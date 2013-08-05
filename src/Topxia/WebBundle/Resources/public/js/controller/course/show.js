@@ -31,6 +31,13 @@ define(function(require, exports, module) {
 
         });
 
+        $(".show-course-review-pane").click(function(){
+            $("#course-review-tab").tab('show');
+            var offset = $("#course-nav-tabs").offset();
+            console.log(offset);
+            $(document).scrollTop(offset.top - 20);
+        }); 
+
         $("#favorite-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(){
@@ -46,10 +53,6 @@ define(function(require, exports, module) {
                 $("#favorite-btn").show();
             });
         });
-
-        // $(".course-item-list-multi").on('click', '.for-preview', function() {
-
-        // });
 
     };
 
