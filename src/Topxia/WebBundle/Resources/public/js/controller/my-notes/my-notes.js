@@ -54,21 +54,18 @@ define(function(require, exports, module) {
 
             $(".note-list").on('click', '[data-role=note-in-list]', function(){
                 var li = $(this);
-
                 $(".note-list").find('[data-role=note-in-list]').each(function(index, item){
                     $(this).removeClass("active");
                 });
-
                 $(this).addClass("active");
-
-                console.log($(this).attr("value"));
-
-                // $(".course-notes").find(".note-form").hide();
+                var noteId = $(this).attr("value");
+                $(".course-notes").find(".note-form").hide();
 
                 $(".course-notes").find(".note-form").each(function(index, item){
-                    console.log($(this).attr("noteId"));
+                    if(noteId == $(this).attr("noteId")){
+                        $(this).show().find(".operations").show();
+                    }
                 });
-
 
             });
 

@@ -12,7 +12,7 @@ class MyNotesController extends BaseController
     {   
         $courseNotes = $this->getNoteService()->findUserCourseNotes($userId, $courseId);
         $course = $this->getCourseService()->getCourse($courseId);
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
         return $this->render('TopxiaWebBundle:MyNotes:my-notes-detail.html.twig',
             array('courseNotes'=>$courseNotes,
                 'course'=>$course,
@@ -58,7 +58,7 @@ class MyNotesController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
 
         foreach ($courses as $key => &$course) {
