@@ -14,9 +14,7 @@ class CourseController extends BaseController
     public function exploreAction(Request $request)
     {
         $conditions = array();
-        $conditions['locationId'] = $request->query->get('locationId');
-        $conditions['date'] = $request->query->get('date');
-        $conditions['tagId'] = $request->query->get('tagId');
+        $conditions['status'] = 'published';
 
         $paginator = new Paginator(
             $this->get('request'),
