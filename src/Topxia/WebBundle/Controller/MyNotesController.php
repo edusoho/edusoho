@@ -71,7 +71,8 @@ class MyNotesController extends BaseController
         }
 
         foreach ($courses as $key => &$course) {
-            $course['noteLatestUpdatedTime'] = current($course['notes'])['updatedTime'];
+            $currentNotes = current($course['notes']);
+            $course['noteLatestUpdatedTime'] = $currentNotes['updatedTime'];
             
         }
 
