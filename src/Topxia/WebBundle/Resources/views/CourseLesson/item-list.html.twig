@@ -1,0 +1,30 @@
+{% set learnStatuses = learnStatuses|default([]) %}
+{% set experience = experience|default(false) %}
+
+<div class="course-item-list-wrap">
+	{% set class = class|default('') %}
+	<ul class="course-item-list {{ class }}" id="course-item-list">
+		{% for id, item in items %}
+		  {% if 'chapter' in id %}
+			  <li class="item chapter-item clearfix">
+			  	<span class="name">章节</span>
+			  	<span class="pie">{{ item.number }}</span>
+			  	<span class="title">{{ item.title }}</span>
+	  	  </li>
+		  {% elseif 'lesson' in id %}
+		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix" data-id="{{ item.id }}">
+		    	<span class="name">课时{{ item.number }}</span>
+		    	<span class="pie">&nbsp;</span>
+		    	<a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{item.id}}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">{{ item.title }}</a>
+		    	{% if item.type == 'video' %}
+			    	<span class="type" title="视频时长{{ item.length|duration }}">
+			    		<span>{{ item.length|duration }}</span>
+			    		<span class="glyphicon glyphicon-play-circle"></span>
+			    	</span>
+		    	{% endif %}
+		    	<button class="btn btn-success btn-mini action">开始学习</button>
+		    </li>
+		  {% endif  %}
+		{% endfor %}
+	</ul>
+</div>

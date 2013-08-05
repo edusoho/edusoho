@@ -1,0 +1,71 @@
+{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+
+{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'course/dashboard-thread-show' %}
+
+{% block dashboard_main %}
+
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'thread'} %}
+
+	<div class="thread">
+	  <div class="thread-header">
+	    {{ web_macro.user_avatar(author, 'pull-right thread-author-avatar') }}
+	    <h2 class="thread-title">
+	      {% if thread.type == 'question' %}
+	      <span class="label label-info">问</span>
+	      {% endif %}
+	      {{ thread.title }}
+	    </h2>
+	    <div class="thread-metas">
+	      By {{  web_macro.user_link(author) }}
+	      <span class="bullet mhs">•</span>
+	      {{ thread.createdTime|smart_time }}
+	      <span class="bullet mhs">•</span>
+	      {{ thread.hitNum}} 次浏览
+	    </div>
+	  </div>
+	  <div class="thread-body">{{ thread.content|raw }}</div>
+	  <div class="thread-footer">
+	    <a href="#" class="btn btn-mini">编辑</a>
+	    <a href="javascript:;" class="btn btn-mini" data-url="{{ path('course_thread_delete', {courseId:course.id, id:thread.id}) }}" data-after-url="{{ path('course_threads', {id:course.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？">删除</a>
+	    {% if thread.isStick %}
+	      <a href="javascript:" class="btn btn-mini" data-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？">取消置顶</a>
+	    {% else %}
+	      <a href="javascript:" class="btn btn-mini" data-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？">置顶</a>
+	    {% endif %}
+
+	    {% if thread.isElite %}
+	      <a href="javascript:" class="btn btn-mini" data-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？">取消加精</a>
+	    {% else %}
+	      <a href="javascript:" class="btn btn-mini" data-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？">加精</a>
+	    {% endif %}
+	  </div>
+	</div>
+
+	{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+	  {% set id = 'thread-post-panel' %}
+	  {% set class = thread.postNum == 0 ? 'hide' : null %}
+	  {% block heading %}<h2><span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h2>{% endblock %}
+	  {% block body %}
+	    <ul id="thread-post-list" class="media-list">
+	      {% for post in posts %}
+	        {% set author = users[post.userId] %}
+	        {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+	      {% endfor %}
+	    </ul>
+	    {{ web_macro.paginator(paginator) }}
+	  {% endblock %}
+	{% endembed %}
+
+	{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+	  {% block heading %}<h2>添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h2>{% endblock %}
+	  {% block body %}
+	    {{ render(controller('TopxiaWebBundle:CourseThread:post', {courseId:course.id, id:thread.id})) }}
+
+	  {% endblock %}
+	  {% endembed %}
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<div class="lesson-plugin-pane lesson-question-plugin-pane">
+
+<button type="button" class="back-to-list">返回</button>
+
+	<div>
+		<h4>{{ thread.title }}</h4>
+		<div>{{ thread.content }}</div>
+	</div>
+
+	<ul data-role="post-list">
+		{% for post in posts %}
+		  {% include 'TopxiaWebBundle:LessonQuestionPlugin:post-item.html.twig' %}
+		{% endfor %}
+	</ul>
+
+<form class="form-vertical" data-role="post-form" method="post" action="{{ path('course_lesson_plugin_question_answer') }}" novalidate>
+	<div class="control-group">
+		<div class="controls">
+			{{ form_widget(form.content, {attr:{rows:4, 'data-display':'内容'}}) }}
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls clearfix">
+			{{ form_rest(form) }}
+			<button type="submit" class="btn btn-primary pull-right">添加答案</button>
+		</div>
+	</div>
+</form>
+</div>

@@ -1,0 +1,75 @@
+{% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
+
+{% set menu = 'group' %}
+
+{% block main %}
+<div class="page-header"><h1>小组管理</h1></div>
+
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th>ID</th>
+         <th>名称</th>
+         <th>会员数</th>
+         <th>话题数</th>
+         <th>组长</th>
+         <th>创建时间</th>
+         <th>管理</th>
+      </tr>
+   </thead>
+   <tbody>
+{% for group in groups %}
+  {% set founder = userList[group.ownerId] %}
+<tr>
+  <td>{{ group.id }}</td>
+  <td>
+    <a href="{{ path('group_show', {group:group.uri|default(group.id)})}}" target="_blank">{{ group.name }}</a>
+    <div>
+      {% set term = termList[group.termId]|default(null) %}
+      {% if term %}分类：<a href="{{ path('channel', {channel:term.uri}) }}" target="_blank" class="label label-info">{{ term.name }}</a> {% else %}<span class="label">无分类</span>{% endif %}
+      标签:
+      {% for tid in group.tags %}
+        {% set tag = tagList[tid] %}
+        <a href="{{ path('tag', {tag:tag.name}) }}" style="color:gray;" target="_blank">{{ tag.name }}</a>
+      {% else %}
+        <span class="label">无标签</span>
+      {% endfor %}
+    </div>
+  </td>
+  <td>{{ group.memberNum }}</td>
+  <td>{{ group.discussNum }}</td>
+  <td>
+    {{ m.user_link(founder) }}
+  </td>
+  <td>{{ group.createdTime|fulltime }}</td>
+  <td>
+    <div class="btn-toolbar">
+  <div class="btn-group">
+      <button class="btn btn-mini btn-primary" data-toggle="dropdown">管理</button>
+    <button class="btn  btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu pull-right">
+      <li><a href="javascript:;" data-url="{{ path('admin_group_tag', {group:group.id}) }}" class="group-tag-btn" data-toggle="modal" data-target="#group-tag-modal"><i class="icon-tag"></i> 设置标签</a></li>
+      <li><a href="javascript:;" data-url="{{ path('admin_group_term', {group:group.id}) }}" class="group-term-btn" data-toggle="modal" data-target="#group-term-modal"><i class="icon-briefcase"></i> 设置分类</a></li>
+      <li><a href="javascript:;" class="group-delete-btn" data-title="{{ group.name }}" data-id="{{ group.id }}" data-url="{{ url('admin_group_delete', {group:group.id}) }}"><i class="icon-remove"></i>  删除小组</a></li>
+    </ul>
+  </div>
+  </div>
+  </td>
+</tr>
+{% endfor %}
+
+
+   </tbody>
+</table>
+
+{% if paginator.lastPage > 1 %} {{ pg.paginator(paginator) }} {% endif %}
+
+<div id="group-tag-modal" class="modal"></div>
+<div id="group-term-modal" class="modal"></div>
+
+{% endblock %}
+
+
+{% block page_script %} app.load('group'); {% endblock %}

@@ -1,0 +1,53 @@
+<div id="lesson-media-choose"
+  data-media-library-url="{{ path('course_manage_media_library', {id:course.id}) }}"
+  data-media-upload-url="{{ path('course_manage_media_upload', {id:course.id}) }}"
+  >
+
+  <div class="media-choose-video" style="display:none;">
+    <div class="media-choose-bar" style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-small" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="media-choose-main">
+      <ul class="nav nav-pills nav-pills-mini mbs">
+        <li class="active"><a href="#type-video-library" data-toggle="tab">从视频库中选择</a></li>
+        <li style="display:none;"><a href="#type-video-upload" data-toggle="tab">上传视频</a></li>
+        <li><a href="#type-video-import" data-toggle="tab">导入网络视频</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="type-video-library">从视频库中选择...</div>
+        <div class="tab-pane" id="type-video-upload">上传视频，稍后开放...</div>
+        <div class="tab-pane" id="type-video-import">
+          <div class="input-group">
+            <input class="video-url" type="text" placeholder="支持优酷、土豆、网易公开课的视频页面地址导入" >
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default import-btn" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="media-choose-audio" style="display:none;">
+    <div class="media-choose-bar" style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-small" type="button" data-role="trigger">编辑</button>
+    </div>
+
+    <div class="media-choose-main">
+      <ul class="nav nav-pills nav-pills-mini mbs">
+        <li class="active"><a href="#type-audio-import" data-toggle="tab">从音频库中选择</a></li>
+        <li style="display:none;"><a href="#type-audio-upload" data-toggle="tab">上传音频</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="type-audio-library">从音频库中选择...</div>
+        <div class="tab-pane" id="type-audio-upload">上传音频，稍后开放...</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

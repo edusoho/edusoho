@@ -1,0 +1,31 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set tag = tag|default(null) %}
+
+{% block title %}
+  <h3>{% if not tag %}新增{% else %}编辑{% endif %}标签</h3>
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="tag-form" action="{% if not tag %}{{ path('admin_tag_create') }}{% else %}{{ path('admin_tag_update', {tag:tag.id}) }}{% endif %}" method="post">
+    {% if tag %}
+      {% set checkTagNameUrl = path('admin_tag_name_check', {tag:tag.id}) %}
+    {% else %}
+      {% set checkTagNameUrl = path('admin_tag_name_check') %}
+    {% endif %}
+    <div class="row control-group">
+      <label class="col-lg-2 control-label">标签名称</label>
+      <div class="controls">
+        <div class="col-lg-6 control-text">
+          {{ form_widget(form.name, {attr:{'data-url': checkTagNameUrl}}) }}
+        </div>
+      </div>
+    </div>
+
+    {{ form_rest(form) }}
+  </form>
+  <script type="text/javascript">app.load('tag/save-modal')</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">保存</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+{% endblock %}

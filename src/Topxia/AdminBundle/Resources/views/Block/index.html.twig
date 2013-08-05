@@ -1,0 +1,28 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% set menu = 'admin_block' %}
+{% set script_controller = 'block/list' %}
+{% block main %}
+<div class="page-header"><h1>编辑区管理</h1></div>
+
+<button class="btn btn-info btn-mini pull-right" id="add-block-btn" data-toggle="modal" data-target="#modal" data-url="/admin/block/create">新增编辑区</button>
+
+<table id="block-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th>编号</th>
+      <th>标题</th>
+      <th>内容最后更新</th>
+      <th>更新内容</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for block in blocks %}
+    {% include 'TopxiaAdminBundle:Block:list-tr.html.twig' %}
+  {% endfor %}
+   </tbody>
+</table>
+
+ {{ web_macro.paginator(paginator) }} 
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'group' %}
+
+{% block content %}
+  <div class="col-lg-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ path('admin_group') }}" class="list-group-item {% if menu == 'group' %}active{% endif %}">小组管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_group_discussions') }}" class="list-group-item {% if menu == 'group_discussions' %}active{% endif %}">小组话题<span class="glyphicon glyphicon-chevron-right"></span></a>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-lg-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

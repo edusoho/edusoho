@@ -1,0 +1,7 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<div class="modal-dialog clear-modal-dialog {% if modalClass|default(null) %}{{ modalClass }}{% endif %}">
+  <div class="modal-content">
+    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+    <div class="modal-body">{% block body %}{% endblock %}</div>
+  </div>
+</div>

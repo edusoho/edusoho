@@ -1,0 +1,20 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'course' %}
+
+{% block content %}
+  <div class="col-lg-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ path('admin_course', {'tab':'auditing'}) }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">课程管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_course_threads') }}" class="list-group-item {% if menu == 'thread' %}active{% endif %}">话题管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_note') }}" class="list-group-item {% if menu == 'note' %}active{% endif %}" >笔记管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-lg-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

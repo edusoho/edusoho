@@ -1,0 +1,42 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}个人详细信息{% endblock %}
+{% block body %}
+
+<table class="table table-striped table-condenseda table-bordered">
+  <tr>
+    <th>用户名</th>
+    <td>{{ user.nickname }}</td>
+  </tr>
+
+  <tr>
+    <th>用户权限</th>
+    <td>
+      {% for role in user.roles %}
+        <span class="mrm">{# role|dict_text('user_role') #}{{ role }}</span>
+      {% endfor %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>Email</th>
+    <td>{{ user.email }}</td>
+  </tr>
+
+  <tr>
+    <th>注册时间</th>
+    <td>{{ user.createdTime|date('Y-n-d H:i:s') }}</td>
+  </tr>
+
+  <tr>
+    <th>上次登录时间</th>
+    <td>{{ user.loginTime|date('Y-n-d H:i:s') }}</td>
+  </tr>
+  
+  <tr>
+      <th>登录IP</th>
+      <td>{{ user.loginIp }}</td>
+    </tr>
+</table>
+
+{% endblock %}

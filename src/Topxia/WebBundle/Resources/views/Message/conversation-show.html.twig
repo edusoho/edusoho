@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}私信 - {{ parent() }}{% endblock %}
+{% set nav = 'message' %}
+
+{% block content %}
+
+
+<div class="page">
+ <a class="btn btn-success" id="read-conversation" href="{{ path('message')}} ">返回到我的私信</a>
+
+  <form id="course-create-form" class="form-horizontal" method="post">
+    {{ web_macro.flash_messages() }}
+    {{ form_errors(form) }}
+    {% set mode = mode|default(null) %}
+      <div class="control-group">
+      {{ form_label(form.content, '私信内容', {label_attr:{class:'control-label'}}) }}
+      <div class="controls">
+        {{ form_widget(form.content, {attr:{rows:3}}) }}
+      </div>
+       {{ form_rest(form) }}
+       <input id="course-create-btn " class="pull-right btn btn-primary" type="submit" value="回复">
+      </div>
+  </form>
+
+<ul class="media-list">
+  <div>
+    {% for message in messages %}
+    {% include 'TopxiaWebBundle:Message:message-item.html.twig' with {message:message} %}
+    {% endfor %}
+  </div>
+</ul>
+
+
+</div>
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

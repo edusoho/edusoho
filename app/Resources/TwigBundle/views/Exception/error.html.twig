@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>哇哦! 有状况发生了: {{ status_text }}</title>
+<style>
+.title {
+	color: #D67F0C;
+	font-size: 20px;
+	font-weight: bold;
+	margin: 10px 10px;
+}
+
+.note {
+	color: #000;
+	font-size: 14px;
+	margin: 20px 10px;
+line-height:1.5;
+}
+
+.imageblock {
+	padding: 5px 0px;
+	width: 600px;
+	margin: 7% auto 0;
+}
+
+.imageblock-image {
+	float: left;
+	margin-right: 10px
+}
+
+.imageblock-image,.imageblock-image img {
+	display: block;
+}
+
+.imageblock-content {
+	display: table-cell;
+	*display: inline-block;
+	vertical-align: top;
+	width: 10000px;
+	*width: auto;
+}
+</style>
+</head>
+<body>
+
+	<div class="imageblock">
+		<img src="/res/images/face404.jpg" class="imageblock-image" />
+		<div class="imageblock-content">
+			<div class="title">哇哦，有状况发生啦！</div>
+			<div class="note">
+				<div><strong>服务器返回了"{{ status_code }} {{ status_text }}"。</strong></div>
+				<div>看起来是像出了点状况，请发邮件到service@howzhi.com告诉我们你当时在做什么的时候就出现了这个状况。
+					<br />我们会立即修复这个问题。真的非常抱歉！</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

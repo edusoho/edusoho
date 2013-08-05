@@ -1,0 +1,106 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1230" measuredH="1125" mockupW="1230" mockupH="1125">
+  <controls>
+    <control controlID="133" controlTypeID="com.balsamiq.mockups::Component" x="0" y="0" w="1230" h="48" measuredW="1230" measuredH="48" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/symbols.bmml#site-header</src>
+      </controlProperties>
+    </control>
+    <control controlID="137" controlTypeID="com.balsamiq.mockups::Component" x="123" y="81" w="978" h="1044" measuredW="978" measuredH="1044" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22243%2C129%2C293%2C156%22%20href%3D%22course_dashboard.bmml%22%20alt%3D%22course_dashboard%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22343%2C129%2C393%2C156%22%20href%3D%22course_assignment.bmml%22%20alt%3D%22course_assignment%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22393%2C129%2C456%2C156%22%20href%3D%22course_discussion.bmml%22%20alt%3D%22course_discussion%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22243%2C129%2C293%2C156%22%20href%3D%22course_dashboard.bmml%22%20alt%3D%22course_dashboard%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22343%2C129%2C393%2C156%22%20href%3D%22course_assignment.bmml%22%20alt%3D%22course_assignment%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22393%2C129%2C456%2C156%22%20href%3D%22course_discussion.bmml%22%20alt%3D%22course_discussion%22%20id%3D%225%22/%3E%0A</map>
+        <override controlID="5">
+          <selectedIndex>0</selectedIndex>
+        </override>
+        <src>./assets/symbols.bmml#course-layout</src>
+      </controlProperties>
+    </control>
+    <control controlID="154" controlTypeID="com.balsamiq.mockups::Component" x="144" y="178" w="953" h="931" measuredW="953" measuredH="931" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22634%2C606%2C730%2C641%22%20href%3D%22course_lesson_learned.bmml%22%20alt%3D%22course_lesson_learned%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22763%2C184%2C871%2C221%22%20href%3D%22course_lesson.bmml%22%20alt%3D%22course_lesson%22%20id%3D%2210%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22871%2C184%2C979%2C221%22%20href%3D%22course_lesson_questions.bmml%22%20alt%3D%22course_lesson_questions%22%20id%3D%2210%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22979%2C184%2C1087%2C221%22%20href%3D%22course_lesson_notes.bmml%22%20alt%3D%22course_lesson_notes%22%20id%3D%2210%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22634%2C606%2C730%2C641%22%20href%3D%22course_lesson_learned.bmml%22%20alt%3D%22course_lesson_learned%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22763%2C184%2C871%2C221%22%20href%3D%22course_lesson.bmml%22%20alt%3D%22course_lesson%22%20id%3D%2210%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22871%2C184%2C979%2C221%22%20href%3D%22course_lesson_questions.bmml%22%20alt%3D%22course_lesson_questions%22%20id%3D%2210%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22979%2C184%2C1087%2C221%22%20href%3D%22course_lesson_notes.bmml%22%20alt%3D%22course_lesson_notes%22%20id%3D%2210%22/%3E%0A</map>
+        <override controlID="6">
+          <hrefs>course_lesson%26bm%3Bcourse_lesson.bmml%26bm%3Bcourse_lesson.bmml%26bm%3Bcourse_lesson.bmml%2Ccourse_lesson_questions%26bm%3Bcourse_lesson_questions.bmml%26bm%3Bcourse_lesson_questions.bmml%26bm%3Bcourse_lesson_questions.bmml%2Ccourse_lesson_notes%26bm%3Bcourse_lesson_notes.bmml%26bm%3Bcourse_lesson_notes.bmml%26bm%3Bcourse_lesson_notes.bmml%2C</hrefs>
+          <selectedIndex>1</selectedIndex>
+        </override>
+        <override controlID="10">
+          <selectedIndex>1</selectedIndex>
+        </override>
+        <src>./assets/symbols.bmml#lesson-main</src>
+      </controlProperties>
+    </control>
+    <control controlID="165" controlTypeID="com.balsamiq.mockups::HRule" x="770" y="408" w="314" h="-1" measuredW="100" measuredH="10" zOrder="3" locked="false" isInGroup="-1"/>
+    <control controlID="175" controlTypeID="com.balsamiq.mockups::PointyButton" x="764" y="232" w="-1" h="-1" measuredW="45" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>left</direction>
+        <href>course_lesson_questions%26bm%3Bcourse_lesson_questions.bmml%26bm%3Bcourse_lesson_questions.bmml%26bm%3Bcourse_lesson_questions.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22764%2C232%2C809%2C259%22%20href%3D%22course_lesson_questions.bmml%22%20alt%3D%22course_lesson_questions%22%20id%3D%22175%22/%3E</map>
+        <text>%u8FD4%u56DE</text>
+      </controlProperties>
+    </control>
+    <control controlID="176" controlTypeID="com.balsamiq.mockups::Label" x="764" y="274" w="-1" h="-1" measuredW="121" measuredH="22" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>%u600E%u4E48%u5408%u5E762%u4E2A%u6570%u7EC4%uFF1F</text>
+      </controlProperties>
+    </control>
+    <control controlID="177" controlTypeID="com.balsamiq.mockups::PointyButton" x="1039" y="232" w="-1" h="-1" measuredW="45" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6989903</color>
+        <direction>center</direction>
+        <menuIcon>false</menuIcon>
+        <state>up</state>
+        <text>%u5173%u6CE8</text>
+      </controlProperties>
+    </control>
+    <control controlID="178" controlTypeID="com.balsamiq.mockups::Image" x="764" y="322" w="24" h="24" measuredW="77" measuredH="79" zOrder="7" locked="false" isInGroup="-1"/>
+    <control controlID="179" controlTypeID="com.balsamiq.mockups::Label" x="793" y="318" w="-1" h="-1" measuredW="36" measuredH="20" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>12</size>
+        <text>%u82CF%u5C0F%u5C0F</text>
+      </controlProperties>
+    </control>
+    <control controlID="180" controlTypeID="com.balsamiq.mockups::Paragraph" x="796" y="346" w="288" h="80" measuredW="200" measuredH="80" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01</text>
+      </controlProperties>
+    </control>
+    <control controlID="181" controlTypeID="com.balsamiq.mockups::HRule" x="770" y="523" w="314" h="-1" measuredW="100" measuredH="10" zOrder="10" locked="false" isInGroup="-1"/>
+    <control controlID="182" controlTypeID="com.balsamiq.mockups::Image" x="764" y="437" w="24" h="24" measuredW="77" measuredH="79" zOrder="11" locked="false" isInGroup="-1"/>
+    <control controlID="183" controlTypeID="com.balsamiq.mockups::Label" x="793" y="433" w="-1" h="-1" measuredW="36" measuredH="20" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>12</size>
+        <text>%u82CF%u5C0F%u5C0F</text>
+      </controlProperties>
+    </control>
+    <control controlID="184" controlTypeID="com.balsamiq.mockups::Paragraph" x="796" y="461" w="288" h="80" measuredW="200" measuredH="80" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01</text>
+      </controlProperties>
+    </control>
+    <control controlID="185" controlTypeID="com.balsamiq.mockups::HRule" x="770" y="646" w="314" h="-1" measuredW="100" measuredH="10" zOrder="14" locked="false" isInGroup="-1"/>
+    <control controlID="186" controlTypeID="com.balsamiq.mockups::Image" x="764" y="560" w="24" h="24" measuredW="77" measuredH="79" zOrder="15" locked="false" isInGroup="-1"/>
+    <control controlID="187" controlTypeID="com.balsamiq.mockups::Label" x="793" y="556" w="-1" h="-1" measuredW="36" measuredH="20" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>12</size>
+        <text>%u82CF%u5C0F%u5C0F</text>
+      </controlProperties>
+    </control>
+    <control controlID="188" controlTypeID="com.balsamiq.mockups::Paragraph" x="796" y="584" w="288" h="80" measuredW="200" measuredH="80" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01</text>
+      </controlProperties>
+    </control>
+    <control controlID="189" controlTypeID="com.balsamiq.mockups::HRule" x="776" y="761" w="314" h="-1" measuredW="100" measuredH="10" zOrder="18" locked="false" isInGroup="-1"/>
+    <control controlID="190" controlTypeID="com.balsamiq.mockups::Image" x="770" y="675" w="24" h="24" measuredW="77" measuredH="79" zOrder="19" locked="false" isInGroup="-1"/>
+    <control controlID="191" controlTypeID="com.balsamiq.mockups::Label" x="799" y="671" w="-1" h="-1" measuredW="36" measuredH="20" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>12</size>
+        <text>%u82CF%u5C0F%u5C0F</text>
+      </controlProperties>
+    </control>
+    <control controlID="192" controlTypeID="com.balsamiq.mockups::Paragraph" x="802" y="699" w="288" h="80" measuredW="200" measuredH="80" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01%u4F60%u4E2A%u5927%u7B28%u86CB%uFF0C%u5C31%u8FD9%u4E48%u5408%u5E76%u554A%uFF01</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

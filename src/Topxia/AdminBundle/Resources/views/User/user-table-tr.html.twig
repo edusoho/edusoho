@@ -1,0 +1,20 @@
+{% import 'TopxiaAdminBundle::admin-macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  <td>
+    {{ admin_macro.user_link(user, 'ajax-modal') }}
+  </td>
+
+  <td>
+    {% for role in user.roles %}
+      {# role #}
+      {# role|dict_text('user_role') #}
+    {% endfor %}
+  </td>
+
+  <td>{{ user.createdTime|date('Y-n-d H:i:s') }}</td>
+  <td>{{ user.loginTime|date('Y-n-d H:i:s') }}</td>
+  <td>{{ user.loginIp }}</td>
+  <td>
+    <a href="javascript:;" class="btn btn-small btn-link" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}"><i class="glyphicon glyphicon-pencil"></i> 编辑</a>
+  </td>
+</tr>

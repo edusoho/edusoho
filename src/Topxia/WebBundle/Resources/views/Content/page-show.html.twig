@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ content.title }} - {{ parent() }}{% endblock %}
+{% set nav = 'course' %}
+
+{% set bodyClass = 'homepage' %}
+
+{% block content %}
+  <div class="row es-row-light" style="padding:30px 50px;">
+
+  	<h1>{{ content.title }}</h1>
+
+  	<div class="content-body">{{ content.body|raw }}</div>
+
+  </div>
+{% endblock %}

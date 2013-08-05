@@ -1,0 +1,65 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}文件 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'file/list' %}
+
+{% set menu = 'file' %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <h1 class="pull-left">文件</h1>
+  <a href="javascript:" class="btn btn-info btn-small pull-right" data-url="{{ path('admin_file_upload') }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-upload"></i>上传文件</a>
+</div>
+
+<div class="well well-small">
+  <form>
+    {{ form_widget(form.group, {attr:{class:'col-lg-3'}}) }}
+    <input type="submit" class="btn" value="检索">
+  </form>
+</div>
+<div id="files">
+  <div class="rows clearfix">
+    {% for file in files %}
+      {% set user = object_load('user', file.userId) %}
+      {% set fileGroup = object_load('file_group', file.groupId) %}
+      {% set fileUri = file_uri_parse(file.uri) %}
+      <div class="col-lg-3 mbl">
+        <div class="thumbnail file-thumbnail">
+          {% if 'image/' in file.mime %}
+            <img src="{{ file_path(file.uri) }}" style="max-height:160px;">
+          {% else %}
+            <i class="glyphicon glyphicon-file"></i>
+          {% endif %}
+          <div class="caption">
+            <p><a href="{{ file_path(file.uri) }}" target="_blank">{{ fileUri.name }}</a></p>
+            <p>
+              <span class="text-muted">{{ file.size|file_size }}</span>
+              <a href="javascript:" class="delete pull-right btn btn-danger btn-mini" data-url="{{ path('admin_file_delete', {id:file.id}) }}">删除</a>
+            </p>
+            <p>
+              <span class="text-muted"><i class="glyphicon glyphicon-time"></i> {{ file.createdTime|date('Y-n-d H:i:s') }}</span>
+            </p>
+            <p>
+              {% if user %}
+                <i class="text-muted glyphicon glyphicon-user"></i>
+                <a href="{{ path('user_show', {user:user.id}) }}">{{ user.nickname }}</a>
+              {% else %}
+                <span class="label label-danger">会员不存在</span>
+              {% endif %}
+            </p>
+            <p>
+              <span class="text-success">
+                <i class="glyphicon glyphicon-folder-open"></i> 
+                {{ fileGroup.name|default('文件组不存在') }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      {% if loop.index % 4  == 0 %}</div><div class="rows clearfix">{% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

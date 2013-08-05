@@ -1,0 +1,112 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menu = 'site' %}
+
+{% block main %}
+
+<div class="page-header"><h1>站点设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <fieldset>
+    <legend>基础信息</legend>
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.name, '网站名称') }}</div>
+      <div class="col-lg-8 controls">{{ form_widget(form.name) }}</div>
+    </div>
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.url, '网站域名') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.url) }}
+        <p class="help-block">以"http://"或"https://"开头</p>
+      </div>
+    </div>
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.logo, '网站LOGO') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.logo) }}
+        <p class="help-block">填写网站logo的文件路径地址。</p>
+      </div>
+    </div>
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.master_email, '管理员邮箱地址') }}</div>
+      <div class="col-lg-8 controls">{{ form_widget(form.master_email) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.icp, 'ICP备案号') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.icp) }}
+      </div>
+    </div>
+  </fieldset>
+
+<br/>
+  <fieldset>
+    <legend>网站统计分析代码部署</legend>
+    <div class="alert">建议网站使用一种统计分析即可。</div>
+
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.google_analytics_enabled, '谷歌分析状态') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.google_analytics_enabled, {attr:{class:'radios'}}) }}
+      </div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.google_analytics_id, '谷歌分析账号ID') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.google_analytics_id, {attr:{class:'span2'}}) }}
+        <p class="help-block">例如：UA-XXXXXXXX-X</p>
+      </div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.google_analytics_params, '谷歌分析自定义参数') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.google_analytics_params, {attr:{rows:3}}) }}
+        <p class="help-block">例如：_gaq.push(['_setDomainName', '.youdomain.com']);</p>
+      </div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.analytics, '其他网站分析代码部署') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.analytics, {attr:{rows:3}}) }}
+        <p class="help-block">
+          例如：<a href="http://tongji.baidu.com/" target="_blank">百度统计</a>、
+          <a href="http://ta.qq.com/" target="_blank">腾讯分析</a>、
+          <a href="http://www.cnzz.com/" target="_blank">CNZZ</a>。
+        </p>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>站点状态</legend>
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.status, '网站状态') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.status, {attr:{class:'radios'}}) }}
+      </div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.closed_note, '网站关闭公告') }}</div>
+        <div class="col-lg-8 controls">
+        {{ form_widget(form.closed_note, {attr:{rows:3}}) }}
+        <p class="help-block">网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码。</p>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="row control-group">
+    <div class="col-offset-2 controls">
+      {{ form_rest(form) }}
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

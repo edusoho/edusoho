@@ -1,0 +1,71 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set block = block|default(null) %}
+{% set modal_size = 'xlarge' %}
+
+{% block title %}
+{% if navigation is defined %}
+编辑导航
+{% else %}
+新增导航
+{% endif %}
+
+{% endblock %}
+
+{% block body %}
+  <form class="form-horizontal" id="navigation-form"
+  {% if navigation is defined %}
+    action="{{ path('admin_navigation_update', {id:navigation.id}) }}" 
+  {% else %}
+    action="{{ path('admin_navigation_create') }}"
+  {% endif %}
+ method="post">
+  
+    <div class="row control-group">
+          <div class="col-lg-3 control-label">{{ form_label(form.name, '名称:') }}</div>
+          <div class="col-lg-8 controls"> {{ form_widget(form.name) }}</div>
+    </div>
+    
+    <div class="row control-group">
+          <div class="col-lg-3 control-label">{{ form_label(form.url, '链接地址:') }}</div>
+          <div class="col-lg-8 controls"> {{ form_widget(form.url) }}</div>
+    </div>
+
+    <div class="row control-group">
+          <div class="col-lg-3 control-label">{{ form_label(form.sequence, '显示顺序:') }}
+          <p style="color:green">(从左至右排序)</p>
+        </div>
+
+          <div class="col-lg-8 controls"> {{ form_widget(form.sequence) }}</div>
+    </div>
+
+    <div class="row control-group">
+          <div class="col-lg-3 control-label">{{ form_label(form.openNewWindow, '新开窗口:') }}</div>
+          <div class="col-lg-8 controls"> {{ form_widget(form.openNewWindow) }}</div>
+    </div>
+
+     <div class="row control-group">
+          <div class="col-lg-3 control-label">{{ form_label(form.status, '状态:') }}</div>
+          <div class="col-lg-8 controls"> {{ form_widget(form.status) }}</div>
+    </div>
+
+    <div class="row control-group">
+          <div class="col-lg-3 control-label">{{ form_label(form.type, '类型:') }}</div>
+          <div class="col-lg-8 controls"> {{ form_widget(form.type) }}</div>
+    </div>
+
+    {{ form_rest(form) }}
+  </form>
+
+  <script type="text/javascript">
+  {% if navigation is defined %}
+    app.load('navigation/edit-modal')
+  {% else %}
+    app.load('navigation/create-modal')
+  {% endif %}
+  </script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#navigation-form">保存</button>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}完善资料 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/login-bind-new' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-6 col-offset-3">
+
+    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-page mtl'} %}
+      {% block heading %}<h2>完善资料</h2>{% endblock %}
+      {% block body %}
+        <div class="alert"> 您当前正在使用<strong>{{ client.clientInfo.name }}</strong>登录{{ setting('site.name') }}，请完善资料。 </div>
+        <form id="bind-new-form" class="form-vertical" method="post">
+          <div class="control-group">
+            {{ form_label(form.email, 'Email地址', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.email, {attr:{'data-url':path('register_email_check')}}) }}
+            </div>
+          </div>
+
+          <div class="control-group">
+            {{ form_label(form.nickname, '昵称', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.nickname, {attr:{'data-url':path('register_nickname_check')}}) }}
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="controls">
+              {{ form_rest(form) }}
+              <button type="submit" class="btn btn-fat btn-primary btn-large">注册</button>
+            </div>
+          </div>
+        </form>
+
+        <div>
+          <span class="text-muted">已有帐号？</span>
+          <a href="{{ path('login_bind_exist', {type: client.clientInfo.type}) }}">绑定到已有帐号</a>
+        </div>
+
+
+      {% endblock %}
+    {% endembed %}
+  </div>
+</div>
+{% endblock %}

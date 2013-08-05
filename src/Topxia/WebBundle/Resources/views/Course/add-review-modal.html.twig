@@ -1,0 +1,48 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'large' %}
+
+{% block title %}编辑课程基本信息{% endblock %}
+{% block body %}
+
+  <form id="add-review-form" class="form-horizontal" method="post" action="{{ path('course_add_review', {id:course.id}) }}" data-auto-submit="false">
+    {{dump(form.vars.value)}}
+  {{ web_macro.flash_messages() }}
+  {% set mode = mode|default(null) %}
+<div class="control-group control-group-online control-group-offline">
+  <div class="controls">
+    {{ form_label(form.rating, '评价星级:', {label_attr:{class:'control-label'}}) }}
+    <div id="my-course-rate" style="height:20px;" 
+        data-rating="{% if form.vars.value is null %} {{course.rating}}  {% else %}  {{form.vars.value.rating}}  {% endif %}" data-url="{{ path('course_add_review', {id: course.id}) }}" class="mrm"></div>
+    {{ form_widget(form.rating, {attr:{class:'col-span-6'}}) }}
+  </div>
+</div>
+
+<div class="control-group control-group-online control-group-offline">
+  <div class="controls">
+     {{ form_label(form.title, '评价标题:', {label_attr:{class:'control-label'}}) }}
+    {{ form_widget(form.title, {attr:{class:'col-span-6', placeholder:'请在这里输入您的评价标题!'}}) }}
+  </div>
+</div>
+
+<div class="control-group control-group-online control-group-offline">
+  <div class="controls">
+    {{ form_label(form.content, '评价内容:', {label_attr:{class:'control-label'}}) }}
+    {{ form_widget(form.content, {attr:{class:'col-span-6', placeholder:'请在这里输入您的评价内容!'}}) }}
+  </div>
+</div>
+
+<div class="hide">{{ form_rest(form) }}</div>
+
+  </form>
+
+<script>
+    app.load('course/add-review-modal');
+</script>
+
+{% endblock %}
+
+{% block footer %}
+    <input id="course-create-btn" class="btn btn-success  pull-left" type="submit" data-toggle="form-submit" data-target="#add-review-form" value="添加评论">
+    <a class="btn btn-primary pull-left" data-dismiss="modal"  href="#">取消</a>
+{% endblock %}

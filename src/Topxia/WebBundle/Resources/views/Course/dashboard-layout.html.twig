@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
+
+{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
+
+{% block content %}
+
+  {{ render(controller('TopxiaWebBundle:Course:header', {course:course})) }}
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel" id="dashboard-main">
+      {% block dashboard_main %}{% endblock %}
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
+    {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+    {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
+  </div>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block bottom %}
+  <div id="course-modal" class="modal"></div>
+{% endblock %}

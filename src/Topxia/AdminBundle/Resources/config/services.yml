@@ -1,0 +1,7 @@
+parameters:
+#    topxia_admin.example.class: Topxia\AdminBundle\Example
+
+services:
+#    topxia_admin.example:
+#        class: %topxia_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

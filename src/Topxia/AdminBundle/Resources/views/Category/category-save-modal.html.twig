@@ -1,0 +1,46 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if type == 'create' %}添加分类{% else %}编辑分类{% endif %}{% endblock %}
+
+{% block body %}
+	<form id="category-form" class="form-horizontal" action="{% if type == 'create' %}{{ path('admin_category_create', {groupId: groupId, parentId:parentId}) }}{% else %}{{ path('admin_category_edit', {id:category.id}) }}{% endif %}" method="POST">
+
+	    <div class="row control-group" id="file-uploaded-control-group">
+		    <label class="col-lg-2 control-label">{{ form_label(form.name, '名称') }}</label>
+		    <div class="col-lg-6 controls">
+		      <div class="control-text">
+		        {{ form_widget(form.name) }}
+		      </div>
+		    </div>
+	    </div>
+		<div class="row control-group" id="file-uploaded-control-group">
+		    <label class="col-lg-2 control-label">{{ form_label(form.code, 'URI') }}</label>
+		    <div class="col-lg-6 controls">
+		      <div class="control-text">
+		      	{% if type == 'create' %}
+			      	{% set checkUrl = path('admin_category_code_check') %}
+		        {% else %}
+			      	{% set checkUrl = path('admin_category_edit_code_check', {categoryId: category.id}) %}
+		        {% endif %}
+	        	{{ form_widget(form.code, {attr:{'data-url': checkUrl}}) }}
+		      </div>
+		    </div>
+	    </div>
+
+	    <div class="row control-group" id="file-uploaded-control-group">
+		    <label class="col-lg-2 control-label">{{ form_label(form.weight, '权重') }}</label>
+		    <div class="col-lg-6 controls">
+		      <div class="control-text">
+		        {{ form_widget(form.weight) }}
+		      </div>
+		    </div>
+	    </div>
+	    {{ form_rest(form) }}
+	</form>
+	<script type="text/javascript"> app.load('category/save-modal') </script>
+{% endblock %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form">保存</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+{% endblock %}

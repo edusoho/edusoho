@@ -1,0 +1,75 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}我的问答... - {{ parent() }}{% endblock %}
+
+{% set nav = 'my-questions' %}
+
+{% set bodyClass = 'my-questions' %}
+
+{% block content %}
+
+<div class="row">
+    
+    {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
+
+    <div class="col-lg-9">
+        
+        <div class="notice-my-questions">
+            <h1>我的问答</h1>
+        </div>
+
+        {% if myQuestions is empty %}
+
+            <h3> 你还没有提过任何问题！ </h3>
+        {% else %}
+            <div class="my-questions">
+                {% for myQuestion in myQuestions %}
+                                <div class="my-thread">
+                    <div class="myQuestion-title">
+                        <label>问答题目:</label>
+                        <a href="{{path('course_thread_show', {courseId:myQuestion.courseId, id:myQuestion.id})}}"> {{myQuestion.title}} </a>
+                    </div>
+                    <div class="myQuestion-content">
+                        <label>问答内容:</label> {{myQuestion.content | raw | plain_text(20) }}
+                    </div>
+                    <div class="course-name"> 
+                        <label> 对应课程名:</label>{{courses[myQuestion.courseId].title}}
+                    </div>
+                    <div class="myQuestion-status"> 
+                        <label>问答状态：</label>
+                            {% if myQuestion.isStick == 1 %}
+                                <span style="color:red"> 置顶 </span>
+                            {% else %}
+                                <span style="color:red"> 未置顶 </span>
+                            {% endif %}
+
+                            {% if myQuestion.isElite == 1 %}
+                                <span style="color:blue"> 优质问题 </span>
+                            {% else %}
+                                <span style="color:blue"> 普通问题 </span>
+                            {% endif %}
+
+                            {% if myQuestion.isClosed == 1 %}
+                                <span style="color:black"> 不好意思，已关闭 </span>
+                            {% else %}
+                                <span style="color:black"> 开放中 </span>
+                            {% endif %}
+                            <span> {{myQuestion.postNum}}条回复 </span>
+                    </div>
+                    <div class="createdTime"> 
+                        <label> 创建时间：</label>{{myQuestion.createdTime | date('Y-n-d H:i:s') }}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div></div>
+            </div>
+        {% endif %}
+        
+      {{ web_macro.paginator(paginator) }} 
+      
+    </div>
+
+</div>
+
+{% endblock %}

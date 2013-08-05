@@ -1,0 +1,45 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="panel">
+  <div class="panel-heading">
+    <h2>课程老师</h2>
+  </div>
+  <div class="panel-body">
+
+    {% if course.teacherIds %}
+      <div class="teacher-carousel {% if course.teacherIds|length == 1 %}teacher-carousel-onlyone{% endif %}">
+        <div class="carousel slide" id="teacher-carousel">
+          <div class="carousel-inner">
+            {% for teacherId in course.teacherIds %}
+              {% set user = users[teacherId] %}
+              {% set profile = profiles[teacherId] %}
+              <div class="item {% if loop.first %}active{% endif %}" data-id="{{ user.id }}">
+                <img src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}" class="avatar">
+              </div>
+            {% endfor %}
+          </div>
+          <a class="left carousel-control" href="#teacher-carousel" data-slide="prev">
+            <span class="icon-prev"></span>
+          </a>
+          <a class="right carousel-control" href="#teacher-carousel" data-slide="next">
+            <span class="icon-next"></span>
+          </a>
+        </div>
+        <div class="teacher-detail" id="teacher-detail">
+            {% for teacherId in course.teacherIds %}
+              {% set user = users[teacherId] %}
+              {% set profile = profiles[teacherId] %}
+            <div class="teacher-item teacher-item-{{ user.id }} {% if loop.first %}teacher-item-active{% endif %}">
+              <div class="nickname"><a href="#">{{ user.nickname }}</a></div>
+              <div class="title">{{ user.title }}</div>
+              <div class="divider"></div>
+              <div class="about">{{ profile.about }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">该课程尚未设置教师</div>
+    {% endif %}
+  </div>
+</div>

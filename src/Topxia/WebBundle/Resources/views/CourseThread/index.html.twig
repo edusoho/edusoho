@@ -1,0 +1,91 @@
+{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+
+{% set script_controller = 'course/common' %}
+
+{% block dashboard_main %}
+
+{% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'thread'} %}
+
+  <div class="pull-right">
+    <a class="btn btn-small btn-info" href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">发话题</a>
+    <a class="btn btn-small btn-info" href="{{ path('course_thread_create', {id:course.id, type:'question'}) }}">提问题</a> 
+  </div>
+
+  <div class="thread-filters clearfix">
+    <ul class="nav nav-pills nav-mini pull-left">
+      <li{% if filters.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
+      <li{% if filters.type == 'question' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
+      <li{% if filters.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
+
+      <li><span class="mhm text-muted">|</span></li>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <span class="text-muted">排序：</span>
+          {% if filters.sort == 'posted' %}
+            最后回复
+          {% elseif filters.sort == 'created'%} 
+            最新发帖
+          {% endif %}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'posted'})) }}">最后回复</a></li>
+          <li class="{% if filters.sort == 'created' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
+        </ul>
+      </li>
+
+
+    </ul>
+
+
+  </div>
+
+  <ul class="media-list">
+    {% for thread in threads %}
+      {% set author = users[thread.userId] %}
+      <li class="media">
+        {{ web_macro.user_avatar(author, 'pull-left media-object media-object-small')}}
+          <div class="media-body">
+            {% if thread.postNum > 0 %}
+              <span class="badge pull-right">{{ thread.postNum }}</span>
+            {% endif %}
+            <div>
+              {% if thread.isStick %}
+                <span class="label label-danger" title="置顶帖">置顶</span>
+              {% endif %}
+              {% if thread.type == 'question' %}
+                <span class="label label-info" title="问答帖">问</span>
+              {% endif  %}
+              <a class="js-nav" href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+
+              {% if thread.isElite %}
+                <span class="label label-warning" title="精华帖">精</span>
+                {% endif %}
+
+            </div>
+            <div class="text-muted text-normal">
+              by {{ web_macro.user_link(author) }}
+
+              {% if thread.postNum > 0 %}
+                {% set poster = users[thread.latestPostUserId] %}
+                <span class="bullet">•</span>
+                <span>最后回复 {{ web_macro.user_link(poster) }}</span>
+              {% endif %}
+              <span class="bullet">•</span>
+              <span>{{ thread.latestPostTime|smart_time }}</span>
+              <span class="bullet">•</span>
+              <span>{{ thread.hitNum }}浏览</span>
+            </div>
+          </div>
+      </li>
+    {% else %}
+      <li class="mvl tac text-muted">课程暂无话题</li>
+    {% endfor %}
+  </ul>
+
+  {{ web_macro.paginator(paginator) }}
+
+
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::bootstrap-clear-modal-layout.html.twig' %}
+
+{% set modalClass = 'modal-dialog-medium' %}
+{% block body %}
+
+<div class="row teacher-profile-card">
+  <div class="col-lg-4">
+    <img class="img-responsive" src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}">
+    {% if user.id != app.user.id %}
+      <div class="actions">
+        <button class="btn btn-primary btn-small btn-block follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
+        <button class="btn btn-primary btn-small btn-block unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
+        <button class="btn btn-default btn-small btn-block" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+      </div>
+    {% else %}
+
+    {% endif %}
+  </div>
+
+  <div class="col-lg-8">
+    <h4>{{ user.nickname }}</h4>
+    <div class="text-muted">{{ user.title }}</div>
+    <div class="mbl"><a href="{{ path('user_show', {user:user.id}) }}" class="fsn">查看老师详细信息</a> </div>
+
+    <div class="mbl">
+      {{ profile.about|raw }}
+    </div>
+
+    <p>
+      {% if profile.weibo %}
+        <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="/assets/img/user/link-weibo.png"> 微博</a>
+      {% endif %}
+      {% if profile.blog %}
+        <a href="{{ profile.blog }}" target="_blank" class="mrm"><img src="/assets/img/user/link-blog.png"> 博客</a>
+      {% endif %}
+      {% if profile.site %}
+        <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="/assets/img/user/link-site.png"> 网站</a>
+      {% endif %}
+    </p>
+  </div>
+
+</div>
+
+<script>
+    app.load('course/teacher-info-modal');
+</script>
+{% endblock %}

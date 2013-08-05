@@ -1,0 +1,143 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1230" measuredH="1125" mockupW="1230" mockupH="1125">
+  <controls>
+    <control controlID="133" controlTypeID="com.balsamiq.mockups::Component" x="0" y="0" w="1230" h="48" measuredW="1230" measuredH="48" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/symbols.bmml#site-header</src>
+      </controlProperties>
+    </control>
+    <control controlID="137" controlTypeID="com.balsamiq.mockups::Component" x="123" y="81" w="978" h="1044" measuredW="978" measuredH="1044" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22243%2C129%2C293%2C156%22%20href%3D%22course_dashboard.bmml%22%20alt%3D%22course_dashboard%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22343%2C129%2C393%2C156%22%20href%3D%22course_assignment.bmml%22%20alt%3D%22course_assignment%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22393%2C129%2C456%2C156%22%20href%3D%22course_discussion.bmml%22%20alt%3D%22course_discussion%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22243%2C129%2C293%2C156%22%20href%3D%22course_dashboard.bmml%22%20alt%3D%22course_dashboard%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22343%2C129%2C393%2C156%22%20href%3D%22course_assignment.bmml%22%20alt%3D%22course_assignment%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22393%2C129%2C456%2C156%22%20href%3D%22course_discussion.bmml%22%20alt%3D%22course_discussion%22%20id%3D%225%22/%3E%0A</map>
+        <override controlID="5">
+          <selectedIndex>0</selectedIndex>
+        </override>
+        <src>./assets/symbols.bmml#course-layout</src>
+      </controlProperties>
+    </control>
+    <control controlID="154" controlTypeID="com.balsamiq.mockups::Component" x="144" y="178" w="953" h="931" measuredW="953" measuredH="931" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22634%2C606%2C730%2C641%22%20href%3D%22course_lesson_learned.bmml%22%20alt%3D%22course_lesson_learned%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22783%2C191%2C847%2C218%22%20href%3D%22course_lesson.bmml%22%20alt%3D%22course_lesson%22%20id%3D%226%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22847%2C191%2C885%2C218%22%20href%3D%22course_lesson_questions.bmml%22%20alt%3D%22course_lesson_questions%22%20id%3D%226%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22885%2C191%2C923%2C218%22%20href%3D%22course_lesson_notes.bmml%22%20alt%3D%22course_lesson_notes%22%20id%3D%226%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22634%2C606%2C730%2C641%22%20href%3D%22course_lesson_learned.bmml%22%20alt%3D%22course_lesson_learned%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22783%2C191%2C847%2C218%22%20href%3D%22course_lesson.bmml%22%20alt%3D%22course_lesson%22%20id%3D%226%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22847%2C191%2C885%2C218%22%20href%3D%22course_lesson_questions.bmml%22%20alt%3D%22course_lesson_questions%22%20id%3D%226%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22885%2C191%2C923%2C218%22%20href%3D%22course_lesson_notes.bmml%22%20alt%3D%22course_lesson_notes%22%20id%3D%226%22/%3E%0A</map>
+        <src>./assets/symbols.bmml#lesson-main</src>
+      </controlProperties>
+    </control>
+    <control controlID="155" controlTypeID="com.balsamiq.mockups::Label" x="794" y="248" w="95" h="-1" measuredW="77" measuredH="22" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>L1%20%20%u521D%u8BC6PHP</text>
+      </controlProperties>
+    </control>
+    <control controlID="156" controlTypeID="com.balsamiq.mockups::Icon" x="1062" y="247" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>VideoCameraIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="157" controlTypeID="com.balsamiq.mockups::Icon" x="769" y="251" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>40463</color>
+        <icon>CheckMarkIcon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="158" controlTypeID="com.balsamiq.mockups::Label" x="794" y="283" w="95" h="-1" measuredW="81" measuredH="22" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>L2%20%20%u521D%u8BC6PHP</text>
+      </controlProperties>
+    </control>
+    <control controlID="159" controlTypeID="com.balsamiq.mockups::Icon" x="1062" y="282" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>VideoCameraIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="160" controlTypeID="com.balsamiq.mockups::Icon" x="769" y="286" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>DotHollowIcon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="161" controlTypeID="com.balsamiq.mockups::HRule" x="754" y="272" w="347" h="-1" measuredW="100" measuredH="10" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="162" controlTypeID="com.balsamiq.mockups::HRule" x="754" y="307" w="347" h="-1" measuredW="100" measuredH="10" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="163" controlTypeID="com.balsamiq.mockups::HRule" x="754" y="237" w="347" h="-1" measuredW="100" measuredH="10" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="164" controlTypeID="com.balsamiq.mockups::Label" x="794" y="318" w="95" h="-1" measuredW="80" measuredH="22" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>L3%20%20%u521D%u8BC6PHP</text>
+      </controlProperties>
+    </control>
+    <control controlID="165" controlTypeID="com.balsamiq.mockups::Icon" x="1062" y="317" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>VideoCameraIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="166" controlTypeID="com.balsamiq.mockups::Icon" x="769" y="321" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>DotHollowIcon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="167" controlTypeID="com.balsamiq.mockups::HRule" x="754" y="342" w="347" h="-1" measuredW="100" measuredH="10" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="168" controlTypeID="com.balsamiq.mockups::Label" x="794" y="353" w="95" h="-1" measuredW="81" measuredH="22" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>L4%20%20%u521D%u8BC6PHP</text>
+      </controlProperties>
+    </control>
+    <control controlID="169" controlTypeID="com.balsamiq.mockups::Icon" x="1062" y="352" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>FileIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="171" controlTypeID="com.balsamiq.mockups::HRule" x="754" y="377" w="347" h="-1" measuredW="100" measuredH="10" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="172" controlTypeID="com.balsamiq.mockups::Canvas" x="754" y="244" w="341" h="30" measuredW="100" measuredH="70" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>11982760</color>
+      </controlProperties>
+    </control>
+    <control controlID="173" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1086" y="217" w="-1" h="552" measuredW="16" measuredH="100" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <value>0</value>
+      </controlProperties>
+    </control>
+    <control controlID="174" controlTypeID="com.balsamiq.mockups::TitleWindow" x="367" y="262" w="450" h="329" measuredW="450" measuredH="400" zOrder="21" locked="true" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <dragger>false</dragger>
+        <text>%u8BFE%u65F6%u6D4B%u9A8C</text>
+      </controlProperties>
+    </control>
+    <control controlID="175" controlTypeID="com.balsamiq.mockups::Label" x="382" y="302" w="-1" h="-1" measuredW="213" measuredH="22" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>40463</color>
+        <size>14</size>
+        <text>%u606D%u559C%u60A8%u901A%u8FC7%u4E86%u6D4B%u9A8C%uFF0C%u5F97%u5206%u662F80%u5206%u3002</text>
+      </controlProperties>
+    </control>
+    <control controlID="196" controlTypeID="com.balsamiq.mockups::Button" x="676" y="533" w="-1" h="-1" measuredW="126" measuredH="27" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course_lesson_learned_quiz_unpass%26bm%3Bcourse_lesson_learned_quiz_unpass.bmml%26bm%3Bcourse_lesson_learned_quiz_unpass.bmml%26bm%3Bcourse_lesson_learned_quiz_unpass.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22676%2C533%2C802%2C560%22%20href%3D%22course_lesson_learned_quiz_unpass.bmml%22%20alt%3D%22course_lesson_learned_quiz_unpass%22%20id%3D%22196%22/%3E</map>
+        <text>%u7EE7%u7EED%u5B66%u4E60%u4E0B%u4E00%u8BFE%u65F6</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

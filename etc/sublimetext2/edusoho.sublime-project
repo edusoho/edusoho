@@ -1,0 +1,14 @@
+{
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				"web/bundles",
+				"app/cache/dev/twig",
+				"app/cache/dev/profiler"
+			],
+			"path": "/var/www/edusoho"
+		}
+	]
+}

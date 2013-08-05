@@ -1,0 +1,20 @@
+<div class="panel">
+  <div class="panel-heading">
+    <h2>最新讨论</h2>
+  </div>
+  <div class="panel-body">
+
+    <ul class="text-list">
+      {% for thread in threads %}
+        <li class="clearfix">
+          <a href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}">{{ thread.title|plain_text(15) }}</a>
+          <span class="text-muted pull-right">{{ thread.createdTime|date('Y-m-d') }}</span>
+        </li>
+      {% else %}
+      {% endfor %}
+    </ul>
+    {% if not threads %}
+      <div class="empty">暂无讨论</div>
+    {% endif %}
+  </div>
+</div>

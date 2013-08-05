@@ -1,0 +1,33 @@
+<tr id="content-{{ content.id }}">
+	<td>
+		<a href="{{ path('content_' ~ content.type ~ '_show', {alias:content.alias|default(content.id)}) }}" target="_blank">{{ content.title }}</a><br />
+		{% if category %}
+			<span class="text-muted">分类：{{ category.name }}</span>
+		{% endif %}
+	</td>
+	<td>{{ dict_text('contentType', content.type) }}</td>
+	<td>{{ dict_text('contentStatus:html', content.status) }}</td>
+	<td>
+		{{ content.publishedTime|date('Y-n-d H:i') }}<br />
+		{{ user.nickname }}
+	</td>
+	<td>
+		<div class="btn-group">
+		  <a href="#modal" data-toggle="modal" data-url="{{ path('admin_content_edit', {id:content.id}) }}" class="btn btn-default btn-small">编辑</a>
+		  <a href="#" type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown">
+		    <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		  	{% if content.status != 'published' %}
+			    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_content_publish', {id:content.id}) }}">发布</a></li>
+		    {% endif  %}
+		    {% if content.status != 'trash' %}
+			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_content_trash', {id:content.id}) }}">移至回收站</a></li>
+		    {% endif %}
+		    {% if content.status == 'trash' %}
+			    <li><a href="javascript:" data-role="delete-item" data-url="{{ path('admin_content_delete', {id:content.id}) }}">永久删除</a></li>
+			  {% endif %}
+		  </ul>
+		</div>
+	</td>
+</tr>

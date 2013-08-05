@@ -1,0 +1,47 @@
+<form class="form-horizontal" id="group-tag-form" action="{{ path('admin_group_tag', {group:group.id}) }}" method="post">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>设置标签</h3>
+  </div>
+
+  <div class="modal-body">
+    <div class="control-group">
+      <label class="control-label">小组名称</label>
+      <div class="controls">
+        <span class="input-xlarge uneditable-input">{{ group.name }}</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">标签</label>
+      <div class="controls" id="course-tag-form-tags">
+        <input type="text" class="input-xlarge" name="tags" value="{% for tag in tags %}{{tag.name}} {% endfor %}" />
+        <p class="help-block">请填写已在系统中添加的标签，多个标签以空格隔开。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">保存</button>
+  </div>
+
+</form>
+
+<script>
+$(function(){
+  var $form = $('#group-tag-form'),
+      $tags = $("#group-tag-form-tags");
+
+  $tags.on('click', '.label', function() {
+    $(this).toggleClass('label-success');
+  });
+
+  $form.submit(function() {
+    $.post($form.attr('action'), $form.serialize(), function(response) {
+      window.location.reload();
+    }, 'json');
+    return false;
+  });
+});
+</script>

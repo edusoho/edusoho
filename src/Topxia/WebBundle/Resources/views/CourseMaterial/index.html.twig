@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+
+{% set script_controller = 'course/common' %}
+
+{% block dashboard_main %}
+	{% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'material'} %}
+
+	<ul class="media-list">
+	{% for material in materials %}
+	  <li class="media">
+	  	<div class="media-body">
+		    <span class="pull-right text-muted">{{ material.createdTime|smart_time }}</span>
+		    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+		    <span class="mlm text-muted">{{ material.fileSize|file_size }}</span>
+		    <div class="text-muted">{{ material.description }}</div>
+	    </div>
+	  </li>
+	{% else %}
+	  <li class="empty tac text-muted mvl">课程暂无资料</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% set menu = 'fortune' %}
+
+{% block main %}
+
+<div class="page-header"><h1>积分流水帐</h1></div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>时间</th>
+      <th>积分类型</th>
+      <th>变化值</th>
+      <th>备注</th>
+      <th>总值</th>
+      <th>用户</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+    {% set u = userList[log.userId] %}
+    <tr>
+      <td> {{ log.createdTime|fulltime }} </td>
+      <td> {% if log.type == 'point' %}学分{% elseif log.type == 'coin' %}金币{% endif %}</td>
+      <td> {% if log.number > 0 %}+{% endif %} {{ log.number }}</td>
+      <td> {{ log.note }} </td>
+      <td> {% if log.type == 'point' %} {{ u.point }} {% elseif log.type == 'coin' %} {{ u.coin }} {% endif %} </td>
+      <td> ID_{{ log.userId }}: <a href="{{ path('admin_user', {nickname:u.nickname})  }}"> {{ u.nickname }} </a> </td>
+    </tr>
+
+    {% endfor %}
+
+  </tbody>
+</table>
+
+{% if paginator.lastPage > 1 %} {{ pg.paginator(paginator) }} {% endif %}
+
+{% endblock %}

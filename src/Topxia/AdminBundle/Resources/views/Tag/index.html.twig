@@ -1,0 +1,35 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% set menu = 'tag' %}
+{% set script_controller = 'tag/list' %}
+{% block main %}
+
+<div class="page-header clearfix">
+    <h1 class="pull-left">标签</h1>
+    <button class="btn btn-info btn-mini pull-right" id="add-tag-btn" data-toggle="modal" data-target="#tag-create-modal" data-url="{{ path('admin_tag_create') }}">新增标签</button>
+</div>
+
+
+<table id="tag-table" class="table table-striped">
+    <thead>
+        <th>ID</th>
+        <th>名称</th>
+        <th>添加时间</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+      {% for tag in tags %}
+        {% include 'TopxiaAdminBundle:Tag:list-tr.html.twig' %}
+      {% endfor %}
+    </tbody>
+</table>
+
+{% if paginator.lastPage > 1 %} {{ pg.paginator(paginator) }} {% endif %}
+
+<div id="tag-create-modal" class="modal"></div>
+<div id="tag-update-modal" class="modal"></div>
+
+
+{% endblock %}
+
+{% block page_script %} app.load('tag'); {% endblock %}

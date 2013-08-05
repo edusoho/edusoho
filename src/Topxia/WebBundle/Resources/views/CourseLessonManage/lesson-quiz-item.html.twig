@@ -1,0 +1,12 @@
+<li id="quiz-item-id-{{quizItem.id}}">
+    
+    <a href="javascript:;" data-role="quiz-item-edit" data-url="{{ path('course_manage_quiz_item_edit', {quizItemId:quizItem.id}) }}" class="list-group-item">
+    <p class="list-group-item-text">
+    {{quizItem.description | plain_text(20)}}
+    </p>
+    </a>
+                  
+  <button class="btn btn-danger" data-role="quiz-item-delete" data-url="{{ path('course_manage_quiz_item_delete', {quizItemId:quizItem.id}) }}">
+    <i class="glyphicon glyphicon-trash"></i></button>
+
+</li>

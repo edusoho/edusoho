@@ -1,0 +1,25 @@
+<script>
+  var app = {};
+  app.debug = {% if app.debug %}true{% else %}false{% endif %};
+  app.version = '{{ assets_version() }}';
+
+  app.config = {{
+    {
+      api:{
+        weibo:{key:setting('login_bind.weibo_key', '')},
+        qq:{key:setting('login_bind.qq_key', '')},
+        douban:{key:setting('login_bind.douban_key', '')},
+        renren:{key:setting('login_bind.renren_key', '')}
+      }
+    }|json_encode|raw
+  }};
+
+  app.arguments = {};
+  {% if script_controller is defined %}
+    app.controller = '{{ script_controller }}';
+  {% endif %}
+  {% if script_arguments is defined %}
+    app.arguments = {{ script_arguments|json_encode|raw }};
+  {% endif %}
+</script>
+<script src="{{ asset('assets/libs/seajs/seajs/2.0.0/sea.js') }}" data-config="seajs-global-config.js" data-main="{{ script_main }}"></script>

@@ -1,0 +1,41 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}消息中心 - {{ parent() }}{% endblock %}
+{% set nav = 'message' %}
+
+{% block content %}
+
+<div class="page">
+<div class="row">
+  <div class="col-lg-12 mbl ptm">
+
+    {% if notifications is empty %}
+   <strong>暂无消息!</strong>
+    {% else %}
+    <ul class="media-list">
+      {% for notification in notifications %}
+            <li class="media">
+              <div class="pull-right"> {{ notification.createdTime | date('Y-n-d H:i:s') }}</div>
+              <p>消息类型: 
+              {% if notification.type == "default" %}
+              默认类型
+              {% endif %}
+            </p> 
+              <p>
+                {% if notification.content is empty %}
+                消息内容为空
+                {% else %}
+                <strong>消息内容：</strong> {{ notification.content.message }}
+                {% endif %}
+              </p>
+            </li c>
+      {% endfor %}
+    </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+</div>
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

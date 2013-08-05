@@ -1,0 +1,6 @@
+
+    {% if favoriteStatus == 1 %} 
+      <a class="mrm " href="{{ path('course_unfavorite', {id:course.id}) }}"  ><i class="glyphicon glyphicon-star"></i> 取消收藏 </a>
+    {% elseif favoriteStatus == 0 %}
+      <a class="mrm" href="{{ path('course_favorite', {id:course.id}) }}"  ><i class="glyphicon glyphicon-star-empty"></i> 收藏课程 </a>
+    {% endif %}

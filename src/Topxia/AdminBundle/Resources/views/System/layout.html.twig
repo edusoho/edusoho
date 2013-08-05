@@ -1,0 +1,22 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'system' %}
+
+{% block content %}
+  <div class="col-lg-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_setting_auth') }}" class="list-group-item {% if menu == 'auth' %}active{% endif %}">登录注册<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_setting_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}">文件设置<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_setting_mailer') }}" class="list-group-item {% if menu == 'mailer' %}active{% endif %}">电子邮件<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_setting_login_bind') }}" class="list-group-item {% if menu == 'login_bind' %}active{% endif %}">第三方登录<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_setting_payment') }}" class="list-group-item {% if menu == 'payment' %}active{% endif %}">支付方式<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单<span class="glyphicon glyphicon-chevron-right"></span></a>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-lg-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

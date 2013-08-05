@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>升级您的浏览器 -  {{ setting('site.name') }} - Powered by EDUSOHO</title>
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/browser-upgrade.css') }}" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="title">{{ setting('site.name') }}</div>
+    <div class="message">您的浏览器版本过低，请升级您的浏览器后，再访问{{ setting('site.name') }}。</div>
+    <div class="browsers">
+      <div class="head">推荐使用以下浏览器：</div>
+      <div>
+        <a href="http://www.google.cn/intl/zh-CN/chrome/browser/" target="_blank"><i class="browser-chrome"></i></a>
+        <a href="http://firefox.com.cn/download/" target="_blank"><i class="browser-firefox"></i></a>
+        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie"  target="_blank"><i class="browser-ie"></i></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

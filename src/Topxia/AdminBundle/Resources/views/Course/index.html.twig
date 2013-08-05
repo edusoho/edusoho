@@ -1,0 +1,90 @@
+{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+
+{% set script_controller = 'course/manage' %}
+
+{% set menu = 'course' %}
+
+{% block main %}
+<div class="page-header">
+  <a href="{{ path('course_create') }}" class="btn btn-primary btn-small pull-right" target="_blank">创建课程</a>
+
+  <h1>课程管理</h1>
+</div>
+
+ <form id="message-search-form" class="well well-small" action="" method="get" novalidate> 
+    <div class="row">
+      <div class="col-lg-3">
+        {{ form_widget(form.title, {attr:{placeholder:'标题'}}) }}
+      </div>
+      <div class="col-lg-2">
+        {{ form_widget(form.nickname, {attr:{placeholder:'课程创建人'}}) }}
+      </div>
+
+      <button class="btn btn-primary">搜索</button>
+      {{ form_rest(form) }}
+    </div>
+  </form>
+
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th>标题</th>
+         <th>分类</th>
+         <th>状态</th>
+         <th>作者</th>
+         <th>日期</th>
+         <th>操作</th>
+      </tr>
+   </thead>
+   <tbody>
+     {% for course in courses %}
+     {% set user = object_load('user', course.userId) %}
+     {% set category = object_load('category', course.categoryId) %}
+     <tr>
+       <td>
+          <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+          <div>
+            <span style="color:gray;">
+              {{ course.studentNum }}学员 / 
+              标签: 
+            </span>
+          </div>
+       </td>
+       <td>
+        {{ category.name|default('--') }}
+       </td>
+       <td>
+      {% if course.status == "published" %}
+       已发布
+       {% elseif course.status == "editing" %} 
+       创作中
+       {% elseif course.status == "closed" %}
+       已关闭
+       {% endif %}
+       </td>
+       <td> {{ user.nickname|default('--') }} </td>
+       <td> {{ course.createdTime|date('Y-n-d H:i:s') }} </td>
+       <td>
+        <a class="btn btn-mini btn-danger delete-btn" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}">删除</a>
+        {% if course.status == "published" %}
+        <a class="btn btn-mini btn-warning close-btn" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}">关闭</a>
+       {% elseif course.status == "editing" %} 
+        <a class="btn btn-mini btn-warning close-btn" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}">关闭</a>
+       {% elseif course.status == "closed" %}
+        <a class="btn btn-mini btn-success open-btn" href="javascript:" data-url="{{ path('admin_course_open', {id:course.id}) }}">开启</a>
+       {% endif %}
+
+       </td>
+     </tr>
+     {% endfor %}
+   </tbody>
+</table>
+
+{% if paginator.lastPage > 1 %} {{ web_macro.paginator(paginator) }} {% endif %}
+
+
+{% endblock %}
+
+{% block footer %}
+<div id="course-modal" class="modal"></div>
+{% endblock %}

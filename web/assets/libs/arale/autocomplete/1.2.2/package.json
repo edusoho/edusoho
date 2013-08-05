@@ -1,0 +1,40 @@
+{
+    "family": "arale",
+    "name": "autocomplete",
+    "version": "1.2.2",
+    "description": "自动补全组件",
+    "keywords": ["widget"],
+    "homepage": "http://aralejs.org/autocomplete/",
+    "author": "贯高 <sakura9515@gmail.com>",
+    "maintainers": [
+        "贯高 <sakura9515@gmail.com>",
+        "乔花 <shengyan1985@gmail.com>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aralejs/autocomplete.git"
+    },
+    "bugs": {
+        "url": "https://github.com/aralejs/autocomplete/issues"
+    },
+    "license": "MIT",
+    "spm": {
+        "alias": {
+            "$":"$",
+            "selection": "gallery/selection/0.9.0/selection",
+            "base": "arale/base/1.1.1/base",
+            "templatable": "arale/templatable/0.9.1/templatable",
+            "overlay": "arale/overlay/1.1.1/overlay"
+        },
+        "devAlias": {
+            "puerh": "popomore/puerh/0.1.0/puerh"
+        },
+        "output": [
+            "autocomplete.js",
+            "textarea-complete.js"
+        ]
+    },
+    "scripts": {
+        "test": "make test"
+    }
+}

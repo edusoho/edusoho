@@ -1,0 +1,32 @@
+{% if player == 'flash' %}
+
+<embed 
+    src="{{ url }}" 
+    type="application/x-shockwave-flash" 
+    allowscriptaccess="always" 
+    allowfullscreen="true" 
+    wmode="opaque" 
+    width="600" 
+    height="450"></embed>
+{% elseif player == 'html5' %}
+
+<script src="/html5media/html5media.min.js"></script>
+
+<video class="video-player" width="600" height="450" controls="controls" preload="auto" autoplay="autoplay">
+    <source src="{{ url }}">
+</video>
+
+{% elseif player == 'youku' %}
+
+{% set url = url | youku_player_url %}
+
+<object type="application/x-shockwave-flash" width="600" height="450" id="movie_player" data="{{ url }}">
+  <param name="allowFullScreen" value="true"/>
+  <param name="allowscriptaccess" value="always"/>
+  <param name="wmode" value="transparent"/>
+  <param name="movie" value="{{ url }}"/>
+</object>
+
+
+
+{% endif %} 

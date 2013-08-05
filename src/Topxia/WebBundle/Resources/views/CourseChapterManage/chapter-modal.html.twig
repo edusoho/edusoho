@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set chapter = chapter|default(null) %}
+
+{% block title %}{% if chapter %}编辑{% else %}添加{% endif %}章节{% endblock %}
+{% block body %}
+
+<form id="course-chapter-form" class="form-horizontal" method="post"
+  {% if chapter %}
+	  action="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"
+	{% else %}
+	  action="{{ path('course_manage_chapter_create', {id:course.id}) }}"
+  {% endif %}
+  >
+  <div class="row control-group">
+    <div class="col-lg-3 control-label"><label for="chapter-title-field">章节标题</label></div>
+    <div class="col-lg-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}"></div>
+  </div>
+</form>
+
+<script>app.load('course-manage/chapter-modal')</script>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">添加</button>
+{% endblock %}
+
+{% set hideFooter = true %}

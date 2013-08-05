@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}绑定用户 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/login-bind-exist' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-6 col-offset-3">
+
+    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-page mtl'} %}
+      {% block heading %}<h2>绑定用户</h2>{% endblock %}
+      {% block body %}
+        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+        <div class="alert">您当前正在使用<strong>{{ client.clientInfo.name }}</strong>登录{{ setting('site.name') }}</div>
+
+        <form id="bind-exist-form" class="form-vertical" method="post">
+          <div class="control-group">
+            {{ form_label(form.email, 'Email地址', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.email, {attr:{'data-url':path('login_check_email')}}) }}
+              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            {{ form_label(form.password, '密码', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.password) }}
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="controls">
+              {{ form_rest(form) }}
+              <button class="btn btn-fat btn-primary btn-large" type="submit">绑定</button>
+            </div>
+          </div>
+        </form>
+
+        <div>
+          <span class="text-muted">还没有帐号？</span>
+          <a href="{{ path('login_bind_new', {type: client.clientInfo.type}) }}">注册一个新帐号</a>
+        </div>
+
+      {% endblock %}
+    {% endembed %}
+  </div>
+</div>
+{% endblock %}

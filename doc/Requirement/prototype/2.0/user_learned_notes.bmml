@@ -1,0 +1,319 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1230" measuredH="1111" mockupW="1230" mockupH="1111">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Component" x="0" y="0" w="1230" h="48" measuredW="1230" measuredH="48" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E</map>
+        <src>./assets/symbols.bmml#site-header</src>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Icon" x="272" y="80" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>2848996</color>
+        <icon>ListIcon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::Component" x="120" y="80" w="978" h="1031" measuredW="978" measuredH="1031" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C102%2C296%2C135%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C135%2C296%2C168%22%20href%3D%22user_teach_dashboard.bmml%22%20alt%3D%22user_teach_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22120%2C234%2C296%2C267%22%20href%3D%22me_account.bmml%22%20alt%3D%22me_account%22%20id%3D%220%22/%3E%0A</map>
+        <src>./assets/symbols.bmml#user_layout</src>
+      </controlProperties>
+    </control>
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::Component" x="333" y="94" w="742" h="37" measuredW="742" measuredH="37" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C94%2C510%2C131%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22510%2C94%2C651%2C131%22%20href%3D%22user_learned_courses.bmml%22%20alt%3D%22user_learned_courses%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22651%2C94%2C792%2C131%22%20href%3D%22user_learned_questions.bmml%22%20alt%3D%22user_learned_questions%22%20id%3D%220%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22792%2C94%2C933%2C131%22%20href%3D%22user_learned_notes.bmml%22%20alt%3D%22user_learned_notes%22%20id%3D%220%22/%3E%0A</map>
+        <override controlID="0">
+          <selectedIndex>3</selectedIndex>
+        </override>
+        <src>./assets/symbols.bmml#user_learned_tab</src>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::LinkBar" x="333" y="155" w="-1" h="-1" measuredW="161" measuredH="19" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>0</selectedIndex>
+        <text>%u6211%u8BB0%u7684%u7B14%u8BB0%2C%u6211%u6536%u85CF%u7684%u7B14%u8BB0</text>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="__group__" x="336" y="195" w="350" h="100" measuredW="350" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22336%2C195%2C686%2C295%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2262%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="62"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="62"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="62">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="62">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="62">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="63" controlTypeID="__group__" x="722" y="195" w="350" h="100" measuredW="350" measuredH="100" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22722%2C195%2C1072%2C295%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2263%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="63"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="63"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="63">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="63">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="63">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="64" controlTypeID="__group__" x="333" y="325" w="350" h="100" measuredW="350" measuredH="100" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C325%2C683%2C425%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2264%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="64"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="64"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="64">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="64">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="64">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="65" controlTypeID="__group__" x="719" y="325" w="350" h="100" measuredW="350" measuredH="100" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22719%2C325%2C1069%2C425%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2265%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="65"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="65"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="65">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="65">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="65">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="66" controlTypeID="__group__" x="333" y="452" w="350" h="100" measuredW="350" measuredH="100" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C452%2C683%2C552%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2266%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="66"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="66"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="66">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="66">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="66">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="67" controlTypeID="__group__" x="719" y="452" w="350" h="100" measuredW="350" measuredH="100" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22719%2C452%2C1069%2C552%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2267%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="67"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="67"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="67">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="67">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="67">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="68" controlTypeID="__group__" x="333" y="573" w="350" h="100" measuredW="350" measuredH="100" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22333%2C573%2C683%2C673%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2268%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="68"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="68"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="68">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="68">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="68">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="69" controlTypeID="__group__" x="719" y="573" w="350" h="100" measuredW="350" measuredH="100" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>user_learned_notes_detail%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml%26bm%3Buser_learned_notes_detail.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22719%2C573%2C1069%2C673%22%20href%3D%22user_learned_notes_detail.bmml%22%20alt%3D%22user_learned_notes_detail%22%20id%3D%2269%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="350" h="100" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="69"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="135" h="100" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="69"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="148" y="9" w="-1" h="-1" measuredW="55" measuredH="22" zOrder="2" locked="false" isInGroup="69">
+          <controlProperties>
+            <size>14</size>
+            <text>PHP%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="148" y="40" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="3" locked="false" isInGroup="69">
+          <controlProperties>
+            <color>40463</color>
+            <size>12</size>
+            <text>15%u7BC7</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="148" y="69" w="-1" h="-1" measuredW="189" measuredH="20" zOrder="4" locked="false" isInGroup="69">
+          <controlProperties>
+            <color>6710886</color>
+            <size>12</size>
+            <text>125%u67E5%u770B%20%20%20121%u559C%u6B22%20%20%20%2087%u6536%u85CF%20%20%205%u8BC4%u8BBA</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::Label" x="525" y="235" w="-1" h="-1" measuredW="38" measuredH="20" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>12</size>
+        <text>1.5%u4E07%u5B57</text>
+      </controlProperties>
+    </control>
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::Label" x="905" y="235" w="-1" h="-1" measuredW="38" measuredH="20" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>12</size>
+        <text>1.5%u4E07%u5B57</text>
+      </controlProperties>
+    </control>
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::Label" x="516" y="365" w="-1" h="-1" measuredW="38" measuredH="20" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>12</size>
+        <text>1.5%u4E07%u5B57</text>
+      </controlProperties>
+    </control>
+    <control controlID="73" controlTypeID="com.balsamiq.mockups::Label" x="898" y="365" w="-1" h="-1" measuredW="38" measuredH="20" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>12</size>
+        <text>1.5%u4E07%u5B57</text>
+      </controlProperties>
+    </control>
+    <control controlID="74" controlTypeID="com.balsamiq.mockups::Label" x="516" y="492" w="-1" h="-1" measuredW="38" measuredH="20" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>12</size>
+        <text>1.5%u4E07%u5B57</text>
+      </controlProperties>
+    </control>
+    <control controlID="75" controlTypeID="com.balsamiq.mockups::Label" x="905" y="492" w="-1" h="-1" measuredW="38" measuredH="20" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>12</size>
+        <text>1.5%u4E07%u5B57</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

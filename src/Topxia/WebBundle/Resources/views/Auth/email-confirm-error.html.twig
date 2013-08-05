@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}邮箱地址验证失败 - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-6 col-offset-3 ptl">
+    <div class="panel panel-page">
+      <div class="panel-heading"><h2>邮箱地址验证失败</h2></div>
+
+      <p class="alert alert-danger">邮箱地址验证失败，请重试。</p>
+
+      <p><a href="{{ path('homepage') }}" class="btn btn-primary">返回首页</a></p>
+
+    </div><!-- /panel -->
+
+  </div>
+
+</div>
+{% endblock %}

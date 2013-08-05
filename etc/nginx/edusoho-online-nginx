@@ -1,0 +1,55 @@
+server {
+    listen 80;
+    server_name edusoho.com www.edusoho.com;
+    root /var/www/edusoho/web;
+
+    access_log /var/log/nginx/edusoho.com.access.log main;
+    error_log /var/log/nginx/edusoho.com.error.log;
+
+    location / {
+        index app.php;
+        if ($host != 'www.edusoho.com' ) {
+            rewrite ^/(.*)$ http://www.edusoho.com/$1 permanent;
+        }
+        try_files $uri @rewriteapp;
+    }
+
+    location ^~ /cache/ {
+        try_files $uri @rewriteapp;
+    }
+
+    location @rewriteapp {
+        rewrite ^(.*)$ /app.php/$1 last;
+    }
+
+    location ~ ^/(app|app_dev)\.php(/|$) {
+        fastcgi_pass   unix:/dev/shm/php.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param  HTTPS              off;
+    }
+
+    location ~* \.(jpg|jpeg|gif|png|ico|swf)$  {
+        expires 3y;
+        access_log off;
+        gzip off;
+    }
+
+    location ~* \.(css|js)$ {
+        access_log off;
+        expires 3y;
+    }
+
+    location ~ ^/files/.*\.(php|php5)$ {
+        deny all;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass   unix:/dev/shm/php.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param  HTTPS              off;
+    }
+}

@@ -1,0 +1,41 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menu = 'file' %}
+
+{% block main %}
+
+<div class="page-header"><h1>站点设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <div class="row control-group">
+    <div class="col-lg-3 control-label">{{ form_label(form.public_directory, '公开文件存放目录名称') }}</div>
+    <div class="controls col-lg-8">
+      {{ form_widget(form.public_directory) }}
+    </div>
+  </div>
+
+  <div class="row control-group">
+    <div class="col-lg-3 control-label">{{ form_label(form.public_url, '公开文件WEB访问URL') }}</div>
+    <div class="controls col-lg-8">
+      {{ form_widget(form.public_url) }}
+      <p class="help-block">如果使用当前域名，请留空</p>
+    </div>
+  </div>
+
+  <div class="row control-group">
+    <div class="col-lg-3 control-label">{{ form_label(form.private_directory, '私有文件存放目录名称') }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.private_directory) }}</div>
+  </div>
+
+  <div class="row control-group">
+    <div class="col-lg-3 control-label"></div>
+    <div class="controls col-lg-8">
+      {{ form_rest(form) }}
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

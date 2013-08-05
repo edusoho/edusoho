@@ -1,0 +1,57 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}{{ group.name }}管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'category' %}
+
+{% block main %}
+
+<!-- <select>
+  <option disabled>摄影</option>
+  <option disabled>&nbsp;&nbsp;基础知识</option>
+  <option>&nbsp;&nbsp;&nbsp;&nbsp;基础知识</option>
+  <option>&nbsp;&nbsp;&nbsp;&nbsp;进阶技巧</option>
+  <option>&nbsp;&nbsp;&nbsp;&nbsp;进阶技巧</option>
+  <option disabled>&nbsp;&nbsp;编程</option>
+</select> -->
+
+<div class="page-header clearfix">
+  <button class="btn btn-small btn-info pull-right add-category" data-toggle="modal" data-target="#category-modal" data-backdrop="static" data-url="{{ path('admin_category_create', {groupId:group.id}) }}">添加分类</button>
+  <h1 class="pull-left">{{ group.name }}管理</h1>
+</div>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th width="50%">名称</th>
+      <th>编码</th>
+      <th>权重</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in categories %}
+      {% include 'TopxiaAdminBundle:Category:list-tr.html.twig' %}
+    {% endfor %}
+  </tbody>
+</table>
+<div id="category-modal" class="modal"></div>
+{% endblock %}
+
+{% macro category_tr(category, group, depth) %}
+
+<tr>
+  <td>
+    <a href="javascript:;" title="编辑" class="btn btn-link"
+    data-toggle="modal" data-backdrop="static" data-target="#category-modal" data-url="{{ path('admin_category_save', {id:category.id}) }}">编辑</a>
+
+    <a href="javascript:;" class="btn btn-link category-delete" data-url="{{ path('admin_category_delete', {id:category.id}) }}" data-title="您真的要删除【{{ category.name }}】分类吗？">删除</a>
+
+    {% if group.depth > depth %}
+      <a href="javascript:;" title="添加子分类" class="btn btn-link"
+      data-toggle="modal" data-backdrop="static" data-target="#category-modal" data-url="{{ path('admin_category_save', {groupId:group.id, parentId:category.id}) }}">添加子分类</a>
+    {% endif %}
+  </td>
+</tr>
+
+{% endmacro %}

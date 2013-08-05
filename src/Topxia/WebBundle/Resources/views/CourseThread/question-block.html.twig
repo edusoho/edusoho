@@ -1,0 +1,14 @@
+<div class="panel">
+  <div class="panel-heading">
+  	<h2>问答</h2>
+  </div>
+  <div class="panel-body">
+  	<ul class="text-list">
+  		{% for thread in threads %}
+  		<li>
+        <a href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}">{{ thread.title }}</a>
+      </li>
+  		{% endfor %}
+  	</ul>
+  </div>
+</div>

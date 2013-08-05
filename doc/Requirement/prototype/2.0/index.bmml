@@ -1,0 +1,956 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1230" measuredH="1342" mockupW="1230" mockupH="1342">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Component" x="0" y="0" w="1230" h="48" measuredW="1230" measuredH="48" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22123%2C8%2C195%2C40%22%20href%3D%22index.bmml%22%20alt%3D%22index%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%221033%2C12%2C1099%2C36%22%20href%3D%22user_learned_dashboard.bmml%22%20alt%3D%22user_learned_dashboard%22%20id%3D%222%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22266%2C14%2C298%2C38%22%20href%3D%22courses_explore.bmml%22%20alt%3D%22courses_explore%22%20id%3D%223%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22332%2C14%2C364%2C38%22%20href%3D%22group_explore.bmml%22%20alt%3D%22group_explore%22%20id%3D%224%22/%3E</map>
+        <src>./assets/symbols.bmml#site-header</src>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Canvas" x="314" y="82" w="791" h="1260" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1"/>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::HRule" x="333" y="299" w="753" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::Label" x="333" y="317" w="-1" h="-1" measuredW="56" measuredH="22" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>%u6700%u65B0%u8BFE%u7A0B</text>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Link" x="1051" y="319" w="-1" h="-1" measuredW="26" measuredH="19" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u66F4%u591A</text>
+      </controlProperties>
+    </control>
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::Label" x="333" y="986" w="-1" h="-1" measuredW="56" measuredH="22" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>%u70ED%u95E8%u8BFE%u7A0B</text>
+      </controlProperties>
+    </control>
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::HRule" x="318" y="976" w="785" h="-1" measuredW="100" measuredH="10" zOrder="6" locked="false" isInGroup="-1"/>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Link" x="1051" y="989" w="-1" h="-1" measuredW="26" measuredH="19" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u66F4%u591A</text>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::Component" x="125" y="82" w="162" h="494" measuredW="162" measuredH="494" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E%3Carea%20shape%3D%22rect%22%20coords%3D%22155%2C129%2C272%2C151%22%20href%3D%22courses_explore_list.bmml%22%20alt%3D%22courses_explore_list%22%20id%3D%221%22/%3E</map>
+        <src>./assets/symbols.bmml#index-nav</src>
+      </controlProperties>
+    </control>
+    <control controlID="49" controlTypeID="com.balsamiq.mockups::Image" x="333" y="98" w="755" h="186" measuredW="77" measuredH="79" zOrder="9" locked="false" isInGroup="-1"/>
+    <control controlID="51" controlTypeID="com.balsamiq.mockups::StickyNote" x="576" y="162" w="273" h="58" measuredW="109" measuredH="123" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u56FE%u7247%u8F6E%u64AD%uFF0C%u624B%u5DE5%u7F16%u8F91%u533A</text>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="__group__" x="326" y="354" w="250" h="285" measuredW="250" measuredH="285" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22326%2C354%2C576%2C639%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2252%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="52">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="52">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22337%2C363%2C567%2C503%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="52">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="52">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="52">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="52">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="52">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="52">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="52">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="52">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="52">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="52">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="52">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="53" controlTypeID="__group__" x="588" y="354" w="250" h="285" measuredW="250" measuredH="285" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22588%2C354%2C838%2C639%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2253%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="53">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="53">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22599%2C363%2C829%2C503%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="53">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="53">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="53">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="53">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="53">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="53">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="53">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="53">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="53">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="53">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="53">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="54" controlTypeID="__group__" x="845" y="354" w="250" h="285" measuredW="250" measuredH="285" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22845%2C354%2C1095%2C639%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2254%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="54">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="54">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22856%2C363%2C1086%2C503%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="54">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="54">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="54">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="54">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="54">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="54">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="54">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="54">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="54">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="54">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="54">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="55" controlTypeID="__group__" x="326" y="654" w="250" h="285" measuredW="250" measuredH="285" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22326%2C654%2C576%2C939%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2255%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="55">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="55">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22337%2C663%2C567%2C803%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="55">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="55">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="55">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="55">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="55">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="55">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="55">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="55">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="55">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="55">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="55">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="56" controlTypeID="__group__" x="588" y="654" w="250" h="285" measuredW="250" measuredH="285" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22588%2C654%2C838%2C939%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2256%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="56">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="56">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22599%2C663%2C829%2C803%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="56">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="56">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="56">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="56">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="56">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="56">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="56">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="56">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="56">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="56">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="56">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="57" controlTypeID="__group__" x="845" y="654" w="250" h="285" measuredW="250" measuredH="285" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22845%2C654%2C1095%2C939%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2257%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="57">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="57">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22856%2C663%2C1086%2C803%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="57">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="57">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="57">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="57">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="57">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="57">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="57">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="57">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="57">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="57">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="57">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="58" controlTypeID="__group__" x="326" y="1029" w="250" h="285" measuredW="250" measuredH="285" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22326%2C1029%2C576%2C1314%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2258%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="58">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="58">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22337%2C1038%2C567%2C1178%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="58">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="58">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="58">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="58">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="58">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="58">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="58">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="58">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="58">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="58">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="58">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="59" controlTypeID="__group__" x="588" y="1029" w="250" h="285" measuredW="250" measuredH="285" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22588%2C1029%2C838%2C1314%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2259%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="59">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="59">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22599%2C1038%2C829%2C1178%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="59">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="59">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="59">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="59">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="59">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="59">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="59">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="59">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="59">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="59">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="59">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="60" controlTypeID="__group__" x="845" y="1029" w="250" h="285" measuredW="250" measuredH="285" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22845%2C1029%2C1095%2C1314%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%2260%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="250" h="285" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="60">
+          <controlProperties>
+            <borderColor>14540253</borderColor>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="11" y="9" w="230" h="140" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="60">
+          <controlProperties>
+            <href>course%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml%26bm%3Bcourse.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22856%2C1038%2C1086%2C1178%22%20href%3D%22course.bmml%22%20alt%3D%22course%22%20id%3D%221%22/%3E</map>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="__group__" x="11" y="201" w="128" h="41" measuredW="128" measuredH="41" zOrder="2" locked="false" isInGroup="60">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="36" h="36" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="2"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="44" y="0" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="1" locked="false" isInGroup="2">
+              <controlProperties>
+                <text>%u82CF%u5C0F%u5C0F</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="44" y="21" w="-1" h="-1" measuredW="84" measuredH="20" zOrder="2" locked="false" isInGroup="2">
+              <controlProperties>
+                <color>6710886</color>
+                <size>12</size>
+                <text>%u56FD%u5BB6%u4E00%u7EA7%u6444%u5F71%u5E08</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::IconLabel" x="11" y="249" w="-1" h="-1" measuredW="43" measuredH="24" zOrder="3" locked="false" isInGroup="60">
+          <controlProperties>
+            <icon>ContactIcon%7Csmall</icon>
+            <labelPosition>left</labelPosition>
+            <text>67</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="73" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="60">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="60">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="105" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="6" locked="false" isInGroup="60">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Icon" x="121" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="60">
+          <controlProperties>
+            <color>40463</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Icon" x="138" y="255" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="60">
+          <controlProperties>
+            <color>6710886</color>
+            <icon>StarIcon%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="156" y="251" w="-1" h="-1" measuredW="24" measuredH="20" zOrder="9" locked="false" isInGroup="60">
+          <controlProperties>
+            <size>12</size>
+            <text>%2823%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="195" y="251" w="-1" h="-1" measuredW="36" measuredH="24" zOrder="10" locked="false" isInGroup="60">
+          <controlProperties>
+            <color>13576743</color>
+            <size>16</size>
+            <text>69%u5143</text>
+          </controlProperties>
+        </control>
+        <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="11" y="139" w="230" h="54" measuredW="100" measuredH="70" zOrder="11" locked="false" isInGroup="60">
+          <controlProperties>
+            <backgroundAlpha>0.25</backgroundAlpha>
+            <borderColor>40463</borderColor>
+            <color>40463</color>
+          </controlProperties>
+        </control>
+        <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="23" y="159" w="-1" h="-1" measuredW="84" measuredH="22" zOrder="12" locked="false" isInGroup="60">
+          <controlProperties>
+            <size>14</size>
+            <text>%u6444%u5F71%u57FA%u7840%u5165%u95E8</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Icon" x="437" y="417" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>RightTriangleIcon%7Cmedium</icon>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::Icon" x="702" y="417" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>RightTriangleIcon%7Cmedium</icon>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::Icon" x="957" y="417" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>RightTriangleIcon%7Cmedium</icon>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = '' %}
+
+{% block title %}课程报名{% endblock %}
+{% block body %}
+
+<form id="course-join-form" class="form-horizontal" method="post" action="{{ path('course_join', {id:course.id}) }}" data-auto-submit="false">
+{{ web_macro.flash_messages() }}
+
+	<div class="row control-group">
+		<div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
+		<div class="col-lg-8 controls">{{ form_widget(form.truename) }}</div>
+	</div>
+
+	<div class="row control-group">
+		<div class="col-lg-2 control-label">{{ form_label(form.email, 'Email') }}</div>
+		<div class="col-lg-8 controls"> {{ form_widget(form.email) }} </div>
+	</div>
+
+	<div class="row control-group">
+		<div class="col-lg-2 control-label">{{ form_label(form.mobile, '手机号') }}</div>
+		<div class="col-lg-8 controls">{{ form_widget(form.mobile) }}</div>
+	</div>
+
+	<div class="row control-group">
+		<div class="col-lg-2 control-label">{{ form_label(form.company, '公司') }}</div>
+		<div class="col-lg-8 controls">{{ form_widget(form.company) }}</div>
+	</div>
+
+	<div class="row control-group">
+		<div class="col-lg-2 control-label">{{ form_label(form.job, '职位') }}</div>
+		<div class="col-lg-8 controls">{{ form_widget(form.job) }}</div>
+	</div>
+
+	<div class="row control-group">
+		<div class="col-offset-2 controls checkboxs">
+			{{ form_widget(form.updateProfile, {attr:{class:''}}) }}
+		</div>
+	</div>
+
+	{{ form_rest(form) }}
+
+</form>
+
+<script>
+app.load('course/join-modal');
+</script>
+
+{% endblock %}
+
+{% block footer %}
+<input class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-join-form" value="报名">
+{% endblock %}

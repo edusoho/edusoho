@@ -1,0 +1,41 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}评价课程{% endblock %}
+{% block body %}
+
+  <form id="review-form" class="form-horizontal" method="post" action="{{ path('course_review_create', {id:course.id}) }}">
+    {{ web_macro.flash_messages() }}
+
+  <p class="control-group">
+    <div class="controls">
+      请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" class="mrm"></span>
+      {{ form_widget(form.rating) }}
+    </div>
+  </p>
+
+  <p class="control-group">
+    <div class="controls">
+      {{ form_widget(form.title, {attr:{placeholder:'评价标题', 'data-display':'评价标题'}}) }}
+    </div>
+  </p>
+
+  <p class="control-group">
+    <div class="controls">
+      {{ form_widget(form.content, {attr:{placeholder:'评价详细内容', 'data-display':'评价详细内容', rows:8}}) }}
+    </div>
+  </p>
+
+  {{ form_rest(form) }}
+
+</form>
+
+<script>
+    app.load('course/review-modal');
+</script>
+
+{% endblock %}
+
+{% block footer %}
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form">保存</button>
+{% endblock %}

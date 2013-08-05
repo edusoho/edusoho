@@ -1,0 +1,100 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - Powered by EDUSOHO{% endblock %}</title>
+  <meta name="keywords" content="{% block keywords %}{% endblock %}" />
+  <meta name="description" content="{% block description %}{% endblock %}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block stylesheets %}
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap/3.0.0/css/bootstrap.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap/3.0.0/css/bootstrap-glyphicons.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap/3.0.0/css/bootstrap-extends.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
+  {% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/bootstrap/3.0.0/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/bootstrap/3.0.0/respond.min.js') }}"></script>
+  <![endif]-->
+
+  <!--[if lt IE 8]>
+    <script>window.location.href="{{ path('browser_upgrade') }}";</script>
+  <![endif]-->
+</head>
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+
+{% block body %}
+<div class="navbar navbar-inverse site-navbar">
+  <div class="container">
+    <!-- .navbar-toggle is used as the toggle for collapsed navbar content -->
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    {% block logo %}
+      <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+    {% endblock %}
+    <div class="nav-collapse collapse navbar-responsive-collapse">
+      {% set nav = nav|default(null) %}
+      {% block nav %}
+        <ul class="nav navbar-nav">
+          <li {% if nav == 'course' %}class="active"{% endif %}><a href="{{ path('course_explore') }}">课程</a></li>
+        </ul>
+      {% endblock %}
+      <ul class="nav navbar-nav pull-right">
+        {% if app.user %}
+          <li class="dropdown">
+            <a href="{{ path('my') }}"> 个人中心 </a>
+          </li>
+          <li class="dropdown">
+            <a href="{{ path('notification') }}">消息 {{app.user.unreadNotificationNum}}</a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li class="hide"><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
+              <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 账户设置</a></li>
+              <li class="divider"></li>
+              {% if is_granted('ROLE_TEACHER') %}
+                <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
+              {% endif  %}
+              {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
+                <li class="divider"></li>
+              {% endif %}
+              <li><a href="{{ path('message') }}"><i class="glyphicon glyphicon-envelope"></i> 私信</a></li>
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <li><a href="{{ path('login') }}">登录</a></li>
+          <li><a href="{{ path('register') }}">注册</a></li>
+        {% endif %}
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<div id="content-container" class="container">
+  {% block content %}{% endblock %}
+</div><!-- /container -->
+
+  {% block bottom %}{% endblock %}
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+
+  <div id="modal" class="modal" tabindex="-1"></div>
+
+{% endblock %}
+
+{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+
+</body>
+</html>

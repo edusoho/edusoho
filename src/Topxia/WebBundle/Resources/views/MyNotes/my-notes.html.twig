@@ -1,0 +1,42 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}我的笔记... - {{ parent() }}{% endblock %}
+
+{% set nav = 'my-notes' %}
+
+{% set bodyClass = 'lesson-notes' %}
+
+{% block content %}
+
+<div class="row">
+    
+    {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
+
+    <div class="col-lg-9">
+        
+        <div class="notice-my-notes">
+            <h1>我的笔记</h1>
+        </div>
+        {%  if myNotes is empty %}
+            <h3> 你还没有创建任何笔记哦！ </h3>
+        {% else %}
+ 
+            {% for course in courses %}
+                <div class="notes-of-course">
+                    <a href="{{ path('my_notes_detail', {userId: app.user.id, courseId: course.id }) }}">
+                        <img src="{{ file_path(course.largePicture, 'course-large.png', true) }}">
+                    </a>
+                    <br>
+                    课程名称:<font size="4"> {{course.title}} </font>
+                    <p> 共 {{ course.notes | length }} 篇笔记</p>
+                    <p> 最后更新 {{ course.noteLatestUpdatedTime | smart_time }} </p>
+                </div>
+            {% endfor %}
+            
+        {% endif %}
+        {{ web_macro.paginator(paginator) }} 
+    </div>
+
+</div>
+
+{% endblock %}

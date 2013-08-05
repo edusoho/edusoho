@@ -1,0 +1,18 @@
+<form class="form-vertical form-vertical-small" id="lesson-note-plugin-form" method="post" 
+action="{{ path('course_lesson_plugin_note_save') }}"
+>
+	<div class="control-group note-content">
+		<div class="controls">
+	    {{ form_widget(form.content) }}
+	  </div>
+	</div>
+
+	<div class="control-group note-actions">
+		<div class="controls clearfix">
+		  {{ form_rest(form) }}
+		  <span class="text-muted pull-left" data-role="saved-message"></span>
+			<button id="save" class="btn btn-primary btn-small" type="submit">保存笔记</button>
+		</div>
+	</div>
+
+</form>

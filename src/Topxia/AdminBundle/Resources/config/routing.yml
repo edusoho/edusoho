@@ -1,0 +1,381 @@
+admin:
+    pattern:  /
+    defaults: { _controller: TopxiaAdminBundle:Default:index }
+
+admin_content:
+    pattern:  /content
+    defaults: { _controller: TopxiaAdminBundle:Content:index }
+
+admin_content_create:
+    pattern:  /content/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:Content:create }
+
+admin_content_edit:
+    pattern:  /content/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Content:edit }
+
+admin_content_publish:
+    pattern:  /content/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Content:publish }
+    methods:  [POST]
+
+admin_content_trash:
+    pattern:  /content/{id}/trash
+    defaults: { _controller: TopxiaAdminBundle:Content:trash }
+    methods:  [POST]
+
+admin_content_delete:
+    pattern:  /content/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Content:delete }
+    methods:  [POST]
+
+
+admin_content_alias_check:
+    pattern:  /content/alias/check
+    defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
+
+admin_content_picture_upload:
+    pattern:  /content/picture/upload
+    defaults: { _controller: TopxiaAdminBundle:Content:pictureUpload }
+
+admin_block:
+    pattern:  /block
+    defaults: { _controller: TopxiaAdminBundle:Block:index }
+
+admin_block_create:
+    pattern:  /block/create
+    defaults: { _controller: TopxiaAdminBundle:Block:create }
+
+admin_block_delete:
+    pattern:  /block/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Block:delete }
+    methods:  [POST]
+
+admin_block_code_check_forcreate:
+    pattern:  /block/code/check/forcreate
+    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForCreate }
+
+admin_block_code_check_foredit:
+    pattern:  /block/code/{id}/check/foredit
+    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
+
+admin_block_update:
+    pattern:  /block/{block}/update
+    defaults: { _controller: TopxiaAdminBundle:Block:update }
+
+admin_block_edit:
+    pattern:  /block/{block}/edit
+    defaults: { _controller: TopxiaAdminBundle:Block:edit }
+
+admin_blockhistory_preview:
+    pattern:  /blockhistory/{id}/preview
+    defaults: { _controller: TopxiaAdminBundle:Block:preview }
+
+admin_tag:
+    pattern:  /tag
+    defaults: { _controller: TopxiaAdminBundle:Tag:index }
+
+admin_tag_create:
+    pattern:  /tag/create
+    defaults: { _controller: TopxiaAdminBundle:Tag:create }
+
+admin_tag_update:
+    pattern:  /tag/{tag}/update
+    defaults: { _controller: TopxiaAdminBundle:Tag:update }
+
+admin_tag_name_check:
+    pattern:  /tag/{tag}/name/check
+    defaults: { _controller: TopxiaAdminBundle:Tag:checkTagName, tag: 0 }
+    requirements:
+        tag: \d+
+
+admin_tag_delete:
+    pattern:  /tag/{tag}/delete
+    defaults: { _controller: TopxiaAdminBundle:Tag:delete }
+    methods:  [POST]
+
+admin_user:
+    pattern:  /user
+    defaults: { _controller: TopxiaAdminBundle:User:index }
+
+admin_user_show:
+    pattern:  /user/{id}/
+    defaults: { _controller: TopxiaAdminBundle:User:show }
+
+admin_user_edit:
+    pattern:  /user/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:User:edit }
+
+admin_user_daren:
+    pattern:  /user/{id}/daren
+    defaults: { _controller: TopxiaAdminBundle:User:daren }
+
+admin_user_lock:
+    pattern:  /user/{id}/lock
+    defaults: { _controller: TopxiaAdminBundle:User:lock }
+
+admin_user_unlock:
+    pattern:  /user/{id}/unlock
+    defaults: { _controller: TopxiaAdminBundle:User:unlock }
+
+admin_user_delete_feeds:
+    pattern:  /user/{user}/delete-feeds
+    defaults: { _controller: TopxiaAdminBundle:User:deleteFeeds }
+
+admin_user_delete_comments:
+    pattern:  /user/{user}/delete-comments
+    defaults: { _controller: TopxiaAdminBundle:User:deleteComments }
+
+admin_user_delete_discussions:
+    pattern:  /user/{user}/delete-discussions
+    defaults: { _controller: TopxiaAdminBundle:User:deleteDiscussions }
+
+admin_user_delete_replies:
+    pattern:  /user/{user}/delete-replies
+    defaults: { _controller: TopxiaAdminBundle:User:deleteReplies }
+
+admin_user_delete_questions:
+    pattern:  /user/{user}/delete-questions
+    defaults: { _controller: TopxiaAdminBundle:User:deleteQuestions }
+
+admin_user_delete_answers:
+    pattern:  /user/{user}/delete-answers
+    defaults: { _controller: TopxiaAdminBundle:User:deleteAnswers }
+
+admin_user_log:
+    pattern:  /user/log
+    defaults: { _controller: TopxiaAdminBundle:User:log }
+admin_user_point_log:
+    pattern: /user/point
+    defaults: { _controller: TopxiaAdminBundle:User:point }
+
+admin_user_emailverify:
+    pattern:  /user/emailverify
+    defaults: { _controller: TopxiaAdminBundle:User:emailverify }
+
+admin_user_lesson_viewed:
+    pattern:  /user/{user}/lessonviewed
+    defaults: { _controller: TopxiaAdminBundle:User:lessonViewed }
+
+admin_password_reset:
+    pattern:  /password/reset/{id}
+    defaults: { _controller: TopxiaAdminBundle:PasswordReset:index }
+
+admin_password_reset_update:
+    pattern:  /password/reset/update
+    defaults: { _controller: TopxiaAdminBundle:PasswordReset:update }
+
+admin_fortune:
+    pattern:  /fortune
+    defaults: { _controller: TopxiaAdminBundle:User:fortune }
+
+admin_invitation:
+    pattern:  /invitation
+    defaults: { _controller: TopxiaAdminBundle:User:invitation }
+
+admin_user_invitation:
+    pattern:  /user/{user}/invitation
+    defaults: { _controller: TopxiaAdminBundle:User:userInvitation }
+
+admin_register_email_send:
+    pattern:  /register/email/send/{id}/{hash}
+    defaults: { _controller: TopxiaAdminBundle:User:emailSend }
+    methods: [POST]
+
+admin_comment:
+    pattern:  /comment
+    defaults: { _controller: TopxiaAdminBundle:Comment:index }
+
+admin_comment_delete:
+    pattern:  /comment/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Comment:delete }
+    methods: [POST]
+
+admin_navigation:
+    pattern:  /navigation
+    defaults: { _controller: TopxiaAdminBundle:Navigation:index }
+
+admin_navigation_create:
+    pattern:  /navigation/create
+    defaults: { _controller: TopxiaAdminBundle:Navigation:create }
+
+admin_navigation_update:
+    pattern:  /navigation/update/{id}
+    defaults: { _controller: TopxiaAdminBundle:Navigation:update }
+
+admin_navigation_delete:
+    pattern:  /navigation/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Navigation:delete }
+
+admin_navigation_tops:
+    pattern:  /navigation/tops
+    defaults: { _controller: TopxiaAdminBundle:Navigation:findTops }
+
+admin_navigation_foots:
+    pattern:  /navigation/foots
+    defaults: { _controller: TopxiaAdminBundle:Navigation:findFoots }
+
+admin_review:
+    pattern:  /review
+    defaults: { _controller: TopxiaAdminBundle:Review:index }
+
+admin_note:
+    pattern: /note
+    defaults: { _controller: TopxiaAdminBundle:CourseNote:index }
+
+admin_note_delete_notes:
+    pattern: /note/delete/choosed/
+    defaults: { _controller: TopxiaAdminBundle:CourseNote:deleteChoosedNotes }
+    methods: [POST]
+
+admin_note_pick:
+    pattern:  /note/pick
+    defaults: { _controller: TopxiaAdminBundle:NoteCourseNote:pick }
+
+admin_note_unpick:
+    pattern:  /note/unpick
+    defaults: { _controller: TopxiaAdminBundle:CourseNote:unpick }
+
+admin_course:
+    pattern:  /course/manage
+    defaults: { _controller: TopxiaAdminBundle:Course:index }
+
+admin_course_delete:
+    pattern:  /course/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Course:delete }
+
+admin_course_open:
+    pattern: /course/{id}/open
+    defaults: { _controller: TopxiaAdminBundle:Course:open }
+
+admin_course_close:
+    pattern: /course/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:Course:close }
+
+admin_course_threads:
+    pattern:  /course/threads
+    defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
+
+admin_course_tag:
+    pattern:  /course/tag
+    defaults: { _controller: TopxiaAdminBundle:Tag:tagCourse }
+
+admin_group:
+    pattern:  /group
+    defaults: { _controller: TopxiaAdminBundle:Group:index }
+
+admin_group_discussions:
+    pattern:  /groups/discusse
+    defaults: { _controller: TopxiaAdminBundle:Group:discusses }
+
+admin_group_delete:
+    pattern:  /group/{group}/delete
+    defaults: { _controller: TopxiaAdminBundle:Group:delete }
+
+admin_group_tag:
+    pattern:  /group/{group}/tag
+    defaults: { _controller: TopxiaAdminBundle:Tag:tagGroup }
+
+admin_group_term:
+    pattern:  /group/{group}/term
+    defaults: { _controller: TopxiaAdminBundle:Group:term }
+
+admin_question_questions:
+    pattern:  /question/questions
+    defaults: { _controller: TopxiaAdminBundle:Question:questions }
+
+admin_question_answers:
+    pattern:  /question/answers
+    defaults: { _controller: TopxiaAdminBundle:Question:answers }
+
+admin_dashboard:
+    pattern:  dashboard
+    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
+
+admin_setting_site:
+    pattern:  /setting/site
+    defaults: { _controller: TopxiaAdminBundle:Setting:site }
+
+admin_setting_auth:
+    pattern:  /setting/auth
+    defaults: { _controller: TopxiaAdminBundle:Setting:auth }
+
+admin_setting_mailer:
+    pattern:  /setting/mailer
+    defaults: { _controller: TopxiaAdminBundle:Setting:mailer }
+
+admin_setting_login_bind:
+    pattern:  /setting/login-connect
+    defaults: { _controller: TopxiaAdminBundle:Setting:loginConnect }
+
+admin_setting_payment:
+    pattern:  /setting/payment
+    defaults: { _controller: TopxiaAdminBundle:Setting:payment }
+
+admin_setting_file:
+    pattern:  /setting/file
+    defaults: { _controller: TopxiaAdminBundle:Setting:file }
+
+admin_setting_ip_blacklist:
+    pattern:  /setting/ip-blacklist
+    defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
+
+admin_category_group:
+    pattern:  /category-group
+    defaults: { _controller: TopxiaAdminBundle:Category:group }
+
+admin_category:
+    pattern:  /category
+    defaults: { _controller: TopxiaAdminBundle:Category:index }
+
+admin_category_create:
+    pattern:  /category/create
+    defaults: { _controller: TopxiaAdminBundle:Category:create }
+
+admin_category_code_check:
+    pattern:  /category/code/check
+    defaults: { _controller: TopxiaAdminBundle:Category:codeCheck }
+
+admin_category_edit_code_check:
+    pattern:  /category/{categoryId}/code/edit/check
+    defaults: { _controller: TopxiaAdminBundle:Category:codeEditCheck }
+
+admin_category_edit:
+    pattern:  /category/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Category:edit }
+
+admin_category_delete:
+    pattern:  /category/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Category:delete }
+
+admin_file:
+    pattern:  /file
+    defaults: { _controller: TopxiaAdminBundle:File:index }
+
+admin_file_delete:
+    pattern:  /file/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:File:delete }
+    methods: [POST]
+
+admin_file_upload:
+    pattern:  /file/upload
+    defaults: { _controller: TopxiaAdminBundle:File:upload }
+
+admin_message:
+    pattern: /message
+    defaults: { _controller: TopxiaAdminBundle:Message:index }
+
+admin_message_delete_messages:
+    pattern: /delete/choosed/messages
+    defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
+    methods: [POST]
+
+admin_thread_delete_threads:
+    pattern: /delete/choosed/threads
+    defaults: {_controller: TopxiaAdminBundle:CourseThread:deleteChoosedThreads }
+    methods: [POST]
+
+admin_content_delete_reviews:
+    pattern: /delete/choosed/reviews
+    defaults: {_controller: TopxiaAdminBundle:Review:deleteChoosedReviews }
+    methods: [POST]

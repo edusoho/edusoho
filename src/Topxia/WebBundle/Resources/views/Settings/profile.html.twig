@@ -1,0 +1,118 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+
+{% block title %}基础信息 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'settings/profile' %}
+{% set side_nav = 'profile' %}
+
+{% block main %}
+
+  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}基础信息{% endblock %}
+    {% block body %}
+      <form id="user-profile-form" class="form-horizontal" method="post">
+        {{ web_macro.flash_messages() }}
+        {% if isTeacher %}
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> <label>教师名称</label> </div>
+            <div class="col-lg-8 controls"> <span class="control-text">{{ app.user.nickname }}</span> </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.title) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.about, '教师简介') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.about, {attr:{rows:8}}) }} </div>
+
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.qq) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.weibo, '微博地址') }} </div>
+            <div class="col-lg-8 controls">
+              {{ form_widget(form.weibo) }}
+              <div class="help-block">微博地址的格式为 http://www.weibo.com/{ID}</div>
+            </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.blog, '博客地址') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.blog) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.site, '网站地址') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.site) }} </div>
+          </div>
+
+        {% else %}
+          <div class="row control-group">
+            <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
+            <div class="col-lg-8 controls">{{ form_widget(form.truename) }}</div>
+          </div>
+          <div class="row control-group">
+            <div class="col-lg-2 control-label">{{ form_label(form.gender, '性别') }}</div>
+            <div class="col-lg-8 controls radios">{{ form_widget(form.gender) }}</div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.birthday, '生日') }} </div>
+            <div class="col-lg-10 controls date-selects form-inline"> {{ form_widget(form.birthday) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.mobile, '手机号') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.mobile) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.qq) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.city, '居住地') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.city) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.company, '所在公司') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.company) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.job, '职位') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.job) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.title) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.about, '自我介绍') }} </div>
+            <div class="col-lg-8 controls"> {{ form_widget(form.about) }} </div>
+          </div>
+        {% endif %}
+
+        <div class="row">
+          <div class="col-lg-8 col-offset-2">
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </div>
+
+      </form>
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

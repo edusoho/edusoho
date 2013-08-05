@@ -1,0 +1,58 @@
+{% set mode = mode|default(null) %}
+
+<div class="row control-group {% if mode == 'edit' %}hide{% endif %}">
+  <div class="col-lg-2 control-label">{{ form_label(form.type, '类型') }}</div>
+  <div class="col-lg-8 controls">{{ form_widget(form.type, {attr:{class:'radios'}}) }}</div>
+</div>
+
+<div class="row control-group control-group-online control-group-offline">
+  <div class="col-lg-2 control-label">{{ form_label(form.title, '标题') }}</div>
+  <div class="col-lg-8 controls">{{ form_widget(form.title) }}</div>
+</div>
+
+<div class="row control-group control-group-online control-group-offline">
+  <div class="col-lg-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
+  <div class="col-lg-8 controls" id="course-category-controls" >
+    <select class="width-input width-input-small" data-role="item"></select>
+    <select class="width-input width-input-small" data-role="item"></select>
+    {{ form_widget(form.categoryId, {attr:{'data-role': 'value'}}) }}
+  </div>
+</div>
+
+<div class="row control-group control-group-online control-group-offline">
+  <div class="col-lg-2 control-label">{{ form_label(form.tags, '标签') }}</div>
+  <div class="col-lg-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
+</div>
+
+<div class="row control-group control-group-online control-group-offline">
+  <div class="col-lg-2 control-label">{{ form_label(form.price, '价格') }}</div>
+  <div class="col-lg-8 controls">
+    <div class="input-group col-lg-3">{{ form_widget(form.price) }}<span class="input-group-addon">元</span></div>
+  </div>
+</div>
+
+<div class="row control-group control-group-offline">
+  <div class="col-lg-2 control-label">{{ form_label(form.startTime, '上课时间') }}</div>
+  <div class="col-lg-8 controls">
+    {{ form_widget(form.startTime, {attr:{class:'width-input'}}) }}
+    <span class="mrs">至</span>
+    {{ form_widget(form.endTime, {attr:{class:'width-input'}}) }}
+  </div>
+</div>
+
+<div class="row control-group control-group-offline">
+  <div class="col-lg-2 control-label">{{ form_label(form.address, '上课地点') }}</div>
+  <div class="col-lg-8 controls" id="course-address-controls">
+    <p>
+      <select class="width-input width-input-small" data-role="item"></select>
+      <select class="width-input width-input-small" data-role="item"></select>
+      <select class="width-input width-input-small" data-role="item"></select>
+      {{ form_widget(form.locationId, {attr:{'data-role': 'value'}}) }}
+    </p>
+    <p>
+      {{ form_widget(form.address) }}
+    </p>
+  </div>
+</div>
+
+<div class="hide">{{ form_rest(form) }}</div>

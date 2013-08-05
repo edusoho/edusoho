@@ -1,0 +1,29 @@
+{%- macro user_avatar(user, class) -%}
+  <a class="user-link user-avatar-link {{ class }}" href="javascript:">
+    <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}">
+  </a>
+{%- endmacro -%}
+
+{%- macro user_link(user, class) -%}
+  <a class="user-link {{ class }}" href="javascript:">{{ user.nickname }}</a>
+{%- endmacro -%}
+
+{% macro flash_messages() %}
+  {% for type, flashMessages in app.session.flashbag.all() %}
+    {% for flashMessage in flashMessages %}
+      <div class="alert alert-{{ type }}">{{ flashMessage|raw }}</div>
+    {% endfor %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro paginator(paginator) %}
+  {% if paginator.lastPage > 1 %}
+    <ul  class="pagination">
+      <li {% if paginator.currentPage == paginator.firstPage %}class="disabled"{% endif %}><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">上一页</a></li>
+      {% for page in paginator.pages %}
+        <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
+      {% endfor %}
+      <li {% if paginator.currentPage == paginator.lastPage %}class="disabled"{% endif %}><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">下一页</a></li>
+    </ul>
+  {% endif %}
+{% endmacro %}

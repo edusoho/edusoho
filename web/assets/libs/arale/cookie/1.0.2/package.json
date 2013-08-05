@@ -1,0 +1,19 @@
+{
+    "family": "arale",
+    "version": "1.0.2",
+    "name": "cookie",
+    "description": "提供 Cookie 操作方法。",
+    "keywords": [ "util" ],
+    "author": "Frank Wang <lifesinger@gmail.com>",
+    "homepage": "http://aralejs.org/cookie/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aralejs/cookie"
+    },
+    "bugs": {
+        "url": "https://github.com/aralejs/cookie/issues"
+    },
+    "spm": {
+        "output": ["cookie.js"]
+    }
+}

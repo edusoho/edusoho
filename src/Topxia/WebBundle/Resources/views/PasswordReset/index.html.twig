@@ -1,0 +1,38 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}重设密码 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/password-reset' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-6 col-offset-3 ptl">
+    <div class="panel panel-page">
+      <div class="panel-heading"><h2>重设密码</h2></div>
+
+      <form id="password-reset-form" class="form-vertical" method="post">
+
+        {% if error %} <div id="alertxx" class="alert alert-danger">{{ error }}</div> {% endif %}
+
+        <div class="control-group">
+          {{ form_label(form.email, '邮箱地址', {label_attr:{class:'control-label'}}) }}
+          <div class="controls">
+            {{ form_widget(form.email) }}
+            <p class="help-block">请输入你在{{ setting('site.name') }}注册时填写的邮箱地址</p>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-primary" data-loading-text="正在发送重设密码邮件...">重设密码</button>
+          </div>
+        </div>
+
+      </form>
+
+    </div><!-- /panel -->
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set panel = 'user' %}
+
+{% block content %}
+<h1>创建新任务</h1>
+
+{% if app.session.hasFlash('success') %}
+    <div class="Messages Information"><ul><li>{{ app.session.flash('success') }}</li></ul></div>
+{% endif %}
+
+
+<form id="task-form" action="" method="post" novalidate>
+  {{ form_errors(form) }}
+  <ul>
+    <li>
+      {{ form_label(form.type, '类型') }}
+      {{ form_widget(form.type, {'attr': {'class': 'InputBox'}}) }}
+    </li>
+    <li>
+      {{ form_label(form.tags, '标签') }}
+      {{ form_widget(form.tags, {'attr': {'class': 'InputBox'}}) }}
+      <div class="Info">多个标签用逗号隔开，中间不能有空格！</div>
+    </li>
+    <li>
+      {{ form_label(form.about, '简介') }}
+      {{ form_widget(form.about, {'attr': {'class': 'InputBox'}}) }}
+    </li>
+    <li>
+      {{ form_label(form.priority, '优先级') }}
+      {{ form_widget(form.priority, {'attr': {'class': 'InputBox'}}) }}
+    </li>
+  </ul>
+  {{ form_rest(form) }}
+  <input type="submit" class="Button" name="" value="保存" />
+  
+</form>
+
+<div class="Info">
+
+</div>
+
+
+
+{% endblock %}

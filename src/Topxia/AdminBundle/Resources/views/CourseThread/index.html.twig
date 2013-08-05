@@ -1,0 +1,53 @@
+{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+
+{% block title %}课程话题 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'course/threads' %}
+
+{% set menu = 'thread' %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <h1 class="pull-left">课程讨论区话题管理</h1>
+</div>
+
+<div class="well well-small">
+  <form>
+    {{ form_widget(form.keywords, {attr:{class:'col-lg-3', placeholder:'关键词'}}) }}
+    {{ form_widget(form.nickname, {attr:{class:'col-lg-3', placeholder:'话题作者昵称'}}) }}
+    <input type="submit" class="btn" value="搜索">
+  </form>
+</div>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="20%">标题</th>
+      <th width="20%">作者</th>
+      <th width="20%">内容</th>
+      <th width="20%">创建时间</th>
+    </tr>
+  </thead>
+  <body>
+    {% for thread in threads %}
+      <tr>
+        <td><input value="{{thread.id}}" type="checkbox" name='thread-item'> {{ thread.title }} </td>
+        <td>{{ users[thread.userId].nickname }}</td>
+        <td>{{ thread.content}}</td>
+        <td>{{ thread.createdTime|date('Y-n-d H:i:s') }}</td>
+      </tr>
+    {% endfor %}
+  </body>
+</table>
+
+ <input class= "choose-all" name="choose-all" type="checkbox">
+    全选/取消全选
+  <a class="thread-delete pull-right btn btn-danger" href="javascript:"  data-url="{{ path('admin_thread_delete_threads') }}">删除</a>
+
+  <div>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+
+{% endblock %}

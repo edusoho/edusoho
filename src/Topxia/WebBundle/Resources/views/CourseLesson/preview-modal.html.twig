@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'large' %}
+
+{% block title %}<span class="text-muted">课时预览:</span> {{lesson.title}}{% endblock %}
+
+{% block body %}
+  {% if lesson.type == 'video' %}
+    <video id="lesson-preview-video-player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="360">
+       <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='video/mp4' />
+    </video>
+  {% else %}
+    {{ lesson.content|raw }}
+  {% endif %}
+
+  <script>app.load('course/lesson-preview')</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_buy', {id:course.id}) }}">购买此课程（{{ course.price }}元）</button>
+{% endblock %}

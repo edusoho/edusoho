@@ -1,0 +1,71 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}编辑用户信息{% endblock %}
+{% block body %}
+
+<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
+  <div class="row control-group">
+    <label class="control-label col-lg-2">
+      用户名
+    </label>
+    <div class="controls col-lg-8 ">
+      <div class="control-text controls col-lg-8 ">
+        {{ user.nickname }}
+        {% if user.locked %}
+          <span class="text-danger"><i class="glyphicon glyphicon-ban-circle"></i> 已封禁</span>
+          <a href="{{ path('admin_user_unlock', {id:user.id }) }}" class="user-unlock-btn btn label" title="解禁用户">解禁用户</a>
+        {% else %}
+          <a href="{{ path('admin_user_lock', {id:user.id}) }}" class="btn label user-lock-btn" title="封禁用户">封禁用户</a>
+        {% endif %}
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="row control-group">
+    <label class="control-label col-lg-2">密码</label>
+    <div class="controls col-lg-8">
+      <div class="control-text">
+        ******** <a href="javascript:;" id="password-reset" data-url="{{ path('admin_password_reset', {id:user.id }) }}" class="btn label">发送重置密码邮件</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row control-group">
+    <label class="control-label col-lg-2">Email</label>
+    <div class="controls col-lg-8">
+      <div class="control-text">
+        {{ user.email }}
+        {% if user.emailVerified %}
+          <span class="text-success"><i class="glyphicon glyphicon-ok-sign"></i> 已验证</span>
+        {% else %}
+          <a href="javascript:;" data-url="{{ path('admin_register_email_send', {id:user.id,hash:hash}) }}" id="register-email-send" class="btn label">重发验证邮件</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row control-group">
+    <label class="control-label col-lg-2">
+    {{ form_label(form.roles, '用户组') }}
+    </label>
+    <div class="controls col-lg-10 checkboxs">
+      {{ form_widget(form.roles) }}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+  <div>
+      {{ form_rest(form) }}
+    <button type="submit" class="btn btn-primary">保存</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  </div>
+</form>
+<script> app.load('user/edit-modal') </script>
+
+{% endblock %}
+

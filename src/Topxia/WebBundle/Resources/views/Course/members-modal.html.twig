@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}课程学员{% endblock %}
+{% set hide_footer = true %}
+{% block body %}
+
+<ul class="media-list user-simple-list" id="course-student-list">
+  {% for student in  students %}
+    {% set user = users[student.userId] %}
+    {% set isFollowing = user.id in followingIds %}
+    <li class="media">
+      {{ web_macro.user_avatar(user, 'pull-left') }}
+      <div class="media-body">
+        {{ web_macro.user_link(user) }}
+        {% if app.user.id != user.id %}
+          <div class="pull-right">
+            <button class="btn btn-primary btn-small follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
+            <button class="btn btn-success btn-small unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
+            <button class="btn btn-default btn-small" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+          </div>
+        {% endif %}
+      </div>
+    </li>
+  {% else  %}
+    <li>本课程暂时还没有学生</li>
+  {% endfor %}
+</ul>
+
+{{ web_macro.paginator(paginator) }}
+
+<script>
+    app.load('course/members-modal');
+</script>
+{% endblock %}
+
+

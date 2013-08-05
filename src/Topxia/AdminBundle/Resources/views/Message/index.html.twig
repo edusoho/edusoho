@@ -1,0 +1,61 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}私信管理 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'message/list' %}
+
+{% set menu = 'message' %}
+
+{% block main %}
+  <div class="page-header clearfix">
+    <h1>私信管理</h1>
+    <em>删除符合条件的消息,用于清理站点冗余数据,此操作不可恢复,请谨慎使用！</em>
+  </div>
+
+  <form id="message-search-form" class="well well-small" action="" method="get" novalidate> 
+    <div class="row">
+      <div class="col-lg-3">
+        {{ form_widget(form.content, {attr:{placeholder:'关键词'}}) }}
+      </div>
+      <div class="col-lg-2">
+        {{ form_widget(form.nickname, {attr:{placeholder:'发件人'}}) }}
+      </div>
+      <div class="col-lg-2">
+        {{ form_widget(form.startDate) }}
+      </div>
+      <div class="col-lg-2">
+        {{ form_widget(form.endDate) }}
+      </div>
+      <button class="btn btn-primary">搜索</button>
+      {{ form_rest(form) }}
+    </div>
+  </form>
+
+  <table class="table table-striped" id="message-list">
+    <thead>
+      <tr>
+        <th width="20%">发件人</th>
+        <th width="65%">内容</th>
+        <th width="15%">发送时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in messages %}
+        <tr id="message-table-tr-{{message.id}}">
+          <td><input value="{{message.id}}" type="checkbox" name='message-item'>{{ users[message.fromId].nickname}}</td>
+          <td>{{message.content}}</td>
+          <td>{{ message.createdTime|date('Y-n-d H:i')}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <input class= "choose-all" name="choose-all" type="checkbox">
+    全选/取消全选
+  <a class="message-delete pull-right btn btn-danger" href="javascript:"  data-url="{{ path('admin_message_delete_messages') }}">删除</a>
+
+  <div>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+
+{% endblock %}

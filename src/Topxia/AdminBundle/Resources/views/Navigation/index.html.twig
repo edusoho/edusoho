@@ -1,0 +1,42 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %} 导航管理 {% endblock %}
+{% set script_controller = 'navigation/page' %}
+{% set menu = 'navigation' %}
+{% set navType = 'navigation' %}
+
+{% block main %}
+
+<p style="display:none" id="navigationType">all</p>
+
+{% include 'TopxiaAdminBundle:Navigation:navigation-page-header.html.twig'  %}
+
+{% include 'TopxiaAdminBundle:Navigation:navigation-nav-tab.html.twig'  %}
+
+<table id="navigation-table" class="table table-striped">
+    <thead>
+        <tr>
+            <th>文案</th>
+            <th>URL</th>
+            <th width="5%">新开窗口</th>
+            <th width="5%">显示顺序</th>
+            <th width="9%">创建时间</th>
+            <th width="9%">更新时间</th>
+            <th width="5%">导航类型</th> 
+            <th width="5%">状态</th>  
+            <th width="5%">操作</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for navigation in navigations%}
+            {% include 'TopxiaAdminBundle:Navigation:navigation-tr.html.twig' with {navigation: navigation}  %}
+        {% endfor %}
+    </tbody>
+</table>
+    
+   <div class="paginator">
+    {{ web_macro.paginator(paginator) }}
+   </div> 
+
+{% endblock %}

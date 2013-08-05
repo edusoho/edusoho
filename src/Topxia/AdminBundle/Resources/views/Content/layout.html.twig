@@ -1,0 +1,35 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'content' %}
+
+{% block content %}
+  <div class="col-lg-2">
+
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ url('admin_content') }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">内容管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        
+        <a href="{{ url('admin_block') }}" class="list-group-item {% if menu == 'admin_block' %}active{% endif %}">编辑区管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ path('admin_comment') }}" class="list-group-item {% if menu == 'comment' %}active{% endif %}">评论管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ path('admin_review') }}" class="list-group-item {% if menu == 'review' %}active{% endif %}">课程评价管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ path('admin_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}">文件管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_category_group') }}" class="list-group-item {% if menu == 'category' %}active{% endif %}">分类管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_tag') }}" class="list-group-item {% if menu == 'tag' %}active{% endif %}">标签管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_message') }}" class="list-group-item {% if menu == 'message' %}active{% endif %}">私信管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-lg-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

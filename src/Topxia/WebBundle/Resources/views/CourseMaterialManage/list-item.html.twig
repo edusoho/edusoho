@@ -1,0 +1,4 @@
+<li class="list-group-item">
+  <a href="{{ path('course_material_download', {courseId:material.courseId, materialId:material.id}) }}">{{ material.title }}</a>
+  <button class="close delete-btn" type="button" title="删除" data-url="{{ path('course_manage_material_delete', {courseId:material.courseId, lessonId:material.lessonId, materialId:material.id}) }}">&times;</button>
+</li>

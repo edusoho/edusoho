@@ -1,0 +1,28 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<ul class="media-list">
+	{% for review in reviews %}
+	  {% set user = users[review.userId] %}
+    <li class="media">
+    	{{ web_macro.user_avatar(user, 'pull-left') }}
+    	<div class="media-body">
+    		<div class="media-heading">
+    			{{ web_macro.user_link(user) }}
+    			<span class="bullet">•</span>
+    			<span class="text-muted">{{ review.createdTime|date('Y-m-d') }}</span>
+    		</div>
+
+    		<div class="media-content">
+    			<div><span class="stars-{{ review.rating }}"></span></div>
+
+    			{{ review.content }}
+
+    		</div>
+    	</div>
+    </li>
+  {% endfor %}
+</ul>
+
+{% if paginator|default(null) %}
+	{{ web_macro.paginator(paginator) }}
+{% endif  %}

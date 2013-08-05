@@ -1,0 +1,93 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}测验管理{% endblock %}
+{% block body %}
+
+<div id="quiz-manage-container">
+
+  <input type="hidden" id="courseId" value={{course.id}}>
+  <input type="hidden" id="lessonId" value={{lesson.id}}>
+
+    <div class="row">
+      <div class="col-lg-4 two-col-side" id="about-quiz-item-created">
+        <div>
+          {% if quizItems %}
+          <span class="notice-quiz-items" value="yes"> 已添加的测验题目: </span>
+            <ol class="created-quiz-items">
+
+              {% for quizItem in quizItems %}
+
+                <li id="quiz-item-id-{{quizItem.id}}">
+                  
+                  <a href="javascript:;" data-role="quiz-item-edit" data-url="{{ path('course_manage_quiz_item_edit', {quizItemId:quizItem.id}) }}" class="list-group-item">
+                    <p class="list-group-item-text">
+                    {{quizItem.description | plain_text(20)}}
+                    </p>
+                  </a>
+                  
+                  <button class="btn btn-danger" data-role="quiz-item-delete" data-url="{{ path('course_manage_quiz_item_delete', {quizItemId:quizItem.id}) }}">
+                    <i class="glyphicon glyphicon-trash"></i></button>
+                
+                </li>
+              {% endfor %}
+            </ol>
+          {% else %}
+           <span class="notice-quiz-items" value="no">暂时没有本课程的测验题!</span>
+           <ol class="created-quiz-items">
+           </ol>
+          {% endif %}
+        </div>
+
+        <button data-role="quiz-item-add" type="button" class="btn btn-primary">增加新的测验问题</button>
+
+      </div>
+
+      <div class="col-lg-8 two-col-main" id="quiz-item-block-edit">
+        <form id="quiz-form" class="form-horizontal quiz-form" method="post"
+            action="{{ path('course_manage_quiz_item_create', {courseId:course.id, lessonId:lesson.id}) }}">
+
+        <div class="row control-group for-text-type">
+          <div class="col-lg-2 control-label">{{ form_label(form.description, '问题描述') }}</div>
+          <div class="col-lg-9 controls">{{ form_widget(form.description) }}</div>
+        </div>
+        
+        <div class="row control-group for-text-type">
+          <div class="col-lg-2 control-label">{{ form_label(form.level, '题目难度:') }}</div>
+          <div class="col-lg-9 controls">{{ form_widget(form.level) }}</div>
+        </div>
+
+          <div class="options"></div>
+          
+          <button data-role="option-add" type="button" class="btn btn-success">增加新的选项</button>
+
+          {{ form_rest(form) }}
+        </form>
+      </div>
+
+      <div style="display:none" id="option-template">
+          <div class="row control-group">
+              <label for="item-input-template" class="required">选项</label>
+            <div class="controls">
+              <input id="item-input-template" class="item-input-template" name="choices[]" type="text" value="" >
+            </div>
+          </div>
+          <input type="checkbox" name="answer-checkbox"> 正确答案
+          <button type="button" data-role="option-delete" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+      </div>
+    </div>
+
+</div>
+
+<script>app.load('course-manage/quiz-modal')</script>
+
+{% endblock %}
+
+{% block footer %}
+
+    <button type="button" class="btn btn-link" data-dismiss="modal">关闭</button>
+    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#quiz-form">保存</button>
+{% endblock %}
+
+{% set hideFooter = true %}

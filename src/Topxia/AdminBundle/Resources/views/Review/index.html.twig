@@ -1,0 +1,63 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}课程评价管理 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'review/list' %}
+
+{% set menu = 'review' %}
+
+{% block main %}
+  <div class="page-header clearfix">
+    <h1>课程评价管理</h1>
+  </div>
+
+  <form id="review-search-form" class="well well-small" action="" method="get" novalidate> 
+    <div class="row">
+
+       <div class="col-lg-3">
+        {{ form_widget(form.keywordType) }}
+      </div>
+
+      <div class="col-lg-3">
+        {{ form_widget(form.keyword, {attr:{placeholder:'关键词:标题或者内容'}}) }}
+      </div>
+      <div class="col-lg-2">
+        {{ form_widget(form.nickname, {attr:{placeholder:'作者'}}) }}
+      </div>
+      <button class="btn btn-primary">搜索</button>
+      {{ form_rest(form) }}
+    </div>
+  </form>
+
+  <table class="table table-striped" id="review-list">
+    <thead>
+      <tr>
+        <th width="15%">作者</th>
+        <th width="10%">课程名称</th>
+        <th width="30%">评价标题</th>
+        <th width="35%">评价内容</th>
+        <th width="10%">评价时间</th>
+      </tr>
+    </thead>
+    <tbody>
+       {% for review in reviews %}
+        <tr id="review-table-tr-{{review.id}}">
+          <td><input value="{{review.id}}" type="checkbox" name="review-item">{{ users[review.userId].nickname}}</td>
+          <td>{{ courses[review.courseId].title }} </td>
+          <td>{{review.title}}</td>
+          <td>{{review.content}}</td>
+          <td>{{review.createdTime|date('Y-n-d H:i')}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <input class= "choose-all" name="choose-all" type="checkbox">
+    全选/取消全选
+  <a class="review-delete pull-right btn btn-danger" href="javascript:" data-url="{{ path('admin_content_delete_reviews') }}">删除</a>
+
+  <div>
+    {{ web_macro.paginator(paginator) }} 
+  </div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+<div class="course-item-list-multi">
+{% for group in groupedItems %}
+  {% if group.type == 'chapter' %}
+    {% set chapter = group.data %}
+    <h3>章节{{ chapter.number }}: <strong>{{ chapter.title }}</strong></h3>
+  {% else  %}
+	  <ul class="row">
+	    {% for item in group.data %}
+	      <li class="col-lg-4 clearfix item">
+	      	<a class="item-object item-object-{{ item.type }}" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}">
+	      		{% if item.free %}<span class="item-free"></span>{% endif %}
+		      	<span class="item-icon"></span>
+		      	<span class="item-length">{% if item.type == 'text' %}图文{% else %}{{ item.length|duration }}{% endif %}</span>
+	      	</a>
+	      	<div class="item-body">
+	      		<div class="item-seq-name">课时{{ item.number }}:</div>
+	      		<div class="item-title"><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}">{{ item.title }}</a></div>
+	      	</div>
+	      </li>
+	    {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}
+</div>

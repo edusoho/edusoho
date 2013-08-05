@@ -1,0 +1,42 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set panel = 'user' %}
+
+{% block content %}
+<h1>编辑用户</h1>
+
+<div class="Info">
+  您当前正在编辑用户 <span style="color:red;">{{ user.nickname }}</span>
+
+  &nbsp; &nbsp; 状态：
+
+      {% if user.locked %}
+        <span class="warning-state">禁</span>
+      {% else %}
+        <span class="done-state">正常</span>
+      {% endif %}
+
+</div>
+
+<div>
+  <h4>删除用户内容</h4>
+  {% if not user.locked %}
+    <div style="color:red;font-size:22px;" class="mvl mhl">注意：当前用户处于正常状态</div>
+  {% endif %}
+  <div id="user-opts">
+    <a href="{{ path('admin_user_delete_feeds', {user:user.id}) }}" class="Button">删除动态</a>
+    <a href="{{ path('admin_user_delete_comments', {user:user.id}) }}" class="Button">删除评论</a>
+    <a href="{{ path('admin_user_delete_discussions', {user:user.id}) }}" class="Button">删除小组帖子</a>
+    <a href="{{ path('admin_user_delete_replies', {user:user.id}) }}" class="Button">删除小组帖子回复</a>
+    <a href="{{ path('admin_user_delete_questions', {user:user.id}) }}" class="Button">删除提问</a>
+    <a href="{{ path('admin_user_delete_answers', {user:user.id}) }}" class="Button">删除回答</a>
+  </div>
+
+  <br />
+  <div style="color:red;">点删除按钮之前，请仔细核对当前要操作的对象！ 每点一次删除按钮，最多删除1000条记录。</div>
+</div>
+
+
+{% endblock %}
+
+{% block page_script %} app.load('user_edit'); {% endblock %}

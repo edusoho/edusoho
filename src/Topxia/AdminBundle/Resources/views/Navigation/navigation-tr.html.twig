@@ -1,0 +1,33 @@
+<tr id="{{navigation.id}}" >
+    <td>{{navigation.name}}</td>
+    <td>{{navigation.url}}</td>
+    <td>
+        {% if navigation.openNewWindow == "no" %}
+            否
+        {% elseif navigation.openNewWindow == "yes" %}
+            是
+        {% endif %}
+    </td>
+
+    <td>{{navigation.sequence}}</td>
+    <td> {{navigation.createdTime| date('Y-n-d H:i:s')}} </td>
+    <td> {{navigation.updateTime| date('Y-n-d H:i:s')}} </td>
+    <td> 
+        {% if navigation.type == "top" %}
+        顶部菜单
+        {% elseif navigation.type == "foot" %}
+        底部链接
+        {% endif %}
+    </td>
+    <td> 
+        {% if navigation.status == "open" %}
+        开启
+        {% elseif navigation.status == "close" %}
+        关闭
+        {% endif %}
+    </td>
+    <td>
+        <button class="btn btn-mini btn-primary edit-btn" data-url="{{ path('admin_navigation_update', {id:navigation.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+        <button class="btn btn-mini delete-btn" data-url="{{ path('admin_navigation_delete', {id:navigation.id}) }}" data-target="{{ navigation.id }}">删除</button>
+    </td>
+</tr>

@@ -1,0 +1,27 @@
+
+           <div class="tab-divs">
+                <ul class="courses-list">
+                        
+                    {% for course in courses %}
+                        <li class="learning-course" id={{course.id}}>
+
+                            <a href="{{ path('course_show', {id:course.id}) }}">
+                                <img src="{{ file_path(course.largePicture, 'course-large.png', true) }}">
+                            </a>
+                            
+                            <div class="title">
+                                <label>课程题目：</label>
+                                <span class="course-name">{{course.title}}</span>
+                            </div>
+
+                            <div class="teachers">
+                                <label>教师名字:</label>
+                                {% for teacherId in course.teacherIds %}
+                                    {{users[teacherId].nickname}}
+                                {% endfor %}
+                            </div>
+                        </li>
+
+                    {% endfor %}
+                </ul>
+            </div>

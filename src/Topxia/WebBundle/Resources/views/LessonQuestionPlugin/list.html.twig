@@ -1,0 +1,8 @@
+<ul class="media-list thread-list-small" data-role="list">
+	{% for thread in threads %}
+	  {% set user = users[thread.userId] %}
+	  {% include 'TopxiaWebBundle:LessonQuestionPlugin:item.html.twig' %}
+	{% else %}
+	  <li class="empty-item">此课时还没有问题</li>
+	{% endfor %}
+</ul>

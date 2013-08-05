@@ -1,0 +1,109 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menu = 'login_bind' %}
+
+{% block main %}
+
+<div class="page-header"><h1>第三方登录</h1></div>
+
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <fieldset>
+    <legend>第三方登录</legend>
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.enabled, '第三方登录') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.enabled) }}</div>
+    </div>
+  </fieldset>
+<br>
+
+  <fieldset>
+    <legend>微博登录</legend>
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.weibo_enabled, '微博登录') }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.weibo_enabled) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.weibo_key, 'App Key') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.weibo_key) }}</div>
+    </div>
+    
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.weibo_secret, 'App Secret') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.weibo_secret) }}</div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>QQ登录</legend>
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.qq_enabled, 'QQ登录') }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.qq_enabled) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.qq_key, 'App ID') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.qq_key) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.qq_secret, 'App Secret') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.qq_secret) }}</div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>人人连接</legend>
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.renren_enabled, '人人连接') }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.renren_enabled) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.renren_key, 'App Key') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.renren_key) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.renren_secret, 'App Secret') }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.renren_secret) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.renren_key, 'App Key') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.renren_key) }}</div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>豆瓣连接</legend>
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.douban_enabled, '豆瓣连接') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.douban_enabled) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.douban_key, 'App Key') }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.douban_key) }}</div>
+    </div>
+
+    <div class="row control-group">
+      <div class="col-lg-3 control-label">{{ form_label(form.douban_secret, 'App Secret') }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.douban_secret) }}</div>
+    </div>
+  </fieldset>
+</br>
+
+  <div class="row control-group">
+    <div class="col-lg-3 control-label"></div>
+    <div class="controls col-lg-8">
+      {{ form_rest(form) }}
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

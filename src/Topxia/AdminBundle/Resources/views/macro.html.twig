@@ -1,0 +1,38 @@
+{% macro flash_messages() %}
+  {% for type, flashMessages in app.session.flashbag.all() %}
+    {% for flashMessage in flashMessages %}
+      <div class="ui-tiptext-container ui-tiptext-container-{{ type }} mbl">
+        <p class="ui-tiptext ui-tiptext-{{ type }}">
+          {{ flashMessage|raw }}
+        </p>
+      </div>
+    {% endfor %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro form_row(field, label, help, attrs) %}
+  <div class="ui-form-item {% if field.vars.errors|length %} ui-form-item-error {% endif %}">
+    {{ form_label(field, label, {label_attr:{class:'ui-label'}}) }}
+      {{ form_widget(field, attrs|default([])) }}{% if help %}<span class="ui-form-other">{{ help|raw }}</span>{% endif %}
+      {% if field.vars.errors|length %}
+        <p class="ui-form-explain ui-tiptext ui-tiptext-error">
+          <i class="ui-tiptext-icon iconfont" title="出错">k</i>
+          {{ form_errors(field) }}
+        </p>
+      {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro paginator(paginator) %}
+  {% if paginator.lastPage|default(0) > 1 %}
+      <ul class="pagination" style="line-height:30px;">
+        <li {% if paginator.currentPage == paginator.firstPage %}class="disabled"{% endif %}><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">上一页</a></li>
+
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
+        {% endfor %}
+
+        <li {% if paginator.currentPage == paginator.lastPage %}class="disabled"{% endif %}><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">下一页</a></li>
+      </ul>
+  {% endif %}
+{% endmacro %}

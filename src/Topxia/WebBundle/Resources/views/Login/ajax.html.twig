@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'small' %}
+
+	{% block title %}登录{{ setting('site.name') }}{% endblock %}
+{% block body %}
+
+<form id="login-ajax-form" class="form-vertical form-vertical-small" method="post" action="{{ path('login_check') }}">
+
+  <div class="alert alert-danger" style="display:none;"></div>
+
+  <div class="control-group">
+    <div class="controls">
+      <input type="text" name="_username" placeholder="Email地址" data-display="Email地址" />
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <input type="password" name="_password" placeholder="密码" data-display="密码" />
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <span class="checkbox mtm pull-right">
+      <label> <input type="checkbox" name="_remember_me" checked="checked"> 记住密码 </label>
+    </span>
+    <button type="submit" class="btn btn-primary btn-fat pull-left">登录</button>
+  </div>
+
+</form>
+<script>
+	app.load('auth/login-ajax');
+</script>
+
+{% endblock %}
+
+{% block footer %}
+<div class="tal fsn">
+  <a href="{{ path('password_reset') }}">找回密码</a>
+  <span class="text-muted mhs">|</span>
+  <span class="text-muted">还没有注册帐号？</span>
+  <a href="{{ path('register') }}">立即注册</a>
+</div>
+{% endblock %}

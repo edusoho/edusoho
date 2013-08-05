@@ -1,0 +1,25 @@
+<div class="col-lg-3">
+        <ul class="nav nav-tabs nav-stacked">
+            <li
+            {% if nav == "index" or nav == "my-courses" %} 
+            class="active"
+            {% endif %}
+            >
+            <a href="{{ path('my_courses') }}">我的课程</a> </li>
+            <li 
+            {% if nav == "my-questions" %} 
+            class="active"
+            {% endif %}
+            > <a href="{{ path('my_questions') }}">我的问答</a> </li>
+            <li 
+            {% if nav == "my-threads" %} 
+            class="active"
+            {% endif %}
+            > <a href="{{ path('my_threads') }}">我的帖子</a> </li>
+            <li 
+            {% if nav == "my-notes" %} 
+            class="active"
+            {% endif %}
+            > <a href="{{ path('my_notes') }}">我的笔记</a> </li>
+        </ul>
+</div>

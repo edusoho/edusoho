@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}公告{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+  <div class="announcement-detail clearfix">
+  	<div>
+			{{ announcement.content|raw }}
+		</div>
+		<div class="pull-left">
+			<a class="btn btn-link btn-small" href="#modal"  data-toggle="modal" data-url="{{ path('course_announcement_update',{courseId:course.id, id:announcement.id}) }}" ><span class="glyphicon glyphicon-pencil"></span> 修改</a>
+			<a class="btn btn-link btn-small" href="#" data-role="delete" data-url="{{ path('course_announcement_delete',{courseId:course.id, id:announcement.id}) }}">
+				<span class="glyphicon glyphicon-trash"></span> 删除</a>
+		</div>
+		<div class="text-muted pull-right">{{ announcement.createdTime | date('Y-n-d') }}</div>
+
+	</div>
+
+<script>
+	app.load('course/announcement-show-modal');
+</script>
+{% endblock %}

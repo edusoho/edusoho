@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% set side_nav = 'lesson' %}
+{% set script_controller = 'course-manage/lesson' %}
+
+{% block main %}
+
+<div class="panel panel-col lesson-manage-panel">
+	<div class="panel-heading">
+		<button class="btn btn-info btn-small pull-right mhs" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 章节</button>
+
+		<button class="btn btn-info btn-small pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 课时</button>
+		课时
+	</div>
+	<div class="panel-body">
+		<ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
+
+			{% for id, item in items %}
+			  {% if 'chapter' in id %}
+			    {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
+			  {% elseif 'lesson' in id %}
+			    {% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item} %}
+			  {% endif %}
+			{% endfor %}
+			
+		</ul>
+	</div>
+</div>
+
+{% endblock %}

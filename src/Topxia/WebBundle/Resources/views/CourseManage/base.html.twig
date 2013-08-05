@@ -1,0 +1,65 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'course-manage/base' %}
+{% set script_arguments = {
+  categoryUrl: path('category_all'),
+  tagUrl: path('tag_all'),
+  locationUrl: path('location_all')
+} 
+%}
+{% block main %}
+
+<div class="panel panel-col">
+	<div class="panel-heading">基本信息</div>
+	<div class="panel-body">
+		<form class="form-horizontal" id="course-form" method="post">
+
+		  {{ web_macro.flash_messages() }}
+
+		  {{ form_errors(form) }}
+
+			<div class="row control-group">
+				<div class="col-lg-2 control-label">{{ form_label(form.title, '标题') }}</div>
+				<div class="col-lg-8 controls">{{ form_widget(form.title) }}</div>
+			</div>
+
+			<div class="row control-group">
+				<div class="col-lg-2 control-label">{{ form_label(form.subtitle, '副标题') }}</div>
+				<div class="col-lg-8 controls">{{ form_widget(form.subtitle) }}</div>
+			</div>
+
+			<div class="row control-group">
+			  <div class="col-lg-2 control-label">{{ form_label(form.tags, '标签') }}</div>
+			  <div class="col-lg-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
+			</div>
+
+			<div class="row control-group">
+			  <div class="col-lg-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
+			  <div class="col-lg-8 controls">
+			    {{ form_widget(form.categoryId, {attr:{class:'width-input width-input-large'}}) }}
+			  </div>
+			</div>
+
+			<div class="row control-group">
+			  <div class="col-lg-2 control-label">{{ form_label(form.price, '价格') }}</div>
+			  <div class="col-lg-8 controls">
+			    {{ form_widget(form.price, {attr:{class:'width-input'}}) }}
+			  </div>
+			</div>
+
+		  <div class="row control-group">
+		    <div class="col-offset-2 controls">
+		    	{{ form_rest(form) }}
+		    	<button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
+		    </div>
+		  </div>
+
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
