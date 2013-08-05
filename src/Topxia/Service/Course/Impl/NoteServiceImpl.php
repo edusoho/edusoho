@@ -63,6 +63,8 @@ class NoteServiceImpl extends BaseService implements NoteService
             throw $this->createServiceException('The Note Is Already Exist!');	
         }
 
+        $content = strip_tags($note['content']);
+        $note['contentCount'] = mb_strlen($content,'UTF8');
         $note['createdTime'] = $note['updatedTime'] = time();
         $note['userId'] = $currentUser['id'];
         $note['status'] = self::NOTE_TYPE_PRIVATE;
@@ -81,6 +83,8 @@ class NoteServiceImpl extends BaseService implements NoteService
             unset($note['id']);
        }
         $noteInfo = array_merge(array('updatedTime'=> time()),$note);
+        $content = strip_tags($noteInfo['content']);
+        $noteInfo['contentCount'] = mb_strlen($content,'UTF8');
         return $this->getNoteDao()->updateNote($id,$noteInfo);
     }
 
