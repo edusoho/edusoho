@@ -64,6 +64,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         $content = strip_tags($note['content']);
+        $content = $this->DeleteHTML($content);
         $note['contentCount'] = mb_strlen($content,'UTF8');
         $note['createdTime'] = $note['updatedTime'] = time();
         $note['userId'] = $currentUser['id'];
@@ -72,7 +73,6 @@ class NoteServiceImpl extends BaseService implements NoteService
 		return $this->getNoteDao()->addNote($note);
 	}
 
-    //TODO 只允许更新笔记的标题，内容，不允许更新所属的课程和课时
     public function updateNote($id,$note)
     {
         $resultNote = $this->getNote($id);
@@ -81,11 +81,22 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
         if (empty($note['id'])) {
             unset($note['id']);
-       }
+        }
         $noteInfo = array_merge(array('updatedTime'=> time()),$note);
         $content = strip_tags($noteInfo['content']);
+        $content = $this->DeleteHTML($content);
         $noteInfo['contentCount'] = mb_strlen($content,'UTF8');
         return $this->getNoteDao()->updateNote($id,$noteInfo);
+    }
+
+    private function DeleteHTML($str)
+    {
+        $str = str_replace("<br/>","",$str);
+        $str = str_replace("\\t","",$str); 
+        $str = str_replace("\\r\\n","",$str); 
+        $str = str_replace("\\r","",$str); 
+        $str = str_replace("\\n","",$str); 
+        return trim($str);
     }
 
     public function findUserLessonNotes($userId,$lessonId)

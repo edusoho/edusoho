@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs nav-stacked note-list">
+    {% for lesson in lessons %}
+        <li id="lesson-li-{{lesson.id}}" data-role="lesson-header-in-list"
+        {% if loop.index == 1 %}
+            class="active" 
+        {% endif %} value="{{lesson.id}}" >
+            <a href="javascript:;"> 
+                <label>课时{{lesson.number}}: </label> {{lesson.title}} 
+                {% for courseNote in courseNotes %}
+                    {% if courseNote.lessonId == lesson.id %}
+                        <span class="content-count-{{lesson.id}}"> ({{courseNote.contentCount}})字 </span>
+                    {% endif %}
+                {% endfor %}
+            </a> 
+        </li>
+    {% endfor %}
+</ul>
