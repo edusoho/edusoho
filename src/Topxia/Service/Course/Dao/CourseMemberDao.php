@@ -9,7 +9,10 @@ interface CourseMemberDao
 
     public function getMemberByCourseIdAndUserId($courseId, $userId);
 
+    public function getMemberCountByUserId($userId);
 
+    public function findMembersByUserId($userId, $start, $limit);
+    
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
 
     public function findMembersByUserIdAndRole($userId, $role, $start, $limit);

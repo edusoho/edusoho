@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
-class MyNotesController extends BaseController
+class MyNoteController extends BaseController
 {
     public function notesDetailAction(Request $request, $userId, $courseId)
     {   
@@ -15,7 +15,6 @@ class MyNotesController extends BaseController
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
         $lessons = ArrayToolkit::index($lessons, 'number');
         $courseNotes = ArrayToolkit::index($courseNotes, 'lessonId');
-   
 
         return $this->render('TopxiaWebBundle:MyNotes:my-notes-detail.html.twig',
             array('courseNotes'=>$courseNotes,
@@ -48,45 +47,24 @@ class MyNotesController extends BaseController
 
     public function myNotesAction(Request $request)
     {
-
-        $user = $this->getCurrentUser();
-        
-         $paginator = new Paginator(
+        $user = $this->getCurrentUser();   
+        $paginator = new Paginator(
             $request,
-            $this->getNoteService()->searchNotesCount(array("userId"=>$user['id'])),
+            $this->getCourseService()->searchUserMemberCount($user['id']),
             5
         );
-
-        $notes = $this->getNoteService()->searchNotes(
-            array("userId"=>$user['id']),
-            'update',
+        $courseMembers = $this->getCourseService()->searchUserMembers(
+            $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
-
-        foreach ($courses as $key => &$course) {
-            $course['notes'] = array();
-            foreach ($notes as $key => $note) {
-                if($course['id'] == $note['courseId']){
-                    $course['notes'][$note['id']] = $note;
-                }
-            }
-        }
-
-        foreach ($courses as $key => &$course) {
-            $currentNotes = current($course['notes']);
-            $course['noteLatestUpdatedTime'] = $currentNotes['updatedTime'];
-            
-        }
-
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
+        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         return $this->render('TopxiaWebBundle:MyNotes:my-notes.html.twig',
-            array('myNotes'=>$notes,
-                'courses'=>$courses,
-                'lessons'=>$lessons,
-                'paginator' => $paginator));
+            array(
+                'courseMembers'=>$courseMembers,
+                'paginator' => $paginator,
+                'courses'=>$courses));
     }
 
 

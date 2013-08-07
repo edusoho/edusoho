@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
-class MyCoursesController extends BaseController
+class MyCourseController extends BaseController
 {
 
     public function indexAction (Request $request)

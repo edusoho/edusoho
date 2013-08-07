@@ -20,4 +20,6 @@ interface CourseNoteDao
     public function findNotesByUserIdAndStatus($userId, $status);
 
     public function findNotesByUserIdAndCourseId($userId, $courseId);
+
+    public function getLastestNoteByUserIdAndCourseId($userId, $courseId);
 }

@@ -868,6 +868,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 	/**
 	 * Member API
 	 */
+	public function searchUserMembers($userId, $start, $limit)
+	{
+		return $this->getMemberDao()->findMembersByUserId($userId, $start, $limit);
+	}
+
+	public function searchUserMemberCount($userId)
+	{
+		return $this->getMemberDao()->getMemberCountByUserId($userId);
+	}
+
+	public function updateCourseMember($id, $fields)
+	{
+		return $this->getMemberDao()->updateMember($id, $fields);
+	}
 
 	public function getCourseMember($courseId, $userId)
 	{

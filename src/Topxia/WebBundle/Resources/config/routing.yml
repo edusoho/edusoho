@@ -515,51 +515,51 @@ notification:
 
 my:
     pattern: /my
-    defaults: { _controller: TopxiaWebBundle:MyCourses:index }
+    defaults: { _controller: TopxiaWebBundle:MyCourse:index }
 
 my_courses:
     pattern: /my/courses
-    defaults: { _controller: TopxiaWebBundle:MyCourses:myCourses }
+    defaults: { _controller: TopxiaWebBundle:MyCourse:myCourses }
 
 my_learning_courses:
     pattern: /my/courses/learning
-    defaults: { _controller: TopxiaWebBundle:MyCourses:myLearningCourses }
+    defaults: { _controller: TopxiaWebBundle:MyCourse:myLearningCourses }
 
 my_learned_courses:
     pattern: /my/courses/learned
-    defaults: { _controller: TopxiaWebBundle:MyCourses:myLearnedCourses }
+    defaults: { _controller: TopxiaWebBundle:MyCourse:myLearnedCourses }
 
 my_teaching_courses:
     pattern: /my/courses/teaching
-    defaults: { _controller: TopxiaWebBundle:MyCourses:myTeachingCourses }
+    defaults: { _controller: TopxiaWebBundle:MyCourse:myTeachingCourses }
 
 my_favorite_courses:
     pattern: /my/courses/favorite
-    defaults: { _controller: TopxiaWebBundle:MyCourses:myFavoriteCourses }
+    defaults: { _controller: TopxiaWebBundle:MyCourse:myFavoriteCourses }
 
 my_questions:
     pattern: /my/questions
-    defaults: { _controller: TopxiaWebBundle:MyQuestions:myQuestions }
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:myQuestions }
 
 my_threads:
     pattern: /my/threads
-    defaults: { _controller: TopxiaWebBundle:MyThreads:myThreads }
+    defaults: { _controller: TopxiaWebBundle:MyThread:myThreads }
 
 my_notes:
     pattern: /my/notes
-    defaults: { _controller: TopxiaWebBundle:MyNotes:myNotes }
+    defaults: { _controller: TopxiaWebBundle:MyNote:myNotes }
 
 my_notes_detail:
     pattern: /my/{userId}/notes/detail/{courseId}
-    defaults: { _controller: TopxiaWebBundle:MyNotes:notesDetail }
+    defaults: { _controller: TopxiaWebBundle:MyNote:notesDetail }
 
 my_notes_delete:
     pattern: /my/notes/{noteId}/delete
-    defaults: { _controller: TopxiaWebBundle:MyNotes:deleteNote }
+    defaults: { _controller: TopxiaWebBundle:MyNote:deleteNote }
 
 my_notes_update:
     pattern: /my/notes/{noteId}/update
-    defaults: { _controller: TopxiaWebBundle:MyNotes:updateNote }
+    defaults: { _controller: TopxiaWebBundle:MyNote:updateNote }
 
 # @todo 
 user_show: 

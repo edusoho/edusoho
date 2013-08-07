@@ -8,6 +8,18 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 {
     protected $table = 'course_member';
 
+    public function getMemberCountByUserId($userId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($userId));
+    }
+
+    public function findMembersByUserId($userId, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
     public function getMember($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";

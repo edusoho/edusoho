@@ -62,6 +62,11 @@ class NoteServiceImpl extends BaseService implements NoteService
 		if ($resultNote) {
             throw $this->createServiceException('The Note Is Already Exist!');	
         }
+        
+        $courseMember = $this->getCourseService()->getCourseMember($course['id'], $currentUser['id']);
+        $this->getCourseService()->updateCourseMember($courseMember['id'], 
+            array("notesNum"=>$courseMember['notesNum']+1,
+                "notesLastUpdateTime"=>time()));
 
         $content = strip_tags($note['content']);
         $content = $this->DeleteHTML($content);
@@ -82,21 +87,15 @@ class NoteServiceImpl extends BaseService implements NoteService
         if (empty($note['id'])) {
             unset($note['id']);
         }
+        
+        $courseMember = $this->getCourseService()->getCourseMember($resultNote['courseId'], $resultNote['userId']);
+        $this->getCourseService()->updateCourseMember($courseMember['id'], array("notesLastUpdateTime"=>time()));
+
         $noteInfo = array_merge(array('updatedTime'=> time()),$note);
         $content = strip_tags($noteInfo['content']);
         $content = $this->DeleteHTML($content);
         $noteInfo['contentCount'] = mb_strlen($content,'UTF8');
         return $this->getNoteDao()->updateNote($id,$noteInfo);
-    }
-
-    private function DeleteHTML($str)
-    {
-        $str = str_replace("<br/>","",$str);
-        $str = str_replace("\\t","",$str); 
-        $str = str_replace("\\r\\n","",$str); 
-        $str = str_replace("\\r","",$str); 
-        $str = str_replace("\\n","",$str); 
-        return trim($str);
     }
 
     public function findUserLessonNotes($userId,$lessonId)
@@ -110,8 +109,38 @@ class NoteServiceImpl extends BaseService implements NoteService
         if(empty($resultNote)) {
             throw $this->createServiceException("The Note Is Not Exist");
         }
-		return $this->getNoteDao()->deleteNote($id);
+        $result = $this->getNoteDao()->deleteNote($id);
+
+        $courseMember = $this->getCourseService()->getCourseMember($resultNote['courseId'], $resultNote['userId']);
+        $latestNote = $this->getUserLatestNoteInCourse($resultNote['userId'], $resultNote['courseId']);
+
+        if(empty($latestNote)){
+            $this->getCourseService()->updateCourseMember($courseMember['id'], array(
+                "notesNum"=>$courseMember['notesNum']-1,
+                "notesLastUpdateTime"=> 0));
+        } else {
+            $this->getCourseService()->updateCourseMember($courseMember['id'], array(
+                "notesNum"=>$courseMember['notesNum']-1,
+                "notesLastUpdateTime"=> time()));
+        }
+
+        return $result;
 	}
+
+    public function getUserLatestNoteInCourse($userId, $courseId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        if(empty($user)){
+            throw $this->createServiceException("The User Is Not Exist");
+            
+        }
+
+        $course = $this->getCourseService()->getCourse($courseId);
+        if(empty($course)){
+            throw $this->createServiceException("The Course Is Not Exist"); 
+        }
+        return $this->getNoteDao()->getLastestNoteByUserIdAndCourseId($userId, $courseId);
+    }
 
 	public function searchNotes($conditions, $sort, $start, $limit)
 	{
@@ -146,6 +175,19 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
        	foreach ($ids as $id) {
+            $note = $this->getNoteDao()->getNote($id);
+            $courseMember = $this->getCourseService()->getCourseMember($note['courseId'], $note['userId']);
+            $latestNote = $this->getUserLatestNoteInCourse($note['userId'], $note['courseId']);
+            if(empty($latestNote)){
+                $this->getCourseService()->updateCourseMember($courseMember['id'], array(
+                    "notesNum"=>$courseMember['notesNum']-1,
+                    "notesLastUpdateTime"=> 0));
+            } else {
+                $this->getCourseService()->updateCourseMember($courseMember['id'], array(
+                    "notesNum"=>$courseMember['notesNum']-1,
+                    "notesLastUpdateTime"=> time()));
+            }
+            
             $deletedResult = $this->getNoteDao()->deleteNote($id);
             if($deletedResult == 0){
                $result = false; 
@@ -153,6 +195,16 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
         return $result;
 	}
+    
+    private function DeleteHTML($str)
+    {
+        $str = str_replace("<br/>","",$str);
+        $str = str_replace("\\t","",$str); 
+        $str = str_replace("\\r\\n","",$str); 
+        $str = str_replace("\\r","",$str); 
+        $str = str_replace("\\n","",$str); 
+        return trim($str);
+    }
 
     private function getNoteDao()
     {
