@@ -133,7 +133,7 @@ class LessonQuestionPluginController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $post = $form->getData();
-                $post = $this->getThreadService()->postThread($post);
+                $post = $this->getThreadService()->createPost($post);
 
                 return $this->render('TopxiaWebBundle:LessonQuestionPlugin:post-item.html.twig', array(
                     'post' => $post,

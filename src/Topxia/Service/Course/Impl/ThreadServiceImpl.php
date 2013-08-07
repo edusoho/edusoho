@@ -194,7 +194,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
 	}
 
-	public function postThread($post)
+	public function getPost($courseId, $id)
+	{
+		$post = $this->getThreadPostDao()->getPost($id);
+		if (empty($post) or $post['courseId'] != $courseId) {
+			return null;
+		}
+		return $post;
+	}
+
+	public function createPost($post)
 	{
 		$requiredKeys = array('courseId', 'threadId', 'content');
 		if (!ArrayToolkit::requireds($post, $requiredKeys)) {
@@ -219,6 +228,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
 
 		return $post;
+	}
+
+	public function updatePost($courseId, $id, $fields)
+	{
+		$post = $this->getPost($courseId, $id);
+		if (empty($post)) {
+			throw $this->createServiceException("回帖#{$id}不存在。");
+		}
+
+		$fields  = ArrayToolkit::parts($fields, array('content'));
+		if (empty($fields)) {
+			throw $this->createServiceException('参数缺失。');
+		}
+
+		return $this->getThreadPostDao()->updatePost($id, $fields);
 	}
 
 	public function deletePost($courseId, $id)

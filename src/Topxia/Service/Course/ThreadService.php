@@ -63,7 +63,11 @@ interface ThreadService
 	/**
 	 * 回复话题
 	 */
-	public function postThread($post);
+	public function getPost($courseId, $id);
+
+	public function createPost($post);
+
+	public function updatePost($courseId, $id, $fields);
 
 	public function deletePost($courseId, $id);
 

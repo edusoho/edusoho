@@ -10,17 +10,18 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	protected $table = 'course_thread';
 
+	public function getThread($id)
+	{
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+	}
+
     public function findThreadsByUserIdAndType($userId, $type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = ? ORDER BY createdTime DESC";
         return $this->getConnection()->fetchAll($sql, array($userId, $type));
     }
 
-	public function getThread($id)
-	{
-		return $this->fetch($id);
-	}
-	
 	public function deleteThreadsByIds(array $ids)
     {
         if(empty($ids)){
@@ -33,30 +34,16 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
 	{
-		return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'course_material')
-            ->where("courseId = :courseId")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchAll();
+		$orderBy = join (' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
 	}
 
 	public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
 	{
-		return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'course_material')
-            ->where("courseId = :courseId")
-            ->where("type = :type")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setParameter(":courseId", $courseId)
-            ->setParameter(":type", $type)
-            ->execute()
-            ->fetchAll();
+		$orderBy = join (' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $type)) ? : array();
 	}
 
 	public function searchThreads($conditions, $orderBys, $start, $limit)
@@ -103,9 +90,9 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		return $builder->execute()->fetchColumn(0);
 	}
 
-	public function addThread($thread)
+	public function addThread($fields)
 	{
-        $affected = $this->getConnection()->insert($this->table, $thread);
+        $affected = $this->getConnection()->insert($this->table, $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course thread error.');
         }
