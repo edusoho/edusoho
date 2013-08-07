@@ -122,7 +122,7 @@ class CourseThreadController extends BaseController
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
-                // $thread = $this->getThreadService()->createThread($form->getData());
+                $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                    'courseId' => $thread['courseId'],
                    'id' => $thread['id'], 
