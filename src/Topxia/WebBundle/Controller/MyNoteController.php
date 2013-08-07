@@ -50,14 +50,21 @@ class MyNoteController extends BaseController
         $user = $this->getCurrentUser();   
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchUserMemberCount($user['id']),
+            $this->getCourseService()->searchMemberCount(array(
+                "userId"=>$user['id'],
+                "role"=>"student",
+                "notesNumGreaterThan"=>0)),
             5
         );
-        $courseMembers = $this->getCourseService()->searchUserMembers(
-            $user['id'],
+        $courseMembers = $this->getCourseService()->searchMember(
+            array(
+                "userId"=>$user['id'],
+                "role"=>"student",
+                "notesNumGreaterThan"=>0),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         return $this->render('TopxiaWebBundle:MyNotes:my-notes.html.twig',

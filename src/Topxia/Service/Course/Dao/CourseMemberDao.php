@@ -5,6 +5,10 @@ namespace Topxia\Service\Course\Dao;
 interface CourseMemberDao
 {
 
+    public function searchMemberCount($conditions);
+    
+    public function searchMember($conditions, $start, $limit);
+
     public function getMember($id);
 
     public function getMemberByCourseIdAndUserId($courseId, $userId);
