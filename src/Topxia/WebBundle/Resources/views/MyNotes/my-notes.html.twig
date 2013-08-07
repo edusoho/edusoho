@@ -25,7 +25,9 @@
                     <br>
                     课程名称:<font size="4"> {{course.title}} </font>
                     <p> 共 {{ courseMembers[course.id].notesNum }} 篇笔记</p>
-                    <p> 最后更新 {{ courseMembers[course.id].notesLastUpdateTime | smart_time }} </p>
+                    {% if courseMembers[course.id].notesLastUpdateTime > 0 %}
+                        <p> 最后更新 {{ courseMembers[course.id].notesLastUpdateTime | smart_time }} </p>
+                    {% endif %}
                 </div>
             {% endfor %}
             
