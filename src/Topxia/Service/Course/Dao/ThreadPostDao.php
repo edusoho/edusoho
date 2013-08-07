@@ -11,7 +11,9 @@ interface ThreadPostDao
 
 	public function getPostCountByThreadId($threadId);
 
-	public function addPost(array $post);
+	public function addPost(array $fields);
+
+	public function updatePost($id, array $fields);
 
 	public function deletePost($id);
 

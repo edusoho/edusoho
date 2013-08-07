@@ -12,50 +12,47 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
 	public function getPost($id)
 	{
-		return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
 	public function findPostsByThreadId($threadId, $orderBy, $start, $limit)
 	{
-		return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'course_thread_post')
-            ->where("threadId = :threadId")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setParameter(":threadId", $threadId)
-            ->execute()
-            ->fetchAll();
+		$orderBy = join (' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE threadId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($threadId)) ? : array();
 	}
 
 	public function getPostCountByThreadId($threadId)
 	{
-		return $this->createQueryBuilder()
-            ->select('COUNT(*)')->from($this->table, 'course_thread_post')
-            ->where("threadId = :threadId")
-            ->setParameter(":threadId", $threadId)
-            ->execute()
-            ->fetchColumn(0);
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE threadId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($threadId));
 	}
 
 	public function addPost(array $post)
 	{
-		$id = $this->insert($post);
-		return $this->getPost($id);
+        $affected = $this->getConnection()->insert($this->table, $post);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course post error.');
+        }
+        return $this->getPost($this->getConnection()->lastInsertId());
+	}
+
+	public function updatePost($id, array $fields)
+	{
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getPost($id);
 	}
 
 	public function deletePost($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 	public function deletePostsByThreadId($threadId)
 	{	
-		return $this->createQueryBuilder()
-            ->delete($this->table)
-            ->where("threadId = :threadId")
-            ->setParameter(":threadId", $threadId)
-            ->execute();
+        $sql ="DELETE FROM {$this->table} WHERE threadId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($threadId));
 	}
 
 }

@@ -198,7 +198,7 @@ class ThreadServiceTest extends BaseTestCase
     		'threadId' => $createdThread['id'],
     		'content' => 'post thread',
 		);
-		$createdPost = $this->getThreadService()->postThread($post);
+		$createdPost = $this->getThreadService()->createPost($post);
 
     	$this->getThreadService()->deleteThread($createdThread['courseId'], $createdThread['id']);
 
@@ -243,7 +243,7 @@ class ThreadServiceTest extends BaseTestCase
     		'threadId' => $notExistThread['id'],
     		'content' => 'post thread',
 		);
-		$createdPost = $this->getThreadService()->postThread($post);
+		$createdPost = $this->getThreadService()->createPost($post);
     }
 
     /**
@@ -264,9 +264,9 @@ class ThreadServiceTest extends BaseTestCase
     		'threadId' => $createdThread['id'],
     		'content' => 'post thread',
 		);
-		$this->getThreadService()->postThread($post);
-		$this->getThreadService()->postThread($post);
-		$this->getThreadService()->postThread($post);
+		$this->getThreadService()->createPost($post);
+		$this->getThreadService()->createPost($post);
+		$this->getThreadService()->createPost($post);
 
 		$foundPosts = $this->getThreadService()->findThreadPosts($thread['courseId'], $createdThread['id'], 'default', 0, 20);
 		$this->assertEquals(3, count($foundPosts));
@@ -278,7 +278,7 @@ class ThreadServiceTest extends BaseTestCase
     /**
      * @group current 
      */
-    public function testPostThread()
+    public function testCreatePost()
     {
 		$thread = array(
 			'courseId' => 1,
@@ -293,7 +293,7 @@ class ThreadServiceTest extends BaseTestCase
     		'threadId' => $createdThread['id'],
     		'content' => 'post thread',
 		);
-		$createdPost = $this->getThreadService()->postThread($post);
+		$createdPost = $this->getThreadService()->createPost($post);
 
 		$this->assertTrue(is_array($createdPost));
 		$this->assertEquals($post['courseId'], $createdPost['courseId']);
@@ -321,7 +321,7 @@ class ThreadServiceTest extends BaseTestCase
     		'threadId' => $createdThread['id'],
     		'content' => 'post thread',
 		);
-		$createdPost = $this->getThreadService()->postThread($post);
+		$createdPost = $this->getThreadService()->createPost($post);
 
 		$this->getThreadService()->deletePost($createdPost['courseId'], $createdPost['id']);
 
