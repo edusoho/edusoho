@@ -13,9 +13,13 @@
     {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
 
     <div class="col-lg-9">
-        <div class="notice-my-notes">
-            <h1>我的笔记</h1>
-        </div>
+
+        <div class="panel panel-col">
+            <div class="panel-heading">
+                <h1>我的笔记</h1>
+            </div>
+
+            <div class="panel-body">
 
             {% for course in courses %}
                 <div class="notes-of-course">
@@ -31,6 +35,8 @@
                 </div>
             {% endfor %}
             
+            </div>
+        </div>  
         {{ web_macro.paginator(paginator) }} 
     </div>
 </div>

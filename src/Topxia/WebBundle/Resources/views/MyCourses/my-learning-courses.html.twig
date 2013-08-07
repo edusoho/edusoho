@@ -14,16 +14,23 @@
 
     <div class="col-lg-9">
         
-        {% include 'TopxiaWebBundle:MyCourses:my-courses-nav.html.twig' %}
+        <div class="panel panel-col">
+            <div class="panel-heading">
+                {% include 'TopxiaWebBundle:MyCourses:my-courses-nav.html.twig' %}
+            </div>
+            <div class="panel-body">
+                
+            {% if learningCourses is empty %}
+               <h3>你还没有学习任何课程，<a href="{{ path('course_explore') }}">来探索更多课程吧！ </a>
 
-        {% if learningCourses is empty %}
-            <h3>你还没有学习任何课程，<a href="{{ path('course_explore') }}">来探索更多课程吧！ </a>
-        {% else %}
-            {% include 'TopxiaWebBundle:MyCourses:my-courses-list.html.twig' with { users: users, courses: learningCourses } %}
-        
-        {% endif %}
+            {% else %}
+                {% include 'TopxiaWebBundle:MyCourses:my-courses-list.html.twig' with { users: users, courses: learningCourses } %}
+            {% endif %}
 
-  {{ web_macro.paginator(paginator) }} 
+            </div>
+        </div>
+
+        {{ web_macro.paginator(paginator) }}
     </div>
 
 </div>

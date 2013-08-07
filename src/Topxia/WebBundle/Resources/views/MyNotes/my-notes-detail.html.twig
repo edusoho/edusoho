@@ -13,56 +13,51 @@
     {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
 
     <div class="col-lg-9">
-
-        {% include 'TopxiaWebBundle:MyNotes:notice-my-notes.html.twig' with {course: course}  %}
-
+        <div class="panel panel-col">
+            {% include 'TopxiaWebBundle:MyNotes:notice-my-notes.html.twig' with {course: course}  %}
+        </div>
         <div class="col-lg-3">
-
-            {% include 'TopxiaWebBundle:MyNotes:note-list.html.twig' with {courseNotes: courseNotes, lessons: lessons }  %}
+             {% include 'TopxiaWebBundle:MyNotes:note-list.html.twig' with {courseNotes: courseNotes, lessons: lessons }  %}
         </div>
 
         <div class="col-lg-6 course-notes">
+            <div class="panel panel-col">
+                {% for lesson in lessons %}
+                    {% if courseNotes[lesson.id] is defined %}
+                        <div class="course-note" lessonid="{{lesson.id}}" istatus="defined"
+                            {% if loop.index != 1 %}
+                                style="display:none"
+                            {% endif %} >
 
-            {% for lesson in lessons %}
-                {% if courseNotes[lesson.id] is defined %}
+                            <form id="note-form-{{courseNotes[lesson.id].id}}" name="note-form" class="form-horizontal note-form" method="post" action="{{ path('my_notes_update', {noteId:courseNotes[lesson.id].id}) }}" noteId="{{courseNotes[lesson.id].id}}">
 
-                <div class="course-note" lessonid="{{lesson.id}}" istatus="defined"
-                    {% if loop.index != 1 %}
-                        style="display:none"
-                    {% endif %} >
+                                    <a href="javascript:;" class="btn btn-mini note-edit"> <span class="glyphicon glyphicon-edit"></span> </a>
 
-                    <form id="note-form-{{courseNotes[lesson.id].id}}" name="note-form" class="form-horizontal note-form" method="post" action="{{ path('my_notes_update', {noteId:courseNotes[lesson.id].id}) }}" noteId="{{courseNotes[lesson.id].id}}">
+                                    <a class="btn btn-mini note-delete" href="javascript:" data-url="{{ path('my_notes_delete', {noteId:courseNotes[lesson.id].id}) }}"> <span class="glyphicon glyphicon-trash"></span></a>
 
-                            <a href="javascript:;" class="btn btn-mini note-edit"> <span class="glyphicon glyphicon-edit"></span> </a>
+                                    <div class="note-content">
+                                        {{ courseNotes[lesson.id].content | raw }}
 
-                            <a class="btn btn-mini note-delete" href="javascript:" data-url="{{ path('my_notes_delete', {noteId:courseNotes[lesson.id].id}) }}"> <span class="glyphicon glyphicon-trash"></span></a>
+                                        <textarea id="note-content-{{courseNotes[lesson.id].id}}" name="content" style="display:none"> 
+                                        {{ courseNotes[lesson.id].content | raw }}
+                                        </textarea>
 
-                            <div class="note-content">
-                                {{ courseNotes[lesson.id].content | raw }}
+                                    </div>
 
-                                <textarea id="note-content-{{courseNotes[lesson.id].id}}" name="content" style="display:none"> 
-                                {{ courseNotes[lesson.id].content | raw }}
-                                </textarea>
-
-                            </div>
-
-                        <button style="display:none" type="submit" class="btn btn-primary pull-right update-note" data-toggle="form-submit" data-target="#note-form">保存</button>
-                    </form>
-                </div>
-
-                {% else %}
-
-                <div class="course-note" lessonid="{{lesson.id}}" status="nodefined" 
-                    {% if loop.index != 1 %}
-                        style="display:none"
-                    {% endif %} >
-                    不好意思，本课时你还没有记过笔记哦！ <br>
-                    <a href="/course/{{lesson.courseId}}/learn#/lesson/{{lesson.id}}"> 快到课时页面来添加笔记吧！ </a>
-                </div>
-
-                {% endif %}
-
-            {% endfor %}
+                                <button style="display:none" type="submit" class="btn btn-primary pull-right update-note" data-toggle="form-submit" data-target="#note-form">保存</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="course-note" lessonid="{{lesson.id}}" status="nodefined" 
+                            {% if loop.index != 1 %}
+                                style="display:none"
+                            {% endif %} >
+                            不好意思，本课时你还没有记过笔记哦！ <br>
+                            <a href="/course/{{lesson.courseId}}/learn#/lesson/{{lesson.id}}"> 快到课时页面来添加笔记吧！ </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 

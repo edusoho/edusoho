@@ -13,47 +13,48 @@
     {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
 
     <div class="col-lg-9">
-        
-    {% include 'TopxiaWebBundle:MyCourses:my-courses-nav.html.twig' %}
 
-       {% if teachingCourses is empty %}
-         
-         <h3>你还没有创建任何课程，<a href="{{ path('course_create') }}">来创建属于你的课程吧！ </a>
-            </h3>
-            
-        {% else %}
-
-            <div class="tab-divs">
-                    <ul class="courses-list">
-                            
-                        {% for course in teachingCourses %}
-                            <li class="learning-course" id={{course.id}}>
-
-                                <a href="{{ path('course_show', {id:course.id}) }}">
-                                    <img src="{{ file_path(course.largePicture, 'course-large.png', true) }}">
-                                </a>
-                                
-                                <div class="title">
-                                    <label>课程题目：</label>
-                                    <span class="course-name">{{course.title}}</span>
-                                </div>
-
-                                <div class="manage">
-                                    <a href="{{ path('course_manage', {id:course.id}) }}">
-                                        <strong>管理本课程</strong>
-                                    </a>
-                                </div>
-                            </li>
-
-                        {% endfor %}
-                    </ul>
+        <div class="panel panel-col">
+            <div class="panel-heading">
+                {% include 'TopxiaWebBundle:MyCourses:my-courses-nav.html.twig' %}
             </div>
-        {% endif %}
+             <div class="panel-body">
+                {% if teachingCourses is empty %}
+                 
+                 <h3>你还没有创建任何课程，<a href="{{ path('course_create') }}">来创建属于你的课程吧！ </a>
+                    </h3>           
+                {% else %}
+                    <div class="tab-divs">
+                            <ul class="courses-list">
+                                    
+                                {% for course in teachingCourses %}
+                                    <li class="learning-course" id={{course.id}}>
+
+                                        <a href="{{ path('course_show', {id:course.id}) }}">
+                                            <img src="{{ file_path(course.largePicture, 'course-large.png', true) }}">
+                                        </a>
+                                        
+                                        <div class="title">
+                                            <label>课程题目：</label>
+                                            <span class="course-name">{{course.title}}</span>
+                                        </div>
+
+                                        <div class="manage">
+                                            <a href="{{ path('course_manage', {id:course.id}) }}">
+                                                <strong>管理本课程</strong>
+                                            </a>
+                                        </div>
+                                    </li>
+
+                                {% endfor %}
+                            </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
       {{ web_macro.paginator(paginator) }} 
-       
     </div>
-
+    
 </div>
-
 
 {% endblock %}

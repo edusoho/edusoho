@@ -1,25 +1,37 @@
 <div class="col-lg-3">
-        <ul class="nav nav-tabs nav-stacked">
-            <li
+
+      <div class="panel">
+        <div class="list-group-panel">
+          
+          <div class="list-group">
+            <a class="list-group-item 
             {% if nav == "index" or nav == "my-courses" %} 
-            class="active"
+            active
             {% endif %}
-            >
-            <a href="{{ path('my_courses') }}">我的课程</a> </li>
-            <li 
-            {% if nav == "my-questions" %} 
-            class="active"
+            " href="{{ path('my_courses') }}">我的课程</a>
+
+            <a class="list-group-item
+              {% if nav == "my-questions" %} 
+            active
             {% endif %}
-            > <a href="{{ path('my_questions') }}">我的问答</a> </li>
-            <li 
+            " href="{{ path('my_questions') }}">我的问答</a>
+
+            <a class="list-group-item
             {% if nav == "my-threads" %} 
-            class="active"
+            active
             {% endif %}
-            > <a href="{{ path('my_threads') }}">我的帖子</a> </li>
-            <li 
+            " href="{{ path('my_threads') }}">我的帖子</a>
+
+            <a class="list-group-item
             {% if nav == "my-notes" %} 
-            class="active"
+             active
             {% endif %}
-            > <a href="{{ path('my_notes') }}">我的笔记</a> </li>
-        </ul>
+            " href="{{ path('my_notes') }}">我的笔记</a>
+            
+          </div>
+
+        </div>
+
+      </div>
+
 </div>
