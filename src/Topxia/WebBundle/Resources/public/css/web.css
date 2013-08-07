@@ -30,7 +30,7 @@ a:focus {
 }
 
 .nav-mini > li > a {
-	padding: 1px 6px;
+	padding: 1px 10px;
 }
 
 .width-input {
@@ -57,7 +57,7 @@ a:focus {
 
 .media-list .media {
 	border-bottom: 1px solid #eee;
-	padding-bottom: 8px;
+	padding-bottom: 15px;
 }
 
 .media-list .media:last-child {
@@ -65,8 +65,8 @@ a:focus {
 }
 
 .media .media-object-small img {
-	width: 36px;
-	height: 36px;
+	width: 48px;
+	height: 48px;
 	border-radius: 3px;
 }
 
@@ -556,7 +556,22 @@ body {
 	margin: 10px 0;
 }
 
+.thread-breadcrumbs {
+	font-size: 13px;
+	margin-bottom: 10px;
+}
+
+.thread-breadcrumbs .glyphicon {
+	color: #999;
+	font-size: 8px;
+}
+
+.thread-breadcrumbs a {
+	text-decoration: none;
+}
+
 .thread {
+	margin-bottom: 20px;
 
 }
 
@@ -576,6 +591,7 @@ body {
 
 .thread-metas {
 	color: #999;
+	font-size: 12px;
 }
 
 .thread-author-avatar img {
@@ -591,6 +607,25 @@ body {
 .thread-footer {
 	text-align: right;
 }
+
+.thread-posts {
+
+}
+
+.thread-posts-heading {
+	font-size: 18px;
+	padding-bottom: 10px;
+	border-bottom: 3px solid #eee;
+	margin-bottom: 20px;
+	color: #000;
+}
+
+.thread-posts-heading .glyphicon {
+	color: #ccc;
+	font-size: 12px;
+	margin-right: 5px;
+}
+
 
 .thread-post {
 	overflow: visible;

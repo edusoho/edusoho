@@ -66,13 +66,15 @@ class CourseThreadController extends BaseController
 
         $this->getThreadService()->hitThread($courseId, $id);
 
-        $template = $request->isXmlHttpRequest() ? 'show-main' : 'show';
-        return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
+        $isManager = $this->getCourseService()->canManageCourse($course);
+
+        return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
             'course' => $course,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
             'users' => $users,
+            'isManager' => $isManager,
             'paginator' => $paginator,
         ));
     }
@@ -105,6 +107,36 @@ class CourseThreadController extends BaseController
             'form' => $form->createView(),
             'type' => $type,
         ));
+    }
+
+    public function editAction(Request $request, $courseId, $id)
+    {
+        $thread = $this->getThreadService()->getThread($courseId, $id);
+        if (empty($thread)) {
+            throw $this->createNotFoundException();
+        }
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $form = $this->createThreadForm($thread);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
+                return $this->redirect($this->generateUrl('course_thread_show', array(
+                   'courseId' => $thread['courseId'],
+                   'id' => $thread['id'], 
+                )));
+            }
+        }
+
+        return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
+            'form' => $form->createView(),
+            'course' => $course,
+            'thread' => $thread,
+            'type' => $thread['type'],
+        ));
+
     }
 
     private function createThreadForm($data = array())
@@ -175,7 +207,8 @@ class CourseThreadController extends BaseController
                     'course' => $course,
                     'thread' => $thread,
                     'post' => $post,
-                    'author' => $this->getUserService()->getUser($post['userId'])
+                    'author' => $this->getUserService()->getUser($post['userId']),
+                    'isManager' => $this->getCourseService()->canManageCourse($course)
                 ));
             } else {
                 return $this->createJsonResponse(false);

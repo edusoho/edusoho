@@ -48,9 +48,9 @@
         {{ web_macro.user_avatar(author, 'pull-left media-object media-object-small')}}
           <div class="media-body">
             {% if thread.postNum > 0 %}
-              <span class="badge pull-right">{{ thread.postNum }}</span>
+              <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
             {% endif %}
-            <div>
+            <div class="mbm">
               {% if thread.isStick %}
                 <span class="label label-danger" title="置顶帖">置顶</span>
               {% endif %}

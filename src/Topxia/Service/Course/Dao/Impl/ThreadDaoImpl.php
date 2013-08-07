@@ -105,18 +105,22 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function addThread($thread)
 	{
-		$id = $this->insert($thread);
-		return $this->getThread($id);
+        $affected = $this->getConnection()->insert($this->table, $thread);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course thread error.');
+        }
+        return $this->getThread($this->getConnection()->lastInsertId());
 	}
 
 	public function updateThread($id, $fields)
 	{
-		return $this->update($id,$fields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getThread($id);
 	}
 
 	public function deleteThread($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 	public function waveThread($id, $field, $diff)
@@ -125,8 +129,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		if (!in_array($field, $fields)) {
 			throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减。。", $field, implode(',', $fields)));
 		}
-		$sql = "UPDATE {$this->table} SET {$field} = {$field} + ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff));
+		$sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
 	}
 
 }
