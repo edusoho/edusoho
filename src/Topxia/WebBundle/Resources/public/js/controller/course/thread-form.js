@@ -14,7 +14,7 @@ define(function(require, exports, module) {
         });
 
         var validator = new Validator({
-            element: '#thread-create-form',
+            element: '#thread-form',
         });
 
         validator.addItem({
@@ -27,23 +27,9 @@ define(function(require, exports, module) {
             required: true
         });
 
-        Validator.query('#thread-create-form').on('formValidate', function(elemetn, event) {
+        validator.on('formValidate', function(elemetn, event) {
             CKEDITOR.instances['thread_content'].updateElement();
         });
-
-        Validator.query('#thread-create-form').on('formValidated', function(err, msg, ele) {
-            if (err == true) {
-                return ;
-            }
-
-            var $form = $("#thread-create-form");
-            $.post($form.attr('action'), $form.serialize(), function(thread) {
-                window.location.href = thread.link;
-            }, 'json');
-            return false;
-        });
-
-
 
     };
 

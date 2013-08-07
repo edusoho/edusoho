@@ -103,6 +103,20 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->addThread($thread);
 	}
 
+	public function updateThread($courseId, $threadId, $thread)
+	{
+		$thread = $this->getThread($courseId, $threadId);
+		if (empty($thread)) {
+			throw $this->createServiceException('话题不存在，更新失败！');
+		}
+
+		$fields = ArrayToolkit::parts($thread, array('title', 'content'));
+		if (empty($fields)) {
+			throw $this->createServiceException('参数缺失，更新失败。');
+		}
+
+	}
+
 	public function deleteThread($courseId, $threadId)
 	{
 		$thread = $this->getThread($courseId, $threadId);
@@ -183,7 +197,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	{
 		$requiredKeys = array('courseId', 'threadId', 'content');
 		if (!ArrayToolkit::requireds($post, $requiredKeys)) {
-			throw $this->createServiceException(sprintf('参数缺失，必须包含参数： %s', implode(',', $requiredKeys)));
+			throw $this->createServiceException('参数缺失');
 		}
 
 		$thread = $this->getThread($post['courseId'], $post['threadId']);
