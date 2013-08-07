@@ -13,6 +13,10 @@ class MyNotesController extends BaseController
         $courseNotes = $this->getNoteService()->findUserCourseNotes($userId, $courseId);
         $course = $this->getCourseService()->getCourse($courseId);
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $lessons = ArrayToolkit::index($lessons, 'number');
+        $courseNotes = ArrayToolkit::index($courseNotes, 'lessonId');
+   
+
         return $this->render('TopxiaWebBundle:MyNotes:my-notes-detail.html.twig',
             array('courseNotes'=>$courseNotes,
                 'course'=>$course,
@@ -21,10 +25,11 @@ class MyNotesController extends BaseController
 
     public function deleteNoteAction(Request $request, $noteId)
     {
-
+        $note = $this->getNoteService()->getNote($noteId);
+        $url = '/course/'.$note['courseId'].'/learn#/lesson/'.$note['lessonId'];
         $result = $this->getNoteService()->deleteNote($noteId);
         if($result == 1){
-            return $this->createJsonResponse(array('status'=>'ok', 'id' => $noteId));
+            return $this->createJsonResponse(array('status'=>'ok', 'id' => $noteId, 'url'=>$url, 'lessonId'=>$note['lessonId']));
         } else {
             return $this->createJsonResponse(array('status'=>'error', 'id' => $noteId));
         }
