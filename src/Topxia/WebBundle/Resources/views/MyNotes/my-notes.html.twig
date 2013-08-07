@@ -13,14 +13,10 @@
     {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
 
     <div class="col-lg-9">
-        
         <div class="notice-my-notes">
             <h1>我的笔记</h1>
         </div>
-        {%  if myNotes is empty %}
-            <h3> 你还没有创建任何笔记哦！ </h3>
-        {% else %}
- 
+
             {% for course in courses %}
                 <div class="notes-of-course">
                     <a href="{{ path('my_notes_detail', {userId: app.user.id, courseId: course.id }) }}">
@@ -28,15 +24,15 @@
                     </a>
                     <br>
                     课程名称:<font size="4"> {{course.title}} </font>
-                    <p> 共 {{ course.notes | length }} 篇笔记</p>
-                    <p> 最后更新 {{ course.noteLatestUpdatedTime | smart_time }} </p>
+                    <p> 共 {{ courseMembers[course.id].notesNum }} 篇笔记</p>
+                    {% if courseMembers[course.id].notesLastUpdateTime > 0 %}
+                        <p> 最后更新 {{ courseMembers[course.id].notesLastUpdateTime | smart_time }} </p>
+                    {% endif %}
                 </div>
             {% endfor %}
             
-        {% endif %}
         {{ web_macro.paginator(paginator) }} 
     </div>
-
 </div>
 
 {% endblock %}

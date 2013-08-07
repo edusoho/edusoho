@@ -24,6 +24,8 @@ interface NoteService
 
     public function searchNotesCount($conditions);
 
+    public function getUserLatestNoteInCourse($userId, $courseId);
+    
     public function findUserCourseNotes($userId, $courseId);
 
 }

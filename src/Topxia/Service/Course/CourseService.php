@@ -120,7 +120,13 @@ interface CourseService
 	/**
 	 * Member API
 	 */
+	public function searchUserMemberCount($userId);
+
+	public function searchUserMembers($userId, $start, $limit);
+
 	public function getCourseMember($courseId, $userId);
+
+	public function updateCourseMember($id, $fields);
 
 	public function findCourseStudents($courseId, $start, $limit);
 
