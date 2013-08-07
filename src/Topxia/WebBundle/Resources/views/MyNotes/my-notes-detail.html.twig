@@ -16,11 +16,11 @@
         <div class="panel panel-col">
             {% include 'TopxiaWebBundle:MyNotes:notice-my-notes.html.twig' with {course: course}  %}
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
              {% include 'TopxiaWebBundle:MyNotes:note-list.html.twig' with {courseNotes: courseNotes, lessons: lessons }  %}
         </div>
 
-        <div class="col-lg-6 course-notes">
+        <div class="col-lg-8 course-notes">
             <div class="panel panel-col">
                 {% for lesson in lessons %}
                     {% if courseNotes[lesson.id] is defined %}
