@@ -16,13 +16,13 @@
         
         <div class="panel panel-col">
             <div class="panel-heading">
-                {% include 'TopxiaWebBundle:MyCourses:my-courses-nav.html.twig' %}
+                {% include 'TopxiaWebBundle:MyCourse:my-courses-nav.html.twig' %}
             </div>
             <div class="panel-body"> 
                 {% if favoriteCourses is empty %}
                    <h3>你还没有收藏任何课程，<a href="{{ path('course_explore') }}">来收藏更多课程吧！ </a> </h3>
                 {% else %}
-                    {% include 'TopxiaWebBundle:MyCourses:my-courses-list.html.twig' with { users: users, courses: favoriteCourses } %}
+                    {% include 'TopxiaWebBundle:MyCourse:my-courses-list.html.twig' with { users: users, courses: favoriteCourses } %}
                 {% endif %}
             </div>
         </div>

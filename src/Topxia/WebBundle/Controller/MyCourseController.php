@@ -49,7 +49,7 @@ class MyCourseController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaWebBundle:MyCourses:my-courses.html.twig', 
+        return $this->render('TopxiaWebBundle:MyCourse:my-courses.html.twig', 
             array('learningCourses'=>$learningCourses,
                 'users'=>$users,
                 'paginator' => $paginator));
@@ -73,7 +73,7 @@ class MyCourseController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaWebBundle:MyCourses:my-learning-courses.html.twig', 
+        return $this->render('TopxiaWebBundle:MyCourse:my-learning-courses.html.twig', 
             array('learningCourses'=>$learningCourses,
                 'users'=>$users,
                 'paginator' => $paginator));
@@ -96,7 +96,7 @@ class MyCourseController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaWebBundle:MyCourses:my-learned-courses.html.twig', 
+        return $this->render('TopxiaWebBundle:MyCourse:my-learned-courses.html.twig', 
             array('learnedCourses'=>$learnedCourses,
                 'users'=>$users,
                 'paginator' => $paginator));
@@ -113,7 +113,7 @@ class MyCourseController extends BaseController
         
         $teachingCourses = $this->getCourseService()->findUserTeachingCourses($currentUser['id'],$paginator->getOffsetCount(),
             $paginator->getPerPageCount());
-        return $this->render('TopxiaWebBundle:MyCourses:my-teaching-courses.html.twig', 
+        return $this->render('TopxiaWebBundle:MyCourse:my-teaching-courses.html.twig', 
             array('teachingCourses'=>$teachingCourses,
                 'paginator' => $paginator));
     }
@@ -134,7 +134,7 @@ class MyCourseController extends BaseController
             $userIds = array_merge($userIds, $favoriteCourse['teacherIds']);
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render('TopxiaWebBundle:MyCourses:my-favorite-courses.html.twig', 
+        return $this->render('TopxiaWebBundle:MyCourse:my-favorite-courses.html.twig', 
             array('favoriteCourses'=>$favoriteCourses,
                 'users'=>$users,
                 'paginator' => $paginator));

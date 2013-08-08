@@ -15,7 +15,7 @@
     <div class="col-lg-9">
         <div class="panel panel-col">
             <div class="panel-heading">
-                {% include 'TopxiaWebBundle:MyCourses:my-courses-nav.html.twig' %}
+                {% include 'TopxiaWebBundle:MyCourse:my-courses-nav.html.twig' %}
             </div>
             <div class="panel-body">
                 {% if learnedCourses is empty %}
@@ -23,7 +23,7 @@
                     </h3>
                 {% else %}
 
-                {% include 'TopxiaWebBundle:MyCourses:my-courses-list.html.twig' with { users: users, courses: learnedCourses } %}
+                {% include 'TopxiaWebBundle:MyCourse:my-courses-list.html.twig' with { users: users, courses: learnedCourses } %}
 
                 {% endif %}
             </div>

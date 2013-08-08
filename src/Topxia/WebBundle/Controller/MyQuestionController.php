@@ -26,7 +26,7 @@ class MyQuestionController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($myQuestions, 'courseId'));
-        return $this->render('TopxiaWebBundle:MyQuestions:my-questions.html.twig',array(
+        return $this->render('TopxiaWebBundle:MyQuestion:my-questions.html.twig',array(
             'courses'=>$courses,
             'myQuestions'=>$myQuestions,
             'paginator' => $paginator));

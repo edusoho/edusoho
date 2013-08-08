@@ -14,10 +14,10 @@
 
     <div class="col-lg-9">
         <div class="panel panel-col">
-            {% include 'TopxiaWebBundle:MyNotes:notice-my-notes.html.twig' with {course: course}  %}
+            {% include 'TopxiaWebBundle:MyNote:notice-my-notes.html.twig' with {course: course}  %}
         </div>
         <div class="col-lg-4">
-             {% include 'TopxiaWebBundle:MyNotes:note-list.html.twig' with {courseNotes: courseNotes, lessons: lessons }  %}
+             {% include 'TopxiaWebBundle:MyNote:note-list.html.twig' with {courseNotes: courseNotes, lessons: lessons }  %}
         </div>
 
         <div class="col-lg-8 course-notes">

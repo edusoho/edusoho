@@ -16,7 +16,7 @@ class MyNoteController extends BaseController
         $lessons = ArrayToolkit::index($lessons, 'number');
         $courseNotes = ArrayToolkit::index($courseNotes, 'lessonId');
 
-        return $this->render('TopxiaWebBundle:MyNotes:my-notes-detail.html.twig',
+        return $this->render('TopxiaWebBundle:MyNote:my-notes-detail.html.twig',
             array('courseNotes'=>$courseNotes,
                 'course'=>$course,
                 'lessons'=>$lessons));
@@ -67,7 +67,7 @@ class MyNoteController extends BaseController
 
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
-        return $this->render('TopxiaWebBundle:MyNotes:my-notes.html.twig',
+        return $this->render('TopxiaWebBundle:MyNote:my-notes.html.twig',
             array(
                 'courseMembers'=>$courseMembers,
                 'paginator' => $paginator,
