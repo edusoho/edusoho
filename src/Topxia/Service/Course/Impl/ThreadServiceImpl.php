@@ -36,19 +36,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit);
 	}
 
-    public function deleteThreadsByIds(array $ids=null){
-
-        if(empty($ids)){
-             throw $this->createServiceException("Please select thread item !");
-        }
-
-       	foreach ($ids as $id) {
-            $this->getThreadDao()->deleteThread($id);
-            $this->getThreadPostDao()->deletePostsByThreadId($id);
-        }
-        return true;
-    }
-
 	public function searchThreads($conditions, $sort, $start, $limit)
 	{
 		switch ($sort) {
@@ -93,6 +80,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question'))) {
 			throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
 		}
+
+		$course = $this->getCourseService()->tryTakeCourse($thread['courseId']);
+
 		$thread['userId'] = $this->getCurrentUser()->id;
 		// @todo filter it.
 		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
@@ -110,6 +100,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException('话题不存在，更新失败！');
 		}
 
+		$user = $this->getCurrentUser();
+		($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
 		if (empty($fields)) {
 			throw $this->createServiceException('参数缺失，更新失败。');
@@ -120,6 +113,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function deleteThread($courseId, $threadId)
 	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
@@ -129,8 +124,23 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->deleteThread($thread['id']);
 	}
 
+    public function deleteThreadsByIds(array $ids=null)
+    {
+        if(empty($ids)){
+             throw $this->createServiceException("Please select thread item !");
+        }
+
+       	foreach ($ids as $id) {
+            $this->getThreadDao()->deleteThread($id);
+            $this->getThreadPostDao()->deletePostsByThreadId($id);
+        }
+        return true;
+    }
+
 	public function stickThread($courseId, $threadId)
 	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
@@ -141,6 +151,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function unstickThread($courseId, $threadId)
 	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
@@ -151,6 +163,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function eliteThread($courseId, $threadId)
 	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
@@ -161,6 +175,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function uneliteThread($courseId, $threadId)
 	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
@@ -194,6 +210,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
 	}
 
+	public function findThreadElitePosts($courseId, $threadId, $start, $limit)
+	{
+		return $this->getThreadPostDao()->findPostsByThreadIdAndIsElite($threadId, 1, $start, $limit);
+	}
+
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
@@ -215,7 +236,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('课程(ID: %s)话题(ID: %s)不存在。', $post['courseId'], $post['threadId']));
 		}
 
+		$course = $this->getCourseService()->tryTakeCourse($post['courseId']);
+
 		$post['userId'] = $this->getCurrentUser()->id;
+		$post['isElite'] = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
 		$post['createdTime'] = time();
 		$post = $this->getThreadPostDao()->addPost($post);
 
@@ -237,6 +261,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException("回帖#{$id}不存在。");
 		}
 
+		$user = $this->getCurrentUser();
+		($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+
+
 		$fields  = ArrayToolkit::parts($fields, array('content'));
 		if (empty($fields)) {
 			throw $this->createServiceException('参数缺失。');
@@ -247,6 +275,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function deletePost($courseId, $id)
 	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$post = $this->getThreadPostDao()->getPost($id);
 		if (empty($post)) {
 			throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $id));

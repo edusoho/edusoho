@@ -134,6 +134,8 @@ interface CourseService
 
 	public function findCourseTeachers($courseId);
 
+	public function isCourseTeacher($courseId, $userId);
+
 	public function setCourseTeachers($courseId, $teachers);
 	
 	/**
