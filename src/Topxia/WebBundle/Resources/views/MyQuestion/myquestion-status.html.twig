@@ -1,0 +1,29 @@
+
+    <div class="myQuestion-status"> 
+        <label>问答状态：</label>
+            {% if myQuestion.isStick == 1 %}
+                <span class="glyphicon glyphicon-circle-arrow-up"></span> 
+                置顶  
+            {% else %}
+                <span class="glyphicon glyphicon-minus-sign"></span> 
+                未置顶
+            {% endif %}
+
+            {% if myQuestion.isElite == 1 %}
+                &nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                优质问题
+            {% else %}
+                &nbsp;<span class="glyphicon glyphicon-hand-right"></span>
+                普通问题
+            {% endif %}
+
+            {% if myQuestion.isClosed == 1 %}
+                <span > 已关闭 </span>
+            {% else %}
+                <span > 开放中 </span>
+            {% endif %}
+            &nbsp;
+
+            <span> {{myQuestion.postNum}}条回复 </span>
+            <span> {{myQuestion.hitNum}}次浏览 </span>
+    </div>

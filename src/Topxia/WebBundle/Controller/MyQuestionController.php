@@ -26,8 +26,10 @@ class MyQuestionController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($myQuestions, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($myQuestions, 'latestPostUserId'));
         return $this->render('TopxiaWebBundle:MyQuestion:my-questions.html.twig',array(
             'courses'=>$courses,
+            'users'=>$users,
             'myQuestions'=>$myQuestions,
             'paginator' => $paginator));
     }
