@@ -81,7 +81,7 @@ class CourseLessonManageController extends BaseController
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
 		return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 			'course' => $this->getCourseService()->getCourse($courseId),
-			'lesson' => $this->getCourseService()->getLesson($courseId, $lessonId),
+			'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
 		));
 	}
 
@@ -90,7 +90,7 @@ class CourseLessonManageController extends BaseController
 		$this->getCourseService()->unpublishLesson($courseId, $lessonId);
 		return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 			'course' => $this->getCourseService()->getCourse($courseId),
-			'lesson' => $this->getCourseService()->getLesson($courseId, $lessonId),
+			'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
 		));
 	}
 
