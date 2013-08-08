@@ -62,6 +62,8 @@ interface ThreadService
 	 */
 	public function getThreadPostCount($courseId, $threadId);
 
+	public function findThreadElitePosts($courseId, $threadId, $start, $limit);
+
 	/**
 	 * 回复话题
 	 */

@@ -62,6 +62,13 @@ class CourseThreadController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        if ($thread['type'] == 'question' and $paginator->getCurrentPage() == 1) {
+            $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
+        } else {
+            $elitePosts = array();
+        }
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $this->getThreadService()->hitThread($courseId, $id);
@@ -73,6 +80,7 @@ class CourseThreadController extends BaseController
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
+            'elitePosts' => $elitePosts,
             'users' => $users,
             'isManager' => $isManager,
             'paginator' => $paginator,

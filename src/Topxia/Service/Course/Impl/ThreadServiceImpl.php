@@ -210,6 +210,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
 	}
 
+	public function findThreadElitePosts($courseId, $threadId, $start, $limit)
+	{
+		return $this->getThreadPostDao()->findPostsByThreadIdAndIsElite($threadId, 1, $start, $limit);
+	}
+
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
@@ -234,6 +239,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$course = $this->getCourseService()->tryTakeCourse($post['courseId']);
 
 		$post['userId'] = $this->getCurrentUser()->id;
+		$post['isElite'] = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
 		$post['createdTime'] = time();
 		$post = $this->getThreadPostDao()->addPost($post);
 

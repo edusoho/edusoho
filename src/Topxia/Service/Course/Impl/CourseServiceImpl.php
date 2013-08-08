@@ -903,6 +903,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, self::MAX_TEACHER);
 	}
 
+	public function isCourseTeacher($courseId, $userId)
+	{
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		return empty($member) or $member['role'] != 'teacher' ? false : true;
+	}
+
 	public function setCourseTeachers($courseId, $teachers)
 	{
 		// 过滤数据
@@ -991,7 +997,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function tryTakeCourse($courseId)
 	{
-		$course = $this->getCourseDao()->getCourse($courseId);
+		$course = $this->getCourse($courseId);
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}

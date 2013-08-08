@@ -53,9 +53,19 @@
 	</div>
 
 	<div class="thread-posts">
+		{% if thread.type == 'question' and elitePosts %}
+			<h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 老师的答案</h3>
+	    <ul id="thread-post-list" class="media-list">
+	      {% for post in elitePosts %}
+	        {% set author = users[post.userId] %}
+	        {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+	      {% endfor %}
+	    </ul>
+		{% endif %}
+
 		<h3 class="thread-posts-heading">
 			<span class="glyphicon glyphicon-share-alt"></span>
-      <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}答案{% else %}回复{% endif %}
+      <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
 		</h3>
 
     <ul id="thread-post-list" class="media-list">
@@ -65,7 +75,6 @@
       {% else %}
         <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
       {% endfor %}
-
     </ul>
 
     {{ web_macro.paginator(paginator) }}
