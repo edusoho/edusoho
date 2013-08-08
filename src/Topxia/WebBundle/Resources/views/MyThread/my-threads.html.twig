@@ -6,7 +6,6 @@
 
 {% set bodyClass = 'my-threads' %}
 
-
 {% block content %}
 
 <div class="row">
@@ -15,50 +14,39 @@
     <div class="col-lg-9">
         <div class="panel panel-col">
             <div class="panel-heading">
-                <h1>我的帖子</h1>
+               我的帖子
             </div>
 
             <div class="panel-body">
                 {% if myThreads is empty %}
-                    <h3> 你尚未发表任何帖子！ </h3>
+                    你还没有发表任何帖子！
                 {% else %}
                     {% for myThread in myThreads %}
+
                         <div class="my-thread">
                             <div class="myThread-title">
                                 <label>帖子名称:</label>
-                                <a href="{{path('course_thread_show', {courseId:myThread.courseId, id:myThread.id})}}"> {{myThread.title}} </a>
+                                <a href="{{path('course_thread_show', {courseId:myThread.courseId, id:myThread.id})}}"> {{myThread.title | plain_text(20) }} </a>
                             </div>
                             <div class="myThread-content">
-                                <label>帖子内容:</label> {{myThread.content | raw | plain_text(20) }}
+                                <label>帖子内容: </label> {{myThread.content | plain_text(40) }}
                             </div>
                             <div class="course-name"> 
-                                <label> 对应课程名:</label>{{courses[myThread.courseId].title}}
+                                <label> 对应课程名 ： </label>{{courses[myThread.courseId].title | plain_text(20) }}
                             </div>
-                            <div class="myThread-status"> 
-                                <label>帖子状态：</label>
-                                    {% if myThread.isStick == 1 %}
-                                        <span style="color:red"> 置顶 </span>
-                                    {% else %}
-                                        <span style="color:red"> 未置顶 </span>
-                                    {% endif %}
 
-                                    {% if myThread.isElite == 1 %}
-                                        <span style="color:blue"> 精华贴 </span>
-                                    {% else %}
-                                        <span style="color:blue"> 普通贴 </span>
-                                    {% endif %}
+                           {% include 'TopxiaWebBundle:MyThread:mythread-status.html.twig' with {myThread: myThread} %}
 
-                                    {% if myThread.isClosed == 1 %}
-                                        <span style="color:black"> 不好意思，已关闭 </span>
-                                    {% else %}
-                                        <span style="color:black"> 开放中 </span>
-                                    {% endif %}
-                                    <span> {{myThread.postNum}}条回复 </span>
-                            </div>
                             <div class="createdTime"> 
                                 <label> 创建时间：</label>{{myThread.createdTime | date('Y-n-d H:i:s') }}
                             </div>
+                            <div class="latestPostTime">
+                                <label> 最后回复：</label>
+                                {{users[myThread['latestPostUserId']]['nickname']}}
+                                {{myThread.latestPostTime | smart_time }}
+                            </div>
                         </div>
+                        <hr>
                     {% endfor %}
                 {% endif %}
             </div>

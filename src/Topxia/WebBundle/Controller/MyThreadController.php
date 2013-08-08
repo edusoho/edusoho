@@ -26,8 +26,11 @@ class MyThreadController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($myThreads, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($myThreads, 'latestPostUserId'));
+
         return $this->render('TopxiaWebBundle:MyThread:my-threads.html.twig',array(
             'courses'=>$courses,
+            'users'=>$users,
             'myThreads'=>$myThreads,
             'paginator' => $paginator));
     }
