@@ -4,10 +4,35 @@
       <a class="btn btn-link pull-right" href="{{ path('course_create') }}"><h3>创建我的课程</h3> </a>
       </div>
 
+        <div class="nav-of-my-courses panel-body">
+            <ul class="nav nav-pills">
+
       {% if 'ROLE_TEACHER' in roles %}
-        {% include 'TopxiaWebBundle:MyCourse:my-courses-nav-for-teacher.html.twig' %}
+        
+        
+
+          <li {% if bodyClass == "index" or bodyClass == "my-courses"  or bodyClass == "teaching-courses" %}
+          class="active"
+          {% endif %}>
+          <a href="{{ path('my_teaching_courses') }}">教学中</a></li>
+
       {% else %}
-        {% include 'TopxiaWebBundle:MyCourse:my-courses-nav-for-learner.html.twig' %}
+     
+          <li {% if bodyClass == "index" or bodyClass == "learning-courses" or bodyClass == "my-courses" %}
+          class="active" 
+          {% endif %}>
+          <a href="{{ path('my_learning_courses') }}">学习中</a></li>
+          <li {% if bodyClass == "learned-courses" %}
+          class="active"
+          {% endif %}>
+            <a href="{{ path('my_learned_courses') }}">已学完</a></li>
+          <li {% if bodyClass == "favorite-courses" %}
+          class="active"
+          {% endif %}>
+          <a href="{{ path('my_favorite_courses') }}">已收藏</a></li>
+
       {% endif %}
+            </ul>
+        </div>
 
 </div>
