@@ -13,8 +13,6 @@
   <li class="active">{% if thread.type == 'question' %}问答{% else %}话题{% endif %}</li>
 </ul>
 
-
-
 	<div class="thread">
 	  <div class="thread-header">
 	    {{ web_macro.user_avatar(author, 'pull-right thread-author-avatar') }}
@@ -33,21 +31,25 @@
 	    </div>
 	  </div>
 	  <div class="thread-body">{{ thread.content|raw }}</div>
-	  <div class="thread-footer">
-	    <a href="{{ path('course_thread_edit', {courseId:thread.courseId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
-	    <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, id:thread.id}) }}" data-after-url="{{ path('course_threads', {id:course.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
-	    {% if thread.isStick %}
-	      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
-	    {% else %}
-	      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
-	    {% endif %}
+	  {% if isManager or app.user.id == author.id %}
+		  <div class="thread-footer" >
+		    <a href="{{ path('course_thread_edit', {courseId:thread.courseId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+		    {% if isManager %}
+			    <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, id:thread.id}) }}" data-after-url="{{ path('course_threads', {id:course.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+			    {% if thread.isStick %}
+			      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+			    {% else %}
+			      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
+			    {% endif %}
 
-	    {% if thread.isElite %}
-	      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
-	    {% else %}
-	      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
-	    {% endif %}
-	  </div>
+			    {% if thread.isElite %}
+			      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+			    {% else %}
+			      <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
+			    {% endif %}
+		    {% endif %}
+		  </div>
+	  {% endif %}
 	</div>
 
 	<div class="thread-posts">
@@ -60,7 +62,10 @@
       {% for post in posts %}
         {% set author = users[post.userId] %}
         {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+      {% else %}
+        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
       {% endfor %}
+
     </ul>
 
     {{ web_macro.paginator(paginator) }}

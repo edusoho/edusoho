@@ -964,7 +964,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (!$this->hasCourseManagerRole($course, $user)) {
-			throw $this->createAccessDeniedException('您不是课程的管理员，无权操作！');
+			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
 		}
 
 		return CourseSerialize::unserialize($course);
@@ -1001,12 +1001,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createAccessDeniedException('未登录用户，无权操作！');
 		}
 
-		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER'))) > 0) {
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return $course;
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-		if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
+		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
 			throw $this->createAccessDeniedException('您不是课程学员，访问被拒绝！');
 		}
 
@@ -1097,7 +1097,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function hasCourseManagerRole($course, $user) 
 	{
-		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER'))) > 0) {
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return true;
 		}
 

@@ -20,6 +20,8 @@ interface ThreadService
 
 	public function deleteThread($courseId, $threadId);
 
+	public function deleteThreadsByIds(array $ids=null);
+
 	public function stickThread($courseId, $threadId);
 
 	public function unstickThread($courseId, $threadId);
@@ -70,7 +72,5 @@ interface ThreadService
 	public function updatePost($courseId, $id, $fields);
 
 	public function deletePost($courseId, $id);
-
-	public function deleteThreadsByIds(array $ids=null);
 
 }

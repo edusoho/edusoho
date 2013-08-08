@@ -9,7 +9,7 @@ class CourseThreadController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryTakeCourse($id);
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
@@ -46,7 +46,7 @@ class CourseThreadController extends BaseController
 
     public function showAction(Request $request, $courseId, $id)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
         $thread = $this->getThreadService()->getThread($course['id'], $id);
 
         $paginator = new Paginator(
@@ -81,8 +81,9 @@ class CourseThreadController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-    	$type = $request->query->get('type') ? : 'discussion';
-        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryTakeCourse($id);
+
+        $type = $request->query->get('type') ? : 'discussion';
         $form = $this->createThreadForm(array(
         	'type' => $type,
         	'courseId' => $course['id'],
@@ -112,10 +113,15 @@ class CourseThreadController extends BaseController
         if (empty($thread)) {
             throw $this->createNotFoundException();
         }
-        $course = $this->getCourseService()->getCourse($courseId);
+
+        $user = $this->getCurrentUser();
+        if ($user->isLogin() and $user->id == $thread['userId']) {
+            $course = $this->getCourseService()->getCourse($courseId);
+        } else {
+            $course = $this->getCourseService()->tryManageCourse($courseId);
+        }
 
         $form = $this->createThreadForm($thread);
-
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
@@ -188,7 +194,7 @@ class CourseThreadController extends BaseController
 
     public function postAction(Request $request, $courseId, $id)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         $form = $this->createPostForm(array(
             'courseId' => $thread['courseId'],
@@ -221,14 +227,19 @@ class CourseThreadController extends BaseController
 
     public function editPostAction(Request $request, $courseId, $threadId, $id)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $thread = $this->getThreadService()->getThread($courseId, $threadId);
-
         $post = $this->getThreadService()->getPost($courseId, $id);
         if (empty($post)) {
             throw $this->createNotFoundException();
         }
 
+        $user = $this->getCurrentUser();
+        if ($user->isLogin() and $user->id == $post['userId']) {
+            $course = $this->getCourseService()->getCourse($courseId);
+        } else {
+            $course = $this->getCourseService()->tryManageCourse($courseId);
+        }
+
+        $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         $form = $this->createPostForm($post);
 
@@ -260,7 +271,6 @@ class CourseThreadController extends BaseController
 
     public function questionBlockAction(Request $request, $course)
     {
-
         $threads = $this->getThreadService()->searchThreads(
             array('type'=> 'question', 'isElite' => 1),
             'createdNotStick',
