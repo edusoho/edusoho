@@ -1510,6 +1510,10 @@ body {
 	margin-bottom: 10px;
 }
 
+.conversation-list .media {
+	cursor: pointer;
+}
+
 .conversation-list .media .actions {
 	visibility: hidden;
 }
@@ -1518,6 +1522,67 @@ body {
 	visibility: visible;
 }
 
+.conversation-list .conversation-footer {
+	color: #999;
+	font-size: 13px;
+}
+
+.message-list .media {
+	border-bottom: none;
+}
+
+.message-list .media > .pull-left {
+	margin-right: 0;
+}
+
+.message-list .media > .pull-right {
+	margin-left: 0;
+}
+
+.message-list .popover {
+	position: relative;
+	display: block;
+	margin: 0 20px 0 20px;
+	max-width: 100%;
+}
+
+.message-list .message-me .popover {
+	margin-left: 70px;
+	background: #fafafa;
+}
+
+.message-list .message-she .popover {
+	margin-right: 70px;
+}
+
+.message-list .popover .arrow {
+	top: 24px;
+}
+
+.message-list .message-me .popover .arrow:after {
+  border-left-color: #fafafa;
+}
+
+.message-list .message-content {
+	margin-bottom: 10px;
+}
+
+.message-list .message-footer {
+	font-size: 12px;
+}
+
+.message-list .message-actions {
+	float: right;
+	visibility: hidden;
+}
+
+.message-list .media:hover .message-actions {
+	visibility: visible;
+}
+
+.message-reply-form {
+	margin-bottom: 30px;
+}
 
 /**
  * 通用属性

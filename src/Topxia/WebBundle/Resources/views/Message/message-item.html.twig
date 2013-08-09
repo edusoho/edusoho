@@ -1,18 +1,25 @@
-<li class="media">
-    <div>
-          {{ web_macro.user_avatar(message.createdUser, 'pull-left media-object') }}
-          
-    <div class="media-body">
-            <h4 class="media-heading">
-              {{ web_macro.user_link(message.createdUser) }}:
-            </h4>
-             {{ message.content}}
-        <div class="text-muted clearfix">
-<span class="pull-left">{{ message.createdTime|smart_time }}</span><br>
-<a class="btn btn-mini btn-warning" id="delete-conversation" href="{{ path('message_delete',
-{conversationId:conversation.id, messageId:message.id })}}">删除当前私信</a>
+{% set messageFrom = message.fromId == app.user.id ? 'me' : 'she' %}
+<li class="media message-{{ messageFrom }}">
+  {{ web_macro.user_avatar(message.createdUser, (messageFrom == 'me' ? 'pull-right' : 'pull-left') ~ ' media-object') }}
+  <div class="media-body">
+    <div class="popover {% if message.fromId == app.user.id %}left{% else %}right{% endif %}">
+      <div class="arrow"></div>
+      <div class="popover-content">
+        <div class="message-content">
+          {% if messageFrom == 'me' %}
+            <strong>我：</strong> 
+          {% else %}
+            <strong>{{ web_macro.user_link(message.createdUser) }}：</strong> 
+          {% endif %}
+          {{ message.content}}
         </div>
+        <div class="message-footer">
+          <span class="text-muted">{{ message.createdTime|smart_time }}</span>
+          <div class="message-actions">
+            <a class="text-muted" id="delete-conversation" href="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}">删除</a>
+          </div>
+        </div>
+      </div>
     </div>
-
-    </div>
+  </div>
 </li>

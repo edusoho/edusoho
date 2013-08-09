@@ -1,37 +1,38 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}私信 - {{ parent() }}{% endblock %}
-{% set nav = 'message' %}
 
 {% block content %}
 
-
-<div class="page">
- <a class="btn btn-success" id="read-conversation" href="{{ path('message')}} ">返回到我的私信</a>
-
-  <form id="course-create-form" class="form-horizontal" method="post">
-    {{ web_macro.flash_messages() }}
-    {{ form_errors(form) }}
-    {% set mode = mode|default(null) %}
-      <div class="control-group">
-      {{ form_label(form.content, '私信内容', {label_attr:{class:'control-label'}}) }}
-      <div class="controls">
-        {{ form_widget(form.content, {attr:{rows:3}}) }}
+<div class="row">
+  <div class="col-lg-8 col-offset-2">
+    <div class="panel panel-page">
+      <div class="panel-heading">
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">返回我的私信</a>
+        <h2>与{{ receiver.nickname }}的私信对话</h2>
       </div>
-       {{ form_rest(form) }}
-       <input id="course-create-btn " class="pull-right btn btn-primary" type="submit" value="回复">
-      </div>
-  </form>
 
-<ul class="media-list">
-  <div>
-    {% for message in messages %}
-    {% include 'TopxiaWebBundle:Message:message-item.html.twig' with {message:message} %}
-    {% endfor %}
+      <form class="message-reply-form form-horizontal clearfix" method="post">
+        <p>
+          {{ form_widget(form.content, {attr:{rows:3, placeholder:'请输入私信内容'}}) }}
+        </p>
+        <p>
+          {{ form_rest(form) }}
+          <button class="btn btn-primary disabled pull-right">发送</button>
+        </p>
+      </form>
+
+      <ul class="media-list message-list">
+        {% for message in messages %}
+          {% include 'TopxiaWebBundle:Message:message-item.html.twig' with {message:message} %}
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
   </div>
-</ul>
-
-
 </div>
-{{ web_macro.paginator(paginator) }}
+
+
 {% endblock %}
