@@ -8,25 +8,26 @@ use Topxia\Common\ArrayToolkit;
 
 class MyCourseController extends BaseController
 {
-
-    public function indexAction (Request $request)
+    private function renderViewForTeacher()
     {
         $currentUser = $this->getCurrentUser();
-        if(in_array('ROLE_TEACHER', $currentUser['roles'])){
-            $paginator = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->getUserTeachingCoursesCount($currentUser['id']),
             5
         );
-        
         $teachingCourses = $this->getCourseService()->findUserTeachingCourses($currentUser['id'],$paginator->getOffsetCount(),
             $paginator->getPerPageCount());
+
         return $this->render('TopxiaWebBundle:MyCourse:my-teaching-courses.html.twig', 
             array('teachingCourses'=>$teachingCourses,
                 'roles'=>$currentUser['roles'],
                 'paginator' => $paginator));
-        } else {
+    }
 
+    private function renderViewForStudent()
+    {
+        $currentUser = $this->getCurrentUser();
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->getUserLeaningCoursesCount($currentUser['id']),
@@ -46,50 +47,27 @@ class MyCourseController extends BaseController
                 'roles'=>$currentUser['roles'],
                 'users'=>$users,
                 'paginator' => $paginator));
-        }
+    }
 
+    public function indexAction (Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        if(in_array('ROLE_TEACHER', $currentUser['roles'])){
+            return $this->renderViewForTeacher();
+        } else {
+            return $this->renderViewForStudent();
+        }
     }
 
     public function myCoursesAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
         if(in_array('ROLE_TEACHER', $currentUser['roles'])){
-            $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->getUserTeachingCoursesCount($currentUser['id']),
-            5
-        );
-        
-        $teachingCourses = $this->getCourseService()->findUserTeachingCourses($currentUser['id'],$paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
-        return $this->render('TopxiaWebBundle:MyCourse:my-teaching-courses.html.twig', 
-            array('teachingCourses'=>$teachingCourses,
-                'roles'=>$currentUser['roles'],
-                'paginator' => $paginator));
-
+            return $this->renderViewForTeacher();
         } else {
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->getUserLeaningCoursesCount($currentUser['id']),
-            5
-        );
-
-        $learningCourses = $this->getCourseService()->findUserLeaningCourses($currentUser['id'], $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
-        $userIds = array();
-        foreach ($learningCourses as $learningCourse) {
-            $userIds = array_merge($userIds, $learningCourse['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render('TopxiaWebBundle:MyCourse:my-courses.html.twig', 
-            array('learningCourses'=>$learningCourses,
-                'roles'=>$currentUser['roles'],
-                'users'=>$users,
-                'paginator' => $paginator));
+            return $this->renderViewForStudent();
         }
     }
-
 
     public function myLearningCoursesAction(Request $request)
     {
@@ -178,7 +156,6 @@ class MyCourseController extends BaseController
                 'users'=>$users,
                 'paginator' => $paginator));
     }
-    
 
     protected function getThreadService()
     {

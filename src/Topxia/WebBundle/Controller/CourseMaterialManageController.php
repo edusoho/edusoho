@@ -10,7 +10,7 @@ class CourseMaterialManageController extends BaseController
 	public function indexAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$lesson = $this->getCourseService()->getLesson($courseId, $lessonId);
+		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 		$materials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
 		return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
 			'course' => $course,
@@ -23,7 +23,7 @@ class CourseMaterialManageController extends BaseController
 	{
 
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getLesson($courseId, $lessonId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         if (empty($lesson)) {
         	throw $this->createNotFoundException();
         }

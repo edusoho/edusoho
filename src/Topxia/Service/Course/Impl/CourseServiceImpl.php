@@ -561,7 +561,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课程(#{$courseId})不存在！");
 		}
 
-		$lesson = $this->getLesson($courseId, $lessonId, true);
+		$lesson = $this->getCourseLesson($courseId, $lessonId, true);
 		if (empty($lesson)) {
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
@@ -588,7 +588,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$course = $this->tryManageCourse($courseId);
 
-		$lesson = $this->getLesson($courseId, $lessonId);
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
 		if (empty($lesson)) {
 			throw $this->createServiceException("课时#{$lessonId}不存在");
 		}
@@ -600,7 +600,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$course = $this->tryManageCourse($courseId);
 
-		$lesson = $this->getLesson($courseId, $lessonId);
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
 		if (empty($lesson)) {
 			throw $this->createServiceException("课时#{$lessonId}不存在");
 		}

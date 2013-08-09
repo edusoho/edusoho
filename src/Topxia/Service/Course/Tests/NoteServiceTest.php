@@ -219,8 +219,18 @@ class NoteServiceTest extends BaseTestCase
         $this->assertNotNull($savedNote);
     }
 
+    /**
+     * @group current
+     */
     public function testDeleteNote()
     {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+
         $courseInfo = array(
             'type' => 'online',
             'title' => 'online test course'
@@ -235,10 +245,12 @@ class NoteServiceTest extends BaseTestCase
         $noteInfo = array(
             'content' => 'note_content',
             'lessonId' => $createdLesson1['id'],
-            'courseId' => $createdCourse['id']
+            'courseId' => $createdCourse['id'],
+            'userId'=>$registeredUser['id']
         );
         $createdNote = $this->getNoteService()->addNote($noteInfo);
         $result = $this->getNoteService()->deleteNote($createdNote['id']);
+
         $this->assertEquals(1, $result);
     }
 
@@ -280,7 +292,12 @@ class NoteServiceTest extends BaseTestCase
 
     public function testDeleteNotes()
     {   
-        $user = $this->getCurrentUser();
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
         $courseInfo = array(
             'type' => 'online',
             'title' => 'online test course'
@@ -307,15 +324,14 @@ class NoteServiceTest extends BaseTestCase
         $createdNote2 = $this->getNoteService()->addNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson2['id'],
-            'courseId' => $createdCourse['id']
+            'courseId' => $createdCourse['id'],
+            'userId'=>$registeredUser['id']
         ));
 
         $ids = array($createdNote1['id'], $createdNote2['id']);
         $result = $this->getNoteService()->deleteNotes($ids);
         $this->assertTrue($result);
 
-        $result = $this->getNoteService()->deleteNotes(array(999));
-        $this->assertFalse($result);
     }
 
     public function testsearchNotesCount()
@@ -358,6 +374,7 @@ class NoteServiceTest extends BaseTestCase
 
     public function testSearchNotes()
     {
+
         $user = $this->getCurrentUser();
         $courseInfo = array(
             'type' => 'online',
@@ -403,5 +420,10 @@ class NoteServiceTest extends BaseTestCase
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
