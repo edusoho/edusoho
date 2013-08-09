@@ -10,8 +10,8 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            if($("#message_content").val().length == 0){
-                Notify.danger("不好意思，私信内容为空!");
+            if($.trim($("#message_content").val()).length == 0){
+                Notify.danger("不好意思，私信内容不允许为空!");
                 return false;
             }
             

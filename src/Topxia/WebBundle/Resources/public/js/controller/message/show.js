@@ -11,6 +11,11 @@ define(function(require, exports, module) {
                 return false;
             }
 
+            if($.trim($("#message_reply_content").val()).length == 0){
+                Notify.danger("不好意思，私信内容不允许为空!");
+                return false;
+            }
+
             $.post($("#message-reply-form").attr('action'), $("#message-reply-form").serialize(), function(response) {
                 $(".message-list").prepend(response.html);
                 $("#message_reply_content").val("");
