@@ -31,6 +31,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $message = $this->addMessage($fromId, $toId, $content);
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId);
+        return $message;
     }
 
     public function getConversation($conversationId)

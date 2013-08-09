@@ -584,6 +584,7 @@ user_unfollow:
 message_create:
     pattern: /mesage/create
     defaults: { _controller: TopxiaWebBundle:Message:create }
+    methods: [POST]
 
 message:
     pattern: /message/
@@ -608,10 +609,12 @@ message_conversation_show:
 message_conversation_delete:
     pattern: /message/conversation/{conversationId}/delete
     defaults: {_controller: TopxiaWebBundle:Message:deleteConversation }
+    methods: [POST]
 
 message_delete:
     pattern: /message/conversation/{conversationId}/message/{messageId}/delete
     defaults: {_controller: TopxiaWebBundle:Message:deleteConversationMessage }
+    methods: [POST]
 
 content_article_show:
     pattern: /article/{alias}

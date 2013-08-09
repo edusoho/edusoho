@@ -54,12 +54,10 @@ class MessageController extends BaseController
     public function showConversationAction(Request $request, $conversationId)
     {
         $user = $this->getCurrentUser();
-
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) or $conversation['toId'] != $user['id']) {
             throw $this->createNotFoundException('私信会话不存在！');
         }
-
         $paginator = new Paginator(
             $request,
             $this->getMessageService()->getConversationMessageCount($conversationId),
@@ -79,13 +77,9 @@ class MessageController extends BaseController
             $form->bind($request);
             if($form->isValid()){
                 $message = $form->getData();
-                $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
-                return $this->redirect(
-                    $this->generateUrl(
-                        'message_conversation_show',
-                        array('conversationId' => $conversationId)
-                    )
-                ); 
+                $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
+                $html = $this->renderView('TopxiaWebBundle:Message:item.html.twig', array('message' => $message, 'conversation'=>$conversation));
+                return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
             }
         }
         return $this->render('TopxiaWebBundle:Message:conversation-show.html.twig',array(
