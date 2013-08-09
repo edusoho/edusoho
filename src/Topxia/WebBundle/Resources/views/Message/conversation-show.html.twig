@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}私信 - {{ parent() }}{% endblock %}
-
+{% set script_controller = 'message/show' %}
 {% block content %}
 
 <div class="row">
@@ -12,13 +12,14 @@
         <h2>与{{ receiver.nickname }}的私信对话</h2>
       </div>
 
-      <form class="message-reply-form form-horizontal clearfix" method="post">
+      <form id="message-reply-form" class="message-reply-form form-horizontal clearfix" method="post" 
+      action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
         <p>
           {{ form_widget(form.content, {attr:{rows:3, placeholder:'请输入私信内容'}}) }}
         </p>
         <p>
           {{ form_rest(form) }}
-          <button class="btn btn-primary disabled pull-right">发送</button>
+          <button id="course-reply-btn" class="btn btn-primary pull-right disabled">发送</button>
         </p>
       </form>
 
