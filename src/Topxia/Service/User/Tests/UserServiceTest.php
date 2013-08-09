@@ -147,27 +147,6 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
-    public function testWaveUnreadNotification()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->waveUnreadNotification($registeredUser['id']);
-        $this->assertEquals(1, $this->getUserService()-> getUnreadNotificationNum($registeredUser['id']));
-
-        $this->getUserService()->waveUnreadNotification($registeredUser['id'], 100);
-        $this->assertEquals(101, $this->getUserService()-> getUnreadNotificationNum($registeredUser['id']));
-        
-        $this->getUserService()->waveUnreadNotification($registeredUser['id'], -100);
-        $this->assertEquals(1, $this->getUserService()-> getUnreadNotificationNum($registeredUser['id']));
-
-        $this->getUserService()->waveUnreadNotification($registeredUser['id'], -200);
-        $this->assertEquals(0, $this->getUserService()-> getUnreadNotificationNum($registeredUser['id']));
-    }
-
 
     public function testGetUserByNickname()
     {

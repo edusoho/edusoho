@@ -109,20 +109,34 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function waveCoin($id, $diff)
     {
-        $sql = "UPDATE {$this->table} SET coin = coin + ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff));
-    }
-
-    public function waveUnreadNotificationNum ($id, $diff) 
-    {
-        $sql = "UPDATE {$this->table} SET unreadNotificationNum = unreadNotificationNum + ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff));
+        $sql = "UPDATE {$this->table} SET coin = coin + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
     public function wavePoint($id, $point)
     {
-        $sql = "UPDATE {$this->table} SET point = point + ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($point));
+        $sql = "UPDATE {$this->table} SET point = point + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($point, $id));
+    }
+
+    public function waveCounterById($id, $name, $number)
+    {
+        $names = array('newMessageNum', 'newNotificationNum');
+        if (!in_array($name, $names)) {
+            throw $this->createDaoException('counter name error');
+        }
+        $sql = "UPDATE {$this->table} SET {$name} = {$name} + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($number, $id));
+    }
+
+    public function clearCounterById($id, $name)
+    {
+        $names = array('newMessageNum', 'newNotificationNum');
+        if (!in_array($name, $names)) {
+            throw $this->createDaoException('counter name error');
+        }
+        $sql = "UPDATE {$this->table} SET {$name} = 0 WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($id));
     }
 
 }

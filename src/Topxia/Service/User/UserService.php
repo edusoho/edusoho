@@ -13,8 +13,6 @@ interface UserService
 
     public function getUserByEmail($email);
 
-    public function getUnreadNotificationNum($userId);
-
 	public function findUsersByIds(array $ids);
 
     public function findUserProfilesByIds(array $ids);
@@ -25,8 +23,6 @@ interface UserService
 
     public function setEmailVerified($userId);
 
-    public function waveUnreadNotification($userId, $diff = 1);
-    
     public function changeEmail($userId, $email);
 
     public function changeAvatar($userId, UploadedFile $file);
@@ -86,6 +82,23 @@ interface UserService
     public function lockUser($id);
     
     public function unlockUser($id);
+
+    /**
+     * 更新用户的计数器
+     * 
+     * @param  integer $number 用户ID
+     * @param  string $name   计数器名称
+     * @param  integer $number 计数器增减的数量
+     */
+    public function waveUserCounter($userId, $name, $number);
+
+    /**
+     * 清零用户的计数器
+     * 
+     * @param  integer $number 用户ID
+     * @param  string $name   计数器名称
+     */
+    public function clearUserCounter($userId, $name);
 
     /**
      * 
