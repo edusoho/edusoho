@@ -23,26 +23,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function waveUnreadNotification($userId, $diff = 1)
-    {
-        $diff = (int) $diff;
-        if ($diff < 0) {
-            $user = $this->getUser($userId);
-            if ($user["unreadNotificationNum"] + $diff < 0) {
-                $this->getUserDao()->updateUser($userId, array('unreadNotificationNum'=>0));
-                return true;
-            }
-        }
-        $this->getUserDao()->waveUnreadNotificationNum($userId, $diff);
-        return true;
-    }
-
-    public function getUnreadNotificationNum($userId)
-    {
-        $user = $this->getUserDao()->getUser($userId);
-        return $user['unreadNotificationNum'];
-    }
-
     public function getUserProfile($id)
     {
         return $this->getProfileDao()->getProfile($id);
@@ -491,6 +471,19 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
         return true;
+    }
+
+    public function waveUserCounter($userId, $name, $number)
+    {
+        if (!ctype_digit((string) $number)) {
+            throw $this->createServiceException('计数器的数量，必须为数字');
+        }
+        $this->getUserDao()->waveCounterById($userId, $name, $number);
+    }
+
+    public function clearUserCounter($userId, $name)
+    {
+        $this->getUserDao()->clearCounterById($userId, $name);
     }
 
     public function filterFollowingIds($userId, array $followingIds)

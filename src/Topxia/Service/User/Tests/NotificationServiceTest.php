@@ -14,8 +14,6 @@ class NotificationServiceTest extends BaseTestCase
     {
         $user = $this->createUser();
         $this->getNotificationService()->notify($user['id'], "default", "content");
-        $unreadNotificationNum = $this->getUserService()->getUnreadNotificationNum($user['id']);
-        $this->assertEquals(1,$unreadNotificationNum);
 
         $notificationsNum = $notifications = $this->getNotificationService()->getUserNotificationCount($user['id']);
         $this->assertEquals(1,$notificationsNum);
@@ -27,8 +25,6 @@ class NotificationServiceTest extends BaseTestCase
         $user = $this->createUser();
         $this->getNotificationService()->notify($user['id'], "default", "content");
         $this->getNotificationService()->notify($user['id'], "default", "content");
-        $unreadNotificationNum = $this->getUserService()->getUnreadNotificationNum($user['id']);
-        $this->assertEquals(2,$unreadNotificationNum);
 
         $notificationsNum = $notifications = $this->getNotificationService()->getUserNotificationCount($user['id']);
         $this->assertEquals(2,$notificationsNum);
@@ -44,9 +40,6 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals("default", $notifications[1]['type']);
         $this->assertEquals(1, $notifications[1]['isRead']);
         $this->assertEquals("content", $notifications[1]['content']['message']);
-
-        $unreadNotificationNum = $this->getUserService()->getUnreadNotificationNum($user['id']);
-        $this->assertEquals(2,$unreadNotificationNum);
     }
 
     private function createUser()

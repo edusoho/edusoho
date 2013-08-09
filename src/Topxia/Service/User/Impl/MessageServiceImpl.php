@@ -128,6 +128,11 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->sortMessages($messages);
     }
 
+    public function clearUserNewMessageCounter($userId)
+    {
+        $this->getUserService()->clearUserCounter($userId, 'newMessageNum');
+    }
+
     private function sortMessages($messages)
     {
         usort($messages ,function($a, $b){

@@ -21,21 +21,19 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 
     public function findUserNotifications($userId, $start, $limit)
     {
-        $user = $this->getUserService()->getUser($userId);
-        $notifications = NotificationSerialize::unserializes($this->getNotificationDao()->findNotificationsByUserId($userId, $start, $limit));
-        foreach ($notifications as  $notification) {
-            if($notification['isRead'] == 0){
-                $this->getNotificationDao()->updateNotification($notification['id'], array('isRead'=>1));
-                $user['unreadNotificationNum']--;
-            }
-        }
-        $this->getUserService()->waveUnreadNotification($userId, $user['unreadNotificationNum']);
-        return $notifications = NotificationSerialize::unserializes($this->getNotificationDao()->findNotificationsByUserId($userId, $start, $limit));
+        return NotificationSerialize::unserializes(
+            $this->getNotificationDao()->findNotificationsByUserId($userId, $start, $limit)
+        );
     }
 
     public function getUserNotificationCount($userId)
     {
         return $this->getNotificationDao()->getNotificationCountByUserId($userId);
+    }
+
+    public function clearUserNewNotificationCounter($userId)
+    {
+        return $this->getUserService()->clearUserCounter($userId, 'newNotificationNum');
     }
 
     public function getNotificationDao()

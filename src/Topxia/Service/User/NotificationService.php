@@ -25,4 +25,6 @@ interface NotificationService
     public function findUserNotifications($userId, $start, $limit);
 
     public function getUserNotificationCount($userId);
+
+    public function clearUserNewNotificationCounter($userId);
 }

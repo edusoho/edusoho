@@ -32,8 +32,9 @@ define(function(require, exports, module) {
 				$("#login-modal").html(html);
 			});
 		}
-
 	});
+
+	
 
 
 

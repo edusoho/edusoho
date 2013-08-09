@@ -29,6 +29,8 @@ class MessageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
 
+        $this->getMessageService()->clearUserNewMessageCounter($user['id']);
+
         return $this->render('TopxiaWebBundle:Message:index.html.twig', array(
             'conversations' => $conversations,
             'users' => $users,
