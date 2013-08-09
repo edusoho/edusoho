@@ -23,4 +23,6 @@ interface ReviewDao
     public function updateReview($id, $fields);
 
     public function deleteReviewsByIds($ids);
+
+    public function deleteReviewsByCourseId($courseId);
 }

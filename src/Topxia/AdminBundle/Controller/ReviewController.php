@@ -10,6 +10,7 @@ class ReviewController extends BaseController {
 
     public function indexAction (Request $request)
     {   
+        
         $form = $this->createFormBuilder()
             ->add('keywordType', 'choice', array(
                     'choices'   => array('title' => '标题', 'content' => '内容'),
@@ -29,12 +30,14 @@ class ReviewController extends BaseController {
             20
         );
 
+
         $reviews = $this->getReviewService()->searchReviews(
             $convertedConditions,
             null,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         ); 
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
         return $this->render('TopxiaAdminBundle:Review:index.html.twig',array(

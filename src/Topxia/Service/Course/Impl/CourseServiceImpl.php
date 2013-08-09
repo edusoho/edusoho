@@ -287,6 +287,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$this->getMemberDao()->deleteMembersByCourseId($id);
 		$this->getCourseDao()->deleteCourse($id);
+		$this->getReviewService()->deleteReviewsByCourseId($id);
 		return true;
 	}
 
@@ -1165,6 +1166,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getUserService()
     {
     	return $this->createService('User.UserService');
+    }
+
+    private function getReviewService()
+    {
+    	return $this->createService('Course.ReviewService');
     }
 
 }
