@@ -18,4 +18,6 @@ interface ReviewService
 	public function saveReview($fields);
 
 	public function deleteReviewsByIds(array $ids=null);
+
+    public function deleteReviewsByCourseId($courseId);
 }

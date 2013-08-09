@@ -11,7 +11,6 @@ class CourseReviewController extends BaseController
 
     public function listAction(Request $request, $id)
     {
-
         $course = $this->getCourseService()->getCourse($id);
 
         $paginator = new Paginator(

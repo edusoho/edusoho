@@ -9,6 +9,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 {
     protected $table = 'course_review';
 
+
     public function getReview($id)
     {
         return $this->fetch($id);
@@ -53,6 +54,11 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         return $this->getConnection()->executeUpdate($sql, $ids);
     }
 
+    public function deleteReviewsByCourseId($courseId)
+    {
+        return $this->getConnection()->delete($this->table, array('courseId' => $courseId));
+    }
+    
     public function getReviewRatingSumByCourseId($courseId)
     {
         $sql = "SELECT sum(rating) FROM {$this->table} WHERE courseId = ?";
