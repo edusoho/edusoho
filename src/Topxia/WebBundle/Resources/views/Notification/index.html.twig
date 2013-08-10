@@ -25,8 +25,9 @@
                 {{ notification.createdTime | date('Y-n-d H:i:s') }}
               </div>
             </div>
-
           </li>
+        {% else %}
+          <li class="empty">暂无通知</li>
         {% endfor %}
       </ul>
 
