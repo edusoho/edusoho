@@ -581,6 +581,10 @@ user_unfollow:
     defaults: { _controller: TopxiaWebBundle:User:unfollow }
     methods: [POST]
 
+user_remind_counter:
+    pattern:  /user_remind_counter
+    defaults: { _controller: TopxiaWebBundle:User:remindCounter }
+
 message_create:
     pattern: /mesage/create
     defaults: { _controller: TopxiaWebBundle:Message:create }

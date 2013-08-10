@@ -211,20 +211,6 @@ textarea {
 	padding: 20px 0;
 }
 
-.badge-fly {
-	position: relative;
-}
-
-.badge-fly .badge {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	font-size: 11px;
-	background: #f60;
-	padding: 2px 5px;
-	border-radius: 12px;
-
-}
 
 
 /**
@@ -264,6 +250,19 @@ textarea {
   background-color: #3a485d;
 }
 
+.site-navbar .badge-container {
+	position: relative;
+}
+
+.site-navbar .badge-container .badge {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 11px;
+	background: #f60;
+	padding: 2px 5px;
+	border-radius: 12px;
+}
 
 /**
  * </global>

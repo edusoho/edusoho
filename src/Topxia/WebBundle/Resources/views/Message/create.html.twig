@@ -1,46 +1,43 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}发送私信 - {{ parent() }}{% endblock %}
+{% block title %}写私信 - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/create' %}
 {% block content %}
 <div class="row">
-  <div class="col-lg-12">
+  <div class="col-lg-8 col-offset-2">
     <div class="panel panel-page">
-      <div class="panel-heading"><h2>发送私信</h2></div>
+      <div class="panel-heading">
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">返回我的私信</a>
+        <h2>写私信</h2>
+      </div>
 
-      <form id="course-create-form" class="form-horizontal" method="post">
+      <form id="message-create-form" class="form-horizontal" method="post">
 
-        {{ web_macro.flash_messages() }}
-        {{ form_errors(form) }}
-        {% set mode = mode|default(null) %}
-
-        <div class="row control-group control-group-online control-group-offline">
-          <div class="col-lg-2 control-label">{{ form_label(form.receiver, '收件人的昵称') }}</div>
-          <div class="col-lg-9 controls">
-            {{ form_widget(form.receiver, {attr:{rows:1}})  }}
+        <div class="row control-group">
+          <div class="col-lg-12 controls">
+            {{ form_widget(form.receiver, {attr:{placeholder:'收信人昵称', 'data-url':path('message_check_receiver'), 'data-display':'收信人昵称'}})  }}
           </div>
         </div>
 
         <div class="row control-group">
-          <div class="col-lg-2 control-label">{{ form_label(form.content, '私信内容') }}</div>
-          <div class="col-lg-9 controls">
-            {{ form_widget(form.content, {attr:{rows:5}}) }}
+          <div class="col-lg-12 controls">
+            {{ form_widget(form.content, {attr:{rows:5, placeholder:'想要说的话', 'data-display': '想要说的话'}}) }}
           </div>
         </div>
 
-          
         <div class="row control-group">
-          <div class="col-lg-2 control-label"></div>
-          <div class="col-lg-9 controls">
+          <div class="col-lg-12 controls">
             {{ form_rest(form) }}
-            <input id="course-create-btn" class="btn btn-primary" type="submit" value="发送">
+            <input id="message-create-btn" class="btn btn-primary pull-right" type="submit" value="发送">
           </div>
         </div>
       </form>
 
-    </div>
 
+
+
+    </div><!-- /panel -->
   </div>
-
 </div>
+
 {% endblock %}
