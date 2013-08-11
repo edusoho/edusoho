@@ -20,7 +20,6 @@ class MessageController extends BaseController
             $this->getMessageService()->getUserConversationCount($user->id),
             10
         );
-
         $conversations = $this->getMessageService()->findUserConversations(
             $user->id,
             $paginator->getOffsetCount(),
