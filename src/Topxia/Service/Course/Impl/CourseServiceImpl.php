@@ -12,89 +12,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	/**
 	 * Course API
 	 */
-	public function findUserTeachingCourses($userId, $start, $limit)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		$teachingCourseMembers = $this->getMemberDao()->findMembersByUserIdAndRole($user['id'], 'teacher', $start, $limit);
-		$teachingCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($teachingCourseMembers, 'courseId'));
-		return CourseSerialize::unserializes($teachingCourses);
-	}
-
-	public function findUserFavoriteCourses($userId, $start, $limit)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		$courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
-		$favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
-		return CourseSerialize::unserializes($favoriteCourses);
-	}	
-
-	public function getUserTeachingCoursesCount($userId)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		$countOfZero = $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($user['id'], 'teacher', 0);
-		$countOfOne = $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($user['id'], 'teacher', 1);
-		return  ($countOfOne + $countOfZero);
-	}
-
-	public function getUserFavoriteCourseCount($userId)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		return $this->getFavoriteDao()->getFavoriteCourseCountByUserId($userId);
-	}
-
-	public function getUserLeanedCoursesCount($userId)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		return $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($user['id'], 'student', 1);
-	}
-
-	public function getUserLeaningCoursesCount($userId)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		return $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($user['id'], 'student',0);
-	}
-
-	public function findUserLeaningCourses($userId, $start, $limit)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		$learningCourseMembers = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($user['id'], 'student', '0', $start, $limit);
-		$learningCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($learningCourseMembers, 'courseId'));
-		return CourseSerialize::unserializes($learningCourses);
-	}
-
-	public function findUserLeanedCourses($userId, $start, $limit)
-	{
-		$user = $this->getUserService()->getUser($userId);
-		if(empty($user)){
-			throw $this->createServiceException('操作失败，用户不存在！');
-		}
-		$learnedCourseMembers = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($user['id'], 'student', '1', 
-			$start, $limit);
-		$learnedCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($learnedCourseMembers, 'courseId'));
-		return CourseSerialize::unserializes($learnedCourses);
-	}
-
 	public function findCoursesByIds(array $ids)
 	{
 		$courses = CourseSerialize::unserializes(
@@ -172,6 +89,64 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return $conditions;
 	}
+
+	public function getUserLeaningCoursesCount($userId)
+	{
+		return $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
+	}
+
+	public function findUserLeaningCourses($userId, $start, $limit)
+	{
+		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+		foreach ($members as $member) {
+			$courses[$member['courseId']]['memberIsLearned'] = 0;
+			$courses[$member['courseId']]['memberLearnedNum'] = $member['learnedNum'];
+		}
+		return $courses;
+	}
+
+	public function getUserLeanedCoursesCount($userId)
+	{
+		return $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
+	}
+
+	public function findUserLeanedCourses($userId, $start, $limit)
+	{
+		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '1', $start, $limit);
+		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+		foreach ($members as $member) {
+			$courses[$member['courseId']]['memberIsLearned'] = 1;
+			$courses[$member['courseId']]['memberLearnedNum'] = $member['learnedNum'];
+		}
+		return $courses;
+	}
+
+	public function getUserTeachingCoursesCount($userId)
+	{
+		$countOfZero = $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 0);
+		$countOfOne = $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 1);
+		return  ($countOfOne + $countOfZero);
+	}
+
+	public function findUserTeachingCourses($userId, $start, $limit)
+	{
+		$teachingCourseMembers = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit);
+		$teachingCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($teachingCourseMembers, 'courseId'));
+		return CourseSerialize::unserializes($teachingCourses);
+	}
+
+	public function getUserFavoriteCourseCount($userId)
+	{
+		return $this->getFavoriteDao()->getFavoriteCourseCountByUserId($userId);
+	}
+
+	public function findUserFavoriteCourses($userId, $start, $limit)
+	{
+		$courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
+		$favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+		return CourseSerialize::unserializes($favoriteCourses);
+	}	
 
 	public function createCourse($course)
 	{

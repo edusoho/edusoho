@@ -81,12 +81,15 @@ a.link-muted {
 	line-height: 1.4;
 }
 
-
 .panel-heading h2, .panel-heading h3 {
 	font-size: 18px;
 	margin: 0;
 	padding: 0;
 	line-height: 1.2;
+}
+
+.panel-col {
+	min-height: 400px;
 }
 
 .panel-col .panel-heading {
@@ -1787,6 +1790,7 @@ body {
 
 .course-grids .grid-body {
 	width: 266px;
+	position: relative;
 	display: block;
 	overflow: hidden;
 	text-decoration: none;
@@ -1845,6 +1849,14 @@ body {
 .course-grids .grid-body .teacher .user-title {
 	font-size: 12px;
 }
+
+.course-grids .grid-body .course-status {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 12px;
+}
+
 
 .homepage .carousel-feature-banner {
 	margin-bottom: 20px;

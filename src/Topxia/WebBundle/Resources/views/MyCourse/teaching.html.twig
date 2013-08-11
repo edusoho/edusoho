@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle:MyCourse:layout.html.twig' %}
+
+{% block title %}在教 - {{ parent() }}{% endblock %}
+
+{% set main_nav = 'teaching' %}
+
+{% block main_body %}
+ {% if courses %}
+		{% include 'TopxiaWebBundle:Course:grids.html.twig' with {mode:'teach'} %}
+		{{ web_macro.paginator(paginator) }} 
+  {% else %}
+    <div class="empty">暂无在教的课程</div>
+  {% endif %}
+{% endblock %}

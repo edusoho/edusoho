@@ -1,0 +1,61 @@
+{% set mode = mode|default('default') %}
+<ul class="course-grids">
+  {% for course in courses %}
+    <li>
+      <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+        <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+        <span class="title">{{ course.title }}</span>
+        <span class="metas clearfix">
+          {% if mode == 'default' %}
+            <span class="lesson-num">{{ course.lessonNum }}课时</span>
+          {% endif %}
+
+          {% if mode == 'teach' %}
+            <span class="student-num"><span class="glyphicon glyphicon-user"></span> {{ course.studentNum }}人</span>
+          {% endif %}
+
+          {% if mode in ['default', 'teach'] %}
+            {% if course.price > 0 %}
+              <span class="money">{{ course.price }}元</span>
+            {% else %}
+              <span class="money money-free">免费</span>
+            {% endif %}
+          {% endif %}
+
+          {% if mode == 'learn' %}
+            {% if course.memberIsLearned %}
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%;"></div>
+              </div>
+              <div class="tac"><button class="btn btn-default btn-small">查看课程</button></div>
+            {% else %}
+              <div class="progress">
+                <div class="progress-bar" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }}%;"></div>
+              </div>
+              <div class="tac"><button class="btn btn-success btn-small">继续学习</button></div>
+            {% endif %}
+          {% endif %}
+        </span>
+        {% if mode == 'default' and course.teacherIds %}
+          {% set user = users[course.teacherIds|first]|default(null) %}
+          {% if user %}
+            <span class="teacher clearfix">
+              <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+              <span class="nickname ellipsis">{{ user.nickname }}</span>
+              <span class="user-title ellipsis">{{ user.title }}</span>
+            </span>
+          {% endif %}
+        {% endif %}
+        {% if mode == 'teach' %}
+          {% if course.status == 'published' %}
+            <span class="label label-success course-status">已发布</span>
+          {% elseif course.status == 'draft' %}
+            <span class="label  label-warning course-status">未发布</span>
+          {% elseif course.status == 'closed' %}
+            <span class="label label-danger course-status">已关闭</span>
+          {% endif %}
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

@@ -24,25 +24,29 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
+	public function getUserLeaningCoursesCount($userId);
+
+	public function findUserLeaningCourses($userId, $start, $limit);
+
+	public function getUserLeanedCoursesCount($userId);
+
+	public function findUserLeanedCourses($userId, $start, $limit);
+
+	public function getUserTeachingCoursesCount($userId);
+	
+	public function findUserTeachingCourses($userId, $start, $limit);
+
+	public function getUserFavoriteCourseCount($userId);
+
+	public function findUserFavoriteCourses($userId, $start, $limit);
+
 	public function createCourse($course);
 
 	public function updateCourse($id, $fields);
 
 	public function updateCourseCounter($id, $counter);
 
-	public function changeCoursePicture ($id, UploadedFile $picture);
-
-	public function getUserLeaningCoursesCount($userId);
-	
-	public function getUserLeanedCoursesCount($userId);
-
-	public function getUserTeachingCoursesCount($userId);
-	
-	public function findUserLeaningCourses($userId, $start, $limit);
-
-	public function findUserLeanedCourses($userId, $start, $limit);
-	
-	public function findUserTeachingCourses($userId, $start, $limit);
+	public function changeCoursePicture($id, UploadedFile $picture);
 
 	/**
 	 * 删除课程
@@ -178,12 +182,6 @@ interface CourseService
 	public function unFavoriteCourse($courseId);
 
 	public function hasFavoritedCourse($courseId);
-
-	public function findUserFavoriteCourses($userId, $start, $limit);
-
-	public function getUserFavoriteCourseCount($userId);
-
-
 
 	/*announcement*/
 	public function createAnnouncement($courseId, $fields);
