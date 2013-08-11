@@ -1,0 +1,15 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的问答 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'questions' %}
+
+{% block main %}
+
+<div class="panel panel-col">
+  <div class="panel-heading">我的问答</div>
+  <div class="panel-body">
+    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: 'question'} %}
+  </div>
+</div>
+{% endblock %}

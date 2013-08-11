@@ -64,10 +64,15 @@ class WebExtension extends \Twig_Extension
             return round($diff / 3600) . '小时前';
         }
 
-        if ($diff < 604800) {
+        if ($diff < 2592000) {
             return round($diff / 86400) . '天前';
         }
-        return date('y-m-d H:i', $time);
+
+        if ($diff < 31536000) {
+            return date('m-d', $time);
+        }
+
+        return date('Y-m-d', $time);
     }
 
     public function durationFilter($value)

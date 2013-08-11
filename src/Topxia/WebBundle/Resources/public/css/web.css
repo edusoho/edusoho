@@ -11,6 +11,10 @@ a:focus {
   color: #51749d;
 }
 
+a.link-muted {
+	color: #96B1D1;
+}
+
 .btn-default {
 	background-color: #babec0;
 	border-color: #babec0;
@@ -676,7 +680,6 @@ body {
 
 .thread-list-small {
 	font-size: 13px;
-
 }
 
 .thread-list-small .metas {

@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}个人中心 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-3">
+    {% set side_nav = side_nav|default(null) %}
+    <div class="panel">
+      <div class="list-group">
+        <a class="list-group-item {% if side_nav == "courses" %} active {% endif %} " href="{{ path('my_courses') }}">我的课程</a>
+        <a class="list-group-item {% if side_nav == "questions" %} active {% endif %} " href="{{ path('my_questions') }}">我的问答</a>
+        <a class="list-group-item {% if side_nav == "discussions" %} active {% endif %} " href="{{ path('my_discussions') }}">我的话题</a>
+        <a class="list-group-item {% if side_nav == "notes" %} active {% endif %} " href="{{ path('my_notes') }}">我的笔记</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9">{% block main %}{% endblock %}</div>
+</div>
+
+{% endblock %}

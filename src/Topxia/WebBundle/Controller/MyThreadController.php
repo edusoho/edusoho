@@ -2,52 +2,79 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
 class MyThreadController extends BaseController
 {
 
-    public function myThreadsAction(Request $request)
+    public function discussionsAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchThreadCount(array("userId"=>$user['id'],"type"=>'discussion')),
-            5
+
+        $conditions = array(
+            'userId'=>$user['id'],
+            'type'=>'discussion'
         );
 
-        $myThreads = $this->getThreadService()->searchThreads(
-            array("userId"=>$user['id'],"type"=>'discussion'),
-            'created',
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCount($conditions),
+            20
+        );
+
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($myThreads, 'courseId'));
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($myThreads, 'latestPostUserId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:my-threads.html.twig',array(
+        return $this->render('TopxiaWebBundle:MyThread:discussions.html.twig',array(
             'courses'=>$courses,
             'users'=>$users,
-            'myThreads'=>$myThreads,
+            'threads'=>$threads,
+            'paginator' => $paginator));
+    }
+
+    public function questionsAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'userId' => $user['id'],
+            'type' => 'question',
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCount($conditions),
+            20
+        );
+
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+
+        return $this->render('TopxiaWebBundle:MyThread:questions.html.twig',array(
+            'courses'=>$courses,
+            'users'=>$users,
+            'threads'=>$threads,
             'paginator' => $paginator));
     }
 
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    protected function getNoteService()
-    {
-        return $this->getServiceKernel()->createService('Course.NoteService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     protected function getCourseService()

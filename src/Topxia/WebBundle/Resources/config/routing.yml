@@ -544,11 +544,11 @@ my_favorite_courses:
 
 my_questions:
     pattern: /my/questions
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:myQuestions }
+    defaults: { _controller: TopxiaWebBundle:MyThread:questions }
 
-my_threads:
-    pattern: /my/threads
-    defaults: { _controller: TopxiaWebBundle:MyThread:myThreads }
+my_discussions:
+    pattern: /my/discussions
+    defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
 
 my_notes:
     pattern: /my/notes
