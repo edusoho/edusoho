@@ -586,9 +586,8 @@ user_remind_counter:
     defaults: { _controller: TopxiaWebBundle:User:remindCounter }
 
 message_create:
-    pattern: /mesage/create
+    pattern: /mesage/create/{toId}
     defaults: { _controller: TopxiaWebBundle:Message:create }
-    methods: [POST]
 
 message:
     pattern: /message/

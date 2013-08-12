@@ -2,6 +2,7 @@ define(function(require, exports, module) {
     "use strict";
 
 	var Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     require('ckeditor');
     require('jquery.select2-css');
@@ -41,10 +42,10 @@ define(function(require, exports, module) {
                         $oldTr = $("tr#" + $newTr.attr('id'));
                     if ($oldTr.length > 0) {
                         $oldTr.replaceWith($newTr);
-                        toastr.success('更新成功!');
+                        Notify.success('更新成功!');
                     } else {
                         var $table = $('#content-table tbody').prepend($newTr);
-                        toastr.success('添加成功!');
+                        Notify.success('添加成功!');
                     }
                     $modal.modal('hide');
                 });

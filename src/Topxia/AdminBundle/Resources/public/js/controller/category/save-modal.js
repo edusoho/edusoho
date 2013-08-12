@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
 	require('common/validator-rules').inject(Validator);
 	exports.run = function() {
 		var $form = $('#category-form');
@@ -19,7 +20,7 @@ define(function(require, exports, module) {
 						window.location.reload();
 					} else {
 						var errorMsg = '添加失败：' + ((response.error && response.error.message) ? response.error.message : '');
-						toastr.error(errorMsg);
+						Notify.danger(errorMsg);
 					}
 				}, 'json');
 

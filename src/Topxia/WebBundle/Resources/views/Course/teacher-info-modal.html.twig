@@ -20,21 +20,29 @@
   <div class="col-lg-8">
     <h4>{{ user.nickname }}</h4>
     <div class="text-muted">{{ user.title }}</div>
-    <div class="mbl"><a href="{{ path('user_show', {user:user.id}) }}" class="fsn">查看老师详细信息</a> </div>
+
+  <!-- TODO 个人对外公开的页面 -->
+  <!--  
+   <div class="mbl"><a href="{{ path('user_show', {user:user.id}) }}" class="fsn">查看老师详细信息</a> </div> 
+  -->
 
     <div class="mbl">
-      {{ profile.about|raw }}
+      {% if profile %}
+        {{ profile.about|raw }}
+      {% endif %}
     </div>
 
     <p>
-      {% if profile.weibo %}
-        <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="/assets/img/user/link-weibo.png"> 微博</a>
-      {% endif %}
-      {% if profile.blog %}
-        <a href="{{ profile.blog }}" target="_blank" class="mrm"><img src="/assets/img/user/link-blog.png"> 博客</a>
-      {% endif %}
-      {% if profile.site %}
-        <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="/assets/img/user/link-site.png"> 网站</a>
+      {% if profile %}
+        {% if profile.weibo %}
+          <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="/assets/img/user/link-weibo.png"> 微博</a>
+        {% endif %}
+        {% if profile.blog %}
+          <a href="{{ profile.blog }}" target="_blank" class="mrm"><img src="/assets/img/user/link-blog.png"> 博客</a>
+        {% endif %}
+        {% if profile.site %}
+          <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="/assets/img/user/link-site.png"> 网站</a>
+        {% endif %}
       {% endif %}
     </p>
   </div>

@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
@@ -24,12 +25,12 @@ define(function(require, exports, module) {
 
                         if( $typeInHtml == "all"){
                             $table.find('tbody').prepend(response.html);
-                            toastr.success('创建成功!'); 
+                            Notify.success('创建成功!'); 
                         } else if ( $typeInHtml == $type ) {
                             $table.find('tbody').prepend(response.html);
-                            toastr.success('创建成功!'); 
+                            Notify.success('创建成功!'); 
                         } else{
-                            toastr.success('创建成功!'); 
+                            Notify.success('创建成功!'); 
                         }
                         $modal.modal('hide');
                     }

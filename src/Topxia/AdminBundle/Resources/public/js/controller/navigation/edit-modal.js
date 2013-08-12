@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
@@ -20,7 +21,7 @@ define(function(require, exports, module) {
                     if (response.status == 'ok') {
                         var $html = $(response.html);
                             $('#' + $html.attr('id')).replaceWith($html);
-                            toastr.success('更新成功!');
+                            Notify.success('更新成功!');
                         $modal.modal('hide');
                     }
                 }, 'json');

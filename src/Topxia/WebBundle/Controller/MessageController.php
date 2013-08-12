@@ -91,14 +91,10 @@ class MessageController extends BaseController
             'paginator' => $paginator
         ));
     }
-
-    public function createAction(Request $request)
+    
+    public function createAction(Request $request, $toId)
     {
-        $toId = $request->query->get('toId');
         $receiver = $this->getUserService()->getUser($toId);
-
-
-
         $user = $this->getCurrentUser();
         $form = $this->createForm(new MessageType(), array('receiver'=>$receiver['nickname']));
         if($request->getMethod() == 'POST'){
@@ -114,7 +110,6 @@ class MessageController extends BaseController
                 return $this->redirect($this->generateUrl('message'));
             }
         }
-
         return $this->render('TopxiaWebBundle:Message:send-message-modal.html.twig', array(
                 'form' => $form->createView(),
                 'userId'=>$toId));

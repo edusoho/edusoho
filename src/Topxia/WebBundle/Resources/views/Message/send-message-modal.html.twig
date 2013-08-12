@@ -5,10 +5,9 @@
 {% block title %}发送私信{% endblock %}
 
 {% block body %}
-
 <input id="app-user-nickname" type=text style="display:none" value="{{app.user.nickname}}">
 
-      <form id="course-create-form" class="form-horizontal" method="post" action="{{ path('message_create') }}">
+      <form id="course-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">
         {{ form_errors(form) }}
 
         <div class="row control-group">

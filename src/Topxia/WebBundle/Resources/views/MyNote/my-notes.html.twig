@@ -1,24 +1,23 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的笔记... - {{ parent() }}{% endblock %}
+{% block title %}我的问答 - {{ parent() }}{% endblock %}
 
-{% set nav = 'my-notes' %}
+{% set side_nav = 'notes' %}
 
 {% set bodyClass = 'lesson-notes' %}
 
-{% block content %}
-
-<div class="row">
-    
-    {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
-
-    <div class="col-lg-9">
+{% block main %}
 
         <div class="panel panel-col">
             <div class="panel-heading">
                我的笔记
             </div>
             <div class="panel-body">
+                {% if courses is empty %}
+                     <div class="empty">
+                     你还没有写过笔记!
+                     </div>
+                 {% endif %}
             {% for course in courses %}
                 <div class="notes-of-course">
                     <a href="{{ path('my_notes_detail', {userId: app.user.id, courseId: course.id }) }}">
@@ -38,6 +37,5 @@
         </div>  
         {{ web_macro.paginator(paginator) }} 
     </div>
-</div>
 
 {% endblock %}

@@ -7,10 +7,10 @@ use Topxia\Common\ArrayToolkit;
 
 class MyCourseController extends BaseController
 {
+
     public function indexAction (Request $request)
     {
         $user = $this->getCurrentUser();
-
         if(in_array('ROLE_TEACHER', $user['roles'])) {
             return $this->forward('TopxiaWebBundle:MyCourse:teaching');
         }
@@ -21,7 +21,6 @@ class MyCourseController extends BaseController
     public function teachingAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->getUserTeachingCoursesCount($user['id']),

@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     require('ckeditor');
-    require('jquery.toastr');
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     var Validator = require('bootstrap.validator');
@@ -250,9 +249,6 @@ define(function(require, exports, module) {
                     $("[type=radio][value='normal']").click().change();
                     Notify.success("保存成功!");
                 }, 'json');
-
-                
-
             });
             return validator;
         }

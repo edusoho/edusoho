@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
-
+    var Notify = require('common/bootstrap-notify');
 	exports.run = function() {
 
         var $modal = $('#user-edit-form').parents('.modal');
@@ -16,11 +16,11 @@ define(function(require, exports, module) {
 
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
-					toastr.success('用户信息保存成功');
+					Notify.success('用户信息保存成功');
 					var $tr = $(html);
 					$('#' + $tr.attr('id')).replaceWith($tr);
 				}).error(function(){
-					toastr.error('操作失败');
+					Notify.danger('操作失败');
 				});
             }
         });
@@ -35,28 +35,28 @@ define(function(require, exports, module) {
 
             $.post($(this).attr('href'), function(html){
                 $modal.modal('hide');
-                toastr.success($btn.attr('title') + '成功！');
+                Notify.success($btn.attr('title') + '成功！');
                  var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function(){
-                toastr.error($btn.attr('title') + '失败');
+                Notify.danger($btn.attr('title') + '失败');
             });
 
         });
 
         $('#password-reset').click(function(){
             $.post($(this).data('url'),function(response){
-                toastr.success('邮件发送成功！');                
+                Notify.success('邮件发送成功！');                
             }).error(function(){
-                toastr.error('邮件发送失败');
+                Notify.danger('邮件发送失败');
             });
         });
 
         $('#register-email-send').click(function(){
             $.post($(this).data('url'),function(response){
-                toastr.success('邮件发送成功！');                
+                Notify.success('邮件发送成功！');                
             }).error(function(){
-                toastr.error('邮件发送失败');
+                Notify.danger('邮件发送失败');
             });
         });
 

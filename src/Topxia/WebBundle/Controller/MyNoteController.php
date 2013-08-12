@@ -64,7 +64,6 @@ class MyNoteController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         return $this->render('TopxiaWebBundle:MyNote:my-notes.html.twig',

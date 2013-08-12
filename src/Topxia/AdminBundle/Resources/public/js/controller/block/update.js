@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     require('ckeditor');
     var Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
@@ -10,9 +11,6 @@ define(function(require, exports, module) {
         var $table = $('#block-table');
 
         CKEDITOR.replace('form_content', {
-                    // height: '50%',
-                    // resize_enabled: false,
-                    // forcePasteAsPlainText: true,
                     toolbar: 'Mini',
                     removePlugins: 'elementspath',
                 });
@@ -31,15 +29,15 @@ define(function(require, exports, module) {
                         var $html = $(response.html);
                         if ($table.find( '#' +  $html.attr('id')).length > 0) {
                             $('#' + $html.attr('id')).replaceWith($html);
-                            toastr.success('更新成功！');
+                            Notify.success('更新成功！');
                         } else {
                             $table.find('tbody').prepend(response.html);
-                            toastr.success('提交成功!');
+                            Notify.success('提交成功!');
                         }
                         $modal.modal('hide');
                     } else {
                         var errorMsg = '添加失败：' + ((response.error && response.error.message) ? response.error.message : '');
-                        toastr.error(errorMsg);
+                        Notify.error(errorMsg);
                     }
                 }, 'json'); 
             }

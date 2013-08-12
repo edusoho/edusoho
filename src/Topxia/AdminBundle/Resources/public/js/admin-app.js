@@ -3,14 +3,6 @@ define(function(require, exports, module) {
 
 	require('bootstrap');
 	require('common/bootstrap-modal-hack');
-	require('jquery.toastr');
-
-	toastr.options = {
-        positionClass: 'toast-bottom-right',
-        fadeIn: 300,
-        fadeOut: 500,
-        timeOut: 3000
-    };
 
 	exports.load = function(name) {
 		require.async('./controller/' + name + '.js?' + window.app.version, function(controller){
@@ -19,6 +11,7 @@ define(function(require, exports, module) {
 			}
 		});
 	};
+    
 	window.app.load = exports.load;
 
 	if (app.controller) {
