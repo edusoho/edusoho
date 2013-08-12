@@ -462,22 +462,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		// if (!empty($lesson['mediaUuid'])) {
-		// 	$media = $this->getMediaParseService()->getMediaByUuid($lesson['mediaUuid']);
-		// 	if (empty($media)) {
-		// 		throw $this->createServiceException("Media uuid:{$lesson['mediaUuid']}不存在!");
-		// 	}
-		// 	$lesson['type'] = empty($media['type']) ? 'video' : $media['type'];
-		// 	$lesson['media'] =  $media;
-		// } else {
-		// 	$lesson['type'] = 'text';
-		// 	$lesson['media'] = $lesson['mediaUuid'] = '';
-		// }
-
-		// if (empty($lesson['length'])) {
-		// 	$lesson['length'] = 0;
-		// }
-
 		$lesson['title'] = empty($lesson['title']) ? '' : $lesson['title'];
 		$lesson['summary'] = empty($lesson['summary']) ? null : $lesson['summary'];
 		$lesson['free'] = empty($lesson['free']) ? 0 : 1;
@@ -494,8 +478,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
-
-		// $this->autosetCourseFields($course['id']);
 
 		return $lesson;
 	}
