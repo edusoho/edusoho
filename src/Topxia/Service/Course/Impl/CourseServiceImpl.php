@@ -462,6 +462,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
+		// 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
+		$lesson['status'] = $course['status'] == 'published' ? 'unpublished' : 'published';
+
 		$lesson['title'] = empty($lesson['title']) ? '' : $lesson['title'];
 		$lesson['summary'] = empty($lesson['summary']) ? null : $lesson['summary'];
 		$lesson['free'] = empty($lesson['free']) ? 0 : 1;
