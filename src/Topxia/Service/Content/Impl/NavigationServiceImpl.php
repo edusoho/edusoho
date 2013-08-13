@@ -47,12 +47,12 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function getTopNavigationsCount()
     {
-        return $this->getNavigationDao()->getTopNavigationsCount();
+        return $this->getNavigationDao()->getNavigationsCountByType('top');
     }
 
     public function getFootNavigationsCount()
     {
-        return $this->getNavigationDao()->getFootNavigationsCount();
+        return $this->getNavigationDao()->getNavigationsCountByType('foot');
     }
 
     public function findNavigations($start, $limit)
@@ -62,12 +62,12 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function findTopNavigations($start, $limit)
     {
-        return $this->getNavigationDao()->findTopNavigations($start, $limit);
+        return $this->getNavigationDao()->findNavigationsByType('top', $start, $limit);
     }
 
     public function findFootNavigations($start, $limit)
     {
-        return $this->getNavigationDao()->findFootNavigations($start, $limit);
+        return $this->getNavigationDao()->findNavigationsByType('foot', $start, $limit);
     }
 
     private function getNavigationDao()

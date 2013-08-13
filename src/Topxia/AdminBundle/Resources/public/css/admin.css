@@ -176,6 +176,15 @@ input.LargeInput {width: 600px;}
 
 .empty {padding:40px 0px;color: #666;font-size: 14px;text-align: center;}
 
+.bootstrap-notify-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0;
+  text-align: center;
+  z-index: 2000;
+}
 
 .form-inline input {
   margin-bottom: 0px;
