@@ -3,22 +3,22 @@
 namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Course\Dao\LessonQuizItemDao;
+use Topxia\Service\Course\Dao\CourseQuizItemDao;
 
-class LessonQuizItemDaoImpl extends BaseDao implements LessonQuizItemDao
+class CourseQuizItemDaoImpl extends BaseDao implements CourseQuizItemDao
 {
-    protected $table = 'lesson_quiz_item';
+    protected $table = 'course_quiz_item';
 
-    public function addLessonQuizItem($lessonQuizItemInfo)
+    public function addQuizItem($quizItemInfo)
     {
-        $affected = $this->getConnection()->insert($this->table, $lessonQuizItemInfo);
+        $affected = $this->getConnection()->insert($this->table, $quizItemInfo);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course lessonQuizItem error.');
         }
-        return $this->getLessonQuizItem($this->getConnection()->lastInsertId());
+        return $this->getQuizItem($this->getConnection()->lastInsertId());
     }
 
-    public function findLessonQuizItemsByIds(array $ids)
+    public function findQuizItemsByIds(array $ids)
     {
         if(empty($ids)){
             return array();
@@ -28,13 +28,13 @@ class LessonQuizItemDaoImpl extends BaseDao implements LessonQuizItemDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function getLessonQuizItem($id)
+    public function getQuizItem($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
-    public function findLessonQuizItemsByCourseIdAndLessonId($courseId, $lessonId)
+    public function findQuizItemsByCourseIdAndLessonId($courseId, $lessonId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND lessonId = ?";
         return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId));
@@ -46,13 +46,13 @@ class LessonQuizItemDaoImpl extends BaseDao implements LessonQuizItemDao
         return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId));
     }
 
-    public function updateLessonQuizItem($id, $fields)
+    public function updateQuizItem($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getLessonQuizItem($id);
+        return $this->getQuizItem($id);
     }
 
-    public function deleteLessonQuizItem($id)
+    public function deleteQuizItem($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }

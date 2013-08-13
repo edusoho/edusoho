@@ -23,14 +23,14 @@ class QuizServiceImpl extends BaseService implements QuizService
             $lessonQuizItemInfo['type'] = 'single';
         }
 
-        $lessonQuizItem = $this->getLessonQuizItemDao()->addLessonQuizItem($lessonQuizItemInfo);
+        $lessonQuizItem = $this->getCourseQuizItemDao()->addQuizItem($lessonQuizItemInfo);
         $lessonQuizItem['description'] = strip_tags($lessonQuizItem['description']);
         return $lessonQuizItem;
     }
 
-    public function getLessonQuizItem($lessonQuizItemId)
+    public function getQuizItem($lessonQuizItemId)
     {
-        $getedLessonQuizItem = $this->getLessonQuizItemDao()->getLessonQuizItem($lessonQuizItemId);
+        $getedLessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($lessonQuizItemId);
         if(!$getedLessonQuizItem){
             return null;
         } else {
@@ -41,7 +41,7 @@ class QuizServiceImpl extends BaseService implements QuizService
     public function findLessonQuizItems($courseId, $lessonId)
     {
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $lessonQuizItems = $this->getLessonQuizItemDao()->findLessonQuizItemsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
+        $lessonQuizItems = $this->getCourseQuizItemDao()->findQuizItemsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
         
         foreach ($lessonQuizItems as $key => &$lessonQuizItem) {
             $lessonQuizItem['description'] = strip_tags($lessonQuizItem['description']);
@@ -57,7 +57,7 @@ class QuizServiceImpl extends BaseService implements QuizService
     public function getUserLessonQuiz($courseId, $lessonId, $userId)
     {
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $getedLessonQuiz = $this->getLessonQuizDao()->getLessonQuizByCourseIdAndLessonIdAndUserId(
+        $getedLessonQuiz = $this->getCourseQuizDao()->getQuizByCourseIdAndLessonIdAndUserId(
             $lesson['courseId'], $lesson['id'], $userId);
         if($getedLessonQuiz){
             return $getedLessonQuiz;
@@ -69,11 +69,11 @@ class QuizServiceImpl extends BaseService implements QuizService
 
     public function findQuizItemsInLessonQuiz($lessonQuizId)
     {
-        $quiz = $this->getLessonQuizDao()->getLessonQuiz($lessonQuizId);
+        $quiz = $this->getCourseQuizDao()->getQuiz($lessonQuizId);
         $quizItemIds = explode("|", $quiz['itemIds']);
 
         if(!empty($quizItemIds)){
-            $quizItems = $this->getLessonQuizItemDao()->findLessonQuizItemsByIds($quizItemIds);
+            $quizItems = $this->getCourseQuizItemDao()->findQuizItemsByIds($quizItemIds);
             foreach ($quizItems as $key => &$item) {
                 $item['Number2Chinese'] = $this->number2Chinese($key+1);
                 $item['choices'] = json_decode($item['choices']);
@@ -89,7 +89,7 @@ class QuizServiceImpl extends BaseService implements QuizService
     public function findLessonQuizItemIds($courseId, $lessonId)
     {
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $lessonQuizItemIds = $this->getLessonQuizItemDao()->findItemIdsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
+        $lessonQuizItemIds = $this->getCourseQuizItemDao()->findItemIdsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
         if(!empty($lessonQuizItemIds)){
             return $lessonQuizItemIds;
         } else {
@@ -113,13 +113,13 @@ class QuizServiceImpl extends BaseService implements QuizService
         $lessonQuizItemAnswerInfo['answers'] = $answerContent;
         $lessonQuizItemAnswerInfo['userId'] = $this->getCurrentUser()->id;
 
-        $itemAnswer = $this->getLessonQuizItemAnswerDao()->getLessonQuizItemAnswerByQuizIdAndItemIdAndUserId(
+        $itemAnswer = $this->getCourseQuizItemAnswerDao()->getAnswerByQuizIdAndItemIdAndUserId(
             $checkResult['quiz']['id'], $checkResult['item']['id'], $this->getCurrentUser()->id);
         if(!empty($itemAnswer)){
              throw $this->createServiceException("每一道题目只能答一次!");
         }
 
-        $this->getLessonQuizItemAnswerDao()->addLessonQuizItemAnswer($lessonQuizItemAnswerInfo);
+        $this->getCourseQuizItemAnswerDao()->addAnswer($answerInfo);
         
         if($answersResult){
             return "correct";
@@ -130,18 +130,18 @@ class QuizServiceImpl extends BaseService implements QuizService
 
     public function checkUserLessonQuizResult($quizId)
     {
-        $quiz = $this->getLessonQuizDao()->getLessonQuiz($quizId);
+        $quiz = $this->getCourseQuizDao()->getQuiz($quizId);
         $itemIds = explode("|", $quiz['itemIds']);
         $itemIdsCount = count($itemIds);
-        $correctAnswersCount = $this->getLessonQuizItemAnswerDao()->getCorrectAnswersCountByUserIdAndQuizId($this->getCurrentUser()->id, $quiz['id']);
+        $correctAnswersCount = $this->getCourseQuizItemAnswerDao()->getCorrectAnswersCountByUserIdAndQuizId($this->getCurrentUser()->id, $quiz['id']);
         $score = round(100*($correctAnswersCount/$itemIdsCount), 1);
-        $this->getLessonQuizDao()->updateLessonQuiz($quiz['id'], array('score'=>$score, 'endTime'=>time()));
+        $this->getCourseQuizDao()->updateQuiz($quiz['id'], array('score'=>$score, 'endTime'=>time()));
         return array("score"=>$score, "correctCount"=>$correctAnswersCount, "wrongCount"=> ($itemIdsCount - $correctAnswersCount));
     }
 
     public function editLessonQuizItem($lessonQuizItemId, $fields)
     {
-        $lessonQuizItem = $this->getLessonQuizItemDao()->getLessonQuizItem($lessonQuizItemId);
+        $lessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($lessonQuizItemId);
         if(!$lessonQuizItem){
             throw $this->createServiceException("编辑问题失败，本问题不存在!");
         }
@@ -154,26 +154,26 @@ class QuizServiceImpl extends BaseService implements QuizService
         } else {
             $fields['type'] = 'single';
         }
-        return $this->getLessonQuizItemDao()->updateLessonQuizItem($lessonQuizItem['id'], $fields);
+        return $this->getCourseQuizItemDao()->updateQuizItem($lessonQuizItem['id'], $fields);
     }
 
-    public function deleteLessonQuizItem($id)
+    public function deleteQuizItem($id)
     {
-        $lessonQuizItem = $this->getLessonQuizItemDao()->getLessonQuizItem($id);
+        $lessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($id);
         if(!$lessonQuizItem){
             throw $this->createServiceException("删除问题失败，本问题不存在!");
         }
-        return $this->getLessonQuizItemDao()->deleteLessonQuizItem($id);
+        return $this->getCourseQuizItemDao()->deleteQuizItem($id);
     }
 
-    public function deleteLessonQuiz($quizId)
+    public function deleteQuiz($quizId)
     {
         $this->clearUserAnswersInQuiz($this->getCurrentUser()->id, $quizId);
-        $lessonQuiz = $this->getLessonQuizDao()->getLessonQuiz($quizId);
+        $lessonQuiz = $this->getCourseQuizDao()->getQuiz($quizId);
         if(!$lessonQuiz){
             throw $this->createServiceException("删除问题失败，本问题不存在!");
         }
-        return $this->getLessonQuizDao()->deleteLessonQuiz($quizId);
+        return $this->getCourseQuizDao()->deleteQuiz($quizId);
     }
 
     public function createLessonQuiz($courseId, $lessonId, $itemIds)
@@ -206,7 +206,7 @@ class QuizServiceImpl extends BaseService implements QuizService
         $lessonQuizInfo['score'] = 0;
         $lessonQuizInfo['endTime'] = 0;
 
-        return $this->getLessonQuizDao()->addLessonQuiz($lessonQuizInfo);
+        return $this->getCourseQuizDao()->addQuiz($lessonQuizInfo);
     }
 
     private function checkForCreateQuiz($courseId, $lessonId, $itemIds)
@@ -259,11 +259,11 @@ class QuizServiceImpl extends BaseService implements QuizService
         if($user['id'] != $userId){
             throw $this->createServiceException("用户已经尚未登陆，操作失败!");
         }
-        $quiz = $this->getLessonQuizDao()->getLessonQuiz($quizId);
+        $quiz = $this->getCourseQuizDao()->getQuiz($quizId);
         if(empty($quiz)){
             throw $this->createServiceException("测试不存在!");
         }
-        return  $this->getLessonQuizItemAnswerDao()->deleteLessonQuizItemAnswersByUserIdAndQuizId($userId, $quizId);
+        return  $this->getCourseQuizItemAnswerDao()->deleteAnswersByUserIdAndQuizId($userId, $quizId);
     }
 
     private function checkCourseAndLesson($courseId, $lessonId)
@@ -281,12 +281,12 @@ class QuizServiceImpl extends BaseService implements QuizService
 
     private function checkQuizAndItem($lessonQuizId, $itemId)
     {
-        $lessonQuizItem = $this->getLessonQuizItemDao()->getLessonQuizItem($itemId);
+        $lessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($itemId);
         if(empty($lessonQuizItem)){
             throw $this->createServiceException("本问题不存在!");
         }
 
-        $lessonQuiz = $this->getLessonQuizDao()->getLessonQuiz($lessonQuizId);
+        $lessonQuiz = $this->getCourseQuizDao()->getQuiz($lessonQuizId);
         if(empty($lessonQuiz)){
             throw $this->createServiceException("本测验不存在!");
         }
@@ -401,19 +401,19 @@ class QuizServiceImpl extends BaseService implements QuizService
         return $chn;
     }
 
-    private function getLessonQuizItemAnswerDao()
+    private function getCourseQuizItemAnswerDao()
     {
-        return $this->createDao('Course.LessonQuizItemAnswerDao');
+        return $this->createDao('Course.CourseQuizItemAnswerDao');
     }
 
-    private function getLessonQuizItemDao()
+    private function getCourseQuizItemDao()
     {
-        return $this->createDao('Course.LessonQuizItemDao');
+        return $this->createDao('Course.CourseQuizItemDao');
     }
 
-     private function getLessonQuizDao()
+     private function getCourseQuizDao()
     {
-        return $this->createDao('Course.LessonQuizDao');
+        return $this->createDao('Course.CourseQuizDao');
     }
 
     private function getCourseService()
