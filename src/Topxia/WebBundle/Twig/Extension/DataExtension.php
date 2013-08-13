@@ -56,6 +56,14 @@ class DataExtension extends \Twig_Extension
         return null;
     }
 
+    private function getUserData($conditions)
+    {
+        if (isset($conditions['id'])) {
+            return $this->getUserService()->getUser($conditions['id']);
+        }
+        return null;
+    }
+
     private function getCourseDatas($conditions, $sort, $start, $limit)
     {
         return $this->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
@@ -70,6 +78,12 @@ class DataExtension extends \Twig_Extension
     {
         return $this->createService('Course.CourseService');
     }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
+    }
+
 
     private function createService($name)
     {
