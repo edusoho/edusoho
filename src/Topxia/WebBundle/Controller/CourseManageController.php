@@ -8,6 +8,13 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
+use Imagine\Imagick\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+
+
+
 class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)
@@ -80,6 +87,31 @@ class CourseManageController extends BaseController
 			'form' => $form->createView()
 		));
 	}
+
+    public function cropPictureAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        if($request->getMethod() == 'POST'){
+            $x = (int)$request->request->get('x');
+            $y = (int)$request->request->get('y');
+            $w = (int)$request->request->get('w');
+            $h = (int)$request->request->get('h');
+            if(($w <= 0) || ($h <= 0)){
+                throw new \RuntimeException('裁剪的参数大小有问题，请重新裁剪！');
+            }
+            $imagine = new Imagine();
+            $uri = $this->getFileService()->parseFileUri($course['largePicture']);
+            $realpath = 'files/'.$uri['path'];
+            $result = $imagine->open($realpath)->crop(new Point($x, $y), new Box($w, $h))
+                ->save($realpath);
+            if(!empty($result)){
+                return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
+            }
+        }
+        return $this->render('TopxiaWebBundle:CourseManage:crop.html.twig', array(
+            'course' => $course
+        ));
+    }
 
     public function teachersAction(Request $request, $id)
     {
@@ -168,6 +200,11 @@ class CourseManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     private function getWebExtension()
