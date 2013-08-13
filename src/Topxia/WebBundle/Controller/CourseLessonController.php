@@ -43,6 +43,7 @@ class CourseLessonController extends BaseController
         $json['summary'] = $lesson['summary'];
         $json['type'] = $lesson['type'];
         $json['content'] = $lesson['content'];
+        $json['status'] = $lesson['status'];
 
         if (!empty($lesson['media'])) {
             $json['media'] = $this->convertMedia($lesson);

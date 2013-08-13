@@ -146,8 +146,6 @@ define(function(require, exports, module) {
 
 			var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson){
-            	console.log(lesson);
-            	that._startLesson();
             	that.element.find('[data-role=lesson-title]').html(lesson.title);
             	that.element.find('[data-role=lesson-number]').html(lesson.number);
             	if (parseInt(lesson.chapterNumber) > 0) {
@@ -155,6 +153,12 @@ define(function(require, exports, module) {
             	} else {
             		that.element.find('[data-role=chapter-number]').parent().hide();
             	}
+
+            	if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
+            		$("#lesson-unpublished-content").show();
+            		return;
+            	}
+
             	if (lesson.type == 'video') {
             		if (lesson.media.source == 'self') {
 			            player.dimensions('100%', '100%');
@@ -176,6 +180,7 @@ define(function(require, exports, module) {
             		$("#lesson-text-content").show();
             		$("#lesson-text-content").perfectScrollbar();
             	}
+            	that._startLesson();
             }, 'json');
 
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {
