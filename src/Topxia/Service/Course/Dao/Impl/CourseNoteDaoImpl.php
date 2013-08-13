@@ -20,12 +20,6 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $this->getConnection()->fetchAll($sql, array($userId, $courseId));
 	}
 
-	public function getLastestNoteByUserIdAndCourseId($userId, $courseId)
-	{
-		$sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? ORDER BY updatedTime DESC LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ? : null;
-	}
-
 	public function addNote($noteInfo)
 	{
     	$id = $this->insert($noteInfo);
@@ -96,5 +90,11 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 			->andWhere('isElite = :isElite')
 			->andWhere('content LIKE ":keywords"');
 		return $builder->execute()->fetchColumn(0);
+	}
+
+	public function getNoteCountByUserIdAndCourseId($userId, $courseId)
+	{
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($userId, $courseId));
 	}
 }

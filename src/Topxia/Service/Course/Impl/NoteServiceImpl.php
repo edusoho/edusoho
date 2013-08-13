@@ -105,42 +105,48 @@ class NoteServiceImpl extends BaseService implements NoteService
 
 	public function deleteNote($id)
 	{
-        $resultNote = $this->getNote($id);
-        if(empty($resultNote)) {
-            throw $this->createServiceException("The Note Is Not Exist");
+        $note = $this->tryManageNote($id);
+
+        $this->getNoteDao()->deleteNote($id);
+
+        $member = $this->getCourseService()->getCourseMember($note['courseId'], $note['userId']);
+        if ($member) {
+            $noteNumber = $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId']);
+            $this->getCourseService()->updateCourseMember($member['id'], array(
+                'notesNum' => $noteNumber,
+            ));
         }
-        $result = $this->getNoteDao()->deleteNote($id);
-
-        $courseMember = $this->getCourseService()->getCourseMember($resultNote['courseId'], $resultNote['userId']);
-        $latestNote = $this->getUserLatestNoteInCourse($resultNote['userId'], $resultNote['courseId']);
-
-        if(empty($latestNote)){
-            $this->getCourseService()->updateCourseMember($courseMember['id'], array(
-                "notesNum"=>$courseMember['notesNum']-1,
-                "notesLastUpdateTime"=> 0));
-        } else {
-            $this->getCourseService()->updateCourseMember($courseMember['id'], array(
-                "notesNum"=>$courseMember['notesNum']-1,
-                "notesLastUpdateTime"=> time()));
-        }
-
-        return $result;
 	}
 
-    public function getUserLatestNoteInCourse($userId, $courseId)
+    private function tryManageNote($id)
     {
-        $user = $this->getUserService()->getUser($userId);
-        if(empty($user)){
-            throw $this->createServiceException("The User Is Not Exist");
-            
+        $note = $this->getNote($id);
+        if (empty($note)) {
+            throw $this->createNotFoundException();
         }
 
-        $course = $this->getCourseService()->getCourse($courseId);
-        if(empty($course)){
-            throw $this->createServiceException("The Course Is Not Exist"); 
+        $user = $this->getCurrentUser();
+        if (empty($user->id)) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
-        return $this->getNoteDao()->getLastestNoteByUserIdAndCourseId($userId, $courseId);
+
+        if (!$this->hasNoteManagerRole($note, $user)) {
+            throw $this->createAccessDeniedException('您不是管理员，无权操作！');
+        }
+        return $note;
     }
+
+    private function hasNoteManagerRole($note, $user) 
+    {
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+            return true;
+        }
+
+        return $user['id'] == $note['userId'];
+    }
+
+
+
 
 	public function searchNotes($conditions, $sort, $start, $limit)
 	{

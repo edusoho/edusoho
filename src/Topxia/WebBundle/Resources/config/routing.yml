@@ -550,21 +550,18 @@ my_discussions:
     pattern: /my/discussions
     defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
 
-my_notes:
-    pattern: /my/notes
-    defaults: { _controller: TopxiaWebBundle:MyNote:myNotes }
+my_notebooks:
+    pattern: /my/notebooks
+    defaults: { _controller: TopxiaWebBundle:MyNotebook:index }
 
-my_notes_detail:
-    pattern: /my/{userId}/notes/detail/{courseId}
-    defaults: { _controller: TopxiaWebBundle:MyNote:notesDetail }
+my_notebook_show:
+    pattern: /my/notebook/{courseId}
+    defaults: { _controller: TopxiaWebBundle:MyNotebook:show }
 
-my_notes_delete:
-    pattern: /my/notes/{noteId}/delete
-    defaults: { _controller: TopxiaWebBundle:MyNote:deleteNote }
-
-my_notes_update:
-    pattern: /my/notes/{noteId}/update
-    defaults: { _controller: TopxiaWebBundle:MyNote:updateNote }
+my_note_delete:
+    pattern: /my/note/{id}/delete
+    defaults: { _controller: TopxiaWebBundle:MyNotebook:noteDelete }
+    methods: [POST]
 
 # @todo 
 user_show: 
