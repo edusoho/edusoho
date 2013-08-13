@@ -367,11 +367,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'role' => 'student',
-			'truename'=> empty($infos['truename']) ? '' : $infos['truename'],
-			'email'=> empty($infos['email']) ? '' : $infos['email'],
-			'mobile'=> empty($infos['mobile']) ? '' : $infos['mobile'],
-			'company'=> empty($infos['company']) ? '' : $infos['company'],
-			'job'=> empty($infos['job']) ? '' : $infos['job'],
 			'createdTime' => time(),
 		);
 
