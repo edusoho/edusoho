@@ -61,9 +61,9 @@ class QuizServiceTest extends BaseTestCase
        $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
 
-       $getLessonQuizItem = $this->getQuizService()->getLessonQuizItem($createdLessonQuizItem['id']);
+       $getQuizItem = $this->getQuizService()->getQuizItem($createdLessonQuizItem['id']);
 
-       $this->assertEquals($createdLessonQuizItem, $getLessonQuizItem);
+       $this->assertEquals($createdLessonQuizItem, $getQuizItem);
     }
 
     public function testEditLessonQuizItem()
@@ -129,7 +129,7 @@ class QuizServiceTest extends BaseTestCase
         $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
 
-        $result = $this->getQuizService()->deleteLessonQuizItem($createdLessonQuizItem['id']);
+        $result = $this->getQuizService()->deleteQuizItem($createdLessonQuizItem['id']);
         $this->assertEquals(1, $result);
     }
 
@@ -206,7 +206,7 @@ class QuizServiceTest extends BaseTestCase
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($createdLessonQuizItem['id']));
         $getedLessonQuiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $createdLesson['id'], $this->getCurrentUser()->id);
-        $this->getQuizService()->deleteLessonQuiz($createdLessonQuiz['id']);
+        $this->getQuizService()->deleteQuiz($createdLessonQuiz['id']);
         $this->assertNotNull($getedLessonQuiz);
 
         $getedLessonQuiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $createdLesson['id'], $this->getCurrentUser()->id);

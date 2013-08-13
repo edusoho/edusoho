@@ -52,7 +52,7 @@ class LessonQuizPluginController extends BaseController
             $quizItems = $this->getQuizService()->findQuizItemsInLessonQuiz($lessonQuiz['id']);
         }
         if(!empty($alreadyLessonQuiz)){
-            $this->getQuizService()->deleteLessonQuiz($alreadyLessonQuiz['id']);
+            $this->getQuizService()->deleteQuiz($alreadyLessonQuiz['id']);
         }
 
         return $this->render('TopxiaWebBundle:LessonQuizPlugin:lesson-quiz-page.html.twig', array(
@@ -75,7 +75,7 @@ class LessonQuizPluginController extends BaseController
 
     public function postItemAction(Request $request, $quizId, $quizItemId)
     {
-        $quizItem = $this->getQuizService()->getLessonQuizItem($quizItemId);
+        $quizItem = $this->getQuizService()->getQuizItem($quizItemId);
         $currentChoice = $request->request->get("currentChoice");        
         $currentChoice = substr($currentChoice, 0, strlen($currentChoice)-1);
         $isError = $this->getQuizService()->answerLessonQuizItem($quizId, $quizItem['id'], $currentChoice);

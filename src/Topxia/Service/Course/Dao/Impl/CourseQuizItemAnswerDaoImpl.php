@@ -3,19 +3,19 @@
 namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Course\Dao\LessonQuizItemAnswerDao;
+use Topxia\Service\Course\Dao\CourseQuizItemAnswerDao;
 
-class LessonQuizItemAnswerDaoImpl extends BaseDao implements LessonQuizItemAnswerDao
+class CourseQuizItemAnswerDaoImpl extends BaseDao implements CourseQuizItemAnswerDao
 {
-    protected $table = 'lesson_quiz_item_answer';
+    protected $table = 'course_quiz_item_answer';
 
-    public function addLessonQuizItemAnswer($lessonQuizItemAnswerInfo)
+    public function addAnswer($answerInfo)
     {
         $affected = $this->getConnection()->insert($this->table, $lessonQuizItemAnswerInfo);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course lessonQuizItemAnswer error.');
         }
-        return $this->getLessonQuizItemAnswer($this->getConnection()->lastInsertId());
+        return $this->getAnswer($this->getConnection()->lastInsertId());
     }
 
     public function getCorrectAnswersCountByUserIdAndQuizId($userId, $quizId)
@@ -24,24 +24,19 @@ class LessonQuizItemAnswerDaoImpl extends BaseDao implements LessonQuizItemAnswe
         return $this->getConnection()->fetchColumn($sql, array($userId, $quizId));
     }
 
-    public function deleteLessonQuizItemAnswer($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function getLessonQuizItemAnswerByQuizIdAndItemIdAndUserId($quizId, $itemId, $userId)
+    public function getAnswerByQuizIdAndItemIdAndUserId($quizId, $itemId, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE quizId = ? AND itemId = ? AND userId =?";
         return $this->getConnection()->fetchAssoc($sql, array($quizId, $itemId, $userId));
     }
 
-    public function getLessonQuizItemAnswer($id)
+    public function getAnswer($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
-    public function deleteLessonQuizItemAnswersByUserIdAndQuizId($userId, $quizId)
+    public function deleteAnswersByUserIdAndQuizId($userId, $quizId)
     {
         return $this->getConnection()->delete($this->table, array('userId' => $userId, 'quizId' => $quizId));
     }

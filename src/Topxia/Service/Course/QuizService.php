@@ -6,15 +6,15 @@ interface QuizService
 
     public function createLessonQuizItem($courseId, $lessonId, $itemInfo);
 
-    public function getLessonQuizItem($lessonQuizItemId);
+    public function getQuizItem($lessonQuizItemId);
 
     public function getUserLessonQuiz($courseId, $lessonId, $userId);
 
     public function editLessonQuizItem($lessonQuizItemId, $fields);
 
-    public function deleteLessonQuizItem($id);
+    public function deleteQuizItem($id);
 
-    public function deleteLessonQuiz($id);
+    public function deleteQuiz($id);
 
     public function findLessonQuizItems($courseId, $lessonId);
 

@@ -142,14 +142,14 @@ class CourseLessonManageController extends BaseController
 
     public function deleteLessonQuizItemAction(Request $request, $quizItemId)
     {
-        $this->getQuizService()->deleteLessonQuizItem($quizItemId);
+        $this->getQuizService()->deleteQuizItem($quizItemId);
         return $this->createJsonResponse(true);
     }
 
     public function editLessonQuizItemAction(Request $request, $quizItemId)
     {
 
-        $lessonQuizItem = $this->getQuizService()->getLessonQuizItem($quizItemId);
+        $lessonQuizItem = $this->getQuizService()->getQuizItem($quizItemId);
         $lessonQuizItem['choices'] = json_decode($lessonQuizItem['choices']);   
         return $this->createJsonResponse(array('lessonQuizItem' => $lessonQuizItem));
     }
