@@ -10,7 +10,11 @@
 	      	<a class="item-object item-object-{{ item.type }}" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}">
 	      		{% if item.free %}<span class="item-free"></span>{% endif %}
 		      	<span class="item-icon"></span>
-		      	<span class="item-length">{% if item.type == 'text' %}图文{% else %}{{ item.length|duration }}{% endif %}</span>
+		      	{% if item.status == 'published' %}
+			      	<span class="item-length">{% if item.type == 'text' %}图文{% else %}{{ item.length|duration }}{% endif %}</span>
+			      {% else %}
+			        <span class="item-length">未发布</span>
+			      {% endif %}
 	      	</a>
 	      	<div class="item-body">
 	      		<div class="item-seq-name">课时{{ item.number }}:</div>
