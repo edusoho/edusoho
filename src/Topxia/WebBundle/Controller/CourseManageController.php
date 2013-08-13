@@ -69,7 +69,6 @@ class CourseManageController extends BaseController
             if ($form->isValid()) {
                 $fields = $form->getData();
                 $this->getCourseService()->changeCoursePicture($course['id'], $fields['picture']);
-
 	            $this->setFlashMessage('success', '课程图片已上传成功！');
 	            return $this->redirect($this->generateUrl('course_manage_picture',array('id' => $id))); 
             } else {

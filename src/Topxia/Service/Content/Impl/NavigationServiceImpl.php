@@ -39,35 +39,24 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $result = $this->getNavigationDao()->addNavigation($fields);
         return $result;
     }
+    public function getNavigationsCountByType($type)
+    {
+        return $this->getNavigationDao()->getNavigationsCountByType($type);
+    }
 
     public function getNavigationsCount()
     {
         return $this->getNavigationDao()->getNavigationsCount();
     }
 
-    public function getTopNavigationsCount()
-    {
-        return $this->getNavigationDao()->getNavigationsCountByType('top');
-    }
-
-    public function getFootNavigationsCount()
-    {
-        return $this->getNavigationDao()->getNavigationsCountByType('foot');
-    }
-
     public function findNavigations($start, $limit)
     {
         return $this->getNavigationDao()->findNavigations($start, $limit);
-    }
+    }  
 
-    public function findTopNavigations($start, $limit)
+    public function findNavigationsByType($type, $start, $limit)
     {
-        return $this->getNavigationDao()->findNavigationsByType('top', $start, $limit);
-    }
-
-    public function findFootNavigations($start, $limit)
-    {
-        return $this->getNavigationDao()->findNavigationsByType('foot', $start, $limit);
+        return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit);
     }
 
     private function getNavigationDao()

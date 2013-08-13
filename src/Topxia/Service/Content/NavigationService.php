@@ -4,16 +4,12 @@ namespace Topxia\Service\Content;
 interface NavigationService
 {
     public function getNavigationsCount();
-    
-    public function getTopNavigationsCount();
 
-    public function getFootNavigationsCount();
+    public function getNavigationsCountByType($type);
 
     public function findNavigations($start, $limit);
     
-    public function findTopNavigations($start, $limit);
-
-    public function findFootNavigations($start, $limit);
+    public function findNavigationsByType($type, $start, $limit);
 
     public function createNavigation($fields);
 

@@ -142,11 +142,12 @@ class NavigationController extends BaseController
     {
         $paginator = new Paginator(
             $request,
-            $this->getNavigationService()->getTopNavigationsCount(),
+            $this->getNavigationService()->getNavigationsCountByType('top'),
             10
         );
 
-        $navigations = $this->getNavigationService()->findTopNavigations(
+        $navigations = $this->getNavigationService()->findNavigationsByType(
+            'top',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -160,11 +161,12 @@ class NavigationController extends BaseController
     {
         $paginator = new Paginator(
             $request,
-            $this->getNavigationService()->getFootNavigationsCount(),
+            $this->getNavigationService()->getNavigationsCountByType('foot'),
             10
         );
 
-        $navigations = $this->getNavigationService()->findFootNavigations(
+        $navigations = $this->getNavigationService()->findNavigationsByType(
+            'foot',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
