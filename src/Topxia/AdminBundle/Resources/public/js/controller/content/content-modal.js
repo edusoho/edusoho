@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         _initEditorFields($form, validator);
         _initTagsField();
         _initDatetimeFields($form);
-        _initPictureField($form);
+        // _initPictureField($form);
 	};
 
     function _initValidator($form, $modal)
