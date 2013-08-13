@@ -947,6 +947,8 @@ body {
 	height: 30px;
 }
 
+
+
 .course-item-list .chapter-item .title {
 	font-weight: bold;
 	color: #888;
@@ -959,6 +961,11 @@ body {
 .course-item-list .lesson-item .type {
 	float: right;
 	color: #999;
+}
+
+.course-item-list .item .status {
+	float: right;
+	color: #E79022;
 }
 
 .course-item-list .hover-item .action {
