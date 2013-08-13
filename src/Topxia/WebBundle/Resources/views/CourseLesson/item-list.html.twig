@@ -16,12 +16,18 @@
 		    	<span class="name">课时{{ item.number }}</span>
 		    	<span class="pie">&nbsp;</span>
 		    	<a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{item.id}}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">{{ item.title }}</a>
-		    	{% if item.type == 'video' %}
-			    	<span class="type" title="视频时长{{ item.length|duration }}">
-			    		<span>{{ item.length|duration }}</span>
-			    		<span class="glyphicon glyphicon-play-circle"></span>
-			    	</span>
-		    	{% endif %}
+		    	{% if item.status == 'published' %}
+			    	{% if item.type == 'video' %}
+				    	<span class="type" title="视频时长{{ item.length|duration }}">
+				    		<span>{{ item.length|duration }}</span>
+				    		<span class="glyphicon glyphicon-play-circle"></span>
+				    	</span>
+				    {% elseif item.type == 'text' %}
+				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
+			    	{% endif %}
+			    {% else %}
+			      <span class="status">未发布</span>
+			    {% endif %}
 		    	<button class="btn btn-success btn-mini action">开始学习</button>
 		    </li>
 		  {% endif  %}

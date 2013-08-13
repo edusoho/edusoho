@@ -8,7 +8,8 @@
     {% block side %}
       <div class="panel">
         <div class="list-group-block">
-          <div class="list-group-heading">帐号</div>
+          <div class="list-group-panel">
+            <div class="list-group-heading">帐号设置</div>
           <ul class="list-group">
             {% set side_nav = side_nav|default(null) %}
             <a class="list-group-item {% if side_nav == 'profile' %}active{% endif %}" href="{{ path('settings') }}"><i class="glyphicon glyphicon-user"></i> 基础信息</a>
@@ -17,6 +18,7 @@
             <a class="list-group-item {% if side_nav == 'email' %}active{% endif %}" href="{{ path('settings_email') }}"><i class="glyphicon glyphicon-envelope"></i> 邮箱设置</a>
             <a class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> 第三方登录</a>
           </ul>
+          </div>
         </div><!-- /list-group-block -->
 
       </div>

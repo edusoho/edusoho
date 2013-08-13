@@ -146,6 +146,7 @@ define(function(require, exports, module) {
 
 			var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson){
+            	console.log(lesson);
             	that._startLesson();
             	that.element.find('[data-role=lesson-title]').html(lesson.title);
             	that.element.find('[data-role=lesson-number]').html(lesson.number);
