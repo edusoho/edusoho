@@ -5,7 +5,14 @@
 {% block main %}
 
 <div class="panel panel-col">
-  <div class="panel-heading">课程图片</div>
+  <div class="panel-heading">
+    课程图片
+    {% if course.largePicture %}
+        <a href="{{ path('course_manage_picture_crop', {id:course.id}) }}"
+        class="btn btn-info pull-right" target="_blank">裁剪</a>
+    {% endif %}
+  </div>
+
   <div class="panel-body">
     <form id="course-picture-form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ web_macro.flash_messages() }}

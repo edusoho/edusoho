@@ -25,6 +25,10 @@ seajs.config({
 			src: 'jquery/toastr/1.0.2/toastr.js',
 			deps: ['jquery']
 		},
+		'jquery.jcrop':  {
+			src: 'jquery-plugin/jcrop/0.9.12/jcrop.js',
+			deps: ['jquery']
+		},
 		'jquery.ui': {
 			src: 'jquery/ui/1.10.3/jquery-ui-custom.min.js',
 			deps: ['jquery']
