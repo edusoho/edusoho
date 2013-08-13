@@ -8,6 +8,12 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 {
     protected $table = 'navigation';
 
+    public function getNavigationsCountByType($type)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE type = '$type' ";
+        return $this->getConnection()->fetchColumn($sql, array());
+    }
+
     public function getNavigation($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -34,33 +40,15 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
     
-    public function getTopNavigationsCount()
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE type = 'top' ";
-        return $this->getConnection()->fetchColumn($sql, array());
-    }
-
-    public function getFootNavigationsCount()
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE type = 'foot' ";
-        return $this->getConnection()->fetchColumn($sql, array());
-    }
-
     public function getNavigationsCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->table}";
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
-    public function findTopNavigations($start, $limit)
+    public function findNavigationsByType($type, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = 'top' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
-    }
-
-    public function findFootNavigations($start, $limit)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE type = 'foot' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE type = '$type' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 
