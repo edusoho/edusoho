@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\NoteService;
+use Topxia\Common\ArrayToolkit;
 
 class NoteServiceImpl extends BaseService implements NoteService
 {
@@ -65,23 +66,27 @@ class NoteServiceImpl extends BaseService implements NoteService
         if(empty($lesson)){
             throw $this->createServiceException('课时不存在，保存笔记失败');
         }
-
         $existNote = $this->getUserLessonNote($user['id'], $note['lessonId']);
-        
+
+        // @todo HTML Purifier
+        // $note['content']
+
         $fields = array();
-        // @todo 还需要过滤html标签，防止注入
         $fields['content'] = empty($note['content']) ? '' : $note['content'];
         $fields['length'] = $this->calculateContnentLength($note['content']);
+        $fields['courseId'] = $lesson['courseId'];
+        $fields['lessonId'] = $lesson['id'];
 
         if (!$existNote) {
             $fields['userId'] = $user['id'];
             $fields['createdTime'] = time();
-            $note = $this->getNoteDao()->addNote($note);
+            $note = $this->getNoteDao()->addNote($fields);
         } else {
+            $fields['updatedTime'] = time();
             $note = $this->getNoteDao()->updateNote($existNote['id'], $fields);
         }
+        $member = $this->getCourseService()->getCourseMember($note['courseId'], $user['id']);
 
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
         if ($member) {
             $memberFields = array();
             $memberFields['noteLastUpdateTime'] = time();
@@ -145,7 +150,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     private function calculateContnentLength($content)
     {
-        $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '',$str)));
+        $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '',$content)));
         return mb_strlen($content, 'utf-8');
     }
 
