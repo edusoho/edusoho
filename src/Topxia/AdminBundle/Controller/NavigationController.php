@@ -89,7 +89,7 @@ class NavigationController extends BaseController
         if ('POST' == $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
-                $this->getNavigationService()->editNavigation($id, $form->getData());
+                $this->getNavigationService()->updateNavigation($id, $form->getData());
                 $navigation = $this->getNavigationService()->getNavigation($id);
                 $html = $this->renderView('TopxiaAdminBundle:Navigation:navigation-tr.html.twig', array('navigation'=>$navigation));
                 return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
