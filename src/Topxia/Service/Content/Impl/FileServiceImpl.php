@@ -146,6 +146,19 @@ class FileServiceImpl extends BaseService implements FileService
     	$parsed['path'] = $parts[1];
     	$parsed['directory'] = dirname($parsed['path']);
     	$parsed['name'] = basename($parsed['path']);
+
+		$setting = $this->getSettingService()->get("file");
+		if (empty($setting[$parsed['access'].'_directory'])) {
+			$parsed['fullpath'] = null;
+		} else {
+			if ($parsed['access'] == 'public') {
+				$directory = $this->getKernel()->getRootPath() . '/web/' . $setting[$parsed['access'].'_directory'];
+			} else {
+				$directory = $this->getKernel()->getRootPath() . '/' . $setting[$parsed['access'].'_directory'];
+			}
+			$parsed['fullpath'] = $directory . '/' . $parsed['path'];
+		}
+
     	return $parsed;
     }
 
