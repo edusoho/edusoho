@@ -1,17 +1,17 @@
 <tr id="{{navigation.id}}" >
-    <td>{{navigation.name}}</td>
+    <td>
+        <a href="{{navigation.url}}"> {{navigation.name}} </a>
+    </td>
     <td>{{navigation.url}}</td>
     <td>
-        {% if navigation.openNewWindow == "no" %}
+        {% if navigation.isNewWin == 0 %}
             否
-        {% elseif navigation.openNewWindow == "yes" %}
+        {% elseif navigation.isNewWin == 1 %}
             是
         {% endif %}
     </td>
 
     <td>{{navigation.sequence}}</td>
-    <td> {{navigation.createdTime| date('Y-n-d H:i:s')}} </td>
-    <td> {{navigation.updateTime| date('Y-n-d H:i:s')}} </td>
     <td> 
         {% if navigation.type == "top" %}
         顶部菜单
@@ -20,9 +20,9 @@
         {% endif %}
     </td>
     <td> 
-        {% if navigation.status == "open" %}
+        {% if navigation.isOpen == 1 %}
         开启
-        {% elseif navigation.status == "close" %}
+        {% elseif navigation.isOpen == 0 %}
         关闭
         {% endif %}
     </td>
