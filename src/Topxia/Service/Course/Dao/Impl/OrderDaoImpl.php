@@ -36,6 +36,33 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 		$this->update($id, $fields);
 		return $this->getOrder($id);
 	}
+    
+    public function searchOrders($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
 
+    public function searchOrderCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        return $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_order')
+            ->andWhere('title LIKE :title')
+            ->andWhere('sn = :sn')
+            ->andWhere('status = :status')
+            ->andWhere('createdTime >= :startDate')
+            ->andWhere('createdTime < :endDate');
+    }
 
 }

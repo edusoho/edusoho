@@ -1,0 +1,97 @@
+{% extends 'TopxiaAdminBundle:CourseOrder:layout.html.twig' %}
+
+{% block title %}课程订单管理 - {{ parent() }}{% endblock %}
+
+{#
+    {% set script_controller = 'trade/index' %}
+#}
+
+{% set menu = 'course-order' %}
+
+{% block main %}
+
+  <div class="page-header clearfix">
+    <h1>课程订单管理</h1>
+  </div>
+
+   <div class="navbar">
+
+    <form id="user-search-form" class="navbar-form row" action="" method="get" novalidate>
+
+        <div class="col-lg-3">
+          {{ form_widget(searchForm.paidStartTime) }}
+        </div>
+
+        <div class="col-lg-3">
+          {{ form_widget(searchForm.paidEndTime) }}
+        </div>
+
+        <div class="col-lg-3">
+          {{ form_widget(searchForm.createStartTime) }}
+        </div>
+
+        <div class="col-lg-3">
+          {{ form_widget(searchForm.createEndTime) }}
+        </div>
+        <br> <br> <br>
+
+        <div class="col-lg-2">
+          {{ form_widget(searchForm.status) }}
+        </div>
+
+         <div class="col-lg-2">
+          {{ form_widget(searchForm.payment) }}
+        </div>
+
+         <div class="col-lg-2">
+          {{ form_widget(searchForm.isGift) }}
+        </div>
+        
+        <div class="col-lg-2">
+        {{ form_widget(searchForm.keywordType) }}
+        </div>
+
+        <div class="col-lg-2">
+          {{ form_widget(searchForm.keyword, {attr:{placeholder:'关键词'}}) }}
+        </div>
+
+        <div class="col-lg-2">
+          {{ form_rest(searchForm) }}
+          <button class="btn btn-primary">搜索</button>
+        </div>
+
+    </form>
+
+  </div>
+      
+    <table class="table table-striped" id="review-list">
+
+    <thead>
+      <tr>
+        <th width="15%">作者</th>
+        <th width="10%">课程名称</th>
+        <th width="30%">评价标题</th>
+        <th width="35%">评价内容</th>
+        <th width="10%">评价时间</th>
+      </tr>
+    </thead>
+
+    {{dump(orders)}}
+
+    <tbody>
+        <tr id="review-table">
+          <td>xxxxx </td>
+          <td>xxxxx </td>
+          <td>xxxxx </td>
+          <td>xxxxx </td>
+        </tr>
+    </tbody>
+
+  </table>
+
+  <div class="paginator">
+    {{ web_macro.paginator(paginator) }} 
+  </div>
+
+
+{% endblock %}

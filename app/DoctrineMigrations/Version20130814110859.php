@@ -12,15 +12,7 @@ class Version20130814110859 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->addSql("
-            ALTER TABLE  `course_member` CHANGE  `notesLastUpdateTime`  `noteLastUpdateTime` INT( 10 ) NOT NULL COMMENT  '最新的笔记更新时间';
-            ");
-        $this->addSql("
-            ALTER TABLE  `course_member` CHANGE  `notesNum`  `noteNum` TINYINT( 4 ) NOT NULL COMMENT  '笔记数目';
-            ");
-        $this->addSql("
-            ALTER TABLE  `course_note` CHANGE  `contentCount`  `length` TINYINT( 5 ) NOT NULL COMMENT  '笔记内容的字数';
-            ");
+
         $this->addSql("
             ALTER TABLE  `navigation` CHANGE  `type`  `type` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT  '类型';
             ");

@@ -32,7 +32,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
 	}
 
-	public function searchCourses($conditions, $sort= 'latest', $start, $limit)
+	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {

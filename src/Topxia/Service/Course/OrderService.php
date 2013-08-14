@@ -14,6 +14,7 @@ interface OrderService
 
 	public function cancelOrder($id, $message = '');
 
-	public function searchOrders($conditions, $order, $start, $limit);
+	public function searchOrders($conditions, $sort = 'latest', $start, $limit);
 
+    public function searchOrderCount($conditions);
 }
