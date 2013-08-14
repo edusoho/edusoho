@@ -48,13 +48,13 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function findNavigationsByType($type, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = '$type' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE type = '$type' ORDER BY sequence ASC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 
     public function findNavigations($start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 

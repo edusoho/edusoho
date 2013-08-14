@@ -101,10 +101,10 @@ class CourseManageController extends BaseController
             }
             $imagine = new Imagine();
             $uri = $this->getFileService()->parseFileUri($course['largePicture']);
-            $realpath = 'files/'.$uri['path'];
-            $result = $imagine->open($realpath)->crop(new Point($x, $y), new Box($w, $h))
-                ->save($realpath);
-            if(!empty($result)){
+            $fullpath = $uri['fullpath'];
+            $cropResult = $imagine->open($fullpath)->crop(new Point($x, $y), new Box($w, $h))
+                ->save($fullpath);
+            if(!empty($cropResult)){
                 return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
             }
         }
