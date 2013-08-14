@@ -365,19 +365,19 @@ course_manage_lesson_unpublish:
 
 course_manage_quiz_item_create:
     pattern: /course/{courseId}/lesson/{lessonId}/quiz/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createLessonQuizItem }
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:createLessonQuizItem }
 
 course_manage_quiz_item_delete:
     pattern: /course/{quizItemId}/quizitemid/delete
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:deleteLessonQuizItem }
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:deleteLessonQuizItem }
 
 course_manage_quiz_item_edit:
     pattern: /course/{quizItemId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editLessonQuizItem }
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:editLessonQuizItem }
 
 course_manage_quiz_item_update:
     pattern: /quiz/item/update/{quizItemId}
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:updateLessonQuizItem }
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:updateLessonQuizItem }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
