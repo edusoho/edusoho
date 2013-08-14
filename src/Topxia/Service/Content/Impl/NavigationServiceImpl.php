@@ -34,7 +34,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function createNavigation($fields)
     {
-        $keysArray = array('name', 'url', 'openNewWindow', 'status', 'type', 'sequence');
+        $keysArray = array('name', 'url', 'isOpen', 'isNewWin', 'type', 'sequence');
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if(!in_array($keyOfFields, $keysArray)){

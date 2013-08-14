@@ -20,15 +20,15 @@ class NavigationController extends BaseController
         $form = $this->createFormBuilder($block)
             ->add('name', 'text')
             ->add('url', 'text')
-            ->add('openNewWindow', 'choice', array(
+            ->add('isNewWin', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('no' => '否', 'yes' => '是'),
-                'data' => 'no'
+                'choices' => array(0 => '否', 1 => '是'),
+                'data' => 1
             ))
-            ->add('status', 'choice', array(
+            ->add('isOpen', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('close' => '关闭', 'open' => '开启'),
-                'data' => 'close'
+                'choices' => array(0 => '关闭', 1 => '开启'),
+                'data' => 1
             ))
             ->add('type', 'choice', array(
                 'expanded' => true, 
@@ -53,13 +53,13 @@ class NavigationController extends BaseController
         $form = $this->createFormBuilder($block)
             ->add('name', 'text')
             ->add('url', 'text')
-            ->add('openNewWindow', 'choice', array(
+            ->add('isNewWin', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('no' => '否', 'yes' => '是'),
+                'choices' => array(0 => '否', 1 => '是'),
             ))
-            ->add('status', 'choice', array(
+            ->add('isOpen', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('close' => '关闭', 'open' => '开启'),
+                'choices' => array(0 => '关闭', 1 => '开启'),
             ))
             ->add('type', 'choice', array(
                 'expanded' => true, 
@@ -114,7 +114,6 @@ class NavigationController extends BaseController
                 return $this->createJsonResponse(array('status' => 'ok', 'type'=>$navigation['type'], 'html' => $html));
             }
         }
-
         return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
             'form' => $form->createView()
         ));
