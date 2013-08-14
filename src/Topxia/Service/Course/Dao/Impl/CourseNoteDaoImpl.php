@@ -48,39 +48,32 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $this->getConnection()->fetchAll($sql, array($userId, $status));
     }
     	
-	public function searchNotes($conditions, $orderBys, $start, $limit)
+	public function searchNotes($conditions, $orderBy, $start, $limit)
 	{
-		if (isset($conditions['keywords'])) {
-			$conditions['keywords'] = "%{$conditions['keywords']}%";
-		}
-
-		$builder = $this->createDynamicQueryBuilder($conditions)
+		$builder = $this->createSearchNoteQueryBuilder($conditions)
 			->select('*')
-			->from($this->table, 'note')
-			->andWhere('courseId = :courseId')
-			->andWhere('lessonId = :lessonId')
-			->andWhere('userId = :userId')
-			->andWhere('type = :type')
-			->andWhere('isStick = :isStick')
-			->andWhere('isElite = :isElite')
-			->andWhere('content LIKE :keywords')
+			->addOrderBy($orderBy[0], $orderBy[1])
 			->setFirstResult($start)
 			->setMaxResults($limit);
-		foreach ($orderBys as $orderBy) {
-			$builder->addOrderBy($orderBy[0], $orderBy[1]);
-		}
 
 		return $builder->execute()->fetchAll() ? : array();
 	}
 	
-	public function searchNotesCount($conditions)
+	public function searchNoteCount($conditions)
+	{
+		$builder = $this->createSearchNoteQueryBuilder($conditions)
+			->select('count(id)');
+
+		return $builder->execute()->fetchColumn(0);
+	}
+
+	private function createSearchNoteQueryBuilder($conditions)
 	{
 		if (isset($conditions['keywords'])) {
 			$conditions['keywords'] = "%{$conditions['keywords']}%";
 		}
 
 		$builder = $this->createDynamicQueryBuilder($conditions)
-			->select('count(id)')
 			->from($this->table, 'note')
 			->andWhere('courseId = :courseId')
 			->andWhere('lessonId = :lessonId')
@@ -88,8 +81,9 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 			->andWhere('type = :type')
 			->andWhere('isStick = :isStick')
 			->andWhere('isElite = :isElite')
-			->andWhere('content LIKE ":keywords"');
-		return $builder->execute()->fetchColumn(0);
+			->andWhere('content LIKE :keywords');
+
+		return $builder;
 	}
 
 	public function getNoteCountByUserIdAndCourseId($userId, $courseId)

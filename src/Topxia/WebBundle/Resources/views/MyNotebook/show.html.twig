@@ -25,7 +25,7 @@
               {% else %}
                 <span>该课时已删除</span>
               {% endif %}
-              <span class="pull-right notebook-note-length">共{{ note.contentCount }}字</span>
+              <span class="pull-right notebook-note-length">共{{ note.length }}字</span>
             </div>
             <div class="notebook-note-summary">{{ note.content|plain_text(100) }}</div>
             <div class="notebook-note-body">

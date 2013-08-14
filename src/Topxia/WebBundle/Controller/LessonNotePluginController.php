@@ -12,7 +12,7 @@ class LessonNotePluginController extends BaseController
         
         $course = $this->getCourseService()->getCourse($request->query->get('courseId'));
         $lesson = array('id' => $request->query->get('lessonId'),'courseId' => $course['id']);
-        $note = $this->getCourseNoteService()->findUserLessonNotes($currentUser['id'], $lesson['id']);
+        $note = $this->getCourseNoteService()->getUserLessonNote($currentUser['id'], $lesson['id']);
         $formInfo = array(
             'courseId' => $course['id'], 
             'lessonId' => $lesson['id'],

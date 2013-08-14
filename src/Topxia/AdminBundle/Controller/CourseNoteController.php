@@ -20,7 +20,7 @@ class CourseNoteController extends BaseController
 		$convertConditions = $this->convertConditions($conditions);
         $paginator = new Paginator(
             $request,
-            $this->getNoteService()->searchNotesCount($convertConditions),
+            $this->getNoteService()->searchNoteCount($convertConditions),
             20
         );
         $notes = $this->getNoteService()->searchNotes(

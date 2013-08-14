@@ -13,31 +13,26 @@ class NoteServiceTest extends BaseTestCase
     public function testGetNote()
     {
         $currentUser = $this->getCurrentUser();
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
-            'courseId' => $createdCourse['id'],
+
+        $course = $this->getCourseService()->createCourse(array(
+            'title' => 'test course'
+        ));
+
+        $lesson = $this->getCourseService()->createLesson(array(
+            'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
-        );
-        $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
+        ));
 
-        $noteInfo = array(
-            'content'=>'note_content',
-            'lessonId'=>$createdLesson['id'],
-            'courseId'=>$createdCourse['id']
-        );
-        $createdNote = $this->getNoteService()->addNote($noteInfo);
-        $foundedNote = $this->getNoteService()->getNote($createdNote['id']);
+        $note = $this->getNoteService()->addNote(array(
+            'content'=>'note content',
+            'lessonId'=>$lesson['id'],
+            'courseId'=>$course['id']
+        ));
 
-        $this->assertEquals($currentUser['id'], $foundedNote['userId']);
-        $this->assertEquals($noteInfo['courseId'], $foundedNote['courseId']);
-        $this->assertEquals($noteInfo['lessonId'], $foundedNote['lessonId']);
-        $this->assertEquals($noteInfo['content'], $foundedNote['content']);
-        $this->assertEquals(0, $foundedNote['status']);
+        $foundNote = $this->getNoteService()->getNote($note['id']);
+
+        $this->assertEquals($note['id'], $foundNote['userId']);
     }
 
     /**
@@ -48,150 +43,123 @@ class NoteServiceTest extends BaseTestCase
         $this->getNoteService()->getNote(999);
     }
 
-    public function testAddNote()
-    {
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
-            'courseId' => $createdCourse['id'],
+    public function testGetUserLessonNote()
+    {   
+        $user = $this->getCurrentUser();
+
+        $course = $this->getCourseService()->createCourse(array(
+            'title' => 'test course'
+        ));
+
+        $lesson = $this->getCourseService()->createLesson(array(
+            'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
-        );
-        $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
-        $noteInfo = array(
-            'content'=>'note_content',
-            'lessonId'=>$createdLesson['id'],
-            'courseId'=>$createdCourse['id']
-        );
-        $createdNote = $this->getNoteService()->addNote($noteInfo);
-        $this->assertNotNull($createdNote);
+        ));
+
+        $note = $this->getNoteService()->addNote(array(
+            'content' => 'note_content1',
+            'lessonId' => $lesson['id'],
+            'courseId' => $course['id']
+        ));
+
+        $foundNote = $this->getNoteService()->getUserLessonNote($note['userId'], $note['lessonId']);
+
+        $this->assertEquals($note['id'], $foundNote['id']);
+        $this->assertEquals($note['userId'], $foundNote['userId']);
+        $this->assertEquals($note['lessonId'], $foundNote['lessonId']);
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @todo
      */
-    public function testAddNoteWithNotExistCourse()
+    public function testFindUserCourseNotes()
     {
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
-        $noteInfo = array(
-            'content' => 'note_content',
-            'lessonId' => $createdLesson['id'],
-            'courseId' => 999
-        );
-        $this->getNoteService()->addNote($noteInfo);
+
     }
 
     /**
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testAddNoteWithNotExistLesson()
+     * @todo
+     */
+    public function testsearchNoteCount()
     {
+        $user = $this->getCurrentUser();
         $courseInfo = array(
             'type' => 'online',
             'title' => 'online test course'
         );
         $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
+        $lessonInfo1 = array(
             'courseId' => $createdCourse['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
         );
-        $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
-        $noteInfo = array(
-            'content' => 'note_content',
-            'lessonId' => 999,
-            'courseId' => $createdCourse['id']
-        );
-        $this->getNoteService()->addNote($noteInfo);
-    }
-
-    /**
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testAddNoteTwice()
-    {
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
+        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo1);
+        $lessonInfo2 = array(
             'courseId' => $createdCourse['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
         );
-        $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
-        $noteInfo = array(
-            'content' => 'note_content',
-            'lessonId' => $createdLesson['id'],
-            'courseId' => $createdCourse['id']
-        );
-        $this->getNoteService()->addNote($noteInfo);
-        $this->getNoteService()->addNote($noteInfo);
-    }
-
-    public function testUpdateNote()
-    {
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo);
-        $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo);
-        $noteInfo = array(
-            'content' => 'note_content',
+        $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
+        $createdNote1 = $this->getNoteService()->addNote(array(
+            'content' => 'note_content1',
             'lessonId' => $createdLesson1['id'],
             'courseId' => $createdCourse['id']
-        );
-        $createdNote = $this->getNoteService()->addNote($noteInfo);
-        $updateInfo = array('content'=>'updated content');
-        $updateNote = $this->getNoteService()->updateNote($createdNote['id'], $updateInfo);
-        $this->assertEquals($updateInfo['content'], $updateNote['content']);
+        ));
+
+        $createdNote2 = $this->getNoteService()->addNote(array(
+            'content' => 'note_content1',
+            'lessonId' => $createdLesson2['id'],
+            'courseId' => $createdCourse['id']
+        ));
+
+        $resultCount = $this->getNoteService()->searchNoteCount(array('courseId'=>$createdCourse['id'], 'lessonId'=>$createdLesson2['id']));
+        $this->assertEquals(1, $resultCount);
+        $resultCount = $this->getNoteService()->searchNoteCount(array('courseId'=>$createdCourse['id']));
+        $this->assertEquals(2, $resultCount);
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @todo
      */
-    public function testUpdateNoteWithNotExistNote()
+    public function testSearchNotes()
     {
+
+        $user = $this->getCurrentUser();
         $courseInfo = array(
             'type' => 'online',
             'title' => 'online test course'
         );
         $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo = array(
+        $lessonInfo1 = array(
             'courseId' => $createdCourse['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
         );
-        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo);
-        $noteInfo = array(
-            'content' => 'note_content',
+        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo1);
+        $lessonInfo2 = array(
+            'courseId' => $createdCourse['id'],
+            'title' => 'test lesson 1',
+            'content' => 'test lesson content 1',
+        );
+        $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
+        $createdNote1 = $this->getNoteService()->addNote(array(
+            'content' => 'note_content1',
             'lessonId' => $createdLesson1['id'],
             'courseId' => $createdCourse['id']
-        );
-        $createdNote = $this->getNoteService()->addNote($noteInfo);
-        $updateInfo = array('content'=>'updated content');
-        $this->getNoteService()->updateNote(999, $updateInfo);
+        ));
+
+        $createdNote2 = $this->getNoteService()->addNote(array(
+            'content' => 'note_content1',
+            'lessonId' => $createdLesson2['id'],
+            'courseId' => $createdCourse['id']
+        ));
+
+        $searchedNotes = $this->getNoteService()->searchNotes(
+            array('courseId'=>$createdCourse['id']),
+            'created', 0, 30);
+        $this->assertEquals(2, count($searchedNotes));
+        $this->assertContains($createdNote2, $searchedNotes);
     }
 
     public function testSaveNote()
@@ -219,9 +187,6 @@ class NoteServiceTest extends BaseTestCase
         $this->assertNotNull($savedNote);
     }
 
-    /**
-     * @group current
-     */
     public function testDeleteNote()
     {
         $userInfo = array(
@@ -262,33 +227,6 @@ class NoteServiceTest extends BaseTestCase
         $this->getNoteService()->deleteNote(999);
     }
 
-    public function testGetUserLessonNote()
-    {   
-        $user = $this->getCurrentUser();
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo1 = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo1);
-        $noteInfo = array(
-            'content' => 'note_content1',
-            'lessonId' => $createdLesson1['id'],
-            'courseId' => $createdCourse['id']
-        );
-        $createdNote = $this->getNoteService()->addNote($noteInfo);
-        $note = $this->getNoteService()->findUserLessonNotes($user['id'], $createdLesson1['id']);
-
-        $this->assertEquals($user['id'], $note['userId']);
-        $this->assertEquals($noteInfo['courseId'], $note['courseId']);
-        $this->assertEquals($noteInfo['lessonId'], $note['lessonId']);
-        $this->assertEquals($noteInfo['content'], $note['content']);
-    }
 
     public function testDeleteNotes()
     {   
@@ -332,84 +270,6 @@ class NoteServiceTest extends BaseTestCase
         $result = $this->getNoteService()->deleteNotes($ids);
         $this->assertTrue($result);
 
-    }
-
-    public function testsearchNotesCount()
-    {
-        $user = $this->getCurrentUser();
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo1 = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo1);
-        $lessonInfo2 = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
-        $createdNote1 = $this->getNoteService()->addNote(array(
-            'content' => 'note_content1',
-            'lessonId' => $createdLesson1['id'],
-            'courseId' => $createdCourse['id']
-        ));
-
-        $createdNote2 = $this->getNoteService()->addNote(array(
-            'content' => 'note_content1',
-            'lessonId' => $createdLesson2['id'],
-            'courseId' => $createdCourse['id']
-        ));
-
-        $resultCount = $this->getNoteService()->searchNotesCount(array('courseId'=>$createdCourse['id'], 'lessonId'=>$createdLesson2['id']));
-        $this->assertEquals(1, $resultCount);
-        $resultCount = $this->getNoteService()->searchNotesCount(array('courseId'=>$createdCourse['id']));
-        $this->assertEquals(2, $resultCount);
-    }
-
-    public function testSearchNotes()
-    {
-
-        $user = $this->getCurrentUser();
-        $courseInfo = array(
-            'type' => 'online',
-            'title' => 'online test course'
-        );
-        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
-        $lessonInfo1 = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo1);
-        $lessonInfo2 = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-        );
-        $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
-        $createdNote1 = $this->getNoteService()->addNote(array(
-            'content' => 'note_content1',
-            'lessonId' => $createdLesson1['id'],
-            'courseId' => $createdCourse['id']
-        ));
-
-        $createdNote2 = $this->getNoteService()->addNote(array(
-            'content' => 'note_content1',
-            'lessonId' => $createdLesson2['id'],
-            'courseId' => $createdCourse['id']
-        ));
-
-        $searchedNotes = $this->getNoteService()->searchNotes(
-            array('courseId'=>$createdCourse['id']),
-            'created', 0, 30);
-        $this->assertEquals(2, count($searchedNotes));
-        $this->assertContains($createdNote2, $searchedNotes);
     }
 
     private function getNoteService()

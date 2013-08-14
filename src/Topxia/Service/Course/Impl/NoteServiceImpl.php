@@ -6,102 +6,93 @@ use Topxia\Service\Course\NoteService;
 
 class NoteServiceImpl extends BaseService implements NoteService
 {
-    public function findUserCourseNotes($userId, $courseId)
-    {   
-        $course = $this->getCourseService()->getCourse($courseId);
-        if(empty($course)){
-            throw $this->createServiceException("The Course Is Not Exist!");
-        }
-        $user = $this->getUserService()->getUser($userId);
-        if(empty($user)){
-            throw $this->createServiceException("The User Is Not Exist!");
-        }
-        return $this->getNoteDao()->findNotesByUserIdAndCourseId($user['id'], $course['id']);
-    }
-
 	public function getNote($id)
 	{
-		$note = $this->getNoteDao()->getNote($id);
-		if(empty($note)) {
-            throw $this->createServiceException("The Note Is Not Exist!");
-        }
-        return $note;
+		return $this->getNoteDao()->getNote($id);
     }
 
+    public function getUserLessonNote($userId, $lessonId)
+    {
+        return $this->getNoteDao()->getNoteByUserIdAndLessonId($userId, $lessonId);
+    }
+
+    public function findUserCourseNotes($userId, $courseId)
+    {   
+        return $this->getNoteDao()->findNotesByUserIdAndCourseId($userId, $courseId);
+    }
+
+    public function searchNotes($conditions, $sort, $start, $limit)
+    {
+        switch ($sort) {
+            case 'created':
+                $orderBy = array('createdTime', 'DESC');
+                break;
+            case 'updated':
+                $orderBy =  array('updatedTime', 'DESC');
+                break;
+            default:
+                throw $this->createServiceException('参数sort不正确。');
+        }
+
+        return $this->getNoteDao()->searchNotes($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchNoteCount($conditions)
+    {
+        return $this->getNoteDao()->searchNoteCount($conditions);
+    }
+
+    /**
+     *类似这样的，提交数据保存到数据的流程是：
+     *
+     *  1. 检查参数是否正确，不正确就抛出异常
+     *  2. 过滤数据
+     *  3. 插入到数据库
+     *  4. 更新其他相关的缓存字段
+     */
 	public function saveNote(array $note)
 	{
-		$currentUser = $this->getCurrentUser();
-        $result = $this->findUserLessonNotes($currentUser['id'], $note['lessonId']);
-        if(!$result){
-            return $this->addNote($note);
-        } else {
-            return $this->updateNote($result['id'], $note);
-        }
-	}
-
-	public function addNote($note)
-	{
-		$currentUser = $this->getCurrentUser();
-
-        /*添加的时候允许笔记内容为空*/
-        if(empty($note['content'])){
-            $note['content'] = '';
+		$user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
         }
 
-        $course = $this->getCourseService()->getCourse($note['courseId']);
-        if(empty($course)){
-            throw $this->createServiceException("The Course Is Not Exist!");
+        if (!ArrayToolkit::requireds($note, array('lessonId', 'courseId', 'content'))) {
+            throw $this->createServiceException('缺少必要的字段，保存笔记失败');
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId']);
         if(empty($lesson)){
-            throw $this->createServiceException("The Lesson Is Not Exist!");
+            throw $this->createServiceException('课时不存在，保存笔记失败');
         }
 
-        $resultNote = $this->getNoteDao()->getNoteByUserIdAndLessonId($currentUser['id'],$note['lessonId']);
-		if ($resultNote) {
-            throw $this->createServiceException('The Note Is Already Exist!');	
-        }
+        $existNote = $this->getUserLessonNote($user['id'], $note['lessonId']);
         
-        $courseMember = $this->getCourseService()->getCourseMember($course['id'], $currentUser['id']);
-        $this->getCourseService()->updateCourseMember($courseMember['id'], 
-            array("notesNum"=>$courseMember['notesNum']+1,
-                "notesLastUpdateTime"=>time()));
+        $fields = array();
+        // @todo 还需要过滤html标签，防止注入
+        $fields['content'] = empty($note['content']) ? '' : $note['content'];
+        $fields['length'] = $this->calculateContnentLength($note['content']);
 
-        $content = strip_tags($note['content']);
-        $content = $this->DeleteHTML($content);
-        $note['contentCount'] = mb_strlen($content,'UTF8');
-        $note['createdTime'] = $note['updatedTime'] = time();
-        $note['userId'] = $currentUser['id'];
-        $note['status'] = self::NOTE_TYPE_PRIVATE;
+        if (!$existNote) {
+            $fields['userId'] = $user['id'];
+            $fields['createdTime'] = time();
+            $note = $this->getNoteDao()->addNote($note);
+        } else {
+            $note = $this->getNoteDao()->updateNote($existNote['id'], $fields);
+        }
 
-		return $this->getNoteDao()->addNote($note);
+        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        if ($member) {
+            $memberFields = array();
+            $memberFields['noteLastUpdateTime'] = time();
+            if (!$existNote) {
+                $memberFields['noteNum'] = $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId']);
+            }
+            $this->getCourseService()->updateCourseMember($member['id'], $memberFields);
+        }
+
+        return $note;
 	}
-
-    public function updateNote($id,$note)
-    {
-        $resultNote = $this->getNote($id);
-        if(empty($resultNote)) {
-            throw $this->createServiceException("The Note Is Not Exist!");
-        }
-        if (empty($note['id'])) {
-            unset($note['id']);
-        }
-        
-        $courseMember = $this->getCourseService()->getCourseMember($resultNote['courseId'], $resultNote['userId']);
-        $this->getCourseService()->updateCourseMember($courseMember['id'], array("notesLastUpdateTime"=>time()));
-
-        $noteInfo = array_merge(array('updatedTime'=> time()),$note);
-        $content = strip_tags($noteInfo['content']);
-        $content = $this->DeleteHTML($content);
-        $noteInfo['contentCount'] = mb_strlen($content,'UTF8');
-        return $this->getNoteDao()->updateNote($id,$noteInfo);
-    }
-
-    public function findUserLessonNotes($userId,$lessonId)
-    {        
-        return $this->getNoteDao()->getNoteByUserIdAndLessonId($userId,$lessonId);
-    }
 
 	public function deleteNote($id)
 	{
@@ -113,10 +104,17 @@ class NoteServiceImpl extends BaseService implements NoteService
         if ($member) {
             $noteNumber = $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId']);
             $this->getCourseService()->updateCourseMember($member['id'], array(
-                'notesNum' => $noteNumber,
+                'noteNum' => $noteNumber,
             ));
         }
 	}
+
+    public function deleteNotes(array $ids)
+    {
+        foreach ($ids as $id) {
+            $this->deleteNote($id);
+        }
+    }
 
     private function tryManageNote($id)
     {
@@ -145,71 +143,10 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $user['id'] == $note['userId'];
     }
 
-
-
-
-	public function searchNotes($conditions, $sort, $start, $limit)
-	{
-		switch ($sort) {
-			case 'created':
-				$orderBys = array(
-                    array('createdTime', 'DESC'),
-                );
-				break;
-            case 'update':
-                $orderBys = array(
-                    array('updatedTime', 'DESC'),
-                );
-                break;
-			default:
-				throw $this->createServiceException('参数sort不正确。');
-		}
-		return $this->getNoteDao()->searchNotes($conditions, $orderBys, $start, $limit);
-	}
-
-
-	public function searchNotesCount($conditions)
-	{
-		return $this->getNoteDao()->searchNotesCount($conditions);
-	}
-    
-	public function deleteNotes($ids)
-	{
-        $result = true;
-        if(empty($ids)){
-             throw $this->createServiceException("Please select thread item !");
-        }
-
-       	foreach ($ids as $id) {
-            $note = $this->getNoteDao()->getNote($id);
-            $courseMember = $this->getCourseService()->getCourseMember($note['courseId'], $note['userId']);
-            $latestNote = $this->getUserLatestNoteInCourse($note['userId'], $note['courseId']);
-            if(empty($latestNote)){
-                $this->getCourseService()->updateCourseMember($courseMember['id'], array(
-                    "notesNum"=>$courseMember['notesNum']-1,
-                    "notesLastUpdateTime"=> 0));
-            } else {
-                $this->getCourseService()->updateCourseMember($courseMember['id'], array(
-                    "notesNum"=>$courseMember['notesNum']-1,
-                    "notesLastUpdateTime"=> time()));
-            }
-            
-            $deletedResult = $this->getNoteDao()->deleteNote($id);
-            if($deletedResult == 0){
-               $result = false; 
-            }
-        }
-        return $result;
-	}
-    
-    private function DeleteHTML($str)
+    private function calculateContnentLength($content)
     {
-        $str = str_replace("<br/>","",$str);
-        $str = str_replace("\\t","",$str); 
-        $str = str_replace("\\r\\n","",$str); 
-        $str = str_replace("\\r","",$str); 
-        $str = str_replace("\\n","",$str); 
-        return trim($str);
+        $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '',$str)));
+        return mb_strlen($content, 'utf-8');
     }
 
     private function getNoteDao()
