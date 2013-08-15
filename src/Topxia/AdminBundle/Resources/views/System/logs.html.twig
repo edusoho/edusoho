@@ -8,15 +8,15 @@
 
 {{ web_macro.flash_messages() }}
 
-<form id="log-search-form" class="well well-small" action="{{ path('admin_setting_logs') }}" 
+<form class="well well-small" action="{{ path('admin_setting_logs') }}" 
 method="get">
 <div class="row">
   <div class="col-lg-2">
-    {{ form_widget(form.start, {attr:{'readonly':'readonly','placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+    {{ form_widget(form.startDateTime, {attr:{'placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
   </div>
 
   <div class="col-lg-2">
-    {{ form_widget(form.end, {attr:{'readonly':'readonly','placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+    {{ form_widget(form.endDateTime, {attr:{'placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
   </div>
 
   <div class="col-lg-2">
@@ -25,7 +25,7 @@ method="get">
 
 
   <div class="col-lg-3">
-    {{ form_widget(form.keyword, {attr:{placeholder:'用户搜索， 非模糊搜索'}}) }}
+    {{ form_widget(form.nickname, {attr:{placeholder:'用户搜索， 非模糊搜索'}}) }}
   </div>  
 
   <button class="btn btn-primary">搜索</button>
@@ -35,7 +35,6 @@ method="get">
 
 {% if logs %}
 	{% set levels = {'info':'提示', 'warning':'警告', 'error':'错误'} %}
-
 	<table class="table table-hover">
 			<tr>
 				<th>用户</th>

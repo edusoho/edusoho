@@ -4,7 +4,7 @@ define(function(require, exports, module){
 	require("$");
 
 	exports.run = function(){
-		$("#form_start, #form_end").datetimepicker();		
+		$("#form_startDateTime, #form_endDateTime").datetimepicker();		
 	};
 
 });

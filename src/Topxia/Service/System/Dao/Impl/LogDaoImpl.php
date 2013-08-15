@@ -11,34 +11,36 @@ class LogDaoImpl extends BaseDao implements LogDao
 
 	public function addLog($log)
 	{
-		return $this->insert($log);
+        $affected = $this->getConnection()->insert($this->table, $log);
+
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert log error.');
+        }
 	}
 
 	public function searchLogs($conditions, $sorts, $start, $limit)
 	{
 		$builder = $this->createLogQueryBuilder($conditions)
-				        ->select('*')
-				        ->from($this->table, $this->table);
+			        ->select('*')
+			        ->from($this->table, $this->table);
 
         foreach ($sorts as $field => $value) {
         	$builder->addOrderBy($field, $value);
         }
 
-		$builder->setFirstResult($start)
-				->setMaxResults($limit);    
-       return $builder->execute()->fetchAll() ? : array();
-	}
+		$builder->setFirstResult($start)->setMaxResults($limit);    
 
+       	return $builder->execute()->fetchAll() ? : array();
+	}
 
 	public function searchLogCount($conditions)
 	{
 		$builder = $this->createLogQueryBuilder($conditions)
-						->select('count(`id`) AS count')
-						->from($this->table, $this->table);
+					->select('count(`id`) AS count')
+					->from($this->table, $this->table);
 
 		return $builder->execute()->fetchColumn(0);
 	}
-
 
 	protected function createLogQueryBuilder($conditions)
 	{
@@ -47,10 +49,8 @@ class LogDaoImpl extends BaseDao implements LogDao
 		$builder->andWhere('action = :action');
 		$builder->andWhere('level = :level');
 		$builder->andWhere('userId = :userId');
-		$builder->andWhere('createdTime >= :startDateTime');
+		$builder->andWhere('createdTime > :startDateTime');
 		$builder->andWhere('createdTime < :endDateTime');
 		return $builder;
 	}
-
-
 }
