@@ -3,10 +3,10 @@
     <td>{{ block.title }}</td>
     <td>{{ block.updateTime|date('Y-n-d H:i:s') }} {{users[block.userId].nickname}}</td>
     <td>
-        <button class="btn btn-mini btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">更新内容</button>
+        <button class="btn btn-small btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">更新内容</button>
     </td>
     <td>
-        <button class="btn btn-mini btn-primary edit-btn" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal">设置</button>
-       <button class="btn btn-mini delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">删除</button>
+        <button class="btn btn-small btn-primary edit-btn" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal">设置</button>
+       <button class="btn btn-small delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">删除</button>
     </td>
 </tr>

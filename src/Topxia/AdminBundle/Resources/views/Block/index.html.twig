@@ -5,9 +5,10 @@
 {% set menu = 'admin_block' %}
 {% set script_controller = 'block/list' %}
 {% block main %}
-<div class="page-header"><h1>编辑区管理</h1></div>
-
-<button class="btn btn-info btn-mini pull-right" id="add-block-btn" data-toggle="modal" data-target="#modal" data-url="/admin/block/create">新增编辑区</button>
+<div class="page-header">
+  <button class="btn btn-info btn-small pull-right" id="add-block-btn" data-toggle="modal" data-target="#modal" data-url="/admin/block/create">新增编辑区</button>  
+  <h1>编辑区管理</h1>
+</div>
 
 <table id="block-table" class="table table-striped">
   <thead>
