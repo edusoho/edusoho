@@ -26,11 +26,21 @@ class LogServiceImpl extends BaseService implements  LogService
 		return $this->addLog('error', $module, $action, $message);
 	}
 
-	public function searchLogs($conditions, $sorts, $start, $limit)
+	public function searchLogs($conditions, $sort, $start, $limit)
 	{
 		$conditions = $this->prepareSearchConditions($conditions);
 
-		return $this->getLogDao()->searchLogs($conditions, $sorts, $start, $limit);
+		switch ($sort) {
+			case 'created':
+				$sort = 'createdTime';
+				break;
+			
+			default:
+				throw $this->createServiceException('参数sort不正确。');
+				break;
+		}
+
+		return $this->getLogDao()->searchLogs($conditions, $sort, $start, $limit);
 	}
 
 	public function searchLogCount($conditions)
@@ -74,10 +84,15 @@ class LogServiceImpl extends BaseService implements  LogService
         if ($conditions['startDateTime'] && $conditions['endDateTime']) {
 			$conditions['startDateTime'] = strtotime($conditions['startDateTime']);
 			$conditions['endDateTime'] = strtotime($conditions['endDateTime']); 
+        } else {
+        	unset($conditions['startDateTime']);
+        	unset($conditions['endDateTime']);
         }
 
         if (in_array($conditions['level'], array('info', 'warning', 'error'))) {
         	$conditions['level'] = $conditions['level'];
+        } else {
+        	unset($conditions['level']);
         }
 
 		return $conditions;

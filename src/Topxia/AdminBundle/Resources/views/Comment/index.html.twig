@@ -1,4 +1,7 @@
 {% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}评论管理 - {{ parent() }}{% endblock %}
+
 {% import 'TopxiaWebBundle::macro.html.twig' as m %}
 {% set menu = 'comment' %}
 {% set script_controller = 'comment/list' %}

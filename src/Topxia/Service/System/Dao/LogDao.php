@@ -6,7 +6,7 @@ interface LogDao
 {
 	public function addLog($log);
 
-	public function searchLogs($conditions, $sorts, $start, $limit);
+	public function searchLogs($conditions, $sort, $start, $limit);
 	
 	public function searchLogCount($conditions);
 }
