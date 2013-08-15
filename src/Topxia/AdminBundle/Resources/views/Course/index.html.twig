@@ -67,13 +67,13 @@
        <td> {{ user.nickname|default('--') }} </td>
        <td> {{ course.createdTime|date('Y-n-d H:i:s') }} </td>
        <td>
-        <a class="btn btn-mini btn-danger delete-btn" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}">删除</a>
+        <a class="btn btn-small btn-danger delete-btn" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}">删除</a>
         {% if course.status == "published" %}
-        <a class="btn btn-mini btn-warning close-btn" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}">关闭</a>
+        <a class="btn btn-small btn-warning close-btn" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}">关闭</a>
        {% elseif course.status == "editing" %} 
-        <a class="btn btn-mini btn-warning close-btn" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}">关闭</a>
+        <a class="btn btn-small btn-warning close-btn" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}">关闭</a>
        {% elseif course.status == "closed" %}
-        <a class="btn btn-mini btn-success open-btn" href="javascript:" data-url="{{ path('admin_course_open', {id:course.id}) }}">开启</a>
+        <a class="btn btn-small btn-success open-btn" href="javascript:" data-url="{{ path('admin_course_open', {id:course.id}) }}">开启</a>
        {% endif %}
 
        </td>
