@@ -1,0 +1,73 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menu = 'logs' %}
+{% set script_controller = 'log/list' %}
+{% block main %}
+
+<div class="page-header"><h1>日志记录</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-small" action="{{ path('admin_setting_logs') }}" 
+method="get">
+<div class="row">
+  <div class="col-lg-2">
+    {{ form_widget(form.startDateTime, {attr:{'placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+  </div>
+
+  <div class="col-lg-2">
+    {{ form_widget(form.endDateTime, {attr:{'placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+  </div>
+
+  <div class="col-lg-2">
+    {{ form_widget(form.level) }}
+  </div>  
+
+
+  <div class="col-lg-3">
+    {{ form_widget(form.nickname, {attr:{placeholder:'用户搜索， 非模糊搜索'}}) }}
+  </div>  
+
+  <button class="btn btn-primary">搜索</button>
+  {{ form_rest(form) }}
+</div>
+</form>
+
+{% if logs %}
+	{% set levels = {'info':'提示', 'warning':'警告', 'error':'错误'} %}
+	<table class="table table-hover">
+			<tr>
+				<th>用户</th>
+				<th>模块</th>
+				<th>动作</th>
+				<th>信息</th>
+				<th>等级</th>
+				<th>时间</th>
+			</tr>		
+
+		{% for log in logs %}
+			{% if log.level == "info" %}
+				<tr class="success">
+			{% elseif log.level == "warning" %}
+				<tr class="warning">
+			{% elseif log.level == "error" %}
+				<tr class="danger">
+			{% endif %}
+				<td>{{ users[log.userId].nickname }}</td>
+				<td>{{ log.module }}</td>
+				<td>{{ log.action }}</td>
+				<td>{{ log.message }}</td>
+				<td>{{ levels[log.level] }}</td>
+				<td>{{ log.createdTime|date("Y-m-d H:i:s") }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	<p>无日志记录</p>
+{% endif %}
+
+{% if paginator is defined %}
+	{{ web_macro.paginator(paginator) }}
+{% endif %}
+
+{% endblock %}

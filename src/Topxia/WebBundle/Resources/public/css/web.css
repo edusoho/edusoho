@@ -1439,6 +1439,41 @@ body {
 }
 
 
+.quiz-manager {
+	height: 360px;
+	overflow-x: hidden; 
+	overflow-y:hidden;
+	border: 1px solid #ddd;
+	position: relative;
+}
+
+.quiz-manager-side {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 250px;
+	/*background: #f3f3f3;*/
+	border-right: 1px solid #ddd;
+}
+
+.quiz-manager-side-header {
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+	line-height: 30px;
+
+}
+
+.quiz-manager-side-title {
+	font-size: 14px;
+	color: #666;
+	font-weight: bold;
+}
+
+.quiz-manager-side  .list-group-item {
+	padding-right: 10px;
+}
+
 /**
  * MISC
  */
