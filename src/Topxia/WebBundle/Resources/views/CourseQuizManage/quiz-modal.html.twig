@@ -5,33 +5,54 @@
 {% block title %}测验管理{% endblock %}
 {% block body %}
 
-<div id="quiz-manage-container">
+<div class="quiz-manager" id="quiz-manager">
+  <div class="quiz-manager-side">
+    <div class="quiz-manager-side-header">
+      <button data-role="quiz-item-add" type="button" class="btn btn-small btn-default pull-right">新增题目</button>
+      <span class="quiz-manager-side-title">题目列表</span>
+    </div>
+
+    <div class="list-group">
+
+     {% for quizItem in quizItems %}
+          <a class="list-group-item" id="quiz-item-id-{{quizItem.id}}" href="javascript:;" data-role="quiz-item-edit" data-url="{{ path('course_manage_quiz_item_edit', {quizItemId:quizItem.id}) }}" >
+            {{quizItem.description | plain_text(20)}}
+            <button class="btn btn-mini btn-link pull-right" data-role="quiz-item-delete" data-url="{{ path('course_manage_quiz_item_delete', {quizItemId:quizItem.id}) }}">
+            <i class="glyphicon glyphicon-trash"></i></button>
+          </a>
+          
+        
+      {% endfor %}
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+  <div class="quiz-manager-main">
+  </div>
+
 
   <input type="hidden" id="courseId" value={{course.id}}>
   <input type="hidden" id="lessonId" value={{lesson.id}}>
 
-    <div class="row">
-      <div class="col-lg-4 two-col-side" id="about-quiz-item-created">
+    <div class="row" style="display:none;">
+      <div class="col-lg-4" id="about-quiz-item-created">
         <div>
+
+          
+
+
           {% if quizItems %}
           <span class="notice-quiz-items" value="yes"> 已添加的测验题目: </span>
-            <ol class="created-quiz-items">
+            <ol class="list-group created-quiz-items">
 
-              {% for quizItem in quizItems %}
-
-                <li id="quiz-item-id-{{quizItem.id}}">
-                  
-                  <a href="javascript:;" data-role="quiz-item-edit" data-url="{{ path('course_manage_quiz_item_edit', {quizItemId:quizItem.id}) }}" class="list-group-item">
-                    <p class="list-group-item-text">
-                    {{quizItem.description | plain_text(20)}}
-                    </p>
-                  </a>
-                  
-                  <button class="btn btn-danger" data-role="quiz-item-delete" data-url="{{ path('course_manage_quiz_item_delete', {quizItemId:quizItem.id}) }}">
-                    <i class="glyphicon glyphicon-trash"></i></button>
-                
-                </li>
-              {% endfor %}
+ 
             </ol>
           {% else %}
            <span class="notice-quiz-items" value="no">暂时没有本课程的测验题!</span>
@@ -40,11 +61,11 @@
           {% endif %}
         </div>
 
-        <button data-role="quiz-item-add" type="button" class="btn btn-primary">增加新的测验问题</button>
+        
 
       </div>
 
-      <div class="col-lg-8 two-col-main" id="quiz-item-block-edit">
+      <div class="col-lg-8" id="quiz-item-block-edit">
         <form id="quiz-form" class="form-horizontal quiz-form" method="post"
             action="{{ path('course_manage_quiz_item_create', {courseId:course.id, lessonId:lesson.id}) }}">
 

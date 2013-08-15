@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         
         var quizModalWiget = new QuizModalWiget({
-            element: '#quiz-manage-container'
+            element: '#quiz-manager'
         }).render();
 
     };

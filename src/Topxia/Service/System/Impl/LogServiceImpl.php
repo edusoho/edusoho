@@ -40,8 +40,24 @@ class LogServiceImpl extends BaseService implements  LogService
 		return $this->getLogDao()->searchLogCount($conditions);
 	}
 
+	private function prepareSearchConditions($conditions)
+	{
+        if (!empty($conditions['nickname'])) {
+            $existsUser = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $userId = $existsUser['id'] ? : -1;
+            $conditions['userId'] = $userId;
+        }
 
-	protected function addLog($module, $action, $message, $level)
+        if ($conditions['startDateTime'] && $conditions['endDateTime']) {
+			$conditions['startDateTime'] = strtotime($conditions['startDateTime']);
+			$conditions['endDateTime']   = strtotime($conditions['endDateTime']); 
+        }
+
+		return $conditions;
+	}
+
+
+	protected function addLog($level, $module, $action, $message)
 	{
 		return $this->getLogDao()->addLog(array(
 			'module'		=> $module,
