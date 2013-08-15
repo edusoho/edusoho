@@ -18,18 +18,15 @@ class LogDaoImpl extends BaseDao implements LogDao
         }
 	}
 
-	public function searchLogs($conditions, $sorts, $start, $limit)
+	public function searchLogs($conditions, $sort, $start, $limit)
 	{
 		$builder = $this->createLogQueryBuilder($conditions)
 			        ->select('*')
 			        ->from($this->table, $this->table);
 
-        foreach ($sorts as $field => $value) {
-        	$builder->addOrderBy($field, $value);
-        }
+        $builder->addOrderBy($sort, "DESC");
 
 		$builder->setFirstResult($start)->setMaxResults($limit);    
-
        	return $builder->execute()->fetchAll() ? : array();
 	}
 

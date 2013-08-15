@@ -255,7 +255,7 @@ class SettingController extends BaseController
 
         $logs = $this->getLogService()->searchLogs(
             $conditions, 
-            array('createdTime'=>'DESC'), 
+            'created', 
             $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
