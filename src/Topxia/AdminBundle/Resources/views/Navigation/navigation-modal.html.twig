@@ -40,17 +40,17 @@
 
     <div class="row control-group">
           <div class="col-lg-3 control-label">{{ form_label(form.isNewWin, '新开窗口:') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.isNewWin) }}</div>
+          <div class="col-lg-8 controls radios"> {{ form_widget(form.isNewWin) }}</div>
     </div>
 
      <div class="row control-group">
           <div class="col-lg-3 control-label">{{ form_label(form.isOpen, '状态:') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.isOpen) }}</div>
+          <div class="col-lg-8 controls radios"> {{ form_widget(form.isOpen) }}</div>
     </div>
 
     <div class="row control-group">
           <div class="col-lg-3 control-label">{{ form_label(form.type, '类型:') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.type) }}</div>
+          <div class="col-lg-8 controls radios"> {{ form_widget(form.type) }}</div>
     </div>
 
     {{ form_rest(form) }}
