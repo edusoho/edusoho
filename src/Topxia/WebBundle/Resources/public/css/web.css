@@ -46,6 +46,7 @@ a.link-muted {
 .width-input-mini {width: 50px;}
 .width-input-small {width: 100px;}
 .width-input-large {width:200px;}
+.width-input-xlarge {width:300px;}
 .width-full {width:100%;}
 
 
@@ -1447,6 +1448,10 @@ body {
 	position: relative;
 }
 
+.quiz-manager .ps-scrollbar-x {
+	display: none;
+}
+
 .quiz-manager-side {
 	position: absolute;
 	top: 0;
@@ -1461,7 +1466,16 @@ body {
 	border-bottom: 1px solid #ddd;
 	padding: 10px;
 	line-height: 30px;
+}
 
+.quiz-manager-side-body {
+	position: absolute;
+	top: 51px;
+	left: 0;
+	bottom: 0;
+	width: 249px;
+	overflow-y: hidden;
+	overflow-x: hidden;
 }
 
 .quiz-manager-side-title {
@@ -1471,17 +1485,72 @@ body {
 }
 
 .quiz-manager-side  .list-group-item {
-	padding-right: 10px;
 }
 
 .quiz-manager-main {
 	position: absolute;
 	top: 0;
-	left: 260px;
+	left: 270px;
 	bottom: 0;
 	right: 0;
+	overflow: hidden;
 }
 
+.quiz-manager-list {
+
+}
+
+.quiz-manager-list-item {
+	position: relative;
+	border-width: 0 0 1px 0;
+}
+
+.quiz-manager-list-item .item-description {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 40px;
+}
+
+.quiz-manager-list a.active {
+	z-index: 0;
+}
+
+.quiz-manager-list .item-delete-btn {
+	position: absolute;
+	top: 20px;
+	right: 6px;
+	color: #999;
+}
+.quiz-manager-list .active .item-delete-btn {
+	color: #fff;
+}
+
+.quiz-item-form .choice-delete-btn {
+	color: #999;
+}
+
+.quiz-item-form .choice-add-btn {
+	margin-left: 50px;
+}
+
+.quiz-item-form .control-label {
+	text-align: left;
+}
+
+.quiz-item-form .item-input {
+	width: 350px;
+	display: inline-block;
+}
+
+.quiz-item-form .choice-label {
+	margin-right: 10px;
+}
+
+.quiz-item-form .choice-answer-label {
+	font-weight: normal;
+	margin-left: 10px;
+}
 
 
 /**

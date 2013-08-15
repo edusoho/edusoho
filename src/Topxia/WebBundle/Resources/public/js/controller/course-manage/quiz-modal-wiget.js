@@ -1,15 +1,15 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
-    var Validator = require('bootstrap.validator');
     var Handlebars = require('handlebars');
+    var Validator = require('bootstrap.validator');
+    require('jquery.perfect-scrollbar');
 
     var QuizModalWiget = Widget.extend({
 
         attrs: {
-            form : '#quiz-form',
+            form : null,
             validator : null
         },
 
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            var $form = $('#quiz-form');
+            var $form = $('#quiz-item-form');
 
             this.set('form', $form);
             this.set('validator', this._createValidator($form));
@@ -32,6 +32,11 @@ define(function(require, exports, module) {
             this.$('[data-role=quiz-item-add]').click();
 
             this.renderItems();
+
+            this.$('.quiz-manager-side-body').perfectScrollbar();
+            this.$('.quiz-manager-main').perfectScrollbar();
+
+
         },
 
         renderItems: function() {
@@ -188,6 +193,7 @@ define(function(require, exports, module) {
             });
 
             validator.on('formValidated', function(error, msg, $form) {
+                console.log(error, msg);
 
                 if (error || !self.prepareFormData()) {
                     return false;
