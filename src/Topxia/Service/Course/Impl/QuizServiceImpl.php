@@ -8,25 +8,58 @@ use Topxia\Common\ArrayToolkit;
 class QuizServiceImpl extends BaseService implements QuizService
 {
 
-    public function createLessonQuizItem($courseId, $lessonId, $lessonQuizItemInfo)
+    public function createItem(array $item)
     {
-        $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $lessonQuizItemInfo['courseId'] = $lesson['courseId'];
-        $lessonQuizItemInfo['lessonId'] = $lesson['id'];
-        $lessonQuizItemInfo['userId'] = $this->getCurrentUser()->id;
-        $lessonQuizItemInfo['createdTime'] = time(); 
+        $course = $this->getCourseService()->tryManageCourse($item['courseId']);
 
-        $quizItemAnswers = explode(";", $lessonQuizItemInfo['answers']);
-        if(count($quizItemAnswers) > 1){
-            $lessonQuizItemInfo['type'] = 'multiple';
-        } else {
-            $lessonQuizItemInfo['type'] = 'single';
+        $item = ArrayToolkit::parts($item, array('courseId', 'lessonId', 'description', 'level', 'choices', 'answers'));
+
+        $lesson = $this->getCourseService()->getCourseLesson($item['courseId'], $item['lessonId']);
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$item['lessonId']})不存在，创建测验题目失败！");
         }
 
-        $lessonQuizItem = $this->getCourseQuizItemDao()->addQuizItem($lessonQuizItemInfo);
-        $lessonQuizItem['description'] = strip_tags($lessonQuizItem['description']);
-        return $lessonQuizItem;
+        $this->checkItem($item);
+
+        $item['type'] = count($item['answers']) > 1 ? 'multiple' : 'single';
+        $item['userId'] = $this->getCurrentUser()->id;
+        $item['createdTime'] = time();
+
+        return ItemSerialize::unserialize(
+            $this->getCourseQuizItemDao()->addQuizItem(ItemSerialize::serialize($item))
+        );
     }
+
+    public function updateItem($id, $fields)
+    {
+        $item = $this->getCourseQuizItemDao()->getQuizItem($id);
+        if(!$item){
+            throw $this->createServiceException("问题(#{$id})不存在，更新问题失败!");
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('description', 'level', 'choices', 'answers'));
+
+        $this->checkItem($fields);
+
+        $fields['type'] = count($fields['answers']) > 1 ? 'multiple' : 'single';
+
+        return ItemSerialize::unserialize(
+            $this->getCourseQuizItemDao()->updateQuizItem($item['id'], ItemSerialize::serialize($fields))
+        );
+    }
+
+    public function deleteItem($id)
+    {
+        $item = $this->getCourseQuizItemDao()->getQuizItem($id);
+        if(!$item){
+            throw $this->createServiceException("测验问题(#{$id})不存在，删除问题失败!");
+        }
+
+        $this->getCourseService()->tryManageCourse($item['courseId']);
+
+        $this->getCourseQuizItemDao()->deleteQuizItem($id);
+    }
+
 
     public function getQuizItem($lessonQuizItemId)
     {
@@ -40,18 +73,9 @@ class QuizServiceImpl extends BaseService implements QuizService
 
     public function findLessonQuizItems($courseId, $lessonId)
     {
-        $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $lessonQuizItems = $this->getCourseQuizItemDao()->findQuizItemsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
-        
-        foreach ($lessonQuizItems as $key => &$lessonQuizItem) {
-            $lessonQuizItem['description'] = strip_tags($lessonQuizItem['description']);
-        }
-
-        if(!empty($lessonQuizItems)){
-            return $lessonQuizItems;
-        } else {
-            return null;
-        }
+        return ItemSerialize::unserializes(
+            $this->getCourseQuizItemDao()->findQuizItemsByCourseIdAndLessonId($courseId, $lessonId)
+        );
     }
 
     public function getUserLessonQuiz($courseId, $lessonId, $userId)
@@ -75,7 +99,6 @@ class QuizServiceImpl extends BaseService implements QuizService
         if(!empty($quizItemIds)){
             $quizItems = $this->getCourseQuizItemDao()->findQuizItemsByIds($quizItemIds);
             foreach ($quizItems as $key => &$item) {
-                $item['Number2Chinese'] = $this->number2Chinese($key+1);
                 $item['choices'] = json_decode($item['choices']);
                 $item['choices'] = $this->randomFullArray($item['choices']);
                 $item['description'] = strip_tags($item['description']);
@@ -139,32 +162,7 @@ class QuizServiceImpl extends BaseService implements QuizService
         return array("score"=>$score, "correctCount"=>$correctAnswersCount, "wrongCount"=> ($itemIdsCount - $correctAnswersCount));
     }
 
-    public function editLessonQuizItem($lessonQuizItemId, $fields)
-    {
-        $lessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($lessonQuizItemId);
-        if(!$lessonQuizItem){
-            throw $this->createServiceException("编辑问题失败，本问题不存在!");
-        }
-        if(isset($fields['choices'])){
-            $fields['choices'] = json_encode($fields['choices']);
-        }
-        $quizItemAnswers = explode(";", $fields['answers']);
-        if(count($quizItemAnswers) > 1){
-            $fields['type'] = 'multiple';
-        } else {
-            $fields['type'] = 'single';
-        }
-        return $this->getCourseQuizItemDao()->updateQuizItem($lessonQuizItem['id'], $fields);
-    }
 
-    public function deleteQuizItem($id)
-    {
-        $lessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($id);
-        if(!$lessonQuizItem){
-            throw $this->createServiceException("删除问题失败，本问题不存在!");
-        }
-        return $this->getCourseQuizItemDao()->deleteQuizItem($id);
-    }
 
     public function deleteQuiz($quizId)
     {
@@ -293,113 +291,21 @@ class QuizServiceImpl extends BaseService implements QuizService
         return array('quiz'=>$lessonQuiz, 'item'=>$lessonQuizItem);
     }
 
-    private function number2Chinese($num, $m = 1) 
+    private function checkItem($item)
     {
-        $numbers = array(0 => "零","一","二","三","四","五","六","七","八","九");
-         // array(0=>"零","壹","贰","叁","肆","伍","陆","柒","捌","玖");
-        $unit1 = array(0 => "","十","百","千");
-         // var $unit1 = array(1=>"拾","佰","仟");
-        $unit2 = array(0 => "","万","亿");
-      
-        if(!is_numeric($num)){
-            exit("Number Error!");
+        if (!in_array($item['level'], array('low', 'normal', 'high'))) {
+            throw $this->createServiceException("level参数不正确");
         }
 
-        $num = trim(strval($num));
-        $zs = null;
-        $xs = null;
-        $chn = null;
-        $len = strlen($num);
-        $i = strpos($num,".");
+        if (!is_array($item['choices']) || count($item['choices']) < 2) {
+            throw $this->createServiceException("choices参数不正确");
+        }
 
-        if(is_numeric($i)){
-           $zs = $i == 0?"0":substr($num,0,$i);
-           if($i == 0){
-            $zs = "0";
-            $xs = substr($num,1);
-           }else if($i == $len - 1){
-            $zs = substr($num,0,$i);
-            ;
-           }else{
-            $zs = substr($num,0,$i);
-            $xs = substr($num,$i + 1);
-           }
-          } else{
-           $zs = $num;
+        if (!is_array($item['answers']) || empty($item['answers'])) {
+            throw $this->createServiceException("answers参数不正确");
         }
-      
-        if($zs){
-            $i = 0;
-            $len = strlen($zs);
-            while($i < $len && $zs[$i] == "0"){
-                $i++;
-            }
-            if($i){
-                $zs = substr($zs,$i);
-            }
-        }
-      
-        if($xs){
-            $i = strlen($xs) - 1;
-            while($i && $xs[$i] == "0"){
-                $i--;
-            }
-            if($i > -1){
-                $xs = substr($xs,0,$i + 1);
-            }
-        }
-      
-        if($zs){
-            $len = strlen($zs);
-            $i = $len;
-            $parts = array();
-            while($i > 4){
-                $i -= 4;
-                $parts[] = substr($zs,$i,4);
-            }
-            $parts[] = substr($zs,0,$i);
-            $chn = '';
-            $l = 0;
-            foreach($parts as $part){
-                if($part == "0000"){ continue; }
-                $t = '';
-                for($i = 0,$j = strlen($part);$i < $j;$i++){
-                    $p = 0;
-                    while($i + $p < $j && $part[$i + $p] == "0"){
-                        $p++;
-                    }
-                    if($i + $p == $j){ continue; }
-                    if($p){ $i += $p - 1; }
-                    $t .= $numbers[$part[$i]];
-                    if($part[$i]){
-                        $t .= $unit1[$j - $i - 1];
-                    }
-                }
-        
-                if(!isset($unit2[$l])){
-                    if($l % 2){
-                        $unit2[$l] = $unit2[$l - 1] . $unit2[1];
-                    } else {
-                        $unit2[$l] = $unit2[$l - 1] . $unit2[2];
-                    }
-                }
-                $t .= $unit2[$l];
-                $chn = $t . $chn;
-                $l++;
-            }
-        } else {
-            $chn = "零";
-        }
-      
-        if($xs){
-           $chn .= "点";
-            for($i = 0,$j = strlen($xs);$i < $j;$i++){
-                $chn .= $numbers[$xs[$i]];
-            }
-        }
-      
-        return $chn;
     }
+
 
     private function getCourseQuizItemAnswerDao()
     {
@@ -421,4 +327,39 @@ class QuizServiceImpl extends BaseService implements QuizService
         return $this->createService('Course.CourseService');
     }
 
+}
+
+
+class ItemSerialize
+{
+    public static function serialize(array $item)
+    {
+        if (isset($item['answers'])) {
+            $item['answers'] = implode(';', $item['answers']);
+        }
+
+        if (isset($item['choices'])) {
+            $item['choices'] = json_encode($item['choices']);
+        }
+
+        return $item;
+    }
+
+    public static function unserialize(array $item = null)
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $item['answers'] = explode(';', $item['answers']);
+        $item['choices'] = json_decode($item['choices'], true);
+        return $item;
+    }
+
+    public static function unserializes(array $items)
+    {
+        return array_map(function($item) {
+            return ItemSerialize::unserialize($item);
+        }, $items);
+    }
 }

@@ -22,7 +22,7 @@
 
 	<div class="item-actions pull-right">
 
-		<button class="btn btn-link"  title="添加测验" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_item_create', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-list-alt"></span></button>
+		<button class="btn btn-link"  title="添加测验" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-list-alt"></span></button>
 
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span></button>
 

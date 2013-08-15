@@ -8,7 +8,7 @@ use Topxia\Common\ArrayToolkit;
 class QuizServiceTest extends BaseTestCase
 {
     
-    public function testCreateLessonQuizItem()
+    public function testcreateItem()
     {
         $courseInfo = array(
             'type' => 'online',
@@ -30,7 +30,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-       $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+       $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
 
        $this->assertNotNull($createdLessonQuizItem);
@@ -58,7 +58,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-       $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+       $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
 
        $getQuizItem = $this->getQuizService()->getQuizItem($createdLessonQuizItem['id']);
@@ -66,7 +66,7 @@ class QuizServiceTest extends BaseTestCase
        $this->assertEquals($createdLessonQuizItem, $getQuizItem);
     }
 
-    public function testEditLessonQuizItem()
+    public function testupdateItem()
     {
         $courseInfo = array(
             'type' => 'online',
@@ -88,7 +88,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
 
         $updateInfo = array(
@@ -97,7 +97,7 @@ class QuizServiceTest extends BaseTestCase
             'answers'=>'lessonQuizItemInfo_update_answers',
             'level'=>'high');
 
-        $updatedLessonQuizItem = $this->getQuizService()->editLessonQuizItem($createdLessonQuizItem['id'], $updateInfo);
+        $updatedLessonQuizItem = $this->getQuizService()->updateItem($createdLessonQuizItem['id'], $updateInfo);
 
         $this->assertEquals($updateInfo['description'], $updatedLessonQuizItem['description']);
         $this->assertEquals($updateInfo['answers'], $updatedLessonQuizItem['answers']);
@@ -126,7 +126,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
 
         $result = $this->getQuizService()->deleteQuizItem($createdLessonQuizItem['id']);
@@ -174,7 +174,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($createdLessonQuizItem['id']));
         $this->assertNotNull($createdLessonQuiz);
@@ -202,7 +202,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($createdLessonQuizItem['id']));
         $getedLessonQuiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $createdLesson['id'], $this->getCurrentUser()->id);
@@ -235,7 +235,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $createdLessonQuizItem = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($createdLessonQuizItem['id']));
         $quizItems = $this->getQuizService()->findLessonQuizItems($course['id'], $createdLesson['id']);
@@ -264,9 +264,9 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $item1 = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $item1 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
-        $item2 = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $item2 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($item1['id'], $item2['id']));
         $arrayIds = $this->getQuizService()->findLessonQuizItemIds($course['id'], $createdLesson['id']);
@@ -297,9 +297,9 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $item1 = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $item1 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
-        $item2 = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $item2 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($item1['id'], $item2['id']));
         $quizItems = $this->getQuizService()->findQuizItemsInLessonQuiz($createdLessonQuiz['id']);
@@ -328,7 +328,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $item1 = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $item1 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($item1['id']));
         $result = $this->getQuizService()->answerLessonQuizItem($createdLessonQuiz['id'], $item1['id'], "lessonQuizItemInfo_answers");
@@ -357,7 +357,7 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-        $item1 = $this->getQuizService()->createLessonQuizItem($course['id'],
+        $item1 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($item1['id']));
         $result = $this->getQuizService()->checkUserLessonQuizResult($createdLessonQuiz['id']); 

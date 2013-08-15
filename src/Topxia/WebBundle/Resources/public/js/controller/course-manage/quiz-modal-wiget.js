@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     var Validator = require('bootstrap.validator');
+    var Handlebars = require('handlebars');
 
     var QuizModalWiget = Widget.extend({
 
@@ -11,201 +12,166 @@ define(function(require, exports, module) {
             form : '#quiz-form',
             validator : null
         },
+
+        choiceGlobalId: 0,
         
         events: {
-            'click [data-role=quiz-item-delete]': 'deleteQuizItem',
-            'click [data-role=quiz-item-edit]': 'editQuizItem',
-            'click [data-role=option-delete]': 'deleteItemOption',
-            'click [data-role=quiz-item-add]': 'clearQuizOptions',
-            'click [data-role=option-add]': 'addQuizOption'
+            'click [data-role=quiz-item-add]': 'onAddItem',
+            'click [data-role=quiz-item-edit]': 'onEditItem',
+            'click [data-role=quiz-item-delete]': 'onDeleteItem',
+            'click [data-role=option-add]': 'onAddChoice',
+            'click [data-role=option-delete]': 'onDeleteChoice'
         },
 
         setup: function() {
-            var validator = this._createValidator(this.get('form'));
-            this.set('validator', validator);
-            this._replaceCKeditor();
-            this._updateCKeditor();
-            for (var i = 0; i < 4; i++) {
-                this.addQuizOption();
-            };
+            var $form = $('#quiz-form');
+
+            this.set('form', $form);
+            this.set('validator', this._createValidator($form));
+
+            this.$('[data-role=quiz-item-add]').click();
+
+            this.renderItems();
         },
 
-        editQuizItem: function(e){
+        renderItems: function() {
+            var model = $.parseJSON(this.$('[data-role=items-model]').text());
+            var template = Handlebars.compile(this.$('[data-role=item-template]').html());
 
+            var html = [], items = {};
+            $.each(model, function() {
+                items[this.id] = this;
+                html.push(template(this));
+            });
+
+            this.set('items', items);
+            this.set('itemTemplate', template);
+            this.$('[data-role=items]').html(html.join(''));
+        },
+
+        onEditItem: function(e) {
+            var $item = $(e.currentTarget);
             var self = this;
-            var $btn = $(e.currentTarget);
 
-            $(".created-quiz-items").find("a").each(function(index){
-                $(this).removeClass("active");
-            });
-            $btn.addClass("active");
+            var itemModel = this.get('items')[$item.data('id')];
 
-            $('#quiz-form').find('.options').children().each(function(index){
-                var id = $(this).find('.item-input').attr("id");
-                self.get("validator").removeItem('#'+id);
-            });
+            this.clearChoices();
 
-            $('#quiz-form').find('.options').html('');
-            $.post($btn.data('url'), function(response) {
-                var arrayChoices = response.lessonQuizItem.choices;
-                var arrayAnswers=response.lessonQuizItem.answers.split(";");
-                for (var i=0; i<arrayChoices.length; i++)
-                {
-                    self.addQuizOption().find('.item-input').val(arrayChoices[i]);
-                }
-
-                $('#quiz-form').find("input[name='answer-checkbox']").each(function(index){
-                    if(arrayAnswers.indexOf(index.toString()) != -1){
-                        $(this).attr("checked", true);
-                    }
-                });
-
-                CKEDITOR.instances['quiz_description'].setData(response.lessonQuizItem.description);
-                $("#quiz-form").attr({action:"/quiz/item/update/"+response.lessonQuizItem.id});
-                var level = response.lessonQuizItem.level;
-
-                switch(level)
-                {
-                case "low":
-                  $("[type=radio][value='low']").click().change();
-                  break;
-                case "normal":
-                  $("[type=radio][value='normal']").click().change();
-                  break;
-                case "high":
-                  $("[type=radio][value='high']").click().change();
-                  break;
-                default:
-                  $("[type=radio][value='normal']").click().change();
-                }
-
-            }, 'json');
-        },
-
-        deleteQuizItem: function(e){
-            var $btn = $(e.currentTarget);
-            $.post($btn.data('url'), function(response) {
-                $btn.parent().remove();
-            }, 'json');
-            if($('.created-quiz-items').children().length == 1){
-                $('.notice-quiz-items').text("暂时没有本课程的测验题!");
+            for (var i=0; i < itemModel.choices.length; i++)
+            {
+                var choiceModel = {index:i, name:itemModel.choices[i], isAnswer: ($.inArray(i+'', itemModel.answers)>-1)};
+                self.addChoice(choiceModel);
             }
+
+            var $form = this.get('form');
+            $form.find('[name=description]').val(itemModel.description);
+            $form.find('[name=level][value="' + itemModel.level +'"]').click();
+            $form.find('[name=id]').val(itemModel.id);
+            $form.find('[name=answers]').val('');
+
+            this.$('[data-role=items]').find('.list-group-item').removeClass('active');
+            $item.addClass('active');
+            $form.find('[name=description]').focus();
         },
 
-        clearQuizOptions: function(e){
-            var self = this;
-            Notify.success("增加了一道新的测验题目!");
+        onDeleteItem: function(e){
+            e.stopPropagation();
+            var $btn = $(e.currentTarget),
+                $item = $btn.parents('.list-group-item'),
+                $items = this.$('[data-role=items]'),
+                self = this;
 
-            $(".created-quiz-items").find("a").each(function(index){
-                    $(this).removeClass("active");
+            if (!confirm('真的要删除该题目吗？')) {
+                return ;
+            }
+
+            var url = $items.data('deleteUrl').replace(/__id__/, $item.data('id'));
+            $.post(url, function(){
+                $item.remove();
+                self.get('items')[$item.data('id')] = undefined;
+                Notify.success('测验题目删除成功！');
             });
-            $('#quiz-form').find('.options').children().each(function(index){
-                var id = $(this).find('.item-input').attr("id");
-                self.get("validator").removeItem('#'+id);
-            });
-            $("[type=radio][value='normal']").click().change();
-            $('#quiz-form').find('.options').html('');
-            $("#quiz-form").attr({action:
-                "/course/"+$('#courseId').val()+"/lesson/"+$('#lessonId').val()+"/quiz/create"});
-            CKEDITOR.instances['quiz_description'].setData('');
-            for (var i = 0; i < 4; i++) {
-                this.addQuizOption();
-            };
         },
 
-        addQuizOption: function(e){
+        onAddItem: function(e){
+            this.resetItemForm();
+        },
 
-            var length = $('#quiz-form').find('.options').children().length;
-            var template = $('#option-template').clone(true).show();
+        clearChoices: function() {
+            var self = this,
+                $form = this.get('form');
+            $form.find('.item-input').each(function(){
+                self.get('validator').removeItem('#' + $(this).attr('id'));
+            });
 
-            template.attr({id:"option-"+String.fromCharCode(length+97)});
-            template.find('label').text(String.fromCharCode(length+65)+"选项")
-                .attr({for:"item-input-"+String.fromCharCode(length+97)});  
-            template.find('.item-input-template').attr({id:"item-input-"+String.fromCharCode(length+97)})
-                .attr({class:"item-input"});
-            template.find('[name=answer-checkbox]').data('role',String.fromCharCode(length+97));
-            
-            template.appendTo(".options");
+            $form.find('.options').html('');
+        },
 
-            var id = template.find('.item-input').attr("id");
+        addChoice: function(model){
+            model.code = String.fromCharCode(model.index + 65);
+            model.globalId = this.getNextChoiceGlobalId();
+            var template = Handlebars.compile(this.$('[data-role=choice-template]').html());
+
+            var $html = $($.trim(template(model)));
+
+            $html.appendTo(this.get('form').find('.options'));
+
+            var id = $html.find('.item-input').attr('id');
 
             this.get("validator").addItem({
                 element: '#'+id,
                 required: true
             });
 
-            return template;
+            return $html;
         },
 
-        deleteItemOption: function(e){
-            var self = this;
+        onAddChoice: function(e){
+            var length = this.get('form').find('.options').children().length;
+            var model = {index:length};
+            var $choice = this.addChoice(model);
+            $choice.find('.item-input').focus();
+        },
 
-            if($('#quiz-form').find('.options').children().length == 2){
+        onDeleteChoice: function(e){
+            var $btn = $(e.currentTarget),
+                $controlGroup = $btn.parents('.control-group'),
+                $choices = this.get('form').find('.options'),
+                self = this;
+
+            if($choices.children().length == 2){
                 Notify.danger("每道题目的选项不得少于两个!");
                 return false;
             }
 
-            $('#quiz-form').find('.options').children().each(function(index){
-                var id = $(this).find('.item-input').attr("id");
-                self.get("validator").removeItem('#'+id);
+            self.get("validator").removeItem('#' + $controlGroup.find('.item-input').attr('id'));
+
+            $controlGroup.remove();
+
+            $choices.find('.choice-label').each(function(index) {
+                $(this).text('选项' + String.fromCharCode(index + 65));
             });
 
-            $(e.currentTarget).parent().remove();
-
-            $('#quiz-form').find('.options').children().each(function(index){
-                $(this).attr({id:"option-"+String.fromCharCode(index+97)});
-                $(this).find('label').text(String.fromCharCode(index+65)+"选项")
-                    .attr({for:"item-input-"+String.fromCharCode(index+97)});
-                $(this).find('.item-input').attr({id:"item-input-"+String.fromCharCode(index+97)});
-                $(this).find('[name=answer-checkbox]').data('role',String.fromCharCode(index+97));
-
-                var id = $(this).find('.item-input').attr("id");
-                self.get("validator").addItem({
-                    element: '#'+id,
-                    required: true
-                });
-
-            });   
         },
 
-        _replaceCKeditor: function(e){
-            CKEDITOR.replace('quiz_description', {
-                height: 100,
-                resize_enabled: false,
-                forcePasteAsPlainText: true,
-                toolbar: 'Simple',
-                removePlugins: 'elementspath',
-                filebrowserUploadUrl: '/ckeditor/upload?group=course'
-            });
-        },
+        prepareFormData: function(e) {
+            var answers = [],
+                $form = this.get('form');
 
-        _updateCKeditor: function(e){
-            validator.on('formValidate', function(elemetn, event) {
-                CKEDITOR.instances['quiz_description'].updateElement();
-            });
-        },
-
-        _setChoicesAndAnswers: function(e){
-            var answers = "";
-            $('#quiz-form').find("input[name='answer-checkbox']").each(function(index){
-                if($(this).is(":checked") == true){
-                    answers += index +";";
+            $form.find(".answer-checkbox").each(function(index){
+                if($(this).prop('checked')) {
+                    answers.push(index);
                 }
             });
-            answers=answers.substr(0,answers.length-1);
 
             if (0 == answers.length){
                 Notify.danger("您尚未选择正确答案,请选择正确答案,或事先增加新的选项!");
                 return false;
             }
-            $('#quiz-form').find('#quiz_answers').attr({value:answers});
-        },
 
-        _addValidatorItem: function($validator){
-            $validator.addItem({
-                element: '[name="quiz[description]"]',
-                required: true
-            });
+            $form.find('[name=answers]').val(answers.join(';'));
+
+            return true;
         },
 
         _createValidator: function($form){
@@ -216,41 +182,56 @@ define(function(require, exports, module) {
                 autoSubmit: false
             });
 
-            this._addValidatorItem(validator);
-            
+            validator.addItem({
+                element: '#quiz-description-field',
+                required: true
+            });
+
             validator.on('formValidated', function(error, msg, $form) {
 
-                if (error) {
-                    return;
-                }
-
-                if(self._setChoicesAndAnswers() == false){
+                if (error || !self.prepareFormData()) {
                     return false;
                 }
 
-                $.post($form.attr('action'), $form.serialize(), function(response){
-
-                    if ((response.action == 'create') && (response.status == 'ok')){
-                        if($('.created-quiz-items').children().length == 0){
-                          $('.notice-quiz-items').text("已添加的测验题目:");  
-                        }
-
-                        $(".created-quiz-items").append(response.html);
-                        self.clearQuizOptions();
-                        $(".created-quiz-items").find("a").each(function(index){
-                            $(this).removeClass("active");
-                        });
+                $.post($form.attr('action'), $form.serialize(), function(item) {
+                    var items = self.get('items'),
+                        $items = self.$('[data-role=items]');
+                    var itemHtml = self.get('itemTemplate')(item);
+                    if (items[item.id]) {
+                        $items.find('[data-id=' + item.id + ']').replaceWith(itemHtml);
+                        $items.find('[data-id=' + item.id + ']').addClass('active');
+                        Notify.success('测验题目保存成功！');
+                    } else {
+                        $items.append(itemHtml);
+                        self.resetItemForm();
+                        Notify.success('测验题目添加成功，您可继续添加！');
                     }
-
-                    if((response.action == 'update') && (response.status == 'ok')){
-                        $('#quiz-item-id-'+response.quizItem.id).find('p').text(response.quizItem.description);
-                    }
-                    
-                    $("[type=radio][value='normal']").click().change();
-                    Notify.success("保存成功!");
+                    items[item.id] = item;
                 }, 'json');
             });
             return validator;
+        },
+
+        resetItemForm: function() {
+            var $form = this.get('form');
+
+            $form.find('[name=id]').val('');
+            $form.find('[name=description]').val('');
+            $form.find('[name=level]:eq(1)').click();
+            $form.find('[name=answers]').val('');
+
+            this.clearChoices();
+            for (var i = 0; i < 4; i++) {
+                this.addChoice({index:i});
+            };
+
+            this.$('[data-role=items]').find('.list-group-item').removeClass('active');
+
+            $form.find('[name=description]').focus();
+        },
+
+        getNextChoiceGlobalId: function() {
+            return this.choiceGlobalId ++;
         }
 
     });

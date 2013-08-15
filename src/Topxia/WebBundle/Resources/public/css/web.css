@@ -1474,6 +1474,16 @@ body {
 	padding-right: 10px;
 }
 
+.quiz-manager-main {
+	position: absolute;
+	top: 0;
+	left: 260px;
+	bottom: 0;
+	right: 0;
+}
+
+
+
 /**
  * MISC
  */
