@@ -26,7 +26,7 @@
 
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span></button>
 
-		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
+		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 
   	{% if lesson.status == 'unpublished' %}
 	  	<button class="btn btn-link publish-lesson-btn" title="发布" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span></button>

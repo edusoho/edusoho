@@ -60,7 +60,7 @@ define(function(require, exports, module) {
                 if (pane.get('formChanged')) {
                     $("#lesson-note-plugin-form").trigger('submit');
                 }
-            }, 60000);
+            }, 1000);
         },
 
         _nowTime: function () {

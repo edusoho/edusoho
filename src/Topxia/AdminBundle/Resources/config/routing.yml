@@ -2,6 +2,10 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_course_order_manage:
+    pattern: /course/order/manage
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
+
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }

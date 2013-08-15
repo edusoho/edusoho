@@ -89,11 +89,7 @@
 				  	  </a>
 				  	{% endif %}
 				  </p>
-				  <p>
-				  	<input type="hidden" name="picture" value="{{ field_value(content, 'picture') }}">
-						<button class="btn btn-default btn-small" id="picture-upload" type="button" data-name="picture" data-accept="image/*" data-action="{{ path('admin_content_picture_upload') }}">上传</button>
-						<span data-role="message"></span>
-					</p>
+				  <p> <input type="file" name="picture"> </p>
 				</div>
 			{% endif %}
 

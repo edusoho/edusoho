@@ -29,7 +29,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_member')
             ->andWhere('userId = :userId')
-            ->andWhere('notesNum > :notesNumGreaterThan')
+            ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role');
     }
 

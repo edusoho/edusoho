@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('jquery.bootstrap-datetimepicker');
-    var Uploader = require('upload');
+    require('jquery.form');
 
 	exports.run = function() {
 		var $form = $("#content-form"),
@@ -19,7 +19,6 @@ define(function(require, exports, module) {
         _initEditorFields($form, validator);
         _initTagsField();
         _initDatetimeFields($form);
-        _initPictureField($form);
 	};
 
     function _initValidator($form, $modal)
@@ -37,21 +36,16 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    var $newTr = $(html),
-                        $oldTr = $("tr#" + $newTr.attr('id'));
-                    if ($oldTr.length > 0) {
-                        $oldTr.replaceWith($newTr);
-                        Notify.success('更新成功!');
-                    } else {
-                        var $table = $('#content-table tbody').prepend($newTr);
-                        Notify.success('添加成功!');
+                $form.ajaxSubmit({
+                    clearForm: true,
+                    success: function(data){
+                        $modal.modal('hide');
+                        window.location.reload();
                     }
-                    $modal.modal('hide');
                 });
             }
+            
         });
-
 
         if ($form.find('[name="title"]').length > 0) {
             validator.addItem({
@@ -130,38 +124,6 @@ define(function(require, exports, module) {
                 autoclose: true,
                 minuteStep: 10
             });
-        });
-    }
-
-    function _initPictureField($form)
-    {
-
-        var uploader = new Uploader({trigger: '#picture-upload'});
-        var $panel = $('#picture-panel');
-
-        uploader.change(function(filename){
-            $form.data('uploading', true);
-            $panel.find('[data-role=message]').html('<span class="text-muted">正在上传，请稍等。</span>').fadeIn('slow');
-            uploader.submit();
-        });
-
-        uploader.success(function(response) {
-            var html = '<a href="' + response.url + '" target="_blank">';
-            html += '<img src="' + response.url + '" class="img-responsive">';
-            html += '</a>';
-
-            $panel.find('input[name=picture]').val(response.uri);
-            $panel.find('[data-role=picture-container]').html(html);
-            $panel.find('[data-role=message]').html('<span class="text-success">上传成功。</span>').fadeIn('slow');
-
-            setTimeout(function(){
-                $panel.find('[data-role=message]').fadeOut('slow');
-            }, 3000);
-            $form.data('uploading', false);
-        });
-
-        uploader.error(function(file){
-            $form.data('uploading', false);
         });
     }
 

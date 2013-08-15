@@ -12,23 +12,29 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->getNavigation($id);
     }
 
-    public function editNavigation($id, $fields)
+    public function findNavigations($start, $limit)
     {
-        if(isset($fields['id'])){
-            unset($fields['id']);
-        }
-        $fields['updateTime'] = time();
-        return $this->getNavigationDao()->updateNavigation($id, $fields);
+        return $this->getNavigationDao()->findNavigations($start, $limit);
     }
 
-    public function deleteNavigation($id)
+    public function getNavigationsCount()
     {
-        return $this->getNavigationDao()->deleteNavigation($id);
+        return $this->getNavigationDao()->getNavigationsCount();
+    }
+
+    public function getNavigationsCountByType($type)
+    {
+        return $this->getNavigationDao()->getNavigationsCountByType($type);
+    }
+
+    public function findNavigationsByType($type, $start, $limit)
+    {
+        return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit);
     }
 
     public function createNavigation($fields)
     {
-        $keysArray = array('name', 'url', 'openNewWindow', 'status', 'type', 'sequence');
+        $keysArray = array('name', 'url', 'isOpen', 'isNewWin', 'type', 'sequence');
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if(!in_array($keyOfFields, $keysArray)){
@@ -40,34 +46,18 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $result;
     }
 
-    public function getNavigationsCount()
+    public function updateNavigation($id, $fields)
     {
-        return $this->getNavigationDao()->getNavigationsCount();
+        if(isset($fields['id'])){
+            unset($fields['id']);
+        }
+        $fields['updateTime'] = time();
+        return $this->getNavigationDao()->updateNavigation($id, $fields);
     }
 
-    public function getTopNavigationsCount()
+    public function deleteNavigation($id)
     {
-        return $this->getNavigationDao()->getTopNavigationsCount();
-    }
-
-    public function getFootNavigationsCount()
-    {
-        return $this->getNavigationDao()->getFootNavigationsCount();
-    }
-
-    public function findNavigations($start, $limit)
-    {
-        return $this->getNavigationDao()->findNavigations($start, $limit);
-    }
-
-    public function findTopNavigations($start, $limit)
-    {
-        return $this->getNavigationDao()->findTopNavigations($start, $limit);
-    }
-
-    public function findFootNavigations($start, $limit)
-    {
-        return $this->getNavigationDao()->findFootNavigations($start, $limit);
+        return $this->getNavigationDao()->deleteNavigation($id);
     }
 
     private function getNavigationDao()

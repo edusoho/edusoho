@@ -10,10 +10,8 @@ class UserController extends BaseController {
     public function indexAction (Request $request)
     {
         $currentUser = $this->getCurrentUser();
-
         $searchForm = $this->createUserSearchForm();
         $searchForm->bind($request);
-        
         $conditions = $searchForm->getData();
         
         $paginator = new Paginator(

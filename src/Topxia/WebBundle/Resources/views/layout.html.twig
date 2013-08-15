@@ -42,6 +42,7 @@
       <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
     {% endblock %}
     <div class="nav-collapse collapse navbar-responsive-collapse">
+      {{ render(controller('TopxiaWebBundle:Default:navigation')) }}
       {% set nav = nav|default(null) %}
       {% block nav %}
         <ul class="nav navbar-nav">

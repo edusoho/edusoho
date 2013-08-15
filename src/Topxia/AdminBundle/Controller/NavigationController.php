@@ -20,15 +20,15 @@ class NavigationController extends BaseController
         $form = $this->createFormBuilder($block)
             ->add('name', 'text')
             ->add('url', 'text')
-            ->add('openNewWindow', 'choice', array(
+            ->add('isNewWin', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('no' => '否', 'yes' => '是'),
-                'data' => 'no'
+                'choices' => array(0 => '否', 1 => '是'),
+                'data' => 1
             ))
-            ->add('status', 'choice', array(
+            ->add('isOpen', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('close' => '关闭', 'open' => '开启'),
-                'data' => 'close'
+                'choices' => array(0 => '关闭', 1 => '开启'),
+                'data' => 1
             ))
             ->add('type', 'choice', array(
                 'expanded' => true, 
@@ -53,13 +53,13 @@ class NavigationController extends BaseController
         $form = $this->createFormBuilder($block)
             ->add('name', 'text')
             ->add('url', 'text')
-            ->add('openNewWindow', 'choice', array(
+            ->add('isNewWin', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('no' => '否', 'yes' => '是'),
+                'choices' => array(0 => '否', 1 => '是'),
             ))
-            ->add('status', 'choice', array(
+            ->add('isOpen', 'choice', array(
                 'expanded' => true, 
-                'choices' => array('close' => '关闭', 'open' => '开启'),
+                'choices' => array(0 => '关闭', 1 => '开启'),
             ))
             ->add('type', 'choice', array(
                 'expanded' => true, 
@@ -89,7 +89,7 @@ class NavigationController extends BaseController
         if ('POST' == $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
-                $this->getNavigationService()->editNavigation($id, $form->getData());
+                $this->getNavigationService()->updateNavigation($id, $form->getData());
                 $navigation = $this->getNavigationService()->getNavigation($id);
                 $html = $this->renderView('TopxiaAdminBundle:Navigation:navigation-tr.html.twig', array('navigation'=>$navigation));
                 return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
@@ -114,7 +114,6 @@ class NavigationController extends BaseController
                 return $this->createJsonResponse(array('status' => 'ok', 'type'=>$navigation['type'], 'html' => $html));
             }
         }
-
         return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
             'form' => $form->createView()
         ));
@@ -142,11 +141,12 @@ class NavigationController extends BaseController
     {
         $paginator = new Paginator(
             $request,
-            $this->getNavigationService()->getTopNavigationsCount(),
+            $this->getNavigationService()->getNavigationsCountByType('top'),
             10
         );
 
-        $navigations = $this->getNavigationService()->findTopNavigations(
+        $navigations = $this->getNavigationService()->findNavigationsByType(
+            'top',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -160,11 +160,12 @@ class NavigationController extends BaseController
     {
         $paginator = new Paginator(
             $request,
-            $this->getNavigationService()->getFootNavigationsCount(),
+            $this->getNavigationService()->getNavigationsCountByType('foot'),
             10
         );
 
-        $navigations = $this->getNavigationService()->findFootNavigations(
+        $navigations = $this->getNavigationService()->findNavigationsByType(
+            'foot',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

@@ -19,7 +19,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 		$course = $this->getCourseService()->getCourse($order['courseId']);
 
 		$order['sn'] = $this->generateOrderSn($order);
-		$order['title'] = "课程《{$course['title']}》";
+		$order['title'] = "用户:"."{$user['nickname']} 购买了 课程:{$course['title']}";
 		$order['price'] = $course['price'];
 		if (intval($order['price']*100) == 0) {
 			$order['status'] = 'paid';
@@ -90,12 +90,25 @@ class OrderServiceImpl extends BaseService implements OrderService
 
 	public function cancelOrder($id, $message = '')
 	{
-
+		
 	}
 
-	public function searchOrders($conditions, $order, $start, $limit)
+	public function searchOrders($conditions, $sort = 'latest', $start, $limit)
 	{
+		$orderBy = array();
+		if ($sort == 'latest') {
+			$orderBy =  array('createdTime', 'DESC');
+		} else {
+			$orderBy = array('createdTime', 'DESC');
+		}
 
+		$orders = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
+        return ArrayToolkit::index($orders, 'id');
+	}
+
+	public function searchOrderCount($conditions)
+	{
+		return $this->getOrderDao()->searchOrderCount($conditions);
 	}
 
 	private function generateOrderSn($order)

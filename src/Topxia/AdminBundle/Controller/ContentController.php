@@ -45,10 +45,17 @@ class ContentController extends BaseController
 	public function createAction(Request $request, $type)
 	{
         $type = ContentTypeFactory::create($type);
-
         if ($request->getMethod() == 'POST') {
+
+
             $content = $request->request->all();
             $content['type'] = $type->getAlias();
+
+            $file = $request->files->get('picture');
+            if(!empty($file)){
+                $record = $this->getFileService()->uploadFile('default', $file);
+                $content['picture'] = $record['uri'];
+            }
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
 
@@ -66,13 +73,20 @@ class ContentController extends BaseController
 
     public function editAction(Request $request, $id)
     {
+
         $content = $this->getContentService()->getContent($id);
         $type = ContentTypeFactory::create($content['type']);
-
+        $record = array();
         if ($request->getMethod() == 'POST') {
+            $file = $request->files->get('picture');
+            if(!empty($file)){
+                $record = $this->getFileService()->uploadFile('default', $file);
+            }
             $content = $request->request->all();
+            if(isset($record['uri'])){
+                $content['picture'] = $record['uri'];
+            }
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
-
             return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
@@ -85,16 +99,6 @@ class ContentController extends BaseController
             'content' => $content,
         ));
 
-    }
-
-    public function pictureUploadAction(Request $request)
-    {
-        $file = $request->files->get('picture');
-        $record = $this->getFileService()->uploadFile('default', $file);
-
-        $url = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-
-        return $this->createJsonResponse(array('uri' => $record['uri'], 'url' => $url));
     }
 
     public function trashAction(Request $request, $id)

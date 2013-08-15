@@ -22,6 +22,7 @@ phpunit -c app/ src/Topxia/Service/Course/Tests/ReviewServiceTest.php
 phpunit -c app/ src/Topxia/Service/Course/Tests/MaterialServiceTest.php
 phpunit -c app/ src/Topxia/Service/Course/Tests/ThreadServiceTest.php
 phpunit -c app/ src/Topxia/Service/Course/Tests/NoteServiceTest.php
+phpunit -c app/ src/Topxia/Service/Course/Tests/OrderServiceTest.php
 phpunit -c app/ src/Topxia/Service/Course/Tests/AnnouncementServiceTest.php
 
 phpunit -c app/ src/Topxia/Service/System/Tests/CacheServiceTest.php

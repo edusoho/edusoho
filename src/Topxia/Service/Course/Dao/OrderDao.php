@@ -13,4 +13,7 @@ interface OrderDao
 
 	public function updateOrder($id, $fields);
 
+    public function searchOrders($conditions, $orderBy, $start, $limit);
+
+    public function searchOrderCount($conditions);
 }

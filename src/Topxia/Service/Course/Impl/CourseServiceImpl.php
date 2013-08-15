@@ -32,7 +32,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
 	}
 
-	public function searchCourses($conditions, $sort= 'latest', $start, $limit)
+	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
@@ -367,11 +367,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'role' => 'student',
-			'truename'=> empty($infos['truename']) ? '' : $infos['truename'],
-			'email'=> empty($infos['email']) ? '' : $infos['email'],
-			'mobile'=> empty($infos['mobile']) ? '' : $infos['mobile'],
-			'company'=> empty($infos['company']) ? '' : $infos['company'],
-			'job'=> empty($infos['job']) ? '' : $infos['job'],
 			'createdTime' => time(),
 		);
 
