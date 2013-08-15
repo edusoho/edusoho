@@ -56,13 +56,32 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-        return $this->createDynamicQueryBuilder($conditions)
+        $queryBuilder =  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_order')
-            ->andWhere('title LIKE :title')
-            ->andWhere('sn = :sn')
             ->andWhere('status = :status')
-            ->andWhere('createdTime >= :startDate')
-            ->andWhere('createdTime < :endDate');
+            ->andWhere('payment = :payment')
+            ->andWhere('paidTime >= :paidStartTime')
+            ->andWhere('paidTime < :paidEndTime');
+
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'sn') {
+            $conditions['keyword'] = "%{$conditions['keyword']}%";
+            unset($conditions['keywordType']);
+            $queryBuilder->andWhere('sn = :keyword');
+        }
+
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'bank') {
+            $conditions['keyword'] = "%{$conditions['keyword']}%";
+            unset($conditions['keywordType']);
+            $queryBuilder->andWhere('bank = :keyword');
+        }
+
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'userId') {
+            $conditions['keyword'] = "%{$conditions['keyword']}%";
+            unset($conditions['keywordType']);
+            $queryBuilder->andWhere('userId = :keyword');
+        }
+        
+        return $queryBuilder;
     }
 
 }

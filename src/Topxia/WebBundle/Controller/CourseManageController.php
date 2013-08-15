@@ -13,8 +13,6 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 
-
-
 class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)
@@ -71,13 +69,14 @@ class CourseManageController extends BaseController
         $form = $this->createFormBuilder()
             ->add('picture', 'file')
             ->getForm();
+        
         if($request->getMethod() == 'POST'){
             $form->bind($request);
             if ($form->isValid()) {
                 $fields = $form->getData();
                 $this->getCourseService()->changeCoursePicture($course['id'], $fields['picture']);
 	            $this->setFlashMessage('success', '课程图片已上传成功！');
-	            return $this->redirect($this->generateUrl('course_manage_picture',array('id' => $id))); 
+	            return $this->redirect($this->generateUrl('course_manage_picture_crop',array('id' => $id))); 
             } else {
                 return $this->createJsonResponse(false);
             }

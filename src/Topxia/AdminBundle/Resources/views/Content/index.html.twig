@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
 
-{% block title %}内容管理 | Simply, but strong! - {{ parent() }}{% endblock %}
+{% block title %}内容管理 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'content/list' %}
 
@@ -32,7 +32,7 @@
     {{ select_options(dict('contentStatus'), app.request.query.get('status'), '--所有状态--') }}
 	</select>
 	<input class="width-input-large" name="keywords" type="text" placeholder="关键词" value="{{ app.request.query.get('keywords') }}">
-	<button class="btn btn-default" type="submit">搜索</button>
+	<button class="btn btn-primary" type="submit">搜索</button>
 </form>
 
 <table class="table table-hover" id="content-table">

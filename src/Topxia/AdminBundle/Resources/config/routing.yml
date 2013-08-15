@@ -6,6 +6,10 @@ admin_course_order_manage:
     pattern: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
+admin_course_order_detail:
+    pattern: /course/order/detail/{id}
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
+
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }

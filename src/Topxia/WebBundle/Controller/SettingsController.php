@@ -16,30 +16,20 @@ class SettingsController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
-        $isTeacher = false;
-        if (in_array('ROLE_TEACHER', $user['roles'])) {
-            $form = $this->createForm(new TeacherProfileType(), $profile);
-            $isTeacher = true;
-        } else {
-            $form = $this->createForm(new UserProfileType(), $profile);
-        }
+        $form = $this->createForm(new UserProfileType(), $profile);
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
                 $profile = $form->getData();
-                $profile['birthday'] = empty($profile['birthday']) ? null : $profile['birthday'];
-
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->setFlashMessage('success', '基础信息保存成功。');
-
                 return $this->redirect($this->generateUrl('settings'));
             }
         }
 
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'form' => $form->createView(),
-            'isTeacher' => $isTeacher,
         ));
 	}
 

@@ -284,7 +284,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $availableFields = array(
-            'truename', 'gender', 'birthday', 'city', 'mobile', 'qq', 'company', 'job', 'signature', 'title',  'about', 'weibo', 'blog', 'site'
+            'truename', 'gender', 'birthday', 'city', 'mobile', 'qq', 'company', 'job', 'signature', 'title',  'about', 'weibo', 'weixin', 'site'
         );
 
         $fields = ArrayToolkit::parts($fields, $availableFields);

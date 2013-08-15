@@ -14,6 +14,7 @@ class CourseOrderController extends BaseController
         $searchForm = $this->createOrderSearchForm();
         $searchForm->bind($request);
         $conditions = $searchForm->getData();
+        $conditions = $this->_prepareConditions($conditions);
         
         $paginator = new Paginator(
             $this->get('request'),
@@ -36,6 +37,36 @@ class CourseOrderController extends BaseController
 
     }
 
+    public  function detailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        $user = $this->getUserService()->getuser($order['userId']);
+        $course = $this->getCourseService()->getCourse($order['courseId']);
+        return $this->render('TopxiaAdminBundle:CourseOrder:detail-modal.html.twig', array(
+            'order'=>$order,
+            'user'=>$user,
+            'course'=>$course
+        ));
+    }
+
+    private function _prepareConditions($conditions)
+    {
+        if(empty($conditions['keyword'])){
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
+        }
+
+        if((isset($conditions['keywordType'])) && $conditions['keywordType'] == 'nickname'){
+            $user = $this->getUserService()->getUserByNickname($conditions['keyword']);
+            if(empty($user)){
+                throw new \RuntimeException('该用户昵称不存在！请重新输入...');
+            }
+            $conditions['keywordType'] = 'userId';
+            $conditions['keyword'] = $user['id'];
+        }
+        return $conditions;
+    }
+
     private function createOrderSearchForm()
     {
         return $this->createFormBuilder()
@@ -43,12 +74,10 @@ class CourseOrderController extends BaseController
                 'choices' => array('paid' => '已付款', 'created' => '未付款')
             ))
             ->add('payment', 'choice', array(
-                'choices' => array('alipay' => '支付宝', 'tenpay'=>'财付通', 'none' => '无')
+                'choices' => array('alipay' => '支付宝', 'tenpay'=>'财付通'),
+                'empty_value' => '支付方式',
+                'required' => false
             ))
-            ->add('isGift', 'choice', array(
-                'choices' => array(0 => '非礼品课程', 1 => '礼品课程')
-            ))
-
             ->add('paidStartTime', 'date', array(
                 'widget' => 'single_text',
                 'input' => 'timestamp',
@@ -59,24 +88,8 @@ class CourseOrderController extends BaseController
                 'input' => 'timestamp',
                 'required' => false
             ))
-            ->add('createStartTime', 'date', array(
-                'widget' => 'single_text',
-                'input' => 'timestamp',
-                'required' => false
-            ))
-            ->add('createEndTime', 'date',  array(
-                'widget' => 'single_text',
-                'input' => 'timestamp',
-                'required' => false
-            ))
-
             ->add('keywordType', 'choice', array(
-                'choices' => array(
-                    'sn' => '订单号',
-                    'nickname' => '用户名',
-                    'courseTitle' => '课程名',
-                    'bank' => '银行编号'
-                ),
+                'choices' => array('sn' => '订单号','nickname' => '用户名','bank' => '银行编号')
             ))
             ->add('keyword', 'text', array('required' => false))
             ->getForm();

@@ -1,0 +1,34 @@
+<tr id="order-table-{{order.id}}">
+  <td>{{order.sn}}</td>
+  <td>{{order.title}} </td>
+  <td>
+    {% if order.status == "created" %}
+    未付款
+    {% elseif order.status == "paid" %}
+    已付款
+    {% endif %}
+  </td>
+  <td> {{order.price}} 元 </td>
+  <td> 
+    {% if order.payment == "none" %}
+    暂无付款
+    {% elseif order.payment == "alipay" %}
+    支付宝
+    {% elseif order.payment == "tenpay" %}
+    财付通
+    {% endif %}
+  </td>
+  <td> 
+    {% if order.bank is empty %}
+        无
+    {% else %}
+        {{ order.bank }}
+    {% endif %}
+  </td>
+  <td> 
+    {{ order.paidTime |date('Y-n-d H:i:s') }}
+  </td>
+  <td>
+    <a href="javascript:;" class="btn btn-small btn-info" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_order_detail', {id:order.id}) }}"> 查看详情</a> 
+  </td>
+</tr>

@@ -40,14 +40,13 @@ interface LogService
 	 *                      'endDateTime'=> 'xxxx-xx-xx xx:xx'
 	 *                 );
 	 *                             
-	 * @param  array   $sorts      按什么排序, 如array('createdTime'=>'DESC', 'ip'=>'ASC'), 
-	 *                             支持的键名请参考log数据
+	 * @param  array   $sort       按什么排序, 暂只提供'created'
 	 * @param  integer $start      开始行数
 	 * @param  integer $limit      返回最多行数
 	 * @return array        	   多维数组    
 	 * 
 	 */
-	public function searchLogs($conditions, $sorts, $start, $limit);
+	public function searchLogs($conditions, $sort, $start, $limit);
 
 	/**
 	 * 根据指定搜索条件返回该条数。

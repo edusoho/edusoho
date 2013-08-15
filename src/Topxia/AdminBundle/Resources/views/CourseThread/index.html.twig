@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}课程话题 - {{ parent() }}{% endblock %}
+{% block title %}话题管理 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'course/threads' %}
 
@@ -14,9 +14,15 @@
 
 <div class="well well-small">
   <form>
-    {{ form_widget(form.keywords, {attr:{class:'col-lg-3', placeholder:'关键词'}}) }}
-    {{ form_widget(form.nickname, {attr:{class:'col-lg-3', placeholder:'话题作者昵称'}}) }}
-    <input type="submit" class="btn" value="搜索">
+    <div class="col-lg-3">
+      {{ form_widget(form.keywords, {attr:{placeholder:'关键词'}}) }}
+    </div>
+
+    <div class="col-lg-3">
+      {{ form_widget(form.nickname, {attr:{placeholder:'话题作者昵称'}}) }}
+    </div>
+    
+    <input type="submit" class="btn btn-primary" value="搜索">
   </form>
 </div>
 
