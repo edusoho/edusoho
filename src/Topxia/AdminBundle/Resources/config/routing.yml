@@ -320,6 +320,10 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_setting_logs:
+    pattern:  /setting/logs
+    defaults: { _controller: TopxiaAdminBundle:Setting:logs }
+
 admin_category_group:
     pattern:  /category-group
     defaults: { _controller: TopxiaAdminBundle:Category:group }
