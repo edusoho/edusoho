@@ -13,8 +13,6 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 
-
-
 class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)

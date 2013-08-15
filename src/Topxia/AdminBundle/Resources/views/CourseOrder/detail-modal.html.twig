@@ -1,0 +1,61 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}查看课程订单详情{% endblock %}
+{% block body %}
+  
+  <div class="course-detail">
+
+    <div class="row control-group">
+      <label class="control-label col-lg-4">
+        用户名:
+      </label>
+      {{user.nickname}}
+    </div>
+
+    <div class="row control-group">
+      <label class="control-label col-lg-4">
+        课程名:
+      </label>
+      {{course.title}}
+    </div>
+
+    <div class="row control-group">
+      <label class="control-label col-lg-4">
+        礼品课程:
+      </label>
+      {% if order.isGift == 1 %}
+        是
+      {% else %}
+        非
+      {% endif %}
+    </div>
+
+    <div class="row control-group">
+      <label class="control-label col-lg-4">
+        订单创建日期:
+      </label>
+      {{ order.createdTime |date('Y-n-d H:i:s')}}
+    </div>
+
+    <div class="row control-group">
+      <label class="control-label col-lg-4">
+        付款时间:
+      </label>
+      {{ order.paidTime |date('Y-n-d H:i:s')}}
+    </div>
+
+  </div>
+
+{% endblock %}
+
+
+{% block footer %}
+  <div>
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  </div>
+</form>
+
+{% endblock %}
+
