@@ -14,58 +14,68 @@
         {{ web_macro.flash_messages() }}
           <div class="row control-group">
             <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
-            <div class="col-lg-8 controls">{{ form_widget(form.truename) }}</div>
+            <div class="col-lg-7 controls">{{ form_widget(form.truename) }}</div>
           </div>
+
           <div class="row control-group">
             <div class="col-lg-2 control-label">{{ form_label(form.gender, '性别') }}</div>
-            <div class="col-lg-8 controls radios">{{ form_widget(form.gender) }}</div>
-          </div>
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.weibo, '微博') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.weibo) }} </div>
+            <div class="col-lg-7 controls radios">{{ form_widget(form.gender) }}</div>
           </div>
 
           <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.qq) }} </div>
-          </div>      
-
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.weixin, '微信') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.weixin) }} </div>
-          </div>               
-
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.site, '个人主页') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.site) }} </div>
-          </div>                
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.job, '职位') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.job) }} </div>
+            <div class="col-lg-2 control-label"> {{ form_label(form.job, '职业') }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.job) }} </div>
           </div>
 
           <div class="row control-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.title) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.title) }} </div>
           </div>
 
           <div class="row control-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.signature, '个人签名') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.signature) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.signature) }} </div>
           </div>          
 
           <div class="row control-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.about, '自我介绍') }} </div>
-            <div class="col-lg-8 controls"> {{ form_widget(form.about) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.about) }} </div>
           </div>
 
-        <div class="row">
-          <div class="col-lg-8 col-offset-2">
-            {{ form_rest(form) }}
-            <button type="submit" class="btn btn-primary">保存</button>
+          <div class="row">
+            <div class="col-lg-7 col-offset-2">
+              <button type="submit" class="btn btn-primary">保存</button>
+            </div>
           </div>
-        </div>
 
+          <hr />
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.site, '个人主页') }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.site) }} </div>
+          </div>   
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.weibo, '微博') }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.weibo) }} </div>
+          </div>
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.weixin, '微信') }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.weixin) }} </div>
+          </div>         
+
+          <div class="row control-group">
+            <div class="col-lg-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.qq) }} </div>
+          </div>                         
+
+          <div class="row">
+            <div class="col-lg-7 col-offset-2">
+              {{ form_rest(form) }}
+              <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+          </div>
       </form>
 
     {% endblock %}
