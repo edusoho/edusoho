@@ -7,11 +7,15 @@
 <div class="panel panel-col">
   <div class="panel-heading">
     课程图片
+    <a id="crop-with-new-window" href="{{ path('course_manage_picture_crop', {id:course.id}) }}" class="pull-right btn btn-primary"> 裁剪课程图片 </a>
   </div>
 
+
   <div class="panel-body">
-    <form id="course-picture-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+    <form id="course-picture-form" class="form-horizontal" method="post" 
+    action="{{ path('course_manage_picture', {id:course.id}) }}" enctype="multipart/form-data">
     {{ web_macro.flash_messages() }}
+    
       <div class="row control-group">
         <div class="col-offset-2 controls">
           <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
@@ -28,7 +32,7 @@
       <div class="row control-group">
         <div class="col-offset-2 controls">
           {{ form_rest(form) }}
-          <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">上传</button>
+          <button class="btn btn-fat btn-primary" id="upload-picture-btn" type="submit">上传</button>
         </div>
       </div>
 

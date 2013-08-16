@@ -20,6 +20,7 @@ seajs.config({
 		"jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.1/perfect-scrollbar",
 		"jquery.select2": "jquery-plugin/select2/3.4.1/select2",
 		"jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",
+		"jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
 		'jquery.toastr': {
 			src: 'jquery/toastr/1.0.2/toastr.js',
@@ -27,7 +28,7 @@ seajs.config({
 		},
 		'jquery.jcrop':  {
 			src: 'jquery-plugin/jcrop/0.9.12/jcrop.js',
-			deps: ['jquery']
+			deps: ['jquery', 'jquery.jcrop-css']
 		},
 		'jquery.ui': {
 			src: 'jquery/ui/1.10.3/jquery-ui-custom.min.js',

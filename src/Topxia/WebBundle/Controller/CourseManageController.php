@@ -75,10 +75,11 @@ class CourseManageController extends BaseController
             if ($form->isValid()) {
                 $fields = $form->getData();
                 $this->getCourseService()->changeCoursePicture($course['id'], $fields['picture']);
-	            $this->setFlashMessage('success', '课程图片已上传成功！');
-	            return $this->redirect($this->generateUrl('course_manage_picture_crop',array('id' => $id))); 
+                $html = $this->renderView('TopxiaWebBundle:CourseManage:picture2crop.html.twig', array(
+                        'course' => $this->getCourseService()->getCourse($id)));
+                return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
             } else {
-                return $this->createJsonResponse(false);
+                return $this->createJsonResponse(array('status'=>'error'));
             }
         }
 		return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
@@ -101,8 +102,9 @@ class CourseManageController extends BaseController
             $imagine = new Imagine();
             $uri = $this->getFileService()->parseFileUri($course['largePicture']);
             $fullpath = $uri['fullpath'];
-            $cropResult = $imagine->open($fullpath)->crop(new Point($x, $y), new Box($w, $h))
-                ->save($fullpath);
+            $cropResult = $imagine->open($fullpath)->crop(new Point($x, $y), new Box($w, $h))->resize(new Box(445, 260))
+                ->save($fullpath, array(
+                    'quality' => 90));
             if(!empty($cropResult)){
                 return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
             }

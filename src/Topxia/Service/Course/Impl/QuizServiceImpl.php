@@ -96,6 +96,8 @@ class QuizServiceImpl extends BaseService implements QuizService
         $quiz = $this->getCourseQuizDao()->getQuiz($lessonQuizId);
         $quizItemIds = explode("|", $quiz['itemIds']);
 
+        // @todo HTML Purifier
+        
         if(!empty($quizItemIds)){
             $quizItems = $this->getCourseQuizItemDao()->findQuizItemsByIds($quizItemIds);
             foreach ($quizItems as $key => &$item) {

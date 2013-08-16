@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         require('./header').run();
 
-        function updateCoords(c){
+        function updateCoords(c) {
             $('#x').val(c.x);
             $('#y').val(c.y);
             $('#w').val(c.w);
@@ -11,9 +11,9 @@ define(function(require, exports, module) {
         };
 
         $("#pic2crop").Jcrop({
-          onSelect: updateCoords
+            onSelect: updateCoords
         });
-        
+
     };
-  
+
 });
