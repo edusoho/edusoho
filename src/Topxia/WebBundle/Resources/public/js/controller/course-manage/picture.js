@@ -10,11 +10,11 @@ define(function(require, exports, module) {
             $('#y').val(c.y);
             $('#w').val(c.w);
             $('#h').val(c.h);
-            // Notify.info("上传之后请如发现图片并未改变，请重新页面！")
         };
 
         function resetCrop() {
            $("#pic2crop").Jcrop({
+                setSelect: [ 100, 100, 300, 200 ],
                 onSelect: updateCoords
             });
         };
@@ -26,7 +26,6 @@ define(function(require, exports, module) {
             $form.ajaxSubmit({
                 clearForm: true,
                 success: function(data){
-                    Notify.success("课程图片上传成功！");
                     $("#crop-with-new-window").remove();
                     $form.remove();
                     $(".panel-body").append(data.html);

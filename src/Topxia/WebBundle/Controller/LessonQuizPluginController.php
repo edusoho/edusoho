@@ -12,11 +12,11 @@ class LessonQuizPluginController extends BaseController
         $currentUser = $this->getCurrentUser(); 
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
-        $alreadyLessonQuiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $currentUser['id']);
+        $quiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $currentUser['id']);
 
-        if(!empty($alreadyLessonQuiz)){   
+        if(!empty($quiz)){   
             return $this->render('TopxiaWebBundle:LessonQuizPlugin:welcome-already-quiz.html.twig', array(
-                'alreadyLessonQuiz'=>$alreadyLessonQuiz,
+                'quiz'=>$quiz,
                 'course'=>$course,
                 'lesson'=>$lesson));
         } else {
@@ -31,7 +31,7 @@ class LessonQuizPluginController extends BaseController
             return $this->render('TopxiaWebBundle:LessonQuizPlugin:lesson-quiz-page.html.twig', array(
             'quizItems'=>$quizItems,
             'lessonQuiz'=>$lessonQuiz,
-            'alreadyLessonQuiz'=>$alreadyLessonQuiz,
+            'quiz'=>$quiz,
             'course'=>$course,
             'lesson'=>$lesson));
         }

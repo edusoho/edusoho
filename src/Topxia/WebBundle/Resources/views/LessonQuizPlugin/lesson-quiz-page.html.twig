@@ -1,5 +1,4 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
 {% set modal_size = 'xlarge' %}
 
 {% block title %}测验{% endblock %}
@@ -10,13 +9,10 @@
 
 <div class="quiz-page quiz-container">
 
-{% if alreadyLessonQuiz is empty and quizItems is empty  %}
+{% if quiz is empty and quizItems is empty  %}
+    {% include 'TopxiaWebBundle:LessonQuizPlugin:quiz-empty-and-items-empty.html.twig' %}
 
-    <p class="empty-item">
-    不好意思，本课时还没有提供对应的测验!
-    </p>
-
-{% elseif alreadyLessonQuiz is empty and quizItems is not empty  %}
+{% elseif quiz is empty and quizItems is not empty  %}
     
     <div class="quiz-content">
         
@@ -72,7 +68,7 @@
         
     </div>
 
-{% elseif alreadyLessonQuiz is not empty and quizItems is not empty  %}
+{% elseif quiz is not empty and quizItems is not empty  %}
 
     <div class="quiz-content">
         
@@ -94,7 +90,7 @@
                         <span id="item-type" style="display:none">single</span>
                     {% endif %}
                 </div>
-                <h3> 第{{quizItem.Number2Chinese}}题</h3>
+                <h3> 第{{loop.index}}题</h3>
 
                 <div class="container">
                     <div class="row show-grid">
@@ -129,10 +125,10 @@
 
     </div>
 
-{% elseif alreadyLessonQuiz is not empty and quizItems is empty  %}
+{% elseif quiz is not empty and quizItems is empty  %}
 
     <p class="empty-item">
-    <h4> 你上次的成绩为: {{alreadyLessonQuiz.score}} 分</h4>
+    <h4> 你上次的成绩为: {{quiz.score}} 分</h4>
     不好意思，本课时的测验已经撤销!
     </p>
 
@@ -144,11 +140,9 @@
 {% endblock %}
 
 {% block footer %}
-
     {% if quizItems %}
     <button style="display:none" class="next-item btn btn-primary" data-url="{{ path('course_lesson_plugin_quiz_check_result', {quizId:lessonQuiz.id}) }}">下一题</button>
     {% endif %}
-
 {% endblock %}
 
 {% set hideFooter = true %}
