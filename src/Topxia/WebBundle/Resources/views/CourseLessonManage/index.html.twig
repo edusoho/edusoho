@@ -3,6 +3,11 @@
 {% set side_nav = 'lesson' %}
 {% set script_controller = 'course-manage/lesson' %}
 
+{% block stylesheets %}
+   {{ parent() }}
+   <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/jquery-plugin/perfect-scrollbar/0.4.1/perfect-scrollbar.css') }}" />
+{% endblock %}
+
 {% block main %}
 
 <div class="panel panel-col lesson-manage-panel">

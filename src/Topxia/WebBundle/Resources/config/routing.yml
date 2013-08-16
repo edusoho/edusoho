@@ -363,21 +363,18 @@ course_manage_lesson_unpublish:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
     methods: [POST]
 
-course_manage_quiz_item_create:
-    pattern: /course/{courseId}/lesson/{lessonId}/quiz/create
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:createLessonQuizItem }
+course_manage_quiz:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/quiz
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:index }
+
+course_manage_quiz_item_save:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/quiz/saveitem
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:saveItem }
 
 course_manage_quiz_item_delete:
-    pattern: /course/{quizItemId}/quizitemid/delete
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:deleteLessonQuizItem }
-
-course_manage_quiz_item_edit:
-    pattern: /course/{quizItemId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:editLessonQuizItem }
-
-course_manage_quiz_item_update:
-    pattern: /quiz/item/update/{quizItemId}
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:updateLessonQuizItem }
+    pattern: /course/{courseId}/manage/quiz/{itemId}/delete
+    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:deleteItem }
+    methods: [POST]
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

@@ -148,6 +148,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $user['id'] == $note['userId'];
     }
 
+    // @todo HTML Purifier
     private function calculateContnentLength($content)
     {
         $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '',$content)));

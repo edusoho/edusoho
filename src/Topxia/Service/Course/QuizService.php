@@ -4,15 +4,18 @@ namespace Topxia\Service\Course;
 interface QuizService
 {
 
-    public function createLessonQuizItem($courseId, $lessonId, $itemInfo);
+
 
     public function getQuizItem($lessonQuizItemId);
 
     public function getUserLessonQuiz($courseId, $lessonId, $userId);
 
-    public function editLessonQuizItem($lessonQuizItemId, $fields);
 
-    public function deleteQuizItem($id);
+    public function createItem(array $item);
+
+    public function updateItem($id, $fields);
+
+    public function deleteItem($id);
 
     public function deleteQuiz($id);
 

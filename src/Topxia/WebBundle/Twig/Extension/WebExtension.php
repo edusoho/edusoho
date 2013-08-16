@@ -236,7 +236,7 @@ class WebExtension extends \Twig_Extension
     public function plainTextFilter($text, $length = null)
     {
         $text = strip_tags($text);
-
+        
         $length = (int) $length;
         if ( ($length > 0) && (mb_strlen($text) > $length) )  {
             $text = mb_substr($text, 0, $length, 'UTF-8');
