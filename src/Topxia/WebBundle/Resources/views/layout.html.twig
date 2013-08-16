@@ -43,12 +43,6 @@
     {% endblock %}
     <div class="nav-collapse collapse navbar-responsive-collapse">
       {{ render(controller('TopxiaWebBundle:Default:navigation')) }}
-      {% set nav = nav|default(null) %}
-      {% block nav %}
-        <ul class="nav navbar-nav">
-          <li {% if nav == 'course' %}class="active"{% endif %}><a href="{{ path('course_explore') }}">课程</a></li>
-        </ul>
-      {% endblock %}
       <ul class="nav navbar-nav pull-right">
         {% if app.user %}
           <li><a href="{{ path('my') }}"> 我的课程 </a></li>
