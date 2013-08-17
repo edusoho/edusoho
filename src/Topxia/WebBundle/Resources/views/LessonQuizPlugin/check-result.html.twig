@@ -1,25 +1,27 @@
 <div class="check-result-block">
-    
-    <div class="result-of-answer-count">
+  
+  <div class="result-of-answer-count">
     <label>你本次测试的成绩：</label>
-        <p> <span class="correct-count">  正确 {{correctCount}}题 </span>    
-            <span class="wrong-count" > 错误 {{wrongCount}}题 </span>
-        </p>
-    </div>
-    <div class="score">
-        <p> 分数：<span> {{score}} </span> </p>
-    </div>
-    
-    <div class="result-notice">
-        {% if score <= 60 %}
-        <p> <h3>严肃的说，你得认真学习了(60分以下)</h3></p>
-        {% elseif score > 60 and score <= 75 %}
-        <p><h3> 还需努力(60-75)</h3></p>
-        {% elseif score > 75 and score <= 90 %}
-        <p><h3>再接再厉</h3></p>
-        {% elseif score > 90 and score <= 100 %}
-        <p><h3>太棒了！</h3></p>
-        {% endif %}
-    </div>
+    <p>
+      <span class="correct-count">  正确 {{correctCount}}题 </span>    
+      <span class="wrong-count" > 错误 {{wrongCount}}题 </span>
+    </p>
+  </div>
+  
+  <div class="score">
+    <p> 分数：<span> {{score}} </span> </p>
+  </div>
 
+  <div class="result-notice">
+      {% if score <= 60 %}
+        <p> <h3>严肃的说，你得认真学习了(60分以下)</h3></p>
+      {% elseif score > 60 and score <= 75 %}
+        <p><h3> 还需努力(60-75)</h3></p>
+      {% elseif score > 75 and score <= 90 %}
+        <p><h3>再接再厉</h3></p>
+      {% elseif score > 90 and score <= 100 %}
+        <p><h3>太棒了！</h3></p>
+      {% endif %}
+  </div>
+  
 </div>

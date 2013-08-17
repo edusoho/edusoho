@@ -31,7 +31,6 @@ define(function(require, exports, module) {
 
         $(".quiz-page").on('click', "button[type='submit'][name='currentSubmit']", function() {
             var answers = "";
-
             if ($("form[name='currentItem']").find("#item-type").text() == "multiple"){                
                 $(this).parent().find(".choice").each(function(index) {
 
@@ -199,7 +198,6 @@ define(function(require, exports, module) {
                 return false;
             }
         });
-
 
     };
 

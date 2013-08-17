@@ -9,139 +9,29 @@
 
 <div class="quiz-page quiz-container">
 
-{% if quiz is empty and quizItems is empty  %}
+  {% if quiz is empty and quizItems is empty  %}
+      
     {% include 'TopxiaWebBundle:LessonQuizPlugin:quiz-empty-and-items-empty.html.twig' %}
 
-{% elseif quiz is empty and quizItems is not empty  %}
-    
-    <div class="quiz-content">
-        
-        <div class="all-count-quiz-items">
-           <h4 style="display:table; width: auto; margin-left: auto;margin-right: auto"> 
-                本次测验一共有 {{ quizItems | length }} 道题目。</h4>
-        </div>
-        {% for quizItem in quizItems %}
+  {% elseif quiz is not empty and quizItems is empty  %}
+      
+    {% include 'TopxiaWebBundle:LessonQuizPlugin:quiz-empty-and-items-exist.html.twig' with {quiz: quiz} %}
 
-            <form style="display:none" name="item-in-quiz" class="form-horizontal quiz-form" method="post" action="{{ path('course_lesson_plugin_quiz_item_post', {quizId:lessonQuiz.id, quizItemId:quizItem.id}) }}" >
-                
-                <div class="item-type pull-right">
-                    {% if quizItem.type == "multiple" %}
-                        <h4 style="color:red"> 本题是多选题 </h4>
-                        <span id="item-type" style="display:none">multiple</span>
-                    {% elseif quizItem.type == "single" %}  
-                        <h4 style="color:red"> 本题是单选题 </h4>
-                        <span id="item-type" style="display:none">single</span>
-                    {% endif %}
-                </div>
-                <h3> 第{{quizItem.Number2Chinese}}题</h3>
+  {% elseif quizItems is not empty  %}
+      
+    {% include 'TopxiaWebBundle:LessonQuizPlugin:items-exist.html.twig' with {quizItems: quizItems, lessonQuiz:lessonQuiz } %}
 
-                <div class="container">
-                    <div class="row show-grid">
-                        <h4 style="background-color:rgb(235, 243, 238)">{{quizItem.description }} </h4>
-                        <hr>
-                    </div>
-                </div>
-
-                {% for index, choice in quizItem.choices %}
-                    {% set indexInChoice = loop.index %}
-                    <div class="choice">
-                        {% for letter in 'A'..'Z' %}  
-                            {% if loop.index == indexInChoice %}
-                              <span style="color:green">  选项{{ letter }}: </span>
-                            {% endif %}
-                        {% endfor %}
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <span> {{choice}} </span>
-                        {% if quizItem.type == "multiple" %}
-                            <span class="pull-right"> <input type="checkbox" name={{index}}>选中 </span>
-                        {% elseif quizItem.type == "single" %}
-                            <span class="pull-right"> <input type="radio" name="single" value={{index}}>选中 </span>
-                        {% endif %}
-                    </div>
-                    <hr>
-                {% endfor %}
-
-                <input style="display:none" id="user-choices" name="user-choices" type="text" value="" >
-                <button type="submit" class="btn btn-primary pull-right" name="user-submit" data-toggle="form-submit" data-target="#quiz-form">完成本题</button>
-            </form>
-        {% endfor %}
-        
-    </div>
-
-{% elseif quiz is not empty and quizItems is not empty  %}
-
-    <div class="quiz-content">
-        
-        <div class="all-count-quiz-items">
-           <h4 style="display:table; width: auto; margin-left: auto;margin-right: auto"> 
-                本次测验一共有 {{ quizItems | length }} 道题目。</h4>
-        </div>
-
-        {% for quizItem in quizItems %}
-
-            <form style="display:none" name="item-in-quiz" class="form-horizontal quiz-form" method="post" action="{{ path('course_lesson_plugin_quiz_item_post', {quizId:lessonQuiz.id, quizItemId:quizItem.id}) }}" >
-                
-                <div class="item-type pull-right">
-                    {% if quizItem.type == "multiple" %}
-                        <h4 style="color:red"> 本题是多选题 </h4>
-                        <span id="item-type" style="display:none">multiple</span>
-                    {% elseif quizItem.type == "single" %}  
-                        <h4 style="color:red"> 本题是单选题 </h4>
-                        <span id="item-type" style="display:none">single</span>
-                    {% endif %}
-                </div>
-                <h3> 第{{loop.index}}题</h3>
-
-                <div class="container">
-                    <div class="row show-grid">
-                        <h4 style="background-color:rgb(235, 243, 238)">{{quizItem.description }} </h4>
-                        <hr>
-                    </div>
-                </div>
-
-                {% for index, choice in quizItem.choices %}
-                    {% set indexInChoice = loop.index %}
-                    <div class="choice">
-                        {% for letter in 'A'..'Z' %}  
-                            {% if loop.index == indexInChoice %}
-                              <span style="color:green">  选项{{ letter }}: </span>
-                            {% endif %}
-                        {% endfor %}
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <span> {{choice}} </span>
-                        {% if quizItem.type == "multiple" %}
-                            <span class="pull-right"> <input type="checkbox" name={{index}}>选中 </span>
-                        {% elseif quizItem.type == "single" %}
-                            <span class="pull-right"> <input type="radio" name="single" value={{index}}>选中 </span>
-                        {% endif %}
-                    </div>
-                    <hr>
-                {% endfor %}
-
-                <input style="display:none" id="user-choices" name="user-choices" type="text" value="" >
-                <button type="submit" class="btn btn-primary pull-right" name="user-submit" data-toggle="form-submit" data-target="#quiz-form">完成本题</button>
-            </form>
-        {% endfor %}
-
-    </div>
-
-{% elseif quiz is not empty and quizItems is empty  %}
-
-    <p class="empty-item">
-    <h4> 你上次的成绩为: {{quiz.score}} 分</h4>
-    不好意思，本课时的测验已经撤销!
-    </p>
-
-{% endif %}
+  {% endif %}
 
 </div>
 
-<script>app.load('course/quiz')</script>
+<script>app.load('course/quiz')</script> 
+
 {% endblock %}
 
 {% block footer %}
     {% if quizItems %}
-    <button style="display:none" class="next-item btn btn-primary" data-url="{{ path('course_lesson_plugin_quiz_check_result', {quizId:lessonQuiz.id}) }}">下一题</button>
+      <button style="display:none" class="next-item btn btn-primary" data-url="{{ path('course_lesson_plugin_quiz_check_result', {quizId:lessonQuiz.id}) }}">下一题</button>
     {% endif %}
 {% endblock %}
 

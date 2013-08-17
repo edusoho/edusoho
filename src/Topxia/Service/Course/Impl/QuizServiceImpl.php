@@ -24,7 +24,6 @@ class QuizServiceImpl extends BaseService implements QuizService
         $item['type'] = count($item['answers']) > 1 ? 'multiple' : 'single';
         $item['userId'] = $this->getCurrentUser()->id;
         $item['createdTime'] = time();
-
         return ItemSerialize::unserialize(
             $this->getCourseQuizItemDao()->addQuizItem(ItemSerialize::serialize($item))
         );
@@ -38,11 +37,8 @@ class QuizServiceImpl extends BaseService implements QuizService
         }
 
         $fields = ArrayToolkit::parts($fields, array('description', 'level', 'choices', 'answers'));
-
         $this->checkItem($fields);
-
         $fields['type'] = count($fields['answers']) > 1 ? 'multiple' : 'single';
-
         return ItemSerialize::unserialize(
             $this->getCourseQuizItemDao()->updateQuizItem($item['id'], ItemSerialize::serialize($fields))
         );
@@ -54,7 +50,6 @@ class QuizServiceImpl extends BaseService implements QuizService
         if(!$item){
             throw $this->createServiceException("测验问题(#{$id})不存在，删除问题失败!");
         }
-
         $this->getCourseService()->tryManageCourse($item['courseId']);
 
         $this->getCourseQuizItemDao()->deleteQuizItem($id);
@@ -83,19 +78,13 @@ class QuizServiceImpl extends BaseService implements QuizService
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
         $getedLessonQuiz = $this->getCourseQuizDao()->getQuizByCourseIdAndLessonIdAndUserId(
             $lesson['courseId'], $lesson['id'], $userId);
-        if($getedLessonQuiz){
-            return $getedLessonQuiz;
-        } else {
-            return array();
-        }
-
+        return $getedLessonQuiz ? $getedLessonQuiz : array();
     }
 
     public function findQuizItemsInLessonQuiz($lessonQuizId)
     {
         $quiz = $this->getCourseQuizDao()->getQuiz($lessonQuizId);
         $quizItemIds = explode("|", $quiz['itemIds']);
-
         // @todo HTML Purifier
         
         if(!empty($quizItemIds)){
@@ -114,43 +103,34 @@ class QuizServiceImpl extends BaseService implements QuizService
     public function findLessonQuizItemIds($courseId, $lessonId)
     {
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $lessonQuizItemIds = $this->getCourseQuizItemDao()->findItemIdsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
-        if(!empty($lessonQuizItemIds)){
-            return $lessonQuizItemIds;
-        } else {
-            return null;
-        }
+        $itemIds = $this->getCourseQuizItemDao()->findItemIdsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
+        return $itemIds ? $itemIds : null;
     }
 
     public function answerLessonQuizItem($lessonQuizId, $itemId, $answerContent)
     {
         $checkResult = $this->checkQuizAndItem($lessonQuizId, $itemId);
-        $lessonQuizItemAnswerInfo = array();
+        $answerInfo = array();
         $answersResult = $this->checkAnswerContent($checkResult['item']['answers'], $answerContent);
         if($answersResult){
-            $lessonQuizItemAnswerInfo['isCorrect'] = 1;
+            $answerInfo['isCorrect'] = 1;
         } else {
-            $lessonQuizItemAnswerInfo['isCorrect'] = 0;
+            $answerInfo['isCorrect'] = 0;
         }
-        $lessonQuizItemAnswerInfo['createdTime'] = time();
-        $lessonQuizItemAnswerInfo['quizId'] = $checkResult['quiz']['id'];
-        $lessonQuizItemAnswerInfo['itemId'] = $checkResult['item']['id'];
-        $lessonQuizItemAnswerInfo['answers'] = $answerContent;
-        $lessonQuizItemAnswerInfo['userId'] = $this->getCurrentUser()->id;
+        $answerInfo['createdTime'] = time();
+        $answerInfo['quizId'] = $checkResult['quiz']['id'];
+        $answerInfo['itemId'] = $checkResult['item']['id'];
+        $answerInfo['answers'] = $answerContent;
+        $answerInfo['userId'] = $this->getCurrentUser()->id;
 
         $itemAnswer = $this->getCourseQuizItemAnswerDao()->getAnswerByQuizIdAndItemIdAndUserId(
             $checkResult['quiz']['id'], $checkResult['item']['id'], $this->getCurrentUser()->id);
         if(!empty($itemAnswer)){
              throw $this->createServiceException("每一道题目只能答一次!");
         }
-
         $this->getCourseQuizItemAnswerDao()->addAnswer($answerInfo);
-        
-        if($answersResult){
-            return "correct";
-        } else {
-            return "wrong";
-        }
+
+        return $answersResult ? 'correct' : 'wrong';
     }
 
     public function checkUserLessonQuizResult($quizId)

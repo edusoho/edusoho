@@ -6,18 +6,14 @@
 
 {% block body %}
     
-    <div class="quiz-page quiz-container">
+  <div class="quiz-page quiz-container">
 
-        <div class="alreay-lesson-quiz">
-            <h4> 你上次的成绩为: {{quiz.score}} 分</h4>
-            <button id="start-quiz" class="start-quiz btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:quiz.courseId, lessonId:quiz.lessonId}) }}">开始答题！</button>
-        </div>
-
+    <div class="alreay-lesson-quiz">
+      <h4> 你上次的成绩为: {{quiz.score}} 分</h4>
+      <button id="start-quiz" class="start-quiz btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:quiz.courseId, lessonId:quiz.lessonId}) }}">开始答题！</button>
     </div>
 
-{% endblock %}
-
-{% block footer %}
+  </div>
 
 {% endblock %}
 
