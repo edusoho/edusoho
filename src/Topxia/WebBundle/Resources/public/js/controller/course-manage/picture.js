@@ -2,6 +2,7 @@ define(function(require, exports, module) {
     require("jquery.jcrop");
     require('jquery.form');
     var Notify = require('common/bootstrap-notify');
+
     exports.run = function() {
       	require('./header').run();
 
@@ -22,9 +23,7 @@ define(function(require, exports, module) {
         $("#upload-picture-btn").on('click', function(e){
             e.preventDefault();
             $form = $("#course-picture-form"); 
-
             $form.ajaxSubmit({
-                clearForm: true,
                 success: function(data){
                     $("#crop-with-new-window").remove();
                     $form.remove();
@@ -32,7 +31,6 @@ define(function(require, exports, module) {
                     resetCrop();
                 }
             });
-            
         });
 
        

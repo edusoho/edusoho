@@ -46,7 +46,7 @@ interface CourseService
 
 	public function updateCourseCounter($id, $counter);
 
-	public function changeCoursePicture($id, UploadedFile $picture);
+	public function cacheCoursePicture($id, UploadedFile $picture);
 
 	/**
 	 * 删除课程

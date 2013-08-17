@@ -74,9 +74,10 @@ class CourseManageController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $fields = $form->getData();
-                $this->getCourseService()->changeCoursePicture($course['id'], $fields['picture']);
+                $tmpFile =  $this->getCourseService()->cacheCoursePicture($course['id'], $fields['picture']);
                 $html = $this->renderView('TopxiaWebBundle:CourseManage:picture2crop.html.twig', array(
-                        'course' => $this->getCourseService()->getCourse($id)));
+                        'course' => $this->getCourseService()->getCourse($id),
+                        'tmpFile'=>$tmpFile));
                 return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
             } else {
                 return $this->createJsonResponse(array('status'=>'error'));
@@ -90,7 +91,9 @@ class CourseManageController extends BaseController
 
     public function cropPictureAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
+        $fileUri = $request->request->get('fileUri');
+        $fileAfterParse = $this->getFileService()->parseFileUri($fileUri);
+
         if($request->getMethod() == 'POST'){
             $x = (int)$request->request->get('x');
             $y = (int)$request->request->get('y');
@@ -100,10 +103,10 @@ class CourseManageController extends BaseController
                 throw new \RuntimeException('裁剪的参数大小有问题，请重新裁剪！');
             }
             $imagine = new Imagine();
-            $uri = $this->getFileService()->parseFileUri($course['largePicture']);
-            $fullpath = $uri['fullpath'];
-            $cropResult = $imagine->open($fullpath)->crop(new Point($x, $y), new Box($w, $h))->resize(new Box(445, 260))
-                ->save($fullpath, array(
+            $course = $this->getCourseService()->getCourse($id);
+            $coursePicture = $this->getFileService()->parseFileUri($course['largePicture']);
+            $cropResult = $imagine->open($fileAfterParse['fullpath'])->crop(new Point($x, $y), new Box($w, $h))->resize(new Box(445, 260))
+                ->save($coursePicture['fullpath'], array(
                     'quality' => 90));
             if(!empty($cropResult)){
                 return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));

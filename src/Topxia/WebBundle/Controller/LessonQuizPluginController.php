@@ -45,20 +45,20 @@ class LessonQuizPluginController extends BaseController
         $quizItemIds = $this->getQuizService()->findLessonQuizItemIds($course['id'], $lesson['id']);
         $quizItems = array();
         $lessonQuiz = array();
-        $alreadyLessonQuiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $currentUser['id']);
+        $quiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $currentUser['id']);
         if(!empty($quizItemIds)){
             $quizItemIds = ArrayToolkit::column($quizItemIds, 'id');
             $lessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $lesson['id'], $quizItemIds);
             $quizItems = $this->getQuizService()->findQuizItemsInLessonQuiz($lessonQuiz['id']);
         }
-        if(!empty($alreadyLessonQuiz)){
-            $this->getQuizService()->deleteQuiz($alreadyLessonQuiz['id']);
+        if(!empty($quiz)){
+            $this->getQuizService()->deleteQuiz($quiz['id']);
         }
 
         return $this->render('TopxiaWebBundle:LessonQuizPlugin:lesson-quiz-page.html.twig', array(
             'quizItems'=>$quizItems,
             'lessonQuiz'=>$lessonQuiz,
-            'alreadyLessonQuiz'=>$alreadyLessonQuiz,
+            'quiz'=>$quiz,
             'course'=>$course,
             'lesson'=>$lesson));
     }

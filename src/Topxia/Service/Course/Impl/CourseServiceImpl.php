@@ -6,6 +6,11 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 
+use Imagine\Imagick\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+
 class CourseServiceImpl extends BaseService implements CourseService
 {
 
@@ -238,24 +243,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-    public function changeCoursePicture ($id, UploadedFile $pictureFile)
+    public function cacheCoursePicture ($id, UploadedFile $pictureFile)
     {
 		$course = $this->getCourse($id);
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，图标更新失败！');
 		}
-
-		$file = $this->getFileService()->uploadFile('default', $pictureFile);
-
-		$largeThumbFile = $this->getFileService()->thumbnailFile($file, array(
-			'mode' => 'outbound',
-			'width' => 445,
-			'height' => 260
-		));
 		
-		$this->getCourseDao()->updateCourse($id, array('largePicture' => $largeThumbFile['uri']));
+		/* 这里上传过来的图片必须在resize之后 才能并保存之后呈现给前台 */
 
-		return true;
+		$tmpFile =  $this->getFileService()->uploadFile('tmp', $pictureFile);
+		$imagine = new Imagine();
+		$tmpFileAfterParse = $this->getFileService()->parseFileUri($tmpFile['uri']);
+		$imagine->open($tmpFileAfterParse['fullpath'])->resize(new Box(480, 270))
+                ->save($tmpFileAfterParse['fullpath'], array(
+                    'quality' => 90));
+        return $tmpFile;
     }
 
 	public function deleteCourse($id)
