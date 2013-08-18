@@ -1,59 +1,42 @@
-<div class="quiz-content">
-
-  <div class="all-count-quiz-items">
-    <h4 style="display:table; width: auto; margin-left: auto;margin-right: auto"> 
-          本次测验一共有 {{ quizItems | length }} 道题目。
-    </h4>
-  </div>
+<div class="quiz">
 
   {% for quizItem in quizItems %}
-
     <form style="display:none" name="item-in-quiz" class="form-horizontal quiz-form" method="post" action="{{ path('course_lesson_plugin_quiz_item_post', {quizId:lessonQuiz.id, quizItemId:quizItem.id}) }}" >
 
-      <div class="item-type pull-right">
-        {% if quizItem.type == "multiple" %}
-          <h4 style="color:red"> 本题是多选题 </h4>
-          <span id="item-type" style="display:none">multiple</span>
-        {% elseif quizItem.type == "single" %}  
-          <h4 style="color:red"> 本题是单选题 </h4>
-          <span id="item-type" style="display:none">single</span>
+      <div class="quiz-heading">
+        {% if quizItem.type != "multiple" %}
+          <span class="pull-right text-muted">本题是多选题</span>
         {% endif %}
+        <h4> 第{{loop.index}}题<small> (共 {{ quizItems | length }}题)</small></h4>
       </div>
 
-      <h3> 第{{loop.index}}题</h3>
-
-      <div class="container">
-        <div class="row show-grid">
-          <h4 style="background-color:rgb(235, 243, 238)">{{quizItem.description }} </h4> <hr>
-        </div>
+      <div class="quiz-description">
+        {{quizItem.description|raw }}
       </div>
 
-      <div class="choices">
+      <div class="quiz-choices">
+        {% set letters =  'A'..'Z' %}
         {% for index, choice in quizItem.choices %}
-        {% set indexInChoice = loop.index %}
-
-          <div class="choice">
-            {% for letter in 'A'..'Z' %}  
-              {% if loop.index == indexInChoice %}
-                <span style="color:green">  选项{{ letter }}: </span>
-              {% endif %}
-            {% endfor %}
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span> {{choice}} </span>
-            {% if quizItem.type == "multiple" %}
-              <span class="pull-right"> <input type="checkbox" name={{index}}>选中 </span>
-            {% elseif quizItem.type == "single" %}
-              <span class="pull-right"> <input type="radio" name="single" value={{index}}>选中 </span>
-            {% endif %}
-          </div>  
-          <hr>
+        <div class="choice clearfix">
+          {{ letters[loop.index0] }}：
+          <span> {{choice}} </span>
+          {% if quizItem.type == "multiple" %}
+            <span class="pull-right"> <input type="checkbox" name={{index}}></span>
+          {% elseif quizItem.type == "single" %}
+            <span class="pull-right"> <input type="radio" name="single" value={{index}}></span>
+          {% endif %}
+        </div>  
         {% endfor %}
       </div>
 
       <input style="display:none" id="user-choices" name="user-choices" type="text" value="" >
-      <button type="submit" class="btn btn-primary pull-right" name="user-submit" data-toggle="form-submit" data-target="#quiz-form">完成本题</button>
+      <div class="clearfix">
+        <button type="submit" class="btn btn-primary pull-right" name="user-submit" data-toggle="form-submit" data-target="#quiz-form">提交</button>
+      </div>
 
     </form>
 
   {% endfor %}
+
+  {% set hide_footer = true %}
 </div>

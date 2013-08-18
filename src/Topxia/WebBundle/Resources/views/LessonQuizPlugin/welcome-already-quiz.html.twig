@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}欢迎来到本课程的测试页面！{% endblock %}
+{% block title %}测验{% endblock %}
 
 {% set block = block|default(null) %}
 
@@ -9,12 +9,17 @@
   <div class="quiz-page quiz-container">
 
     <div class="alreay-lesson-quiz">
-      <h4> 你上次的成绩为: {{quiz.score}} 分</h4>
-      <button id="start-quiz" class="start-quiz btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:quiz.courseId, lessonId:quiz.lessonId}) }}">开始答题！</button>
+      <h4> 你的上次成绩为: <span class="text-success">{{quiz.score}}分</span></h4>
+      <div class="text-muted">多次参加测验，以最后一次成绩为准。</div>
+
     </div>
 
   </div>
 
+{% endblock %}
+
+{% block footer %}
+    <button id="start-quiz" class="start-quiz btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:quiz.courseId, lessonId:quiz.lessonId}) }}">开始测验</button>
 {% endblock %}
 
 {% set hideFooter = true %}

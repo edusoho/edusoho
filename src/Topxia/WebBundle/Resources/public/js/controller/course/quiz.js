@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         var Notify = require('common/bootstrap-notify');
         
         $(".quiz-page").on('click', ".start-quiz", function() {
-            $(".quiz-content").show();
+            $(".quiz").show();
             $(".alreay-lesson-quiz").hide();
         });
 
@@ -194,7 +194,7 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            if (!confirm("测验内容随机生成，温馨提示：真的要退出本课时的测验吗？")) {
+            if (!confirm("测验尚未完成，真的要退出本次测验吗？")) {
                 return false;
             }
         });

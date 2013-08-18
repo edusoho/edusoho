@@ -1526,33 +1526,59 @@ body {
 	color: #fff;
 }
 
-.quiz-item-form .choice-delete-btn {
+.quiz-manager .quiz-item-form .choice-delete-btn {
 	color: #999;
 }
 
-.quiz-item-form .choice-add-btn {
+.quiz-manager .quiz-item-form .choice-add-btn {
 	margin-left: 50px;
 }
 
-.quiz-item-form .control-label {
+.quiz-manager .quiz-item-form .control-label {
 	text-align: left;
 }
 
-.quiz-item-form .item-input {
+.quiz-manager .quiz-item-form .item-input {
 	width: 350px;
 	display: inline-block;
 }
 
-.quiz-item-form .choice-label {
+.quiz-manager .quiz-item-form .choice-label {
 	margin-right: 10px;
 }
 
-.quiz-item-form .choice-answer-label {
+.quiz-manager .quiz-item-form .choice-answer-label {
 	font-weight: normal;
 	margin-left: 10px;
 }
 
+.quiz {
 
+}
+
+.quiz-heading {
+	border-bottom: 1px solid #eee;
+}
+
+.quiz-description {
+	margin: 15px 0;
+}
+
+.quiz-choices {
+	margin: 20px 0;
+}
+
+.quiz-choices .choice {
+	border: 1px solid #eee;
+	padding: 15px;
+	cursor: pointer;
+}
+
+.quiz-choices .choice-active,
+.quiz-choices .choice:hover {
+	border: 1px solid #bbb;
+	background: #f3f3f3;
+}
 /**
  * MISC
  */
