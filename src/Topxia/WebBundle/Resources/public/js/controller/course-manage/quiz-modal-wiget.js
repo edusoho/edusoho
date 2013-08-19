@@ -95,6 +95,7 @@ define(function(require, exports, module) {
                 $item.remove();
                 self.get('items')[$item.data('id')] = undefined;
                 Notify.success('测验题目删除成功！');
+                self.resetItemForm();
             });
         },
 
@@ -174,7 +175,7 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            $form.find('[name=answers]').val(answers.join(';'));
+            $form.find('[name=answers]').val(answers.join('|'));
 
             return true;
         },

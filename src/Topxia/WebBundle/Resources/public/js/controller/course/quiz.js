@@ -17,7 +17,8 @@ define(function(require, exports, module) {
             'click input[name=answer]': 'onClickAnswerInput',
             'click .check-answer': 'onCheckAnswer',
             'click .next-item': 'onNextItem',
-            'click .view-result': 'onViewResult'
+            'click .view-result': 'onViewResult',
+            'click .redo-quiz': 'onRedoQuiz'
         },
 
         setup: function() {
@@ -25,10 +26,20 @@ define(function(require, exports, module) {
             this.set('itemCount', this.element.find('.quiz-form').length);
             this.getNextItemForm().show();
             this.setModalButtonStatus('check-answer');
+
+            $('#modal').on('hide.bs.modal', function(e) {
+                if($("#quiz").find(".quiz-forms").is(":visible")){
+                    if (!confirm("真的要退出本次测验吗？")) {
+                        return false;
+                    } else {
+                        $("#modal").off('hide.bs.modal');
+                    }
+                }
+            });
         },
 
-        getCurrentItemForm: function() {
-
+        onRedoQuiz: function(e){
+            $("#modal").off('hide.bs.modal');
         },
 
         onClickChoice: function(e) {
@@ -147,33 +158,12 @@ define(function(require, exports, module) {
 
 
     exports.run = function() {
+
         new QuizWiget({
             element: '#quiz'
         });
 
-        $("#modal").off('hide.bs.modal');
-        $('#modal').on('hide.bs.modal', function(e) {
-            if ($(".quiz-page").find("p[class='empty-item']").text().length > 0) {
-                return ;
-            }  
-            
-            if ($(".quiz-page").find(".alreay-lesson-quiz").is(":visible") == true){
-                return ;
-            }
-
-            if($(".modal-body").find(".check-result-block").length > 0){
-                return ;
-            }
-
-            // if (!confirm("测验尚未完成，真的要退出本次测验吗？")) {
-            //     return false;
-            // }
-        });
-
     };
-
-
-
 
 
 });

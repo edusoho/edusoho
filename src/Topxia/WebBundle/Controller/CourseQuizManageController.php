@@ -27,8 +27,8 @@ class CourseQuizManageController extends BaseController
     public function saveItemAction(Request $request, $courseId, $lessonId)
     {
         $item = $request->request->all();
-        $item['answers'] = explode(';', $item['answers']);
-
+        $item['answers'] = explode('|', $item['answers']);
+        
         if (empty($item['id'])) {
             $item['courseId'] = $courseId;
             $item['lessonId'] = $lessonId;

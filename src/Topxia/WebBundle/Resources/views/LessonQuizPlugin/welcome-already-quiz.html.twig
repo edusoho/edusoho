@@ -20,9 +20,6 @@
 
 {% block footer %}
     <button id="start-quiz" class="start-quiz btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:quiz.courseId, lessonId:quiz.lessonId}) }}">开始测验</button>
-    <script>
-    	$("#start-quiz").click();
-    </script>
 {% endblock %}
 
 {% set hideFooter = true %}

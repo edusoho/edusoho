@@ -5,7 +5,6 @@ interface QuizService
 {
 
 
-
     public function getQuizItem($lessonQuizItemId);
 
     public function getUserLessonQuiz($courseId, $lessonId, $userId);
@@ -28,7 +27,6 @@ interface QuizService
 
     public function findLessonQuizItemIds($courseId, $lessonId);
 
-    
 
     public function findQuizItemsInLessonQuiz($lessonQuizId);
 

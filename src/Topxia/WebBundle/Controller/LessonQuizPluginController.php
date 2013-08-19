@@ -13,7 +13,7 @@ class LessonQuizPluginController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
         $quiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $this->getCurrentUser()->id);
         
-        if($quiz){   
+        if($quiz){  
             return $this->render('TopxiaWebBundle:LessonQuizPlugin:welcome-already-quiz.html.twig', array('quiz'=>$quiz));
         } else {
             $preparedData = $this->prepareForStart($courseId, $lessonId);
