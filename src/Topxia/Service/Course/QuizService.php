@@ -17,18 +17,23 @@ interface QuizService
 
     public function deleteItem($id);
 
+
+    public function getQuiz($id);
+
+    public function createLessonQuiz($courseId, $lessonId, $itemIds);
+
     public function deleteQuiz($id);
 
     public function findLessonQuizItems($courseId, $lessonId);
 
     public function findLessonQuizItemIds($courseId, $lessonId);
 
-    public function createLessonQuiz($courseId, $lessonId, $itemIds);
+    
 
     public function findQuizItemsInLessonQuiz($lessonQuizId);
 
-    public function answerLessonQuizItem($lessonQuizId, $itemId, $answerContent);
+    public function answerQuizItem($lessonQuizId, $itemId, $answerContent);
 
-    public function checkUserLessonQuizResult($quizId);
+    public function submitQuizResult($quizId);
 
 }

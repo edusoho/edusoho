@@ -25,13 +25,13 @@ class QuizServiceImpl extends BaseService implements QuizService
         $item['userId'] = $this->getCurrentUser()->id;
         $item['createdTime'] = time();
         return ItemSerialize::unserialize(
-            $this->getCourseQuizItemDao()->addQuizItem(ItemSerialize::serialize($item))
+            $this->getItemDao()->addQuizItem(ItemSerialize::serialize($item))
         );
     }
 
     public function updateItem($id, $fields)
     {
-        $item = $this->getCourseQuizItemDao()->getQuizItem($id);
+        $item = $this->getItemDao()->getQuizItem($id);
         if(!$item){
             throw $this->createServiceException("问题(#{$id})不存在，更新问题失败!");
         }
@@ -40,55 +40,50 @@ class QuizServiceImpl extends BaseService implements QuizService
         $this->checkItem($fields);
         $fields['type'] = count($fields['answers']) > 1 ? 'multiple' : 'single';
         return ItemSerialize::unserialize(
-            $this->getCourseQuizItemDao()->updateQuizItem($item['id'], ItemSerialize::serialize($fields))
+            $this->getItemDao()->updateQuizItem($item['id'], ItemSerialize::serialize($fields))
         );
     }
 
     public function deleteItem($id)
     {
-        $item = $this->getCourseQuizItemDao()->getQuizItem($id);
+        $item = $this->getItemDao()->getQuizItem($id);
         if(!$item){
             throw $this->createServiceException("测验问题(#{$id})不存在，删除问题失败!");
         }
         $this->getCourseService()->tryManageCourse($item['courseId']);
 
-        $this->getCourseQuizItemDao()->deleteQuizItem($id);
+        $this->getItemDao()->deleteQuizItem($id);
     }
 
 
-    public function getQuizItem($lessonQuizItemId)
+    public function getQuizItem($id)
     {
-        $getedLessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($lessonQuizItemId);
-        if(!$getedLessonQuizItem){
-            return null;
-        } else {
-            return $getedLessonQuizItem;
-        }
+        return ItemSerialize::unserialize($this->getItemDao()->getQuizItem($id));
     }
 
     public function findLessonQuizItems($courseId, $lessonId)
     {
         return ItemSerialize::unserializes(
-            $this->getCourseQuizItemDao()->findQuizItemsByCourseIdAndLessonId($courseId, $lessonId)
+            $this->getItemDao()->findQuizItemsByCourseIdAndLessonId($courseId, $lessonId)
         );
     }
 
     public function getUserLessonQuiz($courseId, $lessonId, $userId)
     {
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $getedLessonQuiz = $this->getCourseQuizDao()->getQuizByCourseIdAndLessonIdAndUserId(
+        $getedLessonQuiz = $this->getQuizDao()->getQuizByCourseIdAndLessonIdAndUserId(
             $lesson['courseId'], $lesson['id'], $userId);
         return $getedLessonQuiz ? $getedLessonQuiz : array();
     }
 
     public function findQuizItemsInLessonQuiz($lessonQuizId)
     {
-        $quiz = $this->getCourseQuizDao()->getQuiz($lessonQuizId);
+        $quiz = $this->getQuizDao()->getQuiz($lessonQuizId);
         $quizItemIds = explode("|", $quiz['itemIds']);
         // @todo HTML Purifier
         
         if(!empty($quizItemIds)){
-            $quizItems = $this->getCourseQuizItemDao()->findQuizItemsByIds($quizItemIds);
+            $quizItems = $this->getItemDao()->findQuizItemsByIds($quizItemIds);
             foreach ($quizItems as $key => &$item) {
                 $item['choices'] = json_decode($item['choices']);
                 $item['choices'] = $this->randomFullArray($item['choices']);
@@ -103,57 +98,86 @@ class QuizServiceImpl extends BaseService implements QuizService
     public function findLessonQuizItemIds($courseId, $lessonId)
     {
         $lesson = $this->checkCourseAndLesson($courseId, $lessonId);
-        $itemIds = $this->getCourseQuizItemDao()->findItemIdsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
+        $itemIds = $this->getItemDao()->findItemIdsByCourseIdAndLessonId($lesson['courseId'], $lesson['id']);
         return $itemIds ? $itemIds : null;
     }
 
-    public function answerLessonQuizItem($lessonQuizId, $itemId, $answerContent)
+    public function answerQuizItem($quizId, $itemId, $answers)
     {
-        $checkResult = $this->checkQuizAndItem($lessonQuizId, $itemId);
-        $answerInfo = array();
-        $answersResult = $this->checkAnswerContent($checkResult['item']['answers'], $answerContent);
-        if($answersResult){
-            $answerInfo['isCorrect'] = 1;
-        } else {
-            $answerInfo['isCorrect'] = 0;
-        }
-        $answerInfo['createdTime'] = time();
-        $answerInfo['quizId'] = $checkResult['quiz']['id'];
-        $answerInfo['itemId'] = $checkResult['item']['id'];
-        $answerInfo['answers'] = $answerContent;
-        $answerInfo['userId'] = $this->getCurrentUser()->id;
+        $user = $this->getCurrentUser();
 
-        $itemAnswer = $this->getCourseQuizItemAnswerDao()->getAnswerByQuizIdAndItemIdAndUserId(
-            $checkResult['quiz']['id'], $checkResult['item']['id'], $this->getCurrentUser()->id);
-        if(!empty($itemAnswer)){
-             throw $this->createServiceException("每一道题目只能答一次!");
-        }
-        $this->getCourseQuizItemAnswerDao()->addAnswer($answerInfo);
+        $quiz = $this->getQuiz($quizId);
+        $item = $this->getQuizItem($itemId);
 
-        return $answersResult ? 'correct' : 'wrong';
+        if (empty($quiz) or empty($item) or !in_array($item['id'], $quiz['itemIds'])) {
+            throw $this->createServiceException('提交的测验数据不正确。');
+        }
+
+        if ($quiz['userId'] != $user['id']) {
+            throw $this->createServiceException('无权限提交当前测试的答案。');
+        }
+
+        if (empty($answers)) {
+            throw $this->createServiceException('答案不能为空，回答失败！');
+        }
+
+        // $existAnswer = $this->getItemAnswerDao()->getAnswerByQuizIdAndItemIdAndUserId($quizId, $itemId, $user['id']);
+        // if(!empty($existAnswer)){
+        //      throw $this->createServiceException("每一道题目只能答一次!");
+        // }
+
+        $answer = array();
+        $answer['isCorrect'] = $this->isAnswersCorrect($item['answers'], $answers) ? 1 : 0;
+        $answer['quizId'] = $quizId;
+        $answer['itemId'] = $itemId;
+        $answer['answers'] = $answers;
+        $answer['userId'] = $this->getCurrentUser()->id;
+        $answer['createdTime'] = time();
+
+        $this->getItemAnswerDao()->addAnswer(AnswerSerialize::serialize($answer));
+
+        return array('correct' => $answer['isCorrect'], 'correctAnswers' => $item['answers']);
     }
 
-    public function checkUserLessonQuizResult($quizId)
+    public function submitQuizResult($quizId)
     {
-        $quiz = $this->getCourseQuizDao()->getQuiz($quizId);
-        $itemIds = explode("|", $quiz['itemIds']);
-        $itemIdsCount = count($itemIds);
-        $correctAnswersCount = $this->getCourseQuizItemAnswerDao()->getCorrectAnswersCountByUserIdAndQuizId($this->getCurrentUser()->id, $quiz['id']);
-        $score = round(100*($correctAnswersCount/$itemIdsCount), 1);
-        $this->getCourseQuizDao()->updateQuiz($quiz['id'], array('score'=>$score, 'endTime'=>time()));
-        return array("score"=>$score, "correctCount"=>$correctAnswersCount, "wrongCount"=> ($itemIdsCount - $correctAnswersCount));
+        $quiz = $this->getQuiz($quizId);
+        if (empty($quiz)) {
+            throw $this->createServiceException("测验(#{$quizId})不存在，提交失败。");
+        }
+
+        $user = $this->getCurrentUser();
+        if ($quiz['userId'] != $user['id']) {
+            throw $this->createServiceException("你无权提交该测验(#{$quizId})。");
+        }
+
+        $itemCount = count($quiz['itemIds']);
+
+        $correctCount = $this->getItemAnswerDao()->getCorrectAnswersCountByUserIdAndQuizId($user['id'], $quiz['id']);
+        $score = round(100*($correctCount/$itemCount), 1);
+
+        $this->getQuizDao()->updateQuiz($quiz['id'], array('score'=>$score, 'endTime'=>time()));
+        
+        return array(
+            'score'=>$score,
+            'itemCount' => $itemCount,
+            'correctCount' => $correctCount, 
+        );
     }
 
-
+    public function getQuiz($id)
+    {
+        return QuizSerialize::unserialize($this->getQuizDao()->getQuiz($id));
+    }
 
     public function deleteQuiz($quizId)
     {
         $this->clearUserAnswersInQuiz($this->getCurrentUser()->id, $quizId);
-        $lessonQuiz = $this->getCourseQuizDao()->getQuiz($quizId);
+        $lessonQuiz = $this->getQuizDao()->getQuiz($quizId);
         if(!$lessonQuiz){
             throw $this->createServiceException("删除问题失败，本问题不存在!");
         }
-        return $this->getCourseQuizDao()->deleteQuiz($quizId);
+        return $this->getQuizDao()->deleteQuiz($quizId);
     }
 
     public function createLessonQuiz($courseId, $lessonId, $itemIds)
@@ -186,7 +210,7 @@ class QuizServiceImpl extends BaseService implements QuizService
         $lessonQuizInfo['score'] = 0;
         $lessonQuizInfo['endTime'] = 0;
 
-        return $this->getCourseQuizDao()->addQuiz($lessonQuizInfo);
+        return $this->getQuizDao()->addQuiz($lessonQuizInfo);
     }
 
     private function checkForCreateQuiz($courseId, $lessonId, $itemIds)
@@ -220,17 +244,11 @@ class QuizServiceImpl extends BaseService implements QuizService
         return $result;
     }
     
-    private function checkAnswerContent($standardAnswers, $userAnswers)
+    private function isAnswersCorrect($standardAnswers, $userAnswers)
     {
-        $standardAnswersArray = explode(";", $standardAnswers);
-        $userAnswersArray = explode(";", $userAnswers);
-        $arrayDiff1 = array_diff($standardAnswersArray, $userAnswersArray);
-        $arrayDiff2 = array_diff($userAnswersArray, $standardAnswersArray);
-        if (empty($arrayDiff1) && empty($arrayDiff2)) {
-            return true;
-        } else {
-            return false;
-        }
+        $diff1 = array_diff($standardAnswers, $userAnswers);
+        $diff2 = array_diff($userAnswers, $standardAnswers);
+        return empty($diff1) && empty($diff2);
     }
     
     private function clearUserAnswersInQuiz($userId, $quizId)
@@ -239,11 +257,11 @@ class QuizServiceImpl extends BaseService implements QuizService
         if($user['id'] != $userId){
             throw $this->createServiceException("用户已经尚未登陆，操作失败!");
         }
-        $quiz = $this->getCourseQuizDao()->getQuiz($quizId);
+        $quiz = $this->getQuizDao()->getQuiz($quizId);
         if(empty($quiz)){
             throw $this->createServiceException("测试不存在!");
         }
-        return  $this->getCourseQuizItemAnswerDao()->deleteAnswersByUserIdAndQuizId($userId, $quizId);
+        return  $this->getItemAnswerDao()->deleteAnswersByUserIdAndQuizId($userId, $quizId);
     }
 
     private function checkCourseAndLesson($courseId, $lessonId)
@@ -259,17 +277,18 @@ class QuizServiceImpl extends BaseService implements QuizService
         return $lesson;
     }
 
-    private function checkQuizAndItem($lessonQuizId, $itemId)
+    private function checkQuizAndItem($quizId, $itemId)
     {
-        $lessonQuizItem = $this->getCourseQuizItemDao()->getQuizItem($itemId);
+        $lessonQuiz = $this->getQuizDao()->getQuiz($quizId);
+        if(empty($lessonQuiz)){
+            throw $this->createServiceException("本测验不存在!");
+        }
+
+        $lessonQuizItem = $this->getItemDao()->getQuizItem($itemId);
         if(empty($lessonQuizItem)){
             throw $this->createServiceException("本问题不存在!");
         }
 
-        $lessonQuiz = $this->getCourseQuizDao()->getQuiz($lessonQuizId);
-        if(empty($lessonQuiz)){
-            throw $this->createServiceException("本测验不存在!");
-        }
         return array('quiz'=>$lessonQuiz, 'item'=>$lessonQuizItem);
     }
 
@@ -289,17 +308,17 @@ class QuizServiceImpl extends BaseService implements QuizService
     }
 
 
-    private function getCourseQuizItemAnswerDao()
+    private function getItemAnswerDao()
     {
         return $this->createDao('Course.CourseQuizItemAnswerDao');
     }
 
-    private function getCourseQuizItemDao()
+    private function getItemDao()
     {
         return $this->createDao('Course.CourseQuizItemDao');
     }
 
-     private function getCourseQuizDao()
+     private function getQuizDao()
     {
         return $this->createDao('Course.CourseQuizDao');
     }
@@ -311,6 +330,34 @@ class QuizServiceImpl extends BaseService implements QuizService
 
 }
 
+class QuizSerialize
+{
+    public static function serialize(array $quiz)
+    {
+        if (isset($quiz['itemIds'])) {
+            $quiz['itemIds'] = implode('|', $quiz['itemIds']);
+        }
+
+        return $quiz;
+    }
+
+    public static function unserialize(array $quiz = null)
+    {
+        if (empty($quiz)) {
+            return null;
+        }
+
+        $quiz['itemIds'] = explode('|', $quiz['itemIds']);
+        return $quiz;
+    }
+
+    public static function unserializes(array $quizs)
+    {
+        return array_map(function($quiz) {
+            return ItemSerialize::unserialize($quiz);
+        }, $quizs);
+    }
+}
 
 class ItemSerialize
 {
@@ -335,6 +382,35 @@ class ItemSerialize
 
         $item['answers'] = explode(';', $item['answers']);
         $item['choices'] = json_decode($item['choices'], true);
+        return $item;
+    }
+
+    public static function unserializes(array $items)
+    {
+        return array_map(function($item) {
+            return ItemSerialize::unserialize($item);
+        }, $items);
+    }
+}
+
+class AnswerSerialize
+{
+    public static function serialize(array $item)
+    {
+        if (isset($item['answers'])) {
+            $item['answers'] = implode('|', $item['answers']);
+        }
+
+        return $item;
+    }
+
+    public static function unserialize(array $item = null)
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $item['answers'] = explode('|', $item['answers']);
         return $item;
     }
 

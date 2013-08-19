@@ -306,7 +306,7 @@ class QuizServiceTest extends BaseTestCase
         $this->assertEquals(2, count($quizItems));
     }
 
-    public function testAnswerLessonQuizItem()
+    public function testanswerQuizItem()
     {
         $courseInfo = array(
             'type' => 'online',
@@ -331,11 +331,11 @@ class QuizServiceTest extends BaseTestCase
         $item1 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($item1['id']));
-        $result = $this->getQuizService()->answerLessonQuizItem($createdLessonQuiz['id'], $item1['id'], "lessonQuizItemInfo_answers");
+        $result = $this->getQuizService()->answerQuizItem($createdLessonQuiz['id'], $item1['id'], "lessonQuizItemInfo_answers");
         $this->assertEquals("correct", $result);
     }
 
-    public function testCheckUserLessonQuizResult()
+    public function testsubmitQuizResult()
     {
         $courseInfo = array(
             'type' => 'online',
@@ -360,14 +360,14 @@ class QuizServiceTest extends BaseTestCase
         $item1 = $this->getQuizService()->createItem($course['id'],
             $createdLesson['id'], $lessonQuizItemInfo);
         $createdLessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $createdLesson['id'], array($item1['id']));
-        $result = $this->getQuizService()->checkUserLessonQuizResult($createdLessonQuiz['id']); 
+        $result = $this->getQuizService()->submitQuizResult($createdLessonQuiz['id']); 
         
         $this->assertEquals(0, $result['score']);
         $this->assertEquals(0, $result['correctCount']);       
         $this->assertEquals(1, $result['wrongCount']);
 
-        $this->getQuizService()->answerLessonQuizItem($createdLessonQuiz['id'], $item1['id'], "lessonQuizItemInfo_answers");
-        $result = $this->getQuizService()->checkUserLessonQuizResult($createdLessonQuiz['id']);        
+        $this->getQuizService()->answerQuizItem($createdLessonQuiz['id'], $item1['id'], "lessonQuizItemInfo_answers");
+        $result = $this->getQuizService()->submitQuizResult($createdLessonQuiz['id']);        
         $this->assertEquals(100, $result['score']);
         $this->assertEquals(1, $result['correctCount']);       
         $this->assertEquals(0, $result['wrongCount']);

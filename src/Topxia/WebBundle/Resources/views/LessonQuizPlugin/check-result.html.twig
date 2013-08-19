@@ -1,27 +1,22 @@
-<div class="check-result-block">
-  
-  <div class="result-of-answer-count">
-    <label>你本次测试的成绩：</label>
-    <p>
-      <span class="correct-count">  正确 {{correctCount}}题 </span>    
-      <span class="wrong-count" > 错误 {{wrongCount}}题 </span>
-    </p>
-  </div>
-  
-  <div class="score">
-    <p> 分数：<span> {{score}} </span> </p>
-  </div>
+<div class="quiz-result-heading">您的本次测验成绩</div>
 
-  <div class="result-notice">
-      {% if score <= 60 %}
-        <p> <h3>严肃的说，你得认真学习了(60分以下)</h3></p>
-      {% elseif score > 60 and score <= 75 %}
-        <p><h3> 还需努力(60-75)</h3></p>
-      {% elseif score > 75 and score <= 90 %}
-        <p><h3>再接再厉</h3></p>
-      {% elseif score > 90 and score <= 100 %}
-        <p><h3>太棒了！</h3></p>
-      {% endif %}
-  </div>
-  
+<div class="quiz-result-score {% if score < 60 %}quiz-result-score-fail{% endif %}">{{score}} 分</div>
+
+<div class="quiz-result-stats">
+  <span class="quiz-result-correct">正确<strong>{{correctCount}}</strong>题</span>
+  <span class="quiz-result-wrong">错误<strong>{{itemCount - correctCount}}</strong>题</span>
+</div>
+
+<div class="quiz-result-message">
+  {% if score < 60 %}
+    严肃的说，您得认真学习了！
+  {% elseif score >= 60 and score < 75 %}
+    成绩一般，您还需努力！
+  {% elseif score >= 75 and score < 90 %}
+    成绩还不错，请再接再厉！
+  {% elseif score >= 90 and score < 100 %}
+    太棒了，您的成绩已达到了优秀！
+  {% else %}
+    恭喜，您的本次测验成绩满分！
+  {% endif %}
 </div>

@@ -40,21 +40,22 @@ class LessonQuizPluginController extends BaseController
 
     public function checkResultAction(Request $request, $quizId)
     {
-        $checkResultInfo = $this->getQuizService()->checkUserLessonQuizResult($quizId); 
-        $html = $this->renderView('TopxiaWebBundle:LessonQuizPlugin:check-result.html.twig', array(
-            'score'=>$checkResultInfo['score'],
-            'correctCount'=>$checkResultInfo['correctCount'],
-            'wrongCount'=>$checkResultInfo['wrongCount']));
-        return $this->createJsonResponse(array('html'=>$html));
+        $result = $this->getQuizService()->submitQuizResult($quizId); 
+        return $this->render('TopxiaWebBundle:LessonQuizPlugin:check-result.html.twig', $result);
     }
 
     public function postItemAction(Request $request, $quizId, $quizItemId)
     {
-        $quizItem = $this->getQuizService()->getQuizItem($quizItemId);
-        $currentChoice = $request->request->get("currentChoice");        
-        $currentChoice = substr($currentChoice, 0, strlen($currentChoice)-1);
-        $isError = $this->getQuizService()->answerLessonQuizItem($quizId, $quizItem['id'], $currentChoice);
-        return $this->createJsonResponse(array('action' => $isError, 'answers'=>$quizItem['answers']));
+        $answers = $request->request->get("answer");
+        if (is_null($answers)) {
+            $answers = array();
+        } else {
+            $answers = !is_array($answers) ? array($answers) : $answers;
+        }
+
+        $result = $this->getQuizService()->answerQuizItem($quizId, $quizItemId, $answers);
+
+        return $this->createJsonResponse($result);
     }
 
     private function prepareForStart($courseId, $lessonId)

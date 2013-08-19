@@ -1,184 +1,155 @@
 define(function(require, exports, module) {
 
-    exports.run = function() {
+    var Notify = require('common/bootstrap-notify');
+    var Widget = require('widget');
 
-        var quizItemCount = 0;
-        var Notify = require('common/bootstrap-notify');
-        
-        $(".quiz-page").on('click', ".start-quiz", function() {
-            $(".quiz").show();
-            $(".alreay-lesson-quiz").hide();
-        });
+    var QuizWiget = Widget.extend({
 
-        if ($(".quiz-page").find(".quiz-form").length == 1) {
-            $('.next-item').removeClass('next-item').addClass("check-result").text("查看本次测验结果");
-        };
+        attrs: {
+            'modal': null,
+            'itemCount': 0,
+            'currentItemIndex': -1,
+            'currentItemForm': null
+        },
 
-        $(".quiz-page").find(".quiz-form").each(function(index) {
-            if (index == 0) {
-                $(this).attr({
-                    name: "currentItem"
-                });
-                $(this).find("button[type='submit']").attr({
-                    name: "currentSubmit"
-                });
-                $(this).find("input[name='user-choices']").attr({
-                    name: "currentChoice"
-                });
-                $(this).show();
+        events: {
+            'click .choice': 'onClickChoice',
+            'click input[name=answer]': 'onClickAnswerInput',
+            'click .check-answer': 'onCheckAnswer',
+            'click .next-item': 'onNextItem',
+            'click .view-result': 'onViewResult'
+        },
+
+        setup: function() {
+            this.set('modal', this.element.parents('.modal'));
+            this.set('itemCount', this.element.find('.quiz-form').length);
+            this.getNextItemForm().show();
+            this.setModalButtonStatus('check-answer');
+        },
+
+        getCurrentItemForm: function() {
+
+        },
+
+        onClickChoice: function(e) {
+            var $choice =  $(e.currentTarget),
+                $form = this.get('currentItemForm');
+
+            if ($choice.find('input[name=answer]').length == 0) {
+                return;
             }
-        });
 
-        $(".quiz-page").on('click', "button[type='submit'][name='currentSubmit']", function() {
-            var answers = "";
-            if ($("form[name='currentItem']").find("#item-type").text() == "multiple"){                
-                $(this).parent().find(".choice").each(function(index) {
+            if ($form.data('itemType') == 'multiple') {
+                $choice.toggleClass('choice-active');
+            } else {
+                $choice.parents('.quiz-choices').find('.choice').removeClass('choice-active');
+                $choice.addClass('choice-active');
+            }
 
-                    if ($(this).find("input[type='checkbox']").is(":checked") == true) {
-                        answers += $(this).find("input[type='checkbox']").attr("name") + ";";
-                        $(".quiz-page").find("input[name='currentChoice']").attr({
-                            value: answers
-                        });
+            $choice.find('input[name=answer]').click();
+        },
+
+        onClickAnswerInput: function(e) {
+            e.stopPropagation();
+        },
+
+        onCheckAnswer: function(e) {
+            var $form = this.get('currentItemForm'),
+                $answers = $form.find('input[name=answer]'),
+                self = this;
+            if ($answers.filter(':checked').length == 0) {
+                Notify.danger('请选择答案后提交');
+                return ;
+            }
+            $.post($form.attr('action'), $form.serialize(), function(result) {
+                $.each($answers, function() {
+                    var $answer = $(this),
+                        $choice = $answer.parents('.choice');
+
+                    if (result.correctAnswers.length > 1) {
+                        if ($.inArray($answer.val(), result.correctAnswers) > -1) {
+                            if ($answer.is(':checked')) {
+                                $choice.addClass('choice-corrected');
+                                $choice.find('.choice-answer-status').text('正确');
+                            } else {
+                                $choice.addClass('choice-missing');
+                                $choice.find('.choice-answer-status').text('漏选');
+                            }
+                        } else {
+                            if ($answer.is(':checked')) {
+                                $choice.addClass('choice-error');
+                                $choice.find('.choice-answer-status').text('错误');
+                            }
+                        }
+                    } else {
+                        if ($.inArray($answer.val(), result.correctAnswers) > -1) {
+                            $choice.addClass('choice-corrected');
+                            $choice.find('.choice-answer-status').text('正确');
+                        } else {
+                            if ($answer.is(':checked')) {
+                                $choice.addClass('choice-error');
+                                $choice.find('.choice-answer-status').text('错误');
+                            }
+                        }
                     }
 
+                    $answer.remove();
                 });
-            }
 
-            if ($("form[name='currentItem']").find("#item-type").text() == "single"){
-                answers += $("form[name='currentItem']").find("input[name='single']:checked").val() + ";";
-                $(".quiz-page").find("input[name='currentChoice']").attr({
-                    value: answers
-                });
-            }
-            
-            if (answers.length == 0 || answers == "undefined;") {
-                Notify.warning('你尚未提供答案, 请在提交之前选择您所认为正确的答案！');
-                return false;
-            }
-
-            $(".next-item").show();
-
-            if (quizItemCount == $(".quiz-form").length - 1 ) {
-                $('.next-item').removeClass('next-item').addClass("check-result").text("查看本次测验结果");
-            }
-
-            if($(".quiz-form").length == 1){
-                $('.modal-footer').find(".check-result").show();
-            }
-
-            $.post($(this).parent().attr('action'), $(this).parent().serialize(), function(response) {
-                var arrayAnswers = response.answers.split(";");
-                if ($("form[name='currentItem']").find("#item-type").text() == "multiple"){
-                    $("form[name='currentItem']").find(".choice").each(function(index) {
-                        $(this).find("input[type='checkbox']").attr("disabled", true);
-                        var result = $.inArray($(this).find("input[type='checkbox']").attr("name"), arrayAnswers);
-                        if (result == -1) {
-                            if ($(this).find("input[type='checkbox']").is(":checked") == true) {
-                                $(this).append("<span style='text-align:center;width:200px; font-size: 14pt; color:red'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 错误选项，你选择了，非常的可惜! </span>");
-                            }
-                        } else {
-                            if ($(this).find("input[type='checkbox']").is(":checked") == true) {
-                                $(this).append("<span style='text-align:center;width:200px; font-size: 14pt; color:green'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正确选项，你选择了，明智的决定! </span>");
-                            } else {
-                                $(this).append("<span style='text-align:center;width:200px; font-size: 14pt; color:red'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正确选项，你漏选了，非常的可惜! </span>");
-                            }
-                        }
-                    });
-                } else if($("form[name='currentItem']").find("#item-type").text() == "single"){
-                    $("form[name='currentItem']").find(".choice").each(function(index) {
-                        $(this).find("input[type='radio']").attr('disabled', true);
-                        var result = $.inArray($("form[name='currentItem']").find("input[name='single']:checked").val(), arrayAnswers);
-                        if (result == -1) {
-                            if ($(this).find("input[type='radio']").is(":checked") == true) {
-                                $(this).append("<span style='text-align:center;width:200px; font-size: 14pt; color:red'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 错误选项，你选择了，非常的可惜! </span>");
-                            }
-                            if($(this).find("input[type='radio']").val() == arrayAnswers[0]){
-                                $(this).append("<span style='text-align:center;width:200px; font-size: 14pt; color:red'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正确选项，你漏选了，非常的可惜！ </span>");
-                            }
-
-                        } else {
-                            if ($(this).find("input[type='radio']").is(":checked") == true) {
-                                $(this).append("<span style='text-align:center;width:200px; font-size: 14pt; color:green'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正确选项，你选择了，明智的决定! </span>");
-                            }
-                        }
-                    });
-
+                if (self.get('currentItemIndex') == (self.get('itemCount')-1)) {
+                    self.setModalButtonStatus('view-result');
+                } else {
+                    self.setModalButtonStatus('next-item');
                 }
 
-                if (response.action == "wrong") {
-                    Notify.danger("抱歉，你答错了!");
-                } else if (response.action == "correct") {
-                    Notify.success("恭喜你，答对了！");
-                }
+            },'json');
 
+        },
+
+        onNextItem: function(e) {
+            var $form = this.getNextItemForm().show();
+            console.log($form);
+            this.setModalButtonStatus('check-answer');
+        },
+
+        onViewResult: function(e) {
+            var $btn = $(e.currentTarget),
+                self = this;
+
+            $.post($btn.data('url'), function(response) {
+                self.$('.quiz-forms').hide();
+                self.$('.quiz-result').append(response);
+                self.setModalButtonStatus('in-result');
             });
 
-            $(this).hide();
-        });
+        },
 
-        $(".modal-footer").on('click', ".next-item", function() {
-
-            $(".quiz-form[name='currentItem']").hide().attr({
-                name: "item-in-quiz"
-            })
-            .next().attr({
-                name: "currentItem"
-            })
-            .find("input[name='user-choices']").attr({
-                name: "currentChoice"
-            })
-            .next("button[name='user-submit']").attr({
-                name: "currentSubmit"
-            });
-
-            $(".quiz-form[name='currentItem']").show().prev()
-                .find("input[name='currentChoice']").attr({
-                    name: "user-choices"
-                })
-                .next("button[type='submit']").attr({
-                    name: "user-submit"
-                });
-
-            quizItemCount++;
-
-            $(".next-item").hide();
-        });
-
-        $(".modal-footer").on('click', ".check-result", function() {
-            $.post($(this).data('url'), function(response) {
-                $(".quiz-page").replaceWith(response.html);
-            }, 'json');
-            $(".check-result").remove();
-        });
-
-        $(".quiz-page").on('click', ".choice", function(e) {
-            $(this).find("input[type='checkbox']").click().change();
-            if ($(this).find("input[type='checkbox']").is(":checked") == true) {
-                $(this).addClass("empty-item");
-            } else {
-                $(this).removeClass("empty-item");
+        getNextItemForm: function() {
+            var index = this.get('currentItemIndex') + 1;
+            if (index > this.get('itemCount')) {
+                return NaN;
             }
 
+            var $currentForm = this.$('.quiz-form').hide().eq(index);
+            this.set('currentItemForm', $currentForm);
+            this.set('currentItemIndex', index);
+
+            return $currentForm;
+        },
+
+        setModalButtonStatus: function(status) {
+            var $btns = this.$('.quiz-actions').find('.btn');
+            $btns.hide();
+            $btns.filter('.' + status).show();
+        }
+
+    });
+
+
+    exports.run = function() {
+        new QuizWiget({
+            element: '#quiz'
         });
-
-        $(".quiz-page").on('click', ".choice", function(e) {
-            $(this).find("input[type='radio']").click().change();
-            if ($(this).find("input[type='radio']").is(":checked") == true) {
-                $(this).addClass("empty-item");
-            } else {
-                $(this).removeClass("empty-item");
-            }
-
-        });
-
-        $(".quiz-page").on('click', "input[type='checkbox']", function(e) {
-            e.stopPropagation();
-        });
-
-        $(".quiz-page").on('click', "input[type='radio']", function(e) {
-            e.stopPropagation();
-        });
-
 
         $("#modal").off('hide.bs.modal');
         $('#modal').on('hide.bs.modal', function(e) {
@@ -194,11 +165,15 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            if (!confirm("测验尚未完成，真的要退出本次测验吗？")) {
-                return false;
-            }
+            // if (!confirm("测验尚未完成，真的要退出本次测验吗？")) {
+            //     return false;
+            // }
         });
 
     };
+
+
+
+
 
 });
