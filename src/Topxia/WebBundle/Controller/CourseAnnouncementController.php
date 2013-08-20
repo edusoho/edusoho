@@ -9,6 +9,7 @@ class CourseAnnouncementController extends BaseController
 
 	public function showAction(Request $request, $courseId, $id)
 	{
+
 		$course = $this->getCourseService()->tryTakeCourse($courseId);
         $announcement = $this->getCourseService()->getCourseAnnouncement($courseId, $id);
 		return $this->render('TopxiaWebBundle:Course:announcement-show-modal.html.twig',array(

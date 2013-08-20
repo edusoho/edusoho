@@ -1,11 +1,11 @@
 <div class="panel">
   <div class="panel-heading">
   	{% if canManage %}
-	    <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_add',{courseId:course.id}) }}" class="pull-right btn btn-link btn-small">添加公告</a>
+	    <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_add',{courseId:course.id}) }}" class="pull-right btn btn-success btn-small">添加公告</a>
 	  {% endif %}
-  	<h2>公告</h2>
+  	<h2>课程公告</h2>
   </div>
-  <div class="panel-body">
+  <div id="scroll-announcements"  style="overflow: hidden ; width:327px; height:280px" class="panel-body">
   	<ul class="text-list">
   		{% for announcement in announcements %}
   		<li>

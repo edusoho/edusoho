@@ -125,6 +125,10 @@ interface UserService
 
     public function isFollowed($fromId, $toId);
 
+    public function findUserFollowing($userId);
+
+    public function findUserFollowers($userId);
+
     /**
      * 过滤得到用户关注中的用户ID列表
      *

@@ -26,5 +26,5 @@ INSERT INTO `file_group` (`id`, `name`, `code`, `public`) VALUES
 (1, '默认文件组', 'default', 1),
 (2, '缩略图', 'thumb', 1),
 (3, '课程', 'course', 1),
-(3, '课程私有资料', 'course_private', 1),
-(4, '用户', 'user', 1);
+(4, '课程私有资料', 'course_private', 1),
+(5, '用户', 'user', 1);

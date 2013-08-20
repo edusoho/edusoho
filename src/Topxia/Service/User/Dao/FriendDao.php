@@ -14,5 +14,7 @@ interface FriendDao
 
     public function getFriend($id);
 
-    public function getFriendByFromId($fromId);
+    public function findFriendsByFromId($fromId);
+
+    public function findFriendsByToId($toId);
 }

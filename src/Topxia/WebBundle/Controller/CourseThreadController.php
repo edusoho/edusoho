@@ -279,8 +279,9 @@ class CourseThreadController extends BaseController
 
     public function questionBlockAction(Request $request, $course)
     {
+
         $threads = $this->getThreadService()->searchThreads(
-            array('type'=> 'question', 'isElite' => 1),
+            array('type'=> 'question', 'isElite' => 0),
             'createdNotStick',
             0, 
             8

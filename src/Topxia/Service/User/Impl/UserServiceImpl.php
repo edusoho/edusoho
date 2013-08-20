@@ -495,6 +495,25 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::column($friends, 'toId');
     }
 
+    public function findUserFollowing($userId)
+    {
+        $user = $this->getCurrentUser();
+        if($userId != $user['id']){
+            throw $this->createServiceException('你无权限进行此操作!');
+        }
+
+        return $this->getFriendDao()->findFriendsByFromId($userId);
+    }
+
+   public function findUserFollowers($userId)
+   {
+        $user = $this->getCurrentUser();
+        if($userId != $user['id']){
+            throw $this->createServiceException('你无权限进行此操作!');
+        }
+        return $this->getFriendDao()->findFriendsByToId($userId);
+   }
+
     public function follow($fromId, $toId)
     {
         $fromUser = $this->getUser($fromId);

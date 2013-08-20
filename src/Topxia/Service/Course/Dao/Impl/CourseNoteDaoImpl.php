@@ -78,7 +78,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 			->andWhere('courseId = :courseId')
 			->andWhere('lessonId = :lessonId')
 			->andWhere('userId = :userId')
-			->andWhere('type = :type')
+			->andWhere('status = :status')
 			->andWhere('isStick = :isStick')
 			->andWhere('isElite = :isElite')
 			->andWhere('content LIKE :keywords');

@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}个人中心 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-3">
+    {% set side_nav = side_nav|default(null) %}
+    <div class="panel">
+      <div class="list-group-panel">
+        <div class="list-group">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9">{% block main %}{% endblock %}</div>
+</div>
+
+{% endblock %}
