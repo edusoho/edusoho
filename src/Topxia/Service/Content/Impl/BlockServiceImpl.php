@@ -126,6 +126,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (!$block) {
             throw $this->createServiceException("此编辑区不存在，更新失败!");
         }
+        $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($id, array('content'=>$content));
     }
 

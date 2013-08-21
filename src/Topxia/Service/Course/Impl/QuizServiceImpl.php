@@ -36,6 +36,9 @@ class QuizServiceImpl extends BaseService implements QuizService
         $item['type'] = count($item['answers']) > 1 ? 'multiple' : 'single';
         $item['userId'] = $this->getCurrentUser()->id;
         $item['createdTime'] = time();
+
+        //创建题目 过滤html不安全代码
+        $item['description'] = $this->purifyHtml($item['description']);
         return  ItemSerialize::unserialize(
             $this->getItemDao()->addQuizItem(ItemSerialize::serialize($item))
         );
@@ -51,6 +54,9 @@ class QuizServiceImpl extends BaseService implements QuizService
         $fields = ArrayToolkit::parts($fields, array('description', 'level', 'choices', 'answers'));
         $this->checkItem($fields);
         $fields['type'] = count($fields['answers']) > 1 ? 'multiple' : 'single';
+
+        //更新题目 过滤html不安全代码
+        $fields['description'] = $this->purifyHtml($fields['description']);
         return ItemSerialize::unserialize(
             $this->getItemDao()->updateQuizItem($item['id'], ItemSerialize::serialize($fields))
         );

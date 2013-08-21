@@ -62,10 +62,15 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content['userId'] = $this->getCurrentUser()->id;
 		$content['createdTime'] = time();
-		if (empty($content['publishedTime'])) {
+		
+        if (empty($content['publishedTime'])) {
 			$content['publishedTime'] = $content['createdTime'];
 		}
-		
+
+		if(isset($content['body'])){
+            $content['body'] = $this->purifyHtml($content['body']);
+        }
+
 		$id = $this->getContentDao()->addContent(ContentSerialize::serialize($content));
 
 		return $this->getContent($id);
@@ -81,6 +86,10 @@ class ContentServiceImpl extends BaseService implements ContentService
 		$type = ContentTypeFactory::create($content['type']);
 		$fields = $type->convert($fields);
 		$fields = ArrayToolkit::parts($fields, $type->getFields());
+        
+        if(isset($fields['body'])){
+            $fields['body'] = $this->purifyHtml($fields['body']);
+        }
 
 		$this->getContentDao()->updateContent($id, ContentSerialize::serialize($fields));
 

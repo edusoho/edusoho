@@ -4,7 +4,9 @@ namespace Topxia\Service\Content\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Content\FileService;
 use Symfony\Component\HttpFoundation\File\File;
-use Imagine\Gd\Imagine;
+use Imagine\Imagick\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 
 class FileServiceImpl extends BaseService implements FileService
@@ -97,6 +99,13 @@ class FileServiceImpl extends BaseService implements FileService
 	{
 
 	}
+    
+    public function getFileObject($fileId)
+    {
+        $fileInDao = $this->getFileDao()->getFile($fileId);
+        $parsed = $this->parseFileUri($fileInDao['uri']);
+        return new File($parsed['fullpath']);
+    }
 
 	private function saveFile($file, $uri)
 	{
@@ -206,6 +215,11 @@ class FileServiceImpl extends BaseService implements FileService
     private function getSettingService()
     {
     	return $this->createService('System.SettingService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
     private function getFileDao()

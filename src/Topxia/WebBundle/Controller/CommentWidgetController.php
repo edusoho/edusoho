@@ -9,7 +9,6 @@ use Topxia\WebBundle\Form\CommentType;
 class CommentWidgetController extends BaseController
 {
  
-    //Mapping to TestCase testListCommentsByObjectTypeAndObjectId
 	public function initAction(Request $request)
 	{
 		$objectType = $request->query->get('objectType');
@@ -29,7 +28,6 @@ class CommentWidgetController extends BaseController
 		));
 	}
 
-    //Mapping to TestCase testCreateCommentWithHappyPath
 	public function createAction(Request $request)
 	{
 		$form = $this->createForm(new CommentType());
@@ -46,7 +44,6 @@ class CommentWidgetController extends BaseController
         }
 	}
 
-    //Mapping to TestCase testDeleteCommentWithHappyPath
 	public function deleteAction(Request $request)
 	{
 		$id = $request->query->get('id');

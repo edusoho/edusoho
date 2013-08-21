@@ -48,6 +48,7 @@ interface CourseService
 
 	public function cacheCoursePicture($id, UploadedFile $picture);
 
+	public function changeCoursePicture ($courseId, $picture, array $options);
 	/**
 	 * 删除课程
 	 */

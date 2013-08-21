@@ -91,9 +91,9 @@ class CourseManageController extends BaseController
 
     public function cropPictureAction(Request $request, $id)
     {
-        $fileUri = $request->request->get('fileUri');
-        $fileAfterParse = $this->getFileService()->parseFileUri($fileUri);
-
+        $course = $this->getCourseService()->getCourse($id);
+        $tempFileId = $request->request->get('fileId');
+        $tempFile = $this->getFileService()->getFileObject($tempFileId);
         if($request->getMethod() == 'POST'){
             $x = (int)$request->request->get('x');
             $y = (int)$request->request->get('y');
@@ -102,16 +102,11 @@ class CourseManageController extends BaseController
             if(($w <= 0) || ($h <= 0)){
                 throw new \RuntimeException('裁剪的参数大小有问题，请重新裁剪！');
             }
-            $imagine = new Imagine();
-            $course = $this->getCourseService()->getCourse($id);
-            $coursePicture = $this->getFileService()->parseFileUri($course['largePicture']);
-            $cropResult = $imagine->open($fileAfterParse['fullpath'])->crop(new Point($x, $y), new Box($w, $h))->resize(new Box(445, 260))
-                ->save($coursePicture['fullpath'], array(
-                    'quality' => 90));
-            if(!empty($cropResult)){
-                return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
-            }
+            $coursePicture = $this->getFileService()->uploadFile('course', $tempFile);
+            $this->getCourseService()->changeCoursePicture($course['id'], $coursePicture, array('x'=>$x, 'y'=>$y, 'w'=>$w, 'h'=>$h));
+            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id']))); 
         }
+
         return $this->render('TopxiaWebBundle:CourseManage:crop.html.twig', array(
             'course' => $course
         ));

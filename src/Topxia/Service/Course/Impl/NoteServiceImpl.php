@@ -57,10 +57,11 @@ class NoteServiceImpl extends BaseService implements NoteService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-
+        
         if (!ArrayToolkit::requireds($note, array('lessonId', 'courseId', 'content'))) {
             throw $this->createServiceException('缺少必要的字段，保存笔记失败');
         }
+
 
         $lesson = $this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId']);
         if(empty($lesson)){
@@ -68,10 +69,9 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
         $existNote = $this->getUserLessonNote($user['id'], $note['lessonId']);
 
-        // @todo HTML Purifier
-        // $note['content']
-
         $fields = array();
+        //保存笔记,过滤html
+        $note['content'] = $this->purifyHtml($note['content']);
         $fields['content'] = empty($note['content']) ? '' : $note['content'];
         $fields['length'] = $this->calculateContnentLength($note['content']);
         $fields['courseId'] = $lesson['courseId'];

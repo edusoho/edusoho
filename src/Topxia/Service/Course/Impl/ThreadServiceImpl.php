@@ -84,8 +84,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$course = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
 		$thread['userId'] = $this->getCurrentUser()->id;
-		// @todo filter it.
 		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
+
+		//创建thread过滤html
 		$thread['content'] = $this->purifyHtml($thread['content']);
 		$thread['createdTime'] = time();
 		$thread['latestPostUserId'] = $thread['userId'];
@@ -108,6 +109,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException('参数缺失，更新失败。');
 		}
 
+		//更新thread过滤html
+		$fields['content'] = $this->purifyHtml($fields['content']);
 		return $this->getThreadDao()->updateThread($threadId, $fields);
 	}
 
@@ -241,6 +244,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$post['userId'] = $this->getCurrentUser()->id;
 		$post['isElite'] = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
 		$post['createdTime'] = time();
+
+		//创建post过滤html
+		$post['content'] = $this->purifyHtml($post['content']);
 		$post = $this->getThreadPostDao()->addPost($post);
 
 		// 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
@@ -270,6 +276,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException('参数缺失。');
 		}
 
+		//更新post过滤html
+		$fields['content'] = $this->purifyHtml($fields['content']);
 		return $this->getThreadPostDao()->updatePost($id, $fields);
 	}
 
