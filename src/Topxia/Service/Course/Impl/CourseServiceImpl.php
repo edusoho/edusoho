@@ -17,8 +17,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	/**
 	 * Course API
 	 */
-	
-
 
 	public function findCoursesByIds(array $ids)
 	{
@@ -215,10 +213,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'type', 'title', 'about', 'categoryId','goals','audiences', 'subtitle','tags', 'price', 'startTime', 'endTime', 'locationId', 'address'
 		));
 
-		//TODO 暂时先注释，以后可能会用到
-		// if (isset($fields['about'])) {
-		// 	$this->getHtmlPurifier()->purify($fields['about']);
-		// }
+		if (isset($fields['about'])) {
+			$fields['about'] = $this->purifyHtml($fields['about']);
+		}
 
 		if (isset($fields['tags'])) {
 			$fields['tags'] = $fields['tags'] ? : array();
@@ -478,6 +475,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
+		//课程内容的过滤
+		if(isset($lesson['content'])){
+			$lesson['content'] = $this->purifyHtml($lesson['content']);
+		}
+
 		// 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
 		$lesson['status'] = $course['status'] == 'published' ? 'unpublished' : 'published';
 
@@ -514,9 +516,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'summary', 'content', 'media', 'free', 'length'));
-		// if (isset($fields['content'])) {
-		// 	$fields['content'] = $this->getHtmlPurifier()->purify($fields['content']);
-		// }
+		if (isset($fields['content'])) {
+			$fields['content'] = $this->purifyHtml($fields['content']);
+		}
 
 		if (in_array($lesson['type'], array('video', 'audio'))) {
 			if (empty($fields['media'])) {
@@ -1036,6 +1038,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('content'))) {
         	$this->createNotFoundException("课程公告数据不正确，创建失败。");
         }
+
+        if(isset($fields['content'])){
+        	$fields['content'] = $this->purifyHtml($fields['content']);
+        }
+
 		$announcement = array();
 		$announcement['courseId'] = $course['id'];
 		$announcement['content'] = $fields['content'];
@@ -1055,6 +1062,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!ArrayToolkit::requireds($fields, array('content'))) {
         	$this->createNotFoundException("课程公告数据不正确，更新失败。");
+        }
+        
+        if(isset($fields['content'])){
+        	$fields['content'] = $this->purifyHtml($fields['content']);
         }
 
         return $this->getAnnouncementDao()->updateAnnouncement($id, array(

@@ -32,7 +32,7 @@ class ArrayToolkit
 	public static function requireds(array $array, array $keys)
 	{
 		foreach ($keys as $key) {
-			if (!isset($array[$key])) {
+			if (!array_key_exists($key, $array)) {
 				return false;
 			}
 		}

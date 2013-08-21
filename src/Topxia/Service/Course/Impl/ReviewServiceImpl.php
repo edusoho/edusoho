@@ -83,7 +83,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		if (empty($course)) {
 			throw $this->createServiceException("课程(#{$fields['courseId']})不存在，评价失败！");
 		}
-
 		$user = $this->getUserService()->getUser($fields['userId']);
 		if (empty($user)) {
 			return $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");

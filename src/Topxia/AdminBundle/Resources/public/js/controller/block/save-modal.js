@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                     if (response.status == 'ok') {
                         var $html = $(response.html);
                             $table.find('tbody').prepend(response.html);
-                            Notify.success('创建sss成功!');
+                            Notify.success('创建编辑区成功!');
                         $modal.modal('hide');
                     }
                 }, 'json');
