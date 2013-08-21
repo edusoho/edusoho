@@ -239,6 +239,35 @@ class SettingController extends BaseController
         ));
     }
 
+    public function videoAction(Request $request)
+    {
+        $videoSetting = $this->getSettingService()->get('video', array());
+
+        $form = $this->createFormBuilder()
+            ->add('upload_mode', 'choice', array(
+                'expanded' => true, 
+                'choices' => array('local' => '网站服务器', 'cloud' => '云服务器'),
+            ))
+            ->add('cloud_access_key', 'text')
+            ->add('cloud_secret_key', 'text')
+            ->add('cloud_bucket', 'text')
+            ->setData($videoSetting)
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $videoSetting = $form->getData();
+                $this->getSettingService()->set('video', $videoSetting);
+                $this->setFlashMessage('success', '视频设置已保存！');
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:System:video.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
     public function logsAction(Request $request)
     {
         $searchForm = $this->createLogSearchForm();

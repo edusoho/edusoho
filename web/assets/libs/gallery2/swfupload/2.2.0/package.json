@@ -1,0 +1,28 @@
+{
+  "family": "gallery2",
+  "name": "swfupload",
+  "version": "2.2.0",
+  "description": "SWFObject is an easy-to-use and standards-friendly method to embed Flash content, which utilizes one small JavaScript file.",
+  "homepage": "https://code.google.com/p/swfobject/",
+  "author": {
+    "name": "aran.rhee"
+  },
+  "repository": {
+    "type": "svn",
+    "url": "http://swfobject.googlecode.com/svn/trunk/"
+  },
+  "bugs": "https://code.google.com/p/swfobject/issues/list",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": " http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "keywords": [ "swfupload", "upload", "uploader" ],
+  "spm": {
+    "output": [
+       "swfupload.js",
+       "swfupload.swf"
+     ]
+  }
+}
