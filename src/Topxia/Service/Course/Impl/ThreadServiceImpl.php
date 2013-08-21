@@ -86,7 +86,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$thread['userId'] = $this->getCurrentUser()->id;
 		// @todo filter it.
 		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
-		$thread['content'] = empty($thread['content']) ? '' : $thread['content'];
+		$thread['content'] = $this->purifyHtml($thread['content']);
 		$thread['createdTime'] = time();
 		$thread['latestPostUserId'] = $thread['userId'];
 		$thread['latestPostTime'] = $thread['createdTime'];
