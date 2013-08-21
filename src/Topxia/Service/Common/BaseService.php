@@ -5,6 +5,7 @@ use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Util\HTMLPurifierFactory;
 
 abstract class BaseService
 {
@@ -56,8 +57,20 @@ abstract class BaseService
         return $this->getContainer()->get('request');
     }
 
-    protected function getHtmlPurifier() {
-        return $this->getContainer()->get('topxia.htmlpurifier');
+    protected function purifyHtml($html)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => $this->getContainer()->getParameter('kernel.cache_dir') .  '/htmlpurifier'
+        );
+
+        $factory = new HTMLPurifierFactory($config);
+        $purifier = $factory->create();
+
+        return $purifier->purify($html);
     }
 
     protected function getMediaParseService()

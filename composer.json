@@ -22,7 +22,8 @@
         "jms/security-extra-bundle": "1.5.*",
         "jms/di-extra-bundle": "1.4.*",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "avalanche123/imagine-bundle": "dev-master"
+        "avalanche123/imagine-bundle": "dev-master",
+        "ezyang/htmlpurifier": "v4.5.0"
     },
     "scripts": {
         "post-install-cmd": [
