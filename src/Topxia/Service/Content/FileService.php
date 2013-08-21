@@ -5,6 +5,8 @@ use Symfony\Component\HttpFoundation\File\File;
 
 interface FileService
 {
+
+	public function getFileObject($fileId);
 	/**
 	 * 获取最新的文件
 	 * 

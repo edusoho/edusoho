@@ -17,6 +17,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 	/**
 	 * Course API
 	 */
+	
+
+
 	public function findCoursesByIds(array $ids)
 	{
 		$courses = CourseSerialize::unserializes(
@@ -259,6 +262,21 @@ class CourseServiceImpl extends BaseService implements CourseService
                 ->save($tmpFileAfterParse['fullpath'], array(
                     'quality' => 90));
         return $tmpFile;
+    }
+
+    public function changeCoursePicture ($courseId, $picture, array $options)
+    {
+
+        $course = $this->getCourseDao()->getCourse($courseId);
+        if (empty($course)) {
+            throw $this->createServiceException('课程不存在，图标更新失败！');
+        }
+        $courseFileAfterParse = $this->getFileService()->parseFileUri($picture['uri']);
+
+        $imagine = new Imagine();
+        $imagine->open($courseFileAfterParse['fullpath'])->crop(new Point($options['x'], $options['y']), new Box($options['w'], $options['h']))
+                ->resize(new Box(476, 268))->save($courseFileAfterParse['fullpath'], array('quality' => 90));
+        return $this->getCourseDao()->updateCourse($courseId, array('largePicture' => $picture['uri']));
     }
 
 	public function deleteCourse($id)

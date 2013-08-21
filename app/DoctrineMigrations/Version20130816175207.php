@@ -13,7 +13,7 @@ class Version20130816175207 extends AbstractMigration
     public function up(Schema $schema)
     {
          $this->addSQL("
-            INSERT INTO `edusoho_dev`.`file_group` (`id`, `name`, `code`, `public`) VALUES (NULL, '临时文件夹', 'tmp', '0');
+            INSERT INTO `file_group` (`id`, `name`, `code`, `public`) VALUES (6, '临时文件夹', 'tmp', 1);
         ");
     }
 
