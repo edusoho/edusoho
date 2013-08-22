@@ -2,49 +2,54 @@
 
 <ul class="media-list">
   {% for thread in threads %}
+   {% if courses %}
     {% set course = courses[thread.courseId] %}
     <li class="media">
-      <div class="media-body">
-        {% if thread.postNum > 0 %}
-          <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
-        {% endif %}
-        <div class="mbm">
-          {% if thread.type == 'question' %}
-            <span class="label label-info" title="问答帖">问</span>
-          {% endif  %}
-
-          <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
-
-          {% if thread.lessonId %}
-            <span class="label" title="课时{{ thread.lessonId }}">L{{ thread.lessonId }}</span>
-          {% endif %}
-
-          {% if thread.isElite %}
-            <span class="label label-warning" title="精华帖">精</span>
-          {% endif %}
-
-        </div>
-        <div class="text-muted text-normal">
-          <span>发表于<a href="#" class="link-muted">{{ course.title }}</a></span>
-          <span class="bullet">•</span>
+        <div class="media-body">
           {% if thread.postNum > 0 %}
-            {% set poster = users[thread.latestPostUserId] %}
-            <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
-            ,
-            <span>{{ thread.latestPostTime|smart_time }}</span>
-            <span class="bullet">•</span>
+            <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
           {% endif %}
-          <span>{{ thread.hitNum }}浏览</span>
+          <div class="mbm">
+            {% if thread.type == 'question' %}
+              <span class="label label-info" title="问答帖">问</span>
+            {% endif  %}
+
+            <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+
+            {% if thread.lessonId %}
+              <span class="label" title="课时{{ thread.lessonId }}">L{{ thread.lessonId }}</span>
+            {% endif %}
+
+            {% if thread.isElite %}
+              <span class="label label-warning" title="精华帖">精</span>
+            {% endif %}
+
+          </div>
+          <div class="text-muted text-normal">
+            <span>发表于<a href="#" class="link-muted">{{ course.title }}</a></span>
+            <span class="bullet">•</span>
+            {% if thread.postNum > 0 %}
+              {% set poster = users[thread.latestPostUserId] %}
+              <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
+              ,
+              <span>{{ thread.latestPostTime|smart_time }}</span>
+              <span class="bullet">•</span>
+            {% endif %}
+            <span>{{ thread.hitNum }}浏览</span>
+          </div>
         </div>
-      </div>
-    </li>
-  {% else %}
-    {% if type == 'question' %}
-      <li class="empty">你还没提过问题</li>
+      </li>
     {% else %}
-      <li class="empty">你还没发表过话题</li>
+      {% if type == 'question' %}
+        <li class="empty">你还没提过问题</li>
+      {% else %}
+        <li class="empty">你还没发表过话题</li>
+      {% endif %}
+
     {% endif %}
+
   {% endfor %}
+
 </ul>
 
 {{ web_macro.paginator(paginator) }} 

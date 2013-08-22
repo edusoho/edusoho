@@ -15,13 +15,19 @@
                 <br>
                 <h3 class="media-heading nickname"> {{user.nickname}} 
                 
-                  <a class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a> 
+                <div class="pull-right">
 
                   {% if app.user.id != user.id %}
-                    <button class="btn btn-primary pull-right follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}>关注</button>
+                    
+                    <button class="btn btn-info unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已关注</button>
 
-                    <button class="btn btn-info pull-right unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已关注</button>
+                    <button class="btn btn-primary follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}>关注</button>
+
                   {% endif %}
+
+                  <a class="btn btn-success " data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a> 
+
+                </div>
 
                 </h3> <br><br>
 
@@ -44,27 +50,22 @@
                   <span class="glyphicon glyphicon-eye-open"></span> <span>{{ followings | length }}位关注</span> &nbsp;
                 </div>
 
-                <div class="third-party">
+                <div class="third-party pull-right">
 
                   {#
-                  {% if userProfile.weixin is not empty %}
-                  <div class="weixin">
-                    <a class="btn btn-primary pull-right" href="#"> 加微信好友</a>
-                  </div>
-                  {% endif %}
+                    {% if userProfile.weixin is not empty %}
+                      <a class="btn btn-primary" href="#"> 加微信好友</a>
+                    {% endif %}
                   #}
 
-                  {% if userProfile.weibo is not empty %}
-                  <div class="weibo">
-                    <a class="btn btn-success pull-right" href="{{userProfile.weibo}}"> 微博加关注</a>
-                  </div>
+                  {% if userProfile.site is not empty %}
+                    <a class="btn btn-default" href="{{userProfile.site}}"> 个人主页</a>
                   {% endif %}
 
-                  {% if userProfile.site is not empty %}
-                  <div class="site">
-                    <a class="btn btn-default pull-right" href="{{userProfile.site}}"> 个人主页</a>
-                  </div>
+                  {% if userProfile.weibo is not empty %}
+                    <a class="btn btn-success" href="{{userProfile.weibo}}"> 微博加关注</a>
                   {% endif %}
+
                   
                 </div>
               </div>

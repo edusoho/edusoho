@@ -1,19 +1,19 @@
-    <div class="col-lg-4">
+    <div class="col-lg-3">
       
       <div class="panel">
-        <div class="panel-heading">个人简介</div>
+        <div class="panel-heading personal-about">个人简介</div>
             {% if userProfile.about %}
                {{ userProfile.about | raw }}
             {% endif %}
-      </div>
-
-
+        </div>
+        
         <div class="panel">
           <div class="panel-heading">粉丝</div>
           <div class="panel-body">
             {% for follower in followers%}
                <a href="{{ path('user_show', {userId:users[follower.fromId].id}) }}">
                   <img  class="media-object" src="{{ file_path(users[follower.fromId].smallAvatar, 'avatar-large.png') }}">
+                  {{users[follower.fromId].nickname}}
                </a>
             {% endfor %}
           </div>
@@ -25,6 +25,7 @@
             {% for following in followings%}
                <a href="{{ path('user_show', {userId:users[following.toId].id}) }}">
                   <img  class="media-object" src="{{ file_path(users[following.toId].smallAvatar, 'avatar-large.png') }}">
+                  {{users[following.toId].nickname}}
                </a>
             {% endfor %}
           </div>
