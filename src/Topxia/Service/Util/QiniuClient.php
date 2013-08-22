@@ -14,13 +14,15 @@ class QiniuClient
     protected $defaultBucket;
 
     protected $defaultResponseData = array(
+        'bucket' => '$(bucket)',
         'key' => '$(key)',
-        'originalName' => '$(fname)',
+        'filename' => '$(fname)',
         'size' => '$(fsize)',
         'mimeType' => '$(mimeType)',
         'etag' => '$(etag)',
         'imageInfo' => '$(imageInfo)',
-        'endUser' => '$(endUser)',
+        'userId' => '$(endUser)',
+        'filepath' => '$(x:filepath)',
     );
 
     public function __construct ($accessKey, $secretKey, $defaultBucket = null)
@@ -62,9 +64,9 @@ class QiniuClient
             $params['returnBody'] = $this->serializeReturnBody($params['returnBody']);
         }
 
-        // var_dump($params);exit();
 
-    	$encodedParams = json_encode($params);
+        $encodedParams = json_encode($params);
+        // var_dump($encodedParams);exit();
     	$encodedParams = $this->encodeSafely($encodedParams);
 
 		$sign = hash_hmac('sha1', $encodedParams, $this->secretKey, true);

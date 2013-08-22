@@ -19,12 +19,15 @@ define(function(require, exports, module) {
         var progressbar = new UploadProgressBar('#upload-progress');
 
         var token = $("#fileuploadbtn").data('token');
+        var buttonImage = $("#fileuploadbtn").data('buttonImage');
+        var filepath = $("#fileuploadbtn").data('filepath');
+        var callbackUrl = $("#fileuploadbtn").data('callback');
 
         var swfu = new SWFUpload({
             upload_url : "http://up.qiniu.com/",
             post_params : {
-                "key" : "test/test_a.mp4",
-                "token" : token
+                "token" : token,
+                "x:filepath": filepath
             },
             file_types : "*.*",
             file_types_description : "视频",
@@ -34,9 +37,13 @@ define(function(require, exports, module) {
             file_post_name: 'file',
 
             button_placeholder_id : "fileuploadbtn",
-            button_width: "65",
-            button_height: "29",
-            button_text: "上传",
+            button_width: "75",
+            button_height: "35",
+            button_text: "<span class=\"btnText\">上传</span>",
+            button_text_style : ".btnText { color: #333; font-size:16px;}",
+            button_text_left_padding : 18,
+            button_text_top_padding : 5,
+            button_image_url: buttonImage,
 
             file_dialog_complete_handler: function(numFilesSelected, numFilesQueued) {
                 if (numFilesSelected == 0) {
@@ -75,6 +82,9 @@ define(function(require, exports, module) {
                 serverData = $.parseJSON(serverData);
                 console.log('upload success', file, serverData);
                 progressbar.setComplete();
+                $.post(callbackUrl, serverData, function(response) {
+                    console.log('response:',response);
+                }, 'json');
             }
         });
 
