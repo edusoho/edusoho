@@ -12,39 +12,41 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
-
-        $teachingMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'teacher'),0,10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($teachingMembers, 'courseId'));
-        $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:show.html.twig', array(
-            'userProfile'=>$userProfile,
-            'user'=>$user,
-            'courses'=>$courses,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers'],
-            'teachingMembers'=>$teachingMembers
-        ));
-        
-    }
-
-    public function learningCoursesAction(Request $request, $userId)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
-
-        $learningMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'teacher'),0,10);
+        $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
+        $learningMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'student'),0,10);
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($learningMembers, 'courseId'));
 
         $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:learnings.html.twig', array(
+
+        return $this->render('TopxiaWebBundle:User:show.html.twig', array(
+            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
             'userProfile'=>$userProfile,
             'user'=>$user,
+            'teachingCount'=>$teachingCount,
             'courses'=>$courses,
             'users'=>$followInfo['users'],
             'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers'],
-            'learningMembers'=>$learningMembers
+            'followers'=>$followInfo['followers']
+        ));
+    }
+
+    public function teachingCoursesAction(Request $request, $userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $teachingMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'teacher'),0,10);
+        $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($teachingMembers, 'courseId'));
+        $followInfo = $this->getFollowInfo($user['id']);
+        return $this->render('TopxiaWebBundle:User:teachings.html.twig', array(
+            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
+            'userProfile'=>$userProfile,
+            'user'=>$user,
+            'teachingCount'=>$teachingCount,
+            'courses'=>$courses,
+            'users'=>$followInfo['users'],
+            'followings'=>$followInfo['followings'],
+            'followers'=>$followInfo['followers']
         ));
     }
 
@@ -52,77 +54,19 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
-
-        $favoriteCourses = $this->getCourseService()->findUserFavoriteCourses($user['id'], 0 , 10);
+        $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
+        $courses = $this->getCourseService()->findUserFavoriteCourses($user['id'], 0 , 10);
         
         $followInfo = $this->getFollowInfo($user['id']);
         return $this->render('TopxiaWebBundle:User:favorites.html.twig', array(
+            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
             'userProfile'=>$userProfile,
             'user'=>$user,
+            'teachingCount'=>$teachingCount,
             'users'=>$followInfo['users'],
             'followings'=>$followInfo['followings'],
             'followers'=>$followInfo['followers'],
-            'favoriteCourses'=>$favoriteCourses
-        ));
-    }
-
-    public function questionsAction(Request $request, $userId)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
-
-        $questions = $this->getThreadService()->searchThreads(array('userId'=>$user['id'], 'type'=>'question'), 'createdNotStick', 0 , 10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
-        $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:questions.html.twig', array(
-            'userProfile'=>$userProfile,
-            'courses'=>$courses,
-            'user'=>$user,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers'],
-            'questions'=>$questions
-        ));
-    }
-
-    public function threadsAction(Request $request, $userId)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
-
-        $threads = $this->getThreadService()->searchThreads(array('userId'=>$user['id'], 'type'=>'discussion'), 'createdNotStick', 0 , 10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-
-        $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:threads.html.twig', array(
-            'userProfile'=>$userProfile,
-            'courses'=>$courses,
-            'user'=>$user,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers'],
-            'threads'=>$threads
-        ));
-    }
-    public function notesAction(Request $request, $userId)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
-
-        $notes = $this->getNoteService()->searchNotes(array('userId'=>$user['id'], 'status'=>1), 'created', 0 , 10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
-        
-        $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:notes.html.twig', array(
-            'userProfile'=>$userProfile,
-            'courses'=>$courses,
-            'user'=>$user,
-            'lessons'=>$lessons,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers'],
-            'notes'=>$notes
+            'courses'=>$courses
         ));
     }
 

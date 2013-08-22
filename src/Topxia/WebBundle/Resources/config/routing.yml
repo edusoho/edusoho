@@ -568,25 +568,13 @@ user_show:
     pattern:  /user/{userId}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
-user_show_courses_learning: 
-    pattern:  /user/{userId}/courses/learning
-    defaults: { _controller: TopxiaWebBundle:User:learningCourses }
+user_show_courses_teaching: 
+    pattern:  /user/{userId}/courses/teaching
+    defaults: { _controller: TopxiaWebBundle:User:teachingCourses }
 
 user_show_courses_favorite: 
     pattern:  /user/{userId}/courses/favorite
     defaults: { _controller: TopxiaWebBundle:User:favoriteCourses }
-
-user_show_questions: 
-    pattern:  /user/{userId}/questions
-    defaults: { _controller: TopxiaWebBundle:User:questions }
-
-user_show_threads: 
-    pattern:  /user/{userId}/threads
-    defaults: { _controller: TopxiaWebBundle:User:threads }
-
-user_show_notes: 
-    pattern:  /user/{userId}/notes
-    defaults: { _controller: TopxiaWebBundle:User:notes }
 
 user_follow:
     pattern:  /user/{id}/follow

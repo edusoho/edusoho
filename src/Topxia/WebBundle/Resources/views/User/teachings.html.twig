@@ -1,9 +1,9 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %} {{app.user.nickname}}的主页 - {{ parent() }}{% endblock %}
-{% set navType = 'favorites' %}
+{% set navType = 'teaching' %}
 
-{% set script_controller = 'user/favorite' %}
+{% set script_controller = 'user/teaching' %}
 
 {% block content %}
 
@@ -18,7 +18,7 @@
 
           <div class="panel-body">
             {% if courses is empty %}
-                <div class="empty">暂无收藏课程</div>
+                <div class="empty">暂无在教课程</div>
             {% else %}
                 {% include 'TopxiaWebBundle:Course:grids.html.twig' with {mode:'default'} %}
             {% endif %}
@@ -28,6 +28,5 @@
 
     {% include 'TopxiaWebBundle:User:right-down.html.twig' with {userProfile:userProfile, user: user, followings:followings, followers: followers} %}
 </div>
-
 
 {% endblock %}

@@ -1,10 +1,74 @@
-<div class="panel-heading">
-    <p class="simple-introdution">
-      {{user.nickname}}
-      <a class="btn btn-primary pull-right" >已关注</a>
-      <a class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</a>
-      {% if userProfile.signature %}
-      <p class="signature">{{ userProfile.signature }}</p>
-      {% endif %}
-    </p>
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel clearfix course-header">
+          <div class="media">
+
+              <div class="pull-left">
+                <img  class="media-object" src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}">
+                <br>
+                {% if userProfile.signature %}
+                <h4 class="signature"> {{ userProfile.signature }}</h4>
+                {% endif %}
+              </div>
+
+              <div class="media-body">
+                <br>
+                <h3 class="media-heading nickname"> {{user.nickname}} 
+                
+                  <a class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a> 
+
+                  {% if app.user.id != user.id %}
+                    <button class="btn btn-primary pull-right follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}>关注</button>
+
+                    <button class="btn btn-info pull-right unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已关注</button>
+                  {% endif %}
+
+                </h3> <br><br>
+
+                <h4 class="job-title">
+                  
+                  {% if userProfile.job %}
+                    {{ userProfile.job }} 
+                  {% endif %}
+
+                  {% if user.title %}
+                    {{ user.title }} 
+                  {% endif %}
+
+                </h4>
+                <br><br><br>
+
+                <div class="numbers">
+                  <span class="glyphicon glyphicon-book"></span> <span>创建{{teachingCount}}个课程</span> &nbsp;
+                  <span class="glyphicon glyphicon-user"></span> <span>{{ followers | length }}位粉丝</span> &nbsp;
+                  <span class="glyphicon glyphicon-eye-open"></span> <span>{{ followings | length }}位关注</span> &nbsp;
+                </div>
+
+                <div class="third-party">
+
+                  {#
+                  {% if userProfile.weixin is not empty %}
+                  <div class="weixin">
+                    <a class="btn btn-primary pull-right" href="#"> 加微信好友</a>
+                  </div>
+                  {% endif %}
+                  #}
+
+                  {% if userProfile.weibo is not empty %}
+                  <div class="weibo">
+                    <a class="btn btn-success pull-right" href="{{userProfile.weibo}}"> 微博加关注</a>
+                  </div>
+                  {% endif %}
+
+                  {% if userProfile.site is not empty %}
+                  <div class="site">
+                    <a class="btn btn-default pull-right" href="{{userProfile.site}}"> 个人主页</a>
+                  </div>
+                  {% endif %}
+                  
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
