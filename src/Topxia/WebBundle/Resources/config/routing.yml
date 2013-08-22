@@ -624,6 +624,10 @@ message_delete:
     defaults: {_controller: TopxiaWebBundle:Message:deleteConversationMessage }
     methods: [POST]
 
+disk_upload_callback:
+    pattern: /disk/upload/callback
+    defaults: {_controller: TopxiaWebBundle:Disk:uploadCallback }
+
 content_article_show:
     pattern: /article/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:articleShow }
