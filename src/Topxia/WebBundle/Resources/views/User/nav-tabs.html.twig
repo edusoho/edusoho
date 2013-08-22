@@ -1,11 +1,11 @@
 
 <div class="panel-heading">
   <ul class="nav nav-pills">
-    <li {% if navType == 'teachings' %} class="active" {% endif %}><a href="{{ path('user_show', {user:user.id}) }}">已创建的课程</a></li>
-    <li {% if navType == 'learnings' %} class="active" {% endif %} ><a href="{{ path('user_show_courses_learning', {user:user.id}) }}">学习中的课程</a></li>
-    <li {% if navType == 'favorites' %} class="active" {% endif %}><a href="{{ path('user_show_courses_favorite', {user:user.id}) }}">已收藏的课程</a></li>
-    <li {% if navType == 'questions' %} class="active" {% endif %}><a href="{{ path('user_show_questions', {user:user.id}) }}">他/她的问答</a></li>
-    <li {% if navType == 'threads' %} class="active" {% endif %}><a href="{{ path('user_show_threads', {user:user.id}) }}">他/她的话题</a></li>
-     <li {% if navType == 'notes' %} class="active" {% endif %}><a href="{{ path('user_show_notes', {user:user.id}) }}">他/她的笔记</a></li>
+    <li {% if navType == 'teachings' %} class="active" {% endif %}><a href="{{ path('user_show', {userId:user.id}) }}">已创建的课程</a></li>
+    <li {% if navType == 'learnings' %} class="active" {% endif %} ><a href="{{ path('user_show_courses_learning', {userId:user.id}) }}">学习中的课程</a></li>
+    <li {% if navType == 'favorites' %} class="active" {% endif %}><a href="{{ path('user_show_courses_favorite', {userId:user.id}) }}">已收藏的课程</a></li>
+    <li {% if navType == 'questions' %} class="active" {% endif %}><a href="{{ path('user_show_questions', {userId:user.id}) }}">他/她的问答</a></li>
+    <li {% if navType == 'threads' %} class="active" {% endif %}><a href="{{ path('user_show_threads', {userId:user.id}) }}">他/她的话题</a></li>
+     <li {% if navType == 'notes' %} class="active" {% endif %}><a href="{{ path('user_show_notes', {userId:user.id}) }}">他/她的笔记</a></li>
   </ul>
 </div>

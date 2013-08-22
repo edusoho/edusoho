@@ -1,8 +1,8 @@
 <div class="panel-heading">
     <p class="simple-introdution">
       {{user.nickname}}
-      <button type="button" class="btn btn-primary pull-right" >已关注</button>
-      <button type="button" class="btn btn-success pull-right">发私信</button>
+      <a class="btn btn-primary pull-right" >已关注</a>
+      <a class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</a>
       {% if userProfile.signature %}
       <p class="signature">{{ userProfile.signature }}</p>
       {% endif %}

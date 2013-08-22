@@ -46,7 +46,7 @@
             <p>
               {% if user %}
                 <i class="text-muted glyphicon glyphicon-user"></i>
-                <a href="{{ path('user_show', {user:user.id}) }}">{{ user.nickname }}</a>
+                <a href="{{ path('user_show', {userId:user.id}) }}">{{ user.nickname }}</a>
               {% else %}
                 <span class="label label-danger">会员不存在</span>
               {% endif %}

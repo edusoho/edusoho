@@ -565,27 +565,27 @@ my_note_delete:
     methods: [POST]
 
 user_show: 
-    pattern:  /user/{user}
+    pattern:  /user/{userId}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
 user_show_courses_learning: 
-    pattern:  /user/{user}/courses/learning
+    pattern:  /user/{userId}/courses/learning
     defaults: { _controller: TopxiaWebBundle:User:learningCourses }
 
 user_show_courses_favorite: 
-    pattern:  /user/{user}/courses/favorite
+    pattern:  /user/{userId}/courses/favorite
     defaults: { _controller: TopxiaWebBundle:User:favoriteCourses }
 
 user_show_questions: 
-    pattern:  /user/{user}/questions
+    pattern:  /user/{userId}/questions
     defaults: { _controller: TopxiaWebBundle:User:questions }
 
 user_show_threads: 
-    pattern:  /user/{user}/threads
+    pattern:  /user/{userId}/threads
     defaults: { _controller: TopxiaWebBundle:User:threads }
 
 user_show_notes: 
-    pattern:  /user/{user}/notes
+    pattern:  /user/{userId}/notes
     defaults: { _controller: TopxiaWebBundle:User:notes }
 
 user_follow:

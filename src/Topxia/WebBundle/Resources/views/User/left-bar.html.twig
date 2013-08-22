@@ -16,7 +16,9 @@
                     {% if followings %}
                         <p> 关注: {{ followings | length}} </p>
                       {% for following in followings %} 
+                       <a href="{{ path('user_show', {userId:following.toId}) }}">
                         <img src="{{ file_path(users[following.toId].smallAvatar, 'avatar.png') }}">
+                       </a>
                       {% endfor %}
                     {% endif %}
                 </div>
@@ -25,7 +27,9 @@
                     {% if followers %}
                         <p> 粉丝: {{ followers | length}} </p>
                       {% for follower in followers %} 
+                       <a href="{{ path('user_show', {userId:follower.fromId}) }}">
                         <img src="{{ file_path(users[follower.fromId].smallAvatar, 'avatar.png') }}">
+                      </a>
                       {% endfor %}
                     {% endif %}
                 </div>
