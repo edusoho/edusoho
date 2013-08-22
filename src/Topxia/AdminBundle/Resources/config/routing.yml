@@ -324,6 +324,10 @@ admin_setting_file:
     pattern:  /setting/file
     defaults: { _controller: TopxiaAdminBundle:Setting:file }
 
+admin_setting_video:
+    pattern:  /setting/video
+    defaults: { _controller: TopxiaAdminBundle:Setting:video }
+
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }

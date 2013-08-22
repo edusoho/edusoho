@@ -52,6 +52,7 @@ seajs.config({
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'ckeditor': 'ckeditor/ckeditor.js',
 		'video-js': 'gallery2/video-js/4.0.4/video-js',
+		'swfupload': 'gallery2/swfupload/2.2.0/swfupload-debug',
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug',
 	},
 

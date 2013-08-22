@@ -8,9 +8,9 @@ class FileController extends BaseController
 
     public function uploadAction (Request $request)
     {
-        sleep(2);
         $group = $request->query->get('group');
         $file = $this->get('request')->files->get('file');
+
         $record = $this->getFileService()->uploadFile($group, $file);
 
         $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
