@@ -5,7 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AuthController extends BaseController
 {
-    //Mapping to TestCase testEmailConfirm''
     public function emailConfirmAction(Request $request)
     {
         $token = $this->getUserService()->getToken('email-verify', $request->query->get('token'));
