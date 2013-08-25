@@ -34,11 +34,24 @@ define(function(require, exports, module) {
         open: function() {
             this.element.find(".media-chooser-bar").hide();
             this.element.find(".media-chooser-main").show();
+            return this;
+        },
+
+        show: function() {
+            this.element.show();
+            return this;
         },
 
         close: function() {
             this.element.find(".media-chooser-main").hide();
             this.element.find(".media-chooser-bar").show();
+            this.get('uploaderProgressbar').reset().hide();
+            return this;
+        },
+
+        hide: function() {
+            this.element.hide();
+            return this;
         },
 
         isUploading: function() {
@@ -161,12 +174,20 @@ define(function(require, exports, module) {
                 upload_success_handler: function(file, serverData) {
                     progressbar.setComplete().hide();
                     serverData = $.parseJSON(serverData);
-                    console.log(serverData);
-                    $.post($btn.data('callback'), serverData, function(response) {
-                        var media = self._convertFileToMedia(response);
+
+                    if ($btn.data('callback')) {
+                        $.post($btn.data('callback'), serverData, function(response) {
+                            var media = self._convertFileToMedia(response);
+                            self.trigger('change',  media);
+                            Notify.success('文件上传成功！');
+                        }, 'json');
+                    } else {
+                        var media = self._convertFileToMedia(serverData);
                         self.trigger('change',  media);
-                        Notify.success('文件上传成功！')
-                    }, 'json');
+                        Notify.success('文件上传成功！');
+                    }
+
+
                 }
             }, this.get('uploaderSettings'));
 

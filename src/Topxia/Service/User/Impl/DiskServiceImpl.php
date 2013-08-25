@@ -39,9 +39,42 @@ class DiskServiceImpl extends BaseService implements DiskService
         return $this->getFileDao()->searchFileCount($conditions);
     }
 
-    public function addLocalFile(UploadedFile $originalFile, $path = '/')
+    public function parseFileUri($uri)
     {
-        $user = $this->getCurrentUser();
+        if (strpos($uri, 'disk://') === false) {
+            throw $this->createServiceException('uri error.');
+        }
+
+        $result = array();
+
+        $isLocal = preg_match('/disk:\/\/local\/(.*)/', $uri, $maches);
+        if ($isLocal) {
+            $result['type'] = 'local';
+            $result['path'] = $maches[1];
+            $result['fullpath'] = $this->getContainer()->getParameter('topxia.disk.local_directory'). '/' . $result['path'];
+
+            return $result;
+        }
+
+        $isCloud = preg_match('/disk:\/\/cloud\/(.*?)\/(.*)/', $uri, $maches);
+        if ($isCloud) {
+            $result['type'] = 'cloud';
+            $result['bucket'] = $maches[1];
+            $result['key'] = $maches[2];
+
+            return $result;
+        }
+
+        $this->createServiceException('URI不正确。');
+    }
+
+    public function addLocalFile(UploadedFile $originalFile, $userId, $path = '/')
+    {
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，上传失败！');
+        }
+
         $diskDirectory = $this->getContainer()->getParameter('topxia.disk.local_directory');
 
         $disk = new UserLocalDisk($user['id'], $diskDirectory);
@@ -137,6 +170,11 @@ class DiskServiceImpl extends BaseService implements DiskService
     private function getFileDao()
     {
         return $this->createDao('User.DiskFileDao');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 
 

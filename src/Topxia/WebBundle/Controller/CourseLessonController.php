@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\QiniuClient;
 
 class CourseLessonController extends BaseController
 {
@@ -61,7 +62,20 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        return $this->createMediaResponse($lesson['media']['files'][0]['url']);
+        $uri = $this->getDiskService()->parseFileUri($lesson['media']['files'][0]['url']);
+
+        if ($uri['type'] == 'cloud') {
+            $user = $this->getCurrentUser();
+
+            $setting = $this->setting('video');
+            $client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+
+            $url = $client->generateDownloadUrl($uri['bucket'], $uri['key']);
+
+            return $this->redirect($url);
+        }
+
+        return $this->createLocalMediaResponse($uri);
     }
 
     public function learnStatusAction(Request $request, $courseId, $lessonId)
@@ -100,16 +114,16 @@ class CourseLessonController extends BaseController
         return $media;
     }
 
-    private function createMediaResponse($fileUri)
+    private function createLocalMediaResponse($uri)
     {
-        $setting = $this->setting('file');
-        $parsed = $this->getFileService()->parseFileUri($fileUri);
 
-        $directory = dirname($this->get('kernel')->getRootDir()). '/' . $setting[$parsed['access'].'_directory'];
+        if (!file_exists($uri['fullpath'])) {
+            return $this->createNotFoundException();
+        }
 
-        $filename = $directory . '/' .  $parsed['path'];
+        // var_dump($uri);exit();
 
-        $response = BinaryFileResponse::create($filename, 200, array(), false);
+        $response = BinaryFileResponse::create($uri['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
         $response->setContentDisposition(
@@ -117,13 +131,18 @@ class CourseLessonController extends BaseController
             'lesson.mp4',
             iconv('UTF-8', 'ASCII//TRANSLIT', 'lesson.mp4')
         );
-  
+
         return $response;
     }
 
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getDiskService()
+    {
+        return $this->getServiceKernel()->createService('User.DiskService');
     }
 
     private function getFileService()

@@ -64,13 +64,29 @@ class QiniuClient
             $params['returnBody'] = $this->serializeReturnBody($params['returnBody']);
         }
 
-
         $encodedParams = json_encode($params);
         // var_dump($encodedParams);exit();
     	$encodedParams = $this->encodeSafely($encodedParams);
 
 		$sign = hash_hmac('sha1', $encodedParams, $this->secretKey, true);
 		return $this->accessKey . ':' . $this->encodeSafely($sign) . ':' . $encodedParams;
+    }
+
+    public function generateDownloadUrl($bucket, $key, $fop = '', $deadline = 0)
+    {
+        if (empty($deadline)) {
+            $deadline = time() + 60;
+        }
+
+        $url = "http://{$bucket}.qiniudn.com/{$key}";
+        if (empty($fop)) {
+            $url .= "?e={$deadline}";
+        } else {
+            $url .= "?{$fop}&e={$deadline}";
+        }
+
+        $sign = hash_hmac('sha1', $url, $this->secretKey, true);
+        return  $url . '&token=' . $this->accessKey . ':' . $this->encodeSafely($sign);
     }
 
     private function encodeSafely($string)

@@ -1,6 +1,6 @@
 <div id="media-choosers">
 
-  <div class="media-chooser" id="video-chooser">
+  <div class="media-chooser" id="video-chooser" style="display:none;">
     <div class="media-chooser-bar">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-small" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
@@ -40,7 +40,7 @@
                   <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程通常需5至10分钟时间，在这个过程中视频将无法播放。</li>
                 {% else %}
                   <li>支持<strong>mp4</strong>格式的视频文件上传，且文件大小不能超过<strong>300 MB</strong>。</li>
-                  <li>视频将上传到<strong>网站服务器</strong>，当前不会对上传的的视频进行格式转换及压缩，如需使用该功能，请在管理后台设置视频上传模式为云服务器。
+                  <li>视频将上传到<strong>网站服务器</strong>，当前不会对上传的的视频进行格式转换及压缩，如需使用该功能，请在管理后台设置视频上传模式为云服务器。</li>
                 {% endif %}
               </ul>
               <p></p>
@@ -67,5 +67,70 @@
     </div>
 
   </div>
+
+
+
+  <div class="media-chooser" id="audio-chooser" style="display:none;">
+    <div class="media-chooser-bar">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-small" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="media-chooser-main">
+      <ul class="nav nav-pills nav-pills-mini mbs media-chooser-tabs">
+        <li class="active"><a class="media-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
+        <li><a href="#audio-chooser-disk-pane" data-toggle="tab">从音频库中选择</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="audio-chooser-upload-pane">
+
+          <div class="media-chooser-uploader">
+            <div class="media-chooser-uploader-label">选择你要上传的音频文件：</div>
+            <div class="media-chooser-uploader-control">
+              <span id="audio-choose-uploader-btn" 
+                data-role="uploader-btn"
+                data-token="{{ uploadToken }}"
+                data-url="{% if videoSetting.upload_mode == 'cloud' %}http://up.qiniu.com/{% else %}{{ path('disk_upload') }}{% endif %}"
+                data-filepath="course-{{ course.id }}"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if videoSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
+                data-progressbar="#audio-chooser-progress"></span>
+            </div>
+            <div class="progress" id="audio-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                {% if videoSetting.upload_mode == 'cloud' %}
+                  <li>音频将上传到<strong>云服务器</strong></li>
+                {% else %}
+                  <li>音频将上传到<strong>网站服务器</strong></li>
+                {% endif %}
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="tab-pane" id="audio-chooser-disk-pane">
+          <div id="disk-browser-audio" data-role="disk-browser" data-url="{{ path('disk_browse', {type:'audio'}) }}"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
 
 </div>

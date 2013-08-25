@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     var VideoChooser = require('../widget/media-chooser/video-chooser');
+    var AudioChooser = require('../widget/media-chooser/audio-chooser');
     var Notify = require('common/bootstrap-notify');
 
     require('ckeditor');
@@ -90,7 +91,17 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
+        var audioChooser = new AudioChooser({
+            element: '#audio-chooser',
+            choosed: choosedMedia,
+        });
+
         videoChooser.on('change', function(item) {
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
+        });
+
+        audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
         });
@@ -107,8 +118,12 @@ define(function(require, exports, module) {
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text")
             $form.addClass("lesson-form-" + type);
 
-            if (type == 'video' || type == 'audio') {
-                // lessonMediaChoose.set('type', type);
+            if (type == 'video') {
+                videoChooser.show();
+                audioChooser.hide();
+            } else if (type == 'audio') {
+                audioChooser.show();
+                videoChooser.hide();
             }
 
             switchValidator(validator, type);

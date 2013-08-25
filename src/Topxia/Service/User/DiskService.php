@@ -23,7 +23,9 @@ interface DiskService
 
     public function searchFileCount($conditions);
 
-    public function addLocalFile(UploadedFile $originalFile, $path = '/');
+    public function parseFileUri($uri);
+
+    public function addLocalFile(UploadedFile $originalFile, $userId, $path = '/');
 
     public function addCloudFile(array $file);
 

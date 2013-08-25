@@ -8,11 +8,15 @@ class DiskController extends BaseController
 
     public function uploadAction(Request $request)
     {
-        $file = $this->getDiskService()->addLocalFile(
-            $this->get('request')->files->get('file'), '/'
-        );
+        $token = $request->request->get('token');
+        $token = $this->getUserService()->getToken('diskLocalUpload', $token);
+        if (empty($token)) {
+            throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
+        }
 
-        var_dump($file);exit();
+        $file = $this->get('request')->files->get('file');
+
+        $file = $this->getDiskService()->addLocalFile($file, $token['userId'], '/');
 
         return $this->createJsonResponse($file);
     }
