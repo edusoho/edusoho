@@ -55,7 +55,7 @@
 	<div class="thread-posts">
 		{% if thread.type == 'question' and elitePosts %}
 			<h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 老师的答案</h3>
-	    <ul id="thread-post-list" class="media-list">
+	    <ul class="thread-post-list media-list">
 	      {% for post in elitePosts %}
 	        {% set author = users[post.userId] %}
 	        {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
@@ -68,7 +68,7 @@
       <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
 		</h3>
 
-    <ul id="thread-post-list" class="media-list">
+    <ul class="thread-post-list media-list">
       {% for post in posts %}
         {% set author = users[post.userId] %}
         {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}

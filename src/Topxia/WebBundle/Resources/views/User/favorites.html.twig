@@ -3,7 +3,7 @@
 {% block title %} {{app.user.nickname}}的主页 - {{ parent() }}{% endblock %}
 {% set navType = 'favorites' %}
 
-{% set script_controller = 'user/favorite' %}
+{% set script_controller = 'user/user' %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
 
 <div class="row">
 
-    <div class="col-lg-8">
+    <div class="col-lg-9">
 
         <div class="panel panel-col">
           {% include 'TopxiaWebBundle:User:nav-tabs.html.twig' with {userProfile:userProfile, user: user, followings:followings, followers: followers} %}

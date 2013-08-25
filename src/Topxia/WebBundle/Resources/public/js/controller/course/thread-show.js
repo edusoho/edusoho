@@ -29,15 +29,12 @@ define(function(require, exports, module) {
             if (err == true) {
                 return ;
             }
-
+           
             var $form = $("#thread-post-form");
             $.post($form.attr('action'), $form.serialize(), function(html) {
-                $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
-                var id = $(html).appendTo('#thread-post-list').attr('id');
-                $("#thread-post-panel").removeClass('hide');
-                CKEDITOR.instances['post_content'].setData('');
-                window.location.href = '#' + id;
+                   window.location.reload();
             });
+
             return false;
         });
 
@@ -56,20 +53,13 @@ define(function(require, exports, module) {
             });
         });
 
-        $("#thread-post-list").on('click', '[data-action=post-delete]', function() {
+        $(".thread-post-list").on('click', '[data-action=post-delete]', function() {
             if (!confirm("您真的要删除该回帖吗？")) {
                 return false;
             }
             var $btn = $(this);
             $.post($btn.data('url'), function(){
-                var num = parseInt($("#thread-post-num").text()) - 1;
-                $("#thread-post-num").text(num);
-                $($btn.data('for')).slideUp('fast', function(){
-                    $(this).remove();
-                    if (num == 0) {
-                        $("#thread-post-panel").addClass('hide');
-                    }
-                });
+                window.location.reload();
             });
         });
 
