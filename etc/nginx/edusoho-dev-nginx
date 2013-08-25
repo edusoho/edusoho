@@ -28,6 +28,8 @@ server {
         include fastcgi_params;
         fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
         fastcgi_param  HTTPS              off;
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 8 128k;
     }
 
     location ~* \.(jpg|jpeg|gif|png|ico|swf)$  {

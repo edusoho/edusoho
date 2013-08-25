@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\QiniuClient;
 
 class CourseLessonManageController extends BaseController
 {
@@ -38,8 +39,18 @@ class CourseLessonManageController extends BaseController
 			));
         }
 
+    	$setting = $this->setting('video');
+    	$client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+
+    	$user = $this->getCurrentUser();
+    	$uploadToken = $client->generateUploadToken(array(
+            'endUser' => $user['id'],
+        ));
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
+			'uploadToken' => $uploadToken,
+			'videoSetting' => $setting,
 		));
 	}
 

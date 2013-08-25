@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\User;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 interface DiskService
 {
 
@@ -8,7 +10,22 @@ interface DiskService
 
     public function getUserFiles($userId, $storage, $path = '/');
 
-    public function addFile(array $file);
+    /**
+     * 搜索用户空间的文件
+     * 
+     * @param  array $conditions  搜索条件: userId, type
+     * @param  [type] $sort       排序方式: latestUpdated, oldestUpdated, latestCreated, oldestCreated
+     * @param  [type] $start      返回文件的开始行数
+     * @param  [type] $limit      返回文件的限制行数
+     * @return array              符合搜索条件的文件列表
+     */
+    public function searchFiles($conditions, $sort, $start, $limit);
+
+    public function searchFileCount($conditions);
+
+    public function addLocalFile(UploadedFile $originalFile, $path = '/');
+
+    public function addCloudFile(array $file);
 
     public function renameFile($id, $newFilename);
 

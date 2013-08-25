@@ -205,15 +205,15 @@ class WebExtension extends \Twig_Extension
         $currentValue = $currentUnit = null;
         $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
         foreach ($unitExps as $unit => $exp) {
-            $divisor = pow(1024, $exp);
+            $divisor = pow(1000, $exp);
             $currentUnit = $unit;
             $currentValue = $size / $divisor;
-            if ($currentValue < 1024) {
+            if ($currentValue < 1000) {
                 break;
             }
         }
 
-        return sprintf('%.2f', $currentValue) . $currentUnit;
+        return sprintf('%.1f', $currentValue) . $currentUnit;
     }
 
     public function loadObject($type, $id)

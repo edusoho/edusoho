@@ -1,13 +1,12 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-    var MediaChoose = require('./media-choose');
+    var VideoChooser = require('../widget/media-chooser/video-chooser');
     var Notify = require('common/bootstrap-notify');
 
     require('ckeditor');
 
     function createValidator ($form) {
-
 
         Validator.addRule('timeLength', function(options) {
             console.log(options.element.val());
@@ -86,29 +85,34 @@ define(function(require, exports, module) {
         var choosedMedia = $form.find('[name="media"]').val();
         choosedMedia = choosedMedia ? $.parseJSON(choosedMedia) : {};
 
-        var lessonMediaChoose = new MediaChoose({
-            element: '#lesson-media-choose',
-            choosed: choosedMedia
+        var videoChooser = new VideoChooser({
+            element: '#video-chooser',
+            choosed: choosedMedia,
         });
 
-        lessonMediaChoose.on('change', function(item) {
+        videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
         });
 
         var validator = createValidator($form);
 
-        $form.on('change', '[name="type"]', function() {
+        // var currentFormType = 'video';
+        $form.on('change', '[name=type]', function(e) {
+            // if (currentFormType == 'video') {
+            //     this.checked = false;
+            // }
             var type = $(this).val();
 
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text")
             $form.addClass("lesson-form-" + type);
 
             if (type == 'video' || type == 'audio') {
-                lessonMediaChoose.set('type', type);
+                // lessonMediaChoose.set('type', type);
             }
 
             switchValidator(validator, type);
+            // currentFormType = type;
         });
 
         $form.find('[name="type"]:checked').trigger('change');

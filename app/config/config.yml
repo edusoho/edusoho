@@ -77,6 +77,8 @@ parameters:
         db_data_col: session_value
         db_time_col: session_time
 
+    topxia.disk.local_directory: "%kernel.root_dir%/data/disk"
+
 services:
     session.handler.pdo.connection:
         class: PDO
