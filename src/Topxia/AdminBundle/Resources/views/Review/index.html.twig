@@ -11,22 +11,22 @@
     <h1>课程评价管理</h1>
   </div>
 
-  <form id="review-search-form" class="well well-small" action="" method="get" novalidate> 
-    <div class="row">
-
-       <div class="col-lg-3">
-        {{ form_widget(form.keywordType) }}
-      </div>
-
-      <div class="col-lg-3">
-        {{ form_widget(form.keyword, {attr:{placeholder:'关键词:标题或者内容'}}) }}
-      </div>
-      <div class="col-lg-2">
-        {{ form_widget(form.nickname, {attr:{placeholder:'作者'}}) }}
-      </div>
-      <button class="btn btn-primary">搜索</button>
-      {{ form_rest(form) }}
+  <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+    <div class="form-group">
+      {{ form_widget(form.keywordType, {attr:{class:'form-control'}}) }}
     </div>
+
+    <div class="form-group">
+      {{ form_widget(form.keyword, {attr:{class:'form-control',  placeholder:'关键词:标题或者内容'}}) }}
+    </div>
+
+    <div class="form-group">
+      {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'作者'}}) }}
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+
+    {{ form_rest(form) }}
   </form>
 
   <table class="table table-striped" id="review-list">

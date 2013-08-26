@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:CourseOrder:layout.html.twig' %}
 
-{% block title %}课程订单管理 - {{ parent() }}{% endblock %}
+{% block title %}订单管理 - {{ parent() }}{% endblock %}
 
 {#
     {% set script_controller = 'trade/index' %}
@@ -11,46 +11,39 @@
 {% block main %}
 
   <div class="page-header clearfix">
-    <h1>课程订单管理</h1>
+    <h1>订单管理</h1>
   </div>
 
-   <div class="navbar">
-    <form id="user-search-form" class="navbar-form row" action="" method="get" novalidate>
+  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="form-group">
+        {{ form_widget(searchForm.status, {attr:{class:'form-control'}}) }}
+    </div>
 
-        <div class="col-lg-2">
-          {{ form_widget(searchForm.status) }}
-        </div>
+    <div class="form-group">
+      {{ form_widget(searchForm.payment, {attr:{class:'form-control'}}) }}
+    </div>
 
-         <div class="col-lg-2">
-          {{ form_widget(searchForm.payment) }}
-        </div>
-        
-        <div class="col-lg-3">
-          {{ form_widget(searchForm.paidStartTime) }}
-        </div>
+    <div class="form-group">
+      {{ form_widget(searchForm.paidStartTime, {attr:{class:'form-control'}}) }}
+    </div>
 
-        <div class="col-lg-3">
-          {{ form_widget(searchForm.paidEndTime) }}
-        </div>
+    <div class="form-group">
+      {{ form_widget(searchForm.paidEndTime, {attr:{class:'form-control'}}) }}
+    </div>
 
-        <br><br><br>
+    <div class="form-group">
+      {{ form_widget(searchForm.keywordType, {attr:{class:'form-control'}}) }}
+    </div>
 
-        <div class="col-lg-2">
-        {{ form_widget(searchForm.keywordType) }}
-        </div>
+    <div class="form-group">
+      {{ form_widget(searchForm.keyword, {attr:{class:'form-control', placeholder:'关键词'}}) }}
+    </div>
 
-        <div class="col-lg-4">
-          {{ form_widget(searchForm.keyword, {attr:{placeholder:'关键词'}}) }}
-        </div>
+    {{ form_rest(searchForm) }}
 
-        <div class="col-lg-2">
-          {{ form_rest(searchForm) }}
-          <button class="btn btn-primary">搜索</button>
-        </div>
+    <button class="btn btn-primary">搜索</button>
 
-    </form>
-
-  </div>
+  </form>
       
     <table class="table table-striped" id="review-list">
 

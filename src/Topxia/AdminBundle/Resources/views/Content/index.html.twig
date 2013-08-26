@@ -11,8 +11,8 @@
 <div class="page-header clearfix">
 
 	<div class="btn-group pull-right">
-	  <button class="btn btn-primary btn-small" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type:'article'}) }}"><span class="glyphicon glyphicon-plus"></span> 添加文章</button>
-	  <button type="button" class="btn btn-primary btn-small dropdown-toggle" data-toggle="dropdown">
+	  <button class="btn btn-primary btn-sm" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type:'article'}) }}"><span class="glyphicon glyphicon-plus"></span> 添加文章</button>
+	  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
 	    <span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu">
@@ -24,7 +24,7 @@
 
   <h1 class="pull-left">内容管理</h1></div>
 
-<form class="well well-small form-inline">
+<form class="well btn-small form-inline">
 	<select class="width-input" name="type">
     {{ select_options(dict('contentType'), app.request.query.get('type'), '--所有类型--') }}
 	</select>

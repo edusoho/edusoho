@@ -3,7 +3,7 @@
     <td>{{ tag.name }}</td>
     <td>{{ tag.createdTime|date('Y-m-d') }}</td>
     <td>
-        <button class="btn btn-small btn-primary update-btn" data-url="{{ path('admin_tag_update', {tag:tag.id}) }}" data-toggle="modal" data-target="#tag-update-modal">编辑</button>
-        <button class="btn btn-small delete-btn" data-url="{{ path('admin_tag_delete', {tag:tag.id}) }}" data-target="{{ tag.id }}">删除</button>
+        <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_tag_update', {tag:tag.id}) }}" data-toggle="modal" data-target="#tag-update-modal">编辑</button>
+        <button class="btn btn-sm delete-btn" data-url="{{ path('admin_tag_delete', {tag:tag.id}) }}" data-target="{{ tag.id }}">删除</button>
     </td>
 </tr>
