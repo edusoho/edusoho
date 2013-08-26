@@ -46,7 +46,6 @@ class UserController extends BaseController {
             if ($form->isValid()) {
                 $profile = $form->getData();
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->setFlashMessage('success', '基础信息保存成功。');
                 return $this->redirect($this->generateUrl('settings'));
             }
         }

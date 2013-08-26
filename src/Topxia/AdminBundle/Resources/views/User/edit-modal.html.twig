@@ -6,7 +6,6 @@
 {% block body %}
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
-{{ web_macro.flash_messages() }}
 
 <div class="row control-group">
             <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
