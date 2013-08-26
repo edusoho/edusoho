@@ -6,9 +6,6 @@
 
 {% block main %}
 
-<div class="page-header"><h1>第三方登录</h1></div>
-
-
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" novalidate>
@@ -30,12 +27,12 @@
 
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.weibo_key, 'App Key') }}</div>
-      <div class="controls col-lg-8">{{ form_widget(form.weibo_key) }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.weibo_key, {attr:{class:'form-control'}}) }}</div>
     </div>
-    
+    <p></p>
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.weibo_secret, 'App Secret') }}</div>
-      <div class="controls col-lg-8">{{ form_widget(form.weibo_secret) }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.weibo_secret, {attr:{class:'form-control'}}) }}</div>
     </div>
   </fieldset>
 
@@ -48,12 +45,12 @@
 
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.qq_key, 'App ID') }}</div>
-      <div class="controls col-lg-8">{{ form_widget(form.qq_key) }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.qq_key, {attr:{class:'form-control'}}) }}</div>
     </div>
-
+<p></p>
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.qq_secret, 'App Secret') }}</div>
-      <div class="controls col-lg-8">{{ form_widget(form.qq_secret) }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.qq_secret, {attr:{class:'form-control'}}) }}</div>
     </div>
   </fieldset>
 
@@ -66,12 +63,12 @@
 
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.renren_key, 'App Key') }}</div>
-      <div class="controls col-lg-8">{{ form_widget(form.renren_key) }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.renren_key, {attr:{class:'form-control'}}) }}</div>
     </div>
-
+<p></p>
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.renren_secret, 'App Secret') }}</div>
-      <div class="controls col-lg-8 radios">{{ form_widget(form.renren_secret) }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.renren_secret, {attr:{class:'form-control'}}) }}</div>
     </div>
 
     <div class="row control-group">
@@ -89,12 +86,12 @@
 
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.douban_key, 'App Key') }}</div>
-      <div class="controls col-lg-8 radios">{{ form_widget(form.douban_key) }}</div>
+      <div class="controls col-lg-8 radios">{{ form_widget(form.douban_key, {attr:{class:'form-control'}}) }}</div>
     </div>
-
+<p></p>
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.douban_secret, 'App Secret') }}</div>
-      <div class="controls col-lg-8">{{ form_widget(form.douban_secret) }}</div>
+      <div class="controls col-lg-8">{{ form_widget(form.douban_secret,{attr:{class:'form-control'}} ) }}</div>
     </div>
   </fieldset>
 </br>

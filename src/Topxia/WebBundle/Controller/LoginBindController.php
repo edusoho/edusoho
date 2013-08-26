@@ -42,6 +42,7 @@ class LoginBindController extends BaseController
 
     public function newAction(Request $request, $type)
     {
+
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
@@ -109,7 +110,7 @@ class LoginBindController extends BaseController
 
     private function createOAuthClient($type)
     {
-        $settings = $this->setting('login_bind');
+        $settings = $this->setting('login_bind');        
 
         if (empty($settings)) {
             throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');

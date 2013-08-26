@@ -31,14 +31,14 @@
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.alipay_key, 'App Key') }}</div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.alipay_key) }}
+        {{ form_widget(form.alipay_key, {attr:{class:'form-control'}}) }}
       </div>
     </div>
-
+<p></p>
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.alipay_secret, 'App Secret') }}</div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.alipay_secret) }}
+        {{ form_widget(form.alipay_secret, {attr:{class:'form-control'}}) }}
       </div>
     </div>
   </fieldset>
@@ -54,13 +54,14 @@
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.tenpay_key, 'App ID') }}</div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.tenpay_key) }}
+        {{ form_widget(form.tenpay_key, {attr:{class:'form-control'}}) }}
       </div>
     </div>
+    <p></p>
     <div class="row control-group">
       <div class="col-lg-3 control-label">{{ form_label(form.tenpay_secret, 'App Secret') }}</div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.tenpay_secret) }}
+        {{ form_widget(form.tenpay_secret, {attr:{class:'form-control'}}) }}
       </div>
     </div>
   </fieldset>

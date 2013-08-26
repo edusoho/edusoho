@@ -19,7 +19,7 @@ class UserBindDaoImpl extends BaseDao implements UserBindDao
     public function getBindByFromId($fromId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE fromId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($fromId));
+        return $this->getConnection()->fetchAssoc($sql, array($fromId)) ? : array();
     }
 
     public function getBindByTypeAndFromId($type, $fromId)

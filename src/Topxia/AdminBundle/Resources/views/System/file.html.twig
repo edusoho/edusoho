@@ -14,23 +14,23 @@
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.public_directory, '公开文件存放目录名称') }}</div>
     <div class="controls col-lg-8">
-      {{ form_widget(form.public_directory) }}
+      {{ form_widget(form.public_directory, {attr:{class:'form-control'}} ) }}
     </div>
   </div>
-
+  <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.public_url, '公开文件WEB访问URL') }}</div>
     <div class="controls col-lg-8">
-      {{ form_widget(form.public_url) }}
+      {{ form_widget(form.public_url, {attr:{class:'form-control'}}) }}
       <p class="help-block">如果使用当前域名，请留空</p>
     </div>
   </div>
 
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.private_directory, '私有文件存放目录名称') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.private_directory) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.private_directory, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+<p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label"></div>
     <div class="controls col-lg-8">

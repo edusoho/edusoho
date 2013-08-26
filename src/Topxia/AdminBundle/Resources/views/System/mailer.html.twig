@@ -19,37 +19,37 @@
 
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.host, 'SMTP服务器地址') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.host) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.host, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+  <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.port, 'SMTP端口号') }}</div>
     <div class="controls col-lg-8">
-      {{ form_widget(form.port) }}
+      {{ form_widget(form.port, {attr:{class:'form-control'}}) }}
       <p class="help-block">通常端口号为25</p>
     </div>
   </div>
-
+ <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.username, 'SMTP用户名') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.username) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.username, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+ <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.password, 'SMTP密码') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.password) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.password, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+ <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.from, '发信人地址') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.from) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.from, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+ <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.name, '发信人名称') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.name) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.name, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+ <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label"></div>
     <div class="controls col-lg-8">

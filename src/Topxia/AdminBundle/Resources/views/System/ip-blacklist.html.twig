@@ -11,7 +11,7 @@
 {{ web_macro.flash_messages() }}
 
 <form method="post">
-  {{ form_widget(form.ips, {required:false, attr:{rows:18}}) }}
+  {{ form_widget(form.ips, {required:false, attr:{rows:18, class: 'form-control'}}) }}
   <div class="help-block">一行一个IP，被加入黑名单的IP将被禁止访问！赞不支持网段的封锁!</div>
   <input type="submit" class="btn btn-primary" value="提交">
   {{ form_rest(form) }}

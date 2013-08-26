@@ -25,7 +25,7 @@ class WeiboOAuthClient extends AbstractOAuthClient
     	$data = $this->postRequest('https://api.weibo.com/oauth2/access_token?' . http_build_query($params), array());
 
         $rawToken = json_decode($data, true);
-
+        
         $token = array(
             'token' => $rawToken['access_token'],
             'userId' => $rawToken['uid'],

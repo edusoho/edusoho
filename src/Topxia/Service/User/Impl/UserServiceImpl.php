@@ -402,13 +402,6 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserBindByTypeAndFromId($type, $fromId)
     {
-        $bind = $this->getUserBindDao()->getBindByFromId($fromId);
-        if (empty($bind) || $bind['fromId'] != $fromId || $bind['type'] != $type ) {
-            throw $this->createServiceException('获取第三方登陆信息失败,参数有误');
-        }
-        if ($bind['expiredTime'] > 0 && $bind['expiredTime'] < time()) {
-             throw $this->createServiceException('获取第三方登陆信息失败,已经过期');
-        }
         return $this->getUserBindDao()->getBindByTypeAndFromId($type, $fromId);
     }
 
