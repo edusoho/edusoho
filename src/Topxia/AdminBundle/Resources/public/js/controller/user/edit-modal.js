@@ -25,41 +25,6 @@ define(function(require, exports, module) {
             }
         });
 
-
-        $('.user-lock-btn, .user-unlock-btn').click(function(e){
-            e.preventDefault();
-            var $btn = $(this);
-            if(!confirm('真的要' + $btn.attr('title') + '吗？')) {
-                return ;
-            }
-
-            $.post($(this).attr('href'), function(html){
-                $modal.modal('hide');
-                Notify.success($btn.attr('title') + '成功！');
-                 var $tr = $(html);
-                $('#' + $tr.attr('id')).replaceWith($tr);
-            }).error(function(){
-                Notify.danger($btn.attr('title') + '失败');
-            });
-
-        });
-
-        $('#password-reset').click(function(){
-            $.post($(this).data('url'),function(response){
-                Notify.success('邮件发送成功！');                
-            }).error(function(){
-                Notify.danger('邮件发送失败');
-            });
-        });
-
-        $('#register-email-send').click(function(){
-            $.post($(this).data('url'),function(response){
-                Notify.success('邮件发送成功！');                
-            }).error(function(){
-                Notify.danger('邮件发送失败');
-            });
-        });
-
 	};
 
 });

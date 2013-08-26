@@ -3,7 +3,6 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
-use Topxia\AdminBundle\Form\UserInfoType;
 
 class UserController extends BaseController {
 
@@ -35,30 +34,28 @@ class UserController extends BaseController {
     public function showAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
+        $profile = $this->getUserService()->getUserProfile($id);
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
+            'profile' => $profile,
         ));
     }
 
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
-        $form = $this->createForm(new UserInfoType(), $user);
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $info = $form->getData();
-                $this->getUserService()->changeUserRoles($user['id'], $info['roles']);
-
-            return $this->redirect($this->generateUrl('admin_user'));
-            }
-        }
 
         return $this->render('TopxiaAdminBundle:User:edit-modal.html.twig', array(
             'user' => $user,
-            'form' => $form->createView(),
-            'hash' => $this->makeHash($user),
+        ));
+    }
+
+    public function setRolesAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        return $this->render('TopxiaAdminBundle:User:set-roles-modal.html.twig', array(
+            'user' => $user,
         ));
     }
 
@@ -98,11 +95,31 @@ class UserController extends BaseController {
         ));
     }
 
-    public function emailSendAction(Request $request, $id, $hash)
+    public function sendPasswordResetEmail(Request $request, $id)
     {
-        $user = $this->checkHash($id, $hash);
+        $user = $this->getUserService()->getUser($id);
         if (empty($user)) {
-            return $this->createJsonResponse(false);
+            throw $this->createNotFoundException();
+        }
+
+        $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
+        $this->sendEmail(
+            $user['email'],
+            "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+            $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+                'user' => $user,
+                'token' => $token,
+            )), 'html'
+        );
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function sendEmailVerifyEmailAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+        if (empty($user)) {
+            throw $this->createNotFoundException();
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
@@ -115,28 +132,7 @@ class UserController extends BaseController {
                 'token' => $token,
             ))
         );
+
         return $this->createJsonResponse(true);
     }
-
-    private function makeHash($user)
-    {
-        $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
-        return md5($string);
-    }
-
-    private function checkHash($userId, $hash)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        if (empty($user)) {
-            return false;
-        }
-
-        if ($this->makeHash($user) !== $hash) {
-            return false;
-        }
-
-        return $user;
-    }
-
-
 }

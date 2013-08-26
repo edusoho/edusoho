@@ -1,5 +1,5 @@
-{% macro user_link(user, modal = 'user-modal') %}
-	<a href="javascript:;" role="show-user" data-toggle="modal" data-backdrop="static" data-target="#{{ modal }}" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+{% macro user_link(user) %}
+	<a href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.nickname }}</a>
     {% if user.emailVerified %}
       <span class="text-success" title="邮件已验证"><i class="glyphicon glyphicon-envelope"></i></span>
     {% endif %}
