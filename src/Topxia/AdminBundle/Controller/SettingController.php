@@ -19,12 +19,6 @@ class SettingController extends BaseController
             ->add('logo', 'text')
             ->add('master_email', 'text')
             ->add('icp', 'text')
-            ->add('google_analytics_enabled', 'choice', array(
-                'expanded' => true, 
-                'choices' => array(0 => '关闭', 1 => '开启'),
-            ))
-            ->add('google_analytics_id', 'text')
-            ->add('google_analytics_params', 'textarea')
             ->add('status', 'choice', array(
                 'expanded' => true, 
                 'choices' => array('open' => '开放', 'closed' => '关闭'),
@@ -39,7 +33,7 @@ class SettingController extends BaseController
             if ($form->isValid()) {
                 $site = $form->getData();
                 $this->getSettingService()->set('site', $site);
-                $this->setFlashMessage('站点信息设置已保存！', 'success');
+                $this->setFlashMessage('success', '站点信息设置已保存！');
             }
         }
 

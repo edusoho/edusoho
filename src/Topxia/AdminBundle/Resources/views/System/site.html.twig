@@ -13,33 +13,33 @@
 <form class="form-horizontal" method="post" novalidate>
   <fieldset>
     <legend>基础信息</legend>
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.name, '网站名称') }}</div>
-      <div class="col-lg-8 controls">{{ form_widget(form.name) }}</div>
+      <div class="col-lg-8 controls">{{ form_widget(form.name, {attr:{class:'form-control'}}) }}</div>
     </div>
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.url, '网站域名') }}</div>
       <div class="col-lg-8 controls">
-        {{ form_widget(form.url) }}
+        {{ form_widget(form.url, {attr:{class:'form-control'}}) }}
         <p class="help-block">以"http://"或"https://"开头</p>
       </div>
     </div>
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.logo, '网站LOGO') }}</div>
       <div class="col-lg-8 controls">
-        {{ form_widget(form.logo) }}
+        {{ form_widget(form.logo, {attr:{class:'form-control'}}) }}
         <p class="help-block">填写网站logo的文件路径地址。</p>
       </div>
     </div>
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.master_email, '管理员邮箱地址') }}</div>
-      <div class="col-lg-8 controls">{{ form_widget(form.master_email) }}</div>
+      <div class="col-lg-8 controls">{{ form_widget(form.master_email, {attr:{class:'form-control'}}) }}</div>
     </div>
 
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.icp, 'ICP备案号') }}</div>
       <div class="col-lg-8 controls">
-        {{ form_widget(form.icp) }}
+        {{ form_widget(form.icp, {attr:{class:'form-control'}}) }}
       </div>
     </div>
   </fieldset>
@@ -47,37 +47,15 @@
 <br/>
   <fieldset>
     <legend>网站统计分析代码部署</legend>
-    <div class="alert">建议网站使用一种统计分析即可。</div>
 
-    <div class="row control-group">
-      <div class="col-lg-2 control-label">{{ form_label(form.google_analytics_enabled, '谷歌分析状态') }}</div>
+    <div class="form-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.analytics, '统计分析代码') }}</div>
       <div class="col-lg-8 controls">
-        {{ form_widget(form.google_analytics_enabled, {attr:{class:'radios'}}) }}
-      </div>
-    </div>
-
-    <div class="row control-group">
-      <div class="col-lg-2 control-label">{{ form_label(form.google_analytics_id, '谷歌分析账号ID') }}</div>
-      <div class="col-lg-8 controls">
-        {{ form_widget(form.google_analytics_id, {attr:{class:'span2'}}) }}
-        <p class="help-block">例如：UA-XXXXXXXX-X</p>
-      </div>
-    </div>
-
-    <div class="row control-group">
-      <div class="col-lg-2 control-label">{{ form_label(form.google_analytics_params, '谷歌分析自定义参数') }}</div>
-      <div class="col-lg-8 controls">
-        {{ form_widget(form.google_analytics_params, {attr:{rows:3}}) }}
-        <p class="help-block">例如：_gaq.push(['_setDomainName', '.youdomain.com']);</p>
-      </div>
-    </div>
-
-    <div class="row control-group">
-      <div class="col-lg-2 control-label">{{ form_label(form.analytics, '其他网站分析代码部署') }}</div>
-      <div class="col-lg-8 controls">
-        {{ form_widget(form.analytics, {attr:{rows:3}}) }}
+        {{ form_widget(form.analytics, {attr:{class:'form-control', rows:4}}) }}
         <p class="help-block">
-          例如：<a href="http://tongji.baidu.com/" target="_blank">百度统计</a>、
+          建议使用下列统计分析的一种：
+          <a href="http://www.google.cn/intl/zh-CN_ALL/analytics/" target="_blank">谷歌分析</a>、
+          <a href="http://tongji.baidu.com/" target="_blank">百度统计</a>、
           <a href="http://ta.qq.com/" target="_blank">腾讯分析</a>、
           <a href="http://www.cnzz.com/" target="_blank">CNZZ</a>。
         </p>
@@ -87,24 +65,24 @@
 
   <fieldset>
     <legend>站点状态</legend>
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.status, '网站状态') }}</div>
       <div class="col-lg-8 controls">
         {{ form_widget(form.status, {attr:{class:'radios'}}) }}
       </div>
     </div>
 
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.closed_note, '网站关闭公告') }}</div>
         <div class="col-lg-8 controls">
-        {{ form_widget(form.closed_note, {attr:{rows:3}}) }}
+        {{ form_widget(form.closed_note, {attr:{class:'form-control', rows:4}}) }}
         <p class="help-block">网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码。</p>
       </div>
     </div>
   </fieldset>
 
-  <div class="row control-group">
-    <div class="col-offset-2 controls">
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
       {{ form_rest(form) }}
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
