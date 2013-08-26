@@ -3,9 +3,11 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
 	require('common/validator-rules').inject(Validator);
+
 	exports.run = function() {
 		var $form = $('#category-form');
 		var $modal = $form.parents('.modal');
+        var $table = $('#category-table');
 
 		var validator = new Validator({
             element: $form,
@@ -15,37 +17,35 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                $.post($form.attr('action'), $form.serialize(), function(response){
-					if (response.status == 'ok') {
-						window.location.reload();
-					} else {
-						var errorMsg = '添加失败：' + ((response.error && response.error.message) ? response.error.message : '');
-						Notify.danger(errorMsg);
-					}
-				}, 'json');
+                $.post($form.attr('action'), $form.serialize(), function(html){
+                    $modal.modal('hide');
+                    $table.find('tbody').replaceWith(html);
+                    Notify.success('添加分类成功！');
+				});
 
             }
         });
 
         validator.addItem({
-            element: '[name="category[name]"]',
+            element: '#category-name-field',
             required: true,
-            rule: 'maxlength{max:10}'
+            rule: 'maxlength{max:100}'
         });
 
         validator.addItem({
-            element: '[name="category[code]"]',
-            required: true,
+            element: '#category-code-field',
             rule: 'remote'
         });
 
         validator.addItem({
-            element: '[name="category[weight]"]',
+            element: '#category-weight-field',
             required: false,
-            rule: 'max{max: 99999}'
+            rule: 'integer'
         });
 
-
+        $modal.find('.delete-category').on('click', function(){
+            console.log('bbb');
+        });
 
 	};
 

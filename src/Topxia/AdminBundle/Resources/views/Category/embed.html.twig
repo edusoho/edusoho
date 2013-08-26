@@ -1,0 +1,25 @@
+{% extends layout %}
+
+{% block title %}{{ group.name }}管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'category' %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_category_create', {groupId:group.id}) }}">添加分类</button>
+  <h1 class="pull-left">{{ group.name }}管理</h1>
+</div>
+
+<table class="table table-hover" id="category-table">
+  <thead>
+    <tr>
+      <th width="50%">名称</th>
+      <th>编码</th>
+      <th>权重</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  {% include 'TopxiaAdminBundle:Category:tbody.html.twig' %}
+</table>
+{% endblock %}

@@ -8,9 +8,20 @@
       <div class="list-group">
         <a href="{{ path('admin_course', {'tab':'auditing'}) }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">课程管理<span class="glyphicon glyphicon-chevron-right"></span></a>
 
-        <a href="{{ url('admin_course_threads') }}" class="list-group-item {% if menu == 'thread' %}active{% endif %}">话题管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_review') }}" class="list-group-item {% if menu == 'review' %}active{% endif %}">评价管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_course_order_manage') }}" class="list-group-item {% if menu == 'course-order' %}active{% endif %}">
+          交易管理 <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+
+        <a href="{{ url('admin_course_threads') }}" class="list-group-item {% if menu == 'thread' %}active{% endif %}">讨论区管理<span class="glyphicon glyphicon-chevron-right"></span></a>
 
         <a href="{{ url('admin_note') }}" class="list-group-item {% if menu == 'note' %}active{% endif %}" >笔记管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_course_category') }}" class="list-group-item {% if menu == 'category' %}active{% endif %}">课程分类管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
+        <a href="{{ url('admin_tag') }}" class="list-group-item {% if menu == 'tag' %}active{% endif %}">标签管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+
       </div>
     {% endblock %}
   </div>

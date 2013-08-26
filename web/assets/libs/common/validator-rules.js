@@ -54,6 +54,11 @@ define(function(require, exports, module) {
             '{{display}}格式不正确'
         ],
         [
+            'integer',
+            /^[+-]?\d+$/,
+            '{{display}}必须为整数'
+        ],
+        [
             'remote',
             function(options, commit) {
                 var element = options.element,

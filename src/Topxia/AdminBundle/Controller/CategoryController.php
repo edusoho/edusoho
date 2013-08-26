@@ -9,74 +9,41 @@ use Topxia\Service\Common\ServiceException;
 
 class CategoryController extends BaseController
 {
-    public function indexAction(Request $request)
+
+    public function embedAction($group, $layout)
     {
-        $groupId = (int) $request->query->get('groupId');
-        $group = $this->getCategoryService()->getGroup($groupId);
+        $group = $this->getCategoryService()->getGroupByCode($group);
         if (empty($group)) {
             throw $this->createNotFoundException();
         }
 
-        $categories = $this->getCategoryService()->getCategoryTree($groupId);
-        return $this->render('TopxiaAdminBundle:Category:index.html.twig', array(
+        $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+        return $this->render('TopxiaAdminBundle:Category:embed.html.twig', array(
             'group' => $group,
             'categories' => $categories,
+            'layout' => $layout
         ));
     }
 
     public function createAction(Request $request)
     {
-        $groupId = (int) $request->query->get('groupId');
-        $parentId = (int) $request->query->get('parentId', 0);
-        $form = $this->createForm(new CategoryType);
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $data['groupId'] = $groupId;
-                $data['parentId'] = $parentId;
-                $data['weight'] = (int) $data['weight'];
-                try {
-                    $category = $this->getCategoryService()->saveCategory($data);
-                    return $this->createJsonResponse(array('status' => 'ok'));
-                } catch (ServiceException $e) {
-                    return $this->createJsonResponse(array('status' => 'error', 'error' => array('message' => $e->getMessage())));
-                }
-            }
+            $category = $this->getCategoryService()->createCategory($request->request->all());
+            return $this->renderTbody($category['groupId']);
         }
-        return $this->render('TopxiaAdminBundle:Category:category-save-modal.html.twig', array(
-            'form' => $form->createView(),
-            'groupId' => $groupId,
-            'parentId' => $parentId,
-            'type' => 'create'
+
+        $category = array(
+            'id' => 0,
+            'name' => '',
+            'code' => '',
+            'groupId' => (int) $request->query->get('groupId'),
+            'parentId' => (int) $request->query->get('parentId', 0),
+            'weight' => 0,
+        );
+
+        return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
+            'category' => $category
         ));
-    }
-
-    public function codeCheckAction(Request $request)
-    {
-        $code = $request->query->get('value');
-        $category = $this->getCategoryService()->getCategoryByCode($code);
-        if (empty($category)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => 'URI可以使用'));
-        }
-        return $this->createJsonResponse(array('success' => false, 'message' => 'URI已被占用'));
-    }
-
-    public function codeEditCheckAction(Request $request, $categoryId)
-    {
-        $code = $request->query->get('value');
-        $category = $this->getCategoryService()->getCategory($categoryId);
-        $categoryByCode = $this->getCategoryService()->getCategoryByCode($code);
-
-        if (empty($categoryByCode)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => 'URI可以使用'));
-        }
-
-        $diff = array_diff($category, $categoryByCode);
-        if (!empty($diff) && !empty($categoryByCode)) {
-            return $this->createJsonResponse(array('success' => false, 'message' => 'URI已被占用'));
-        }
-        return $this->createJsonResponse(array('success' => true, 'message' => 'URI可以使用'));
     }
 
     public function editAction(Request $request, $id)
@@ -85,26 +52,14 @@ class CategoryController extends BaseController
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
-        $form = $this->createForm(new CategoryType, $category);
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                try {
-                    $category = $this->getCategoryService()->saveCategory($data);
-                    return $this->createJsonResponse(array('status' => 'ok'));
-                } catch (ServiceException $e) {
-                    return $this->createJsonResponse(array('status' => 'ok', 'error' => array('message' => $e->getMessage())));
-                }
-            }
+            $category = $this->getCategoryService()->updateCategory($id, $request->request->all());
+            return $this->renderTbody($category['groupId']);
         }
 
-        return $this->render('TopxiaAdminBundle:Category:category-save-modal.html.twig', array(
-            'form' => $form->createView(),
+        return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
             'category' => $category,
-            'group' => $this->getCategoryService()->getGroup($category['groupId']),
-            'type' => 'edit'
         ));
     }
 
@@ -113,16 +68,33 @@ class CategoryController extends BaseController
         
     }
 
-    public function groupAction (Request $request)
+    public function checkCodeAction(Request $request)
     {
-        //  @todo, 暂时就取１００个够了吧。
-        $groups = $this->getCategoryService()->getGroups(0, 100);
-        return $this->render('TopxiaAdminBundle:Category:group.html.twig', array(
-            'groups' => $groups,
+        $code = $request->query->get('value');
+        $exclude = $request->query->get('exclude');
+
+        $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
+
+        if ($avaliable) {
+            $response = array('success' => true, 'message' => '');
+        } else {
+            $response = array('success' => false, 'message' => '编码已被占用，请换一个。');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    private function renderTbody($groupId)
+    {
+        $group = $this->getCategoryService()->getGroup($groupId);
+        $categories = $this->getCategoryService()->getCategoryTree($groupId);
+        return $this->render('TopxiaAdminBundle:Category:tbody.html.twig', array(
+            'categories' => $categories,
+            'group' => $group
         ));
     }
 
-    protected function getCategoryService()
+    private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

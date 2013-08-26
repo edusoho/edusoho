@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var BootstrapValidator = Validator.extend({
         attrs: {
             explainClass: "help-block",
-            itemClass: "control-group",
+            itemClass: "form-group",
             itemHoverClass: "on-hover",
             itemFocusClass: "in-focus",
             itemErrorClass: "has-error",

@@ -205,6 +205,10 @@ admin_course_close:
     pattern: /course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Course:close }
 
+admin_course_category:
+    pattern: /course/category
+    defaults: { _controller: TopxiaAdminBundle:Course:category }
+
 admin_course_threads:
     pattern:  /course/threads
     defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
@@ -281,10 +285,6 @@ admin_setting_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Setting:logs }
 
-admin_category_group:
-    pattern:  /category-group
-    defaults: { _controller: TopxiaAdminBundle:Category:group }
-
 admin_category:
     pattern:  /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
@@ -293,13 +293,9 @@ admin_category_create:
     pattern:  /category/create
     defaults: { _controller: TopxiaAdminBundle:Category:create }
 
-admin_category_code_check:
-    pattern:  /category/code/check
-    defaults: { _controller: TopxiaAdminBundle:Category:codeCheck }
-
-admin_category_edit_code_check:
-    pattern:  /category/{categoryId}/code/edit/check
-    defaults: { _controller: TopxiaAdminBundle:Category:codeEditCheck }
+admin_category_checkcode:
+    pattern:  /category/checkcode
+    defaults: { _controller: TopxiaAdminBundle:Category:checkCode }
 
 admin_category_edit:
     pattern:  /category/{id}/edit

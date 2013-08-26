@@ -40,7 +40,7 @@ seajs.config({
 		},
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete-debug',
 		'upload': 'arale/upload/1.0.1/upload',
-		'bootstrap.validator': 'bootstrap/3.0.0/validator',
+		'bootstrap.validator': 'bootstrap-rc/3.0.0/validator',
 		'class': 'arale/class/1.1.0/class',
 		'base': 'arale/base/1.1.0/base',
 		'widget': 'arale/widget/1.1.1/widget',

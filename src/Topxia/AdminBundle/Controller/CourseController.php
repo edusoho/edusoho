@@ -57,9 +57,12 @@ class CourseController extends BaseController
         }
     }
 
-    protected function getCourseService()
+    public function categoryAction(Request $request)
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->forward('TopxiaAdminBundle:Category:embed', array(
+            'group' => 'course',
+            'layout' => 'TopxiaAdminBundle:Course:layout.html.twig',
+        ));
     }
 
     private function convertConditions($conditions)
@@ -79,4 +82,8 @@ class CourseController extends BaseController
         return $conditions;
     }
 
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
 }
