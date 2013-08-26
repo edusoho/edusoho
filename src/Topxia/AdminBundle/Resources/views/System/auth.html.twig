@@ -18,7 +18,7 @@
 
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.agreement, '用户协议') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.agreement) }}</div>
+    <div class="col-lg-8 controls">{{ form_widget(form.agreement, {attr:{class:'form-control'}}) }}</div>
   </div>
 
   <div class="row control-group">
@@ -38,12 +38,12 @@
 
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.email_activation_title, '新用户激活邮件标题') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.email_activation_title) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.email_activation_title, {attr:{class:'form-control'}}) }}</div>
   </div>
-
+  <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.email_activation_body, '新用户激活邮件内容') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.email_activation_body) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.email_activation_body, {attr:{class:'form-control'}}) }}</div>
   </div>
 
   <div class="row control-group">
@@ -57,12 +57,12 @@
 
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.welcome_title, '欢迎信息标题') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.welcome_title) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.welcome_title,{attr:{class:'form-control'}}) }}</div>
   </div>
-
+  <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label">{{ form_label(form.welcome_body, '欢迎信息内容') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.welcome_body) }}</div>
+    <div class="controls col-lg-8">{{ form_widget(form.welcome_body, {attr:{class:'form-control'}}) }}</div>
   </div>
 
   <div class="row control-group">
