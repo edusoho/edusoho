@@ -7,12 +7,28 @@
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_set_roles', {id:user.id}) }}">
 
+   <input type="checkbox" value="ROLE_USER" name="role[]"
+	{% if 'ROLE_USER' in user.roles %}
+		checked="checked"
+	{% endif %}  > 学生 <br>
+
+   <input type="checkbox" value="ROLE_TEACHER" name="role[]"
+    {% if 'ROLE_TEACHER' in user.roles %}
+		checked="checked"
+	{% endif %} > 教师 <br>
+
+   <input type="checkbox" value="ROLE_ADMIN" name="role[]" 
+   {% if 'ROLE_ADMIN' in user.roles %}
+		checked="checked"
+	{% endif %} > 管理员 <br>
+
+   <input type="checkbox" value="ROLE_SUPER_ADMIN" name="role[]"
+     {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+		checked="checked"
+	{% endif %} > 超级管理员 <br>
+
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-primary pull-right">保存</button>
+
 </form>
 {% endblock %}
-
-{% block footer %}
-  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary">保存</button>
-  <script>app.load('user/edit-modal')</script>
-{% endblock %}
-

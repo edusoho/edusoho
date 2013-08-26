@@ -29,7 +29,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ));
 	}
 

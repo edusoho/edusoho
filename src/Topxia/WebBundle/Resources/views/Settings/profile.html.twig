@@ -12,6 +12,7 @@
     {% block body %}
       <form id="user-profile-form" class="form-horizontal" method="post">
         {{ web_macro.flash_messages() }}
+        
           <div class="row control-group">
             <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
             <div class="col-lg-7 controls">{{ form_widget(form.truename) }}</div>
@@ -76,6 +77,7 @@
               <button type="submit" class="btn btn-primary">保存</button>
             </div>
           </div>
+
       </form>
 
     {% endblock %}
