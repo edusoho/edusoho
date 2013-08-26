@@ -1,19 +1,19 @@
 define(function(require, exports, module) {
+
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('ckeditor');
 
     exports.run = function() {
 
-            CKEDITOR.replace('profile_about', {
-                height: 150,
-                resize_enabled: false,
-                forcePasteAsPlainText: true,
-                toolbar: 'Simple',
-                removePlugins: 'elementspath',
-                filebrowserUploadUrl: '/ckeditor/upload?group=course'
-            });
-
+        CKEDITOR.replace('profile_about', {
+            height: 150,
+            resize_enabled: false,
+            forcePasteAsPlainText: true,
+            toolbar: 'Simple',
+            removePlugins: 'elementspath',
+            filebrowserUploadUrl: '/ckeditor/upload?group=course'
+        });
 
 
         var validator = new Validator({
@@ -24,11 +24,6 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="profile[truename]"]',
             rule: 'chinese minlength{min:2} maxlength{max:5}'
-        });
-
-        validator.addItem({
-            element: '[name="profile[mobile]"]',
-            rule: 'mobile'
         });
 
         validator.addItem({

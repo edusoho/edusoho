@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\WebBundle\Form\UserProfileType;
 use Topxia\Common\Paginator;
 
 class UserController extends BaseController {
@@ -31,22 +32,40 @@ class UserController extends BaseController {
         ));
     }
 
-    public function showAction(Request $request, $id)
-    {
-        $user = $this->getUserService()->getUser($id);
-        $profile = $this->getUserService()->getUserProfile($id);
-        return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
-            'user' => $user,
-            'profile' => $profile,
-        ));
-    }
-
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
 
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['title'] = $user['title'];
+
+        $form = $this->createForm(new UserProfileType(), $profile);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $profile = $form->getData();
+                $this->getUserService()->updateUserProfile($user['id'], $profile);
+                return $this->redirect($this->generateUrl('settings'));
+            }
+        }
+
         return $this->render('TopxiaAdminBundle:User:edit-modal.html.twig', array(
             'user' => $user,
+            'form' => $form->createView(),
+            'profile'=>$profile
+        ));
+    }
+
+    public function showAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+        $profile = $this->getUserService()->getUserProfile($id);
+        $profile['title'] = $user['title'];
+
+        return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
+            'user' => $user,
+            'profile' => $profile,
         ));
     }
 
@@ -54,8 +73,14 @@ class UserController extends BaseController {
     {
         $user = $this->getUserService()->getUser($id);
 
+        if ($request->getMethod() == 'POST') {
+            $userRoles = $request->request->get('role');
+            $this->getUserService()->changeUserRoles($user['id'], $userRoles);
+            return $this->redirect($this->generateUrl('admin_user'));
+        }
+
         return $this->render('TopxiaAdminBundle:User:set-roles-modal.html.twig', array(
-            'user' => $user,
+            'user' => $user
         ));
     }
 
