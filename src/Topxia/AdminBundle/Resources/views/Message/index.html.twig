@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
 {% block title %}私信管理 - {{ parent() }}{% endblock %}
 
@@ -8,8 +8,6 @@
 
 {% block main %}
   <div class="page-header clearfix">
-    <h1>私信管理</h1>
-    <em>删除符合条件的消息,用于清理站点冗余数据,此操作不可恢复,请谨慎使用！</em>
   </div>
 
   <form id="message-search-form" class="well well-small" action="" method="get" novalidate> 
@@ -50,10 +48,13 @@
     </tbody>
   </table>
 
+{% if messages %}
+
   <input class= "choose-all" name="choose-all" type="checkbox">
     全选/取消全选
   <a class="message-delete pull-right btn btn-danger" href="javascript:"  data-url="{{ path('admin_message_delete_messages') }}">删除</a>
 
+{% endif %}
   <div>
     {{ web_macro.paginator(paginator) }}
   </div>

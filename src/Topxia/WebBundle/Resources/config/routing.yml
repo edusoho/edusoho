@@ -268,7 +268,6 @@ course_thread_edit:
     pattern:  /course/{courseId}/thread/{id}/edit
     defaults: { _controller: TopxiaWebBundle:CourseThread:edit }
 
-
 course_thread_post_delete:
     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
     defaults: { _controller: TopxiaWebBundle:CourseThread:deletePost }
@@ -419,6 +418,10 @@ course_manage_publish:
 course_manage_preview:
     pattern:  /course/{id}/manage/preview
     defaults: { _controller: TopxiaWebBundle:CourseManage:preview }
+
+course_announcement_show_all:
+    pattern:  /course/{courseId}/announcement/all
+    defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:showAll }
 
 course_announcement_add:
     pattern:  /course/{courseId}/announcement/create

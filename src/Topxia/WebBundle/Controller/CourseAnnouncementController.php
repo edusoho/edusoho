@@ -3,6 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Common\ArrayToolkit;
+
 
 class CourseAnnouncementController extends BaseController
 {
@@ -38,6 +40,20 @@ class CourseAnnouncementController extends BaseController
 			'course'=>$course,
 		));
 	}
+
+	public function showAllAction(Request $request, $courseId)
+	{
+
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$announcements = $this->getCourseService()->findAnnouncements($course['id'], 0, 10000);
+		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
+		return $this->render('TopxiaWebBundle:Course:announcement-show-all-modal.html.twig',array(
+			'course'=>$course,
+			'announcements'=>$announcements,
+			'users'=>$users
+		));
+	}
+
 	
 	public function updateAction(Request $request, $courseId, $id)
 	{	
@@ -92,6 +108,11 @@ class CourseAnnouncementController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
 }

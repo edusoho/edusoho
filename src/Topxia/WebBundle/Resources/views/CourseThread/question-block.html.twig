@@ -1,16 +1,15 @@
 <div class="panel">
   <div class="panel-heading">
-  	<h2>最新问答</h2>
+    <a href="{{ path('course_threads',{id:course.id})}}?type=question&sort=posted" class="btn btn-primary btn-small pull-right" title="查看本课程的所有问答">去讨论区查看</a>
+    <h2>最新问答</h2>
   </div>
   <div class="panel-body">
   	<ul class="text-list">
-
   		{% for thread in threads %}
   		<li>
         <a href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}">{{ thread.title }}</a>
       </li>
   		{% endfor %}
-
   	</ul>
   </div>
 </div>
