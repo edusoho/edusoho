@@ -78,6 +78,7 @@ parameters:
         db_time_col: session_time
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/disk"
+    topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
 
 services:
     session.handler.pdo.connection:

@@ -48,6 +48,7 @@ class CourseLessonManageController extends BaseController
 	    	$client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 	    	$uploadToken = $client->generateUploadToken(array(
 	            'endUser' => $user['id'],
+	            'asyncOps' => $this->container->getParameter('topxia.disk.cloud_video_fop')
 	        ));
     	}
 
@@ -93,6 +94,7 @@ class CourseLessonManageController extends BaseController
 	    	$client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 	    	$uploadToken = $client->generateUploadToken(array(
 	            'endUser' => $user['id'],
+	            'asyncOps' => $this->container->getParameter('topxia.disk.cloud_video_fop')
 	        ));
     	}
 
