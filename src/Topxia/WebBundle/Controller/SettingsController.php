@@ -109,7 +109,7 @@ class SettingsController extends BaseController
 
                 $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
                 if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
-                    $this->setFlashMessage('danger', '新邮箱，不能更当前邮箱一样。');
+                    $this->setFlashMessage('danger', '新邮箱，不能跟当前邮箱一样。');
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 

@@ -1,21 +1,14 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}个人详细信息{% endblock %}
-{% block body %}
+{% set modal_size = 'large' %}
 
+{% block title %}个人详细信息{% endblock %}
+
+{% block body %}
 <table class="table table-striped table-condenseda table-bordered">
   <tr>
     <th>用户名</th>
     <td>{{ user.nickname }}</td>
-  </tr>
-
-  <tr>
-    <th>用户权限</th>
-    <td>
-      {% for role in user.roles %}
-        <span class="mrm">{# role|dict_text('user_role') #}{{ role }}</span>
-      {% endfor %}
-    </td>
   </tr>
 
   <tr>
@@ -24,19 +17,82 @@
   </tr>
 
   <tr>
-    <th>注册时间</th>
-    <td>{{ user.createdTime|date('Y-n-d H:i:s') }}</td>
+    <th>用户组</th>
+    <td>
+      {% for role in user.roles %}
+        <span class="mrm">{# role|dict_text('user_role') #}{{ role }}</span>
+      {% endfor %}
+    </td>
   </tr>
 
   <tr>
-    <th>上次登录时间</th>
-    <td>{{ user.loginTime|date('Y-n-d H:i:s') }}</td>
+    <th>注册时间/IP</th>
+    <td>
+      {{ user.createdTime|date('Y-n-d H:i:s') }}
+      /
+      {{ user.createdIp }}
+    </td>
   </tr>
-  
+
   <tr>
-      <th>登录IP</th>
-      <td>{{ user.loginIp }}</td>
-    </tr>
+    <th>最近登录时间/IP</th>
+    <td>{{ user.loginTime|date('Y-n-d H:i:s') }} / {{ user.loginIp }}</td>
+  </tr>
+
+  <tr>
+    <th>姓名</th>
+    <td>{{ profile.truename }}</td>
+  </tr>
+
+  <tr>
+    <th>姓别</th>
+    <td>{{ profile.gender }}</td>
+  </tr>
+
+  <tr>
+    <th>职业</th>
+    <td>{{ profile.job }}</td>
+  </tr>
+
+  <tr>
+    <th>头衔</th>
+    <td>{{ user.title }}</td>
+  </tr>
+
+  <tr>
+    <th>个人签名</th>
+    <td>{{ profile.signature }}</td>
+  </tr>
+
+  <tr>
+    <th>自我介绍</th>
+    <td>{{ profile.about|raw }}</td>
+  </tr>
+
+  <tr>
+    <th>个人网站</th>
+    <td>{{ profile.site }}</td>
+  </tr>
+
+  <tr>
+    <th>微博</th>
+    <td>{{ profile.weibo }}</td>
+  </tr>
+
+  <tr>
+    <th>微信</th>
+    <td>{{ profile.weixin }}</td>
+  </tr>
+
+  <tr>
+    <th>QQ</th>
+    <td>{{ profile.qq }}</td>
+  </tr>
+
 </table>
 
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
 {% endblock %}
