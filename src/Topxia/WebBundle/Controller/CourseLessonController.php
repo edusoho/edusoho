@@ -70,7 +70,11 @@ class CourseLessonController extends BaseController
             $setting = $this->setting('video');
             $client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 
-            $url = $client->generateDownloadUrl($uri['bucket'], $uri['key'], $this->container->getParameter('topxia.disk.cloud_video_fop'));
+            if ($lesson['type'] == 'video') {
+                $url = $client->generateDownloadUrl($uri['bucket'], $uri['key'], $this->container->getParameter('topxia.disk.cloud_video_fop'));
+            } else {
+                $url = $client->generateDownloadUrl($uri['bucket'], $uri['key']);
+            }
 
             return $this->redirect($url);
         }
