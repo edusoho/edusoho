@@ -31,18 +31,26 @@ define(function(require, exports, module) {
             var self = this;
 
             $.get(this.get('url'), function(files) {
-                var html = '<ul class="disk-browser-file-list">';
-                $.each(files, function(i, file){
-                    html += '<li class="disk-browser-file-list-item clearfix" data-index="' + i + '">';
-                    html += '<span class="filename">' + file.filename + '</span>';
-                    html += '<span class="filesize">' + file.size + '</span>';
-                    html += '<span class="filetime">' + file.updatedTime + '</span>';
-                    html += '</li>';
-                });
-                html += '</ul>';
-                self.element.html(html);
-                self.set('files', files);
-            });
+                if (files.length > 0) {
+                    var html = '<ul class="disk-browser-file-list">';
+                    $.each(files, function(i, file){
+                        html += '<li class="disk-browser-file-list-item clearfix" data-index="' + i + '">';
+                        html += '<span class="filename">' + file.filename + '</span>';
+                        html += '<span class="filesize">' + file.size + '</span>';
+                        html += '<span class="filetime">' + file.updatedTime + '</span>';
+                        html += '</li>';
+                    });
+                    html += '</ul>';
+                    self.element.html(html);
+                    self.set('files', files);
+                } else {
+                    var message = self.element.data('empty');
+                    if (message) {
+                        self.element.html('<div class="empty">' + message + '</div>');
+                    }
+                }
+
+            }, 'json');
 
             return this;
         },
