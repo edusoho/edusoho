@@ -61,8 +61,9 @@
     </div>
   </div>
 
-  <div class="row control-group for-video-type">
-    <div class="col-lg-2 control-label"><label for="lesson-length-field">视频时长</label></div>
+  <div class="row control-group for-video-type for-audio-type">
+    <div class="col-lg-2 control-label for-video-type"><label for="lesson-length-field">视频时长</label></div>
+    <div class="col-lg-2 control-label for-audio-type"><label for="lesson-length-field">音频时长</label></div>
     <div class="col-lg-9 controls">
       <input class="width-input width-input-small" id="lesson-length-field" type="text" name="length" value="{{ field_value(lesson, 'length') }}">
       <div class="help-block">比如15分32秒，则填写15:32。</div>

@@ -174,7 +174,14 @@ define(function(require, exports, module) {
             			swfobject.embedSWF(lesson.media.files[0].url, 'lesson-swf-player', '100%', '100%', "9.0.0");
             			$("#lesson-swf-content").show();
             		}
-
+            	} else if (lesson.type == 'audio') {
+            		player.dimensions('100%', '100%');
+            		player.src(lesson.media.files[0].url);
+		            player.on('ended', function(){
+		            	that._onFinishLearnLesson();
+		            });
+            		$("#lesson-video-content").show();
+            		player.play();
             	} else if (lesson.type == 'text') {
             		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
             		$("#lesson-text-content").show();
