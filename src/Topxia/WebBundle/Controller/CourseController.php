@@ -92,17 +92,30 @@ class CourseController extends BaseController
         );
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-
-        $currentUser = $this->getCurrentUser();
-
-        $followingIds = $this->getUserService()->filterFollowingIds($currentUser->id, $studentUserIds);
+        $followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
+        
+        $progresses = $this->getUsersLearnedProgresses($users, $course);
 
         return $this->render('TopxiaWebBundle:Course:members-modal.html.twig', array(
             'students' => $students,
             'users'=>$users,
             'followingIds' => $followingIds,
             'paginator' => $paginator,
+            'progresses'=>$progresses
         ));
+    }
+
+    private function getUsersLearnedProgresses($users, $course)
+    {
+        $progresses = array();
+
+        foreach ($users as $user) {
+            $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
+            $progress = $this->calculateUserLearnProgress($course, $learnStatuses);
+            $progress['userId'] = $user['id'];
+            array_push($progresses, $progress);
+        }
+        return ArrayToolkit::index($progresses, 'userId');
     }
 
     /**
@@ -376,7 +389,6 @@ class CourseController extends BaseController
 
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
         $progress = $this->calculateUserLearnProgress($course, $learnStatuses);
-
         return $this->render('TopxiaWebBundle:Course:progress-block.html.twig', array(
             'course' => $course,
             'member' => $member,
