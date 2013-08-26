@@ -7,26 +7,25 @@
 {% set menu = 'message' %}
 
 {% block main %}
-  <div class="page-header clearfix">
+  <div class="page-header">
+    <h1>笔记管理</h1>
   </div>
 
-  <form id="message-search-form" class="well well-small" action="" method="get" novalidate> 
-    <div class="row">
-      <div class="col-lg-3">
-        {{ form_widget(form.content, {attr:{placeholder:'关键词'}}) }}
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+      <div class="form-group">
+        {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'关键词'}}) }}
       </div>
-      <div class="col-lg-2">
-        {{ form_widget(form.nickname, {attr:{placeholder:'发件人'}}) }}
+      <div class="form-group">
+        {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'发件人'}}) }}
       </div>
-      <div class="col-lg-2">
-        {{ form_widget(form.startDate) }}
+      <div class="form-group">
+        {{ form_widget(form.startDate, {attr:{class:'form-control'}}) }}
       </div>
-      <div class="col-lg-2">
-        {{ form_widget(form.endDate) }}
+      <div class="form-group">
+        {{ form_widget(form.endDate, {attr:{class:'form-control'}}) }}
       </div>
       <button class="btn btn-primary">搜索</button>
       {{ form_rest(form) }}
-    </div>
   </form>
 
   <table class="table table-striped" id="message-list">

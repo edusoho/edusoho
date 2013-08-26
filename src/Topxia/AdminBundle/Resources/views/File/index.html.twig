@@ -10,10 +10,10 @@
 
 <div class="page-header clearfix">
   <h1 class="pull-left">文件</h1>
-  <a href="javascript:" class="btn btn-info btn-small pull-right" data-url="{{ path('admin_file_upload') }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-upload"></i>上传文件</a>
+  <a href="javascript:" class="btn btn-info btn-sm pull-right" data-url="{{ path('admin_file_upload') }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-upload"></i>上传文件</a>
 </div>
 
-<div class="well well-small">
+<div class="well btn-small">
   <form>
     <div class="col-lg-2">
     {{ form_widget(form.group) }}
@@ -38,7 +38,7 @@
             <p><a href="{{ file_path(file.uri) }}" target="_blank">{{ fileUri.name }}</a></p>
             <p>
               <span class="text-muted">{{ file.size|file_size }}</span>
-              <a href="javascript:" class="delete pull-right btn btn-danger btn-small" data-url="{{ path('admin_file_delete', {id:file.id}) }}">删除</a>
+              <a href="javascript:" class="delete pull-right btn btn-danger btn-sm" data-url="{{ path('admin_file_delete', {id:file.id}) }}">删除</a>
             </p>
             <p>
               <span class="text-muted"><i class="glyphicon glyphicon-time"></i> {{ file.createdTime|date('Y-n-d H:i:s') }}</span>

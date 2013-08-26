@@ -35,7 +35,7 @@ seajs.config({
 			deps: ['jquery']
 		},
 		'bootstrap': {
-			src: 'bootstrap/3.0.0/bootstrap.js',
+			src: 'bootstrap-rc/3.0.0/bootstrap.js',
 			deps: ['jquery']
 		},
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete-debug',

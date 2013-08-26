@@ -11,17 +11,17 @@
   <h1 class="pull-left">笔记管理</h1>
 </div>
 
-<div class="well well-small">
-  <form>
-    <div class="col-lg-3">
-      {{ form_widget(form.keywords, {attr:{placeholder:'输入关键词'}}) }}
+<div class="well well-sm">
+  <form class="form-inline">
+    <div class="form-group">
+      {{ form_widget(form.keywords, {attr:{class:'form-control', placeholder:'输入关键词'}}) }}
     </div>
 
-    <div class="col-lg-3">
-      {{ form_widget(form.nickname, {attr:{placeholder:'输入作者昵称'}}) }}
+    <div class="form-group">
+      {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'输入作者昵称'}}) }}
     </div>
 
-    <input type="submit" class="btn btn-primary" value="搜索">
+    <button class="btn btn-primary" type="submit">搜索</button>
   </form>
 </div>
 

@@ -99,7 +99,7 @@ legend {
 	color: #666;
 }
 
-.navbar-form > .divider {
+.form-inline > .divider {
   width: 1px;
   height: 30px;
   margin: 10px 9px;
