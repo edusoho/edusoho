@@ -42,7 +42,6 @@ class CourseLessonManageController extends BaseController
     	$user = $this->getCurrentUser();
 
     	$setting = $this->setting('video');
-
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
@@ -86,9 +85,22 @@ class CourseLessonManageController extends BaseController
 
         $lesson['length'] = $this->secondsToText($lesson['length']);
 
+        $user = $this->getCurrentUser();
+    	$setting = $this->setting('video');
+    	if ($setting['upload_mode'] == 'local') {
+    		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
+    	} else {
+	    	$client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+	    	$uploadToken = $client->generateUploadToken(array(
+	            'endUser' => $user['id'],
+	        ));
+    	}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
+			'uploadToken' => $uploadToken,
+			'videoSetting' => $setting
 		));
 	}
 
