@@ -37,6 +37,13 @@ define(function(require, exports, module) {
             required: true
         });
 
+        validator.addItem({
+            element: '[name="sequence"]',
+            rule: 'number',
+            required: true
+            
+        });
+
     };
 
 });
