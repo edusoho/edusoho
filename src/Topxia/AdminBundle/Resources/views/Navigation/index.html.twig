@@ -1,0 +1,44 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %} 导航管理 {% endblock %}
+{% set script_controller = 'navigation/page' %}
+
+{% set menu = 'navigation' %}
+
+{% set types = {top:'顶部', foot:'底部'} %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">新增{{ types[type] }}导航</button>
+  <h1 class="pull-left">导航管理</h1>
+</div>
+
+<div data-role="navigation">
+  <ul class="nav nav-tabs">
+  	{% for key, name in types %}
+	    <li {% if type == key %} class="active"{% endif %}><a href="{{ url('admin_navigation', {type:key}) }}">{{ name }}导航</a></li>
+  	{% endfor %}
+  </ul>
+</div>
+
+<table id="navigation-table" class="table table-striped">
+	<thead>
+	  <tr>
+	    <th>导航名称</th>
+	    <th>URL</th>
+	    <th width="10%">新开窗口</th>
+	    <th width="10%">显示顺序</th>
+	    <th width="10%">状态</th>  
+	    <th width="10%">操作</th>
+	  </tr>
+	</thead>
+    
+ 	{% include 'TopxiaAdminBundle:Navigation:tbody.html.twig' %}
+</table>
+    
+   <div class="paginator">
+    {{ web_macro.paginator(paginator) }}
+   </div> 
+
+{% endblock %}

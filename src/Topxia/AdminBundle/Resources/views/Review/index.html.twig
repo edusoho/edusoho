@@ -8,7 +8,7 @@
 
 {% block main %}
   <div class="page-header clearfix">
-    <h1>课程评价管理</h1>
+    <h1>评价管理</h1>
   </div>
 
   <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
@@ -32,21 +32,26 @@
   <table class="table table-striped" id="review-list">
     <thead>
       <tr>
-        <th width="15%">作者</th>
-        <th width="10%">课程名称</th>
-        <th width="30%">评价标题</th>
-        <th width="35%">评价内容</th>
-        <th width="10%">评价时间</th>
+        <th>全选</th>
+        <th>评价</th>
+        <th>作者</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
-       {% for review in reviews %}
+      {% for review in reviews %}
+        {% set author = users[review.userId]|default(null) %}
         <tr id="review-table-tr-{{review.id}}">
-          <td><input value="{{review.id}}" type="checkbox" name="review-item">{{ users[review.userId].nickname}}</td>
-          <td>{{ courses[review.courseId].title }} </td>
-          <td>{{review.title}}</td>
-          <td>{{review.content}}</td>
-          <td>{{review.createdTime|date('Y-n-d H:i')}}</td>
+          <td><input value="{{review.id}}" type="checkbox" name="review-item"></td>
+          <td>
+            <div><a href="#">{{ courses[review.courseId].title }}：</a></div>
+            {{review.content}}
+          </td>
+          <td>
+            {{ admin_macro.user_link(author) }}<br>
+            <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
+          </td>
+          <td></td>
         </tr>
       {% endfor %}
     </tbody>

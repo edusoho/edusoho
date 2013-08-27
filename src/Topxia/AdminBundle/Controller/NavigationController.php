@@ -10,6 +10,28 @@ use Topxia\Service\Common\ServiceException;
 class NavigationController extends BaseController
 {
 
+    public function indexAction(Request $request)
+    {
+        $type = $request->query->get('type', 'top');
+
+        $paginator = new Paginator(
+            $request,
+            $this->getNavigationService()->getNavigationsCountByType($type),
+            10
+        );
+
+        $navigations = $this->getNavigationService()->findNavigationsByType(
+            $type,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaAdminBundle:Navigation:index.html.twig', array(
+            'type' => $type,
+            'navigations' => $navigations,
+            'paginator' => $paginator));
+    }
+
     public function deleteAction (Request $request, $id)
     {
         $result = $this->getNavigationService()->deleteNavigation($id);
@@ -64,43 +86,6 @@ class NavigationController extends BaseController
         return $this->render('TopxiaAdminBundle:Navigation:tbody.html.twig', array(
             'navigations'=>$footNavigations
         ));
-    }
-
-    public function findTopsAction(Request $request)
-    {
-        $paginator = new Paginator(
-            $request,
-            $this->getNavigationService()->getNavigationsCountByType('top'),
-            10
-        );
-
-        $navigations = $this->getNavigationService()->findNavigationsByType(
-            'top',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render('TopxiaAdminBundle:Navigation:top-navigations.html.twig', array(
-            'navigations' => $navigations,
-            'paginator' => $paginator));
-    }
-
-    public function  findFootsAction(Request $request)
-    {
-        $paginator = new Paginator(
-            $request,
-            $this->getNavigationService()->getNavigationsCountByType('foot'),
-            10
-        );
-
-        $navigations = $this->getNavigationService()->findNavigationsByType(
-            'foot',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        return $this->render('TopxiaAdminBundle:Navigation:foot-navigations.html.twig', array(
-            'navigations' => $navigations,
-            'paginator' => $paginator));
     }
 
     protected function getNavigationService()

@@ -136,27 +136,20 @@ admin_comment_delete:
 
 admin_navigation:
     pattern:  /navigation
-    defaults: { _controller: TopxiaAdminBundle:Navigation:findTops }
+    defaults: { _controller: TopxiaAdminBundle:Navigation:index }
 
 admin_navigation_create:
     pattern:  /navigation/create
     defaults: { _controller: TopxiaAdminBundle:Navigation:create }
 
 admin_navigation_update:
-    pattern:  /navigation/update/{id}
+    pattern:  /navigation/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:update }
 
 admin_navigation_delete:
-    pattern:  /navigation/delete/{id}
+    pattern:  /navigation/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Navigation:delete }
-
-admin_navigation_tops:
-    pattern:  /navigation/tops
-    defaults: { _controller: TopxiaAdminBundle:Navigation:findTops }
-
-admin_navigation_foots:
-    pattern:  /navigation/foots
-    defaults: { _controller: TopxiaAdminBundle:Navigation:findFoots }
+    methods: [POST]
 
 admin_review:
     pattern:  /review
