@@ -25,36 +25,32 @@
  method="post">
 
  <div class="row control-group form-group">
-  <div class="col-lg-3 control-label"><label for="name">名称:</label></div>
+  <div class="col-lg-3 control-label"><label for="name">名称</label></div>
   <div class="col-lg-8 controls"> 
     <input class="form-control" type="text" id="name" value="{{navigation.name}}" name="name"></div>
 </div>
 <p></p>
 
 <div class="row control-group form-group">
-  <div class="col-lg-3 control-label"><label for="url">链接地址:</label></div>
+  <div class="col-lg-3 control-label"><label for="url">链接地址</label></div>
   <div class="col-lg-8 controls"> <input class="form-control" type="text" id="url" value="{{navigation.url}}" name="url" ></div>
 </div>
 
 <p></p>
 
-<div class="row control-group">
-      <div class="col-lg-3 control-label"><label for="sequence">显示顺序:</label>
-        <p style="color:green">(从左至右排序)</p>
-      </div>
 
-    <div class="col-lg-8 controls"> 
-        <select class="width-input form-control" id="sequence" name="sequence">
-          {{ select_options([0,1,2,3,4,5,6,7,8,9] , navigation.sequence) }}
-        </select>
-    </div>
-
+<div class="row control-group form-group">
+  <div class="col-lg-3 control-label"><label for="sequence">显示顺序</label>
+   <p style="color:green">(从左至右排序,请填数字)</p>
+ </div>
+  <div class="col-lg-8 controls"> <input class="form-control" type="text" id="sequence" value="{{navigation.sequence}}" name="sequence" ></div>
 </div>
+
 
 <input type="hidden" name="type" value="{{ navigation.type }}" >
 
 <div class="row control-group">
-          <div class="col-lg-3 control-label"><label>新开窗口:</label></div>
+          <div class="col-lg-3 control-label"><label>新开窗口</label></div>
           <div class="col-lg-8 controls radios"> 
             <div id="isNewWin">
               <input type="radio" name="isNewWin"  value="0"
@@ -69,16 +65,16 @@
 
 <div class="row control-group">
       <div class="col-lg-3 control-label">
-        <label>状态:</label>
+        <label>状态</label>
       </div>
       <div class="col-lg-8 controls radios">
         <div id="isOpen">
-          <input type="radio" name="isOpen"  value="0"
-           {% if navigation.isOpen == 0 %} checked="checked" {% endif %}>
-          <label>关闭</label>
           <input type="radio" name="isOpen"  value="1" 
           {% if navigation.isOpen == 1 %} checked="checked" {% endif %}>
           <label>开启</label>
+          <input type="radio" name="isOpen"  value="0"
+           {% if navigation.isOpen == 0 %} checked="checked" {% endif %}>
+          <label>关闭</label>
         </div>
       </div>
 </div>

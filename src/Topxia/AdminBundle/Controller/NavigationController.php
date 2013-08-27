@@ -58,7 +58,7 @@ class NavigationController extends BaseController
             'url' => '',
             'sequence' => 0,
             'isNewWin'=>0,
-            'isOpen'=>0,
+            'isOpen'=>1,
             'type'=>$request->query->get('type')
         );
 
