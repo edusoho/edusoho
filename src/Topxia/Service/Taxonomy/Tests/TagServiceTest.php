@@ -96,88 +96,88 @@ class TagServiceTest extends BaseTestCase
         $this->assertFalse($foundTag);
     }
 
-    public function testGetAllTagsAndGetTagsCount()
+    public function testfindAllTagsAndGetTagsCount()
     {
         $tagA = array('name' => '测试标签1');
         $tagB = array('name' => '测试标签2');
         $this->getTagService()->addTag($tagA);
-        $this->assertEquals(1, $this->getTagService()->getAllTagsCount());
+        $this->assertEquals(1, $this->getTagService()->getAllTagCount());
         $this->getTagService()->addTag($tagB);
-        $this->assertEquals(2, $this->getTagService()->getAllTagsCount());
-        $tags = $this->getTagService()->getAllTags(0, 1);
+        $this->assertEquals(2, $this->getTagService()->getAllTagCount());
+        $tags = $this->getTagService()->findAllTags(0, 1);
         $this->assertEquals(1, count($tags));
-        $tags = $this->getTagService()->getAllTags(0, 2);
+        $tags = $this->getTagService()->findAllTags(0, 2);
         $this->assertEquals(2, count($tags));
     }
 
     /**
     * @group get
     */
-    public function testGetAllTagsAndGetTagsCountWithEmptyTags()
+    public function testfindAllTagsAndGetTagsCountWithEmptyTags()
     {
-        $this->assertEquals(0, $this->getTagService()->getAllTagsCount());
-        $tags = $this->getTagService()->getAllTags(0, 1);
+        $this->assertEquals(0, $this->getTagService()->getAllTagCount());
+        $tags = $this->getTagService()->findAllTags(0, 1);
         $this->assertEquals(0, count($tags));
-        $tags = $this->getTagService()->getAllTags(0, 2);
+        $tags = $this->getTagService()->findAllTags(0, 2);
         $this->assertEquals(0, count($tags));
     }
 
     /**
     * @group get
     */
-    public function testGetTagsByIds()
+    public function testfindTagsByIds()
     {
         $tagA = array('name' => '测试标签1');
         $tagB = array('name' => '测试标签2');
         $tagA = $this->getTagService()->addTag($tagA);
         $tagB = $this->getTagService()->addTag($tagB);
         $ids = array($tagA['id'], $tagB['id']);
-        $tags = $this->getTagService()->getTagsByIds($ids);
+        $tags = $this->getTagService()->findTagsByIds($ids);
         $this->assertEquals(2, count($tags));
     }
 
     /**
     * @group get
     */
-    public function testGetTagsByIdsWithNotExistId()
+    public function testfindTagsByIdsWithNotExistId()
     {
         $tagA = array('name' => '测试标签1');
         $tagB = array('name' => '测试标签2');
         $tagA = $this->getTagService()->addTag($tagA);
         $tagB = $this->getTagService()->addTag($tagB);
-        $tags = $this->getTagService()->getTagsByIds(array($tagA['id'], $tagB['id'], 99, 12));
+        $tags = $this->getTagService()->findTagsByIds(array($tagA['id'], $tagB['id'], 99, 12));
         $this->assertEquals(2, count($tags));
 
-        $tags = $this->getTagService()->getTagsByIds(array(99, 12));
+        $tags = $this->getTagService()->findTagsByIds(array(99, 12));
         $this->assertEquals(0, count($tags));
     }
 
     /**
     * @group get
     */
-    public function testGetTagsByNames()
+    public function testfindTagsByNames()
     {
     	$tagA = array('name' => '测试标签1');
         $tagB = array('name' => '测试标签2');
         $tagA = $this->getTagService()->addTag($tagA);
         $tagB = $this->getTagService()->addTag($tagB);
-        $tags = $this->getTagService()->getTagsByNames(array('测试标签1', '测试标签2'));
+        $tags = $this->getTagService()->findTagsByNames(array('测试标签1', '测试标签2'));
         $this->assertEquals(2, count($tags));
     }
 
     /**
     * @group get
     */
-    public function testGetTagsByNamesWithNotExistId()
+    public function testfindTagsByNamesWithNotExistId()
     {
         $tagA = array('name' => '测试标签1');
         $tagB = array('name' => '测试标签2');
         $tagA = $this->getTagService()->addTag($tagA);
         $tagB = $this->getTagService()->addTag($tagB);
-        $tags = $this->getTagService()->getTagsByNames(array('xxx'));
+        $tags = $this->getTagService()->findTagsByNames(array('xxx'));
         $this->assertEquals(0, count($tags));
 
-        $tags = $this->getTagService()->getTagsByNames(array('xxx', '测试标签1', '测试标签2'));
+        $tags = $this->getTagService()->findTagsByNames(array('xxx', '测试标签1', '测试标签2'));
         $this->assertEquals(2, count($tags));
     }
 

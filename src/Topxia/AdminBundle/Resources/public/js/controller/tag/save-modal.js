@@ -16,34 +16,44 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                $.post($form.attr('action'), $form.serialize(), function(response){
-					if (response.status == 'ok') {
-                        var $html = $(response.html);
-                        if ($table.find( '#' +  $html.attr('id')).length > 0) {
-                            $('#' + $html.attr('id')).replaceWith($html);
-                            Notify.success('更新成功！');
-                        } else {
-                            $table.find('tbody').prepend(response.html);
-                            Notify.success('提交成功!');
-                        }
-                        $modal.modal('hide');
-					} else {
-						var errorMsg = '添加失败：' + ((response.error && response.error.message) ? response.error.message : '');
-						Notify.danger(errorMsg);
-					}
-				}, 'json');
+                $.post($form.attr('action'), $form.serialize(), function(html){
+                    var $html = $(html);
 
-                
+                    if ($table.find( '#' +  $html.attr('id')).length > 0) {
+                        $('#' + $html.attr('id')).replaceWith($html);
+                        Notify.success('标签更新成功！');
+                    } else {
+                        $table.find('tbody').prepend(html);
+                        Notify.success('标签添加成功!');
+                    }
+                    $modal.modal('hide');
+				});
 
             }
         });
 
         validator.addItem({
-            element: '[name="form[name]"]',
+            element: '#tag-name-field',
             required: true,
-            rule: 'maxlength{max:25} remote'
+            rule: 'remote'
+        });
+
+        $modal.find('.delete-tag').on('click', function() {
+            if (!confirm('真的要删除该标签吗？')) {
+                return ;
+            }
+
+            var trId = '#tag-tr-' + $(this).data('tagId');
+            $.post($(this).data('url'), function(html) {
+                $modal.modal('hide');
+                $table.find(trId).remove();
+            });
+
         });
 
 	};
+
+
+
 
 });

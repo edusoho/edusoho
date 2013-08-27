@@ -15,7 +15,7 @@ interface TagDao
 
     public function getTag($id);
 
-    public function findTagByName($name);
+    public function getTagByName($name);
 
     public function findAllTagsCount();
 

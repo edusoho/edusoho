@@ -34,7 +34,7 @@ class CourseController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $tags = $this->getTagService()->getAllTags(0, 100);
+        $tags = $this->getTagService()->findAllTags(0, 100);
 
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
@@ -50,7 +50,7 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags = $this->getTagService()->getTagsByIds($course['tags']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
         return $this->render('TopxiaWebBundle:Course:info-modal.html.twig', array(
             'course' => $course,
             'category' => $category,

@@ -3,86 +3,98 @@ namespace Topxia\Service\Taxonomy\Impl;
 
 use Topxia\Service\Taxonomy\TagService;
 use Topxia\Service\Common\BaseService;
+use Topxia\Common\ArrayToolkit;
 
 class TagServiceImpl extends BaseService implements TagService
 {
 
-    public function addTag(array $tag)
-    {
-        $tag = $this->filterTag($tag);
-        $this->checkTag($tag);
-        $this->checkTagName($tag['name']);
-        $tag['createdTime'] = time();
-        return $this->getTagDao()->addTag($tag);
-    }
-
-    public function updateTag($id, array $fields)
-    {
-        $fields = $this->filterTag($fields);
-        $this->checkTag($fields);
-        return $this->getTagDao()->updateTag($id, $fields);
-    }
-
     public function getTag($id)
     {
-        $id = (int) $id;
         return $this->getTagDao()->getTag($id);
     }
 
     public function getTagByName($name)
     {
-        return $this->getTagDao()->findTagByName($name);
+        return $this->getTagDao()->getTagByName($name);
     }
 
-	public function getAllTags($start, $limit)
+	public function findAllTags($start, $limit)
 	{
 		return $this->getTagDao()->findAllTags($start, $limit);
 	}
 
-    public function getAllTagsCount()
+    public function getAllTagCount()
     {
         return $this->getTagDao()->findAllTagsCount();
     }
 
-    public function getTagsByIds(array $ids)
+    public function findTagsByIds(array $ids)
     {
     	return $this->getTagDao()->findTagsByIds($ids);
     }
 
-    public function getTagsByNames(array $names)
+    public function findTagsByNames(array $names)
     {
     	return $this->getTagDao()->findTagsByNames($names);
     }
 
+    public function isTagNameAvalieable($name, $exclude=null)
+    {
+        if (empty($name)) {
+            return false;
+        }
+
+        if ($name == $exclude) {
+            return true;
+        }
+
+        $tag = $this->getTagByName($name);
+
+        return $tag ? false : true;
+    }
+
+    public function addTag(array $tag)
+    {
+        $tag = ArrayToolkit::parts($tag, array('name'));
+
+        $this->filterTagFields($tag);
+        $tag['createdTime'] = time();
+
+        return $this->getTagDao()->addTag($tag);
+    }
+
+    public function updateTag($id, array $fields)
+    {
+        $tag = $this->getTag($id);
+        if (empty($tag)) {
+            throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('name'));
+        $this->filterTagFields($fields, $tag);
+
+        return $this->getTagDao()->updateTag($id, $fields);
+    }
+
     public function deleteTag($id)
     {
-        return $this->getTagDao()->deleteTag($id);
+        $this->getTagDao()->deleteTag($id);
     }
 
-    private function filterTag(array $tag)
-    {
-        foreach ($tag as $key => $value) {
-            if ($key != 'name') unset($tag[$key]);
-        }
-        return $tag;
-    }
-
-    private function checkTag(array $tag)
+    private function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
-            throw $this->createServiceException('标签名称不能为空!');
+            throw $this->createServiceException('标签名不能为空，添加失败！');
         }
-        if (mb_strlen($tag['name']) > 25) {
-            throw $this->createServiceException('标签名称过长!');
-        }
-    }
 
-    private function checkTagName($name)
-    {
-        $existTag = $this->getTagByName($name);
-        if (!empty($existTag)) {
-            throw $this->createServiceException('标签已存在!');
+        $tag['name'] = (string) $tag['name'];
+
+        $exclude = $relatedTag ? $relatedTag['name'] : null;
+        if (!$this->isTagNameAvalieable($tag['name'], $exclude)) {
+            throw $this->createServiceException('该标签名已存在，添加失败！');
         }
+
+        return $tag;
     }
 
 	private function getTagDao()

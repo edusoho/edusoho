@@ -12,7 +12,7 @@ class TagController extends BaseController
     {
         $data = array();
 
-        $tags = $this->getTagService()->getAllTags(0, 100);
+        $tags = $this->getTagService()->findAllTags(0, 100);
         foreach ($tags as $tag) {
             $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
         }

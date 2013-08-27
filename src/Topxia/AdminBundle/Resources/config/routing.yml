@@ -87,20 +87,19 @@ admin_tag_create:
     pattern:  /tag/create
     defaults: { _controller: TopxiaAdminBundle:Tag:create }
 
+admin_tag_checkname:
+    pattern:  /tag/checkname
+    defaults: { _controller: TopxiaAdminBundle:Tag:checkName}
+
 admin_tag_update:
-    pattern:  /tag/{tag}/update
+    pattern:  /tag/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Tag:update }
 
-admin_tag_name_check:
-    pattern:  /tag/{tag}/name/check
-    defaults: { _controller: TopxiaAdminBundle:Tag:checkTagName, tag: 0 }
-    requirements:
-        tag: \d+
-
 admin_tag_delete:
-    pattern:  /tag/{tag}/delete
+    pattern:  /tag/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Tag:delete }
     methods:  [POST]
+
 
 admin_user:
     pattern:  /user

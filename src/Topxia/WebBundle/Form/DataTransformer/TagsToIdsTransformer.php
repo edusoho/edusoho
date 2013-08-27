@@ -15,7 +15,7 @@ class TagsToIdsTransformer implements DataTransformerInterface
             return '';
         }
 
-        $tags = $this->getTagService()->getTagsByIds($tagIds);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
         return implode(',', ArrayToolkit::column($tags, 'name'));
     }
 
@@ -27,7 +27,7 @@ class TagsToIdsTransformer implements DataTransformerInterface
 
         $tags = explode(',', $tags);
 
-        $tags = $this->getTagService()->getTagsByNames($tags);
+        $tags = $this->getTagService()->findTagsByNames($tags);
         return ArrayToolkit::column($tags, 'id');
     }
 

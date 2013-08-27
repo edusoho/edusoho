@@ -145,7 +145,7 @@ class ContentController extends BaseController
     {
         if (isset($content['tags'])) {
             $tagNames = array_filter(explode(',', $content['tags']));
-            $tags = $this->getTagService()->getTagsByNames($tagNames);
+            $tags = $this->getTagService()->findTagsByNames($tagNames);
             $content['tagIds'] = ArrayToolkit::column($tags, 'id');
         } else {
             $content['tagIds'] = array();

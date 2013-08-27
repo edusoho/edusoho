@@ -3,22 +3,23 @@ namespace Topxia\Service\Taxonomy;
 
 interface TagService
 {
-
-	public function addTag(array $tag);
-
-	public function updateTag($id, array $fields);
-
 	public function getTag($id);
 
 	public function getTagByName($name);
 
-    public function getAllTags($start, $limit);
+    public function findAllTags($start, $limit);
 
-    public function getAllTagsCount();
+    public function getAllTagCount();
 
-    public function getTagsByIds(array $ids);
+    public function findTagsByIds(array $ids);
 
-    public function getTagsByNames(array $names);
+    public function findTagsByNames(array $names);
+
+    public function isTagNameAvalieable($name, $exclude=null);
+
+	public function addTag(array $tag);
+
+	public function updateTag($id, array $fields);
 
     public function deleteTag($id);
 }
