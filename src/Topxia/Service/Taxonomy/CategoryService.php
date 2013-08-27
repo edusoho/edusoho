@@ -16,6 +16,7 @@ interface CategoryService
 
     public function findCategoriesByIds(array $ids);
 
+
     public function isCategoryCodeAvaliable($code, $exclude = null);
 
     public function createCategory(array $category);
@@ -23,6 +24,7 @@ interface CategoryService
     public function updateCategory($id, array $fields);
 
     public function deleteCategory($id);
+    
 
     public function getGroup($id);
 

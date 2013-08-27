@@ -16,28 +16,27 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
-                
-                $.post($form.attr('action'), $form.serialize(), function(response){
-                    if (response.status == 'ok') {
-                        var $html = $(response.html);
-                            $('#' + $html.attr('id')).replaceWith($html);
-                            Notify.success('更新成功!');
-                        $modal.modal('hide');
-                    }
-                }, 'json');
+
+                $.post($form.attr('action'), $form.serialize(), function(html){
+                    $modal.modal('hide');
+                    $table.find('tbody').replaceWith(html);
+                    Notify.success('保存导航成功！');
+                });
+
             }
 
         });
 
-       validator.addItem({
-            element: '[name="form[name]"]',
+        validator.addItem({
+            element: '[name="name"]',
             required: true
         });
 
         validator.addItem({
-            element: '[name="form[url]"]',
+            element: '[name="url"]',
             required: true
         });
+
 
     };
 

@@ -17,35 +17,23 @@ define(function(require, exports, module) {
                     return ;
                 }
                 
-                $.post($form.attr('action'), $form.serialize(), function(response){
-                    if (response.status == 'ok') {
-                        var $html = $(response.html);
-                        var $type = response.type;
-                        var $typeInHtml = $("#navigationType").text();
+                $.post($form.attr('action'), $form.serialize(), function(html){
+                    $modal.modal('hide');
+                    $table.find('tbody').replaceWith(html);
+                    Notify.success('保存导航成功！');
+                });
 
-                        if( $typeInHtml == "all"){
-                            $table.find('tbody').prepend(response.html);
-                            Notify.success('创建成功!'); 
-                        } else if ( $typeInHtml == $type ) {
-                            $table.find('tbody').prepend(response.html);
-                            Notify.success('创建成功!'); 
-                        } else{
-                            Notify.success('创建成功!'); 
-                        }
-                        $modal.modal('hide');
-                    }
-                }, 'json');
             }
 
         });
 
         validator.addItem({
-            element: '[name="form[name]"]',
+            element: '[name="name"]',
             required: true
         });
 
         validator.addItem({
-            element: '[name="form[url]"]',
+            element: '[name="url"]',
             required: true
         });
 

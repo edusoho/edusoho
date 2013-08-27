@@ -1,11 +1,8 @@
 <?php
-
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Form\CategoryType;
-use Topxia\Service\Common\ServiceException;
 
 class CategoryController extends BaseController
 {

@@ -1,68 +1,98 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set block = block|default(null) %}
-{% set modal_size = 'xlarge' %}
 
 {% block title %}
-{% if navigation is defined %}
-编辑导航
-{% else %}
-新增导航
+{% if navigation.id == 0 and navigation.type =='top' %}
+新增顶部导航
+{% elseif navigation.id > 0 and navigation.type =='top'%}
+编辑顶部导航
+{% elseif navigation.id == 0 and navigation.type =='foot'%}
+新增底部导航
+{% elseif navigation.id > 0 and navigation.type =='foot'%}
+编辑底部导航
 {% endif %}
 
 {% endblock %}
 
 {% block body %}
+
   <form class="form-horizontal" id="navigation-form"
-  {% if navigation is defined %}
-    action="{{ path('admin_navigation_update', {id:navigation.id}) }}" 
-  {% else %}
+  {% if navigation.id == 0 %}
     action="{{ path('admin_navigation_create') }}"
+  {% else %}
+    action="{{ path('admin_navigation_update', {id:navigation.id}) }}" 
   {% endif %}
  method="post">
-  
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.name, '名称:') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.name) }}</div>
-    </div>
-    
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.url, '链接地址:') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.url) }}</div>
+
+ <div class="row control-group form-group">
+  <div class="col-lg-3 control-label"><label for="name">名称:</label></div>
+  <div class="col-lg-8 controls"> 
+    <input class="form-control" type="text" id="name" value="{{navigation.name}}" name="name"></div>
+</div>
+<p></p>
+
+<div class="row control-group form-group">
+  <div class="col-lg-3 control-label"><label for="url">链接地址:</label></div>
+  <div class="col-lg-8 controls"> <input class="form-control" type="text" id="url" value="{{navigation.url}}" name="url" ></div>
+</div>
+
+<p></p>
+
+<div class="row control-group">
+      <div class="col-lg-3 control-label"><label for="sequence">显示顺序:</label>
+        <p style="color:green">(从左至右排序)</p>
+      </div>
+
+    <div class="col-lg-8 controls"> 
+        <select class="width-input form-control" id="sequence" name="sequence">
+          {{ select_options([0,1,2,3,4,5,6,7,8,9] , navigation.sequence) }}
+        </select>
     </div>
 
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.sequence, '显示顺序:') }}
-          <p style="color:green">(从左至右排序)</p>
+</div>
+
+<input type="hidden" name="type" value="{{ navigation.type }}" >
+
+<div class="row control-group">
+          <div class="col-lg-3 control-label"><label>新开窗口:</label></div>
+          <div class="col-lg-8 controls radios"> 
+            <div id="isNewWin">
+              <input type="radio" name="isNewWin"  value="0"
+               {% if navigation.isNewWin == 0 %} checked="checked" {% endif %}>
+              <label >否</label>
+              <input type="radio" name="isNewWin"  value="1"
+              {% if navigation.isNewWin == 1 %} checked="checked" {% endif %}>
+              <label >是</label>
+            </div>
+          </div>
+</div>
+
+<div class="row control-group">
+      <div class="col-lg-3 control-label">
+        <label>状态:</label>
+      </div>
+      <div class="col-lg-8 controls radios">
+        <div id="isOpen">
+          <input type="radio" name="isOpen"  value="0"
+           {% if navigation.isOpen == 0 %} checked="checked" {% endif %}>
+          <label>关闭</label>
+          <input type="radio" name="isOpen"  value="1" 
+          {% if navigation.isOpen == 1 %} checked="checked" {% endif %}>
+          <label>开启</label>
         </div>
+      </div>
+</div>
 
-          <div class="col-lg-8 controls"> {{ form_widget(form.sequence) }}</div>
-    </div>
-
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.isNewWin, '新开窗口:') }}</div>
-          <div class="col-lg-8 controls radios"> {{ form_widget(form.isNewWin) }}</div>
-    </div>
-
-     <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.isOpen, '状态:') }}</div>
-          <div class="col-lg-8 controls radios"> {{ form_widget(form.isOpen) }}</div>
-    </div>
-
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.type, '类型:') }}</div>
-          <div class="col-lg-8 controls radios"> {{ form_widget(form.type) }}</div>
-    </div>
-
-    {{ form_rest(form) }}
   </form>
 
   <script type="text/javascript">
-  {% if navigation is defined %}
-    app.load('navigation/edit-modal')
-  {% else %}
+  {% if navigation.id  == 0  %}
     app.load('navigation/create-modal')
+  {% else %}
+    app.load('navigation/edit-modal')
   {% endif %}
   </script>
+  
 {% endblock %}
 
 {% block footer %}
