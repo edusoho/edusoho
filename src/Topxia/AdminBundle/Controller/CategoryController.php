@@ -65,7 +65,14 @@ class CategoryController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        
+        $category = $this->getCategoryService()->getCategory($id);
+        if (empty($category)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getCategoryService()->deleteCategory($id);
+
+        return $this->renderTbody($category['groupId']);
     }
 
     public function checkCodeAction(Request $request)

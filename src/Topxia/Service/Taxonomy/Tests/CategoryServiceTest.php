@@ -127,13 +127,13 @@ class CategoryServiceTest extends BaseTestCase
     /**
      * @group get
      */
-    public function testGetCategories()
+    public function testfindCategories()
     {
         $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'weight' => 100, 'groupId' => 1);
         $categoryB = array('name' => '测试分类2', 'code' => 'codeB', 'weight' => 10, 'groupId' => 1);
         $createdCategoryA = $this->getCategoryService()->createCategory($categoryA);
         $createdCategoryB = $this->getCategoryService()->createCategory($categoryB);
-        $categories = $this->getCategoryService()->getCategories(1);
+        $categories = $this->getCategoryService()->findCategories(1);
         $this->assertContains($createdCategoryA, $categories);
         $this->assertContains($createdCategoryB, $categories);
     }
@@ -142,9 +142,9 @@ class CategoryServiceTest extends BaseTestCase
      * @group get
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testGetCategoriesWithNotExistGroupId()
+    public function testfindCategoriesWithNotExistGroupId()
     {
-        $this->getCategoryService()->getCategories(999);
+        $this->getCategoryService()->findCategories(999);
     }
 
      /**

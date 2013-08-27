@@ -5,7 +5,7 @@ class CategoryController extends BaseController
 {
     public function allAction()
     {
-        $categories = $this->getCategoryService()->getCategories(1);
+        $categories = $this->getCategoryService()->findCategories(1);
 
         $data = array();
         foreach ($categories as $category) {

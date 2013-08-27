@@ -43,7 +43,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
 	public function findCategoriesByGroupId($groupId) 
     {
-        $sql = "SELECT * FROM {$this->table} WHERE groupId = ? ";
+        $sql = "SELECT * FROM {$this->table} WHERE groupId = ? ORDER BY weight ASC";
         return $this->getConnection()->fetchAll($sql, array($groupId));
     }
 

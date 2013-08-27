@@ -43,8 +43,16 @@ define(function(require, exports, module) {
             rule: 'integer'
         });
 
-        $modal.find('.delete-category').on('click', function(){
-            console.log('bbb');
+        $modal.find('.delete-category').on('click', function() {
+            if (!confirm('真的要删除该分类及其子分类吗？')) {
+                return ;
+            }
+
+            $.post($(this).data('url'), function(html) {
+                $modal.modal('hide');
+                $table.find('tbody').replaceWith(html);
+            });
+
         });
 
 	};

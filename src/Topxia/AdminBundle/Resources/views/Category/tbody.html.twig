@@ -1,11 +1,11 @@
 <tbody>
   {% for category in categories %}
 		<tr id="category-tr-{{ category.id }}">
+		  <td>{{ category.weight }}</td>
 		  <td>
 		    {% for i in 0..(category.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ category.name }}
 		  </td>
 		  <td>{{ category.code }}</td>
-		  <td>{{ category.weight }}</td>
 		  <td>
 		    <a href="javascript:;" class="btn btn-default btn-xs " data-url="{{ path('admin_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
 		    {% if group.depth > category.depth %}
@@ -14,5 +14,7 @@
 
 		  </td>
 		</tr>
+	{% else %}
+	  <tr><td colspan="4"><div class="empty">暂无分类，请添加</div></td></tr>
   {% endfor %}
 </tbody>

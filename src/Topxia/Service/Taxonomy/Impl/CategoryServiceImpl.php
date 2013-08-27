@@ -7,7 +7,6 @@ use Topxia\Common\ArrayToolkit;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
-
     public function getCategory($id)
     {
         return $this->getCategoryDao()->getCategory($id);
@@ -16,65 +15,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function getCategoryByCode($code)
     {
         return $this->getCategoryDao()->findCategoryByCode($code);
-    }
-
-    public function isCategoryCodeAvaliable($code, $exclude = null)
-    {
-        if (empty($code)) {
-            return false;
-        }
-
-        if ($code == $exclude) {
-            return true;
-        }
-
-        $category = $this->getCategoryDao()->findCategoryByCode($code);
-
-        return $category ? false : true;
-    }
-
-    public function findCategoriesByIds(array $ids)
-    {
-        return ArrayToolkit::index( $this->getCategoryDao()->findCategoriesByIds($ids), 'id');
-    }
-
-    public function createCategory(array $category)
-    {
-        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight', 'groupId', 'parentId'));
-
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
-            throw $this->createServiceException("缺少必要参数，，添加分类失败");
-        }
-
-        $this->filterCategoryFields($category);
-
-        return $this->getCategoryDao()->addCategory($category);
-    }
-
-    public function updateCategory($id, array $fields)
-    {
-        $category = $this->getCategory($id);
-        if (empty($category)) {
-            throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
-        }
-
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId'));
-        if (empty($fields)) {
-            throw $this->createServiceException('参数不正确，更新分类失败！');
-        }
-
-        $this->filterCategoryFields($fields, $category);
-
-        return $this->getCategoryDao()->updateCategory($id, $fields);
-    }
-
-    public function getCategories($groupId)
-    {
-        $group = $this->getGroup($groupId);
-        if (empty($group)) {
-            throw $this->createServiceException("分类Group #{$groupId}，不存在");
-        }
-        return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
     }
 
     public function getCategoryTree($groupId)
@@ -94,12 +34,21 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return $prepared;
         };
 
-        $categories = $prepare($this->getCategories($groupId));
+        $categories = $prepare($this->findCategories($groupId));
 
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
 
         return $tree;
+    }
+
+    public function findCategories($groupId)
+    {
+        $group = $this->getGroup($groupId);
+        if (empty($group)) {
+            throw $this->createServiceException("分类Group #{$groupId}，不存在");
+        }
+        return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
     }
 
     public function findCategoryChildrenIds($id)
@@ -130,9 +79,71 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $childrenIds;
     }
 
+    public function findCategoriesByIds(array $ids)
+    {
+        return ArrayToolkit::index( $this->getCategoryDao()->findCategoriesByIds($ids), 'id');
+    }
+
+    public function isCategoryCodeAvaliable($code, $exclude = null)
+    {
+        if (empty($code)) {
+            return false;
+        }
+
+        if ($code == $exclude) {
+            return true;
+        }
+
+        $category = $this->getCategoryDao()->findCategoryByCode($code);
+
+        return $category ? false : true;
+    }
+
+    public function createCategory(array $category)
+    {
+        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight', 'groupId', 'parentId'));
+
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
+            throw $this->createServiceException("缺少必要参数，，添加分类失败");
+        }
+
+        $this->filterCategoryFields($category);
+
+        return $this->getCategoryDao()->addCategory($category);
+    }
+
+    public function updateCategory($id, array $fields)
+    {
+        $category = $this->getCategory($id);
+        if (empty($category)) {
+            throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId'));
+        if (empty($fields)) {
+            throw $this->createServiceException('参数不正确，更新分类失败！');
+        }
+
+        // filterCategoryFields里有个判断，需要用到这个$fields['groupId']
+        $fields['groupId'] = $category['groupId'];
+
+        $this->filterCategoryFields($fields, $category);
+
+        return $this->getCategoryDao()->updateCategory($id, $fields);
+    }
+
     public function deleteCategory($id)
     {
-        return $this->getCategoryDao()->deleteCategory($id);
+        $category = $this->getCategory($id);
+        if (empty($category)) {
+            throw $this->createNotFoundException();
+        }
+
+        $ids = $this->findCategoryChildrenIds($id);
+        $ids[] = $id;
+        foreach ($ids as $id) {
+            $this->getCategoryDao()->deleteCategory($id);
+        }
     }
 
     /**
