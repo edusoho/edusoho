@@ -60,9 +60,9 @@ class TagDaoImpl extends BaseDao implements TagDao
         return $this->getConnection()->fetchAll($sql, array());
     }
 
-    public function findTagByName($name)
+    public function getTagByName($name)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE name = ? ORDER BY createdTime DESC";
+        $sql = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($name));
     }
 

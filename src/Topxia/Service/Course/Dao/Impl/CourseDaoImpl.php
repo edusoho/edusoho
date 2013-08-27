@@ -50,14 +50,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['title']);
         }
 
-        if (isset($conditions['locationId'])) {
-            $locationId = (int) $conditions['locationId'];
-            if (!empty($locationId)) {
-                $conditions['locationIdLike'] = rtrim($conditions['locationId'], '0') . '%';
-            }
-            unset($conditions['locationId']);
-        }
-
         if (isset($conditions['tagId'])) {
             $tagId = (int) $conditions['tagId'];
             if (!empty($tagId)) {
@@ -71,7 +63,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('status = :status')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
-            ->andWhere('locationId LIKE :locationIdLike')
             ->andWhere('tagId LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan');

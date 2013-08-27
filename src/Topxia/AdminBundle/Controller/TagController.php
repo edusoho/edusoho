@@ -11,9 +11,9 @@ class TagController extends BaseController
 
 	public function indexAction(Request $request)
 	{
-		$total = $this->getTagService()->getAllTagsCount();
+		$total = $this->getTagService()->getAllTagCount();
 		$paginator = new Paginator($request, $total, 20);
-		$tags = $this->getTagService()->getAllTags($paginator->getOffsetCount(), $paginator->getPerPageCount());
+		$tags = $this->getTagService()->findAllTags($paginator->getOffsetCount(), $paginator->getPerPageCount());
 		return $this->render('TopxiaAdminBundle:Tag:index.html.twig', array(
 			'tags' => $tags,
 			'paginator' => $paginator
@@ -22,67 +22,55 @@ class TagController extends BaseController
 
 	public function createAction(Request $request)
 	{
-		$form = $this->getCreateForm();
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
-			if ($form->isValid()) {
-				try {
-					$tag = $this->getTagService()->addTag($form->getData());
-					$html = $this->renderView('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
-					return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-				} catch (ServiceException $e) {
-					return $this->createJsonResponse(array('status' => 'error', 'error' => array('message' => $e->getMessage())));
-				}
-			}
+			$tag = $this->getTagService()->addTag($request->request->all());
+			return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
 		}
 
 		return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
-			'form' => $form->createView()
+			'tag' => array('id' => 0, 'name' => '')
 		));
 	}
 
-	public function updateAction(Request $request, $tag)
+	public function updateAction(Request $request, $id)
 	{
-		$tag = $this->getTagWithException($tag);
-		$form = $this->getCreateForm($tag);
-		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
-			if ($form->isValid()) {
-				try {
-					$tag = $this->getTagService()->updateTag($tag['id'], $form->getData());
-					$html = $this->renderView('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
-						'tag' => $tag
-					));
-					return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-				} catch (ServiceException $e) {
-					return $this->createJsonResponse(array('status' => 'error', 'error' => array('message' => $e->getMessage())));
-				}
-			}
+		$tag = $this->getTagService()->getTag($id);
+		if (empty($tag)) {
+			throw $this->createNotFoundException();
 		}
+
+		if ('POST' == $request->getMethod()) {
+			$tag = $this->getTagService()->updateTag($id, $request->request->all());
+			return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+				'tag' => $tag
+			));
+		}
+
 		return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
-			'form' => $form->createView(),
 			'tag' => $tag
 		));
 	}
 
-	public function deleteAction(Request $request, $tag)
+	public function deleteAction(Request $request, $id)
 	{
-		try {
-			$this->getTagService()->deleteTag($tag);
-			return $this->createJsonResponse(array('status' => 'ok'));
-		} catch (ServiceException $e) {
-			return $this->createJsonResponse(array('status' => 'error'));
-		}
+		$this->getTagService()->deleteTag($id);
+		return $this->createJsonResponse(true);
 	}
 
-	public function checkTagNameAction(Request $request, $tag)
+	public function checkNameAction(Request $request)
 	{
-		$tagName = $request->query->get('value');
-		$tagByName = $this->getTagService()->getTagByName($tagName);
-		if (empty($tagByName) || (!empty($tagByName) && $tagByName['id'] == $tag)) {
-			return $this->createJsonResponse(array('success' => true, 'message' => '标签名称可以使用'));
-		}
-		return $this->createJsonResponse(array('success' => false, 'message' => '标签已存在'));
+		$name = $request->query->get('value');
+		$exclude = $request->query->get('exclude');
+
+		$avaliable = $this->getTagService()->isTagNameAvalieable($name, $exclude);
+
+        if ($avaliable) {
+            $response = array('success' => true, 'message' => '');
+        } else {
+            $response = array('success' => false, 'message' => '标签已存在');
+        }
+
+        return $this->createJsonResponse($response);
 	}
 
 	private function getTagService()

@@ -6,7 +6,7 @@
   <div class="col-lg-2">
     {% block sidebar %}
       <div class="list-group">
-        <a href="{{ path('admin_course', {'tab':'auditing'}) }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">课程管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_course') }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">课程管理<span class="glyphicon glyphicon-chevron-right"></span></a>
 
         <a href="{{ path('admin_review') }}" class="list-group-item {% if menu == 'review' %}active{% endif %}">评价管理<span class="glyphicon glyphicon-chevron-right"></span></a>
 

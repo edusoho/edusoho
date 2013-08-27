@@ -40,7 +40,7 @@
 
 {% block footer %}
 	{% if category.id %}
-		<button type="button" class="btn btn-default pull-left delete-category" data-url="{{ path('admin_category_delete', {id:category.id}) }}"><i class="glyphicon glyphicon-trash" tabindex="5"></i> 删除</button>
+		<button type="button" class="btn btn-default pull-left delete-category" data-url="{{ path('admin_category_delete', {id:category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
 	{% else %}
 
 	{% endif %}

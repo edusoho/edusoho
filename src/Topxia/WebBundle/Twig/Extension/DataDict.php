@@ -4,6 +4,17 @@ namespace Topxia\WebBundle\Twig\Extension;
 class DataDict
 {
 	private static $dict = array(
+		'courseStatus' => array(
+			'draft' => '未发布',
+			'published' => '已发布',
+			'closed' => '已关闭'
+		),
+		'courseStatus:html' => array(
+			'draft' => '<span class="text-muted">未发布</span>',
+			'published' => '<span class="text-success">已发布</span>',
+			'closed' => '<span class="text-danger">已关闭</span>'
+		),
+
 		'contentType' => array(
             'article' => '文章',
             'activity' => '活动',

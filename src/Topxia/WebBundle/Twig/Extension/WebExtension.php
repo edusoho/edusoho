@@ -101,7 +101,7 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $tags = ServiceKernel::instance()->createService('Taxonomy.TagService')->getTagsByIds($tagIds);
+        $tags = ServiceKernel::instance()->createService('Taxonomy.TagService')->findTagsByIds($tagIds);
         $names = ArrayToolkit::column($tags, 'name');
 
         return join($names, ',');
@@ -158,7 +158,7 @@ class WebExtension extends \Twig_Extension
     public function tagsHtmlFilter($tags, $class = '')
     {
         $links = array();
-        $tags = ServiceKernel::instance()->createService('Taxonomy.TagService')->getTagsByIds($tags);
+        $tags = ServiceKernel::instance()->createService('Taxonomy.TagService')->findTagsByIds($tags);
         foreach ($tags as $tag) {
             $url = $this->container->get('router')->generate('course_explore', array('tagId' => $tag['id']));
             $links[] = "<a href=\"{$url}\" class=\"{$class}\">{$tag['name']}</a>";

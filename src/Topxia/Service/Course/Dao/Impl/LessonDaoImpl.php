@@ -90,10 +90,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function deleteLessonsByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->delete($this->table, 'lesson')
-            ->where("courseId = :courseId")
-            ->setParameter(":courseId", $courseId)
-            ->execute();
+        $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($courseId));
     }
 }

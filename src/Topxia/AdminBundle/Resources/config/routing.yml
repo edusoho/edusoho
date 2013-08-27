@@ -2,14 +2,6 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
-admin_course_order_manage:
-    pattern: /course/order/manage
-    defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
-
-admin_course_order_detail:
-    pattern: /course/order/detail/{id}
-    defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
-
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
@@ -87,20 +79,19 @@ admin_tag_create:
     pattern:  /tag/create
     defaults: { _controller: TopxiaAdminBundle:Tag:create }
 
+admin_tag_checkname:
+    pattern:  /tag/checkname
+    defaults: { _controller: TopxiaAdminBundle:Tag:checkName}
+
 admin_tag_update:
-    pattern:  /tag/{tag}/update
+    pattern:  /tag/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Tag:update }
 
-admin_tag_name_check:
-    pattern:  /tag/{tag}/name/check
-    defaults: { _controller: TopxiaAdminBundle:Tag:checkTagName, tag: 0 }
-    requirements:
-        tag: \d+
-
 admin_tag_delete:
-    pattern:  /tag/{tag}/delete
+    pattern:  /tag/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Tag:delete }
     methods:  [POST]
+
 
 admin_user:
     pattern:  /user
@@ -189,16 +180,16 @@ admin_note_unpick:
     defaults: { _controller: TopxiaAdminBundle:CourseNote:unpick }
 
 admin_course:
-    pattern:  /course/manage
+    pattern:  /course
     defaults: { _controller: TopxiaAdminBundle:Course:index }
 
 admin_course_delete:
     pattern:  /course/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Course:delete }
 
-admin_course_open:
-    pattern: /course/{id}/open
-    defaults: { _controller: TopxiaAdminBundle:Course:open }
+admin_course_publish:
+    pattern: /course/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Course:publish }
 
 admin_course_close:
     pattern: /course/{id}/close
@@ -215,6 +206,15 @@ admin_course_threads:
 admin_course_tag:
     pattern:  /course/tag
     defaults: { _controller: TopxiaAdminBundle:Tag:tagCourse }
+
+admin_course_order_manage:
+    pattern: /course/order/manage
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
+
+admin_course_order_detail:
+    pattern: /course/order/detail/{id}
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
+
 
 admin_group:
     pattern:  /group
