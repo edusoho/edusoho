@@ -1,32 +1,36 @@
 define(function(require, exports, module) {
+	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function(options) {
+		var $table = $('#course-table');
 
-		$('.delete-btn').click(function() {
-			if (prompt('确定删除该课程，请输入：DELETE') != 'DELETE') {
-				return;
+		$table.on('click', '.close-course', function(){
+			$.post($(this).data('url'), function(html){
+				var $tr = $(html);
+				$table.find('#' + $tr.attr('id')).replaceWith(html);
+				Notify.success('课程关闭成功！');
+			});
+		});
+
+		$table.on('click', '.publish-course', function(){
+			$.post($(this).data('url'), function(html){
+				var $tr = $(html);
+				$table.find('#' + $tr.attr('id')).replaceWith(html);
+				Notify.success('课程发布成功！');
+			});
+		});
+
+		$table.on('click', '.delete-course', function() {
+			if (!confirm('删除课程，将删除课程的章节、课时、学员信息。真的要删除该课程吗？')) {
+				return ;
 			}
-			$.post($(this).data('url'), function() {
-				window.location.reload();
+
+			var $tr = $(this).parents('tr');
+			$.post($(this).data('url'), function(){
+				$tr.remove();
 			});
+
 		});
-
-
-
-		$('.open-btn').click(function() {
-			
-			$.post($(this).data('url'), function() {
-				window.location.reload();
-			});
-		});
-
-		$('.close-btn').click(function() {
-
-			$.post($(this).data('url'), function() {
-				window.location.reload();
-			});
-		});
-
 
 	};
 

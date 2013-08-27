@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);
-                    Notify.success('添加分类成功！');
+                    Notify.success('保存分类成功！');
 				});
 
             }

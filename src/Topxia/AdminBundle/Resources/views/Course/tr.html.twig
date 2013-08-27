@@ -1,0 +1,37 @@
+<tr id="course-tr-{{ course.id }}">
+  <td>
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+    <br>
+    <span class="text-muted">分类：{{ category.name|default('--') }}</span>
+  </td>
+  <td>{{ course.studentNum }}</td>
+  <td><span class="text-warning" style="color:#f40;">{{ course.income }}</span></td>
+  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+  <td> {{ user.nickname|default('--') }} <br /> {{ course.createdTime|date('Y-n-d H:i') }}</td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">管理</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
+        <li><a href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>
+
+        <li class="divider"></li>
+
+        {% if course.status == 'published' %}
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
+        {% endif %}
+
+        {% if course.status != 'published' %}
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_course_publish', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
+        {% endif %}
+
+        <li class="divider"></li>
+
+        <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

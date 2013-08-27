@@ -19,4 +19,6 @@ interface CourseChapterDao
 
     public function deleteChapter($id);
 
+    public function deleteChaptersByCourseId($courseId);
+
 }

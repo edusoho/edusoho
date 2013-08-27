@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Form\Common;
 
 class DefaultCategoryType extends AbstractCategoryType
 {
-	protected $group = 'default';
+	protected $group = 'course';
 
     public function getName()
     {

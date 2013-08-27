@@ -58,6 +58,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function _prepareCourseConditions($conditions)
 	{
+		$conditions = array_filter($conditions);
+
 		if (isset($conditions['date'])) {
 			$dates = array(
 				'this_week' => array(
@@ -91,6 +93,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$conditions['startTimeLessThan'] = $dates[$conditions['date']][1];
 				unset($conditions['date']);
 			}
+		}
+
+		if (isset($conditions['creator'])) {
+			$user = $this->getUserService()->getUserByNickname($conditions['creator']);
+			$conditions['userId'] = $user ? $user['id'] : -1;
+			unset($conditions['creator']);
 		}
 
 		return $conditions;
@@ -278,9 +286,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function deleteCourse($id)
 	{
+		$course = $this->tryAdminCourse($id);
+
 		$this->getMemberDao()->deleteMembersByCourseId($id);
+		$this->getLessonDao()->deleteLessonsByCourseId($id);
+		$this->getChapterDao()->deleteChaptersByCourseId($id);
+
 		$this->getCourseDao()->deleteCourse($id);
-		$this->getReviewService()->deleteReviewsByCourseId($id);
+
 		return true;
 	}
 
@@ -950,6 +963,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		if (!$this->hasCourseManagerRole($course, $user)) {
 			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+		}
+
+		return CourseSerialize::unserialize($course);
+	}
+
+	public function tryAdminCourse($courseId)
+	{
+		$course = $this->getCourseDao()->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createNotFoundException();
+		}
+
+		$user = $this->getCurrentUser();
+		if (empty($user->id)) {
+			throw $this->createAccessDeniedException('未登录用户，无权操作！');
+		}
+
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+			throw $this->createAccessDeniedException('您不是管理员，无权操作！');
 		}
 
 		return CourseSerialize::unserialize($course);
