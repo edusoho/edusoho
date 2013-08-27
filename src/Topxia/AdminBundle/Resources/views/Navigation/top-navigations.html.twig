@@ -6,19 +6,17 @@
 {% set navType = 'navigation-top' %}
 
 {% block main %}
-<p style="display:none" id="navigationType">top</p>
+
 {% include 'TopxiaAdminBundle:Navigation:navigation-page-header.html.twig'  %}
 
 {% include 'TopxiaAdminBundle:Navigation:navigation-nav-tab.html.twig'  %}
 
 <table id="navigation-table" class="table table-striped">
+    
     {% include 'TopxiaAdminBundle:Navigation:navigation-tab-bytype.html.twig'  %}
     
-    <tbody>
-        {% for navigation in navigations%}
-            {% include 'TopxiaAdminBundle:Navigation:navigation-tr.html.twig' with {navigation: navigation}  %}
-        {% endfor %}
-    </tbody>
+ 	{% include 'TopxiaAdminBundle:Navigation:tbody.html.twig' %}
+
 </table>
     
    <div class="paginator">

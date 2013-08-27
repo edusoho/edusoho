@@ -125,7 +125,6 @@ admin_user_send_emailverify_email:
     pattern:  /user/{id}/send_emailverify_email
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
 
-
 admin_comment:
     pattern:  /comment
     defaults: { _controller: TopxiaAdminBundle:Comment:index }
@@ -137,7 +136,7 @@ admin_comment_delete:
 
 admin_navigation:
     pattern:  /navigation
-    defaults: { _controller: TopxiaAdminBundle:Navigation:index }
+    defaults: { _controller: TopxiaAdminBundle:Navigation:findTops }
 
 admin_navigation_create:
     pattern:  /navigation/create

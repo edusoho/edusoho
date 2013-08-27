@@ -1,0 +1,30 @@
+<tbody>
+  {% for navigation in navigations %}
+		<tr id="navigations-tr-{{ navigation.id }}">
+		  <td>{{ navigation.name }}</td>
+		  <td> <a href="{{navigation.url}}"> {{navigation.url}} </a></td>
+		  <td>
+				{% if navigation.isNewWin == 0 %}
+		            否
+		        {% elseif navigation.isNewWin == 1 %}
+		            是
+		        {% endif %}
+    		</td>
+		  <td>{{ navigation.sequence }}</td>
+		  <td>
+	        {% if navigation.isOpen == 1 %}
+	        开启
+	        {% elseif navigation.isOpen == 0 %}
+	        关闭
+	        {% endif %}
+    		</td>
+		  <td>
+	        <button class="btn btn-sm btn-primary edit-btn" data-url="{{ path('admin_navigation_update', {id:navigation.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+	        <button class="btn btn-sm delete-btn" data-url="{{ path('admin_navigation_delete', {id:navigation.id}) }}" data-target="{{ navigation.id }}">删除</button>
+		   </td>
+
+	{% else %}
+	  <tr><td colspan="4"><div class="empty">暂无导航，请添加</div></td></tr>
+  {% endfor %}
+
+</tbody>

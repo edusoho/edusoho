@@ -9,68 +9,6 @@ use Topxia\Service\Common\ServiceException;
 
 class NavigationController extends BaseController
 {
-    private function getCreateForm($block = array())
-    {
-        $sequence = array();
-
-        for ($i=1; $i < 11 ; $i++) { 
-            $sequence[$i] = $i;
-        }
-
-        $form = $this->createFormBuilder($block)
-            ->add('name', 'text')
-            ->add('url', 'text')
-            ->add('isNewWin', 'choice', array(
-                'expanded' => true, 
-                'choices' => array(0 => '否', 1 => '是'),
-                'data' => 1
-            ))
-            ->add('isOpen', 'choice', array(
-                'expanded' => true, 
-                'choices' => array(0 => '关闭', 1 => '开启'),
-                'data' => 1
-            ))
-            ->add('type', 'choice', array(
-                'expanded' => true, 
-                'choices' => array('top' => '顶部导航', 'foot' => '底部导航'),
-                'data' => 'top'
-            ))
-            ->add('sequence', 'choice', array(
-                'choices' => $sequence
-            ))
-            ->getForm();
-        return $form;
-    }
-
-    private function getEditForm($block = array())
-    {
-        $sequence = array();
-
-        for ($i=1; $i < 11 ; $i++) { 
-            $sequence[$i] = $i;
-        }
-
-        $form = $this->createFormBuilder($block)
-            ->add('name', 'text')
-            ->add('url', 'text')
-            ->add('isNewWin', 'choice', array(
-                'expanded' => true, 
-                'choices' => array(0 => '否', 1 => '是'),
-            ))
-            ->add('isOpen', 'choice', array(
-                'expanded' => true, 
-                'choices' => array(0 => '关闭', 1 => '开启'),
-            ))
-            ->add('type', 'choice', array(
-                'expanded' => true, 
-                'choices' => array('top' => '顶部导航', 'foot' => '底部导航'),
-            ))
-            ->add('sequence', 'choice', array(
-                'choices' => $sequence
-            ))
-            ->getForm();
-        return $form;
-    }
 
     public function deleteAction (Request $request, $id)
     {
@@ -82,62 +20,53 @@ class NavigationController extends BaseController
         }
     }
 
+    public function createAction (Request $request)
+    {   
+
+        if ('POST' == $request->getMethod()) {
+            $navigation = $request->request->all();
+            $navigationId = $this->getNavigationService()->createNavigation($navigation);
+            $navigation = $this->getNavigationService()->getNavigation($navigationId);
+            return $this->renderTbody($navigation['type']);
+        }
+
+        $navigation = array(
+            'id' => 0,
+            'name' => '',
+            'url' => '',
+            'sequence' => 0,
+            'isNewWin'=>0,
+            'isOpen'=>0,
+            'type'=>$request->query->get('type')
+        );
+
+        return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
+            'navigation'=>$navigation));
+    }
+
     public function updateAction (Request $request, $id)
     {
         $navigation = $this->getNavigationService()->getNavigation($id);
-        $form = $this->getEditForm($navigation);
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $this->getNavigationService()->updateNavigation($id, $form->getData());
+                $this->getNavigationService()->updateNavigation($id, $request->request->all());
                 $navigation = $this->getNavigationService()->getNavigation($id);
-                $html = $this->renderView('TopxiaAdminBundle:Navigation:navigation-tr.html.twig', array('navigation'=>$navigation));
-                return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-            }
+                return $this->renderTbody($navigation['type']);
         }
 
         return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
-            'form' => $form->createView(),
             'navigation'=>$navigation
         ));
     }
 
-    public function createAction (Request $request)
-    {   
-        $form = $this->getCreateForm();
-        if ('POST' == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $navigationId = $this->getNavigationService()->createNavigation($form->getData());
-                $navigation = $this->getNavigationService()->getNavigation($navigationId);
-                $html = $this->renderView('TopxiaAdminBundle:Navigation:navigation-tr.html.twig', array('navigation'=>$navigation));
-                return $this->createJsonResponse(array('status' => 'ok', 'type'=>$navigation['type'], 'html' => $html));
-            }
-        }
-        return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
-            'form' => $form->createView()
+    private function renderTbody($type)
+    {
+        $footNavigations = $this->getNavigationService()->findNavigationsByType($type, 0 ,20);
+        return $this->render('TopxiaAdminBundle:Navigation:tbody.html.twig', array(
+            'navigations'=>$footNavigations
         ));
     }
 
-    public function indexAction (Request $request)
-    {   
-        $paginator = new Paginator(
-            $request,
-            $this->getNavigationService()->getNavigationsCount(),
-            10
-        );
-
-        $navigations = $this->getNavigationService()->findNavigations(
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render('TopxiaAdminBundle:Navigation:index.html.twig', array(
-            'navigations' => $navigations,
-            'paginator' => $paginator));
-    }
-
-    public function  findTopsAction(Request $request)
+    public function findTopsAction(Request $request)
     {
         $paginator = new Paginator(
             $request,
