@@ -14,6 +14,9 @@ class HtmlExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * 这个不要使用，要废弃
+     */
     public function fieldValue($object, $key, $default = '')
     {
         $html = '';
