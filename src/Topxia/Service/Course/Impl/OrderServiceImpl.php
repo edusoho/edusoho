@@ -102,13 +102,35 @@ class OrderServiceImpl extends BaseService implements OrderService
 			$orderBy = array('createdTime', 'DESC');
 		}
 
+		$conditions = $this->_prepareSearchConditions($conditions);
 		$orders = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
+
         return ArrayToolkit::index($orders, 'id');
 	}
 
 	public function searchOrderCount($conditions)
 	{
+		$conditions = $this->_prepareSearchConditions($conditions);
 		return $this->getOrderDao()->searchOrderCount($conditions);
+	}
+
+	private function _prepareSearchConditions($conditions)
+	{
+		$conditions = array_filter($conditions);
+
+
+        if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+        }
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
+        if (isset($conditions['buyer'])) {
+        	$user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+        	$conditions['userId'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
 	}
 
 	private function generateOrderSn($order)
@@ -129,6 +151,11 @@ class OrderServiceImpl extends BaseService implements OrderService
 	private function getCourseService()
 	{
 		return $this->createService('Course.CourseService');
+	}
+
+	private function getUserService()
+	{
+		return $this->createService('User.UserService');
 	}
 
 }

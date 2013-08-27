@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% import "TopxiaAdminBundle::paginator.html.twig" as pg %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}EduSoho管理后台{% endblock %}</title>
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.0.0/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
   {% block javascripts %}{% endblock %}

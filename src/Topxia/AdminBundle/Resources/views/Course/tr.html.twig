@@ -5,7 +5,7 @@
     <span class="text-muted">分类：{{ category.name|default('--') }}</span>
   </td>
   <td>{{ course.studentNum }}</td>
-  <td><span class="text-warning" style="color:#f40;">{{ course.income }}</span></td>
+  <td><span class="money-text">{{ course.income }}</span></td>
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
   <td> {{ user.nickname|default('--') }} <br /> {{ course.createdTime|date('Y-n-d H:i') }}</td>
   <td>

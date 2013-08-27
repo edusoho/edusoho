@@ -1,7 +1,14 @@
-{% import 'TopxiaAdminBundle::admin-macro.html.twig' as admin_macro %}
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
 <tr id="user-table-tr-{{ user.id }}">
   <td>
     {{ admin_macro.user_link(user) }}
+    {% if user.emailVerified %}
+      <span class="text-success" title="邮件已验证"><i class="glyphicon glyphicon-envelope"></i></span>
+    {% endif %}
+
+    {% if user.locked %}
+      <span class="text-danger" title="已封禁" data-toggle="tooltip"><i class="glyphicon glyphicon-ban-circle"></i></span>
+    {% endif %}
   </td>
 
   <td>

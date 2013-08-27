@@ -1,0 +1,26 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+
+<tr id="order-table-{{order.id}}">
+  <td>
+    <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank">{{order.title}}</a>
+    <br>
+    <span class="text-muted">订单号：{{order.sn}}</span>
+  </td>
+  <td>{{ dict_text('orderStatus:html', order.status) }}</td>
+  <td><span class="money-text">{{order.price}}</span></td>
+  <td>
+    {{ admin_macro.user_link(buyer) }}
+  </td>
+  <td>
+    {% if order.paidTime > 0 %}
+      {{ order.paidTime |date('Y-n-d H:i:s') }}
+      <br>
+      <span class="text-muted">{{ dict_text('payment', order.payment) }}</span>
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>
+    <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_order_detail', {id:order.id}) }}">详情</a> 
+  </td>
+</tr>

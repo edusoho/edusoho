@@ -14,7 +14,17 @@ class DataDict
 			'published' => '<span class="text-success">已发布</span>',
 			'closed' => '<span class="text-danger">已关闭</span>'
 		),
-
+		'orderStatus' => array(
+			'created' => '未付款',
+			'paid' => '已付款',
+		),
+		'orderStatus:html' => array(
+			'created' => '<span class="text-muted">未付款</span>',
+			'paid' => '<span class="text-success">已付款</span>',
+		),
+		'payment' => array(
+			'alipay' => '支付宝'
+		),
 		'contentType' => array(
             'article' => '文章',
             'activity' => '活动',
