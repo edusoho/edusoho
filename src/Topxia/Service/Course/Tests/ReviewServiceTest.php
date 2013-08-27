@@ -134,34 +134,6 @@ class ReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @group review
-     */
-    public function testDeleteReviewsByIds()
-    {
-        $course = array(
-            'type' => 'online',
-            'title' => 'online test course 1',
-        );
-        $createdCourse = $this->getCourseService()->createCourse($course);
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $reviewInfo1 = array(
-            'title'=>'title',
-            'content'=>'content',
-            'rating'=>$createdCourse['rating'],
-            'userId'=>$registeredUser['id'],
-            'courseId'=>$createdCourse['id']
-            );
-        $savedReview = $this->getReviewService()->saveReview($reviewInfo1);
-        $result = $this->getReviewService()->deleteReviewsByIds(array($savedReview['id']));
-        $this->assertEquals(1, $result);
-    }
-
-    /**
      * @group current
      */
     public function testSearchReviewsCount()

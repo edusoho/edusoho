@@ -18,11 +18,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		return $this->getReviewDao()->findReviewsByCourseId($courseId, $start, $limit);
 	}
 
-	public function deleteReviewsByCourseId($courseId)
-	{
-		return $this->getReviewDao()->deleteReviewsByCourseId($courseId);
-	}
-
 	public function getCourseReviewCount($courseId)
 	{
 		return $this->getReviewDao()->getReviewCountByCourseId($courseId);
@@ -106,23 +101,32 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 			));
 		}
 
-		$ratingSum = $this->getReviewDao()->getReviewRatingSumByCourseId($course['id']);
-		$ratingNum = $this->getReviewDao()->getReviewCountByCourseId($course['id']);
-
-		$this->getCourseService()->updateCourseCounter($course['id'], array(
-			'rating' => $ratingSum / $ratingNum,
-			'ratingNum' => $ratingNum,
-		));
+		$this->calculateCourseRating($course['id']);
 
 		return $review;
 	}
-	
-	public function deleteReviewsByIds(array $ids=null)
+
+	public function deleteReview($id)
 	{
-		if(empty($ids)){
-            throw $this->createServiceException("Please select review item !");
-        }
-		return $this->getReviewDao()->deleteReviewsByIds($ids);
+		$review = $this->getReview($id);
+		if (empty($review)) {
+			throw $this->createServiceException("评价(#{$id})不存在，删除失败！");
+		}
+
+		$this->getReviewDao()->deleteReview($id);
+
+		$this->calculateCourseRating($review['courseId']);
+	}
+
+	private function calculateCourseRating($courseId)
+	{
+		$ratingSum = $this->getReviewDao()->getReviewRatingSumByCourseId($courseId);
+		$ratingNum = $this->getReviewDao()->getReviewCountByCourseId($courseId);
+
+		$this->getCourseService()->updateCourseCounter($courseId, array(
+			'rating' => $ratingNum ? $ratingSum / $ratingNum : 0,
+			'ratingNum' => $ratingNum,
+		));
 	}
 
 	private function getReviewDao()

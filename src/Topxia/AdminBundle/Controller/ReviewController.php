@@ -49,15 +49,13 @@ class ReviewController extends BaseController {
             ));
     }
 
-    public function deleteChoosedReviewsAction(Request $request)
-    {  
+    public function batchDeleteAction(Request $request)
+    {
         $ids = $request->request->get('ids');
-        $result = $this->getReviewService()->deleteReviewsByIds($ids);
-        if($result){
-           return $this->createJsonResponse(array("status" =>"success")); 
-       } else {
-           return $this->createJsonResponse(array("status" =>"failed")); 
-       }
+        foreach ($ids as $id) {
+            $this->getReviewService()->deleteReview($id);
+        }
+        return $this->createJsonResponse(true);
     }
 
     private function convertConditions($conditions)

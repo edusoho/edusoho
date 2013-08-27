@@ -29,40 +29,47 @@
     {{ form_rest(form) }}
   </form>
 
-  <table class="table table-striped" id="review-list">
-    <thead>
-      <tr>
-        <th>全选</th>
-        <th>评价</th>
-        <th>作者</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for review in reviews %}
-        {% set author = users[review.userId]|default(null) %}
-        <tr id="review-table-tr-{{review.id}}">
-          <td><input value="{{review.id}}" type="checkbox" name="review-item"></td>
-          <td>
-            <div><a href="#">{{ courses[review.courseId].title }}：</a></div>
-            {{review.content}}
-          </td>
-          <td>
-            {{ admin_macro.user_link(author) }}<br>
-            <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
-          </td>
-          <td></td>
+  <div id="review-table-container">
+    <table class="table table-striped" id="review-table">
+      <thead>
+        <tr>
+          <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
+          <th width="60%">评价</th>
+          <th width="20%">作者</th>
+          <th width="16%">操作</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for review in reviews %}
+          {% set author = users[review.userId]|default(null) %}
+          <tr id="review-table-tr-{{review.id}}">
+            <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
+            <td class="short-long-text">
+              <div><a href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}：</a></div>
+              <div class="short-text">
+                {{ review.content }} <span class="text-muted trigger">(展开)</span>
+              </div>
+              <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">(收起)</span></div>
+            </td>
+            <td>
+              {{ admin_macro.user_link(author) }}<br>
+              <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
+            </td>
+            <td>
+              <button class="btn btn-default btn-sm">删除</button>
 
-  <input class= "choose-all" name="choose-all" type="checkbox">
-    全选/取消全选
-  <a class="review-delete pull-right btn btn-danger" href="javascript:" data-url="{{ path('admin_content_delete_reviews') }}">删除</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-  <div>
-    {{ web_macro.paginator(paginator) }} 
+    <div>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_review_batch_delete') }}" data-role="batch-delete" data-name="评价">删除</button>
+    </div>
   </div>
+
+  {{ web_macro.paginator(paginator) }}
 
 {% endblock %}

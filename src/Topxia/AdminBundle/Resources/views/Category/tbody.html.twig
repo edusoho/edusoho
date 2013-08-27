@@ -7,9 +7,9 @@
 		  </td>
 		  <td>{{ category.code }}</td>
 		  <td>
-		    <a href="javascript:;" class="btn btn-default btn-xs " data-url="{{ path('admin_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+		    <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
 		    {% if group.depth > category.depth %}
-		      <a href="javascript:;" class="btn btn-default btn-xs" data-url="{{ path('admin_category_create', {parentId:category.id, groupId:group.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加子分类</a>
+		      <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_category_create', {parentId:category.id, groupId:group.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加子分类</a>
 		    {% endif %}
 
 		  </td>

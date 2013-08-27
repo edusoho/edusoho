@@ -155,6 +155,11 @@ admin_review:
     pattern:  /review
     defaults: { _controller: TopxiaAdminBundle:Review:index }
 
+admin_review_batch_delete:
+    pattern: /review/batch_delete
+    defaults: {_controller: TopxiaAdminBundle:Review:batchDelete }
+    methods: [POST]
+
 admin_note:
     pattern: /note
     defaults: { _controller: TopxiaAdminBundle:CourseNote:index }
@@ -322,9 +327,4 @@ admin_message_delete_messages:
 admin_thread_delete_threads:
     pattern: /delete/choosed/threads
     defaults: {_controller: TopxiaAdminBundle:CourseThread:deleteChoosedThreads }
-    methods: [POST]
-
-admin_content_delete_reviews:
-    pattern: /delete/choosed/reviews
-    defaults: {_controller: TopxiaAdminBundle:Review:deleteChoosedReviews }
     methods: [POST]

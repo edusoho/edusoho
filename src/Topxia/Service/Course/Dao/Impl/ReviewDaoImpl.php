@@ -44,21 +44,6 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ? : null;
     }
 
-    public function deleteReviewsByIds($ids)
-    {
-        if(empty($ids)){
-            return array();
-        }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->executeUpdate($sql, $ids);
-    }
-
-    public function deleteReviewsByCourseId($courseId)
-    {
-        return $this->getConnection()->delete($this->table, array('courseId' => $courseId));
-    }
-    
     public function getReviewRatingSumByCourseId($courseId)
     {
         $sql = "SELECT sum(rating) FROM {$this->table} WHERE courseId = ?";
@@ -90,5 +75,11 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
                 ->setFirstResult($start)
                 ->setMaxResults($limit);
             return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function deleteReview($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeUpdate($sql, array($id));
     }
 }
