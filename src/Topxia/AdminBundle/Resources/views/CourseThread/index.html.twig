@@ -63,10 +63,12 @@
                 <span class="label label-info">问</span>
               {% endif %}
               <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
+
               <div class="short-long-text">
                 <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
                 <div class="long-text">{{ thread.content|raw }} <span class="trigger">(收起)</span></div>
               </div>
+              
               <div class="text-sm mts">
                 {% if course %}
                   <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>

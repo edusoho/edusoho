@@ -42,7 +42,7 @@
     <body>
       {% for note in notes %}
         <tr class="note-tr">
-          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" name='note-item'></td>
+          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" ></td>
           <td>
           	{{ users[note.userId].nickname }}
           </td>
