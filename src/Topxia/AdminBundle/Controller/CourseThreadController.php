@@ -43,15 +43,19 @@ class CourseThreadController extends BaseController
 		));
     }
 
+    public function deleteAction(Request $request, $id)
+    {
+        $this->getThreadService()->deleteThread($id);
+        return $this->createJsonResponse(true);
+    }
+
     public function deleteChoosedThreadsAction(Request $request)
     {
         $ids = $request->request->get('ids');
-        $result = $this->getThreadService()->deleteThreadsByIds($ids);
-        if($result){
-           return $this->createJsonResponse(array("status" =>"success")); 
-       } else {
-           return $this->createJsonResponse(array("status" =>"failed")); 
-       }
+        foreach ($ids as $id) {
+            $this->getThreadService()->deleteThread($id);
+        }
+        return $this->createJsonResponse(true);
     }
 
 	private function convertConditions($conditions)

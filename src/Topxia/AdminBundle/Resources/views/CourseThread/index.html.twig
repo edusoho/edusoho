@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}话题管理 - {{ parent() }}{% endblock %}
+{% block title %}讨论区管理 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'course/threads' %}
 
@@ -9,7 +9,7 @@
 {% block main %}
 
 <div class="page-header clearfix">
-  <h1 class="pull-left">话题管理</h1>
+  <h1 class="pull-left">讨论区管理</h1>
 </div>
 
 <div class="well well-sm">
@@ -24,33 +24,40 @@
   </form>
 </div>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th width="20%">标题</th>
-      <th width="20%">作者</th>
-      <th width="20%">内容</th>
-      <th width="20%">创建时间</th>
-    </tr>
-  </thead>
-  <body>
-    {% for thread in threads %}
-      <tr>
-        <td><input value="{{thread.id}}" type="checkbox" name='thread-item'> {{ thread.title }} </td>
-        <td>{{ users[thread.userId].nickname }}</td>
-        <td>{{ thread.content}}</td>
-        <td>{{ thread.createdTime|date('Y-n-d H:i:s') }}</td>
-      </tr>
-    {% endfor %}
-  </body>
-</table>
+  <div id="thread-table-container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th width="5%"><input type="checkbox" data-role="batch-select"></th>
+          <th width="50%">话题</th>
+          <th width="10%">回复/查看</th>
+          <th width="15%">作者</th>
+          <th width="10%">创建时间</th>
+          <th width="10%">操作</th>
+        </tr>
+      </thead>
+      <body>
+        {% for thread in threads %}
+          <tr data-role="item">
+            <td><input value="{{thread.id}}" type="checkbox" name='thread-item'> </td>
+            <td>
+              <a href="#">{{ thread.title }}</a>
+              {{ thread.content}}
+            </td>
+            <td>{{ thread.postNum }} / {{ thread.hitNum }}</td>
+            <td>{{ users[thread.userId].nickname }}</td>
+            <td>{{ thread.createdTime|date('Y-n-d H:i:s') }}</td>
+            <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="帖子" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}">删除</button></td>
+          </tr>
+        {% endfor %}
+      </body>
+    </table>
 
- <input class= "choose-all" name="choose-all" type="checkbox">
-    全选/取消全选
-  <a class="thread-delete pull-right btn btn-danger" href="javascript:"  data-url="{{ path('admin_thread_delete_threads') }}">删除</a>
-
-  <div>
-    {{ web_macro.paginator(paginator) }}
+    <div class="mbm">
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+        <button class="btn btn-default-btn-sm mlm" data-role="batch-delete" name="帖子" data-url="{{ path('admin_thread_batch_delete') }}">删除</button>
+    </div>
   </div>
-
+    
+  {{ web_macro.paginator(paginator) }}
 {% endblock %}

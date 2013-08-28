@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
 
-    module.exports = function($container) {
+    module.exports = function($element) {
 
-        $container.on('click', '.short-text', function() {
+        $element.on('click', '.short-text', function() {
             var $short = $(this);
             $short.slideUp('fast').parents('.short-long-text').find('.long-text').slideDown('fast');
         });
 
-        $container.on('click', '.long-text', function() {
+        $element.on('click', '.long-text', function() {
             var $long = $(this);
             $long.slideUp('fast').parents('.short-long-text').find('.short-text').slideDown('fast');
         });

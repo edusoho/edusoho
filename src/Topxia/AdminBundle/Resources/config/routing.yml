@@ -202,10 +202,6 @@ admin_course_category:
     pattern: /course/category
     defaults: { _controller: TopxiaAdminBundle:Course:category }
 
-admin_course_threads:
-    pattern:  /course/threads
-    defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
-
 admin_course_tag:
     pattern:  /course/tag
     defaults: { _controller: TopxiaAdminBundle:Tag:tagCourse }
@@ -329,7 +325,16 @@ admin_message_delete_messages:
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
     methods: [POST]
 
-admin_thread_delete_threads:
-    pattern: /delete/choosed/threads
-    defaults: {_controller: TopxiaAdminBundle:CourseThread:deleteChoosedThreads }
+admin_thread:
+    pattern:  /thread
+    defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
+
+admin_thread_delete:
+    pattern: /thread/{id}/delete
+    defaults: {_controller: TopxiaAdminBundle:CourseThread:delete }
+    methods: [POST]
+
+admin_thread_batch_delete:
+    pattern: /thread/batch_delete
+    defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]

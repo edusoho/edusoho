@@ -4,7 +4,6 @@ define(function(require, exports, module) {
 
     module.exports = function($element, onSuccess) {
         $element.on('click', '[data-role=item-delete]', function() {
-            console.log('xxx');
             var $btn = $(this),
                 name = $btn.data('name'),
                 message = $btn.data('message');

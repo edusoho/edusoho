@@ -2,13 +2,13 @@ define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
 
-    module.exports = function($container) {
-        $container.on('click', '[data-role=batch-delete]', function() {
+    module.exports = function($element) {
+        $element.on('click', '[data-role=batch-delete]', function() {
         	var $btn = $(this);
         		name = $btn.data('name');
 
             var ids = [];
-            $container.find('[data-role=batch-item]:checked').each(function(){
+            $element.find('[data-role=batch-item]:checked').each(function(){
                 ids.push(this.value);
             });
 
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            $container.find('.btn').addClass('disabled');
+            $element.find('.btn').addClass('disabled');
 
             Notify.info('正在删除' + name + '，请稍等。', 60);
 
