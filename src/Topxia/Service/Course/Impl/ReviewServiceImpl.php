@@ -38,34 +38,27 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
 	public function searchReviews($conditions, $sort= 'latest', $start, $limit)
 	{	
-		if(isset($conditions['keywordType'])){
-			if($conditions['keywordType'] == 'title'){
-				$conditions['title'] = "%{$conditions['keyword']}%";
-				unset($conditions['keywordType']);
-				unset($conditions['keyword']);
-			} elseif ($conditions['keywordType'] == 'content'){
-				$conditions['content'] = "%{$conditions['keyword']}%";
-				unset($conditions['keywordType']);
-				unset($conditions['keyword']);
-			}
-		}
-		return $this->getReviewDao()->searchReviews($conditions, $sort, $start, $limit);
+		$orderBy = array('createdTime', 'DESC');
+		$conditions = $this->prepareReviewSearchConditions($conditions);
+		return $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
 	}
 
 	public function searchReviewsCount($conditions)
 	{		
-		if(isset($conditions['keywordType'])){
-			if($conditions['keywordType'] == 'title'){
-				$conditions['title'] = "%{$conditions['keyword']}%";
-				unset($conditions['keywordType']);
-				unset($conditions['keyword']);
-			} elseif ($conditions['keywordType'] == 'content'){
-				$conditions['content'] = "%{$conditions['keyword']}%";
-				unset($conditions['keywordType']);
-				unset($conditions['keyword']);
-			}
-		}
+		$conditions = $this->prepareReviewSearchConditions($conditions);
 		return $this->getReviewDao()->searchReviewsCount($conditions);
+	}
+
+	private function prepareReviewSearchConditions($conditions)
+	{
+		$conditions = array_filter($conditions);
+
+        if (isset($conditions['author'])) {
+        	$author = $this->getUserService()->getUserByNickname($conditions['author']);
+        	$conditions['userId'] = $author ? $author['id'] : -1;
+        }
+
+        return $conditions;
 	}
 	
 	public function saveReview($fields)
