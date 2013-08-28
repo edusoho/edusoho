@@ -5,8 +5,8 @@
 {% block body %}
 <table class="table table-striped table-condenseda table-bordered">
   <tr>
-    <th>用户名</th>
-    <td>{{ user.nickname }}</td>
+    <th width="25%">用户名</th>
+    <td width="75%">{{ user.nickname }}</td>
   </tr>
 
   <tr>
@@ -18,7 +18,7 @@
     <th>用户组</th>
     <td>
       {% for role in user.roles %}
-        <span class="mrm">{# role|dict_text('user_role') #}{{ role }}</span>
+        {{ dict_text('userRole', role) }}
       {% endfor %}
     </td>
   </tr>
