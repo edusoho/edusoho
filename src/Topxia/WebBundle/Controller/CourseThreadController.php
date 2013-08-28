@@ -172,7 +172,7 @@ class CourseThreadController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $id)
     {
-        $this->getThreadService()->deleteThread($courseId, $id);
+        $this->getThreadService()->deleteThread($id);
         return $this->createJsonResponse(true);
     }
 

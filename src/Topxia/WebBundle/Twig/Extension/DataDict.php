@@ -25,6 +25,10 @@ class DataDict
 		'payment' => array(
 			'alipay' => '支付宝'
 		),
+		'threadType' => array(
+			'discussion'=> '话题',
+			'question' => '问答',
+		),
 		'contentType' => array(
             'article' => '文章',
             'activity' => '活动',

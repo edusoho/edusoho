@@ -205,7 +205,7 @@ class ThreadServiceTest extends BaseTestCase
 		);
 		$createdPost = $this->getThreadService()->createPost($post);
 
-    	$this->getThreadService()->deleteThread($createdThread['courseId'], $createdThread['id']);
+    	$this->getThreadService()->deleteThread($createdThread['id']);
 
     	$foundThread = $this->getThreadService()->getThread($createdThread['courseId'], $createdThread['id']);
     	$this->assertNull($foundThread);
@@ -215,23 +215,6 @@ class ThreadServiceTest extends BaseTestCase
     	$this->assertEmpty($foundPosts);
 
 	}
-
-    /**
-     * @group error
-     */
-    public function testDeleteChoosedThreads()
-    {   
-        $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
-        $thread = array(
-            'courseId' => $course['id'],
-            'type' => 'discussion',
-            'title' => 'test thread',
-            'content' => 'test content',
-        );
-        $createdThread = $this->getThreadService()->createThread($thread);
-        $ids = array($createdThread['id']);
-        $this->getThreadService()->deleteThreadsByIds($ids);
-    }
 
 	/**
      * @group current 

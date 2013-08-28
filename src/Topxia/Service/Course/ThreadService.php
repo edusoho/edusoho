@@ -1,6 +1,9 @@
 <?php
 namespace Topxia\Service\Course;
 
+/**
+ * @todo refactor: 去除第一个参数$courseId
+ */
 interface ThreadService
 {
 	public function getThread($courseId, $threadId);
@@ -18,9 +21,7 @@ interface ThreadService
 
 	public function updateThread($courseId, $threadId, $thread);
 
-	public function deleteThread($courseId, $threadId);
-
-	public function deleteThreadsByIds(array $ids=null);
+	public function deleteThread($threadId);
 
 	public function stickThread($courseId, $threadId);
 

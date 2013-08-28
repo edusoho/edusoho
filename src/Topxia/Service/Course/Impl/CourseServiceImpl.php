@@ -949,16 +949,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 		
 	}
 
+	/**
+	 * @todo refactor it.
+	 */
 	public function tryManageCourse($courseId)
 	{
-		$course = $this->getCourseDao()->getCourse($courseId);
-		if (empty($course)) {
-			throw $this->createNotFoundException();
-		}
-
 		$user = $this->getCurrentUser();
 		if (empty($user->id)) {
 			throw $this->createAccessDeniedException('未登录用户，无权操作！');
+		}
+
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+			return true;
+		}
+
+		$course = $this->getCourseDao()->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createNotFoundException();
 		}
 
 		if (!$this->hasCourseManagerRole($course, $user)) {

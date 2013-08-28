@@ -24,6 +24,4 @@ interface ThreadDao
 
 	public function waveThread($id, $field, $diff);
 
-    public function deleteThreadsByIds(array $ids);
-
 }

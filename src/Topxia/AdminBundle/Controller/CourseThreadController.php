@@ -10,36 +10,30 @@ class CourseThreadController extends BaseController
 
     public function indexAction (Request $request)
     {
-
-    	$form = $this->createFormBuilder()
-    		->add('keywords', 'text', array('required' => false))
-    		->add('nickname', 'text', array('required' => false))
-			->getForm();
-
-		$form->bind($request);
-
-		$conditions = $form->getData();
-
-		$convertedConditions = $this->convertConditions($conditions);
+		$conditions = $request->query->all();
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchThreadCount($convertedConditions),
+            $this->getThreadService()->searchThreadCount($conditions),
             20
         );
         
         $threads = $this->getThreadService()->searchThreads(
-            $convertedConditions,
+            $conditions,
             'createdNotStick',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+
     	return $this->render('TopxiaAdminBundle:CourseThread:index.html.twig', array(
-    		'form' => $form->createView(),
     		'paginator' => $paginator,
             'threads' => $threads,
-            'users'=>$users
+            'users'=> $users,
+            'courses' => $courses,
+            'lessons' => $lessons,
 		));
     }
 
@@ -49,37 +43,23 @@ class CourseThreadController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function deleteChoosedThreadsAction(Request $request)
+    public function batchDeleteAction(Request $request)
     {
         $ids = $request->request->get('ids');
-        foreach ($ids as $id) {
+        foreach ($ids ? : array() as $id) {
             $this->getThreadService()->deleteThread($id);
         }
         return $this->createJsonResponse(true);
     }
 
-	private function convertConditions($conditions)
-	{
-		if (!empty($conditions['nickname'])) {
-			$user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-			if (empty($user)) {
-				throw $this->createNotFoundException(sprintf("昵称为%s的用户不存在", $conditions['nickname']));
-			}
-
-			$conditions['userId'] = $user['id'];
-		}
-		unset($conditions['nickname']);
-
-		if (empty($conditions['keywords'])) {
-			unset($conditions['keywords']);
-		}
-
-		return $conditions;
-	}
-
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }
