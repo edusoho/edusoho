@@ -169,18 +169,14 @@ admin_note:
     pattern: /note
     defaults: { _controller: TopxiaAdminBundle:CourseNote:index }
 
-admin_note_delete_notes:
-    pattern: /note/delete/choosed/
-    defaults: { _controller: TopxiaAdminBundle:CourseNote:deleteChoosedNotes }
+admin_note_delete:
+    pattern: /note/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:CourseNote:delete }
+
+admin_note_batch_delete:
+    pattern: /note/batch_delete
+    defaults: { _controller: TopxiaAdminBundle:CourseNote:batchDelete }
     methods: [POST]
-
-admin_note_pick:
-    pattern:  /note/pick
-    defaults: { _controller: TopxiaAdminBundle:NoteCourseNote:pick }
-
-admin_note_unpick:
-    pattern:  /note/unpick
-    defaults: { _controller: TopxiaAdminBundle:CourseNote:unpick }
 
 admin_course:
     pattern:  /course

@@ -14,13 +14,11 @@
 <div class="well well-sm">
   <form class="form-inline">
     <div class="form-group">
-      {{ form_widget(form.keywords, {attr:{class:'form-control', placeholder:'输入关键词'}}) }}
+      <input class="form-control" type="text" name="author" value="{{ app.request.get('author') }}" placeholder="作者昵称">
     </div>
-
     <div class="form-group">
-      {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'输入作者昵称'}}) }}
+      <input class="form-control" type="text" name="content" value="{{ app.request.get('content') }}" placeholder="关键词">
     </div>
-
     <button class="btn btn-primary" type="submit">搜索</button>
   </form>
 </div>
@@ -31,42 +29,54 @@
 
     <thead>
       <tr>
-        <th width="10%"> <input type="checkbox"  data-role="batch-select"> 作者</th>
-        <th width="10%">课程标题</th>
-        <th width="10">课时标题</th>
-        <th width="45%">内容</th>
-        <th width="15%">创建时间</th>
+        <th width="3%"><input type="checkbox" data-role="batch-select"></th>
+        <th width="75%">内容</th>
+        <th width="15%">作者</th>
+        <th width="7%">操作</th>
       </tr>
     </thead>
 
     <tbody>
 
       {% for note in notes %}
-        <tr class="note-tr" id="note-table-tr-{{note.id}}">
-          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" >
-            {{ admin_macro.user_link(users[note.userId]) }}
-          </td>
-          <td>
-            {{ courses[note.courseId].title }}
-          </td>
-          <td>
-            {{lessons[note.lessonId].title}}
-          </td>
+        {% set course = courses[note.courseId]|default(null) %}
+        {% set lesson = courses[note.lessonId]|default(null) %}
+        <tr data-role="item">
+          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" ></td>
           <td>
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ note.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
+                <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">(展开)</span></div>
                 <div class="long-text">{{ note.content|raw }} <span class="trigger">(收起)</span></div>
               </div>
+
+              <div class="text-sm mts">
+                {% if course %}
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
+                  {% if lesson %}
+                    <span class="text-muted mhs">&raquo;</span>
+                    <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">课时{{lesson.number}}：{{ lesson.title }}</a>
+                  {% endif %}
+                {% endif %}
+              </div>
           </td>
-          <td>{{ note.createdTime|date('Y-n-d H:i:s') }}</td>
+          <td>
+            {{ admin_macro.user_link(users[note.userId]) }}
+            <br>
+            <span class="text-muted text-sm">{{ note.createdTime|date('Y-n-d H:i') }}</span>
+          </td>
+          <td>
+            <button class="btn btn-default btn-sm" data-role="item-delete" data-name="笔记" data-url="{{ path('admin_note_delete', {id:note.id}) }}">删除</button>
+          </td>
         </tr>
+      {% else %}
+        <tr><td colspan="4"><div class="empty">无笔记记录</div></td></tr>
       {% endfor %}
     </tbody>
   </table>
 
   <div>
     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="笔记" data-url="{{ path('admin_note_delete_notes') }}">删除</button>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="笔记" data-url="{{ path('admin_note_batch_delete') }}">删除</button>
   </div>
 
 </div>

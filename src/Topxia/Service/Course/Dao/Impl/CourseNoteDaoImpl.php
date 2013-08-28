@@ -69,19 +69,17 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 
 	private function createSearchNoteQueryBuilder($conditions)
 	{
-		if (isset($conditions['keywords'])) {
-			$conditions['keywords'] = "%{$conditions['keywords']}%";
+		if (isset($conditions['content'])) {
+			$conditions['content'] = "%{$conditions['content']}%";
 		}
 
 		$builder = $this->createDynamicQueryBuilder($conditions)
 			->from($this->table, 'note')
+			->andWhere('userId = :userId')
 			->andWhere('courseId = :courseId')
 			->andWhere('lessonId = :lessonId')
-			->andWhere('userId = :userId')
 			->andWhere('status = :status')
-			->andWhere('isStick = :isStick')
-			->andWhere('isElite = :isElite')
-			->andWhere('content LIKE :keywords');
+			->andWhere('content LIKE :content');
 
 		return $builder;
 	}

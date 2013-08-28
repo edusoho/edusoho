@@ -10,21 +10,15 @@ class CourseNoteController extends BaseController
 {
 	public function indexAction(Request $request)
 	{
-    	$form = $this->createFormBuilder()
-    		->add('keywords', 'text', array('required' => false))
-    		->add('nickname', 'text', array('required' => false))
-			->getForm();
-		$form->bind($request);
-		$conditions = $form->getData();
+		$conditions = $request->query->all();
 
-		$convertConditions = $this->convertConditions($conditions);
         $paginator = new Paginator(
             $request,
-            $this->getNoteService()->searchNoteCount($convertConditions),
+            $this->getNoteService()->searchNoteCount($conditions),
             20
         );
         $notes = $this->getNoteService()->searchNotes(
-            $convertConditions,
+            $conditions,
             'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -33,44 +27,26 @@ class CourseNoteController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
 		return $this->render('TopxiaAdminBundle:CourseNote:index.html.twig',array(
-    		'form' => $form->createView(),
-    		'paginator' => $paginator,
             'notes' => $notes,
+            'paginator' => $paginator,
             'users'=>$users,
             'lessons'=>$lessons,
             'courses'=>$courses
 		));
 	}
 
-	private function convertConditions($conditions)
-	{
-		if (!empty($conditions['nickname'])) {
-			$user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-			if (empty($user)) {
-				throw $this->createNotFoundException(sprintf("昵称为%s的用户不存在", $conditions['nickname']));
-			}
-
-			$conditions['userId'] = $user['id'];
-		}
-		unset($conditions['nickname']);
-
-		if (empty($conditions['keywords'])) {
-			unset($conditions['keywords']);
-		}
-
-		return $conditions;
-	}
-
-    public function deleteChoosedNotesAction(Request $request)
+    public function deleteAction(Request $request, $id)
     {
-        $ids = $request->request->get('ids');
-        $result = $this->getNoteService()->deleteNotes($ids);
-        
-        if($result){
-           return $this->createJsonResponse(array("status" =>"success")); 
-       } else {
-           return $this->createJsonResponse(array("status" =>"failed")); 
-       }
+        $note = $this->getNoteService()->deleteNote($id);
+        return $this->createJsonResponse(true);
+    }
+
+    public function batchDeleteAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array());
+        $this->getNoteService()->deleteNotes($ids);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getNoteService()

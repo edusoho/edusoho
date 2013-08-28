@@ -35,12 +35,27 @@ class NoteServiceImpl extends BaseService implements NoteService
                 throw $this->createServiceException('参数sort不正确。');
         }
 
+        $conditions = $this->prepareSearchNoteConditions($conditions);
         return $this->getNoteDao()->searchNotes($conditions, $orderBy, $start, $limit);
     }
 
     public function searchNoteCount($conditions)
     {
+        $conditions = $this->prepareSearchNoteConditions($conditions);
         return $this->getNoteDao()->searchNoteCount($conditions);
+    }
+
+    private function prepareSearchNoteConditions($conditions)
+    {
+        $conditions = array_filter($conditions);
+
+        if (isset($conditions['author'])) {
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
+            $conditions['userId'] = $author ? $author['id'] : -1;
+            unset($conditions['author']);
+        }
+
+        return $conditions;
     }
 
     /**
