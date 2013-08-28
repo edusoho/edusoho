@@ -26,8 +26,12 @@ class CourseMaterialController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+        $lessons = ArrayToolkit::index($lessons, 'id');
+
         return $this->render("TopxiaWebBundle:CourseMaterial:index.html.twig", array(
             'course' => $course,
+            'lessons'=>$lessons,
             'materials' => $materials,
             'paginator' => $paginator,
         ));

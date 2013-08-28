@@ -10,8 +10,8 @@
   <div class="page-header">
     <h1>私信管理</h1>
   </div>
-
-  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+<div class="well well-sm">
+  <form id="message-search-form" class="form-inline" action="" method="get" novalidate> 
       <div class="form-group">
         {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'关键词'}}) }}
       </div>
@@ -27,6 +27,7 @@
       <button class="btn btn-primary">搜索</button>
       {{ form_rest(form) }}
   </form>
+</div>
 
 <div id="message-table-container">
 
@@ -35,7 +36,7 @@
       <tr >
         <th width="10%"> <input type="checkbox"  data-role="batch-select"> 发信人</th>
         <th width="10%">收信人</th>
-        <th width="65%">内容</th>
+        <th width="45%">内容</th>
         <th width="15%">发送时间</th>
       </tr>
     </thead>
@@ -58,7 +59,6 @@
       {% endfor %}
     </tbody>
   </table>
-
   <div>
     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
     <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="私信" data-url="{{ path('admin_message_delete_messages') }}">删除</button>

@@ -30,13 +30,13 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="form[title]"]',
+            element: '[name="title"]',
             required: true,
             rule: 'maxlength{max:25}'
         });
 
         validator.addItem({
-            element: '[name="form[code]"]',
+            element: '[name="code"]',
             required: true,
             rule: 'maxlength{max:25} remote'
         });

@@ -9,10 +9,20 @@
 	{% for material in materials %}
 	  <li class="media">
 	  	<div class="media-body">
-		    <span class="pull-right text-muted">{{ material.createdTime|smart_time }}</span>
-		    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+	    	<div class="pull-right">
+	    	 属于课时&nbsp;&nbsp; <a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lessons[material.lessonId].id}}" title="{{ lessons[material.lessonId].title }}" data-id="{{ lessons[material.lessonId].id }}" >{{ lessons[material.lessonId].title }}</a>
+		    	<br>
+		    	<span class="pull-right text-muted">{{ material.createdTime|smart_time }}</span>
+	    	</div>
+		    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" 
+		    target="_blank">{{ material.title }}</a>
 		    <span class="mlm text-muted">{{ material.fileSize|file_size }}</span>
-		    <div class="text-muted">{{ material.description }}</div>
+
+
+		    <div class="text-muted">
+		    	{{ material.description }} 
+		    </div>
+		    
 	    </div>
 	  </li>
 	{% else %}

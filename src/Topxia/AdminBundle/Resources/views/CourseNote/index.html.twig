@@ -31,34 +31,37 @@
 
     <thead>
       <tr>
-        <th wdith="5%"> <input type="checkbox"  data-role="batch-select"> </th>
-        <th width="15%">作者</th>
+        <th width="10%"> <input type="checkbox"  data-role="batch-select"> 作者</th>
         <th width="10%">课程标题</th>
-        <th width="10%">课时标题</th>
+        <th width="10">课时标题</th>
         <th width="45%">内容</th>
-        <th width="20%">创建时间</th>
+        <th width="15%">创建时间</th>
       </tr>
     </thead>
-    <body>
+
+    <tbody>
+
       {% for note in notes %}
-        <tr class="note-tr">
-          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" ></td>
-          <td>
-          	{{ users[note.userId].nickname }}
+        <tr class="note-tr" id="note-table-tr-{{note.id}}">
+          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" >
+            {{ admin_macro.user_link(users[note.userId]) }}
           </td>
-           <td>
+          <td>
             {{ courses[note.courseId].title }}
           </td>
           <td>
             {{lessons[note.lessonId].title}}
           </td>
           <td>
-          {{ note.content | raw | plain_text(20) }}
+              <div class="short-long-text">
+                <div class="short-text text-sm text-muted">{{ note.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
+                <div class="long-text">{{ note.content|raw }} <span class="trigger">(收起)</span></div>
+              </div>
           </td>
           <td>{{ note.createdTime|date('Y-n-d H:i:s') }}</td>
         </tr>
       {% endfor %}
-    </body>
+    </tbody>
   </table>
 
   <div>
@@ -68,4 +71,7 @@
 
 </div>
 
+  <div>
+    {{ web_macro.paginator(paginator) }}
+  </div>
 {% endblock %} 

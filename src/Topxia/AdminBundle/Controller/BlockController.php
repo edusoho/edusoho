@@ -48,31 +48,25 @@ class BlockController extends BaseController
             20
         );
 
-        $form = $this->getUpdateForm($block);
+
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'], 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
+
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                try {
-                    $block = $this->getBlockService()->updateBlock($block['id'], $form->getData());
-                    $users = $this->getUserService()->findUsersByIds(array($block['userId']));
-                    $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                        'block' => $block, 'users'=>$users
-                    ));
-                    return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-                } catch (ServiceException $e) {
-                    return $this->createJsonResponse(array('status' => 'error', 'error' => array('message' => $e->getMessage())));
-                }
-            }
+            $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
+            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
+                'block' => $block, 'users'=>$users
+            ));
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
+                
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-update-modal.html.twig', array(
-            'form' => $form->createView(),
             'block' => $block,
             'blockHistorys'=>$blockHistorys,
             'historyUsers'=>$historyUsers,
@@ -83,47 +77,40 @@ class BlockController extends BaseController
     public function editAction(Request $request, $block)
     {
         $block = $this->getBlockService()->getBlock($block);
-        $form = $this->getCreateForm($block);
+
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                try {
-                    $block = $this->getBlockService()->updateBlock($block['id'], $form->getData());
-                    $users = $this->getUserService()->findUsersByIds(array($block['userId']));
-                    $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                        'block' => $block, 'users'=>$users
-                    ));
-                    return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-                } catch (ServiceException $e) {
-                    return $this->createJsonResponse(array('status' => 'error', 'error' => array('message' => $e->getMessage())));
-                }
-            }
+
+            $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
+            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
+                'block' => $block, 'users'=>$users
+            ));
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
+
         return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
-            'form' => $form->createView(),
             'editBlock' => $block
         ));
     }
 
     public function createAction(Request $request)
     {
-        $form = $this->getCreateForm();
+        
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                try {
-                    $block = $this->getBlockService()->createBlock($form->getData());
-                    $users = $this->getUserService()->findUsersByIds(array($block['userId']));
-                    $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'users'=>$users));
-                    return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-                } catch (ServiceException $e) {
-                    return $this->createJsonResponse(array('status' => 'error', 'error' => array('message' => $e->getMessage())));
-                }
-            }
+            $block = $this->getBlockService()->createBlock($request->request->all());
+            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'users'=>$users));
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
+        $editBlock = array(
+            'id'=>0,
+            'title'=>'',
+            'code'=>''
+        );
+
         return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
-            'form' => $form->createView()
+            'editBlock' => $editBlock
         ));
     }
 
@@ -160,22 +147,6 @@ class BlockController extends BaseController
         }
     }
 
-    private function getCreateForm($block = array())
-    {
-        $form = $this->createFormBuilder($block)
-            ->add('code', 'text')
-            ->add('title', 'text')
-            ->getForm();
-        return $form;
-    }
-
-    private function getUpdateForm($block = array())
-    {
-        $form = $this->createFormBuilder($block)
-            ->add('content', 'textarea')
-            ->getForm();
-        return $form;
-    }
 
     protected function getBlockService()
     {

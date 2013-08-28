@@ -2,45 +2,48 @@
 {% set block = block|default(null) %}
 
 {% block title %}
-{% if editBlock is defined %}
-设置编辑区
-{% else %}
+{% if editBlock.id == 0 %}
 新增编辑区
+{% else %}
+设置编辑区
 {% endif %}
 {% endblock %}
 
-{% if editBlock is defined %}
-  {% set checkCodeUrl = path('admin_block_code_check_foredit', {id:editBlock.id}) %}
-{% else %}
+{% if editBlock.id == 0 %}
   {% set checkCodeUrl = path('admin_block_code_check_forcreate') %}
+{% else %}
+  {% set checkCodeUrl = path('admin_block_code_check_foredit', {id:editBlock.id}) %}
 {% endif %}
 
 {% block body %}
   <form class="form-horizontal" id="block-form"  
-  {% if editBlock is defined %}
-    action="{{ path('admin_block_edit', {block:editBlock.id}) }}" 
-  {% else %}
+  {% if editBlock.id == 0 %}
     action="{{ path('admin_block_create') }}"
+  {% else %}
+    action="{{ path('admin_block_edit', {block:editBlock.id}) }}" 
   {% endif %}  method="post">
-  
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.code, '编号') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.code, {attr:{'data-url': checkCodeUrl}}) }}</div>
-    </div>
-    
-    <div class="row control-group">
-          <div class="col-lg-3 control-label">{{ form_label(form.title, '标题') }}</div>
-          <div class="col-lg-8 controls"> {{ form_widget(form.title) }}</div>
-    </div>
 
-    {{ form_rest(form) }}
+
+   <div class="row control-group form-group">
+    <div class="col-lg-3 control-label"><label for="code">编号</label></div>
+    <div class="col-lg-8 controls"> 
+    <input class="form-control" type="text" id="code" value="{{editBlock.code}}" data-url="{{checkCodeUrl}}" name="code"></div>
+  </div>
+
+   <div class="row control-group form-group">
+    <div class="col-lg-3 control-label"><label for="title">标题</label></div>
+    <div class="col-lg-8 controls"> 
+    <input class="form-control" type="text" id="title" value="{{editBlock.title}}" name="title"></div>
+  </div>
+
+
   </form>
 
   <script type="text/javascript">
-    {% if editBlock is defined %}
-  app.load('block/edit-modal')
-  {% else %}
+    {% if editBlock.id == 0 %}
   app.load('block/save-modal')
+  {% else %}
+  app.load('block/edit-modal')
    {% endif %}
   </script>
 {% endblock %}
