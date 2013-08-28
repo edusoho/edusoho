@@ -52,29 +52,33 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function searchReviewsCount($conditions)
     {
-         $builder = $this->createDynamicQueryBuilder($conditions)
-                ->select('count(id)')
-                ->from($this->table, 'course_review')
-                ->andWhere('userId = :userId')
-                ->andWhere('courseId = :courseId')
-                ->andWhere('title LIKE :title')
-                ->andWhere('content LIKE :content');
-                return $builder->execute()->fetchColumn(0);
+         $builder = $this->createReviewSearchBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function searchReviews($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->createDynamicQueryBuilder($conditions)
-                ->select('*')
-                ->from($this->table, 'course_review')
+        $builder = $this->createReviewSearchBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    private function createReviewSearchBuilder($conditions)
+    {
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
+        return $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, $this->table)
                 ->andWhere('userId = :userId')
                 ->andWhere('courseId = :courseId')
-                ->andWhere('title LIKE :title')
-                ->andWhere('content LIKE :content')
-                ->orderBy("createdTime", "DESC")
-                ->setFirstResult($start)
-                ->setMaxResults($limit);
-            return $builder->execute()->fetchAll() ? : array();
+                ->andWhere('rating = :rating')
+                ->andWhere('content LIKE :content');
     }
 
     public function deleteReview($id)

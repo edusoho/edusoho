@@ -155,6 +155,11 @@ admin_review:
     pattern:  /review
     defaults: { _controller: TopxiaAdminBundle:Review:index }
 
+admin_review_delete:
+    pattern: /review/{id}/delete
+    defaults: {_controller: TopxiaAdminBundle:Review:delete }
+    methods: [POST]
+
 admin_review_batch_delete:
     pattern: /review/batch_delete
     defaults: {_controller: TopxiaAdminBundle:Review:batchDelete }

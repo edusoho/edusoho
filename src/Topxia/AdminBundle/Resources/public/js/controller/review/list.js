@@ -8,10 +8,7 @@ define(function(require, exports, module) {
         require('../../util/short-long-text')($table);
         require('../../util/batch-select')($container);
         require('../../util/batch-delete')($container);
-
-        $(".review-tr").on('click', function(){
-            $(this).find('input[name=review-item]').click();
-        });
+        require('../../util/item-delete')($container);
     };
 
 });

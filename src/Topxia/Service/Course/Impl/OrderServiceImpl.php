@@ -127,7 +127,6 @@ class OrderServiceImpl extends BaseService implements OrderService
 	{
 		$conditions = array_filter($conditions);
 
-
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
         }
