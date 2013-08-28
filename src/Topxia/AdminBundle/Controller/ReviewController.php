@@ -34,6 +34,13 @@ class ReviewController extends BaseController {
             ));
     }
 
+    public function deleteAction(Request $request, $id)
+    {
+        $this->getReviewService()->deleteReview($id);
+        return $this->createJsonResponse(true);
+    }
+
+
     public function batchDeleteAction(Request $request)
     {
         $ids = $request->request->get('ids');
