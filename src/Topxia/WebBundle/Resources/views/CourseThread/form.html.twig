@@ -44,11 +44,11 @@
     <div class="controls clearfix">
       {{ form_rest(form) }}
       {% if thread %}
-        <button type="submit" class="btn btn-primary btn-fat pull-right">保存</button>
         <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}" class="btn btn-link pull-right">取消</a>
+        <button type="submit" class="btn btn-primary btn-fat pull-right">保存</button>
       {% else %}
-        <button type="submit" class="btn btn-primary btn-fat pull-right">发表</button>
         <a href="{{ path('course_threads', {id:course.id}) }}" class="btn btn-link pull-right">取消</a>
+        <button type="submit" class="btn btn-primary btn-fat pull-right">发表</button>
       {% endif  %}
     </div>
   </div>
