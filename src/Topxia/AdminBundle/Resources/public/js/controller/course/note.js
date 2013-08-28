@@ -1,35 +1,14 @@
 define(function(require, exports, module) {
         
-    exports.run = function() {
-        $(".choose-all").click(function() {
-           if( $(this).is(":checked") == true){
-                $("input[name='note-item']").prop("checked", true);
-            } else {
-                $("input[name='note-item']").prop("checked", false);
-            }
-        });
+  exports.run = function() {
 
-        $(".note-delete").on('click', function(){
-            var ids = [];
-            $("input[name='note-item']:checked ").each(function() {
-                ids.push($(this).attr("value"));
-            });
-            
-            if(ids.length == 0){
-                return ;
-            }
+    var $container = $('#note-table-container');
+    var $table = $("#note-table");
+    require('../../util/short-long-text')($table);
+    require('../../util/batch-select')($container);
+    require('../../util/batch-delete')($container);
+    require('../../util/item-delete')($container);
 
-            if (!confirm('真的要删除这些话题吗？')) {
-                return ;
-            }
-
-            $.post($(this).data('url'), {ids:ids}, function(){
-                 window.location.reload();
-            }); 
-        });
-
-        $(".note-tr").on('click', function(){
-            $(this).find('input[name=note-item]').click();
-        });
-    };
+  };
+    
 });
