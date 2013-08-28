@@ -40,10 +40,12 @@ class CourseOrderController extends BaseController
         $order = $this->getOrderService()->getOrder($id);
         $user = $this->getUserService()->getuser($order['userId']);
         $course = $this->getCourseService()->getCourse($order['courseId']);
+        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
         return $this->render('TopxiaAdminBundle:CourseOrder:detail-modal.html.twig', array(
             'order'=>$order,
             'user'=>$user,
-            'course'=>$course
+            'course'=>$course,
+            'orderLogs'=>$orderLogs
         ));
     }
 

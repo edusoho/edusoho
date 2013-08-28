@@ -29,7 +29,9 @@ define(function(require, exports, module) {
             }); 
         });
         
-
+        $(".thread-tr").on('click', function(){
+            $(this).find('input[name=thread-item]').click();
+        });
     };
 
   });

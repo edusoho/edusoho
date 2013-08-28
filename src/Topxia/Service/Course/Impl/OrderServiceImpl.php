@@ -64,6 +64,15 @@ class OrderServiceImpl extends BaseService implements OrderService
 		return $this->getOrder($order['id']);
 	}
 
+	public function findOrderLogs($orderId)
+	{
+		$order = $this->getOrder($orderId);
+		if(empty($order)){
+			throw $this->createServiceException("订单不存在，获取订单日志失败！");
+		}
+		return $this->getOrderLogDao()->findLogsByOrderId($orderId);
+	}
+
 	private function _createLog($orderId, $type, $message = '', array $data = array())
 	{
 		$user = $this->getCurrentUser();

@@ -38,7 +38,7 @@
     </thead>
     <tbody>
       {% for message in messages %}
-        <tr id="message-table-tr-{{message.id}}">
+        <tr class="message-tr" id="message-table-tr-{{message.id}}">
           <td><input value="{{message.id}}" type="checkbox" name='message-item'>{{ users[message.fromId].nickname}}</td>
           <td>{{message.content}}</td>
           <td>{{ message.createdTime|date('Y-n-d H:i')}}</td>

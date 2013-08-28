@@ -35,10 +35,10 @@
   </thead>
   <body>
     {% for thread in threads %}
-      <tr>
+      <tr class="thread-tr">
         <td><input value="{{thread.id}}" type="checkbox" name='thread-item'> {{ thread.title }} </td>
         <td>{{ users[thread.userId].nickname }}</td>
-        <td>{{ thread.content}}</td>
+        <td>{{ thread.content | raw }}</td>
         <td>{{ thread.createdTime|date('Y-n-d H:i:s') }}</td>
       </tr>
     {% endfor %}

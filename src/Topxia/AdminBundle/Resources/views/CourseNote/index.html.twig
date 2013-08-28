@@ -38,7 +38,7 @@
   </thead>
   <body>
     {% for note in notes %}
-      <tr>
+      <tr class="note-tr">
         <td><input value="{{note.id}}" type="checkbox" name='note-item'></td>
         <td>
         	{{ users[note.userId].nickname }}

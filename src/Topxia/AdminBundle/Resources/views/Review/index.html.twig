@@ -42,8 +42,8 @@
       <tbody>
         {% for review in reviews %}
           {% set author = users[review.userId]|default(null) %}
-          <tr id="review-table-tr-{{review.id}}">
-            <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
+          <tr class="review-tr" id="review-table-tr-{{review.id}}">
+            <td><input type="checkbox" value="{{review.id}}" data-role="batch-item" name="review-item"></td>
             <td class="short-long-text">
               <div><a href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}：</a></div>
               <div class="short-text">
