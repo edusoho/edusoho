@@ -64,12 +64,35 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			default:
 				throw $this->createServiceException('参数sort不正确。');
 		}
+
+		$conditions = $this->prepareThreadSearchConditions($conditions);
 		return $this->getThreadDao()->searchThreads($conditions, $orderBys, $start, $limit);
 	}
 
 	public function searchThreadCount($conditions)
 	{
+		$conditions = $this->prepareThreadSearchConditions($conditions);
 		return $this->getThreadDao()->searchThreadCount($conditions);
+	}
+
+	private function prepareThreadSearchConditions($conditions)
+	{
+		$conditions = array_filter($conditions);
+		if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
+			if (!in_array($conditions['keywordType'], array('title', 'content'))) {
+				throw $this->createServiceException('keywordType参数不正确');
+			}
+			$conditions[$conditions['keywordType']] = $conditions['keyword'];
+		}
+		unset($conditions['keywordType']);
+		unset($conditions['keyword']);
+
+		if (isset($conditions['author'])) {
+			$author = $this->getUserService()->getUserByNickname($conditions['author']);
+			$conditions['userId'] = $author ? $author['id'] : -1;
+		}
+
+		return $conditions;
 	}
 
 	public function createThread($thread)
@@ -114,31 +137,18 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->updateThread($threadId, $fields);
 	}
 
-	public function deleteThread($courseId, $threadId)
+	public function deleteThread($threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThreadDao()->getThread($threadId);
 		if (empty($thread)) {
-			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
 		}
 
-		$this->getThreadPostDao()->deletePostsByThreadId($thread['id']);
-		$this->getThreadDao()->deleteThread($thread['id']);
+		$this->getCourseService()->tryManageCourse($thread['courseId']);
+
+		$this->getThreadPostDao()->deletePostsByThreadId($threadId);
+		$this->getThreadDao()->deleteThread($threadId);
 	}
-
-    public function deleteThreadsByIds(array $ids=null)
-    {
-        if(empty($ids)){
-             throw $this->createServiceException("Please select thread item !");
-        }
-
-       	foreach ($ids as $id) {
-            $this->getThreadDao()->deleteThread($id);
-            $this->getThreadPostDao()->deletePostsByThreadId($id);
-        }
-        return true;
-    }
 
 	public function stickThread($courseId, $threadId)
 	{

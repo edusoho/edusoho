@@ -1,3 +1,15 @@
+.text-sm {
+  font-size: 12px;
+}
+
+.text-xs {
+  font-size: 10px;
+}
+
+.text-lg {
+  font-size: 18px;
+}
+
 .money-text {
     color: #f40;
 }
@@ -11,6 +23,7 @@
 .short-long-text .long-text:hover .trigger {
   visibility: visible;
   font-size: 12px;
+  color: #999;
 }
 
 .short-long-text .short-text {

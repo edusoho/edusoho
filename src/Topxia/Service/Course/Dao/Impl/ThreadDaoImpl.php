@@ -22,16 +22,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getConnection()->fetchAll($sql, array($userId, $type));
     }
 
-	public function deleteThreadsByIds(array $ids)
-    {
-        if(empty($ids)){
-            return array();
-        }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->executeUpdate($sql, $ids);
-    }
-
 	public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
 	{
 		$orderBy = join (' ', $orderBy);
@@ -48,20 +38,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function searchThreads($conditions, $orderBys, $start, $limit)
 	{
-		if (isset($conditions['keywords'])) {
-			$conditions['keywords'] = "%{$conditions['keywords']}%";
-		}
-
-		$builder = $this->createDynamicQueryBuilder($conditions)
+		$builder = $this->createThreadSearchQueryBuilder($conditions)
 			->select('*')
-			->from($this->table, 'thread')
-			->andWhere('courseId = :courseId')
-			->andWhere('lessonId = :lessonId')
-			->andWhere('userId = :userId')
-			->andWhere('type = :type')
-			->andWhere('isStick = :isStick')
-			->andWhere('isElite = :isElite')
-			->andWhere('title LIKE :keywords')
 			->setFirstResult($start)
 			->setMaxResults($limit);
 		foreach ($orderBys as $orderBy) {
@@ -73,21 +51,31 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function searchThreadCount($conditions)
 	{
-		if (isset($conditions['keywords'])) {
-			$conditions['keywords'] = "%{$conditions['keywords']}%";
+		$builder = $this->createThreadSearchQueryBuilder($conditions)
+			->select('COUNT(id)');
+		return $builder->execute()->fetchColumn(0);
+	}
+
+	private function createThreadSearchQueryBuilder($conditions)
+	{
+		if (isset($conditions['title'])) {
+			$conditions['title'] = "%{$conditions['title']}%";
 		}
 
-		$builder = $this->createDynamicQueryBuilder($conditions)
-			->select('count(id)')
-			->from($this->table, 'thread')
+		if (isset($conditions['content'])) {
+			$conditions['content'] = "%{$conditions['content']}%";
+		}
+
+		return $this->createDynamicQueryBuilder($conditions)
+			->from($this->table, $this->table)
 			->andWhere('courseId = :courseId')
 			->andWhere('lessonId = :lessonId')
 			->andWhere('userId = :userId')
 			->andWhere('type = :type')
 			->andWhere('isStick = :isStick')
 			->andWhere('isElite = :isElite')
-			->andWhere('title LIKE ":keywords"');
-		return $builder->execute()->fetchColumn(0);
+			->andWhere('title LIKE :title')
+			->andWhere('content LIKE :content');
 	}
 
 	public function addThread($fields)
