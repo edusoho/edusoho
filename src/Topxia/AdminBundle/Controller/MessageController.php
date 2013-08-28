@@ -39,7 +39,9 @@ class MessageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         ); 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
+        $usersFromId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
+        $usersToId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
+        $users = ArrayToolkit::index(array_merge($usersFromId, $usersToId), 'id');
 
         return $this->render('TopxiaAdminBundle:Message:index.html.twig',array(
             'users'=>$users,
