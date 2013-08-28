@@ -11,13 +11,13 @@ services:
             - { name: security.voter }
 
     topxia.authentication.failure_handler:
-        class: Topxia\WebBundle\Handler\AjaxAuthenticationFailureHandler
+        class: Topxia\WebBundle\Handler\AuthenticationFailureHandler
         parent: security.authentication.failure_handler
         calls:
             - [setTranslator, [@translator]]
 
     topxia.authentication.success_handler:
-        class: Topxia\WebBundle\Handler\AjaxAuthenticationSuccessHandler
+        class: Topxia\WebBundle\Handler\AuthenticationSuccessHandler
         parent: security.authentication.success_handler
 
 security:
