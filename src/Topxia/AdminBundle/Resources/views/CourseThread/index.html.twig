@@ -84,6 +84,8 @@
             </td>
             <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="帖子" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}">删除</button></td>
           </tr>
+        {% else %}
+          <tr><td colspan="5"><div class="empty">无帖子记录</div></td></tr>
         {% endfor %}
       </body>
     </table>

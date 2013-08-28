@@ -22,7 +22,7 @@
 
     <div class="form-group">
       <select class="form-control" name="rating">
-        {{ select_options({1:1, 2:2, 3:3, 4:4, 5:5}, app.request.get('rating'), '评分') }}
+        {{ select_options({2:2, 4:4, 6:6, 8:8, 10:10}, app.request.get('rating'), '评分') }}
       </select>
     </div>
 
@@ -49,12 +49,16 @@
           {% set author = users[review.userId]|default(null) %}
           <tr id="review-table-tr-{{review.id}}" data-role="item">
             <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
-            <td class="short-long-text">
-              <div><a href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}：</a></div>
-              <div class="short-text">
-                {{ review.content }} <span class="text-muted trigger">(展开)</span>
+            <td>
+              <div class="short-long-text">
+                <div class="short-text">
+                  {{ review.content|plain_text(60) }} <span class="text-muted trigger">(展开)</span>
+                </div>
+                <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">(收起)</span></div>
               </div>
-              <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">(收起)</span></div>
+              <div class="mts">
+                <a class="text-success text-sm" href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}</a>
+              </div>
             </td>
             <td>{{ review.rating }}</td>
             <td>
@@ -66,7 +70,7 @@
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="5"><div class="empty">暂无评价</div></td></tr>
+          <tr><td colspan="5"><div class="empty">无评价记录</div></td></tr>
         {% endfor %}
       </tbody>
     </table>
