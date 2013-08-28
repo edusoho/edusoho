@@ -49,6 +49,12 @@ class DataDict
     		'audio' => '音频',
     		'text' => '图文'
 		),
+		'userRole' => array(
+			'ROLE_USER' => '会员',
+			'ROLE_TEACHER' => '老师',
+			'ROLE_ADMIN' => '管理员',
+			'ROLE_SUPER_ADMIN' => '超级管理员'
+		),
 	);
 
 	public static function dict($type)

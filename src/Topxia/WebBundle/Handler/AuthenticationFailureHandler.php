@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
  
-class AjaxAuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
+class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 {
 
     protected $translator;

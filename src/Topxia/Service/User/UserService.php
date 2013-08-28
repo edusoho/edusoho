@@ -61,9 +61,9 @@ interface UserService
      */
     public function register($registration, $type = 'default');
 
-    public function updateUserProfile($id, $fields);
+    public function markLoginInfo();
 
-    public function updateLoginInfo($id,$loginInfo);
+    public function updateUserProfile($id, $fields);
 
     public function getUserProfile($id);
 

@@ -64,7 +64,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function searchUsers(array $conditions, $start, $limit)
     {
         $users = $this->getUserDao()->searchUsers($conditions, $start, $limit);
-        return ArrayToolkit::index($users, 'id');
+        return UserSerialize::unserializes($users);
     }
 
     public function searchUserCount(array $conditions)
@@ -440,12 +440,17 @@ class UserServiceImpl extends BaseService implements UserService
             ));
     }
     
-    public function updateLoginInfo($id,$loginInfo){
-        $user = $this->getUser($id);
-        if(empty($loginInfo) || empty($user )) return;
-        $infoFields = array('loginIp', 'loginTime');
-        $info = ArrayToolkit::parts($loginInfo, $infoFields);
-        $this->getUserDao()->updateUser($id, $info);
+    public function markLoginInfo()
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return ;
+        }
+
+        $this->getUserDao()->updateUser($user['id'], array(
+            'loginIp' => $user['currentIp'],
+            'loginTime' => time(),
+        ));
     }
 
     public function lockUser($id)
