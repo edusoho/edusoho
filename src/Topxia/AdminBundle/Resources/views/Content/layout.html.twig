@@ -8,15 +8,15 @@
     {% block sidebar %}
       <div class="list-group">
 
-        <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理</a>
 
-        <a href="{{ url('admin_block') }}" class="list-group-item {% if menu == 'admin_block' %}active{% endif %}">编辑区管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_block') }}" class="list-group-item {% if menu == 'admin_block' %}active{% endif %}">编辑区管理</a>
 
-        <a href="{{ path('admin_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}">文件监控<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}">文件监控</a>
 
-        <a href="{{ url('admin_content') }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">内容管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ url('admin_content') }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">内容管理</a>
 
-        <a href="{{ path('admin_comment') }}" class="list-group-item {% if menu == 'comment' %}active{% endif %}">评论管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_comment') }}" class="list-group-item {% if menu == 'comment' %}active{% endif %}">评论管理</a>
 
       </div>
     {% endblock %}
