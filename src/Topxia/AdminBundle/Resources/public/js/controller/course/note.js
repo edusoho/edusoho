@@ -27,5 +27,9 @@ define(function(require, exports, module) {
                  window.location.reload();
             }); 
         });
+
+        $(".note-tr").on('click', function(){
+            $(this).find('input[name=note-item]').click();
+        });
     };
 });

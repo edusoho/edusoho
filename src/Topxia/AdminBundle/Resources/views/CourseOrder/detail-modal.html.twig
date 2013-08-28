@@ -1,61 +1,104 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
 {% set modalSize = 'large' %}
 
-{% block title %}查看课程订单详情{% endblock %}
+{% block title %}订单详情 / 日志记录{% endblock %}
 {% block body %}
   
-  <div class="course-detail">
+  <ul class="nav nav-tabs">
+    <li class="active order-detail-tab"><a href="javascript:">订单详情</a></li>
+    <li class="order-log-tab"><a href="javascript:">订单日志</a></li>
+  </ul>
+  <p></p>
 
+  <div class="order-detail">
     <div class="row control-group">
       <label class="control-label col-lg-4">
-        用户名:
+        用户名
       </label>
       {{user.nickname}}
     </div>
 
     <div class="row control-group">
       <label class="control-label col-lg-4">
-        课程名:
+        课程名
       </label>
       {{course.title}}
     </div>
 
     <div class="row control-group">
       <label class="control-label col-lg-4">
-        礼品课程:
+        礼品课程
       </label>
-      {% if order.isGift == 1 %}
-        是
-      {% else %}
-        非
-      {% endif %}
+      {% if order.isGift == 1 %} 是 {% else %} 非 {% endif %}
     </div>
 
     <div class="row control-group">
       <label class="control-label col-lg-4">
-        订单创建日期:
+        订单创建日期
       </label>
       {{ order.createdTime |date('Y-n-d H:i:s')}}
     </div>
 
     <div class="row control-group">
       <label class="control-label col-lg-4">
-        付款时间:
+        付款时间
       </label>
       {{ order.paidTime |date('Y-n-d H:i:s')}}
     </div>
-
   </div>
 
-{% endblock %}
+  <div class="order-logs" style="display:none">
 
+    {% if orderLogs %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>类型</th>
+            <th>ID</th>
+            <th>信息</th>
+            <th>数据</th>
+            <th>支付人</th>
+            <th>登陆IP</th>
+            <th>创建时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for orderLog in orderLogs %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>
+                {% if orderLog.type == 'pay_error' %}
+                  失败
+                {% elseif orderLog.type == 'pay_success' %}
+                  成功
+                {% elseif orderLog.type == 'pay_ignore' %}
+                  被忽略
+                {% else %} 
+                  未知
+                {% endif %}
+              </td>
+              <td>{{ orderLog.orderId}}</td>
+              <td>{{ orderLog.message | plain_text(50) }}</td>
+              <td>{{ orderLog.data | plain_text(120) }}</td>
+              <td>{{ user.nickname}}</td>
+              <td>{{ orderLog.ip}}</td>
+              <td>{{ orderLog.createdTime|date('Y-n-d H:i')}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}
 
 {% block footer %}
   <div>
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
   </div>
-</form>
 
+  <script type="text/javascript">
+    app.load('order/order-modal-detail')
+  </script>
 {% endblock %}
 

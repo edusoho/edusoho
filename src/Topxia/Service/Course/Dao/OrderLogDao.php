@@ -9,4 +9,6 @@ interface OrderLogDao
 
 	public function addLog($log);
 
+	public function findLogsByOrderId($orderId);
+
 }

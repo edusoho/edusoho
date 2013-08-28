@@ -16,4 +16,5 @@ interface OrderDao
     public function searchOrders($conditions, $orderBy, $start, $limit);
 
     public function searchOrderCount($conditions);
+
 }

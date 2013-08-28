@@ -20,4 +20,10 @@ class OrderLogDaoImpl extends BaseDao implements OrderLogDao
     	return $this->getLog($id);
     }
 
+    public function findLogsByOrderId($orderId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE orderId = ?";
+        return $this->getConnection()->fetchAll($sql, array($orderId));
+    }
+
 }

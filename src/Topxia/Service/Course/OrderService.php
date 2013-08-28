@@ -17,4 +17,6 @@ interface OrderService
 	public function searchOrders($conditions, $sort = 'latest', $start, $limit);
 
     public function searchOrderCount($conditions);
+
+    public function findOrderLogs($orderId);
 }

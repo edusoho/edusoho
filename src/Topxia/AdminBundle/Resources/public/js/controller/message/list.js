@@ -29,6 +29,9 @@ define(function(require, exports, module) {
             }); 
         });
         
+        $(".message-tr").on('click', function(){
+            $(this).find('input[name=message-item]').click();
+        });
 
     };
 
