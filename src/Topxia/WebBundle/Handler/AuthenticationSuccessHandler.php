@@ -13,7 +13,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         $this->getUserService()->markLoginInfo();
-]
+
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => true
