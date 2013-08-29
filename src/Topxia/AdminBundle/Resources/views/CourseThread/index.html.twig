@@ -28,7 +28,7 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({title:'标题', content: '内容'}, app.request.get('keywordType')) }}
+        {{ select_options({title:'标题', content: '内容', courseId:'课程编号'}, app.request.get('keywordType')) }}
       </select>
     </div>
 

@@ -49,6 +49,15 @@ class NoteServiceImpl extends BaseService implements NoteService
     {
         $conditions = array_filter($conditions);
 
+        if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
+            if (!in_array($conditions['keywordType'], array('content', 'courseId'))) {
+                throw $this->createServiceException('keywordType参数不正确');
+            }
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+        }
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
         if (isset($conditions['author'])) {
             $author = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
