@@ -13,41 +13,22 @@ class SettingController extends BaseController
     {
         $site = $this->getSettingService()->get('site', array());
 
-        // if(empty($site)){
-        //     $site = array(
-        //         'name'=>'',
-        //         'url'=>'',
-        //         'logo'=>'',
-        //         'master_email'=>'',
-        //         'icp'=>'',
-        //         'analytics'=>'',
-        //         'status'=>'closed',
-        //         'closed_note'=>'',
-        //         );
-        // }
-
-        $form = $this->createFormBuilder()
-            ->add('name', 'text')
-            ->add('slogan', 'text')
-            ->add('logo', 'text')
-            ->add('seo_keywords', 'text')
-            ->add('seo_description', 'text')
-            ->add('homepage_template', 'choice', array(
-                'choices' => array(
-                    'less' => '少量课程模板',
-                    'more' => '大量课程模板'
-                ),
-            ))
-            ->add('master_email', 'text')
-            ->add('icp', 'text')
-            ->add('status', 'choice', array(
-                'expanded' => true, 
-                'choices' => array('open' => '开放', 'closed' => '关闭'),
-            ))
-            ->add('analytics', 'textarea')
-            ->add('closed_note', 'textarea')
-            ->setData($site)
-            ->getForm();
+        if(empty($site)){
+            $site = array(
+                'name'=>'',
+                'slogan'=>'',
+                'url'=>'',
+                'logo'=>'',
+                'seo_keywords'=>'',
+                'seo_description'=>'',
+                'master_email'=>'',
+                'icp'=>'',
+                'analytics'=>'',
+                'status'=>'closed',
+                'closed_note'=>'',
+                'homepage_template'=>'less'
+                );
+        }
 
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
