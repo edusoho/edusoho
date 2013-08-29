@@ -16,19 +16,19 @@
 	<div class="row">
 		<div class="col-lg-8 two-col-main">
 			{% if 'title' in type.basicFields %}
-				<div class="control-group">
-				  <label for="content-title-field">标题</label>
+				<div class="form-group">
+				  <label for="content-title-field" class="control-label">标题</label>
 				  <div class="controls">
-				  	<input id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
+				  	<input class="form-control" id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
 				  </div>
 				</div>
 			{% endif %}
 
 			{% if 'body' in type.basicFields %}
-				<div class="control-group">
-					<label for="content-body-field">正文</label>
+				<div class="form-group">
+					<label for="content-body-field" class="control-label">正文</label>
 					<div class="controls">
-						<textarea id="content-body-field" rows="16" name="body" data-role="editor-field">{{ field_value(content, 'body') }}</textarea>
+						<textarea class="form-control" id="content-body-field" rows="16" name="body" data-role="editor-field">{{ field_value(content, 'body') }}</textarea>
 					</div>
 				</div>
 			{% endif %}
@@ -39,12 +39,14 @@
 		</div>
 		<div class="col-lg-4 two-col-side">
 			{% if 'alias' in type.basicFields %}
-				<div class="panel">
+				<div class="panel panel-default">
 				  <div class="panel-heading">URL路径</div>
-				  <div class="control-group">
-				  	<div class="controls">
-						  <input type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
-				  	</div>
+				  <div class="panel-body">
+					  <div class="form-group">
+					  	<div class="controls">
+							  <input class="form-control" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
+					  	</div>
+					  </div>
 				  </div>
 				</div>
 			{% endif %}
@@ -70,48 +72,52 @@
 			{% endif %}
 
 			{% if 'template' in type.basicFields %}
-				<div class="panel">
+				<div class="panel panel-default">
 				  <div class="panel-heading">模版</div>
-				  {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
-				  <select name="template">
-				  	{{ select_options(templates, field_value(content, 'template')) }}
-				  </select>
+				  <div class="panel-body">
+					  {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
+					  <select class="form-control" name="template">
+					  	{{ select_options(templates, field_value(content, 'template')) }}
+					  </select>
+				  </div>
 				</div>
 			{% endif %}
 
 			{% if 'picture' in type.basicFields %}
-				<div class="panel" id="picture-panel">
+				<div class="panel panel-default" id="picture-panel">
 					<div class="panel-heading">附图</div>
-				  <p data-role="picture-container">
-				  	{% if content.picture|default(null) %}
-				  	  <a href="{{ file_path(content.picture) }}" target="_blank">
-					  	  <img src="{{ file_path(content.picture) }}" class="img-responsive">
-				  	  </a>
-				  	{% endif %}
-				  </p>
-				  <p> <input type="file" name="picture"> </p>
+					<div class="panel-body">
+					  <p data-role="picture-container">
+					  	{% if content.picture|default(null) %}
+					  	  <a href="{{ file_path(content.picture) }}" target="_blank">
+						  	  <img src="{{ file_path(content.picture) }}" class="img-responsive">
+					  	  </a>
+					  	{% endif %}
+					  </p>
+					  <p> <input type="file" name="picture"> </p>
+					</div>
 				</div>
 			{% endif %}
 
-			<div class="panel">
+			<div class="panel panel-default">
 				<div class="panel-heading">设置</div>
+				<div class="panel-body">
+					<div>
+						<label>发布时间</label><input type="text" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+						<div class="help-block">内容条目默认按发布时间的倒序显示</div>
+					</div>
 
-				<div>
-					<label>发布时间</label><input type="text" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
-					<div class="help-block">内容条目默认按发布时间的倒序显示</div>
-				</div>
+					<div class="checkbox">
+						<label><input type="checkbox" name="promoted" value="1" {% if field_value(content, 'promoted', 1) %} checked="checked" {% endif %}> 在列：<span class="text-muted">在列表中显示</span></label>
+					</div>
 
-				<div class="checkbox">
-					<label><input type="checkbox" name="promoted" value="1" {% if field_value(content, 'promoted', 1) %} checked="checked" {% endif %}> 在列：<span class="text-muted">在列表中显示</span></label>
+					<div class="checkbox">
+						<label><input type="checkbox" name="sticky" value="1" {% if field_value(content, 'sticky') %} checked="checked" {% endif %}> 置顶：<span class="text-muted">内容条目显示在列表顶部</span></label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" name="featured" value="1" {% if field_value(content, 'featured') %} checked="checked" {% endif %}> 头条：<span class="text-muted">在头条区域显示</span></label>
+					</div>
 				</div>
-
-				<div class="checkbox">
-					<label><input type="checkbox" name="sticky" value="1" {% if field_value(content, 'sticky') %} checked="checked" {% endif %}> 置顶：<span class="text-muted">内容条目显示在列表顶部</span></label>
-				</div>
-				<div class="checkbox">
-					<label><input type="checkbox" name="featured" value="1" {% if field_value(content, 'featured') %} checked="checked" {% endif %}> 头条：<span class="text-muted">在头条区域显示</span></label>
-				</div>
-
 			</div>
 
 		</div>
