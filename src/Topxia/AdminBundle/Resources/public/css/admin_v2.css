@@ -10,7 +10,7 @@ textarea {
 legend {
   font-size: 16px;
   background: #fafafa;
-  padding-left: 20px;
+  padding: 8px 20px;
 }
 
 .width-input {
@@ -58,7 +58,6 @@ legend {
 
   .modal-dialog-xlarge {
     width: 978px;
-    margin-left: -489px;
   }
 
 

@@ -17,13 +17,14 @@
       <div class="col-lg-2 control-label">{{ form_label(form.name, '网站名称') }}</div>
       <div class="col-lg-8 controls">{{ form_widget(form.name, {attr:{class:'form-control'}}) }}</div>
     </div>
+
     <div class="form-group">
-      <div class="col-lg-2 control-label">{{ form_label(form.url, '网站域名') }}</div>
+      <div class="col-lg-2 control-label">{{ form_label(form.slogan, '网站副标题') }}</div>
       <div class="col-lg-8 controls">
-        {{ form_widget(form.url, {attr:{class:'form-control'}}) }}
-        <p class="help-block">以"http://"或"https://"开头</p>
+        {{ form_widget(form.slogan, {attr:{class:'form-control'}}) }}
       </div>
     </div>
+
     <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.logo, '网站LOGO') }}</div>
       <div class="col-lg-8 controls">
@@ -31,6 +32,28 @@
         <p class="help-block">填写网站logo的文件路径地址。</p>
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.seo_keywords, 'SEO关键词') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.seo_keywords, {attr:{class:'form-control'}}) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.seo_description, 'SEO描述信息') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.seo_description, {attr:{class:'form-control'}}) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-2 control-label">{{ form_label(form.homepage_template, '首页模版') }}</div>
+      <div class="col-lg-8 controls">
+        {{ form_widget(form.homepage_template, {attr:{class:'form-control'}}) }}
+      </div>
+    </div>
+
     <div class="form-group">
       <div class="col-lg-2 control-label">{{ form_label(form.master_email, '管理员邮箱地址') }}</div>
       <div class="col-lg-8 controls">{{ form_widget(form.master_email, {attr:{class:'form-control'}}) }}</div>

@@ -15,8 +15,16 @@ class SettingController extends BaseController
 
         $form = $this->createFormBuilder()
             ->add('name', 'text')
-            ->add('url', 'text')
+            ->add('slogan', 'text')
             ->add('logo', 'text')
+            ->add('seo_keywords', 'text')
+            ->add('seo_description', 'text')
+            ->add('homepage_template', 'choice', array(
+                'choices' => array(
+                    'less' => '少量课程模板',
+                    'more' => '大量课程模板'
+                ),
+            ))
             ->add('master_email', 'text')
             ->add('icp', 'text')
             ->add('status', 'choice', array(
@@ -273,8 +281,6 @@ class SettingController extends BaseController
             $this->getLogService()->searchLogCount($conditions),
             30
         );
-
-        $this->getLogService()->error("Setting", "logs", "查询日志");
 
         $logs = $this->getLogService()->searchLogs(
             $conditions, 

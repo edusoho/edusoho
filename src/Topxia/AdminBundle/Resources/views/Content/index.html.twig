@@ -17,7 +17,7 @@
   <h1 class="pull-left">{{ typeName }}管理</h1>
 </div>
 
-<form class="well btn-small form-inline">
+<form class="well well-sm form-inline">
 	<div class="form-group">
 		<select class="form-control" name="status">
 		  {{ select_options(dict('contentStatus'), app.request.query.get('status'), '--所有状态--') }}
