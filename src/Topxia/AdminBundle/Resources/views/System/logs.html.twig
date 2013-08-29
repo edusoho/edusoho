@@ -10,66 +10,56 @@
 
 {{ web_macro.flash_messages() }}
 
-<form class="well btn-small" action="{{ path('admin_setting_logs') }}" 
+<form class="well well-sm form-inline" action="{{ path('admin_setting_logs') }}" 
 method="get">
-<div class="row">
-  <div class="col-lg-2">
-    {{ form_widget(form.startDateTime, {attr:{'placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+
+  <div class="form-group">
+    {{ form_widget(form.level, {attr:{class:'form-control'}}) }}
   </div>
 
-  <div class="col-lg-2">
-    {{ form_widget(form.endDateTime, {attr:{'placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+  <div class="form-group">
+    {{ form_widget(form.startDateTime, {attr:{class:'form-control', 'placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
   </div>
 
-  <div class="col-lg-2">
-    {{ form_widget(form.level) }}
-  </div>  
+  <div class="form-group">
+    {{ form_widget(form.endDateTime, {attr:{class:'form-control', 'placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+  </div>
 
 
-  <div class="col-lg-3">
-    {{ form_widget(form.nickname, {attr:{placeholder:'用户搜索， 非模糊搜索'}}) }}
-  </div>  
+
+  <div class="form-group">
+    {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'用户昵称'}}) }}
+  </div>
 
   <button class="btn btn-primary">搜索</button>
-  {{ form_rest(form) }}
-</div>
+
 </form>
 
-{% if logs %}
-	{% set levels = {'info':'提示', 'warning':'警告', 'error':'错误'} %}
 	<table class="table table-hover">
-			<tr>
-				<th>用户</th>
-				<th>模块</th>
-				<th>动作</th>
-				<th>信息</th>
-				<th>等级</th>
-				<th>时间</th>
-			</tr>		
-
+		<tr>
+			<th width="15%">用户</th>
+			<th width="15%">操作</th>
+			<th width="40%">信息</th>
+			<th width="10%">日志等级</th>
+			<th width="20%">时间/IP</th>
+		</tr>		
 		{% for log in logs %}
-			{% if log.level == "info" %}
-				<tr class="success">
-			{% elseif log.level == "warning" %}
-				<tr class="warning">
-			{% elseif log.level == "error" %}
-				<tr class="danger">
-			{% endif %}
-				<td>{{ users[log.userId].nickname }}</td>
-				<td>{{ log.module }}</td>
-				<td>{{ log.action }}</td>
+			<tr>
+				<td>{{ admin_macro.user_link(users[log.userId]|default(null)) }}</td>
+				<td>{{ log.module }}.{{ log.action }}</td>
 				<td>{{ log.message }}</td>
-				<td>{{ levels[log.level] }}</td>
-				<td>{{ log.createdTime|date("Y-m-d H:i:s") }}</td>
+				<td>{{ dict('logLevel:html')[log.level]|raw }}</td>
+				<td>
+					<span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
+					<br />
+					<span class="text-muted text-sm">{{ log.ip }}</span>
+				</td>
 			</tr>
+		{% else %}
+		  <tr><td colspan="5">无日志记录</tr>
 		{% endfor %}
 	</table>
-{% else %}
-	<p>无日志记录</p>
-{% endif %}
 
-{% if paginator is defined %}
 	{{ web_macro.paginator(paginator) }}
-{% endif %}
 
 {% endblock %}

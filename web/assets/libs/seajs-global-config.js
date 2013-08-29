@@ -22,17 +22,9 @@ seajs.config({
 		"jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",
 		"jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
-		'jquery.toastr': {
-			src: 'jquery/toastr/1.0.2/toastr.js',
-			deps: ['jquery']
-		},
 		'jquery.jcrop':  {
 			src: 'jquery-plugin/jcrop/0.9.12/jcrop.js',
 			deps: ['jquery', 'jquery.jcrop-css']
-		},
-		'jquery.ui': {
-			src: 'jquery/ui/1.10.3/jquery-ui-custom.min.js',
-			deps: ['jquery']
 		},
 		'bootstrap': {
 			src: 'bootstrap-rc/3.0.0/bootstrap.js',
@@ -52,8 +44,7 @@ seajs.config({
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'ckeditor': 'ckeditor/ckeditor.js',
 		'video-js': 'gallery2/video-js/4.0.4/video-js',
-		'swfupload': 'gallery2/swfupload/2.2.0/swfupload-debug',
-		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug',
+		'swfupload': 'gallery2/swfupload/2.2.0/swfupload-debug'
 	},
 
 	// 预加载项

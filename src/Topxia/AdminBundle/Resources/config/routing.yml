@@ -97,6 +97,10 @@ admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
 
+admin_user_logs:
+    pattern:  /user/logs
+    defaults: { _controller: TopxiaAdminBundle:User:logs }
+
 admin_user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
@@ -274,10 +278,6 @@ admin_setting_video:
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
-
-admin_setting_logs:
-    pattern:  /setting/logs
-    defaults: { _controller: TopxiaAdminBundle:Setting:logs }
 
 admin_category:
     pattern:  /category

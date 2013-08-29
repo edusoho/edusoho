@@ -58,7 +58,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+        $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course')
             ->andWhere('status = :status')
             ->andWhere('title LIKE :titleLike')
@@ -66,6 +66,21 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('tagId LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan');
+
+        if (isset($conditions['categoryIds'])) {
+            $categoryIds = array();
+            foreach ($conditions['categoryIds'] as $categoryId) {
+                if (ctype_digit($categoryId)) {
+                    $categoryIds[] = $categoryId;
+                }
+            }
+            if ($categoryIds) {
+                $categoryIds = join(',', $categoryIds);
+                $builder->andStaticWhere("categoryId IN ($categoryIds)");
+            }
+        }
+
+        return $builder;
     }
 
     public function addCourse($course)

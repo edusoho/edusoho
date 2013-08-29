@@ -12,6 +12,7 @@ class SettingController extends BaseController
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
+<<<<<<< HEAD
         if(empty($site)){
             $site = array(
                 'name'=>'',
@@ -24,6 +25,31 @@ class SettingController extends BaseController
                 'closed_note'=>'',
                 );
         }
+=======
+
+        $form = $this->createFormBuilder()
+            ->add('name', 'text')
+            ->add('slogan', 'text')
+            ->add('logo', 'text')
+            ->add('seo_keywords', 'text')
+            ->add('seo_description', 'text')
+            ->add('homepage_template', 'choice', array(
+                'choices' => array(
+                    'less' => '少量课程模板',
+                    'more' => '大量课程模板'
+                ),
+            ))
+            ->add('master_email', 'text')
+            ->add('icp', 'text')
+            ->add('status', 'choice', array(
+                'expanded' => true, 
+                'choices' => array('open' => '开放', 'closed' => '关闭'),
+            ))
+            ->add('analytics', 'textarea')
+            ->add('closed_note', 'textarea')
+            ->setData($site)
+            ->getForm();
+>>>>>>> df148df1145e259a581f135bda4999c98ad42d51
 
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
@@ -216,69 +242,9 @@ class SettingController extends BaseController
         ));
     }
 
-    public function logsAction(Request $request)
-    {
-        $searchForm = $this->createLogSearchForm();
-        $searchForm->bind($request);
-        $conditions = $searchForm->getData();  
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getLogService()->searchLogCount($conditions),
-            30
-        );
-
-        $this->getLogService()->error("Setting", "logs", "查询日志");
-
-        $logs = $this->getLogService()->searchLogs(
-            $conditions, 
-            'created', 
-            $paginator->getOffsetCount(), 
-            $paginator->getPerPageCount()
-        );
-        
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:System:logs.html.twig', array(
-            'logs' => $logs,
-            'paginator' => $paginator,
-            'form' => $searchForm->createView(),
-            'users' => $users
-        ));
-    }
-
-    protected function createLogSearchForm() {
-        $form = $this->createFormBuilder()
-                ->add('startDateTime', 'text',array(
-                    'required' => false
-                ))
-                ->add('endDateTime', 'text', array(
-                    'required' => false
-                ))
-                ->add('level', 'choice', array(
-                    'choices'   => array(
-                        '' => '日志等级',
-                        'info' => '提示', 
-                        'warning' => '警告', 
-                        'error' => '错误'
-                    ),
-                    'required'  => false,
-                ))
-                ->add('nickname', 'text', array(
-                    'required' => false
-                ))
-                ->getForm();
-
-        return $form;
-    }
-
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getLogService()
-    {
-        return $this->getServiceKernel()->createService('System.LogService');        
-    }
 }
