@@ -12,7 +12,6 @@
         <a href="{{ url('admin_setting_payment') }}" class="list-group-item {% if menu == 'payment' %}active{% endif %}">支付方式</a>
         <a href="{{ url('admin_setting_mailer') }}" class="list-group-item {% if menu == 'mailer' %}active{% endif %}">电子邮件</a>
         <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
-        <a href="{{ url('admin_setting_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">日志记录</a>        
         <a href="{{ path('admin_setting_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}" style="display:none;">文件设置</a>
       </div>
     {% endblock %}
