@@ -8,30 +8,25 @@
 
 {% block main %}
 
+{% set type = app.request.get('type') %}
+{% set typeName = dict('contentType')[type] %}
+
+
 <div class="page-header clearfix">
-
-	<div class="btn-group pull-right">
-	  <button class="btn btn-primary btn-sm" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type:'article'}) }}"><span class="glyphicon glyphicon-plus"></span> 添加文章</button>
-	  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-	    <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu">
-	    <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type:'article'}) }}">添加<strong>文章</strong></a></li>
-	    <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type:'activity'}) }}">添加<strong>活动</strong></a></li>
-	    <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type:'page'}) }}">添加<strong>页面</strong></a></li>
-	  </ul>
-	</div>
-
-  <h1 class="pull-left">内容管理</h1></div>
+  <button class="btn btn-info btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type: type}) }}"><span class="glyphicon glyphicon-plus"></span> 添加{{ typeName }}</button>
+  <h1 class="pull-left">{{ typeName }}管理</h1>
+</div>
 
 <form class="well btn-small form-inline">
-	<select class="width-input" name="type">
-    {{ select_options(dict('contentType'), app.request.query.get('type'), '--所有类型--') }}
-	</select>
-	<select class="width-input" name="status">
-    {{ select_options(dict('contentStatus'), app.request.query.get('status'), '--所有状态--') }}
-	</select>
-	<input class="width-input-large" name="keywords" type="text" placeholder="关键词" value="{{ app.request.query.get('keywords') }}">
+	<div class="form-group">
+		<select class="form-control" name="status">
+		  {{ select_options(dict('contentStatus'), app.request.query.get('status'), '--所有状态--') }}
+		</select>
+	</div>
+	<div class="form-group">
+		<input class="form-control" name="keywords" type="text" placeholder="关键词" value="{{ app.request.query.get('keywords') }}">
+	</div>
+		<input type="hidden" name="type" value="{{ type }}">
 	<button class="btn btn-primary" type="submit">搜索</button>
 </form>
 

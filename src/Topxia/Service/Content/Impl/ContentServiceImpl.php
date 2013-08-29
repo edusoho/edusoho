@@ -37,6 +37,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 	private function prepareSearchConditions($conditions)
 	{
+		$conditions = array_filter($conditions);
 		if (isset($conditions['categoryId'])) {
 			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
 			$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
