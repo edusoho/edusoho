@@ -1,15 +1,18 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="{{ block.id }}">
-    <td>{{ block.code }}</td>
-    <td>{{ block.title }}</td>
-    <td>{{ block.updateTime|date('Y-n-d H:i:s') }}
+    <td>
+        {{ block.title }}
+        <br>
+        <span class="text-muted text-sm">编码：{{ block.code }}</span>
     </td>
     <td>
-     {{users[block.userId].nickname}}</td>
-    <td>
-        <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">更新内容</button>
+        {{ admin_macro.user_link(users[block.userId]|default(null)) }}
+        <br>
+        <span class="text-muted text-sm">{{ block.updateTime|date('Y-n-d H:i:s') }}</span>
     </td>
     <td>
-        <button class="btn btn-sm btn-primary edit-btn" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal">设置</button>
-       <button class="btn btn-sm delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">删除</button>
+        <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">编辑内容</button>
+        <button class="btn btn-sm btn-default edit-btn" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal">设置</button>
+       <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">删除</button>
     </td>
 </tr>
