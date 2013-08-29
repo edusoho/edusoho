@@ -27,7 +27,7 @@ class SettingController extends BaseController
                 'status'=>'closed',
                 'closed_note'=>'',
                 'homepage_template'=>'less'
-                );
+            );
         }
 
         if ($request->getMethod() == 'POST') {
@@ -196,28 +196,22 @@ class SettingController extends BaseController
     {
         $videoSetting = $this->getSettingService()->get('video', array());
 
-        $form = $this->createFormBuilder()
-            ->add('upload_mode', 'choice', array(
-                'expanded' => true, 
-                'choices' => array('local' => '网站服务器', 'cloud' => '云服务器'),
-            ))
-            ->add('cloud_access_key', 'text')
-            ->add('cloud_secret_key', 'text')
-            ->add('cloud_bucket', 'text')
-            ->setData($videoSetting)
-            ->getForm();
-
+        if(empty($videoSetting)){
+            $videoSetting = array(
+                'upload_mode'=>'local',
+                'cloud_access_key'=>'',
+                'cloud_bucket'=>'',
+                'cloud_secret_key'=>''
+            );
+        }
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $videoSetting = $form->getData();
-                $this->getSettingService()->set('video', $videoSetting);
-                $this->setFlashMessage('success', '视频设置已保存！');
-            }
+            $videoSetting = $request->request->all();
+            $this->getSettingService()->set('video', $videoSetting);
+            $this->setFlashMessage('视频设置已保存！', 'success');
         }
 
         return $this->render('TopxiaAdminBundle:System:video.html.twig', array(
-            'form' => $form->createView(),
+            'videoSetting'=>$videoSetting
         ));
     }
 

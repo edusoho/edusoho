@@ -2,7 +2,7 @@
 
 {% block title %}视频设置 - {{ parent() }}{% endblock %}
 
-{% set menu = 'file' %}
+{% set menu = 'video' %}
 
 {% block main %}
 
@@ -12,29 +12,55 @@
 
 <form class="form-horizontal" method="post" novalidate>
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.upload_mode, '上传模式') }}</div>
-    <div class="controls col-lg-8 radios">{{ form_widget(form.upload_mode) }}</div>
+    <div class="col-lg-3 control-label">
+      <label >上传模式</label>
+    </div>
+    <div class="controls col-lg-8 radios">
+      
+      <div id="upload_mode">
+        <input type="radio" id="upload_mode_0" name="upload_mode" value="local"
+        {% if videoSetting.upload_mode == 'local' %} checked="checked" {% endif %}>
+        <label for="upload_mode_0" class="required">网站服务器</label>
+        <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud"
+        {% if videoSetting.upload_mode == 'cloud' %} checked="checked" {% endif %}>
+        <label for="upload_mode_1" class="required">云服务器</label>
+      </div>
+
+    </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.cloud_access_key, '云服务器AccessKey') }}</div>
-    <div class="controls col-lg-8 radios">{{ form_widget(form.cloud_access_key) }}</div>
+    <div class="col-lg-3 control-label">
+      <label for="cloud_access_key" >云服务器AccessKey</label>
+    </div>
+    <div class="controls col-lg-8 radios">
+      <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" value="{{videoSetting.cloud_access_key}}">
+    </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.cloud_secret_key, '云服务器SecretKey') }}</div>
-    <div class="controls col-lg-8 radios">{{ form_widget(form.cloud_secret_key) }}</div>
+    <div class="col-lg-3 control-label">
+      <label for="cloud_secret_key" >云服务器SecretKey</label>
+    </div>
+    <div class="controls col-lg-8 radios">
+      <input type="text" id="cloud_secret_key" class="form-control" name="cloud_secret_key" value="{{videoSetting.cloud_secret_key}}">
+    </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.cloud_bucket, '云服务器空间名') }}</div>
-    <div class="controls col-lg-8 radios">{{ form_widget(form.cloud_bucket) }}</div>
+    <div class="col-lg-3 control-label">
+      <label for="cloud_bucket" >云服务器空间名</label>
+    </div>
+    <div class="controls col-lg-8 radios">
+      <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{videoSetting.cloud_bucket}}">
+    </div>
   </div>
 
+  <br>
+  
   <div class="row control-group">
     <div class="col-lg-3 control-label"></div>
     <div class="controls col-lg-8">
-      {{ form_rest(form) }}
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>
