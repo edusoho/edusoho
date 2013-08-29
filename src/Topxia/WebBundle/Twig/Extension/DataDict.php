@@ -55,6 +55,16 @@ class DataDict
 			'ROLE_ADMIN' => '管理员',
 			'ROLE_SUPER_ADMIN' => '超级管理员'
 		),
+		'logLevel' => array(
+			'info' => '提示',
+			'warning' => '警告',
+			'error' => '错误'
+		),
+		'logLevel:html' => array(
+			'info' => '<span>提示</span>',
+			'warning' => '<span class="text-warning">警告</span>',
+			'error' => '<span class="text-danger">错误</span>'
+		),
 	);
 
 	public static function dict($type)
