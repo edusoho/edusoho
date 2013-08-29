@@ -207,7 +207,7 @@ admin_course_order_manage:
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
 admin_course_order_detail:
-    pattern: /course/order/detail/{id}
+    pattern: /course/order/{id}/detail
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
 
 
