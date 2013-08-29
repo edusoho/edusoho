@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
 {
-
     public function embedAction($group, $layout)
     {
         $group = $this->getCategoryService()->getGroupByCode($group);

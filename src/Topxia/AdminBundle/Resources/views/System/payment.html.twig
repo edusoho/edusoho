@@ -12,64 +12,115 @@
 
 <form class="form-horizontal" method="post" novalidate>
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.enabled, '支付功能') }}</div>
-    <div class="controls col-lg-8 radios">{{ form_widget(form.enabled) }}</div>
+    <div class="col-lg-3 control-label">
+      <label >支付功能</label>
+    </div>
+    <div class="controls col-lg-8 radios">
+      
+      <div id="enabled">
+        <input type="radio" id="enabled_0" name="enabled" value="0"
+        {% if payment.enabled == 0 %} checked="checked" {% endif %}>
+        <label for="enabled_0">关闭</label>
+        <input type="radio" id="enabled_1" name="enabled" value="1" 
+        {% if payment.enabled == 1 %} checked="checked" {% endif %}>
+        <label for="enabled_1">开启</label>
+      </div>
+
+    </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.bank_gateway, '网银直连支付网关') }}</div>
-    <div class="controls col-lg-8 radios">{{ form_widget(form.bank_gateway) }}</div>
+    <div class="col-lg-3 control-label">
+      <label >网银直连支付网关</label>
+    </div>
+    <div class="controls col-lg-8 radios">
+
+      <div id="bank_gateway">
+
+        <input type="radio" id="bank_gateway_0" name="bank_gateway" value="none"
+        {% if payment.bank_gateway == 'none'%}checked="checked" {% endif %}>
+        <label for="bank_gateway_0">关闭</label>
+        <input type="radio" id="bank_gateway_1" name="bank_gateway"  value="alipay" 
+        {% if payment.bank_gateway == 'alipay'%}checked="checked" {% endif %}>
+        <label for="bank_gateway_1">支付宝</label>
+        <input type="radio" id="bank_gateway_2" name="bank_gateway"  value="tenpay"
+        {% if payment.bank_gateway == 'tenpay'%}checked="checked" {% endif %}>
+        <label for="bank_gateway_2">财付通</label></div>
+
+    </div>
   </div>
 
   <fieldset>
     <legend>支付宝</legend>
     <div class="row control-group">
-      <div class="col-lg-3 control-label">{{ form_label(form.alipay_enabled, '支付宝') }}</div>
-      <div class="controls col-lg-8 radios">{{ form_widget(form.alipay_enabled) }}</div>
+      <div class="col-lg-3 control-label">
+        <label >支付宝</label>
+      </div>
+      <div class="controls col-lg-8 radios">
+        <div id="alipay_enabled">
+          <input type="radio" id="alipay_enabled_0" name="alipay_enabled" value="0"
+          {% if payment.alipay_enabled == 0 %} checked="checked" {% endif %}>
+          <label for="alipay_enabled_0">关闭</label>
+          <input type="radio" id="alipay_enabled_1" name="alipay_enabled" value="1" 
+          {% if payment.alipay_enabled == 1 %} checked="checked" {% endif %}>
+          <label for="alipay_enabled_1">开启</label>
+        </div>
+      </div>
     </div>
 
     <div class="row control-group">
-      <div class="col-lg-3 control-label">{{ form_label(form.alipay_key, 'App Key') }}</div>
+      <div class="col-lg-3 control-label">
+        <label for="alipay_key">App Key</label>
+      </div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.alipay_key, {attr:{class:'form-control'}}) }}
+        <input type="text" id="alipay_key" name="alipay_key" class="form-control" value="{{payment.alipay_key}}">
       </div>
     </div>
 <p></p>
-    <div class="row control-group">
-      <div class="col-lg-3 control-label">{{ form_label(form.alipay_secret, 'App Secret') }}</div>
-      <div class="controls col-lg-8">
-        {{ form_widget(form.alipay_secret, {attr:{class:'form-control'}}) }}
-      </div>
-    </div>
-  </fieldset>
 
   <fieldset>
     <legend>财付通</legend>
     <div class="row control-group">
-      <div class="col-lg-3 control-label">{{ form_label(form.tenpay_enabled, '财付通') }}</div>
+      <div class="col-lg-3 control-label">
+        <label >财付通</label>
+      </div>
       <div class="controls col-lg-8 radios">
-        {{ form_widget(form.tenpay_enabled) }}
+        <div id="tenpay_enabled">
+          <input type="radio" id="tenpay_enabled_0" name="tenpay_enabled" value="0"
+          {% if payment.tenpay_enabled == 0 %} checked="checked" {% endif %}>
+          <label for="tenpay_enabled_0">关闭</label>
+          <input type="radio" id="tenpay_enabled_1" name="tenpay_enabled" value="1" 
+          {% if payment.tenpay_enabled == 1 %} checked="checked" {% endif %}>
+          <label for="tenpay_enabled_1">开启</label>
+        </div>
       </div>
     </div>
+
     <div class="row control-group">
-      <div class="col-lg-3 control-label">{{ form_label(form.tenpay_key, 'App ID') }}</div>
+      <div class="col-lg-3 control-label">
+        <label for="tenpay_key">App ID</label>
+      </div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.tenpay_key, {attr:{class:'form-control'}}) }}
+        <input type="text" id="tenpay_key" name="tenpay_key" class="form-control" value="{{payment.tenpay_key}}">
       </div>
     </div>
     <p></p>
     <div class="row control-group">
-      <div class="col-lg-3 control-label">{{ form_label(form.tenpay_secret, 'App Secret') }}</div>
+      <div class="col-lg-3 control-label">
+        <label for="tenpay_secret">App Secret</label>
+      </div>
       <div class="controls col-lg-8">
-        {{ form_widget(form.tenpay_secret, {attr:{class:'form-control'}}) }}
+        <input type="text" id="tenpay_secret" name="tenpay_secret" class="form-control" value="{{payment.tenpay_secret}}">
       </div>
     </div>
+
   </fieldset>
+
+
 </br>
   <div class="row control-group">
     <div class="col-lg-3 control-label"></div>
     <div class="controls col-lg-8">
-      {{ form_rest(form) }}
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>

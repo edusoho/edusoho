@@ -9,43 +9,35 @@ class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {   
-        $form = $this->createFormBuilder()
-            ->add('content', 'text', array('required' => false))
-            ->add('nickname', 'text', array('required' => false))
-            ->add('startDate', 'date', array(
-                'widget' => 'single_text',
-                'input' => 'timestamp',
-                'required' => false
-            ))
-            ->add('endDate', 'date',  array(
-                'widget' => 'single_text',
-                'input' => 'timestamp',
-                'required' => false
-            ))
-            ->getForm();
-        $form->bind($request);
-
-        $conditions = $form->getData();
-        $convertedConditions = $this->convertConditions($conditions);
+        $fields = $request->query->all();
+        $conditions = array(
+            'content'=>'',
+            'nickname'=>'',
+            'startDate'=>0,
+            'endDate'=>time()
+        );
+        if(!empty($fields)){
+            $conditions = $this->convertConditions($fields);
+        }
+        
         $paginator = new Paginator(
             $request,
-            $this->getMessageService()->searchMessagesCount($convertedConditions),
+            $this->getMessageService()->searchMessagesCount($conditions),
             20
         );
 
         $messages = $this->getMessageService()->searchMessages(
-            $convertedConditions,
+            $conditions,
             null,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         ); 
+
         $usersFromId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
         $usersToId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
         $users = ArrayToolkit::index(array_merge($usersFromId, $usersToId), 'id');
-
         return $this->render('TopxiaAdminBundle:Message:index.html.twig',array(
             'users'=>$users,
-            'form' => $form->createView(),
             'messages' => $messages,
             'paginator' => $paginator));
     }
@@ -71,6 +63,7 @@ class MessageController extends BaseController
             }
             $conditions['fromId'] = $user['id'];
         }
+        
         unset($conditions['nickname']);
 
         if (empty($conditions['content'])) {
@@ -84,6 +77,15 @@ class MessageController extends BaseController
         if(empty($conditions['endDate'])){
              unset($conditions['endDate']);
         }
+
+        if(isset($conditions['startDate'])){
+            $conditions['startDate'] = strtotime($conditions['startDate']);
+        }
+
+        if(isset($conditions['endDate'])){
+            $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
+
         return $conditions;
     }
 

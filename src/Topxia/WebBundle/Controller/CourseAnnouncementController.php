@@ -44,11 +44,9 @@ class CourseAnnouncementController extends BaseController
 	public function showAllAction(Request $request, $courseId)
 	{
 
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$announcements = $this->getCourseService()->findAnnouncements($course['id'], 0, 10000);
+		$announcements = $this->getCourseService()->findAnnouncements($courseId, 0, 10000);
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 		return $this->render('TopxiaWebBundle:Course:announcement-show-all-modal.html.twig',array(
-			'course'=>$course,
 			'announcements'=>$announcements,
 			'users'=>$users
 		));

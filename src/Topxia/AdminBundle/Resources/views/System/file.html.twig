@@ -12,29 +12,38 @@
 
 <form class="form-horizontal" method="post" novalidate>
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.public_directory, '公开文件存放目录名称') }}</div>
+    <div class="col-lg-3 control-label">
+      <label for="public_directory" >公开文件存放目录名称</label>
+    </div>
     <div class="controls col-lg-8">
-      {{ form_widget(form.public_directory, {attr:{class:'form-control'}} ) }}
+      <input type="text" id="public_directory" name="public_directory" class="form-control" 
+      value="{{fileSetting.public_directory}}">
     </div>
   </div>
   <p></p>
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.public_url, '公开文件WEB访问URL') }}</div>
+    <div class="col-lg-3 control-label">
+      <label for="public_url">公开文件WEB访问URL</label>
+    </div>
     <div class="controls col-lg-8">
-      {{ form_widget(form.public_url, {attr:{class:'form-control'}}) }}
+      <input type="text" id="public_url" name="public_url" class="form-control" value="{{fileSetting.public_url}}">
       <p class="help-block">如果使用当前域名，请留空</p>
     </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-3 control-label">{{ form_label(form.private_directory, '私有文件存放目录名称') }}</div>
-    <div class="controls col-lg-8">{{ form_widget(form.private_directory, {attr:{class:'form-control'}}) }}</div>
+    <div class="col-lg-3 control-label">
+      <label for="private_directory" >私有文件存放目录名称</label>
+    </div>
+    <div class="controls col-lg-8">
+      <input type="text" id="private_directory" name="private_directory" class="form-control" 
+      value="{{fileSetting.private_directory}}">
+    </div>
   </div>
 <p></p>
   <div class="row control-group">
     <div class="col-lg-3 control-label"></div>
     <div class="controls col-lg-8">
-      {{ form_rest(form) }}
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>

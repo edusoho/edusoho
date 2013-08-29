@@ -12,20 +12,24 @@
   </div>
 <div class="well well-sm">
   <form id="message-search-form" class="form-inline" action="" method="get" novalidate> 
+
       <div class="form-group">
-        {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'关键词'}}) }}
+          <input class="form-control" type="text" id="startDate" name="startDate" placeholder="起始时间">
       </div>
+
       <div class="form-group">
-        {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'发信人'}}) }}
+          <input class="form-control" type="text" id="endDate" name="endDate" placeholder="结束时间">
       </div>
+      <span></span>
       <div class="form-group">
-        {{ form_widget(form.startDate, {attr:{class:'form-control'}}) }}
+        <input type="text" id="nickname" name="nickname" class="form-control" placeholder="发信人昵称">
       </div>
+
       <div class="form-group">
-        {{ form_widget(form.endDate, {attr:{class:'form-control'}}) }}
+        <input type="text" id="content" name="content" class="form-control" placeholder="私信内容关键词">
       </div>
+
       <button class="btn btn-primary">搜索</button>
-      {{ form_rest(form) }}
   </form>
 </div>
 
