@@ -12,20 +12,19 @@ class SettingController extends BaseController
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
-<<<<<<< HEAD
-        if(empty($site)){
-            $site = array(
-                'name'=>'',
-                'url'=>'',
-                'logo'=>'',
-                'master_email'=>'',
-                'icp'=>'',
-                'analytics'=>'',
-                'status'=>'closed',
-                'closed_note'=>'',
-                );
-        }
-=======
+
+        // if(empty($site)){
+        //     $site = array(
+        //         'name'=>'',
+        //         'url'=>'',
+        //         'logo'=>'',
+        //         'master_email'=>'',
+        //         'icp'=>'',
+        //         'analytics'=>'',
+        //         'status'=>'closed',
+        //         'closed_note'=>'',
+        //         );
+        // }
 
         $form = $this->createFormBuilder()
             ->add('name', 'text')
@@ -49,7 +48,6 @@ class SettingController extends BaseController
             ->add('closed_note', 'textarea')
             ->setData($site)
             ->getForm();
->>>>>>> df148df1145e259a581f135bda4999c98ad42d51
 
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
