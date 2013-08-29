@@ -12,6 +12,11 @@
 
 <form class="well well-sm form-inline" action="{{ path('admin_setting_logs') }}" 
 method="get">
+
+  <div class="form-group">
+    {{ form_widget(form.level, {attr:{class:'form-control'}}) }}
+  </div>
+
   <div class="form-group">
     {{ form_widget(form.startDateTime, {attr:{class:'form-control', 'placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
   </div>
@@ -20,9 +25,7 @@ method="get">
     {{ form_widget(form.endDateTime, {attr:{class:'form-control', 'placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
   </div>
 
-  <div class="form-group">
-    {{ form_widget(form.level, {attr:{class:'form-control'}}) }}
-  </div>
+
 
   <div class="form-group">
     {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'用户昵称'}}) }}
@@ -34,22 +37,22 @@ method="get">
 
 	<table class="table table-hover">
 		<tr>
-			<th width="10%">模块</th>
-			<th width="10%">动作</th>
-			<th width="55%">信息</th>
-			<th width="10%">等级</th>
-			<th width="15%">用户/时间</th>
+			<th width="15%">用户</th>
+			<th width="15%">操作</th>
+			<th width="40%">信息</th>
+			<th width="10%">日志等级</th>
+			<th width="20%">时间/IP</th>
 		</tr>		
 		{% for log in logs %}
 			<tr>
-				<td>{{ log.module }}</td>
-				<td>{{ log.action }}</td>
+				<td>{{ admin_macro.user_link(users[log.userId]|default(null)) }}</td>
+				<td>{{ log.module }}.{{ log.action }}</td>
 				<td>{{ log.message }}</td>
 				<td>{{ dict('logLevel:html')[log.level]|raw }}</td>
 				<td>
-					{{ admin_macro.user_link(users[log.userId]|default(null)) }}
+					<span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
 					<br />
-					<span class="text-muted text-sm">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
+					<span class="text-muted text-sm">{{ log.ip }}</span>
 				</td>
 			</tr>
 		{% else %}
