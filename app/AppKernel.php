@@ -16,10 +16,7 @@ class AppKernel extends Kernel {
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            // new JMS\SecurityExtraBundle\JMSSecurityExtraBundle() ,
             new Topxia\WebBundle\TopxiaWebBundle(),
-            // new Leezy\PheanstalkBundle\LeezyPheanstalkBundle(),
-            // new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             );

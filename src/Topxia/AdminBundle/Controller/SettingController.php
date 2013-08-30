@@ -13,22 +13,22 @@ class SettingController extends BaseController
     {
         $site = $this->getSettingService()->get('site', array());
 
-        if(empty($site)){
-            $site = array(
-                'name'=>'',
-                'slogan'=>'',
-                'url'=>'',
-                'logo'=>'',
-                'seo_keywords'=>'',
-                'seo_description'=>'',
-                'master_email'=>'',
-                'icp'=>'',
-                'analytics'=>'',
-                'status'=>'closed',
-                'closed_note'=>'',
-                'homepage_template'=>'less'
-            );
-        }
+        $default = array(
+            'name'=>'',
+            'slogan'=>'',
+            'url'=>'',
+            'logo'=>'',
+            'seo_keywords'=>'',
+            'seo_description'=>'',
+            'master_email'=>'',
+            'icp'=>'',
+            'analytics'=>'',
+            'status'=>'open',
+            'closed_note'=>'',
+            'homepage_template'=>'less'
+        );
+
+        $site = array_merge($default, $site);
 
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
