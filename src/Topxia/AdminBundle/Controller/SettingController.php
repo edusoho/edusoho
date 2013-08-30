@@ -59,7 +59,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
             $this->getSettingService()->set('auth', $auth);
-            $this->setFlashMessage('登录/注册设置已保存！', 'success');
+            $this->setFlashMessage('success','登录/注册设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
@@ -84,7 +84,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
-            $this->setFlashMessage('电子邮件设置已保存！', 'success');
+            $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
@@ -116,7 +116,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->setFlashMessage('第三方登录设置已保存！', 'success');
+            $this->setFlashMessage('success','第三方登录设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
@@ -141,7 +141,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
             $this->getSettingService()->set('payment', $payment);
-            $this->setFlashMessage('支付方式设置已保存！', 'success');
+            $this->setFlashMessage('success', '支付方式设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
@@ -162,7 +162,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('blacklist_ip', $ips);
             $ips = $this->getSettingService()->get('blacklist_ip', array());
             $ips['ips'] =  join("\n", $ips['ips']);
-            $this->setFlashMessage('保存成功！', 'success');
+            $this->setFlashMessage('success','保存成功！');
         }
 
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
@@ -184,7 +184,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fileSetting = $request->request->all();
             $this->getSettingService()->set('file', $fileSetting);
-            $this->setFlashMessage('文件设置已保存！', 'success');
+            $this->setFlashMessage('success', '文件设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:file.html.twig', array(
@@ -207,7 +207,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $videoSetting = $request->request->all();
             $this->getSettingService()->set('video', $videoSetting);
-            $this->setFlashMessage('视频设置已保存！', 'success');
+            $this->setFlashMessage('success', '视频设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:video.html.twig', array(

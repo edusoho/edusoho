@@ -28,7 +28,7 @@ class LoginBindController extends BaseController
         if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
-                $this->setFlashMessage('绑定的用户不存在，请重新绑定。');
+                $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
                 return $this->redirect($this->generateUrl('register'));
             }
             $this->authenticateUser($user);

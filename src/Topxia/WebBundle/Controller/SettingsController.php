@@ -154,7 +154,7 @@ class SettingsController extends BaseController
             ))
         );
 
-        $this->setFlashMessage("请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。", 'success');
+        $this->setFlashMessage('success',"请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
 
         return $this->createJsonResponse(true);
     }
