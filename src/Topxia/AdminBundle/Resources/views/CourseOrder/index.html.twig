@@ -23,7 +23,7 @@
 
     <div class="form-group">
       <select class="form-control" name="payment">
-        {{ select_options(dict('payment'), app.request.get('status'), '支付方式') }}
+        {{ select_options(dict('payment'), app.request.get('payment'), '支付方式') }}
       </select>
     </div>
 
