@@ -24,14 +24,14 @@
   {% endif %}
  method="post">
 
- <div class="row control-group form-group">
+ <div class="row form-group">
   <div class="col-lg-3 control-label"><label for="name">名称</label></div>
   <div class="col-lg-8 controls"> 
     <input class="form-control" type="text" id="name" value="{{navigation.name}}" name="name"></div>
 </div>
 <p></p>
 
-<div class="row control-group form-group">
+<div class="row form-group">
   <div class="col-lg-3 control-label"><label for="url">链接地址</label></div>
   <div class="col-lg-8 controls"> <input class="form-control" type="text" id="url" value="{{navigation.url}}" name="url" ></div>
 </div>
@@ -39,9 +39,9 @@
 <p></p>
 
 
-<div class="row control-group form-group">
+<div class="row form-group">
   <div class="col-lg-3 control-label"><label for="sequence">显示顺序</label>
-   <p style="color:green">(从左至右排序,请填数字)</p>
+   <p class="help-block">(从左至右排序,请填数字)</p>
  </div>
   <div class="col-lg-8 controls"> <input class="form-control" type="text" id="sequence" value="{{navigation.sequence}}" name="sequence" ></div>
 </div>
@@ -49,7 +49,7 @@
 
 <input type="hidden" name="type" value="{{ navigation.type }}" >
 
-<div class="row control-group">
+<div class="row form-group">
           <div class="col-lg-3 control-label"><label>新开窗口</label></div>
           <div class="col-lg-8 controls radios"> 
             <div id="isNewWin">
@@ -63,7 +63,7 @@
           </div>
 </div>
 
-<div class="row control-group">
+<div class="row form-group">
       <div class="col-lg-3 control-label">
         <label>状态</label>
       </div>

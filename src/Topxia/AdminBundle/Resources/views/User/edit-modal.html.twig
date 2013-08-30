@@ -7,64 +7,108 @@
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
 
-<div class="row control-group">
-            <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
-            <div class="col-lg-7 controls">{{ form_widget(form.truename) }}</div>
-          </div>
+  <div class="row form-group">
+    <div class="col-lg-2 control-label">
+      <label for="truename">姓名</label>
+    </div>
+    <div class="col-lg-7 controls">
+      <input type="text" id="truename" name="truename" class="form-control" value="{{profile.truename}}" >
+    </div>
+  </div>
 
-          <div class="row control-group">
-            <div class="col-lg-2 control-label">{{ form_label(form.gender, '性别') }}</div>
-            <div class="col-lg-7 controls radios">{{ form_widget(form.gender) }}</div>
-          </div>
+  <div class="row form-group">
+    <div class="col-lg-2 control-label">
+      <label for="gender">性别</label>
+    </div>
+    <div class="col-lg-7 controls radios">
+      <div id="gender">
+        <input type="radio" id="gender_0" name="gender" value="male"
+        {% if profile.gender == 'male' %} checked="checked" {% endif %}>
+        <label for="gender_0">男</label>
 
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.job, '职业') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.job) }} </div>
-          </div>
+        <input type="radio" id="gender_1" name="gender" value="female"
+        {% if profile.gender == 'female' %} checked="checked" {% endif %}>
+        <label for="gender_1">女</label>
+      </div>
 
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.title) }} </div>
-          </div>
+    </div>
+  </div>
 
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.signature, '个人签名') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.signature) }} </div>
-          </div>          
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="job">职业</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
+     </div>
+    </div>
 
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.about, '自我介绍') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.about) }} </div>
-          </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="title">头衔</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="title" name="title" class="form-control" value="{{profile.title}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="signature">个人签名</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="signature" name="signature" class="form-control" value="{{profile.signature}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="about">自我介绍</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <textarea id="about" name="about">{{profile.about}}</textarea>
+      </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="site">个人主页</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="site" name="site" class="form-control" value="{{profile.site}}">
+     </div>
+    </div>
+    <p></p>
+  <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="weibo">微博</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="weibo" name="weibo" class="form-control" value="{{profile.weibo}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="qq">QQ</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="qq" name="qq" class="form-control" value="{{profile.qq}}">
+     </div>
+    </div>
+    <p></p>
+    <div class="row form-group">
+      <div class="col-lg-2 control-label"> 
+        <label for="weixin">微信</label>
+      </div>
+      <div class="col-lg-7 controls">
+        <input type="text" id="weixin" name="weixin" class="form-control" value="{{profile.weixin}}">
+     </div>
+    </div>            
 
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.site, '个人主页') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.site) }} </div>
-          </div>   
-
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.weibo, '微博') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.weibo) }} </div>
-          </div>
-
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.weixin, '微信') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.weixin) }} </div>
-          </div>         
-
-          <div class="row control-group">
-            <div class="col-lg-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.qq) }} </div>
-          </div>                         
-
-          <div class="row">
-            <div class="col-lg-7 col-offset-2">
-              {{ form_rest(form) }}
-            </div>
-          </div>
-
-      <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 		  <button type="submit" class="btn btn-primary pull-right">保存</button>
+      <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 </form>
  
   <script>app.load('user/edit-modal')</script>

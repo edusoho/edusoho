@@ -11,7 +11,6 @@ use Topxia\Common\Paginator;
 
 class BlockController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $paginator = new Paginator(

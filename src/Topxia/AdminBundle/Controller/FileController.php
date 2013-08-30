@@ -2,14 +2,12 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use Topxia\AdminBundle\Form\FileUploadType;
 
 class FileController extends BaseController
 {
     public function indexAction(Request $request)
     {
-
     	$form = $this->buildFileSearchForm();
     	$form->bind($request);
     	$conditions = $form->getData();

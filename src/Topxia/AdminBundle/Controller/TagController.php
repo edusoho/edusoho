@@ -87,11 +87,4 @@ class TagController extends BaseController
 		return $tag;
 	}
 
-	private function getCreateForm($tag = array())
-	{
-		$form = $this->createFormBuilder($tag)
-			->add('name', 'text')
-			->getForm();
-		return $form;
-	}
 }

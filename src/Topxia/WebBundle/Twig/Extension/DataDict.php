@@ -55,6 +55,11 @@ class DataDict
 			'ROLE_ADMIN' => '管理员',
 			'ROLE_SUPER_ADMIN' => '超级管理员'
 		),
+		'userKeyWordType' => array(
+			'nickname' => '昵称',
+			'email' => '邮件地址',
+			'loginIp' => '登陆IP'
+		),
 		'logLevel' => array(
 			'info' => '提示',
 			'warning' => '警告',

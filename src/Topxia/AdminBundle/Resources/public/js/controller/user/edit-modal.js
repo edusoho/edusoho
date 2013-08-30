@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 
-		CKEDITOR.replace('profile_about', {
+		CKEDITOR.replace('about', {
                 height: 150,
                 resize_enabled: false,
                 forcePasteAsPlainText: true,
@@ -27,7 +27,7 @@ define(function(require, exports, module) {
             		return false;
             	}
             	
-            	CKEDITOR.instances['profile_about'].updateElement();
+            	CKEDITOR.instances['about'].updateElement();
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
 					Notify.success('用户信息保存成功');
@@ -40,23 +40,23 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="profile[truename]"]',
+            element: '[name="truename"]',
             rule: 'chinese minlength{min:2} maxlength{max:5}'
         });
 
         validator.addItem({
-            element: '[name="profile[qq]"]',
+            element: '[name="qq"]',
             rule: 'qq'
         });
 
         validator.addItem({
-            element: '[name="profile[weibo]"]',
+            element: '[name="weibo"]',
             rule: 'url',
             errormessageUrl: '网站地址不正确，须以http://weibo.com开头。'
         });
 
         validator.addItem({
-            element: '[name="profile[site]"]',
+            element: '[name="site"]',
             rule: 'url',
             errormessageUrl: '网站地址不正确，须以http://开头。'
         });

@@ -15,19 +15,21 @@
 <form class="well well-sm form-inline">
 
   <div class="form-group">
-    {{ form_widget(form.level, {attr:{class:'form-control'}}) }}
+    <select class="form-control" name="level">
+        {{ select_options(dict('logLevel'), app.request.query.get('level'), '--所有等级--') }}
+    </select>
   </div>
 
   <div class="form-group">
-    {{ form_widget(form.startDateTime, {attr:{class:'form-control', 'placeholder':'起始时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+    <input type="text" id="startDateTime" value="{{app.request.query.get('startDateTime')}}" name="startDateTime" class="form-control" placeholder="起始时间">
   </div>
 
   <div class="form-group">
-    {{ form_widget(form.endDateTime, {attr:{class:'form-control', 'placeholder':'结束时间', 'data-date-format':'yyyy-mm-dd hh:ii'}}) }}
+    <input type="text" id="endDateTime" value="{{app.request.query.get('endDateTime')}}" name="endDateTime" class="form-control" placeholder="结束时间">
   </div>
 
   <div class="form-group">
-    {{ form_widget(form.nickname, {attr:{class:'form-control', placeholder:'用户昵称'}}) }}
+    <input type="text" id="nickname" name="nickname" value="{{app.request.query.get('nickname')}}" class="form-control" placeholder="用户昵称">
   </div>
 
   <button class="btn btn-primary">搜索</button>
@@ -55,7 +57,7 @@
         </td>
       </tr>
     {% else %}
-      <tr><td colspan="5">无日志记录</tr>
+      <tr><td class="empty" colspan="5">无日志记录</tr>
     {% endfor %}
   </table>
 

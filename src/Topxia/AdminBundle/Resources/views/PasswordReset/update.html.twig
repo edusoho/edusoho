@@ -13,14 +13,14 @@
 
         {{ web_macro.flash_messages() }}
 
-        <div class="control-group">
+        <div class="form-group">
           {{ form_label(form.password, '新密码', {label_attr:{class:'control-label'}}) }}
           <div class="controls">
             {{ form_widget(form.password) }}
           </div>
         </div>
 
-        <div class="control-group">
+        <div class="form-group">
           {{ form_label(form.confirmPassword, '确认密码', {label_attr:{class:'control-label'}}) }}
           <div class="controls">
             {{ form_widget(form.confirmPassword) }}
@@ -28,7 +28,7 @@
           </div>
         </div>
 
-        <div class="control-group">
+        <div class="form-group">
           <div class="controls">
             {{ form_rest(form) }}
             <button type="submit" class="btn btn-primary">重设密码</button>

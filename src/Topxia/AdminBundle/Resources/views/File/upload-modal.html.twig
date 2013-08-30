@@ -4,14 +4,14 @@
 {% block body %}
 
 <form id="file-upload-form" class="form-horizontal" method="post" action="{{ url('file_upload', {group:'default'}) }}" enctype="multipart/form-data">
-  <div class="control-group">
+  <div class="form-group">
     <label class="control-label">请选择文件</label>
     <div class="controls">
       <input type="file" name="file" />
     </div>
   </div>
 
-  <div class="control-group" id="file-uploaded-control-group">
+  <div class="form-group" id="file-uploaded-form-group">
     <label class="control-label">已上传的文件</label>
     <div class="controls">
       <div class="control-text">
