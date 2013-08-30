@@ -14,29 +14,13 @@
     </div>
 
     <div class="form-group">
-      {{ form_label(form.termId, '分类', {label_attr:{class:'control-label'}}) }}
       <div class="controls">
-        {{ form_widget(form.termId, {required:false}) }}
       </div>
     </div>
   </div>
 
   <div class="modal-footer">
-    {{ form_rest(form) }}
     <button type="submit" class="btn btn-primary">保存</button>
   </div>
 
 </form>
-
-<script>
-$(function(){
-  var $form = $('#group-term-form');
-  $form.submit(function() {
-    $.post($form.attr('action'), $form.serialize(), function(response) {
-      console.log('aa');
-      window.location.reload();
-    }, 'json');
-    return false;
-  });
-});
-</script>
