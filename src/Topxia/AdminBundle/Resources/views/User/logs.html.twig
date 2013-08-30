@@ -43,8 +43,14 @@
       <th width="20%">时间/IP</th>
     </tr>   
     {% for log in logs %}
+      {% set user = users[log.userId]|default(null) %}
       <tr>
-        <td>{{ admin_macro.user_link(users[log.userId]|default(null)) }}</td>
+        <td>
+          {% if user %}
+            {{ admin_macro.user_link(user) }}
+          {% else %}
+            --
+          {% endif %}
         <td>{{ log.module }}.{{ log.action }}</td>
         <td>{{ log.message }}</td>
         <td>{{ dict('logLevel:html')[log.level]|raw }}</td>
