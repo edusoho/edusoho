@@ -44,18 +44,19 @@ class SettingController extends BaseController
     public function authAction(Request $request)
     {
         $auth = $this->getSettingService()->get('auth', array());
-        if(empty($auth)){
-            $auth = array(
-                'register_mode'=>'closed',
-                'agreement'=>'',
-                'email_activation_mode'=>'closed',
-                'email_activation_title'=>'',
-                'email_activation_body'=>'',
-                'welcome_methods'=>'email',
-                'welcome_title'=>'',
-                'welcome_body'=>'',
-                );
-        }
+
+        $default = array(
+            'register_mode'=>'closed',
+            'agreement'=>'',
+            'email_activation_mode'=>'closed',
+            'email_activation_title'=>'',
+            'email_activation_body'=>'',
+            'welcome_methods'=>'email',
+            'welcome_title'=>'',
+            'welcome_body'=>'',
+            );
+
+        $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
             $this->getSettingService()->set('auth', $auth);
@@ -70,17 +71,16 @@ class SettingController extends BaseController
     public function mailerAction(Request $request)
     {
         $mailer = $this->getSettingService()->get('mailer', array());
-        if(empty($mailer)){
-            $mailer = array(
-                'enabled'=>0,
-                'host'=>'',
-                'port'=>'',
-                'username'=>'',
-                'password'=>'',
-                'from'=>'',
-                'name'=>'',
-                );
-        }
+        $default = array(
+            'enabled'=>0,
+            'host'=>'',
+            'port'=>'',
+            'username'=>'',
+            'password'=>'',
+            'from'=>'',
+            'name'=>'',
+            );
+        $mailer = array_merge($default, $mailer);
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
@@ -95,24 +95,22 @@ class SettingController extends BaseController
     public function loginConnectAction(Request $request)
     {
         $loginConnect = $this->getSettingService()->get('login_bind', array());
-        if(empty($loginConnect)){
-            $loginConnect = array(
-                'enabled'=>0,
-                'weibo_enabled'=>0,
-                'weibo_key'=>'',
-                'weibo_secret'=>'',
-                'qq_enabled'=>0,
-                'qq_key'=>'',
-                'qq_secret'=>'',
-                'renren_enabled'=>0,
-                'renren_key'=>'',
-                'renren_secret'=>'',
-                'douban_enabled'=>0,
-                'douban_key'=>'',
-                'douban_secret'=>''
-                );
-        }
-
+        $default = array(
+            'enabled'=>0,
+            'weibo_enabled'=>0,
+            'weibo_key'=>'',
+            'weibo_secret'=>'',
+            'qq_enabled'=>0,
+            'qq_key'=>'',
+            'qq_secret'=>'',
+            'renren_enabled'=>0,
+            'renren_key'=>'',
+            'renren_secret'=>'',
+            'douban_enabled'=>0,
+            'douban_key'=>'',
+            'douban_secret'=>''
+            );
+        $loginConnect = array_merge($default, $loginConnect);
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
@@ -127,17 +125,16 @@ class SettingController extends BaseController
     public function paymentAction(Request $request)
     {
         $payment = $this->getSettingService()->get('payment', array());
-        if(empty($payment)){
-            $payment = array(
-                'enabled'=>0,
-                'bank_gateway'=>'',
-                'alipay_enabled'=>0,
-                'tenpay_enabled'=>0,
-                'alipay_key'=>'',
-                'tenpay_key'=>'',
-                'tenpay_secret'=>''
-                );
-        }
+        $default = array(
+            'enabled'=>0,
+            'bank_gateway'=>'none',
+            'alipay_enabled'=>0,
+            'tenpay_enabled'=>0,
+            'alipay_key'=>'',
+            'tenpay_key'=>'',
+            'tenpay_secret'=>''
+            );
+        $payment = array_merge($default, $payment);
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
             $this->getSettingService()->set('payment', $payment);
@@ -152,8 +149,10 @@ class SettingController extends BaseController
     public function ipBlacklistAction(Request $request)
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());
+
         if(!empty($ips)){
-            $ips['ips'] =  join("\n", $ips['ips']);
+            $default['ips'] =  join("\n", $ips['ips']);
+            $ips = array_merge($ips, $default);
         }
 
         if ($request->getMethod() == 'POST') {
@@ -173,13 +172,12 @@ class SettingController extends BaseController
     public function fileAction(Request $request)
     {
         $fileSetting = $this->getSettingService()->get('file', array());
-        if(empty($fileSetting)){
-            $fileSetting = array(
-                'public_directory'=>'',
-                'public_url'=>'',
-                'private_directory'=>''
-            );
-        }
+        $default = array(
+            'public_directory'=>'',
+            'public_url'=>'',
+            'private_directory'=>''
+        );
+        $fileSetting = array_merge($default, $fileSetting);
         
         if ($request->getMethod() == 'POST') {
             $fileSetting = $request->request->all();
@@ -195,15 +193,13 @@ class SettingController extends BaseController
     public function videoAction(Request $request)
     {
         $videoSetting = $this->getSettingService()->get('video', array());
-
-        if(empty($videoSetting)){
-            $videoSetting = array(
-                'upload_mode'=>'local',
-                'cloud_access_key'=>'',
-                'cloud_bucket'=>'',
-                'cloud_secret_key'=>''
-            );
-        }
+        $default = array(
+            'upload_mode'=>'local',
+            'cloud_access_key'=>'',
+            'cloud_bucket'=>'',
+            'cloud_secret_key'=>''
+        );
+        $videoSetting = array_merge($default, $videoSetting);
         if ($request->getMethod() == 'POST') {
             $videoSetting = $request->request->all();
             $this->getSettingService()->set('video', $videoSetting);
