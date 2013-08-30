@@ -451,6 +451,8 @@ class UserServiceImpl extends BaseService implements UserService
             'loginIp' => $user['currentIp'],
             'loginTime' => time(),
         ));
+
+        $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 
     public function lockUser($id)
@@ -594,6 +596,11 @@ class UserServiceImpl extends BaseService implements UserService
     private function getFileService()
     {
         return $this->createService('Content.FileService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');        
     }
 
     private function getPasswordEncoder()

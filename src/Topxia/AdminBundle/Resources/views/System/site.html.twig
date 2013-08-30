@@ -93,15 +93,8 @@
       <div class="col-lg-2 control-label">
          <label for="homepage_template">首页模版</label>
       </div>
-      <div class="col-lg-8 controls">
-        <div id="homepage_template" class="radios">
-          <input type="radio" id="homepage_template_0" name="homepage_template"  value="less"  
-          {% if site.homepage_template == 'less' %} checked="checked" {% endif %}>
-          <label for="homepage_template_0">少量课程模板</label>
-          <input type="radio" id="homepage_template_1" name="homepage_template"  value="more"
-          {% if site.homepage_template == 'more' %} checked="checked" {% endif %} >
-          <label for="homepage_template_1">大量课程模板</label>
-        </div>
+      <div class="col-lg-8 controls radios">
+        {{ radios('homepage_template', {less:'少量课程模板', more: '大量课程模板'}, site.homepage_template) }}
       </div>
     </div>
   </fieldset>
@@ -136,16 +129,8 @@
       <div class="col-lg-2 control-label">
         <label >网站状态</label>
       </div>
-      <div class="col-lg-8 controls">
-
-        <div id="status" class="radios">
-          <input type="radio" id="status_0" name="status"  value="open"  
-          {% if site.status == 'open' %} checked="checked" {% endif %}>
-          <label for="status_0">开放</label>
-          <input type="radio" id="status_1" name="status"  value="closed"
-          {% if site.status == 'closed' %} checked="checked" {% endif %} >
-          <label for="status_1">关闭</label>
-        </div>
+      <div class="col-lg-8 controls radios">
+        {{ radios('status', {open:'开放', closed:'关闭'}, site.status) }}
       </div>
     </div>
 <br>

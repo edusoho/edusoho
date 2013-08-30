@@ -6,6 +6,8 @@ use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureH
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Topxia\Service\Common\ServiceKernel;
  
 class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 {
@@ -14,19 +16,32 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
+        $message = $this->translator->trans($exception->getMessage());
+
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => false,
-                'message' => $this->translator->trans($exception->getMessage())
+                'message' => $message,
             );
             return new JsonResponse($content, 400);
         }
+
  
-        return parent::onAuthenticationFailure($request, $exception);
+        $result = parent::onAuthenticationFailure($request, $exception);
+
+        $username = $request->request->get('_username');
+        $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
+        
+        return $result;
     }
 
     public function setTranslator($translator)
     {
         $this->translator = $translator;
+    }
+
+    private function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System.LogService');
     }
 }

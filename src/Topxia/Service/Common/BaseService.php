@@ -36,11 +36,9 @@ abstract class BaseService
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
-        if (null === $token = $this->getContainer()->get('security.context')->getToken()) {
-            throw new \LogicException('The Authentication token is not available.');
-        }
+        $token = $this->getContainer()->get('security.context')->getToken();
 
-        if (!is_object($user = $token->getUser())) {
+        if ( empty($token) or !is_object($user = $token->getUser())) {
             $user = new CurrentUser();
             $user->fromArray(array(
                 'id' => 0,
