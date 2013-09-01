@@ -20,6 +20,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group add
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testAddCategoryWithNoParentId()
     {
@@ -38,7 +39,6 @@ class CategoryServiceTest extends BaseTestCase
     /**
     * @group add 
     * @expectedException Topxia\Service\Common\ServiceException
-    * @expectedExceptionMessage 父分类不存在
     */
     public function testAddCategoryWithNotExistParentId()
     {
@@ -49,7 +49,6 @@ class CategoryServiceTest extends BaseTestCase
     /**
      * @group add
      * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage 分类名称不能为空
      */
     public function testAddCategoryWithEmptyCategoryName()
     {
@@ -61,7 +60,6 @@ class CategoryServiceTest extends BaseTestCase
     /**
     * @group add
     * @expectedException Topxia\Service\Common\ServiceException
-    * @expectedExceptionMessage 分类Group不存在!
     */
     public function testAddCategoryWithNotExistGroupId()
     {
@@ -72,7 +70,6 @@ class CategoryServiceTest extends BaseTestCase
     /**
      * @group add
      * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage code已被占用
      */
     public function testAddCategoryWithCodeAlreayExist()
     {
@@ -84,6 +81,7 @@ class CategoryServiceTest extends BaseTestCase
     
      /**
      * @group get
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetCategory()
     {
@@ -104,6 +102,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetCategoryByCode()
     {
@@ -115,6 +114,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetCategoryByCodeWithNotExistCategoryCode()
     {
@@ -126,6 +126,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group get
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testfindCategories()
     {
@@ -149,6 +150,7 @@ class CategoryServiceTest extends BaseTestCase
 
      /**
      * @group get
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetCategoryTree()
     {
@@ -177,37 +179,8 @@ class CategoryServiceTest extends BaseTestCase
     }
 
     /**
-     * @group save
-     */
-    public function testSaveCategory()
-    {
-        $categoryA = array('name' => '测试分类1', 'code' => 'codeA', 'weight' => 100, 'groupId' => 1);
-
-        $saveCategoryA = $this->getCategoryService()->saveCategory($categoryA);
-        $this->assertEquals('codeA', $saveCategoryA['code']);
-        $this->assertEquals('测试分类1', $saveCategoryA['name']);
-        $this->assertEquals('1', $saveCategoryA['path']);
-        $this->assertEquals(100, $saveCategoryA['weight']);
-        $this->assertEquals(0, $saveCategoryA['parentId']);
-        $this->assertEquals(1, $saveCategoryA['groupId']);
-
-        $saveCategoryA = $this->getCategoryService()->saveCategory(array(
-            'id'=>$saveCategoryA['id'],
-            'code'=>'xxx',
-            'name'=>'xxxname',
-            'path'=>'1|2',
-            'weight'=>5,
-            'groupId'=>2));
-        $this->assertEquals('xxx', $saveCategoryA['code']);
-        $this->assertEquals('xxxname', $saveCategoryA['name']);
-        $this->assertEquals('1|2', $saveCategoryA['path']);
-        $this->assertEquals(5, $saveCategoryA['weight']);
-        $this->assertEquals(0, $saveCategoryA['parentId']);
-        $this->assertEquals(2, $saveCategoryA['groupId']);
-    }
-
-    /**
      * @group update
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateCategory()
     {
@@ -229,6 +202,7 @@ class CategoryServiceTest extends BaseTestCase
 
     /**
      * @group delete
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testDeleteCategory()
     {

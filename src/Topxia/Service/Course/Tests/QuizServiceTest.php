@@ -30,8 +30,10 @@ class QuizServiceTest extends BaseTestCase
             'level'=>'low'
             );
 
-       $createdLessonQuizItem = $this->getQuizService()->createItem($course['id'],
-            $createdLesson['id'], $lessonQuizItemInfo);
+       $createdLessonQuizItem = $this->getQuizService()->createItem(
+            $course['id'],
+            $createdLesson['id'], $lessonQuizItemInfo
+            );
 
        $this->assertNotNull($createdLessonQuizItem);
     }

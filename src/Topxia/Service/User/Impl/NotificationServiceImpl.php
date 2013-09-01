@@ -15,7 +15,6 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         $notification['createdTime'] = time();
         $notification['isRead'] = 0;
         $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
-        $this->getUserService()->waveUnreadNotification($userId, 1);
         return true;
     }
 

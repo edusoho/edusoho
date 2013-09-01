@@ -24,7 +24,7 @@ class NoteServiceTest extends BaseTestCase
             'content' => 'test lesson content 1',
         ));
 
-        $note = $this->getNoteService()->addNote(array(
+        $note = $this->getNoteService()->saveNote(array(
             'content'=>'note content',
             'lessonId'=>$lesson['id'],
             'courseId'=>$course['id']
@@ -57,7 +57,7 @@ class NoteServiceTest extends BaseTestCase
             'content' => 'test lesson content 1',
         ));
 
-        $note = $this->getNoteService()->addNote(array(
+        $note = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $lesson['id'],
             'courseId' => $course['id']
@@ -101,13 +101,13 @@ class NoteServiceTest extends BaseTestCase
             'content' => 'test lesson content 1',
         );
         $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
-        $createdNote1 = $this->getNoteService()->addNote(array(
+        $createdNote1 = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson1['id'],
             'courseId' => $createdCourse['id']
         ));
 
-        $createdNote2 = $this->getNoteService()->addNote(array(
+        $createdNote2 = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson2['id'],
             'courseId' => $createdCourse['id']
@@ -143,13 +143,13 @@ class NoteServiceTest extends BaseTestCase
             'content' => 'test lesson content 1',
         );
         $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
-        $createdNote1 = $this->getNoteService()->addNote(array(
+        $createdNote1 = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson1['id'],
             'courseId' => $createdCourse['id']
         ));
 
-        $createdNote2 = $this->getNoteService()->addNote(array(
+        $createdNote2 = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson2['id'],
             'courseId' => $createdCourse['id']
@@ -213,7 +213,7 @@ class NoteServiceTest extends BaseTestCase
             'courseId' => $createdCourse['id'],
             'userId'=>$registeredUser['id']
         );
-        $createdNote = $this->getNoteService()->addNote($noteInfo);
+        $createdNote = $this->getNoteService()->saveNote($noteInfo);
         $result = $this->getNoteService()->deleteNote($createdNote['id']);
 
         $this->assertEquals(1, $result);
@@ -253,13 +253,13 @@ class NoteServiceTest extends BaseTestCase
             'content' => 'test lesson content 1',
         );
         $createdLesson2 = $this->getCourseService()->createLesson($lessonInfo2);
-        $createdNote1 = $this->getNoteService()->addNote(array(
+        $createdNote1 = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson1['id'],
             'courseId' => $createdCourse['id']
         ));
 
-        $createdNote2 = $this->getNoteService()->addNote(array(
+        $createdNote2 = $this->getNoteService()->saveNote(array(
             'content' => 'note_content1',
             'lessonId' => $createdLesson2['id'],
             'courseId' => $createdCourse['id'],

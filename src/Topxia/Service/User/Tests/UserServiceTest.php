@@ -1414,22 +1414,22 @@ class UserServiceTest extends BaseTestCase
     /**
      * @group login
      */
-    public function testUpdateLoginInfo()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->updateLoginInfo($registeredUser['id'], array(
-            'loginIp'=>'192.168.1.2',
-            'loginTime'=>123123
-            ));
-        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
-        $this->assertEquals(123123, $registeredUser['loginTime']);
-        $this->assertEquals('192.168.1.2', $registeredUser['loginIp']);
-    }
+    // public function testUpdateLoginInfo()
+    // {
+    //     $userInfo = array(
+    //         'nickname'=>'test_nickname', 
+    //         'password'=> 'test_password',
+    //         'email'=>'test_email@email.com'
+    //     );
+    //     $registeredUser = $this->getUserService()->register($userInfo);
+    //     $this->getUserService()->updateLoginInfo($registeredUser['id'], array(
+    //         'loginIp'=>'192.168.1.2',
+    //         'loginTime'=>123123
+    //         ));
+    //     $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
+    //     $this->assertEquals(123123, $registeredUser['loginTime']);
+    //     $this->assertEquals('192.168.1.2', $registeredUser['loginIp']);
+    // }
 
     private function createUser($user)
     {
