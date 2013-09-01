@@ -5,15 +5,14 @@
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - {% if setting('site.slogan') %}{{ setting('site.slogan') }} -{% endif %} Powered by EDUSOHO{% endblock %}</title>
   <meta name="keywords" content="{% block keywords %}{% endblock %}" />
   <meta name="description" content="{% block description %}{% endblock %}" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block stylesheets %}
-    <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap-rc/3.0.0/css/bootstrap.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap-rc/3.0.0/css/bootstrap-glyphicons.css') }}" />
+    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.0.0/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap-rc/3.0.0/css/bootstrap-extends.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
@@ -27,55 +26,53 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-<div class="navbar navbar-inverse site-navbar" id="site-navbar" data-counter-url="{{ path('user_remind_counter') }}">
-  <div class="container">
-    <!-- .navbar-toggle is used as the toggle for collapsed navbar content -->
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    {% block logo %}
-      <a class="navbar-brand" href="{{ path('homepage') }}">
-        {% if setting('site.logo') %}
-          <img src="{{ asset(setting('site.logo')) }}">
-        {% else %}
-          {{ setting('site.name', 'EDUSOHO') }}
-        {% endif %}
-      </a>
-    {% endblock %}
-    <div class="nav-collapse collapse navbar-responsive-collapse">
-      {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
-      <ul class="nav navbar-nav pull-right">
-        {% if app.user %}
-          <li><a href="{{ path('my') }}"> 我的课程 </a></li>
-          <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container"><span class="glyphicon glyphicon-bell"></span>{% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
-          <li><a href="{{ path('message') }}" class="badge-container message-badge-container"><span class="glyphicon glyphicon-envelope"></span>{% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}</a></li>
-
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li class="hide"><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
-              <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
-              <li class="divider"></li>
-              {% if is_granted('ROLE_TEACHER') %}
-                <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
-              {% endif  %}
-              {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
+  <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ path('homepage') }}">
+          {% if setting('site.logo') %}
+            <img src="{{ asset(setting('site.logo')) }}">
+          {% else %}
+            {{ setting('site.name', 'EDUSOHO') }}
+          {% endif %}
+        </a>
+      </div>
+      <div class="navbar-collapse collapse">
+        {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
+        <ul class="nav navbar-nav navbar-right">
+          {% if app.user %}
+            <li><a href="{{ path('my') }}"> 我的课程 </a></li>
+            <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container"><span class="glyphicon glyphicon-bell"></span>{% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
+            <li><a href="{{ path('message') }}" class="badge-container message-badge-container"><span class="glyphicon glyphicon-envelope"></span>{% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="hide"><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
+                <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                 <li class="divider"></li>
-              {% endif %}
-              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
-            </ul>
-          </li>
-        {% else %}
-          <li><a href="{{ path('login') }}">登录</a></li>
-          <li><a href="{{ path('register') }}">注册</a></li>
-        {% endif %}
-      </ul>
-    </div><!--/.nav-collapse -->
+                {% if is_granted('ROLE_TEACHER') %}
+                  <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
+                {% endif  %}
+                {% if is_granted('ROLE_ADMIN') %}
+                  <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
+                  <li class="divider"></li>
+                {% endif %}
+                <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li><a href="{{ path('login') }}">登录</a></li>
+            <li><a href="{{ path('register') }}">注册</a></li>
+          {% endif %}
+        </ul>
+      </div><!--/.navbar-collapse -->
+    </div>
   </div>
-</div>
 
   <div id="content-container" class="container">
     {% block content %}{% endblock %}
