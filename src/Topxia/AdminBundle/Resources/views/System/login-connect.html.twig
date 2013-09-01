@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}第三方登录 - {{ parent() }}{% endblock %}
+{% block title %}登录设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'login_bind' %}
 
@@ -10,21 +10,13 @@
 <form class="form-horizontal" method="post" novalidate>
 
   <fieldset>
-    <legend>第三方登录</legend>
-    <div class="row form-group">
+    <legend>登录设置</legend>
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label >第三方登录</label>
       </div>
       <div class="controls col-lg-8 radios">
-
-        <div id="enabled">
-          <input type="radio" id="enabled_0" name="enabled" value="0"
-          {% if loginConnect.enabled == 0 %} checked="checked"  {% endif %}>
-          <label for="enabled_0" >关闭</label>
-          <input type="radio" id="enabled_1" name="enabled" value="1" 
-           {% if loginConnect.enabled == 1 %} checked="checked"  {% endif %}>
-          <label for="enabled_1" >开启</label>
-        </div>
+        {{ radios('enabled', {1:'开启', 0:'关闭'}, loginConnect.enabled) }}
       </div>
     </div>
   </fieldset>
@@ -32,23 +24,16 @@
 
   <fieldset>
     <legend>微博登录</legend>
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
           <label >微博登录</label>
       </div>
       <div class="controls col-lg-8 radios">
-        <div id="weibo_enabled">
-          <input type="radio" id="weibo_enabled_0" name="weibo_enabled" value="0"
-          {% if loginConnect.weibo_enabled == 0 %} checked="checked"  {% endif %}>
-          <label for="weibo_enabled_0" >关闭</label>
-          <input type="radio" id="weibo_enabled_1" name="weibo_enabled" value="1" 
-          {% if loginConnect.weibo_enabled == 1 %} checked="checked"  {% endif %}>
-          <label for="weibo_enabled_1" >开启</label>
-        </div>
+        {{ radios('weibo_enabled', {1:'开启', 0:'关闭'}, loginConnect.weibo_enabled) }}
       </div>
     </div>
 
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="weibo_key" >App Key</label>
       </div>
@@ -56,8 +41,8 @@
         <input type="text" id="weibo_key" name="weibo_key" class="form-control" value="{{loginConnect.weibo_key}}">
       </div>
     </div>
-    <p></p>
-    <div class="row form-group">
+
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="weibo_secret" >App Secret</label>
       </div>
@@ -69,23 +54,16 @@
 
   <fieldset>
     <legend>QQ登录</legend>
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label >QQ登录</label>
       </div>
       <div class="controls col-lg-8 radios">
-        <div id="qq_enabled">
-          <input type="radio" id="qq_enabled_0" name="qq_enabled" value="0"
-          {% if loginConnect.qq_enabled == 0 %} checked="checked"  {% endif %}>
-          <label for="qq_enabled_0" >关闭</label>
-          <input type="radio" id="qq_enabled_1" name="qq_enabled" value="1" 
-          {% if loginConnect.qq_enabled == 1 %} checked="checked"  {% endif %}>
-          <label for="qq_enabled_1" >开启</label>
-        </div>
+        {{ radios('qq_enabled', {1:'开启', 0:'关闭'}, loginConnect.qq_enabled) }}
       </div>
     </div>
 
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="qq_key" >App ID</label>
       </div>
@@ -93,8 +71,8 @@
         <input type="text" id="qq_key" name="qq_key" class="form-control" value="{{loginConnect.qq_key}}">
       </div>
     </div>
-<p></p>
-    <div class="row form-group">
+
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="qq_secret" >App Secret</label>
       </div>
@@ -106,23 +84,16 @@
 
   <fieldset>
     <legend>人人连接</legend>
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label >人人连接</label>
       </div>
       <div class="controls col-lg-8 radios">
-        <div id="renren_enabled">
-          <input type="radio" id="renren_enabled_0" name="renren_enabled" value="0"
-          {% if loginConnect.renren_enabled == 0 %} checked="checked" {% endif %}>
-          <label for="renren_enabled_0" >关闭</label>
-          <input type="radio" id="renren_enabled_1" name="renren_enabled" value="1"
-          {% if loginConnect.renren_enabled == 1 %} checked="checked" {% endif %}>
-          <label for="renren_enabled_1" >开启</label>
-        </div>
+        {{ radios('renren_enabled', {1:'开启', 0:'关闭'}, loginConnect.renren_enabled) }}
       </div>
     </div>
 
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="renren_key" >App Key</label>
       </div>
@@ -130,9 +101,8 @@
         <input type="text" id="renren_key" name="renren_key" class="form-control" value="{{loginConnect.renren_key}}">
       </div>
     </div>
-<p></p>
   
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="renren_secret" >App Secret</label>
       </div>
@@ -145,24 +115,16 @@
 
   <fieldset>
     <legend>豆瓣连接</legend>
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label >豆瓣连接</label>
       </div>
       <div class="controls col-lg-8 radios">
-        
-        <div id="douban_enabled">
-          <input type="radio" id="douban_enabled_0" name="douban_enabled" value="0"
-          {% if loginConnect.douban_enabled == 0 %} checked="checked" {% endif %} >
-          <label for="douban_enabled_0" >关闭</label>
-          <input type="radio" id="douban_enabled_1" name="douban_enabled" value="1"
-          {% if loginConnect.douban_enabled == 1 %} checked="checked" {% endif %} >
-          <label for="douban_enabled_1" >开启</label>
-        </div>
+        {{ radios('douban_enabled', {1:'开启', 0:'关闭'}, loginConnect.douban_enabled) }}
       </div>
     </div>
 
-    <div class="row form-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="douban_key" >App Key</label>
       </div>
@@ -170,8 +132,8 @@
           <input type="text" id="douban_key" name="douban_key" class="form-control" value="{{loginConnect.douban_key}}">
       </div>
     </div>
-<p></p>
-    <div class="row form-group">
+
+    <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="douban_secret">App Secret</label>
       </div>
@@ -180,11 +142,9 @@
       </div>
     </div>
   </fieldset>
-</br>
 
-  <div class="row form-group">
-    <div class="col-lg-3 control-label"></div>
-    <div class="controls col-lg-8">
+  <div class="form-group">
+    <div class="controls col-lg-offset-3 col-lg-8">
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>

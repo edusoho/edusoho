@@ -17,16 +17,7 @@
       <label >邮件发送</label>
     </div>
     <div class="controls col-lg-8 radios">
-      
-      <div id="enabled">
-        <input type="radio" id="_enabled_0" name="enabled" value="0"
-        {% if mailer.enabled == 0 %} checked="checked"  {% endif %}>
-        <label for="enabled_0" >关闭</label>
-        <input type="radio" id="_enabled_1" name="enabled" value="1" 
-        {% if mailer.enabled == 1 %} checked="checked"  {% endif %}>
-        <label for="enabled_1" >开启</label>
-      </div>
-
+      {{ radios('enabled', {1:'开启', 0:'关闭'}, mailer.enabled) }}
     </div>
   </div>
 
