@@ -33,12 +33,12 @@ class NotificationServiceTest extends BaseTestCase
 
         $this->assertEquals($user['id'], $notifications[0]['userId']);
         $this->assertEquals("default", $notifications[0]['type']);
-        $this->assertEquals(1, $notifications[0]['isRead']);
+        $this->assertEquals(0, $notifications[0]['isRead']);
         $this->assertEquals("content", $notifications[0]['content']['message']);
 
         $this->assertEquals($user['id'], $notifications[1]['userId']);
         $this->assertEquals("default", $notifications[1]['type']);
-        $this->assertEquals(1, $notifications[1]['isRead']);
+        $this->assertEquals(0, $notifications[1]['isRead']);
         $this->assertEquals("content", $notifications[1]['content']['message']);
     }
 
