@@ -491,6 +491,7 @@ password_reset_update:
 
 browser_upgrade:
     pattern:  /browser/upgrade
+    defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
 
 category_all:
     pattern: /category/all
