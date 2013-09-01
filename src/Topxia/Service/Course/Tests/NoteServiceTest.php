@@ -35,12 +35,11 @@ class NoteServiceTest extends BaseTestCase
         $this->assertEquals($note['id'], $foundNote['userId']);
     }
 
-    /**
-     * @expectedException Topxia\Service\Common\ServiceException
-     */
+
     public function testGetNoteWithNotExistNote()
     {
-        $this->getNoteService()->getNote(999);
+        $result = $this->getNoteService()->getNote(999);
+        $this->assertEquals(false, $result);
     }
 
     public function testGetUserLessonNote()
@@ -215,8 +214,7 @@ class NoteServiceTest extends BaseTestCase
         );
         $createdNote = $this->getNoteService()->saveNote($noteInfo);
         $result = $this->getNoteService()->deleteNote($createdNote['id']);
-
-        $this->assertEquals(1, $result);
+        $this->assertNull($result);
     }
 
      /**
@@ -268,7 +266,7 @@ class NoteServiceTest extends BaseTestCase
 
         $ids = array($createdNote1['id'], $createdNote2['id']);
         $result = $this->getNoteService()->deleteNotes($ids);
-        $this->assertTrue($result);
+        $this->assertNull($result);
 
     }
 

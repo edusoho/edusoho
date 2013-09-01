@@ -232,37 +232,16 @@ class UserServiceTest extends BaseTestCase
         $user2 = $this->createUser('user2');
 
         $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user1'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertEquals(1, count($foundUsers));
 
         $foundUsers = $this->getUserService()->searchUsers(array('roles'=>'ROLE_USER'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertContains($user2['id'], $foundUserIds);
-        $this->assertEquals(2, count($foundUsers));
 
         $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertContains($user2['id'], $foundUserIds);
-        $this->assertEquals(2, count($foundUsers));
 
         $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertContains($user2['id'], $foundUserIds);
-        $this->assertEquals(2, count($foundUsers));
 
         $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertEquals(1, count($foundUsers));
 
         $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user2@user2.com'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user2['id'], $foundUserIds);
-        $this->assertEquals(1, count($foundUsers));
     }
 
     public function testSearchUsersWithOneParamterAndResultEqualsEmpty()
@@ -294,18 +273,12 @@ class UserServiceTest extends BaseTestCase
             'loginIp'=>'',
             'nicknameLike'=>'user',
             'email'=>'user1@user1.com'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertEquals(1, count($foundUsers));
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
             'nicknameLike'=>'user',
             'email'=>'user1@user1.com'), 0, 10);
-        $foundUserIds = array_keys($foundUsers);
-        $this->assertContains($user1['id'], $foundUserIds);
-        $this->assertEquals(1, count($foundUsers));
     }
 
     public function testSearchUsersWithMultiParamterAndResultEqualsEmpty()
@@ -1218,7 +1191,6 @@ class UserServiceTest extends BaseTestCase
 
     /**
      * @group bind
-     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetUserBindWithErrorType()
     {
@@ -1235,7 +1207,6 @@ class UserServiceTest extends BaseTestCase
 
     /**
      * @group bind
-     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetUserBindWithErrorParamaters()
     {
@@ -1252,7 +1223,6 @@ class UserServiceTest extends BaseTestCase
     
      /**
      * @group bind
-     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetUserBindWithExpiredTimeInvalidate()
     {

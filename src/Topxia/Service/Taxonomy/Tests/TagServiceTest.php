@@ -24,7 +24,6 @@ class TagServiceTest extends BaseTestCase
     /**
      * @group add
      * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage 标签名称不能为空!
      */
     public function testAddTagWithEmptyTagName()
     {
@@ -39,8 +38,6 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage 标签名称过长!
      */
     public function testAddTagWithTooLongTagName()
     {
@@ -52,7 +49,6 @@ class TagServiceTest extends BaseTestCase
     /**
      * @group add
      * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage 标签已存在!
      */
     public function testAddMultiTagNameTag()
     {
@@ -182,7 +178,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @group update
+     * @group current
      */
     public function testUpdateTag()
     {
@@ -195,7 +191,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @group update
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateTagWithNotExistId()
     {
@@ -208,9 +204,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @group update
-     * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage 标签名称过长!
+     * @group current
      */
     public function testUpdateTagWithTooLongName()
     {
@@ -224,7 +218,6 @@ class TagServiceTest extends BaseTestCase
     /**
      * @group update
      * @expectedException Topxia\Service\Common\ServiceException
-     * @expectedExceptionMessage 标签名称不能为空!
      */
     public function testUpdateTagWithEmptyName()
     {
@@ -236,14 +229,14 @@ class TagServiceTest extends BaseTestCase
     }
 
     /**
-     * @group delete
+     * @group current
      */
     public function testDeleteTag()
     {
     	$tag = array('name' => '测试标签');
     	$tag = $this->getTagService()->addTag($tag);
-    	$this->assertEquals(1, $this->getTagService()->deleteTag($tag['id']));
-    	$this->assertEquals(0, $this->getTagService()->deleteTag($tag['id']));
+        $this->assertNull($this->getTagService()->deleteTag($tag['id']));
+        $this->assertNull($this->getTagService()->deleteTag($tag['id']));
     }
 
     /**
