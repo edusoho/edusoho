@@ -251,6 +251,14 @@ admin_setting_site:
     pattern:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:Setting:site }
 
+admin_setting_logo_upload:
+    pattern:  /setting/logo/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:logoUpload }
+
+admin_setting_logo_remove:
+    pattern:  /setting/logo/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
+
 admin_setting_auth:
     pattern:  /setting/auth
     defaults: { _controller: TopxiaAdminBundle:Setting:auth }

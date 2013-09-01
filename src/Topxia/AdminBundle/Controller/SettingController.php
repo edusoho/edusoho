@@ -41,6 +41,42 @@ class SettingController extends BaseController
         ));
     }
 
+    public function logoUploadAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("file");
+
+        if (empty($setting['public_directory'])) {
+            throw new \RuntimeException('文件存放路径尚未设置，请先设置文件存放路径。');
+        }
+        $file = $request->files->get('logo');
+
+        $filename = 'logo_' . time() . '.' . $file->guessExtension();
+        
+        $directory = "{$this->container->getParameter('kernel.root_dir')}/../web/{$setting['public_directory']}/system";
+        $file = $file->move($directory, $filename);
+
+
+        $site = $this->getSettingService()->get('site', array());
+        $site['logo'] = "{$setting['public_directory']}/system/{$filename}";
+
+        $this->getSettingService()->set('site', $site);
+
+        return $this->createJsonResponse(array(
+            'path' => $site['logo'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['logo']),
+        ));
+    }
+
+    public function logoRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("site");
+        $setting['logo'] = '';
+
+        $this->getSettingService()->set('site', $setting);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function authAction(Request $request)
     {
         $auth = $this->getSettingService()->get('auth', array());

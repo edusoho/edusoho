@@ -3,7 +3,7 @@
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
-#/app/data/udisk/*
+/app/data/udisk/*
 /app/data/private_files/*
 /build/
 /vendor/
