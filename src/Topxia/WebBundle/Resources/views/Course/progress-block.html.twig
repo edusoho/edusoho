@@ -1,5 +1,5 @@
-<div class="panel">
-  <div class="panel-heading">学习进度</div>
+<div class="panel panel-default">
+  <div class="panel-heading"><h3 class="panel-title">学习进度</h3></div>
   <div class="panel-body">
     <div class="progress">
       <div class="progress-bar" style="width: {{ progress.percent }};"></div>
@@ -7,10 +7,10 @@
     <div class="clearfix">
       <span class="text-muted">已学: <strong class="text-success">{{ progress.number }}</strong> / <strong>{{ progress.total }}</strong></span>
       {% if progress.percent == '100%' %}
-        <button class="btn btn-default btn-small disabled pull-right">您已完成全部课时的学习</button>
+        <button class="btn btn-default btn-sm disabled pull-right">您已完成全部课时的学习</button>
       {% else %}
         {% if nextLearnLesson %}
-          <a class="btn btn-primary btn-small pull-right" id="next-learn-btn" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="继续学习：{{ nextLearnLesson.title }}">继续学习</a>
+          <a class="btn btn-primary btn-sm pull-right" id="next-learn-btn" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="继续学习：{{ nextLearnLesson.title }}">继续学习</a>
         {% endif %}
       {% endif %}
     </div>

@@ -15,11 +15,6 @@ a.link-muted {
 	color: #96B1D1;
 }
 
-.btn-default {
-	background-color: #babec0;
-	border-color: #babec0;
-}
-
 .navbar {
 	min-height: 44px;
 }
@@ -82,13 +77,13 @@ a.link-muted {
 	line-height: 1.4;
 }
 
-.panel-heading h2, .panel-heading h3 {
+/*.panel-heading h2, .panel-heading h3 {
 	font-size: 18px;
 	margin: 0;
 	padding: 0;
 	line-height: 1.2;
 }
-
+*/
 .panel-col {
 	min-height: 400px;
 }
@@ -172,17 +167,14 @@ textarea {
 
   .modal-dialog-medium {
     width: 700px;
-    margin-left: -350px;
   }
 
   .modal-dialog-large {
     width: 800px;
-    margin-left: -400px;
   }
 
   .modal-dialog-xlarge {
     width: 900px;
-    margin-left: -450px;
   }
 
   .date-selects select {

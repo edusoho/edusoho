@@ -9,12 +9,12 @@
 
   <div class="row course-cover-heading">
     <div class="col-lg-5 picture">
-      <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
+      <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" class="img-responsive" />
     </div>
     <div class="col-lg-7 info">
       {% if is_granted('ROLE_ADMIN') %}
       <div class="btn-group pull-right">
-        <button class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
         </button>
         <ul class="dropdown-menu pull-right">
           <li>
@@ -69,67 +69,69 @@
   <div class="row">
     <div class="col-lg-8">
 
-      <div class="panel">
-        <ul class="nav nav-tabs mbl" id="course-nav-tabs">
-          <li class="active">
-            <a href="#course-about-pane" data-toggle="tab">课程介绍</a>
-          </li>
-          <li>
-            <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id}) }}">
-              课程评价
-              <span class="badge">{{ course.ratingNum }}</span>
-            </a>
-          </li>
-          {% if course.goals %}
-          <li>
-            <a href="#course-goal-pane" data-toggle="tab">课程目标</a>
-          </li>
-          {% endif %}
-          {% if course.audiences %}
-          <li>
-            <a href="#course-audience-pane" data-toggle="tab">适合人群</a>
-          </li>
-          {% endif %}
-        </ul>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ul class="nav nav-tabs mbl" id="course-nav-tabs">
+            <li class="active">
+              <a href="#course-about-pane" data-toggle="tab">课程介绍</a>
+            </li>
+            <li>
+              <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id}) }}">
+                课程评价
+                <span class="badge">{{ course.ratingNum }}</span>
+              </a>
+            </li>
+            {% if course.goals %}
+            <li>
+              <a href="#course-goal-pane" data-toggle="tab">课程目标</a>
+            </li>
+            {% endif %}
+            {% if course.audiences %}
+            <li>
+              <a href="#course-audience-pane" data-toggle="tab">适合人群</a>
+            </li>
+            {% endif %}
+          </ul>
 
-        <div class="tab-content">
-          <div class="tab-pane active" id="course-about-pane" class="text-left">
-            {% if course.about %}
-              {{ course.about|raw }}
-            {% else %}
-            <span class="text-muted">还没有课程介绍...</span>
+          <div class="tab-content">
+            <div class="tab-pane active" id="course-about-pane" class="text-left">
+              {% if course.about %}
+                {{ course.about|raw }}
+              {% else %}
+              <span class="text-muted">还没有课程介绍...</span>
+              {% endif %}
+            </div>
+            <div class="tab-pane" id="course-review-pane">正在载入课程评价数据...</div>
+            {% if course.goals %}
+            <div class="tab-pane" id="course-goal-pane">
+              <ul class="media-list">
+                {% for goal in course.goals  %}
+                <li class="media">
+                  <div class="pull-left">
+                    <span class="glyphicon glyphicon-flag media-object"></span>
+                  </div>
+                  <div class="media-body">{{ goal }}</div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+
+            {% if course.audiences %}
+            <div class="tab-pane" id="course-audience-pane">
+              <ul class="media-list">
+                {% for audience in course.audiences %}
+                <li class="media">
+                  <div class="pull-left">
+                    <span class="glyphicon glyphicon-user media-object"></span>
+                  </div>
+                  <div class="media-body">{{ audience }}</div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
             {% endif %}
           </div>
-          <div class="tab-pane" id="course-review-pane">正在载入课程评价数据...</div>
-          {% if course.goals %}
-          <div class="tab-pane" id="course-goal-pane">
-            <ul class="media-list">
-              {% for goal in course.goals  %}
-              <li class="media">
-                <div class="pull-left">
-                  <span class="glyphicon glyphicon-flag media-object"></span>
-                </div>
-                <div class="media-body">{{ goal }}</div>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
-
-          {% if course.audiences %}
-          <div class="tab-pane" id="course-audience-pane">
-            <ul class="media-list">
-              {% for audience in course.audiences %}
-              <li class="media">
-                <div class="pull-left">
-                  <span class="glyphicon glyphicon-user media-object"></span>
-                </div>
-                <div class="media-body">{{ audience }}</div>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
         </div>
       </div>
       {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}

@@ -1,13 +1,13 @@
     <div class="col-lg-3">
       
-      <div class="panel">
+      <div class="panel panel-default">
         <div class="panel-heading personal-about">个人简介</div>
             {% if userProfile.about %}
                {{ userProfile.about | raw }}
             {% endif %}
         </div>
         
-        <div class="panel">
+        <div class="panel panel-default">
           <div class="panel-heading">粉丝</div>
           <div class="panel-body">
             {% for follower in followers%}
@@ -19,7 +19,7 @@
           </div>
         </div>
 
-        <div class="panel">
+        <div class="panel panel-default">
           <div class="panel-heading">关注</div>
             <div class="panel-body">
             {% for following in followings%}
