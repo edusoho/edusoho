@@ -7,7 +7,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - Powered by EDUSOHO{% endblock %}</title>
+  <title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - {% if setting('site.slogan') %}{{ setting('site.slogan') }} -{% endif %} Powered by EDUSOHO{% endblock %}</title>
   <meta name="keywords" content="{% block keywords %}{% endblock %}" />
   <meta name="description" content="{% block description %}{% endblock %}" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,10 +39,16 @@
       <span class="icon-bar"></span>
     </button>
     {% block logo %}
-      <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+      <a class="navbar-brand" href="{{ path('homepage') }}">
+        {% if setting('site.logo') %}
+          <img src="{{ asset(setting('site.logo')) }}">
+        {% else %}
+          {{ setting('site.name', 'EDUSOHO') }}
+        {% endif %}
+      </a>
     {% endblock %}
     <div class="nav-collapse collapse navbar-responsive-collapse">
-      {{ render(controller('TopxiaWebBundle:Default:navigation')) }}
+      {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
       <ul class="nav navbar-nav pull-right">
         {% if app.user %}
           <li><a href="{{ path('my') }}"> 我的课程 </a></li>
@@ -74,16 +80,21 @@
   </div>
 </div>
 
-<div id="content-container" class="container">
-  {% block content %}{% endblock %}
-</div><!-- /container -->
+  <div id="content-container" class="container">
+    {% block content %}{% endblock %}
+  </div><!-- /container -->
+
+  <div class="site-footer container clearfix">
+    {% if setting('site.icp') %}
+      <div class="pull-right"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>
+    {% endif %}
+    {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+  </div>
 
   {% block bottom %}{% endblock %}
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
-
   <div id="modal" class="modal" tabindex="-1"></div>
-
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
