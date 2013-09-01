@@ -83,20 +83,25 @@ class SettingController extends BaseController
 
         $default = array(
             'register_mode'=>'closed',
-            'agreement'=>'',
-            'email_activation_mode'=>'closed',
-            'email_activation_title'=>'',
-            'email_activation_body'=>'',
-            'welcome_methods'=>'email',
-            'welcome_title'=>'',
-            'welcome_body'=>'',
-            );
+            'email_activation_mode' => '',
+            'email_activation_title' => '',
+            'email_activation_body' => '',
+            'welcome_enabled' => '',
+            'welcome_sender' => '',
+            'welcome_methods' => array(),
+            'welcome_title' => '',
+            'welcome_body' => '',
+        );
 
         $auth = array_merge($default, $auth);
+
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
+            if (empty($auth['welcome_methods'])) {
+                $auth['welcome_methods'] = array();
+            }
             $this->getSettingService()->set('auth', $auth);
-            $this->setFlashMessage('success','登录/注册设置已保存！');
+            $this->setFlashMessage('success','注册设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
@@ -150,7 +155,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->setFlashMessage('success','第三方登录设置已保存！');
+            $this->setFlashMessage('success','登录设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(

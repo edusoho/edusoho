@@ -11,116 +11,126 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" novalidate>
-  <div class="row form-group">
+  <div class="form-group">
     <div class="col-lg-3 control-label">
       <label >新用户注册</label>
     </div>
     <div class="controls col-lg-8 radios">
-      <div id="register_mode">
-        <input type="radio" id="register_mode_0" name="register_mode" value="opened" 
-        {% if auth.register_mode == 'opened' %}  checked="checked" {% endif %}>
-        <label for="register_mode_0" >开启</label>
-        <input type="radio" id="register_mode_1" name="register_mode" value="closed"
-        {% if auth.register_mode == 'closed' %}  checked="checked" {% endif %}>
-        <label for="register_mode_1" >关闭</label>
+      {{ radios('register_mode', {'opened':'开启', 'closed':'关闭'}, auth.register_mode) }}
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>新用户激活邮件设置</legend>
+
+    <div class="form-group" style="display:none;">
+      <div class="col-lg-3 control-label">
+        <label >新用户邮件激活</label>
       </div>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label for="agreement" >用户协议</label>
-    </div>
-    <div class="col-lg-8 controls">
-    <textarea id="agreement" name="agreement"  class="form-control">{{auth.agreement}}</textarea>
-  </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label >新用户邮件激活</label>
-    </div>
-    <div class="controls col-lg-8 radios">
-
-      <div id="email_activation_mode">
-        <input type="radio" id="email_activation_mode_0" name="email_activation_mode"  value="required" 
-        {% if auth.email_activation_mode == 'required' %}  checked="checked" {% endif %}>
-        <label for="email_activation_mode_0" >必须激活</label>
-        <input type="radio" id="email_activation_mode_1" name="email_activation_mode"  value="optional"
-         {% if auth.email_activation_mode == 'optional' %}  checked="checked" {% endif %}>
-        <label for="email_activation_mode_1" >推荐激活</label>
-        <input type="radio" id="email_activation_mode_2" name="email_activation_mode"  value="closed"
-       {% if auth.email_activation_mode == 'closed' %}  checked="checked" {% endif %}>
-        <label for="email_activation_mode_2" >关闭</label>
-      </div>
-
-      <div class="help-block">
-        <ul>
-          <li>必须激活：用户必须通过邮件激活，才能登录。</li>
-          <li>推荐激活：用户注册注册成功后，会发送激活邮件，但不强制激活。</li>
-          <li>关闭：用户注册时，不会出现邮件激活的步骤。</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label for="email_activation_title" >新用户激活邮件标题</label>
-    </div>
-    <div class="controls col-lg-8">
-      <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
-    </div>
-  </div>
-  <p></p>
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label for="email_activation_body">新用户激活邮件内容</label>
-    </div>
-    <div class="controls col-lg-8">
-      <textarea id="email_activation_body" name="email_activation_body" class="form-control">{{auth.email_activation_body}}</textarea>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label >发送欢迎信息</label>
-    </div>
-    <div class="controls col-lg-8 checkboxs">
-      <div id="welcome_methods">
-        <input type="checkbox" id="welcome_methods_0" name="welcome_methods[]" value="message" 
-        {% if 'message' in auth.welcome_methods %}   checked="checked" {% endif %} >
-        <label for="welcome_methods_0">站内私信</label>
-        <input type="checkbox" id="welcome_methods_1" name="welcome_methods[]" value="email"
-        {% if 'email' in auth.welcome_methods %}   checked="checked" {% endif %} >
-        <label for="welcome_methods_1">电子邮件</label>
-      </div>
-
+      <div class="controls col-lg-8 radios">
+        {{ radios('email_activation_mode', {'required':'必须激活', 'optional':'推荐激活', closed:'关闭'}, auth.email_activation_mode) }}
         <div class="help-block">
-          新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效。
+          <ul>
+            <li>必须激活：用户必须通过邮件激活，才能登录。</li>
+            <li>推荐激活：用户注册注册成功后，会发送激活邮件，但不强制激活。</li>
+            <li>关闭：用户注册时，不会出现邮件激活的步骤。</li>
+          </ul>
         </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label for="welcome_title">欢迎信息标题</label>
+    <div class="form-group">
+      <div class="col-lg-3 control-label">
+        <label for="email_activation_title" >新用户激活邮件标题</label>
+      </div>
+      <div class="controls col-lg-8">
+        <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
+      </div>
     </div>
-    <div class="controls col-lg-8">
-      <input type="text" id="welcome_title" name="welcome_title" class="form-control" value="{{auth.welcome_title}}">
+
+    <div class="form-group">
+      <div class="col-lg-3 control-label">
+        <label for="email_activation_body">新用户激活邮件内容</label>
+      </div>
+      <div class="controls col-lg-8">
+        <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
+        <div class="help-block">
+          {% verbatim %}
+          <div>变量说明：</div>
+          <ul>
+            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{sitename}} 为网站名称</li>
+            <li>{{siteurl}} 为网站的地址</li>
+          </ul>
+          {% endverbatim %}
+        </div>
+      </div>
     </div>
-  </div>
-  <p></p>
-  <div class="row form-group">
-    <div class="col-lg-3 control-label">
-      <label for="welcome_body">欢迎信息内容</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>欢迎信息设置</legend>
+
+    <div class="form-group" style="display:none;">
+      <div class="col-lg-3 control-label">
+        <label>发送欢迎信息</label>
+      </div>
+      <div class="controls col-lg-8 checkboxs">
+        {{ checkboxs('welcome_methods', {'message':'站内私信', 'email':'电子邮件'}, auth.welcome_methods) }}
+        <div class="help-block">新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效。</div>
+      </div>
     </div>
-    <div class="controls col-lg-8">
-      <textarea id="welcome_body" name="welcome_body" class="form-control">{{auth.welcome_body}}</textarea>
+
+    <div class="form-group">
+      <div class="col-lg-3 control-label">
+        <label for="welcome_title">发送欢迎信息</label>
+      </div>
+      <div class="controls col-lg-8 radios">
+        {{ radios('welcome_enabled', {'opened':'开启', 'closed':'关闭'}, auth.welcome_enabled) }}
+        <div class="help-block">欢迎信以站内私信的方式，发送给新用户。</div>
+      </div>
     </div>
-  </div>
-<p></p>
-  <div class="row form-group">
+
+    <div class="form-group">
+      <div class="col-lg-3 control-label">
+        <label for="welcome_sender">欢迎信息发送方</label>
+      </div>
+      <div class="controls col-lg-8">
+        <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
+        <div class="help-block">通常为这个网站的管理员，请输入用户昵称。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-3 control-label">
+        <label for="welcome_title">欢迎信息标题</label>
+      </div>
+      <div class="controls col-lg-8">
+        <input type="text" id="welcome_title" name="welcome_title" class="form-control" value="{{auth.welcome_title}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-3 control-label">
+        <label for="welcome_body">欢迎信息内容</label>
+      </div>
+      <div class="controls col-lg-8">
+        <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{auth.welcome_body}}</textarea>
+        <div class="help-block">
+          {% verbatim %}
+          <div>变量说明：</div>
+          <ul>
+            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{sitename}} 为网站名称</li>
+            <li>{{siteurl}} 为网站的地址</li>
+          </ul>
+          {% endverbatim %}
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
     <div class="col-lg-3 control-label"></div>
     <div class="controls col-lg-8">
       <button type="submit" class="btn btn-primary">提交</button>  

@@ -10,6 +10,7 @@ class HtmlExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('select_options', array($this, 'selectOptions'), $options),
             new \Twig_SimpleFunction('radios', array($this, 'radios'), $options),
+            new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
         );
     }
@@ -56,6 +57,23 @@ class HtmlExtension extends \Twig_Extension
                 $html .= "<label><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" checked=\"checked\"> {$label}</label>";
             } else {
                 $html .= "<label><input type=\"radio\" name=\"{$name}\" value=\"{$value}\"> {$label}</label>";
+            }
+        }
+        return $html;
+    }
+
+    public function checkboxs($name, $choices, $checkeds = array())
+    {
+        $html = '';
+        if (!is_array($checkeds)) {
+            $checkeds = array($checkeds);
+        }
+
+        foreach ($choices as $value => $label) {
+            if (in_array($value, $checkeds)) {
+                $html .= "<label><input type=\"checkbox\" name=\"{$name}[]\" value=\"{$value}\" checked=\"checked\"> {$label}</label>";
+            } else {
+                $html .= "<label><input type=\"checkbox\" name=\"{$name}[]\" value=\"{$value}\"> {$label}</label>";
             }
         }
         return $html;
