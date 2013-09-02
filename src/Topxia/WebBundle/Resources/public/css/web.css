@@ -157,7 +157,6 @@ textarea {
 @media screen and (min-width: 768px) {
   .modal-dialog-small {
 	width: 480px;
-	margin-left: -280px;
   }
 
   .modal-dialog-small .modal-footer {

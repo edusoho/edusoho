@@ -2,22 +2,23 @@
 
 {% set modal_size = 'small' %}
 
-	{% block title %}登录{{ setting('site.name') }}{% endblock %}
+{% block title %}登录{{ setting('site.name') }}{% endblock %}
+
 {% block body %}
 
 <form id="login-ajax-form" class="form-vertical form-vertical-small" method="post" action="{{ path('login_check') }}">
 
   <div class="alert alert-danger" style="display:none;"></div>
 
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls">
-      <input type="text" name="_username" placeholder="Email地址" data-display="Email地址" />
+      <input class="form-control" type="text" name="_username" placeholder="Email地址" data-display="Email地址" />
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls">
-      <input type="password" name="_password" placeholder="密码" data-display="密码" />
+      <input class="form-control" type="password" name="_password" placeholder="密码" data-display="密码" />
     </div>
   </div>
 
