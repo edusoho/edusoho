@@ -93,29 +93,21 @@ class CourseController extends BaseController
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
-        
-        $progresses = $this->getUsersLearnedProgresses($users, $course);
+
+        $progresses = array();
+        foreach ($students as $student) {
+            $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
+        }
 
         return $this->render('TopxiaWebBundle:Course:members-modal.html.twig', array(
+            'course' => $course,
             'students' => $students,
             'users'=>$users,
+            'progresses' => $progresses,
             'followingIds' => $followingIds,
             'paginator' => $paginator,
-            'progresses'=>$progresses
+            'canManage' => $this->getCourseService()->canManageCourse($course),
         ));
-    }
-
-    private function getUsersLearnedProgresses($users, $course)
-    {
-        $progresses = array();
-
-        foreach ($users as $user) {
-            $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-            $progress = $this->calculateUserLearnProgress($course, $learnStatuses);
-            $progress['userId'] = $user['id'];
-            array_push($progresses, $progress);
-        }
-        return ArrayToolkit::index($progresses, 'userId');
     }
 
     /**
@@ -221,27 +213,19 @@ class CourseController extends BaseController
         return $grouped;
     }
 
-    private function calculateUserLearnProgress($course, $learnStatuses)
+    private function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $learnedNum = 0;
-        foreach ($learnStatuses as $lessonId => $status) {
-            if ($status == 'finished') {
-                $learnedNum ++;
-            }
-        }
-
-        $percent = intval($learnedNum / $course['lessonNum'] * 100) . '%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
         return array (
             'percent' => $percent,
-            'number' => $learnedNum,
+            'number' => $member['learnedNum'],
             'total' => $course['lessonNum']
         );
-
     }
     
     public function favoriteAction(Request $request, $id)
@@ -339,8 +323,7 @@ class CourseController extends BaseController
         $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
-        $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-        $progress = $this->calculateUserLearnProgress($course, $learnStatuses);
+        $progress = $this->calculateUserLearnProgress($course, $member);
         return $this->render('TopxiaWebBundle:Course:progress-block.html.twig', array(
             'course' => $course,
             'member' => $member,
