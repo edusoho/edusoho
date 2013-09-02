@@ -4,7 +4,7 @@
 
   {% if isManager or app.user.id == author.id %}
   <div class="thread-post-dropdown">
-    <a href="javascript:" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse"></i></a>
+    <a href="javascript:" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse-down"></i></a>
     <ul class="dropdown-menu pull-right">
       <li><a href="{{ path('course_thread_post_edit', {courseId:course.id,threadId:thread.id, id:post.id}) }}"><i class="glyphicon glyphicon-edit"></i> 编辑</a></li>
       {% if isManager %}

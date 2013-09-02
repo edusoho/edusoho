@@ -14,19 +14,19 @@
   <li class="active">编辑帖子</li>
 </ul>
 
-<form id="thread-post-form" class="form-vertical" method="post"
+<form id="thread-post-form" method="post"
   {% if post %}
     action="{{ path('course_thread_post_edit', {courseId:course.id, threadId:post.threadId, id:post.id}) }}"
   {% else %}
     action="{{ path('course_thread_post', {courseId:course.id, id:post.id}) }}"
   {% endif %}
   >
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls">
-      {{ form_widget(form.content, {attr:{rows:15, 'data-display':'内容'}}) }}
+      {{ form_widget(form.content, {attr:{class:'form-control', rows:15, 'data-display':'内容'}}) }}
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
       <button type="submit" class="btn btn-primary pull-right">发表</button>
@@ -34,7 +34,5 @@
     </div>
   </div>
 </form>
-
-
 
 {% endblock %}

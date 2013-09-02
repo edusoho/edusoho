@@ -1,10 +1,10 @@
 <form id="thread-post-form" class="form-vertical" method="post" action="{{ path('course_thread_post', {courseId:course.id, id:thread.id}) }}" data-auto-submit="false" novalidate>
-	<div class="control-group">
+	<div class="form-group">
 		<div class="controls">
-			{{ form_widget(form.content, {attr:{rows:8, 'data-display':'内容'}}) }}
+			{{ form_widget(form.content, {attr:{class:'form-control', rows:8, 'data-display':'内容'}}) }}
 		</div>
 	</div>
-	<div class="control-group">
+	<div class="form-group">
 		<div class="controls clearfix">
 			{{ form_rest(form) }}
 			<button type="submit" class="btn btn-primary pull-right">添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</button>
