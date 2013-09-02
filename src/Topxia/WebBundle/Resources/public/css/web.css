@@ -1553,6 +1553,10 @@ body {
 	color: #fff;
 }
 
+.quiz-manager .quiz-item-form {
+	margin-right: 15px;
+}
+
 .quiz-manager .quiz-item-form .choice-delete-btn {
 	color: #999;
 }
