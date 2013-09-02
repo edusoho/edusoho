@@ -1,23 +1,20 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}撰写公告{% endblock %}
+{% block title %}{% if announcement.id %}编辑{% else %}添加{% endif %}公告{% endblock %}
 
 {% block body %}
-	<form id="announcement-write-form" class="form-horizontal" method="post"
-	  {% if announcement|default(null) %}
+	<form id="announcement-write-form" method="post"
+	  {% if announcement.id %}
 			action="{{ path('course_announcement_update',{courseId:course.id, id:announcement.id}) }}"
 	  {% else %}
 		  action="{{ path('course_announcement_add',{courseId:course.id}) }}"
 	  {% endif %}
 	>
 
-		<div class="control-group">
-	    <div class="controls">
-			{{ form_widget(form.content, {attr:{'data-display':'公告内容'}}) }}
-	    </div>
+		<div class="form-group">
+			<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容">{{ announcement.content }}</textarea>
 		</div>
 
-		{{ form_rest(form) }}
 	</from>
 
 	<script>

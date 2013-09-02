@@ -14,7 +14,7 @@
 			<a class="btn btn-link btn-sm" href="#" data-role="delete" data-url="{{ path('course_announcement_delete',{courseId:course.id, id:announcement.id}) }}">
 				<span class="glyphicon glyphicon-trash"></span> 删除</a>
 		</div>
-		<div class="text-muted pull-right">{{ announcement.createdTime | date('Y-n-d') }}</div>
+		<div class="text-muted pull-right">{{ announcement.createdTime | date('Y-m-d H:i') }}</div>
 
 	</div>
 
