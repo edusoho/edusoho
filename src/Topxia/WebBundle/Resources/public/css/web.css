@@ -709,11 +709,6 @@ body {
 	width: 100%;
 }
 
-#lesson-note-plugin-form .control-group {
-	padding: 0;
-	margin:0;
-}
-
 #lesson-note-plugin-form .note-content {
 	position: absolute;
 	top: 10px;
