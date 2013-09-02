@@ -27,12 +27,3 @@
     </ul>
   {% endif %}
 {% endmacro %}
-
-{%- macro course_learn_progress(course, member) -%}
-  {% set progress = member.isLearned ? 100 : (course.lessonNum > 0 ? member.learnedNum / course.lessonNum * 100 : 0) %}
-  {% set progress = progress > 100 ? 100 : progress %}
-  <div class="progress" title="已学{{ member.learnedNum }}课时">
-    <div class="progress-bar" style="width: {{ progress }}%">
-    </div>
-  </div>
-{%- endmacro -%}

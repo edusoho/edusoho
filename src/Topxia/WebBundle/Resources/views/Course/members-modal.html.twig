@@ -7,6 +7,7 @@
 <ul class="media-list user-simple-list" id="course-student-list">
   {% for student in  students %}
     {% set user = users[student.userId] %}
+    {% set progress = progresses[student.userId] %}
     {% set isFollowing = user.id in followingIds %}
     <li class="media">
       {{ web_macro.user_avatar(user, 'pull-left') }}
@@ -14,7 +15,10 @@
         <a target="_blank" href="{{ path('user_show', {userId:user.id}) }}">{{ user.nickname }}</a>
 
         {% if canManage %}
-          {{ web_macro.course_learn_progress(course, student) }}
+          <div class="progress" title="已学{{ progress.number }}课时">
+            <div class="progress-bar" style="width: {{ progress.percent }}">
+            </div>
+          </div>
         {% endif %}
 
         {% if app.user.id != user.id %}
