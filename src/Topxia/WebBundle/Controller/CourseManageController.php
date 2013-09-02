@@ -111,6 +111,16 @@ class CourseManageController extends BaseController
 
     public function priceAction(Request $request, $id)
     {
+
+        if ($request->getMethod() == 'POST') {
+            $this->getCourseService()->updateCourse($id, $request->request->all());
+            $this->setFlashMessage('success', '课程价格已经修改成功!');
+        }
+
+        $course = $this->getCourseService()->getCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
+            'course' => $course
+        ));
         
     }
 
@@ -189,10 +199,7 @@ class CourseManageController extends BaseController
 			->add('tags', 'tags')
 			->add('categoryId', 'default_category', array(
 				'empty_value' => '请选择分类'
-			))
-			->add('price', 'number', array(
-	            'precision' => 2,
-	        )
+			)
         );
 
 	    return $builder->getForm();
