@@ -16,11 +16,11 @@ define(function(require, exports, module) {
         });
 
         var goalDynamicCollection = new DynamicCollection({
-            element: '#course-goals-control-group',
+            element: '#course-goals-form-group',
         });
 
         var goalDynamicCollection = new DynamicCollection({
-            element: '#course-audiences-control-group',
+            element: '#course-audiences-form-group',
         });
 
         $(".sortable-list").sortable();
