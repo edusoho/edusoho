@@ -89,7 +89,7 @@ define(function(require, exports, module) {
                 });
             });
 
-            this.createFormElement.find('.detail-control-group').removeClass('hide');
+            this.createFormElement.find('.detail-form-group').removeClass('hide');
         },
         collapseForm: function() {
             this.createFormElement.removeClass('form-expanded');
@@ -101,7 +101,7 @@ define(function(require, exports, module) {
 
             this.clearForm();
 
-            this.createFormElement.find('.detail-control-group').addClass('hide');
+            this.createFormElement.find('.detail-form-group').addClass('hide');
         },
         clearForm: function() {
             this.createFormElement.find('input[type=text],textarea').each(function(){
