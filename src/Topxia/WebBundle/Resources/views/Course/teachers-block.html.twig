@@ -36,7 +36,7 @@
               <div class="nickname"><a href="#">{{ user.nickname }}</a></div>
               <div class="title">{{ user.title }}</div>
               <div class="divider"></div>
-              <div class="about">{{ profile.about }}</div>
+              <div class="about">{{ profile.about | raw }}</div>
             </div>
             {% endif %}
           {% endfor %}
