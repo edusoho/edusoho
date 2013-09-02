@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %} {{app.user.nickname}}的主页 - {{ parent() }}{% endblock %}
+{% block title %} {{user.nickname}}的公共主页 - {{ parent() }}{% endblock %}
 {% set navType = 'show' %}
 
 {% set script_controller = 'user/user' %}
