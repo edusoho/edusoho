@@ -13,7 +13,7 @@
       <form id="setting-email-form" class="form-horizontal" method="post" >
         {{ web_macro.flash_messages() }}
 
-        <div class="row control-group">
+        <div class="form-group">
           <div class="col-lg-2 control-label"><label>当前登录邮箱</label></div>
           <div class="col-lg-8 controls">
             <span class="control-text">
@@ -30,23 +30,22 @@
           </div>
         </div>
 
-        <div class="row control-group">
+        <div class="form-group">
           <div class="col-lg-2 control-label">{{ form_label(form.password, '网站登录密码') }}</div>
           <div class="col-lg-8 controls">
-            {{ form_widget(form.password, {attr:{class:'col-lg-6'}}) }}
-            <br/><br/>
+            {{ form_widget(form.password, {attr:{class:'form-control'}}) }}
             <p class="help-block">设置新的登录邮箱，需要校验当前的网站登录密码</p>
           </div>
         </div>
 
-        <div class="row control-group">
+        <div class="form-group">
           <div class="col-lg-2 control-label">{{ form_label(form.email, '新登录邮箱') }}</div>
           <div class="col-lg-8 controls">
-            {{ form_widget(form.email, {attr:{class:'col-lg-6'}}) }}
+            {{ form_widget(form.email, {attr:{class:'form-control'}}) }}
           </div>
         </div>
 
-        <div class="row control-group">
+        <div class="form-group">
           <div class="col-lg-2 control-label"></div>
           <div class="col-lg-8 controls">
             {{ form_rest(form) }}
