@@ -55,6 +55,7 @@ class MyCourseController extends BaseController
         );
 
         $userIds = array();
+
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
         }

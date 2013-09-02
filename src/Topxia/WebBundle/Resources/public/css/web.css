@@ -109,6 +109,7 @@ a.link-muted {
 
 .panel-page .panel-heading h2 {
 	font-size: 24px;
+	margin-top: 0;
 }
 
 .control-text {
@@ -1551,6 +1552,10 @@ body {
 }
 .quiz-manager-list .active .item-delete-btn {
 	color: #fff;
+}
+
+.quiz-manager .quiz-item-form {
+	margin-right: 15px;
 }
 
 .quiz-manager .quiz-item-form .choice-delete-btn {

@@ -13,62 +13,54 @@
       <form id="user-profile-form" class="form-horizontal" method="post">
         {{ web_macro.flash_messages() }}
         
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
-            <div class="col-lg-7 controls">{{ form_widget(form.truename) }}</div>
+            <div class="col-lg-7 controls">{{ form_widget(form.truename, {attr:{class:'form-control'}}) }}</div>
           </div>
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label">{{ form_label(form.gender, '性别') }}</div>
             <div class="col-lg-7 controls radios">{{ form_widget(form.gender) }}</div>
           </div>
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.job, '职业') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.job) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.job, {attr:{class:'form-control'}}) }} </div>
           </div>
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.title) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.title, {attr:{class:'form-control'}}) }} </div>
           </div>
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.signature, '个人签名') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.signature) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.signature, {attr:{class:'form-control'}}) }} </div>
           </div>          
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.about, '自我介绍') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.about) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.about, {attr:{class:'form-control'}}) }} </div>
           </div>
 
-          <div class="row">
-            <div class="col-lg-7 col-lg-offset-2">
-              <button type="submit" class="btn btn-primary">保存</button>
-            </div>
-          </div>
-
-          <hr />
-
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.site, '个人主页') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.site) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.site, {attr:{class:'form-control'}}) }} </div>
           </div>   
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.weibo, '微博') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.weibo) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.weibo, {attr:{class:'form-control'}}) }} </div>
           </div>
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.weixin, '微信') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.weixin) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.weixin, {attr:{class:'form-control'}}) }} </div>
           </div>         
 
-          <div class="row control-group">
+          <div class="form-group">
             <div class="col-lg-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
-            <div class="col-lg-7 controls"> {{ form_widget(form.qq) }} </div>
+            <div class="col-lg-7 controls"> {{ form_widget(form.qq, {attr:{class:'form-control'}}) }} </div>
           </div>                         
 
           <div class="row">

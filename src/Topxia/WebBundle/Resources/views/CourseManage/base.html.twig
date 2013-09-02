@@ -19,36 +19,36 @@
 
 		  {{ form_errors(form) }}
 
-			<div class="row control-group">
+			<div class="form-group">
 				<div class="col-lg-2 control-label">{{ form_label(form.title, '标题') }}</div>
-				<div class="col-lg-8 controls">{{ form_widget(form.title) }}</div>
+				<div class="col-lg-8 controls">{{ form_widget(form.title, {attr:{class:'form-control'}}) }}</div>
 			</div>
 
-			<div class="row control-group">
+			<div class="form-group">
 				<div class="col-lg-2 control-label">{{ form_label(form.subtitle, '副标题') }}</div>
-				<div class="col-lg-8 controls">{{ form_widget(form.subtitle) }}</div>
+				<div class="col-lg-8 controls">{{ form_widget(form.subtitle, {attr:{class:'form-control'}}) }}</div>
 			</div>
 
-			<div class="row control-group">
+			<div class="form-group">
 			  <div class="col-lg-2 control-label">{{ form_label(form.tags, '标签') }}</div>
 			  <div class="col-lg-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
 			</div>
 
-			<div class="row control-group">
+			<div class="form-group">
 			  <div class="col-lg-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
 			  <div class="col-lg-8 controls">
-			    {{ form_widget(form.categoryId, {attr:{class:'width-input width-input-large'}}) }}
+			    {{ form_widget(form.categoryId, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
 			</div>
 
-			<div class="row control-group">
+			<div class="form-group">
 			  <div class="col-lg-2 control-label">{{ form_label(form.price, '价格') }}</div>
 			  <div class="col-lg-8 controls">
-			    {{ form_widget(form.price, {attr:{class:'width-input'}}) }}
+			    {{ form_widget(form.price, {attr:{class:'form-control width-input'}}) }}
 			  </div>
 			</div>
 
-		  <div class="row control-group">
+		  <div class="form-group">
 		    <div class="col-lg-offset-2 controls">
 		    	{{ form_rest(form) }}
 		    	<button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>

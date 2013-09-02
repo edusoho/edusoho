@@ -21,18 +21,18 @@
 
   <div class="quiz-manager-main">
 
-    <form id="quiz-item-form" class="form-horizontal quiz-item-form" method="post"
+    <form id="quiz-item-form" class=" quiz-item-form" method="post"
         action="{{ path('course_manage_quiz_item_save', {courseId:course.id, lessonId:lesson.id}) }}"
         >
 
-      <div class="control-group mbm">
+      <div class="form-group">
         <div class="control-label"><label for="quiz-description-field">问题描述</label></div>
-        <div class="controls"><textarea id="quiz-description-field" name="description"></textarea></div>
+        <div class="controls"><textarea class="form-control" id="quiz-description-field" name="description"></textarea></div>
       </div>
       
-      <div class="row control-group mbm">
-        <div class="col-lg-2 control-label"><label>题目难度</label></div>
-        <div class="col-lg-10 controls radios">
+      <div class="form-group">
+        <div class="control-label"><label>题目难度</label></div>
+        <div class="controls radios">
           <label><input type="radio" name="level" value="low"> 入门</label>
           <label><input type="radio" name="level" value="normal"> 中级</label>
           <label><input type="radio" name="level" value="high"> 高级</label>
@@ -52,10 +52,10 @@
     <script type="text/plain" data-role="items-model">{{ quizItems|json_encode|raw }}</script>
     <script type="text/x-handlebars-template" data-role="choice-template">
       {% verbatim %}
-        <div class="control-group mbs">
+        <div class="form-group mbs">
           <div class="controls">
             <label class="choice-label">选项{{ code }}</label>
-            <input class="item-input" id="item-input-{{ globalId }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
+            <input class="form-control item-input" id="item-input-{{ globalId }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
             <label class="choice-answer-label"><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
             <button type="button" data-role="option-delete" class="btn btn-link btn-sm choice-delete-btn" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>
           </div>
