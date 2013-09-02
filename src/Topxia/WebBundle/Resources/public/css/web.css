@@ -688,11 +688,6 @@ body {
 	margin-bottom: 10px;
 }
 
-#lesson-question-plugin-form .control-group {
-	padding: 10px;
-	margin:0;
-}
-
 .lesson-dashboard .question-list-pane {
 	position: absolute;
 	top: 0;
