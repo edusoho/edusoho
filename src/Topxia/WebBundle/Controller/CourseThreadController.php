@@ -27,11 +27,12 @@ class CourseThreadController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+
         $userIds = array_merge(
             ArrayToolkit::column($threads, 'userId'),
             ArrayToolkit::column($threads, 'latestPostUserId')
         );
-
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
@@ -41,6 +42,7 @@ class CourseThreadController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
+            'lessons'=>$lessons
         ));
     }
 

@@ -141,7 +141,7 @@ define(function(require, exports, module) {
 
         onDeleteChoice: function(e){
             var $btn = $(e.currentTarget),
-                $controlGroup = $btn.parents('.control-group'),
+                $controlGroup = $btn.parents('.form-group'),
                 $choices = this.get('form').find('.options'),
                 self = this;
 

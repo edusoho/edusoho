@@ -61,9 +61,10 @@
 
               {% if thread.isElite %}
                 <span class="label label-warning" title="精华帖">精</span>
-                {% endif %}
+              {% endif %}
 
             </div>
+            
             <div class="text-muted text-normal">
               by {{ web_macro.user_link(author) }}
 
@@ -76,6 +77,15 @@
               <span>{{ thread.latestPostTime|smart_time }}</span>
               <span class="bullet">•</span>
               <span>{{ thread.hitNum }}浏览</span>
+              <span class="bullet">•</span>
+              <span>
+              {% if thread.lessonId != 0 %}
+                  <span>所属课时  </span>
+                  <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" >
+                    {{lessons[thread.lessonId].title}} </a>
+              {% endif %}
+              </span>
+
             </div>
           </div>
       </li>
