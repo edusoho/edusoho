@@ -15,20 +15,20 @@
     {{ web_macro.flash_messages() }}
 
       <div class="row control-group">
-        <div class="col-offset-2 controls">
+        <div class="col-lg-offset-2 controls">
           <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
         </div>
       </div>
 
       <div class="row control-group">
-        <div class="col-offset-2 col-lg-8 controls">
+        <div class="col-lg-offset-2 col-lg-8 controls">
           请选择课程图片文件 {{ form_widget(form.picture) }}
           <p class="help-block">你可以上传jpg, gif, png格式的文件。</p>
         </div>
       </div>
 
       <div class="row control-group">
-        <div class="col-offset-2 controls">
+        <div class="col-lg-offset-2 controls">
           {{ form_rest(form) }}
           <button class="btn btn-fat btn-primary" id="upload-picture-btn" type="submit">上传</button>
         </div>

@@ -5,7 +5,7 @@
 
 <form id="course-material-form" class="form-horizontal" action="{{ path('course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) }}" enctype="multipart/form-data" method="post">
   <div class="row control-group">
-    <div class="col-lg-10 col-offset-1  controls">
+    <div class="col-lg-10 col-lg-offset-1  controls">
       <ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>
         {% for material in materials %}
           {% include 'TopxiaWebBundle:CourseMaterialManage:list-item.html.twig' %}
@@ -18,19 +18,19 @@
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-10 col-offset-1 controls">
+    <div class="col-lg-10 col-lg-offset-1 controls">
       <input id="material-file-field" type="file" name="file">
     </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-10 col-offset-1 controls">
+    <div class="col-lg-10 col-lg-offset-1 controls">
       <textarea name="description" rows="2" placeholder="填写资料简介 (可选)"></textarea>
     </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-lg-10 col-offset-1 controls">
+    <div class="col-lg-10 col-lg-offset-1 controls">
       <button class="btn btn-primary" id="material-upload-btn" type="submit" data-uploading-text="正在上传, 请稍后...">上传</button>
     </div>
   </div>
