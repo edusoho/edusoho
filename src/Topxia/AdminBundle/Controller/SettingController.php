@@ -86,7 +86,7 @@ class SettingController extends BaseController
             'email_activation_mode' => '',
             'email_activation_title' => '',
             'email_activation_body' => '',
-            'welcome_enabled' => '',
+            'welcome_enabled' => 'opened',
             'welcome_sender' => '',
             'welcome_methods' => array(),
             'welcome_title' => '',

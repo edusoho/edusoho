@@ -175,6 +175,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function register($registration, $type = 'default')
     {
+
         if (!SimpleValidator::email($registration['email'])) {
             throw $this->createServiceException('email error!');
         }
@@ -212,6 +213,7 @@ class UserServiceImpl extends BaseService implements UserService
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
+
         return $user;
     }
 
@@ -596,6 +598,16 @@ class UserServiceImpl extends BaseService implements UserService
     private function getFileService()
     {
         return $this->createService('Content.FileService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->createService('User.NotificationService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');        
     }
 
     protected function getLogService()

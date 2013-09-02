@@ -20,6 +20,8 @@ class RegisterController extends BaseController
                 $user = $this->getUserService()->register($registration);
                 $this->authenticateUser($user);
                 $this->get('session')->set('registed_email', $user['email']);
+                $this->sendWelcomeMessage($user);
+
                 return $this->redirect($this->generateUrl('register_submited', array(
                     'id' => $user['id'], 'hash' => $this->makeHash($user))
                 ));
@@ -149,4 +151,26 @@ class RegisterController extends BaseController
         return 'http://mail.' . $host;
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+
+    protected function getMessageService()
+    {
+        return $this->getServiceKernel()->createService('User.MessageService');
+    }
+
+    private function sendWelcomeMessage($user)
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        $site = $this->getSettingService()->get('site', array());
+        $messageContent = str_replace('{{nickname}}', $user['nickname'], $auth['welcome_body']);
+        $messageContent = str_replace('{{sitename}}', $site['name'], $messageContent);
+        $messageContent = str_replace('{{siteurl}}', $site['url'], $messageContent);
+        $welcomeSender = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
+        $this->getMessageService()->sendMessage($welcomeSender['id'], $user['id'], $messageContent);
+
+    }
 }
