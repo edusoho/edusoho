@@ -11,39 +11,47 @@
 <dl class="course-modal-infos">
   <dt>简介</dt>
   <dd>{{ course.about|raw }}</dd>
+
+  {% if category %}
   <dt>分类</dt>
   <dd>
-    {% if category %}
-      <a href="#">{{ category.name }}</a>
-    {% else %}
-      暂无分类
-    {% endif %}
+    <a href="#">{{ category.name }}</a>
   </dd>
-  <dt>标签</dt>
-  <dd>
-    <ul class="list-inline">
-      {% for tag in tags %}
-        <li><a href="#">{{ tag.name }}</a></li>
-      {% else %}
-        <li>暂无标签</li>
-      {% endfor %}
-    </ul>
-  </dd>
-  <dt>课程目标</dt>
-  <dd>
-    <ul>
-      {% for goal in course.goals %}
-        <li>{{ goal }}</li>
-      {% endfor %}
-    </ul>
-  </dd>
-  <dt>适合人群</dt>
-  <dd>
-    <ul>
-      {% for audience in course.audiences %}
-        <li>{{ audience }}</li>
-      {% endfor %}
-    </ul>
-  </dd>
+  {% endif %}
+
+  {% if course.tags %}
+    <dt>标签</dt>
+    <dd>
+      <ul class="list-inline">
+        {% for tag in tags %}
+          <li><a href="#">{{ tag.name }}</a></li>
+        {% else %}
+          <li>暂无标签</li>
+        {% endfor %}
+      </ul>
+    </dd>
+  {% endif %}
+
+  {% if course.goals %}
+    <dt>课程目标</dt>
+    <dd>
+      <ul>
+        {% for goal in course.goals %}
+          <li>{{ goal }}</li>
+        {% endfor %}
+      </ul>
+    </dd>
+  {% endif %}
+
+  {% if course.audiences %}
+    <dt>适合人群</dt>
+    <dd>
+      <ul>
+        {% for audience in course.audiences %}
+          <li>{{ audience }}</li>
+        {% endfor %}
+      </ul>
+    </dd>
+  {% endif %}
 </dl>
 {% endblock %}
