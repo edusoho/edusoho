@@ -11,19 +11,19 @@
     <form id="course-base-form" class="form-horizontal" method="post">
       {{ web_macro.flash_messages() }}
 
-      <div class="row control-group">
+      <div class="form-group">
         <div class="col-lg-2 control-label"><label>课程简介</label></div>
         <div class="col-lg-8 controls">
-          <textarea name="about" rows="10" id="course-about-field">{{ field_value(course, 'about') }}</textarea>
+          <textarea name="about" rows="10" id="course-about-field" class="form-control">{{ field_value(course, 'about') }}</textarea>
         </div>
       </div>
 
-      <div class="row control-group" id="course-goals-control-group">
+      <div class="form-group" id="course-goals-control-group">
         <div class="col-lg-2 control-label"><label>课程目标</label></div>
         <div class="col-lg-8 controls">
           <ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
           <div class="input-group">
-            <input id="teacher-input" type="text" data-role="item-input">
+            <input id="teacher-input" type="text" data-role="item-input" class="form-control">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
             </span>
@@ -44,13 +44,13 @@
         </div>
       </div>
 
-      <div class="row control-group" id="course-audiences-control-group">
+      <div class="form-group" id="course-audiences-control-group">
         <div class="col-lg-2 control-label"><label>适应人群</label></div>
         <div class="col-lg-8 controls">
 
           <ul class="list-group sortable-list" data-role="list" style="margin-bottom:10px;display:none;"></ul>
           <div class="input-group">
-            <input id="teacher-input" type="text" data-role="item-input">
+            <input id="teacher-input" type="text" data-role="item-input" class="form-control">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
             </span>
@@ -71,7 +71,7 @@
         </div>
       </div>
 
-      <div class="row control-group">
+      <div class="form-group">
         <div class="col-lg-8 col-lg-offset-2 controls">
             <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
         </div>

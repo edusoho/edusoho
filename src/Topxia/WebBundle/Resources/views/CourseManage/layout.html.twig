@@ -11,23 +11,25 @@
     {% block side %}
       {% set side_nav = side_nav|default(null) %}
       <div class="panel panel-default">
-        <div class="list-group-panel">
-          <div class="list-group-heading">课程概况</div>
-          <div class="list-group">
-            <a class="list-group-item {% if side_nav == 'index' %}active{% endif %}" href="{{ path('course_manage', {id:course.id}) }}">概览</a>
-            <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('course_manage_base', {id:course.id}) }}">基本信息</a>
-            <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('course_manage_detail', {id:course.id}) }}">详细信息</a>
-            <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}">课程图片</a>
-            <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('course_manage_teachers', {id:course.id}) }}">教师管理</a>
-          </div>
-        </div><!-- /list-group-block -->
+        <div class="panel-body">
+          <div class="list-group-panel">
+            <div class="list-group-heading">课程概况</div>
+            <div class="list-group">
+              <a class="list-group-item {% if side_nav == 'index' %}active{% endif %}" href="{{ path('course_manage', {id:course.id}) }}">概览</a>
+              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('course_manage_base', {id:course.id}) }}">基本信息</a>
+              <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('course_manage_detail', {id:course.id}) }}">详细信息</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}">课程图片</a>
+              <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('course_manage_teachers', {id:course.id}) }}">教师管理</a>
+            </div>
+          </div><!-- /list-group-block -->
 
-        <div class="list-group-panel">
-          <div class="list-group-heading">课时</div>
-          <div class="list-group">
-            <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时信息</a>
-          </div>
-        </div><!-- /list-group-block -->
+          <div class="list-group-panel">
+            <div class="list-group-heading">课时</div>
+            <div class="list-group">
+              <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时信息</a>
+            </div>
+          </div><!-- /list-group-block -->
+        </div>
 
       </div>
     {% endblock %}

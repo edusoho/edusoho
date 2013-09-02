@@ -41,13 +41,13 @@
     <form id="teachers-form" class="form-horizontal" method="post">
       {{ web_macro.flash_messages() }}
 
-      <div class="row control-group" id="teachers-control-group">
+      <div class="form-group" id="teachers-control-group">
         <div class="col-lg-2 control-label"><label>已添加老师</label></div>
         <div class="col-lg-8 controls">
           <ul class="list-group teacher-list-group sortable-list" data-role="list" style="display:none;"></ul>
           <div class="input-group">
             {% set url = path('course_manage_teachers_match', {id:course.id}) ~ '?q={{query}}' %}
-            <input id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
+            <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
             </span>
@@ -69,7 +69,7 @@
         </div>  
       </div>
 
-      <div class="row control-group">
+      <div class="form-group">
         <div class="col-lg-offset-2 col-lg-8 controls">
           <button type="submit" class="btn btn-primary">保存</button>
         </div>  
