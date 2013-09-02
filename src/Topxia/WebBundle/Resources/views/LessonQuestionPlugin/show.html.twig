@@ -14,12 +14,12 @@
 	</ul>
 
 <form class="form-vertical" data-role="post-form" method="post" action="{{ path('course_lesson_plugin_question_answer') }}" novalidate>
-	<div class="control-group">
+	<div class="form-group">
 		<div class="controls">
-			{{ form_widget(form.content, {attr:{rows:4, 'data-display':'内容'}}) }}
+			{{ form_widget(form.content, {attr:{class:'form-control', rows:4, 'data-display':'内容'}}) }}
 		</div>
 	</div>
-	<div class="control-group">
+	<div class="form-group">
 		<div class="controls clearfix">
 			{{ form_rest(form) }}
 			<button type="submit" class="btn btn-primary pull-right">添加答案</button>
