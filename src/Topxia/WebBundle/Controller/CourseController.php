@@ -94,28 +94,14 @@ class CourseController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
         
-        $progresses = $this->getUsersLearnedProgresses($users, $course);
-
         return $this->render('TopxiaWebBundle:Course:members-modal.html.twig', array(
+            'course' => $course,
             'students' => $students,
             'users'=>$users,
             'followingIds' => $followingIds,
             'paginator' => $paginator,
-            'progresses'=>$progresses
+            'canManage' => $this->getCourseService()->canManageCourse($course),
         ));
-    }
-
-    private function getUsersLearnedProgresses($users, $course)
-    {
-        $progresses = array();
-
-        foreach ($users as $user) {
-            $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-            $progress = $this->calculateUserLearnProgress($course, $learnStatuses);
-            $progress['userId'] = $user['id'];
-            array_push($progresses, $progress);
-        }
-        return ArrayToolkit::index($progresses, 'userId');
     }
 
     /**

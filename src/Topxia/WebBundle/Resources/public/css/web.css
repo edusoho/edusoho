@@ -554,6 +554,19 @@ body {
 	line-height: 24px;
 }
 
+#course-student-list .media {
+	position: relative;
+}
+
+#course-student-list .media .progress {
+	position: absolute;
+	top: 12px;
+	left: 180px;
+	width: 150px;
+	margin: 0;
+}
+
+
 .thread-filters {
 	padding: 10px 0;
 	border-bottom: 1px solid #eee;
