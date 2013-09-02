@@ -1,13 +1,13 @@
   <form method="post" id="crop-tmp-form" class="form-horizontal" action="{{ path('course_manage_picture_crop', {id:course.id}) }}">
 
   <div class="row control-group">
-    <div class="col-offset-2 controls">
+    <div class="col-lg-offset-2 controls">
       <img id="pic2crop" src="{{file_path(tmpFile.uri)}}"/>
     </div>
   </div>
 
   <div class="row control-group">
-    <div class="col-offset-2 controls">
+    <div class="col-lg-offset-2 controls">
       <input type="hidden" name="fileId" value="{{tmpFile.id}}">
       <input type="hidden" id="x" name="x" />
       <input type="hidden" id="y" name="y" />
@@ -18,7 +18,7 @@
 
   <p> </p>
   <div class="row control-group">
-      <div class="col-offset-2 controls">
+      <div class="col-lg-offset-2 controls">
         <input type="submit" value="保存" class="btn btn-fat btn-primary" />
       </div>
   </div>

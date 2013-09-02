@@ -6,12 +6,12 @@
 {% set script_controller = 'my/notebook-show' %}
 
 {% block main %}
-<div class="panel panel-col">
+<div class="panel panel-default panel-col">
   <div class="panel-heading">我的笔记</div>
   <div class="panel-body">
     <div class="notebook" id="notebook">
       <div class="notebook-heading">
-        <a class="btn btn-default btn-small pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >返回</a>
+        <a class="btn btn-default btn-sm pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >返回</a>
         <img class="notebook-icon" src="{{ file_path(course.largePicture, 'course.png') }}" />
         《{{ course.title }}》的笔记
       </div>

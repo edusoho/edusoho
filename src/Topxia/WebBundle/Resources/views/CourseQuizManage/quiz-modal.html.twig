@@ -9,7 +9,7 @@
 <div class="quiz-manager" id="quiz-manager">
   <div class="quiz-manager-side">
     <div class="quiz-manager-side-header">
-      <button data-role="quiz-item-add" type="button" class="btn btn-small btn-default pull-right">新增题目</button>
+      <button data-role="quiz-item-add" type="button" class="btn btn-sm btn-default pull-right">新增题目</button>
       <span class="quiz-manager-side-title">题目列表</span>
     </div>
 
@@ -43,7 +43,7 @@
 
       </div>
 
-      <button data-role="option-add" type="button" class="btn btn-success btn-small choice-add-btn">增加新的选项</button>
+      <button data-role="option-add" type="button" class="btn btn-success btn-sm choice-add-btn">增加新的选项</button>
       <input type="hidden" name="id">
       <input type="hidden" name="answers">
 
@@ -57,7 +57,7 @@
             <label class="choice-label">选项{{ code }}</label>
             <input class="item-input" id="item-input-{{ globalId }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
             <label class="choice-answer-label"><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
-            <button type="button" data-role="option-delete" class="btn btn-link btn-small choice-delete-btn" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>
+            <button type="button" data-role="option-delete" class="btn btn-link btn-sm choice-delete-btn" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>
           </div>
         </div>
       {% endverbatim %}

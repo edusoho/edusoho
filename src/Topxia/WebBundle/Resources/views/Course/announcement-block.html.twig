@@ -1,19 +1,19 @@
-<div class="panel">
+<div class="panel panel-default">
   <div class="panel-heading">
 
     <div class="pull-right">
 
     {% if canManage %}
-      <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_add',{courseId:course.id}) }}" class="btn btn-success btn-small">添加公告</a>
+      <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_add',{courseId:course.id}) }}" class="btn btn-success btn-xs">添加公告</a>
     {% endif %}
 
     {% if announcements | length >= 10 %}
-            <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_show_all',{courseId:course.id}) }}" class="btn btn-info btn-small">所有公告</a>
+            <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_show_all',{courseId:course.id}) }}" class="btn btn-info btn-sm">所有公告</a>
     {% endif %}
 
     </div>
 
-  	<h2>课程公告</h2>
+  	<h3 class="panel-title">课程公告</h3>
   </div>
   <div class="panel-body">
 

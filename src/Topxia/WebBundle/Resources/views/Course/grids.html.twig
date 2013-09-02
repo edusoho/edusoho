@@ -27,12 +27,12 @@
               <div class="progress">
                 <div class="progress-bar" style="width: 100%;"></div>
               </div>
-              <div class="tac"><button class="btn btn-default btn-small">查看课程</button></div>
+              <div class="tac"><button class="btn btn-default btn-sm">查看课程</button></div>
             {% else %}
               <div class="progress">
                 <div class="progress-bar" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }}%;"></div>
               </div>
-              <div class="tac"><button class="btn btn-success btn-small">继续学习</button></div>
+              <div class="tac"><button class="btn btn-success btn-sm">继续学习</button></div>
             {% endif %}
           {% endif %}
         </span>

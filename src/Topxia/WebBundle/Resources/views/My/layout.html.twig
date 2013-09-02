@@ -7,7 +7,7 @@
 <div class="row">
   <div class="col-lg-3">
     {% set side_nav = side_nav|default(null) %}
-    <div class="panel">
+    <div class="panel panel-default">
       <div class="list-group-panel">
         <div class="list-group">
           <a class="list-group-item {% if side_nav == "courses" %} active {% endif %} " href="{{ path('my_courses') }}">我的课程</a>
