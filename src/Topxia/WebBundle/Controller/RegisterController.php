@@ -165,14 +165,17 @@ class RegisterController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
-        $emailActivationTitle = $this->setting('auth.email_activation_title', 
+        $emailTitle = $this->setting('auth.email_activation_title', 
             '请激活你的帐号 完成注册');
-        $emailActivationBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
-        $emailActivationBody = str_replace('{{nickname}}', $user['nickname'], $emailActivationBody);
-        $emailActivationBody = str_replace('{{sitename}}', $site['name'], $emailActivationBody);
-        $emailActivationBody = str_replace('{{siteurl}}', $site['url'], $emailActivationBody);
-        $emailActivationBody = str_replace('{{verifyurl}}', $site['verifyurl']."/{$token}", $emailActivationBody);
-        $this->sendEmail($user['email'], $emailActivationTitle, $emailActivationBody);
+
+        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token));
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
+        $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
+        
+        $this->sendEmail($user['email'], $emailTitle, $emailBody);
         $this->getNotificationService()->notify($user['id'], 'default', '邮箱已经发送，请激活你的帐号，完成注册！');
         $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
     }
@@ -181,10 +184,11 @@ class RegisterController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
-        $messageContent = str_replace('{{nickname}}', $user['nickname'], $auth['welcome_body']);
-        $messageContent = str_replace('{{sitename}}', $site['name'], $messageContent);
-        $messageContent = str_replace('{{siteurl}}', $site['url'], $messageContent);
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
+        $messageContent = str_replace($valuesToBeReplace, $valuesToReplace, $auth['welcome_body']);
         $welcomeSender = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
+
         $this->getMessageService()->sendMessage($welcomeSender['id'], $user['id'], $messageContent);
         $this->getUserService()->waveUserCounter($user['id'], 'newMessageNum', 1);
 
