@@ -118,8 +118,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findUserLeaningCourses($userId, $start, $limit)
 	{
 		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 		foreach ($members as $member) {
+			if (empty($courses[$member['courseId']])) {
+				continue;
+			}
 			$courses[$member['courseId']]['memberIsLearned'] = 0;
 			$courses[$member['courseId']]['memberLearnedNum'] = $member['learnedNum'];
 		}
