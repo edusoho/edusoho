@@ -25,11 +25,6 @@ class FileController extends BaseController
     	return $this->createNewJsonResponse(true);
     }
 
-    public function uploadAction(Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:File:upload-modal.html.twig');
-    }
-
     private function buildFileSearchForm()
     {
     	$groups = $this->getFileService()->getAllFileGroups();

@@ -184,18 +184,6 @@ textarea {
 
 }
 
-.form-vertical .control-group {
-	margin-bottom: 20px;
-}
-
-.form-vertical .control-label {
-	/*color: #585b62;*/
-}
-
-.form-vertical-small .control-group {
-	margin-bottom: 10px;
-}
-
 .bootstrap-notify-bar {
 	position: fixed;
 	top: 0;

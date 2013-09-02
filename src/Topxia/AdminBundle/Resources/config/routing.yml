@@ -316,10 +316,6 @@ admin_file_delete:
     defaults: { _controller: TopxiaAdminBundle:File:delete }
     methods: [POST]
 
-admin_file_upload:
-    pattern:  /file/upload
-    defaults: { _controller: TopxiaAdminBundle:File:upload }
-
 admin_message:
     pattern: /message
     defaults: { _controller: TopxiaAdminBundle:Message:index }
