@@ -3,7 +3,8 @@ INSERT INTO `setting` (`id`, `name`, `value`) VALUES
 
 
 INSERT INTO `category_group` (`id`, `code`, `name`, `depth`) VALUES
-(1, 'default', '默认分类', 2);
+(1, 'default', '默认分类', 2),
+(2, 'course', '课程分类', 2);
 
 INSERT INTO `category` (`id`, `code`, `name`, `path`, `weight`, `groupId`, `parentId`) VALUES
 (1, 'a', '测试分类A', '', 0, 1, 0),
