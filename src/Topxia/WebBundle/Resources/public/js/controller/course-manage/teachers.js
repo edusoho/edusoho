@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var dynamicCollection = new DynamicCollection({
-            element: '#teachers-control-group',
+            element: '#teachers-form-group',
             onlyAddItemWithModel: true
         });
 

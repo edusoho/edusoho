@@ -285,54 +285,6 @@ class CourseController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function joinOfflineAction(Request $request, $id)
-    {
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-
-        $data = array(
-            'truename' => $profile['truename'],
-            'email' => $user['email'],
-            'mobile' => $profile['mobile'],
-            'company' => $profile['company'],
-            'job' => $profile['job'],
-            'updateProfile' => array(1),
-        );
-
-        $form = $this->createFormBuilder($data)
-            ->add('truename', 'text')
-            ->add('email', 'email')
-            ->add('mobile', 'text')
-            ->add('company', 'text')
-            ->add('job', 'text')
-            ->add('updateProfile', 'choice', array(
-                'expanded' => true,
-                'multiple' => true,
-                'choices' => array('1' => '将姓名、手机号、公司、职位更新到我的个人信息')
-            ))
-            ->getForm();
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $member = $this->getCourseService()->joinCourse($user['id'], $course['id'], $data);
-                if ($data['updateProfile']) {
-                    unset($data['email']);
-                    unset($data['updateProfile']);
-                    $this->getUserService()->updateUserProfile($user['id'], $data);
-                }
-                return $this->createJsonResponse(true);
-            } else {
-                return $this->createJsonResponse(false);
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:Course:join-modal.html.twig', array(
-            'course' => $course,
-            'form' => $form->createView()
-        ));
-    }
-
     public function exitAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
