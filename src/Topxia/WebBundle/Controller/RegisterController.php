@@ -16,7 +16,7 @@ class RegisterController extends BaseController
 
             if ($form->isValid()) {
                 $registration = $form->getData();
-
+                $auth = $this->getSettingService()->get('auth', array());
                 $user = $this->getUserService()->register($registration);
                 $this->authenticateUser($user);
                 $this->get('session')->set('registed_email', $user['email']);
@@ -41,17 +41,11 @@ class RegisterController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+        $this->sendVerifyEmail($token, $user);
 
-        $this->sendEmail(
-            $user['email'],
-            "请激活你的帐号，完成注册",
-            $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                'user' => $user,
-                'token' => $token,
-            ))
-        );
         return $this->createJsonResponse(true);
     }
+
 
     public function submitedAction(Request $request, $id, $hash)
     {
@@ -160,6 +154,24 @@ class RegisterController extends BaseController
     protected function getMessageService()
     {
         return $this->getServiceKernel()->createService('User.MessageService');
+    }
+
+    private function sendVerifyEmail($token, $user)
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        $site = $this->getSettingService()->get('site', array());
+        $emailActivationTitle = $this->setting('auth.email_activation_title', 
+            '请激活你的帐号 完成注册');
+        $emailActivationBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+        $emailActivationBody = str_replace('{{nickname}}', $user['nickname'], $emailActivationBody);
+        $emailActivationBody = str_replace('{{sitename}}', $site['name'], $emailActivationBody);
+        $emailActivationBody = str_replace('{{siteurl}}', $site['url'], $emailActivationBody);
+        $emailActivationBody = str_replace('{{verifyurl}}', $site['verifyurl']."/{$token}", $emailActivationBody);
+        $this->sendEmail(
+            $user['email'],
+            $emailActivationTitle,
+            $emailActivationBody
+        );
     }
 
     private function sendWelcomeMessage($user)

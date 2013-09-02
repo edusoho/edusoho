@@ -16,6 +16,7 @@ class SettingController extends BaseController
         $default = array(
             'name'=>'',
             'slogan'=>'',
+            'verifyurl'=>'',
             'url'=>'',
             'logo'=>'',
             'seo_keywords'=>'',
