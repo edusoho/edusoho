@@ -9,14 +9,14 @@
   {% endif %}
   <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}" data-auto-submit="false">
 
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">课程名称</div>
       <div class="col-lg-9 controls">
       	<span class="control-text text-muted">《{{ course.title }}》</span>
       </div>
     </div>
 
-    <div class="row control-group">
+    <div class="form-group">
       <div class="col-lg-3 control-label">价格</div>
       <div class="col-lg-9 controls">
       	<span class="control-text"><strong class="money">{{ course.price }}</strong>
@@ -26,7 +26,7 @@
     </div>
 
     {% if course.price > 0 %}
-      <div class="row control-group">
+      <div class="form-group">
         <div class="col-lg-3 control-label">选择支付方式</div>
         <div class="col-lg-9 controls">
         	<input type="radio" checked="checked" />
