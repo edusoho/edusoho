@@ -1,36 +1,29 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-
     <div class="pull-right">
-
-    {% if canManage %}
-      <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_add',{courseId:course.id}) }}" class="btn btn-success btn-xs">添加公告</a>
-    {% endif %}
-
-    {% if announcements | length >= 10 %}
-            <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_show_all',{courseId:course.id}) }}" class="btn btn-info btn-sm">所有公告</a>
-    {% endif %}
-
+      {% if canManage %}
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_add',{courseId:course.id}) }}" class="btn btn-link btn-xs"><span class="glyphicon glyphicon-plus"></span> 添加公告</a>
+      {% endif %}
     </div>
-
   	<h3 class="panel-title">课程公告</h3>
   </div>
-  <div class="panel-body">
 
-  	<ul class="text-list">
-  		{% for announcement in announcements %}
-  		<li>
-  			<span class="pull-right text-muted">{{ announcement.createdTime|date('Y-n-d') }}</span>
-  			<a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_show', {courseId:course.id, id:announcement.id}) }}">{{ announcement.content|plain_text(15) }}</a>
-  		</li>
+  <div class="panel-body">
+    <ul class="media-list">
+      {% for announcement in announcements %}
+        <li class="media">
+          <div class="media-body">
+            <p>
+              <a href="#modal" data-toggle="modal" data-url="{{ path('course_announcement_show', {courseId:course.id, id:announcement.id}) }}">{{ announcement.content|plain_text(40) }}</a>
+            </p>
+            <div class="clearfix">
+              <span class="pull-right text-muted text-sm">{{ announcement.createdTime|date('Y-m-d H:i') }}</span>
+            </div>
+          </div>
+        </li>
+      {% else %}
+        <li class="empty">暂无公告</li>
       {% endfor %}
     </ul>
-    
-
-
-    {% if not announcements %}
-      <div class="empty">暂无公告</div>
-    {% endif %}
-
   </div>
 </div>

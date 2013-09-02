@@ -10,12 +10,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="announcement[content]"]',
+            element: '#announcement-content-field',
             required: true
         });
 
-        CKEDITOR.replace('announcement_content', {
-            height: 300,
+        CKEDITOR.replace('announcement-content-field', {
+            height: 200,
             resize_enabled: false,
             forcePasteAsPlainText: true,
             toolbar: 'Mini',
@@ -23,7 +23,7 @@ define(function(require, exports, module) {
         });
 
         validator.on('formValidate', function(elemetn, event) {
-            CKEDITOR.instances['announcement_content'].updateElement();
+            CKEDITOR.instances['announcement-content-field'].updateElement();
         });
 
         validator.on('formValidated', function(error, msg, $form) {

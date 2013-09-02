@@ -21,26 +21,6 @@ class CourseAnnouncementController extends BaseController
 
 	}
 
-	public function createAction(Request $request, $courseId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-        $form = $this->createAnnouncementWriteForm();
-	    if($request->getMethod() == 'POST'){
-	        $form->bind($request);
-	        if ($form->isValid()) {
-            	$announcement = $this->getCourseService()->createAnnouncement($courseId, $form->getData());
-	        	return $this->createJsonResponse(true);
-	        }
-	        return $this->createJsonResponse(false);
-		}
-
-		return $this->render('TopxiaWebBundle:Course:announcement-write-modal.html.twig',array(
-			'form' => $form->createView(),
-			'course'=>$course,
-		));
-	}
-
 	public function showAllAction(Request $request, $courseId)
 	{
 
@@ -52,6 +32,20 @@ class CourseAnnouncementController extends BaseController
 		));
 	}
 
+	public function createAction(Request $request, $courseId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+	    if($request->getMethod() == 'POST'){
+        	$announcement = $this->getCourseService()->createAnnouncement($courseId, $request->request->all());
+        	return $this->createJsonResponse(true);
+		}
+
+		return $this->render('TopxiaWebBundle:Course:announcement-write-modal.html.twig',array(
+			'announcement' => array('id' => '', 'content' => ''),
+			'course'=>$course,
+		));
+	}
 	
 	public function updateAction(Request $request, $courseId, $id)
 	{	
@@ -59,21 +53,15 @@ class CourseAnnouncementController extends BaseController
 
         $announcement = $this->getCourseService()->getCourseAnnouncement($courseId, $id);
         if (empty($announcement)) {
-        	return $this->createNotFoundException("课程公告{$id}不存在。");
+        	return $this->createNotFoundException("课程公告(#{$id})不存在。");
         }
 
-        $form = $this->createAnnouncementWriteForm($announcement);
-	    if($request->getMethod() == 'POST'){
-	        $form->bind($request);
-	        if ($form->isValid()) {
-            	$this->getCourseService()->updateAnnouncement($courseId, $id, $form->getData());
-		        return $this->createJsonResponse(true);
-	        }
-	        return $this->createJsonResponse(false);
+	    if($request->getMethod() == 'POST') {
+        	$this->getCourseService()->updateAnnouncement($courseId, $id, $request->request->all());
+	        return $this->createJsonResponse(true);
 		}
 
 		return $this->render('TopxiaWebBundle:Course:announcement-write-modal.html.twig',array(
-			'form' => $form->createView(),
 			'course' => $course,
 			'announcement'=>$announcement,
 		));
@@ -94,13 +82,6 @@ class CourseAnnouncementController extends BaseController
 			'announcements' => $announcements,
 			'canManage' => $this->getCourseService()->canManageCourse($course),
 		));
-	}
-
-	private function createAnnouncementWriteForm($announcement = array())
-	{
-        return $this->createNamedFormBuilder('announcement', $announcement)
-            ->add('content', 'textarea')
-	        ->getForm();
 	}
 
     protected function getCourseService()

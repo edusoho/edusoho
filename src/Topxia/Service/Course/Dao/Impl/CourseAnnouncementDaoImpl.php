@@ -11,35 +11,34 @@ class CourseAnnouncementDaoImpl extends BaseDao implements CourseAnnouncementDao
 
     public function getAnnouncement($id)
     {
-    	return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function findAnnouncementsByCourseId($courseId, $start, $limit)
     {
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'course_announcement')
-            ->where("courseId = :courseId")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy('createdTime', 'ASC')
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchAll();
+        $sql ="SELECT * FROM {$this->table} WHERE courseId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }
 
 	public function addAnnouncement($fields)
 	{
-	   $id = $this->insert($fields);
-       return $this->getAnnouncement($id);
+        $affected = $this->getConnection()->insert($this->table, $fields);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert announcement error.');
+        }
+        return $this->getAnnouncement($this->getConnection()->lastInsertId());
 	}
 
 	public function deleteAnnouncement($id)
 	{
-		return $this->delete($id);
+        $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeUpdate($sql, array($id));
 	}
 
 	public function updateAnnouncement($id, $fields)
 	{
-		return $this->update($id, $fields);
+        $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getAnnouncement($id);
 	}
 }
