@@ -13,12 +13,6 @@ define(function(require, exports, module) {
             required: true
         });
 
-        validator.addItem({
-            element: '[name="course[type]"]',
-            required: true,
-            errormessageRequired: '请选择课程类型'
-        });
-
     };
 
 });
