@@ -17,20 +17,20 @@
             <div class="alert alert-danger">{{ error.message|trans }}</div>
           {% endif %}
 
-          <div class="control-group">
+          <div class="form-group">
             <label class="control-label" for="login_username">Email地址</label>
             <div class="controls">
-              <input id="login_username" type="text" name="_username" value="{{ last_username }}" required />
+              <input class="form-control" id="login_username" type="text" name="_username" value="{{ last_username }}" required />
             </div>
           </div>
-          <div class="control-group">
+          <div class="form-group">
             <label class="control-label" for="login_password">密码</label>
             <div class="controls">
-              <input id="login_password" type="password" name="_password" required />
+              <input class="form-control" id="login_password" type="password" name="_password" required />
             </div>
           </div>
 
-          <div class="control-group">
+          <div class="form-group">
             <div class="controls">
               {% if app.request.query.get('to') %}
                 <input type="hidden" name="_target_path" value="{{ app.request.query.get('to') }}" />
