@@ -164,7 +164,7 @@ class UserController extends BaseController {
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-
+        $auth = $this->getSettingService()->get('auth', array());
         $this->sendEmail(
             $user['email'],
             "请激活你的帐号，完成注册",
@@ -180,6 +180,11 @@ class UserController extends BaseController {
     protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');        
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');        
     }
 
 }

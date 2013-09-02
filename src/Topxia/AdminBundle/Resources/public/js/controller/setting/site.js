@@ -7,8 +7,6 @@ define(function(require, exports, module) {
 
         var $form = $("#site-form");
 
-        
-
         var uploader = new Uploader({
             trigger: '#site-logo-upload',
             name: 'logo',
