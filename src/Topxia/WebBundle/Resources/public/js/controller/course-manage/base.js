@@ -45,11 +45,6 @@ define(function(require, exports, module) {
             required: true
         });
 
-        validator.addItem({
-            element: '[name="course[price]"]',
-            rule: 'number'
-        });
-
     };
 
 });
