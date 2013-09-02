@@ -156,6 +156,11 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('User.MessageService');
     }
 
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
     private function sendVerifyEmail($token, $user)
     {
         $auth = $this->getSettingService()->get('auth', array());
@@ -167,11 +172,9 @@ class RegisterController extends BaseController
         $emailActivationBody = str_replace('{{sitename}}', $site['name'], $emailActivationBody);
         $emailActivationBody = str_replace('{{siteurl}}', $site['url'], $emailActivationBody);
         $emailActivationBody = str_replace('{{verifyurl}}', $site['verifyurl']."/{$token}", $emailActivationBody);
-        $this->sendEmail(
-            $user['email'],
-            $emailActivationTitle,
-            $emailActivationBody
-        );
+        $this->sendEmail($user['email'], $emailActivationTitle, $emailActivationBody);
+        $this->getNotificationService()->notify($user['id'], 'default', '邮箱已经发送，请激活你的帐号，完成注册！');
+        $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
     }
 
     private function sendWelcomeMessage($user)
@@ -183,6 +186,7 @@ class RegisterController extends BaseController
         $messageContent = str_replace('{{siteurl}}', $site['url'], $messageContent);
         $welcomeSender = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
         $this->getMessageService()->sendMessage($welcomeSender['id'], $user['id'], $messageContent);
+        $this->getUserService()->waveUserCounter($user['id'], 'newMessageNum', 1);
 
     }
 }
