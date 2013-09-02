@@ -17,10 +17,7 @@ class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
-		return $this->render('TopxiaWebBundle:CourseManage:index.html.twig', array(
-			'course' => $course
-		));
+        return $this->forward('TopxiaWebBundle:CourseManage:base',  array('id' => $id));
 	}
 
 	public function baseAction(Request $request, $id)
@@ -110,6 +107,11 @@ class CourseManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseManage:crop.html.twig', array(
             'course' => $course
         ));
+    }
+
+    public function priceAction(Request $request, $id)
+    {
+        
     }
 
     public function teachersAction(Request $request, $id)

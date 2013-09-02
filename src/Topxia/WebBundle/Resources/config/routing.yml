@@ -322,6 +322,10 @@ course_manage_picture_crop:
     pattern:  /course/{id}/manage/picture/crop
     defaults: { _controller: TopxiaWebBundle:CourseManage:cropPicture }
 
+course_manage_price:
+    pattern:  /course/{id}/manage/price
+    defaults: { _controller: TopxiaWebBundle:CourseManage:price }
+
 course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
@@ -329,6 +333,10 @@ course_manage_teachers:
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
+
+course_manage_students:
+    pattern:  /course/{id}/manage/students
+    defaults: { _controller: TopxiaWebBundle:CourseManage:students }
 
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
