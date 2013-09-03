@@ -20,7 +20,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+            ->orderBy('createdTime', 'ASC');
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
@@ -29,8 +30,11 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_member')
             ->andWhere('userId = :userId')
+            ->andWhere('courseId = :courseId')
             ->andWhere('noteNum > :noteNumGreaterThan')
-            ->andWhere('role = :role');
+            ->andWhere('role = :role')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan');
     }
 
     public function getMemberCountByUserId($userId)

@@ -7,9 +7,23 @@ use Topxia\Common\ArrayToolkit;
 
 class DefaultController extends BaseController
 {
+
+    public function findWelcomedCoursesAction(Request $request)
+    {
+        $dateType = $request->query->get('dateType');
+        $welcomedCourses = $this->_findWelcomedCourses($dateType);
+
+        $html = $this->renderView('TopxiaAdminBundle:Default:block-welcomed-courses.html.twig', array(
+                'welcomedCourses' => $welcomedCourses
+            ));
+        
+        return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
+    }
+
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+        $welcomedCourses = $this->_findWelcomedCourses('today');
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig', array('welcomedCourses'=>$welcomedCourses));
     }
 
     public function newUsersAction(Request $request)
@@ -64,6 +78,34 @@ class DefaultController extends BaseController
         ));
     }
 
+     private function _findWelcomedCourses($dateType)
+    {
+        $courseMembers = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 1000);
+        $welcomedCourses = array();
+
+        foreach ($courseMembers as $courseMember) {
+            $courseId = $courseMember['courseId'];
+            if(empty($welcomedCourses[$courseId])){
+                $welcomedCourses[$courseId] = array('newStudentsNumber'=>1);
+            } else {
+                $welcomedCourses[$courseId]['newStudentsNumber']++;
+            }
+        }
+
+        foreach ($welcomedCourses as $courseId => &$welcomedCourse) {
+            $allStudentsNumber = $this->getCourseService()->searchMemberCount(array('courseId'=>$courseId, 'role'=>'student'));
+            $welcomedCourse['allStudentsNumber'] = $allStudentsNumber;
+            $welcomedCourse['newMoneyAdded'] = 0;
+            $welcomedCourse['course'] = $this->getCourseService()->getCourse($courseId);
+
+            $orders = $this->getOrderService()->searchOrders(array('date'=>$dateType, 'courseId'=>$courseId), 'latest', 0, 1000);
+            foreach ($orders as $id => $order) {
+                $welcomedCourse['newMoneyAdded'] += $order['price'];
+            }
+        }
+        return $welcomedCourses;
+    }
+    
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');

@@ -42,19 +42,6 @@ class MessageController extends BaseController
             'paginator' => $paginator));
     }
 
-    public function remindCourseTeachersAction(Request $request, $courseId)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $auth = $this->getSettingService()->get('auth', array());
-        $sender = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-        foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getMessageService()->sendMessage($sender['id'], $receiverId, 
-                "来自后台管理者的提醒，您的课程: {$course['title']}还有尚未解答的问题,请及时提供答案!");
-        }
-
-        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-    }
-
     public function deleteChoosedMessagesAction(Request $request)
     {  
         $ids = $request->request->get('ids');

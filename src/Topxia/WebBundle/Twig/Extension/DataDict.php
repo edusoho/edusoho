@@ -34,6 +34,14 @@ class DataDict
             'activity' => '活动',
             'page' => '页面',
         ),
+        'dateType' => array(
+            'today' => '今日',
+            'yesterday' => '昨日',
+            'last_week' => '上周',
+            'this_week' => '本周',
+            'last_month' => '上月',
+            'this_month' => '本月',
+    	),
         'contentStatus' => array(
             'published' => '已发布',
             'unpublished' => '未发布',

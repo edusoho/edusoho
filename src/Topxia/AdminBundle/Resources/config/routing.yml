@@ -2,6 +2,10 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_find_welcomed_courses:
+    pattern:  /find/welcome/courses
+    defaults: { _controller: TopxiaAdminBundle:Default:findWelcomedCourses }
+
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
@@ -318,7 +322,7 @@ admin_message:
 
 admin_remind_course_teachers:
     pattern: /message/{courseId}/remind/teachers
-    defaults: { _controller: TopxiaAdminBundle:Message:remindCourseTeachers }
+    defaults: { _controller: TopxiaAdminBundle:Notification:remindCourseTeachers }
 
 admin_message_delete_messages:
     pattern: /delete/choosed/messages
