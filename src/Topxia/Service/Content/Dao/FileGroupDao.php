@@ -11,4 +11,8 @@ interface FileGroupDao
 
 	public function findAllGroups();
 
+	public function addGroup($group);
+
+	public function deleteGroup($id);
+
 }

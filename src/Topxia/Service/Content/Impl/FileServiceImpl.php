@@ -186,6 +186,16 @@ class FileServiceImpl extends BaseService implements FileService
     	return $this->getGroupDao()->findAllGroups();
     }
 
+    public function addFileGroup($group)
+    {
+    	return $this->getGroupDao()->addGroup($group);
+    }
+
+    public function deleteFileGroup($id)
+    {
+    	return $this->getGroupDao()->deleteGroup($id);
+    }
+
     public function thumbnailFile(array $file, array $options)
     {
     	$options = array('quality' => 90, 'mode' => 'outbound') + $options;
