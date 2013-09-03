@@ -17,7 +17,7 @@
           </div>
         {% endif %}
         <div class="course-metas">
-          <span class="stars-5">&nbsp;</span>
+          <span class="stars-{{ (course.rating/2)|number_format }}">&nbsp;</span>
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
           <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
