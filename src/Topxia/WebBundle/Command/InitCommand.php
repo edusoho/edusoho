@@ -195,19 +195,25 @@ EOD;
 			$this->getCategoryService()->deleteGroup($group['id']);
 		}
 
-		$group = $this->getCategoryService()->addGroup(array(
-			'name' => '课程分类',
-			'code' => 'course',
-			'depth' => 2,
-		));
+		$group = $this->getCategoryService()->getGroupByCode('course');
+		if (!$group) {
+			$group = $this->getCategoryService()->addGroup(array(
+				'name' => '课程分类',
+				'code' => 'course',
+				'depth' => 2,
+			));
+		}
 
-		$this->getCategoryService()->createCategory(array(
-			'name' => '默认分类',
-			'code' => 'default',
-			'weight' => 100,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
+		$category = $this->getCategoryService()->getCategoryByCode('default');
+		if (!$category) {
+			$this->getCategoryService()->createCategory(array(
+				'name' => '默认分类',
+				'code' => 'default',
+				'weight' => 100,
+				'groupId' => $group['id'],
+				'parentId' => 0,
+			));
+		}
 
 		$output->writeln(' ...<info>成功</info>');
 	}
