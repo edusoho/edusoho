@@ -335,10 +335,6 @@ course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
 
-course_manage_students:
-    pattern:  /course/{id}/manage/students
-    defaults: { _controller: TopxiaWebBundle:CourseManage:students }
-
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:index }
