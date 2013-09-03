@@ -52,7 +52,7 @@ CKEDITOR.editorConfig = function( config ) {
 	    [ 'Bold', 'Italic', 'Underline', '-', 
 	      'NumberedList', 'BulletedList', '-', 
 	      'Link', 'Unlink', '-',
-	      'Image'
+	      'Image', '-', 'Source'
 	    ]
 	];
 

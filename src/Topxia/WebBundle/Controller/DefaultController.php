@@ -25,11 +25,14 @@ class DefaultController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        // var_dump($users);
+        $blocks = $this->getBlockService()->getContentsByCodes(array('less_home_top_banner'));
+
+        // <a href="#"><img src="{{ asset('/assets/img/placeholder/carousel-1200x256-1.png') }}" class="img-responsive"></a>
 
         return $this->render('TopxiaWebBundle:Default:index-less.html.twig', array(
             'courses' => $courses,
             'users' => $users,
+            'blocks' => $blocks,
         ));
     }
 
@@ -76,6 +79,11 @@ class DefaultController extends BaseController
     protected function getNavigationService()
     {
         return $this->getServiceKernel()->createService('Content.NavigationService');
+    }
+
+    protected function getBlockService()
+    {
+        return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
     protected function getCourseService()

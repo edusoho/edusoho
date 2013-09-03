@@ -11,9 +11,11 @@
 
   <div class="row">
 
-    <a href="#">
-      <img src="{{ asset('/assets/img/placeholder/carousel-1200x256-1.png') }}" class="img-responsive">
-    </a>
+    {% if blocks.less_home_top_banner %}
+      <div class="homepage-feature">
+        {{ blocks.less_home_top_banner|raw }}
+      </div>
+    {% endif %}
 
     <div class="col-lg-9">
       <div class="es-box">
