@@ -72,6 +72,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('nickname LIKE :nicknameLike')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('email = :email')
+            ->orderBy('createdTime', 'ASC')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 

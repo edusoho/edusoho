@@ -320,6 +320,10 @@ admin_message:
     pattern: /message
     defaults: { _controller: TopxiaAdminBundle:Message:index }
 
+admin_remind_course_teachers:
+    pattern: /message/{courseId}/remind/teachers
+    defaults: { _controller: TopxiaAdminBundle:Message:remindCourseTeachers }
+
 admin_message_delete_messages:
     pattern: /delete/choosed/messages
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }

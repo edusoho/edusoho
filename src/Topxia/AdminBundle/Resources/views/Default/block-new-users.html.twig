@@ -1,0 +1,48 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+  <div class="col-md-6">
+		 	
+		 	<div>
+			  	<p class="panel-title">新用户</p>
+		 	</div>
+
+				<div>
+					<table class="table table-condensed table-bordered table-striped table-hover">
+		        <thead>
+		          <tr>
+		            <th width="10%">昵称</th>
+		            <th width="15%">上次登陆IP地址</th>
+		            <th width="20%">注册时间</th>
+		            <th width="50%" >收藏的课程</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		        	{% if newUsers %}
+
+			        	{% for newUser in newUsers %}
+			        		
+			        		<tr>
+					            <td>{{newUser.nickname}}</td>
+					            <td>{{newUser.loginIp}}</td>
+					            <td>{{newUser.createdTime | date('Y-n-d H:i:s') }}</td>
+					            <td>
+					            	{% if favoriteCourses[newUser.id] %}
+						            	{% for favoriteCourse in favoriteCourses[newUser.id] %}
+						            		<a href="{{ path('course_show', {id:favoriteCourse.id}) }}" >
+						            			<strong> {{ favoriteCourse.title }} </strong>
+						            		</a>
+						            	{% endfor %}
+					            	{% else %}
+					            	  暂无收藏课程 
+					            	{% endif %}
+
+					            </td>
+			          		</tr>
+
+			        	{% endfor %}
+
+		        	{% endif %}
+
+		        </tbody>
+		      </table>
+		    </div>
+  </div>

@@ -1,0 +1,52 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<div class="col-md-12">
+		 	
+		 	<div>
+			  	<p class="panel-title">购买记录</p>
+		 	</div>
+
+			<div>
+				<table class="table table-condensed table-bordered table-striped table-hover">
+			        <thead>
+			          <tr>
+			            <th width="20%">昵称</th>
+			            <th width="20%">课程名称</th>
+			            <th width="20%">课程价格</th>
+			            <th width="20%">购买时间</th>
+			            <th width="20%">支付方式</th>
+			          </tr>
+			        </thead>
+			        <tbody>
+			        	{% for paidRecord in paidRecords %}
+			      	        <tr>
+					            <td> <strong> {{ admin_macro.user_link(users[paidRecord.userId]) }} </strong>
+						        	</td>
+					            <td>
+					            <a href="{{ path('course_show', {id:courses[paidRecord.courseId].id}) }}" target="_blank"><strong>{{ courses[paidRecord.courseId].title }}</strong></a>
+					        	</td>
+					            <td class="money-text">
+					            	{% if paidRecord.price == 0 %}
+						            	免费 {{paidRecord.price}} 元
+					            	{% else %}
+						            	{{paidRecord.price}} 元
+					            	{% endif %}
+					            </td>
+					            <td>
+					            	{{paidRecord.createdTime |date('Y-n-d H:i')}}
+					            </td>
+					            <td>
+						            {% if paidRecord.payment == 'none' %} 暂无
+						            {% elseif paidRecord.payment == 'alipay' %} 支付宝
+						            {% elseif paidRecord.payment == 'tenpay' %} 财付通
+						            {% endif %}
+        						</td>
+					        </tr>
+
+			        	{% endfor %}
+
+			          
+			        </tbody>
+			    </table>
+		    </div>
+
+		</div>

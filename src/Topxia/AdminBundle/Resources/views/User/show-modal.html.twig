@@ -40,52 +40,112 @@
 
   <tr>
     <th>姓名</th>
-    <td>{{ profile.truename }}</td>
+    <td>
+      {% if profile.truename %}
+        {{ profile.truename }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>姓别</th>
-    <td>{{ profile.gender }}</td>
+    <td>
+      {% if profile.gender %}
+        {{ profile.gender }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>职业</th>
-    <td>{{ profile.job }}</td>
+    <td>
+      {% if profile.job %}
+        {{ profile.job }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>头衔</th>
-    <td>{{ user.title }}</td>
+    <td>
+    {% if profile.title %}
+        {{ profile.title }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>个人签名</th>
-    <td>{{ profile.signature }}</td>
+    <td>
+    {% if profile.signature %}
+        {{ profile.signature }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>自我介绍</th>
-    <td>{{ profile.about|raw }}</td>
+    <td>
+    {% if profile.about %}
+        {{ profile.about | raw }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>个人网站</th>
-    <td>{{ profile.site }}</td>
+    <td>
+      {% if profile.site %}
+        {{ profile.site }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>微博</th>
-    <td>{{ profile.weibo }}</td>
+    <td>
+      {% if profile.weibo %}
+        {{ profile.weibo }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>微信</th>
-    <td>{{ profile.weixin }}</td>
+    <td>
+      {% if profile.weixin %}
+        {{ profile.weixin }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
     <th>QQ</th>
-    <td>{{ profile.qq }}</td>
+    <td>
+      {% if profile.qq %}
+        {{ profile.qq }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 </table>
 

@@ -65,7 +65,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		if (isset($conditions['content'])) {
 			$conditions['content'] = "%{$conditions['content']}%";
 		}
-
+		
 		return $this->createDynamicQueryBuilder($conditions)
 			->from($this->table, $this->table)
 			->andWhere('courseId = :courseId')
@@ -74,6 +74,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			->andWhere('type = :type')
 			->andWhere('isStick = :isStick')
 			->andWhere('isElite = :isElite')
+            ->andWhere('postNum = :postNum')
 			->andWhere('title LIKE :title')
 			->andWhere('content LIKE :content');
 	}

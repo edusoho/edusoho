@@ -97,7 +97,6 @@ class UserController extends BaseController {
         $user = $this->getUserService()->getUser($id);
         $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
-
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
