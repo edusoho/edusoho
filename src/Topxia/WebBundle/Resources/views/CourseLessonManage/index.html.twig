@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
+{% block title %}课程内容 - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'lesson' %}
 {% set script_controller = 'course-manage/lesson' %}
 
@@ -15,7 +17,7 @@
 		<button class="btn btn-info btn-sm pull-right mhs" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 章节</button>
 
 		<button class="btn btn-info btn-sm pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 课时</button>
-		课时
+		课程内容
 	</div>
 	<div class="panel-body">
 		<ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">

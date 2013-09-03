@@ -13,8 +13,6 @@
         <a href="{{ url('admin_setting_mailer') }}" class="list-group-item {% if menu == 'mailer' %}active{% endif %}">电子邮件</a>
         <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
 
-        <a href="{{ path('admin_setting_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}" style="display:none" >文件设置</a>
-
         <a href="{{ path('admin_setting_video') }}" class="list-group-item {% if menu == 'video' %}active{% endif %}" style="display:none" >视频设置</a>
       </div>
     {% endblock %}

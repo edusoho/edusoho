@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}课程 - {{ parent() }}{% endblock %}
+{% set nav = 'course' %}
+
+{% set bodyClass = 'homepage' %}
+
+{% block content %}
+
+  <div class="row es-row-light">
+
+    <div class="col-lg-10">
+
+      <div class="es-box">
+        <div class="es-box-heading">
+          <h2>课程</h2>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-lg-2 es-sidebar">
+
+      <div class="es-box">
+        <h2 class="es-sidebar-heading">课程分类</h2>
+        <ul class="nav es-sidenav">
+          <li><a href="#">课程分类A</a></li>
+          <li class="active"><a href="#">课程分类B</a></li>
+          <li><a href="#">课程分类C</a></li>
+        </ul>
+      </div>
+
+    </div>
+    
+  </div>
+{% endblock %}

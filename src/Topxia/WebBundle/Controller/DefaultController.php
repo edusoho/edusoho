@@ -8,6 +8,21 @@ class DefaultController extends BaseController
     public function indexAction ()
     {
         return $this->redirect($this->generateUrl('course_explore'));
+        $template = ucfirst($this->setting('site.homepage_template', 'less'));
+
+        return $this->forward("TopxiaWebBundle:Default:index{$template}");
+    }
+
+    public function indexLessAction()
+    {
+        return $this->render('TopxiaWebBundle:Default:index-less.html.twig', array(
+        ));
+    }
+
+    public function indexMoreAction()
+    {
+        return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
+        ));
     }
 
     public function topNavigationAction()
