@@ -211,27 +211,6 @@ class SettingController extends BaseController
         ));
     }
 
-    public function fileAction(Request $request)
-    {
-        $fileSetting = $this->getSettingService()->get('file', array());
-        $default = array(
-            'public_directory'=>'',
-            'public_url'=>'',
-            'private_directory'=>''
-        );
-        $fileSetting = array_merge($default, $fileSetting);
-        
-        if ($request->getMethod() == 'POST') {
-            $fileSetting = $request->request->all();
-            $this->getSettingService()->set('file', $fileSetting);
-            $this->setFlashMessage('success', '文件设置已保存！');
-        }
-
-        return $this->render('TopxiaAdminBundle:System:file.html.twig', array(
-            'fileSetting'=>$fileSetting
-        ));
-    }
-
     public function videoAction(Request $request)
     {
         $videoSetting = $this->getSettingService()->get('video', array());

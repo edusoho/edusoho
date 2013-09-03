@@ -275,10 +275,6 @@ admin_setting_payment:
     pattern:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:Setting:payment }
 
-admin_setting_file:
-    pattern:  /setting/file
-    defaults: { _controller: TopxiaAdminBundle:Setting:file }
-
 admin_setting_video:
     pattern:  /setting/video
     defaults: { _controller: TopxiaAdminBundle:Setting:video }
