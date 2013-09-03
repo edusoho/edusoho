@@ -28,6 +28,17 @@
 	      {{ thread.createdTime|smart_time }}
 	      <span class="bullet mhs">•</span>
 	      {{ thread.hitNum}} 次浏览
+	      <span>
+	      	{% if thread.lessonId != 0 %}
+            <span>所属课时 
+              <strong>[{{lesson.number}}]</strong>
+            </span>
+            <span class="bullet">•</span>
+            <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" >
+              {{lesson.title}} 
+            </a>
+          {% endif %}
+          </span>
 	    </div>
 	  </div>
 	  <div class="thread-body">{{ thread.content|raw }}</div>

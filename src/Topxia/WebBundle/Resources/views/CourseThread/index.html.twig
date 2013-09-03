@@ -80,7 +80,10 @@
               <span class="bullet">•</span>
               <span>
               {% if thread.lessonId != 0 %}
-                  <span>所属课时  </span>
+                  <span>所属课时 
+                    <strong>[{{lessons[thread.lessonId].number}}]</strong>
+                  </span>
+                  <span class="bullet">•</span>
                   <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" >
                     {{lessons[thread.lessonId].title}} </a>
               {% endif %}

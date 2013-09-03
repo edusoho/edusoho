@@ -77,8 +77,10 @@ class CourseThreadController extends BaseController
 
         $isManager = $this->getCourseService()->canManageCourse($course);
 
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
             'course' => $course,
+            'lesson' => $lesson,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
