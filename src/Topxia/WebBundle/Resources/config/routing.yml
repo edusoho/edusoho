@@ -320,7 +320,7 @@ course_manage_picture:
 
 course_manage_picture_crop:
     pattern:  /course/{id}/manage/picture/crop
-    defaults: { _controller: TopxiaWebBundle:CourseManage:cropPicture }
+    defaults: { _controller: TopxiaWebBundle:CourseManage:pictureCrop }
 
 course_manage_price:
     pattern:  /course/{id}/manage/price

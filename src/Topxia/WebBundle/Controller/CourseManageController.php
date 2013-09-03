@@ -8,7 +8,7 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-use Imagine\Imagick\Imagine;
+use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
@@ -62,50 +62,58 @@ class CourseManageController extends BaseController
 
 	public function pictureAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
-        $form = $this->createFormBuilder()
-            ->add('picture', 'file')
-            ->getForm();
-        
+		$course = $this->getCourseService()->tryManageCourse($id);
+
         if($request->getMethod() == 'POST'){
-            $form->bind($request);
-            if ($form->isValid()) {
-                $fields = $form->getData();
-                $tmpFile =  $this->getCourseService()->cacheCoursePicture($course['id'], $fields['picture']);
-                $html = $this->renderView('TopxiaWebBundle:CourseManage:picture2crop.html.twig', array(
-                        'course' => $this->getCourseService()->getCourse($id),
-                        'tmpFile'=>$tmpFile));
-                return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-            } else {
-                return $this->createJsonResponse(array('status'=>'error'));
-            }
+            $file = $request->files->get('picture');
+
+            $filenamePrefix = "course_{$course['id']}_";
+            $hash = substr(md5($filenamePrefix . time()), -8);
+            $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();
+
+            $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+
+            $file = $file->move($directory, $filename);
+
+            return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
+                'id' => $course['id'],
+                'file' => $file->getFilename())
+            ));
         }
+
 		return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
 			'course' => $course,
-			'form' => $form->createView()
 		));
 	}
 
-    public function cropPictureAction(Request $request, $id)
+    public function pictureCropAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
-        $tempFileId = $request->request->get('fileId');
-        $tempFile = $this->getFileService()->getFileObject($tempFileId);
-        if($request->getMethod() == 'POST'){
-            $x = (int)$request->request->get('x');
-            $y = (int)$request->request->get('y');
-            $w = (int)$request->request->get('w');
-            $h = (int)$request->request->get('h');
-            if(($w <= 0) || ($h <= 0)){
-                throw new \RuntimeException('裁剪的参数大小有问题，请重新裁剪！');
-            }
-            $coursePicture = $this->getFileService()->uploadFile('course', $tempFile);
-            $this->getCourseService()->changeCoursePicture($course['id'], $coursePicture, array('x'=>$x, 'y'=>$y, 'w'=>$w, 'h'=>$h));
-            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id']))); 
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        //@todo 文件名的过滤
+        $filename = $request->query->get('file');
+        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+
+        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+
+        if($request->getMethod() == 'POST') {
+            $c = $request->request->all();
+            $this->getCourseService()->changeCoursePicture($course['id'], $pictureFilePath, $c);
+            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage:crop.html.twig', array(
-            'course' => $course
+        $imagine = new Imagine();
+        $image = $imagine->open($pictureFilePath);
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen(480)->heighten(270);
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url') . '/tmp/' . $filename;
+
+        return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
+            'course' => $course,
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
         ));
     }
 

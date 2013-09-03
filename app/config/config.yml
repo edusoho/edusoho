@@ -79,6 +79,9 @@ parameters:
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
     topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
+    topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
+    topxia.upload.public_url: "files"
+    topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
 
 services:
     session.handler.pdo.connection:
