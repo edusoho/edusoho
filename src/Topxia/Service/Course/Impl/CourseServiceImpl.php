@@ -59,16 +59,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 	private function _prepareCourseConditions($conditions)
 	{
 		$conditions = array_filter($conditions);
-
 		if (isset($conditions['date'])) {
 			$dates = array(
+				'yesterday'=>array(
+					strtotime('yesterday'),
+					strtotime('today'),
+				),
+				'today'=>array(
+					strtotime('today'),
+					strtotime('tomorrow'),
+				),
 				'this_week' => array(
-					strtotime('Monday'),
+					strtotime('Monday this week'),
 					strtotime('Monday next week'),
 				),
 				'last_week' => array(
 					strtotime('Monday last week'),
-					strtotime('Monday'),
+					strtotime('Monday this week'),
 				),
 				'next_week' => array(
 					strtotime('Monday next week'),
@@ -879,6 +886,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function searchMember($conditions, $start, $limit)
 	{
+		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
 

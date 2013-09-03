@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 class NotificationController extends BaseController
 {
 
+
     public function indexAction (Request $request)
     {
         $user = $this->getCurrentUser();
@@ -33,12 +34,18 @@ class NotificationController extends BaseController
         ));
     }
 
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
 
-    protected function getUserService(){
+    protected function getUserService()
+    {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getNotificationService(){
+    protected function getNotificationService()
+    {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 }

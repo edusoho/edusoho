@@ -127,6 +127,49 @@ class OrderServiceImpl extends BaseService implements OrderService
 	{
 		$conditions = array_filter($conditions);
 
+		if (isset($conditions['date'])) {
+			$dates = array(
+				'yesterday'=>array(
+					strtotime('yesterday'),
+					strtotime('today'),
+				),
+				'today'=>array(
+					strtotime('today'),
+					strtotime('tomorrow'),
+				),
+				'this_week' => array(
+					strtotime('Monday this week'),
+					strtotime('Monday next week'),
+				),
+				'last_week' => array(
+					strtotime('Monday last week'),
+					strtotime('Monday this week'),
+				),
+				'next_week' => array(
+					strtotime('Monday next week'),
+					strtotime('Monday next week', strtotime('Monday next week')),
+				),
+				'this_month' => array(
+					strtotime('first day of this month midnight'), 
+					strtotime('first day of next month midnight'),
+				),
+				'last_month' => array(
+					strtotime('first day of last month midnight'),
+					strtotime('first day of this month midnight'),
+				),
+				'next_month' => array(
+					strtotime('first day of next month midnight'),
+					strtotime('first day of next month midnight', strtotime('first day of next month midnight')),
+				),
+			);
+
+			if (array_key_exists($conditions['date'], $dates)) {
+				$conditions['paidStartTime'] = $dates[$conditions['date']][0];
+				$conditions['paidEndTime'] = $dates[$conditions['date']][1];
+				unset($conditions['date']);
+			}
+		}
+		
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
         }

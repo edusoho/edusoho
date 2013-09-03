@@ -10,10 +10,9 @@
 
 <div class="row">
 
-	{{ render(controller('TopxiaAdminBundle:Default:newUsers')) }}
+{{ render(controller('TopxiaAdminBundle:Default:newUsers')) }}
 
-
-{% include 'TopxiaAdminBundle:Default:block-excellent-courses.html.twig' %}
+{% include 'TopxiaAdminBundle:Default:block-welcomed-courses.html.twig' with {welcomedCourses:welcomedCourses} %}
 
 </div>
 
