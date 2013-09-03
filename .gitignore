@@ -11,6 +11,7 @@
 /composer.phar
 /etc/sublimetext2/edusoho.sublime-workspace
 /web/files/*
+!/web/files/.gitkeep
 /private_files/
 /web/customize/content/article/
 /web/customize/content/activity/
