@@ -14,15 +14,6 @@ class InitCommand extends BaseCommand
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		// $output->writeln('文件设置初始化');
-
-		// $fileSettings = array(
-		// 	'public_directory' => 'web/files',
-		// 	'public_web_path' => '/files',
-		// 	'private_directory' => 'private_files',
-		// );
-		// $this->getSettingService()->set('file', $fileSettings);
-
 		$output->writeln('<info>开始初始化系统</info>');
 
 		$user = $this->initAdminUser($output);
@@ -78,11 +69,7 @@ class InitCommand extends BaseCommand
 
 		$user = $this->getUserService()->getUserByEmail('test@edusoho.com');
 		if (!$user) {
-			$user = $this->getUserService()->register(array(
-				'email' => 'test@edusoho.com',
-				'nickname' => '测试管理员',
-				'password' => 'testtest',
-			));
+			$user = $this->getUserService()->register($fields);
 		}
 
 		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));

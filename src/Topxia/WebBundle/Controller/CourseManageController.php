@@ -107,7 +107,7 @@ class CourseManageController extends BaseController
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(480)->heighten(270);
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url') . '/tmp/' . $filename;
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
             'course' => $course,

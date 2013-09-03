@@ -111,15 +111,10 @@ class FileServiceImpl extends BaseService implements FileService
 	{
 		$parsed = $this->parseFileUri($uri);
 
-		$setting = $this->getSettingService()->get("file");
-		if (empty($setting[$parsed['access'].'_directory'])) {
-			throw $this->createServiceException('文件上传失败，公开文件存储路径尚未设置。');
-		}
-
 		if ($parsed['access'] == 'public') {
-			$directory = $this->getKernel()->getRootPath() . '/web/' . $setting[$parsed['access'].'_directory'];
+			$directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
 		} else {
-			$directory = $this->getKernel()->getRootPath() . '/' . $setting[$parsed['access'].'_directory'];
+			$directory = $this->getContainer()->getParameter('topxia.upload.private_directory');
 		}
 
 		if (!is_writable($directory)) {
@@ -156,17 +151,14 @@ class FileServiceImpl extends BaseService implements FileService
     	$parsed['directory'] = dirname($parsed['path']);
     	$parsed['name'] = basename($parsed['path']);
 
-		$setting = $this->getSettingService()->get("file");
-		if (empty($setting[$parsed['access'].'_directory'])) {
-			$parsed['fullpath'] = null;
+    	$directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
+
+		if ($parsed['access'] == 'public') {
+			$directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
 		} else {
-			if ($parsed['access'] == 'public') {
-				$directory = $this->getKernel()->getRootPath() . '/web/' . $setting[$parsed['access'].'_directory'];
-			} else {
-				$directory = $this->getKernel()->getRootPath() . '/' . $setting[$parsed['access'].'_directory'];
-			}
-			$parsed['fullpath'] = $directory . '/' . $parsed['path'];
+			$directory = $this->getContainer()->getParameter('topxia.upload.private_directory');
 		}
+		$parsed['fullpath'] = $directory . '/' . $parsed['path'];
 
     	return $parsed;
     }

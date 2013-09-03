@@ -81,24 +81,10 @@ class CourseMaterialController extends BaseController
         $setting = $this->setting('file');
         $parsed = $this->getFileService()->parseFileUri($fileUri);
 
-        $directory = dirname($this->get('kernel')->getRootDir()). '/' . $setting[$parsed['access'].'_directory'];
+        $directory = $this->container->getParameter('topxia.upload.private_directory');
 
         $filename = $directory . '/' .  $parsed['path'];
 
-
-        $response = BinaryFileResponse::create($filename, 200, array(), false, 'attachment');
-
-        // $response = new Response();
-
-        // $response->headers->set('Cache-Control', 'private');
-        // $response->headers->set('Content-type', mime_content_type($filename));
-        // $response->headers->set('Content-Disposition', 'attachment; filename="' . basename($filename) . '"');
-        // $response->headers->set('Content-length', filesize($filename));
-
-        // $response->sendHeaders();
-
-        // $response->setContent(readfile($filename));
-
-        return $response;
+        return BinaryFileResponse::create($filename, 200, array(), false, 'attachment');
     }
 }
