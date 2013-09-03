@@ -44,13 +44,13 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 	public function findCategoriesByGroupId($groupId) 
     {
         $sql = "SELECT * FROM {$this->table} WHERE groupId = ? ORDER BY weight ASC";
-        return $this->getConnection()->fetchAll($sql, array($groupId));
+        return $this->getConnection()->fetchAll($sql, array($groupId)) ? : array();
     }
 
 	public function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit) 
     {
         $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY {$orderBy} DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($parentId));
+        return $this->getConnection()->fetchAll($sql, array($parentId)) ? : array();
 	}
 
 	public function findCategoriesCountByParentId($parentId) 
@@ -66,7 +66,13 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findAllCategories()
+    {
+        $sql = "SELECT * FROM {$this->table}";
+        return $this->getConnection()->fetchAll($sql) ? : array();
     }
 
 }

@@ -84,6 +84,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return ArrayToolkit::index( $this->getCategoryDao()->findCategoriesByIds($ids), 'id');
     }
 
+    public function findAllCategories()
+    {
+        return $this->getCategoryDao()->findAllCategories();
+    }
+
     public function isCategoryCodeAvaliable($code, $exclude = null)
     {
         if (empty($code)) {
@@ -164,12 +169,19 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getGroupDao()->findGroups($start, $limit);
     }
 
-    /**
-    *分类的分组系统初始化时初始化好，此方法仅仅给单元测试使用
-    */
+    public function findAllGroups()
+    {
+        return $this->getGroupDao()->findAllGroups();
+    }
+
     public function addGroup(array $group)
     {
         return $this->getGroupDao()->addGroup($group);
+    }
+
+    public function deleteGroup($id)
+    {
+        return $this->getGroupDao()->deleteGroup($id);
     }
 
     private function makeCategoryTree(&$tree, &$categories, $parentId)

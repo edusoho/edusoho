@@ -1,12 +1,12 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 
-use Imagine\Imagick\Imagine;
+use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
@@ -261,37 +261,40 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-    public function cacheCoursePicture ($id, UploadedFile $pictureFile)
+    public function changeCoursePicture ($courseId, $filePath, array $options)
     {
-		$course = $this->getCourse($id);
-		if (empty($course)) {
-			throw $this->createServiceException('课程不存在，图标更新失败！');
-		}
-		
-		/* 这里上传过来的图片必须在resize之后 才能并保存之后呈现给前台 */
-
-		$tmpFile =  $this->getFileService()->uploadFile('tmp', $pictureFile);
-		$imagine = new Imagine();
-		$tmpFileAfterParse = $this->getFileService()->parseFileUri($tmpFile['uri']);
-		$imagine->open($tmpFileAfterParse['fullpath'])->resize(new Box(480, 270))
-                ->save($tmpFileAfterParse['fullpath'], array(
-                    'quality' => 90));
-        return $tmpFile;
-    }
-
-    public function changeCoursePicture ($courseId, $picture, array $options)
-    {
-
         $course = $this->getCourseDao()->getCourse($courseId);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，图标更新失败！');
         }
-        $courseFileAfterParse = $this->getFileService()->parseFileUri($picture['uri']);
+
+        $pathinfo = pathinfo($filePath);
 
         $imagine = new Imagine();
-        $imagine->open($courseFileAfterParse['fullpath'])->crop(new Point($options['x'], $options['y']), new Box($options['w'], $options['h']))
-                ->resize(new Box(476, 268))->save($courseFileAfterParse['fullpath'], array('quality' => 90));
-        return $this->getCourseDao()->updateCourse($courseId, array('largePicture' => $picture['uri']));
+        $rawImage = $imagine->open($filePath);
+
+        $largeImage = $rawImage->copy();
+        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        $largeImage->resize(new Box(480, 270));
+        $largeFilePath = "{$pathinfo['filename']}_large.{$pathinfo['extension']}";
+        $largeImage->save($largeFilePath, array('quality' => 90));
+        $largeFileRecord = $this->getFileService()->uploadFile('course', new File($largeFilePath));
+
+        $largeImage->resize(new Box(304, 171));
+        $middleFilePath = "{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
+        $largeImage->save($middleFilePath, array('quality' => 90));
+        $middleFileRecord = $this->getFileService()->uploadFile('course', new File($middleFilePath));
+
+        $largeImage->resize(new Box(96, 54));
+        $smallFilePath = "{$pathinfo['filename']}_small.{$pathinfo['extension']}";
+        $largeImage->save($smallFilePath, array('quality' => 90));
+        $smallFileRecord = $this->getFileService()->uploadFile('course', new File($smallFilePath));
+
+        return $this->getCourseDao()->updateCourse($courseId, array(
+        	'smallPicture' => $smallFileRecord['uri'],
+        	'middlePicture' => $middleFileRecord['uri'],
+        	'largePicture' => $largeFileRecord['uri'],
+    	));
     }
 
 	public function deleteCourse($id)

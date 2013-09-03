@@ -15,15 +15,6 @@ class CategoryGroupDaoImpl extends BaseDao implements CategoryGroupDao
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
-    public function addGroup(array $group)
-    {
-        $affected = $this->getConnection()->insert($this->table, $group);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert group error.');
-        }
-        return $this->getGroup($this->getConnection()->lastInsertId());
-    }
-
     public function findGroupByCode($code)
     {
         $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
@@ -33,6 +24,26 @@ class CategoryGroupDaoImpl extends BaseDao implements CategoryGroupDao
     public function findGroups($start, $limit)
     {
         $sql = "SELECT * FROM {$this->table} LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
+        return $this->getConnection()->fetchAll($sql, array()) ? : array();
+    }
+
+    public function findAllGroups()
+    {
+        $sql = "SELECT * FROM {$this->table}";
+        return $this->getConnection()->fetchAll($sql) ? : array();
+    }
+
+    public function addGroup(array $group)
+    {
+        $affected = $this->getConnection()->insert($this->table, $group);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert group error.');
+        }
+        return $this->getGroup($this->getConnection()->lastInsertId());
+    }
+
+    public function deleteGroup($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 }

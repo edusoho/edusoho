@@ -184,17 +184,7 @@ class WebExtension extends \Twig_Extension
         }
         $uri = $this->parseFileUri($uri);
         if ($uri['access'] == 'public') {
-            $kernel = ServiceKernel::instance();
-            $setting = $kernel->createService('System.SettingService')->get('file');
-            if (empty($setting['public_url'])) {
-                $url = $request->getBaseUrl() . '/' . $setting['public_directory'] . '/' . $uri['path'];
-                if ($absolute) {
-                    $url = $request->getSchemeAndHttpHost() . $url;
-                }
-                return $url;
-            } else {
-                return rtrim($setting['public_url'], ' /') . '/' . $uri['path'];
-            }
+            return rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
         } else {
 
         }

@@ -11,10 +11,9 @@
 /composer.phar
 /etc/sublimetext2/edusoho.sublime-workspace
 /web/files/*
-/private_files/
-/web/customize/content/article/
-/web/customize/content/activity/
-/web/customize/content/page/
+!/web/files/.gitkeep
+/web/customize/*
+!/web/customize/.gitkeep
 .DS_Store
 .tags*
 src/Topxia/WebBundle/Controller/TestController.php

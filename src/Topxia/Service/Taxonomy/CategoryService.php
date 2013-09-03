@@ -16,6 +16,7 @@ interface CategoryService
 
     public function findCategoriesByIds(array $ids);
 
+    public function findAllCategories();
 
     public function isCategoryCodeAvaliable($code, $exclude = null);
 
@@ -25,12 +26,15 @@ interface CategoryService
 
     public function deleteCategory($id);
     
-
     public function getGroup($id);
 
     public function getGroupByCode($code);
 
     public function getGroups($start, $limit);
 
+    public function findAllGroups();
+
     public function addGroup(array $group);
+
+    public function deleteGroup($id);
 }

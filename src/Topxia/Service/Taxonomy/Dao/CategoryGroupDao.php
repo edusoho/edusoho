@@ -10,8 +10,9 @@ interface CategoryGroupDao
 
     public function findGroups($start, $limit);
 
-    /**
-    *分类的分组系统初始化时初始化好，此方法仅仅给单元测试使用
-    */
+    public function findAllGroups();
+
     public function addGroup(array $group);
+
+    public function deleteGroup($id);
 }

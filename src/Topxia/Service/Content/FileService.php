@@ -141,6 +141,10 @@ interface FileService
 	 */
 	public function getAllFileGroups();
 
+	public function addFileGroup($group);
+
+	public function deleteFileGroup($id);
+
 
 	/**
 	 * [thumbnailFile description]

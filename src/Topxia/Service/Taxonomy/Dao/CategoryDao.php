@@ -4,22 +4,24 @@ namespace Topxia\Service\Taxonomy\Dao;
 
 interface CategoryDao {
 
-	function addCategory($category);
+	public function addCategory($category);
 
-	function deleteCategory($id);
+	public function deleteCategory($id);
 
-	function getCategory($id);
+	public function getCategory($id);
 
-	function findCategoryByCode($code);
+	public function findCategoryByCode($code);
 
-	function updateCategory($id, $category);
+	public function updateCategory($id, $category);
 
-	function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit);
+	public function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit);
 
-	function findCategoriesCountByParentId($parentId);
+	public function findCategoriesCountByParentId($parentId);
 
-	function findCategoriesByGroupId($groupId);
+	public function findCategoriesByGroupId($groupId);
 
-	function findCategoriesByIds(array $ids);
+	public function findCategoriesByIds(array $ids);
+
+	public function findAllCategories();
 
 }
