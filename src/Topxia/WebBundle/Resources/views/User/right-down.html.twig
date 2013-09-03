@@ -11,7 +11,7 @@
           <div class="panel-heading">粉丝</div>
           <div class="panel-body">
             {% for follower in followers%}
-               <a href="{{ path('user_show', {userId:users[follower.fromId].id}) }}">
+               <a href="{{ path('user_show', {id:users[follower.fromId].id}) }}">
                   <img  class="media-object" src="{{ file_path(users[follower.fromId].smallAvatar, 'avatar-large.png') }}">
                   {{users[follower.fromId].nickname}}
                </a>
@@ -23,7 +23,7 @@
           <div class="panel-heading">关注</div>
             <div class="panel-body">
             {% for following in followings%}
-               <a href="{{ path('user_show', {userId:users[following.toId].id}) }}">
+               <a href="{{ path('user_show', {id:users[following.toId].id}) }}">
                   <img  class="media-object" src="{{ file_path(users[following.toId].smallAvatar, 'avatar-large.png') }}">
                   {{users[following.toId].nickname}}
                </a>

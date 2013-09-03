@@ -1,0 +1,29 @@
+<ul class="course-wide-list">
+  {% for course in courses %}
+  <li class="course-item clearfix">
+    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
+      <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
+    </a>
+    <div class="course-body">
+      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
+      <div class="course-about ellipsis">{% if course.subtitle %}{{ course.subtitle }}{% else %}此课程尚未设置副标题，请设置。{% endif %}</div>
+      <div class="course-footer clearfix">
+        {% set teacher = users[course.teacherIds|first]|default(null) %}
+        {% if teacher %}
+          <div class="teacher">
+            <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ file_path(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+            <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+            <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+          </div>
+        {% endif %}
+        <div class="course-metas">
+          <span class="stars-5">&nbsp;</span>
+          <span class="divider"></span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
+          <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+        </div>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>

@@ -1,6 +1,6 @@
 
   <ul class="nav nav-tabs">
-    <li {% if navType == 'show' %} class="active" {% endif %} ><a href="{{ path('user_show', {userId:user.id}) }}">在学课程</a></li>
-    <li {% if navType == 'teaching' %} class="active" {% endif %}><a href="{{ path('user_show_courses_teaching', {userId:user.id}) }}">在教课程</a></li>
-    <li {% if navType == 'favorites' %} class="active" {% endif %}><a href="{{ path('user_show_courses_favorite', {userId:user.id}) }}">收藏课程</a></li>
+    <li {% if navType == 'show' %} class="active" {% endif %} ><a href="{{ path('user_show', {id:user.id}) }}">在学课程</a></li>
+    <li {% if navType == 'teaching' %} class="active" {% endif %}><a href="{{ path('user_show_courses_teaching', {id:user.id}) }}">在教课程</a></li>
+    <li {% if navType == 'favorites' %} class="active" {% endif %}><a href="{{ path('user_show_courses_favorite', {id:user.id}) }}">收藏课程</a></li>
   </ul>

@@ -8,9 +8,9 @@ use Topxia\Common\ArrayToolkit;
 class UserController extends BaseController
 {
 
-    public function showAction(Request $request, $userId)
+    public function showAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
         $learningMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'student'),0,10);
@@ -30,9 +30,9 @@ class UserController extends BaseController
         ));
     }
 
-    public function teachingCoursesAction(Request $request, $userId)
+    public function teachingCoursesAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $teachingMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'teacher'),0,10);
         $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
@@ -50,9 +50,9 @@ class UserController extends BaseController
         ));
     }
 
-    public function favoriteCoursesAction(Request $request, $userId)
+    public function favoriteCoursesAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
         $courses = $this->getCourseService()->findUserFavoriteCourses($user['id'], 0 , 10);

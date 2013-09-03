@@ -574,15 +574,15 @@ my_note_delete:
     methods: [POST]
 
 user_show: 
-    pattern:  /user/{userId}
+    pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
 user_show_courses_teaching: 
-    pattern:  /user/{userId}/courses/teaching
+    pattern:  /user/{id}/courses/teaching
     defaults: { _controller: TopxiaWebBundle:User:teachingCourses }
 
 user_show_courses_favorite: 
-    pattern:  /user/{userId}/courses/favorite
+    pattern:  /user/{id}/courses/favorite
     defaults: { _controller: TopxiaWebBundle:User:favoriteCourses }
 
 user_follow:

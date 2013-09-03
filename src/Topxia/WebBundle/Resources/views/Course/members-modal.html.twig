@@ -12,7 +12,7 @@
     <li class="media">
       {{ web_macro.user_avatar(user, 'pull-left') }}
       <div class="media-body">
-        <a target="_blank" href="{{ path('user_show', {userId:user.id}) }}">{{ user.nickname }}</a>
+        <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
 
         {% if canManage %}
           <div class="progress" title="已学{{ progress.number }}课时">

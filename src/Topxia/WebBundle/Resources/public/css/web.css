@@ -2048,12 +2048,15 @@ body {
 /**
  * 
  */
-.es-row-light {
-	margin-left: 0;
-	margin-right: 0;
+.es-row-wrap {
 	margin-bottom: 20px;
 	background: #fff;
 	border: 1px solid #e1e1e1;
+}
+
+.es-row-wrap .row {
+	margin-left: 0;
+	margin-right: 0;
 }
 
 .es-box {
@@ -2063,6 +2066,7 @@ body {
 
 .es-box-heading {
 	border-bottom: 1px solid #ddd;
+	margin-bottom: 15px;
 }
 
 .es-box-heading h2 {
@@ -2070,9 +2074,9 @@ body {
 	font-size: 18px;
 	display: inline-block;
 	border-bottom: 4px solid #096;
-	line-height: 32px;
-	padding-left: 15px;
-	padding-right: 15px;
+	line-height: 28px;
+	padding-left: 10px;
+	padding-right: 10px;
 	margin-bottom: -1px;
 }
 
@@ -2191,6 +2195,137 @@ body {
 	font-size: 12px;
 }
 
+.course-wide-list {
+	list-style: none;
+	margin: 0;
+	padding:0;
+
+}
+
+.course-wide-list .course-item {
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+	border-radius: 5px;
+}
+
+.course-wide-list .course-item:hover {
+	background: #f9f9f9;
+	border-color: #ccc;
+}
+
+.course-wide-list .course-picture-link {
+	float: left;
+}
+
+.course-wide-list .course-picture {
+	width: 230px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.course-wide-list .course-body {
+	margin: 15px 15px 0px 245px;
+}
+
+.course-wide-list .course-title {
+	margin: 10px 0 10px;
+}
+
+.course-wide-list .course-title a {
+	color: #555;
+	font-weight: bold;
+}
+
+.course-wide-list .course-about {
+	margin: 0 0 15px;
+	color: #666;
+}
+
+.course-wide-list .course-footer {
+	/*border-top: 1px dashed #ddd;*/
+}
+
+.course-wide-list .teacher {
+	float: left;
+	width: 200px;
+}
+
+.course-wide-list .teacher-avatar {
+	float: left;
+	display: block;
+	width: 30px;
+	height: 30px;
+	border-radius: 3px;
+	margin-right: 5px;
+}
+
+.course-wide-list .teacher-nickname {
+	font-size: 12px;
+	font-weight: bold;
+	color: #555;
+}
+
+.course-wide-list .teacher-title {
+	color: #777;
+	font-size: 12px;
+}
+
+.course-wide-list .course-metas {
+	float: right;
+	margin-top: 10px;
+}
+
+.course-wide-list .course-price {
+	color: #096;
+	font-size: 16px;
+}
+
+.course-wide-list .divider {
+	width: 1px;
+	border-left: 1px solid #ccc;
+	margin: 0 5px;
+}
+
+.latest-review-list {
+	font-size: 13px;
+}
+
+.latest-review-list .author-nickname {
+	/*font-weight: bold;*/
+	color: #555;
+}
+
+.latest-review-list .author-picture-link {
+	float: left;
+	margin: 0 10px 5px 0;
+}
+
+.latest-review-list .author-picture {
+	display: block;
+	width: 48px;
+	height: 48px;
+	border-radius: 3px;
+}
+
+.latest-review-list .review-content {
+	font-size: 13px;
+	color: #999;
+}
+
+.latest-review-list .review-footer {
+	text-align: right;
+	margin-top: 5px;
+}
+
+.latest-review-list .course-title {
+	color: #555;
+}
+
+.latest-review-list .divider {
+	width: 1px;
+	border-left: 1px solid #ccc;
+	margin: 0 5px;
+}
 
 .homepage .carousel-feature-banner {
 	margin-bottom: 20px;
