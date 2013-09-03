@@ -276,17 +276,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
         $largeImage->resize(new Box(480, 270));
-        $largeFilePath = "{$pathinfo['filename']}_large.{$pathinfo['extension']}";
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
         $largeFileRecord = $this->getFileService()->uploadFile('course', new File($largeFilePath));
 
         $largeImage->resize(new Box(304, 171));
-        $middleFilePath = "{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
+        $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
         $largeImage->save($middleFilePath, array('quality' => 90));
         $middleFileRecord = $this->getFileService()->uploadFile('course', new File($middleFilePath));
 
         $largeImage->resize(new Box(96, 54));
-        $smallFilePath = "{$pathinfo['filename']}_small.{$pathinfo['extension']}";
+        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('course', new File($smallFilePath));
 
