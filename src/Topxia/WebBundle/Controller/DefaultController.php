@@ -7,6 +7,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
+        return $this->redirect($this->generateUrl('course_explore'));
         $template = ucfirst($this->setting('site.homepage_template', 'less'));
 
         return $this->forward("TopxiaWebBundle:Default:index{$template}");
