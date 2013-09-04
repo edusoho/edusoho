@@ -1,9 +1,4 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
-
-{% block title %}课程 - {{ parent() }}{% endblock %}
-{% set nav = 'course' %}
-
-{% set bodyClass = 'homepage' %}
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block content %}
 
@@ -28,7 +23,7 @@
       </div>
     </div>
 
-    <div class="col-lg-3 es-sidebar">
+    <div class="col-lg-3">
       {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:5})) }}
     </div>
 

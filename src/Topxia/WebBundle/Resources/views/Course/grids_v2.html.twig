@@ -1,0 +1,42 @@
+<ul class="course-grids">
+  {% for course in courses %}
+    <li class="course-grid">
+      <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+        <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+        <span class="title">{{ course.title }}</span>
+        <span class="metas clearfix">
+          <span class="price-col">
+            <span class="meta-label">价格</span>
+            {% if course.price > 0 %}
+              <span class="price-num">{{ course.price }}元</span>
+            {% else %}
+              <span class="price-num">免费</span>
+            {% endif %}
+          </span>
+
+          <span class="review-col">
+            <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+            <span class="review-rating">
+              <span class="stars-3">&nbsp;</span>
+            </span>
+          </span>
+
+          <span class="student-col">
+            <span class="meta-label">学生</span>
+            <span class="student-num">{{ course.studentNum }}人</span>
+          </span>
+
+        </span>
+        {% set user = users[course.teacherIds|first]|default(null) %}
+        {% if user %}
+          <span class="teacher clearfix">
+            <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+            <span class="nickname ellipsis">{{ user.nickname }}</span>
+            <span class="user-title ellipsis">{{ user.title }}</span>
+          </span>
+        {% endif %}
+
+      </a>
+    </li>
+  {% endfor %}
+</ul>

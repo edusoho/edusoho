@@ -27,12 +27,30 @@ class DefaultController extends BaseController
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('less_home_top_banner'));
 
-        // <a href="#"><img src="{{ asset('/assets/img/placeholder/carousel-1200x256-1.png') }}" class="img-responsive"></a>
-
         return $this->render('TopxiaWebBundle:Default:index-less.html.twig', array(
             'courses' => $courses,
             'users' => $users,
             'blocks' => $blocks,
+        ));
+    }
+
+    public function indexMoreAction()
+    {
+        $conditions = array('status' => 'published');
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 100);
+
+        $userIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $blocks = $this->getBlockService()->getContentsByCodes(array('more_home_top_banner'));
+
+        return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
+            'courses' => $courses,
+            'users' => $users,
+            'blocks' => $blocks
         ));
     }
 
@@ -42,19 +60,10 @@ class DefaultController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
-
         return $this->render('TopxiaWebBundle:Default:latest-reviews-block.html.twig', array(
             'reviews' => $reviews,
             'users' => $users,
             'courses' => $courses,
-        ));
-
-
-    }
-
-    public function indexMoreAction()
-    {
-        return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
         ));
     }
 
