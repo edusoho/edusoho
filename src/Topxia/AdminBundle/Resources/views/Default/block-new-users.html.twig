@@ -28,9 +28,23 @@
 					            <td>{{newUser.createdTime | date('Y-n-d H:i:s') }}</td>
 					            <td>
 					            	{% if favoriteCourses[newUser.id] %}
+
 						            	{% for favoriteCourse in favoriteCourses[newUser.id] %}
-						            		<a href="{{ path('course_show', {id:favoriteCourse.id}) }}" > {{ favoriteCourse.title }} </a>
+
+						            		<a  
+						            		{% if loop.index > 6 %} 
+						            		style="display:none" class="favorite-course more-course"
+						            		{% else %} class="favorite-course less-course"
+						            		{% endif %} href="{{ path('course_show', {id:favoriteCourse.id}) }}" > {{ favoriteCourse.title }} 
+						            		</a>
+						            		{% if loop.index != favoriteCourses[newUser.id]|length %} <br> {% endif %}
+
 						            	{% endfor %}
+
+						            	{% if favoriteCourses[newUser.id]|length > 6 %}
+					            		   <button id="more-or-less" class="pull-right btn btn-info" href="javascript:;">更多</button>
+					            		{% endif %}
+
 					            	{% else %}
 					            	  暂无收藏课程 
 					            	{% endif %}
