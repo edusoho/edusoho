@@ -603,6 +603,8 @@ body {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 5px;
+	word-break: break-all;
+	word-wrap: break-word;
 
 }
 
@@ -619,6 +621,8 @@ body {
 
 .thread-body {
 	margin-bottom: 15px;
+	word-break: break-all;
+	word-wrap: break-word;
 }
 
 .thread-footer {
@@ -787,6 +791,7 @@ body {
 	width: 100px;
 	height: 100px;
 	border-radius: 5px;
+	display: inline-block;
 }
 
 .teacher-carousel .teacher-item {
