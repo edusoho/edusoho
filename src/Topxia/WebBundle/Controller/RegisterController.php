@@ -167,17 +167,15 @@ class RegisterController extends BaseController
         $site = $this->getSettingService()->get('site', array());
         $emailTitle = $this->setting('auth.email_activation_title', 
             '请激活你的帐号 完成注册');
-
         $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
         $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token));
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
+        $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-        
         $this->sendEmail($user['email'], $emailTitle, $emailBody);
-        $this->getNotificationService()->notify($user['id'], 'default', '邮箱已经发送，请激活你的帐号，完成注册！');
-        $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
+        
     }
 
     private function sendWelcomeMessage($user)
@@ -188,9 +186,6 @@ class RegisterController extends BaseController
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
         $messageContent = str_replace($valuesToBeReplace, $valuesToReplace, $auth['welcome_body']);
         $welcomeSender = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-
         $this->getMessageService()->sendMessage($welcomeSender['id'], $user['id'], $messageContent);
-        $this->getUserService()->waveUserCounter($user['id'], 'newMessageNum', 1);
-
     }
 }

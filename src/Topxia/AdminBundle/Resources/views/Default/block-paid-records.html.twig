@@ -21,10 +21,12 @@
 			        <tbody>
 			        	{% for paidRecord in paidRecords %}
 			      	        <tr>
-					            <td> <strong> {{ admin_macro.user_link(users[paidRecord.userId]) }} </strong>
+					            <td> {{ admin_macro.user_link(users[paidRecord.userId]) }}
 						        	</td>
 					            <td>
-					            <a href="{{ path('course_show', {id:courses[paidRecord.courseId].id}) }}" target="_blank"><strong>{{ courses[paidRecord.courseId].title }}</strong></a>
+					            <a href="{{ path('course_show', {id:courses[paidRecord.courseId].id}) }}" target="_blank">
+					            	{{ courses[paidRecord.courseId].title }}
+					            </a>
 					        	</td>
 					            <td class="money-text">
 					            	{% if paidRecord.price == 0 %}

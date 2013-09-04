@@ -34,7 +34,7 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
         $builder = $this->createQueryBuilder()
             ->select('*')->from($this->table, 'notification')
             ->where("userId = :userId")
-            ->orderBy('createdTime', 'ASC')
+            ->orderBy('createdTime', 'DESC')
             ->setParameter(":userId", $userId)
             ->setFirstResult($start)
             ->setMaxResults($limit);

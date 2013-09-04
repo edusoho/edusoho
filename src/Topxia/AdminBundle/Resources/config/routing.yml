@@ -321,8 +321,8 @@ admin_message:
     defaults: { _controller: TopxiaAdminBundle:Message:index }
 
 admin_remind_course_teachers:
-    pattern: /message/{courseId}/remind/teachers
-    defaults: { _controller: TopxiaAdminBundle:Notification:remindCourseTeachers }
+    pattern: /message/{courseId}/remind/{questionId}teachers
+    defaults: { _controller: TopxiaAdminBundle:Default:remindCourseTeachers }
 
 admin_message_delete_messages:
     pattern: /delete/choosed/messages
