@@ -7,8 +7,11 @@
     <ul class="text-list">
       {% for thread in threads %}
         <li class="clearfix">
-          <a href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}">{{ thread.title|plain_text(15) }}</a>
+          
+          <a id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{{ thread.title|plain_text(15) }}</a>
+
           <span class="text-muted pull-right">{{ thread.createdTime|date('Y-m-d') }}</span>
+          
         </li>
       {% else %}
       {% endfor %}
