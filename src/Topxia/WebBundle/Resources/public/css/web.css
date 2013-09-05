@@ -2177,7 +2177,8 @@ body {
 	padding-top: 2px;
 	font-size: 15px;
 	font-weight: bold;
-	color: #096;
+	color: #e57259;
+	display: block;
 }
 
 .course-grid .metas .review-col {
@@ -2213,13 +2214,13 @@ body {
 }
 
 .course-grid .teacher .nickname {
-	color: #666;
 	font-size: 12px;
-	font-weight: bold;
+	/*font-weight: bold;*/
 }
 
 .course-grid .teacher .user-title {
 	font-size: 12px;
+	color: #777;
 }
 
 .course-grid .course-status {

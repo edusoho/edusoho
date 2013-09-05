@@ -15,10 +15,17 @@
           </span>
 
           <span class="review-col">
-            <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
-            <span class="review-rating">
-              <span class="stars-3">&nbsp;</span>
-            </span>
+            {% if course.ratingNum > 0 %}
+              <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+              <span class="review-rating">
+                <span class="stars-{{ (course.rating/2)|number_format }}">&nbsp;</span>
+              </span>
+            {% else %}
+              <span class="meta-label">无评价</span>
+              <span class="review-rating">
+                <span class="stars-0">&nbsp;</span>
+              </span>
+            {% endif %}
           </span>
 
           <span class="student-col">
