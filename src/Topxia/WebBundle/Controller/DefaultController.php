@@ -15,7 +15,7 @@ class DefaultController extends BaseController
     public function indexLessAction()
     {
         $conditions = array('status' => 'published');
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 100);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('less_home_top_banner'));
 
@@ -28,7 +28,7 @@ class DefaultController extends BaseController
     public function indexMoreAction()
     {
         $conditions = array('status' => 'published');
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 100);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 

@@ -198,21 +198,22 @@ textarea {
  */
 .site-navbar {
 	border-radius: 0;
-	background-color: #2c3747;
+	background-color: #363e45;
 	box-shadow: 0 2px 3px rgba(0,0,0,0.3);
 	z-index: 1024;
+	min-height: 56px;
 }
 
 .site-navbar .navbar-brand {
   color: #fff;
-  padding-top: 12px;
-  padding-bottom: 12px; 
+  padding-top: 16px;
+  padding-bottom: 16px; 
 }
 
 .site-navbar .navbar-nav > li > a {
   color: #fff;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
 .site-navbar .navbar-nav > li > a:hover,
@@ -2131,7 +2132,7 @@ body {
 	position: relative;
 	display: block;
 	overflow: hidden;
-	width: 259px;
+	width: 254px;
 	text-decoration: none;
 	border-radius: 4px;
 	color: #353535;
@@ -2375,7 +2376,6 @@ body {
 }
 
 .homepage-category-nav li a {
-	color: #00A76F;
 	text-decoration: none;
 	line-height: 32px;
 	padding: 0 15px;
@@ -2384,7 +2384,6 @@ body {
 }
 
 .homepage-category-nav li a:hover {
-	color: #096;
 	border-bottom-color: #d9d9d9;
 }
 
