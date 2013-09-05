@@ -12,9 +12,14 @@ define(function(require, exports, module) {
                 _super(item, container);
                 var data = $list.sortable("serialize").get();
                 $.post($list.data('sortUrl'), {ids:data}, function(response){
-                    console.log(response);
+
+                    $('.lesson-list').find('.item-lesson').each(function(index){
+
+                        $(this).find('.sequence').text(index+1);
+
+                    });
+                    
                 });
-                console.log(data);
             },
             serialize: function(parent, children, isContainer) {
                 return isContainer ? children : parent.attr('id');

@@ -1,6 +1,7 @@
 <li class="item-lesson" id="lesson-{{ lesson.id }}">
 	<div class="item-line"></div>
 	<div class="item-content">
+		
 		{% if lesson.type == 'video' %}
 			<span class="glyphicon glyphicon-facetime-video text-success"></span>
 		{% elseif lesson.type == 'audio' %}
@@ -8,7 +9,7 @@
 		{% else %}
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
-		课时{{ lesson.number }}：{{ lesson.title }}
+		课时<span class="sequence">{{ lesson.number }}</span>： {{ lesson.title }}
 
 		{% if lesson.type in ['video', 'audio'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
