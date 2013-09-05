@@ -1,5 +1,4 @@
 <?php
-
 namespace Topxia\Service\User;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -83,9 +82,12 @@ interface UserService
     
     public function unlockUser($id);
 
+
     public function promoteUser($id);
 
     public function cancelPromoteUser($id);
+
+    public function findLatestPromotedTeacher($start, $limit);
 
     /**
      * 更新用户的计数器

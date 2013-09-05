@@ -515,6 +515,11 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedTime' => 0));
     }
 
+    public function findLatestPromotedTeacher($start, $limit)
+    {
+        return $this->searchUsers(array('roles' => 'ROLE_TEACHER', 'promoted' => 1), array('promotedTime', 'DESC'),  $start, $limit);
+    }
+
     public function waveUserCounter($userId, $name, $number)
     {
         if (!ctype_digit((string) $number)) {

@@ -45,11 +45,21 @@ class DefaultController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
+        $promotedTeacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);
+        if ($promotedTeacher) {
+            $promotedTeacher = $promotedTeacher[0];
+            $promotedTeacher = array_merge(
+                $promotedTeacher,
+                $this->getUserService()->getUserProfile($promotedTeacher['id'])
+            );
+        }
+
         $blocks = $this->getBlockService()->getContentsByCodes(array('more_home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
             'courses' => $courses,
             'users' => $users,
+            'promotedTeacher' => $promotedTeacher,
             'blocks' => $blocks
         ));
     }

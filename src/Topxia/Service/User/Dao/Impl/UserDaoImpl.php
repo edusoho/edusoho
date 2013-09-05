@@ -85,6 +85,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
+            ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('nickname = :nickname')
             ->andWhere('nickname LIKE :nicknameLike')
