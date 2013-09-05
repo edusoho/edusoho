@@ -12,6 +12,8 @@ interface CategoryDao {
 
 	public function findCategoryByCode($code);
 
+	public function findCategoriesByGroupIdAndParentId($groupId, $parentId);
+
 	public function updateCategory($id, $category);
 
 	public function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit);
