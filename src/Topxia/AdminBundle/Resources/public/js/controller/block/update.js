@@ -10,11 +10,6 @@ define(function(require, exports, module) {
       var $modal = $form.parents('.modal');
       var $table = $('#block-table');
 
-      CKEDITOR.replace('blockContent', {
-          toolbar: 'Mini',
-          removePlugins: 'elementspath',
-      });
-
       var validator = new Validator({
           element: $form,
           autoSubmit: false,
@@ -23,7 +18,6 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            CKEDITOR.instances['blockContent'].updateElement();
             $.post($form.attr('action'), $form.serialize(), function(response){
                 if (response.status == 'ok') {
                     var $html = $(response.html);
