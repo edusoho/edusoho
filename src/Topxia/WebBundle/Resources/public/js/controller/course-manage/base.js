@@ -6,9 +6,9 @@ define(function(require, exports, module) {
     require('jquery.select2');
 
     exports.run = function() {
-
+        
         require('./header').run();
-
+        
         // 标签选择组件初始化
         require.async(app.arguments.tagUrl + '#', function(tags) {
             $('#course_tags').select2({

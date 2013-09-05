@@ -7,6 +7,8 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+    	require('./header').run();
+    	
         var dynamicCollection = new DynamicCollection({
             element: '#teachers-form-group',
             onlyAddItemWithModel: true
