@@ -2427,6 +2427,9 @@ body {
 
 .promoted-teacher .nickname {
 	margin-top: 5px;
+	display: block;
+	color: #333;
+	text-decoration: none;
 }
 
 .promoted-teacher .title {

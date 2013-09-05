@@ -3,11 +3,11 @@
   <div class="es-box-heading"><h2>每日一师</h2></div>
   <div class="es-box-body">
     <div class="promoted-teacher">
-      <img src="{{ file_path(teacher.mediumAvatar, 'user.png') }}" class="avatar">
-      <div class="nickname">{{ teacher.nickname }}</div>
+      <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ file_path(teacher.mediumAvatar, 'user.png') }}" class="avatar"></a>
+      <a class="nickname" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
       <div class="title">{{ teacher.title }}</div>
       <div class="about">{{ teacher.about|plain_text(100) }}</div>
-      <div class="more"><a href="#">去老师主页看看 &raquo;</a></div>
+      <div class="more"><a href="{{ path('user_show', {id:teacher.id}) }}">去老师主页看看 &raquo;</a></div>
     </div>
   </div>
 </div>
