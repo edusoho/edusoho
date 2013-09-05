@@ -42,7 +42,7 @@
       </a>
       <ul class="dropdown-menu">
         {% if 'ROLE_TEACHER' in user.roles %}
-          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐老师</a></li>
+          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐教师</a></li>
         {% endif %}
         <li><a href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
         <li><a href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_set_roles', {id:user.id}) }}">设置用户组</a></li>

@@ -18,18 +18,18 @@
         <div class="toolbar">
           {% if not manage %}
           <div class="btn-group">
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_info', {id:course.id}) }}" data-role="tooltip" data-original-title="课程信息" data-placement="top" href="#modal">
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_info', {id:course.id}) }}" data-role="tooltip" title="课程信息" data-placement="top" href="#modal">
             <i class="glyphicon glyphicon-info-sign">
             </i>
             </a>
             
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" data-original-title="评价" data-placement="top" href="#modal">
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="评价" data-placement="top" href="#modal">
               <i class="glyphicon glyphicon-thumbs-up"></i></a>
 
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" data-original-title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom"
             href="#modal"><i class="glyphicon glyphicon-user"></i> {{course.studentNum}}</a>
 
-            <div class="btn-group" data-role="tooltip" data-original-title="分享到" data-placement="left" >
+            <div class="btn-group" data-role="tooltip" title="分享到" data-placement="left" >
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <i class="glyphicon glyphicon-share"></i>
               </button>
@@ -48,7 +48,7 @@
             </div>
 
           </div>
-          <div class="btn-group" data-role="tooltip" data-original-title="操作" data-placement="left" >
+          <div class="btn-group" data-role="tooltip" title="操作" data-placement="left" >
             <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
               <i class="glyphicon glyphicon-cog"></i>
             </button>

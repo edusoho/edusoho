@@ -5,10 +5,6 @@ define(function(require, exports, module) {
     exports.run = function() {
         var social = new SocialShare(app.config.api);
 
-        $('[data-role=tooltip]').mouseover(function() { 
-            $(this).tooltip('show'); 
-        }) 
-
         $('.js-social-shares').on('click', '[data-share]', function() {
             var $this = $(this);
             social.share($this.data('share'), $($this.data('params')).data());

@@ -8,10 +8,10 @@ class UserRoleDict implements DataDictInterface
     public function getDict()
     {
         return array(
-            'ROLE_USER' => '注册会员',
+            'ROLE_USER' => '会员',
+            'ROLE_TEACHER' => '教师',
             'ROLE_ADMIN' => '管理员',
             'ROLE_SUPER_ADMIN' => '超级管理员',
-            'ROLE_TEACHER' => '老师',
         );
     }
 

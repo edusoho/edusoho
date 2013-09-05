@@ -927,11 +927,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$teacherMembers = array();
 		foreach (array_values($teachers) as $index => $teacher) {
 			if (empty($teacher['id'])) {
-				throw $this->createServiceException("老师ID不能为空，设置课程(#{$courseId})老师失败");
+				throw $this->createServiceException("教师ID不能为空，设置课程(#{$courseId})教师失败");
 			}
 			$user = $this->getUserService()->getUser($teacher['id']);
 			if (empty($user)) {
-				throw $this->createServiceException("用户不存在或没有老师角色，设置课程(#{$courseId})老师失败");
+				throw $this->createServiceException("用户不存在或没有教师角色，设置课程(#{$courseId})教师失败");
 			}
 
 			$teacherMembers[] = array(
@@ -943,13 +943,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			);
 		}
 
-		// 先清除所有的已存在的老师会员
+		// 先清除所有的已存在的教师会员
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
 		}
 
-		// 逐个插入新的老师的会员数据
+		// 逐个插入新的教师的会员数据
 		$visibleTeacherIds = array();
 		foreach ($teacherMembers as $member) {
 			// 存在会员信息，说明该用户先前是学生会员，则删除该会员信息。
@@ -963,7 +963,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 		}
 
-		// 更新课程的teacherIds，该字段为课程可见老师的ID列表
+		// 更新课程的teacherIds，该字段为课程可见教师的ID列表
 		$fields = array('teacherIds' => $visibleTeacherIds);
 		$this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
 		

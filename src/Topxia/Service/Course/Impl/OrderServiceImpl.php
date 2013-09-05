@@ -126,7 +126,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 	private function _prepareSearchConditions($conditions)
 	{
 		$conditions = array_filter($conditions);
-
+		
 		if (isset($conditions['date'])) {
 			$dates = array(
 				'yesterday'=>array(

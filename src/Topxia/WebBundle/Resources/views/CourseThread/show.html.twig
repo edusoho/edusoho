@@ -65,7 +65,7 @@
 
 	<div class="thread-posts">
 		{% if thread.type == 'question' and elitePosts %}
-			<h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 老师的答案</h3>
+			<h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 教师的答案</h3>
 	    <ul class="thread-post-list media-list">
 	      {% for post in elitePosts %}
 	        {% set author = users[post.userId] %}

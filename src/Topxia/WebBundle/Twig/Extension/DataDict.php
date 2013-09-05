@@ -59,7 +59,7 @@ class DataDict
 		),
 		'userRole' => array(
 			'ROLE_USER' => '会员',
-			'ROLE_TEACHER' => '老师',
+			'ROLE_TEACHER' => '教师',
 			'ROLE_ADMIN' => '管理员',
 			'ROLE_SUPER_ADMIN' => '超级管理员'
 		),
