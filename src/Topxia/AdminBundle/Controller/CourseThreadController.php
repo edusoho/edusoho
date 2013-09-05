@@ -10,14 +10,13 @@ class CourseThreadController extends BaseController
 
     public function indexAction (Request $request)
     {
-		$conditions = $request->query->all();
 
+		$conditions = $request->query->all();
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchThreadCount($conditions),
             20
         );
-        
         $threads = $this->getThreadService()->searchThreads(
             $conditions,
             'createdNotStick',
