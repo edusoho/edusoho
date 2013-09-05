@@ -47,6 +47,11 @@ interface CourseService
 	public function updateCourseCounter($id, $counter);
 
 	public function changeCoursePicture ($courseId, $filePath, array $options);
+
+	public function recommendCourse($id);
+
+	public function cancelRecommendCourse($id);
+
 	/**
 	 * 删除课程
 	 */

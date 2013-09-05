@@ -48,6 +48,18 @@ class CourseController extends BaseController
         return $this->renderCourseTr($id);
     }
 
+    public function recommendAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->recommendCourse($id);
+        return $this->renderCourseTr($id);
+    }
+
+    public function cancelRecommendAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->cancelRecommendCourse($id);
+        return $this->renderCourseTr($id);
+    }
+
     public function categoryAction(Request $request)
     {
         return $this->forward('TopxiaAdminBundle:Category:embed', array(

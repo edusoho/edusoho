@@ -27,9 +27,12 @@ class CourseController extends BaseController
             $category = array('id' => null);
         }
 
+        $sort = $request->query->get('sort', 'popular');
+
         $conditions = array(
             'status' => 'published',
-            'categoryId' => $category['id']
+            'categoryId' => $category['id'],
+            'recommended' => ($sort == 'recommended') ? 1 : null
         );
 
         $paginator = new Paginator(
@@ -38,7 +41,6 @@ class CourseController extends BaseController
             , 10
         );
 
-        $sort = $request->query->get('sort', 'popular');
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions, $sort,

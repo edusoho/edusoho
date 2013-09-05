@@ -4,6 +4,22 @@ define(function(require, exports, module) {
 	exports.run = function(options) {
 		var $table = $('#course-table');
 
+		$table.on('click', '.recommend-course', function(){
+			$.post($(this).data('url'), function(html){
+				var $tr = $(html);
+				$table.find('#' + $tr.attr('id')).replaceWith(html);
+				Notify.success('课程推荐成功！');
+			});
+		});
+
+		$table.on('click', '.cancel-recommend-course', function(){
+			$.post($(this).data('url'), function(html){
+				var $tr = $(html);
+				$table.find('#' + $tr.attr('id')).replaceWith(html);
+				Notify.success('课程推荐已取消！');
+			});
+		});
+
 		$table.on('click', '.close-course', function(){
 			$.post($(this).data('url'), function(html){
 				var $tr = $(html);

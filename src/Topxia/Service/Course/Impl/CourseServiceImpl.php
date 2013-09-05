@@ -43,6 +43,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
 			$orderBy =  array('hitNum', 'DESC');
+		} else if ($sort == 'recommended') {
+			$orderBy = array('recommendedTime', 'DESC');
 		} else {
 			$orderBy = array('createdTime', 'DESC');
 		}
@@ -303,6 +305,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         	'largePicture' => $largeFileRecord['uri'],
     	));
     }
+
+	public function recommendCourse($id)
+	{
+		$course = $this->tryAdminCourse($id);
+
+		$this->getCourseDao()->updateCourse($id, array(
+			'recommended' => 1,
+			'recommendedTime' => time(),
+		));
+	}
+
+	public function cancelRecommendCourse($id)
+	{
+		$course = $this->tryAdminCourse($id);
+
+		$this->getCourseDao()->updateCourse($id, array(
+			'recommended' => 0,
+			'recommendedTime' => 0,
+		));
+	}
 
 	public function deleteCourse($id)
 	{

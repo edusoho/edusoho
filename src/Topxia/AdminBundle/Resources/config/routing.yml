@@ -209,14 +209,27 @@ admin_course:
 admin_course_delete:
     pattern:  /course/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Course:delete }
+    methods: [POST]
 
 admin_course_publish:
     pattern: /course/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Course:publish }
+    methods: [POST]
 
 admin_course_close:
     pattern: /course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Course:close }
+    methods: [POST]
+
+admin_course_recommend:
+    pattern: /course/{id}/recommend
+    defaults: { _controller: TopxiaAdminBundle:Course:recommend }
+    methods: [POST]
+
+admin_course_cancel_recommend:
+    pattern: /course/{id}/recommend/cancel
+    defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
+    methods: [POST]
 
 admin_course_category:
     pattern: /course/category

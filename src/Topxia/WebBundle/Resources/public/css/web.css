@@ -199,21 +199,20 @@ textarea {
 .site-navbar {
 	border-radius: 0;
 	background-color: #363e45;
-	box-shadow: 0 2px 3px rgba(0,0,0,0.3);
 	z-index: 1024;
-	min-height: 56px;
+	height: 56px;
 }
 
 .site-navbar .navbar-brand {
   color: #fff;
-  padding-top: 16px;
-  padding-bottom: 16px; 
+  padding-top: 17px;
+  padding-bottom: 17px;
 }
 
 .site-navbar .navbar-nav > li > a {
   color: #fff;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 17px;
+  padding-bottom: 17px;
 }
 
 .site-navbar .navbar-nav > li > a:hover,
