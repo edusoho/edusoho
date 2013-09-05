@@ -28,6 +28,7 @@ class UserController extends BaseController {
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

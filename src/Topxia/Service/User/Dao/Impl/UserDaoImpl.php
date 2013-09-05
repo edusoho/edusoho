@@ -50,7 +50,26 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function searchUsers($conditions, $start, $limit)
+    public function searchUsers($conditions, $orderBy, $start, $limit)
+    {
+        $builder = $this->createUserQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ? : array();  
+    }
+
+    public function searchUserCount($conditions)
+    {
+        $builder = $this->createUserQueryBuilder($conditions)
+            ->select('COUNT(id)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    private function createUserQueryBuilder($conditions)
     {
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
@@ -64,37 +83,14 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
         }
 
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->select('*')
+        return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
+            ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('nickname = :nickname')
             ->andWhere('nickname LIKE :nicknameLike')
             ->andWhere('loginIp = :loginIp')
-            ->andWhere('email = :email')
-            ->orderBy('createdTime', 'ASC')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        return $builder->execute()->fetchAll() ? : array();  
-    }
-
-    public function searchUserCount($conditions)
-    {
-        if (isset($conditions['roles'])) {
-            $conditions['roles'] = "%{$conditions['roles']}%";
-        }
-        $conditions[$conditions['keywordType']]=$conditions['keyword'];
-
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->select('count(id)')
-            ->from($this->table, 'user')
-            ->andWhere('roles LIKE :roles')
-            ->andWhere('nickname = :nickname')
-            ->andWhere('loginIp = :loginIp')
             ->andWhere('email = :email');
-
-        return $builder->execute()->fetchColumn(0);
     }
 
     public function addUser($user)

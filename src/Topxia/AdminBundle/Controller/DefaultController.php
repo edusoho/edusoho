@@ -28,7 +28,7 @@ class DefaultController extends BaseController
 
     public function newUsersAction(Request $request)
     {
-        $newUsers = $this->getUserService()->searchUsers(array(), 0 , 10);
+        $newUsers = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 10);
         $favoriteCourses = array();
         foreach ($newUsers as $newUser) {
             $courses = $this->getCourseService()->findUserFavoriteCourses($newUser['id'], 0, 10);

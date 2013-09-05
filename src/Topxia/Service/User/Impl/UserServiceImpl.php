@@ -79,9 +79,9 @@ class UserServiceImpl extends BaseService implements UserService
         return  ArrayToolkit::index($userProfiles, 'id');
     }
 
-    public function searchUsers(array $conditions, $start, $limit)
+    public function searchUsers(array $conditions, array $oderBy, $start, $limit)
     {
-        $users = $this->getUserDao()->searchUsers($conditions, $start, $limit);
+        $users = $this->getUserDao()->searchUsers($conditions, $oderBy, $start, $limit);
         return UserSerialize::unserializes($users);
     }
 
@@ -495,6 +495,29 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
         return true;
+    }
+
+    public function promoteUser($id)
+    {
+        $user = $this->getUser($id);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，推荐失败！');
+        }
+        $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedTime' => time()));
+    }
+
+    public function cancelPromoteUser($id)
+    {
+        $user = $this->getUser($id);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，取消推荐失败！');
+        }
+        $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedTime' => 0));
+    }
+
+    public function findLatestPromotedTeacher($start, $limit)
+    {
+        return $this->searchUsers(array('roles' => 'ROLE_TEACHER', 'promoted' => 1), array('promotedTime', 'DESC'),  $start, $limit);
     }
 
     public function waveUserCounter($userId, $name, $number)
