@@ -23,22 +23,6 @@
   <fieldset>
     <legend>新用户激活邮件设置</legend>
 
-    <div class="form-group" style="display:none;">
-      <div class="col-lg-3 control-label">
-        <label >新用户邮件激活</label>
-      </div>
-      <div class="controls col-lg-8 radios">
-        {{ radios('email_activation_mode', {'required':'必须激活', 'optional':'推荐激活', closed:'关闭'}, auth.email_activation_mode) }}
-        <div class="help-block">
-          <ul>
-            <li>必须激活：用户必须通过邮件激活，才能登录。</li>
-            <li>推荐激活：用户注册注册成功后，会发送激活邮件，但不强制激活。</li>
-            <li>关闭：用户注册时，不会出现邮件激活的步骤。</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
     <div class="form-group">
       <div class="col-lg-3 control-label">
         <label for="email_activation_title" >新用户激活邮件标题</label>
