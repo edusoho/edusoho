@@ -11,7 +11,7 @@ class CourseOrderController extends BaseController
     public function buyAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        if (empty($user['id'])) {
+        if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
 

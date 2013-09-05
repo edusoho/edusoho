@@ -1,7 +1,7 @@
 {% set mode = mode|default('default') %}
 <ul class="course-grids">
   {% for course in courses %}
-    <li>
+    <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
         <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
         <span class="title">{{ course.title }}</span>

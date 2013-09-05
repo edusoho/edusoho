@@ -1,0 +1,53 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block content %}
+  <div class="es-row-wrap">
+
+    {% if blocks.more_home_top_banner %}
+      <div class="homepage-feature">
+        {{ blocks.more_home_top_banner|raw }}
+      </div>
+    {% endif %}
+
+
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="homepage-category-nav">
+          <li><a href="#">兴趣爱好</a></li>
+          <li><a href="#">外语学习</a></li>
+          <li><a href="#">职场技能</a></li>
+          <li><a href="#">实用软件</a></li>
+          <li><a href="#">兴趣爱好</a></li>
+          <li><a href="#">外语学习</a></li>
+          <li><a href="#">职场技能</a></li>
+          <li><a href="#">外语学习</a></li>
+          <li><a href="#">职场技能</a></li>
+          <li><a href="#">实用软件</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-9">
+        <div class="es-box">
+          <div class="es-box-heading"><h2>课程</h2></div>
+          <div class="es-box-body">
+            {% include 'TopxiaWebBundle:Course:grids_v2.html.twig' with {mode:'default'} %}
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="es-box">
+          <div class="es-box-heading"><h2>每日一师</h2></div>
+          <div class="es-box-body"></div>
+        </div>
+
+        {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:5})) }}
+
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
