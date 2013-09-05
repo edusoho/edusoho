@@ -497,9 +497,17 @@ browser_upgrade:
     pattern:  /browser/upgrade
     defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
 
+category:
+    pattern: /category
+    defaults: { _controller: TopxiaWebBundle:Category:index }
+
 category_all:
     pattern: /category/all
-    defaults: { _controller: TopxiaWebBundle:Category:all}
+    defaults: { _controller: TopxiaWebBundle:Category:all }
+
+category_show:
+    pattern: /category/{code}
+    defaults: { _controller: TopxiaWebBundle:Category:show }
 
 location_all:
     pattern: /location/all

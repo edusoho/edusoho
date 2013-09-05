@@ -9,23 +9,12 @@
       </div>
     {% endif %}
 
-
-    <div class="row">
-      <div class="col-lg-12">
-        <ul class="homepage-category-nav">
-          <li><a href="#">兴趣爱好</a></li>
-          <li><a href="#">外语学习</a></li>
-          <li><a href="#">职场技能</a></li>
-          <li><a href="#">实用软件</a></li>
-          <li><a href="#">兴趣爱好</a></li>
-          <li><a href="#">外语学习</a></li>
-          <li><a href="#">职场技能</a></li>
-          <li><a href="#">外语学习</a></li>
-          <li><a href="#">职场技能</a></li>
-          <li><a href="#">实用软件</a></li>
-        </ul>
-      </div>
-    </div>
+    <ul class="homepage-category-nav">
+      {% for category in categories %}
+        <li><a href="{{ path('category_show', {code:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
+      {% endfor %}
+        <li><a href="{{ path('category') }}">更多</a></li>
+    </ul>
 
     <div class="row">
       <div class="col-lg-9">
@@ -39,22 +28,8 @@
       </div>
 
       <div class="col-lg-3">
-        <div class="es-box">
-          <div class="es-box-heading"><h2>每日一师</h2></div>
-          <div class="es-box-body">
-            <div class="promoted-teacher">
-              <img src="{{ file_path(promotedTeacher.mediumAvatar, 'user.png') }}" class="avatar">
-              <div class="nickname">{{ promotedTeacher.nickname }}</div>
-              <div class="title">{{ promotedTeacher.title }}</div>
-              <div class="about">{{ promotedTeacher.about|plain_text(100) }}</div>
-              <div class="more"><a href="#">去老师主页看看 &raquo;</a></div>
-            </div>
-
-          </div>
-        </div>
-
-        {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:5})) }}
-
+        {{ render(controller('TopxiaWebBundle:Default:promotedTeacherBlock')) }}
+        {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
       </div>
     </div>
 

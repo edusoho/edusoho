@@ -2,15 +2,6 @@
  * Bootstrap Modify
  */
 
-a {
-	color: #618bbb;
-}
-
-a:hover,
-a:focus {
-  color: #51749d;
-}
-
 a.link-muted {
 	color: #96B1D1;
 }
@@ -2064,6 +2055,14 @@ body {
 	margin-right: 0;
 }
 
+.es-row-wrap .page-header {
+	margin-top: 10px;
+}
+
+.es-row-wrap .page-header h1 {
+	font-size: 24px;
+}
+
 .es-box {
 	margin-bottom: 20px;
 }
@@ -2363,12 +2362,10 @@ body {
 
 .homepage-category-nav {
 	list-style: none;
-	padding:5px 5px;
-	margin: 20px 0;
+	padding:10px 5px;
+	margin-bottom: 30px;
 	background: #f9f9f9;
-	border: 1px solid #eee;
-	border-bottom-color: #d9d9d9;
-	border-right-color: #d9d9d9;
+	border-bottom: 1px dotted #ccc;
 	font-size: 16px;
 }
 
@@ -2378,23 +2375,22 @@ body {
 }
 
 .homepage-category-nav li a {
-	color: #555;
+	color: #00A76F;
 	text-decoration: none;
-	line-height: 40px;
-	padding: 0 10px;
+	line-height: 32px;
+	padding: 0 15px;
 	display: inline-block;
+	border-bottom: 2px solid #f9f9f9;
 }
 
 .homepage-category-nav li a:hover {
 	color: #096;
-
+	border-bottom-color: #d9d9d9;
 }
-
 
 .homepage .carousel-feature-banner {
 	margin-bottom: 20px;
 }
-
 
 .promoted-teacher {
 	text-align: center;

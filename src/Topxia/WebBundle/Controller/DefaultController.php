@@ -45,22 +45,40 @@ class DefaultController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $promotedTeacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);
-        if ($promotedTeacher) {
-            $promotedTeacher = $promotedTeacher[0];
-            $promotedTeacher = array_merge(
-                $promotedTeacher,
-                $this->getUserService()->getUserProfile($promotedTeacher['id'])
-            );
-        }
+        $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('more_home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
             'courses' => $courses,
             'users' => $users,
-            'promotedTeacher' => $promotedTeacher,
+            'categories' => $categories,
             'blocks' => $blocks
+        ));
+    }
+
+    public function coursesBlockAction($courses, $mode)
+    {
+        $userIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+    }
+
+    public function promotedTeacherBlockAction()
+    {
+        $teacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);
+        if ($teacher) {
+            $teacher = $teacher[0];
+            $teacher = array_merge(
+                $teacher,
+                $this->getUserService()->getUserProfile($teacher['id'])
+            );
+        }
+
+        return $this->render('TopxiaWebBundle:Default:promoted-teacher-block.html.twig', array(
+            'teacher' => $teacher,
         ));
     }
 
@@ -113,6 +131,11 @@ class DefaultController extends BaseController
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
 }
