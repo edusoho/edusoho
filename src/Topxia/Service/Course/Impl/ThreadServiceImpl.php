@@ -70,21 +70,35 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	}
 
 	public function searchThreadCount($conditions)
-	{
+	{	
 		$conditions = $this->prepareThreadSearchConditions($conditions);
 		return $this->getThreadDao()->searchThreadCount($conditions);
 	}
 
 	private function prepareThreadSearchConditions($conditions)
 	{
+
+		if(empty($conditions['type'])) {
+			unset($conditions['type']);
+		}
+
+		if(empty($conditions['keyword'])) {
+			unset($conditions['keyword']);
+			unset($conditions['keywordType']);
+		}
+
 		if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
 			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId'))) {
 				throw $this->createServiceException('keywordType参数不正确');
 			}
 			$conditions[$conditions['keywordType']] = $conditions['keyword'];
+			unset($conditions['keywordType']);
+			unset($conditions['keyword']);
 		}
-		unset($conditions['keywordType']);
-		unset($conditions['keyword']);
+
+		if(empty($conditions['author'])) {
+			unset($conditions['author']);
+		}
 
 		if (isset($conditions['author'])) {
 			$author = $this->getUserService()->getUserByNickname($conditions['author']);

@@ -83,10 +83,9 @@ class SettingController extends BaseController
 
         $default = array(
             'register_mode'=>'closed',
-            'email_activation_mode' => '',
             'email_activation_title' => '',
             'email_activation_body' => '',
-            'welcome_enabled' => 'opened',
+            'welcome_enabled' => 'closed',
             'welcome_sender' => '',
             'welcome_methods' => array(),
             'welcome_title' => '',
