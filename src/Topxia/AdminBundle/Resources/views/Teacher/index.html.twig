@@ -1,0 +1,29 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% block title %}教师管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'teacher' %}
+{% set script_controller = 'user/teacher-list' %}
+
+{% block main %}
+<div class="page-header">
+  <h1>教师管理</h1>
+</div>
+
+<table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+    <tr>
+      <th>用户名</th>
+      <th>推荐老师</th>
+      <th>最近登录</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+      {% include 'TopxiaAdminBundle:Teacher:tr.html.twig' with {user:user} %}
+    {% endfor %}
+  </tbody>
+</table>
+ {{ web_macro.paginator(paginator) }} 
+{% endblock %}

@@ -231,34 +231,34 @@ class UserServiceTest extends BaseTestCase
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user1'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user1'), array('createdTime', 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('roles'=>'ROLE_USER'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('roles'=>'ROLE_USER'), array('createdTime', 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), array('createdTime', 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), array('createdTime', 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user2@user2.com'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user2@user2.com'), array('createdTime', 'DESC'), 0, 10);
     }
 
     public function testSearchUsersWithOneParamterAndResultEqualsEmpty()
     {
-        $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user1'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user1'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('roles'=>'ROLE_USER'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('roles'=>'ROLE_USER'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
        
-        $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
     }
 
@@ -272,13 +272,13 @@ class UserServiceTest extends BaseTestCase
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
             'nicknameLike'=>'user',
-            'email'=>'user1@user1.com'), 0, 10);
+            'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
             'nicknameLike'=>'user',
-            'email'=>'user1@user1.com'), 0, 10);
+            'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
     }
 
     public function testSearchUsersWithMultiParamterAndResultEqualsEmpty()
@@ -291,7 +291,7 @@ class UserServiceTest extends BaseTestCase
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
             'nicknameLike'=>'user',
-            'email'=>'user2@user2.com'), 0, 10);
+            'email'=>'user2@user2.com'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
@@ -299,7 +299,7 @@ class UserServiceTest extends BaseTestCase
             'roles'=>'ROLE_ADMIN',
             'loginIp'=>'',
             'nicknameLike'=>'user',
-            'email'=>'user1@user1.com'), 0, 10);
+            'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
     }
     

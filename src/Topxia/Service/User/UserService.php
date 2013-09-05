@@ -17,7 +17,7 @@ interface UserService
 
     public function findUserProfilesByIds(array $ids);
 
-    public function searchUsers(array $conditions, $start, $limit);
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit);
 
     public function searchUserCount(array $conditions);
 
@@ -82,6 +82,10 @@ interface UserService
     public function lockUser($id);
     
     public function unlockUser($id);
+
+    public function promoteUser($id);
+
+    public function cancelPromoteUser($id);
 
     /**
      * 更新用户的计数器
