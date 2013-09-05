@@ -5,9 +5,9 @@ define(function(require, exports, module) {
     exports.run = function() {
 
     	$('.tbody').on('click', 'button.remind-teachers', function(){
-			$.post($(this).data('url'),function(response){
-	       Notify.success('提醒老师的通知，发送成功！');                
-	    	});
+  			$.post($(this).data('url'),function(response){
+  	     Notify.success('提醒老师的通知，发送成功！');                
+  	    });
 	    });
 
     	$('.row').on('change', '#date-type-select',function(){
@@ -17,6 +17,18 @@ define(function(require, exports, module) {
           }
     		}, 'json');
     	});
+
+      $('tbody').on('click', '#more-or-less', function(){
+        
+          if($(this).text() == "更多"){
+            $('td').find('.more-course').show();
+            $(this).text("少量");
+          } else if ( $(this).text() == "少量") {
+            $('td').find('.more-course').hide();
+            $(this).text("更多");
+          }
+
+      });
 
     };
 

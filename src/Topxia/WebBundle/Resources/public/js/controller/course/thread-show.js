@@ -29,10 +29,20 @@ define(function(require, exports, module) {
             if (err == true) {
                 return ;
             }
-           
+            
+            var $submitButton = $('#thread-post-form').find('button[type=submit]');
+            $submitButton.addClass("disabled");
+
+            $('.thread-post-list').find('li.empty').remove();
             var $form = $("#thread-post-form");
             $.post($form.attr('action'), $form.serialize(), function(html) {
-                   window.location.reload();
+                $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
+                var id = $(html).appendTo('.thread-post-list').attr('id');
+                CKEDITOR.instances['post_content'].setData('');
+
+                $submitButton.removeClass("disabled");
+                window.location.href = '#' + id;
+
             });
 
             return false;

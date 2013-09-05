@@ -78,7 +78,21 @@ class DefaultController extends BaseController
         ));
     }
 
-     private function _findWelcomedCourses($dateType)
+    public function remindCourseTeachersAction(Request $request, $courseId, $questionId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $question = $this->getThreadService()->getThread($courseId, $questionId);
+        $questionUrl = $this->generateUrl('course_thread_show', array('courseId'=>$course['id'], 'id'=> $question['id']), true);
+        foreach ($course['teacherIds'] as $receiverId) {
+            $result = $this->getNotificationService()->notify($receiverId, 'default',
+                "这是来自后台管理者的通知: 你好, 您的课程: <<{$course['title']}>> 还有尚未解答的问题:  
+                <a href='{$questionUrl}'> {$question['title']} </a> ,请及时提供答案!");
+        }
+
+        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    private function _findWelcomedCourses($dateType)
     {
         $courseMembers = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 1000);
         $welcomedCourses = array();
@@ -121,4 +135,8 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.OrderService');
     }
 
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
 }
