@@ -68,7 +68,7 @@ class DefaultController extends BaseController
 
     public function paidRecordsAction(Request $request)
     {
-        $paidRecords = $this->getOrderService()->searchOrders(array(), 'latest', 0 , 10);
+        $paidRecords = $this->getOrderService()->searchOrders(array('paidStartTime'=>1), 'latest', 0 , 10);
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($paidRecords, 'courseId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paidRecords, 'userId'));
         return $this->render('TopxiaAdminBundle:Default:block-paid-records.html.twig', array(

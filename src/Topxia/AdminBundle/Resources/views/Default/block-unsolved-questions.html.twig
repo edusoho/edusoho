@@ -11,11 +11,11 @@
 			        <thead>
 			          <tr>
 			            <th width="15%">课程</th>
-			            <th width="15%">标题</th>
-			            <th width="10%">提问人</th>
-			            <th width="5%">教师</th>
+			            <th width="35%">问题名称</th>
+			            <th width="5%">提问人</th>
+			            <th width="10%">教师</th>
 			            <th width="5%">点击次数</th>
-			            <th width="10%">创建时间</th>
+			            <th width="8%">创建时间</th>
 			            <th width="10%">操作</th>
 			          </tr>
 			        </thead>
@@ -45,7 +45,7 @@
 			            <td>{{question.createdTime |date('Y-n-d H:i:s') }} </td>
 			            <td>
 			            <button class="btn btn-default btn-sm remind-teachers" data-url="{{ path('admin_remind_course_teachers', {courseId:question.courseId, questionId:question.id}) }}">
-			            	提醒老师
+			            	提醒教师
 			            </button>
 			        	</td>
 			          </tr>

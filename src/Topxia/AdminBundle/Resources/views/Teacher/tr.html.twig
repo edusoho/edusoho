@@ -27,9 +27,9 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐老师</a></li>
+        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐教师</a></li>
         {% if user.promoted %}
-          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐老师</a></li>
+          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
         {% endif %}
       </ul>
     </div>

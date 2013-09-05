@@ -154,6 +154,10 @@ admin_comment_delete:
     defaults: { _controller: TopxiaAdminBundle:Comment:delete }
     methods: [POST]
 
+admin_statistic:
+    pattern: /statistic
+    defaults: { _controller: TopxiaAdminBundle:Statistic:index }
+
 admin_navigation:
     pattern:  /navigation
     defaults: { _controller: TopxiaAdminBundle:Navigation:index }

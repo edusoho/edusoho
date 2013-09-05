@@ -8,7 +8,7 @@ interface CourseService
 {
 
 	/**
-	 * 每个课程可添加的最大的老师人数
+	 * 每个课程可添加的最大的教师人数
 	 */
 	const MAX_TEACHER = 100;
 
@@ -169,7 +169,7 @@ interface CourseService
 	/**
 	 * 尝试学习课程
 	 * 
-	 * 只有是课程的学员/老师，才可以学习。
+	 * 只有是课程的学员/教师，才可以学习。
 	 * 
 	 * @param  [type] $courseId 课程ID
 	 * @return array

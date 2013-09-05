@@ -111,7 +111,7 @@ class CourseController extends BaseController
     }
 
     /**
-     * 如果用户已购买了此课程，或者用户是该课程的老师，则显示课程的Dashboard界面。
+     * 如果用户已购买了此课程，或者用户是该课程的教师，则显示课程的Dashboard界面。
      * 如果用户未购买该课程，那么显示课程的营销界面。
      */
     public function showAction(Request $request, $id)

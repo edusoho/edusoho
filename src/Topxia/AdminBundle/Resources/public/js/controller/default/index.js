@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     	$('.tbody').on('click', 'button.remind-teachers', function(){
   			$.post($(this).data('url'),function(response){
-  	     Notify.success('提醒老师的通知，发送成功！');                
+  	     Notify.success('提醒教师的通知，发送成功！');                
   	    });
 	    });
 

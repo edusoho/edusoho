@@ -13,10 +13,6 @@ define(function(require, exports, module) {
 
         });
 
-        $('a[data-toggle=tooltip]').mouseover(function() { 
-            $(this).tooltip('show'); 
-        }) 
-
     };
 
 });
