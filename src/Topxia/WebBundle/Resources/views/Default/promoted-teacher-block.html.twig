@@ -1,3 +1,4 @@
+{% if teacher %}
 <div class="es-box">
   <div class="es-box-heading"><h2>每日一师</h2></div>
   <div class="es-box-body">
@@ -8,6 +9,6 @@
       <div class="about">{{ teacher.about|plain_text(100) }}</div>
       <div class="more"><a href="#">去老师主页看看 &raquo;</a></div>
     </div>
-
   </div>
 </div>
+{% endif %}

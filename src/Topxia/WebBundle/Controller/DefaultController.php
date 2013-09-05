@@ -8,9 +8,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        // return $this->redirect($this->generateUrl('course_explore'));
         $template = ucfirst($this->setting('site.homepage_template', 'less'));
-
         return $this->forward("TopxiaWebBundle:Default:index{$template}");
     }
 
@@ -19,17 +17,10 @@ class DefaultController extends BaseController
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 100);
 
-        $userIds = array();
-        foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
         $blocks = $this->getBlockService()->getContentsByCodes(array('less_home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-less.html.twig', array(
             'courses' => $courses,
-            'users' => $users,
             'blocks' => $blocks,
         ));
     }
@@ -39,19 +30,12 @@ class DefaultController extends BaseController
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 100);
 
-        $userIds = array();
-        foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('more_home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
             'courses' => $courses,
-            'users' => $users,
             'categories' => $categories,
             'blocks' => $blocks
         ));
@@ -64,6 +48,11 @@ class DefaultController extends BaseController
             $userIds = array_merge($userIds, $course['teacherIds']);
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render("TopxiaWebBundle:Default:courses-block-{$mode}.html.twig", array(
+            'courses' => $courses,
+            'users' => $users,
+        ));
     }
 
     public function promotedTeacherBlockAction()

@@ -11,9 +11,9 @@
 
     <ul class="homepage-category-nav">
       {% for category in categories %}
-        <li><a href="{{ path('category_show', {code:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
+        <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
       {% endfor %}
-        <li><a href="{{ path('category') }}">更多</a></li>
+        <li><a href="{{ path('course_explore') }}">更多</a></li>
     </ul>
 
     <div class="row">
@@ -21,8 +21,7 @@
         <div class="es-box">
           <div class="es-box-heading"><h2>课程</h2></div>
           <div class="es-box-body">
-            {% include 'TopxiaWebBundle:Course:grids_v2.html.twig' with {mode:'default'} %}
-
+            {{ render(controller('TopxiaWebBundle:Default:coursesBlock', {courses:courses, mode: 'grid'})) }}
           </div>
         </div>
       </div>

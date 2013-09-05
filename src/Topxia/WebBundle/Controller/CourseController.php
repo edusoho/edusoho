@@ -11,38 +11,49 @@ use Topxia\Common\ArrayToolkit;
 
 class CourseController extends BaseController
 {
-    public function exploreAction(Request $request)
+    public function exploreAction(Request $request, $category)
     {
-        $conditions = array();
-        $conditions['status'] = 'published';
+        if (!empty($category)) {
+            if (ctype_digit((string) $category)) {
+                $category = $this->getCategoryService()->getCategory($category);
+            } else {
+                $category = $this->getCategoryService()->getCategoryByCode($category);
+            }
+
+            if (empty($category)) {
+                throw $this->createNotFoundException();
+            }
+        } else {
+            $category = array('id' => null);
+        }
+
+        $conditions = array(
+            'status' => 'published',
+            'categoryId' => $category['id']
+        );
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions)
-            , 12
+            , 10
         );
 
+        $sort = $request->query->get('sort', 'popular');
+
         $courses = $this->getCourseService()->searchCourses(
-            $conditions, 'latest',
+            $conditions, $sort,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = array();
-        foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $tags = $this->getTagService()->findAllTags(0, 100);
+        $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
+            'category' => $category,
+            'sort' => $sort,
             'paginator' => $paginator,
-            'conditions' => $conditions,
-            'tags' => $tags,
-            'users' => $users,
-            'members' => array(),
+            'categories' => $categories,
         ));
     }
 

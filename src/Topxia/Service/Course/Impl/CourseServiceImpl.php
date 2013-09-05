@@ -42,7 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
-			$orderBy =  array('viewNum', 'DESC');
+			$orderBy =  array('hitNum', 'DESC');
 		} else {
 			$orderBy = array('createdTime', 'DESC');
 		}

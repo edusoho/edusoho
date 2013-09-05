@@ -18,7 +18,7 @@
           <h2>课程</h2>
         </div>
         <div class="es-box-body">
-          {% include 'TopxiaWebBundle:Default:course-wide-list.html.twig' %}
+          {{ render(controller('TopxiaWebBundle:Default:coursesBlock', {courses:courses, mode: 'list'})) }}
         </div>
       </div>
     </div>
