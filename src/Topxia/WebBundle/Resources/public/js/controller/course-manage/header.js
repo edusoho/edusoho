@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
+
         $('.course-publish-btn').click(function() {
             if (!confirm('您真的要发布该课程吗？')) {
                 return ;
@@ -11,6 +12,11 @@ define(function(require, exports, module) {
             });
 
         });
+
+        $('a[data-toggle=tooltip]').mouseover(function() { 
+            $(this).tooltip('show'); 
+        }) 
+
     };
 
 });
