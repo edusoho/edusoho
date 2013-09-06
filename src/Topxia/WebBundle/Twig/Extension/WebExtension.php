@@ -267,6 +267,10 @@ class WebExtension extends \Twig_Extension
 
     public function calculatePercent($number, $total)
     {
+        if ($number == 0 or $total == 0) {
+            return '0%';
+        }
+
         if ($number >= $total) {
             return '100%';
         }
