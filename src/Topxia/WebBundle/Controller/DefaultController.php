@@ -41,20 +41,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function coursesBlockAction($courses, $mode)
-    {
-        $userIds = array();
-        foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render("TopxiaWebBundle:Default:courses-block-{$mode}.html.twig", array(
-            'courses' => $courses,
-            'users' => $users,
-        ));
-    }
-
     public function promotedTeacherBlockAction()
     {
         $teacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);

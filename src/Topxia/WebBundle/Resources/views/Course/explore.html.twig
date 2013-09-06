@@ -27,7 +27,7 @@
       </div>
 
       {% if courses %}
-        {{ render(controller('TopxiaWebBundle:Default:coursesBlock', {courses:courses, mode:'list'})) }}
+        {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
         {{ web_macro.paginator(paginator) }} 
       {% else %}
         <div class="empty">该分类下无课程</div>

@@ -1,0 +1,81 @@
+{% set mode = mode|default('default') %}
+<ul class="course-grids">
+  {% for course in courses %}
+    <li class="course-grid">
+      <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+        <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+        <span class="title">{{ course.title }}</span>
+        {% if mode in ['default', 'teach'] %}
+          <span class="metas clearfix">
+            <span class="price-col">
+              <span class="meta-label">价格</span>
+              {% if course.price > 0 %}
+                <span class="price-num">{{ course.price }}元</span>
+              {% else %}
+                <span class="price-num">免费</span>
+              {% endif %}
+            </span>
+
+            <span class="review-col">
+              {% if course.ratingNum > 0 %}
+                <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+                <span class="review-rating">
+                  <span class="stars-{{ (course.rating/2)|number_format }}">&nbsp;</span>
+                </span>
+              {% else %}
+                <span class="meta-label">无评价</span>
+                <span class="review-rating">
+                  <span class="stars-0">&nbsp;</span>
+                </span>
+              {% endif %}
+            </span>
+
+            <span class="student-col">
+              <span class="meta-label">学生</span>
+              <span class="student-num">{{ course.studentNum }}人</span>
+            </span>
+
+          </span>
+        {% endif %}
+
+        {% if mode in ['default'] %}
+          {% set user = users[course.teacherIds|first]|default(null) %}
+          {% if user %}
+            <span class="teacher clearfix">
+              <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+              <span class="nickname ellipsis">{{ user.nickname }}</span>
+              <span class="user-title ellipsis">{{ user.title }}</span>
+            </span>
+          {% endif %}
+        {% endif  %}
+
+        {% if mode in ['learn'] %}
+          <div class="learn-status">
+            {% if course.memberIsLearned %}
+              <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
+              </div>
+              <div class="action"><button class="btn btn-default btn-sm">查看课程</button></div>
+            {% else %}
+              <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }}%;"></div>
+              </div>
+              <div class="action"><button class="btn btn-primary btn-sm">继续学习</button></div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if mode == 'teach' %}
+          {% if course.status == 'published' %}
+            <span class="label label-success course-status">已发布</span>
+          {% elseif course.status == 'draft' %}
+            <span class="label  label-warning course-status">未发布</span>
+          {% elseif course.status == 'closed' %}
+            <span class="label label-danger course-status">已关闭</span>
+          {% endif %}
+        {% endif %}
+
+      </a>
+    </li>
+  {% endfor %}
+</ul>

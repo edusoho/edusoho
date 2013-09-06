@@ -21,7 +21,7 @@
           <h2>课程</h2>
         </div>
         <div class="es-box-body">
-          {{ render(controller('TopxiaWebBundle:Default:coursesBlock', {courses:courses, mode: 'list'})) }}
+          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
           {% if courses|length >= 12 %}
             <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
           {% endif %}

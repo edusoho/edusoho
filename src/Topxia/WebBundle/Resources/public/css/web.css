@@ -2222,6 +2222,18 @@ body {
 	color: #777;
 }
 
+.course-grid .learn-status {
+	margin: 0 10px 15px;
+}
+
+.course-grid .learn-status .progress {
+	margin-bottom: 15px;
+}
+
+.course-grid .learn-status .action {
+	text-align: center;
+}
+
 .course-grid .course-status {
 	position: absolute;
 	top: 5px;

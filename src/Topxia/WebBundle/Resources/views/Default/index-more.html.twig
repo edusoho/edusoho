@@ -29,7 +29,7 @@
         <div class="es-box">
           <div class="es-box-heading"><h2>课程</h2></div>
           <div class="es-box-body">
-            {{ render(controller('TopxiaWebBundle:Default:coursesBlock', {courses:courses, mode: 'grid'})) }}
+            {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
             <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
           </div>
         </div>

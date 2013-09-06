@@ -355,6 +355,21 @@ class CourseController extends BaseController
         ));
     }
 
+    public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
+    {
+        $userIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
+            'courses' => $courses,
+            'users' => $users,
+            'mode' => $mode,
+        ));
+    }
+
     private function createCourseForm()
     {
         return $this->createNamedFormBuilder('course')

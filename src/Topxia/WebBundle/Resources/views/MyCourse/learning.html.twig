@@ -6,7 +6,7 @@
 
 {% block main_body %}
  {% if courses %}
-		{% include 'TopxiaWebBundle:Course:grids.html.twig' with {mode:'learn'} %}
+     {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
 		{{ web_macro.paginator(paginator) }} 
   {% else %}
     <div class="empty">暂无学习中的课程</div>
