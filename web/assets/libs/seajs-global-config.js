@@ -17,6 +17,7 @@ seajs.config({
 		"jquery.form": "jquery-plugin/form/3.36.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",
+		"jquery.cycle2": "jquery-plugin/cycle2/2013.08.01/cycle2",
 		"jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.1/perfect-scrollbar",
 		"jquery.select2": "jquery-plugin/select2/3.4.1/select2",
 		"jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",

@@ -1,10 +1,18 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
+{% set script_controller = 'index-more' %}
+
 {% block content %}
   <div class="es-row-wrap">
 
     {% if blocks.more_home_top_banner %}
-      <div class="homepage-feature">
+      <div class="homepage-feature cycle-slideshow" 
+        data-cycle-fx="scrollHorz"
+        data-cycle-slides="> a, > img"
+        data-log="false"
+        data-pause-on-hover="true"
+        >
+        <div class="cycle-pager"></div>
         {{ blocks.more_home_top_banner|raw }}
       </div>
     {% endif %}
@@ -21,7 +29,7 @@
         <div class="es-box">
           <div class="es-box-heading"><h2>课程</h2></div>
           <div class="es-box-body">
-            {{ render(controller('TopxiaWebBundle:Default:coursesBlock', {courses:courses, mode: 'grid'})) }}
+            {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
             <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
           </div>
         </div>
