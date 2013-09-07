@@ -580,7 +580,7 @@ user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
-user_show_courses_teaching: 
+user_teaching: 
     pattern:  /user/{id}/courses/teaching
     defaults: { _controller: TopxiaWebBundle:User:teachingCourses }
 

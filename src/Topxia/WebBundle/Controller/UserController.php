@@ -12,6 +12,7 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $user = array_merge($user, $userProfile);
         $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
         $learningMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'student'),0,10);
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($learningMembers, 'courseId'));

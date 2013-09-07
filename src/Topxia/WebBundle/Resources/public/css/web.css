@@ -2503,6 +2503,78 @@ body {
 
 }
 
+@media (min-width: 1200px) {
+    .userpage #content-container {
+         max-width: 970px;
+    }
+}
+
+.userpage-header {
+	border-radius: 5px;
+}
+
+.userpage-header .row {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+.userpage-header .avatar {
+	float: left;
+	width: 128px;
+	height: 128px;
+	border-radius: 50%;
+}
+
+.userpage-header-info {
+	margin-left: 150px;
+}
+
+.userpage-header-info h1 {
+	margin-top: 0px;
+	margin-bottom: 15px;
+	font-size: 28px;
+}
+
+.userpage-header-info h1 small {
+	font-size: 16px;
+	color: #096;
+}
+
+.userpage-header-info .about {
+	color: #777;
+}
+
+.userpage-header-info .actions {
+	float: right;
+}
+
+.userpage-body {
+	border-radius: 5px;
+}
+
+.userpage-body .nav {
+	background: #f8f8f8;
+	border-bottom: 1px solid #e7e7e7;
+	padding: 0px 15px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.userpage-body .nav li a {
+	padding: 10px 20px;
+	color: #777;
+	border-radius: 0;
+}
+
+.userpage-body .nav li a:hover {
+	color: #333;
+}
+
+.userpage-body .nav li.active a {
+	color: #555;
+	background-color: #e7e7e7;
+}
+
 /**
  * CMS
  */
