@@ -31,7 +31,7 @@ class DefaultController extends BaseController
         $newUsers = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 10);
         $favoriteCourses = array();
         foreach ($newUsers as $newUser) {
-            $courses = $this->getCourseService()->findUserFavoriteCourses($newUser['id'], 0, 10);
+            $courses = $this->getCourseService()->findUserFavoritedCourses($newUser['id'], 0, 10);
             $favoriteCourses[$newUser['id']] = $courses;
         }
 

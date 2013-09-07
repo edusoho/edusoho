@@ -14,7 +14,11 @@ interface FriendDao
 
     public function getFriend($id);
 
-    public function findFriendsByFromId($fromId);
+    public function findFriendsByFromId($fromId, $start, $limit);
 
-    public function findFriendsByToId($toId);
+    public function findFriendCountByFromId($fromId);
+
+    public function findFriendsByToId($toId, $start, $limit);
+
+    public function findFriendCountByToId($toId);
 }

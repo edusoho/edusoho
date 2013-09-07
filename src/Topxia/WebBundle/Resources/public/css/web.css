@@ -2550,6 +2550,7 @@ body {
 
 .userpage-body {
 	border-radius: 5px;
+	min-height: 200px;
 }
 
 .userpage-body .nav {
@@ -2558,6 +2559,7 @@ body {
 	padding: 0px 15px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
+	margin-bottom: 20px;
 }
 
 .userpage-body .nav li a {

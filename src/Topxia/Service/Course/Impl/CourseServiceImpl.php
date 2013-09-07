@@ -119,9 +119,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $conditions;
 	}
 
-	public function getUserLeaningCoursesCount($userId)
+	public function findUserLearnCourses($userId, $start, $limit)
 	{
-		return $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit);
+
+		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+		foreach ($members as $member) {
+			if (empty($courses[$member['courseId']])) {
+				continue;
+			}
+			$courses[$member['courseId']]['memberIsLearned'] = $member['isLearned'];
+			$courses[$member['courseId']]['memberLearnedNum'] = $member['learnedNum'];
+		}
+		return $courses;
+	}
+
+	public function findUserLearnCourseCount($userId)
+	{
+		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', 0);
+	}
+
+	public function findUserLeaningCourseCount($userId)
+	{
+		return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
 	}
 
 	public function findUserLeaningCourses($userId, $start, $limit)
@@ -139,9 +159,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $courses;
 	}
 
-	public function getUserLeanedCoursesCount($userId)
+	public function findUserLeanedCourseCount($userId)
 	{
-		return $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
+		return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
 	}
 
 	public function findUserLeanedCourses($userId, $start, $limit)
@@ -155,26 +175,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $courses;
 	}
 
-	public function getUserTeachingCoursesCount($userId)
+	public function findUserTeachCourseCount($userId)
 	{
-		$countOfZero = $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 0);
-		$countOfOne = $this->getMemberDao()->getMembersCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 1);
+		$countOfZero = $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 0);
+		$countOfOne = $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 1);
 		return  ($countOfOne + $countOfZero);
 	}
 
-	public function findUserTeachingCourses($userId, $start, $limit)
+	public function findUserTeachCourses($userId, $start, $limit)
 	{
 		$teachingCourseMembers = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit);
 		$teachingCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($teachingCourseMembers, 'courseId'));
 		return CourseSerialize::unserializes($teachingCourses);
 	}
 
-	public function getUserFavoriteCourseCount($userId)
+	public function findUserFavoritedCourseCount($userId)
 	{
 		return $this->getFavoriteDao()->getFavoriteCourseCountByUserId($userId);
 	}
 
-	public function findUserFavoriteCourses($userId, $start, $limit)
+	public function findUserFavoritedCourses($userId, $start, $limit)
 	{
 		$courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
 		$favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));

@@ -37,16 +37,28 @@ class FriendDaoImpl extends BaseDao implements FriendDao
         return $this->getConnection()->fetchAssoc($sql, array($fromId, $toId));
     }
 
-    public function findFriendsByFromId($fromId)
+    public function findFriendsByFromId($fromId, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime ASC";
+        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($fromId));
     }
 
-    public function findFriendsByToId($toId)
+    public function findFriendCountByFromId($fromId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime ASC";
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE fromId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($fromId));
+    }
+
+    public function findFriendsByToId($toId, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($toId));
+    }
+
+    public function findFriendCountByToId($toId)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE toId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($toId));
     }
 
     public function getFriendsByFromIdAndToIds($fromId, array $toIds)

@@ -8,47 +8,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 {
     protected $table = 'course_member';
 
-    public function searchMemberCount($conditions)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    public function searchMember($conditions, $start, $limit)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy('createdTime', 'ASC');
-        return $builder->execute()->fetchAll() ? : array(); 
-    }
-
-    private function _createSearchQueryBuilder($conditions)
-    {
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course_member')
-            ->andWhere('userId = :userId')
-            ->andWhere('courseId = :courseId')
-            ->andWhere('noteNum > :noteNumGreaterThan')
-            ->andWhere('role = :role')
-            ->andWhere('createdTime >= :startTimeGreaterThan')
-            ->andWhere('createdTime < :startTimeLessThan');
-    }
-
-    public function getMemberCountByUserId($userId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId));
-    }
-
-    public function findMembersByUserId($userId, $start, $limit)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId));
-    }
-
     public function getMember($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -67,10 +26,16 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $role));
     }
 
-    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
+    public function findMemberCountByUserIdAndRole($userId, $role)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ?";
+        return $this->getConnection()->fetchColumn($sql, array($userId, $role));
+    }
+
+    public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
+        return $this->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
     }
 
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
@@ -80,22 +45,33 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
 
+    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+    }
+
     public function findMemberCountByCourseIdAndRole($courseId, $role)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND role = ?";
         return $this->getConnection()->fetchColumn($sql, array($courseId, $role));
     }
 
-    public function getMembersCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    public function searchMemberCount($conditions)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
-    public function findMembersByRole($role, $start, $limit)
+    public function searchMember($conditions, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE role = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($role));
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy('createdTime', 'ASC');
+        return $builder->execute()->fetchAll() ? : array(); 
     }
 
     public function addMember($member)
@@ -129,4 +105,17 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql = "DELETE FROM {$this->table} WHERE userId AND courseId = ?";
         return $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
     }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        return $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_member')
+            ->andWhere('userId = :userId')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('noteNum > :noteNumGreaterThan')
+            ->andWhere('role = :role')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan');
+    }
+
 }

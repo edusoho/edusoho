@@ -1,73 +1,75 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class UserController extends BaseController
 {
 
-    public function showAction(Request $request, $id)
+    public function headerBlockAction($user)
     {
-        $user = $this->getUserService()->getUser($id);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($user, $userProfile);
-        $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
-        $learningMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'student'),0,10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($learningMembers, 'courseId'));
 
-        $followInfo = $this->getFollowInfo($user['id']);
-
-        return $this->render('TopxiaWebBundle:User:show.html.twig', array(
-            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
-            'userProfile'=>$userProfile,
+        return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user'=>$user,
-            'teachingCount'=>$teachingCount,
-            'courses'=>$courses,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers']
+            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
         ));
     }
 
-    public function teachingCoursesAction(Request $request, $id)
+    public function showAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($id);
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
-        $teachingMembers = $this->getCourseService()->searchMember(array('userId' => $user['id'], 'role'=>'teacher'),0,10);
-        $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($teachingMembers, 'courseId'));
-        $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:teachings.html.twig', array(
-            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
-            'userProfile'=>$userProfile,
-            'user'=>$user,
-            'teachingCount'=>$teachingCount,
-            'courses'=>$courses,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers']
+        $user = $this->tryGetUser($id);
+
+        if(in_array('ROLE_TEACHER', $user['roles'])) {
+            return $this->_teachAction($user);
+        }
+
+        return $this->_learnAction($user);
+    }
+
+    public function learnAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        return $this->_learnAction($user);
+    }
+
+    public function teachAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        return $this->_teachAction($user);
+    }
+
+    public function favoritedAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserFavoritedCourseCount($user['id']),
+            10
+        );
+
+        $courses = $this->getCourseService()->findUserFavoritedCourses(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
+            'user' => $user,
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'type' => 'favorited',
         ));
     }
 
-    public function favoriteCoursesAction(Request $request, $id)
+    public function friendAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($id);
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
-        $teachingCount = $this->getCourseService()->searchMemberCount(array('userId' => $user['id'], 'role'=>'teacher'));
-        $courses = $this->getCourseService()->findUserFavoriteCourses($user['id'], 0 , 10);
-        
-        $followInfo = $this->getFollowInfo($user['id']);
-        return $this->render('TopxiaWebBundle:User:favorites.html.twig', array(
-            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
-            'userProfile'=>$userProfile,
-            'user'=>$user,
-            'teachingCount'=>$teachingCount,
-            'users'=>$followInfo['users'],
-            'followings'=>$followInfo['followings'],
-            'followers'=>$followInfo['followers'],
-            'courses'=>$courses
+        $user = $this->tryGetUser($id);
+        return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
+            'user' => $user,
         ));
     }
 
@@ -135,5 +137,57 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
+    private function tryGetUser($id)
+    {
+        $user = $this->getUserService()->getUser($id);
+        if (empty($user)) {
+            throw $this->createNotFoundException();
+        }
+        return $user;
+    }
+
+    private function _learnAction($user)
+    {
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserLearnCourseCount($user['id']),
+            10
+        );
+
+        $courses = $this->getCourseService()->findUserLearnCourses(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
+            'user' => $user,
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'type' => 'learn',
+        ));
+    }
+
+    private function _teachAction($user)
+    {
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserLearnCourseCount($user['id']),
+            10
+        );
+
+        $courses = $this->getCourseService()->findUserTeachCourses(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
+            'user' => $user,
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'type' => 'teach',
+        ));
+    }
 
 }

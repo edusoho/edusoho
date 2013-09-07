@@ -23,11 +23,11 @@ class MyCourseController extends BaseController
         $user = $this->getCurrentUser();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->getUserTeachingCoursesCount($user['id']),
+            $this->getCourseService()->findUserTeachCourseCount($user['id']),
             12
         );
         
-        $courses = $this->getCourseService()->findUserTeachingCourses(
+        $courses = $this->getCourseService()->findUserTeachCourses(
             $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -44,7 +44,7 @@ class MyCourseController extends BaseController
         $currentUser = $this->getCurrentUser();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->getUserLeaningCoursesCount($currentUser['id']),
+            $this->getCourseService()->findUserLeaningCourseCount($currentUser['id']),
             12
         );
 
@@ -73,7 +73,7 @@ class MyCourseController extends BaseController
         $currentUser = $this->getCurrentUser();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->getUserLeanedCoursesCount($currentUser['id']),
+            $this->getCourseService()->findUserLeanedCourseCount($currentUser['id']),
             12
         );
 
@@ -101,11 +101,11 @@ class MyCourseController extends BaseController
         $currentUser = $this->getCurrentUser();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->getUserFavoriteCourseCount($currentUser['id']),
+            $this->getCourseService()->findUserFavoritedCourseCount($currentUser['id']),
             12
         );
         
-        $courses = $this->getCourseService()->findUserFavoriteCourses(
+        $courses = $this->getCourseService()->findUserFavoritedCourses(
             $currentUser['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()

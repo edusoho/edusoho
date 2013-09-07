@@ -24,21 +24,25 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
-	public function getUserLeaningCoursesCount($userId);
+	public function findUserLearnCourses($userId, $start, $limit);
+
+	public function findUserLearnCourseCount($userId);
 
 	public function findUserLeaningCourses($userId, $start, $limit);
 
-	public function getUserLeanedCoursesCount($userId);
+	public function findUserLeaningCourseCount($userId);
+
+	public function findUserLeanedCourseCount($userId);
 
 	public function findUserLeanedCourses($userId, $start, $limit);
 
-	public function getUserTeachingCoursesCount($userId);
+	public function findUserTeachCourseCount($userId);
 	
-	public function findUserTeachingCourses($userId, $start, $limit);
+	public function findUserTeachCourses($userId, $start, $limit);
 
-	public function getUserFavoriteCourseCount($userId);
+	public function findUserFavoritedCourseCount($userId);
 
-	public function findUserFavoriteCourses($userId, $start, $limit);
+	public function findUserFavoritedCourses($userId, $start, $limit);
 
 	public function createCourse($course);
 

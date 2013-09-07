@@ -5,29 +5,25 @@ namespace Topxia\Service\Course\Dao;
 interface CourseMemberDao
 {
 
-    public function searchMemberCount($conditions);
-    
-    public function searchMember($conditions, $start, $limit);
-
     public function getMember($id);
 
     public function getMemberByCourseIdAndUserId($courseId, $userId);
 
-    public function getMemberCountByUserId($userId);
+    public function findMembersByUserIdAndRole($userId, $role, $start, $limit);
 
-    public function findMembersByUserId($userId, $start, $limit);
+    public function findMemberCountByUserIdAndRole($userId, $role);
+
+    public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+    
+    public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
     
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
 
-    public function findMembersByUserIdAndRole($userId, $role, $start, $limit);
-
     public function findMemberCountByCourseIdAndRole($courseId, $role);
 
-    public function findMembersByRole($role, $start, $limit);
-
-    public function getMembersCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+    public function searchMemberCount($conditions);
     
-    public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
+    public function searchMember($conditions, $start, $limit);
 
     public function addMember($member);
 
