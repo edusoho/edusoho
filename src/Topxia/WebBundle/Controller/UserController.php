@@ -65,11 +65,52 @@ class UserController extends BaseController
         ));
     }
 
-    public function friendAction(Request $request, $id)
+    public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $this->getUserService()->findUserFollowingCount($user['id']);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUserService()->findUserFollowingCount($user['id']),
+            10
+        );
+
+        $followings = $this->getUserService()->findUserFollowing(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
+            'friends' => $followings,
+            'friendNav' => 'following',
+        ));
+
+    }
+
+    public function followerAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        $this->getUserService()->findUserFollowerCount($user['id']);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUserService()->findUserFollowerCount($user['id']),
+            10
+        );
+
+        $followers = $this->getUserService()->findUserFollowers(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
+            'user' => $user,
+            'friends' => $followers,
+            'friendNav' => 'follower',
         ));
     }
 
@@ -104,17 +145,6 @@ class UserController extends BaseController
             return $this->createJsonResponse(false);
         }
         return $this->createJsonResponse(true);
-    }
-
-    private function getFollowInfo($userId)
-    {
-        $followings = $this->getUserService()->findUserFollowing($userId);
-        $followers = $this->getUserService()->findUserFollowers($userId);
-        $followingIds = ArrayToolkit::column($followings, 'toId');
-        $followerIds = ArrayToolkit::column($followers, 'fromId');
-        $userIds = array_merge($followingIds, $followerIds);
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        return array('followings'=>$followings, 'followers'=>$followers, 'users'=>$users);
     }
 
     protected function getUserService()

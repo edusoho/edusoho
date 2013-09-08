@@ -592,6 +592,14 @@ user_friend:
     pattern:  /user/{id}/friend
     defaults: { _controller: TopxiaWebBundle:User:friend }
 
+user_following:
+    pattern:  /user/{id}/following
+    defaults: { _controller: TopxiaWebBundle:User:following }
+
+user_follower:
+    pattern:  /user/{id}/follower
+    defaults: { _controller: TopxiaWebBundle:User:follower }
+
 user_follow:
     pattern:  /user/{id}/follow
     defaults: { _controller: TopxiaWebBundle:User:follow }

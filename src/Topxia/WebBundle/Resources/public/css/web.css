@@ -2553,7 +2553,7 @@ body {
 	min-height: 200px;
 }
 
-.userpage-body .nav {
+.userpage-nav {
 	background: #f8f8f8;
 	border-bottom: 1px solid #e7e7e7;
 	padding: 0px 15px;
@@ -2562,19 +2562,54 @@ body {
 	margin-bottom: 20px;
 }
 
-.userpage-body .nav li a {
+.userpage-nav li a {
 	padding: 10px 20px;
 	color: #777;
 	border-radius: 0;
 }
 
-.userpage-body .nav li a:hover {
+.userpage-nav li a:hover {
 	color: #333;
 }
 
-.userpage-body .nav li.active a {
+.userpage-nav li.active a {
 	color: #555;
 	background-color: #e7e7e7;
+}
+
+.userpage-sec-nav {
+	margin-bottom: 20px;
+}
+
+.friendcard {
+	border: 1px solid #eee;
+	border-radius: 3px;
+	padding: 5px;
+	margin-bottom: 20px;
+}
+
+.friendcard:hover {
+	border: 1px solid #ddd;
+	background-color: #f7f7f7;
+}
+
+.friendcard .avatar {
+	width: 48px;
+	height: 48px;
+	float: left;
+}
+
+.friendcard .infos {
+	margin-left: 58px;
+}
+
+.friendcard .nickname {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.friendcard .title {
+	color: #777;
 }
 
 /**

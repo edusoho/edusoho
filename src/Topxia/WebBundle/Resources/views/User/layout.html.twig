@@ -13,16 +13,14 @@
 
 <div class="es-row-wrap userpage-body">
 
-  <ul class="nav nav-pills">
+  <ul class="nav nav-pills userpage-nav">
     <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">在教课程</a></li>
     <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">在学课程</a></li>
     <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">收藏的课程</a></li>
-    <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_friend', {id:user.id}) }}">关注/粉丝</a></li>
+    <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">关注/粉丝</a></li>
   </ul>
 
-  <div class="row">
-    <div class="col-lg-12">{% block main %}{% endblock %}</div>
-  </div>
+  {% block main %}{% endblock %}
 
 </div>
 
