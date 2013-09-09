@@ -4,7 +4,7 @@
 	{% for review in reviews %}
 	  {% set author = users[review.userId]|default(null) %}
 	  {% set course = courses[review.courseId]|default(null) %}
-	  {% if author %}
+	  {% if author and course %}
 		  <li class="media">
 		  	<a href="{{ path('user_show', {id:author.id}) }}" class="author-picture-link">
 			  	<img class="author-picture" src="{{ file_path(author.smallAvatar, 'avatar.png') }}">
