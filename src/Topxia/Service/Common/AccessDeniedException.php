@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Service\Common;
 
-class AccessDeniedException extends ServiceException
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+class AccessDeniedException extends AccessDeniedHttpException
 {
 
 }

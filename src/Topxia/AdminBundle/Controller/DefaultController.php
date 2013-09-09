@@ -26,29 +26,22 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array('welcomedCourses'=>$welcomedCourses));
     }
 
-    public function newUsersAction(Request $request)
+    public function latestUsersBlockAction(Request $request)
     {
-        $newUsers = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 10);
-        $favoriteCourses = array();
-        foreach ($newUsers as $newUser) {
-            $courses = $this->getCourseService()->findUserFavoritedCourses($newUser['id'], 0, 10);
-            $favoriteCourses[$newUser['id']] = $courses;
-        }
-
-        return $this->render('TopxiaAdminBundle:Default:block-new-users.html.twig',
-            array(
-                'newUsers'=>$newUsers,
-                'favoriteCourses'=>$favoriteCourses
-            ));
+        $users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 5);
+        return $this->render('TopxiaAdminBundle:Default:latest-users-block.html.twig', array(
+            'users'=>$users,
+        ));
     }
 
-    public function unsolvedQuestionsAction(Request $request)
+    public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
-            array('type'=>'question', 'postNum'=>0),
+            array('type' => 'question', 'postNum' => 0),
             'createdNotStick',
-            0,10
+            0,5
         );
+
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $askers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
@@ -58,21 +51,23 @@ class DefaultController extends BaseController
         }
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);        
 
-        return $this->render('TopxiaAdminBundle:Default:block-unsolved-questions.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
             'questions'=>$questions,
             'courses'=>$courses,
             'askers'=>$askers,
             'teachers'=>$teachers
-            ));
+        ));
     }
 
-    public function paidRecordsAction(Request $request)
+    public function latestPaidOrdersBlockAction(Request $request)
     {
-        $paidRecords = $this->getOrderService()->searchOrders(array('paidStartTime'=>1), 'latest', 0 , 10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($paidRecords, 'courseId'));
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paidRecords, 'userId'));
-        return $this->render('TopxiaAdminBundle:Default:block-paid-records.html.twig', array(
-            'paidRecords'=>$paidRecords,
+        $orders = $this->getOrderService()->searchOrders(array('status'=>'paid'), 'latest', 0 , 5);
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($orders, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        
+        return $this->render('TopxiaAdminBundle:Default:latest-paid-orders-block.html.twig', array(
+            'orders'=>$orders,
             'users'=>$users,
             'courses'=>$courses
         ));

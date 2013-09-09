@@ -78,6 +78,13 @@ class DataDict
 			'warning' => '<span class="text-warning">警告</span>',
 			'error' => '<span class="text-danger">错误</span>'
 		),
+		'userType' => array(
+			'default' => '网站注册',
+			'weibo' => '微博登录',
+			'renren' => '人人连接',
+			'qq' => 'QQ登录',
+			'douban' => '豆瓣连接'
+		),
 	);
 
 	public static function dict($type)

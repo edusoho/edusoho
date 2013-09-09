@@ -176,6 +176,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
+        $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
+
         return true;
     }
 
@@ -215,6 +217,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
+        $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
 
         if($type == 'default') {
@@ -355,6 +358,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户角色不正确，设置用户角色失败。');
         }
         $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
+
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
     } 
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
@@ -483,6 +488,8 @@ class UserServiceImpl extends BaseService implements UserService
         }
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
 
+        $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
+
         return true;
     }
 
@@ -494,6 +501,8 @@ class UserServiceImpl extends BaseService implements UserService
         }
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
+        $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
+
         return true;
     }
 
@@ -504,6 +513,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，推荐失败！');
         }
         $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedTime' => time()));
+
+        $this->getLogService()->info('user', 'recommend', "推荐用户{$user['nickname']}(#{$user['id']})");
     }
 
     public function cancelPromoteUser($id)
@@ -513,6 +524,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，取消推荐失败！');
         }
         $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedTime' => 0));
+        
+        $this->getLogService()->info('user', 'cancel_recommend', "取消推荐用户{$user['nickname']}(#{$user['id']})");
     }
 
     public function findLatestPromotedTeacher($start, $limit)

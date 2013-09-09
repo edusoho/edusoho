@@ -5,31 +5,20 @@
 {% block content %}
 
 <div class="page-header">
-	<h1>欢迎来到{{ setting('site.name') }}管理后台!</h1>
+	<h1>管理中心</h1>
 </div>
 
 <div class="row">
-
-{{ render(controller('TopxiaAdminBundle:Default:newUsers')) }}
-
-{% include 'TopxiaAdminBundle:Default:block-welcomed-courses.html.twig' with {welcomedCourses:welcomedCourses} %}
-
+	{{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
+	{% include 'TopxiaAdminBundle:Default:block-welcomed-courses.html.twig' with {welcomedCourses:welcomedCourses} %}
 </div>
 
 <div class="row">
-	 
-	{{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestions')) }}
-
+	{{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
 </div>
 
 <div class="row">
-	
-	{{ render(controller('TopxiaAdminBundle:Default:paidRecords')) }}
-
+	{{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
 </div>
-
-{% endblock %}
-
-{% block footer %}
 
 {% endblock %}

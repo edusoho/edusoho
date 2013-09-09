@@ -1,19 +1,8 @@
 seajs.config({
-	plugins: ['shim', 'style'],
-
 	alias: {
-		'jquery': {
-			src: 'jquery/jquery-1.9.1.js',
-			exports: 'jQuery'
-		},
-		'$': {
-			src: 'jquery/jquery-1.9.1.js',
-			exports: 'jQuery'
-		},
-		'$-debug': {
-			src: 'jquery/jquery-1.9.1.js',
-			exports: 'jQuery'
-		},
+		'jquery': 'jquery/jquery/1.10.1/jquery',
+		'$': 'jquery/jquery/1.10.1/jquery',
+		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
 		"jquery.form": "jquery-plugin/form/3.36.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",
@@ -21,19 +10,13 @@ seajs.config({
 		"jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.1/perfect-scrollbar",
 		"jquery.select2": "jquery-plugin/select2/3.4.1/select2",
 		"jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",
+		"jquery.jcrop": "jquery-plugin/jcrop/0.9.12/jcrop",
 		"jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
-		'jquery.jcrop':  {
-			src: 'jquery-plugin/jcrop/0.9.12/jcrop.js',
-			deps: ['jquery', 'jquery.jcrop-css']
-		},
-		'bootstrap': {
-			src: 'bootstrap-rc/3.0.0/bootstrap.js',
-			deps: ['jquery']
-		},
-		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete-debug',
+		'bootstrap': 'gallery2/bootstrap/3.0.0/bootstrap',
+		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.0.1/upload',
-		'bootstrap.validator': 'bootstrap-rc/3.0.0/validator',
+		'bootstrap.validator': 'common/validator',
 		'class': 'arale/class/1.1.0/class',
 		'base': 'arale/base/1.1.0/base',
 		'widget': 'arale/widget/1.1.1/widget',

@@ -458,6 +458,10 @@ body {
 	margin-right: 3px;
 }
 
+.course-cover-heading .rating-num {
+	color: #777;
+}
+
 .course-cover-heading .rating-user-num {
 	margin-left: 10px;
 }

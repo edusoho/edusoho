@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class DefaultController extends BaseController
 {

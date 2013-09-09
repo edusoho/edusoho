@@ -16,6 +16,7 @@ class RegisterController extends BaseController
 
             if ($form->isValid()) {
                 $registration = $form->getData();
+                $registration['createdIp'] = $request->getClientIp();
                 $auth = $this->getSettingService()->get('auth', array());
                 $user = $this->getUserService()->register($registration);
                 $this->authenticateUser($user);

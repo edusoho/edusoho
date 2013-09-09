@@ -71,11 +71,6 @@ abstract class BaseService
         return $purifier->purify($html);
     }
 
-    protected function getMediaParseService()
-    {
-        return $this->createService('Util.MediaParseService');
-    }
-
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
         return new ServiceException($message, $code);
@@ -83,7 +78,7 @@ abstract class BaseService
 
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, $code);
+        return new AccessDeniedException($message, null, $code);
     }
 
     protected function createNotFoundException($message = 'Not Found', $code = 0)

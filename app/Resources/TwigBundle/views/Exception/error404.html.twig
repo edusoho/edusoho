@@ -1,70 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>页面找不到</title>
-<style>
-.title {
-	color: #D67F0C;
-	font-size: 20px;
-	font-weight: bold;
-	margin: 10px 10px;
-}
+{% extends 'TwigBundle:Exception:layout.html.twig' %}
+{% block title %}页面找不到 - {{ parent() }}{% endblock %}
 
-.note {
-	color: #000;
-	font-size: 20px;
-	font-weight: bold;
-	margin: 20px 10px;
-}
-
-.imageblock {
-	padding: 5px 0px;
-	width: 450px;
-	margin: 7% auto 0;
-}
-
-.imageblock-image {
-	float: left;
-	margin-right: 10px
-}
-
-.imageblock-image,.imageblock-image img {
-	display: block;
-}
-
-.imageblock-content {
-	display: table-cell;
-	*display: inline-block;
-	vertical-align: top;
-	width: 10000px;
-	*width: auto;
-}
-</style>
-</head>
-<body>
-
-	<div class="imageblock">
-		<img src="/res/images/face404.jpg" class="imageblock-image" />
-		<div class="imageblock-content">
-			<div class="title">页面找不到</div>
-			<div class="note">
-				啊？走错教室了.... <span id="time">5</span>秒后回首页
+{% block body %}
+	<div class="container">
+		<div class="content">
+			<h1>页面找不到</h1>
+			<div class="message">该页面已被删除，或地址错误。</div>
+			<div class="actions">
+				<a href="{{ path('homepage', {ref:404}) }}">返回首页</a>
 			</div>
-			<div class=""></div>
 		</div>
 	</div>
-	<script>
-		var second = 5;
-		var si = setInterval(function() {
-			if (--second) {
-				document.getElementById('time').innerHTML = '' + second;
-			} else {
-				location.href = "/?ref=404";
-				clearInterval(si);
-			}
-		}, 1000);
-	</script>
-
-</body>
-</html>
+{% endblock %}

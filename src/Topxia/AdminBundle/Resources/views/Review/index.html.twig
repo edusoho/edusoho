@@ -22,7 +22,7 @@
 
     <div class="form-group">
       <select class="form-control" name="rating">
-        {{ select_options({2:2, 4:4, 6:6, 8:8, 10:10}, app.request.get('rating'), '评分') }}
+        {{ select_options({1:'1星', 2:'2星', 3:'3星', 4:'4星', 5:'5星'}, app.request.get('rating'), '评分') }}
       </select>
     </div>
 
@@ -60,7 +60,7 @@
                 <a class="text-success text-sm" href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}</a>
               </div>
             </td>
-            <td>{{ review.rating }}</td>
+            <td>{{ review.rating }}星</td>
             <td>
               {{ admin_macro.user_link(author) }}<br>
               <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
