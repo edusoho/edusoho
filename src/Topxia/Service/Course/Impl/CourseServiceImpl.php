@@ -331,6 +331,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'recommended' => 1,
 			'recommendedTime' => time(),
 		));
+
+		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']})");
 	}
 
 	public function cancelRecommendCourse($id)
@@ -341,6 +343,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'recommended' => 0,
 			'recommendedTime' => 0,
 		));
+
+		$this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
 	}
 
 	public function deleteCourse($id)
@@ -353,22 +357,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->deleteCourse($id);
 
+		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
+
 		return true;
 	}
 
 	public function publishCourse($id)
 	{
 		$course = $this->tryManageCourse($id);
-		return $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
+		$this->getCourseDao()->updateCourse($id, array('status' => 'published'));
+		$this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
 	}
 
 	public function closeCourse($id)
 	{
-		$course = $this->getCourseDao()->getCourse($id);
-		if(empty($course)) {
-			throw $this->createServiceException('课程不存在，关闭课程失败！');
-		}
-		return $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
+		$course = $this->tryManageCourse($id);
+		$this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
+		$this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
 	}
 
 	public function favoriteCourse($courseId)
@@ -1252,6 +1257,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getReviewService()
     {
     	return $this->createService('Course.ReviewService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');        
     }
 
 }

@@ -71,11 +71,6 @@ abstract class BaseService
         return $purifier->purify($html);
     }
 
-    protected function getMediaParseService()
-    {
-        return $this->createService('Util.MediaParseService');
-    }
-
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
         return new ServiceException($message, $code);

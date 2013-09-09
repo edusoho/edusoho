@@ -44,7 +44,7 @@ class CourseController extends BaseController
 
     public function closeAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->closeCourse($id);
+        $this->getCourseService()->closeCourse($id);
         return $this->renderCourseTr($id);
     }
 

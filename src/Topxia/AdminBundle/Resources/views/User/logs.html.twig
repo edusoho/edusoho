@@ -39,8 +39,7 @@
   <table class="table table-hover">
     <tr>
       <th width="15%">用户</th>
-      <th width="15%">操作</th>
-      <th width="40%">信息</th>
+      <th width="55%">操作</th>
       <th width="10%">日志等级</th>
       <th width="20%">时间/IP</th>
     </tr>   
@@ -53,8 +52,11 @@
           {% else %}
             --
           {% endif %}
-        <td>{{ log.module }}.{{ log.action }}</td>
-        <td>{{ log.message }}</td>
+        <td>
+          {{ log.message }}
+          <br />
+          <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
+        </td>
         <td>{{ dict('logLevel:html')[log.level]|raw }}</td>
         <td>
           <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
