@@ -31,13 +31,10 @@
       
       {% if profile %}
         {% if profile.weibo %}
-          <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="/assets/img/user/link-weibo.png"> 微博</a>
-        {% endif %}
-        {% if profile.weixin %}
-          <a href="{{ profile.weixin }}" target="_blank" class="mrm"><img src="/assets/img/user/link-blog.png"> 博客</a>
+          <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-weibo.png') }}"> 微博</a>
         {% endif %}
         {% if profile.site %}
-          <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="/assets/img/user/link-site.png"> 网站</a>
+          <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-site.png') }}"> 网站</a>
         {% endif %}
       {% endif %}
     </p>
