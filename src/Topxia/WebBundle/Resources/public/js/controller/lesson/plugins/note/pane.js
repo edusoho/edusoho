@@ -39,10 +39,10 @@ define(function(require, exports, module) {
                     CKEDITOR.instances['note_content'].updateElement();
                     $.post($(this).attr('action'), $(this).serialize(), function(response) {
                         pane.set('formChanged', false);
-                        clearInterval(pane.get('timer'));
 
                         pane.$('[data-role=saved-message]').html('最近保存于' + pane._nowTime()).show('slow');
                     }, 'json').error(function(error) {
+
                     });
                     return false;
                 });
@@ -60,7 +60,7 @@ define(function(require, exports, module) {
                 if (pane.get('formChanged')) {
                     $("#lesson-note-plugin-form").trigger('submit');
                 }
-            }, 1000);
+            }, 20000);
         },
 
         _nowTime: function () {
