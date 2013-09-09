@@ -5,7 +5,7 @@
       <div class="userpage-header-info">
           <div class="actions">
             {% if app.user.id != user.id %}
-              <button class="btn btn-info unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已关注</button>
+              <button class="btn btn-success unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已关注</button>
               <button class="btn btn-primary follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}>关注</button>
             {% endif %}
             <a class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
