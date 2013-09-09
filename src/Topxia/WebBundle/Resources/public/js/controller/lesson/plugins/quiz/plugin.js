@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 	var QuizPlugin = BasePlugin.extend({
 		code: 'quiz',
 		name: '测验',
+		noactive: true,
 		iconClass: 'glyphicon glyphicon-info-sign',
 		api: {
 			init: '/lessonplugin/quiz/init',
