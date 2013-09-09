@@ -46,7 +46,7 @@ class UserController extends BaseController {
             'startDateTime'=>'',
             'endDateTime'=>'',
             'nickname'=>'',
-            'level'=>'error'
+            'level'=>''
         );
 
         if(!empty($fields)){
