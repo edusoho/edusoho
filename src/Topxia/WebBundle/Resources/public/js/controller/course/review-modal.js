@@ -30,11 +30,6 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="review[title]"]',
-            required: true
-        });
-
-        validator.addItem({
             element: '[name="review[content]"]',
             required: true
         });

@@ -14,7 +14,6 @@ class ReviewType extends AbstractType
     {
 
         $builder->add('rating', 'hidden');
-        $builder->add('title', 'text');
         $builder->add('content', 'textarea');
     }
 
