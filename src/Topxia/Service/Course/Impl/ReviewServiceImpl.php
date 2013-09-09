@@ -88,7 +88,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		} else {
 			$review = $this->getReviewDao()->updateReview($review['id'], array(
 				'rating' => $fields['rating'],
-				'title' => empty($fields['title']) ? '' : $fields['title'],
 				'content' => empty($fields['content']) ? '' : $fields['content'],
 			));
 		}

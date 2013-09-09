@@ -33,8 +33,8 @@
         </p>
         <p>
           评　价：
-          <span class="stars-{{ (course.rating/2)|number_format }}">&nbsp;</span>
-          <span class="rating-num">{{ course.rating }}</span>
+          <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
+          <span class="rating-num">{{ course.rating|number_format(1) }}分</span>
           <a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}人评价)</a>
         </p>
         <p>
