@@ -46,7 +46,7 @@ class CourseReviewController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $fields = $form->getData();
-                $fields['rating'] = $fields['rating'] * 2;
+                $fields['rating'] = $fields['rating'];
                 $fields['userId']= $currentUser['id'];
                 $fields['courseId']= $id;
                 $this->getReviewService()->saveReview($fields);
