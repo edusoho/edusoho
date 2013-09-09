@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    require("jquery.jcrop-css");
     require("jquery.jcrop");
     var Notify = require('common/bootstrap-notify');
 
