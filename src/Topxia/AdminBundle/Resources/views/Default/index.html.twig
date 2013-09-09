@@ -9,27 +9,16 @@
 </div>
 
 <div class="row">
-
-{{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
-
-{% include 'TopxiaAdminBundle:Default:block-welcomed-courses.html.twig' with {welcomedCourses:welcomedCourses} %}
-
+	{{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
+	{% include 'TopxiaAdminBundle:Default:block-welcomed-courses.html.twig' with {welcomedCourses:welcomedCourses} %}
 </div>
 
 <div class="row">
-	 
 	{{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
-
 </div>
 
 <div class="row">
-	
-	{{ render(controller('TopxiaAdminBundle:Default:paidRecords')) }}
-
+	{{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
 </div>
-
-{% endblock %}
-
-{% block footer %}
 
 {% endblock %}

@@ -59,13 +59,15 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function paidRecordsAction(Request $request)
+    public function latestPaidOrdersBlockAction(Request $request)
     {
-        $paidRecords = $this->getOrderService()->searchOrders(array('paidStartTime'=>1), 'latest', 0 , 10);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($paidRecords, 'courseId'));
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paidRecords, 'userId'));
-        return $this->render('TopxiaAdminBundle:Default:block-paid-records.html.twig', array(
-            'paidRecords'=>$paidRecords,
+        $orders = $this->getOrderService()->searchOrders(array('status'=>'paid'), 'latest', 0 , 5);
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($orders, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        
+        return $this->render('TopxiaAdminBundle:Default:latest-paid-orders-block.html.twig', array(
+            'orders'=>$orders,
             'users'=>$users,
             'courses'=>$courses
         ));
