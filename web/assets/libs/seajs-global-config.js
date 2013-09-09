@@ -2,18 +2,9 @@ seajs.config({
 	plugins: ['shim', 'style'],
 
 	alias: {
-		'jquery': {
-			src: 'jquery/jquery-1.9.1.js',
-			exports: 'jQuery'
-		},
-		'$': {
-			src: 'jquery/jquery-1.9.1.js',
-			exports: 'jQuery'
-		},
-		'$-debug': {
-			src: 'jquery/jquery-1.9.1.js',
-			exports: 'jQuery'
-		},
+		'jquery': 'jquery/jquery/1.10.1/jquery',
+		'$': 'jquery/jquery/1.10.1/jquery',
+		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
 		"jquery.form": "jquery-plugin/form/3.36.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",
