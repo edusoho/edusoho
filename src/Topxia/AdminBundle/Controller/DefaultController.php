@@ -38,7 +38,7 @@ class DefaultController extends BaseController
             $courses[] = $course;
         }
 
-        return $this->render('TopxiaAdminBundle:Default:block-welcomed-courses.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
             'courses' => $courses
         ));
         
