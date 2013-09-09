@@ -34,13 +34,14 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function unsolvedQuestionsAction(Request $request)
+    public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
-            array('type'=>'question', 'postNum'=>0),
+            array('type' => 'question', 'postNum' => 0),
             'createdNotStick',
-            0,10
+            0,5
         );
+
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $askers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
@@ -50,12 +51,12 @@ class DefaultController extends BaseController
         }
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);        
 
-        return $this->render('TopxiaAdminBundle:Default:block-unsolved-questions.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
             'questions'=>$questions,
             'courses'=>$courses,
             'askers'=>$askers,
             'teachers'=>$teachers
-            ));
+        ));
     }
 
     public function paidRecordsAction(Request $request)
