@@ -151,7 +151,6 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-
     protected function getMessageService()
     {
         return $this->getServiceKernel()->createService('User.MessageService');

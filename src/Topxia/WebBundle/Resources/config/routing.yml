@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+install_createData:
+    pattern:  /createData
+    defaults: { _controller: TopxiaWebBundle:Install:createData }
+
 login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:Login:index }
