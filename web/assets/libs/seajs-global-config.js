@@ -15,13 +15,10 @@ seajs.config({
 		"jquery.jcrop": "jquery-plugin/jcrop/0.9.12/jcrop",
 		"jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
-		'bootstrap': {
-			src: 'bootstrap-rc/3.0.0/bootstrap.js',
-			deps: ['jquery']
-		},
-		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete-debug',
+		'bootstrap': 'gallery2/bootstrap/3.0.0/bootstrap',
+		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.0.1/upload',
-		'bootstrap.validator': 'bootstrap-rc/3.0.0/validator',
+		'bootstrap.validator': 'common/validator',
 		'class': 'arale/class/1.1.0/class',
 		'base': 'arale/base/1.1.0/base',
 		'widget': 'arale/widget/1.1.1/widget',
