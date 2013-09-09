@@ -4,42 +4,46 @@
 		<div class="panel-heading">
 			 <h3 class="panel-title">最新购买记录</h3>
 		</div>
-    <table class="table table-condensed table-bordered table-striped table-hover">
-	    <thead>
-	      <tr>
-	        <th width="50%">订单名称</th>
-	        <th width="10%">价格</th>
-	        <th width="10%">购买人</th>
-	        <th width="20%">付款方式</th>
-	      </tr>
-	    </thead>
-      <tbody>
-        {% for order in orders %}
-          {% set course = courses[order.courseId]|default(null) %}
-          <tr>
-          	<td>
-		          {% if course %}
-            		<a href="{{ path('course_show', {id:courses[order.courseId].id}) }}" target="_blank">{{ order.title }}</a>
-            	{% else %}
-	            	{{ order.title }}
-            	{% endif %}
-          	</td>
-            <td class="money-text">
-              {% if order.price == 0 %}
-                {{order.price}} 元
-              {% else %}
-                {{order.price}} 元
-              {% endif %}
-            </td>
-            <td>
-            	{{ admin_macro.user_link(users[order.userId]) }}
-            </td>
-            <td>
-            	<span class="text-sm">{{ dict_text('payment', order.payment)|default('--') }}  / {{order.paidTime |date('Y-n-d H:i')}}</span>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    {% if orders %}
+      <table class="table table-condensed table-bordered table-striped table-hover">
+  	    <thead>
+  	      <tr>
+  	        <th width="50%">订单名称</th>
+  	        <th width="10%">价格</th>
+  	        <th width="10%">购买人</th>
+  	        <th width="20%">付款方式</th>
+  	      </tr>
+  	    </thead>
+        <tbody>
+          {% for order in orders %}
+            {% set course = courses[order.courseId]|default(null) %}
+            <tr>
+            	<td>
+  		          {% if course %}
+              		<a href="{{ path('course_show', {id:courses[order.courseId].id}) }}" target="_blank">{{ order.title }}</a>
+              	{% else %}
+  	            	{{ order.title }}
+              	{% endif %}
+            	</td>
+              <td class="money-text">
+                {% if order.price == 0 %}
+                  {{order.price}} 元
+                {% else %}
+                  {{order.price}} 元
+                {% endif %}
+              </td>
+              <td>
+              	{{ admin_macro.user_link(users[order.userId]) }}
+              </td>
+              <td>
+              	<span class="text-sm">{{ dict_text('payment', order.payment)|default('--') }}  / {{order.paidTime |date('Y-n-d H:i')}}</span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">暂无记录</div>
+    {% endif %}
   </div>
 </div>

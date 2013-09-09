@@ -6,6 +6,10 @@ admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
 
+admin_question_remind_teachers:
+    pattern: /course/{courseId}/question/{questionId}/remindTeachers
+    defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
+
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
@@ -348,10 +352,6 @@ admin_file_delete:
 admin_message:
     pattern: /message
     defaults: { _controller: TopxiaAdminBundle:Message:index }
-
-admin_remind_course_teachers:
-    pattern: /message/{courseId}/remind/{questionId}teachers
-    defaults: { _controller: TopxiaAdminBundle:Default:remindCourseTeachers }
 
 admin_message_delete_messages:
     pattern: /delete/choosed/messages

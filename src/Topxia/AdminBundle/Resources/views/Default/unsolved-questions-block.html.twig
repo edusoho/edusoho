@@ -2,19 +2,19 @@
 <div class="col-md-12">
 	<div class="panel panel-default">
 		<div class="panel-heading"><h3 class="panel-title">最新未解答问题</h3></div>
-    <table class="table table-condensed table-bordered table-striped table-hover">
-      <thead>
-        <tr>
-          <th width="40%">问题标题</th>
-          <th width="35%">所属课程</th>
-          <th width="10%">提问人</th>
-          <th width="15%">操作</th>
-        </tr>
-      </thead>
-      <tbody class="tbody">
-        {% for question in questions %}
-          {% set course =  courses[question.courseId]|default(null) %}
-          {% if course %}
+		{% if questions %}
+	    <table class="table table-condensed table-bordered table-striped table-hover">
+	      <thead>
+	        <tr>
+	          <th width="40%">问题标题</th>
+	          <th width="35%">所属课程</th>
+	          <th width="10%">提问人</th>
+	          <th width="15%">操作</th>
+	        </tr>
+	      </thead>
+	      <tbody class="tbody">
+	        {% for question in questions %}
+	          {% set course =  courses[question.courseId]|default(null) %}
 		        <tr>
 		          <td>
 	              <a href="{{ path('course_thread_show', {courseId:question.courseId, id:question.id}) }}" target="_blank">
@@ -26,24 +26,32 @@
 	              <span class="text-muted text-sm">发表于{{question.createdTime |date('Y-n-d H:i') }}</span>
 		          </td>
 		          <td>
-	              <a href="{{ path('course_show', {id:courses[question.courseId].id}) }}" target="_blank">{{ courses[question.courseId].title }}</a>
-	              <br>
-	              <span class="text-muted text-sm">老师：
-			            {% for teacherId in courses[question.courseId].teacherIds %}
-			              {{ admin_macro.user_link(teachers[teacherId], 'text-muted text-sm') }}
-			            {% endfor %}
-			          </span>
+		          	{% if course %}
+		              <a href="{{ path('course_show', {id:courses[question.courseId].id}) }}" target="_blank">{{ courses[question.courseId].title }}</a>
+		              <br>
+		              <span class="text-muted text-sm">老师：
+				            {% for teacherId in courses[question.courseId].teacherIds %}
+				              {{ admin_macro.user_link(teachers[teacherId], 'text-muted text-sm') }}
+				            {% endfor %}
+				          </span>
+			          {% else %}
+			            --
+			          {% endif %}
 		          </td>
 		          <td>
 		            {{ admin_macro.user_link(askers[question.userId]) }}
 		          </td>
 		          <td>
-			          <button class="btn btn-default btn-sm remind-teachers" data-url="{{ path('admin_remind_course_teachers', {courseId:question.courseId, questionId:question.id}) }}">提醒教师</button>
+		          	{% if course %}
+				          <button class="btn btn-default btn-sm remind-teachers" data-url="{{ path('admin_question_remind_teachers', {courseId:question.courseId, questionId:question.id}) }}">提醒教师</button>
+			          {% endif %}
 			        </td>
 		        </tr>
-	        {% endif %}
-        {% endfor %}
-      </tbody>
+	        {% endfor %}
+	      </tbody>
       </table>
-   </div>
+    {% else %}
+      <div class="empty">暂无记录</div>
+    {% endif %}
+	</div>
 </div>
