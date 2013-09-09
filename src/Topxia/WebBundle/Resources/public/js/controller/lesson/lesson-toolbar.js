@@ -8,6 +8,10 @@ define(function(require, exports, module) {
 
 		_currentPane: null,
 
+		events: {
+			'click .hide-pane': 'hidePane'
+		},
+
 		attrs: {
 			courseId: null,
 			lessonId: null,
@@ -46,7 +50,10 @@ define(function(require, exports, module) {
 			var html = '';
 			$.each(toolbar.get('activePlugins'), function(i, name){
 				var plugin = toolbar.get('plugins')[name];
-				html += '<li data-plugin="' + plugin.code + '"><a href="#"><span class="' + plugin.iconClass + '"></span>' + plugin.name + '</a></li>'
+				if (plugin.noactive == undefined) {
+					plugin.noactive = false;
+				}
+				html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><span class="' + plugin.iconClass + '"></span>' + plugin.name + '</a></li>'
 			});
 
 			$('#lesson-toolbar-primary').html(html);
@@ -55,9 +62,13 @@ define(function(require, exports, module) {
 			$('#lesson-toolbar-primary').on('click', 'li[data-plugin]', function(e){
 				e.preventDefault();
 				$(e.delegateTarget).find('li[data-plugin]').removeClass('active');
+
 				
 				var $this = $(this);
-				$this.addClass('active');
+
+				if (!$this.data('noactive')) {
+					$this.addClass('active');
+				}
 				toolbar.get('plugins')[$this.data('plugin')].execute();
 
 				return false;
@@ -88,13 +99,18 @@ define(function(require, exports, module) {
 			this.getPaneContainer().find('[data-pane]').hide();
 			this.getPaneContainer().find('[data-pane=' + name + ']').show();
 			this.getPaneContainer().show();
+			this.element.addClass('toolbar-open');
 			$('.lesson-dashboard').addClass('lesson-dashboard-open');
 			this._currentPane = name;
+			this.$('.hide-pane').show();
 		},
 
 		hidePane: function() {
 			this.getPaneContainer().hide();
+			this.$('.toolbar-nav li').removeClass('active');
 			this.element.removeClass('toolbar-open');
+			$('.lesson-dashboard').removeClass('lesson-dashboard-open');
+			this.$('.hide-pane').hide();
 		},
 
 		setLessons: function(lessons) {
@@ -108,6 +124,7 @@ define(function(require, exports, module) {
 		getLessons: function() {
 			return this._lessons;
 		},
+
 		_onChangeLessonId: function(id) {
 			if (this._currentPane) {
 				var plugin = this.get('plugins')[this._currentPane];

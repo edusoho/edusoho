@@ -1217,9 +1217,12 @@ body {
 	color: #fff;
 }
 
-
-
-
+.lesson-dashboard #lesson-toolbar-secondary {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
 
 .lesson-dashboard .dashboard-header {
 	position: absolute;
