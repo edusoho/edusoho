@@ -20,7 +20,7 @@
     <script src="/assets/libs/bootstrap/3.0.0/html5shiv.js?2"></script>
     <script src="/assets/libs/bootstrap/3.0.0/respond.min.js?2"></script>
   <![endif]-->
-  
+
     <style>
     .pact {
 box-shadow: 5px 5px 5px #f7f7f7 inset;
@@ -58,7 +58,7 @@ outline: none;
           </div>
 
           <div class="es-box-body">
-            <img src="/assets/img/default/course-large.png">
+            <img src="./headerBar.png">
           </div>
 
           <div class="next">

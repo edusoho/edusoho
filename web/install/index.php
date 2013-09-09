@@ -58,7 +58,7 @@ outline: none;
           </div>
 
           <div class="es-box-body">
-            <img src="/assets/img/default/course-large.png">
+            <img src="./headerBar.png">
           </div>
 
           <div class="protocol">
