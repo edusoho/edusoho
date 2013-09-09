@@ -1,37 +1,14 @@
-{% extends 'TopxiaWebBundle::layout_old.html.twig' %}
+{% extends 'TwigBundle:Exception:layout.html.twig' %}
+{% block title %}访问被拒绝 - {{ parent() }}{% endblock %}
 
-{%block title %}访问被拒绝！{% endblock %}
-
-{% block content %}
-<style>
-
-.error-page {
-  min-height: 300px;
-  _height: 300px;
-}
-
-.error-box {
-  width: 500px;
-  margin: 100px auto 0;
-  padding: 50px 50px;
-}
-
-.error-box .message {
-  font-size: 18px;
-  line-height: 32px;
-}
-
-</style>
-
-<div class="error-page">
-  <div class="error-box flat">
-    <div class="imageblock">
-      <div class="imageblock-image"><img src="/res/images/warning.png" /></div>
-      <div class="imageblock-content">
-        <div class="message">{{ exception.message }}</div>
+{% block body %}
+  <div class="container">
+    <div class="content">
+      <h1>访问被拒绝</h1>
+      <div class="message">你没有权限访问该页面！</div>
+      <div class="actions">
+        <a href="{{ path('homepage', {ref:404}) }}">返回首页</a>
       </div>
     </div>
   </div>
-</div>
-
 {% endblock %}

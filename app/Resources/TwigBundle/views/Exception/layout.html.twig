@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - {% if setting('site.slogan') %}{{ setting('site.slogan') }} -{% endif %} Powered by EDUSOHO{% endblock %}</title>
+
+<style>
+
+body {
+  background-color: #f9f9f9;
+  font-size: 14px;
+}
+
+h1 {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0 0 20px;
+	padding: 0;
+	color: #444;
+}
+
+a {
+	color: #428bca;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.container {
+  width: 500px;
+  margin: 60px auto;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.content {
+	padding: 40px;
+}
+
+.message {
+	margin-bottom: 20px;
+	color: #666;
+	line-height: 24px;
+}
+
+.actions a {
+	margin-right: 20px;
+}
+
+</style>
+</head>
+<body>
+	{% block body %}{% endblock %}
+</body>
+</html>

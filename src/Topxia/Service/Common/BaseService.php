@@ -78,7 +78,7 @@ abstract class BaseService
 
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, $code);
+        return new AccessDeniedException($message, null, $code);
     }
 
     protected function createNotFoundException($message = 'Not Found', $code = 0)

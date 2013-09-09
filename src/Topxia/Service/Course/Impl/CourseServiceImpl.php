@@ -1081,7 +1081,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$user = $this->getCurrentUser();
-		if (empty($user)) {
+		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('未登录用户，无权操作！');
 		}
 
