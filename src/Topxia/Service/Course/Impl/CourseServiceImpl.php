@@ -212,9 +212,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
-        $course['address'] = !empty($course['address']) ? $course['address'] : '';
-        $course['startTime'] = empty($course['startTime']) ? 0 : (int) $course['startTime'];
-        $course['endTime'] = empty($course['endTime']) ? 0 : (int) $course['endTime'];
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
 		$course['teacherIds'] = array($course['userId']);
