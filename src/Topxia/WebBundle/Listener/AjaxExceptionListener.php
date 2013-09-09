@@ -26,13 +26,6 @@ class AjaxExceptionListener
 
         if ($exception instanceof AccessDeniedException) {
             $statusCode = 403;
-
-            $user = $this->getUser($event);
-            if ($user) {
-                $error = array('name' => 'AccessDenied', 'message' => '访问被拒绝！');
-            } else {
-                $error = array('name' => 'Unlogin', 'message' => '当前操作，需要登录！');
-            }
         } else {
             $statusCode = $exception->getCode();
             if (!array_key_exists($statusCode, Response::$statusTexts)) {
@@ -45,6 +38,15 @@ class AjaxExceptionListener
                 $error = array('name' => 'Error', 'message' => 'Error');
             }
         }
+
+        if ($statusCode == 403) {
+            $user = $this->getUser($event);
+            if ($user) {
+                $error = array('name' => 'AccessDenied', 'message' => '访问被拒绝！');
+            } else {
+                $error = array('name' => 'Unlogin', 'message' => '当前操作，需要登录！');
+            }
+        } 
 
         $response = new JsonResponse(array('error' => $error) , $statusCode);
         $event->setResponse($response);

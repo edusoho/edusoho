@@ -13,9 +13,15 @@ class UserController extends BaseController
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($user, $userProfile);
 
+        if ($this->getCurrentUser()->isLogin()) {
+            $isFollowed = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']);
+        } else {
+            $isFollowed = false;
+        }
+
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
-            'user'=>$user,
-            'isFollowed'=>$this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']),
+            'user' => $user,
+            'isFollowed' => $isFollowed,
         ));
     }
 
@@ -127,23 +133,21 @@ class UserController extends BaseController
 
     public function unfollowAction(Request $request, $id)
     {
-        try {
-            $user = $this->getCurrentUser();
-            $this->getUserService()->unFollow($user['id'], $id);
-        } catch (Exception $e) {
-            return $this->createJsonResponse(false);
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
         }
+        $this->getUserService()->unFollow($user['id'], $id);
         return $this->createJsonResponse(true);
     }
 
     public function followAction(Request $request, $id)
     {
-        try {
-            $user = $this->getCurrentUser();
-            $this->getUserService()->follow($user['id'], $id);
-        } catch (Exception $e) {
-            return $this->createJsonResponse(false);
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
         }
+        $this->getUserService()->follow($user['id'], $id);
         return $this->createJsonResponse(true);
     }
 
