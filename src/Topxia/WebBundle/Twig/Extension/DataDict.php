@@ -37,10 +37,10 @@ class DataDict
         'dateType' => array(
             'today' => '今日',
             'yesterday' => '昨日',
-            'last_week' => '上周',
             'this_week' => '本周',
-            'last_month' => '上月',
+            'last_week' => '上周',
             'this_month' => '本月',
+            'last_month' => '上月',
     	),
         'contentStatus' => array(
             'published' => '已发布',

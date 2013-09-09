@@ -1,43 +1,26 @@
-<div id="welcomed-courses" class="col-md-6">
-	
-	 	<div class="panel panel-default">
-			
-			<div class="panel-heading">
-		  	<p class="panel-title">受欢迎课程</p>
-		  	
-		  	<div>
-			  	<select id="date-type-select" class="form-control" data-url="{{path('admin_find_welcomed_courses')}}">
-		  			{{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
-				</select>
-				</div>
-			</div>
-
-			<div>
-					<table class="table table-condensed table-bordered table-striped table-hover">
-			        <thead>
-			          <tr>
-			            <th>课程名称</th>
-			            <th>新增学生人数</th>
-			            <th>总学生人数</th>
-			            <th>新增金额</th>
-			          </tr>
-			        </thead>
-			        <tbody>
-			        	{% for welcomedCourse in welcomedCourses %}
-				        	<tr>
-					            <td>
-					            	<a href="{{ path('course_show', {id:welcomedCourse['course'].id}) }}" target="_blank">
-					            		{{ welcomedCourse['course'].title }}
-					            	</a>
-					            <td>{{ welcomedCourse['newStudentsNumber'] }} 人 </td>
-					            <td>{{ welcomedCourse['allStudentsNumber'] }} 人</td>
-					            <td class="money-text">{{ welcomedCourse['newMoneyAdded'] }} 元 </td>
-									</tr>
-			      		{% endfor %}
-			        </tbody>
-			    </table>
-			</div>
-
-		</div>
-
-</div>
+{% if courses %}
+	<table class="table table-condensed table-striped table-hover">
+	  <thead>
+	    <tr>
+	      <th>课程名称</th>
+	      <th>新增学生人数</th>
+	      <th>总学生人数</th>
+	      <th>新增收入</th>
+	    </tr>
+	  </thead>
+		<tbody>
+			{% for course in courses %}
+				<tr>
+					<td>
+						<a href="{{ path('course_show', {id: course.id}) }}" target="_blank">{{ course.title }}</a>
+					</td>
+					<td>{{ course['addedStudentNum'] }} 人 </td>
+					<td>{{ course['studentNum'] }} 人</td>
+					<td class="money-text">{{ course['addedMoney'] }} 元 </td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+  <div class="empty">暂无记录</div>
+{% endif %}

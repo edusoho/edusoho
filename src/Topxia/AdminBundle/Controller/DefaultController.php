@@ -8,22 +8,45 @@ use Topxia\Common\ArrayToolkit;
 class DefaultController extends BaseController
 {
 
-    public function findWelcomedCoursesAction(Request $request)
+    public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
-        $welcomedCourses = $this->_findWelcomedCourses($dateType);
 
-        $html = $this->renderView('TopxiaAdminBundle:Default:block-welcomed-courses.html.twig', array(
-                'welcomedCourses' => $welcomedCourses
-            ));
+        $map = array();
+        $students = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 10000);
+        foreach ($students as $student) {
+            if (empty($map[$student['courseId']])) {
+                $map[$student['courseId']] = 1;
+            } else {
+                $map[$student['courseId']] ++;
+            }
+        }
+        asort($map, SORT_NUMERIC);
+        $map = array_slice($map, 0, 5, true);
+
+        $courses = array();
+        foreach ($map as $courseId => $studentNum) {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $course['addedStudentNum'] = $studentNum;
+            $course['addedMoney'] = 0;
+
+            $orders = $this->getOrderService()->searchOrders(array('courseId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
+            foreach ($orders as $id => $order) {
+                $course['addedMoney'] += $order['price'];
+            }
+
+            $courses[] = $course;
+        }
+
+        return $this->render('TopxiaAdminBundle:Default:block-welcomed-courses.html.twig', array(
+            'courses' => $courses
+        ));
         
-        return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
     }
 
     public function indexAction(Request $request)
     {
-        $welcomedCourses = $this->_findWelcomedCourses('today');
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig', array('welcomedCourses'=>$welcomedCourses));
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
 
     public function latestUsersBlockAction(Request $request)
@@ -87,34 +110,6 @@ class DefaultController extends BaseController
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
-    private function _findWelcomedCourses($dateType)
-    {
-        $courseMembers = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 1000);
-        $welcomedCourses = array();
-
-        foreach ($courseMembers as $courseMember) {
-            $courseId = $courseMember['courseId'];
-            if(empty($welcomedCourses[$courseId])){
-                $welcomedCourses[$courseId] = array('newStudentsNumber'=>1);
-            } else {
-                $welcomedCourses[$courseId]['newStudentsNumber']++;
-            }
-        }
-
-        foreach ($welcomedCourses as $courseId => &$welcomedCourse) {
-            $allStudentsNumber = $this->getCourseService()->searchMemberCount(array('courseId'=>$courseId, 'role'=>'student'));
-            $welcomedCourse['allStudentsNumber'] = $allStudentsNumber;
-            $welcomedCourse['newMoneyAdded'] = 0;
-            $welcomedCourse['course'] = $this->getCourseService()->getCourse($courseId);
-
-            $orders = $this->getOrderService()->searchOrders(array('date'=>$dateType, 'courseId'=>$courseId), 'latest', 0, 1000);
-            foreach ($orders as $id => $order) {
-                $welcomedCourse['newMoneyAdded'] += $order['price'];
-            }
-        }
-        return $welcomedCourses;
-    }
-    
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');

@@ -5,20 +5,32 @@
 {% block content %}
 
 <div class="page-header">
-	<h1>管理中心</h1>
+  <h1>管理中心</h1>
 </div>
 
 <div class="row">
-	{{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
-	{% include 'TopxiaAdminBundle:Default:block-welcomed-courses.html.twig' with {welcomedCourses:welcomedCourses} %}
+  {{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
+  <div id="popular-courses-panel" class="col-md-6">
+     <div class="panel panel-default">
+      <div class="panel-heading">
+        <select id="popular-courses-type" class="pull-right" data-url="{{path('admin_popular_courses')}}">
+            {{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
+        </select>
+        <h3 class="panel-title">受欢迎课程</h3>
+      </div>
+      <div id="popular-courses-table">
+      	<div class="empty">正在载入数据，请稍等。</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="row">
-	{{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
+  {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
 </div>
 
 <div class="row">
-	{{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
+  {{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
 </div>
 
 {% endblock %}

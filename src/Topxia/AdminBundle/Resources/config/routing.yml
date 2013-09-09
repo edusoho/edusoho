@@ -2,9 +2,9 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
-admin_find_welcomed_courses:
-    pattern:  /find/welcome/courses
-    defaults: { _controller: TopxiaAdminBundle:Default:findWelcomedCourses }
+admin_popular_courses:
+    pattern:  /popular_courses
+    defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
 
 admin_content:
     pattern:  /content
