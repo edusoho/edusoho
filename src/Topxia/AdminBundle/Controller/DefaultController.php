@@ -26,20 +26,12 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array('welcomedCourses'=>$welcomedCourses));
     }
 
-    public function newUsersAction(Request $request)
+    public function latestUsersBlockAction(Request $request)
     {
-        $newUsers = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 10);
-        $favoriteCourses = array();
-        foreach ($newUsers as $newUser) {
-            $courses = $this->getCourseService()->findUserFavoritedCourses($newUser['id'], 0, 10);
-            $favoriteCourses[$newUser['id']] = $courses;
-        }
-
-        return $this->render('TopxiaAdminBundle:Default:block-new-users.html.twig',
-            array(
-                'newUsers'=>$newUsers,
-                'favoriteCourses'=>$favoriteCourses
-            ));
+        $users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 5);
+        return $this->render('TopxiaAdminBundle:Default:latest-users-block.html.twig', array(
+            'users'=>$users,
+        ));
     }
 
     public function unsolvedQuestionsAction(Request $request)

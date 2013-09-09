@@ -20,6 +20,8 @@
 			        </thead>
 			        <tbody>
 			        	{% for paidRecord in paidRecords %}
+			        	  {% set course = courses[paidRecord.courseId]|default(null) %}
+		        	    {% if course %}
 			      	        <tr>
 					            <td> {{ admin_macro.user_link(users[paidRecord.userId]) }}
 						        	</td>
@@ -45,6 +47,8 @@
 						            {% endif %}
         						</td>
 					        </tr>
+
+					        {% endif %}
 
 			        	{% endfor %}
 

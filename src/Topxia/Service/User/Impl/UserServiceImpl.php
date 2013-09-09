@@ -217,6 +217,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
+        $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
 
         if($type == 'default') {

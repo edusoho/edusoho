@@ -22,9 +22,11 @@
 			        <tbody class="tbody">
 			        	{% if questions %}
 			        		{% for question in questions %}
+			        		  {% set course =  courses[question.courseId]|default(null) %}
+			        		  {% if course %}
 			        	<tr>
 			            <td>
-			            	<a href="{{ path('course_show', {id:courses[question.courseId].id}) }}" target="_blank">{{ courses[question.courseId].title }}</a>
+				            	<a href="{{ path('course_show', {id:courses[question.courseId].id}) }}" target="_blank">{{ courses[question.courseId].title }}</a>
 			            </td>
 			            <td>
 			                <a href="{{ path('course_thread_show', {courseId:question.courseId, id:question.id}) }}" target="_blank">
@@ -49,6 +51,7 @@
 			            </button>
 			        	</td>
 			          </tr>
+			          {% endif %}
 
 			        		{% endfor %}
 			        	{% endif %}       
