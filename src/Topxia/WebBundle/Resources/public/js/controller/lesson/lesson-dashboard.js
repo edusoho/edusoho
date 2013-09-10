@@ -127,6 +127,7 @@ define(function(require, exports, module) {
 			var that = this;
 			this._toolbar.on('lessons_ready', function(lessons){
 				that._lessons = lessons;
+				that._showOrHideNavBtn();
 			});
 		},
 
@@ -198,6 +199,30 @@ define(function(require, exports, module) {
             		$finishButton.addClass('disabled');
             	}
             }, 'json');
+
+            this._showOrHideNavBtn();
+
+		},
+
+		_showOrHideNavBtn: function() {
+			var $prevBtn = this.$('[data-role=prev-lesson]'),
+				$nextBtn = this.$('[data-role=next-lesson]'),
+				index = $.inArray(parseInt(this.get('lessonId')), this._lessons);
+			$prevBtn.show();
+			$nextBtn.show();
+
+			if (index < 0) {
+				return ;
+			}
+
+			console.log('show or hide nav btn:', index);
+			console.log(this._lessons);
+
+			if (index === 0) {
+				$prevBtn.hide();
+			} else if (index === (this._lessons.length - 1)) {
+				$nextBtn.hide();
+			}
 
 		},
 
