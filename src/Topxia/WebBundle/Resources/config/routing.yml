@@ -85,13 +85,10 @@ course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
 
-course_join:
-    pattern:  /course/{id}/join
-    defaults: { _controller: TopxiaWebBundle:Course:join }
-
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
+    methods: [POST]
 
 course_buy:
     pattern:  /course/{id}/buy
