@@ -137,11 +137,6 @@ class CourseOrderController extends BaseController
         return $this->getServiceKernel()->createService('Course.OrderService');
     }
 
-    private function getLogService()
-    {
-        return $this->getServiceKernel()->createService('System.LogService');
-    }
-
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
