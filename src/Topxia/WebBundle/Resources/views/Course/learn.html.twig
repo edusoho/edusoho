@@ -11,11 +11,14 @@
 {% set bodyClass = 'lesson-dashboard-page' %}
 
 {% block content %}
-    <div class="container lesson-dashboard " id="lesson-dashboard"
+    <div class="container lesson-dashboard" id="lesson-dashboard"
          data-course-id="{{ course.id }}"
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
          data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}">
       <div class="dashboard-content">
+         <a class="btn btn-default btn-sm nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
+         <a class="btn btn-default btn-sm nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson"><span class="glyphicon glyphicon-chevron-up"></span></a>
+         <a class="btn btn-default btn-sm nav-btn next-lesson-btn" href="javascript:" data-role="next-lesson"><span class="glyphicon glyphicon-chevron-down"></span></a>
 
         <div class="dashboard-header">
           <div class="pull-left title-group">
@@ -40,13 +43,6 @@
         </div>
 
         <div class="dashboard-footer clearfix">
-
-          <div class="pull-left">
-            <a class="btn btn-default btn-sm" href="{{ path('course_show', {id:course.id}) }}">返回课程主页</a>
-
-            <button class="btn btn-default btn-sm" data-role="prev-lesson"><span class="glyphicon glyphicon-chevron-left"></span> 上一课</button>
-            <button class="btn btn-default btn-sm" data-role="next-lesson">下一课 <span class="glyphicon glyphicon-chevron-right"></span></button>
-          </div>
 
           <div class="pull-right">
             <button class="btn btn-success btn-sm" data-role="finish-lesson"><span class="glyphicon glyphicon-check"></span> 学过了</button>

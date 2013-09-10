@@ -1228,10 +1228,10 @@ body {
 
 .lesson-dashboard .dashboard-content {
 	position:absolute;
-	top:10px;
+	top:0px;
 	left: 20px;
 	right: 80px;
-	bottom: 10px;
+	bottom: 0px;
 }
 
 .lesson-dashboard-open .dashboard-content {
@@ -1333,7 +1333,7 @@ body {
 
 .lesson-dashboard .dashboard-header {
 	position: absolute;
-	left: 0;
+	left: 150px;
 	top: 0;
 	height: 40px;
 }
@@ -1363,7 +1363,7 @@ body {
 
 .lesson-dashboard .dashboard-footer {
 	position: absolute;
-	bottom: 0;
+	bottom: 10px;
 	width: 100%;
 }
 
@@ -1432,6 +1432,30 @@ body {
 
 .lesson-dashboard .lesson-content-text-body img {
 	max-width: 100%;
+}
+
+.lesson-dashboard .nav-btn {
+	position: absolute;
+	background: #f9f9f9;
+	border-radius: 0;
+	color: #777;
+	z-index: 1000;
+	padding: 3px 10px;
+}
+
+.lesson-dashboard .back-course-btn {
+	left: 0px;
+	top: -1px;
+}
+
+.lesson-dashboard .prev-lesson-btn {
+	left: 90px;
+	top: -1px;
+}
+
+.lesson-dashboard .next-lesson-btn {
+	left: 90px;
+	bottom: -1px;
 }
 
 
