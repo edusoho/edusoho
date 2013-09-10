@@ -1,0 +1,63 @@
+{% extends 'TopxiaWebBundle::layout-for-install.html.twig' %}
+
+{% block title %}完成安装并进入首页 - {{ parent() }}{% endblock %}
+
+{% block content %}
+	
+		  
+<div class="container">
+    
+	<div class="es-row-wrap">
+
+  	<div class="row">
+
+      <div class="col-lg-12">
+        
+        <div class="es-box">
+
+           <span class="pull-right">Version : <small>1.0</small></span>
+            <h2 class="text-primary">4 完成安装并进入首页</h2>
+            <hr>
+
+            <div class="setup-wizard">
+              <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="text-success" style="font-weight:900;font-size:250%">安装向导</span>
+            </div>
+            <hr>
+
+			<div class="step">
+				<ul>
+				  <li style="font-weight:900;font-size:150%;color:green"> 1 环境检测
+				  </li>
+
+				  <li style="font-weight:900;font-size:150%;color:green"> 2 创建数据库
+				  </li>
+
+				  <li style="font-weight:900;font-size:150%;color:green"> 3 初始化系统
+				  </li>
+
+				  <li style="font-weight:900;font-size:150%;color:red"> 4 完成安装并进入首页
+				  </li>
+				</ul>
+
+				<h3 align="center"> 恭喜你！你已经成功安装了Edusoho1.0版本！ <h3>
+
+			   <a type="button" href="{{ path('homepage') }}" class="btn btn-success pull-left">进入前台首页</a>
+			   <a type="button" href="{{ path('admin') }}" class="btn btn-primary pull-right">进入后台首页</a>
+
+			</div>
+
+	        <hr>
+
+        </div>
+
+      </div>
+
+  	</div>
+
+	</div>
+
+</div>
+
+{% endblock %}

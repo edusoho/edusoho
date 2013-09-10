@@ -55,7 +55,6 @@ class InitCommand extends BaseCommand
 
         $output->writeln(' ...<info>成功</info>');
 
-
 	}
 
 	private function initAdminUser($output)

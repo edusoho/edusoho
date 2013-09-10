@@ -12,7 +12,6 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
       <link href="/assets/libs/gallery2/bootstrap/3.0.0/css/bootstrap.css?2" rel="stylesheet" />
-    <link rel="stylesheet" media="screen" href="/assets/libs/bootstrap-rc/3.0.0/css/bootstrap-extends.css?2" />
     <link rel="stylesheet" media="screen" href="/assets/css/common.css?2" />
     <link rel="stylesheet" media="screen" href="/bundles/topxiaweb/css/web.css?2" />
 
@@ -39,10 +38,11 @@ outline: none;
 }
 
 .step li {
+list-style: none;
 float: left;
 height: 60px;
 line-height: 60px;
-width: 33%;
+width: 25%;
 text-align: center;
 font-size: 14px;
 color: #6f7885;
@@ -62,24 +62,33 @@ $allowNext = 'yes';
 
       <div class="row">
 
-        <div class="col-lg-9">
+        <div class="col-lg-12">
           
             <div class="es-box">
 
-          <div class="es-box-heading">
-            <h1>环境检测</h1>
-          </div>
+            <span class="pull-right">Version : <small>1.0</small></span>
+            <h2 class="text-primary">1 环境检测</h2>
+            <hr>
 
+            <div class="setup-wizard">
+              <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="text-success" style="font-weight:900;font-size:250%">安装向导</span>
+            </div>
+            <hr>
 
           <div class="step">
             <ul>
-              <li > <em>1</em> 检测环境
+              <li style="font-weight:900;font-size:150%;color:red"> 1 环境检测
               </li>
 
-              <li > <em>2</em> 创建数据
+              <li > <em>2</em> 创建数据库
               </li>
 
-              <li > <em>3</em> 完成安装
+              <li > <em>3</em> 初始化系统
+              </li>
+
+              <li > <em>4</em> 完成安装并进入首页
               </li>
             </ul>
           </div>
@@ -204,8 +213,6 @@ $allowNext = 'yes';
                 </tr>
               </tbody>
             </table>
-
-            <hr>
 
             <table class="table table-hover table-bordered">
               <tbody>
@@ -350,9 +357,9 @@ $allowNext = 'yes';
             <div>
                   <div class="next">
                       <?php if($allowNext == 'yes'){ ?>
-                      <a href="./dataBasepage.php" class="btn btn-primary btn-lg" role="button" >下一步</a>
+                      <a href="./dataBasepage.php" class="btn btn-primary btn-lg pull-right" role="button" >下一步</a>
                       <?php } elseif ($allowNext == 'no'){ ?>
-                        <p class="text-warning"> 不好意思，安装环境检测没有通过，请设置环境之后，重新刷新检测！</p>
+                        <h3 class="text-warning"> 不好意思，安装环境检测没有通过，请正确设置环境之后，重新刷新检测！</h3>
                       <?php } ?>
                   </div>
             </div>

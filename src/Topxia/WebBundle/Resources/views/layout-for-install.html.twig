@@ -13,7 +13,6 @@
   <meta name="description" content="{% block description %}{% endblock %}" />
   {% block stylesheets %}
     <link href="{{ asset('assets/libs/gallery2/bootstrap/3.0.0/css/bootstrap.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/bootstrap-rc/3.0.0/css/bootstrap-extends.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
   {% endblock %}
@@ -40,10 +39,11 @@ outline: none;
 }
 
 .step li {
+list-style: none;
 float: left;
 height: 60px;
 line-height: 60px;
-width: 33%;
+width: 25%;
 text-align: center;
 font-size: 14px;
 color: #6f7885;

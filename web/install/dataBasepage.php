@@ -8,14 +8,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> 创建数据 </title>
+  <title> 创建数据库 </title>
   <meta name="keywords" content="" />
   <meta name="description" content="" />
       <link href="/assets/libs/gallery2/bootstrap/3.0.0/css/bootstrap.css?2" rel="stylesheet" />
-    <link rel="stylesheet" media="screen" href="/assets/libs/bootstrap-rc/3.0.0/css/bootstrap-extends.css?2" />
     <link rel="stylesheet" media="screen" href="/assets/css/common.css?2" />
     <link rel="stylesheet" media="screen" href="/bundles/topxiaweb/css/web.css?2" />
-
     <!--[if lt IE 9]>
     <script src="/assets/libs/bootstrap/3.0.0/html5shiv.js?2"></script>
     <script src="/assets/libs/bootstrap/3.0.0/respond.min.js?2"></script>
@@ -39,16 +37,17 @@ outline: none;
 }
 
 .step li {
+list-style: none;
 float: left;
 height: 60px;
 line-height: 60px;
-width: 33%;
+width: 25%;
 text-align: center;
 font-size: 14px;
 color: #6f7885;
 font-weight: 700;
 }
-    </style>
+</style>
 
 </head>
 
@@ -60,33 +59,43 @@ font-weight: 700;
 
       <div class="row">
 
-        <div class="col-lg-9">
+        <div class="col-lg-12">
           
             <div class="es-box">
 
-          <div class="es-box-heading">
-            <h1>环境检测</h1>
-          </div>
+
+            <span class="pull-right">Version : <small>1.0</small></span>
+            <h2 class="text-primary">2 创建数据库</h2>
+            <hr>
+
+             <div class="setup-wizard">
+              <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="text-success" style="font-weight:900;font-size:250%">安装向导</span>
+            </div>
+            <hr>
 
           <div class="step">
             <ul>
-              <li > <em>1</em> 检测环境
+              <li style="font-weight:900;font-size:150%;color:green"> 1 环境检测
               </li>
 
-              <li > <em>2</em> 创建数据
+              <li style="font-weight:900;font-size:150%;color:red"> 2 创建数据库
               </li>
 
-              <li > <em>3</em> 完成安装
+              <li > <em>3</em> 初始化系统
               </li>
+
+              <li > <em>4</em> 完成安装并进入首页 
+              </li>
+
             </ul>
           </div>
-
-          <div class="form">
-
+         <p class="text-info">注:数据库密码可以为空</p>
+          <hr>
           <form class="form-horizontal" id="create-data-form" action="./createData.php" role="form" action="" method="post">
-                  
-            <label> 数据库信息</label>
 
+            <label> 数据库信息</label>
             <div class="form-group">
               <label for="dbhost" class="col-sm-2 control-label">数据库服务器：</label>
               <div class="col-sm-10">
@@ -120,12 +129,10 @@ font-weight: 700;
             </div> 
 
             <div class="tac">
-              <button type="submit" class="btn btn-primary btn-lg">创建数据</button>
+              <button type="submit" id="create-db" class="btn btn-primary btn-lg">创建数据库</button>
             </div>
 
-            </form>
-
-          </div>
+          </form>
 
           <hr>
 
@@ -138,6 +145,16 @@ font-weight: 700;
   </div>
 
 </div>
+<script type="text/javascript">
+  (function (btn) {
+      function $(str) { return document.getElementById(str); }
+      $(btn).onclick = function () {
+          this.innerHTML = "正在创建数据库...";
+          this.disabled = true;
+          $("create-data-form").submit();
+      }
+  })("create-db");
+</script>
 
 </body>
 

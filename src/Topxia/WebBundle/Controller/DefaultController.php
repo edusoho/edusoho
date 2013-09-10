@@ -63,7 +63,6 @@ class DefaultController extends BaseController
         $reviews = $this->getReviewService()->searchReviews(array(), 'latest', 0, $number);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
-
         return $this->render('TopxiaWebBundle:Default:latest-reviews-block.html.twig', array(
             'reviews' => $reviews,
             'users' => $users,
