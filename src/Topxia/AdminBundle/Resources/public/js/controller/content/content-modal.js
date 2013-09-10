@@ -2,6 +2,13 @@ define(function(require, exports, module) {
     "use strict";
 
 	var Validator = require('bootstrap.validator');
+    
+    Validator.addRule(
+        'noNumberFirst',
+        /^[a-zA-Z]+[a-zA-Z0-9]+?$/,
+        'URL路径不能以数字开头'
+    );
+
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     require('ckeditor');
@@ -57,7 +64,7 @@ define(function(require, exports, module) {
         if ($form.find('[name="alias"]').length > 0) {
             validator.addItem({
                 element: '[name="alias"]',
-                rule: 'remote'
+                rule: 'remote noNumberFirst'
             });
         }
 
