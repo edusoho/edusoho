@@ -53,7 +53,7 @@
             --
           {% endif %}
         <td>
-          {{ log.message }}
+          <div style="word-break: break-all;word-wrap: break-word;">{{ log.message }}</div>
           <br />
           <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
         </td>
