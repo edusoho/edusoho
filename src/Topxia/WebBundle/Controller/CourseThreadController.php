@@ -50,6 +50,9 @@ class CourseThreadController extends BaseController
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $thread = $this->getThreadService()->getThread($course['id'], $id);
+        if (empty($thread)) {
+            throw $this->createNotFoundException();
+        }
 
         $paginator = new Paginator(
             $request,
@@ -283,11 +286,10 @@ class CourseThreadController extends BaseController
 
     public function questionBlockAction(Request $request, $course)
     {
-
         $threads = $this->getThreadService()->searchThreads(
-            array('type'=> 'question', 'isElite' => 0),
+            array('courseId' => $course['id'], 'type'=> 'question'),
             'createdNotStick',
-            0, 
+            0,
             8
         );
 
