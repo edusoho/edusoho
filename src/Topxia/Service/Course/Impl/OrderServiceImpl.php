@@ -16,15 +16,28 @@ class OrderServiceImpl extends BaseService implements OrderService
 	public function createOrder($order)
 	{
 		$user = $this->getCurrentUser();
+		if (!ArrayToolkit::requireds($order, array('courseId', 'payment'))) {
+			throw $this->createServiceException('创建订单失败：缺少参数。');
+		}
+
+		$order = ArrayToolkit::parts($order, array('courseId', 'payment'));
+
 		$course = $this->getCourseService()->getCourse($order['courseId']);
+		if (empty($course)) {
+			throw $this->createNotFoundException();
+		}
+
+		if (in_array($order['payment'], array('none', 'alipay', 'tenpay'))) {
+			throw $this->createServiceException('创建订单失败：缺少payment，取值不正确。');
+		}
 
 		$order['sn'] = $this->generateOrderSn($order);
-		$order['title'] = "用户:"."{$user['nickname']} 购买了 课程:{$course['title']}";
+		$order['title'] = "购买课程《{$course['title']}》";
 		$order['price'] = $course['price'];
+		$order['status'] = 'created';
+
 		if (intval($order['price']*100) == 0) {
-			$order['status'] = 'paid';
 			$order['payment'] = 'none';
-			$order['paidTime'] = time();
 		}
 		$order['userId'] = $user['id'];
 		$order['createdTime'] = time();
@@ -42,7 +55,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 		if ($payData['status'] == 'success') {
 			// 避免浮点数比较大小可能带来的问题，转成整数再比较。
 			if (intval($payData['amount']*100) !== intval($order['price']*100)) {
-				$message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致。', array($order['sn'], $order['price'], $payData['amount']));
+				$message = sprintf('支付信息，校验失败：订单(%s)的金额(%s)与实际支付的金额(%s)不一致。', array($order['sn'], $order['price'], $payData['amount']));
 				$this->_createLog($order['id'], 'pay_error', $message, $payData);
 				throw \RuntimeException($message);
 			}
@@ -55,7 +68,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 				$this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
 				$this->getCourseService()->joinCourse($order['userId'], $order['courseId']);
 			} else {
-				$this->_createLog($order['id'], 'pay_ignore', '付款被忽略', $payData);
+				$this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
 			}
 		} else {
 			$this->_createLog($order['id'], 'pay_unknown', '', $payData);

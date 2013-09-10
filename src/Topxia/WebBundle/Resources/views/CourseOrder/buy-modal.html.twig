@@ -30,7 +30,7 @@
         <div class="col-lg-3 control-label">选择支付方式</div>
         <div class="col-lg-9 controls">
         	<input type="radio" checked="checked" />
-        	<img src="/assets/img/order/alipay.gif" />
+        	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
         </div>
       </div>
     {% else %}
@@ -43,17 +43,12 @@
     <input type="hidden" name="courseId" value="{{ course.id }}" />
     <input type="hidden" name="payment" value="alipay" />
   </form>
-
-<script>
-app.load('course/buy-modal');
-</script>
-
 {% endblock %}
 
 {% block footer %}
   {% if course.price > 0 %}
-    <input class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form" value="去支付">
+    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
   {% else %}
-    <button class="btn btn-primary course-join-btn" type="button" data-url="{{ path('course_join', {id:course.id}) }}">加入学习</button>
+    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
   {% endif %}
 {% endblock %}

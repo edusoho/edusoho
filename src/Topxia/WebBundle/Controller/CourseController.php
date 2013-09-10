@@ -271,17 +271,6 @@ class CourseController extends BaseController
 		));
 	}
 
-    public function joinAction(Request $request, $id)
-    {
-        $user = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($id);
-
-        $this->getOrderService()->createOrder(array('courseId' => $course['id']));
-        $this->getCourseService()->joinCourse($user['id'], $course['id']);
-
-        return $this->createJsonResponse(true);
-    }
-
     public function exitAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();

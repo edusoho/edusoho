@@ -30,6 +30,7 @@ abstract class BaseController extends Controller
 
     protected function authenticateUser ($user)
     {
+        $user['currentIp'] = $this->container->get('request')->getClientIp();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
 
