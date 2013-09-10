@@ -31,14 +31,26 @@ class CourseOrderController extends BaseController
 
     public function payAction(Request $request)
     {
+        // var_dump($request->request->all());exit();
         $order = $this->getOrderService()->createOrder($request->request->all());
 
-        $paymentRequest = $this->createPaymentRequest($order);
+        if (intval($order['price']*100) > 0) {
+            $paymentRequest = $this->createPaymentRequest($order);
 
-        return $this->render('TopxiaWebBundle:CourseOrder:pay.html.twig', array(
-            'form' => $paymentRequest->form(),
-            'order' => $order,
-        ));
+            return $this->render('TopxiaWebBundle:CourseOrder:pay.html.twig', array(
+                'form' => $paymentRequest->form(),
+                'order' => $order,
+            ));
+        } else {
+            $this->getOrderService()->payOrder(array(
+                'sn' => $order['sn'],
+                'status' => 'success', 
+                'amount' => $order['price'], 
+                'paidTime' => time()
+            ));
+
+            return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
+        }
     }
 
     public function payReturnAction(Request $request, $name)
