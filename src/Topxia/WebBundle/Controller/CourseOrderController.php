@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseOrderController extends BaseController
 {
@@ -31,18 +32,31 @@ class CourseOrderController extends BaseController
 
     public function payAction(Request $request)
     {
+        // var_dump($request->request->all());exit();
         $order = $this->getOrderService()->createOrder($request->request->all());
 
-        $paymentRequest = $this->createPaymentRequest($order);
+        if (intval($order['price']*100) > 0) {
+            $paymentRequest = $this->createPaymentRequest($order);
 
-        return $this->render('TopxiaWebBundle:CourseOrder:pay.html.twig', array(
-            'form' => $paymentRequest->form(),
-            'order' => $order,
-        ));
+            return $this->render('TopxiaWebBundle:CourseOrder:pay.html.twig', array(
+                'form' => $paymentRequest->form(),
+                'order' => $order,
+            ));
+        } else {
+            $this->getOrderService()->payOrder(array(
+                'sn' => $order['sn'],
+                'status' => 'success', 
+                'amount' => $order['price'], 
+                'paidTime' => time()
+            ));
+
+            return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
+        }
     }
 
     public function payReturnAction(Request $request, $name)
     {
+        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知：" . json_encode($request->query->all()));
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
@@ -51,9 +65,18 @@ class CourseOrderController extends BaseController
         return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
     }
 
-    public function payNotifyAction(Request $request)
+    public function payNotifyAction(Request $request, $name)
     {
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知：" . json_encode($request->request->all()));
+        $response = $this->createPaymentResponse($name, $request->request->all());
 
+        $payData = $response->getPayData();
+        try {
+            $order = $this->getOrderService()->payOrder($payData);
+            return new Response('success');
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     private function createPaymentRequest($order)
@@ -113,7 +136,6 @@ class CourseOrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.OrderService');
     }
-
 
     private function getCourseService()
     {

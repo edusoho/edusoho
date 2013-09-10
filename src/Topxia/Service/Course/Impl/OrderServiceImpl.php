@@ -27,8 +27,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 			throw $this->createNotFoundException();
 		}
 
-		if (in_array($order['payment'], array('none', 'alipay', 'tenpay'))) {
-			throw $this->createServiceException('创建订单失败：缺少payment，取值不正确。');
+		if (!in_array($order['payment'], array('none', 'alipay', 'tenpay'))) {
+			throw $this->createServiceException('创建订单失败：payment取值不正确。');
 		}
 
 		$order['sn'] = $this->generateOrderSn($order);
@@ -42,7 +42,11 @@ class OrderServiceImpl extends BaseService implements OrderService
 		$order['userId'] = $user['id'];
 		$order['createdTime'] = time();
 
-		return $this->getOrderDao()->addOrder($order);
+		$order = $this->getOrderDao()->addOrder($order);
+
+		$this->_createLog($order['id'], 'created', '创建订单');
+
+		return $order;
 	}
 
 	public function payOrder($payData)
@@ -97,6 +101,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 			'data' => json_encode($data),
 			'userId' => $this->getCurrentUser()->id,
 			'ip' => $this->getCurrentUser()->currentIp,
+			'createdTime' => time()
 		);
 
 		return $this->getOrderLogDao()->addLog($log);

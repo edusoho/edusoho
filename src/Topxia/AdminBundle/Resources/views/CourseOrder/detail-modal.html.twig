@@ -73,35 +73,32 @@
         <table class="table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>类型</th>
-              <th>信息</th>
-              <th>支付人</th>
-              <th>登陆IP</th>
-              <th>创建时间</th>
+              <th width="50%">日志信息</th>
+              <th width="25%">操作人</th>
+              <th width="25%">创建时间</th>
             </tr>
           </thead>
           <tbody>
             {% for orderLog in orderLogs %}
+              {% set logUser = users[orderLog.userId]|default(null) %}
               <tr>
-                <td>{{loop.index}}</td>
                 <td>
-                  {% if orderLog.type == 'pay_error' %}
-                    失败
-                  {% elseif orderLog.type == 'pay_success' %}
-                    成功
-                  {% elseif orderLog.type == 'pay_ignore' %}
-                    被忽略
-                  {% else %} 
-                    未知
+                  {{ orderLog.message | plain_text(50) }}
+                  <br>
+                  <span class="text-muted text-sm">{{ orderLog.type }}</span>
+                </td>
+                <td>
+                  {% if logUser %}
+                    {{ admin_macro.user_link(user) }}
+                  {% else %}
+                    --
                   {% endif %}
                 </td>
-                <td>{{ orderLog.message | plain_text(50) }}</td>
                 <td>
-                 <strong>{{ admin_macro.user_link(user) }}</strong>
+                  {{ orderLog.createdTime|date('Y-n-d H:i')}}
+                  <br>
+                  <span class="text-muted text-sm">{{ orderLog.ip}}</span>
                 </td>
-                <td>{{ orderLog.ip}}</td>
-                <td>{{ orderLog.createdTime|date('Y-n-d H:i')}}</td>
               </tr>
             {% endfor %}
           </tbody>

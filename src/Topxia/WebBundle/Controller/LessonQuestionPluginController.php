@@ -69,6 +69,7 @@ class LessonQuestionPluginController extends BaseController
     {
 
         $course = $this->getCourseService()->getCourse($request->query->get('courseId'));
+
         $thread = $this->getThreadService()->getThread(
             $course['id'],
             $request->query->get('id')
@@ -77,7 +78,7 @@ class LessonQuestionPluginController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->getThreadPostCount($course['id'], $thread['id']),
-            20
+            100
         );
 
         $posts = $this->getThreadService()->findThreadPosts(
@@ -88,14 +89,18 @@ class LessonQuestionPluginController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
         $form = $this->createPostForm(array(
             'courseId' => $course['id'],
             'threadId' => $thread['id'],
         ));
 
         return $this->render('TopxiaWebBundle:LessonQuestionPlugin:show.html.twig', array(
+            'course' => $course,
             'thread' => $thread,
             'posts' => $posts,
+            'users' => $users,
             'form' => $form->createView(),
         ));
 
@@ -137,6 +142,8 @@ class LessonQuestionPluginController extends BaseController
 
                 return $this->render('TopxiaWebBundle:LessonQuestionPlugin:post-item.html.twig', array(
                     'post' => $post,
+                    'user' => $this->getUserService()->getUser($post['userId']),
+                    'course' => $this->getCourseService()->getCourse($post['courseId']),
                 ));
             } else {
                 return $this->createJsonResponse(false);
