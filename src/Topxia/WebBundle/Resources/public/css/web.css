@@ -738,6 +738,109 @@ body {
 	text-align: right;
 }
 
+
+.lesson-question-plugin-pane-header {
+	background: #f5f5f5;
+	border-bottom: 1px solid #e9e9e9;
+	padding: 10px;
+	position: relative;
+}
+
+.lesson-question-plugin-pane-header .back-to-list {
+	float: left;
+}
+
+.lesson-question-plugin-pane-header h4 {
+	margin: 0;
+	padding: 0 70px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 34px;
+}
+
+.lesson-question-plugin-pane-header h4 i {
+	font-weight: normal;
+	color: #777;
+	font-size: 14px;
+}
+
+.lesson-question-plugin-pane-thread {
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+.lesson-question-plugin-pane-thread h5 {
+	margin: 0 0 10px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.lesson-question-plugin-pane-posts .posts-header {
+	margin: 10px 10px;
+	border-top: 1px solid #ddd;
+	position: relative;
+	height: 20px;
+}
+
+.lesson-question-plugin-pane-posts .posts-header h5 {
+	position: absolute;
+	top: -18px;
+	left: 10px;
+	background: #fff;
+	padding: 0 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.lesson-question-plugin-pane .posts {
+	list-style: none;
+	margin:10px;
+	padding: 0;
+}
+
+.lesson-question-plugin-pane .post-item {
+	margin-bottom: 20px;
+}
+
+.lesson-question-plugin-pane .post-item-heading {
+	border-bottom: 1px solid #e3e3e3;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+.lesson-question-plugin-pane .post-item-heading .avatar {
+	float: left;
+	width: 32px;
+	height: 32px;
+}
+
+.lesson-question-plugin-pane .post-item-heading .infos {
+	margin-left: 42px;
+}
+
+.lesson-question-plugin-pane .post-item-heading .infos .time {
+	font-size: 12px;
+	color: #999;
+}
+
+.lesson-question-plugin-pane .post-item-heading .infos .teacher-flag {
+	background: #5cb85c;
+	font-size: 12px;
+	color: #fff;
+	float: right;
+	padding: 1px 5px;
+	border-radius: 2px;
+}
+
+.lesson-question-plugin-pane .post-item-body {
+	color: #444;
+}
+
+.lesson-question-plugin-pane .post-form {
+	margin: 10px;
+}
+
 .toolbar-pane-list {
 	font-size: 13px;
 }
