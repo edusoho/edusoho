@@ -78,7 +78,7 @@ class LessonQuestionPluginController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->getThreadPostCount($course['id'], $thread['id']),
-            20
+            100
         );
 
         $posts = $this->getThreadService()->findThreadPosts(
