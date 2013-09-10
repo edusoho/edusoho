@@ -65,7 +65,7 @@ class CourseOrderController extends BaseController
         return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
     }
 
-    public function payNotifyAction(Request $request)
+    public function payNotifyAction(Request $request, $name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知：" . json_encode($request->request->all()));
         $response = $this->createPaymentResponse($name, $request->request->all());
