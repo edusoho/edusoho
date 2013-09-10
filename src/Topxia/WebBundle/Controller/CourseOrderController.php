@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseOrderController extends BaseController
 {
@@ -55,6 +56,7 @@ class CourseOrderController extends BaseController
 
     public function payReturnAction(Request $request, $name)
     {
+        $this->getLogService()->info('info', "{$name}页面跳转支付通知：" . json_encode($request->query->all()));
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
@@ -65,7 +67,16 @@ class CourseOrderController extends BaseController
 
     public function payNotifyAction(Request $request)
     {
+        $this->getLogService()->info('info', "{$name}服务器端支付通知：" . json_encode($request->request->all()));
+        $response = $this->createPaymentResponse($name, $request->request->all());
 
+        $payData = $response->getPayData();
+        try {
+            $order = $this->getOrderService()->payOrder($payData);
+            return new Response('success');
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     private function createPaymentRequest($order)
@@ -126,6 +137,10 @@ class CourseOrderController extends BaseController
         return $this->getServiceKernel()->createService('Course.OrderService');
     }
 
+    private function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
+    }
 
     private function getCourseService()
     {
