@@ -11,26 +11,12 @@ class InstallController extends BaseController
 
     public function createDataAction(Request $request)
     {
-        var_dump($_POST);
-         $formData = $request->request->all();
-         echo "string";
-            var_dump($formData);
-            exit();
 
         if ($request->getMethod() == 'POST') {
 
+            $formData = $request->request->all();
+
             $registration = array();
-
-            if(empty($formData['dbpw'])){
-                $formData['dbpw'] = null;
-            }
-
-            $pdo = new \PDO("mysql:host={$formData['dbhost']}","{$formData['dbuser']}","{$formData['dbpw']}");
-            $pdo->query("create database `{$formData['dbname']}`;");
-            $pdo->query("use `{$formData['dbname']}`;");
-            $sql = file_get_contents('/var/www/edusoho/app/config/edusoho_dev.sql');
-            $pdo->exec($sql);
-
             $registration['email'] = $formData['super_manager_email'];
             $registration['password'] = $registration['confirmPassword'] = $formData['super_manager_pd'] ;
             $registration['nickname'] = $formData['super_manager'] ;
@@ -38,10 +24,9 @@ class InstallController extends BaseController
             $user = $this->getUserService()->register($registration);
             $this->authenticateUser($user);
             $this->get('session')->set('registed_email', $user['email']);
+
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
             $this->sendWelcomeMessage($user);
-
-            exit();
 
             $parameters = array(
                 'parameters' => array(
@@ -67,7 +52,7 @@ class InstallController extends BaseController
   
         }
         
-        return $this->render("TopxiaWebBundle:Install:create-data.html.twig"); 
+        return $this->render("TopxiaWebBundle:Install:create-super-admin.html.twig"); 
     }
 
     protected function getSettingService()

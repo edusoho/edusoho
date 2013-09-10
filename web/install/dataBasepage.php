@@ -83,7 +83,7 @@ font-weight: 700;
 
           <div class="form">
 
-            <form class="form-horizontal" id="create-data-form" action="./createData.php" role="form" action="" method="post">
+          <form class="form-horizontal" id="create-data-form" action="./createData.php" role="form" action="" method="post">
                   
             <label> 数据库信息</label>
 
@@ -103,7 +103,7 @@ font-weight: 700;
               </div>
             </div>
 
-             <div class="form-group">
+            <div class="form-group">
               <label for="dbpw" class="col-sm-2 control-label">数据库密码：</label>
               <div class="col-sm-10">
                 <input type="password" class="form-control input" id="dbpw" name="dbpw">
@@ -117,44 +117,7 @@ font-weight: 700;
                 <input type="text" id="dbname" name="dbname" class="form-control input">
                 <p class="help-block"><span class="text-danger"></span></p>
               </div>
-            </div>
-
-          <label> 超级管理员</label>
-
-            <div class="form-group">
-              <label for="super_manager" class="col-sm-2 control-label">超级管理员帐号：</label>
-              <div class="col-sm-10">
-                <input type="text" id="super_manager" name="super_manager" class="form-control input">
-                <p class="help-block"><span class="text-danger"></span></p>
-              </div>
-            </div>
-
-
-           <div class="form-group">
-              <label for="super_manager_pd" class="col-sm-2 control-label">密码：</label>
-              <div class="col-sm-10">
-                <input type="password" class="form-control input" id="super_manager_pd" name="super_manager_pd">
-                <p class="help-block"><span class="text-danger"></span></p>
-              </div>
-            </div>
-
-
-            <div class="form-group">
-              <label for="super_manager_ckpd" class="col-sm-2 control-label">重复密码：</label>
-              <div class="col-sm-10">
-                <input type="password" class="form-control input" id="super_manager_ckpd">
-                <p class="help-block"><span class="text-danger"></span></p>
-              </div>
-            </div>
-
-
-             <div class="form-group">
-              <label for="super_manager_email" class="col-sm-2 control-label">Email：</label>
-              <div class="col-sm-10">
-                <input type="email" class="form-control" name="super_manager_email" id="super_manager_email">
-                <p class="help-block"><span class="text-danger"></span></p>
-              </div>
-            </div>
+            </div> 
 
             <div class="tac">
               <button type="submit" class="btn btn-primary btn-lg">创建数据</button>
