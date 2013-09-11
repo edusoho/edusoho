@@ -1213,7 +1213,7 @@ body {
 }
 
 .lesson-dashboard-page .container {
-	max-width: 100% !important;
+	width: 100% !important;
 }
 
 .lesson-dashboard {
@@ -1317,6 +1317,7 @@ body {
 
 .lesson-dashboard .toolbar-nav-stacked li a .glyphicon {
 	display: block;
+	margin-bottom: 5px;
 }
 
 .lesson-dashboard .toolbar-nav-stacked li.active a {

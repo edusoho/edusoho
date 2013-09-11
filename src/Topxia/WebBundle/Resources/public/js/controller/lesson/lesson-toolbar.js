@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 				if (plugin.noactive == undefined) {
 					plugin.noactive = false;
 				}
-				html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><span class="' + plugin.iconClass + '"></span>' + plugin.name + '</a></li>'
+				html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><span class="' + plugin.iconClass + '"> </span>' + plugin.name + '</a></li>'
 			});
 
 			$('#lesson-toolbar-primary').html(html);
