@@ -20,43 +20,13 @@
     <script src="/assets/libs/bootstrap/3.0.0/respond.min.js?2"></script>
   <![endif]-->
 
-    <style>
-    .pact {
-box-shadow: 5px 5px 5px #f7f7f7 inset;
-border: 1px solid #bdbcbc;
-width: 670px;
-height: 350px;
-padding: 10px;
-overflow: hidden;
-display: block;
-overflow-y: scroll;
-margin: 0 auto;
-font-size: 12px;
-line-height: 1.5;
-margin-bottom: 22px;
-outline: none;
-}
-
-.step li {
-list-style: none;
-float: left;
-height: 60px;
-line-height: 60px;
-width: 25%;
-text-align: center;
-font-size: 14px;
-color: #6f7885;
-font-weight: 700;
-}
-    </style>
-
 </head>
 
 <body>
 <?php
 $allowNext = 'yes';
 ?>
-<div class="container">
+<div class="container" style="width:940px">
     
   <div class="es-row-wrap">
 
@@ -66,34 +36,22 @@ $allowNext = 'yes';
           
             <div class="es-box">
 
-            <span class="pull-right">Version : <small>1.0</small></span>
-            <h2 class="text-primary">1 环境检测</h2>
-            <hr>
-
             <div class="setup-wizard">
               <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <span class="text-success" style="font-weight:900;font-size:250%">安装向导</span>
             </div>
             <hr>
+          
+          <ul class="nav nav-pills nav-justified" style="font-weight:900;font-size:150%">
+            <li class="active disabled"><a >1 环境检测</a></li>
+            <li class="disabled"><a>2 创建数据库</a></li>
+            <li class="disabled"><a>3 初始化系统</a></li>
+            <li class="disabled"><a>4 进入首页</a></li>
+          </ul>
+          <hr>
 
-          <div class="step">
-            <ul>
-              <li style="font-weight:900;font-size:150%;color:red"> 1 环境检测
-              </li>
-
-              <li > <em>2</em> 创建数据库
-              </li>
-
-              <li > <em>3</em> 初始化系统
-              </li>
-
-              <li > <em>4</em> 完成安装并进入首页
-              </li>
-            </ul>
-          </div>
-
-              <div class="server">
+          <div class="server">
 
             <table  class="table table-hover table-bordered">
               <tbody>
@@ -109,11 +67,15 @@ $allowNext = 'yes';
                   <td>
                     <strong>
                       <?php 
-                        if(PHP_OS == 'Linux'){
-                            echo "√".PHP_OS;
+                        if(PHP_OS == 'Linux' || PHP_OS == 'Darwin'){
+                      ?>
+                      <p class="text-success">√ Linux / Mac OS X </p>
+                      <?php
                         } else {
-                            echo "X".PHP_OS;
-                            $allowNext = 'no';
+                      ?>
+                      <p class="text-danger">X 检测失败</p>
+                      <?php
+                          $allowNext = 'no';
                         }
                       ?>
                     </strong>
@@ -122,40 +84,47 @@ $allowNext = 'yes';
                 </tr>
                 <tr>
                   <td>PHP版本</td>
-                  <td>5.3.x</td>
+                  <td>5.3.17</td>
                   <td>
                     <strong>
                       <?php
-                      if(version_compare(PHP_VERSION, '5.3.17') >= 0){
-                        echo "√".PHP_VERSION;
+                      if(version_compare(PHP_VERSION, '5.3.0') >= 0){
+                      ?>
+                       <p class="text-success">√ <?php  echo PHP_VERSION; ?> </p>
+                     <?php 
                       } else {
-                        echo "X".PHP_VERSION;
+                        ?>
+                        <p class="text-danger">X <?php  echo PHP_VERSION; ?> </p>
+                      <?php 
                         $allowNext = 'no';
                       }
                       ?>
                     </strong>
                   </td>
-                  <td>5.3.17</td>
+                  <td>5.3.0</td>
                 </tr>
                 <tr>
                   <td>MySQL版本（client）</td>
-                  <td>5.x.x</td>
+                  <td>5.4.x</td>
                   <td>
                     <strong>
                    <?php
                      if (function_exists('mysqli_get_client_info')){
                             if (version_compare(mysql_get_client_info(), '5.0.0') >= 0) {
-                               echo "√".mysql_get_client_info();
-                            } else {
-                               echo "X".mysql_get_client_info();
-                               $allowNext = 'no';
-                            }
-
+                    ?>
+                    <p class="text-success">√ <?php  echo mysql_get_client_info(); ?> </p>
+                    <?php
+                          } else {
+                             $allowNext = 'no';
+                    ?>
+                    <p class="text-danger">x <?php  echo mysql_get_client_info(); ?> </p>
+                    <?php
+                          }
                     } else {
-                               echo "X 尚未安装MySQL客户端";
-                               $allowNext = 'no';
-                    }
+                             $allowNext = 'no';
                    ?>
+                    <p class="text-danger">X 尚未安装MySQL客户端 </p>
+                    <?php } ?>
                     </strong>
                   </td>
                   <td>5.0.0</td>
@@ -167,46 +136,45 @@ $allowNext = 'yes';
                     <strong>
                    <?php
                    if (extension_loaded('pdo_mysql')){
-                    echo "√已安装";
-                   } else {
-                    echo "X尚未安装MySQL_PDO";
-                    $allowNext = 'no';
-                   }
-                   ?>
+                    ?>
+                    <p class="text-success">√已安装</p>
+                    <?php } else { ?>
+                    <p class="text-danger">X尚未安装MySQL_PDO</p>
+                    <?php $allowNext = 'no'; } ?>
                     </strong>
                   </td>
                   <td>必须</td>
                 </tr>
                 <tr>
                   <td>附件上传</td>
-                  <td>2M</td>
+                  <td>20MB</td>
                   <td>
                     <strong>
                    <?php
-                   if('2M' == ini_get('upload_max_filesize')){
-                    echo '√'.ini_get('upload_max_filesize');
-                   } else{
-                    echo 'X'.ini_get('upload_max_filesize');
-                    $allowNext = 'no';
-                   }
-                   ?>
+                   if(ini_get('upload_max_filesize') >= 2){
+                    ?>
+                     <p class="text-success">√<?php echo ini_get('upload_max_filesize'); ?></p>
+                   <?php } else { ?>
+                     <p class="text-danger">X<?php echo ini_get('upload_max_filesize'); ?></p>
+                    <?php
+                    $allowNext = 'no'; }
+                    ?>
                   </strong>
                   </td>
-                  <td>不限制</td>
+                  <td>2MB</td>
                 </tr>
                 <tr>
                   <td>磁盘空间</td>
-                  <td>50M</td>
+                  <td>>1G</td>
                   <td>
                     <strong>
                       <?php
                       if(intval(disk_free_space('/')/(1024*1024)) > 50){
-                        echo "√".intval(disk_free_space('/')/(1024*1024)).'MB';
-                      } else {
-                        echo "X".intval(disk_free_space('/')/(1024*1024)).'MB';
-                        $allowNext = 'no';
-                      }
-                      ?>
+                        ?>
+                     <p class="text-success">√<?php echo intval(disk_free_space('/')/(1024*1024)).'MB'; ?></p>
+                      <?php } else { ?>
+                     <p class="text-danger">X<?php echo intval(disk_free_space('/')/(1024*1024)).'MB'; ?></p>
+                        <?php $allowNext = 'no';  } ?>
                     </strong>
                   </td>
                   <td>50M</td>
@@ -229,9 +197,9 @@ $allowNext = 'yes';
                     <?php
                     $file = "/var/www/edusoho/app/config/parameters.yml";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                        echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                        echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -247,9 +215,9 @@ $allowNext = 'yes';
                      <?php
                     $file = "/var/www/edusoho/app/data/udisk";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                      echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                      echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -264,9 +232,9 @@ $allowNext = 'yes';
                    <?php
                     $file = "/var/www/edusoho/app/data/private_files";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                      echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                      echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -282,9 +250,9 @@ $allowNext = 'yes';
                    <?php
                     $file = "/var/www/edusoho/web/files";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                      echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                      echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -300,9 +268,9 @@ $allowNext = 'yes';
                     <?php
                     $file = "/var/www/edusoho/web/install";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                      echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                      echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -318,9 +286,9 @@ $allowNext = 'yes';
                     <?php
                     $file = "/var/www/edusoho/app/cache";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                       echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                      echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -336,9 +304,9 @@ $allowNext = 'yes';
                     <?php
                     $file = "/var/www/edusoho/app/logs";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
-                        echo "√可写";
+                      echo "<p class='text-success'>√可写</p>";
                     } else {
-                        echo "X不可写";
+                      echo "<p class='text-danger'>X不可写</p>";
                         $allowNext = 'no';
                     }
                     ?>
@@ -352,17 +320,13 @@ $allowNext = 'yes';
 
           </div>
 
-          <hr>
-
-            <div>
-                  <div class="next">
-                      <?php if($allowNext == 'yes'){ ?>
-                      <a href="./dataBasepage.php" class="btn btn-primary btn-lg pull-right" role="button" >下一步</a>
-                      <?php } elseif ($allowNext == 'no'){ ?>
-                        <h3 class="text-warning"> 不好意思，安装环境检测没有通过，请正确设置环境之后，重新刷新检测！</h3>
-                      <?php } ?>
-                  </div>
-            </div>
+          <div class="next" style="text-align:center">
+              <?php if($allowNext == 'yes'){ ?>
+              <a href="./dataBasepage.php" class="btn btn-primary btn-lg" role="button" >下一步</a>
+              <?php } elseif ($allowNext == 'no'){ ?>
+                <h3 class="text-warning"> 不好意思，安装环境检测没有通过，请正确设置环境之后，重新刷新检测！</h3>
+              <?php } ?>
+          </div>
 
           </div>
 

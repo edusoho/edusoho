@@ -41,17 +41,13 @@
 
 <body>
 
-<div class="container">
+<div class="container" style="width:940px">
     
   <div class="es-row-wrap">
 
     <div class="row">
 
       <div class="col-lg-12">
-      
-        <span class="pull-right">Version : <small>1.0</small></span>
-        <h2 class="text-primary">欢迎安装Edusoho 1.0版本!</h2>
-        <hr>
 
         <div class="setup-wizard">
           <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
@@ -87,8 +83,8 @@ I 协议许可的权利
             </pre>
           </div>
         
-          <div class="next pull-right">
-            <a href="./envDetect.php" class="btn btn-primary btn-lg" role="button" >接受</a>
+          <div class="next" style="text-align:center">
+            <a style="margin-bottom:20px;" href="./envDetect.php" class="btn btn-primary btn-lg" role="button" >接受</a>
           </div>
 
       </div>

@@ -19,41 +19,11 @@
     <script src="/assets/libs/bootstrap/3.0.0/respond.min.js?2"></script>
   <![endif]-->
 
-    <style>
-    .pact {
-box-shadow: 5px 5px 5px #f7f7f7 inset;
-border: 1px solid #bdbcbc;
-width: 670px;
-height: 350px;
-padding: 10px;
-overflow: hidden;
-display: block;
-overflow-y: scroll;
-margin: 0 auto;
-font-size: 12px;
-line-height: 1.5;
-margin-bottom: 22px;
-outline: none;
-}
-
-.step li {
-list-style: none;
-float: left;
-height: 60px;
-line-height: 60px;
-width: 25%;
-text-align: center;
-font-size: 14px;
-color: #6f7885;
-font-weight: 700;
-}
-</style>
-
 </head>
 
 <body>
 
-<div class="container">
+<div class="container" style="width:940px">
     
   <div class="es-row-wrap">
 
@@ -63,11 +33,6 @@ font-weight: 700;
           
             <div class="es-box">
 
-
-            <span class="pull-right">Version : <small>1.0</small></span>
-            <h2 class="text-primary">2 创建数据库</h2>
-            <hr>
-
              <div class="setup-wizard">
               <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
               &nbsp;&nbsp;&nbsp;&nbsp;
@@ -75,22 +40,13 @@ font-weight: 700;
             </div>
             <hr>
 
-          <div class="step">
-            <ul>
-              <li style="font-weight:900;font-size:150%;color:green"> 1 环境检测
-              </li>
-
-              <li style="font-weight:900;font-size:150%;color:red"> 2 创建数据库
-              </li>
-
-              <li > <em>3</em> 初始化系统
-              </li>
-
-              <li > <em>4</em> 完成安装并进入首页 
-              </li>
-
-            </ul>
-          </div>
+          <ul class="nav nav-pills nav-justified" style="font-weight:900;font-size:150%">
+            <li class="disabled"><a style="color:green">1 环境检测</a></li>
+            <li class="active disabled"><a>2 创建数据库</a></li>
+            <li class="disabled"><a>3 初始化系统</a></li>
+            <li class="disabled"><a>4 进入首页</a></li>
+          </ul>
+          <hr>
          <p class="text-info">注:数据库密码可以为空</p>
           <hr>
           <form class="form-horizontal" id="create-data-form" action="./createData.php" role="form" action="" method="post">
@@ -133,8 +89,6 @@ font-weight: 700;
             </div>
 
           </form>
-
-          <hr>
 
           </div>
 

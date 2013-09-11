@@ -6,7 +6,7 @@
 
 {% block content %}
 	
-<div class="container">
+<div class="container" style="width:940px">
     
   <div class="es-row-wrap">
 
@@ -16,10 +16,6 @@
           
           <div class="es-box">
             
-            <span class="pull-right">Version : <small>1.0</small></span>
-            <h2 class="text-primary">3 初始化系统</h2>
-            <hr>
-
             <div class="setup-wizard">
               <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
               &nbsp;&nbsp;&nbsp;&nbsp;
@@ -27,22 +23,17 @@
             </div>
             <hr>
 
-          <div class="step">
-            <ul>
-              <li style="font-weight:900;font-size:150%;color:green"> 1 环境检测
-              </li>
+           <ul class="nav nav-pills nav-justified" style="font-weight:900;font-size:150%">
+            <li class="disabled"><a style="color:green">1 环境检测</a></li>
+            <li class="disabled"><a style="color:green">2 创建数据库</a></li>
+            <li class="active disabled"><a>3 初始化系统</a></li>
+            <li class="disabled"><a>4 进入首页</a></li>
+          </ul>
+          <hr>
 
-              <li style="font-weight:900;font-size:150%;color:green"> 2 创建数据库
-              </li>
-
-              <li style="font-weight:900;font-size:150%;color:red"> 3 初始化系统
-              </li>
-
-              <li > <em>4</em> 完成安装并进入首页
-              </li>
-            </ul>
-          </div>
-          <p class="text-info">请认真填写超级管理员的注册信息</p>
+          <p class="text-info">
+          请认真填写超级管理员的注册信息
+          </p>
           <hr>
 
 		<form class="form-horizontal" id="create-data-form" action=" " role="form" action="" method="post">
@@ -98,8 +89,6 @@
             </div>
 
         </form>
-
-        <hr>
         
           </div>
 

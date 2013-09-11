@@ -1,11 +1,11 @@
 {% extends 'TopxiaWebBundle::layout-for-install.html.twig' %}
 
-{% block title %}完成安装并进入首页 - {{ parent() }}{% endblock %}
+{% block title %}进入首页 - {{ parent() }}{% endblock %}
 
 {% block content %}
 	
 		  
-<div class="container">
+<div class="container" style="width:940px">
     
 	<div class="es-row-wrap">
 
@@ -15,10 +15,6 @@
         
         <div class="es-box">
 
-           <span class="pull-right">Version : <small>1.0</small></span>
-            <h2 class="text-primary">4 完成安装并进入首页</h2>
-            <hr>
-
             <div class="setup-wizard">
               <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
               &nbsp;&nbsp;&nbsp;&nbsp;
@@ -26,25 +22,17 @@
             </div>
             <hr>
 
-			<div class="step">
-				<ul>
-				  <li style="font-weight:900;font-size:150%;color:green"> 1 环境检测
-				  </li>
-
-				  <li style="font-weight:900;font-size:150%;color:green"> 2 创建数据库
-				  </li>
-
-				  <li style="font-weight:900;font-size:150%;color:green"> 3 初始化系统
-				  </li>
-
-				  <li style="font-weight:900;font-size:150%;color:red"> 4 完成安装并进入首页
-				  </li>
-				</ul>
+			<ul class="nav nav-pills nav-justified" style="font-weight:900;font-size:150%">
+	            <li class="disabled"><a style="color:green">1 环境检测</a></li>
+	            <li class="disabled"><a style="color:green">2 创建数据库</a></li>
+	            <li class="disabled"><a style="color:green">3 初始化系统</a></li>
+	            <li class="active disabled"><a>4 进入首页</a></li>
+          	</ul>
+          	<hr>
 
 				<h3 align="center"> 恭喜你！你已经成功安装了Edusoho1.0版本！ <h3>
-
-			   <a type="button" href="{{ path('homepage') }}" class="btn btn-success pull-left">进入前台首页</a>
-			   <a type="button" href="{{ path('admin') }}" class="btn btn-primary pull-right">进入后台首页</a>
+			   <a type="button" style="margin-bottom:20px;" href="{{ path('homepage') }}" class="btn btn-success pull-left">进入前台首页</a>
+			   <a type="button" style="margin-bottom:20px;"href="{{ path('admin') }}" class="btn btn-primary pull-right">进入后台首页</a>
 
 			</div>
 
