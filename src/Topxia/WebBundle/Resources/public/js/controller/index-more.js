@@ -4,6 +4,12 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+    	$('.homepage-feature').cycle({
+	        fx:"scrollHorz",
+	        slides: "> a, > img",
+	        log: "false",
+	        pauseOnHover: "true"
+    	});
 
     };
 

@@ -2263,14 +2263,21 @@ body {
 	border-radius: 4px;
 }
 
+
 .course-grid .grid-body {
 	position: relative;
 	display: block;
 	overflow: hidden;
-	width: 254px;
+	width: 204px;
 	text-decoration: none;
 	border-radius: 4px;
 	color: #353535;
+}
+
+@media (min-width: 1200px) {
+	.course-grid .grid-body {
+		width: 254px;
+	}
 }
 
 .course-grid .grid-body:hover {
@@ -2511,12 +2518,11 @@ body {
 
 .homepage-feature {
 	width: 100%;
-	position: relative;
 }
 
 .homepage-feature a,
 .homepage-feature img {
-	display: block;
+	display: none;
 	width: 100%;
 }
 
@@ -2640,9 +2646,13 @@ body {
 }
 
 @media (min-width: 1200px) {
-    .teacherpage #content-container {
-         width: 970px;
-    }
+	.teacherpage #content-container {
+	     width: 970px;
+	}	
+}
+
+.lt-ie9 .teacherpage #content-container {
+	width: 970px;
 }
 
 .teacherpage .teacher-title {
@@ -2659,6 +2669,10 @@ body {
     .userpage #content-container {
          width: 970px;
     }
+}
+
+.lt-ie9 .userpage #content-container {
+	width: 970px;
 }
 
 .userpage-header {
