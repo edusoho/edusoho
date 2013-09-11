@@ -197,11 +197,13 @@ EOD;
     {
         $dumper = new Dumper();
         $parser = new Parser();
-        $parameters = $parser->parse(file_get_contents('/var/www/edusoho/app/config/parameters.yml'));
+        $ymlFile = "{$this->container->getParameter('kernel.root_dir')}/config/parameters.yml";
+        
+        $parameters = $parser->parse(file_get_contents($ymlFile));
         $parameters['parameters']['mailer_user'] = $formData['super_manager'];
         $parameters['parameters']['mailer_password'] = $formData['super_manager_pd'];
         $yaml = $dumper->dump($parameters, 2);
-        file_put_contents('/var/www/edusoho/app/config/parameters.yml', $yaml);
+        file_put_contents($ymlFile, $yaml);
     }
 
     protected function getSettingService()
