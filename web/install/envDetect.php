@@ -1,26 +1,6 @@
-
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> EDUSOHO -  Powered by EDUSOHO</title>
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-      <link href="/assets/libs/gallery2/bootstrap/3.0.0/css/bootstrap.css?2" rel="stylesheet" />
-    <link rel="stylesheet" media="screen" href="/assets/css/common.css?2" />
-    <link rel="stylesheet" media="screen" href="/bundles/topxiaweb/css/web.css?2" />
-
-    <!--[if lt IE 9]>
-    <script src="/assets/libs/bootstrap/3.0.0/html5shiv.js?2"></script>
-    <script src="/assets/libs/bootstrap/3.0.0/respond.min.js?2"></script>
-  <![endif]-->
-
-</head>
+<?php
+require_once('./header.php');
+?>
 
 <body>
 <?php
@@ -173,7 +153,7 @@ $allowNext = 'yes';
                   <td>
                     <strong>
                     <?php
-                    $file = "/var/www/edusoho/app/config/parameters.yml";
+                    $file = "../../app/config/parameters.yml";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                         echo "<p class='text-success'>√可写</p>";
                     } else {
@@ -191,7 +171,7 @@ $allowNext = 'yes';
                   <td>
                     <strong>
                      <?php
-                    $file = "/var/www/edusoho/app/data/udisk";
+                    $file = "../../app/data/udisk";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                       echo "<p class='text-success'>√可写</p>";
                     } else {
@@ -208,7 +188,7 @@ $allowNext = 'yes';
                   <td>
                    <strong>
                    <?php
-                    $file = "/var/www/edusoho/app/data/private_files";
+                    $file = "../../app/data/private_files";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                       echo "<p class='text-success'>√可写</p>";
                     } else {
@@ -226,7 +206,7 @@ $allowNext = 'yes';
                   <td>
                     <strong>
                    <?php
-                    $file = "/var/www/edusoho/web/files";
+                    $file = "../../web/files";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                       echo "<p class='text-success'>√可写</p>";
                     } else {
@@ -244,7 +224,7 @@ $allowNext = 'yes';
                   <td>
                     <strong>
                     <?php
-                    $file = "/var/www/edusoho/web/install";
+                    $file = "../../web/install";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                       echo "<p class='text-success'>√可写</p>";
                     } else {
@@ -262,7 +242,7 @@ $allowNext = 'yes';
                   <td>
                     <strong>
                     <?php
-                    $file = "/var/www/edusoho/app/cache";
+                    $file = "../../app/cache";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                        echo "<p class='text-success'>√可写</p>";
                     } else {
@@ -280,7 +260,7 @@ $allowNext = 'yes';
                   <td>
                      <strong>
                     <?php
-                    $file = "/var/www/edusoho/app/logs";
+                    $file = "../../app/logs";
                     if (is_executable($file) && is_writable($file) && is_readable($file)) {
                       echo "<p class='text-success'>√可写</p>";
                     } else {

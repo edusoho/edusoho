@@ -1,33 +1,4 @@
--- phpMyAdmin SQL Dump
--- version 3.5.8.2
--- http://www.phpmyadmin.net
---
--- 主机: localhost
--- 生成日期: 2013 年 09 月 09 日 20:37
--- 服务器版本: 5.5.32-0ubuntu0.13.04.1
--- PHP 版本: 5.4.9-4ubuntu2.3
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- 数据库: `edusoho_dev`
---
-
--- --------------------------------------------------------
-
---
--- 表的结构 `block`
---
-
-DROP TABLE IF EXISTS `block`;
-CREATE TABLE IF NOT EXISTS `block` (
+CREATE TABLE `block` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT '用户Id',
   `title` varchar(255) NOT NULL COMMENT '编辑时的题目',
@@ -37,32 +8,18 @@ CREATE TABLE IF NOT EXISTS `block` (
   `updateTime` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `block_history`
---
-
-DROP TABLE IF EXISTS `block_history`;
-CREATE TABLE IF NOT EXISTS `block_history` (
+CREATE TABLE `block_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `blockId` int(11) NOT NULL COMMENT 'blockId',
   `content` text NOT NULL COMMENT 'content',
   `userId` int(11) NOT NULL COMMENT 'userId',
   `createdTime` int(11) unsigned NOT NULL COMMENT 'createdTime',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='历史表' AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='历史表';
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cache`
---
-
-DROP TABLE IF EXISTS `cache`;
-CREATE TABLE IF NOT EXISTS `cache` (
+CREATE TABLE `cache` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `data` longblob,
@@ -72,16 +29,9 @@ CREATE TABLE IF NOT EXISTS `cache` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `expiredTime` (`expiredTime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `category`
---
-
-DROP TABLE IF EXISTS `category`;
-CREATE TABLE IF NOT EXISTS `category` (
+CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -91,31 +41,17 @@ CREATE TABLE IF NOT EXISTS `category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uri` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `category_group`
---
-
-DROP TABLE IF EXISTS `category_group`;
-CREATE TABLE IF NOT EXISTS `category_group` (
+CREATE TABLE `category_group` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL,
   `depth` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `comment`
---
-
-DROP TABLE IF EXISTS `comment`;
-CREATE TABLE IF NOT EXISTS `comment` (
+CREATE TABLE `comment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(32) NOT NULL,
   `objectId` int(10) unsigned NOT NULL,
@@ -124,16 +60,9 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `objectType` (`objectType`,`objectId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `content`
---
-
-DROP TABLE IF EXISTS `content`;
-CREATE TABLE IF NOT EXISTS `content` (
+CREATE TABLE `content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
@@ -163,16 +92,9 @@ CREATE TABLE IF NOT EXISTS `content` (
   `publishedTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course`
---
-
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE IF NOT EXISTS `course` (
+CREATE TABLE `course` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(1024) NOT NULL,
   `subtitle` varchar(1024) NOT NULL COMMENT '副标题',
@@ -200,16 +122,9 @@ CREATE TABLE IF NOT EXISTS `course` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_announcement`
---
-
-DROP TABLE IF EXISTS `course_announcement`;
-CREATE TABLE IF NOT EXISTS `course_announcement` (
+CREATE TABLE `course_announcement` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `userId` int(10) NOT NULL,
   `courseId` int(10) NOT NULL,
@@ -217,16 +132,9 @@ CREATE TABLE IF NOT EXISTS `course_announcement` (
   `createdTime` int(10) NOT NULL,
   `updatedTime` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_chapter`
---
-
-DROP TABLE IF EXISTS `course_chapter`;
-CREATE TABLE IF NOT EXISTS `course_chapter` (
+CREATE TABLE `course_chapter` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` int(10) unsigned NOT NULL,
   `number` int(10) unsigned NOT NULL,
@@ -234,31 +142,17 @@ CREATE TABLE IF NOT EXISTS `course_chapter` (
   `title` varchar(255) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_favorite`
---
-
-DROP TABLE IF EXISTS `course_favorite`;
-CREATE TABLE IF NOT EXISTS `course_favorite` (
+CREATE TABLE `course_favorite` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '收藏的id',
   `courseId` int(10) unsigned NOT NULL COMMENT '收藏课程的Id',
   `userId` int(10) unsigned NOT NULL COMMENT '收藏人的Id',
   `createdTime` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表' AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_lesson`
---
-
-DROP TABLE IF EXISTS `course_lesson`;
-CREATE TABLE IF NOT EXISTS `course_lesson` (
+CREATE TABLE `course_lesson` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` int(10) unsigned NOT NULL,
   `chapterId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -280,16 +174,9 @@ CREATE TABLE IF NOT EXISTS `course_lesson` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_lesson_learn`
---
-
-DROP TABLE IF EXISTS `course_lesson_learn`;
-CREATE TABLE IF NOT EXISTS `course_lesson_learn` (
+CREATE TABLE `course_lesson_learn` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(10) unsigned NOT NULL,
   `courseId` int(10) unsigned NOT NULL,
@@ -300,16 +187,9 @@ CREATE TABLE IF NOT EXISTS `course_lesson_learn` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId_lessonId` (`userId`,`lessonId`),
   KEY `userId_courseId` (`userId`,`courseId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_material`
---
-
-DROP TABLE IF EXISTS `course_material`;
-CREATE TABLE IF NOT EXISTS `course_material` (
+CREATE TABLE `course_material` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` int(10) unsigned NOT NULL,
   `lessonId` int(10) unsigned NOT NULL,
@@ -321,16 +201,9 @@ CREATE TABLE IF NOT EXISTS `course_material` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_member`
---
-
-DROP TABLE IF EXISTS `course_member`;
-CREATE TABLE IF NOT EXISTS `course_member` (
+CREATE TABLE `course_member` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` int(10) unsigned NOT NULL,
   `userId` int(10) unsigned NOT NULL,
@@ -344,16 +217,9 @@ CREATE TABLE IF NOT EXISTS `course_member` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_note`
---
-
-DROP TABLE IF EXISTS `course_note`;
-CREATE TABLE IF NOT EXISTS `course_note` (
+CREATE TABLE `course_note` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `userId` int(10) NOT NULL COMMENT '笔记作者ID',
   `courseId` int(10) NOT NULL COMMENT '课程ID',
@@ -364,16 +230,9 @@ CREATE TABLE IF NOT EXISTS `course_note` (
   `createdTime` int(10) NOT NULL COMMENT '笔记创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_order`
---
-
-DROP TABLE IF EXISTS `course_order`;
-CREATE TABLE IF NOT EXISTS `course_order` (
+CREATE TABLE `course_order` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sn` varchar(32) CHARACTER SET utf8 NOT NULL,
   `status` enum('created','paid') CHARACTER SET utf8 NOT NULL,
@@ -389,16 +248,9 @@ CREATE TABLE IF NOT EXISTS `course_order` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_order_log`
---
-
-DROP TABLE IF EXISTS `course_order_log`;
-CREATE TABLE IF NOT EXISTS `course_order_log` (
+CREATE TABLE `course_order_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `orderId` int(10) unsigned NOT NULL,
   `type` varchar(32) NOT NULL,
@@ -409,16 +261,9 @@ CREATE TABLE IF NOT EXISTS `course_order_log` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `orderId` (`orderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_quiz`
---
-
-DROP TABLE IF EXISTS `course_quiz`;
-CREATE TABLE IF NOT EXISTS `course_quiz` (
+CREATE TABLE `course_quiz` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` int(10) unsigned NOT NULL,
   `lessonId` int(10) unsigned NOT NULL,
@@ -429,16 +274,9 @@ CREATE TABLE IF NOT EXISTS `course_quiz` (
   `startTime` int(11) unsigned NOT NULL COMMENT '开始时间',
   `endTime` int(11) unsigned NOT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成' AUTO_INCREMENT=87 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成';
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_quiz_item`
---
-
-DROP TABLE IF EXISTS `course_quiz_item`;
-CREATE TABLE IF NOT EXISTS `course_quiz_item` (
+CREATE TABLE `course_quiz_item` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` int(10) unsigned NOT NULL,
   `lessonId` int(10) unsigned NOT NULL,
@@ -450,16 +288,9 @@ CREATE TABLE IF NOT EXISTS `course_quiz_item` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(11) unsigned NOT NULL COMMENT '课时测验创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表' AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表';
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_quiz_item_answer`
---
-
-DROP TABLE IF EXISTS `course_quiz_item_answer`;
-CREATE TABLE IF NOT EXISTS `course_quiz_item_answer` (
+CREATE TABLE `course_quiz_item_answer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(11) unsigned NOT NULL,
   `quizId` int(10) unsigned NOT NULL,
@@ -468,16 +299,9 @@ CREATE TABLE IF NOT EXISTS `course_quiz_item_answer` (
   `isCorrect` tinyint(1) NOT NULL COMMENT '测验正确与否结果',
   `createdTime` int(11) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容';
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_review`
---
-
-DROP TABLE IF EXISTS `course_review`;
-CREATE TABLE IF NOT EXISTS `course_review` (
+CREATE TABLE `course_review` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(10) unsigned NOT NULL,
   `courseId` int(10) unsigned NOT NULL,
@@ -486,16 +310,9 @@ CREATE TABLE IF NOT EXISTS `course_review` (
   `rating` float unsigned NOT NULL DEFAULT '0',
   `createdTime` int(11) unsigned NOT NULL COMMENT '评价创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_thread`
---
-
-DROP TABLE IF EXISTS `course_thread`;
-CREATE TABLE IF NOT EXISTS `course_thread` (
+CREATE TABLE `course_thread` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` varchar(32) NOT NULL,
   `lessonId` int(11) NOT NULL,
@@ -513,16 +330,9 @@ CREATE TABLE IF NOT EXISTS `course_thread` (
   `latestPostTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `course_thread_post`
---
-
-DROP TABLE IF EXISTS `course_thread_post`;
-CREATE TABLE IF NOT EXISTS `course_thread_post` (
+CREATE TABLE `course_thread_post` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `courseId` varchar(32) NOT NULL,
   `lessonId` int(10) unsigned NOT NULL,
@@ -532,16 +342,9 @@ CREATE TABLE IF NOT EXISTS `course_thread_post` (
   `content` text NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `file`
---
-
-DROP TABLE IF EXISTS `file`;
-CREATE TABLE IF NOT EXISTS `file` (
+CREATE TABLE `file` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `groupId` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -551,46 +354,25 @@ CREATE TABLE IF NOT EXISTS `file` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `file_group`
---
-
-DROP TABLE IF EXISTS `file_group`;
-CREATE TABLE IF NOT EXISTS `file_group` (
+CREATE TABLE `file_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
   `public` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `friend`
---
-
-DROP TABLE IF EXISTS `friend`;
-CREATE TABLE IF NOT EXISTS `friend` (
+CREATE TABLE `friend` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `fromId` int(10) unsigned NOT NULL,
   `toId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `location`
---
-
-DROP TABLE IF EXISTS `location`;
-CREATE TABLE IF NOT EXISTS `location` (
+CREATE TABLE `location` (
   `id` bigint(20) unsigned NOT NULL,
   `parentId` bigint(20) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
@@ -598,14 +380,7 @@ CREATE TABLE IF NOT EXISTS `location` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `log`
---
-
-DROP TABLE IF EXISTS `log`;
-CREATE TABLE IF NOT EXISTS `log` (
+CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `module` varchar(32) NOT NULL,
@@ -616,32 +391,18 @@ CREATE TABLE IF NOT EXISTS `log` (
   `level` char(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `message`
---
-
-DROP TABLE IF EXISTS `message`;
-CREATE TABLE IF NOT EXISTS `message` (
+CREATE TABLE `message` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '私信Id',
   `fromId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发信人Id',
   `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
   `content` text NOT NULL,
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `message_conversation`
---
-
-DROP TABLE IF EXISTS `message_conversation`;
-CREATE TABLE IF NOT EXISTS `message_conversation` (
+CREATE TABLE `message_conversation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '会话Id',
   `fromId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发信人Id',
   `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
@@ -652,43 +413,22 @@ CREATE TABLE IF NOT EXISTS `message_conversation` (
   `unreadNum` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `message_relation`
---
-
-DROP TABLE IF EXISTS `message_relation`;
-CREATE TABLE IF NOT EXISTS `message_relation` (
+CREATE TABLE `message_relation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `conversationId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '对话id',
   `messageId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消息Id',
   `isRead` enum('0','1') NOT NULL DEFAULT '0' COMMENT '0表示未读',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `migration_versions`
---
-
-DROP TABLE IF EXISTS `migration_versions`;
-CREATE TABLE IF NOT EXISTS `migration_versions` (
+CREATE TABLE `migration_versions` (
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `navigation`
---
-
-DROP TABLE IF EXISTS `navigation`;
-CREATE TABLE IF NOT EXISTS `navigation` (
+CREATE TABLE `navigation` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(255) NOT NULL COMMENT '文案',
   `url` varchar(300) NOT NULL COMMENT 'URL',
@@ -699,16 +439,9 @@ CREATE TABLE IF NOT EXISTS `navigation` (
   `isOpen` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认1，为开启',
   `isNewWin` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认为1,另开窗口',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表' AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表';
 
--- --------------------------------------------------------
-
---
--- 表的结构 `notification`
---
-
-DROP TABLE IF EXISTS `notification`;
-CREATE TABLE IF NOT EXISTS `notification` (
+CREATE TABLE `notification` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(10) unsigned NOT NULL,
   `type` varchar(64) NOT NULL DEFAULT 'default',
@@ -716,60 +449,32 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `createdTime` int(10) unsigned NOT NULL,
   `isRead` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=56 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `session`
---
-
-DROP TABLE IF EXISTS `session`;
-CREATE TABLE IF NOT EXISTS `session` (
+CREATE TABLE `session` (
   `session_id` varchar(255) NOT NULL,
   `session_value` text NOT NULL,
   `session_time` int(11) NOT NULL,
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `setting`
---
-
-DROP TABLE IF EXISTS `setting`;
-CREATE TABLE IF NOT EXISTS `setting` (
+CREATE TABLE `setting` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `value` longblob,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `tag`
---
-
-DROP TABLE IF EXISTS `tag`;
-CREATE TABLE IF NOT EXISTS `tag` (
+CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `user`
---
-
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(128) NOT NULL,
   `password` varchar(64) NOT NULL,
@@ -796,16 +501,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `createdIp` varchar(64) NOT NULL,
   `createdTime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `user_bind`
---
-
-DROP TABLE IF EXISTS `user_bind`;
-CREATE TABLE IF NOT EXISTS `user_bind` (
+CREATE TABLE `user_bind` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(64) NOT NULL,
   `fromId` varchar(32) NOT NULL,
@@ -817,16 +515,9 @@ CREATE TABLE IF NOT EXISTS `user_bind` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`fromId`),
   UNIQUE KEY `type_2` (`type`,`toId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `user_disk_file`
---
-
-DROP TABLE IF EXISTS `user_disk_file`;
-CREATE TABLE IF NOT EXISTS `user_disk_file` (
+CREATE TABLE `user_disk_file` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `filepath` varchar(2048) NOT NULL,
@@ -842,16 +533,9 @@ CREATE TABLE IF NOT EXISTS `user_disk_file` (
   `updatedTime` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `user_fortune_log`
---
-
-DROP TABLE IF EXISTS `user_fortune_log`;
-CREATE TABLE IF NOT EXISTS `user_fortune_log` (
+CREATE TABLE `user_fortune_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `number` int(10) NOT NULL,
@@ -860,16 +544,9 @@ CREATE TABLE IF NOT EXISTS `user_fortune_log` (
   `createdTime` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `user_profile`
---
-
-DROP TABLE IF EXISTS `user_profile`;
-CREATE TABLE IF NOT EXISTS `user_profile` (
+CREATE TABLE `user_profile` (
   `id` int(10) unsigned NOT NULL,
   `truename` varchar(255) NOT NULL,
   `gender` enum('male','female','secret') NOT NULL DEFAULT 'secret',
@@ -887,14 +564,7 @@ CREATE TABLE IF NOT EXISTS `user_profile` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `user_token`
---
-
-DROP TABLE IF EXISTS `user_token`;
-CREATE TABLE IF NOT EXISTS `user_token` (
+CREATE TABLE `user_token` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `token` varchar(64) NOT NULL,
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -904,8 +574,4 @@ CREATE TABLE IF NOT EXISTS `user_token` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`(6))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=64 ;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
