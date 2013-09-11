@@ -5,7 +5,7 @@
 {% block title %}设置用户组{% endblock %}
 {% block body %}
 
-<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_set_roles', {id:user.id}) }}">
+<form id="user-role-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_set_roles', {id:user.id}) }}">
 
    <input type="checkbox" value="ROLE_USER" name="role[]"
 	{% if 'ROLE_USER' in user.roles %}
@@ -27,8 +27,11 @@
 		checked="checked"
 	{% endif %} > 超级管理员 <br>
 
-  <button type="submit" class="btn btn-primary pull-right">保存</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-
 </form>
+{% endblock %}
+
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-role-edit-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 {% endblock %}
