@@ -1,7 +1,7 @@
 {
   "family": "gallery2",
   "name": "video-js",
-  "version": "4.0.4",
+  "version": "4.2.1",
   "description": "An HTML5 and Flash video player with a common API and skin for both.",
   "homepage": "http://videojs.com",
   "author": {

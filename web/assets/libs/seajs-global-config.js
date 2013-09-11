@@ -28,7 +28,7 @@ seajs.config({
 		"backbone": "gallery/backbone/1.0.0/backbone",
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'ckeditor': 'ckeditor/ckeditor.js',
-		'video-js': 'gallery2/video-js/4.0.4/video-js',
+		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload-debug'
 	},
 
