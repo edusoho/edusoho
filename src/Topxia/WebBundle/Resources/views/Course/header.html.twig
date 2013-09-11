@@ -19,8 +19,7 @@
           {% if not manage %}
           <div class="btn-group">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_info', {id:course.id}) }}" data-role="tooltip" title="课程信息" data-placement="top" href="#modal">
-            <i class="glyphicon glyphicon-info-sign">
-            </i>
+            <i class="glyphicon glyphicon-info-sign"></i>
             </a>
             
             <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="评价" data-placement="top" href="#modal">
@@ -48,8 +47,8 @@
             </div>
 
           </div>
-          <div class="btn-group" data-role="tooltip" title="操作" data-placement="left" >
-            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+          <div class="btn-group" data-role="tooltip" title="操作" >
+            <button class="btn btn-default btn-sm " data-toggle="dropdown">
               <i class="glyphicon glyphicon-cog"></i>
             </button>
             <ul class="dropdown-menu pull-right">

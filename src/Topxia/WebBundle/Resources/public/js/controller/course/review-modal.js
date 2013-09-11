@@ -13,7 +13,7 @@ define(function(require, exports, module) {
                 return $(this).attr('data-rating');
             },
             click: function(score, event) {
-                $('#review_rating').val($("#my-course-rate > input[name='score']").attr("value"));
+                $('#review_rating').val($("#my-course-rate > input[name=score]").val());
 
             }
         });
