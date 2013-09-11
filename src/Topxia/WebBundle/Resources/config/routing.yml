@@ -73,9 +73,9 @@ file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
 
-ckeditor_upload:
-    pattern:  /ckeditor/upload
-    defaults: { _controller: TopxiaWebBundle:Ckeditor:upload }
+kindeditor_upload:
+    pattern:  /kindeditor/upload
+    defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
 
 course_explore:
     pattern:  /course/explore/{category}

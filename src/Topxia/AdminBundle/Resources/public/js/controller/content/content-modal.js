@@ -10,8 +10,8 @@ define(function(require, exports, module) {
     );
 
     var Notify = require('common/bootstrap-notify');
+    var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
     require('jquery.select2-css');
     require('jquery.select2');
     require('jquery.bootstrap-datetimepicker');
@@ -76,17 +76,10 @@ define(function(require, exports, module) {
         $form.find('[data-role=editor-field]').each(function(){
             var id = $(this).attr('id');
 
-            CKEDITOR.replace(id, {
-                height: 320,
-                resize_enabled: false,
-                forcePasteAsPlainText: true,
-                toolbar: 'Simple',
-                removePlugins: 'elementspath',
-                filebrowserUploadUrl: '/ckeditor/upload?group=content'
-            });
+            var editor = EditorFactory.create('#' + id, 'full', {extraFileUploadParams:{group:'default'}});
 
             validator.on('formValidate', function(elemetn, event) {
-                CKEDITOR.instances[id].updateElement();
+                editor.sync();
             });
 
         });

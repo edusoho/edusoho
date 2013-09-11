@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-	require('ckeditor');
+    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
 
     exports.run = function() {
@@ -14,23 +14,16 @@ define(function(require, exports, module) {
             required: true
         });
 
-        CKEDITOR.replace('announcement-content-field', {
-            height: 200,
-            resize_enabled: false,
-            forcePasteAsPlainText: true,
-            toolbar: 'Mini',
-            filebrowserUploadUrl: '/ckeditor/upload?group=course'
-        });
+        var editor = EditorFactory.create('#announcement-content-field', 'simple', {extraFileUploadParams:{group:'course'}});
 
         validator.on('formValidate', function(elemetn, event) {
-            CKEDITOR.instances['announcement-content-field'].updateElement();
+            editor.sync();
         });
 
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
                 return;
             }
-            console.log($form.attr,$form.serialize);
             $.post($form.attr('action'), $form.serialize(), function(json) {
                 window.location.reload();
             }, 'json');
