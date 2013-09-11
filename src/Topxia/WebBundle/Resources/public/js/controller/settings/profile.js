@@ -2,19 +2,11 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
 
-        CKEDITOR.replace('profile_about', {
-            height: 150,
-            resize_enabled: false,
-            forcePasteAsPlainText: true,
-            toolbar: 'Simple',
-            removePlugins: 'elementspath',
-            filebrowserUploadUrl: '/ckeditor/upload?group=course'
-        });
-
+        var editor = EditorFactory.create('#profile_about', 'simple', {extraFileUploadParams:{group:'user'}});
 
         var validator = new Validator({
             element: '#user-profile-form',

@@ -3,19 +3,11 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-    require('ckeditor');
+    var EditorFactory = require('common/kindeditor-factory');
 
 	exports.run = function() {
 
-
-		CKEDITOR.replace('about', {
-                height: 150,
-                resize_enabled: false,
-                forcePasteAsPlainText: true,
-                toolbar: 'Simple',
-                removePlugins: 'elementspath',
-                filebrowserUploadUrl: '/ckeditor/upload?group=course'
-        });
+        var editor = EditorFactory.create('#about', 'simple', {extraFileUploadParams:{group:'course'}});
 
         var $modal = $('#user-edit-form').parents('.modal');
 
@@ -26,8 +18,9 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
-            	
-            	CKEDITOR.instances['about'].updateElement();
+
+                editor.sync();
+
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
 					Notify.success('用户信息保存成功');

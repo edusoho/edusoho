@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    var EditorFactory = require('common/kindeditor-factory');
     var Widget = require('widget'),
     Validator = require('bootstrap.validator'),
     ThreadShowWidget = require('../../../course-thread/show-widget');
@@ -9,7 +9,8 @@ define(function(require, exports, module) {
     var QuestionPane = Widget.extend({
         _dataInitialized: false,
         attrs: {
-            createFormId: 'lesson-question-plugin-form'
+            createFormId: 'lesson-question-plugin-form',
+            editor:null
         },
         events: {
             'focusin .expand-form-trigger' : 'expandForm',
@@ -53,14 +54,8 @@ define(function(require, exports, module) {
             }
             $form.addClass('form-expanded');
 
-            CKEDITOR.replace('question_content', {
-                height: 100,
-                resize_enabled: false,
-                forcePasteAsPlainText: true,
-                toolbar: 'Mini',
-                removePlugins: 'elementspath',
-                filebrowserUploadUrl: '/ckeditor/upload?group=course'
-            });
+            var editor = EditorFactory.create('#question_content', 'simple', {extraFileUploadParams:{group:'course'}});
+            this.set('editor', editor);
 
             var validator = new Validator({
                 element: $form,
@@ -74,7 +69,7 @@ define(function(require, exports, module) {
             });
 
             validator.on('formValidate', function(elemetn, event) {
-                CKEDITOR.instances['question_content'].updateElement();
+                this.get('editor').sync();
             });
 
             validator.on('formValidated', function(err, msg, ele) {
@@ -93,8 +88,8 @@ define(function(require, exports, module) {
         },
         collapseForm: function() {
             this.createFormElement.removeClass('form-expanded');
-            if (CKEDITOR.instances.question_content) {
-                CKEDITOR.instances.question_content.destroy();
+            if (this.get('editor')) {
+                this.get('editor').remove();
             }
 
             Validator.query(this.createFormElement).destroy();

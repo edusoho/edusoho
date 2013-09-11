@@ -1,12 +1,13 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    var EditorFactory = require('common/kindeditor-factory');
     var Widget = require('widget');
     Validator = require('bootstrap.validator');
 
     var NotePane = Widget.extend({
         attrs: {
-            formChanged: false,
+            editor: null,
+            content: '',
             timer: null,
             plugin: null
         },
@@ -22,24 +23,18 @@ define(function(require, exports, module) {
                 lessonId: toolbar.get('lessonId')
             }, function(html) {
                 pane.element.html(html);
-                CKEDITOR.replace('note_content', {
-                    height: '100%',
-                    resize_enabled: false,
-                    forcePasteAsPlainText: true,
-                    toolbar: 'Mini',
-                    removePlugins: 'elementspath',
-                    filebrowserUploadUrl: '/ckeditor/upload?group=course'
-                });
+
+                var editorHeight = $("#lesson-note-plugin-form .note-content").outerHeight()
+
+                var editor = EditorFactory.create('#note_content', 'simple', {extraFileUploadParams:{group:'course'}, height: editorHeight});
+                pane.set('editor', editor);
+                pane.set('content', editor.html());
                 
-                CKEDITOR.instances["note_content"].on("key", function (events, editor) {
-                    pane.set('formChanged', true);
-                });
-
                 $("#lesson-note-plugin-form").on('submit', function() {
-                    CKEDITOR.instances['note_content'].updateElement();
+                    editor.sync();
+                    var content = editor.html();
                     $.post($(this).attr('action'), $(this).serialize(), function(response) {
-                        pane.set('formChanged', false);
-
+                        pane.set('content', content);
                         pane.$('[data-role=saved-message]').html('最近保存于' + pane._nowTime()).show('slow');
                     }, 'json').error(function(error) {
 
@@ -57,7 +52,7 @@ define(function(require, exports, module) {
             };
 
             var timer = setInterval(function() {
-                if (pane.get('formChanged')) {
+                if (pane.get('editor').html() != pane.get('content')) {
                     $("#lesson-note-plugin-form").trigger('submit');
                 }
             }, 20000);

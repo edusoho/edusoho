@@ -14,7 +14,7 @@
         {{ web_macro.flash_messages() }}
         
           <div class="form-group">
-            <div class="col-lg-2 control-label">{{ form_label(form.truename, '姓名') }}</div>
+            {{ form_label(form.truename, '姓名', {label_attr:{class:'col-lg-2 control-label'}}) }}
             <div class="col-lg-7 controls">{{ form_widget(form.truename, {attr:{class:'form-control'}}) }}</div>
           </div>
 

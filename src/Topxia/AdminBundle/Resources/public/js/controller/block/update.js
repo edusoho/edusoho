@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+  var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
@@ -9,6 +9,8 @@ define(function(require, exports, module) {
       var $form = $('#block-form');
       var $modal = $form.parents('.modal');
       var $table = $('#block-table');
+
+      var editor = EditorFactory.create('#blockContent', 'simple', {extraFileUploadParams:{group:'default'}, designMode:false});
 
       var validator = new Validator({
           element: $form,
@@ -35,8 +37,8 @@ define(function(require, exports, module) {
       });
 
       $('.btn-recover-content').on('click', function(){
-            var text = $(this).parents('tr').find('.data-role-content').text();
-            CKEDITOR.instances.blockContent.setData(text);
+            var html = $(this).parents('tr').find('.data-role-content').text();
+            editor.html(html);
       });
     };
 
