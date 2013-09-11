@@ -170,9 +170,8 @@ EOD;
         $registration['nickname'] = $formData['super_manager'] ;
         $this->getSettingService()->get('auth', array());
         $user = $this->getUserService()->register($registration);
-        $this->authenticateUser($user);
-        $this->get('session')->set('registed_email', $user['email']);
         $this->getUserService()->changeUserRoles($user['id'], array('ROLE_TEACHER', 'ROLE_SUPER_ADMIN'));
+        $this->authenticateUser($this->getUserService()->getUser($user['id']));
     }
 
     private function initSiteSetting($sitename)

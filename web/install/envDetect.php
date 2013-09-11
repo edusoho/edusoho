@@ -23,11 +23,11 @@ $allowNext = 'yes';
             </div>
             <hr>
           
-          <ul class="nav nav-pills nav-justified" style="font-weight:900;font-size:150%">
+          <ul class="nav nav-pills nav-justified">
             <li class="active disabled"><a >1 环境检测</a></li>
             <li class="disabled"><a>2 创建数据库</a></li>
             <li class="disabled"><a>3 初始化系统</a></li>
-            <li class="disabled"><a>4 进入首页</a></li>
+            <li class="disabled"><a>4 完成安装</a></li>
           </ul>
           <hr>
 
@@ -36,10 +36,10 @@ $allowNext = 'yes';
             <table  class="table table-striped table-hover table-bordered">
               <thead>
                 <tr>
-                  <th>环境检测</th>
-                  <th>推荐配置</th>
-                  <th>当前状态</th>
-                  <th>最低要求</th>
+                  <th width="25%">环境检测</th>
+                  <th width="25%">推荐配置</th>
+                  <th width="25%">当前状态</th>
+                  <th width="25%">最低要求</th>
                 </tr>
               </thead>
               <tbody>
@@ -141,9 +141,9 @@ $allowNext = 'yes';
             <table class="table table-hover table-striped table-bordered">
               <thead>
                 <tr>
-                  <th>目录、文件权限检查</th>
-                  <th>当前状态</th>
-                  <th>所需状态</th>
+                  <th width="50%">目录、文件权限检查</th>
+                  <th width="25%">当前状态</th>
+                  <th width="25%">所需状态</th>
                 </tr>
               </thead>
               <tbody>
@@ -282,7 +282,7 @@ $allowNext = 'yes';
               <a href="./dataBasepage.php" class="btn btn-primary btn-lg" role="button" >下一步</a>
               <?php } elseif ($allowNext == 'no'){ ?>
               <a href="./envDetect.php" class="btn btn-primary btn-lg" role="button" >重新检测</a>
-                <h3 class="text-danger"> 不好意思，安装环境检测没有通过，请正确设置环境之后，重新检测！</h3>
+                <h3 class="text-danger"> 安装环境检测没有通过，请正确设置环境之后，重新检测！</h3>
               <?php } ?>
           </div>
 

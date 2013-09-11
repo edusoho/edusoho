@@ -39,7 +39,7 @@ $parameters = "parameters:
     mailer_host: 127.0.0.1
     mailer_user: null
     mailer_password: null
-    locale: zh_cn
+    locale: zh_CN
     secret: {$secret}";
 
 file_put_contents($yamlFile,$parameters);
