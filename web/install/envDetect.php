@@ -53,14 +53,16 @@ $allowNext = 'yes';
 
           <div class="server">
 
-            <table  class="table table-hover table-bordered">
-              <tbody>
+            <table  class="table table-striped table-hover table-bordered">
+              <thead>
                 <tr>
-                  <td><h1>环境检测</h1></td>
-                  <td width="25%"><h1>推荐配置</h1></td>
-                  <td width="25%"><h1>当前状态</h1></td>
-                  <td width="25%"><h1>最低要求</h1></td>
+                  <th>环境检测</th>
+                  <th>推荐配置</th>
+                  <th>当前状态</th>
+                  <th>最低要求</th>
                 </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td>操作系统</td>
                   <td>类UNIX</td>
@@ -102,32 +104,6 @@ $allowNext = 'yes';
                     </strong>
                   </td>
                   <td>5.3.0</td>
-                </tr>
-                <tr>
-                  <td>MySQL版本（client）</td>
-                  <td>5.4.x</td>
-                  <td>
-                    <strong>
-                   <?php
-                     if (function_exists('mysqli_get_client_info')){
-                            if (version_compare(mysql_get_client_info(), '5.0.0') >= 0) {
-                    ?>
-                    <p class="text-success">√ <?php  echo mysql_get_client_info(); ?> </p>
-                    <?php
-                          } else {
-                             $allowNext = 'no';
-                    ?>
-                    <p class="text-danger">x <?php  echo mysql_get_client_info(); ?> </p>
-                    <?php
-                          }
-                    } else {
-                             $allowNext = 'no';
-                   ?>
-                    <p class="text-danger">X 尚未安装MySQL客户端 </p>
-                    <?php } ?>
-                    </strong>
-                  </td>
-                  <td>5.0.0</td>
                 </tr>
                 <tr>
                   <td>PDO_MySQL</td>
@@ -324,7 +300,8 @@ $allowNext = 'yes';
               <?php if($allowNext == 'yes'){ ?>
               <a href="./dataBasepage.php" class="btn btn-primary btn-lg" role="button" >下一步</a>
               <?php } elseif ($allowNext == 'no'){ ?>
-                <h3 class="text-warning"> 不好意思，安装环境检测没有通过，请正确设置环境之后，重新刷新检测！</h3>
+              <a href="./envDetect.php" class="btn btn-primary btn-lg" role="button" >重新检测</a>
+                <h3 class="text-danger"> 不好意思，安装环境检测没有通过，请正确设置环境之后，重新检测！</h3>
               <?php } ?>
           </div>
 
