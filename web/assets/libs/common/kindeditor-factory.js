@@ -27,12 +27,18 @@ define(function(require, exports, module) {
         'about'
     ];
 
+    var contentCss = [];
+    contentCss.push('body {font-size: 14px; line-height: 1.428571429;color: #333333;}');
+    contentCss.push('a {color: #428bca;}');
+    contentCss.push('p {margin: 0 0 10px;}');
+
     var defaultConfig = {
         width: '100%',
         resizeType: 1,
         uploadJson: '/kindeditor/upload',
         extraFileUploadParams: {},
         filePostName: 'file',
+        cssData: contentCss.join('\n')
     };
 
     var configs = {};

@@ -54,16 +54,8 @@ class MyCourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $userIds = array();
-
-        foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
         return $this->render('TopxiaWebBundle:MyCourse:learning.html.twig', array(
             'courses'=>$courses,
-            'users'=>$users,
             'paginator' => $paginator
         ));
     }
