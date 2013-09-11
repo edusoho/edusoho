@@ -8,10 +8,10 @@
 <div class="page course-cover">
 
   <div class="row course-cover-heading">
-    <div class="col-md-5 picture">
+    <div class="col-sm-5 picture hidden-xs">
       <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" class="img-responsive" />
     </div>
-    <div class="col-md-7 info">
+    <div class="col-sm-7 info">
       {% if is_granted('ROLE_ADMIN') %}
       <div class="btn-group pull-right">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
