@@ -15,7 +15,7 @@ class MyNotebookController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'noteNumGreaterThan' => 0
+            'noteNumGreaterThan' => 1
         );
 
         $paginator = new Paginator(

@@ -149,14 +149,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
 
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+		$sortedCourses = array();
 		foreach ($members as $member) {
 			if (empty($courses[$member['courseId']])) {
 				continue;
 			}
-			$courses[$member['courseId']]['memberIsLearned'] = 0;
-			$courses[$member['courseId']]['memberLearnedNum'] = $member['learnedNum'];
+			$course = $courses[$member['courseId']];
+			$course['memberIsLearned'] = 0;
+			$course['memberLearnedNum'] = $member['learnedNum'];
+			$sortedCourses[] = $course;
 		}
-		return $courses;
+		return $sortedCourses;
 	}
 
 	public function findUserLeanedCourseCount($userId)
@@ -168,25 +172,41 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '1', $start, $limit);
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+		$sortedCourses = array();
 		foreach ($members as $member) {
-			$courses[$member['courseId']]['memberIsLearned'] = 1;
-			$courses[$member['courseId']]['memberLearnedNum'] = $member['learnedNum'];
+			if (empty($courses[$member['courseId']])) {
+				continue;
+			}
+			$course = $courses[$member['courseId']];
+			$course['memberIsLearned'] = 1;
+			$course['memberLearnedNum'] = $member['learnedNum'];
+			$sortedCourses[] = $course;
 		}
-		return $courses;
+		return $sortedCourses;
 	}
 
 	public function findUserTeachCourseCount($userId)
 	{
-		$countOfZero = $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 0);
-		$countOfOne = $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'teacher', 1);
-		return  ($countOfOne + $countOfZero);
+		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher');
 	}
 
 	public function findUserTeachCourses($userId, $start, $limit)
 	{
-		$teachingCourseMembers = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit);
-		$teachingCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($teachingCourseMembers, 'courseId'));
-		return CourseSerialize::unserializes($teachingCourses);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit);
+		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+		/**
+		 * @todo 以下排序代码有共性，需要重构成一函数。
+		 */
+		$sortedCourses = array();
+		foreach ($members as $member) {
+			if (empty($courses[$member['courseId']])) {
+				continue;
+			}
+			$sortedCourses[] = $courses[$member['courseId']];
+		}
+		return $sortedCourses;
 	}
 
 	public function findUserFavoritedCourseCount($userId)
