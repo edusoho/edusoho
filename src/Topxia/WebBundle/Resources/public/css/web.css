@@ -2640,8 +2640,24 @@ body {
 }
 
 @media (min-width: 1200px) {
+    .teacherpage .container {
+         width: 970px;
+    }
+}
+
+.teacherpage .teacher-title {
+	color: #096;
+	margin-bottom: 10px;
+}
+
+.teacherpage .teacher-about {
+	color: #555;
+}
+
+
+@media (min-width: 1200px) {
     .userpage #content-container {
-         max-width: 970px;
+         width: 970px;
     }
 }
 

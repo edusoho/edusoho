@@ -690,6 +690,10 @@ content_page_list:
     pattern: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
 
+teacher:
+    pattern: /teacher
+    defaults: {_controller: TopxiaWebBundle:Teacher:index }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }

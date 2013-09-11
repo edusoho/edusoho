@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set bodyClass = 'teacherpage' %}
+{% block content %}
+
+<div class="es-row-wrap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>师资力量</h1></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+
+      <ul class="media-list">
+        {% for teacher in teachers %}
+          {% set profile = profiles[teacher.id] %}
+          <li class="media teacher">
+            <a class="pull-left" href="{{ path('user_show', {id:teacher.id}) }}">
+              <img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}">
+            </a>
+            <div class="media-body">
+              <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>
+
+              <h4 class="media-heading">
+                <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+              </h4>
+              <div class="teacher-title">
+                {% if teacher.title %}
+                  {{ teacher.title }}
+                {% else %}
+                  <span class="text-muted">请设置头衔</span>
+                {% endif %}
+              </div>
+              <div class="teacher-about">{{ profile.about|raw }}</div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
