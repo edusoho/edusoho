@@ -158,14 +158,16 @@ $allowNext = 'yes';
               </tbody>
             </table>
 
-            <table class="table table-hover table-bordered">
-              <tbody>
+            <table class="table table-hover table-striped table-bordered">
+              <thead>
                 <tr>
-                  <td class="td1">目录、文件权限检查</td>
-                  <td class="td1" width="25%">当前状态</td>
-                  <td class="td1" width="25%">所需状态</td>
+                  <th>目录、文件权限检查</th>
+                  <th>当前状态</th>
+                  <th>所需状态</th>
                 </tr>
-                
+              </thead>
+              <tbody>
+                               
                 <tr>
                   <td>app/config/parameters.yml</td>
                   <td>
@@ -290,7 +292,6 @@ $allowNext = 'yes';
                   </td>
                   <td>可写</td>
                 </tr>
-
               </tbody>
             </table>
 
