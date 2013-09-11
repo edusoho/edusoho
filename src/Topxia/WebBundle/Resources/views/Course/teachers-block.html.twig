@@ -15,7 +15,7 @@
               {% if profiles %}
               {% set profile = profiles[teacherId] %}
               <div class="item {% if loop.first %}active{% endif %}" data-id="{{ user.id }}">
-                <img src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}" class="avatar">
+                <a href="{{ path('user_show', {id:user.id}) }}"><img src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}" class="avatar"></a>
               </div>
               {% endif %}
             {% endfor %}
@@ -33,7 +33,7 @@
               {% if profiles %}
               {% set profile = profiles[teacherId] %}
             <div class="teacher-item teacher-item-{{ user.id }} {% if loop.first %}teacher-item-active{% endif %}">
-              <div class="nickname"><a href="#">{{ user.nickname }}</a></div>
+              <div class="nickname"><a href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></div>
               <div class="title">{{ user.title }}</div>
               <div class="divider"></div>
               <div class="about">{{ profile.about | raw }}</div>
