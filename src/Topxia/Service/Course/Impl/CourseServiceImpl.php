@@ -1117,6 +1117,30 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $course;
 	}
 
+	public function canTakeCourse($course)
+	{
+		$course = empty($course['id']) ? $this->getCourse(intval($course)) : $course;
+		if (empty($course)) {
+			return false;
+		}
+
+		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
+			return false;
+		}
+
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+			return true;
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+		if ($member and in_array($member['role'], array('teacher', 'student'))) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public function tryLearnCourse($courseId)
 	{
 		$course = $this->getCourseDao()->getCourse($courseId);

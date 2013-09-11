@@ -176,6 +176,11 @@ interface CourseService
 	public function tryTakeCourse($courseId);
 
 	/**
+	 * 是否可以使用课程
+	 */
+	public function canTakeCourse($course);
+
+	/**
 	 * 尝试学习课程
 	 * 
 	 * 只有是课程的学员/教师，才可以学习。

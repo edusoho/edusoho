@@ -79,6 +79,7 @@ class CourseAnnouncementController extends BaseController
 			'course' => $course,
 			'announcements' => $announcements,
 			'canManage' => $this->getCourseService()->canManageCourse($course),
+			'canTake' => $this->getCourseService()->canTakeCourse($course)
 		));
 	}
 
