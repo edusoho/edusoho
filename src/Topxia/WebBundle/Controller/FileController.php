@@ -15,7 +15,7 @@ class FileController extends BaseController
 
         $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
-        return $this->createNewJsonResponse($record);
+        return $this->createJsonResponse($record);
     }
 
     protected function getFileService()

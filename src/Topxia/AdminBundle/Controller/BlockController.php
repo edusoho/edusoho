@@ -44,7 +44,7 @@ class BlockController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
-            20
+            5
         );
 
 
