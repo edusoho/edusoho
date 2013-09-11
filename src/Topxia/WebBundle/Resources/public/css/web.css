@@ -2640,7 +2640,7 @@ body {
 }
 
 @media (min-width: 1200px) {
-    .teacherpage .container {
+    .teacherpage #content-container {
          width: 970px;
     }
 }
