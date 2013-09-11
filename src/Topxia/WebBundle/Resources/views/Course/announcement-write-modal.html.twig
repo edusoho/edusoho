@@ -12,10 +12,12 @@
 	>
 
 		<div class="form-group">
-			<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容">{{ announcement.content }}</textarea>
+			<div class="controls">
+				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容">{{ announcement.content }}</textarea>
+			</div>
 		</div>
 
-	</from>
+	</form>
 
 	<script>
 		app.load('course/announcement-write');
