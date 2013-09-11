@@ -12,10 +12,10 @@
 
 <form class="form-horizontal" method="post" novalidate>
   <div class="form-group">
-    <div class="col-lg-3 control-label">
+    <div class="col-md-3 control-label">
       <label >新用户注册</label>
     </div>
-    <div class="controls col-lg-8 radios">
+    <div class="controls col-md-8 radios">
       {{ radios('register_mode', {'opened':'开启', 'closed':'关闭'}, auth.register_mode) }}
     </div>
   </div>
@@ -24,19 +24,19 @@
     <legend>新用户激活邮件设置</legend>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="email_activation_title" >新用户激活邮件标题</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="email_activation_body">新用户激活邮件内容</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
         <div class="help-block">
           {% verbatim %}
@@ -57,49 +57,49 @@
     <legend>欢迎信息设置</legend>
 
     <div class="form-group" style="display:none;">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label>发送欢迎信息</label>
       </div>
-      <div class="controls col-lg-8 checkboxs">
+      <div class="controls col-md-8 checkboxs">
         {{ checkboxs('welcome_methods', {'message':'站内私信', 'email':'电子邮件'}, auth.welcome_methods) }}
         <div class="help-block">新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效。</div>
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="welcome_title">发送欢迎信息</label>
       </div>
-      <div class="controls col-lg-8 radios">
+      <div class="controls col-md-8 radios">
         {{ radios('welcome_enabled', {'opened':'开启', 'closed':'关闭'}, auth.welcome_enabled) }}
         <div class="help-block">欢迎信以站内私信的方式，发送给新用户。</div>
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="welcome_sender">欢迎信息发送方</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
         <div class="help-block">通常为这个网站的管理员，请输入用户昵称。</div>
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="welcome_title">欢迎信息标题</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <input type="text" id="welcome_title" name="welcome_title" class="form-control" value="{{auth.welcome_title}}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="welcome_body">欢迎信息内容</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{auth.welcome_body}}</textarea>
         <div class="help-block">
           {% verbatim %}
@@ -116,8 +116,8 @@
   </fieldset>
 
   <div class="form-group">
-    <div class="col-lg-3 control-label"></div>
-    <div class="controls col-lg-8">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
       <button type="submit" class="btn btn-primary">提交</button>  
     </div>
   </div>

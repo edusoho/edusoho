@@ -7,7 +7,7 @@
 {% block main %}
 
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-md-12">
 		<ul class="nav nav-pills nav-mini userpage-sec-nav">
 			<li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">关注</a></li>
 			<li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">粉丝</a></li>

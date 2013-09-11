@@ -8,10 +8,10 @@
 <div class="page course-cover">
 
   <div class="row course-cover-heading">
-    <div class="col-lg-5 picture">
+    <div class="col-md-5 picture">
       <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" class="img-responsive" />
     </div>
-    <div class="col-lg-7 info">
+    <div class="col-md-7 info">
       {% if is_granted('ROLE_ADMIN') %}
       <div class="btn-group pull-right">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
@@ -67,7 +67,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-md-8">
 
       <div class="panel panel-default">
         <div class="panel-body">
@@ -147,7 +147,7 @@
 
       {{ render(controller('TopxiaWebBundle:CourseReview:latestBlock',{course:course})) }}
     </div>
-    <div class="col-lg-4">
+    <div class="col-md-4">
       {{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
 
       {{ render(controller('TopxiaWebBundle:CourseThread:latestBlock',{course:course})) }}

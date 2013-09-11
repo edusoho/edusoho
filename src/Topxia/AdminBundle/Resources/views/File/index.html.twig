@@ -14,7 +14,7 @@
 
 <div class="well btn-small">
   <form>
-    <div class="col-lg-2">
+    <div class="col-md-2">
     {{ form_widget(form.group) }}
     </div>
     <input type="submit" class="btn btn-primary" value="检索">
@@ -26,7 +26,7 @@
       {% set user = object_load('user', file.userId) %}
       {% set fileGroup = object_load('file_group', file.groupId) %}
       {% set fileUri = file_uri_parse(file.uri) %}
-      <div class="col-lg-3 mbl">
+      <div class="col-md-3 mbl">
         <div class="thumbnail file-thumbnail">
           {% if 'image/' in file.mime %}
             <img src="{{ file_path(file.uri) }}" style="max-height:160px;">

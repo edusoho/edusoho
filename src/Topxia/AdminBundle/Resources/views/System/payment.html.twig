@@ -13,10 +13,10 @@
 <form class="form-horizontal" method="post" novalidate>
   
   <div class="form-group">
-    <div class="col-lg-3 control-label">
+    <div class="col-md-3 control-label">
       <label >支付功能</label>
     </div>
-    <div class="controls col-lg-8 radios">
+    <div class="controls col-md-8 radios">
       {{ radios('enabled', {1:'开启', 0:'关闭'}, payment.enabled) }}
     </div>
   </div>
@@ -24,35 +24,35 @@
   <fieldset>
     <legend>支付宝</legend>
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label >支付宝</label>
       </div>
-      <div class="controls col-lg-8 radios">
+      <div class="controls col-md-8 radios">
         {{ radios('alipay_enabled', {1:'开启', 0:'关闭'}, payment.alipay_enabled) }}
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="alipay_key">App Key</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <input type="text" id="alipay_key" name="alipay_key" class="form-control" value="{{payment.alipay_key}}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label">
+      <div class="col-md-3 control-label">
         <label for="alipay_key">App Secret</label>
       </div>
-      <div class="controls col-lg-8">
+      <div class="controls col-md-8">
         <input type="text" id="alipay_secret" name="alipay_secret" class="form-control" value="{{payment.alipay_secret}}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-lg-3 control-label"></div>
-      <div class="controls col-lg-8">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
         <button type="submit" class="btn btn-primary">提交</button>
       </div>
     </div>

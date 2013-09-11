@@ -7,8 +7,8 @@
 {% block body %}
   <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_tag_create') }}{% endif %}" method="post">
     <div class="form-group">
-      <label class="col-lg-3 control-label" for="tag-name-field">标签名称</label>
-      <div class="col-lg-6 controls">
+      <label class="col-md-3 control-label" for="tag-name-field">标签名称</label>
+      <div class="col-md-6 controls">
         <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_tag_checkname', {exclude:tag.name}) }}">
       </div>
     </div>

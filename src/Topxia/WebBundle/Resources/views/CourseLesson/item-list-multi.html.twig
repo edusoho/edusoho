@@ -6,7 +6,7 @@
   {% else  %}
 	  <ul class="row">
 	    {% for item in group.data %}
-	      <li class="col-lg-4 clearfix item">
+	      <li class="col-md-4 clearfix item">
 	      	<a class="item-object item-object-{{ item.type }}" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}">
 	      		{% if item.free %}<span class="item-free"></span>{% endif %}
 		      	<span class="item-icon"></span>

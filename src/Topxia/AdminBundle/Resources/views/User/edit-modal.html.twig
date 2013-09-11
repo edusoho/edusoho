@@ -8,19 +8,19 @@
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
 
   <div class="row form-group">
-    <div class="col-lg-2 control-label">
+    <div class="col-md-2 control-label">
       <label for="truename">姓名</label>
     </div>
-    <div class="col-lg-7 controls">
+    <div class="col-md-7 controls">
       <input type="text" id="truename" name="truename" class="form-control" value="{{profile.truename}}" >
     </div>
   </div>
 
   <div class="row form-group">
-    <div class="col-lg-2 control-label">
+    <div class="col-md-2 control-label">
       <label for="gender">性别</label>
     </div>
-    <div class="col-lg-7 controls radios">
+    <div class="col-md-7 controls radios">
       <div id="gender">
         <input type="radio" id="gender_0" name="gender" value="male"
         {% if profile.gender == 'male' %} checked="checked" {% endif %}>
@@ -35,74 +35,74 @@
   </div>
 
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="job">职业</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
      </div>
     </div>
 
     <p></p>
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="title">头衔</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="title" name="title" class="form-control" value="{{profile.title}}">
      </div>
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="signature">个人签名</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="signature" name="signature" class="form-control" value="{{profile.signature}}">
      </div>
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="about">自我介绍</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <textarea id="about" name="about">{{profile.about}}</textarea>
       </div>
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="site">个人主页</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="site" name="site" class="form-control" value="{{profile.site}}">
      </div>
     </div>
     <p></p>
   <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="weibo">微博</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="weibo" name="weibo" class="form-control" value="{{profile.weibo}}">
      </div>
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="qq">QQ</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="qq" name="qq" class="form-control" value="{{profile.qq}}">
      </div>
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-lg-2 control-label"> 
+      <div class="col-md-2 control-label"> 
         <label for="weixin">微信</label>
       </div>
-      <div class="col-lg-7 controls">
+      <div class="col-md-7 controls">
         <input type="text" id="weixin" name="weixin" class="form-control" value="{{profile.weixin}}">
      </div>
     </div>            

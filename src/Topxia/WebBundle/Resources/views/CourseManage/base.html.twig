@@ -22,29 +22,29 @@
 		  {{ form_errors(form) }}
 
 			<div class="form-group">
-				<div class="col-lg-2 control-label">{{ form_label(form.title, '标题') }}</div>
-				<div class="col-lg-8 controls">{{ form_widget(form.title, {attr:{class:'form-control'}}) }}</div>
+				<div class="col-md-2 control-label">{{ form_label(form.title, '标题') }}</div>
+				<div class="col-md-8 controls">{{ form_widget(form.title, {attr:{class:'form-control'}}) }}</div>
 			</div>
 
 			<div class="form-group">
-				<div class="col-lg-2 control-label">{{ form_label(form.subtitle, '副标题') }}</div>
-				<div class="col-lg-8 controls">{{ form_widget(form.subtitle, {attr:{class:'form-control'}}) }}</div>
+				<div class="col-md-2 control-label">{{ form_label(form.subtitle, '副标题') }}</div>
+				<div class="col-md-8 controls">{{ form_widget(form.subtitle, {attr:{class:'form-control'}}) }}</div>
 			</div>
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.tags, '标签') }}</div>
-			  <div class="col-lg-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
+			  <div class="col-md-2 control-label">{{ form_label(form.tags, '标签') }}</div>
+			  <div class="col-md-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
 			</div>
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
-			  <div class="col-lg-8 controls">
+			  <div class="col-md-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
+			  <div class="col-md-8 controls">
 			    {{ form_widget(form.categoryId, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
 			</div>
 
 		  <div class="form-group">
-		    <div class="col-lg-offset-2 col-lg-8 controls">
+		    <div class="col-md-offset-2 col-md-8 controls">
 		    	{{ form_rest(form) }}
 		    	<button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
 		    </div>

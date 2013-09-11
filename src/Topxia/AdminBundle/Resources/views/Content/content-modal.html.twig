@@ -14,7 +14,7 @@
 	{% endif %}
 	>
 	<div class="row">
-		<div class="col-lg-8 two-col-main">
+		<div class="col-md-8 two-col-main">
 			{% if 'title' in type.basicFields %}
 				<div class="form-group">
 				  <label for="content-title-field" class="control-label">标题</label>
@@ -37,7 +37,7 @@
 			  {% include 'TopxiaAdminBundle:Content:' ~ type.alias ~ '-extended-fields.html.twig' %}
 			{% endif %}
 		</div>
-		<div class="col-lg-4 two-col-side">
+		<div class="col-md-4 two-col-side">
 			{% if 'alias' in type.basicFields %}
 				<div class="panel panel-default">
 				  <div class="panel-heading">URL路径</div>

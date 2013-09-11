@@ -4,7 +4,7 @@
 {% block body %}
 
 <div class="row teacher-profile-card">
-  <div class="col-lg-4">
+  <div class="col-md-4">
     <img class="img-responsive" src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}">
     {% if user.id != app.user.id %}
       <div class="actions">
@@ -17,7 +17,7 @@
     {% endif %}
   </div>
 
-  <div class="col-lg-8">
+  <div class="col-md-8">
     <h4>{{ user.nickname }}</h4>
     <div class="text-muted">{{ user.title }}</div>
 

@@ -14,8 +14,8 @@
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">
-          <div class="col-lg-2 control-label"><label>当前登录邮箱</label></div>
-          <div class="col-lg-8 controls">
+          <div class="col-md-2 control-label"><label>当前登录邮箱</label></div>
+          <div class="col-md-8 controls">
             <span class="control-text">
               {{ app.user.email }}
               {% if app.user.emailVerified %}
@@ -31,23 +31,23 @@
         </div>
 
         <div class="form-group">
-          <div class="col-lg-2 control-label">{{ form_label(form.password, '网站登录密码') }}</div>
-          <div class="col-lg-8 controls">
+          <div class="col-md-2 control-label">{{ form_label(form.password, '网站登录密码') }}</div>
+          <div class="col-md-8 controls">
             {{ form_widget(form.password, {attr:{class:'form-control'}}) }}
             <p class="help-block">设置新的登录邮箱，需要校验当前的网站登录密码</p>
           </div>
         </div>
 
         <div class="form-group">
-          <div class="col-lg-2 control-label">{{ form_label(form.email, '新登录邮箱') }}</div>
-          <div class="col-lg-8 controls">
+          <div class="col-md-2 control-label">{{ form_label(form.email, '新登录邮箱') }}</div>
+          <div class="col-md-8 controls">
             {{ form_widget(form.email, {attr:{class:'form-control'}}) }}
           </div>
         </div>
 
         <div class="form-group">
-          <div class="col-lg-2 control-label"></div>
-          <div class="col-lg-8 controls">
+          <div class="col-md-2 control-label"></div>
+          <div class="col-md-8 controls">
             {{ form_rest(form) }}
             <button type="submit" class="btn btn-primary">提交</button>
           </div>

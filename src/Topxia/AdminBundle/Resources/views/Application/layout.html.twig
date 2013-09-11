@@ -3,14 +3,14 @@
 {% set nav = 'application' %}
 
 {% block content %}
-  <div class="col-lg-2">
+  <div class="col-md-2">
     {% block sidebar %}
       <div class="list-group">
         <a href="{{ path('admin_task') }}" class="list-group-item {% if menu == 'task' %}active{% endif %}">任务管理<span class="glyphicon glyphicon-chevron-right"></span></a>
       </div>
     {% endblock %}
   </div>
-  <div class="col-lg-10">
+  <div class="col-md-10">
       {% block main %}{% endblock %}
   </div>
 {% endblock %}
