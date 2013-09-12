@@ -277,6 +277,13 @@ $allowNext = 'yes';
 
           </div>
 
+          <?php
+          if(file_exists("./install.lock")){
+            $allowNext = 'no';
+          ?>
+          <h4 align="center" class="text-warning"> 你已经安装过Edusoho1.0版本，如想重新安装，请在删除 "web/install/install.lock" 文件之后重新检测！<h4>
+          <?php } ?>
+
           <div class="next" style="text-align:center">
               <?php if($allowNext == 'yes'){ ?>
               <a href="./dataBasepage.php" class="btn btn-primary btn-lg" role="button" >下一步</a>

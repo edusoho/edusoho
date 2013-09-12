@@ -3,8 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Dumper;
 
 class InstallController extends BaseController
 {
@@ -16,7 +14,6 @@ class InstallController extends BaseController
             $formData = $request->request->all();
             $this->createSuperManager($formData);
             $this->initSiteSetting($formData['site-name']);
-            $this->processParametersYml($formData); 
 
             $super_manager = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
             $super_manager = $super_manager[0];
@@ -34,6 +31,8 @@ class InstallController extends BaseController
 
     public function welcomeAction(Request $request)
     {
+        $lockFile = "{$this->container->getParameter('kernel.root_dir')}/../web/install/install.lock";
+        file_put_contents($lockFile, '');
         return $this->render("TopxiaWebBundle:Install:welcome.html.twig"); 
     }
 
@@ -192,18 +191,18 @@ EOD;
         $this->getSettingService()->set('site', $siteFields);
     }
 
-    private function processParametersYml($formData)
-    {
-        $dumper = new Dumper();
-        $parser = new Parser();
-        $ymlFile = "{$this->container->getParameter('kernel.root_dir')}/config/parameters.yml";
+    // private function processParametersYml($formData)
+    // {
+    //     $dumper = new Dumper();
+    //     $parser = new Parser();
+    //     $ymlFile = "{$this->container->getParameter('kernel.root_dir')}/config/parameters.yml";
         
-        $parameters = $parser->parse(file_get_contents($ymlFile));
-        $parameters['parameters']['mailer_user'] = $formData['super_manager'];
-        $parameters['parameters']['mailer_password'] = $formData['super_manager_pd'];
-        $yaml = $dumper->dump($parameters, 2);
-        file_put_contents($ymlFile, $yaml);
-    }
+    //     $parameters = $parser->parse(file_get_contents($ymlFile));
+    //     $parameters['parameters']['mailer_user'] = null;
+    //     $parameters['parameters']['mailer_password'] = null;
+    //     $yaml = $dumper->dump($parameters, 2);
+    //     file_put_contents($ymlFile, $yaml);
+    // }
 
     protected function getSettingService()
     {
