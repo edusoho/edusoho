@@ -2528,8 +2528,13 @@ body {
 
 .homepage-feature a,
 .homepage-feature img {
-	display: none;
+	display: block;
 	width: 100%;
+}
+
+.homepage-feature-slides  a,
+.homepage-feature-slides  img {
+	display: none;
 }
 
 .homepage-feature .cycle-pager {
