@@ -15,6 +15,10 @@
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
   {% block javascripts %}{% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
 </head>
 
 {% set nav = nav|default(null) %}
