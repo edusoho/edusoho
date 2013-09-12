@@ -1133,7 +1133,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return true;
 		}
 
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 		if ($member and in_array($member['role'], array('teacher', 'student'))) {
 			return true;
 		}
