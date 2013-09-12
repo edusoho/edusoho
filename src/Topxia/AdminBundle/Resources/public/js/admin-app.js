@@ -1,6 +1,8 @@
 define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 
+	require('placeholder');
+
 	require('bootstrap');
 	require('common/bootstrap-modal-hack');
 

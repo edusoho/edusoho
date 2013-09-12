@@ -1,4 +1,4 @@
-define("arale/placeholder/1.0.1/placeholder-debug", [ "$-debug" ], function(require, exports, module) {
+define("arale/placeholder/1.1.0/placeholder-debug", [ "$-debug" ], function(require, exports, module) {
     // placeholder
     // --------
     // 针对不支持placeholder的浏览器做的模拟支持
@@ -55,8 +55,6 @@ define("arale/placeholder/1.0.1/placeholder-debug", [ "$-debug" ], function(requ
                     return $element;
                 }
             };
-            //isInputSupported || (valHooks.input = hooks);
-            //isTextareaSupported || (valHooks.textarea = hooks);
             // 这里的修改是为了防止别的hooks被覆盖
             if (!isInputSupported) {
                 var _old = valHooks.input;
@@ -189,5 +187,24 @@ define("arale/placeholder/1.0.1/placeholder-debug", [ "$-debug" ], function(requ
     } : function() {};
     // 默认运行，这样就不需要手动调用
     placeholder();
+    // 提供清除 input.value 的方法
+    placeholder.clear = function(element) {
+        element = $(element);
+        if (element[0].tagName === "FORM") {
+            // 寻找表单下所有的 input 元素
+            clearInput(element.find("input.placeholder, textarea.placeholder"));
+        } else {
+            // 清除指定的 input 元素
+            clearInput(element);
+        }
+        function clearInput(input) {
+            input.each(function(i, item) {
+                item = $(item);
+                if (item[0].value === item.attr("placeholder") && item.hasClass("placeholder")) {
+                    item[0].value = "";
+                }
+            });
+        }
+    };
     module.exports = placeholder;
 });
