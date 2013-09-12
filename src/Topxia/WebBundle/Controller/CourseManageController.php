@@ -146,7 +146,6 @@ class CourseManageController extends BaseController
             		'isVisible' => empty($data['visible_' . $teacherId]) ? 0 : 1
         		);
             }
-
             $this->getCourseService()->setCourseTeachers($id, $teachers);
             $this->setFlashMessage('success', '教师设置成功！');
 
@@ -168,7 +167,7 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
-
+        
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $this->getCourseService()->getCourse($id),
             'teachers' => $teachers

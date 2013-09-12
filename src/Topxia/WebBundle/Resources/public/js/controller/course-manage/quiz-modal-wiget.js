@@ -36,11 +36,10 @@ define(function(require, exports, module) {
             this.$('.quiz-manager-side-body').perfectScrollbar();
             this.$('.quiz-manager-main').perfectScrollbar();
 
-
         },
 
         renderItems: function() {
-            var model = $.parseJSON(this.$('[data-role=items-model]').text());
+            var model = $.parseJSON(this.$('[data-role=items-model]').html());
             var template = Handlebars.compile(this.$('[data-role=item-template]').html());
 
             var html = [], items = {};
