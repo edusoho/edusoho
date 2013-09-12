@@ -49,7 +49,7 @@
 
       {% for note in notes %}
         {% set course = courses[note.courseId]|default(null) %}
-        {% set lesson = courses[note.lessonId]|default(null) %}
+        {% set lesson = lessons[note.lessonId]|default(null) %}
         <tr data-role="item">
           <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" ></td>
           <td>
@@ -64,6 +64,7 @@
                   {% if lesson %}
                     <span class="text-muted mhs">&raquo;</span>
                     <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">课时{{lesson.number}}：{{ lesson.title }}</a>
+
                   {% endif %}
                 {% endif %}
               </div>
