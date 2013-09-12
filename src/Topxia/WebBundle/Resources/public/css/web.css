@@ -1048,6 +1048,7 @@ body {
 
 .course-item-list .lesson-item:hover .title {
 	color: #444;
+	outline: none;
 }
 
 .course-item-list .lesson-item .type {
@@ -2527,8 +2528,13 @@ body {
 
 .homepage-feature a,
 .homepage-feature img {
-	display: none;
+	display: block;
 	width: 100%;
+}
+
+.homepage-feature-slides  a,
+.homepage-feature-slides  img {
+	display: none;
 }
 
 .homepage-feature .cycle-pager {
