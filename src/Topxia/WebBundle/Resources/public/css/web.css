@@ -1048,6 +1048,7 @@ body {
 
 .course-item-list .lesson-item:hover .title {
 	color: #444;
+	outline: none;
 }
 
 .course-item-list .lesson-item .type {
