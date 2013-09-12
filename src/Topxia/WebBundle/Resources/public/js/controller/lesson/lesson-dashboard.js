@@ -132,11 +132,9 @@ define(function(require, exports, module) {
 		},
 
 		_onChangeLessonId: function(id) {
-            console.log('dashboard lessson id change:', id);
             if (!this._toolbar) {
             	return ;
             }
-            console.log('xxx');
             this._toolbar.set('lessonId', id);
 
             var player = VideoJS("lesson-video-player");
@@ -214,9 +212,6 @@ define(function(require, exports, module) {
 			if (index < 0) {
 				return ;
 			}
-
-			console.log('show or hide nav btn:', index);
-			console.log(this._lessons);
 
 			if (index === 0) {
 				$prevBtn.hide();

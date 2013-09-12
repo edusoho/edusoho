@@ -19,10 +19,6 @@ define(function(require, exports, module) {
             selectWidth = 360 * (naturalWidth/scaledWidth),
             selectHeight = 202.5 * (naturalHeight/scaledHeight);
 
-            console.log('natural:', naturalWidth, naturalHeight);
-            console.log('scaled:', scaledWidth, scaledHeight);
-            console.log('select:', selectWidth, selectHeight);
-
         $picture.Jcrop({
             trueSize: [naturalWidth, naturalHeight],
             setSelect: [0, 0, selectWidth, selectHeight],

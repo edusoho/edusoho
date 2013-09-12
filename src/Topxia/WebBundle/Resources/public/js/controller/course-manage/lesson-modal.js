@@ -9,7 +9,6 @@ define(function(require, exports, module) {
     function createValidator ($form) {
 
         Validator.addRule('timeLength', function(options) {
-            console.log(options.element.val());
             return /^\d+:\d+$/.test(options.element.val())
         }, '时长格式不正确');
 

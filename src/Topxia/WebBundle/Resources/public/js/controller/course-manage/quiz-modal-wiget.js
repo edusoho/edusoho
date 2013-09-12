@@ -194,7 +194,6 @@ define(function(require, exports, module) {
             });
 
             validator.on('formValidated', function(error, msg, $form) {
-                console.log(error, msg);
 
                 if (error || !self.prepareFormData()) {
                     return false;

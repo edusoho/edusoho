@@ -31,7 +31,6 @@ define(function(require, exports, module) {
 			var $form = $('.course-question-widget-form');
 
 			$.post($form.data('url'), $form.serialize(), function(response){
-				console.log(response);
 			});
 
 		}

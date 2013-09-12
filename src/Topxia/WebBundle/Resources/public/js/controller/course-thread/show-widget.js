@@ -61,7 +61,6 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     that.$('[data-role=post-list]').append(html);
                     var number = parseInt(that.$('[data-role=post-number]').text());
-                    console.log(number);
                     that.$('[data-role=post-number]').text(number+1+'');
                     $form.find('textarea').val('');
                 });
