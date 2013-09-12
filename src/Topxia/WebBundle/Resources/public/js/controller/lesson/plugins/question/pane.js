@@ -20,7 +20,6 @@ define(function(require, exports, module) {
         },
         setup: function() {
             this.get('plugin').toolbar.on('change:lessonId', function(id) {
-                console.log('question plugin, lesson lessonid change:', id);
             });
         },
         showList: function() {

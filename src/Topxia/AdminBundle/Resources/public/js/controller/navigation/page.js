@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $('tbody').on('click', '.delete-btn', function() {
-            console.log("shaojiatong");
             if (!confirm('确认要删除此导航吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {

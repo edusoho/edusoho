@@ -34,7 +34,6 @@ define(function(require, exports, module) {
         $(".show-course-review-pane").click(function(){
             $("#course-review-tab").tab('show');
             var offset = $("#course-nav-tabs").offset();
-            console.log(offset);
             $(document).scrollTop(offset.top - 20);
         }); 
 

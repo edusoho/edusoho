@@ -119,7 +119,6 @@ define(function(require, exports, module) {
 
         onNextItem: function(e) {
             var $form = this.getNextItemForm().show();
-            console.log($form);
             this.setModalButtonStatus('check-answer');
         },
 
