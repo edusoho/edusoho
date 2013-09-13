@@ -1,9 +1,9 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div class="row">
+<div class="row row-12">
   <div class="col-md-12">
-    <div class="panel panel-default clearfix course-header">
-      <div class="panel-body">
+    <div class="panel panel-default  course-header">
+      <div class="panel-body clearfix">
         <a href="{{ path('course_show', {id:course.id}) }}"><img class="picture" src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" /></a>
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h1>
         <div class="teachers">

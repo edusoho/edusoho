@@ -972,6 +972,11 @@ body {
 	/*background: url(../img/course/course-item-icons.png) 89px -150px no-repeat;*/
 }
 
+.lt-ie8 .course-item-list .item {
+	border-top-color: #fff;
+	border-bottom-color: #fff;
+}
+
 .course-item-list .hover-item:hover {
 	cursor: pointer;
 	background-color: #f9f9f9;

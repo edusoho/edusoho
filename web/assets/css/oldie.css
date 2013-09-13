@@ -62,6 +62,11 @@
     padding: 0;
 }
 
+.row-12 .col-md-12 {
+    width: auto;
+    padding: 0;
+}
+
 .row-3-9 .col-md-3 {
     padding-left: 0;
     padding-right: 0;
