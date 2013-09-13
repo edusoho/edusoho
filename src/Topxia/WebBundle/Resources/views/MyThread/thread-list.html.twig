@@ -3,7 +3,7 @@
 <ul class="media-list">
   {% for thread in threads %}
    {% if courses %}
-    {% set course = courses[thread.courseId] %}
+    {% set course = courses[thread.courseId]|default(null) %}
     <li class="media">
         <div class="media-body">
           {% if thread.postNum > 0 %}
@@ -26,7 +26,11 @@
 
           </div>
           <div class="text-muted text-normal">
-            <span>发表于<a href="#" class="link-muted">{{ course.title }}</a></span>
+            {% if course %}
+              <span>发表于<a href="{{ path('course_show', {id:course.id}) }}" class="link-muted">{{ course.title }}</a></span>
+            {% else %}
+              <span>课程已删除</span>
+            {% endif %}
             <span class="bullet">•</span>
             {% if thread.postNum > 0 %}
               {% set poster = users[thread.latestPostUserId] %}

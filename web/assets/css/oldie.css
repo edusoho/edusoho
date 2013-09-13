@@ -325,6 +325,11 @@
   margin-right: 10px;
 }
 
+.media, .media-body {
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
 .form-control {
   padding: 0;
   line-height: 28px;
