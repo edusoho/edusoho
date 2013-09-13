@@ -43,21 +43,17 @@ class SettingController extends BaseController
 
     public function logoUploadAction(Request $request)
     {
-        $setting = $this->getSettingService()->get("file");
-
-        if (empty($setting['public_directory'])) {
-            throw new \RuntimeException('文件存放路径尚未设置，请先设置文件存放路径。');
-        }
         $file = $request->files->get('logo');
 
         $filename = 'logo_' . time() . '.' . $file->guessExtension();
         
-        $directory = "{$this->container->getParameter('kernel.root_dir')}/../web/{$setting['public_directory']}/system";
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
 
         $site = $this->getSettingService()->get('site', array());
-        $site['logo'] = "{$setting['public_directory']}/system/{$filename}";
+
+        $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
 
         $this->getSettingService()->set('site', $site);
 

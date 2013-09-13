@@ -32,7 +32,7 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-  <div class="navbar navbar-inverse site-navbar clearfix" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
+  <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -40,13 +40,11 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ path('homepage') }}">
-          {% if setting('site.logo') %}
-            <img src="{{ asset(setting('site.logo')) }}">
-          {% else %}
-            {{ setting('site.name', 'EDUSOHO') }}
-          {% endif %}
-        </a>
+        {% if setting('site.logo') %}
+          <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
+        {% else %}
+          <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+        {% endif %}
       </div>
       <div class="navbar-collapse collapse">
         {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}

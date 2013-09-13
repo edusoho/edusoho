@@ -200,13 +200,17 @@ textarea {
 	border-radius: 0;
 	background-color: #363e45;
 	z-index: 1024;
-	height: 56px;
 }
 
 .site-navbar .navbar-brand {
   color: #fff;
   padding-top: 17px;
   padding-bottom: 17px;
+}
+
+.site-navbar .navbar-brand-logo {
+	margin-left: -15px;
+	float: left;
 }
 
 .site-navbar .navbar-nav > li > a {
