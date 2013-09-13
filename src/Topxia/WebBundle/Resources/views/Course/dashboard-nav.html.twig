@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs course-dashboard-tabs" id="course-tabs">
+<ul class="nav nav-tabs course-dashboard-tabs clearfix" id="course-tabs">
   <li class="{% if nav == 'lesson' %}active{% endif %}"><a class="js-nav" href="{{ path('course_show', {id:course.id}) }}">课时</a></li>
   <li class="{% if nav == 'thread' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
   <li class="{% if nav == 'material' %}active{% endif %}"><a class="js-nav" href="{{ path('course_materials', {id:course.id}) }}">资料区</a></li>

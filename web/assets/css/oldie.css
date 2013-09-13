@@ -76,17 +76,31 @@
     float: right;
 }
 
-.es-row-wrap .row-9-3 .col-md-9 {
+.row-9-3 .col-md-9 {
     padding-left: 0;
     padding-right: 0;
     width: 74%;
     float: left;
 }
 
-.es-row-wrap .row-9-3 .col-md-3 {
+.row-9-3 .col-md-3 {
     padding-left: 0;
     padding-right: 0;
     width: 23%;
+    float: right;
+}
+
+.row-8-4 .col-md-8 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 66%;
+    float: left;
+}
+
+.row-8-4 .col-md-4 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 32%;
     float: right;
 }
 
@@ -202,6 +216,51 @@
     overflow: hidden;
     background-color: #e5e5e5;
 }
+
+
+
+
+.nav-tabs {
+}
+
+.nav-tabs li {
+  float: left;
+  margin-bottom: -1px;
+  background: #fff;
+}
+
+.nav-tabs li a {
+  margin-right: 2px;
+  line-height: 1.428571429;
+}
+
+.nav-tabs li a:hover {
+  border-color: #eeeeee #eeeeee #dddddd;
+}
+
+.nav-tabs li.active {
+  /*background: #fff;*/
+
+}
+
+.nav-tabs li.active a,
+.nav-tabs li.active a:hover,
+.nav-tabs li.active a:focus {
+  color: #555555;
+  cursor: default;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-bottom-color: #fff;
+}
+
+
+
+
+
+
+
+
+
 
 .nav-pills  li {
   float: left;
@@ -325,6 +384,17 @@
 .popover .arrow {
     display: none;
 }
+
+
+.panel-default .panel-heading {
+  color: #333333;
+  background-color: #f5f5f5;
+  border-color: #dddddd;
+}
+
+
+
+
 
 .media-list {
   margin-left: 0;

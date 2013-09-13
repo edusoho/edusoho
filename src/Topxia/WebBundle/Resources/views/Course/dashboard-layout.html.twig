@@ -6,27 +6,28 @@
 
 {% block content %}
 
+<div class="container-gap">
+
   {{ render(controller('TopxiaWebBundle:Course:header', {course:course})) }}
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="panel panel-default" id="dashboard-main">
-      <div class="panel-body">
-        {% block dashboard_main %}{% endblock %}
+  <div class="row row-8-4">
+    <div class="col-md-8">
+      <div class="panel panel-default" id="dashboard-main">
+        <div class="panel-body">
+          {% block dashboard_main %}{% endblock %}
+        </div>
       </div>
+    </div>
+
+    <div class="col-md-4">
+      {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
+      {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+      {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
     </div>
   </div>
 
-  <div class="col-md-4">
-    {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
-    {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
-    {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
-  </div>
-
-
-
-
 </div>
+
 {% endblock %}
 
 {% block bottom %}
