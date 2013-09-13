@@ -2719,7 +2719,7 @@ body {
          width: 970px;
     }
 }
-
+ container-gap 
 .lt-ie9 .userpage #content-container {
 	width: 970px;
 }
@@ -2731,6 +2731,16 @@ body {
 .userpage-header .row {
 	margin-top: 25px;
 	margin-bottom: 25px;
+}
+
+.lt-ie8 .userpage-header {
+	zoom:1;
+}
+
+.lt-ie8 .userpage-header .row {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	zoom:1;
 }
 
 .userpage-header .avatar {
