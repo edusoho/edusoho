@@ -390,6 +390,9 @@
     display: none;
 }
 
+.tooltip-arrow {
+  display: none;
+}
 
 .panel-default .panel-heading {
   color: #333333;
