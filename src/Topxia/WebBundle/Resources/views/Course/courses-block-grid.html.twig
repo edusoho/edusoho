@@ -16,6 +16,11 @@
               {% endif %}
             </span>
 
+            <span class="student-col">
+              <span class="meta-label">学生</span>
+              <span class="student-num">{{ course.studentNum }}人</span>
+            </span>
+
             <span class="review-col">
               {% if course.ratingNum > 0 %}
                 <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
@@ -30,10 +35,7 @@
               {% endif %}
             </span>
 
-            <span class="student-col">
-              <span class="meta-label">学生</span>
-              <span class="student-num">{{ course.studentNum }}人</span>
-            </span>
+
 
           </span>
         {% endif %}
