@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="es-row-wrap">
+<div class="es-row-wrap container-gap">
   <div class="row">
     <div class="col-md-12">
       <div class="page-header"><h1>课程</h1></div>
@@ -21,9 +21,9 @@
     <div class="col-md-9">
 
       <div class="category-filters">
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}" {% if sort == 'popular' %}class="active"{% endif %}>热门</a>
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="active"{% endif %}>最新</a>
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommended'}) }}" {% if sort == 'recommended' %}class="active"{% endif %}>推荐</a>
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}" {% if sort == 'popular' %}class="selected"{% endif %}>热门</a>
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="selected"{% endif %}>最新</a>
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommended'}) }}" {% if sort == 'recommended' %}class="selected"{% endif %}>推荐</a>
       </div>
 
       {% if courses %}

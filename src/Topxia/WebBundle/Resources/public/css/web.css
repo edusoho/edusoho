@@ -2610,9 +2610,10 @@ body {
 
 .category-filters a:hover {
 	color: #999;
+	text-decoration: none;
 }
 
-.category-filters a.active {
+.category-filters a.selected {
 	color: #33383d;
 	font-weight: bold;
 }
