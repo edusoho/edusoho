@@ -15,7 +15,7 @@
             {% endfor %}
           {% endif  %}
         </div>
-        <div class="toolbar">
+        <div class="toolbar hidden-lt-ie8">
           {% if not manage %}
           <div class="btn-group">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_info', {id:course.id}) }}" data-role="tooltip" title="课程信息" data-placement="top" href="#modal">

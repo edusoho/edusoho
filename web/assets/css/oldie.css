@@ -427,3 +427,9 @@
 .row-8 .form-control {
   width: 575px;
 }
+
+
+
+.lt-ie8 .hidden-lt-ie8 {
+  display: none;
+}
