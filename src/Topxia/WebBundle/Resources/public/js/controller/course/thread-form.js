@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         var editor = EditorFactory.create('#thread_content', 'simple', {extraFileUploadParams:{group:'course'}});
 
         var validator = new Validator({
-            element: '#thread-form',
+            element: '#thread-form'
         });
 
         validator.addItem({
