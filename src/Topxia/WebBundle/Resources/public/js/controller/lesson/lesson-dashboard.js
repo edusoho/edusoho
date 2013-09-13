@@ -161,7 +161,6 @@ define(function(require, exports, module) {
             	if (lesson.type == 'video') {
             		if (lesson.media.source == 'self') {
 			            player.dimensions('100%', '100%');
-			            console.log(lesson.media.files[0].url);
 			            player.src(lesson.media.files[0].url);
 			            player.on('ended', function(){
 			            	that._onFinishLearnLesson();
