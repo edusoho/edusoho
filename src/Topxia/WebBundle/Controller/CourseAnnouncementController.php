@@ -33,14 +33,6 @@ class CourseAnnouncementController extends BaseController
 	public function createAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$courseMemberOfStudents = $this->getCourseService()->findCourseStudents($courseId, 0, 1000);
-
-		if (!empty($courseMemberOfStudents)) {
-	        $courseUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseMemberOfStudents, 'userId'));
-			foreach ($courseUsers as $courseUser) {
-				$this->getNotificationService()->notify($courseUser['id'], 'default', "新公告! 课程:<a href='/course/{$course['id']}'> {$course['title']} </a>已创建一个新公告,请及时查看！");
-			}
-		}
 
 	    if($request->getMethod() == 'POST'){
         	$announcement = $this->getCourseService()->createAnnouncement($courseId, $request->request->all());
