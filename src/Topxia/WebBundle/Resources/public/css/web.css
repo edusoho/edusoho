@@ -86,6 +86,11 @@ a.link-muted {
 	padding: 20px 20px;
 }
 
+.lt-ie8 .panel-col .panel-heading {
+	border-bottom: 1px solid #ddd;
+	zoom: 1;
+}
+
 .panel-page {
 	padding: 45px 50px 50px;
 	min-height: 500px;

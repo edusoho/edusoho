@@ -35,7 +35,7 @@
       {% if paginator.currentPage == paginator.lastPage %}
         <li class="disabled"><span>下一页</span></li>
       {% else %}
-        <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">上一页</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">下一页</a></li>
       {% endif %}
     </ul>
   {% endif %}

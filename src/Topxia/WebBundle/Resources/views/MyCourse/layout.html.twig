@@ -10,7 +10,7 @@
   <div class="panel-body">
 
   	{% set main_nav = main_nav|default(null) %}
-		<ul class="nav nav-pills">
+		<ul class="nav nav-pills clearfix">
 			{% if 'ROLE_TEACHER' in app.user.roles %}
 				<li{% if main_nav == 'teaching' %} class="active"{% endif %}><a href="{{ path('my_courses_teaching') }}">在教</a></li>
 			{% endif %}
