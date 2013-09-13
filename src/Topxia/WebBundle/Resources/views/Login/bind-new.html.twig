@@ -4,13 +4,14 @@
 {% set script_controller = 'auth/login-bind-new' %}
 
 {% block content %}
-<div class="row">
+<div class="row row-6">
   <div class="col-md-6 col-md-offset-3">
 
-    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-page mtl'} %}
-      {% block heading %}<h2>完善资料</h2>{% endblock %}
-      {% block body %}
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>完善资料</h2></div>
+
         <div class="alert alert-warning"> 您当前正在使用<strong>{{ client.clientInfo.name }}</strong>登录{{ setting('site.name') }}，请完善资料。 </div>
+
         <form id="bind-new-form" class="form-vertical" method="post">
           <div class="form-group">
             {{ form_label(form.email, 'Email地址', {label_attr:{class:'control-label'}}) }}
@@ -39,9 +40,8 @@
           <a href="{{ path('login_bind_exist', {type: client.clientInfo.type}) }}">绑定到已有帐号</a>
         </div>
 
+    </div>
 
-      {% endblock %}
-    {% endembed %}
   </div>
 </div>
 {% endblock %}
