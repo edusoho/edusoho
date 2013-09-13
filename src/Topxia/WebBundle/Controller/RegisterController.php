@@ -21,7 +21,6 @@ class RegisterController extends BaseController
                 $user = $this->getUserService()->register($registration);
                 $this->authenticateUser($user);
                 $this->get('session')->set('registed_email', $user['email']);
-                $this->sendWelcomeMessage($user);
 
                 return $this->redirect($this->generateUrl('register_submited', array(
                     'id' => $user['id'], 'hash' => $this->makeHash($user))
@@ -178,14 +177,4 @@ class RegisterController extends BaseController
         
     }
 
-    private function sendWelcomeMessage($user)
-    {
-        $auth = $this->getSettingService()->get('auth', array());
-        $site = $this->getSettingService()->get('site', array());
-        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
-        $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
-        $messageContent = str_replace($valuesToBeReplace, $valuesToReplace, $auth['welcome_body']);
-        $welcomeSender = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-        $this->getMessageService()->sendMessage($welcomeSender['id'], $user['id'], $messageContent);
-    }
 }
