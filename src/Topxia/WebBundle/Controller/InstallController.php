@@ -31,9 +31,87 @@ class InstallController extends BaseController
 
     public function welcomeAction(Request $request)
     {
+        $this->createTeacherNavigation();
+        $this->createAboutUsNavigation();
+        $this->createQuestionNavigation();
         $lockFile = "{$this->container->getParameter('kernel.root_dir')}/../web/install/install.lock";
         file_put_contents($lockFile, '');
         return $this->render("TopxiaWebBundle:Install:welcome.html.twig"); 
+    }
+
+    private function createAboutUsNavigation()
+    {
+        $super_manager = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
+        $super_manager = $super_manager[0];
+        $this->getNavigationService()->createNavigation(array(
+            'name'=>'关于我们', 
+            'url'=>'/page/aboutus', 
+            'sequence' => 2,
+            'isNewWin'=>0,
+            'isOpen'=>1,
+            'type'=>'top'));
+        $this->getContentService()->createContent(array(
+            'title'=>'关于我们',
+            'type'=>'page',
+            'alias'=>'aboutus',
+            'body'=>'关于我们: <br> 简介： <br> 招聘：<br> 联系方式：<br> ',
+            'template'=>'default',
+            'status'=>'published',
+            'createdTime'=>time(),
+            'publishedTime'=>time(),
+            'userId'=>$super_manager['id'],
+            'promoted'=>0));
+    }
+
+    private function createQuestionNavigation()
+    {
+        $super_manager = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
+        $super_manager = $super_manager[0];
+        $this->getNavigationService()->createNavigation(array(
+            'name'=>'常见问题', 
+            'url'=>'/page/questions', 
+            'sequence' => 2,
+            'isNewWin'=>0,
+            'isOpen'=>1,
+            'type'=>'top'));
+        $body = <<<'EOD'
+常见问题：<br>
+<strong>入学流程？</strong><br>
+注册网站会员帐号才能进行其他操作，如购买课程，学习课程，参与讨论，浏览提问等权限，不注册的用户只能观看免费的课时。
+这里没有复杂的入学流程，根据课程介绍，选定课程付款即可随时随地进行学习。<br><br>
+<strong>如何付款？</strong><br>
+本站所有课程支持支付宝付款。<br><br>
+<strong>购课流程？</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;1）注册，登录；<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;2）选择要购买的课程；<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;3）点击购买课程；<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;4）选择支付方式并支付；<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;5）购买完成后，即可浏览课程内容，在讨论区发帖。您也可以进入“我的课程”，查看自己的学习情况；<br><br>
+<strong>学习流程是怎样的？</strong><br>
+学员自主点播课程进行学习，遇到不懂的问题，及时提问，本课程的老师即会马上进行回答。也可以在课程的讨论区与其他学员讨论问题，上传自己的作品等。<br>
+EOD;
+        $this->getContentService()->createContent(array(
+            'title'=>'常见问题',
+            'type'=>'page',
+            'alias'=>'questions',
+            'body'=>$body,
+            'template'=>'default',
+            'status'=>'published',
+            'createdTime'=>time(),
+            'publishedTime'=>time(),
+            'userId'=>$super_manager['id'],
+            'promoted'=>0));
+    }
+
+    private function createTeacherNavigation()
+    {
+        $this->getNavigationService()->createNavigation(array(
+            'name'=>'师资力量', 
+            'url'=>'/teacher', 
+            'sequence' => 1,
+            'isNewWin'=>0,
+            'isOpen'=>1,
+            'type'=>'top'));
     }
 
     private function initMailerSetting()
@@ -191,18 +269,10 @@ EOD;
         $this->getSettingService()->set('site', $siteFields);
     }
 
-    // private function processParametersYml($formData)
-    // {
-    //     $dumper = new Dumper();
-    //     $parser = new Parser();
-    //     $ymlFile = "{$this->container->getParameter('kernel.root_dir')}/config/parameters.yml";
-        
-    //     $parameters = $parser->parse(file_get_contents($ymlFile));
-    //     $parameters['parameters']['mailer_user'] = null;
-    //     $parameters['parameters']['mailer_password'] = null;
-    //     $yaml = $dumper->dump($parameters, 2);
-    //     file_put_contents($ymlFile, $yaml);
-    // }
+    protected function getNavigationService()
+    {
+        return $this->getServiceKernel()->createService('Content.NavigationService');
+    }
 
     protected function getSettingService()
     {
@@ -227,6 +297,11 @@ EOD;
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getContentService()
+    {
+        return $this->getServiceKernel()->createService('Content.ContentService');
     }
 
 }

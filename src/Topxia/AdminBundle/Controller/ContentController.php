@@ -58,7 +58,6 @@ class ContentController extends BaseController
             }
 
             $content = $this->getContentService()->createContent($this->convertContent($content));
-
             return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),
