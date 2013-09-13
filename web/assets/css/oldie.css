@@ -52,6 +52,11 @@
   margin: 0 auto;
 }
 
+.row-8 .col-md-8 {
+  width: 68%;
+  margin: 0 auto;
+}
+
 .es-row-wrap .col-md-12 {
     width: auto;
     padding: 0;
@@ -317,6 +322,10 @@
   border-color: #dddddd;
 }
 
+.popover .arrow {
+    display: none;
+}
+
 .media-list {
   margin-left: 0;
 }
@@ -338,4 +347,8 @@
 
 .row-6 .form-control {
   width: 413px;
+}
+
+.row-8 .form-control {
+  width: 575px;
 }
