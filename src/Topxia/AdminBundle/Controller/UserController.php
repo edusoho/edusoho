@@ -110,6 +110,9 @@ class UserController extends BaseController {
 
         if ($request->getMethod() == 'POST') {
             $userRoles = $request->request->get('role');
+            if(is_null($userRoles)){
+                $userRoles = array('ROLE_USER');
+            }
             $this->getUserService()->changeUserRoles($user['id'], $userRoles);
             return $this->redirect($this->generateUrl('admin_user'));
         }
