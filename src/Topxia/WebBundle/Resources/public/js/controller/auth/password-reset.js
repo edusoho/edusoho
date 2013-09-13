@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="form[email]"]',
             required: true,
-            rule: 'email',
+            rule: 'email'
         });
     };
 
