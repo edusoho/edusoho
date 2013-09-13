@@ -342,6 +342,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeUserRoles($id, array $roles)
     {
+
         $user = $this->getUser($id);
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，设置用户角色失败。');

@@ -7,10 +7,7 @@
 
 <form id="user-role-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_set_roles', {id:user.id}) }}">
 
-   <input type="checkbox" value="ROLE_USER" name="role[]"
-	{% if 'ROLE_USER' in user.roles %}
-		checked="checked"
-	{% endif %}  > 会员 <br>
+   <input type="checkbox" value="ROLE_USER" name="role[]" disabled="disabled" checked="checked" > 会员 <br>
 
    <input type="checkbox" value="ROLE_TEACHER" name="role[]"
     {% if 'ROLE_TEACHER' in user.roles %}
