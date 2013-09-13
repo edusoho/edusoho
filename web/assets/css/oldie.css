@@ -63,6 +63,20 @@
     float: right;
 }
 
+.es-row-wrap .row-9-3 .col-md-9 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 74%;
+    float: left;
+}
+
+.es-row-wrap .row-9-3 .col-md-3 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 23%;
+    float: right;
+}
+
 .es-row-wrap .page-header {
     margin-top: 10px;
     zoom:1;

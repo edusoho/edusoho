@@ -2216,6 +2216,7 @@ body {
 .es-box-heading {
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 15px;
+	zoom:1;
 }
 
 .es-box-heading h2 {
@@ -2227,6 +2228,10 @@ body {
 	padding-left: 10px;
 	padding-right: 10px;
 	margin-bottom: -1px;
+}
+
+.lt-ie8 .es-box-heading h2 {
+	display: inline;
 }
 
 .es-sidebar-heading {
@@ -2273,15 +2278,26 @@ body {
 	border-radius: 4px;
 }
 
+.lt-ie8 .course-grid {
+	display: inline;
+}
 
 .course-grid .grid-body {
 	position: relative;
+	width: 204px;
 	display: block;
 	overflow: hidden;
-	width: 204px;
 	text-decoration: none;
 	border-radius: 4px;
 	color: #353535;
+}
+
+.lt-ie8 .course-grid .grid-body {
+	width: 207px;
+}
+
+.course-grid .grid-body:hover {
+	text-decoration: none;
 }
 
 @media (min-width: 1200px) {
@@ -2292,6 +2308,10 @@ body {
 
 .course-grid .grid-body:hover {
 	background: #fafafa;
+}
+
+.lt-ie8 .course-grid .thumb {
+	width: 207px;
 }
 
 .course-grid .title {
@@ -2334,6 +2354,10 @@ body {
 
 .course-grid .metas .review-col {
 	display: inline-block;
+}
+
+.lt-ie8 .course-grid .metas .review-col {
+	display: inline;
 }
 
 
@@ -2488,6 +2512,10 @@ body {
 	font-size: 13px;
 }
 
+.lt-ie8 .latest-review-list {
+	margin-left: 0;
+}
+
 .latest-review-list .author-nickname {
 	/*font-weight: bold;*/
 	color: #555;
@@ -2508,6 +2536,8 @@ body {
 .latest-review-list .review-content {
 	font-size: 13px;
 	color: #999;
+	word-break: break-all;
+	word-wrap: break-word;
 }
 
 .latest-review-list .review-footer {
