@@ -1,6 +1,6 @@
 .clearfix:before,
 .clearfix:after,
-.container:before,
+.container:before,ro
 .container:after,
 .row:before,
 .row:after {
@@ -42,6 +42,14 @@
     margin-right: 0;
     padding-left: 25px;
     padding-right: 25px;
+}
+
+.row-6 {
+}
+
+.row-6 .col-md-6 {
+  width: 52%;
+  margin: 0 auto;
 }
 
 .es-row-wrap .col-md-12 {
@@ -315,4 +323,14 @@
 
 .media .pull-left .media-object {
   margin-right: 10px;
+}
+
+.form-control {
+  padding: 0;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.row-6 .form-control {
+  width: 413px;
 }
