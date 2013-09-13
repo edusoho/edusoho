@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var Handlebars = require('handlebars');
+
+
     var DynamicCollection = Widget.extend({
         attrs: {
             onlyAddItemWithModel: false
@@ -9,7 +11,7 @@ define(function(require, exports, module) {
         events: {
             'click [data-role=item-add]': 'addItem',
             'keydown [data-role=item-input]': 'addItemWithEnter',
-            'click [data-role=item-delete]' : 'deleteItem',
+            'click [data-role=item-delete]' : 'deleteItem'
         },
 
         setup: function() {
@@ -56,7 +58,7 @@ define(function(require, exports, module) {
         },
 
         _setupAttrsFromHtml: function() {
-            var model = $.parseJSON(this.$('[data-role=model]').text());
+            var model = $.parseJSON(this.$('[data-role=model]').html());
             var itemTemplate = Handlebars.compile(this.$('[data-role=item-template]').html());
 
             this.set('model', model);

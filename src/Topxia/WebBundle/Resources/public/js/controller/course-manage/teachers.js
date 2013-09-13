@@ -18,7 +18,6 @@ define(function(require, exports, module) {
         	if (value.length > 0) {
         		Notify.danger('该教师不存在！');
         	}
-
         });
 
 	    var autocomplete = new AutoComplete({
@@ -29,7 +28,7 @@ define(function(require, exports, module) {
 	            options: {
 	                key: 'nickname'
 	            }
-	        },
+	        }
 	    }).render();
 
 	    autocomplete.on('itemSelect', function(data){
