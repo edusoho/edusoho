@@ -308,3 +308,11 @@
   background-color: #ffffff;
   border-color: #dddddd;
 }
+
+.media-list {
+  margin-left: 0;
+}
+
+.media .pull-left .media-object {
+  margin-right: 10px;
+}
