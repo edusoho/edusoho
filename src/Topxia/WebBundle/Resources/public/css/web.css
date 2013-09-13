@@ -2566,8 +2566,6 @@ body {
 	color: #096;
 }
 
-
-
 .homepage-category-nav {
 	list-style: none;
 	padding:10px 5px;
@@ -2575,11 +2573,15 @@ body {
 	background: #f9f9f9;
 	border-bottom: 1px dotted #ccc;
 	font-size: 16px;
+	margin-left: 0;
 }
 
 .homepage-category-nav li {
 	display: inline-block;
+}
 
+.lt-ie8 .homepage-category-nav li {
+	display: inline;
 }
 
 .homepage-category-nav li a {
@@ -2592,6 +2594,7 @@ body {
 
 .homepage-category-nav li a:hover {
 	border-bottom-color: #d9d9d9;
+	text-decoration: none;
 }
 
 .homepage .carousel-feature-banner {

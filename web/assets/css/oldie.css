@@ -49,14 +49,14 @@
     padding: 0;
 }
 
-.es-row-wrap .col-md-3 {
+.es-row-wrap .row-3-9 .col-md-3 {
     padding-left: 0;
     padding-right: 0;
     width: 23%;
     float: left;
 }
 
-.es-row-wrap .col-md-9 {
+.es-row-wrap .row-3-9 .col-md-9 {
     padding-left: 0;
     padding-right: 0;
     width: 74%;
