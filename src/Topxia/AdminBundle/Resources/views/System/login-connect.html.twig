@@ -111,37 +111,6 @@
         <input type="text" id="renren_secret" name="renren_secret" class="form-control" value="{{loginConnect.renren_secret}}">
       </div>
     </div>
-
-  </fieldset>
-
-  <fieldset>
-    <legend>豆瓣连接</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label >豆瓣连接</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('douban_enabled', {1:'开启', 0:'关闭'}, loginConnect.douban_enabled) }}
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="douban_key" >App Key</label>
-      </div>
-      <div class="controls col-md-8 radios">
-          <input type="text" id="douban_key" name="douban_key" class="form-control" value="{{loginConnect.douban_key}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="douban_secret">App Secret</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="douban_secret" name="douban_secret" class="form-control" value="{{loginConnect.douban_secret}}">
-      </div>
-    </div>
   </fieldset>
 
   <div class="form-group">

@@ -57,6 +57,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserByEmail($email)
     {
+        if (empty($email)) {
+            return null;
+        }
         $user = $this->getUserDao()->findUserByEmail($email);
         if(!$user){
             return null;

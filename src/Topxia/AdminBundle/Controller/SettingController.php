@@ -131,6 +131,7 @@ class SettingController extends BaseController
     public function loginConnectAction(Request $request)
     {
         $loginConnect = $this->getSettingService()->get('login_bind', array());
+
         $default = array(
             'enabled'=>0,
             'weibo_enabled'=>0,
@@ -142,10 +143,8 @@ class SettingController extends BaseController
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
-            'douban_enabled'=>0,
-            'douban_key'=>'',
-            'douban_secret'=>''
-            );
+        );
+
         $loginConnect = array_merge($default, $loginConnect);
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();

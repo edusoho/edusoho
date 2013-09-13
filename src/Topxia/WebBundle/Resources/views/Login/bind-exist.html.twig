@@ -4,12 +4,12 @@
 {% set script_controller = 'auth/login-bind-exist' %}
 
 {% block content %}
-<div class="row">
+<div class="row row-6">
   <div class="col-md-6 col-md-offset-3">
 
-    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-page mtl'} %}
-      {% block heading %}<h2>绑定用户</h2>{% endblock %}
-      {% block body %}
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>绑定用户</h2></div>
+
         {% if error %}<div class="alert alert-warning">{{ error }}</div>{% endif %}
         <div class="alert">您当前正在使用<strong>{{ client.clientInfo.name }}</strong>登录{{ setting('site.name') }}</div>
 
@@ -42,8 +42,8 @@
           <a href="{{ path('login_bind_new', {type: client.clientInfo.type}) }}">注册一个新帐号</a>
         </div>
 
-      {% endblock %}
-    {% endembed %}
+    </div>
+
   </div>
 </div>
 {% endblock %}
