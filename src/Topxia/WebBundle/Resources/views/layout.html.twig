@@ -32,7 +32,7 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-  <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
+  <div class="navbar navbar-inverse site-navbar clearfix" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">

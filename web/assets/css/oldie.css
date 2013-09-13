@@ -195,7 +195,43 @@
 }
 
 
+.navbar-brand {
+    float: left;
+}
 
+.navbar-toggle {
+    display: none;
+}
+
+.navbar-collapse {
+    float: left;
+    display: block;
+    border-top: 0;
+}
+
+.navbar-right {
+    float: right;
+    margin-top: 0;
+}
+
+.navbar-nav li {
+    float: left;
+}
+
+.navbar-nav li a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
+.navbar-inverse .navbar-nav li a {
+    color: #fff;
+}
+
+.navbar-inverse .navbar-nav li  a:hover,
+.navbar-inverse .navbar-nav li  a:focus {
+  background-color: #3a485d;
+}
 
 /**
  * pagination
