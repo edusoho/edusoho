@@ -34,9 +34,26 @@ class InstallController extends BaseController
         $this->createTeacherNavigation();
         $this->createAboutUsNavigation();
         $this->createQuestionNavigation();
+        $this->createHomeTopBanner();
         $lockFile = "{$this->container->getParameter('kernel.root_dir')}/../web/install/install.lock";
         file_put_contents($lockFile, '');
         return $this->render("TopxiaWebBundle:Install:welcome.html.twig"); 
+    }
+
+    private function  createHomeTopBanner()
+    {
+        $super_manager = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
+        $super_manager = $super_manager[0];
+        $body = <<<'EOD'
+<a href=""><img src="/assets/img/placeholder/carousel-1200x256-1.png" /></a>
+<a href="#"><img src="/assets/img/placeholder/carousel-1200x256-2.png" /></a>
+<a href="#"><img src="/assets/img/placeholder/carousel-1200x256-3.png" /></a>
+EOD;
+        $homeTopBanner = $this->getBlockService()->createBlock(array(
+            'code'=>'home_top_banner',
+            'title'=>'网站首页-顶部-图片轮播 '
+            ));
+        $this->getBlockService()->updateBlock($homeTopBanner['id'], array('content'=>$body));
     }
 
     private function createAboutUsNavigation()
@@ -302,6 +319,11 @@ EOD;
     protected function getContentService()
     {
         return $this->getServiceKernel()->createService('Content.ContentService');
+    }
+
+    protected function getBlockService()
+    {
+        return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
 }
