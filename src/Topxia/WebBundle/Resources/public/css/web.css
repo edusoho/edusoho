@@ -2576,9 +2576,13 @@ body {
 	width: 100%;
 }
 
-.homepage-feature-slides  a,
-.homepage-feature-slides  img {
+.homepage-feature-slides a,
+.homepage-feature-slides img {
 	display: none;
+}
+
+.homepage-feature-slides a img {
+	display: block;
 }
 
 .homepage-feature .cycle-pager {

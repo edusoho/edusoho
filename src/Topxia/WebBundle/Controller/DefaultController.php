@@ -18,7 +18,7 @@ class DefaultController extends BaseController
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
-        $blocks = $this->getBlockService()->getContentsByCodes(array('less_home_top_banner'));
+        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-less.html.twig', array(
             'courses' => $courses,
@@ -33,7 +33,7 @@ class DefaultController extends BaseController
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
-        $blocks = $this->getBlockService()->getContentsByCodes(array('more_home_top_banner'));
+        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
             'courses' => $courses,
