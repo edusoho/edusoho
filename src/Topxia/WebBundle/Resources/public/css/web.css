@@ -1487,6 +1487,7 @@ body {
 	margin: 0;
 	background: #fff;
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+	z-index: 1000;
 }
 
 
