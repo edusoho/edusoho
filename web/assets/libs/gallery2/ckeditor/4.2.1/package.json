@@ -1,0 +1,37 @@
+{
+  "family": "gallery2",
+  "name": "ckeditor",
+  "version": "4.2.1",
+  "description": "CKEditor is a text editor to be used inside web pages. It's not a replacement for desktop text editors like Word or OpenOffice, but a component to be used as part of web applications and websites.",
+  "homepage": "http://ckeditor.com",
+  "author": [
+    {
+      "name": "CKSource"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ckeditor/ckeditor-dev.git"
+  },
+  "bugs": "http://dev.ckeditor.com/",
+  "licenses": [
+    {
+      "type": "GPL",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    },
+    {
+      "type": "LGPL",
+      "url": "http://www.gnu.org/licenses/lgpl.html"
+    },
+    {
+      "type": "MPL",
+      "url": "http://www.mozilla.org/MPL/MPL-1.1.html"
+    }
+  ],
+  "keywords": [ "ckeditor", "WYSIWYG" ],
+  "spm": {
+    "output": [
+       "ckeditor.js"
+     ]
+  }
+}

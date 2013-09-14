@@ -15,6 +15,7 @@ seajs.config({
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
 		'bootstrap': 'gallery2/bootstrap/3.0.0/bootstrap',
 		'kindeditor': 'gallery2/kindeditor/4.1.7/kindeditor',
+		'ckeditor': 'gallery2/ckeditor/4.2.1/ckeditor',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.0.1/upload',
 		'bootstrap.validator': 'common/validator',
@@ -28,7 +29,6 @@ seajs.config({
 		"handlebars": "gallery/handlebars/1.0.2/handlebars",
 		"backbone": "gallery/backbone/1.0.0/backbone",
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
-		'ckeditor': 'ckeditor/ckeditor.js',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload'
 	},
