@@ -615,7 +615,7 @@ define("gallery2/swfupload/2.2.0/swfupload-debug", [], function(require, exports
                 this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");
                 for (var key in movieElement) {
                     try {
-                        if (typeof movieElement[key] === "function") {
+                        if (typeof movieElement[key] === "function" && key[0] <= "Z") {
                             movieElement[key] = null;
                         }
                     } catch (ex) {}
@@ -751,7 +751,6 @@ define("gallery2/swfupload/2.2.0/swfupload-debug", [], function(require, exports
             alert("Exception: " + ex.name + " Message: " + ex.message);
         }
     };
-
     window.SWFUpload = SWFUpload;
     return SWFUpload;
 });
