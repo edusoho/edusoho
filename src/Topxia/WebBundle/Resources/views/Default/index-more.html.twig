@@ -1,14 +1,12 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
-{% set script_controller = 'index-more' %}
-
 {% block content %}
   <div class="es-row-wrap container-gap">
 
-    {% if blocks.more_home_top_banner %}
+    {% if blocks.home_top_banner %}
       <div class="homepage-feature homepage-feature-slides">
         <div class="cycle-pager"></div>
-        {{ blocks.more_home_top_banner|raw }}
+        {{ blocks.home_top_banner|raw }}
       </div>
     {% endif %}
 

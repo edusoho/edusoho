@@ -1487,6 +1487,7 @@ body {
 	margin: 0;
 	background: #fff;
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+	z-index: 1000;
 }
 
 
@@ -2576,9 +2577,13 @@ body {
 	width: 100%;
 }
 
-.homepage-feature-slides  a,
-.homepage-feature-slides  img {
+.homepage-feature-slides a,
+.homepage-feature-slides img {
 	display: none;
+}
+
+.homepage-feature-slides a img {
+	display: block;
 }
 
 .homepage-feature .cycle-pager {

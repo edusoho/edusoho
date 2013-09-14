@@ -4,9 +4,10 @@
 
 <div class="es-row-wrap container-gap">
 
-  {% if blocks.less_home_top_banner %}
-    <div class="homepage-feature mbl">
-      {{ blocks.less_home_top_banner|raw }}
+  {% if blocks.home_top_banner %}
+    <div class="homepage-feature homepage-feature-slides mbl">
+      <div class="cycle-pager"></div>
+      {{ blocks.home_top_banner|raw }}
     </div>
   {% endif %}
 

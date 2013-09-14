@@ -106,6 +106,10 @@ class UserController extends BaseController {
 
     public function setRolesAction(Request $request, $id)
     {
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = $this->getUserService()->getUser($id);
 
         if ($request->getMethod() == 'POST') {

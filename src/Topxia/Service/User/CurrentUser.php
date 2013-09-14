@@ -88,6 +88,14 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
             return false;
         }
 
+        if (array_diff($this->roles, $user->getRoles())) {
+            return false;
+        }
+
+        if (array_diff($user->getRoles(), $this->roles)) {
+            return false;
+        }
+
         return true;
     }
 
