@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
-    var Uploader = require('upload');
+    require('jquery.form');
 
     exports.run = function() {
         var $form = $('#block-form');
@@ -27,21 +27,28 @@ define(function(require, exports, module) {
             return false;
         });
 
-        var uploader = new Uploader({
-            trigger: '#block-insert-image',
-            name: 'file',
-            action: $('#block-insert-image').data('url'),
-            accept: 'image/*',
-            error: function(file) {
-                Notify.danger('上传图片失败，请重试！')
-            },
-            success: function(response) {
-                var html = '<img src="' + response.url + '">';
-                $("#blockContent").val($("#blockContent").val() + '\n' + html);
-                Notify.success('插入图片成功！');
-            }
-        });
 
+        $("#block-image-upload-form").submit(function(){
+            var $uploadForm = $(this);
+
+            var file = $uploadForm.find('[name=file]').val();
+            if (!file) {
+                Notify.danger('请先选择要上传的图片');
+                return false;
+            }
+
+            $uploadForm.ajaxSubmit({
+                clearForm: true,
+                dataType:'json',
+                success: function(response){
+                    var html = '<img src="' + response.url + '">';
+                    $("#blockContent").val($("#blockContent").val() + '\n' + html);
+                    Notify.success('插入图片成功！');
+                }
+            });
+
+            return false;
+        });
 
         $('.btn-recover-content').on('click', function() {
             var html = $(this).parents('tr').find('.data-role-content').text();

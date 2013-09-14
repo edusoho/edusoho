@@ -6,17 +6,22 @@
 
 {% block body %}
 
-<button class="btn btn-sm btn-default pull-right" id="block-insert-image" data-url="{{ path('file_upload', {group:'default'}) }}">插入图片</button>
+
 <h5>编辑区名称：{{block.title}}</h5>
 
 <form id="block-form" action="{{ path('admin_block_update', {block:block.id}) }}" method="post">
 
 <div class="form-group">
     <div class="controls">
-      <textarea class="form-control" id="blockContent" rows="10" name="content" data-role="editor-field" >{{block.content}}</textarea>
+      <textarea class="form-control" id="blockContent" rows="10" name="content" data-role="editor-field" style="z-index:1000;">{{block.content}}</textarea>
     </div>
 </div>
 
+</form>
+
+<form id="block-image-upload-form" action="{{ path('file_upload', {group:'default'}) }}" method="post" enctype="multipart/form-data">
+  <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;">
+  <button class="btn btn-default btn-sm">上传图片</button>
 </form>
 
 <div class="mbm mtl"><strong>变更记录</strong></div>
