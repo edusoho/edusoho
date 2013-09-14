@@ -678,7 +678,7 @@ define("gallery2/bootstrap/3.0.0/bootstrap-debug", [ "$-debug" ], function(requi
         };
         Modal.prototype.enforceFocus = function() {
             $(document).off("focusin.bs.modal").on("focusin.bs.modal", $.proxy(function(e) {
-                if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+                if (this.$element[0] !== e.target && !this.$element.has(e.target).length && $(e.target).parentsUntil('*[role="dialog"]').length === 0) {
                     this.$element.focus();
                 }
             }, this));

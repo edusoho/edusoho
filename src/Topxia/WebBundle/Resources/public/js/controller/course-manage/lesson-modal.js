@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     var AudioChooser = require('../widget/media-chooser/audio-chooser');
     var Notify = require('common/bootstrap-notify');
     var EditorFactory = require('common/kindeditor-factory');
-    require('ckeditor');
 
     function createValidator ($form) {
 
@@ -131,22 +130,10 @@ define(function(require, exports, module) {
 
         $form.find('[name="type"]:checked').trigger('change');
 
-
-        CKEDITOR.replace('lesson-content-field', {
-            height: 300,
-            resize_enabled: false,
-            forcePasteAsPlainText: true,
-            toolbar: 'Simple',
-            removePlugins: 'elementspath',
-            filebrowserUploadUrl: '/ckeditor/upload?group=course'
-        });
-
-
-        // var editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
+        var editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
 
         validator.on('formValidate', function(elemetn, event) {
-            CKEDITOR.instances['lesson-content-field'].updateElement();
-            // editor.sync();
+            editor.sync();
         });
 
     };
