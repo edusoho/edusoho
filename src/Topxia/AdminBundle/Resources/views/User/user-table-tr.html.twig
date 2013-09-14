@@ -45,7 +45,9 @@
           <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐教师</a></li>
         {% endif %}
         <li><a href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
-        <li><a href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_set_roles', {id:user.id}) }}">设置用户组</a></li>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+          <li><a href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_set_roles', {id:user.id}) }}">设置用户组</a></li>
+        {% endif %}
         <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">发送密码重置邮件</a></li>
         <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">发送Email验证邮件</a></li>
         {% if user.locked %}
