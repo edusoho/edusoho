@@ -694,10 +694,6 @@ teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
 
-ckeditor_upload:
-    pattern: /ckeditor/upload
-    defaults: {_controller: TopxiaWebBundle:CKEditor:upload }
-
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
