@@ -24,9 +24,10 @@ define(function(require, exports, module) {
             }, function(html) {
                 pane.element.html(html);
 
-                var editorHeight = $("#lesson-note-plugin-form .note-content").outerHeight()
+                var editorHeight = $("#lesson-note-plugin-form .note-content").outerHeight();
 
                 var editor = EditorFactory.create('#note_content', 'simple', {extraFileUploadParams:{group:'course'}, height: editorHeight});
+                editor.focus();
                 pane.set('editor', editor);
                 pane.set('content', editor.html());
                 
