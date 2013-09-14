@@ -30,7 +30,7 @@ seajs.config({
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'ckeditor': 'ckeditor/ckeditor.js',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
-		'swfupload': 'gallery2/swfupload/2.2.0/swfupload-debug'
+		'swfupload': 'gallery2/swfupload/2.2.0/swfupload'
 	},
 
 	// 预加载项

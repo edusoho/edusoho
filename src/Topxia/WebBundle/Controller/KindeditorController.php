@@ -14,12 +14,12 @@ class KindeditorController extends BaseController
 		$file = $request->files->get('file');
 		$record = $this->getFileService()->uploadFile($group, $file);
 
-	    return $this->createJsonResponse(array(
+		$response = array(
 	    	'error' => 0,
 	    	'url' => $this->get('topxia.twig.web_extension')->getFilePath($record['uri'])
+    	);
 
-    	));
-
+    	return new Response(json_encode($response));
 	}
 
     private function getFileService()
