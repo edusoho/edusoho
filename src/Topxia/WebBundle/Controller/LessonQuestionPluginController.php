@@ -88,7 +88,7 @@ class LessonQuestionPluginController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+        $threader = $this->getUserService()->getUser($thread['userId']);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $form = $this->createPostForm(array(
@@ -99,6 +99,7 @@ class LessonQuestionPluginController extends BaseController
         return $this->render('TopxiaWebBundle:LessonQuestionPlugin:show.html.twig', array(
             'course' => $course,
             'thread' => $thread,
+            'threader' => $threader,
             'posts' => $posts,
             'users' => $users,
             'form' => $form->createView(),
