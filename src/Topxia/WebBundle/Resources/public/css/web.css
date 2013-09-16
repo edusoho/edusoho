@@ -19,6 +19,15 @@ a.link-muted {
 	overflow-y: auto;
 }
 
+.modal-body {
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+.modal-body img {
+	max-width: 100%;
+}
+
 .nav-mini > li > a {
 	padding: 1px 10px;
 }
