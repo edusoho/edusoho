@@ -32,7 +32,7 @@
   <td>
     <span class="text-sm">
       {% if user.loginTime == 0 %}
-        新注册用户，尚未再次登录
+       --
       {% else %}
         {{ user.loginTime|date('Y-n-d H:i:s') }}
       {% endif %}
