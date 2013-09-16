@@ -30,7 +30,13 @@
     <span></span>
   </td>
   <td>
-    <span class="text-sm">{{ user.loginTime|date('Y-n-d H:i:s') }}</span>
+    <span class="text-sm">
+      {% if user.loginTime == 0 %}
+        新注册用户，尚未再次登录
+      {% else %}
+        {{ user.loginTime|date('Y-n-d H:i:s') }}
+      {% endif %}
+    </span>
     <br>
     <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
   </td>
