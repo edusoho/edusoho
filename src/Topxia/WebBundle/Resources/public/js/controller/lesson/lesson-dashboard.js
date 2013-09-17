@@ -163,6 +163,7 @@ define(function(require, exports, module) {
 			            player.dimensions('100%', '100%');
 			            player.src(lesson.media.files[0].url);
 			            player.on('ended', function(){
+			            	console.log('on ended');
 			            	that._onFinishLearnLesson();
 			            });
 			            $("#lesson-video-content").show();
@@ -176,6 +177,7 @@ define(function(require, exports, module) {
             		player.dimensions('100%', '100%');
             		player.src(lesson.media.files[0].url);
 		            player.on('ended', function(){
+		            	console.log('on ended');
 		            	that._onFinishLearnLesson();
 		            });
             		$("#lesson-video-content").show();
