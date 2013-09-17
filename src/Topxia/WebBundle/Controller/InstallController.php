@@ -22,11 +22,22 @@ class InstallController extends BaseController
             $this->initMailerSetting();
             $this->initCategorySetting();
             $this->initFileSetting();
+            $this->initVideoStorage($formData);
 
             return $this->redirect($this->generateUrl('install_welcome')); 
         }
         
         return $this->render("TopxiaWebBundle:Install:init-system.html.twig"); 
+    }
+
+    private function initVideoStorage($formData)
+    {
+        $videoSetting = array();
+        $videoSetting['upload_mode'] = $formData['upload_mode'];
+        $videoSetting['cloud_access_key'] = $formData['cloud_access_key'];
+        $videoSetting['cloud_secret_key'] = $formData['cloud_secret_key'];
+        $videoSetting['cloud_bucket'] = $formData['cloud_bucket'];
+        $this->getSettingService()->set('video', $videoSetting);
     }
 
     public function welcomeAction(Request $request)
