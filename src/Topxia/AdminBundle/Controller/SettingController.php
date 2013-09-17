@@ -205,24 +205,26 @@ class SettingController extends BaseController
         ));
     }
 
-    public function videoAction(Request $request)
+    public function storageAction(Request $request)
     {
-        $videoSetting = $this->getSettingService()->get('video', array());
+        $storageSetting = $this->getSettingService()->get('storage', array());
+
         $default = array(
             'upload_mode'=>'local',
             'cloud_access_key'=>'',
+            'cloud_secret_key'=>'',
             'cloud_bucket'=>'',
-            'cloud_secret_key'=>''
         );
-        $videoSetting = array_merge($default, $videoSetting);
+
+        $storageSetting = array_merge($default, $storageSetting);
         if ($request->getMethod() == 'POST') {
-            $videoSetting = $request->request->all();
-            $this->getSettingService()->set('video', $videoSetting);
-            $this->setFlashMessage('success', '视频设置已保存！');
+            $storageSetting = $request->request->all();
+            $this->getSettingService()->set('storage', $storageSetting);
+            $this->setFlashMessage('success', '云存储设置已保存！');
         }
 
-        return $this->render('TopxiaAdminBundle:System:video.html.twig', array(
-            'videoSetting'=>$videoSetting
+        return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
+            'storageSetting'=>$storageSetting
         ));
     }
 
