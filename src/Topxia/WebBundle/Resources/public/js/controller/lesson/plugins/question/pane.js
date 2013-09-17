@@ -118,7 +118,7 @@ define(function(require, exports, module) {
         _showListPane: function() {
             this.$('[data-role=show-pane]').hide();
             this.$('[data-role=list-pane]').show();
-            this.element.find('.question-list-pane').perfectScrollbar();
+            this.element.find('.question-list-pane').perfectScrollbar({wheelSpeed:50});
             return this.$('[data-role=list-pane]');
         },
         _showItemPane: function() {

@@ -312,9 +312,9 @@ admin_setting_payment:
     pattern:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:Setting:payment }
 
-admin_setting_video:
-    pattern:  /setting/video
-    defaults: { _controller: TopxiaAdminBundle:Setting:video }
+admin_setting_storage:
+    pattern:  /setting/storage
+    defaults: { _controller: TopxiaAdminBundle:Setting:storage }
 
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist

@@ -67,7 +67,7 @@ class CourseLessonController extends BaseController
         if ($uri['type'] == 'cloud') {
             $user = $this->getCurrentUser();
 
-            $setting = $this->setting('video');
+            $setting = $this->setting('storage');
             $client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 
             if ($lesson['type'] == 'video') {

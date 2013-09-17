@@ -154,7 +154,7 @@ EOD;
 	{
 		$output->write('  初始化云服务器设置');
 
-        $videoSetting = $this->getSettingService()->get('video', array());
+        $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
             'upload_mode'=>'cloud',
@@ -163,7 +163,7 @@ EOD;
             'cloud_secret_key'=>'o9kPc_isTvHPBG5vtvwkWVAwG-HbUFKQ0nz3yJyQ'
         );
 
-        $videoSetting = $this->getSettingService()->set('video', $default);
+        $storageSetting = $this->getSettingService()->set('storage', $default);
 		
 		$output->writeln(' ...<info>成功</info>');
 	}

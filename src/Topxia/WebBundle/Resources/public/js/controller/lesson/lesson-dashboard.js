@@ -183,7 +183,7 @@ define(function(require, exports, module) {
             	} else if (lesson.type == 'text') {
             		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
             		$("#lesson-text-content").show();
-            		$("#lesson-text-content").perfectScrollbar();
+            		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
             	}
             	that._startLesson();
             }, 'json');

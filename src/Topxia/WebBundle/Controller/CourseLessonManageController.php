@@ -41,7 +41,7 @@ class CourseLessonManageController extends BaseController
 
     	$user = $this->getCurrentUser();
 
-    	$setting = $this->setting('video');
+    	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
@@ -55,7 +55,7 @@ class CourseLessonManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'uploadToken' => $uploadToken,
-			'videoSetting' => $setting,
+			'storageSetting' => $setting,
 		));
 	}
 
@@ -87,7 +87,7 @@ class CourseLessonManageController extends BaseController
         $lesson['length'] = $this->secondsToText($lesson['length']);
 
         $user = $this->getCurrentUser();
-    	$setting = $this->setting('video');
+    	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
@@ -102,7 +102,7 @@ class CourseLessonManageController extends BaseController
 			'course' => $course,
 			'lesson' => $lesson,
 			'uploadToken' => $uploadToken,
-			'videoSetting' => $setting
+			'storageSetting' => $setting
 		));
 	}
 
