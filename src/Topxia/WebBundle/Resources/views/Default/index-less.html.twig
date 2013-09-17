@@ -15,9 +15,7 @@
 
     <div class="col-md-9">
       <div class="es-box">
-        <div class="es-box-heading">
-          <h2>课程</h2>
-        </div>
+        <div class="es-box-heading"><h2>课程</h2></div>
         <div class="es-box-body">
           {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
           {% if courses|length >= 12 %}

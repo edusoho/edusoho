@@ -77,7 +77,7 @@ class DiskServiceImpl extends BaseService implements DiskService
 
         $diskDirectory = $this->getContainer()->getParameter('topxia.disk.local_directory');
 
-        $disk = new UserLocalDisk($user['id'], $diskDirectory);
+        $disk = new UserLocalDisk($user, $diskDirectory);
 
         $savedFile = $disk->saveFile($originalFile, $path);
 
