@@ -2,6 +2,14 @@
 
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
+{%- block keywords -%}
+  {% if category %}{{ category.name }}{% endif %}
+  {% for tag in tags %}{{ tag.name }}{% endfor %}
+  {{ course.title }} {{ setting('site.name') }}
+{%- endblock -%}
+{% block description %}{{ course.about|plain_text(150) }}{% endblock %}
+
+
 {% set script_controller = 'course/show' %}
 
 {% block content %}

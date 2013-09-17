@@ -155,11 +155,16 @@ class CourseController extends BaseController
         $groupedItems = $this->groupCourseItems($items);
         $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 
+        $category = $this->getCategoryService()->getCategory($course['categoryId']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,
             'member' => $member,
             'groupedItems' => $groupedItems,
             'hasFavorited' => $hasFavorited,
+            'category' => $category,
+            'tags' => $tags,
         ));
 
     }

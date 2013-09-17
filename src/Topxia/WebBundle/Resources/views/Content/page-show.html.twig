@@ -1,16 +1,25 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{ content.title }} - {{ parent() }}{% endblock %}
+{% block keywords %}{{ content.title }} {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ content.body|plain_text(100) }}{% endblock %}
+
 {% set nav = 'course' %}
 
-{% set bodyClass = 'homepage' %}
-
+{% set bodyClass = 'contentpage' %}
 {% block content %}
-  <div class="row es-row-light" style="padding:30px 50px;">
-
-  	<h1>{{ content.title }}</h1>
-
-  	<div class="content-body">{{ content.body|raw }}</div>
-
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>{{ content.title }}</h1></div>
+    </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-12">
+    	{{ content.body|raw }}
+    </div>
+  </div>
+
+</div>
 {% endblock %}

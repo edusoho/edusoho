@@ -9,6 +9,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 {
     public function getCategory($id)
     {
+        if (empty($id)) {
+            return null;
+        }
         return $this->getCategoryDao()->getCategory($id);
     }
 
