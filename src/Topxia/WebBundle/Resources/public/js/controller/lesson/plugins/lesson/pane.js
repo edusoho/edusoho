@@ -29,7 +29,7 @@ define(function(require, exports, module) {
                         });
                         toolbar.setLessons(lessons);
 
-                        $('.course-item-list-in-toolbar-pane').perfectScrollbar();
+                        $('.course-item-list-in-toolbar-pane').perfectScrollbar({wheelSpeed:50});
 
                   });
 

@@ -33,8 +33,8 @@ define(function(require, exports, module) {
 
             this.renderItems();
 
-            this.$('.quiz-manager-side-body').perfectScrollbar();
-            this.$('.quiz-manager-main').perfectScrollbar();
+            this.$('.quiz-manager-side-body').perfectScrollbar({wheelSpeed:50});
+            this.$('.quiz-manager-main').perfectScrollbar({wheelSpeed:50});
 
         },
 
