@@ -56,12 +56,13 @@ class FileServiceImpl extends BaseService implements FileService
 
 	public function uploadFile($group, File $file, $target = null)
 	{
+
 		$group = $this->getGroupDao()->findGroupByCode($group);
 		$user = $this->getCurrentUser();
 		$record = array();
 		$record['userId'] = $user['id'];
 		$record['groupId'] = $group['id'];
-		$record['mime'] = $file->getMimeType();
+		$record['mime'] = $file->getClientMimeType();
 		$record['size'] = $file->getSize();
 		$record['uri'] = $this->generateUri($group, $file);
 		$record['createdTime'] = time();

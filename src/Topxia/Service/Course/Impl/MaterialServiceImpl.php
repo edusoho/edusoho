@@ -19,9 +19,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，上传资料失败！');
 		}
-
 		$file = $this->getFileService()->uploadFile('course_private', $material['file']);
-
 		$fields = array(
 			'courseId' => $material['courseId'],
 			'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
