@@ -6,6 +6,11 @@ use Topxia\WebBundle\Form\UserProfileType;
 use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+
 class SettingsController extends BaseController
 {
 
@@ -45,8 +50,18 @@ class SettingsController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                $this->getUserService()->changeAvatar($user['id'], $data['avatar']);
-                $this->setFlashMessage('success', '头像上传成功。');
+                $file = $data['avatar'];
+                $filenamePrefix = "user_{$user['id']}_";
+                $hash = substr(md5($filenamePrefix . time()), -8);
+                $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();
+                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+                $file = $file->move($directory, $filename);
+
+                return $this->redirect($this->generateUrl('settings_avatar_crop', array(
+                    'userId' => $user['id'],
+                    'file' => $file->getFilename())
+                ));
+                // 
             }
         }
 
@@ -55,6 +70,33 @@ class SettingsController extends BaseController
             'user' => $this->getUserService()->getUser($user['id']),
         ));
 	}
+
+    public function avatarCropAction(Request $request, $userId)
+    {
+        $filename = $request->query->get('file');
+        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+
+        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+
+        if($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($userId, $pictureFilePath, $options);
+            return $this->redirect($this->generateUrl('settings_avatar'));
+        }
+
+        $imagine = new Imagine();
+        $image = $imagine->open($pictureFilePath);
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen(480)->heighten(270);
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+
+        return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+        ));
+    }
 
 	public function passwordAction(Request $request)
 	{

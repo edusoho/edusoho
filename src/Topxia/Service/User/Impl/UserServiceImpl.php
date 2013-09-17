@@ -2,13 +2,17 @@
 namespace Topxia\Service\User\Impl;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Common\SimpleValidator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\UserService;
 use Topxia\Service\User\CurrentUser;
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -110,39 +114,40 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($userId, array('email' => $email));
     }
 
-    public function changeAvatar($userId, UploadedFile $file)
+    public function changeAvatar($userId, $filePath, array $options)
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，头像更新失败！');
         }
 
-        $file = $this->getFileService()->uploadFile('user', $file);
+        $pathinfo = pathinfo($filePath);
 
-        $smallAvatarFile = $this->getFileService()->thumbnailFile($file, array(
-            'mode' => 'outbound',
-            'width' => 48,
-            'height' => 48,
-        ));
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($filePath);
 
-        $mediumAvatarFile = $this->getFileService()->thumbnailFile($file, array(
-            'mode' => 'outbound',
-            'width' => 100,
-            'height' => 100,
-        ));
+        $largeImage = $rawImage->copy();
+        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        $largeImage->resize(new Box(480, 270));
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
+        $largeImage->save($largeFilePath, array('quality' => 90));
+        $largeFileRecord = $this->getFileService()->uploadFile('user', new File($largeFilePath));
 
-        $largeAvatarFile = $this->getFileService()->thumbnailFile($file, array(
-            'mode' => 'inset',
-            'width' => 220,
-            'height' => 220,
-        ));
+        $largeImage->resize(new Box(304, 171));
+        $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
+        $largeImage->save($mediumFilePath, array('quality' => 90));
+        $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
 
-        $this->getUserDao()->updateUser($userId, array(
-            'smallAvatar' => $smallAvatarFile['uri'],
-            'mediumAvatar' => $mediumAvatarFile['uri'],
-            'largeAvatar' => $largeAvatarFile['uri'],
+        $largeImage->resize(new Box(96, 54));
+        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
+        $largeImage->save($smallFilePath, array('quality' => 90));
+        $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
+        
+        return  $this->getUserDao()->updateUser($userId, array(
+            'smallAvatar' => $smallFileRecord['uri'],
+            'mediumAvatar' => $mediumFileRecord['uri'],
+            'largeAvatar' => $largeFileRecord['uri'],
         ));
-        return true;
     }
 
     public function isNicknameAvaliable($nickname)
