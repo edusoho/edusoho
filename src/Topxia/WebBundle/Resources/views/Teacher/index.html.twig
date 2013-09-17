@@ -2,6 +2,10 @@
 
 {% block title %}师资介绍 - {{ parent() }}{% endblock %}
 
+{% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ setting('site.name') }}的师资介绍。{% endblock %}
+
+
 {% set bodyClass = 'teacherpage' %}
 {% block content %}
 

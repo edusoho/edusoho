@@ -1,6 +1,9 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{ content.title }} - {{ parent() }}{% endblock %}
+{% block keywords %}{{ content.title }} {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ content.body|plain_text(100) }}{% endblock %}
+
 {% set nav = 'course' %}
 
 {% set bodyClass = 'contentpage' %}
