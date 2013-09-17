@@ -78,32 +78,27 @@
 
             <div class="form-group">
               <div class="col-sm-4 control-label">
-                <label>视频上传模式</label>
               </div>
               <div class="controls col-md-8 radios">
                 
-                <div id="upload_mode">
-                  <input type="radio" id="upload_mode_0" name="upload_mode" value="local">
-                  <label for="upload_mode_0">网站服务器</label>
-                  <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" checked="checked">
-                  <label for="upload_mode_1">云服务器</label>
+                <div>
+                  <input type="checkbox" id="upload_mode" name="upload_mode">我已经购买云存储服务
                 </div>
-                <label class="help-block"><span class="text-danger">
-                  注：[云服务器]适用于已经开通云存储服务的客户，<br>[网站服务器]则直接存储在本地服务器中。</span></label>
+                
               </div>
             </div>
 
-            <div class="row form-group cloud-storage">
+            <div class="row form-group cloud-storage" style="display:none">
               <div class="col-sm-4 control-label">
                 <label for="cloud_access_key">云服务器AccessKey</label>
               </div>
               <div class="controls col-sm-6 radios">
-                <input type="text" id="cloud_access_key" class="form-control input" name="cloud_access_key" 
+                <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" 
                 value="">
               </div>
             </div>
 
-            <div class="row form-group cloud-storage">
+            <div class="row form-group cloud-storage" style="display:none">
               <div class="col-sm-4 control-label">
                 <label for="cloud_secret_key">云服务器SecretKey</label>
               </div>
@@ -113,7 +108,7 @@
               </div>
             </div>
 
-            <div class="row form-group cloud-storage">
+            <div class="row form-group cloud-storage" style="display:none">
               <div class="col-sm-4 control-label">
                 <label for="cloud_bucket">云服务器空间名</label>
               </div>

@@ -33,11 +33,19 @@ class InstallController extends BaseController
     private function initVideoStorage($formData)
     {
         $videoSetting = array();
-        $videoSetting['upload_mode'] = $formData['upload_mode'];
-        $videoSetting['cloud_access_key'] = $formData['cloud_access_key'];
-        $videoSetting['cloud_secret_key'] = $formData['cloud_secret_key'];
-        $videoSetting['cloud_bucket'] = $formData['cloud_bucket'];
-        $this->getSettingService()->set('video', $videoSetting);
+        if(isset($formData['upload_mode'])){
+            $videoSetting['upload_mode'] = 'cloud';
+            $videoSetting['cloud_access_key'] = $formData['cloud_access_key'];
+            $videoSetting['cloud_secret_key'] = $formData['cloud_secret_key'];
+            $videoSetting['cloud_bucket'] = $formData['cloud_bucket'];
+        } else {
+            $videoSetting['upload_mode'] = 'local';
+            $videoSetting['cloud_access_key'] = '';
+            $videoSetting['cloud_secret_key'] = '';
+            $videoSetting['cloud_bucket'] = '';
+        }
+
+        $this->getSettingService()->set('storage', $videoSetting);
     }
 
     public function welcomeAction(Request $request)

@@ -7,12 +7,11 @@ define(function(require, exports, module) {
         });
 
         $('#upload_mode').on('change', function(){
-    		var storage = $('[name=upload_mode]:checked').val();
-    		if(storage == 'local'){
-	        	$('.cloud-storage').hide();
-    		} else if (storage == 'cloud'){
-    			$('.cloud-storage').show();
-    		}
+                if($(this).is(':checked')){
+                    $('.cloud-storage').show();
+                } else {
+                    $('.cloud-storage').hide();
+                }
 
         });
 
