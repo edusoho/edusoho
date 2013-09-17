@@ -335,7 +335,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('course', new File($smallFilePath));
-
+        
         return $this->getCourseDao()->updateCourse($courseId, array(
         	'smallPicture' => $smallFileRecord['uri'],
         	'middlePicture' => $middleFileRecord['uri'],

@@ -461,6 +461,10 @@ settings_avatar:
     pattern:  /settings/avatar
     defaults: { _controller: TopxiaWebBundle:Settings:avatar }
 
+settings_avatar_crop:
+    pattern:  /settings/{userId}/avatar/crop
+    defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
+
 settings_password:
     pattern:  /settings/password
     defaults: { _controller: TopxiaWebBundle:Settings:password }
