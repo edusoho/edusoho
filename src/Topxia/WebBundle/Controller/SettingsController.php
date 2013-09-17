@@ -61,7 +61,6 @@ class SettingsController extends BaseController
                     'userId' => $user['id'],
                     'file' => $file->getFilename())
                 ));
-                // 
             }
         }
 
@@ -88,7 +87,7 @@ class SettingsController extends BaseController
         $image = $imagine->open($pictureFilePath);
 
         $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(480)->heighten(270);
+        $scaledSize = $naturalSize->widen(270)->heighten(270);
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
 
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
