@@ -2743,7 +2743,7 @@ body {
          width: 970px;
     }
 }
- container-gap 
+
 .lt-ie9 .userpage #content-container {
 	width: 970px;
 }
@@ -2828,6 +2828,16 @@ body {
 
 .userpage-sec-nav {
 	margin-bottom: 20px;
+}
+
+@media (min-width: 1200px) {
+    .contentpage #content-container {
+         width: 970px;
+    }
+}
+
+.contentpage .es-row-wrap {
+	padding-bottom: 20px;
 }
 
 .friendcard {
