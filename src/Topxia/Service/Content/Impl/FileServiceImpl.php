@@ -57,6 +57,17 @@ class FileServiceImpl extends BaseService implements FileService
 	public function uploadFile($group, File $file, $target = null)
 	{
 
+		$fileExtension = $file->getClientOriginalExtension();
+		if(in_array($fileExtension, 
+			array('GIF','JPG','PNG','SWF','PSD','BMP','TIFF','TIFF','JPC','JP2','JPX','JB2','SWC','IFF','WBMP','XBM',
+				'gif','jpg','png','swf','psd','bmp','tiff','tiff','jpc','jp2','jpx','jb2','swc','iff','wbmp','xbm'))
+			) {
+			$imageCheckResult = getimagesize($file->getRealPath());
+			if(!$imageCheckResult){
+				return array();
+			}
+		}
+
 		$group = $this->getGroupDao()->findGroupByCode($group);
 		$user = $this->getCurrentUser();
 		$record = array();
