@@ -62,13 +62,48 @@ class FileServiceImpl extends BaseService implements FileService
 		$record = array();
 		$record['userId'] = $user['id'];
 		$record['groupId'] = $group['id'];
-		$record['mime'] = $file->getClientMimeType();
+		$record['mime'] = $file->getMimeType();
 		$record['size'] = $file->getSize();
 		$record['uri'] = $this->generateUri($group, $file);
 		$record['createdTime'] = time();
 		$record = $this->getFileDao()->addFile($record);
 		$record['file'] = $this->saveFile($file, $record['uri']);
 		return $record;
+	}
+
+	protected function validateFileExtension(File $file, $extensions)
+	{
+		$errors = array();
+		$regex = '/\.(' . preg_replace('/ +/', '|', preg_quote($extensions)) . ')$/i';
+		if (!preg_match($regex, $file->getFilename())) {
+			$errors[] = "只允许上传以下扩展名的文件：" . join(' ', $extensions);
+		}
+		return $errors;
+	}
+
+	protected function validateFileIsImage(File $file)
+	{
+		$errors = array();
+
+		$info = image_get_info($file->getFileUri());
+		if (!$info || empty($info['extension'])) {
+			$errors[] = "只运行上传JPG、PNG、GIF格式的图片文件。";
+		}
+
+		return $errors;
+	}
+
+	protected function validateFileNameLength(File $file)
+	{
+		$errors = array();
+
+		if (!$file->getFilename()) {
+			$errors[] = "文件名为空，请给文件取个名吧。";
+		}
+		if (strlen($file->getFilename()) > 240) {
+			$errors[] = "文件名超出了240个字符的限制，请重命名后再试。";
+		}
+		return $errors;
 	}
 
 	public function deleteFile($id)
