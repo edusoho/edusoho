@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+    ServerName esdev.com
+    ServerAlias www.esdev.com
+
+    DocumentRoot /var/www/edusoho/web
+
+    LoadModule xsendfile_module modules/mod_xsendfile.so
+    XSendFile On
+    XSendFilePath /var/www/edusoho/web/files/
+
+    <Directory /var/www/edusoho/web/>
+        # enable the .htaccess rewrites
+        AllowOverride All
+        Order allow,deny
+        Allow from All
+    </Directory>
+
+    ErrorLog /var/log/apache2/project_error.log
+    CustomLog /var/log/apache2/project_access.log combined
+</VirtualHost>

@@ -34,7 +34,7 @@ class CourseMaterialManageController extends BaseController
             $fields['title'] = $fields['file']->getClientOriginalName();
             $fields['courseId'] = $course['id'];
             $fields['lessonId'] = $lesson['id'];
-            
+
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
 			return $this->render('TopxiaWebBundle:CourseMaterialManage:list-item.html.twig', array(
