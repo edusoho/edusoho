@@ -2,8 +2,8 @@
 
 {% block title %}{% if not category.id %}全部课程{% else %}{{ category.name }} 课程{% endif %} 第{{ app.request.get('page', 1)}}页- {{ parent() }}{% endblock %}
 
-{% block keywords %}{% if category %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
-{% block description %}{{category.name}}的课程列表，第{{ app.request.get('page', 1)}}页。{% endblock %}
+{% block keywords %}{% if category.id %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
+{% block description %}{% if category.id %}{{category.name}}的{% endif %}课程列表，第{{ app.request.get('page', 1)}}页。{% endblock %}
 
 {% block content %}
 
