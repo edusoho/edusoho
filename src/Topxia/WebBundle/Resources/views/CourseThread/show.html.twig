@@ -6,8 +6,6 @@
 
 {% block dashboard_main %}
 
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-
 <ul class="breadcrumb">
   <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
   <li class="active">{% if thread.type == 'question' %}问答{% else %}话题{% endif %}</li>
