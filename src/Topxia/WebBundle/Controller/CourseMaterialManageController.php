@@ -29,7 +29,6 @@ class CourseMaterialManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-        	sleep(1);
             $fields = $request->request->all();
             $fields['file'] = $request->files->get('file');
             $fields['title'] = $fields['file']->getClientOriginalName();

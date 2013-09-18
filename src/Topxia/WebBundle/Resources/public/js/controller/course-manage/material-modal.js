@@ -33,6 +33,11 @@ define(function(require, exports, module) {
                     $("#material-list").append(html).show();
                     $form.find('.text-warning').hide();
                     $form.clearForm();
+                },
+                error: function(jqr, textStatus, errorThrown, $form) {
+                    Notify.danger(jqr.responseJSON.error.message);
+                    $form.find('[type=submit]').button('reset');
+                    $form.clearForm();
                 }
             });
 

@@ -4,6 +4,7 @@ namespace Topxia\Service\Content\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Content\FileService;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Imagine\Imagick\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
@@ -56,16 +57,10 @@ class FileServiceImpl extends BaseService implements FileService
 
 	public function uploadFile($group, File $file, $target = null)
 	{
-
-		$fileExtension = $file->getClientOriginalExtension();
-		if(in_array($fileExtension, 
-			array('GIF','JPG','PNG','SWF','PSD','BMP','TIFF','TIFF','JPC','JP2','JPX','JB2','SWC','IFF','WBMP','XBM',
-				'gif','jpg','png','swf','psd','bmp','tiff','tiff','jpc','jp2','jpx','jb2','swc','iff','wbmp','xbm'))
-			) {
-			$imageCheckResult = getimagesize($file->getRealPath());
-			if(!$imageCheckResult){
-				return array();
-			}
+		$extensions = 'jpg jpeg gif png txt pdf doc docx xls xlsx ppt pptx pps mp4 mp3 avi zip rar gz tar 7z';
+		$errors = $this->validateFileExtension($file, $extensions);
+		if ($errors) {
+			throw $this->createServiceException(join("\n", $errors));
 		}
 
 		$group = $this->getGroupDao()->findGroupByCode($group);
@@ -79,15 +74,21 @@ class FileServiceImpl extends BaseService implements FileService
 		$record['createdTime'] = time();
 		$record = $this->getFileDao()->addFile($record);
 		$record['file'] = $this->saveFile($file, $record['uri']);
+
 		return $record;
 	}
 
 	protected function validateFileExtension(File $file, $extensions)
 	{
+		if ($file instanceof UploadedFile) {
+			$filename = $file->getClientOriginalName();
+		} else {
+			$filename = $file->getFilename();
+		}
 		$errors = array();
 		$regex = '/\.(' . preg_replace('/ +/', '|', preg_quote($extensions)) . ')$/i';
-		if (!preg_match($regex, $file->getFilename())) {
-			$errors[] = "只允许上传以下扩展名的文件：" . join(' ', $extensions);
+		if (!preg_match($regex, $filename)) {
+			$errors[] = "只允许上传以下扩展名的文件：" . $extensions;
 		}
 		return $errors;
 	}
@@ -174,11 +175,21 @@ class FileServiceImpl extends BaseService implements FileService
 
     private function generateUri ($group, $file)
     {
+		if ($file instanceof UploadedFile) {
+			$filename = $file->getClientOriginalName();
+		} else {
+			$filename = $file->getFilename();
+		}
+
+	    $filenameParts = explode('.', $filename);
+	    $ext = array_pop($filenameParts);
+	    if (empty($ext)) {
+	    	throw $this->createServiceException('获取文件扩展名失败！');
+	    }
+
     	$uri = ($group['public'] ? 'public://' : 'private://') . $group['code'] . '/';
         $uri .= date('Y') . '/' . date('m-d') . '/' . date('His');
         $uri .= substr(uniqid(), - 6) . substr(uniqid('', true), - 6);
-        $ext = $file->guessExtension();
-        $ext = $ext == 'jpeg' ? 'jpg' : $ext;
         $uri .= '.' . $ext;
         return $uri;
     }

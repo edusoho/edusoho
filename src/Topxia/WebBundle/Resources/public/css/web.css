@@ -643,6 +643,10 @@ body {
 	word-wrap: break-word;
 }
 
+.thread-body img {
+	max-width: 100%;
+}
+
 .thread-footer {
 	text-align: right;
 }
