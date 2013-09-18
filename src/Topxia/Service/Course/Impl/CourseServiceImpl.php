@@ -573,9 +573,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		//课程内容的过滤
-		if(isset($lesson['content'])){
-			$lesson['content'] = $this->purifyHtml($lesson['content']);
-		}
+		// if(isset($lesson['content'])){
+		// 	$lesson['content'] = $this->purifyHtml($lesson['content']);
+		// }
 
 		// 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
 		$lesson['status'] = $course['status'] == 'published' ? 'unpublished' : 'published';
@@ -613,9 +613,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'summary', 'content', 'media', 'free', 'length'));
-		if (isset($fields['content'])) {
-			$fields['content'] = $this->purifyHtml($fields['content']);
-		}
+		// if (isset($fields['content'])) {
+		// 	$fields['content'] = $this->purifyHtml($fields['content']);
+		// }
 
 		if (in_array($lesson['type'], array('video', 'audio'))) {
 			if (empty($fields['media'])) {
