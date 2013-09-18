@@ -1,0 +1,75 @@
+server {
+    listen 80;
+
+    # [改] 网站的域名
+    server_name www.example.com example.com;
+
+    # [改] 程序的安装路径
+    root /var/www/edusoho/web;
+
+    # [改] 日志路径
+    access_log /var/log/nginx/example.com.access.log;
+    error_log /var/log/nginx/example.com.error.log;
+
+    location / {
+        index app.php;
+        try_files $uri @rewriteapp;
+    }
+
+    location @rewriteapp {
+        rewrite ^(.*)$ /app.php/$1 last;
+    }
+
+    location ~ ^/udisk {
+        internal;
+        # [改] 请根据程序的实际安装路径修改。该目录下存放的是私有的文件课时的视频、音频等。
+        root /var/www/edusoho/app/data/;
+    }
+
+    location ~ ^/(app|app_dev)\.php(/|$) {
+        # [改] 请根据实际php-fpm运行的方式修改
+        fastcgi_pass   unix:/var/run/php5-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param  HTTPS              off;
+        fastcgi_param HTTP_X-Sendfile-Type X-Accel-Redirect;
+        # [改] 请根据程序的实际安装路径修改。该目录下存放的是私有的文件。
+        fastcgi_param HTTP_X-Accel-Mapping /udisk=/var/www/edusoho/app/data/udisk;
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 8 128k;
+    }
+
+    # 配置设置图片格式文件
+    location ~* \.(jpg|jpeg|gif|png|ico|swf)$ {
+        # 过期时间为3年
+        expires 3y;
+        
+        # 关闭日志记录
+        access_log off;
+
+        # 关闭gzip压缩，减少CPU消耗，因为图片的压缩率不高。
+        gzip off;
+    }
+
+    # 配置css/js文件
+    location ~* \.(css|js)$ {
+        access_log off;
+        expires 3y;
+    }
+
+    # 禁止用户上传目录下所有.php文件的访问，提高安全性
+    location ~ ^/files/.*\.(php|php5)$ {
+        deny all;
+    }
+
+    # 以下配置允许运行.php的程序，方便于其他第三方系统的集成。
+    location ~ \.php$ {
+        # [改] 请根据实际php-fpm运行的方式修改
+        fastcgi_pass   unix:/var/run/php5-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param  HTTPS              off;
+    }
+}

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
@@ -85,6 +86,6 @@ class CourseMaterialController extends BaseController
 
         $filename = $directory . '/' .  $parsed['path'];
 
-        return BinaryFileResponse::create($filename, 200, array(), false, 'attachment');
+        return BinaryFileResponse::create($filename, 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }
 }
