@@ -237,7 +237,7 @@ class UserServiceTest extends BaseTestCase
 
         $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), array('createdTime', 'DESC'), 0, 10);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user'), array('createdTime', 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
 
@@ -255,7 +255,7 @@ class UserServiceTest extends BaseTestCase
         $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
-        $foundUsers = $this->getUserService()->searchUsers(array('nicknameLike'=>'user'), array('createdTime', 'DESC'), 0, 10);
+        $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
         $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
@@ -271,13 +271,13 @@ class UserServiceTest extends BaseTestCase
             'nickname'=>'user1', 
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
-            'nicknameLike'=>'user',
+            'nickname'=>'user',
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
-            'nicknameLike'=>'user',
+            'nickname'=>'user',
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
     }
 
@@ -290,7 +290,7 @@ class UserServiceTest extends BaseTestCase
             'nickname'=>'user1', 
             'roles'=>'ROLE_USER',
             'loginIp'=>'',
-            'nicknameLike'=>'user',
+            'nickname'=>'user',
             'email'=>'user2@user2.com'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
 
@@ -298,7 +298,7 @@ class UserServiceTest extends BaseTestCase
             'nickname'=>'user2', 
             'roles'=>'ROLE_ADMIN',
             'loginIp'=>'',
-            'nicknameLike'=>'user',
+            'nickname'=>'user',
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
         $this->assertEmpty($foundUsers);
     }
