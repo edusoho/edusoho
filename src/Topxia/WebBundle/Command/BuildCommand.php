@@ -97,7 +97,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('build doc/ .');
 
 		$this->filesystem->mkdir("{$this->distDirectory}/doc");
-		$this->filesystem->copy("{$this->rootDirectory}/doc/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
+		$this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
 	}
 
 	public function buildSrcDirectory()
