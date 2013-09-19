@@ -39,6 +39,52 @@ class UserController extends BaseController {
         ));
     }
 
+    public function emailCheckAction(Request $request)
+    {
+        $email = $request->query->get('value');
+        $result = $this->getUserService()->isEmailAvaliable($email);
+        if ($result) {
+            $response = array('success' => true, 'message' => '该Email地址可以使用');
+        } else {
+            $response = array('success' => false, 'message' => '该Email地址已经被占用了');
+        }
+        return $this->createJsonResponse($response);
+    }
+
+    public function nicknameCheckAction(Request $request)
+    {
+        $nickname = $request->query->get('value');
+        $result = $this->getUserService()->isNicknameAvaliable($nickname);
+        if ($result) {
+            $response = array('success' => true, 'message' => '该昵称可以使用');
+        } else {
+            $response = array('success' => false, 'message' => '该昵称已经被占用了');
+        }
+        return $this->createJsonResponse($response);
+    }
+
+    public function createAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            $userData['email'] = $formData['email'];
+            $userData['nickname'] = $formData['nickname'];
+            $userData['password'] = $formData['password'];
+            $userData['createdIp'] = $request->getClientIp();
+            $user = $this->getUserService()->register($userData);
+            $this->get('session')->set('registed_email', $user['email']);
+
+            if(isset($formData['roles'])){
+                $roles = $formData['roles'];
+                array_push($roles, 'ROLE_USER');
+                $this->getUserService()->changeUserRoles($user['id'], $roles);
+            }
+
+            return $this->redirect($this->generateUrl('admin_user'));
+        }
+        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
+    } 
+
     public function logsAction(Request $request)
     {
         $fields = $request->query->all();

@@ -100,10 +100,21 @@ admin_tag_delete:
     defaults: { _controller: TopxiaAdminBundle:Tag:delete }
     methods:  [POST]
 
-
 admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
+
+admin_user_create:
+    pattern:  /user/create
+    defaults: { _controller: TopxiaAdminBundle:User:create }
+
+admin_user_create_email_check:
+    pattern:  /user/create/email/check
+    defaults: { _controller: TopxiaAdminBundle:User:emailCheck }
+
+admin_user_create_nickname_check:
+    pattern:  /user/create/nickname/check
+    defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
 
 admin_user_logs:
     pattern:  /user/logs
