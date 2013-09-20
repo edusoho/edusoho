@@ -10,7 +10,6 @@ class RegisterController extends BaseController
     public function indexAction(Request $request)
     {
         $form = $this->createForm(new RegisterType());
-
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
@@ -30,9 +29,10 @@ class RegisterController extends BaseController
                 ));
             }
         }
-
+        $loginEnable  = $this->isLoginEnabled();
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'isLoginEnabled' => $loginEnable
         ));
     }
 
@@ -179,5 +179,17 @@ class RegisterController extends BaseController
         $this->sendEmail($user['email'], $emailTitle, $emailBody);
         
     }
+    private function isLoginEnabled()
+    {
+        $auth = $this->getSettingService()->get('auth');
+        if($auth && array_key_exists('register_mode',$auth)){
+           if($auth['register_mode'] == 'opened'){
+               return true;
+           }else{
+               return false;  
+           }
+        } 
+        return true;      
+    }    
 
 }

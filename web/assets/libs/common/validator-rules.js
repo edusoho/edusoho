@@ -30,6 +30,11 @@ define(function(require, exports, module) {
             '{{display}}的长度必须大于等于{{min}}，一个中文字算2个字符'
         ],
         [
+            'currency',
+            /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
+            '请输入合法的{{display}},如:200, 221.99, 0.99, 0等'
+        ],        
+        [
             'byte_maxlength',
             function(options) {
                 var element = options.element;

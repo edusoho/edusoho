@@ -44,7 +44,11 @@ define(function(require, exports, module) {
             element: '[name="course[title]"]',
             required: true
         });
-
+        
+        validator.addItem({
+            element: '[name="course[subtitle]"]',
+            rule: 'maxlength{max:70}'
+        });
     };
 
 });

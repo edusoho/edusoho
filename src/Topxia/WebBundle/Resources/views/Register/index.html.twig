@@ -6,59 +6,61 @@
 {% block content %}
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3 ptl">
-    <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>注册</h2></div>
+    {% if isLoginEnabled %}
+      <div class="panel panel-default panel-page">
+        <div class="panel-heading"><h2>注册</h2></div>
 
-      <form id="register-form" class="form-vertical" method="post" action="{{ path('register') }}">
+        <form id="register-form" class="form-vertical" method="post" action="{{ path('register') }}">
 
-        {{ web_macro.flash_messages() }}
+          {{ web_macro.flash_messages() }}
 
-        <div class="form-group">
-          {{ form_label(form.email, '邮箱地址', {label_attr:{class:'control-label'}}) }}
-          <div class="controls">
-            {{ form_widget(form.email, {attr:{class:'form-control', 'data-url':path('register_email_check')}}) }}
-            <p class="help-block">填写你常用的邮箱作为登录帐号</p>
+          <div class="form-group">
+            {{ form_label(form.email, '邮箱地址', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.email, {attr:{class:'form-control', 'data-url':path('register_email_check')}}) }}
+              <p class="help-block">填写你常用的邮箱作为登录帐号</p>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          {{ form_label(form.nickname, '昵称', {label_attr:{class:'control-label'}}) }}
-          <div class="controls">
-            {{ form_widget(form.nickname, {attr:{class:'form-control', 'data-url':path ('register_nickname_check')}}) }}
-            <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
+          <div class="form-group">
+            {{ form_label(form.nickname, '昵称', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.nickname, {attr:{class:'form-control', 'data-url':path ('register_nickname_check')}}) }}
+              <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          {{ form_label(form.password, '密码', {label_attr:{class:'control-label'}}) }}
-          <div class="controls">
-            {{ form_widget(form.password, {attr:{class:'form-control'}}) }}
-            <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+          <div class="form-group">
+            {{ form_label(form.password, '密码', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.password, {attr:{class:'form-control'}}) }}
+              <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          {{ form_label(form.confirmPassword, '确认密码', {label_attr:{class:'control-label'}}) }}
-          <div class="controls">
-            {{ form_widget(form.confirmPassword, {attr:{class:'form-control'}}) }}
-            <p class="help-block">再输入一次密码</p>
+          <div class="form-group">
+            {{ form_label(form.confirmPassword, '确认密码', {label_attr:{class:'control-label'}}) }}
+            <div class="controls">
+              {{ form_widget(form.confirmPassword, {attr:{class:'form-control'}}) }}
+              <p class="help-block">再输入一次密码</p>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <div class="controls">
-            {{ form_rest(form) }}
-            <button type="submit" class="btn btn-primary btn-large btn-block">注册</button>
+          <div class="form-group">
+            <div class="controls">
+              {{ form_rest(form) }}
+              <button type="submit" class="btn btn-primary btn-large btn-block">注册</button>
+            </div>
           </div>
-        </div>
 
-      </form>
+        </form>
 
-      {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
+        {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
 
-    </div><!-- /panel -->
-
+      </div><!-- /panel -->
+    {% else %}
+        <div class="panel-heading"><h2>系统暂时关闭注册，请联系管理员</h2></div>
+    {% endif %}    
   </div>
-
 </div>
 {% endblock %}
