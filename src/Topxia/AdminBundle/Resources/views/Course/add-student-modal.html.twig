@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}添加学员--课程名： {{course.title}}{% endblock %}
+{% block body %}
+
+<form id="add-student-form" class="form-horizontal" method="post" action="{{ path('admin_course_add_student', {id:course.id}) }}">
+
+	<div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="nickname">学员昵称</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="nickname" name="nickname" class="form-control" 
+      data-url="{{ path('admin_course_add_student_nickname_check',{courseId:course.id})}}" >
+    	<div class="help-block">注意：只能添加系统中已注册的用户!</div>
+  	</div>
+  </div>
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#add-student-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('course/add-student')</script>
+{% endblock %}

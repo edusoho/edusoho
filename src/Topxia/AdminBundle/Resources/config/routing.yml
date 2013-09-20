@@ -241,6 +241,14 @@ admin_course_recommend:
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
     methods: [POST]
 
+admin_course_add_student_nickname_check:
+    pattern:  /add/student/{courseId}/nickname/check
+    defaults: { _controller: TopxiaAdminBundle:Course:nicknameCheck }
+
+admin_course_add_student:
+    pattern: /course/{id}/add/student
+    defaults: { _controller: TopxiaAdminBundle:Course:addStudent }
+
 admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }

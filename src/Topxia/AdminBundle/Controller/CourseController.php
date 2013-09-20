@@ -8,6 +8,29 @@ use Topxia\Common\ArrayToolkit;
 class CourseController extends BaseController
 {
 
+    public function nicknameCheckAction(Request $request, $courseId)
+    {
+        $nickname = $request->query->get('value');
+        $result = $this->getUserService()->isNicknameAvaliable($nickname);
+        if ($result) {
+            $response = array('success' => false, 'message' => '该用户还不是注册用户！');
+        } else {
+            $user = $this->getUserService()->getUserByNickname($nickname);
+            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+            if($isCourseStudent){
+                $response = array('success' => false, 'message' => '该用户已是本课程的学员了，请不要重复添加！');
+            } else {
+                $response = array('success' => true, 'message' => '该用户尚未学习本课程，可以添加！');
+            }
+            
+            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+            if($isCourseTeacher){
+                $response = array('success' => false, 'message' => '该用户是本课程的教师，不需要添加成学员!');
+            }
+        }
+        return $this->createJsonResponse($response);
+    }
+
     public function indexAction (Request $request)
     {
         $conditions = $request->query->all();
@@ -28,6 +51,24 @@ class CourseController extends BaseController
             'categories' => $categories,
             'paginator' => $paginator
         ));
+    }
+
+    public function addStudentAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $currentUser = $this->getCurrentUser();
+        if ('POST' == $request->getMethod()) {
+            $courseUrl = $this->generateUrl('course_show', array('id'=>$course['id']), true);
+            $formData = $request->request->all();
+            $user = $this->getUserService()->getUserByNickname($formData['nickname']);
+            $this->getCourseService()->joinCourse($user['id'], $course['id']);
+            $this->getNotificationService()->notify($user['id'], 'default',
+                "管理员{$currentUser['nickname']}已将你设置为课程<a href='{$courseUrl}' target='_blank'>《{$course['title']}》</a> 的学员了, 开始学习吧!");
+            return $this->redirect($this->generateUrl('admin_course'));
+        }
+
+        return $this->render('TopxiaAdminBundle:Course:add-student-modal.html.twig',array(
+            'course'=>$course));
     }
 
     public function deleteAction(Request $request, $id)
@@ -60,6 +101,7 @@ class CourseController extends BaseController
         return $this->renderCourseTr($id);
     }
 
+
     public function categoryAction(Request $request)
     {
         return $this->forward('TopxiaAdminBundle:Category:embed', array(
@@ -87,5 +129,10 @@ class CourseController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 }

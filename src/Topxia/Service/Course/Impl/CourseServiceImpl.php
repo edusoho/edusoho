@@ -982,7 +982,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function isCourseTeacher($courseId, $userId)
 	{
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-		return empty($member) or $member['role'] != 'teacher' ? false : true;
+		if(!$member){
+			return false;
+		} else {
+			return empty($member) or $member['role'] != 'teacher' ? false : true;
+		}
+	}
+
+	public function isCourseStudent($courseId, $userId)
+	{
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if(!$member){
+			return false;
+		} else {
+			return empty($member) or $member['role'] != 'student' ? false : true;
+		}
 	}
 
 	public function setCourseTeachers($courseId, $teachers)
