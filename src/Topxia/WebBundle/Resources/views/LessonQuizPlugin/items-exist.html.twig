@@ -18,9 +18,9 @@
       <div class="choice clearfix">
         {{ letters[loop.index0] }}：<span>{{choice}}</span>
         {% if item.type == "multiple" %}
-          <span class="pull-right"> <input class="choice-answer" type="checkbox" name="answer" value="{{index}}"></span>
+          <span class="pull-right"> <input class="choice-answer" type="checkbox"  data-role="answer" name="answer[]" value="{{index}}"></span>
         {% elseif item.type == "single" %}
-          <span class="pull-right"> <input class="choice-answer" type="radio" name="answer" value="{{index}}"></span>
+          <span class="pull-right"> <input class="choice-answer" type="radio" data-role="answer" name="answer" value="{{index}}"></span>
         {% endif %}
         <span class="choice-answer-status"></span>
       </div>  

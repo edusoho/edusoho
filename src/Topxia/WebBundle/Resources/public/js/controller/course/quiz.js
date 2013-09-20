@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 
         events: {
             'click .choice': 'onClickChoice',
-            'click input[name=answer]': 'onClickAnswerInput',
+            'click input[data-role=answer]': 'onClickAnswerInput',
             'click .check-answer': 'onCheckAnswer',
             'click .next-item': 'onNextItem',
             'click .view-result': 'onViewResult',
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
             var $choice =  $(e.currentTarget),
                 $form = this.get('currentItemForm');
 
-            if ($choice.find('input[name=answer]').length == 0) {
+            if ($choice.find('input[data-role=answer]').length == 0) {
                 return;
             }
 
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                 $choice.addClass('choice-active');
             }
 
-            $choice.find('input[name=answer]').click();
+            $choice.find('input[data-role=answer]').click();
         },
 
         onClickAnswerInput: function(e) {
@@ -66,7 +66,7 @@ define(function(require, exports, module) {
 
         onCheckAnswer: function(e) {
             var $form = this.get('currentItemForm'),
-                $answers = $form.find('input[name=answer]'),
+                $answers = $form.find('input[data-role=answer]'),
                 self = this;
             if ($answers.filter(':checked').length == 0) {
                 Notify.danger('请选择答案后提交');
