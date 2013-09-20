@@ -19,6 +19,9 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
                 $auth = $this->getSettingService()->get('auth', array());
                 $user = $this->getUserService()->register($registration);
+                //发送邮件到最新注册的用户
+                $token = $this->getUserService()->makeToken('email-verify', $user['id']);
+                $this->sendVerifyEmail($token, $user);
                 $this->authenticateUser($user);
                 $this->get('session')->set('registed_email', $user['email']);
 
