@@ -185,6 +185,7 @@ define(function(require, exports, module) {
             		$("#lesson-text-content").show();
             		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
             	}
+            	that._toolbar.set('lesson', lesson);
             	that._startLesson();
             }, 'json');
 

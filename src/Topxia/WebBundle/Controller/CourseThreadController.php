@@ -78,7 +78,7 @@ class CourseThreadController extends BaseController
 
         $this->getThreadService()->hitThread($courseId, $id);
 
-        $isManager = $this->getCourseService()->canManageCourse($course);
+        $isManager = $this->getCourseService()->canManageCourse($course['id']);
 
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
@@ -226,7 +226,7 @@ class CourseThreadController extends BaseController
                     'thread' => $thread,
                     'post' => $post,
                     'author' => $this->getUserService()->getUser($post['userId']),
-                    'isManager' => $this->getCourseService()->canManageCourse($course)
+                    'isManager' => $this->getCourseService()->canManageCourse($course['id'])
                 ));
             } else {
                 return $this->createJsonResponse(false);

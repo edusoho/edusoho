@@ -119,7 +119,7 @@ class CourseController extends BaseController
             'progresses' => $progresses,
             'followingIds' => $followingIds,
             'paginator' => $paginator,
-            'canManage' => $this->getCourseService()->canManageCourse($course),
+            'canManage' => $this->getCourseService()->canManageCourse($course['id']),
         ));
     }
 
@@ -304,7 +304,7 @@ class CourseController extends BaseController
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
-            'canManage' => $this->getCourseService()->canManageCourse($course),
+            'canManage' => $this->getCourseService()->canManageCourse($course['id']),
             'member' => $this->getCourseService()->getCourseMember($course['id'], $user['id']),
             'users' => $users,
             'manage' => $manage,

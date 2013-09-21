@@ -17,4 +17,6 @@ interface CourseQuizItemDao
     public function findItemIdsByCourseIdAndLessonId($courseId, $lessonId);
     
     public function findQuizItemsByCourseIdAndLessonId($courseId, $lessonId);
+
+    public function getQuizItemsCount($courseId, $lessonId);
 }

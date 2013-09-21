@@ -14,6 +14,7 @@
 		  {% elseif 'lesson' in id %}
 		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix" data-id="{{ item.id }}">
 		    	{% if item.status == 'published' %}
+		    	
 			    	{% if item.type == 'video' %}
 				    	<span class="type" title="视频时长{{ item.length|duration }}">
 				    		<span>{{ item.length|duration }}</span>
@@ -32,7 +33,11 @@
 			    {% endif %}
 		    	<span class="name">课时{{ item.number }}</span>
 		    	<span class="pie">&nbsp;</span>
-		    	<a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{item.id}}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">{{ item.title }}</a>
+		    	<a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{item.id}}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">{{ item.title }}
+		    		{% if item.quizNum > 0 %}
+				      <span class="glyphicon  glyphicon-list-alt"></span>
+				    {% endif %}
+		    	</a>
 		    	<button class="btn btn-success btn-mini action">开始学习</button>
 		    </li>
 		  {% endif  %}

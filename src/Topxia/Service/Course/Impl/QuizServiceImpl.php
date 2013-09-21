@@ -39,9 +39,11 @@ class QuizServiceImpl extends BaseService implements QuizService
 
         //创建题目 过滤html不安全代码
         $item['description'] = $this->purifyHtml($item['description']);
-        return  ItemSerialize::unserialize(
+        $result =  ItemSerialize::unserialize(
             $this->getItemDao()->addQuizItem(ItemSerialize::serialize($item))
         );
+        $this->getCourseService()->increaseLessonQuizCount($lesson['id']);
+        return $result;
     }
 
     public function updateItem($id, $fields)
@@ -68,9 +70,12 @@ class QuizServiceImpl extends BaseService implements QuizService
         if(!$item){
             throw $this->createServiceException("测验问题(#{$id})不存在，删除问题失败!");
         }
-        $this->getCourseService()->tryManageCourse($item['courseId']);
-
+        if(!$this->getCourseService()->canManageCourse($item['courseId'])){
+             throw $this->createServiceException("无权限操作");
+        }
         $this->getItemDao()->deleteQuizItem($id);
+        $count = $this->getItemDao()->getQuizItemsCount($item['courseId'],$item['lessonId']);
+        $this->getCourseService()->resetLessonQuizCount($item['lessonId'],$count);
     }
 
     public function getQuiz($id)

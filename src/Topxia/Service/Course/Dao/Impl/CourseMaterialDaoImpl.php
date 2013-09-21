@@ -46,4 +46,14 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
+
+     public function getLessonMaterialCount($courseId,$lessonId){
+        return $this->createQueryBuilder()
+            ->select('count(id)')->from($this->table, 'item')
+            ->where("courseId = :courseId and lessonId = :lessonId   ")
+            ->setParameter(":courseId", $courseId)
+            ->setParameter(":lessonId", $lessonId)
+            ->execute()
+            ->fetchColumn(0);   
+     }  
 }

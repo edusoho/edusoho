@@ -70,6 +70,7 @@ interface CourseService
 	public function exitCourse($userId, $courseId);
 
 
+
 	/**
 	 * Lesson API
 	 */
@@ -166,7 +167,7 @@ interface CourseService
 	 * @param  [mixed] $course ID或Course数组。
 	 * @return [Boolean] 可以管理返回true，否则返回false
 	 */
-	public function canManageCourse($course);
+	public function canManageCourse($courseId,$userId=null);
 
 	/**
 	 * 尝试使用课程
@@ -192,6 +193,11 @@ interface CourseService
 	 */
 	public function tryLearnCourse($courseId);
 
+	public function increaseLessonQuizCount($lessonId);
+	public function resetLessonQuizCount($lessonId,$count);
+	public function increaseLessonMaterialCount($lessonId);
+	public function resetLessonMaterialCount($lessonId,$count);
+
 	public function favoriteCourse($courseId);
 
 	public function unFavoriteCourse($courseId);
@@ -208,5 +214,6 @@ interface CourseService
 	public function findAnnouncements($courseId, $start, $limit);
 
 	public function updateAnnouncement($courseId, $id, $fields);
+
 
 }
