@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 		attrs: {
 			courseId: null,
 			lessonId: null,
+			lesson: null,
 			activePlugins: {},
 			plugins: {},
 		},
@@ -131,6 +132,14 @@ define(function(require, exports, module) {
 				if (plugin.onChangeLesson) {
 					plugin.onChangeLesson();
 				}
+			}
+		},
+		_onChangeLesson: function(lesson){
+			for(item in this.get('plugins')){
+				var plugin = this.get('plugins')[item];
+				if (plugin.onChangeMeta) {
+					plugin.onChangeMeta(lesson);
+				}			
 			}
 		}
 	});

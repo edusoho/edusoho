@@ -47,4 +47,14 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         $sql = "DELETE FROM {$this->table} WHERE id = ?";
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
+
+     public function getLessonMaterialCount($courseId,$lessonId){
+        return $this->createQueryBuilder()
+            ->select('count(id)')->from($this->table, 'item')
+            ->where("courseId = :courseId and lessonId = :lessonId   ")
+            ->setParameter(":courseId", $courseId)
+            ->setParameter(":lessonId", $lessonId)
+            ->execute()
+            ->fetchColumn(0);   
+     }  
 }

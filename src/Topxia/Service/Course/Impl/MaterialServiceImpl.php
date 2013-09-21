@@ -37,7 +37,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			'createdTime' => time(),
 		);
 
-		return $this->getMaterialDao()->addMaterial($fields);
+
+
+		$material =  $this->getMaterialDao()->addMaterial($fields);
+		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
+		return $material;
 	}
 
 	public function deleteMaterial($courseId, $materialId)
@@ -47,6 +51,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			throw $this->createNotFoundException('课程资料不存在，删除失败。');
 		}
 		$this->getMaterialDao()->deleteMaterial($materialId);
+		if($material['lessonId']){
+		   $count = $this->getMaterialDao()->getLessonMaterialCount($courseId,$material['lessonId']);
+		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'],$count);
+		}
+
 	}
 
 	public function getMaterial($courseId, $materialId)

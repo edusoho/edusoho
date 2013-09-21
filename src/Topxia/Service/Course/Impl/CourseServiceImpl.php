@@ -1047,6 +1047,32 @@ class CourseServiceImpl extends BaseService implements CourseService
 		
 	}
 
+
+	public function increaseLessonQuizCount($lessonId){
+	    $lesson = $this->getLessonDao()->getLesson($lessonId);
+	    $lesson['quizNum'] += 1;
+	    $this->getLessonDao()->updateLesson($lesson['id'],$lesson);
+
+	}
+	public function resetLessonQuizCount($lessonId,$count){
+	    $lesson = $this->getLessonDao()->getLesson($lessonId);
+	    $lesson['quizNum'] = $count;
+	    $this->getLessonDao()->updateLesson($lesson['id'],$lesson);
+	}
+	
+	public function increaseLessonMaterialCount($lessonId){
+	    $lesson = $this->getLessonDao()->getLesson($lessonId);
+	    $lesson['materialNum'] += 1;
+	    $this->getLessonDao()->updateLesson($lesson['id'],$lesson);
+
+	}
+	public function resetLessonMaterialCount($lessonId,$count){
+	    $lesson = $this->getLessonDao()->getLesson($lessonId);
+	    $lesson['materialNum'] = $count;
+	    $this->getLessonDao()->updateLesson($lesson['id'],$lesson);
+	}
+
+
 	/**
 	 * @todo refactor it.
 	 */
@@ -1062,7 +1088,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createNotFoundException();
 		}
 
-		if (!$this->hasCourseManagerRole($course, $user)) {
+		if (!$this->hasCourseManagerRole($course, $user['id'])) {
 			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
 		}
 
@@ -1088,24 +1114,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($course);
 	}
 
-	public function canManageCourse($course)
+	public function canManageCourse($courseId,$userId=null)
 	{
-		$course = empty($course['id']) ? $this->getCourse(intval($course)) : $course;
-		if (empty($course)) {
+		if(!$userId){
+			$userId = $this->getCurrentUser()->id;
+		}
+		if(!$courseId || !$userId){
 			return false;
 		}
-
-		$user = $this->getCurrentUser();
-		if (empty($user->id)) {
-			return false;
-		}
-
-		if (!$this->hasCourseManagerRole($course, $user)) {
-			return false;
-		}
-
-		return true;
+		return $this->hasCourseManagerRole($courseId, $userId);
 	}
+
 
 	public function tryTakeCourse($courseId)
 	{
@@ -1208,6 +1227,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getAnnouncementDao()->addAnnouncement($announcement);
 	}
 
+
+
 	public function updateAnnouncement($courseId, $id, $fields)
 	{
 		$course = $this->tryManageCourse($courseId);
@@ -1246,13 +1267,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->createDao('Course.CourseAnnouncementDao');
     }
 
-	private function hasCourseManagerRole($course, $user) 
+	private function hasCourseManagerRole($courseId, $userId) 
 	{
-		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+		if($this->getUserService()->hasAdminRoles($userId)){
 			return true;
 		}
 
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if ($member and ($member['role'] == 'teacher')) {
 			return true;
 		}

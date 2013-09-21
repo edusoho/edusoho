@@ -79,7 +79,7 @@ class CourseAnnouncementController extends BaseController
 		return $this->render('TopxiaWebBundle:Course:announcement-block.html.twig',array(
 			'course' => $course,
 			'announcements' => $announcements,
-			'canManage' => $this->getCourseService()->canManageCourse($course),
+			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
 			'canTake' => $this->getCourseService()->canTakeCourse($course)
 		));
 	}

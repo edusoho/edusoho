@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 		code: 'quiz',
 		name: '测验',
 		noactive: true,
-		iconClass: 'glyphicon glyphicon-info-sign',
+		iconClass: 'glyphicon glyphicon-list-alt',
 		api: {
 			init: '/lessonplugin/quiz/init',
 		},
@@ -14,6 +14,16 @@ define(function(require, exports, module) {
 			var initUrl = this.api.init+"/"+this.toolbar.get('courseId')+"/"+this.toolbar.get('lessonId');
 			$('#modal').modal({keyboard: false}).html('').load(initUrl);
 		},
+		onChangeMeta: function(lesson) {	
+			if(!lesson){
+				return;
+			}
+			if(lesson.quizNum>0){
+				$('.glyphicon-list-alt').attr('style','color:#096');
+			}else{
+				$('.glyphicon-list-alt').removeAttr('style');
+			}
+		}
 	});
 	
 	module.exports = QuizPlugin;

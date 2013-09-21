@@ -24,6 +24,17 @@ define(function(require, exports, module) {
 		},
 		onChangeLesson: function() {
 			this.pane.show();
+		},
+		onChangeMeta: function(lesson) {	
+			if(!lesson){
+				return;
+			}
+			console.log("应该有资料的挖");
+			if(lesson.materialNum>0){
+				$('.glyphicon-download').attr('style','color:#096');
+			}else{
+				$('.glyphicon-download').removeAttr('style');
+			}
 		}
 	});
 

@@ -30,6 +30,8 @@ interface UserService
 
     public function isEmailAvaliable($email);
 
+    public function hasAdminRoles($userId);
+
     /**
      * 变更密码
      * 

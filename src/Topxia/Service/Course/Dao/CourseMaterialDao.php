@@ -17,4 +17,6 @@ interface CourseMaterialDao
 
     public function deleteMaterial($id);
 
+    public function getLessonMaterialCount($courseId,$lessonId);
+
 }
