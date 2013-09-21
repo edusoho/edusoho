@@ -106,11 +106,7 @@ define(function(require, exports, module) {
 
         var validator = createValidator($form);
 
-        // var currentFormType = 'video';
         $form.on('change', '[name=type]', function(e) {
-            // if (currentFormType == 'video') {
-            //     this.checked = false;
-            // }
             var type = $(this).val();
 
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text")
@@ -125,13 +121,12 @@ define(function(require, exports, module) {
             }
 
             switchValidator(validator, type);
-            // currentFormType = type;
         });
 
         $form.find('[name="type"]:checked').trigger('change');
 
         var editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
-
+        
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
         });
