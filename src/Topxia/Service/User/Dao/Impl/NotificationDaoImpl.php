@@ -9,6 +9,12 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
 {
     protected $table = 'notification';
 
+    public function getNotification($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
     public function addNotification($notification)
     {
         $affected = $this->getConnection()->insert($this->table, $notification);
@@ -18,36 +24,22 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
         return $this->getNotification($this->getConnection()->lastInsertId());
     }
 
-    public function getNotification($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-    }
-
     public function updateNotification($id, $fields)
     {
-        return $this->update($id, $fields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getNotification($id);
     }
 
     public function findNotificationsByUserId($userId, $start, $limit)
     {
-        $builder = $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'notification')
-            ->where("userId = :userId")
-            ->orderBy('createdTime', 'DESC')
-            ->setParameter(":userId", $userId)
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ? : array();
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($userId));
     }
 
     public function getNotificationCountByUserId($userId)
     {
-        return $this->createQueryBuilder()
-            ->select('COUNT(*)')->from($this->table, 'notification')
-            ->where("userId = :userId")
-            ->setParameter(":userId", $userId)
-            ->execute()
-            ->fetchColumn(0);
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($userId));
     }
+    
 }

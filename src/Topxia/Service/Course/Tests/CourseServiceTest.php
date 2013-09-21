@@ -9,9 +9,6 @@ use Topxia\Common\ArrayToolkit;
 class CourseServiceTest extends BaseTestCase
 {
 
-    /**
-     * @group current
-     */
     public function testFavoriteCourse()
     {
         $course = array(
@@ -25,7 +22,6 @@ class CourseServiceTest extends BaseTestCase
 
      /**
      * @expectedException Topxia\Service\Common\ServiceException
-     * @group current
      */
     public function testFavoriteCourseTwice()
     {

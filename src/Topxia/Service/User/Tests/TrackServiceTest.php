@@ -15,13 +15,14 @@ class TrackServiceTest extends BaseTestCase
        $this->assertNull(null);
     }
 
-    private function getUserService(){
-    return $this->getServiceKernel()->createService('User.UserService');
+    private function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     private function getTrackService()
     {
-    return $this->getServiceKernel()->createService('User.TrackService');
+        return $this->getServiceKernel()->createService('User.TrackService');
     }
 
 }

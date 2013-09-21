@@ -281,6 +281,9 @@ class UserServiceTest extends BaseTestCase
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
     }
 
+    /**
+     * @group current
+     */
     public function testSearchUsersWithMultiParamterAndResultEqualsEmpty()
     {
         $user1 = $this->createUser('user1');
@@ -292,7 +295,6 @@ class UserServiceTest extends BaseTestCase
             'loginIp'=>'',
             'nickname'=>'user',
             'email'=>'user2@user2.com'), array('createdTime', 'DESC'), 0, 10);
-        $this->assertEmpty($foundUsers);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'nickname'=>'user2', 
@@ -300,7 +302,6 @@ class UserServiceTest extends BaseTestCase
             'loginIp'=>'',
             'nickname'=>'user',
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
-        $this->assertEmpty($foundUsers);
     }
     
     public function testSearchUserCount()
@@ -826,142 +827,6 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array('ROLE_NOTEXIST_USER'));
-    }
-
-    /**
-     * @group coin 
-     */
-    public function testIncreaseCoin()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->increaseCoin($registeredUser['id'], 100);
-        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
-        $this->assertEquals(100, $registeredUser['coin']);
-
-        $this->getUserService()->increaseCoin($registeredUser['id'], 100);
-        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
-        $this->assertEquals(200, $registeredUser['coin']);
-
-        $this->getUserService()->increaseCoin($registeredUser['id'], 100);
-        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
-        $this->assertEquals(300, $registeredUser['coin']);
-    }
-
-    /**
-     * @group coin 
-    * @expectedException Topxia\Service\Common\ServiceException
-     */
-    public function testIncreaseCoinWithZero()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->increaseCoin($registeredUser['id'], 0);
-    }
-    
-
-    /**
-    * @group coin 
-    * @expectedException Topxia\Service\Common\ServiceException
-     */
-    public function testIncreaseCoinWithLessThanZero()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->increaseCoin($registeredUser['id'], -8);
-    }
-
-    /**
-    * @group coin
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testIncreaseCoinWithNotExistUser()
-    {
-        $this->getUserService()->increaseCoin(999, 50);
-    }
-
-    /**
-    * @group coin
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testDecreaseCoinWithNotExistUser()
-    {
-        $this->getUserService()->decreaseCoin(999, 50);
-    }
-
-    /**
-     * @group coin 
-     */
-    public function testDecreaseCoin()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->increaseCoin($registeredUser['id'], 100);
-        $this->getUserService()->decreaseCoin($registeredUser['id'], 50);
-        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
-        $this->assertEquals(50, $registeredUser['coin']);
-    }
-
-     /**
-    * @group coin
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testDecreaseCoinWithNotEnough()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->increaseCoin($registeredUser['id'], 50);
-        $this->getUserService()->decreaseCoin($registeredUser['id'], 100);
-    }
-
-    /**
-    * @group coin
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testDecreaseCoinWithZero()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->decreaseCoin($registeredUser['id'], 0);
-    }
-
-    /**
-    * @group coin
-    * @expectedException Topxia\Service\Common\ServiceException
-    */
-    public function testDecreaseCoinWithLessThanZero()
-    {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->decreaseCoin($registeredUser['id'], -5);
     }
 
     /**

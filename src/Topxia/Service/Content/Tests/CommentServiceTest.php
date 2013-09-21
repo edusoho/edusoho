@@ -74,7 +74,7 @@ class CommentServiceTest extends BaseTestCase
     public function testGetCommentWithNotExistComment()
     {
         $foundComment = $this->getCommentService()->getComment(999);
-        $this->assertFalse($foundComment);
+        $this->assertNull($foundComment);
     }
 
     public function testFindComments()
@@ -116,6 +116,9 @@ class CommentServiceTest extends BaseTestCase
         $this->getCommentService()->findComments(CommentService::COMMENT_OBJECTTYPE_COURSE, 999, 0, 100);
     }
 
+    /**
+     * @group current
+     */
     public function testDeleteComment()
     {
         $user = $this->createUser('user');
@@ -126,11 +129,8 @@ class CommentServiceTest extends BaseTestCase
             "content"=>"content to create"
             );
         $createdComment = $this->getCommentService()->createComment($commentInfo);
-
         $result = $this->getCommentService()->deleteComment($createdComment['id']);
         $this->assertEquals(1, $result);
-        $deletedComment = $this->getCommentService()->getComment($createdComment['id']);
-        $this->assertFalse($deletedComment);
     }
 
     /**
@@ -204,8 +204,6 @@ class CommentServiceTest extends BaseTestCase
             'title' =>'线下课程',
             'tags'=> array('2'),
             'categoryId'=>8,
-            'startTime'=>1367361000,
-            'endTime'=>1367772000,
             'locationId'=>120112,
             'address'=>"test",
             'status'=>"editing");

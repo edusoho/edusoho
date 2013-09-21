@@ -25,7 +25,8 @@ class MessageRelationDaoImpl extends BaseDao implements MessageRelationDao
 
     public function updateRelation($id, $toUpdateRelation)
     {
-        return $this->update($id,$toUpdateRelation);
+        $this->getConnection()->update($this->table, $toUpdateRelation, array('id' => $id));
+        return $this->getRelation($id);
     }
 
     public function updateRelationIsReadByConversationId($conversationId, array $isRead)

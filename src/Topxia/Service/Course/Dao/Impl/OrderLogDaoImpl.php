@@ -11,13 +11,17 @@ class OrderLogDaoImpl extends BaseDao implements OrderLogDao
 
     public function getLog($id)
     {
-    	return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function addLog($log)
     {
-        $id = $this->insert($log);
-    	return $this->getLog($id);
+        $affected = $this->getConnection()->insert($this->table, $log);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert log error.');
+        }
+        return $this->getLog($this->getConnection()->lastInsertId());
     }
 
     public function findLogsByOrderId($orderId)

@@ -12,5 +12,8 @@ phpunit -c app/  --coverage-html
   phpunit -c app/ src/Topxia/Service/User/Tests/
 
 * 运行某个测试，例如
+phpunit -c app/ src/Topxia/Service/Course/Tests/CourseServiceTest.php
 phpunit -c app/ src/Topxia/Service/User/Tests/UserServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/CommentServiceTest.php
+phpunit -c app/ src/Topxia/Service/Content/Tests/ContentServiceTest.php
+phpunit -c app/ src/Topxia/Service/Content/Tests/BlockServiceTest.php

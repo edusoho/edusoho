@@ -11,14 +11,13 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function getLesson($id)
     {
-        return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function findLessonsByIds(array $ids)
     {
-        if(empty($ids)){
-            return array();
-        }
+        if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -26,13 +25,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function findLessonsByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'lesson')
-            ->where("courseId = :courseId")
-            ->orderBy('seq', 'ASC')
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchAll();
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY seq ASC";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
     public function findLessonIdsByCourseId($courseId)
@@ -43,49 +37,35 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function getLessonCountByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->select('COUNT(*)')->from($this->table, 'lesson')
-            ->where("courseId = :courseId")
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchColumn(0);
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE courseId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     public function getLessonMaxSeqByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->select('MAX(seq)')->from($this->table, 'lesson')
-            ->where("courseId = :courseId")
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchColumn(0);
+        $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     public function findLessonsByChapterId($chapterId)
     {
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'lesson')
-            ->where("chapterId = :chapterId")
-            ->orderBy('seq', 'ASC')
-            ->setParameter(":chapterId", $chapterId)
-            ->execute()
-            ->fetchAll();
+        $sql = "SELECT * FROM {$this->table} WHERE chapterId = ? ORDER BY seq ASC";
+        return $this->getConnection()->fetchAll($sql, array($chapterId));
     }
 
     public function addLesson($lesson)
     {
-        $id = $this->insert($lesson);
-        return $this->getLesson($id);
+        $affected = $this->getConnection()->insert($this->table, $lesson);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course lesson error.');
+        }
+        return $this->getLesson($this->getConnection()->lastInsertId());
     }
 
     public function updateLesson($id, $fields)
     {
-        return $this->update($id, $fields);
-    }
-
-    public function deleteLesson($id)
-    {
-        return $this->delete($id);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getLesson($id);
     }
 
     public function deleteLessonsByCourseId($courseId)
@@ -93,4 +73,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId));
     }
+
+    public function deleteLesson($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
 }

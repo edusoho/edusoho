@@ -11,54 +11,46 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
 
     public function getChapter($id)
     {
-        return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function addChapter(array $chapter)
     {
-        $id = $this->insert($chapter);
-    	return $this->getChapter($id);
+        $affected = $this->getConnection()->insert($this->table, $chapter);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course chapter error.');
+        }
+        return $this->getChapter($this->getConnection()->lastInsertId());
     }
 
     public function findChaptersByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'chapter')
-            ->where("courseId = :courseId")
-            ->orderBy('seq', 'ASC')
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchAll();
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime ASC";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
     public function getChapterCountByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->select('COUNT(*)')->from($this->table, 'chapter')
-            ->where("courseId = :courseId")
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchColumn(0);
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     public function getChapterMaxSeqByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->select('MAX(seq)')->from($this->table, 'chapter')
-            ->where("courseId = :courseId")
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchColumn(0);
+        $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     public function updateChapter($id, array $chapter)
     {
-        return $this->update($id, $chapter);
+        $this->getConnection()->update($this->table, $chapter, array('id' => $id));
+        return $this->getChapter($id);
     }
 
     public function deleteChapter($id)
     {
-        return $this->delete($id);
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
     public function deleteChaptersByCourseId($courseId)

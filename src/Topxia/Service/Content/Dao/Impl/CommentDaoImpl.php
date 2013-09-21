@@ -11,18 +11,22 @@ class CommentDaoImpl extends BaseDao implements CommentDao
 
 	public function getComment($id)
 	{
-		return $this->fetch($id);
+		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
 	public function addComment($comment)
 	{
-		$id = $this->insert($comment);
-       	return $this->getComment($id);
+        $affected = $this->getConnection()->insert($this->table, $comment);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert comment error.');
+        }
+        return $this->getComment($this->getConnection()->lastInsertId());
 	}
 
 	public function deleteComment($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 	public function findCommentsByObjectTypeAndObjectId($objectType, $objectId, $start, $limit)

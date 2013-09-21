@@ -14,6 +14,15 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function addMember($member)
+    {
+        $affected = $this->getConnection()->insert($this->table, $member);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course member error.');
+        }
+        return $this->getMember($this->getConnection()->lastInsertId());
+    }
+
     public function getMemberByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? LIMIT 1";
@@ -72,15 +81,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->setMaxResults($limit)
             ->orderBy('createdTime', 'ASC');
         return $builder->execute()->fetchAll() ? : array(); 
-    }
-
-    public function addMember($member)
-    {
-        $affected = $this->getConnection()->insert($this->table, $member);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert course member error.');
-        }
-        return $this->getMember($this->getConnection()->lastInsertId());
     }
 
     public function updateMember($id, $member)

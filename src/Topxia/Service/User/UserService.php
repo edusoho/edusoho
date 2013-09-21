@@ -68,10 +68,6 @@ interface UserService
 
     public function changeUserRoles($id, array $roles);
 
-    public function increaseCoin ($userId, $coin, $action = null, $note = null);
-
-    public function decreaseCoin ($userId, $coin, $action = null, $note = null);
-
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null);
 
     public function getToken($type, $token);

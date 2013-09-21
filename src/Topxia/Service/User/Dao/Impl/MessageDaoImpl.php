@@ -31,14 +31,9 @@ class MessageDaoImpl extends BaseDao implements MessageDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     } 
 
-    public function searchMessagesCount($conditions)
+    private function _createSearchQueryBuilder($conditions)
     {
-        if (isset($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
-        }
-
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->select('count(id)')
+        return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'message')
             ->andWhere('fromId = :fromId')
             ->andWhere('toId = :toId')
@@ -46,6 +41,17 @@ class MessageDaoImpl extends BaseDao implements MessageDao
             ->andWhere('createdTime >= :startDate')
             ->andWhere('createdTime < :endDate')
             ->andWhere('content LIKE :content');
+    }
+
+    public function searchMessagesCount($conditions)
+    {
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+             ->select('COUNT(id)');
+
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -54,18 +60,13 @@ class MessageDaoImpl extends BaseDao implements MessageDao
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }
-        $builder = $this->createDynamicQueryBuilder($conditions)
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->from($this->table, 'message')
-            ->andWhere('createdTime >= :startDate')
-            ->andWhere('createdTime < :endDate')
-            ->andWhere('fromId = :fromId')
-            ->andWhere('toId = :toId')
-            ->andWhere('createdTime =  :createdTime ')
-            ->andWhere('content LIKE :content')
-            ->orderBy("createdTime", "DESC")
             ->setFirstResult($start)
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+            ->orderBy('createdTime', 'DESC');
+
         return $builder->execute()->fetchAll() ? : array();
     }
 
@@ -77,9 +78,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     public function findMessagesByIds(array $ids)
     {
-        if(empty($ids)){
-            return array();
-        }
+        if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -87,9 +86,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     public function deleteMessagesByIds(array $ids)
     {
-        if(empty($ids)){
-            return array();
-        }
+        if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->executeUpdate($sql, $ids);

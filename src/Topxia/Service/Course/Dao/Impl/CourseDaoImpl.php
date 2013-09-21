@@ -42,6 +42,26 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function addCourse($course)
+    {
+        $affected = $this->getConnection()->insert($this->table, $course);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course error.');
+        }
+        return $this->getCourse($this->getConnection()->lastInsertId());
+    }
+
+    public function updateCourse($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getCourse($id);
+    }
+
+    public function deleteCourse($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
 
@@ -82,26 +102,5 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         return $builder;
-    }
-
-    public function addCourse($course)
-    {
-        $affected = $this->getConnection()->insert($this->table, $course);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert course error.');
-        }
-        return $this->getCourse($this->getConnection()->lastInsertId());
-    }
-
-    public function updateCourse($id, $fields)
-    {
-        $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getCourse($id);
-    }
-
-    public function deleteCourse($id)
-    {
-        $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeUpdate($sql, array($id));
     }
 }

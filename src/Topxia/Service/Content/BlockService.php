@@ -18,6 +18,8 @@ interface BlockService
 
 	public function getBlockHistory($id);
 
+	public function getLatestBlockHistory();
+	
 	public function createBlock($block);
 
 	public function updateBlock($id, $fields);

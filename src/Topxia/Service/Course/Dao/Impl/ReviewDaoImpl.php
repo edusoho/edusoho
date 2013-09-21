@@ -9,10 +9,10 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 {
     protected $table = 'course_review';
 
-
     public function getReview($id)
     {
-        return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function findReviewsByCourseId($courseId, $start, $limit)
@@ -29,13 +29,17 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function addReview($review)
     {
-        $id = $this->insert($review);
-        return $this->getReview($id);
+        $affected = $this->getConnection()->insert($this->table, $review);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert review error.');
+        }
+        return $this->getReview($this->getConnection()->lastInsertId());
     }
 
     public function updateReview($id, $fields)
     {
-        return $this->update($id, $fields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getReview($id);
     }
 
     public function getReviewByUserIdAndCourseId($userId, $courseId)
@@ -67,6 +71,12 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
+    public function deleteReview($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeUpdate($sql, array($id));
+    }
+
     private function createReviewSearchBuilder($conditions)
     {
         if (isset($conditions['content'])) {
@@ -81,9 +91,4 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
                 ->andWhere('content LIKE :content');
     }
 
-    public function deleteReview($id)
-    {
-        $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeUpdate($sql, array($id));
-    }
 }

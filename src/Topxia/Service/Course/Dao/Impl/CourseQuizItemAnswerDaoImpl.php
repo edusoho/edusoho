@@ -13,7 +13,7 @@ class CourseQuizItemAnswerDaoImpl extends BaseDao implements CourseQuizItemAnswe
     {
         $affected = $this->getConnection()->insert($this->table, $answerInfo);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert course lessonQuizItemAnswer error.');
+            throw $this->createDaoException('Insert QuizItemAnswer error.');
         }
         return $this->getAnswer($this->getConnection()->lastInsertId());
     }

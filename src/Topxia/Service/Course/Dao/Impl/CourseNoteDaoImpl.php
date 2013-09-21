@@ -11,7 +11,8 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 	
 	public function getNote($id)
 	{
-        return $this->fetch($id);
+		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
 	public function findNotesByUserIdAndCourseId($userId, $courseId)
@@ -22,18 +23,22 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 
 	public function addNote($noteInfo)
 	{
-    	$id = $this->insert($noteInfo);
-    	return $this->getNote($id);
+		$affected = $this->getConnection()->insert($this->table, $noteInfo);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert noteInfo error.');
+        }
+        return $this->getNote($this->getConnection()->lastInsertId());
 	}
 
 	public function updateNote($id,$noteInfo)
 	{
-		return $this->update($id,$noteInfo);
+		$this->getConnection()->update($this->table, $noteInfo, array('id' => $id));
+        return $this->getNote($id);
 	}
 
 	public function deleteNote($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 	public function getNoteByUserIdAndLessonId($userId,$lessonId)
@@ -63,8 +68,13 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 	{
 		$builder = $this->createSearchNoteQueryBuilder($conditions)
 			->select('count(id)');
-
 		return $builder->execute()->fetchColumn(0);
+	}
+
+	public function getNoteCountByUserIdAndCourseId($userId, $courseId)
+	{
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($userId, $courseId));
 	}
 
 	private function createSearchNoteQueryBuilder($conditions)
@@ -84,9 +94,4 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 		return $builder;
 	}
 
-	public function getNoteCountByUserIdAndCourseId($userId, $courseId)
-	{
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId, $courseId));
-	}
 }

@@ -10,30 +10,30 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 {
     protected $table = 'course_order';
 
-	public function getOrder($id)
-	{
-		return $this->fetch($id);
-	}
+    public function getOrder($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
 
 	public function getOrderBySn($sn)
 	{
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'corder')
-            ->where("sn = :sn")
-            ->setParameter(":sn", $sn)
-            ->execute()
-            ->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 
 	public function addOrder($order)
 	{
-        $id = $this->insert($order);
-    	return $this->getOrder($id);
+        $affected = $this->getConnection()->insert($this->table, $order);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert order error.');
+        }
+        return $this->getOrder($this->getConnection()->lastInsertId());
 	}
 
 	public function updateOrder($id, $fields)
 	{
-		$this->update($id, $fields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
 		return $this->getOrder($id);
 	}
     
@@ -56,7 +56,6 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_order')
             ->andWhere('sn = :sn')

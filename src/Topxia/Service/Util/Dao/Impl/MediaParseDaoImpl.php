@@ -38,7 +38,8 @@ class MediaParseDaoImpl extends BaseDao implements MediaParseDao
 
     public function updateMediaParse($id, array $fields)
     {
-    	return $this->update($id, $fields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getMediaParse($id);
     }
 
 }

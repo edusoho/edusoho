@@ -37,14 +37,13 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     {
         $affected = $this->getConnection()->insert($this->table, $material);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert learn error.');
+            throw $this->createDaoException('Insert material error.');
         }
         return $this->getMaterial($this->getConnection()->lastInsertId());
     }
 
     public function deleteMaterial($id)
     {
-        $sql = "DELETE FROM {$this->table} WHERE id = ?";
-        return $this->getConnection()->executeUpdate($sql, array($id));
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 }
