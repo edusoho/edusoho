@@ -406,6 +406,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$course = $this->getCourse($courseId);
+		if($course['status']!='published'){
+			throw $this->createServiceException('不能收藏未发布课程');
+		}
+
 		if (empty($course)) {
 			throw $this->createServiceException("该课程不存在,收藏失败!");
 		}
@@ -466,6 +470,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function joinCourse($userId, $courseId, array $infos = array())
 	{
 		$course = $this->getCourse($courseId);
+
+		if($course['status']!='published'){
+			throw $this->createServiceException('不能加入未发布课程');
+		}
+
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
