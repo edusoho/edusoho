@@ -7,11 +7,10 @@ use Topxia\Service\Course\Dao\CourseDao;
 
 class CourseDaoImpl extends BaseDao implements CourseDao
 {
-    protected $table = 'course';
 
     public function getCourse($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
     
@@ -21,7 +20,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return array();
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
@@ -44,7 +43,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
-        $affected = $this->getConnection()->insert($this->table, $course);
+        $affected = $this->getConnection()->insert(self::TABLENAME, $course);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
         }
@@ -53,13 +52,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function updateCourse($id, $fields)
     {
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }
 
     public function deleteCourse($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
     }
 
     private function _createSearchQueryBuilder($conditions)
@@ -79,7 +78,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course')
+            ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
@@ -102,5 +101,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         return $builder;
+    }
+
+    private function getTablename()
+    {
+        return self::TABLENAME;
     }
 }

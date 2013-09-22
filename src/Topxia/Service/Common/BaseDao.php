@@ -6,7 +6,6 @@ use PDO,
 
 abstract class BaseDao
 {
-
     protected $connection;
 
     protected $table = null;
@@ -15,7 +14,7 @@ abstract class BaseDao
 
     protected function wave ($id, $fields) 
     {
-        $sql = "UPDATE {$this->table} SET ";
+        $sql = "UPDATE {$this->getTable()} SET ";
         $fieldStmts = array();
         foreach (array_keys($fields) as $field) {
             $fieldStmts[] = "{$field} = {$field} + ? ";
@@ -29,7 +28,11 @@ abstract class BaseDao
 
     public function getTable()
     {
-        return $this->table;
+        if($this->table){
+            return $this->table;
+        }else{
+            return self::TABLENAME;
+        }
     }
 
     public function getConnection ()
