@@ -57,7 +57,7 @@ class FileServiceImpl extends BaseService implements FileService
 
 	public function uploadFile($group, File $file, $target = null)
 	{
-		$extensions = 'jpg jpeg gif png txt pdf doc docx xls xlsx ppt pptx pps mp4 mp3 avi zip rar gz tar 7z flv f4v';
+		$extensions = 'jpg jpeg gif png txt pdf doc docx xls xlsx ppt pptx pps mp4 mp3 avi zip rar gz tar 7z swf';
 		$errors = $this->validateFileExtension($file, $extensions);
 		if ($errors) {
 			throw $this->createServiceException(join("\n", $errors));
