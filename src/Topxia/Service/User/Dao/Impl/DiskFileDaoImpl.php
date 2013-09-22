@@ -17,7 +17,7 @@ class DiskFileDaoImpl extends BaseDao implements DiskFileDao
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
@@ -27,7 +27,7 @@ class DiskFileDaoImpl extends BaseDao implements DiskFileDao
 
     public function searchFileCount($conditions)
     {
-        $builder = $this->_createQueryBuilder($conditions)
+        $builder = $this->createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
@@ -41,7 +41,7 @@ class DiskFileDaoImpl extends BaseDao implements DiskFileDao
         return $this->getFile($this->getConnection()->lastInsertId());
     }
 
-    private function _createQueryBuilder($conditions)
+    private function createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)

@@ -52,9 +52,4 @@ abstract class BaseDao
         return new DynamicQueryBuilder($this->getConnection(), $conditions);
     }
 
-    protected function createQueryBuilder()
-    {
-        return $this->getConnection()->createQueryBuilder();
-    }
-
 }
