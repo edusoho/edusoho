@@ -20,7 +20,7 @@ class LessonQuizPluginController extends BaseController
             return $this->render('TopxiaWebBundle:LessonQuizPlugin:lesson-quiz-page.html.twig', array(
                 'quizItems'=>$preparedData['quizItems'],
                 'lessonQuiz'=>$preparedData['lessonQuiz'],
-                'quiz'=>$preparedData['quiz']));
+                'alreadyQuiz'=>$preparedData['alreadyQuiz']));
         }
     }
 
@@ -28,14 +28,13 @@ class LessonQuizPluginController extends BaseController
     {
        
         $preparedData = $this->prepareForStart($courseId, $lessonId);
-        if(!empty($preparedData['quiz'])){
-            $this->getQuizService()->deleteQuiz($preparedData['quiz']['id']);
+        if(!empty($preparedData['alreadyQuiz'])){
+            $this->getQuizService()->deleteQuiz($preparedData['alreadyQuiz']['id']);
         }
-
         return $this->render('TopxiaWebBundle:LessonQuizPlugin:lesson-quiz-page.html.twig', array(
             'quizItems'=>$preparedData['quizItems'],
             'lessonQuiz'=>$preparedData['lessonQuiz'],
-            'quiz'=>$preparedData['quiz']));
+            'alreadyQuiz'=>$preparedData['alreadyQuiz']));
     }
 
     public function checkResultAction(Request $request, $quizId)
@@ -65,13 +64,13 @@ class LessonQuizPluginController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
         $quizItemIds = $this->getQuizService()->findLessonQuizItemIds($course['id'], $lesson['id']);
-        $quiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $this->getCurrentUser()->id);
+        $alreadyQuiz = $this->getQuizService()->getUserLessonQuiz($course['id'], $lesson['id'], $this->getCurrentUser()->id);
         if($quizItemIds){
             $quizItemIds = ArrayToolkit::column($quizItemIds, 'id');
             $lessonQuiz = $this->getQuizService()->createLessonQuiz($course['id'], $lesson['id'], $quizItemIds);
             $quizItems = $this->getQuizService()->findQuizItemsInLessonQuiz($lessonQuiz['id']);
         }
-        return array('quiz'=>$quiz, 'quizItems'=>$quizItems, 'lessonQuiz'=>$lessonQuiz);
+        return array('alreadyQuiz'=>$alreadyQuiz, 'quizItems'=>$quizItems, 'lessonQuiz'=>$lessonQuiz);
     }
 
     protected function getCourseService()

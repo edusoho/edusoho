@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Course\Dao\CourseMemberDao;
+use Topxia\Service\Course\Dao\CourseDao;
 
 class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 {
@@ -29,16 +30,26 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId));
     }
 
-    public function findMembersByUserIdAndRole($userId, $role, $start, $limit)
+    public function findMembersByUserIdAndRole($userId, $role, $start, $limit,$exceptDraft = true)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql  = "SELECT m.* FROM {$this->table} m ";
+        $sql.= ' INNER JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
+        $sql .= " AND m.role =  ? AND m.courseId = c.id ";
+        if($exceptDraft){
+            $sql .= " AND c.status <> 'draft' ";
+        }        
         return $this->getConnection()->fetchAll($sql, array($userId, $role));
     }
 
-    public function findMemberCountByUserIdAndRole($userId, $role)
+    public function findMemberCountByUserIdAndRole($userId, $role,$exceptDraft = true)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId, $role));
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql.= " INNER JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
+        $sql.= " AND m.role =  ? AND m.courseId = c.id ";
+        if($exceptDraft){
+            $sql.= " AND c.status <> 'draft' ";
+        }
+        return $this->getConnection()->fetchColumn($sql,array($userId, $role));
     }
 
     public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)

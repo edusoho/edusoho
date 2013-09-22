@@ -18,16 +18,11 @@ class CourseQuizItemDaoImpl extends BaseDao implements CourseQuizItemDao
         return $this->getQuizItem($this->getConnection()->lastInsertId());
     }
 
-    public function getQuizItemsCount($courseId, $lessonId){
-        return $this->createQueryBuilder()
-            ->select('count(id)')->from($this->table, 'item')
-            ->where("courseId = :courseId and lessonId = :lessonId   ")
-            ->setParameter(":courseId", $courseId)
-            ->setParameter(":lessonId", $lessonId)
-            ->execute()
-            ->fetchColumn(0);   
+    public function getQuizItemsCount($courseId, $lessonId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND lessonId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId, $lessonId)); 
     }
-
 
     public function findQuizItemsByIds(array $ids)
     {

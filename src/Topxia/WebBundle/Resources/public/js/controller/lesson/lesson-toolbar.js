@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 			lessonId: null,
 			lesson: null,
 			activePlugins: {},
-			plugins: {},
+			plugins: {}
 		},
 
 		registerPlugin: function(plugin) {

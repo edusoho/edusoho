@@ -186,14 +186,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $sortedCourses;
 	}
 
-	public function findUserTeachCourseCount($userId)
+	public function findUserTeachCourseCount($userId,$includeOther=false)
 	{
-		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher');
+		$includeDraft = $this->isCurrentUser($userId);
+		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher',!$includeDraft);
 	}
 
-	public function findUserTeachCourses($userId, $start, $limit)
+	public function findUserTeachCourses($userId, $start, $limit,$includeOther=false)
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit);
+		$includeDraft = $this->isCurrentUser($userId);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit,!$includeDraft);
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
 		/**
@@ -404,6 +406,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$course = $this->getCourse($courseId);
+		if($course['status']!='published'){
+			throw $this->createServiceException('不能收藏未发布课程');
+		}
+
 		if (empty($course)) {
 			throw $this->createServiceException("该课程不存在,收藏失败!");
 		}
@@ -464,6 +470,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function joinCourse($userId, $courseId, array $infos = array())
 	{
 		$course = $this->getCourse($courseId);
+
+		if($course['status']!='published'){
+			throw $this->createServiceException('不能加入未发布课程');
+		}
+
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
@@ -1278,6 +1289,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return true;
 		}
 
+		return false;
+	}
+
+	private function isCurrentUser($userId){
+		$user = $this->getCurrentUser();
+		if($userId==$user->id){
+			return true;
+		}
 		return false;
 	}
 

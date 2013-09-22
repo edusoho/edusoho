@@ -206,7 +206,7 @@ class UserController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserLearnCourseCount($user['id']),
+            $this->getCourseService()->findUserTeachCourseCount($user['id']),
             10
         );
 

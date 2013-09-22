@@ -19,7 +19,7 @@
 			<button class="btn btn-primary check-answer" style="display:none">提交</button>
 			<button class="btn btn-primary next-item" style="display:none">下一题</button>
 			<button class="btn btn-primary view-result"  style="display:none" data-url="{{ path('course_lesson_plugin_quiz_check_result', {quizId:lessonQuiz.id}) }}">查看测验成绩</button>
-			<button class="btn btn-default in-result redo-quiz" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:quiz.courseId, lessonId:quiz.lessonId}) }}">重新测验</button>
+			<button class="btn btn-default in-result redo-quiz" data-toggle="modal" data-target="#modal" data-url="{{ path('course_lesson_plugin_quiz_start', {courseId:lessonQuiz.courseId, lessonId:lessonQuiz.lessonId}) }}">重新测验</button>
 			<button class="btn btn-primary in-result close-quiz" data-dismiss="modal" >回到课堂</button>
 			{% endif %}
 		</div>
