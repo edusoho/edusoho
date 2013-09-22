@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 		code: 'quiz',
 		name: '测验',
 		noactive: true,
-		iconClass: 'glyphicon glyphicon-list-alt',
+		iconClass: 'glyphicon glyphicon-ok-circle',
 		api: {
 			init: '/lessonplugin/quiz/init',
 		},
@@ -19,9 +19,9 @@ define(function(require, exports, module) {
 				return;
 			}
 			if(lesson.quizNum>0){
-				$('.glyphicon-list-alt').attr('style','color:#096');
+				$('.glyphicon-ok-circle').attr('style','color:#096');
 			}else{
-				$('.glyphicon-list-alt').removeAttr('style');
+				$('.glyphicon-ok-circle').removeAttr('style');
 			}
 		}
 	});
