@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 	var MaterialPlugin = BasePlugin.extend({
 		code: 'material',
 		name: '资料',
-		iconClass: 'glyphicon glyphicon-download',
+		iconClass: 'glyphicon glyphicon-download-alt',
 		api: {
 			init: '/lessonplugin/material/init'
 		},
@@ -31,9 +31,9 @@ define(function(require, exports, module) {
 			}
 			console.log("应该有资料的挖");
 			if(lesson.materialNum>0){
-				$('.glyphicon-download').attr('style','color:#096');
+				$('.glyphicon-download-alt').attr('style','color:#096');
 			}else{
-				$('.glyphicon-download').removeAttr('style');
+				$('.glyphicon-download-alt').removeAttr('style');
 			}
 		}
 	});
