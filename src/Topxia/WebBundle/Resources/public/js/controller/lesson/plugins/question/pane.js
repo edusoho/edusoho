@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             'focusin .expand-form-trigger' : 'expandForm',
             'click .collapse-form-btn' : 'collapseForm',
             'click .show-question-item' : 'showItem',
-            'click .back-to-list' : 'backToList',
+            'click .back-to-list' : 'backToList'
         },
         setup: function() {
             this.get('plugin').toolbar.on('change:lessonId', function(id) {
