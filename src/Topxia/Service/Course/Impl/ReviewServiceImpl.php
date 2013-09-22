@@ -68,6 +68,12 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		}
 
 		$course = $this->getCourseService()->tryTakeCourse($fields['courseId']);
+
+		$userId = $this->getCurrentUser()->id;
+		if($course['status']!='published' || in_array($userId, $course['teacherIds'])){
+			throw $this->createServiceException('您不能评价未发布课程和自己的课程！');
+		}		
+
 		if (empty($course)) {
 			throw $this->createServiceException("课程(#{$fields['courseId']})不存在，评价失败！");
 		}
@@ -119,6 +125,16 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 			'ratingNum' => $ratingNum,
 		));
 	}
+
+
+	private function isCurrentUser($userId){
+		$user = $this->getCurrentUser();
+		if($userId==$user->id){
+			return true;
+		}
+		return false;
+	}
+
 
 	private function getReviewDao()
     {
