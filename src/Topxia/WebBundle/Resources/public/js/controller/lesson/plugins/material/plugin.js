@@ -29,7 +29,6 @@ define(function(require, exports, module) {
 			if(!lesson){
 				return;
 			}
-			console.log("应该有资料的挖");
 			if(lesson.materialNum>0){
 				$('.glyphicon-download-alt').attr('style','color:#096');
 			}else{
