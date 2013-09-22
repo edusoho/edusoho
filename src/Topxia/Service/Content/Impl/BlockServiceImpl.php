@@ -18,6 +18,11 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $this->getBlockHistoryDao()->findBlockHistoryCountByBlockId($blockId);
     }
 
+    public function getLatestBlockHistory()
+    {
+        return  $this->getBlockHistoryDao()->getLatestBlockHistory();
+    }
+
     public function getBlock($id)
     {
         $result = $this->getBlockDao()->getBlock($id);
@@ -79,6 +84,8 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function updateBlock($id, $fields)
     {   
         $block = $this->getBlockDao()->getBlock($id);
+        $user = $this->getCurrentUser();
+
         if (!$block) {
             throw $this->createServiceException("此编辑区不存在，更新失败!");
         }
@@ -89,7 +96,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $blockHistoryInfo = array(
             'blockId'=>$updatedBlock['id'],
             'content'=>$updatedBlock['content'],
-            'userId'=>$updatedBlock['userId'],
+            'userId'=>$user['id'],
             'createdTime'=>time()
             );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);

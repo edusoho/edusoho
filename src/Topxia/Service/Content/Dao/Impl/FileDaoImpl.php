@@ -49,7 +49,7 @@ class FileDaoImpl extends BaseDao implements FileDao
 
 	public function deleteFile($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 }

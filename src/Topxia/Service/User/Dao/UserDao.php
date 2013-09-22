@@ -20,10 +20,6 @@ interface UserDao
 
 	public function updateUser($id, $fields);
 
-	public function waveCoin($id, $diff);
-
-	public function wavePoint($id, $point);
-
 	public function waveCounterById($id, $name, $number);
 
 	public function clearCounterById($id, $name);

@@ -11,7 +11,8 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlock($id)
     {
-        return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function searchBlockCount()
@@ -22,13 +23,16 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function addBlock($block)
     {
-        $id = $this->insert($block);
-        return $this->getBlock($id);
+        $affected = $this->getConnection()->insert($this->table, $block);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert block error.');
+        }
+        return $this->getBlock($this->getConnection()->lastInsertId());
     }
 
     public function deleteBlock($id)
     {
-        return $this->delete($id);
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
     public function getBlockByCode($code)
@@ -45,7 +49,8 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function updateBlock($id, array $fields)
     {
-        return $this->update($id,$fields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getBlock($id);
     }
 
 }

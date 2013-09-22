@@ -13,12 +13,7 @@ class MaterialServiceTest extends BaseTestCase
 
     public function testFindCourseMaterials()
     {
-        $course = $this->createCourse();
-        $user = $this->createUser();
-        $countOfMaterial = $this->getMaterialService()->getMaterialCount($course['id']);
-        $materials = $this->getMaterialService()->findCourseMaterials($course['id'], 0 ,10);
-        $this->assertEquals(0, $countOfMaterial);
-        $this->assertCount(0, $materials);
+        
     }
 
     public function testDownloadMaterials()

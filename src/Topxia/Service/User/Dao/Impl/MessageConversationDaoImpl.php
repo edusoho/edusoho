@@ -40,7 +40,8 @@ class MessageConversationDaoImpl extends BaseDao implements MessageConversationD
 
     public function updateConversation($id, $toUpdateConversation)
     {
-        return $this->update($id, $toUpdateConversation);
+        $this->getConnection()->update($this->table, $toUpdateConversation, array('id' => $id));
+        return $this->getConversation($id);
     }
 
     public function findConversationsByToId($toId, $start, $limit)

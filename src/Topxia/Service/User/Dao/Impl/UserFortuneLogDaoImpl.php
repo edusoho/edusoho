@@ -13,7 +13,7 @@ class UserFortuneLogDaoImpl extends BaseDao implements UserFortuneLogDao
     {
         $affected = $this->getConnection()->insert($this->table, $log);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert log error.');
+            throw $this->createDaoException('Insert log error');
         }
         return $this->getLog($this->getConnection()->lastInsertId());
     }

@@ -11,11 +11,8 @@ class LessonViewedDaoImpl extends BaseDao implements LessonViewedDao
 
     public function deleteViewedsByCourseId($courseId)
     {
-        return $this->createQueryBuilder()
-            ->delete($this->table, 'course_lesson_viewed')
-            ->where("courseId = :courseId")
-            ->setParameter(":courseId", $courseId)
-            ->execute();
+    	$sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
 }

@@ -8,9 +8,6 @@ use Topxia\Common\ArrayToolkit;
 class BlockServiceTest extends BaseTestCase
 {   
 
-    /**
-     * @group get
-     */
     public function testGetBlock()
     {
         $blockFields1 = array(
@@ -241,7 +238,7 @@ class BlockServiceTest extends BaseTestCase
     {
         
         $blockHistory = $this->getBlockService()->getBlockHistory(999);
-        $this->assertFalse($blockHistory);
+        $this->assertNull($blockHistory);
     }
 
     /**

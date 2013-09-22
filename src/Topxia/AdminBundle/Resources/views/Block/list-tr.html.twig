@@ -6,7 +6,7 @@
         <span class="text-muted text-sm">编码：{{ block.code }}</span>
     </td>
     <td>
-        {{ admin_macro.user_link(users[block.userId]|default(null)) }}
+        {{ admin_macro.user_link(latestUpdateUser|default(null)) }}
         <br>
         <span class="text-muted text-sm">{{ block.updateTime|date('Y-n-d H:i:s') }}</span>
     </td>

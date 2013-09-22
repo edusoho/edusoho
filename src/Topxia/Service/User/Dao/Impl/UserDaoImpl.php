@@ -13,38 +13,25 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function getUser($id)
     {
-        return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function findUserByEmail($email)
     {
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'user')
-            ->where("email = :email")
-            ->orderBy('createdTime', 'DESC')
-            ->setParameter(":email", $email)
-            ->setMaxResults(1)
-            ->execute()
-            ->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($email));
     }
 
     public function findUserByNickname($nickname)
     {
-        return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'user')
-            ->where("nickname = :nickname")
-            ->orderBy('createdTime', 'DESC')
-            ->setParameter(":nickname", $nickname)
-            ->setMaxResults(1)
-            ->execute()
-            ->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
 
     public function findUsersByIds(array $ids)
     {
-        if(empty($ids)){
-            return array();
-        }
+        if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -65,7 +52,6 @@ class UserDaoImpl extends BaseDao implements UserDao
     {
         $builder = $this->createUserQueryBuilder($conditions)
             ->select('COUNT(id)');
-
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -96,25 +82,17 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function addUser($user)
     {
-        $id = $this->insert($user);
-        return $this->getUser($id);
+        $affected = $this->getConnection()->insert($this->table, $user);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert user error.');
+        }
+        return $this->getUser($this->getConnection()->lastInsertId());
     }
 
     public function updateUser($id, $fields)
     {
-        return $this->update($id, $fields);
-    }
-
-    public function waveCoin($id, $diff)
-    {
-        $sql = "UPDATE {$this->table} SET coin = coin + ? WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
-    }
-
-    public function wavePoint($id, $point)
-    {
-        $sql = "UPDATE {$this->table} SET point = point + ? WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($point, $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getUser($id);
     }
 
     public function waveCounterById($id, $name, $number)

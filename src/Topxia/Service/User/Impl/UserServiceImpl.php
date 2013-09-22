@@ -245,66 +245,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
-    public function increaseCoin ($userId, $coin, $action = null, $note = null) 
-    {
-        $user = $this->getUser($userId);
-        if (empty($user)) {
-            throw $this->createServiceException('用户不存在，增加金币失败！');
-        }
-
-        $coin = (int) $coin;
-        if ($coin <= 0) {
-            throw $this->createServiceException('金币值不正确，增加金币失败！');
-        }
-
-        $this->getUserDao()->waveCoin($user['id'], $coin);
-
-        $log = array(
-            'userId' => $user['id'],
-            'type' => 'coin',
-            'number' => $coin,
-            'action' => $action ? : '',
-            'note' => $note ? : '',
-            'createdTime' => time(),
-        );
-
-        $this->getUserFortuneLogDao()->addLog($log);
-
-        return true;
-    }
-
-    public function decreaseCoin ($userId, $coin, $action = null, $note = null) 
-    {
-        $user = $this->getUser($userId);
-        if (empty($user)) {
-            throw $this->createServiceException('用户不存在，扣除金币失败！');
-        }
-
-        $coin = (int) $coin;
-        if ($coin <= 0) {
-            throw $this->createServiceException('金币值不正确，扣除金币失败！');
-        }
-
-        if ($user['coin'] - $coin < 0) {
-            throw $this->createServiceException('金币不足，扣除金币失败！');
-        }
-
-        $this->getUserDao()->waveCoin($user['id'], -$coin);
-
-        $log = array(
-            'userId' => $user['id'],
-            'type' => 'coin',
-            'number' => -$coin,
-            'action' => $action ? : '',
-            'note' => $note ? : '',
-            'createdTime' => time(),
-        );
-
-        $this->getUserFortuneLogDao()->addLog($log);
-
-        return true;
-    }
-
     public function updateUserProfile($id, $fields)
     {
         $user = $this->getUser($id);

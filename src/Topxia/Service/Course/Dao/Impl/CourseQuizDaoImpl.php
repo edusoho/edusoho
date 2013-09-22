@@ -9,6 +9,12 @@ class CourseQuizDaoImpl extends BaseDao implements CourseQuizDao
 {
     protected $table = 'course_quiz';
 
+    public function getQuiz($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id));
+    }
+
     public function addQuiz($lessonQuizInfo)
     {
         $affected = $this->getConnection()->insert($this->table, $lessonQuizInfo);
@@ -27,12 +33,6 @@ class CourseQuizDaoImpl extends BaseDao implements CourseQuizDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND lessonId = ? AND userId = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId, $userId));
-    }
-    
-    public function getQuiz($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
     public function updateQuiz($id, $fields)

@@ -11,18 +11,28 @@ class BlockHistoryDaoImpl extends BaseDao implements BlockHistoryDao
 
     public function getBlockHistory($id)
     {
-        return $this->fetch($id);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
+    public function getLatestBlockHistory()
+    {
+        $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql) ? : null;
     }
 
     public function addBlockHistory($blockHistory)
     {
-        $id = $this->insert($blockHistory);
-        return $this->getBlockHistory($id);
+        $affected = $this->getConnection()->insert($this->table, $blockHistory);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert Block History error.');
+        }
+        return $this->getBlockHistory($this->getConnection()->lastInsertId());
     }
 
     public function deleteBlockHistory($id)
     {
-        return $this->delete($id);
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
     public function deleteBlockHistoryByBlockId($blockId)
