@@ -493,8 +493,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'role' => 'student',
-			'createdTime' => time(),
+			'createdTime' => time()
 		);
+
+		if(isset($infos['remarks'])){
+			$fields['remarks'] = $infos['remarks'];
+		}
 
 		$member = $this->getMemberDao()->addMember($fields);
 

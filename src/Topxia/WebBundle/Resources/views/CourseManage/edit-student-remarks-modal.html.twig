@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}编辑学员备注信息--课程名： {{course.title}}{% endblock %}
+{% block body %}
+
+<form id="edit-student-remarks" class="form-horizontal" method="post" action="{{ path('edit_student_remarks', {courseId:course.id, userId:user.id}) }}">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="remarks">备注</label>
+    </div>
+    
+    <div class="col-md-7 controls">
+    	<textarea class="form-control" id="remarks" name="remarks" rows="3">{{member.remarks}}</textarea>
+      <div class="help-block">学员备注信息为选填内容</div>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#edit-student-remarks">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+<script>app.load('course-manage/edit-student-remarks')</script>
+{% endblock %}

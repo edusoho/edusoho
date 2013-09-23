@@ -1,0 +1,84 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}学员管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+{% set script_controller = 'course-manage/students' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">学员管理
+      {% if 'ROLE_ADMIN' in app.user.roles %}
+    <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_add', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i>添加学员
+    </button>
+      {% endif %}
+  </div>
+  
+  <div class="panel-body">  
+    <table class="table table-striped">
+            
+            <thead>
+              <tr>
+                <th width="20%">学员</th>
+                <th>学习进度</th>
+                <th width="40%">操作</th>
+              </tr>
+            </thead>
+
+            <tbody id="course-student-list">
+
+              {% for student in students %}
+
+                {% set user = users[student.userId] %}
+                {% set progress = progresses[student.userId] %}
+                {% set isFollowing = user.id in followingIds %}
+
+                <tr>
+                  <td class="media">
+                    {{ web_macro.user_avatar(user, 'pull-left') }}
+                    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+                  </td>
+                  
+                  <td>
+                    {% if canManage %}
+                      <div class="progress" title="已学{{ progress.number }}课时">
+                        <div class="progress-bar" style="width: {{ progress.percent }}">
+                        </div>
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <td>
+                    {% if app.user.id != user.id %}
+                      <div class="pull-right">
+                        <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
+                        <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
+
+                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('edit_student_remarks', {courseId:course.id, userId:user.id})}}">备注</button>
+
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">移除</button>
+
+                        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+                      </div>
+                    {% endif %}
+                  </td>
+                </tr>
+
+              {% else %}
+
+              <li>本课程暂时还没有学生</li>
+
+              {% endfor %}
+
+            </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}

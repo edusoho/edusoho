@@ -32,7 +32,6 @@ class CourseOrderController extends BaseController
 
     public function payAction(Request $request)
     {
-        // var_dump($request->request->all());exit();
         $order = $this->getOrderService()->createOrder($request->request->all());
 
         if (intval($order['price']*100) > 0) {

@@ -5,10 +5,10 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $modal = $('#add-student-form').parents('.modal');
+        var $modal = $('#edit-student-remarks').parents('.modal');
 
         var validator = new Validator({
-            element: '#add-student-form',
+            element: '#edit-student-remarks',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -17,20 +17,18 @@ define(function(require, exports, module) {
                 
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     $modal.modal('hide');
-                    console.log("response");
-                    console.log(response);
-                    Notify.success('添加学员操作成功!');
+                    Notify.success('编辑学员备注信息成功!');
                 },'json').error(function(){
-                    Notify.danger('添加学员操作失败!');
+                    Notify.danger('编辑学员备注信息失败!');
                 });
             }
 
         });
 
         validator.addItem({
-            element: '[name="nickname"]',
-            required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            element: '[name="remarks"]',
+            required: false,
+            rule: 'maxlength{max:250}'
         });
 
     };
