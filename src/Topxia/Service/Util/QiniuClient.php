@@ -72,6 +72,31 @@ class QiniuClient
 		return $this->accessKey . ':' . $this->encodeSafely($sign) . ':' . $encodedParams;
     }
 
+    public function generateDownloadCookieToken($url, $deadline = 0)
+    {
+        if (empty($deadline)) {
+            $deadline = time() + 60;
+        }
+
+        $macKey = 'MowmlzHiXJDiggdY7--PgmKgUTf_nW2o7QNA75Zt';
+
+        $url = str_replace('?', '\\\\?', $url);
+
+        $policy = "{\"E\":\"{$deadline}\", \"S\":\"{$url}\"}";
+
+        // $policy = array('E' => "$deadline", 'S' => $url);
+        $ctx = $this->encodeSafely($policy);
+
+        $sign = hash_hmac('sha1', $ctx, $macKey);
+
+        $sign = $this->encodeSafely($sign);
+        var_dump($sign);exit();
+
+        $token = "1:{$sign}:{$ctx}";
+
+        return $token;
+    }
+
     public function generateDownloadUrl($bucket, $key, $fop = '', $deadline = 0)
     {
         if (empty($deadline)) {
