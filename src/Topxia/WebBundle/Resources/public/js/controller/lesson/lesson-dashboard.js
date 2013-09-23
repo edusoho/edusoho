@@ -4,7 +4,8 @@ define(function(require, exports, module) {
 		Backbone = require('backbone'),
         VideoJS = require('video-js'),
         swfobject = require('swfobject'),
-        Scrollbar = require('jquery.perfect-scrollbar');
+        Scrollbar = require('jquery.perfect-scrollbar'),
+        Notify = require('common/bootstrap-notify');
 
 	var Toolbar = require('./lesson-toolbar');
 
@@ -137,7 +138,9 @@ define(function(require, exports, module) {
             }
             this._toolbar.set('lessonId', id);
 
-            var player = VideoJS("lesson-video-player");
+            var player = VideoJS("lesson-video-player", {
+            	techOrder: ['flash','html5']
+            });
             player.pause();
             swfobject.removeSWF('lesson-swf-player');
 
@@ -164,6 +167,13 @@ define(function(require, exports, module) {
 			            player.src(lesson.media.files[0].url);
 			            player.on('ended', function(){
 			            	that._onFinishLearnLesson();
+			            	player.currentTime(0);
+			            	player.pause();
+			            });
+			       
+			            player.on('error', function(error){
+			            	var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
+			            	Notify.danger(message, 60);
 			            });
 			            $("#lesson-video-content").show();
 			            player.play();
