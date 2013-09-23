@@ -18,12 +18,10 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
                 $auth = $this->getSettingService()->get('auth', array());
                 $user = $this->getUserService()->register($registration);
-                //发送邮件到最新注册的用户
-                $token = $this->getUserService()->makeToken('email-verify', $user['id']);
-                $this->sendVerifyEmail($token, $user);
                 $this->authenticateUser($user);
-                $this->get('session')->set('registed_email', $user['email']);
 
+                $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
+                
                 return $this->redirect($this->generateUrl('register_submited', array(
                     'id' => $user['id'], 'hash' => $this->makeHash($user))
                 ));
@@ -163,6 +161,16 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
+    private function getWelcomeBody($user)
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        $site = $this->getSettingService()->get('site', array());
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
+        $welcomeBody = $this->setting('auth.welcome_body', '注册欢迎内容');
+        $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
+        return $welcomeBody;
+    }
     private function sendVerifyEmail($token, $user)
     {
         $auth = $this->getSettingService()->get('auth', array());
@@ -172,13 +180,13 @@ class RegisterController extends BaseController
         $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
-        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token));
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
         $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-        $this->sendEmail($user['email'], $emailTitle, $emailBody);
-        
+        $this->sendEmail($user['email'], $emailTitle, $emailBody);    
     }
+
     private function isLoginEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
