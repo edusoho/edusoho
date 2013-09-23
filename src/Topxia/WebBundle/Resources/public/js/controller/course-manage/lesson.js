@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         });
 
         $("#course-item-list").on('click', '.delete-lesson-btn', function(e) {
-            if (!confirm('您真的要删除该课时吗？')) {
+            if (!confirm('删除课时的同时会删除课时的资料、测验。\n您真的要删除该课时吗？')) {
                 return ;
             }
             var $btn = $(e.currentTarget);
