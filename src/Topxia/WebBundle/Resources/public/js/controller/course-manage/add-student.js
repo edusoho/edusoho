@@ -17,14 +17,15 @@ define(function(require, exports, module) {
                 
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     $modal.modal('hide');
-                    console.log("response");
-                    console.log(response);
+                    if(response){
+                        window.location.reload();
+                    }
                     Notify.success('添加学员操作成功!');
                 },'json').error(function(){
                     Notify.danger('添加学员操作失败!');
                 });
-            }
 
+            }
         });
 
         validator.addItem({

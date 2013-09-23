@@ -49,6 +49,29 @@ class OrderServiceImpl extends BaseService implements OrderService
 		return $order;
 	}
 
+	public function createFreeOrderForSingle($userId, $courseId)
+	{
+		$currentUser = $this->getCurrentUser();
+		$user = $this->getUserService()->getUser($userId);
+		$course = $this->getCourseService()->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createNotFoundException();
+		}
+		$order = array();
+		$order['courseId'] = $courseId;
+		$order['payment'] = 'none';
+		$order['sn'] = $this->generateOrderSn($order);
+		$order['title'] = "被管理员{$currentUser['nickname']}添加为课程《{$course['title']}》的免费新增学员";
+		$order['price'] = 0; 	//添加用户订单价格为0
+		$order['status'] = 'created';
+		$order['userId'] = $user['id'];
+		$order['createdTime'] = time();
+
+		$order = $this->getOrderDao()->addOrder($order);
+		$this->_createLog($order['id'], 'created', "被管理员{$currentUser['nickname']}添加为课程《{$course['title']}》的免费新增学员");
+		return $order;
+	}
+
 	public function payOrder($payData)
 	{
 		$order = $this->getOrderDao()->getOrderBySn($payData['sn']);
