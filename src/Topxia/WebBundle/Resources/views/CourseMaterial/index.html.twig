@@ -9,19 +9,27 @@
 	{% for material in materials %}
 	  <li class="media">
 	  	<div class="media-body">
-	    	<div class="pull-right">
-	    	 属于课时&nbsp;&nbsp; <a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lessons[material.lessonId].id}}" title="{{ lessons[material.lessonId].title }}" data-id="{{ lessons[material.lessonId].id }}" >{{ lessons[material.lessonId].title }}</a>
-		    	<br>
-		    	<span class="pull-right text-muted">{{ material.createdTime|smart_time }}</span>
+	    	<div class="mbs">
+			    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" 
+			    target="_blank">{{ material.title }}</a>
 	    	</div>
-		    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" 
-		    target="_blank">{{ material.title }}</a>
-		    <span class="mlm text-muted">{{ material.fileSize|file_size }}</span>
 
+	    	{% if material.description%}
+			    <div class="text-muted text-sm mbs">
+			    	{{ material.description|plain_text(100) }} 
+			    </div>
+			   {% endif %}
 
-		    <div class="text-muted">
-		    	{{ material.description }} 
-		    </div>
+	    	<div class="text-sm">
+	    		<span class="text-muted">{{ material.fileSize|file_size }}</span>
+	    		{% set lesson = lessons[material.lessonId]|default(null) %}
+	    		{% if lesson %}
+		    		<span class="bullet">•</span>
+	    		  <a class="link-muted" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lesson.id}}" title="{{ lesson.title }}">课时{{ lesson.number }}</a>
+	    		{% endif %}
+	    		<span class="bullet">•</span>
+		    	<span class="text-muted">上传于{{ material.createdTime|smart_time }}</span>
+	    	</div>
 		    
 	    </div>
 	  </li>

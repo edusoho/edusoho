@@ -66,28 +66,22 @@
             </div>
             
             <div class="text-muted text-normal">
-              by {{ web_macro.user_link(author) }}
+              by {{ web_macro.user_link(author, 'link-muted') }}
 
               {% if thread.postNum > 0 %}
                 {% set poster = users[thread.latestPostUserId] %}
                 <span class="bullet">•</span>
-                <span>最后回复 {{ web_macro.user_link(poster) }}</span>
+                <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
               {% endif %}
               <span class="bullet">•</span>
               <span>{{ thread.latestPostTime|smart_time }}</span>
               <span class="bullet">•</span>
               <span>{{ thread.hitNum }}浏览</span>
-              <span class="bullet">•</span>
-              <span>
-              {% if thread.lessonId != 0 %}
-                  <span>所属课时 
-                    <strong>[{{lessons[thread.lessonId].number}}]</strong>
-                  </span>
-                  <span class="bullet">•</span>
-                  <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" >
-                    {{lessons[thread.lessonId].title}} </a>
+              {% set lesson = thread.lessonId > 0 ? lessons[thread.lessonId]|default(null) : null %}
+              {% if lesson %}
+                <span class="bullet">•</span>
+                <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">课时{{lesson.number}}</a>
               {% endif %}
-              </span>
 
             </div>
           </div>

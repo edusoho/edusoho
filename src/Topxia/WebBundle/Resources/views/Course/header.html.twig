@@ -46,20 +46,26 @@
                 ></div>
             </div>
 
+            <div class="btn-group" data-role="tooltip" title="操作" >
+              <button class="btn btn-default btn-sm " data-toggle="dropdown">
+                <i class="glyphicon glyphicon-cog"></i>
+              </button>
+              <ul class="dropdown-menu pull-right">
+                {% if canManage %}
+                  <li><a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a></li>
+                {% endif %}
+                {% if member.role|default(null) == 'student' %}
+                  <li><a class="course-exit-btn" href="javascript:" data-url="{{ path('course_exit', {id:course.id}) }}">退出学习</a></li>
+                {% endif %}
+              </ul>
+            </div>
+
+
+
+
+
           </div>
-          <div class="btn-group" data-role="tooltip" title="操作" >
-            <button class="btn btn-default btn-sm " data-toggle="dropdown">
-              <i class="glyphicon glyphicon-cog"></i>
-            </button>
-            <ul class="dropdown-menu pull-right">
-              {% if canManage %}
-                <li><a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a></li>
-              {% endif %}
-              {% if member.role|default(null) == 'student' %}
-                <li><a class="course-exit-btn" href="javascript:" data-url="{{ path('course_exit', {id:course.id}) }}">退出学习</a></li>
-              {% endif %}
-            </ul>
-          </div>
+
           {% else %}
 
             {% if course.status == 'published' %}

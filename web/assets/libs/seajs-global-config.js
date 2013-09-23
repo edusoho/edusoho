@@ -3,7 +3,7 @@ seajs.config({
 		'jquery': 'jquery/jquery/1.10.1/jquery',
 		'$': 'jquery/jquery/1.10.1/jquery',
 		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
-		"jquery.form": "jquery-plugin/form/3.36.0/form",
+		"jquery.form": "jquery-plugin/form/3.44.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",
 		"jquery.cycle2": "jquery-plugin/cycle2/2013.08.01/cycle2",

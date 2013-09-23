@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    var Validator = require('arale/validator/0.9.3/validator');
+    var Validator = require('arale/validator/0.9.6/validator');
 
     var BootstrapValidator = Validator.extend({
         attrs: {
