@@ -259,8 +259,6 @@ class FileServiceImpl extends BaseService implements FileService
 		$savePath = tempnam(sys_get_temp_dir(), '_thumb_');
 		unlink($savePath);
 
-		// var_dump($options, $file['file']->getRealPath());exit();
-
         $imagine->open($file['file']->getRealPath())
         	->thumbnail($size, $options['mode'])
         	->save($savePath . '.jpg' , array('quality' => $options['quality']));
