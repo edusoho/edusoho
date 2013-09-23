@@ -21,22 +21,15 @@
 	      {{ thread.title }}
 	    </h2>
 	    <div class="thread-metas">
-	      By {{  web_macro.user_link(author) }}
+	      By {{  web_macro.user_link(author, 'link-muted') }}
 	      <span class="bullet mhs">•</span>
 	      {{ thread.createdTime|smart_time }}
 	      <span class="bullet mhs">•</span>
 	      {{ thread.hitNum}} 次浏览
-	      <span>
-	      	{% if thread.lessonId != 0 %}
-            <span>所属课时 
-              <strong>[{{lesson.number}}]</strong>
-            </span>
-            <span class="bullet">•</span>
-            <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" >
-              {{lesson.title}} 
-            </a>
-          {% endif %}
-          </span>
+        {% if lesson %}
+          <span class="bullet mhs">•</span>
+          <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">课时{{lesson.number}}</a>
+        {% endif %}
 	    </div>
 	  </div>
 	  <div class="thread-body">{{ thread.content|raw }}</div>

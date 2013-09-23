@@ -668,6 +668,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
 
+		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
+
 		// $this->autosetCourseFields($courseId);
 	}
 

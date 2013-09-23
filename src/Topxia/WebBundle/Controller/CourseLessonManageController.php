@@ -135,6 +135,7 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
+		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 		return $this->createJsonResponse(true);
 	}
 
@@ -157,6 +158,11 @@ class CourseLessonManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getCourseMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
 }
