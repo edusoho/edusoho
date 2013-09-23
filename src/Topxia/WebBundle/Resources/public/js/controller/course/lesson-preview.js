@@ -6,7 +6,10 @@ define(function(require, exports, module) {
     exports.run = function() {
 
 		if ($("#lesson-preview-video-player").length > 0) {
-			var player = VideoJS("lesson-preview-video-player");
+			var player = VideoJS("lesson-preview-video-player", {
+            	techOrder: ['flash','html5']
+            });
+            player.width('100%');
 	    	player.play();
 
 	    	$('#modal').one('hidden.bs.modal', function () {
