@@ -1061,9 +1061,28 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// 更新课程的teacherIds，该字段为课程可见教师的ID列表
 		$fields = array('teacherIds' => $visibleTeacherIds);
 		$this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
-		
 	}
 
+	/**
+	 * @todo 当用户拥有大量的课程老师角色时，这个方法效率是有就有问题咯！鉴于短期内用户不会拥有大量的课程老师角色，先这么做着。
+	 */
+	public function cancelTeacherInAllCourses($userId)
+	{
+		$count = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', 0, $count, false);
+		foreach ($members as $member) {
+			$course = $this->getCourse($member['courseId']);
+
+			$this->getMemberDao()->deleteMember($member['id']);
+
+			$fields = array(
+				'teacherIds' => array_diff($course['teacherIds'], array($member['userId']))
+			);
+			$this->getCourseDao()->updateCourse($member['courseId'], CourseSerialize::serialize($fields));
+		}
+
+		$this->getLogService()->info('course', 'cancel_teachers_all', "取消用户#{$userId}所有的课程老师角色");
+	}
 
 	public function increaseLessonQuizCount($lessonId){
 	    $lesson = $this->getLessonDao()->getLesson($lessonId);

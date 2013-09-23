@@ -299,6 +299,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户角色不能为空');
         }
 
+        if (!in_array('ROLE_USER', $roles)) {
+            throw $this->createServiceException('用户角色必须包含ROLE_USER');
+        }
+
         $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER');
 
         $notAllowedRoles = array_diff($roles, $allowedRoles);

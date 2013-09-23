@@ -152,6 +152,8 @@ interface CourseService
 	public function isCourseStudent($courseId, $userId);
 
 	public function setCourseTeachers($courseId, $teachers);
+
+	public function cancelTeacherInAllCourses($userId);
 	
 	/**
 	 * 尝试管理课程, 无权限则抛出异常
