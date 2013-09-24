@@ -65,7 +65,7 @@ interface CourseService
 
 	public function closeCourse($id);
 
-	public function joinCourse($userId, $courseId, array $infos = array());
+	public function joinCourse($userId, $courseId, $remark);
 
 	public function exitCourse($userId, $courseId);
 

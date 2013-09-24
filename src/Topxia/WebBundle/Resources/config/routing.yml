@@ -307,10 +307,6 @@ course_thread_delete:
     defaults: { _controller: TopxiaWebBundle:CourseThread:delete }
     methods: [POST]
 
-edit_student_remarks:
-    pattern:  /edit/{courseId}/student/{userId}/remarks
-    defaults: { _controller: TopxiaWebBundle:CourseManage:editStudentRemarks }
-
 course_manage:
     pattern:  /course/{id}/manage
     defaults: { _controller: TopxiaWebBundle:CourseManage:index }
@@ -341,15 +337,23 @@ course_manage_teachers:
 
 course_manage_students:
     pattern:  /course/{id}/manage/students
-    defaults: { _controller: TopxiaWebBundle:CourseManage:students }
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
 
-course_manage_student_add:
-    pattern:  /course/{id}/add/student
-    defaults: { _controller: TopxiaWebBundle:CourseManage:addStudent }
+course_manage_student_create:
+    pattern:  /course/{id}/manage/student/create
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
 
-course_manage_student_add_nickname_check:
-    pattern:  /course/{courseId}/nickname/check
-    defaults: { _controller: TopxiaWebBundle:CourseManage:nicknameCheck }
+course_manage_student_remove:
+    pattern:  /course/{courseId}/manage/student/{userId}/remove
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }
+
+course_manage_student_remark:
+    pattern:  /course/{courseId}/manage/student/{userId}/remark
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
+
+course_manage_student_check_nickname:
+    pattern:  /course/{id}/manage/nickname_check
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkNickname }
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch

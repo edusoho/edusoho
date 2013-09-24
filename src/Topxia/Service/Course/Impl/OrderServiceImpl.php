@@ -15,12 +15,23 @@ class OrderServiceImpl extends BaseService implements OrderService
 
 	public function createOrder($order)
 	{
-		$user = $this->getCurrentUser();
+		$orderUser = $this->getCurrentUser();
+		if (empty($orderUser)) {
+			throw $this->createServiceException('用户未登录，不能创建订单。');
+		}
+
+		if (!empty($order['userId'])) {
+			$orderUser = $this->getUserService()->getUser($order['userId']);
+			if (empty($orderUser)) {
+				throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
+			}
+		}
+
 		if (!ArrayToolkit::requireds($order, array('courseId', 'payment'))) {
 			throw $this->createServiceException('创建订单失败：缺少参数。');
 		}
 
-		$order = ArrayToolkit::parts($order, array('courseId', 'payment'));
+		$order = ArrayToolkit::parts($order, array('courseId', 'payment', 'price'));
 
 		$course = $this->getCourseService()->getCourse($order['courseId']);
 		if (empty($course)) {
@@ -33,42 +44,20 @@ class OrderServiceImpl extends BaseService implements OrderService
 
 		$order['sn'] = $this->generateOrderSn($order);
 		$order['title'] = "购买课程《{$course['title']}》";
-		$order['price'] = $course['price'];
+		$order['price'] = empty($order['price']) ? $course['price'] : number_format($order['price'], 2, '.', '');;
 		$order['status'] = 'created';
 
 		if (intval($order['price']*100) == 0) {
 			$order['payment'] = 'none';
 		}
-		$order['userId'] = $user['id'];
+
+		$order['userId'] = $orderUser['id'];
 		$order['createdTime'] = time();
 
 		$order = $this->getOrderDao()->addOrder($order);
 
 		$this->_createLog($order['id'], 'created', '创建订单');
 
-		return $order;
-	}
-
-	public function createFreeOrderForSingle($userId, $courseId)
-	{
-		$currentUser = $this->getCurrentUser();
-		$user = $this->getUserService()->getUser($userId);
-		$course = $this->getCourseService()->getCourse($courseId);
-		if (empty($course)) {
-			throw $this->createNotFoundException();
-		}
-		$order = array();
-		$order['courseId'] = $courseId;
-		$order['payment'] = 'none';
-		$order['sn'] = $this->generateOrderSn($order);
-		$order['title'] = "被管理员{$currentUser['nickname']}添加为课程《{$course['title']}》的免费新增学员";
-		$order['price'] = 0; 	//添加用户订单价格为0
-		$order['status'] = 'created';
-		$order['userId'] = $user['id'];
-		$order['createdTime'] = time();
-
-		$order = $this->getOrderDao()->addOrder($order);
-		$this->_createLog($order['id'], 'created', "被管理员{$currentUser['nickname']}添加为课程《{$course['title']}》的免费新增学员");
 		return $order;
 	}
 

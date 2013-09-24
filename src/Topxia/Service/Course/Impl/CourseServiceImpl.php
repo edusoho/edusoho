@@ -467,7 +467,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $favorite ? true : false;
 	}
 
-	public function joinCourse($userId, $courseId, array $infos = array())
+	public function joinCourse($userId, $courseId, $remark = null)
 	{
 		$course = $this->getCourse($courseId);
 
@@ -493,12 +493,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'role' => 'student',
+			'remark' => empty($remark) ? '' : $remark,
 			'createdTime' => time()
 		);
-
-		if(isset($infos['remarks'])){
-			$fields['remarks'] = $infos['remarks'];
-		}
 
 		$member = $this->getMemberDao()->addMember($fields);
 

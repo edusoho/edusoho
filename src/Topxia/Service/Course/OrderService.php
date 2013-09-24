@@ -20,5 +20,4 @@ interface OrderService
 
     public function findOrderLogs($orderId);
 
-    public function createFreeOrderForSingle($userId, $courseId);
 }

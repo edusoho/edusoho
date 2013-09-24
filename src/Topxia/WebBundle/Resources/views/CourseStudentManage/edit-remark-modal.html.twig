@@ -5,7 +5,7 @@
 {% block title %}编辑学员备注信息--课程名： {{course.title}}{% endblock %}
 {% block body %}
 
-<form id="edit-student-remarks" class="form-horizontal" method="post" action="{{ path('edit_student_remarks', {courseId:course.id, userId:user.id}) }}">
+<form id="edit-student-remarks" class="form-horizontal" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">

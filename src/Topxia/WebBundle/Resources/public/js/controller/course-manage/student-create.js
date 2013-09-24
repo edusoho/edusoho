@@ -5,10 +5,10 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $modal = $('#add-student-form').parents('.modal');
+        var $modal = $('#student-create-form').parents('.modal');
 
         var validator = new Validator({
-            element: '#add-student-form',
+            element: '#student-create-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -29,9 +29,14 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="nickname"]',
+            element: '#student-nickname',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric remote'
+        });
+
+        validator.addItem({
+            element: '#student-remark',
+            rule: 'maxlength{max:80}'
         });
 
     };
