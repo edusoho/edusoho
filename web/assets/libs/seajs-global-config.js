@@ -22,7 +22,7 @@ seajs.config({
 		'base': 'arale/base/1.1.1/base',
 		'widget': 'arale/widget/1.1.1/widget',
 		'sticky': 'arale/sticky/1.2.1/sticky',
-		"templatable": "arale/templatable/0.9.2/templatable",
+		"templatable": "arale/templatable/0.9.1/templatable",
 		'placeholder': 'arale/placeholder/1.1.0/placeholder',
 		'json': 'gallery/json/1.0.2/json',
 		"handlebars": "gallery/handlebars/1.0.2/handlebars",
