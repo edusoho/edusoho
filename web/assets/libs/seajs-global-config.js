@@ -15,7 +15,7 @@ seajs.config({
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
 		'bootstrap': 'gallery2/bootstrap/3.0.0/bootstrap-debug',
 		'kindeditor': 'gallery2/kindeditor/4.1.7/kindeditor',
-		'autocomplete': 'arale/autocomplete/1.3.0/autocomplete',
+		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.0.1/upload',
 		'bootstrap.validator': 'common/validator',
 		'class': 'arale/class/1.1.0/class',

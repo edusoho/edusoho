@@ -1,4 +1,48 @@
-define("arale/overlay/1.1.2/overlay-debug", [ "$-debug", "arale/position/1.0.1/position-debug", "arale/iframe-shim/1.0.2/iframe-shim-debug", "arale/widget/1.1.1/widget-debug", "arale/base/1.1.1/base-debug", "arale/class/1.1.0/class-debug", "arale/events/1.1.0/events-debug" ], function(require, exports, module) {
+define("arale/overlay/1.1.1/mask-debug", [ "$-debug", "./overlay-debug", "arale/position/1.0.1/position-debug", "arale/iframe-shim/1.0.2/iframe-shim-debug", "arale/widget/1.1.1/widget-debug", "arale/base/1.1.1/base-debug", "arale/class/1.1.0/class-debug", "arale/events/1.1.0/events-debug" ], function(require, exports, module) {
+    var $ = require("$-debug"), Overlay = require("./overlay-debug"), ua = (window.navigator.userAgent || "").toLowerCase(), isIE6 = ua.indexOf("msie 6") !== -1, body = $(document.body), doc = $(document);
+    // Mask
+    // ----------
+    // 全屏遮罩层组件
+    var Mask = Overlay.extend({
+        attrs: {
+            width: isIE6 ? doc.outerWidth(true) : "100%",
+            height: isIE6 ? doc.outerHeight(true) : "100%",
+            className: "ui-mask",
+            opacity: .2,
+            backgroundColor: "#000",
+            style: {
+                position: isIE6 ? "absolute" : "fixed",
+                top: 0,
+                left: 0
+            },
+            align: {
+                // undefined 表示相对于当前可视范围定位
+                baseElement: isIE6 ? body : undefined
+            }
+        },
+        show: function() {
+            if (isIE6) {
+                this.set("width", doc.outerWidth(true));
+                this.set("height", doc.outerHeight(true));
+            }
+            return Mask.superclass.show.call(this);
+        },
+        setup: function() {
+            // 加载 iframe 遮罩层并与 overlay 保持同步
+            this._setupShim();
+        },
+        _onRenderBackgroundColor: function(val) {
+            this.element.css("backgroundColor", val);
+        },
+        _onRenderOpacity: function(val) {
+            this.element.css("opacity", val);
+        }
+    });
+    // 单例
+    module.exports = new Mask();
+});
+
+define("arale/overlay/1.1.1/overlay-debug", [ "$-debug", "arale/position/1.0.1/position-debug", "arale/iframe-shim/1.0.2/iframe-shim-debug", "arale/widget/1.1.1/widget-debug", "arale/base/1.1.1/base-debug", "arale/class/1.1.0/class-debug", "arale/events/1.1.0/events-debug" ], function(require, exports, module) {
     var $ = require("$-debug"), Position = require("arale/position/1.0.1/position-debug"), Shim = require("arale/iframe-shim/1.0.2/iframe-shim-debug"), Widget = require("arale/widget/1.1.1/widget-debug");
     // Overlay
     // -------
@@ -136,27 +180,17 @@ define("arale/overlay/1.1.2/overlay-debug", [ "$-debug", "arale/position/1.0.1/p
     });
     // 绑定 resize 重新定位事件
     var timeout;
-    var winWidth = $(window).width();
-    var winHeight = $(window).height();
     Overlay.allOverlays = [];
     $(window).resize(function() {
         timeout && clearTimeout(timeout);
         timeout = setTimeout(function() {
-            var winNewWidth = $(window).width();
-            var winNewHeight = $(window).height();
-            // IE678 莫名其妙触发 resize 
-            // http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer
-            if (winWidth !== winNewWidth || winHeight !== winNewHeight) {
-                $(Overlay.allOverlays).each(function(i, item) {
-                    // 当实例为空或隐藏时，不处理
-                    if (!item || !item.get("visible")) {
-                        return;
-                    }
-                    item._setPosition();
-                });
-            }
-            winWidth = winNewWidth;
-            winHeight = winNewHeight;
+            $(Overlay.allOverlays).each(function(i, item) {
+                // 当实例为空或隐藏时，不处理
+                if (!item || !item.get("visible")) {
+                    return;
+                }
+                item._setPosition();
+            });
         }, 80);
     });
     module.exports = Overlay;
