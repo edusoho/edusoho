@@ -43,11 +43,9 @@ define("arale/upload/1.0.1/upload-debug", [ "$-debug" ], function(require, expor
         var data = this.settings.data;
         this.form.append(createInputs(data));
         if (window.FormData) {
-            this._formdata = new FormData();
-            for (var key in data) {
-                this._formdata.append(key, data[key]);
-            }
-            this._formdata.append("_uploader_", "formdata");
+            this.form.append(createInputs({
+                _uploader_: "formdata"
+            }));
         } else {
             this.form.append(createInputs({
                 _uploader_: "iframe"
@@ -116,9 +114,9 @@ define("arale/upload/1.0.1/upload-debug", [ "$-debug" ], function(require, expor
     // prepare for submiting form
     Uploader.prototype.submit = function() {
         var self = this;
-        if (self._formdata && self._files) {
-            // clone a new FormData
-            var form = new FormData(self._formdata);
+        if (window.FormData && self._files) {
+            // build a FormData
+            var form = new FormData(self.form.get(0));
             // use FormData to upload
             $.each(self._files, function(i, file) {
                 form.append(self.settings.name, file);
@@ -174,8 +172,9 @@ define("arale/upload/1.0.1/upload-debug", [ "$-debug" ], function(require, expor
     };
     // handle when upload success
     Uploader.prototype.success = function(callback) {
+        var me = this;
         this.settings.success = function(response) {
-            this.refreshInput();
+            me.refreshInput();
             if (callback) {
                 callback(response);
             }
@@ -184,9 +183,10 @@ define("arale/upload/1.0.1/upload-debug", [ "$-debug" ], function(require, expor
     };
     // handle when upload success
     Uploader.prototype.error = function(callback) {
+        var me = this;
         this.settings.error = function(fileName) {
             if (callback) {
-                this.refreshInput();
+                me.refreshInput();
                 callback(response);
             }
         };
