@@ -1,0 +1,32 @@
+{
+    "family": "arale",
+    "name": "templatable",
+    "version": "0.9.2",
+    "description": "处理组件的模板渲染，混入到 Widget 中使用。",
+    "keywords": ["utility", "widget"],
+    "homepage": "http://aralejs.org/templatable/",
+    "author": "贯高 <sakura9515@gmail.com>",
+    "maintainers": [
+        "贯高 <sakura9515@gmail.com>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/aralejs/templatable.git"
+    },
+    "bugs": {
+        "url": "https://github.com/aralejs/templatable/issues"
+    },
+    "licenses": "MIT",
+    "spm": {
+        "output": ["templatable.js"],
+        "alias": {
+            "$": "$",
+            "handlebars": "gallery/handlebars/1.0.2/handlebars"
+        },
+        "devAlias": {
+            "widget": "arale/widget/1.1.0/widget",
+            "runtime": "gallery/handlebars/1.0.2/runtime"
+        },
+        "engines": {}
+    }
+}
