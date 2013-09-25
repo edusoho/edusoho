@@ -1,42 +1,34 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set hide_footer = true %}
-
 {% block title %}发送私信{% endblock %}
 
 {% block body %}
-<input id="app-user-nickname" type=text style="display:none" value="{{app.user.nickname}}">
+  <form id="message-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">
+    {{ form_errors(form) }}
 
-      <form id="course-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">
-        {{ form_errors(form) }}
+    <div class="form-group">
+      <div class="col-md-2 control-label">{{ form_label(form.receiver, '收件人') }}</div>
+      <div class="col-md-10 controls">
+        {{ form_widget(form.receiver, {attr:{class:'form-control', rows:1,'data-url':path('message_check_receiver') }})  }}
+      </div> 
+    </div>
 
-        <div class="form-group">
-          <div class="col-md-2 control-label">{{ form_label(form.receiver, '收件人') }}</div>
-          <div class="col-md-10 controls">
-            {{ form_widget(form.receiver, {attr:{class:'form-control', rows:1,'data-url':path('message_check_receiver') }})  }}
-          </div> 
-        </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">{{ form_label(form.content, '内容') }}</div>
+      <div class="col-md-10 controls">
+        {{ form_widget(form.content, {attr:{class:'form-control',rows:5}}) }}
+      </div>
+    </div>
 
-        <div class="form-group">
-          <div class="col-md-2 control-label">{{ form_label(form.content, '内容') }}</div>
-          <div class="col-md-10 controls">
-            {{ form_widget(form.content, {attr:{class:'form-control',rows:5}}) }}
-          </div>
-        </div>
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10 controls">
+        {{ form_rest(form) }}
+        <button class="btn btn-primary" type="submit">发送</button>
+      </div>
+    </div>
+  </form>
 
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-10 controls">
-            {{ form_rest(form) }}
-            <input id="course-create-btn" class="btn btn-primary" type="submit" value="发送">
-          </div>
-        </div>
-      </form>
-
-<script>
-    app.load('user/message-send-modal');
-</script>
+  <script> app.load('user/message-send-modal'); </script>
 {% endblock %}
 
-{% block footer %}
-
-{% endblock %}
+{% set hide_footer = true %}
