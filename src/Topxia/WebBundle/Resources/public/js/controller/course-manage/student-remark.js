@@ -5,30 +5,34 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $modal = $('#edit-student-remarks').parents('.modal');
+        var $modal = $('#student-remark-form').parents('.modal');
 
         var validator = new Validator({
-            element: '#edit-student-remarks',
+            element: '#student-remark-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
                 
-                $.post($form.attr('action'), $form.serialize(), function(response) {
+                $.post($form.attr('action'), $form.serialize(), function(html) {
+                    var $html = $(html);
+                    console.log($('#'+$html.attr('id'))[0]);
+                    $('#'+$html.attr('id')).replaceWith($html);
                     $modal.modal('hide');
-                    Notify.success('编辑学员备注信息成功!');
-                },'json').error(function(){
-                    Notify.danger('编辑学员备注信息失败!');
+                    Notify.success('备注学员成功');
+                }).error(function(){
+                    Notify.danger('备注学员失败，请重试！');
                 });
             }
 
         });
 
         validator.addItem({
-            element: '[name="remarks"]',
+            element: '#student-remark',
             required: false,
-            rule: 'maxlength{max:250}'
+            rule: 'maxlength{max:80}',
+            display: '备注'
         });
 
     };

@@ -481,12 +481,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$user = $this->getUserService()->getUser($userId);
 		if (empty($user)) {
-			return $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
+			throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if ($member) {
-			return false;
+			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
 		}
 
 		$fields = array(
@@ -1079,6 +1079,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getLogService()->info('course', 'cancel_teachers_all', "取消用户#{$userId}所有的课程老师角色");
+	}
+
+	public function remarkStudent($courseId, $userId, $remark)
+	{
+		$member = $this->getCourseMember($courseId, $userId);
+		if (empty($member)) {
+			throw $this->createServiceException('课程会员不存在，备注失败!');
+		}
+		$fields = array('remark' => empty($remark) ? '' : (string) $remark);
+		return $this->getMemberDao()->updateMember($member['id'], $fields);
 	}
 
 	public function increaseLessonQuizCount($lessonId){

@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var $modal = $('#student-create-form').parents('.modal');
+        var $table = $('#course-student-list');
 
         var validator = new Validator({
             element: '#student-create-form',
@@ -15,13 +16,12 @@ define(function(require, exports, module) {
                     return false;
                 }
                 
-                $.post($form.attr('action'), $form.serialize(), function(response) {
+                $.post($form.attr('action'), $form.serialize(), function(html) {
+                    $table.find('tr.empty').remove();
+                    $(html).prependTo($table.find('tbody'));
                     $modal.modal('hide');
-                    if(response){
-                        window.location.reload();
-                    }
                     Notify.success('添加学员操作成功!');
-                },'json').error(function(){
+                }).error(function(){
                     Notify.danger('添加学员操作失败!');
                 });
 

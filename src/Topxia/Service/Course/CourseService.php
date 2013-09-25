@@ -154,6 +154,8 @@ interface CourseService
 	public function setCourseTeachers($courseId, $teachers);
 
 	public function cancelTeacherInAllCourses($userId);
+
+	public function remarkStudent($courseId, $userId, $remark);
 	
 	/**
 	 * 尝试管理课程, 无权限则抛出异常

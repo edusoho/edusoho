@@ -15,34 +15,19 @@
           <div class="list-group-panel">
             <div class="list-group-heading">课程信息</div>
             <div class="list-group">
-              
-              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('course_manage_base', {id:course.id}) }}" 
-              data-toggle="tooltip" data-original-title="标题.副标题.分类.标签" data-placement="top"
-              >基本信息</a>
-              <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('course_manage_detail', {id:course.id}) }}" 
-              data-toggle="tooltip" data-original-title="简介.目标.适应人群" data-placement="top"
-              >详细信息</a>
-              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}"
-              data-toggle="tooltip" data-original-title="裁剪.上传" data-placement="top"
-              >课程图片</a>
-              <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}"
-              data-toggle="tooltip" data-original-title="课时.章节.资料.测试" data-placement="top"
-              >课时管理</a>
+              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('course_manage_base', {id:course.id}) }}">基本信息</a>
+              <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('course_manage_detail', {id:course.id}) }}">详细信息</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}">课程图片</a>
+              <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a>
             </div>
           </div><!-- /list-group-block -->
 
           <div class="list-group-panel">
             <div class="list-group-heading">课程设置</div>
             <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'price' %}active{% endif %}" href="{{ path('course_manage_price', {id:course.id}) }}"
-              data-toggle="tooltip" data-original-title="设置课程价格" data-placement="top"
-              >价格设置</a>
-              <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('course_manage_teachers', {id:course.id}) }}"
-              data-toggle="tooltip" data-original-title="添加或删除本课程的教师" data-placement="top"
-              >教师设置</a>
-              <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}"
-              data-toggle="tooltip" data-original-title="添加或删除本课程的学员" data-placement="top" style="display:none;"
-              >学员管理</a>
+              <a class="list-group-item {% if side_nav == 'price' %}active{% endif %}" href="{{ path('course_manage_price', {id:course.id}) }}">价格设置</a>
+              <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('course_manage_teachers', {id:course.id}) }}">教师设置</a>
+              <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a>
             </div>
           </div><!-- /list-group-block -->
         </div>

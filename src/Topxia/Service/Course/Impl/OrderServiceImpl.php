@@ -82,7 +82,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 					'paidTime' => $payData['paidTime'],
 				));
 				$this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
-				$this->getCourseService()->joinCourse($order['userId'], $order['courseId']);
+				$memberRemark = empty($payData['memberRemark']) ? '' : $payData['memberRemark'];
+				$this->getCourseService()->joinCourse($order['userId'], $order['courseId'], $memberRemark);
 			} else {
 				$this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
 			}

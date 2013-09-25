@@ -47,13 +47,16 @@ class CourseStudentManageController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryAdminCourse($id);
+
         $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
-            $courseUrl = $this->generateUrl('course_show', array('id'=>$course['id']), true);
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByNickname($data['nickname']);
+            if (empty($user)) {
+                throw $this->createNotFoundException("用户{$data['nickname']}不存在");
+            }
 
             $order = $this->getOrderService()->createOrder(array(
                 'courseId' => $course['id'],
@@ -66,21 +69,36 @@ class CourseStudentManageController extends BaseController
                 'sn' => $order['sn'],
                 'status' => 'success', 
                 'amount' => $order['price'], 
-                'paidTime' => time()
+                'paidTime' => time(),
+                'memberRemark' => $data['remark'],
             ));
 
-            $member = $this->getCourseService()->joinCourse($user['id'], $course['id'], $data['remark']);
-            // $this->getNotificationService()->notify($user['id'], 'default', "管理员{$currentUser['nickname']}已将你设置为课程<a href='{$courseUrl}' target='_blank'>《{$course['title']}》</a> 的学员了, 开始学习吧!");
-            return $this->createJsonResponse(true);
+            $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+
+            $this->getNotificationService()->notify($member['userId'], 'student-create', array(
+                'courseId' => $course['id'], 
+                'courseTitle' => $course['title'],
+            ));
+
+            return $this->createStudentTrResponse($course, $member);
         }
 
         return $this->render('TopxiaWebBundle:CourseStudentManage:create-modal.html.twig',array(
-            'course'=>$course));
+            'course'=>$course
+        ));
     }
 
     public function removeAction(Request $request, $courseId, $userId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+
         $this->getCourseService()->exitCourse($userId, $courseId);
+
+        $this->getNotificationService()->notify($userId, 'student-remove', array(
+            'courseId' => $course['id'], 
+            'courseTitle' => $course['title'],
+        ));
+
         return $this->createJsonResponse(true);
     }
 
@@ -92,16 +110,16 @@ class CourseStudentManageController extends BaseController
         $member = $this->getCourseService()->getCourseMember($courseId, $userId);
 
         if ('POST' == $request->getMethod()) {
-            $formData = $request->request->all();
-            $this->getCourseService()->updateCourseMember($member['id'], array('remarks'=>$formData['remarks']));
-            return $this->createJsonResponse(true);
+            $data = $request->request->all();
+            $member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
+            return $this->createStudentTrResponse($course, $member);
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage:edit-remark-modal.html.twig',array(
+        return $this->render('TopxiaWebBundle:CourseStudentManage:remark-modal.html.twig',array(
             'member'=>$member,
             'user'=>$user,
-            'course'=>$course));
-
+            'course'=>$course
+        ));
     }
 
     public function checkNicknameAction(Request $request, $id)
@@ -140,6 +158,21 @@ class CourseStudentManageController extends BaseController
             'number' => $member['learnedNum'],
             'total' => $course['lessonNum']
         );
+    }
+
+    private function createStudentTrResponse($course, $student)
+    {
+        $user = $this->getUserService()->getUser($student['userId']);
+        $isFollowing = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $student['userId']);
+        $progress = $this->calculateUserLearnProgress($course, $student);
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:tr.html.twig', array(
+            'course' => $course,
+            'student' => $student,
+            'user'=>$user,
+            'progress' => $progress,
+            'isFollowing' => $isFollowing,
+        ));
     }
 
     private function getCourseService()
