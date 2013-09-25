@@ -56,7 +56,7 @@
             {% endif %}
               <li><a href="{{ path('my') }}"> 我的课程 </a></li>
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
-                <span class="glyphicon glyphicon-bell"></span>
+                <span class="glyphicon glyphicon-bullhorn"></span>
                 {% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
               <li><a href="{{ path('message') }}" class="badge-container message-badge-container"><span class="glyphicon glyphicon-envelope"></span>{% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}</a></li>
               <li class="dropdown">
