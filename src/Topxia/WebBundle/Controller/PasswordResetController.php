@@ -8,7 +8,14 @@ class PasswordResetController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $form = $this->createFormBuilder()
+        $user = $this->getCurrentUser();
+
+        $data = array('email' => '');
+        if ($user->isLogin()) {
+            $data['email'] = $user['email'];
+        }
+
+        $form = $this->createFormBuilder($data)
             ->add('email', 'email')
             ->getForm();
 

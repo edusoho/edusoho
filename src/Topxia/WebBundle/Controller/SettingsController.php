@@ -101,6 +101,10 @@ class SettingsController extends BaseController
 	{
         $user = $this->getCurrentUser();
 
+        if (empty($user['setup'])) {
+            return $this->redirect($this->generateUrl('settings_setup'));
+        }
+
         $form = $this->createFormBuilder()
             ->add('currentPassword', 'password')
             ->add('newPassword', 'password')
@@ -130,6 +134,10 @@ class SettingsController extends BaseController
 	public function emailAction(Request $request)
 	{
         $user = $this->getCurrentUser();
+
+        if (empty($user['setup'])) {
+            return $this->redirect($this->generateUrl('settings_setup'));
+        }
 
         $form = $this->createFormBuilder()
             ->add('password', 'password')
@@ -233,6 +241,38 @@ class SettingsController extends BaseController
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
         $client = OAuthClientFactory::create($type, $config);
         return $this->redirect($client->getAuthorizeUrl($callback));
+    }
+
+    public function setupAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $user = $this->getUserService()->setupAccount($user['id'], $request->request->all());
+            $this->authenticateUser($user);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:setup.html.twig');
+    }
+
+    public function setupCheckNicknameAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $nickname = $request->query->get('value');
+
+        if ($nickname == $user['nickname']) {
+            $response = array('success' => true);
+        } else {
+            if ($this->getUserService()->isNicknameAvaliable($nickname)) {
+                $response = array('success' => true);
+            } else {
+                $response = array('success' => false, 'message' => '该昵称已经被占用了');
+            }
+        }
+
+        return $this->createJsonResponse($response);
     }
 
     private function checkBindsName($type) {

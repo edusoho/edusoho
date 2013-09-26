@@ -516,6 +516,14 @@ settings_binds_bind:
     pattern: /settings/bind/{type}
     defaults: { _controller: TopxiaWebBundle:Settings:bind }
 
+settings_setup:
+    pattern: /settings/setup
+    defaults: { _controller: TopxiaWebBundle:Settings:setup }
+
+settings_setup_check_nickname:
+    pattern: /settings/setup/check_nickname
+    defaults: { _controller: TopxiaWebBundle:Settings:setupCheckNickname }
+
 auth_email_confirm:
     pattern:  /auth/email/confirm
     defaults: { _controller: TopxiaWebBundle:Auth:emailConfirm }
