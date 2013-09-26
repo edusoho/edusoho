@@ -1,0 +1,65 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default clearfix course-header">
+      <div class="panel-body">
+        <h1 class="title"><a href="{{ path('activity_show', {id:course.id}) }}">{{ course.name }}</a></h1>
+       
+        <div class="toolbar">
+          {% if not manage %}
+          <div class="btn-group">
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_info', {id:course.id}) }}" href="#modal" title="课程信息"><i class="glyphicon glyphicon-info-sign"></i></a>
+            
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" href="#modal" title="评价"><i class="glyphicon glyphicon-thumbs-up"></i></a>
+
+            <div class="btn-group" title="分享到：">
+              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-share"></i>
+              </button>
+              <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
+                <li class="disabled"><a href="javascript:">分享到：</a></li>
+                <li><a href="javascript:" data-share="weibo" data-params="#course-social-share-params"><span class="social-icon-weibo"></span> 新浪微博</a></li>
+                <li><a href="javascript:" data-share="qq" data-params="#course-social-share-params"><span class="social-icon-qq"></span> QQ空间</a></li>
+                <li><a href="javascript:" data-share="renren" data-params="#course-social-share-params"><span class="social-icon-renren"></span> 人人网</a></li>
+                <li><a href="javascript:" data-share="douban" data-params="#course-social-share-params"><span class="social-icon-douban"></span> 豆瓣</a></li>
+              </ul>
+              <div id="course-social-share-params" style="display:none;"
+                data-title="课程 《{{ course.title }}》"
+                data-picture="{{ file_path(course.largePicture, 'course-large.png', true) }}"
+                data-url="{{ url('course_show', {id:course.id}) }}"
+                ></div>
+            </div>
+
+          </div>
+          <div class="btn-group" title="操作">
+            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <i class="glyphicon glyphicon-cog"></i>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              {% if canManage %}
+                <li><a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a></li>
+              {% endif %}
+              {% if member.role|default(null) == 'student' %}
+                <li><a class="course-exit-btn" href="javascript:" data-url="{{ path('course_exit', {id:course.id}) }}">退出学习</a></li>
+              {% endif %}
+            </ul>
+          </div>
+          {% else %}
+
+            
+
+            <div class="btn-group">
+              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <span class="caret"></span></button>
+              <ul class="dropdown-menu pull-right">
+                  <li><a href="{{ path('activity_show', {id:course.id, previewAs:'member'}) }}" target="_blank">作为 已购买用户</a></li>
+                  <li><a href="{{ path('activity_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">作为 未购买用户</a></li>
+              </ul>
+            </div>
+
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

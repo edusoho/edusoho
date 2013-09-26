@@ -1,0 +1,288 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set bodyClass = 'homepage' %}
+{% set script_controller = 'homepage' %}
+
+{% block contentlg %}
+ <section class="row">  
+  <!-- banner -->
+  <div class="banner clear-mtop">  
+    <!-- 广告 -->
+    <div class="container clear-pleft clear-pright">
+      <div class="banner-bg">
+        <div class="top">
+          <div class="pull-left bulletin">
+            <div>
+              <img class="activity-img-sm" src="{{ file_path(nextActivity.smallPicture,'course-large.png')  }}">    
+              <h4>{{nextActivity.title }}<br />{{nextActivity.subtitle }}</span></h4>
+            </div>
+          </div>
+          <div class="pull-left info">
+            <div class="info-header">
+              <span class="ky-times">{{ nextActivity.startTime }} - 21：30</span>
+              <span class="ky-address ">{{ Locations[nextActivity.locationId].name}}</span>
+              <span class="ky-jiangshi">{{ activitTerchar.nickname }}</span>
+              <div class="fix-right font18">64231人报名公开课</div>
+            </div>
+            <div class="info-content clearfix">             
+              <div id="photo" class="photo-wall pull-left">
+                {% for user in users%}
+                <span class="list-item">
+                  <img class="tip" class="tip" src="{{ asset('bundles/topxiaweb/img/5969313944_e5d6d67b23_s.gif')}}"  title="Neque porro quisquam" alt="monaco see">
+                  <span class="todos-thumb-span text-left">
+                    {{user.nickname}}
+                    <span class="user-tag">{{ user.title }}</span>
+                  </span>
+                </span>
+                {% endfor %}
+
+                
+                <span class="justify_fix"></span>
+              </div>
+              <div class="info-ad pull-left">
+                <div class="info-btn">
+                <p>还等什么呢就差你了</p>
+                <a class="btn center-block" href="{{ path('activity_activityform',{id:nextActivity.id}) }}">我要报名</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="kyitem">
+          <ul class='guide center-block row'>
+              <li class="everyone col-md-3">
+                <p>告别弯路</p>
+                  <strong>人人是我师，我乃人人师</strong>  
+                </li>
+                <li class="ky-time col-md-3">
+                  <p>告别懒惰</p>
+                  <strong>计划系统的学习</strong>  
+                </li>
+                <li class="ky_code col-md-3">
+                   <p>告别自负</p>
+                  <strong>见识真正的核心技术</strong>
+                </li>
+                <li class="ky-comtmu col-md-3">
+                   <p>告别孤独</p>
+                  <strong>这里是温暖的大家庭</strong>
+                </li>
+            </ul>
+        </div>      
+    </div>        
+  </div>
+
+  <div class="row">
+    <div class="container clear-pleft clear-pright">   
+      <!-- <div class="curriculum"> -->
+   
+
+      <!-- 课程资源 -->
+      <div class="Resources">
+        <!-- 课程资源库 -->
+        <div class="mod TopicList">     
+          <div class="header clearfix">
+            <h3>课程资源库</h3>
+            <a href="{{ path('course_page') }}" target="_blank" class="pull-right">查看全部课程资源</a>
+            <div class="height-down"></div>
+          </div>
+          <div class="hp-tab-newprd">       
+            <div class="newprd-clip" style="height: 350px;">
+                <div class="tempWrap" style="overflow:hidden; position:relative; width:1185px">
+                      <ul class="grids" style="float: left; width: 1185px; ">
+                        {% for course in courses%}
+                        <li class="grid">
+                          <div class="imageblock clearfix">
+                            <div class="imageblock-image">
+                              <a href="{{ path('course_show', {id:course.id}) }}" class="show-user-card">
+                                <img src="{{asset('bundles/topxiaweb/img/145-145.jpg')}}" alt="ae120"></a>
+                            </div>
+                            <div class="imageblock-content">
+                              <p class="title">
+                                <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+                              </p>
+                              <p class="stars-{{ (course.rating/2)|number_format }}"></p>
+                              <p>{{ course.lessonNum}}课时{{ course.studentNum }}人学习</p>
+                            </div>
+                          </div>
+                        </li>
+                        {% endfor %}
+
+                      </ul>
+      
+                </div>
+            </div>
+          </div>        
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">          
+          <!-- 问答讨论 -->
+          <div class="mod k_postlist discussion">
+            <div class="kytitle clearfix">
+              <h3>问答讨论</h3>
+              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>              
+            </div>
+            <div class="content">       
+              <ul>
+                {% for activityThread in activityThreads %}
+                <li>
+                  <div class="imageblock clearfix">
+                    <div class="imageblock-image">
+                      <a href="#" class="show-user-card user-link user-avatar-link" >
+                        {% if activityThread['userid']==0 %}
+                        <img src="/assets/img/default/avatar.png" alt="ae120"></a>
+                        {% else %}
+                        <a href="{{ path('user_show',{id:activityThread['userid']})}}"><img src="{{ file_path(threadUsers[activityThread.userid].smallAvatar,'avatar.png') }}" alt="ae120"></a>
+                        {% endif %}
+                    </div>
+                    <div class="imageblock-content">
+                      <p class="title">
+                        <a href="
+                          {% if activityThread['userid']==0 %}
+                            #
+                          {% else %}
+                             {{ path('user_show',{id:activityThread['userid'] }) }}
+
+                          {% endif %}
+                          "
+                        >{{ threadUsers[activityThread.userid].nickname }}</a>
+                        在 {{activitys[activityThread.activityId].subtitle}} 提问到：
+                      </p>
+                      <p class="metas">
+                        <a href="#" class="show-user-card">{{ activityThread.content }}</a>
+                        <time class="pull-right">{{ activityThread.createdTime|smart_time }}</time>
+                      </p>
+                      <p class="scan">
+                        <span>{{ activityThread.postnum }}回复</span>
+                        <span class="highlight"></span>
+                      </p>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>           
+            </div>
+          </div>
+          <!-- 新加入学员 -->
+          <div class="mod trainee">
+            <div class="kytitle">
+              <h3>新加入学员</h3>              
+            </div>            
+            <div class="mod-content">
+              <ul class="grids smallpic-grids">
+                {% for studnet in students %}
+                <li class="grid">
+                  <a href="{{ path('user_show',{id:studnet['id'] }) }}" class="user-link user-avatar-link">
+                    <img src="{{  file_path(studnet.smallAvatar,'avatar.png') }}" alt="用户" class="thumb"></a>
+                  <p>
+                    <a href="{{ path('user_show',{id:studnet['id'] }) }}">{{ studnet.nickname }}</a>
+                  </p>
+                </li>
+                {% endfor %}
+              </ul>
+              <p style="clear: both;"></p>
+            </div>
+          </div>
+          <!-- 开源教练组 -->
+          <div class="mod coach">
+            <div class="kytitle clearfix">
+              <h3>开源教练组</h3>
+              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+            </div>
+            <div class="mod-content">
+              <ul class="grids">
+                {% for teacher in teachers %}
+                <li class="grid">
+                  <a href="#">
+                    <img src=" {{ file_path(teacher.mediumAvatar,'avatar.png')  }}" alt="用户" class="thumb"></a>
+                  <p>
+                    <h5 href="#">{{teacher.nickname}}</h5>
+                  </p>
+                  <p>{{ teacherinfos[teacher.id].about|raw }}</p>
+                </li>
+                {% endfor %}
+              </ul>
+              </div>
+          </div>
+        </div>
+
+        <!-- 侧栏 -->
+        <aside class="col-md-4">
+          <!-- 大家正在学 -->
+          <div class="widget k_postlist shadow studying">
+            <div class="kytitle clearfix bor-l-green">
+              <h3>大家这在学</h3>
+              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+            </div>
+            <div class="content">       
+              <ul>
+                {% for userAction in userActions %}
+                <li>
+                  <div class="imageblock clearfix">
+                    <div class="imageblock-image">
+                      <a href="{{ path('user_show',{id:userAction['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
+                        <img src=" {{ file_path(userActionUsers[userAction.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
+                    </div>
+                    <div class="imageblock-content">
+                      <p class="title">
+                        <a href="{{ path('user_show',{id:userAction['userId'] }) }}">
+                          {{ userActionUsers[userAction.userId].nickname  }}
+                        </a> 刚刚学习了
+                      </p>
+                      <p class="metas">
+                        <a href="#" class="show-user-card ">{{ userAction.courseName}} 
+                          第{{ userAction.chapterName }}章 第{{ userAction.lessonName }}课时</a>
+                      </p>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>           
+            </div>
+          </div>
+          <!-- 大家正在学 -->
+          <div class="widget k_postlist shadow">
+            <div class="kytitle clearfix bor-l-green">
+              <h3>最新点评</h3>
+              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+            </div>
+            <div class="content">       
+              <ul>
+                {% for review in reviews%}
+                <li>
+                  <div class="shadow speak">
+                    <p>{{ review.content }}</p>
+                  </div>
+                  <div class="imageblock clearfix">
+                    <div class="imageblock-image">
+                      <a href="{{ path('user_show',{id:review['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
+                        <img src="{{ file_path(userActionUsers[review.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
+                    </div>
+                    <div class="imageblock-content">
+                      <p class="title">
+                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} 刚刚点评了</a>
+                      </p>
+                      <p class="metas">
+                        <a href="{{ path('course_show', {id:review.courseId }) }}" class="show-user-card " data-uid="1272156">
+                          课程 {{ reviewCourse[review.courseId].title }}
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>           
+            </div>
+          </div>          
+        </aside>
+      </div>
+    </div>
+  </div>  
+</section>
+{% endblock %}

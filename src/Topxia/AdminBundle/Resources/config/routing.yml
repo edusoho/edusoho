@@ -382,3 +382,32 @@ admin_thread_batch_delete:
     pattern: /thread/batch_delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
+
+admin_activity:
+    pattern: /activity
+    defaults: { _controller: TopxiaAdminBundle:Activity:index }
+
+admin_activity_delete:
+    pattern:  /activity/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Activity:delete }
+
+admin_activity_publish:
+    pattern: /activity/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Activity:publish }
+
+admin_activity_close:
+    pattern: /activity/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:Activity:close }
+
+admin_activity_category:
+    pattern: /activity/category
+    defaults: { _controller: TopxiaAdminBundle:Activity:category }
+
+
+admin_photo:
+    pattern: /photo
+    defaults: { _controller: TopxiaAdminBundle:Photo:index }
+
+admin_photo_delete:
+    pattern:  /photo/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Photo:delete }

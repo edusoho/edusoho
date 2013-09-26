@@ -1,0 +1,41 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="course-tr-{{ course.id }}">
+  <td>
+    <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    <br>
+    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+  </td>
+  <td>{{ course.studentNum }}</td>
+  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ course.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('activity_manage', {id:course.id}) }}" target="_blank">管理</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a href="{{ path('activity_show', {id:course.id, previewAs:'guest'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
+        <li><a href="{{ path('activity_show', {id:course.id, previewAs:'member'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>
+
+        <li class="divider"></li>
+
+        {% if course.status == 'published' %}
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_activity_close', {id:course.id}) }}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
+        {% endif %}
+
+        {% if course.status != 'published' %}
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_activity_publish', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
+        {% endif %}
+
+        <li class="divider"></li>
+
+        <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_activity_delete', {id:course.id}) }}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

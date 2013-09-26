@@ -161,6 +161,7 @@ class Version20130524144924 extends AbstractMigration
 			  `parentId` bigint(20) NOT NULL DEFAULT '0',
 			  `name` varchar(255) NOT NULL,
 			  `pinyin` varchar(255) NOT NULL,
+			  'createdTime` int(10) unsigned NOT NULL DEFAULT '0',
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

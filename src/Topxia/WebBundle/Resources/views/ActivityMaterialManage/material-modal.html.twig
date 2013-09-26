@@ -1,0 +1,53 @@
+
+{% extends 'TopxiaWebBundle:ActivityManage:layout.html.twig' %}
+
+{% block title %}活动附件 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'attachment' %}
+{% set script_controller = 'activity-manage/material-modal' %}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    活动附件
+  </div>
+  <div class="panel-body">
+    <form id="course-material-form" class="form-horizontal" action="{{ path('activity_material_upload', {id:course.id}) }}" enctype="multipart/form-data" method="post">
+      <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-1  controls">
+          <ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>
+            {% for material in materials %}
+              {% include 'TopxiaWebBundle:ActivityMaterialManage:list-item.html.twig' %}
+            {% endfor %}
+          </ul>
+          {% if not materials %}
+            <span class="control-text text-warning">暂无资料，请上传。</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-1 controls">
+          <input id="material-file-field" type="file" name="file">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-1 controls">
+          <textarea class="form-control" name="description" rows="2" placeholder="填写资料简介 (可选)"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-1 controls">
+          <button class="btn btn-primary" id="material-upload-btn" type="submit" data-uploading-text="正在上传, 请稍后...">上传</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+
+{% set hide_footer = true %}

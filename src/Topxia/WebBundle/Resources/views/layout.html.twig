@@ -16,6 +16,10 @@
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/layout.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/style.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/osf.css') }}" />
+    
     <!--[if lt IE 8]>
       <link href="{{ asset('assets/css/oldie.css') }}" rel="stylesheet">
     <![endif]-->
@@ -32,10 +36,10 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-  <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
-    <div class="container">
-      <div class="container-gap">
-        <div class="navbar-header">
+
+  <header class="navbar navbar-inverse navbar-fixed-top" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
+  <div class="container"> 
+    <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -47,10 +51,11 @@
             <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
           {% endif %}
         </div>
-        <div class="navbar-collapse collapse">
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
-          <ul class="nav navbar-nav navbar-right">
-            {% if app.user %}
+    <nav class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{{ path('homepage') }}">首页</a></li>
+        {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
+        {% if app.user %}
             {% if is_granted('ROLE_TEACHER') %}
               <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
             {% endif %}
@@ -75,12 +80,15 @@
             {% else %}
               <li><a href="{{ path('login') }}">登录</a></li>
               <li><a href="{{ path('register') }}">注册</a></li>
-            {% endif %}
-          </ul>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </div>
+        {% endif %}
+      </ul>           
+    </nav>    
   </div>
+    
+</header> 
+ <div class="slide"></div>
+  
+  {% block contentlg %}{% endblock %}
 
   <div id="content-container" class="container">
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
@@ -92,22 +100,52 @@
     {% endif %}
     {% block content %}{% endblock %}
   </div><!-- /container -->
-
-  <div class="site-footer container clearfix">
-    {% if setting('site.icp') %}
-      <div class="pull-right"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>
-    {% endif %}
-    
-    {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-
-    <p class="text-gray" data-role="default-foot-bar">
-      Powered by 
-      <a href="http://www.edusoho.com/" target="_blank"> Edusoho v1.0</a>
-      ©2013 
-      <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
-    </p>
+  
+  <footer class="footer">
+    <div class="container clearfix">    
+      <div class="pull-left bor-r">
+        <img class="footer-ad" src="{{ asset('bundles/topxiaweb/img/kaiyuan.jpg') }}" >
+        <ul class="about">
+          <li>关于我们</li>
+          <li>开源帮助</li>
+          <li>意见反馈</li>
+          <li>联系方式</li>
+          <li>招聘信息</li>
+        </ul>     
+      </div>
+      <div class="pull-left bor-l bor-r">
+        <ul class="links">
+          <li>友情链接</li>
+          <li>友情链接</li>
+          <li>友情链接</li>
+          <li>友情链接</li>
+          <li>友情链接</li>
+        </ul>
+      </div>
+      <div class="pull-left bor-l bor-r">
+        <p>开源力量创始人</p>
+        <p>
+          <img src="{{ asset('bundles/topxiaweb/img/ceo1.png')}}">     
+          <img src="{{ asset('bundles/topxiaweb/img/ceo2.png')}}"></p>
+        <div class="contact">
+          <p>如果你遇到任何疑问,欢迎随时给我们留言</p>
+        </div>
+      </div>
+      <div class="pull-left bor-l">
+        <div class="social-media">
+          <p class="ky-sina">新浪微博</p>
+          <p class="ky-weixin">微信</p>
+          <div>
+            <img src="{{ asset('bundles/topxiaweb/img/weixin.png')}}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   </div>
+
+  
 
   {% block bottom %}{% endblock %}
 

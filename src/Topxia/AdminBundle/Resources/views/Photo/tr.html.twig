@@ -1,0 +1,18 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="course-tr-{{ course.id }}">
+  <td>
+    <a href="{{ path('photoview',{id:course.id}) }}" target="_blank"><strong>{{ course.name }}</strong></a>
+    <br>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('photoview_manage', {id:course.id}) }}" target="_blank">管理</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_photo_delete', {id:course.id}) }}"><span class="glyphicon glyphicon-trash"></span> 删除专辑</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

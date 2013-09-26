@@ -1,0 +1,28 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set nav = 'openclass' %}
+
+{% set bodyClass = 'homepage' %}
+
+{% block content %} 
+	<div class="row es-row-light">
+			<div class="col-lg-12">
+				<p>
+					{% if state %}
+						报名成功  <a href="{{ path("activity_show",{id:activityid}) }}">查看活动详情>></a>
+					{% else %}
+						报名失败
+					{% endif %}
+				</p>
+				{% if islogin %}
+					<p>您的账号：{{ randomuser.email }}</p>
+				{% endif %}
+				<p>活动管理员将会发送系统消息、短信以及邮件通知，请注意查收！</p>
+				<p>你可以去 : 
+					<a href="{{ path("homepage") }}" >主页</a>
+					<a href="{{ path('course_page') }}" >浏览其他公开课</a>
+					<a href="{{ path('settings') }}" >完善个人信息</a>
+				</P>
+			</div>
+	</div>
+{% endblock %}

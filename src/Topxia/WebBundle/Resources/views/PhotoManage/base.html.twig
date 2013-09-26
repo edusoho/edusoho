@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle:PhotoManage:layout.html.twig' %}
+
+{% block title %}基本信息 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'photo-manage/base' %}
+{% set script_arguments = {
+  categoryUrl: path('category_all'),
+  tagUrl: path('tag_all'),
+  locationUrl: path('location_all')
+} 
+%}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+	<div class="panel-heading">基本信息</div>
+	<div class="panel-body">
+		<form class="form-horizontal" id="course-form" method="post">
+
+		  {{ web_macro.flash_messages() }}
+
+		  {{ form_errors(form) }}
+
+			<div class="form-group">
+				<div class="col-lg-2 control-label">{{ form_label(form.name, '标题') }}</div>
+				<div class="col-lg-8 controls">{{ form_widget(form.name, {attr:{class:'form-control'}}) }}</div>
+			</div>
+
+			<div class="form-group">
+			  <div class="col-lg-2 control-label">{{ form_label(form.tagIds, '标签') }}</div>
+			  <div class="col-lg-8 controls"> {{ form_widget(form.tagIds, {attr:{class:'width-full'}}) }}</div>
+			</div>
+
+
+		  <div class="form-group">
+		    <div class="col-lg-offset-2 col-lg-8 controls">
+		    	{{ form_rest(form) }}
+		    	<button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
+		    </div>
+		  </div>
+
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+
+

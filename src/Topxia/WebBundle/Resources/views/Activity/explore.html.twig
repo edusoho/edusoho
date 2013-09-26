@@ -1,0 +1,200 @@
+
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set nav = 'openclass' %}
+
+{% set bodyClass = 'homepage' %}
+
+{% set script_controller = 'activity/explore' %}
+
+{% block content %} 
+
+  <section class="row"> 
+  <!-- banner -->
+    <!-- ads -->
+    <div class="container">
+      <div class="banner-bg">
+        <div class="top">
+          <div id="focus">
+            <div id="slides">
+              <div class="slides_container">
+                <a href="#" title="title" rel="external">
+                <img src="{{ asset('bundles/topxiaweb/img/home-slide/home-slide.jpg') }}" alt="title" /></a>
+                <a href="#" title="title" rel="external">
+                <img src="{{ asset('bundles/topxiaweb/img/home-slide/ticket_banner.png') }}" alt="title" /></a>
+                <a href="#" title="title" rel="external">
+                <img src="{{ asset('bundles/topxiaweb/img/home-slide/coupon.jpg') }}" alt="title" /></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div>        
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">  
+          <div class="mod k_postlist filter">
+            <div class="kytitle clearfix">
+              <h3>条件筛选</h3>             
+            </div>
+            <div class="content">
+              <ul>
+                <li> <strong>地点：</strong>
+                  <a href="{{ path('activity_home') }}">全部</a>
+                  {% for location in locations %}
+                    <a href="{{ path('activity_home', {location:location.id}) }}" {% if filters.locationId == location.id %} class="active"{% endif %}>{{location.name}}</a>
+                  {% endfor %}
+                </li>
+                
+                <li> <strong>状态：</strong>
+                  <a href="{{ path('activity_home') }}">全部</a>
+                  {% set istimeout=filters.istimeout|default('') %}
+                  <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:true})) }}" {% if filters.istimeout=='1' %} class="active"{% endif %}>未开始</a>
+                  <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:false})) }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>已结束</a>
+                
+                <li>
+                  <strong>标签：</strong>
+                   <a href="{{ path('activity_home') }}">全部</a>
+                    {% for tag in tags %}              
+                      <a href="{{ path('activity_home', {tagsid:tag.id}) }}" 
+                      {% if filters.tagId == tag.id %} class="active"{% endif %}>
+                        {{ tag.name }}
+                      </a>
+                    {% endfor %}
+                </li>
+                <li>
+                  <strong>时间：</strong>
+                   <a href="{{ path('activity_home') }}">全部</a>
+              
+                <a href="{{ path('activity_home', {time:'thisweek'}) }}"
+                {% if filters.time == 'thisweek' %} class="active"{% endif %}>本周</a>
+              
+              
+                <a href="{{ path('activity_home', {time:'lastweek'}) }}"
+                {% if filters.time == 'lastweek' %} class="active"{% endif %}>上周</a>
+              
+              
+                <a href="{{ path('activity_home', {time:'nextweek'}) }}"
+                {% if filters.time == 'nextweek' %} class="active"{% endif %}>下周</a>
+              
+                <a href="{{ path('activity_home', {time:'thismonth'}) }}"
+                {% if filters.time == 'thismonth' %} class="active"{% endif %}>本月</a>
+              
+                <a href="{{ path('activity_home', {time:'lastmonth'}) }}"
+                {% if filters.time == 'lastmonth' %} class="active"{% endif %}>上月</a>
+
+                <a href="{{ path('activity_home', {time:'nextmonth'}) }}"
+                {% if filters.time == 'nextmonth' %} class="active"{% endif %}>下月</a>
+
+                </li>
+              </ul>
+            </div>
+          </div>        
+          <!-- item-list -->
+          <div class="mod k_postlist openstack">            
+            <div class="content">       
+              <ul>
+                {% for activity in activitys %}
+                <li class="shadow">
+                  <div class="imageblock clearfix">
+                    <div class="imageblock-image">
+                      <a href="#" class="show-user-card" >
+                        <img src="{{ file_path(activity.largePiceture,'course-large.png') }}" alt="{{ activity.subtitle}}"></a>
+                    </div>
+                    <div class="imageblock-content">
+                      <p class="title">
+                        <h4>{{ activity.title}}</h4>
+                        <h3>{{ activity.subtitle}}</h3>
+                      </p>
+                      <p>开始时间： {{activity.startTime}}</p>
+                      <p>结束时间： {{activity.endTime}}</p>
+                      <p>地点： {{ activity.address }}</p>
+                      <p>形式： {{ activity.form }}</p>
+                      <p>费用： {{ activity.price}}</p>
+                      <div class="text-right">
+                        <p>
+                          {{ activity.studentNum }}人已报名
+                          <a class='mar-l btn btn-success  green'
+                           {% if activity.istimeout %} 
+                            href="{{ path('activity_show',{id:activity.id})}}"
+                          {% else %}
+                            href="{{ path('activity_showsuccess',{id:activity.id})}}"
+                          {% endif %}
+                      >查看详情</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+                
+              </ul>
+              {{ web_macro.paginator(paginator) }}         
+            </div>
+          </div>
+        </div>
+
+        <!-- 侧栏 -->
+        <aside class="col-md-4">
+          <!-- 已报名的开源达人 -->
+          <div class="widget k_postlist shadow">
+            <div class="kytitle clearfix bor-l-gray">
+              <h3>已报名的开源达人</h3>             
+            </div>
+            <div class="content daren">
+              {% for user in users %}
+              <a href="{{ path('user_show',{id:user.id }) }}" class="user-link user-avatar-link"><img src="{{file_path(user.smallAvatar,'avatar.png')}}" ></a>
+              {% endfor %}
+              <span class="justify_fix"></span>         
+            </div>
+          </div>
+          <!-- 关于开源力量公开课 -->
+          <div class="widget k_postlist shadow">
+            <div class="kytitle clearfix bor-l-gray">
+              <h3>关于开源力量公开课</h3>              
+            </div>
+            <div class="content">       
+              <p>
+                开源力量公开课每周二晚举行，每次2小时，地点上海或北京。
+讲师公开申请中，请发邮件到(@程开源) scheng@teksource.
+cn，注明姓名,个人简介,讲课主题，来信必复
+              </p>        
+            </div>
+          </div>
+          <!-- 联系我们 -->
+          <div class="widget k_postlist shadow">
+            <div class="kytitle clearfix bor-l-gray">
+              <h3>联系我们</h3>
+              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+            </div>
+            <div class="content">       
+              <p><strong>邮件订阅</strong></p>          
+              <p>填写您的邮件地址，及时掌握开源力量公开课信息</p>
+              <div class="subscription mar-t mar-b">
+                <form action="#" >              
+                  <input name="subscription" type="text" class="form-control" placeholder="Email">
+                  <button type="submit" class="btn btn-success">订阅</button>
+                </form>             
+              </div>
+              <ul class="social">
+                <li>
+                  <h4><strong>微信公众账号</strong></h4>
+                  <p>别犹豫了，开刷吧！关注开源力量微信号: <strong>osforse</strong>，给你
+惊喜连连！</p>
+                </li>
+                <li>
+                  <h4><strong>新浪微博</strong></h4>
+                  <p>别犹豫了，开刷吧！关注开源力量官方微博: <a href="#">开源力量</a>，好书
+送不断！</p>
+                </li>
+              </ul>
+            </div>
+          </div>        
+        </aside>
+      </div>
+    </div>
+</section>
+{% endblock %}

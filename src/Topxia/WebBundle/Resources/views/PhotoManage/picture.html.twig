@@ -1,0 +1,61 @@
+{% extends 'TopxiaWebBundle:PhotoManage:layout.html.twig' %}
+
+{% block title %}专辑图片 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'picture' %}
+{% set script_controller = 'photo-manage/file' %}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    专辑图片
+  </div>
+
+  <div class="panel-body">
+    <form id="course-picture-form" method="post" action="{{ path('photoview_manage_picture', {id:course.id}) }}" enctype="multipart/form-data">
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group clearfix">
+        <div class="col-lg-offset-2 col-lg-8 controls">
+          <img src="/assets/img/default/course-default-475x250.png" />
+        </div>
+      </div>
+      
+      <div class="form-group clearfix">
+        <div class="col-lg-offset-2 col-lg-8 controls">
+          <input type="file" name="picture">
+          <p class="help-block">你可以上传jpg, gif, png格式的文件。</p>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-lg-offset-2 col-lg-8 controls">
+          <button class="btn btn-fat btn-primary" id="upload-picture-btn" type="submit">上传</button>
+        </div>
+      </div>
+      
+    </form>
+
+  </div>
+  <div class="panel-body">
+      <table class="table table-striped table-hover" id="photo-table">
+      <thead>
+      <tr>
+        <th width="50%">名称</th>
+        <th>描述</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+          {% include 'TopxiaWebBundle:PhotoManage:tr.html.twig' %}
+        {% else %}
+          <tr><td colspan="6"><div class="empty">无专辑记录</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+

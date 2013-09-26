@@ -1,0 +1,16 @@
+{% import "TopxiaWebBundle::macro.html.twig" as admin_macro %}
+<tr id="course-tr-{{ course.id }}">
+  <td>
+    <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    <br>
+  </td>
+   <td>
+    <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank"><strong>{{ course.content }}</strong></a>
+    <br>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="delete-course" href="javascript:" data-url="{{ path('photoview_manage_file_delete', {id:course.id}) }}"><span class="glyphicon glyphicon-trash"></span> 删除专辑</a>
+    </div>
+  </td>
+</tr>

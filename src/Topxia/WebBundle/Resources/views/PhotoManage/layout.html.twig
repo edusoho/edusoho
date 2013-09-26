@@ -1,0 +1,33 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}专辑管理 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+{{ render(controller('TopxiaWebBundle:PhotoManage:header', {course:course, manage: true})) }}
+
+<div class="row">
+  <div class="col-lg-3">
+    {% block side %}
+      {% set side_nav = side_nav|default(null) %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="list-group-panel">
+            <div class="list-group-heading">专辑信息</div>
+            <div class="list-group">
+              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('photoview_manage_base', {id:course.id}) }}">基本信息</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('photoview_manage_picture', {id:course.id}) }}">专辑内容</a>
+            </div>
+          </div><!-- /list-group-block -->
+
+
+        </div>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-lg-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

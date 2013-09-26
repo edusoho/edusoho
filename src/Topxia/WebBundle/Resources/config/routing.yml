@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+course_page:
+    pattern: /course
+    defaults: { _controller: TopxiaWebBundle:Default:indexMore }
+
 install_init_system:
     pattern:  /install/init/system
     defaults: { _controller: TopxiaWebBundle:Install:initSystem }
@@ -66,6 +70,10 @@ register_email_send:
 register_email_verify:
     pattern:  /register/email/verify/{token}
     defaults: { _controller: TopxiaWebBundle:Register:emailVerify }
+
+register_email_activa:
+    pattern:  /register/email/activa/{token}
+    defaults: { _controller: TopxiaWebBundle:Register:emailActiva }
 
 register_email_check:
     pattern:  /register/email/check
@@ -735,3 +743,214 @@ teacher:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
+activity_home:
+    pattern:  /openclass/explore/
+    defaults: { _controller: TopxiaWebBundle:Activity:explore }
+
+activity_zhaoxin:
+    pattern: /openclass/zhaoxin/
+    defaults: { _controller: TopxiaWebBundle:Activity:zhaoxin }
+
+activity_activityform:
+    pattern: /openclass/{id}/activityform
+    defaults: { _controller: TopxiaWebBundle:Activity:activityform }
+
+activity_create:
+    pattern:  /openclass/create
+    defaults: { _controller: TopxiaWebBundle:Activity:create }
+
+activity_join:
+    pattern: /openclass/{id}/join
+    defaults: { _controller: TopxiaWebBundle:Activity:join }
+
+activity_remove:
+    pattern: /openclass/{id}/remove
+    defaults: { _controller:TopxiaWebBundle:Activity:remove}
+
+activity_show:
+    pattern:  /openclass/{id}
+    defaults: { _controller: TopxiaWebBundle:Activity:show }
+
+
+activity_showsuccess:
+    pattern: /openclass/{id}/show
+    defaults: { _controller: TopxiaWebBundle:Activity:showsuccess }
+
+
+activity_success:
+    pattern: /openclass/{id}/success
+    defaults: { _controller:TopxiaWebBundle:Activity:success }
+
+activity_qustioncreate:
+    pattern: /openclass/{id}/question/create
+    defaults: { _controller:TopxiaWebBundle:Activity:qustioncreate }
+
+activity_qustionpost:
+    pattern: /openclass/{id}/question/{qid}/postcreate
+    defaults: { _controller: TopxiaWebBundle:Activity:postcreate }
+
+
+activity_manage:
+    pattern:  /openclass/{id}/manage
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:index }
+
+activity_manage_base:
+    pattern:  /openclass/{id}/manage/base
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:base }
+
+activity_manage_detail:
+    pattern:  /openclass/{id}/manage/detail
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:detail }
+
+activity_manage_picture:
+    pattern:  /openclass/{id}/manage/picture
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:picture }
+
+activity_manage_picture_crop:
+    pattern:  /openclass/{id}/manage/picture/crop
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:pictureCrop }
+
+activity_manage_price:
+    pattern:  /openclass/{id}/manage/price
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:price }
+
+activity_manage_course:
+    pattern: /openclass/{id}/manage/course
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:course }
+
+activity_manage_course_match:
+    pattern: /openclass/{id}/manage/courseMatch
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:courseMatch }
+
+activity_manage_attachment:
+    pattern: /openclass/{id}/manage/attachment
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:attachment }
+
+activity_manage_pictures:
+    pattern: /openclass/{id}/manage/pictures
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:pictures }
+
+activity_manage_pictures_match:
+    pattern: /openclass/{id}/manage/picturesMatch
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:picturesMatch }
+
+activity_manage_teachers:
+    pattern:  /openclass/{id}/manage/teachers
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:teachers }
+
+activity_manage_teachers_match:
+    pattern: /openclass/{id}/manage/teachersMatch
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:teachersMatch }
+
+
+
+activity_manage_quiz:
+    pattern: /openclass/{courseId}/manage/lesson/{lessonId}/quiz
+    defaults: { _controller: TopxiaWebBundle:ActivityQuizManage:index }
+
+activity_manage_quiz_item_save:
+    pattern: /openclass/{courseId}/manage/lesson/{lessonId}/quiz/saveitem
+    defaults: { _controller: TopxiaWebBundle:ActivityQuizManage:saveItem }
+
+activity_manage_quiz_item_delete:
+    pattern: /openclass/{courseId}/manage/quiz/{itemId}/delete
+    defaults: { _controller: TopxiaWebBundle:ActivityQuizManage:deleteItem }
+    methods: [POST]
+
+activity_manage_chapter_create:
+    pattern:  /openclass/{id}/manage/chapter/create
+    defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:create }
+
+activity_manage_chapter_edit:
+    pattern:  /openclass/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:edit }
+
+activity_manage_chapter_delete:
+    pattern:  /openclass/{courseId}/manage/chapter/{chapterId}/delete
+    defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:delete }
+
+
+activity_manage_media_library:
+    pattern:  /openclass/{id}/manage/media/library
+    defaults: { _controller: TopxiaWebBundle:ActivityMediaManage:library }
+
+activity_manage_media_upload:
+    pattern:  /openclass/{id}/manage/media/upload
+    defaults: { _controller: TopxiaWebBundle:ActivityMediaManage:upload }
+
+activity_manage_media_import:
+    pattern:  /openclass/{id}/manage/media/import
+    defaults: { _controller: TopxiaWebBundle:ActivityMediaManage:import }
+
+activity_manage_publish:
+    pattern:  /openclass/{id}/manage/publish
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:publish }
+
+activity_manage_preview:
+    pattern:  /openclass/{id}/manage/preview
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:preview }
+
+activity_materials:
+    pattern:  /openclass/{id}/material/
+    defaults: { _controller: TopxiaWebBundle:ActivityMaterial:index }
+
+activity_material_download:
+    pattern:  /openclass/{courseId}/material/{materialId}/download
+    defaults: { _controller: TopxiaWebBundle:ActivityMaterial:download }
+
+activity_material_delete:
+    pattern:  /openclass/{id}/material/{materialId}/delete
+    defaults: { _controller: TopxiaWebBundle:ActivityMaterial:delete }
+
+activity_material_upload:
+    pattern:  /openclass/{id}/material/upload
+    defaults: { _controller: TopxiaWebBundle:ActivityMaterial:upload }
+
+photoview:
+    pattern: /photoview/
+    defaults: { _controller: TopxiaWebBundle:PhotoView:index }
+
+photoview_content:
+    pattern: /photoview/{id}/content/
+    defaults: { _controller: TopxiaWebBundle:PhotoView:content }
+
+photoview_create:
+    pattern:  /photoview/create
+    defaults: { _controller: TopxiaWebBundle:PhotoView:create }
+
+
+photoview_comment:
+    pattern: /photoview/{id}/comment
+    defaults: { _controller: TopxiaWebBundle:PhotoComment:index }
+
+photoview_comment_create:
+    pattern: /photoview/{id}/comment/create
+    defaults: { _controller: TopxiaWebBundle:PhotoComment:create }
+
+photoview_comment_delete:
+    pattern: /photoview/{id}/comment/delete
+    defaults: { _controller: TopxiaWebBundle:PhotoComment:delete }
+
+
+photoview_manage:
+    pattern:  /photoview/{id}/manage
+    defaults: { _controller: TopxiaWebBundle:PhotoManage:index }
+
+photoview_manage_base:
+    pattern:  /photoview/{id}/manage/base
+    defaults: { _controller: TopxiaWebBundle:PhotoManage:base }
+
+photoview_manage_picture:
+    pattern: /photoview/{id}/manage/picture
+    defaults: { _controller: TopxiaWebBundle:PhotoManage:picture }
+
+photoview_manage_picture_crop:
+    pattern:  /photoview/{id}/manage/picture/crop
+    defaults: { _controller: TopxiaWebBundle:PhotoManage:pictureCrop }
+
+photoview_manage_file_delete:
+    pattern:  /photoview/{id}/manage/file/delete
+    defaults: { _controller: TopxiaWebBundle:PhotoManage:deleteFile }
+
+
+

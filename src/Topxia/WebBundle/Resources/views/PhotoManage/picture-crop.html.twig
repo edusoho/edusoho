@@ -1,0 +1,56 @@
+{% extends 'TopxiaWebBundle:PhotoManage:layout.html.twig' %}
+
+{% block title %}专辑图片 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'picture' %}
+{% set script_controller = 'course-manage/picture-crop' %}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    专辑图片
+  </div>
+
+  <div class="panel-body">
+    <form id="course-picture-crop-form" method="post" enctype="multipart/form-data">
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group clearfix">
+        <div class="col-lg-offset-2 col-lg-8 controls">
+          <img src="{{ asset(pictureUrl) }}" id="course-picture-crop" width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+          <div class="help-block">提示：请选择图片裁剪区域。</div>
+        </div>
+      </div>
+      
+        <div class="form-group">
+        <label class="col-lg-3 control-label" for="photo_title">图片标题</label>
+        <div class="col-lg-9">
+          <input id="photo_title" class="form-control" type="text" name="title"  required />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="photo_content">图片描述</label>
+        <div class="col-lg-9">
+          <input id="photo_content" class="form-control" type="text"   name="content"
+           required />
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-lg-offset-2 col-lg-8 controls">
+          <input type="hidden" name="x">
+          <input type="hidden" name="y">
+          <input type="hidden" name="width">
+          <input type="hidden" name="height">
+          <button class="btn btn-fat btn-primary" id="upload-picture-btn" type="submit">保存</button>
+        </div>
+      </div>
+      
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
+

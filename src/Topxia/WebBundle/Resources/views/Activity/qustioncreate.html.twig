@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}课程提问{% endblock %}
+{% block body %}
+
+  <form id="qustion-form" class="form-horizontal" method="post" action="{{ path("activity_qustioncreate",{id:activityid}) }}">
+    {{ web_macro.flash_messages() }}
+
+  <p class="control-group">
+    <div class="controls">
+      {{ form_widget(form.title, {attr:{placeholder:'问题标题', 'data-display':'问题标题'}}) }}
+    </div>
+  </p>
+
+  <p class="control-group">
+    <div class="controls">
+      {{ form_widget(form.content, {attr:{placeholder:'问题详细内容', 'data-display':'问题详细内容', rows:8}}) }}
+    </div>
+  </p>
+
+  {{ form_rest(form) }}
+
+</form>
+
+<script>
+    app.load('activity/qustion');
+</script>
+
+{% endblock %}
+
+{% block footer %}
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#qustion-form">保存</button>
+{% endblock %}

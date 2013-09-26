@@ -1,0 +1,17 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'activity' %}
+
+{% block content %}
+  <div class="col-lg-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ path('admin_activity') }}" class="list-group-item {% if menu == 'activity' %}active{% endif %}">活动管理</a>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-lg-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}
