@@ -43,9 +43,8 @@ class RenrenOAuthClient extends AbstractOAuthClient
         $userInfo = array();
         $userInfo['id'] = $infos['id'];
         $userInfo['name'] = $infos['name'];
-        $userInfo['avatar'] = $infos['avatar'][1]['url'];
-        $userInfo['avatar_large'] = $infos['avatar'][2]['url'];
-        $userInfo['portrait'] = $userInfo['avatar_large'];
+        $userInfo['smallAvatar'] = $infos['avatar'][1]['url'];
+        $userInfo['largeAvatar'] = $infos['avatar'][2]['url'];
         return $userInfo;
     }
 

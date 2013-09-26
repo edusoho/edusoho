@@ -5,9 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 
-use Topxia\WebBundle\Form\UserBindNewType;
-use Topxia\WebBundle\Form\UserBindExistType;
-
 class LoginBindController extends BaseController
 {
 
@@ -35,35 +32,82 @@ class LoginBindController extends BaseController
             return $this->redirect($this->generateUrl('homepage'));
         } else {
             $request->getSession()->set('oauth_token', $token);
-            return $this->redirect($this->generateUrl('login_bind_new', array('type'  => $type)));
+            return $this->redirect($this->generateUrl('login_bind_choose', array('type'  => $type)));
         }
 
     }
 
-    public function newAction(Request $request, $type)
+    public function chooseAction(Request $request, $type)
     {
-
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-        $form = $this->createForm(new UserBindNewType(), array(
-            'nickname' => $oauthUser['name'],
-        ));
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $registration = $form->getData();
-                $registration['token'] = $token;
-                $user = $this->getUserService()->register($registration, $type);
-                $this->authenticateUser($user);
-                return $this->redirect($this->generateUrl('homepage'));
-            }
-        }
-        return $this->render('TopxiaWebBundle:Login:bind-new.html.twig', array(
-            'form' => $form->createView(),
+
+        return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+            'oauthUser' => $oauthUser,
             'client' => $client,
         ));
+    }
 
+    public function newAction(Request $request, $type)
+    {
+        $token = $request->getSession()->get('oauth_token');
+
+        if (empty($token)) {
+            $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
+            goto response;
+        }
+
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
+
+        if (empty($oauthUser)) {
+            $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
+            goto response;
+        }
+
+        $user = $this->generateUser($type, $token, $oauthUser);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => '登录失败，请重试！');
+            goto response;
+        }
+
+        $this->authenticateUser($user);
+        $response = array('success' => true);
+
+        response:
+        return $this->createJsonResponse($response);
+    }
+
+    private function generateUser($type, $token, $oauthUser)
+    {
+        $registration = array();
+
+        $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+
+        $nicknames = array();
+        $nicknames[] = $oauthUser['name'];
+        $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 0, 3);
+        $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 3, 3);
+        $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 6, 3);
+
+        foreach ($nicknames as $name) {
+            if ($this->getUserService()->isNicknameAvaliable($name)) {
+                $registration['nickname'] = $name;
+                break;
+            }
+        }
+
+        if (empty($registration['nickname'])) {
+            return null;
+        }
+
+        $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
+        $registration['token'] = $token;
+
+        $user = $this->getUserService()->register($registration, $type);
+
+        return $user;
     }
 
     public function existAction(Request $request, $type)
@@ -72,40 +116,22 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
 
         $oauthUser = $client->getUserInfo($token);
-        $error = null;
-        $form = $this->createForm(new UserBindExistType());
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $user = $this->getUserService()->getUserByEmail($data['email']);
-                if (empty($user)) {
-                    $error = '该Email地址尚未注册';
-                    goto response;
-                }
 
-                if (!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
-                    $error = '密码不正确，请重试！';
-                    goto response;
-                }
-
-                $bindUser = $this->getUserService()->getUserBindByTypeAndUserId($type, $user['id']);
-                if ($bindUser) {
-                    $error = "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站帐号，如需重新绑定，请先到账户设置中取消绑定！";
-                    goto response;
-                }
-                $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
-                $this->authenticateUser($user);
-                return $this->redirect($this->generateUrl('homepage'));
-            }
+        $data = $request->request->all();
+        $user = $this->getUserService()->getUserByEmail($data['email']);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+        } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
+            $response = array('success' => false, 'message' => '密码不正确，请重试！');
+        } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
+            $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
+        } else {
+            $response = array('success' => true);
+            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
+            $this->authenticateUser($user);
         }
 
-        response:
-        return $this->render('TopxiaWebBundle:Login:bind-exist.html.twig', array(
-            'form' => $form->createView(),
-            'error' => $error,
-            'client' => $client
-        ));
+        return $this->createJsonResponse($response);
     }
 
     private function createOAuthClient($type)

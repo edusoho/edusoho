@@ -32,13 +32,19 @@ login_bind_callback:
     pattern:  /login/bind/{type}/callback
     defaults: { _controller: TopxiaWebBundle:LoginBind:callback }
 
+login_bind_choose:
+    pattern:  /login/bind/{type}/choose
+    defaults: { _controller: TopxiaWebBundle:LoginBind:choose }
+
 login_bind_new:
     pattern:  /login/bind/{type}/new
     defaults: { _controller: TopxiaWebBundle:LoginBind:new }
+    methods: [POST]
 
 login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
+    methods: [POST]
 
 login_check_email:
     pattern:  /login/check/email
