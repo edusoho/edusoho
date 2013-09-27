@@ -262,11 +262,12 @@
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
                       <a href="{{ path('user_show',{id:review['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
-                        <img src="{{ file_path( reviewUsers[review.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
+
+                         <img  class="user-small-avatar" src="{{ file_path(reviewUsers[review.userId].smallAvatar,'avatar.png')  }}" alt="ae120"></a>
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
-                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} 刚刚点评了</a>
+                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }}</a> 刚刚点评了
                       </p>
                       <p class="metas">
                         <a href="{{ path('course_show', {id:review.courseId }) }}" class="show-user-card " data-uid="1272156">

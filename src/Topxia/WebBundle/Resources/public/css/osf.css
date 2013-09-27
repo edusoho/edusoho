@@ -94,7 +94,6 @@
 	background-color:#f2f2f2 ;
 }
 
-
 /* 空信息 */
 .empty-info{
 	 text-align: center;
@@ -114,3 +113,16 @@
 /* 末班样式兼容 */
 
 .todos-thumb-span a{ color: white; }
+
+.photo-view-page .container{
+	width: 100%;
+}
+
+
+
+.user-small-avatar {
+	width: 30px !important;
+	height: 30px !important;
+	
+}
+
