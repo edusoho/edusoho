@@ -6,7 +6,7 @@
 .reg{margin-left:2em;border: 1px solid #000;border-top: none;border-bottom: none;}
 .reg a{padding: 0;float: left;}
 .info .info-content{padding: 10px 10px 10px 0;}
-.info{ width: 922px;}
+/*.info{ width: 922px;}*/
 .info-header{overflow: hidden;zoom:1; padding: 0 15px;line-height: 32px;height: 32px;border-bottom: 1px solid #e5e5e5;background-color: #f0f0f0;position: relative;}
 .info-header span{padding-left: 20px;margin-right: 25px}
 .info .photo-wall{width: 740px;*width: 742px;position:relative;}
