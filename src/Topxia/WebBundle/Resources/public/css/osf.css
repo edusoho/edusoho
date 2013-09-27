@@ -79,3 +79,11 @@
 .photo-view-page .container{
 	width: 100%;
 }
+
+
+
+.user-small-avatar {
+	width: 30px !important;
+	height: 30px !important;
+	
+}
