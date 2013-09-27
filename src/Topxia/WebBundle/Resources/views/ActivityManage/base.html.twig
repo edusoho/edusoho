@@ -30,6 +30,9 @@
 				<div class="col-lg-2 control-label">{{ form_label(form.subtitle, '副标题') }}</div>
 				<div class="col-lg-8 controls">{{ form_widget(form.subtitle, {attr:{class:'form-control'}}) }}</div>
 			</div>
+			
+
+			
 
 			<div class="form-group">
 			  <div class="col-lg-2 control-label">{{ form_label(form.tagsid, '标签') }}</div>
@@ -40,6 +43,13 @@
 			  <div class="col-lg-2 control-label">{{ form_label(form.categoryid, '分类') }}</div>
 			  <div class="col-lg-8 controls">
 			    {{ form_widget(form.categoryid, {attr:{class:'form-control width-input width-input-large'}}) }}
+			  </div>
+			</div>
+
+			<div class="form-group">
+			  <div class="col-lg-2 control-label">{{ form_label(form.locationId, '举办城市') }}</div>
+			  <div class="col-lg-8 controls">
+			    {{ form_widget(form.locationId, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
 			</div>
 

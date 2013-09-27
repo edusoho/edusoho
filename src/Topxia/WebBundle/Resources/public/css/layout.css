@@ -203,7 +203,20 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
-
+a {
+  color: #008536;
+  text-decoration: none;
+}
+a:hover,
+a:focus {
+  color: #003917;
+  text-decoration: underline;
+}
+a:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
 img {
   vertical-align: middle;
 }

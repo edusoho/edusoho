@@ -173,7 +173,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form',"onlineAddress"
+			'type', 'title', 'about', 'categoryid', 'subtitle','tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form','onlineAddress'
 		));
 
 		//TODO 暂时先注释，以后可能会用到
@@ -196,6 +196,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			$fields['rating'] = (int) $fields['rating'];
 		}
 		
+		
+		if (isset($fields['locationId'])) {
+			$fields['locationId'] = (int) $fields['locationId'];
+		}
+
 		if (isset($fields['ratingNum'])) {
 			$fields['ratingNum'] = (int) $fields['ratingNum'];
 		}

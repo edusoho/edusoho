@@ -324,6 +324,7 @@ class ActivityManageController extends BaseController
         $builder = $this->createNamedFormBuilder('activity', $course)
             ->add('title', 'text')
             ->add('subtitle', 'textarea')
+            ->add('locationId','text')
             ->add('tagsid', 'tags')
             ->add('address','text')
             ->add('onlineAddress','text')

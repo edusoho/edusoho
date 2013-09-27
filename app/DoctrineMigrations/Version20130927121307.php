@@ -13,10 +13,11 @@ class Version20130927121307 extends AbstractMigration
     public function up(Schema $schema)
     {
         
-	  $this->addSql("
+	$this->addSql("
 				ALTER TABLE  `activity` ADD  `isExpired` int(11) NOT NULL DEFAULT '0' COMMENT '是否已结束'
 				");
-	   
+	    }
+
     	  
     }
 

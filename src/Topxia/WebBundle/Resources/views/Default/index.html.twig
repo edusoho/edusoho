@@ -3,6 +3,8 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
+{% set nav = 'index' %}
+
 {% set bodyClass = 'homepage' %}
 {% set script_controller = 'homepage' %}
 
@@ -262,12 +264,11 @@
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
                       <a href="{{ path('user_show',{id:review['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
-
-                         <img  class="user-small-avatar" src="{{ file_path(reviewUsers[review.userId].smallAvatar,'avatar.png')  }}" alt="ae120"></a>
+                        <img src="{{ file_path( reviewUsers[review.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
-                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }}</a> 刚刚点评了
+                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} 刚刚点评了</a>
                       </p>
                       <p class="metas">
                         <a href="{{ path('course_show', {id:review.courseId }) }}" class="show-user-card " data-uid="1272156">
