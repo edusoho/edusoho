@@ -50,6 +50,18 @@ class ActivityController extends BaseController
         return $this->renderActivityTr($id);
     }
 
+    public function endAction(Request $request, $id)
+    {
+        $this->getActivityService()->endActivity($id);
+        return $this->renderActivityTr($id);
+    }
+
+    public function defaultAction(Request $request, $id)
+    {
+        $course = $this->getActivityService()->defaultActivity($id);
+        return $this->renderActivityTr($id);
+    }
+
     private function renderActivityTr($courseId)
     {
         $course = $this->getActivityService()->getActivity($courseId);

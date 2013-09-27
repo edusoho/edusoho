@@ -326,6 +326,7 @@ class ActivityManageController extends BaseController
             ->add('subtitle', 'textarea')
             ->add('tagsid', 'tags')
             ->add('address','text')
+            ->add('onlineAddress','text')
             ->add('form','text')
             ->add('strstartTime','text')
             ->add('strendTime','text')

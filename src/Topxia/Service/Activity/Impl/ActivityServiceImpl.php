@@ -107,6 +107,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		}
 		return $this->getActivityDao()->updateActivity($id, array('status' => 'closed'));
 	}
+
+
+	public function endActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('isExpired' => 1));	
+	}
+
+	public function defaultActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('isExpired' => 0));
+	}
+
 	public function setActivityCourse($courseId, $teachers){
 		$this->getActivityDao()->updateActivity($courseId,ActivitySerialize::serialize($teachers));
 	}
@@ -163,7 +173,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form'
+			'type', 'title', 'about', 'categoryid', 'subtitle','tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form',"onlineAddress"
 		));
 
 		//TODO 暂时先注释，以后可能会用到
@@ -394,11 +404,6 @@ class ActivitySerialize
 			$activity['startTime']=date("Y-m-d H:i",$activity['startTime']);
 		}
 		
-		if($activity['endTime']>time()){
-			$activity['istimeout']=true;
-		}else{
-			$activity['istimeout']=false;
-		}
 
 		if(empty($activity['endTime'])){
 			$activity['endTime']='';

@@ -18,7 +18,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function getThread($id)
 	{
-		return $this->fetch($id);
+		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 	
 	public function deleteThreadsByIds(array $ids)
@@ -33,30 +34,17 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function findThreadsByActivityId($courseId, $orderBy, $start, $limit)
 	{
-		return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'activity_thread')
-            ->where("activityId = :courseId")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setParameter(":courseId", $courseId)
-            ->execute()
-            ->fetchAll();
+
+        $orderBy = join (' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE activityId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
 	}
 
 	public function findThreadsByActivityIdAndType($courseId, $type, $orderBy, $start, $limit)
 	{
-		return $this->createQueryBuilder()
-            ->select('*')->from($this->table, 'course_material')
-            ->where("courseId = :courseId")
-            ->where("type = :type")
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setParameter(":courseId", $courseId)
-            ->setParameter(":type", $type)
-            ->execute()
-            ->fetchAll();
+        $orderBy = join (' ', $orderBy);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $type)) ? : array();
 	}
 
 	public function searchThreads($conditions, $orderBys, $start, $limit)

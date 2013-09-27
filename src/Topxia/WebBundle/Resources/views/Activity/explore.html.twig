@@ -52,8 +52,8 @@
                 <li> <strong>状态：</strong>
                   <a href="{{ path('activity_home') }}">全部</a>
                   {% set istimeout=filters.istimeout|default('') %}
-                  <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:true})) }}" {% if filters.istimeout=='1' %} class="active"{% endif %}>未开始</a>
-                  <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:false})) }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>已结束</a>
+                  <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:0})) }}" {% if filters.istimeout=='1' %} class="active"{% endif %}>未开始</a>
+                  <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:1})) }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>已结束</a>
                 
                 <li>
                   <strong>标签：</strong>
@@ -117,13 +117,17 @@
                       <div class="text-right">
                         <p>
                           {{ activity.studentNum }}人已报名
-                          <a class='mar-l btn btn-success  green'
-                           {% if activity.istimeout %} 
-                            href="{{ path('activity_show',{id:activity.id})}}"
-                          {% else %}
-                            href="{{ path('activity_showsuccess',{id:activity.id})}}"
-                          {% endif %}
-                      >查看详情</a>
+                        {% if activity.isExpired==1 %}
+                          <a class='mar-l btn btn-success  green' 
+                          href="{{ path('activity_showsuccess',{id:activity.id})}}">
+                            活动内容
+                          </a>
+                        {% else %}
+                          <a class='mar-l btn btn-success  green' 
+                          href="{{ path('activity_show',{id:activity.id})}}">
+                            查看详情
+                          </a>
+                        {% endif %}
                         </p>
                       </div>
                     </div>

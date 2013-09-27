@@ -15,25 +15,25 @@
       <div class="banner-bg">
         <div class="top">
           <div class="pull-left bulletin">
-            <div>
+            <div class="index-img-box">
               <img class="activity-img-sm" src="{{ file_path(nextActivity.smallPicture,'course-large.png')  }}">    
-              <h4>{{nextActivity.title }}<br />{{nextActivity.subtitle }}</span></h4>
+              <h4 class="activity-img-title">{{nextActivity.title }}<br />{{nextActivity.subtitle }}</span></h4>
             </div>
           </div>
           <div class="pull-left info">
             <div class="info-header">
               <span class="ky-times">{{ nextActivity.startTime }} - 21：30</span>
               <span class="ky-address ">{{ Locations[nextActivity.locationId].name}}</span>
-              <span class="ky-jiangshi">{{ activitTerchar.nickname }}</span>
+              <span class="ky-jiangshi">{{ activitTerchar.nickname|default('') }}</span>
               <div class="fix-right font18">64231人报名公开课</div>
             </div>
             <div class="info-content clearfix">             
               <div id="photo" class="photo-wall pull-left">
                 {% for user in users%}
                 <span class="list-item">
-                  <img class="tip" class="tip" src="{{ asset('bundles/topxiaweb/img/5969313944_e5d6d67b23_s.gif')}}"  title="Neque porro quisquam" alt="monaco see">
+                  <img class="tip" class="tip" src="{{ asset('bundles/topxiaweb/img/5969313944_e5d6d67b23_s.gif')}}" alt="user icon">
                   <span class="todos-thumb-span text-left">
-                    {{user.nickname}}
+                    <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
                     <span class="user-tag">{{ user.title }}</span>
                   </span>
                 </span>
@@ -193,16 +193,16 @@
           <div class="mod coach">
             <div class="kytitle clearfix">
               <h3>开源教练组</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+              <a href="{{ path('teacher') }}" target="_blank" class="pull-right cm_go">更多»</a>
             </div>
             <div class="mod-content">
               <ul class="grids">
                 {% for teacher in teachers %}
                 <li class="grid">
-                  <a href="#">
+                  <a href="{{ path('user_show',{id:teacher.id }) }}">
                     <img src=" {{ file_path(teacher.mediumAvatar,'avatar.png')  }}" alt="用户" class="thumb"></a>
                   <p>
-                    <h5 href="#">{{teacher.nickname}}</h5>
+                    <h5><a href="{{ path('user_show',{id:teacher.id }) }}">{{teacher.nickname}}</a></h5>
                   </p>
                   <p>{{ teacherinfos[teacher.id].about|raw }}</p>
                 </li>
@@ -262,7 +262,7 @@
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
                       <a href="{{ path('user_show',{id:review['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
-                        <img src="{{ file_path(userActionUsers[review.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
+                        <img src="{{ file_path( reviewUsers[review.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
                     </div>
                     <div class="imageblock-content">
                       <p class="title">

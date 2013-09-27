@@ -19,18 +19,27 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu pull-right">
-        <li><a href="{{ path('activity_show', {id:course.id, previewAs:'guest'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
-        <li><a href="{{ path('activity_show', {id:course.id, previewAs:'member'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>
+        <li><a href="{{ path('activity_show',{id:course.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：活动结束前</a></li>
+        <li><a href="{{ path('activity_showsuccess',{id:course.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：活动结束后</a></li>
 
         <li class="divider"></li>
 
         {% if course.status == 'published' %}
-          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_activity_close', {id:course.id}) }}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_activity_close', {id:course.id}) }}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭活动</a></li>
         {% endif %}
 
         {% if course.status != 'published' %}
-          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_activity_publish', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_activity_publish', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布活动</a></li>
         {% endif %}
+
+        <li class="divider"></li>
+          
+        {% if course.isExpired == 0 %}
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_activity_end', {id:course.id}) }}"><span class="glyphicon glyphicon-ban-circle"></span> 活动结束</a></li>
+        {% else %}
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_activity_default', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span>活动开始</a></li>
+        {% endif %}          
+
 
         <li class="divider"></li>
 

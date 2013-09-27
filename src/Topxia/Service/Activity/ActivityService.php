@@ -38,6 +38,10 @@ interface ActivityService
 
 	public function closeActivity($id);
 
+	public function endActivity($id);
+
+	public function defaultActivity($id);
+
 	public function changeActivityPicture ($courseId, $filePath, array $options);
 
 	/**

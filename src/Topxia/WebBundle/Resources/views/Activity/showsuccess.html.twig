@@ -20,10 +20,14 @@
           <div class="content">       
             <ul>
               <li class="shadow">
+                {% if activity.courseId %}
                <div class="activity-video-player" 
                 data-url="{{ path('course_lesson_media',{courseId:activity.courseId[0],lessonId:lessonid}) }}">
                 <video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>
               </div>
+                {% else %}
+                  <p class="empty-info">暂无视频信息</p>
+                {% endif %}
               </li>           
             </ul>
           </div>
@@ -69,7 +73,7 @@
   <div class="col-md-12 ">
     <div class="widget k_postlist shadow">
       <div class="content" >
-            
+          {% if pics %}
           <div id="carousel-demo-1" class="carousel-demo">
               <span class="ui-switchable-prev-btn" data-role="prev">&lsaquo; 上一页</span>
               <span class="ui-switchable-next-btn" data-role="next">下一页 &rsaquo;</span>
@@ -81,7 +85,9 @@
                   </div>
               </div>
           </div>
-            
+          {% else %}
+              <p class="empty-info">暂无活动图片信息</p>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -95,7 +101,8 @@
                   <div class="kytitle clearfix bor-l-green">
                     <h3>讲师介绍</h3>
                   </div>
-                  <div class="content lecturer">
+                  <div class="content lecturer mod-h-sm">
+                    {% if experter %}
                     <div class="text-center">
                       <img class="bor" src="{{ file_path(experter.mediumAvatar,'avatar.png') }}">
                       <p>{{experter.nickname }}</p>
@@ -103,10 +110,29 @@
                     <p class="padding">
                       {{experter.profile.about|raw }}
                     </p>
+                  
+                  {% else %}
+                    <p class="empty-info">暂无老师信息</p>
+                  {% endif %}
                   </div>
                 </div>
+
+                <!-- 附件下载-->
+                <div class="widget k_postlist shadow">
+                  <div class="kytitle clearfix bor-l-green">
+                    <h3>附件下载</h3>
+                  </div>
+                  <div class="content outline mod-h-sm">
+                    <div class="padding">
+                      {% for appendix in appendixs %}
+                        {{ appendix.title }}  . <a href="{{ path('activity_material_download', {courseId:activity.id, materialId: appendix.id}) }}">下载</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
               </div>
-              <div class="col-md-4">
+              <div class="col-md-8 clear-pright">
                 <!-- 课程大纲 -->
                 <div class="widget k_postlist shadow">
                   <div class="kytitle clearfix bor-l-green">
@@ -115,19 +141,6 @@
                   <div class="content outline">
                     <div class="padding">
                       {{ activity.about|raw}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 clear-pright">
-                <!-- 课程大纲 -->
-                <div class="widget k_postlist shadow">
-                  <div class="kytitle clearfix bor-l-green">
-                    <h3>附件下载</h3>
-                  </div>
-                  <div class="content outline">
-                    <div class="padding">
-                      {{ activity.about|raw }}
                     </div>
                   </div>
                 </div>

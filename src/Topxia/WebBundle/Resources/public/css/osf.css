@@ -8,10 +8,28 @@
 
 .header-top { margin-top:56px;}
 
-.activity-img-sm{
-	width: 230px;
-	height: 129px;
+.index-img-box{
+	position: relative;
+	width: 200px;
+	height: 200px;
 }
+
+.activity-img-sm{
+	width: 100%;
+	height: 100%;
+}
+
+.activity-img-title{
+	height: 28px;
+	line-height: 27px;
+	text-align: center;
+	width: 100%;
+	position: absolute;
+	left:0px;
+	bottom:0px;
+
+}
+
 
 .photoview-nav{
 	position: fixed;
@@ -76,6 +94,23 @@
 	background-color:#f2f2f2 ;
 }
 
-.photo-view-page .container{
-	width: 100%;
+
+/* 空信息 */
+.empty-info{
+	 text-align: center;
+	 font-size: 14px;
+	 height: 40px;
+	 line-height: 38px;
+	 color: #666px;
 }
+
+
+/* activity contnet page style*/
+
+.mod-h-sm{  height :173px;}
+
+
+
+/* 末班样式兼容 */
+
+.todos-thumb-span a{ color: white; }

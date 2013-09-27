@@ -58,6 +58,7 @@
                     <h3>讲师介绍</h3>
                   </div>
                   <div class="content lecturer">
+                    {% if experter %}
                     <div class="text-center">
                       <img class="bor" src="{{ file_path(experter.mediumAvatar,'avatar.png') }}">
                       <p>{{experter.nickname }}</p>
@@ -65,6 +66,9 @@
                     <p class="padding">
                       {{experter.profile.about|raw }}
                     </p>
+                    {% else %}
+                       <p class="empty-info">暂无老师信息</p>
+                    {% endif %}
                   </div>
                 </div>
               </div>

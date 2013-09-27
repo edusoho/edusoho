@@ -39,7 +39,7 @@ class ActivityController extends BaseController
         //已经报名的用户
         $members=$this->getActivityService()->searchMember(array(),0,100);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members,'userId'));
-        
+
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
             'activitys' => $activity,
             'paginator' => $paginator,
@@ -137,11 +137,19 @@ class ActivityController extends BaseController
         
         $activitys=$this->getActivityService()->searchActivitys(array('status'=>'published'),'latestCreated',0,4);
         
-        $experter=$this->getUserService()->getUser($activity['experterid'][0]);
-        $experterpro=$this->getUserService()->getUserProfile($experter['id']);
-        $experter['profile']=$experterpro;
         
-        $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoid'][0]),'latest',0,100);
+
+        $experter=array();
+        if(!empty($activity['experterid'])){
+            $experter=$this->getUserService()->getUser($activity['experterid'][0]);
+            $experterpro=$this->getUserService()->getUserProfile($experter['id']);
+            $experter['profile']=$experterpro;
+        }
+        
+        $files=array();
+        if(!empty($activity['photoid'])){
+            $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoid'][0]),'    latest',0,100);
+        }
 
         $lessionid=0;
         if(!empty($activity['courseId'])){
@@ -184,6 +192,12 @@ class ActivityController extends BaseController
             "id" =>  0,
           "nickname" =>"游客");
 
+        //附件下载
+        $appendix=array();
+        if(!empty($activity['id'])){
+            $appendix=$this->getMaterialService()->findActivityMaterials($activity['id'],0,2);
+        }
+
         return $this->render("TopxiaWebBundle:Activity:showsuccess.html.twig",array(
             "activity"=>$activity,
             "activitys"=>$activitys,
@@ -195,7 +209,8 @@ class ActivityController extends BaseController
             'attachments'=>$attachments,
             "current_user"=> $currentuser,
             "qustion_users"=>$qustionUsers,
-            "post_users"=>$postUsers));
+            "post_users"=>$postUsers,
+            "appendixs"=>$appendix));
     }
 
     public function activityformAction(Request $request, $id){
@@ -290,7 +305,7 @@ class ActivityController extends BaseController
         $filters = array();
         $filters['istimeout'] = $request->query->get('istimeout');
         if (!in_array($filters['istimeout'], array('1','0' ))) {
-            //$filters['istimeout']=1;
+            $filters['istimeout']=0;
         }
 
         $filters['status']='published';

@@ -305,7 +305,7 @@ background-position: 0 -448px;}
 background-color: #32a764;
 color: white;
 width: 167px;*width: 107px;
-height: 54px;
+height: 55px;
 padding-left: 60px;
 top: -2px;
 margin-left: -28px;
@@ -324,11 +324,11 @@ filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Colo
 
 /* Firefox 1 - 2 */
 body:empty .todos-thumb-span
-{margin-left: -56px;}
+{margin-left: -52px;}
  
 /* Firefox */
 @-moz-document url-prefix()
-{.todos-thumb-span { margin-left: -56px; }}
+{.todos-thumb-span { margin-left: -52px; }}
 
 
 .todos-thumb-span .user-tag{color: #a6f3c7;display: block;margin-top: .5em}
