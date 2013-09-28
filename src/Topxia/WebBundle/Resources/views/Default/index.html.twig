@@ -129,8 +129,7 @@
           <!-- 问答讨论 -->
           <div class="mod k_postlist discussion">
             <div class="kytitle clearfix">
-              <h3>问答讨论</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>              
+              <h3>问答讨论</h3>          
             </div>
             <div class="content">       
               <ul>
@@ -176,7 +175,7 @@
           <!-- 新加入学员 -->
           <div class="mod trainee">
             <div class="kytitle">
-              <h3>新加入学员</h3>              
+              <h3>新加学员</h3>              
             </div>            
             <div class="mod-content">
               <ul class="grids smallpic-grids">
@@ -196,7 +195,7 @@
           <!-- 开源教练组 -->
           <div class="mod coach">
             <div class="kytitle clearfix">
-              <h3>开源教练组</h3>
+              <h3>课程专家</h3>
               <a href="{{ path('teacher') }}" target="_blank" class="pull-right cm_go">更多»</a>
             </div>
             <div class="mod-content">
@@ -221,8 +220,7 @@
           <!-- 大家正在学 -->
           <div class="widget k_postlist shadow studying">
             <div class="kytitle clearfix bor-l-green">
-              <h3>大家这在学</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+              <h3>大家正在学</h3>
             </div>
             <div class="content">       
               <ul>
@@ -254,8 +252,7 @@
           <div class="widget k_postlist shadow">
             <div class="kytitle clearfix bor-l-green">
               <h3>最新点评</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
-            </div>
+              </div>
             <div class="content">       
               <ul>
                 {% for review in reviews%}
@@ -270,7 +267,7 @@
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
-                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} 刚刚点评了</a>
+                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} </a>刚刚点评了
                       </p>
                       <p class="metas">
                         <a href="{{ path('course_show', {id:review.courseId }) }}" class="show-user-card " data-uid="1272156">

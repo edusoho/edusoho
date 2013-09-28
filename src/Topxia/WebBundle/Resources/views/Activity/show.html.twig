@@ -138,34 +138,34 @@
                 </div>                
                 <ul class="mar-b" id="qustion-media-list">
                   {% for qustion in qustions %}
-          <li class="media">
-            <a class="pull-left user-link user-avatar-link" href="javascript:">
-              {% if qustion['userid']==0 %}
-              <img src="/assets/img/default/avatar.png" alt="ae120"></a>
-              {% else %}
-              <img src="{{ file_path(qustion_users[qustion['userid']].mediumAvatar,'avatar.png') }}" alt="ae120"></a>
-              {% endif %}
-            </a>
-            <div class="media-body">
-              <p class="media-content"><a>{{qustion_users[qustion['userid']].nickname }}:</a> {{qustion.content}}
-              </p>
-              <div class="media-content" style="margin-bottom:5px;">
-                <a hef="javascript:" class="reply btn btn-link">回复</a>
-                <a hef="javascript:" style="float:right;" class="huifu">2013-8-24</a>
-              </div>
-              <div class="post-list media-content">
-                {% for post in qustion.bindpost %}
-                  <div class="well well-sm">
-                            <a href="#">{{ post_users[post.userid].nickname }}</a>:{{post.content}}
-                  </div>
-                {% endfor %}
-              </div>
-              <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}">
-                
-              </div>
-            </div>
-          </li>
-         {% endfor %}
+                      <li class="media">
+                        <a class="pull-left user-link user-avatar-link" href="javascript:">
+                          {% if qustion['userid']==0 %}
+                          <img src="/assets/img/default/avatar.png" alt="ae120"></a>
+                          {% else %}
+                          <img src="{{ file_path(qustion_users[qustion['userid']].mediumAvatar,'avatar.png') }}" alt="ae120"></a>
+                          {% endif %}
+                        </a>
+                        <div class="media-body">
+                          <p class="media-content"><a>{{qustion_users[qustion['userid']].nickname }}:</a> {{qustion.content}}
+                          </p>
+                          <div class="media-content" style="margin-bottom:5px;">
+                            <a hef="javascript:" class="reply btn btn-link">回复</a>
+                            <a hef="javascript:" style="float:right;" class="huifu">2013-8-24</a>
+                          </div>
+                          <div class="post-list media-content">
+                            {% for post in qustion.bindpost %}
+                              <div class="well well-sm">
+                                        <a href="#">{{ post_users[post.userid].nickname }}</a>:{{post.content}}
+                              </div>
+                            {% endfor %}
+                          </div>
+                          <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}">
+                            
+                          </div>
+                        </div>
+                      </li>
+                  {% endfor %}
                 </ul>
               </div>
             </div>
