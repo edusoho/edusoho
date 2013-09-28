@@ -6,7 +6,7 @@
 .reg{margin-left:2em;border: 1px solid #000;border-top: none;border-bottom: none;}
 .reg a{padding: 0;float: left;}
 .info .info-content{padding: 10px 10px 10px 0;}
-.info{ width: 922px;}
+
 .info-header{overflow: hidden;zoom:1; padding: 0 15px;line-height: 32px;height: 32px;border-bottom: 1px solid #e5e5e5;background-color: #f0f0f0;position: relative;}
 .info-header span{padding-left: 20px;margin-right: 25px}
 .info .photo-wall{width: 740px;*width: 742px;position:relative;}
@@ -131,17 +131,7 @@ margin: 5px 0;
 
 .studying .imageblock{margin: 0;padding: 0}
 .curriculum .grid,.TopicList .grid,.coach .grid{font-size: 12px;}
-/*今日有课*/
-.curriculum .grid:last-child{margin-right: 0}
-.curriculum .grid{background-color: white;width: 220px;height: 245px;text-align: left;margin-right: 17px;}
-.curriculum .sign-up{position: absolute;
-right: -10px;
-top: 10px;
-background-color: #FC6161;
-color: white;
-padding: 0 6px;}
-.summary{position: relative;color: #666;}
-.course-item{padding: 10px;}
+
 
 /*问答讨论discussion*/
 .discussion .content ul li{border-bottom: 1px solid #eee}
@@ -157,9 +147,10 @@ padding: 0 6px;}
 box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.22);
 }
 .shadow{	
-	-webkit-box-shadow:  0 .2em .35em .07em rgba(117, 117, 117, 0.22);
+-webkit-box-shadow:  0 .2em .35em .07em rgba(117, 117, 117, 0.22);
 -moz-box-shadow:  0 .2em .35em .07em rgba(117, 117, 117, 0.22);
-box-shadow:  0 .2em .35em .07em rgba(117, 117, 117, 0.22);}
+box-shadow:  0 .2em .35em .07em rgba(117, 117, 117, 0.22);
+}
 /*-- 课程资源库 */
 .TopicList .grid{margin-right:13px; background-color: #fff;width: 282px;*width: 268px;height: 158px;*height: 144px;overflow: hidden;border: 1px solid #c5c4c4;padding: 6px;}
 .TopicList .imageblock{margin: 0;padding: 0;}
@@ -225,14 +216,19 @@ color: #999;
 .openstack .imageblock{padding: 0;margin-top: 0}
 .openstack .imageblock-content{color: #333}
 .openstack .imageblock-image {margin-right: 1.5em;}
-.openstack .content{padding: 0}
-.openstack .content li{margin-bottom: 2em; padding: 10px;background-color: white;position: relative;}
+.openstack .content{padding: 10px}
+.openstack .content li{margin-bottom: 2em; padding: 0px 15px;background-color: white;position: relative;}
 .openstack .content .text-right{position: absolute;bottom: 1em;right: 1em;font-weight: bold;}
+
+/*公开课列表*/
+.openclass .list-item li{margin-bottom: 2em; background-color: white;position: relative;}
+
 /*已报名的开源达人*/
 .daren{}	
 .daren a{display:inline-block;
 padding-bottom:0.8em;}
 .justify_fix{display:inline-block; width:100%; height:0; overflow:hidden;}
+
 /*订阅*/
 .subscription .form-control{width: 280px;*width: 250px;*margin-right: 5px; display: inline;}
 .social li{border-top: 1px solid #ddd;}

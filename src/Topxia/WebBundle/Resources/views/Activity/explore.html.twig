@@ -9,11 +9,11 @@
 
 {% block content %} 
 
-  <section class="row"> 
-  <!-- banner -->
-    <!-- ads -->
-    <div class="container">
+<section class="row"> 
+  <div class="row">
       <div class="banner-bg">
+         <img  class='open-class-banner-size' src="{{ asset('assets/img/default/open-class-default-banner.jpg') }}" alt="title" />
+       <!--
         <div class="top">
           <div id="focus">
             <div id="slides">
@@ -28,14 +28,11 @@
             </div>
           </div>
         </div>
+      -->
       </div>  
-    </div>        
-  </div>
-
+  </div> 
   <div class="row">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8">  
+        <div class="col-md-12">  
           <div class="mod k_postlist filter">
             <div class="kytitle clearfix">
               <h3>条件筛选</h3>             
@@ -95,19 +92,20 @@
           </div>        
           <!-- item-list -->
           <div class="mod k_postlist openstack">            
-            <div class="content">       
+            <div class="content pz">       
               <ul>
                 {% for activity in activitys %}
-                <li class="shadow">
+                <li class="shadow pz">
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
                       <a href="#" class="show-user-card" >
-                        <img src="{{ file_path(activity.largePiceture,'course-large.png') }}" alt="{{ activity.subtitle}}"></a>
+                        <img class="open-class-logo-large-size" src="{{ file_path(activity.largePiceture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
-                        <h4>{{ activity.title}}</h4>
-                        <h3>{{ activity.subtitle}}</h3>
+                        <h4>{{ activity.subtitle}}</h4>
+                        <h3>{{ activity.title}}</h3>
+                        
                       </p>
                       <p>开始时间： {{activity.startTime}}</p>
                       <p>结束时间： {{activity.endTime}}</p>
@@ -134,71 +132,11 @@
                   </div>
                 </li>
                 {% endfor %}
-                
               </ul>
               {{ web_macro.paginator(paginator) }}         
             </div>
           </div>
         </div>
-
-        <!-- 侧栏 -->
-        <aside class="col-md-4">
-          <!-- 已报名的开源达人 -->
-          <div class="widget k_postlist shadow">
-            <div class="kytitle clearfix bor-l-gray">
-              <h3>已报名的开源达人</h3>             
-            </div>
-            <div class="content daren">
-              {% for user in users %}
-              <a href="{{ path('user_show',{id:user.id }) }}" class="user-link user-avatar-link"><img src="{{file_path(user.smallAvatar,'avatar.png')}}" ></a>
-              {% endfor %}
-              <span class="justify_fix"></span>         
-            </div>
-          </div>
-          <!-- 关于开源力量公开课 -->
-          <div class="widget k_postlist shadow">
-            <div class="kytitle clearfix bor-l-gray">
-              <h3>关于开源力量公开课</h3>              
-            </div>
-            <div class="content">       
-              <p>
-                开源力量公开课每周二晚举行，每次2小时，地点上海或北京。
-讲师公开申请中，请发邮件到(@程开源) scheng@teksource.
-cn，注明姓名,个人简介,讲课主题，来信必复
-              </p>        
-            </div>
-          </div>
-          <!-- 联系我们 -->
-          <div class="widget k_postlist shadow">
-            <div class="kytitle clearfix bor-l-gray">
-              <h3>联系我们</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
-            </div>
-            <div class="content">       
-              <p><strong>邮件订阅</strong></p>          
-              <p>填写您的邮件地址，及时掌握开源力量公开课信息</p>
-              <div class="subscription mar-t mar-b">
-                <form action="#" >              
-                  <input name="subscription" type="text" class="form-control" placeholder="Email">
-                  <button type="submit" class="btn btn-success">订阅</button>
-                </form>             
-              </div>
-              <ul class="social">
-                <li>
-                  <h4><strong>微信公众账号</strong></h4>
-                  <p>别犹豫了，开刷吧！关注开源力量微信号: <strong>osforse</strong>，给你
-惊喜连连！</p>
-                </li>
-                <li>
-                  <h4><strong>新浪微博</strong></h4>
-                  <p>别犹豫了，开刷吧！关注开源力量官方微博: <a href="#">开源力量</a>，好书
-送不断！</p>
-                </li>
-              </ul>
-            </div>
-          </div>        
-        </aside>
-      </div>
-    </div>
+  </div>    
 </section>
 {% endblock %}

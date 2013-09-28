@@ -8,132 +8,115 @@
 {% block content %}
 
  <section class="row">	
-	<div class="container">
-		<div class="kytitle clearfix">
-			<h3>首页—公开课—{{ activity.title }}</h3>
-			<!-- <div class="height-down"></div>	 -->
-		</div>	
-		<div class="row">
-			<div class="col-md-12">
-				<!-- item-list -->
-				<div class="mod k_postlist openstack">
-					<div class="content">				
-						<ul>
-							<li class="shadow">
-								<div class="imageblock clearfix">
-									<div class="imageblock-image">
-										<a href="#" class="show-user-card" >
-											<img src="{{ file_path(activity.largePiceture,'course-large.png') }}" alt="openstack30"></a>
-									</div>
-									<div class="imageblock-content">
-										<p class="title">
-											<h4>{{ activity.title }}</h4>
-											<h3>{{ activity.subtitle }}</h3>
-										</p>
-										<p>开始时间： {{activity.startTime}}</p>
-										<p>结束时间： {{activity.endTime}}</p>
-										<p>地点： {{ activity.address }}</p>
-										<p>形式： {{ activity.form }}</p>
-										<p>费用： {{ activity.price}}</p>
-										<div class="text-right">
-											<p>
-												{{activity.studentNum}}人已报名
-											</p>
-										</div>
-									</div>
-								</div>
-							</li>						
-						</ul>
-						<div class="row">
-							<div class="col-md-8">
-								<!-- 讲师介绍 -->
-								<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
-								<div class="widget k_postlist shadow">
-									<div class="kytitle clearfix bor-l-green">
-										<h3>报名信息</h3>
-									</div>
-									<div class="content lecturer">
-										<div class="col-md-7">
-											<div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_email">Email地址</label>
-				            <div class="col-lg-9">
-
-				              <input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}"  value="{{user.email}}" required />
-				               <p class="help-block">填写你常用的邮箱作为登录帐号</p>
-				            </div>
-				        </div>
-				        <div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_nickname">昵称</label>
-				            <div class="col-lg-9">
-				              <input id="activity_nickname" class="form-control" type="text" name="activitymember[nickname]" 
-				                data-url="{{ path('register_nickname_check') }}"  value="{{user.nickname}}"  required />
-				               <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
-				            </div>
-				        </div>
-				        <div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_username">真实姓名</label>
-				            <div class="col-lg-9">
-				              <input id="activity_username" class="form-control" type="text" name="activitymember[username]" value="{{profile.truename}}" required />
-				            </div>
-				        </div>
-				        <div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_phone">手机号码</label>
-				            <div class="col-lg-9">
-				              <input id="activity_phone" class="form-control" type="text" name="activitymember[mobile]"
-				               value="{{profile.mobile}}" required />
-				            </div>
-				        </div>
-				        <div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_title">职位</label>
-				            <div class="col-lg-9">
-				              <input id="activity_title" class="form-control" type="text" name="activitymember[title]"  value="{{userTitle }}" />
-				            </div>
-				        </div>
-				        <div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_job">公司</label>
-				            <div class="col-lg-9">
-				              <input id="activity_job" class="form-control" type="text" name="activitymember[job]"  value="{{profile.job}}" />
-				            </div>
-				        </div>
-				        <div class="form-group">
-				            <label class="col-lg-3 control-label" for="activity_aboutinfo">其他信息</label>
-				            <div class="col-lg-9">
-				              <textarea rows="3" class="form-control" name="activitymember[aboutinfo]"></textarea>
-				            </div>
-				        </div>
-				        
-										</div>
-										<div class="col-md-5">
-											<div>
-												<p>问题出干货--高质量问题互动，才能点燃老师在公开课上的激情，亲，让我们一起吧讲师编成蜡炬的灰吧～～</p>
-											</div>
-											<div><textarea rows="3" class="form-control" name="activitymember[question]"></textarea></div>
-											<div class="form-group">
-									            <div class="col-lg-12">
-									              <div class="checkbox">
-											        <label>
-											          <input type="checkbox" checked="checked" /> 转发微博
-											       	</label>
-											      </div>
-											      <button type="submit" class="form-control btn btn-fat btn-primary btn-large">立即报名</button>
-									            </div>
-									        </div>
-
-										</div>
-									</div>
-								</div>
+	<div class="col-md-12">
+		<!-- item-list -->
+		<div class="mod k_postlist openstack pz">
+			<div class="content pz">				
+				<ul>
+					<li class="shadow pz">
+						<div class="imageblock clearfix">
+							<div class="imageblock-image">
+								<a href="#" class="show-user-card" >
+									<img class="open-class-logo-large-size" src="{{ file_path(activity.largePiceture,'activity-large.jpg') }}" alt="openstack30"></a>
 							</div>
-							<div class="col-md-4">
-					
+							<div class="imageblock-content">
+								<p class="title">
+									<h4>{{ activity.title }}</h4>
+									<h3>{{ activity.subtitle }}</h3>
+								</p>
+								<p>开始时间： {{activity.startTime}}</p>
+								<p>结束时间： {{activity.endTime}}</p>
+								<p>地点： {{ activity.address }}</p>
+								<p>形式： {{ activity.form }}</p>
+								<p>费用： {{ activity.price}}</p>
+								<div class="text-right">
+									<p>
+										{{activity.studentNum}}人已报名
+									</p>
+								</div>
 							</div>
 						</div>
-		</form>
-					</div>
-				</div>
+					</li>						
+				</ul>
+				<div class="row">
+					<div class="col-md-12">
+						<!-- 报名 -->
+					<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
+						<div class="widget k_postlist shadow">
+							<div class="kytitle clearfix bor-l-green">
+								<h3>报名信息</h3>
+							</div>
+							<div class="content lecturer">
+								<div class="col-md-7">
+									<div class="form-group">
+			            				<label class="col-lg-3 control-label" for="activity_email">Email地址</label>
+			            				<div class="col-lg-9">
+				              				<input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}"  value="{{user.email}}" required />
+				              					 <p class="help-block">填写你常用的邮箱作为登录帐号</p>
+			           					 </div>
+					        		</div>
+							        <div class="form-group">
+							            <label class="col-lg-3 control-label" for="activity_nickname">昵称</label>
+							            <div class="col-lg-9">
+							              <input id="activity_nickname" class="form-control" type="text" name="activitymember[nickname]" 
+							                data-url="{{ path('register_nickname_check') }}"  value="{{user.nickname}}"  required />
+							               <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
+							            </div>
+							        </div>
+							        <div class="form-group">
+							            <label class="col-lg-3 control-label" for="activity_username">真实姓名</label>
+							            <div class="col-lg-9">
+							              <input id="activity_username" class="form-control" type="text" name="activitymember[username]" value="{{profile.truename}}" required />
+							            </div>
+							        </div>
+							        <div class="form-group">
+							            <label class="col-lg-3 control-label" for="activity_phone">手机号码</label>
+							            <div class="col-lg-9">
+							              <input id="activity_phone" class="form-control" type="text" name="activitymember[mobile]"
+							               value="{{profile.mobile}}" required />
+							            </div>
+							        </div>
+							        <div class="form-group">
+							            <label class="col-lg-3 control-label" for="activity_title">职位</label>
+							            <div class="col-lg-9">
+							              <input id="activity_title" class="form-control" type="text" name="activitymember[title]"  value="{{userTitle }}" />
+							            </div>
+							        </div>
+							        <div class="form-group">
+							            <label class="col-lg-3 control-label" for="activity_job">公司</label>
+							            <div class="col-lg-9">
+							              <input id="activity_job" class="form-control" type="text" name="activitymember[job]"  value="{{profile.job}}" />
+							            </div>
+							        </div>
+							        <div class="form-group">
+							            <label class="col-lg-3 control-label" for="activity_aboutinfo">其他信息</label>
+							            <div class="col-lg-9">
+							              <textarea rows="3" class="form-control" name="activitymember[aboutinfo]"></textarea>
+							            </div>
+							        </div>
+		        				</div>
+								<div class="col-md-5">
+									<div>
+										<p>问题出干货--高质量问题互动，才能点燃老师在公开课上的激情，亲，让我们一起吧讲师编成蜡炬的灰吧～～</p>
+									</div>
+									<div><textarea rows="10" class="form-control" name="activitymember[question]"></textarea></div>
+									<div class="form-group">
+							            <div class="col-lg-12">
+							              <div class="checkbox">
+									        <label>
+									          <input type="checkbox" checked="checked" /> 转发微博
+									       	</label>
+									      </div>
+									      <button type="submit" class="form-control btn btn-fat btn-primary btn-large">立即报名</button>
+							            </div>
+							        </div>
+								</div>
+							</div>
+						</div>
+					</form>
 			</div>
-
 		</div>
-	</div>		
+	</div>
 </section>
 
 {% endblock %}

@@ -9,8 +9,6 @@ use Topxia\Common\ArrayToolkit;
 class CourseServiceTest extends BaseTestCase
 {
 
-
-
 	public function testgetActivity(){
 		$activity = $this->getActivityService()->getActivity('1');
         var_dump($activity);

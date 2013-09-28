@@ -4,60 +4,71 @@
 {% set script_controller = 'activity/show' %}
 
 {% block content %}
-<section class="row"> 
-  <div class="container">
-    <div class="kytitle clearfix">
-      <h3>首页—公开课—{{ activity.title }}</h3>
-      <!-- <div class="height-down"></div>   -->
-    </div>  
-    <div class="row">
-      <div class="col-md-8">
+     
+<div class="row">
+      
         <!-- item-list -->
-        <div class="mod k_postlist openstack">
-          <div class="content">       
-            <ul>
-              <li class="shadow">
-                <div class="imageblock clearfix">
-                  <div class="imageblock-image">
-                    <a href="#" class="show-user-card" >
-                      <img src="{{ file_path(activity.largePiceture,'course-large.png') }}" alt="openstack30"></a>
-                  </div>
-                  <div class="imageblock-content">
-                    <p class="title">
-                      <h4>{{ activity.title }}</h4>
-                      <h3>{{ activity.subtitle }}</h3>
-                    </p>
-                    <p>开始时间： {{activity.startTime}}</p>
-                    <p>结束时间： {{activity.endTime}}</p>
-                    <p>地点： {{ activity.address }}</p>
-                    {% if current_user.id!=0  %}
-                    <p>线上地址: {{ activity.onlineAddress }}</p>
-                    {% endif %}
-                    <p>形式：  {{ activity.form }}</p>
-                    <p>费用： {{ activity.price}}</p>
-                    <div class="text-right">
-                      <p>
-                        {{activity.studentNum}}人已报名
-                  {% if activity.id in ids %}
-                    <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mar-l btn btn-warning" >取消报名</a>
-                  {% else %}
-                    <a href="{{ path('activity_activityform',{id:activity.id}) }}" class="mar-l btn btn-success  green" >活动报名</a>
-                  {% endif %}
-                    <a href="#media-qustion" class="mar-l btn btn-success  green">课前提问</a>
+        <div class="mod k_postlist openstack pz">
+          <div class="content pz">       
+            <div class=row>
+              <ul>
+                <li class="shadow pz">
+                  <div class="imageblock clearfix">
+                    <div class="imageblock-image">
+                      <a href="#" class="show-user-card" >
+                        <img class="open-class-logo-large-size"  src="{{ file_path(activity.largePiceture,'activity-large.jpg') }}"></a>
+                    </div>
+                    <div class="imageblock-content">
+                      <p class="title">
+                        <h4>{{ activity.subtitle }}</h4>
+                        <h3>{{ activity.title }}</h3>
+                      
                       </p>
+                      <p>开始时间： {{activity.startTime}}</p>
+                      <p>结束时间： {{activity.endTime}}</p>
+                      <p>地点： {{ activity.address }}</p>
+                      {% if current_user.id!=0  %}
+                      <p>线上地址: {{ activity.onlineAddress }}</p>
+                      {% endif %}
+                      <p>形式：  {{ activity.form }}</p>
+                      <p>费用： {{ activity.price}}</p>
+                      <div class="text-right">
+                        <p>
+                          {{activity.studentNum}}人已报名
+                    {% if activity.id in ids %}
+                      <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mar-l btn btn-warning" >取消报名</a>
+                    {% else %}
+                      <a href="{{ path('activity_activityform',{id:activity.id}) }}" class="mar-l btn btn-success  green" >活动报名</a>
+                    {% endif %}
+                      <a href="#media-qustion" class="mar-l btn btn-success  green">课前提问</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>  
+              </ul>  
+            </div>
+            <div class="row">
+              <div class="col-md-8">
+                <!-- 课程大纲 -->
+                <div class="widget k_postlist shadow">
+                  <div class="kytitle clearfix bor-l-green">
+                    <h3>课程大纲</h3>
+                  </div>
+                  <div class="content">
+                    <div class="padding">
+                      {{ activity.about|raw}}
                     </div>
                   </div>
                 </div>
-              </li>           
-            </ul>
-            <div class="row">
-              <div class="col-md-6">
+              </div>
+              <div class="col-md-4">
                 <!-- 讲师介绍 -->
                 <div class="widget k_postlist shadow">
                   <div class="kytitle clearfix bor-l-green">
                     <h3>讲师介绍</h3>
                   </div>
-                  <div class="content lecturer">
+                  <div class="content">
                     {% if experter %}
                     <div class="text-center">
                       <img class="bor" src="{{ file_path(experter.mediumAvatar,'avatar.png') }}">
@@ -71,20 +82,19 @@
                     {% endif %}
                   </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <!-- 课程大纲 -->
+
+                <!-- 已报名 -->
                 <div class="widget k_postlist shadow">
                   <div class="kytitle clearfix bor-l-green">
-                    <h3>课程大纲</h3>
+                    <h3>已报名的小伙伴</h3>             
                   </div>
-                  <div class="content outline">
-                    <div class="padding">
-                      {{ activity.about|raw}}
-                    </div>
+                  <div class="content daren">
+                    {% for student in students %}
+                      <a href="" class="user-link user-avatar-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}"></a>
+                    {% endfor %}
+                    <span class="justify_fix"></span>         
                   </div>
                 </div>
-
               </div>
             </div>
             <div class="widget k_postlist shadow">
@@ -119,10 +129,12 @@
                       </div>
                     </div>                  
                   </div>
+                  <!--
                   <div class="sequence clearfix">
                     <span class="btn btn-default">按提问时间</span>
                     <span class="btn btn-default">按老师回答</span>
                   </div>
+                -->
                 </div>                
                 <ul class="mar-b" id="qustion-media-list">
                   {% for qustion in qustions %}
@@ -159,42 +171,26 @@
             </div>
           </div>
         </div>
-      </div>
+ </div>
 
-      <!-- 侧栏 -->
-      <aside class="col-md-4">
-        
+<div class="row">
         <!-- 小伙伴们正在看 -->
         <div class="widget k_postlist shadow">
           <div class="kytitle clearfix bor-l-gray">
             <h3>小伙伴们正在看</h3>              
           </div>                  
-            <div class="content daren"> 
+          <div class="content daren"> 
               {% for item in activitys %}
                 <a href="{{ path('activity_showsuccess',{id:item.id})}}">
-                  <img src="{{ file_path(item.middlePicture,'avatar.png') }}">
+                  <img class="open-class-logo-middle-size" src="{{ file_path(item.middlePicture,'activity-large.jpg') }}">
                 </a>
               {% endfor %}
-            <span class="justify_fix"></span>         
+              <span class="justify_fix"></span>         
           </div>
-        </div>
-        <!-- 已报名的开源达人 -->
-        <div class="widget k_postlist shadow">
-          <div class="kytitle clearfix bor-l-gray">
-            <h3>已报名的开源达人</h3>             
-          </div>
-          <div class="content daren">
-            {% for student in students %}
-              <a href="" class="user-link user-avatar-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}"></a>
-            {% endfor %}
-            <span class="justify_fix"></span>         
-          </div>
-        </div>
-              
-      </aside>
-    </div>
-  </div>    
-</section>
+        </div>         
+</div>
+    
+
   <script type="reply-templete" id="reply-templete">
           <li class="media">
             <a class="user-link user-avatar-link pull-left" href="javascript:">

@@ -10,7 +10,7 @@
 
 .index-img-box{
 	position: relative;
-	width: 200px;
+	
 	height: 200px;
 }
 
@@ -24,10 +24,6 @@
 	line-height: 27px;
 	text-align: center;
 	width: 100%;
-	position: absolute;
-	left:0px;
-	bottom:0px;
-
 }
 
 
@@ -600,4 +596,41 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 }
 .activity-video-player {
 	height:430px;
+}
+
+
+
+.open-class-logo-large-size{
+	width: 470px !important;
+	height: 300px !important;
+}
+
+.open-class-logo-default-size{
+	width: 442px !important;
+	height: 250px !important;
+}
+
+.open-class-logo-bigla-size{
+	width: 354px !important;
+	height: 200px !important;
+}
+
+.open-class-logo-midla-size{
+	width: 300px !important;
+	height: 170px !important;
+}
+
+.open-class-logo-middle-size{
+	width: 230px !important;
+	height: 130px !important;
+}
+
+.open-class-logo-small-size{
+	width: 160px !important;
+	height: 91px !important;
+}
+
+.open-class-banner-size{
+	width: 1200px !important;
+	height: 204px !important;
 }

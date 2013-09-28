@@ -18,8 +18,8 @@
         <div class="top">
           <div class="pull-left bulletin">
             <div class="index-img-box">
-              <img class="activity-img-sm" src="{{ file_path(nextActivity.smallPicture,'course-large.png')  }}">    
-              <h4 class="activity-img-title">{{nextActivity.title }}<br />{{nextActivity.subtitle }}</span></h4>
+              <img class="open-class-logo-middle-size" src="{{ file_path(nextActivity.smallPicture,'open-class-default-logo.jpg')  }}">    
+              <h4 class="activity-img-title">{{nextActivity.title }}<br />{{nextActivity.subtitle }}</h4>
             </div>
           </div>
           <div class="pull-left info">
@@ -31,9 +31,11 @@
             </div>
             <div class="info-content clearfix">             
               <div id="photo" class="photo-wall pull-left">
+               
                 {% for user in users%}
                 <span class="list-item">
-                  <img class="tip" class="tip" src="{{ asset('bundles/topxiaweb/img/5969313944_e5d6d67b23_s.gif')}}" alt="user icon">
+                  
+                  <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'avatar.png')  }}" alt="user icon">
                   <span class="todos-thumb-span text-left">
                     <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
                     <span class="user-tag">{{ user.title }}</span>

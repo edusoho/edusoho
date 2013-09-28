@@ -95,7 +95,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('locationId = :locationId')
-            ->andWhere('tagsid = :tagsLike')
+            ->andWhere('tagsId = :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('isExpired = :isExpired');
