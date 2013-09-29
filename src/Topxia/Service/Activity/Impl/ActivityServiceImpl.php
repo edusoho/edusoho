@@ -263,7 +263,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->updateActivity($courseId, array(
         	'smallPicture' => $smallFileRecord['uri'],
         	'middlePicture' => $middleFileRecord['uri'],
-        	'largePiceture' => $largeFileRecord['uri'],
+        	'largePicture' => $largeFileRecord['uri'],
     	));
 	}
 

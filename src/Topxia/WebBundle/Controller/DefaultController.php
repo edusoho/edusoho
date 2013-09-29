@@ -16,8 +16,13 @@ class DefaultController extends BaseController
         $feild['status']='published';//0表示未开始并未结束。
         $nextActivity=$this->getActivityService()->searchActivitys($feild,'latest',0,1);
         
+        $nextActivity=count($nextActivity)>0?$nextActivity[0]:array('largePicture' =>'',
+                                                                    'subtitle'=>'',
+                                                                    'title'=>'',
+                                                                    'startTime'=>'',
+                                                                    'locationId'=>'0',
+                                                                    'id'=>0);
 
-        $nextActivity=count($nextActivity)>0?$nextActivity[0]:null;
         $activitTerchar=empty($nextActivity['experterid'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterid']);
         $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
         //地址
