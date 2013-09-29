@@ -59,14 +59,14 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             //unset($conditions['locationId']);
         }
 
-        if (isset($conditions['tagId'])) {
-            $tagId = (int) $conditions['tagId'];
+        if (isset($conditions['tagsId'])) {
+            $tagsId = (int) $conditions['tagsId'];
             if (!empty($tagId)) {
               //  $conditions['tagsLike'] = "%|{$conditions['tagId']}|%";
-                $conditions['tagsLike'] = $tagId;
+                $conditions['tagsLike'] = $tagsId;
 
             }
-           unset($conditions['tagId']);
+           unset($conditions['tagsId']);
         }
 
         if(empty($conditions['startTimeGreaterThan'])){
