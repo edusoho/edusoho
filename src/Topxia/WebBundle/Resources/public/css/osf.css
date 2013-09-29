@@ -599,28 +599,27 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 }
 
 
+.open-class-logo-default-size{
+	width: 442px !important;
+	height: 250px !important;
+}
 
 .open-class-logo-large-size{
 	width: 470px !important;
 	height: 300px !important;
 }
 
-.open-class-logo-default-size{
-	width: 442px !important;
-	height: 250px !important;
-}
-
-.open-class-logo-bigla-size{
+.open-class-logo-larle-size{
 	width: 354px !important;
 	height: 200px !important;
 }
 
-.open-class-logo-midla-size{
+.open-class-logo-middle-size{
 	width: 300px !important;
 	height: 170px !important;
 }
 
-.open-class-logo-middle-size{
+.open-class-logo-midll-size{
 	width: 230px !important;
 	height: 130px !important;
 }

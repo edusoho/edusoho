@@ -55,9 +55,7 @@
       <ul class="nav navbar-nav">
         {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
         {% if app.user %}
-            {% if is_granted('ROLE_TEACHER') %}
-              <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
-            {% endif %}
+          
               <li><a href="{{ path('my') }}"> 我的课程 </a></li>
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
                 <span class="glyphicon glyphicon-bullhorn"></span>
@@ -68,6 +66,11 @@
                 <ul class="dropdown-menu">
                   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
+                   <li class="divider"></li>
+                  {% if is_granted('ROLE_TEACHER') %}
+                    <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
+                  {% endif %}
+
                   <li class="divider"></li>
                   {% if is_granted('ROLE_ADMIN') %}
                     <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>

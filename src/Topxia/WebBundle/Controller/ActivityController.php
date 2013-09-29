@@ -27,6 +27,7 @@ class ActivityController extends BaseController
             , 5
         );
         //活动
+        var_dump($conditions);
         $activity = $this->getActivityService()->searchActivitys(
             $conditions, 'latest',
             $paginator->getOffsetCount(),

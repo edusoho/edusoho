@@ -13,6 +13,7 @@ class DefaultController extends BaseController
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
         $feild['istimeout']=0;//0表示未开始并未结束。
+        $feild['status']='published';//0表示未开始并未结束。
         $nextActivity=$this->getActivityService()->searchActivitys($feild,'latest',0,1);
         
 

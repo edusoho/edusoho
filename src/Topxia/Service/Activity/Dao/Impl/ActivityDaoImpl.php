@@ -85,7 +85,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             unset($conditions['istimeout']);
         }
 
-        if(!empty($conditions['status'])){
+        if(empty($conditions['status'])){
             unset($conditions['status']);       
         }
 

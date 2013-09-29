@@ -245,19 +245,19 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(300, 300));
+        $largeImage->resize(new Box(470, 300));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
+        $largeImage->save($largeFilePath, array('quality' => 100));
         $largeFileRecord = $this->getFileService()->uploadFile('activity', new File($largeFilePath));
 
-        $largeImage->resize(new Box(160, 160));
+        $largeImage->resize(new Box(300, 170));
         $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
-        $largeImage->save($middleFilePath, array('quality' => 90));
+        $largeImage->save($middleFilePath, array('quality' => 100));
         $middleFileRecord = $this->getFileService()->uploadFile('activity', new File($middleFilePath));
 
-        $largeImage->resize(new Box(230, 129));
+        $largeImage->resize(new Box(160, 91));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        $largeImage->save($smallFilePath, array('quality' => 90));
+        $largeImage->save($smallFilePath, array('quality' => 100));
         $smallFileRecord = $this->getFileService()->uploadFile('activity', new File($smallFilePath));
 
         return $this->getActivityDao()->updateActivity($courseId, array(

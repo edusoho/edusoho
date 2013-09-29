@@ -14,6 +14,10 @@ class DataDict
 			'published' => '<span class="text-success">已发布</span>',
 			'closed' => '<span class="text-danger">已关闭</span>'
 		),
+		'activityExpired:html' => array(
+			'openning' => '<span class="text-muted">开放中</span>',
+			'closed' => '<span class="text-success">已结束</span>'
+		),
 		'orderStatus' => array(
 			'created' => '未付款',
 			'paid' => '已付款',

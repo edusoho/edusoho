@@ -2121,6 +2121,8 @@ body {
  * 通用属性
  */
 
+.mz  { margin: 0px !important;}
+.mtz {margin-top: 0px !important;}
 .mts {margin-top: 5px !important;}
 .mtm {margin-top: 10px !important;}
 .mtl {margin-top: 20px !important;}
@@ -2129,6 +2131,7 @@ body {
 .mrm {margin-right: 10px !important;}
 .mrl {margin-right: 20px !important;}
 
+.mbz {margin-bottom: 0px !important;}
 .mbs {margin-bottom: 5px !important;}
 .mbm {margin-bottom: 10px !important;}
 .mbl {margin-bottom: 20px !important;}
