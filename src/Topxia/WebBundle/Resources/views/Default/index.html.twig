@@ -83,22 +83,19 @@
 
   <div class="row">
     <div class="container clear-pleft clear-pright">   
-      <!-- <div class="curriculum"> -->
-   
-
       <!-- 课程资源 -->
-      <div class="Resources">
-        <!-- 课程资源库 -->
-        <div class="mod TopicList">     
-          <div class="header clearfix">
-            <h3>课程资源库</h3>
-            <a href="{{ path('course_page') }}" target="_blank" class="pull-right">查看全部课程资源</a>
-            <div class="height-down"></div>
+      <div class="Resources row  mtl">
+       
+        <div class="mod TopicList col-md-12">     
+          <div class="kytitle clearfix">
+            <h3>课程资源</h3>
+            <a href="{{ path('course_page') }}" target="_blank" class="pull-right">全部课程资源>></a>
+            
           </div>
           <div class="hp-tab-newprd">       
             <div class="newprd-clip" style="height: 350px;">
                 <div class="tempWrap" style="overflow:hidden; position:relative; width:1185px">
-                      <ul class="grids" style="float: left; width: 1185px; ">
+                      <ul class="grids pll prl" style="float: left;">
                         {% for course in courses%}
                         <li class="grid">
                           <div class="imageblock clearfix">
@@ -124,7 +121,7 @@
           </div>        
         </div>
       </div>
-
+      <!-- 讨论，学员，牛人，谁在学，最新点评-->
       <div class="row">
         <div class="col-md-8">          
           <!-- 问答讨论 -->
@@ -176,10 +173,10 @@
           <!-- 新加入学员 -->
           <div class="mod trainee">
             <div class="kytitle">
-              <h3>新加学员</h3>              
+              <h3>新学员</h3>              
             </div>            
             <div class="mod-content">
-              <ul class="grids smallpic-grids">
+              <ul class="grids smallpic-grids pz">
                 {% for studnet in students %}
                 <li class="grid">
                   <a href="{{ path('user_show',{id:studnet['id'] }) }}" class="user-link user-avatar-link">
@@ -196,11 +193,11 @@
           <!-- 开源教练组 -->
           <div class="mod coach">
             <div class="kytitle clearfix">
-              <h3>课程专家</h3>
+              <h3>牛人团</h3>
               <a href="{{ path('teacher') }}" target="_blank" class="pull-right cm_go">更多»</a>
             </div>
             <div class="mod-content">
-              <ul class="grids">
+              <ul class="grids  pz">
                 {% for teacher in teachers %}
                 <li class="grid">
                   <a href="{{ path('user_show',{id:teacher.id }) }}">
@@ -224,7 +221,7 @@
               <h3>大家正在学</h3>
             </div>
             <div class="content">       
-              <ul>
+              <ul class="pz">
                 {% for userAction in userActions %}
                 <li>
                   <div class="imageblock clearfix">
@@ -255,7 +252,7 @@
               <h3>最新点评</h3>
               </div>
             <div class="content">       
-              <ul>
+              <ul class="pz">
                 {% for review in reviews%}
                 <li>
                   <div class="shadow speak">

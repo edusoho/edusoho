@@ -33,7 +33,8 @@ margin: 0.8em 0;
 }
 .kytitle a{display: block;
 float: right;
-/*color: #666;*/
+color: #999;
+font-size: 13px;
 }
 
 /*guide*/
@@ -42,7 +43,7 @@ float: right;
 .imageblock{margin-top:1em; padding-bottom: 1em}
 .mod .imageblock-content {margin-left: 50px;}
 .mod .kytitle h3{font-size: 1.4em;margin-top: 0.4em;}
-.mod-content{padding: 5px 20px 20px 20px;+padding: 5px 0 20px 0;}
+.mod-content{padding: 5px 20px 5px 20px;}
 .show-user-card{font-weight: 600;margin-bottom:1em; }
 /*widget*/
 .widget{background-color: white;
@@ -99,17 +100,21 @@ margin-top: 50px;
 margin: 0 -50px 0 -10px;
 _margin-left: -5px;
 }
+.coach  .grids {
+margin: 0 -50px 0 -10px;
+_margin-left: -5px;
+}
+
 .grids {
 letter-spacing: -3px;
 zoom: 1;
 }
-.trainee .grids .grid {
-text-align: center;
-margin: 0 10px 5px 0;
-}
+
 .smallpic-grids .grid {
 width: 82px;
 }
+
+
 .grids .grid {
 display: inline-block;
 vertical-align: top;
@@ -122,6 +127,12 @@ margin: 0 0px 15px 0;
 color: #999;
 font-size: 13px;
 }
+
+.coach a {
+color: #999;
+font-size: 13px;
+}
+
 .grids .grid p {
 word-break: break-all;
 word-wrap: break-word;
@@ -212,7 +223,7 @@ color: #999;
 
 /*公开课首页*/
 /*slide*/
-.banner,.slide{margin-top: 56px;}
+.banner,.slide{margin-top: 51px;}
 .openstack .imageblock{padding: 0;margin-top: 0}
 .openstack .imageblock-content{color: #333}
 .openstack .imageblock-image {margin-right: 1.5em;}
