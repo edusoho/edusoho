@@ -57,7 +57,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity['endTime'] = empty($activity['endTime']) ? 0 : (int) $activity['endTime'];
 		$activity['userId'] = $this->getCurrentUser()->id;
 		$activity['createdTime'] = time();
-		$activity['experterid'] = array($activity['userId']);
+		$activity['experterId'] = array($activity['userId']);
 		$activity = $this->getActivityDao()->addActivity(ActivitySerialize::serialize($activity));
 		return $this->getActivity($activity['id']);
 	}
@@ -173,7 +173,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form','onlineAddress'
+			'type', 'title', 'about', 'categoryId', 'subtitle','tags', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form','onlineAddress'
 		));
 
 		//TODO 暂时先注释，以后可能会用到
@@ -181,9 +181,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		// 	$this->getHtmlPurifier()->purify($fields['about']);
 		// }
 
-		if (isset($fields['tagsid'])) {
-			$fields['tagsid'] = $fields['tagsid'] ? : array();
-			array_walk($fields['tagsid'], function(&$item, $key) {
+		if (isset($fields['tags'])) {
+			$fields['tags'] = $fields['tags'] ? : array();
+			array_walk($fields['tags'], function(&$item, $key) {
 				$item = (int) $item;
 			});
 		}
@@ -325,27 +325,27 @@ class ActivitySerialize
 {
     public static function serialize(array &$activity)
     {
-    	if (isset($activity['tagsid'])) {
-    		if (is_array($activity['tagsid']) and !empty($activity['tagsid'])) {
-    			$activity['tagsid'] = '|' . implode('|', $activity['tagsid']) . '|';
+    	if (isset($activity['tags'])) {
+    		if (is_array($activity['tags']) and !empty($activity['tags'])) {
+    			$activity['tags'] = '|' . implode('|', $activity['tags']) . '|';
     		} else {
-    			$activity['tagsid'] = '';
+    			$activity['tags'] = '';
     		}
     	}
     	
-    	if (isset($activity['experterid'])) {
-    		if (is_array($activity['experterid']) and !empty($activity['experterid'])) {
-    			$activity['experterid'] = '|' . implode('|', $activity['experterid']) . '|';
+    	if (isset($activity['experterId'])) {
+    		if (is_array($activity['experterId']) and !empty($activity['experterId'])) {
+    			$activity['experterId'] = '|' . implode('|', $activity['experterId']) . '|';
     		} else {
-    			$activity['experterid'] = null;
+    			$activity['experterId'] = null;
     		}
     	}
 
-    	if (isset($activity['photoid'])) {
-    		if (is_array($activity['photoid']) and !empty($activity['photoid'])) {
-    			$activity['photoid'] = '|' . implode('|', $activity['photoid']) . '|';
+    	if (isset($activity['photoId'])) {
+    		if (is_array($activity['photoId']) and !empty($activity['photoId'])) {
+    			$activity['photoId'] = '|' . implode('|', $activity['photoId']) . '|';
     		} else {
-    			$activity['photoid'] = null;
+    			$activity['photoId'] = null;
     		}
     	}
 
@@ -381,19 +381,19 @@ class ActivitySerialize
     		return $activity;
     	}
 
-		$activity['tagsid'] = empty($activity['tagsid']) ? array() : explode('|', trim($activity['tagsid'], '|'));
+		$activity['tags'] = empty($activity['tags']) ? array() : explode('|', trim($activity['tags'], '|'));
 
 
-		if(empty($activity['experterid'] )) {
-			$activity['experterid'] = array();
+		if(empty($activity['experterId'] )) {
+			$activity['experterId'] = array();
 		} else {
-			$activity['experterid'] = explode('|', trim($activity['experterid'], '|'));
+			$activity['experterId'] = explode('|', trim($activity['experterId'], '|'));
 		}
 
-		if(empty($activity['photoid'] )) {
-			$activity['photoid'] = array();
+		if(empty($activity['photoId'] )) {
+			$activity['photoId'] = array();
 		} else {
-			$activity['photoid'] = explode('|', trim($activity['photoid'], '|'));
+			$activity['photoId'] = explode('|', trim($activity['photoId'], '|'));
 		}
 
 

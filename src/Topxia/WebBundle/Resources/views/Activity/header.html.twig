@@ -4,12 +4,12 @@
   <div class="col-lg-12">
     <div class="panel panel-default clearfix course-header">
       <div class="panel-body">
-        <a href="{{ path('activity_show', {id:course.id}) }}"><img class="picture" src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" /></a>
-        <h1 class="title"><a href="{{ path('activity_show', {id:course.id}) }}">{{ course.title }}</a></h1>
+        <a href="{{ path('activity_show', {id:activity.id}) }}"><img class="picture" src="{{ file_path(activity.largePicture, 'course-default-475x250.png') }}" /></a>
+        <h1 class="title"><a href="{{ path('activity_show', {id:activity.id}) }}">{{ activity.title }}</a></h1>
         <div class="teachers">
-          {% if course.teacherIds|default(null) %}
+          {% if activity.teacherIds|default(null) %}
             教师：
-            {% for id in course.teacherIds %}
+            {% for id in activity.teacherIds %}
               {% set user = users[id] %}
               <a href="{{ path('user_show', {id:user.id}) }}" data-toggle="modal" data-target="#modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
             {% endfor %}
@@ -17,64 +17,39 @@
         </div>
         <div class="toolbar">
           {% if not manage %}
-          <div class="btn-group">
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_info', {id:course.id}) }}" href="#modal" title="课程信息"><i class="glyphicon glyphicon-info-sign"></i></a>
-            
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" href="#modal" title="评价"><i class="glyphicon glyphicon-thumbs-up"></i></a>
 
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" href="#modal" title="查看学员的学习进度, 还可以发私信进行联系!" ><i class="glyphicon glyphicon-user"></i> {{course.studentNum}}</a>
-
-            <div class="btn-group" title="分享到：">
-              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-share"></i>
-              </button>
-              <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
-                <li class="disabled"><a href="javascript:">分享到：</a></li>
-                <li><a href="javascript:" data-share="weibo" data-params="#course-social-share-params"><span class="social-icon-weibo"></span> 新浪微博</a></li>
-                <li><a href="javascript:" data-share="qq" data-params="#course-social-share-params"><span class="social-icon-qq"></span> QQ空间</a></li>
-                <li><a href="javascript:" data-share="renren" data-params="#course-social-share-params"><span class="social-icon-renren"></span> 人人网</a></li>
-                <li><a href="javascript:" data-share="douban" data-params="#course-social-share-params"><span class="social-icon-douban"></span> 豆瓣</a></li>
-              </ul>
-              <div id="course-social-share-params" style="display:none;"
-                data-title="课程 《{{ course.title }}》"
-                data-picture="{{ file_path(course.largePicture, 'course-large.png', true) }}"
-                data-url="{{ url('course_show', {id:course.id}) }}"
-                ></div>
-            </div>
-
-          </div>
           <div class="btn-group" title="操作">
             <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
               <i class="glyphicon glyphicon-cog"></i>
             </button>
             <ul class="dropdown-menu pull-right">
               {% if canManage %}
-                <li><a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a></li>
+                <li><a href="{{ path('course_manage', {id:activity.id}) }}">活动管理</a></li>
               {% endif %}
               {% if member.role|default(null) == 'student' %}
-                <li><a class="course-exit-btn" href="javascript:" data-url="{{ path('course_exit', {id:course.id}) }}">退出学习</a></li>
+                <li><a class="course-exit-btn" href="javascript:" data-url="{{ path('course_exit', {id:activity.id}) }}">退出学习</a></li>
               {% endif %}
             </ul>
           </div>
           {% else %}
 
-            {% if course.status == 'published' %}
+            {% if activity.status == 'published' %}
               <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('activity_show', {id:course.id}) }}">返回课程主页</a>
+                <a class="btn btn-default btn-sm" href="{{ path('activity_show', {id:activity.id}) }}">返回活动主页</a>
               </div>
             {% endif %}
 
             <div class="btn-group">
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <span class="caret"></span></button>
               <ul class="dropdown-menu pull-right">
-                  <li><a href="{{ path('activity_show', {id:course.id, previewAs:'member'}) }}" target="_blank">作为 已购买用户</a></li>
-                  <li><a href="{{ path('activity_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">作为 未购买用户</a></li>
+                  <li><a href="{{ path('activity_show', {id:activity.id, previewAs:'member'}) }}" target="_blank">活动未开始页面</a></li>
+                  <li><a href="{{ path('activity_show', {id:activity.id, previewAs:'guest'}) }}" target="_blank">活动已结束页面</a></li>
               </ul>
             </div>
 
-            {% if course.status != 'published' %}
+            {% if activity.status != 'published' %}
               <div class="btn-group">
-                <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('activity_manage_publish', {id:course.id}) }}">发布课程</button>
+                <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('activity_manage_publish', {id:activity.id}) }}">发布活动</button>
               </div>
             {% endif  %}
 

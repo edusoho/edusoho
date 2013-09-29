@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{{ render(controller('TopxiaWebBundle:Activity:header', {course:course, manage: true})) }}
+{{ render(controller('TopxiaWebBundle:Activity:header', {activity:activity, manage: true})) }}
 
 <div class="row">
   <div class="col-lg-3">
@@ -15,20 +15,20 @@
           <div class="list-group-panel">
             <div class="list-group-heading">活动信息</div>
             <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('activity_manage_base', {id:course.id}) }}">基本信息</a>
-              <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('activity_manage_detail', {id:course.id}) }}">详细信息</a>
-              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('activity_manage_picture', {id:course.id}) }}">活动图标</a>
-              <a class="list-group-item {% if side_nav == 'course' %}active{% endif %}" href="{{ path('activity_manage_course', {id:course.id}) }}">活动课程</a>
-              <a class="list-group-item {% if side_nav == 'pictures' %}active{% endif %}" href="{{ path('activity_manage_pictures', {id:course.id}) }}">现场图片</a>
-              <a class="list-group-item {% if side_nav == 'attachment' %}active{% endif %}" href="{{ path('activity_materials', {id:course.id}) }}">活动附件</a>
+              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('activity_manage_base', {id:activity.id}) }}">基本信息</a>
+              <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('activity_manage_detail', {id:activity.id}) }}">详细信息</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('activity_manage_picture', {id:activity.id}) }}">活动图标</a>
+              <a class="list-group-item {% if side_nav == 'activity' %}active{% endif %}" href="{{ path('activity_manage_course', {id:activity.id}) }}">活动课程</a>
+              <a class="list-group-item {% if side_nav == 'pictures' %}active{% endif %}" href="{{ path('activity_manage_pictures', {id:activity.id}) }}">活动相册</a>
+              <a class="list-group-item {% if side_nav == 'attachment' %}active{% endif %}" href="{{ path('activity_materials', {id:activity.id}) }}">活动附件</a>
             </div>
           </div><!-- /list-group-block -->
 
           <div class="list-group-panel">
             <div class="list-group-heading">活动设置</div>
             <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'price' %}active{% endif %}" href="{{ path('activity_manage_price', {id:course.id}) }}">价格设置</a>
-              <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('activity_manage_teachers', {id:course.id}) }}">活动嘉宾管理</a>
+              <a class="list-group-item {% if side_nav == 'price' %}active{% endif %}" href="{{ path('activity_manage_price', {id:activity.id}) }}">价格设置</a>
+              <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('activity_manage_teachers', {id:activity.id}) }}">活动讲师</a>
             </div>
           </div><!-- /list-group-block -->
         </div>

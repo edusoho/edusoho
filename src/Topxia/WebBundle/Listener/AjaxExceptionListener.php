@@ -18,9 +18,10 @@ class AjaxExceptionListener
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
+        var_dump($exception->getMessage());
         $request = $event->getRequest();
  
-        if (! $request->isXmlHttpRequest()) {
+        if (!$request->isXmlHttpRequest()) {
             return;
         }
 

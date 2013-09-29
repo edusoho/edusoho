@@ -12,12 +12,12 @@
   </div>
 
   <div class="panel-body">
-    <form id="course-picture-form" method="post" action="{{ path('activity_manage_picture', {id:course.id}) }}" enctype="multipart/form-data">
+    <form id="course-picture-form" method="post" action="{{ path('activity_manage_picture', {id:activity.id}) }}" enctype="multipart/form-data">
       {{ web_macro.flash_messages() }}
 
       <div class="form-group clearfix">
         <div class="col-lg-offset-2 col-lg-8 controls">
-          <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
+          <img src="{{ file_path(activity.largePicture, 'course-default-475x250.png') }}" />
         </div>
       </div>
 

@@ -44,11 +44,11 @@
       {{ web_macro.flash_messages() }}
 
       <div class="form-group" id="teachers-form-group">
-        <div class="col-lg-2 control-label"><label>绑定活动</label></div>
+        <div class="col-lg-2 control-label"><label>绑定课程</label></div>
         <div class="col-lg-8 controls">
           <ul class="list-group teacher-list-group sortable-list" data-role="list" style="display:none;"></ul>
           <div class="input-group">
-            {% set url = path('activity_manage_course_match', {id:course.id}) ~ '?q={{query}}' %}
+            {% set url = path('activity_manage_course_match', {id:activity.id}) ~ '?q={{query}}' %}
             <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>

@@ -118,14 +118,14 @@ class ActivityController extends BaseController
     }
 
 
-    public function headerAction($course, $manage = false)
+    public function headerAction($activity, $manage = false)
     {
         $user = $this->getCurrentUser();
 
-        $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $users = empty($activity['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         return $this->render('TopxiaWebBundle:Activity:header.html.twig', array(
-            'course' => $course,
+            'activity' => $activity,
             'users' => $users,
             'manage' => $manage,
         ));

@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
         // 标签选择组件初始化
         require.async(app.arguments.tagUrl + '#', function(tags) {
-            $('#activity_tagsid').select2({
+            $('#activity_tags').select2({
                 width: 'off',
                 multiple: true,
                 maximumSelectionSize: 20,
@@ -36,13 +36,13 @@ define(function(require, exports, module) {
 
         // 表单校验
         var validator = new Validator({
-            element: '#course-form',
+            element: '#activity-form',
             failSilently: true,
             triggerType: 'change'
         });
 
         validator.addItem({
-            element: '[name="course[title]"]',
+            element: '[name="activity[title]"]',
             required: true
         });
         //日期时间选择
