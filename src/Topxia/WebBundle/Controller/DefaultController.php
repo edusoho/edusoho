@@ -24,7 +24,7 @@ class DefaultController extends BaseController
                                                                     'locationId'=>'0',
                                                                     'id'=>0);
 
-        $activitTerchar=empty($nextActivity['experterid'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterid']);
+        $activitTerchar=empty($nextActivity['experterId'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterId']);
         $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
         //地址
         $Locations=$this->getLocationService()->getAllLocations();
@@ -39,7 +39,7 @@ class DefaultController extends BaseController
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
         $activityIds=ArrayToolkit::column($activityThreads,'activityId');
         $activitys=$this->getActivityService()->findActivityByIds($activityIds);
-        $threadUserIds=ArrayToolkit::column($activityThreads,'userid');
+        $threadUserIds=ArrayToolkit::column($activityThreads,'userId');
         $threadUsers=$this->getUserService()->findUsersByIds($threadUserIds);
         $threadUsers[0]=array(
             "id"=>0,

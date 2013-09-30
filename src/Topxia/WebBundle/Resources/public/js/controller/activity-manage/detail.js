@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         require('./header').run();
 
-        var editor = EditorFactory.create('#course-about-field', 'simple', {extraFileUploadParams:{group:'course'}});
+        var editor = EditorFactory.create('#course-about-field', 'full', {extraFileUploadParams:{group:'course'}});
 
         var goalDynamicCollection = new DynamicCollection({
             element: '#course-goals-form-group',

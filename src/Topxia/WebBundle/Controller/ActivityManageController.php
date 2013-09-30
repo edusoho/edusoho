@@ -27,8 +27,8 @@ class ActivityManageController extends BaseController
         if($request->getMethod() == 'POST'){
             $form->bind($request);
             if($form->isValid()){
-                $courseBaseInfo = $form->getData();
-                $this->getActivityService()->updateActivity($id, $courseBaseInfo);
+                $activityBaseInfo = $form->getData();
+                $this->getActivityService()->updateActivity($id, $activityBaseInfo);
                 $this->setFlashMessage('success', '活动基本信息已保存！');
                 return $this->redirect($this->generateUrl('activity_manage_base',array('id' => $id))); 
             }
@@ -324,7 +324,8 @@ class ActivityManageController extends BaseController
         $builder = $this->createNamedFormBuilder('activity', $activity)
             ->add('title', 'text')
             ->add('subtitle', 'textarea')
-            ->add('locationId','text')
+            ->add('locationId','location'
+            )
             ->add('tags', 'tags')
             ->add('address','text')
             ->add('onlineAddress','text')
@@ -333,8 +334,8 @@ class ActivityManageController extends BaseController
             ->add('strendTime','text')
             ->add('categoryId', 'default_category', array(
                 'empty_value' => '请选择分类'
-            )
-        );
+                )
+            );
 
         return $builder->getForm();
     }

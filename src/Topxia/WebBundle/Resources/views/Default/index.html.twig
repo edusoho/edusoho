@@ -9,7 +9,8 @@
 {% set script_controller = 'homepage' %}
 
 {% block contentlg %}
- <section class="row">  
+ 
+<section class="row">  
   <!-- banner -->
   <div class="banner clear-mtop">  
     <!-- 广告 -->
@@ -136,23 +137,23 @@
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
                       <a href="#" class="show-user-card user-link user-avatar-link" >
-                        {% if activityThread['userid']==0 %}
+                        {% if activityThread['userId']==0 %}
                         <img src="/assets/img/default/avatar.png" alt="ae120"></a>
                         {% else %}
-                        <a href="{{ path('user_show',{id:activityThread['userid']})}}"><img src="{{ file_path(threadUsers[activityThread.userid].smallAvatar,'avatar.png') }}" alt="ae120"></a>
+                        <a href="{{ path('user_show',{id:activityThread['userId']})}}"><img src="{{ file_path(threadUsers[activityThread.userId].smallAvatar,'avatar.png') }}" alt="ae120"></a>
                         {% endif %}
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
                         <a href="
-                          {% if activityThread['userid']==0 %}
+                          {% if activityThread['userId']==0 %}
                             #
                           {% else %}
-                             {{ path('user_show',{id:activityThread['userid'] }) }}
+                             {{ path('user_show',{id:activityThread['userId'] }) }}
 
                           {% endif %}
                           "
-                        >{{ threadUsers[activityThread.userid].nickname }}</a>
+                        >{{ threadUsers[activityThread.userId].nickname }}</a>
                         在 {{activitys[activityThread.activityId].subtitle}} 提问到：
                       </p>
                       <p class="metas">
@@ -160,7 +161,7 @@
                         <time class="pull-right">{{ activityThread.createdTime|smart_time }}</time>
                       </p>
                       <p class="scan">
-                        <span>{{ activityThread.postnum }}回复</span>
+                        <span>{{ activityThread.postNum }}回复</span>
                         <span class="highlight"></span>
                       </p>
                     </div>
@@ -284,4 +285,5 @@
     </div>
   </div>  
 </section>
+
 {% endblock %}

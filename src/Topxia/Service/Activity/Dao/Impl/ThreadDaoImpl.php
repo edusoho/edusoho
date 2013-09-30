@@ -92,8 +92,12 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function addThread($thread)
 	{
-		$id = $this->insert($thread);
-		return $this->getThread($id);
+		
+		$affected = $this->getConnection()->insert($this->table, $thread);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert ActivityThread error.');
+        }
+        return $this->getThread($this->getConnection()->lastInsertId());
 	}
 
 	public function updateThread($id, $fields)

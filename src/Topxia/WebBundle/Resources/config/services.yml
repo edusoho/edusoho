@@ -19,6 +19,11 @@ services:
         tags:
             - { name: form.type, alias: gender }
 
+    form.type.location:
+        class: Topxia\WebBundle\Form\Common\LocationType
+        tags:
+            - { name: form.type, alias: location }
+
     topxia.data_dict.user_role:
         class: Topxia\WebBundle\DataDict\UserRoleDict
 

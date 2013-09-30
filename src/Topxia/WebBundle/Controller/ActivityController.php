@@ -27,7 +27,7 @@ class ActivityController extends BaseController
             , 5
         );
         //活动
-        var_dump($conditions);
+      
         $activity = $this->getActivityService()->searchActivitys(
             $conditions, 'latest',
             $paginator->getOffsetCount(),
@@ -65,6 +65,7 @@ class ActivityController extends BaseController
         ///获取当前学生报名的活动ids
         $currentuser=$this->getCurrentUser();
 
+
         $Ids=array();
         if(!empty($currentuser['id'])){
             $currrentUsers=$this->getActivityService()->findStudentActivitys($currentuser['id'],0,100);
@@ -89,15 +90,18 @@ class ActivityController extends BaseController
         foreach ($threads as $thread) {
             $thread['bindpost']=$this->getActivityThreadService()->findThreadPosts($activity['id'],$thread['id'],"default",0,20);
             if(!empty($thread['bindpost'])){
-                $postUserIds=array_merge($postUserIds,ArrayToolkit::column($thread['bindpost'],'userid'));
+                $postUserIds=array_merge($postUserIds,ArrayToolkit::column($thread['bindpost'],'userId'));
             }
             $sss[]=$thread;
         }
-        $qustionUserIds=ArrayToolkit::column($sss,'userid');
+        $qustionUserIds=ArrayToolkit::column($sss,'userId');
         $qustionUsers = $this->getUserService()->findUsersByIds($qustionUserIds);
+       
         $qustionUsers[0]=array(
             "id" =>  0,
           "nickname" =>"游客");
+
+      
         
         $postUsers = $this->getUserService()->findUsersByIds($postUserIds);
         $postUsers[0]=array(
@@ -255,7 +259,8 @@ class ActivityController extends BaseController
                     // regitser 
                     $newuser['email']=$member['email'];
                     $newuser['nickname']=$member['nickname'];
-                    $newuser['password']=$this->getUserService()->createRandomPassworld();
+                    //$newuser['password']=$this->getUserService()->createRandomPassworld();
+                    $newuser['password']='abcd1234';
                     $randomuser=$this->getUserService()->register($newuser);
                     $this->get('session')->set('activity_islogin', true);
                     $this->get('session')->set('activity_randomuser', $randomuser );
@@ -410,7 +415,7 @@ class ActivityController extends BaseController
                 $qustion['action']=$url;
                 $currentuser=$this->getCurrentUser();
                 
-                if(empty($qustion['userid'])){
+                if(empty($qustion['userId'])){
                     $qustion['usernickname']="游客";
                     $qustion['usersmallAvatar']="/assets/img/default/avatar.png";
                 }else{
