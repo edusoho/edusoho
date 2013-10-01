@@ -1122,7 +1122,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function tryManageCourse($courseId)
 	{
 		$user = $this->getCurrentUser();
-		if (empty($user->id)) {
+		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('未登录用户，无权操作！');
 		}
 
@@ -1131,7 +1131,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createNotFoundException();
 		}
 
-		if (!$this->hasCourseManagerRole($course, $user['id'])) {
+		if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
 			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
 		}
 
