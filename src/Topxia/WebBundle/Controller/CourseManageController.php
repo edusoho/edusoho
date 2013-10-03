@@ -39,6 +39,29 @@ class CourseManageController extends BaseController
 		));
 	}
 
+    public function nicknameCheckAction(Request $request, $courseId)
+    {
+        $nickname = $request->query->get('value');
+        $result = $this->getUserService()->isNicknameAvaliable($nickname);
+        if ($result) {
+            $response = array('success' => false, 'message' => '该用户还不存在！');
+        } else {
+            $user = $this->getUserService()->getUserByNickname($nickname);
+            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+            if($isCourseStudent){
+                $response = array('success' => false, 'message' => '该用户已是本课程的学员了！');
+            } else {
+                $response = array('success' => true, 'message' => '');
+            }
+            
+            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+            if($isCourseTeacher){
+                $response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加!');
+            }
+        }
+        return $this->createJsonResponse($response);
+    }
+
 	public function detailAction(Request $request, $id)
 	{
         
@@ -212,6 +235,21 @@ class CourseManageController extends BaseController
 	    return $builder->getForm();
 	}
 
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -227,4 +265,13 @@ class CourseManageController extends BaseController
         return $this->container->get('topxia.twig.web_extension');
     }
 
+    private function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.OrderService');
+    }
 }

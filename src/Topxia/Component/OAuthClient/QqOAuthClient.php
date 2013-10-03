@@ -65,8 +65,8 @@ class QqOAuthClient extends AbstractOAuthClient
         $userInfo = array();
         $userInfo['id'] = $infos['id'];
         $userInfo['name'] = $infos['nickname'];
-        $userInfo['avatar'] = empty($infos['figureurl_1']) ? '' : $infos['figureurl_1'];
-        $userInfo['avatar_large'] = empty($infos['figureurl_2']) ? '' : $infos['figureurl_2'];
+        $userInfo['smallAvatar'] = empty($infos['figureurl_1']) ? '' : $infos['figureurl_1'];
+        $userInfo['largeAvatar'] = empty($infos['figureurl_2']) ? '' : $infos['figureurl_2'];
         if ($infos['gender'] == '男') {
             $infos['gender'] = 'male';
         } elseif ($infos['gender'] == '女') {

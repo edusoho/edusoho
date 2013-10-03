@@ -32,12 +32,12 @@ define(function(require, exports, module) {
                     $form.find('[type=submit]').button('reset');
                     $("#material-list").append(html).show();
                     $form.find('.text-warning').hide();
-                    $form.clearForm();
+                    clearForm($form, validator);
                 },
                 error: function(jqr, textStatus, errorThrown, $form) {
                     Notify.danger(jqr.responseJSON.error.message);
                     $form.find('[type=submit]').button('reset');
-                    $form.clearForm();
+                    clearForm($form, validator);
                 }
             });
 
@@ -57,4 +57,19 @@ define(function(require, exports, module) {
 
 
     };
+
+    function clearForm($form, validator)
+    {
+        $form.clearForm();
+        // 在ie下清除:file类型的input时，会clone该input并插入，然后删除原来的input。
+        // 所以这里得重新添加校验
+        if (/MSIE/.test(navigator.userAgent)) {
+            validator.addItem({
+                element: '#material-file-field',
+                required: true,
+                errormessageRequired: '请选择要上传的资料文件'
+            });
+        }
+    }
+
 });

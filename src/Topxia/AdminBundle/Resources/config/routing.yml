@@ -148,9 +148,9 @@ admin_teacher_promote_cancel:
     pattern:  /teacher/{id}/promote/cancel
     defaults: { _controller: TopxiaAdminBundle:Teacher:promoteCancel }
 
-admin_user_set_roles:
+admin_user_roles:
     pattern:  /user/{id}/roles
-    defaults: { _controller: TopxiaAdminBundle:User:setRoles }
+    defaults: { _controller: TopxiaAdminBundle:User:roles }
 
 admin_user_send_passwordreset_email:
     pattern:  /user/{id}/send_passwordreset_email
@@ -240,14 +240,6 @@ admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
     methods: [POST]
-
-admin_course_add_student_nickname_check:
-    pattern:  /add/student/{courseId}/nickname/check
-    defaults: { _controller: TopxiaAdminBundle:Course:nicknameCheck }
-
-admin_course_add_student:
-    pattern: /course/{id}/add/student
-    defaults: { _controller: TopxiaAdminBundle:Course:addStudent }
 
 admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel

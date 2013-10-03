@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      您已经被管理员移除您在学课程<a href="{{ path('course_show', {id:data.courseId}) }}">《{{ data.courseTitle }}》</a>的学员身份，不能再继续学习该课程。如有疑问，请联系网站客服。
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime | date('Y-n-d H:i:s') }}
+    </div>
+  </div>
+</li>

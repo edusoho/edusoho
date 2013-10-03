@@ -62,6 +62,12 @@ interface UserService
      */
     public function register($registration, $type = 'default');
 
+    /**
+     * 从第三方帐号直接登录的用户，未设置Email地址和昵称
+     * 通过调用此接口，可以设置帐号信息，但只能设置一次。
+     */
+    public function setupAccount($userId, $account = array());
+
     public function markLoginInfo();
 
     public function updateUserProfile($id, $fields);

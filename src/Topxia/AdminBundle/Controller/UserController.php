@@ -150,7 +150,7 @@ class UserController extends BaseController {
         ));
     }
 
-    public function setRolesAction(Request $request, $id)
+    public function rolesAction(Request $request, $id)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
             throw $this->createAccessDeniedException();
@@ -159,15 +159,17 @@ class UserController extends BaseController {
         $user = $this->getUserService()->getUser($id);
 
         if ($request->getMethod() == 'POST') {
-            $userRoles = $request->request->get('role');
-            if(is_null($userRoles)){
-                $userRoles = array('ROLE_USER');
+            $roles = $request->request->get('roles');
+            $this->getUserService()->changeUserRoles($user['id'], $roles);
+
+            if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
+                $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
             }
-            $this->getUserService()->changeUserRoles($user['id'], $userRoles);
+
             return $this->redirect($this->generateUrl('admin_user'));
         }
 
-        return $this->render('TopxiaAdminBundle:User:set-roles-modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
             'user' => $user
         ));
     }
@@ -238,6 +240,11 @@ class UserController extends BaseController {
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');        
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');        
     }
 
 }

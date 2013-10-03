@@ -230,9 +230,11 @@ class UserServiceImpl extends BaseService implements UserService
         if($type == 'default') {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
+            $user['setup'] = 1;
         } else {
             $user['salt'] = '';
             $user['password'] = ''; 
+            $user['setup'] = 0;
         }
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
@@ -243,6 +245,47 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $user;
+    }
+
+    public function setupAccount($userId, $account = array())
+    {
+        $user = $this->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，设置帐号失败！');
+        }
+
+        if ($user['setup']) {
+            throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
+        }
+
+        if (!ArrayToolkit::requireds($account, array('email', 'nickname'))) {
+            throw $this->createServiceException('参数缺失，设置帐号失败！');
+        }
+
+        if (!SimpleValidator::email($account['email'])) {
+            throw $this->createServiceException('Email地址格式不正确，设置帐号失败！');
+        }
+        
+        if (!SimpleValidator::nickname($account['nickname'])) {
+            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
+        }
+
+        if (!$this->isEmailAvaliable($account['email'])) {
+            throw $this->createServiceException('Email已存在！');
+        }
+
+        if ($user['nickname'] != $account['nickname']) {
+            if (!$this->isNicknameAvaliable($account['nickname'])) {
+                throw $this->createServiceException('昵称已存在！');
+            }
+        }
+
+        $fields = ArrayToolkit::parts($account, array('email', 'nickname'));
+        $fields['setup'] = 1;
+
+        $this->getUserDao()->updateUser($userId, $fields);
+
+        return $this->getUser($userId);
     }
 
     public function updateUserProfile($id, $fields)
@@ -297,6 +340,10 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (empty($roles)) {
             throw $this->createServiceException('用户角色不能为空');
+        }
+
+        if (!in_array('ROLE_USER', $roles)) {
+            throw $this->createServiceException('用户角色必须包含ROLE_USER');
         }
 
         $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER');

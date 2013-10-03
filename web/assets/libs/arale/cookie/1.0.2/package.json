@@ -3,8 +3,12 @@
     "version": "1.0.2",
     "name": "cookie",
     "description": "提供 Cookie 操作方法。",
-    "keywords": [ "util" ],
-    "author": "Frank Wang <lifesinger@gmail.com>",
+    "keywords": [ "utility" ],
+    "author": "玉伯 <lifesinger@gmail.com>",
+    "maintainers": [
+        "玉伯 <lifesinger@gmail.com>",
+        "偏右 <afc163@gmail.com>"
+    ],
     "homepage": "http://aralejs.org/cookie/",
     "repository": {
         "type": "git",

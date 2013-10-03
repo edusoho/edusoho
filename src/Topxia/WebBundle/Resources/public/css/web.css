@@ -3,7 +3,7 @@
  */
 
 a.link-muted {
-	color: #96B1D1;
+	color: #9AB2CF;
 }
 
 .navbar {
@@ -436,10 +436,6 @@ body {
 	right: 15px;
 	top: 50%;
 	margin-top: -15px;
-}
-
-.lt-ie9 .course-header .toolbar {
-	width: 185px;
 }
 
 .course-dashboard-tabs {

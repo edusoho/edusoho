@@ -1,0 +1,46 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}学员管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+{% set script_controller = 'course-manage/students' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">学员管理
+      {% if 'ROLE_ADMIN' in app.user.roles %}
+    <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i>添加学员
+    </button>
+      {% endif %}
+  </div>
+  
+  <div class="panel-body">  
+    <table class="table table-striped" id="course-student-list">
+      <thead>
+        <tr>
+          <th width="40%">学员</th>
+          <th width="24%">学习进度</th>
+          <th width="36%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+          {% set user = users[student.userId] %}
+          {% set progress = progresses[student.userId] %}
+          {% set isFollowing = user.id in followingIds %}
+          {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="3">无学员记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ web_macro.paginator(paginator) }}
+
+  </div>
+
+</div>
+
+
+{% endblock %}

@@ -57,11 +57,13 @@ class CourseLessonController extends BaseController
 
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
-
         if (empty($lesson) || empty($lesson['media']) || ($lesson['media']['source'] != 'self') ) {
             throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
         }
 
         $uri = $this->getDiskService()->parseFileUri($lesson['media']['files'][0]['url']);

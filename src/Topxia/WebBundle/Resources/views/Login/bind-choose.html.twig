@@ -1,0 +1,74 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}登录 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/login-bind-choose' %}
+
+{% block content %}
+<div class="row row-6">
+  <div class="col-md-6 col-md-offset-3">
+
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>登录</h2></div>
+
+        <div class="well well-sm">
+
+          <div class="media">
+            <a class="pull-left" href="javascript:">
+              <img class="media-object" src="{{ oauthUser.smallAvatar }}">
+            </a>
+            <div class="media-body">
+              <div><strong>{{ oauthUser.name }}</strong></div>
+              <div class="text-muted">您正在使用<strong class="text-primary"> {{ client.clientInfo.name }} </strong>登录{{ setting('site.name') }}</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="tac pvl">
+          <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
+          <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{{ path('homepage') }}">直接登录</button>
+        </div>
+
+        <hr>
+
+        <p class="text-primary">
+          已有帐号？绑定到已有帐号：
+          <a href="{{ path('login_bind_exist', {type: client.clientInfo.type}) }}"></a>
+        </p>
+
+        <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_exist', {type:client.clientInfo.type}) }}" data-goto="{{ path('homepage') }}">
+
+          <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
+
+
+          <div class="form-group">
+            <label class="control-label" for="bind-email-field">Email地址</label>
+            <div class="controls">
+              <input id="bind-email-field" class="form-control" type="text" name="email">
+              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="bind-password-field">密码</label>
+            <div class="controls">
+              <input id="bind-password-field" class="form-control" type="password" name="password">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="controls">
+              <button class="btn btn-fat btn-default btn-lg" type="submit" data-loading-text="正在提交...">绑定</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="form-group">
+
+        </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

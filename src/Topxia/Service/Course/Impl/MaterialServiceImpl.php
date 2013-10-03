@@ -53,9 +53,18 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		$this->getMaterialDao()->deleteMaterial($materialId);
 		if($material['lessonId']){
 		   $count = $this->getMaterialDao()->getLessonMaterialCount($courseId,$material['lessonId']);
-		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'],$count);
+		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
 		}
+	}
 
+	public function deleteMaterialsByLessonId($lessonId)
+	{
+		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId);
+	}
+
+	public function deleteMaterialsByCourseId($courseId)
+	{
+		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
 	}
 
 	public function getMaterial($courseId, $materialId)

@@ -19,4 +19,5 @@ interface OrderService
     public function searchOrderCount($conditions);
 
     public function findOrderLogs($orderId);
+
 }

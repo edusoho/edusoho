@@ -14,13 +14,17 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                $.post($form.attr('action'), $form.serialize(), function(html) {
+                
+                $.post($form.attr('action'), $form.serialize(), function(response) {
                     $modal.modal('hide');
+                    console.log("response");
+                    console.log(response);
                     Notify.success('添加学员操作成功!');
-                }).error(function(){
+                },'json').error(function(){
                     Notify.danger('添加学员操作失败!');
                 });
             }
+
         });
 
         validator.addItem({

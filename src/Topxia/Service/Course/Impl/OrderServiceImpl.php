@@ -15,12 +15,23 @@ class OrderServiceImpl extends BaseService implements OrderService
 
 	public function createOrder($order)
 	{
-		$user = $this->getCurrentUser();
+		$orderUser = $this->getCurrentUser();
+		if (empty($orderUser)) {
+			throw $this->createServiceException('用户未登录，不能创建订单。');
+		}
+
+		if (!empty($order['userId'])) {
+			$orderUser = $this->getUserService()->getUser($order['userId']);
+			if (empty($orderUser)) {
+				throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
+			}
+		}
+
 		if (!ArrayToolkit::requireds($order, array('courseId', 'payment'))) {
 			throw $this->createServiceException('创建订单失败：缺少参数。');
 		}
 
-		$order = ArrayToolkit::parts($order, array('courseId', 'payment'));
+		$order = ArrayToolkit::parts($order, array('courseId', 'payment', 'price'));
 
 		$course = $this->getCourseService()->getCourse($order['courseId']);
 		if (empty($course)) {
@@ -33,13 +44,14 @@ class OrderServiceImpl extends BaseService implements OrderService
 
 		$order['sn'] = $this->generateOrderSn($order);
 		$order['title'] = "购买课程《{$course['title']}》";
-		$order['price'] = $course['price'];
+		$order['price'] = empty($order['price']) ? $course['price'] : number_format($order['price'], 2, '.', '');;
 		$order['status'] = 'created';
 
 		if (intval($order['price']*100) == 0) {
 			$order['payment'] = 'none';
 		}
-		$order['userId'] = $user['id'];
+
+		$order['userId'] = $orderUser['id'];
 		$order['createdTime'] = time();
 
 		$order = $this->getOrderDao()->addOrder($order);
@@ -70,7 +82,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 					'paidTime' => $payData['paidTime'],
 				));
 				$this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
-				$this->getCourseService()->joinCourse($order['userId'], $order['courseId']);
+				$memberRemark = empty($payData['memberRemark']) ? '' : $payData['memberRemark'];
+				$this->getCourseService()->joinCourse($order['userId'], $order['courseId'], $memberRemark);
 			} else {
 				$this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
 			}

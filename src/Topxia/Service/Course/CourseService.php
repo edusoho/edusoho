@@ -65,7 +65,7 @@ interface CourseService
 
 	public function closeCourse($id);
 
-	public function joinCourse($userId, $courseId, array $infos = array());
+	public function joinCourse($userId, $courseId, $remark);
 
 	public function exitCourse($userId, $courseId);
 
@@ -152,6 +152,10 @@ interface CourseService
 	public function isCourseStudent($courseId, $userId);
 
 	public function setCourseTeachers($courseId, $teachers);
+
+	public function cancelTeacherInAllCourses($userId);
+
+	public function remarkStudent($courseId, $userId, $remark);
 	
 	/**
 	 * 尝试管理课程, 无权限则抛出异常

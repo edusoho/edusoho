@@ -49,7 +49,6 @@ class TenpayRequest extends Request {
             $sign .= $key . '=' . $value . '&';
         }
         $sign .= 'key=' . $this->options['secret'];
-        // var_dump($sign);exit();
         return strtolower(md5($sign));
     }
 

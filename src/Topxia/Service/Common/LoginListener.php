@@ -37,7 +37,6 @@ class LoginListener extends BaseService implements AuthenticationSuccessHandlerI
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {       
-        var_dump('aaaaaahhhhhhhhhhhh');
 			$user = $token->getUser();
 		$loginInfo = array('loginIp'=>$request->getClientIp(),'loginTime'=> time());
 		// $this->getUserService()->updateLoginInfo($user['id'],$loginInfo);

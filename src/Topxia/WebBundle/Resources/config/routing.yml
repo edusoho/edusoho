@@ -32,13 +32,19 @@ login_bind_callback:
     pattern:  /login/bind/{type}/callback
     defaults: { _controller: TopxiaWebBundle:LoginBind:callback }
 
+login_bind_choose:
+    pattern:  /login/bind/{type}/choose
+    defaults: { _controller: TopxiaWebBundle:LoginBind:choose }
+
 login_bind_new:
     pattern:  /login/bind/{type}/new
     defaults: { _controller: TopxiaWebBundle:LoginBind:new }
+    methods: [POST]
 
 login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
+    methods: [POST]
 
 login_check_email:
     pattern:  /login/check/email
@@ -335,6 +341,26 @@ course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
+course_manage_students:
+    pattern:  /course/{id}/manage/students
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
+
+course_manage_student_create:
+    pattern:  /course/{id}/manage/student/create
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
+
+course_manage_student_remove:
+    pattern:  /course/{courseId}/manage/student/{userId}/remove
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }
+
+course_manage_student_remark:
+    pattern:  /course/{courseId}/manage/student/{userId}/remark
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
+
+course_manage_student_check_nickname:
+    pattern:  /course/{id}/manage/nickname_check
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkNickname }
+
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
@@ -489,6 +515,14 @@ settings_binds_unbind:
 settings_binds_bind:
     pattern: /settings/bind/{type}
     defaults: { _controller: TopxiaWebBundle:Settings:bind }
+
+settings_setup:
+    pattern: /settings/setup
+    defaults: { _controller: TopxiaWebBundle:Settings:setup }
+
+settings_setup_check_nickname:
+    pattern: /settings/setup/check_nickname
+    defaults: { _controller: TopxiaWebBundle:Settings:setupCheckNickname }
 
 auth_email_confirm:
     pattern:  /auth/email/confirm

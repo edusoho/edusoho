@@ -467,7 +467,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $favorite ? true : false;
 	}
 
-	public function joinCourse($userId, $courseId, array $infos = array())
+	public function joinCourse($userId, $courseId, $remark = null)
 	{
 		$course = $this->getCourse($courseId);
 
@@ -481,19 +481,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$user = $this->getUserService()->getUser($userId);
 		if (empty($user)) {
-			return $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
+			throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if ($member) {
-			return false;
+			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
 		}
 
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'role' => 'student',
-			'createdTime' => time(),
+			'remark' => empty($remark) ? '' : $remark,
+			'createdTime' => time()
 		);
 
 		$member = $this->getMemberDao()->addMember($fields);
@@ -667,6 +668,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
+
+		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
 		// $this->autosetCourseFields($courseId);
 	}
@@ -1055,9 +1058,38 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// 更新课程的teacherIds，该字段为课程可见教师的ID列表
 		$fields = array('teacherIds' => $visibleTeacherIds);
 		$this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
-		
 	}
 
+	/**
+	 * @todo 当用户拥有大量的课程老师角色时，这个方法效率是有就有问题咯！鉴于短期内用户不会拥有大量的课程老师角色，先这么做着。
+	 */
+	public function cancelTeacherInAllCourses($userId)
+	{
+		$count = $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', false);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', 0, $count, false);
+		foreach ($members as $member) {
+			$course = $this->getCourse($member['courseId']);
+
+			$this->getMemberDao()->deleteMember($member['id']);
+
+			$fields = array(
+				'teacherIds' => array_diff($course['teacherIds'], array($member['userId']))
+			);
+			$this->getCourseDao()->updateCourse($member['courseId'], CourseSerialize::serialize($fields));
+		}
+
+		$this->getLogService()->info('course', 'cancel_teachers_all', "取消用户#{$userId}所有的课程老师角色");
+	}
+
+	public function remarkStudent($courseId, $userId, $remark)
+	{
+		$member = $this->getCourseMember($courseId, $userId);
+		if (empty($member)) {
+			throw $this->createServiceException('课程会员不存在，备注失败!');
+		}
+		$fields = array('remark' => empty($remark) ? '' : (string) $remark);
+		return $this->getMemberDao()->updateMember($member['id'], $fields);
+	}
 
 	public function increaseLessonQuizCount($lessonId){
 	    $lesson = $this->getLessonDao()->getLesson($lessonId);
@@ -1090,7 +1122,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function tryManageCourse($courseId)
 	{
 		$user = $this->getCurrentUser();
-		if (empty($user->id)) {
+		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('未登录用户，无权操作！');
 		}
 
@@ -1099,7 +1131,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createNotFoundException();
 		}
 
-		if (!$this->hasCourseManagerRole($course, $user['id'])) {
+		if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
 			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
 		}
 
