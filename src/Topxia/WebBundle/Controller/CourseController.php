@@ -286,7 +286,11 @@ class CourseController extends BaseController
 
     public function learnAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        try{
+            $course = $this->getCourseService()->tryTakeCourse($id);
+        }catch(Exception $e){
+            throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
+        }
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
             'course' => $course,
         ));
