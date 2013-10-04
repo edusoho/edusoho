@@ -17,3 +17,4 @@ phpunit -c app/ src/Topxia/Service/User/Tests/UserServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/CommentServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/ContentServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/BlockServiceTest.php
+phpunit -c app/ src/Topxia/Service/Upgrade/Tests/UpgradeServiceTest.php
