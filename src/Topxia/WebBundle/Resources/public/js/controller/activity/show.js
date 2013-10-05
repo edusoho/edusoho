@@ -11,6 +11,7 @@ define(function(require, exports, module) {
     require('jquery.raty');
     require('common/validator-rules').inject(Validator);
     var Carousel=require('carousel');
+   
 
 
     var TempleteBindDate=function(templeteBindDate,canvertFun,data){

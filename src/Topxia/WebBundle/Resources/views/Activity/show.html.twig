@@ -11,7 +11,7 @@
         <div class="mod k_postlist openstack pz">
           <div class="content pz">       
             <div class=row>
-              <ul>
+              <ul class='plm prm'>
                 <li class="shadow pz">
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
@@ -114,7 +114,7 @@
                     </div>
                     <div class="imageblock-content">
                       <div class="comment-box">
-                         <form class="form-horizontal" role="form" id="qustion-form" action="{{ path("activity_qustioncreate",{id:activity.id}) }}" method="post">
+                        <form class="form-horizontal" role="form" id="qustion-form" action="{{ path("activity_qustioncreate",{id:activity.id}) }}" method="post">
                           <textarea class="form-control" rows="5" name="qustion[content]"
                           id="qustiontext"></textarea>
                           <div class="comment-side">
@@ -129,13 +129,7 @@
                       </div>
                     </div>                  
                   </div>
-                  <!--
-                  <div class="sequence clearfix">
-                    <span class="btn btn-default">按提问时间</span>
-                    <span class="btn btn-default">按老师回答</span>
-                  </div>
-                -->
-                </div>                
+                </div>
                 <ul class="mar-b" id="qustion-media-list">
                   {% for qustion in qustions %}
                       <li class="media">
@@ -156,7 +150,7 @@
                           <div class="post-list media-content">
                             {% for post in qustion.bindpost %}
                               <div class="well well-sm">
-                                        <a href="#">{{ post_users[post.userid].nickname }}</a>:{{post.content}}
+                                        <a href="#">{{ post_users[post.userId].nickname }}</a>:{{post.content}}
                               </div>
                             {% endfor %}
                           </div>
@@ -189,9 +183,8 @@
           </div>
         </div>         
 </div>
-    
 
-  <script type="reply-templete" id="reply-templete">
+<script type="reply-templete" id="reply-templete">
           <li class="media">
             <a class="user-link user-avatar-link pull-left" href="javascript:">
               <img src="{ usersmallAvatar }"></img>
@@ -206,18 +199,18 @@
               <div class="reply-box media-content" style="display:none;" action='{ action }'></div>
             </div>
           </li>
-  </script>
-  <script type="reply-templete" id="post-templete">
-                    <div class="input-group well well-sm">
-                      <input type="text" name="activitypost[content]" class="form-control" id="posttest" />
-                      <span class="input-group-btn">
-                        <button class="btn btn-info reply-btn" type="button">回复</button>
-                      </span>
-                    </div>
-  </script>
-  <script type="reply-templete" id="post-reply-templete">
-    <div class="well well-sm">
-      <a href="#">{ usernickname }</a>:{ content }
-    </div>
-  </script>
+</script>
+<script type="reply-templete" id="post-templete">
+          <div class="input-group well well-sm">
+            <input type="text" name="activitypost[content]" class="form-control" id="posttest" />
+            <span class="input-group-btn">
+              <button class="btn btn-info reply-btn" type="button">回复</button>
+            </span>
+          </div>
+</script>
+<script type="reply-templete" id="post-reply-templete">
+          <div class="well well-sm">
+            <a href="#">{ usernickname }</a>:{ content }
+          </div>
+</script>
 {% endblock %}
