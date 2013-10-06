@@ -14,7 +14,7 @@
   </td>
   <td>
     {% if order.paidTime > 0 %}
-      {{ dict_text('payment', order.payment) }}
+      {{ dict_text('payment', order.payment)|default('--') }}
       <br>
       <span class="text-muted text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
       

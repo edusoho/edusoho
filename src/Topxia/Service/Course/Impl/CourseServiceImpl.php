@@ -467,63 +467,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $favorite ? true : false;
 	}
 
-	public function joinCourse($userId, $courseId, $remark = null)
-	{
-		$course = $this->getCourse($courseId);
-
-		if($course['status']!='published'){
-			throw $this->createServiceException('不能加入未发布课程');
-		}
-
-		if (empty($course)) {
-			throw $this->createNotFoundException();
-		}
-
-		$user = $this->getUserService()->getUser($userId);
-		if (empty($user)) {
-			throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
-		}
-
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-		if ($member) {
-			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
-		}
-
-		$fields = array(
-			'courseId' => $courseId,
-			'userId' => $userId,
-			'role' => 'student',
-			'remark' => empty($remark) ? '' : $remark,
-			'createdTime' => time()
-		);
-
-		$member = $this->getMemberDao()->addMember($fields);
-
-		$fields = array('studentNum'=> $this->getCourseStudentCount($courseId));
-		$this->getCourseDao()->updateCourse($courseId, $fields);
-
-		return $member;
-	}
-
-	public function exitCourse($userId, $courseId)
-	{
-		$course = $this->getCourse($courseId);
-		if (empty($course)) {
-			throw $this->createNotFoundException("课程(#${$courseId})不存在，退出失败。");
-		}
-
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-		if (empty($member) or ($member['role'] != 'student')) {
-			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员。");
-		}
-
-		$this->getMemberDao()->deleteMember($member['id']);
-
-		$this->getCourseDao()->updateCourse($courseId, array(
-			'studentNum' => $this->getCourseStudentCount($courseId),
-		));
-	}
-
 	private function autosetCourseFields($courseId)
 	{
 		$fields = array('type' => 'text', 'lessonNum' => 0);
@@ -1089,6 +1032,103 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 		$fields = array('remark' => empty($remark) ? '' : (string) $remark);
 		return $this->getMemberDao()->updateMember($member['id'], $fields);
+	}
+
+	public function becomeStudent($courseId, $userId, $info = array())
+	{
+		$course = $this->getCourse($courseId);
+
+		if (empty($course)) {
+			throw $this->createNotFoundException();
+		}
+
+		if($course['status'] != 'published') {
+			throw $this->createServiceException('不能加入未发布课程');
+		}
+
+		$user = $this->getUserService()->getUser($userId);
+		if (empty($user)) {
+			throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if ($member) {
+			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
+		}
+
+		$fields = array(
+			'courseId' => $courseId,
+			'userId' => $userId,
+			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+			'role' => 'student',
+			'remark' => empty($info['remark']) ? '' : $remark,
+			'createdTime' => time()
+		);
+
+		$member = $this->getMemberDao()->addMember($fields);
+
+		$fields = array('studentNum'=> $this->getCourseStudentCount($courseId));
+		$this->getCourseDao()->updateCourse($courseId, $fields);
+
+		return $member;
+
+	}
+
+	public function removeStudent($courseId, $userId)
+	{
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createNotFoundException("课程(#${$courseId})不存在，退出课程失败。");
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if (empty($member) or ($member['role'] != 'student')) {
+			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
+		}
+
+		$this->getMemberDao()->deleteMember($member['id']);
+
+		$this->getCourseDao()->updateCourse($courseId, array(
+			'studentNum' => $this->getCourseStudentCount($courseId),
+		));
+	}
+
+	public function lockStudent($courseId, $userId)
+	{
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学员失败。");
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if (empty($member) or ($member['role'] != 'student')) {
+			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，封锁学员失败。");
+		}
+
+		if ($member['locked']) {
+			return ;
+		}
+
+		$this->getMemberDao()->updateMember($member['id'], array('locked' => 1));
+	}
+
+	public function unlockStudent($courseId, $userId)
+	{
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学员失败。");
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if (empty($member) or ($member['role'] != 'student')) {
+			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，解封学员失败。");
+		}
+
+		if (empty($member['locked'])) {
+			return ;
+		}
+
+		$this->getMemberDao()->updateMember($member['id'], array('locked' => 0));
 	}
 
 	public function increaseLessonQuizCount($lessonId){

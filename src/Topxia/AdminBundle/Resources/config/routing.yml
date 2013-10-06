@@ -262,6 +262,18 @@ admin_course_order_detail:
     pattern: /course/order/{id}/detail
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
 
+admin_order_refunds:
+    pattern: /order/refunds
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:refunds }
+
+admin_order_cancel_refund:
+    pattern: /order/{id}/cancel_refund
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:cancelRefund }
+    methods: [POST]
+
+admin_order_audit_refund:
+    pattern: /order/{id}/audit_refund
+    defaults: { _controller: TopxiaAdminBundle:CourseOrder:auditRefund }
 
 admin_group:
     pattern:  /group
@@ -326,6 +338,10 @@ admin_setting_payment:
 admin_setting_storage:
     pattern:  /setting/storage
     defaults: { _controller: TopxiaAdminBundle:Setting:storage }
+
+admin_setting_refund:
+    pattern:  /setting/refund
+    defaults: { _controller: TopxiaAdminBundle:Setting:refund }
 
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist

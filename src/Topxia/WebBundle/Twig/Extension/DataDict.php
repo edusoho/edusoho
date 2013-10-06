@@ -17,10 +17,26 @@ class DataDict
 		'orderStatus' => array(
 			'created' => '未付款',
 			'paid' => '已付款',
+			'refunding' => '退款中',
+			'refunded' => '已退款',
 		),
 		'orderStatus:html' => array(
 			'created' => '<span class="text-muted">未付款</span>',
 			'paid' => '<span class="text-success">已付款</span>',
+			'refunding' => '<span class="text-warning">退款中</span>',
+			'refunded' => '<span class="text-danger">已退款</span>',
+		),
+		'refundStatus' => array(
+			'created'  => '已申请',
+			'success' => '退款成功',
+			'failed' => '退款失败',
+			'cancelled' => '已取消',
+		),
+		'refundStatus:html' => array(
+			'created'  => '<span class="text-warning">已申请</span>',
+			'success' => '<span class="text-success">退款成功</span>',
+			'failed' => '<span class="text-danger">退款失败</span>',
+			'cancelled' => '<span class="text-muted">已取消</span>',
 		),
 		'payment' => array(
 			'alipay' => '支付宝'

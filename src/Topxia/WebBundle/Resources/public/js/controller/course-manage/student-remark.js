@@ -17,7 +17,6 @@ define(function(require, exports, module) {
                 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     var $html = $(html);
-                    console.log($('#'+$html.attr('id'))[0]);
                     $('#'+$html.attr('id')).replaceWith($html);
                     $modal.modal('hide');
                     Notify.success('备注学员成功');

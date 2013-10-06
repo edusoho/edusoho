@@ -141,7 +141,7 @@ class CourseController extends BaseController
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($request->query->get('previewAs'), $member, $course);
 
-        if ($member) {
+        if ($member && empty($member['locked'])) {
             $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 
             return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
@@ -189,6 +189,7 @@ class CourseController extends BaseController
                     'seq' => 0,
                     'isVisible' => 0,
                     'role' => 'teacher',
+                    'locked' => 0,
                     'createdTime' => time()
                 );
             }
@@ -278,9 +279,20 @@ class CourseController extends BaseController
 
     public function exitAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->tryTakeCourse($id);
-        $this->getCourseService()->exitCourse($user['id'], $course['id']);
+        $user = $this->getCurrentUser();
+
+        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+
+        if (empty($member)) {
+            throw $this->createAccessDeniedException('您不是课程的学员。');
+        }
+
+        if (!empty($member['orderId'])) {
+            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
+        }
+
+        $this->getCourseService()->removeStudent($course['id'], $user['id']);
         return $this->createJsonResponse(true);
     }
 

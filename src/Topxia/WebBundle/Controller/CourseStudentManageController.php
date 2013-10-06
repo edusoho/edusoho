@@ -92,7 +92,7 @@ class CourseStudentManageController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $this->getCourseService()->exitCourse($userId, $courseId);
+        $this->getCourseService()->removeStudent($courseId, $userId);
 
         $this->getNotificationService()->notify($userId, 'student-remove', array(
             'courseId' => $course['id'], 
