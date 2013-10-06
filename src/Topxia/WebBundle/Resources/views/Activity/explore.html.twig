@@ -115,7 +115,7 @@
                           <p>
                             {{ activity.studentNum }}人已报名
                           {% if activity.isExpired==1 %}
-                            <a class='mar-l btn btn-success  green' 
+                            <a class='mar-l btn btn-warning  green' 
                             href="{{ path('activity_showsuccess',{id:activity.id})}}">
                               活动内容
                             </a>

@@ -102,12 +102,13 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function updateThread($id, $fields)
 	{
-		return $this->update($id,$fields);
+		$this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getThread($id);
 	}
 
 	public function deleteThread($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 	public function waveThread($id, $field, $diff)

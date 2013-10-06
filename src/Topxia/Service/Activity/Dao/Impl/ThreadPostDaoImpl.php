@@ -42,7 +42,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
 	public function deletePost($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
 	}
 
 	public function deletePostsByThreadId($threadId)

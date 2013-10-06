@@ -79,7 +79,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException('问题不存在，操作失败！');
 		}
 
-		$field['postnum']=(int)$thread['postnum']+1;
+		$field['postNum']=(int)$thread['postNum']+1;
 		//$user=$this->getUserService()->getUser($userId);
 		//if(empty($user)&&$user['id']>0){
 			//ROLE_TEACHER

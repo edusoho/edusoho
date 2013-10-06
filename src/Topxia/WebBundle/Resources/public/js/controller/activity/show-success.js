@@ -10,8 +10,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
     require('common/validator-rules').inject(Validator);
-
-
+    var Carousel=require('carousel');
+   
 
 
     var TempleteBindDate=function(templeteBindDate,canvertFun,data){
@@ -64,15 +64,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $('#teacher-carousel').carousel({interval: 0});
-        $('#teacher-carousel').on('slide.bs.carousel', function (e) {
-            var teacherId = $(e.relatedTarget).data('id');
-
-            $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
-            $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
-        });
-
-
         
         $(".reply").bind("click",createReply);
         //提问
@@ -101,7 +92,27 @@ define(function(require, exports, module) {
         });
 
 
-       
+        //图片
+        var carousel = new Carousel({
+            element: '#carousel-demo-1',
+            hasTriggers: false,
+            easing: 'easeOutStrong',
+            effect: 'scrollx',
+            step: 3,
+            viewSize: [350],
+            circular: false,
+            autoplay: true
+        }).render();
+        //视频
+
+        var videourl=$('.activity-video-player').attr('data-url');
+        
+
+        var player = VideoJS("lesson-video-player");
+        player.pause();
+        player.dimensions('100%', '100%');
+        player.src(videourl);
+        player.play();
 
 
     };

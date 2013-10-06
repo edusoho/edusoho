@@ -72,12 +72,7 @@ class ActivityController extends BaseController
             $Ids=ArrayToolkit::column($currrentUsers,"activityId");
         }
         //老师信息查询
-        $experter=array();
-        if(!empty($activity['experterid'])){
-            $experter=$this->getUserService()->getUser($activity['experterid'][0]);
-            $experterpro=$this->getUserService()->getUserProfile($experter['id']);
-            $experter['profile']=$experterpro;
-        }
+
         //小伙伴们正在看的活动
         $activitys=$this->getActivityService()->searchActivitys(array('status'=>'published'),'latestCreated',0,4);
         //活动的问题
@@ -114,28 +109,15 @@ class ActivityController extends BaseController
             "students"=>$students,
             "ids"=>$Ids,
             "qustions"=>$sss,
-            "experter"=>$experter,
             "activitys"=>$activitys,
             "current_user"=> $currentuser,
             "qustion_users"=>$qustionUsers,
             "post_users"=>$postUsers));
     }
-
-
-    public function headerAction($activity, $manage = false)
-    {
-        $user = $this->getCurrentUser();
-
-        $users = empty($activity['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-        return $this->render('TopxiaWebBundle:Activity:header.html.twig', array(
-            'activity' => $activity,
-            'users' => $users,
-            'manage' => $manage,
-        ));
-    }
+  
 
     public function showsuccessAction(Request $request,$id){
+
         $activity=$this->getActivityService()->getActivity($id);
         $threads=$this->getActivityThreadService()->findThreadsByType($activity['id'],'latestCreated',0,100);
 
@@ -144,16 +126,11 @@ class ActivityController extends BaseController
         
         
 
-        $experter=array();
-        if(!empty($activity['experterid'])){
-            $experter=$this->getUserService()->getUser($activity['experterid'][0]);
-            $experterpro=$this->getUserService()->getUserProfile($experter['id']);
-            $experter['profile']=$experterpro;
-        }
+     
         
         $files=array();
-        if(!empty($activity['photoid'])){
-            $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoid'][0]),'    latest',0,100);
+        if(!empty($activity['photoId'])){
+            $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoId'][0]),'    latest',0,100);
         }
 
         $lessionid=0;
@@ -181,12 +158,12 @@ class ActivityController extends BaseController
         foreach ($threads as $thread) {
             $thread['bindpost']=$this->getActivityThreadService()->findThreadPosts($activity['id'],$thread['id'],"default",0,20);
             if(!empty($thread['bindpost'])){
-                $postUserIds=array_merge($postUserIds,ArrayToolkit::column($thread['bindpost'],'userid'));
+                $postUserIds=array_merge($postUserIds,ArrayToolkit::column($thread['bindpost'],'userId'));
             }
             $sss[]=$thread;
         }
 
-        $qustionUserIds=ArrayToolkit::column($sss,'userid');
+        $qustionUserIds=ArrayToolkit::column($sss,'userId');
         $qustionUsers = $this->getUserService()->findUsersByIds($qustionUserIds);
         $qustionUsers[0]=array(
             "id" =>  0,
@@ -203,11 +180,10 @@ class ActivityController extends BaseController
             $appendix=$this->getMaterialService()->findActivityMaterials($activity['id'],0,2);
         }
 
-        return $this->render("TopxiaWebBundle:Activity:showsuccess.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:show-success.html.twig",array(
             "activity"=>$activity,
             "activitys"=>$activitys,
             "qustions"=>$sss,
-            "experter"=>$experter,
             "pics"=>$files,
             "students"=>$students,
             'lessonid'=>$lessionid,
@@ -218,14 +194,40 @@ class ActivityController extends BaseController
             "appendixs"=>$appendix));
     }
 
+
+    public function headerAction($activity, $manage = false)
+    {
+        $user = $this->getCurrentUser();
+
+        $users = empty($activity['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return $this->render('TopxiaWebBundle:Activity:header.html.twig', array(
+            'activity' => $activity,
+            'users' => $users,
+            'manage' => $manage,
+        ));
+    }
+
+    public function expertersBlockAction($activity)
+    {
+        $users = $this->getUserService()->findUsersByIds($activity['experterId']);
+        $profiles = $this->getUserService()->findUserProfilesByIds($activity['experterId']);
+
+        return $this->render('TopxiaWebBundle:Activity:experters-block.html.twig', array(
+            'activity' => $activity,
+            'users' => $users,
+            'profiles' => $profiles,
+        ));
+    }
+
     public function activityformAction(Request $request, $id){
-        $filename="activityform";
+        $filename="activity-form";
         $activity=$this->getActivityService()->getActivity($id);
         $user=$this->getCurrentUser();
         $userprofile=array();
         if(!empty($user['id'])){
             $userprofile=$this->getUserService()->getUserProfile($user['id']);
-            $filename="activityformex";
+            $filename="activity-form-ex";
         }
         return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
             "activity"=>$activity,
@@ -240,7 +242,7 @@ class ActivityController extends BaseController
         if(!empty($randomPassworld)){
             $randomuser['password']=$randomPassworld;
         }
-        return $this->render("TopxiaWebBundle:Activity:activitysuccess.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:activity-success.html.twig",array(
             "activityid"=>$id,
             "state"=>true,"islogin"=>$islogin,"randomuser"=>$randomuser));
     }
@@ -425,7 +427,7 @@ class ActivityController extends BaseController
                 $newqustion=$qustion;
                 return $this->createJsonResponse($newqustion);
         }
-        return $this->render('TopxiaWebBundle:Activity:qustioncreate.html.twig', array(
+        return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
             'form' => $form->createView(),
             'activityid'=>$id
         ));
@@ -517,7 +519,7 @@ class ActivityController extends BaseController
         //} else {
          //   return $this->createJsonResponse(true);   
         //}
-        return $this->render('TopxiaWebBundle:Activity:showsuccess.html.twig');
+        return $this->render('TopxiaWebBundle:Activity:show-success.html.twig');
     }
 
    
