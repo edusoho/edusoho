@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}开源阅图 - {{ parent() }}{% endblock %}
+{% block title %}开源悦图 - {{ parent() }}{% endblock %}
 
 {% set nav = 'photoview' %}
 
@@ -74,7 +74,7 @@
             {% endfor %}
   				</ul>
   			    <hr class="divider" />
-  				<ul class="photo-nav">
+  				<ul class="photo-nav pz text-normal" >
             {% for photo in photos %}
               {% if loop.index==loop.last %}
                 <li class="photo-border-r"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>

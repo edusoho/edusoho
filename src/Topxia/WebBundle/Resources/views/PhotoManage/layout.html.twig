@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}专辑管理 - {{ parent() }}{% endblock %}
+{% block title %}相册管理 - {{ parent() }}{% endblock %}
 
 {% block content %}
 
@@ -13,10 +13,10 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="list-group-panel">
-            <div class="list-group-heading">专辑信息</div>
+            <div class="list-group-heading">相册信息</div>
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('photoview_manage_base', {id:course.id}) }}">基本信息</a>
-              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('photoview_manage_picture', {id:course.id}) }}">专辑内容</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('photoview_manage_picture', {id:course.id}) }}">相册图片</a>
             </div>
           </div><!-- /list-group-block -->
 
