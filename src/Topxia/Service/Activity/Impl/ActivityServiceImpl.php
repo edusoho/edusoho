@@ -47,11 +47,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			throw $this->createServiceException('缺少必要字段，创建活动失败！');
 		}
 
-		$activity = ArrayToolkit::parts($activity, array('title', 'about', 'categoryId', 'tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$activity = ArrayToolkit::parts($activity, array('title', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
 
 		$activity['status'] = 'draft';
         $activity['about'] = !empty($activity['about']) ? $this->getHtmlPurifier()->purify($activity['about']) : '';
-        $activity['tagsid'] = !empty($activity['tagsid']) ? $activity['tagsid'] : '';
+        $activity['tags'] = !empty($activity['tags']) ? $activity['tags'] : '';
         $activity['address'] = !empty($activity['address']) ? $activity['address'] : '';
         $activity['startTime'] = empty($activity['startTime']) ? 0 : (int) $activity['startTime'];
         $activity['endTime'] = empty($activity['endTime']) ? 0 : (int) $activity['endTime'];
