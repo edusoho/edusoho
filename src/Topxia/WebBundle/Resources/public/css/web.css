@@ -1323,6 +1323,18 @@ body {
 
 }
 
+@media (max-width: 767px) {
+	.lesson-dashboard .dashboard-content,
+	.lesson-dashboard-open .dashboard-content {
+		right: 20px;
+	}
+
+	.lesson-dashboard .toolbar {
+		display: none;
+	}
+}
+
+
 .lesson-dashboard .toolbar-nav-stacked {
 	margin:0;
 	padding: 0;
