@@ -279,7 +279,7 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 		}
 		$activity['imgId']= !empty($file['imgId']) ? $file['imgId'] : '';
         $activity['content']= !empty($file['content']) ? $file['content'] : '';
-        $activity['userid']= $this->getCurrentUser()->id;
+        $activity['userId']= $this->getCurrentUser()->id;
 		$activity['createdTime'] = time();
 		$activity = $this->getPhotoCommentDao()->addComment(CommentSerialize::serialize($activity));
 		return $this->getComment($activity['id']);

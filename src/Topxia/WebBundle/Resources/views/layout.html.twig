@@ -31,7 +31,6 @@
   <!--[if IE 8]>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
-
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
@@ -52,7 +51,7 @@
             {% else %}
               <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
             {% endif %}
-          </div>
+      </div>
       <nav class="nav navbar-nav navbar-right">
         <ul class="nav navbar-nav">
           {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
@@ -90,11 +89,11 @@
     </div>     
 </header> 
 
-  <div class="slide"></div>
+<div class="slide"></div>
   
-  {% block contentlg %}{% endblock %}
-
-  <div id="content-container" class="container">
+{% block contentlg %}{% endblock %}
+<!-- container -->
+<div id="content-container" class="container">
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
       <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -103,9 +102,9 @@
       </div>
     {% endif %}
     {% block content %}{% endblock %}
-  </div><!-- /container -->
-  
-  <footer class="footer">
+</div>
+<!-- container -->
+<footer class="footer">
     <div class="container clearfix">    
       <div class="pull-left bor-r">
         <img class="footer-ad" src="{{ asset('bundles/topxiaweb/img/kaiyuan.jpg') }}" >
@@ -145,11 +144,9 @@
         </div>
       </div>
     </div>
-  </footer>
+</footer>
 
-</div>
-
-  {% block bottom %}{% endblock %}
+{% block bottom %}{% endblock %}
 
 <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
 <div id="modal" class="modal"></div>
