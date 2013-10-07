@@ -449,11 +449,12 @@ body {
 
 
 .course-cover {
+	font-size: 13px;
 
 }
 
 .course-cover-heading {
-	padding-top: 5px;
+	margin-top: 25px;
 	margin-bottom: 20px;
 }
 
