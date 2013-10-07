@@ -25,34 +25,9 @@ abstract class BaseService
         return ServiceKernel::instance();
     }
 
-    protected function getContainer()
-    {
-        return $this->getKernel()->getContainer();
-    }
-
     public function getCurrentUser()
     {
-        if (!$this->getContainer()->has('security.context')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
-        }
-
-        $token = $this->getContainer()->get('security.context')->getToken();
-
-        if ( empty($token) or !is_object($user = $token->getUser())) {
-            $user = new CurrentUser();
-            $user->fromArray(array(
-                'id' => 0,
-                'nickname' => '游客',
-                'currentIp' =>  $this->getContainer()->get('request')->getClientIp()
-            ));
-        }
-
-        return $user;
-    }
-
-    protected function getRequest()
-    {
-        return $this->getContainer()->get('request');
+        return $this->getKernel()->getCurrentUser();
     }
 
     protected function purifyHtml($html)
@@ -62,7 +37,7 @@ abstract class BaseService
         }
 
         $config = array(
-            'cacheDir' => $this->getContainer()->getParameter('kernel.cache_dir') .  '/htmlpurifier'
+            'cacheDir' => $this->getKernel()->getParameter('kernel.cache_dir') .  '/htmlpurifier'
         );
 
         $factory = new HTMLPurifierFactory($config);
