@@ -24,7 +24,7 @@
   "spm": {
     "alias": {
       "$": "$",
-      "jquery.mousewheel": "jquery-plugin/mousewheel/3.1.3/mousewheel"
+      "jquery.mousewheel": "jquery-plugin/mousewheel/3.0.6/mousewheel"
     },
     "output": [
       "perfect-scrollbar.js",

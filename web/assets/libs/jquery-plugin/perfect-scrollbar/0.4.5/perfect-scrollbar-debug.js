@@ -1,6 +1,6 @@
-define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-debug", "jquery-plugin/mousewheel/3.1.3/mousewheel-debug" ], function(require) {
+define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-debug", "jquery-plugin/mousewheel/3.0.6/mousewheel-debug" ], function(require) {
     var jQuery = require("$-debug");
-    require("jquery-plugin/mousewheel/3.1.3/mousewheel-debug");
+    require("jquery-plugin/mousewheel/3.0.6/mousewheel-debug");
     /* Copyright (c) 2012 HyeonJe Jun (http://github.com/noraesae)
    * Licensed under the MIT License
    */
