@@ -40,7 +40,7 @@ class InstalledPackageDaoImpl extends BaseDao implements InstalledPackageDao
     public function findInstalledPackages()
     {
         $sql = "SELECT ename,version FROM {$this->table}";
-        return $this->getConnection()->fetchAssoc($sql);       
+        return $this->getConnection()->fetchAll($sql);       
     }
 	
 }

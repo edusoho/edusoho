@@ -4,6 +4,9 @@ namespace Topxia\WebBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Topxia\Service\User\CurrentUser;
+
 class InitCommand extends BaseCommand
 {
 
@@ -63,7 +66,9 @@ class InitCommand extends BaseCommand
 			'email' => 'test@edusoho.com',
 			'nickname' => '测试管理员',
 			'password' => 'testtest',
-			'roles' => array('ROLE_USER')
+
+			'roles' => array(),
+			'createdIp' => '127.0.0.1',
 		);
 		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
 
@@ -72,7 +77,13 @@ class InitCommand extends BaseCommand
 			$user = $this->getUserService()->register($fields);
 		}
 
-		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
+        $currentUser = new CurrentUser();
+        $user['currentIp'] = '127.0.0.1';
+        $currentUser->fromArray($user);
+        $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser->getRoles());
+        static::$this->getContainer()->get('security.context')->setToken($token);
+
+		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
 
 		$output->writeln(' ...<info>成功</info>');
 
