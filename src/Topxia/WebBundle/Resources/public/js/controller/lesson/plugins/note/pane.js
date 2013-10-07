@@ -32,16 +32,21 @@ define(function(require, exports, module) {
                 pane.set('content', editor.html());
                 
                 $("#lesson-note-plugin-form").on('submit', function() {
+                    pane.$('[data-role=saved-message]').html('正在保存').show();
                     editor.sync();
                     var content = editor.html();
                     $.post($(this).attr('action'), $(this).serialize(), function(response) {
                         pane.set('content', content);
-                        pane.$('[data-role=saved-message]').html('最近保存于' + pane._nowTime()).show('slow');
+                        pane.$('[data-role=saved-message]').html('已保存');
+                        setTimeout(function(){
+                            pane.$('[data-role=saved-message]').hide();
+                        }, 3000);
                     }, 'json').error(function(error) {
 
                     });
                     return false;
                 });
+
                 pane.autosave();
             });
         },
@@ -56,22 +61,10 @@ define(function(require, exports, module) {
                 if (pane.get('editor').html() != pane.get('content')) {
                     $("#lesson-note-plugin-form").trigger('submit');
                 }
-            }, 20000);
-        },
+            }, 10000);
 
-        _nowTime: function () {
-            var now = new Date(),
-                hours = now.getHours(),
-                minutes = now.getMinutes(),
-                seconds = now.getSeconds(),
-
-            hours = hours < 10 ? '0' + hours : hours;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-
-            return hours + ':' + minutes + ':' + seconds;
+            pane.set('timer', timer);
         }
-
     });
 
     module.exports = NotePane;

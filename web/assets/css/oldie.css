@@ -109,6 +109,24 @@
     float: right;
 }
 
+.row-5-7 .col-sm-5 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 40%;
+    float: left;
+}
+
+.row-5-7 .col-sm-5 .img-responsive {
+  width: 100%;
+}
+
+.row-5-7 .col-sm-7 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 58%;
+    float: right;
+}
+
 .es-row-wrap .page-header {
     margin-top: 10px;
     zoom:1;
@@ -318,6 +336,16 @@
 .navbar-inverse .navbar-nav li  a:focus {
   background-color: #3a485d;
 }
+
+
+.tab-content  .tab-pane {
+  display: none;
+}
+
+.tab-content div.active {
+  display: block;
+}
+
 
 /**
  * pagination

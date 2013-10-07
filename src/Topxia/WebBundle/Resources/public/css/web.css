@@ -449,11 +449,12 @@ body {
 
 
 .course-cover {
+	font-size: 13px;
 
 }
 
 .course-cover-heading {
-	padding-top: 5px;
+	padding-top: 25px;
 	margin-bottom: 20px;
 }
 
@@ -1323,6 +1324,18 @@ body {
 
 }
 
+@media (max-width: 767px) {
+	.lesson-dashboard .dashboard-content,
+	.lesson-dashboard-open .dashboard-content {
+		right: 20px;
+	}
+
+	.lesson-dashboard .toolbar {
+		display: none;
+	}
+}
+
+
 .lesson-dashboard .toolbar-nav-stacked {
 	margin:0;
 	padding: 0;
@@ -1358,6 +1371,15 @@ body {
 	bottom: 0;
 	left: 0;
 	right: 0;
+}
+
+.lesson-dashboard #lesson-toolbar-secondary .hide-pane {
+	text-align: center;
+
+}
+
+.lesson-dashboard #lesson-toolbar-secondary .hide-pane .glyphicon {
+	display: inline;
 }
 
 .lesson-dashboard .dashboard-header {
