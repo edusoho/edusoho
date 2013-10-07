@@ -137,10 +137,14 @@ define(function(require, exports, module) {
             }
             this._toolbar.set('lessonId', id);
 
+            if (VideoJS.players["lesson-video-player"]) {
+            	VideoJS.players["lesson-video-player"].dispose();
+            	$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
+            }
+
             var player = VideoJS("lesson-video-player", {
             	techOrder: ['flash','html5']
             });
-            player.pause();
             swfobject.removeSWF('lesson-swf-player');
 
             this.element.find('[data-role=lesson-content]').hide();
