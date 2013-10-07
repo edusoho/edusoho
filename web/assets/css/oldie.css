@@ -337,6 +337,16 @@
   background-color: #3a485d;
 }
 
+
+.tab-content  .tab-pane {
+  display: none;
+}
+
+.tab-content div.active {
+  display: block;
+}
+
+
 /**
  * pagination
  */
