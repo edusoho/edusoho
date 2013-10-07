@@ -194,6 +194,8 @@ define(function(require, exports, module) {
             		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
             		$("#lesson-text-content").show();
             		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+					$("#lesson-text-content").scrollTop(0);
+					$("#lesson-text-content").perfectScrollbar('update');
             	}
             	that._toolbar.set('lesson', lesson);
             	that._startLesson();

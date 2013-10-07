@@ -1,7 +1,7 @@
 {
   "family": "jquery-plugin",
   "name": "perfect-scrollbar",
-  "version": "0.4.1",
+  "version": "0.4.5",
   "description": "Tiny but perfect jquery scrollbar plugin.",
   "homepage": "http://noraesae.github.io/perfect-scrollbar/",
   "author": {
