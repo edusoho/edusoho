@@ -5,72 +5,49 @@ namespace Topxia\Service\Upgrade\Impl;
 use Topxia\Service\Upgrade\UpgradeService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\System;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
 
-	public function check($packages,$clientInfo)
+	public function check()
 	{
-		$packageNames = ArrayToolkit::parts($packages);
-		$canInstallPackages = $this->getPackageDao()->findPackagesByTypeAndNotIncluded($packageNames, UpgradeService::PackTypeForInstall);
-		$canUpdatePackages = array();
-		foreach ($packages as $package) {
-			$row = $this->getPackageDao()->
-		  		getPackageByPackTypeAndFromVersionAndEname(UpgradeService::PackTypeForUpgrade , $package['version'], $package['ename']);
-		    if(!empty($row)){
-		  		$canUpdatePackages[] = $row;
-		    }
+		$packages = $this->getInstalledPackageDao()->findInstalledPackages();
+		if(!$this->checkMainVersion($packages)){
+
 		}
-		$result = array_merge($canInstallPackages,$canUpdatePackages);
-		$this->addCheckLog($packages,$clientInfo);
-		return $result;
 	}
-	
-	public function upgrade($package)
-	{
 
-	}
-	public function install($package)
+	public function upgrade($id)
 	{
 
 	}
 
-	public function addPackage($package)
+	public function install($id)
 	{
-		return $this->getPackageDao()->addPackage($package);
 
 	}
-	public function deletePackage($id)
-	{
-		return $this->getPackageDao()->deletePackage($id);
 
-	}
-	public function updatePackage($id,$package)
+	private function checkMainVersion(&$packages)
 	{
-		return $this->getPackageDao()->updatePackage($id,$package);
-	}
-
-	private function addCheckLog($packages,$clientInfo)
-	{
-		$log = array('operation' =>'check' ,
-		             'packages'=> serialize($packages),
-		             'ip'=> $clientInfo['ip'],
-		             'host' =>  $clientInfo['host'],
-		             'logtime'=> time());
-		$this->getUpgradeLogDao()->addLog($log);
+		foreach ($packages as $package) {
+			if('MAIN' == $package['ename']){
+				return true;
+			}
+		}
+		return false;
 	}
 
-    private function getPackageDao ()
-    {
-        return $this->createDao('Upgrade.PackageDao');
-    }
+	private function addMainVersionAndReloadPackages(){
+		$mainPackage = array(
+			'ename' => 'MAIN',
+			'cname' => '系统版本',
+			'version' => System::VERSION,
+			'installTime' => time()
+			);
+	}
 
-    private function getUpgradeLogDao ()
-    {
-        return $this->createDao('Upgrade.UpgradeLogDao');
-    }	
-
-     private function getInstalledPackageDao ()
+    private function getInstalledPackageDao ()
     {
         return $this->createDao('Upgrade.InstalledPackageDao');
     }	

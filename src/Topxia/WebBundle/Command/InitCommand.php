@@ -63,6 +63,7 @@ class InitCommand extends BaseCommand
 			'email' => 'test@edusoho.com',
 			'nickname' => '测试管理员',
 			'password' => 'testtest',
+			'roles' => array('ROLE_USER')
 		);
 		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
 
@@ -71,7 +72,7 @@ class InitCommand extends BaseCommand
 			$user = $this->getUserService()->register($fields);
 		}
 
-		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
+		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
 
 		$output->writeln(' ...<info>成功</info>');
 
