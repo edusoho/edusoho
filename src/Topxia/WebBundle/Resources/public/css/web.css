@@ -1360,6 +1360,15 @@ body {
 	right: 0;
 }
 
+.lesson-dashboard #lesson-toolbar-secondary .hide-pane {
+	text-align: center;
+
+}
+
+.lesson-dashboard #lesson-toolbar-secondary .hide-pane .glyphicon {
+	display: inline;
+}
+
 .lesson-dashboard .dashboard-header {
 	position: absolute;
 	left: 150px;
