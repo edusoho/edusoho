@@ -436,6 +436,40 @@
   border-color: #dddddd;
 }
 
+.modal {
+  position: absolute;
+  opacity: 1;
+  filter: none;
+}
+
+.modal-dialog {
+  width: 600px;
+}
+
+.modal-dialog-small {
+  width: 480px;
+}
+
+.modal-backdrop {
+  display: none;
+  opacity: 1;
+  filter: none;
+}
+
+.modal-header {
+  position: relative;
+}
+
+.modal-header button.close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  float: none;
+  background: #fff;
+  color: #000;
+  display: inline;
+}
+
 .media-list {
   margin-left: 0;
 }
