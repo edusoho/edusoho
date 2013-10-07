@@ -3061,7 +3061,7 @@ body {
 }
 
 .lt-ie8 .hidden-lt-ie8 {
-  display: none;
+  display: none !important;
 }
 
 .visible-lt-ie8 {
