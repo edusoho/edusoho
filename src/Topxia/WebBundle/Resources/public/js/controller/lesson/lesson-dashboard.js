@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 
 		onFinishLesson: function(e) {
 			var $btn = this.element.find('[data-role=finish-lesson]');
-			if ($btn.hasClass('disabled')) {
+			if ($btn.hasClass('btn-success')) {
 				this._onCancelLearnLesson();
 			} else {
 				this._onFinishLearnLesson();
@@ -61,8 +61,7 @@ define(function(require, exports, module) {
 		},
 
 		_startLesson: function() {
-			var $btn = this.element.find('[data-role=finish-lesson]'),
-				toolbar = this._toolbar,
+			var toolbar = this._toolbar,
 				self = this;
 			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
 			$.post(url, function(result) {
@@ -78,7 +77,7 @@ define(function(require, exports, module) {
 				self = this;
 			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
 			$.post(url, function(json) {
-				$btn.addClass('disabled');
+				$btn.addClass('btn-success');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 			}, 'json');
 		},
@@ -89,7 +88,7 @@ define(function(require, exports, module) {
 				self = this;
 			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/cancel';
 			$.post(url, function(json) {
-				$btn.removeClass('disabled');
+				$btn.removeClass('btn-success');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
 			}, 'json');
 		},
@@ -204,9 +203,9 @@ define(function(require, exports, module) {
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {
             	var $finishButton = that.element.find('[data-role=finish-lesson]');
             	if (json.status != 'finished') {
-	            	$finishButton.removeClass('disabled');
+	            	$finishButton.removeClass('btn-success');
             	} else {
-            		$finishButton.addClass('disabled');
+            		$finishButton.addClass('btn-success');
             	}
             }, 'json');
 
