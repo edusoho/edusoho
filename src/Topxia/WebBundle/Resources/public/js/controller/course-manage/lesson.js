@@ -13,10 +13,12 @@ define(function(require, exports, module) {
                 var data = $list.sortable("serialize").get();
                 $.post($list.data('sortUrl'), {ids:data}, function(response){
 
-                    $('.lesson-list').find('.item-lesson').each(function(index){
+                    $list.find('.item-lesson').each(function(index){
+                        $(this).find('.number').text(index+1);
+                    });
 
-                        $(this).find('.sequence').text(index+1);
-
+                    $list.find('.item-chapter').each(function(index){
+                        $(this).find('.number').text(index+1);
                     });
                     
                 });

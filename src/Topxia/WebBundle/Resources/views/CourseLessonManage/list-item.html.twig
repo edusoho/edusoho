@@ -9,7 +9,7 @@
 		{% else %}
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
-		课时<span class="sequence">{{ lesson.number }}</span>： {{ lesson.title }}
+		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
 		{% if lesson.type in ['video', 'audio'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
