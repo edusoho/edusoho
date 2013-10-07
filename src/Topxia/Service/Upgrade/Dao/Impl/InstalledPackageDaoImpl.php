@@ -25,9 +25,22 @@ class InstalledPackageDaoImpl extends BaseDao implements InstalledPackageDao
         return $this->getInstalledPackage($this->getConnection()->lastInsertId());
     }
 
+    public function updateInstalledPackage($id,$installedPackage)
+    {
+        $this->getConnection()->update($this->table, $installedPackage, array('id' => $id));
+        return $this->getInstalledPackage($id);
+    }
+
+
 	public function deleteInstalledPackage($id)
 	{
         return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
+
+    public function findInstalledPackages()
+    {
+        $sql = "SELECT ename,version FROM {$this->table}";
+        return $this->getConnection()->fetchAll($sql);       
+    }
 	
 }

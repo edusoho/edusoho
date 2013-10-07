@@ -3,21 +3,9 @@ namespace Topxia\Service\Upgrade;
 
 interface UpgradeService 
 {
+	function check();
 
-	CONST PackTypeForInstall = 0;
+	function upgrade($id);
 
-	CONST PackTypeForUpgrade = 1;
-
-	function check($packages,$clientInfo);
-
-	function upgrade($package);
-
-	function install($package);
-
-
-	function addPackage($package);
-
-	function deletePackage($id);
-
-	function updatePackage($id,$package);
+	function install($id);
 }

@@ -66,6 +66,7 @@ class InitCommand extends BaseCommand
 			'email' => 'test@edusoho.com',
 			'nickname' => '测试管理员',
 			'password' => 'testtest',
+
 			'roles' => array(),
 			'createdIp' => '127.0.0.1',
 		);
