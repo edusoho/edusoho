@@ -9,6 +9,7 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 	CONST CHECK_URL = 'http://www.edusoho-dev.com/upgrade/check';
 	CONST UPGRADE_URL = 'http://www.edusoho-dev.com/upgrade/upgrade';
 	CONST INSTALL_URL = 'http://www.edusoho-dev.com/upgrade/install';
+	CONST BASE_URL = 'http://www.edusoho-dev.com/';
 
 	public function check($packages){
 		$postData = array('packages'=>$packages);
@@ -22,7 +23,9 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		var_dump(curl_exec($ch));
+		$result = json_decode(curl_exec($ch));
+		curl_close($ch);
+		return $result;
 	}
 	public function upgrade($packId){
 		$postData = array('id'=>$packId);
@@ -36,7 +39,9 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		var_dump(curl_exec($ch));
+		$result = json_decode(curl_exec($ch));
+		curl_close($ch);
+		return $result;
 	}
 	public function install($packId){
 		$postData = array('id'=>$packId);
@@ -50,7 +55,19 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		var_dump(curl_exec($ch));
+		$result = json_decode(curl_exec($ch));
+		curl_close($ch);
+		return $result;
+	}
+
+	public function download($uri,$filename){
+		$ch = curl_init(self::BASE_URL.$uri);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    	$data = curl_exec($ch);
+    	curl_close($ch);
+    	$path = $this->getContainer()->getParameter('topxia.disk.upgrade_dir').DIRECTORY_SEPARATOR.$filename;
+    	file_put_contents($path, $data);	
+    	return 	$path;
 	}
 
 	private function getClientInfo(){
