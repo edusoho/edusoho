@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 	exports.run = function() {
+
 		$('body').on('click', 'button.delete-btn', function() {
 			if (!confirm('确认要删除此编辑区吗？')) return false;
 			var $btn = $(this);
@@ -13,6 +14,7 @@ define(function(require, exports, module) {
 				}
 			}, 'json');
 		});
+		
 	};
 
 });

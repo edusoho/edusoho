@@ -17,5 +17,7 @@ interface InstalledPackageDao
 
 	public function findInstalledPackages();
 
-	// 日志操作一般不设计更新,所以忽略update操作
+	public function searchPackageCount();
+
+	public function findPackages($start, $limit);
 }

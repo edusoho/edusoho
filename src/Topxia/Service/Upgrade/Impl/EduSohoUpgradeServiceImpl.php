@@ -4,14 +4,16 @@ namespace Topxia\Service\Upgrade\Impl;
 use Topxia\Service\Upgrade\EduSohoUpgradeService;
 use Topxia\Service\Common\BaseService;
 
-class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
+class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeService 
 {
 	CONST CHECK_URL = 'http://www.edusoho-dev.com/upgrade/check';
 	CONST UPGRADE_URL = 'http://www.edusoho-dev.com/upgrade/upgrade';
 	CONST INSTALL_URL = 'http://www.edusoho-dev.com/upgrade/install';
 	CONST BASE_URL = 'http://www.edusoho-dev.com/';
+	CONST FILES_URL = 'http://www.edusoho-dev.com/files/';
 
-	public function check($packages){
+	public function check($packages)
+	{
 		$postData = array('packages'=>$packages);
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
@@ -27,7 +29,9 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 		curl_close($ch);
 		return $result;
 	}
-	public function upgrade($packId){
+
+	public function upgrade($packId)
+	{
 		$postData = array('id'=>$packId);
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
@@ -43,7 +47,9 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 		curl_close($ch);
 		return $result;
 	}
-	public function install($packId){
+
+	public function install($packId)
+	{
 		$postData = array('id'=>$packId);
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
@@ -60,17 +66,19 @@ class EduSohoUpgradeServiceImpl implements EduSohoUpgradeService
 		return $result;
 	}
 
-	public function download($uri,$filename){
-		$ch = curl_init(self::BASE_URL.$uri);
+	public function downloadPackage($uri,$filename)
+	{
+		$ch = curl_init(self::FILES_URL.$uri);
     	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     	$data = curl_exec($ch);
     	curl_close($ch);
-    	$path = $this->getContainer()->getParameter('topxia.disk.upgrade_dir').DIRECTORY_SEPARATOR.$filename;
+    	$path = $this->getKernel()->getParameter('topxia.disk.upgrade_dir').DIRECTORY_SEPARATOR.$filename;    	
     	file_put_contents($path, $data);	
     	return 	$path;
 	}
 
-	private function getClientInfo(){
+	private function getClientInfo()
+	{
 		return array(
 			'ip'=>$_SERVER['SERVER_ADDR'],
 			'host'=>$_SERVER['SERVER_NAME']
