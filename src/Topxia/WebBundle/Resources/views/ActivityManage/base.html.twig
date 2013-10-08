@@ -15,7 +15,7 @@
 <div class="panel panel-default panel-col">
 	<div class="panel-heading">基本信息</div>
 	<div class="panel-body">
-		<form class="form-horizontal" id="course-form" method="post">
+		<form class="form-horizontal" id="activity-form" method="post">
 
 		  {{ web_macro.flash_messages() }}
 
@@ -35,14 +35,14 @@
 			
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.tagsid, '标签') }}</div>
-			  <div class="col-lg-8 controls"> {{ form_widget(form.tagsid, {attr:{class:'width-full'}}) }}</div>
+			  <div class="col-lg-2 control-label">{{ form_label(form.tags, '标签') }}</div>
+			  <div class="col-lg-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
 			</div>
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.categoryid, '分类') }}</div>
+			  <div class="col-lg-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
 			  <div class="col-lg-8 controls">
-			    {{ form_widget(form.categoryid, {attr:{class:'form-control width-input width-input-large'}}) }}
+			    {{ form_widget(form.categoryId, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
 			</div>
 
@@ -54,14 +54,14 @@
 			</div>
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.address, '活动地点') }}</div>
+			  <div class="col-lg-2 control-label">{{ form_label(form.address, '线下地址') }}</div>
 			  <div class="col-lg-8 controls">
 			    {{ form_widget(form.address, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
 			</div>
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.onlineAddress, '线上活动地点') }}</div>
+			  <div class="col-lg-2 control-label">{{ form_label(form.onlineAddress, '直播地址') }}</div>
 			  <div class="col-lg-8 controls">
 			    {{ form_widget(form.onlineAddress, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
@@ -79,14 +79,14 @@
 			<div class="form-group">
 			  <div class="col-lg-2 control-label">{{ form_label(form.strstartTime, '开始时间') }}</div>
 			  <div class="col-lg-8 controls">
-			    {{ form_widget(form.strstartTime, {attr:{class:'form-control width-input width-input-large',value:course.strstartTime}}) }}
+			    {{ form_widget(form.strstartTime, {attr:{class:'form-control width-input width-input-large',value:activity.strstartTime}}) }}
 			  </div>
 			</div>
 
 			<div class="form-group">
 			  <div class="col-lg-2 control-label">{{ form_label(form.strendTime, '结束时间') }}</div>
 			  <div class="col-lg-8 controls">
-			    {{ form_widget(form.strendTime, {attr:{class:'form-control width-input width-input-large',value:course.strendTime}}) }}
+			    {{ form_widget(form.strendTime, {attr:{class:'form-control width-input width-input-large',value:activity.strendTime}}) }}
 			  </div>
 			</div>
 

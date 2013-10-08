@@ -895,7 +895,7 @@ activity_materials:
     defaults: { _controller: TopxiaWebBundle:ActivityMaterial:index }
 
 activity_material_download:
-    pattern:  /openclass/{courseId}/material/{materialId}/download
+    pattern:  /openclass/{activityId}/material/{materialId}/download
     defaults: { _controller: TopxiaWebBundle:ActivityMaterial:download }
 
 activity_material_delete:

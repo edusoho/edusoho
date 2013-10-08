@@ -59,14 +59,14 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             //unset($conditions['locationId']);
         }
 
-        if (isset($conditions['tagId'])) {
-            $tagId = (int) $conditions['tagId'];
+        if (isset($conditions['tags'])) {
+            $tags = (int) $conditions['tags'];
             if (!empty($tagId)) {
               //  $conditions['tagsLike'] = "%|{$conditions['tagId']}|%";
-                $conditions['tagsLike'] = $tagId;
+                $conditions['tagsLike'] = $tags;
 
             }
-           unset($conditions['tagId']);
+           unset($conditions['tags']);
         }
 
         if(empty($conditions['startTimeGreaterThan'])){
@@ -85,7 +85,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             unset($conditions['istimeout']);
         }
 
-        if(!empty($conditions['status'])){
+        if(empty($conditions['status'])){
             unset($conditions['status']);       
         }
 
@@ -95,7 +95,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('locationId = :locationId')
-            ->andWhere('tagsid = :tagsLike')
+            ->andWhere('tags = :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('isExpired = :isExpired');

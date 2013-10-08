@@ -36,12 +36,13 @@ class PhotoCommentController extends BaseController
                 $comments=array();
                 $users=array();
                 $comments[]=$qustion;
-                $user=$this->getUserService()->getUser($qustion['userid']);
+                $user=$this->getUserService()->getUser($qustion['userId']);
                 $users[$user['id']]=$user;
                 return $this->render('TopxiaWebBundle:PhotoComment:commit-list.html.twig',array(
                 'comments'=>$comments,
                 'users'=>$users));
         }
+
     }
 
     private function createActivityForm()

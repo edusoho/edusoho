@@ -2121,83 +2121,86 @@ body {
  * 通用属性
  */
 
-.mts {margin-top: 5px;}
-.mtm {margin-top: 10px;}
-.mtl {margin-top: 20px;}
+.mz  { margin: 0px !important;}
+.mtz {margin-top: 0px !important;}
+.mts {margin-top: 5px !important;}
+.mtm {margin-top: 10px !important;}
+.mtl {margin-top: 20px !important;}
 
-.mrs {margin-right: 5px;}
-.mrm {margin-right: 10px;}
-.mrl {margin-right: 20px;}
+.mrs {margin-right: 5px !important;}
+.mrm {margin-right: 10px !important;}
+.mrl {margin-right: 20px !important;}
 
-.mbs {margin-bottom: 5px;}
-.mbm {margin-bottom: 10px;}
-.mbl {margin-bottom: 20px;}
+.mbz {margin-bottom: 0px !important;}
+.mbs {margin-bottom: 5px !important;}
+.mbm {margin-bottom: 10px !important;}
+.mbl {margin-bottom: 20px !important;}
 
-.mls {margin-left: 5px;}
-.mlm {margin-left: 10px;}
-.mll {margin-left: 20px;}
+.mls {margin-left: 5px !important;}
+.mlm {margin-left: 10px !important;}
+.mll {margin-left: 20px !important;}
 
-.mhs {margin-left: 5px; margin-right: 5px;}
-.mhm {margin-left: 10px; margin-right: 10px;}
-.mhl {margin-left: 20px; margin-right: 20px;}
+.mhs {margin-left: 5px !important; margin-right: 5px !important;}
+.mhm {margin-left: 10px !important; margin-right: 10px !important;}
+.mhl {margin-left: 20px !important; margin-right: 20px !important;}
 
-.mvs {margin-top: 5px; margin-bottom: 5px;}
-.mvm {margin-top: 10px; margin-bottom: 10px;}
-.mvl {margin-top: 20px; margin-bottom: 20px;}
+.mvs {margin-top: 5px !important; margin-bottom: 5px !important;}
+.mvm {margin-top: 10px !important; margin-bottom: 10px !important;}
+.mvl {margin-top: 20px !important; margin-bottom: 20px !important;}
 
+.pz  {padding: 0px !important;} 
+.pts {padding-top: 5px !important;}
+.ptm {padding-top: 10px !important;}
+.ptl {padding-top: 20px !important;}
 
-.pts {padding-top: 5px;}
-.ptm {padding-top: 10px;}
-.ptl {padding-top: 20px;}
+.prs {padding-right: 5px !important;}
+.prm {padding-right: 10px !important;}
+.prl {padding-right: 20px !important;}
 
-.prs {padding-right: 5px;}
-.prm {padding-right: 10px;}
-.prl {padding-right: 20px;}
+.pbs {padding-bottom: 5px !important;}
+.pbm {padding-bottom: 10px !important;}
+.pbl {padding-bottom: 20px !important;}
 
-.pbs {padding-bottom: 5px;}
-.pbm {padding-bottom: 10px;}
-.pbl {padding-bottom: 20px;}
+.pls {padding-left: 5px !important;}
+.plm {padding-left: 10px !important;}
+.pll {padding-left: 20px !important;}
 
-.pls {padding-left: 5px;}
-.plm {padding-left: 10px;}
-.pll {padding-left: 20px;}
+.phs {padding-left: 5px !important; padding-right: 5px !important;}
+.phm {padding-left: 10px !important; padding-right: 10px !important;}
+.phl {padding-left: 20px !important; padding-right: 20px !important;}
 
-.phs {padding-left: 5px; padding-right: 5px;}
-.phm {padding-left: 10px; padding-right: 10px;}
-.phl {padding-left: 20px; padding-right: 20px;}
+.pvs {padding-top: 5px !important; padding-bottom: 5px !important;}
+.pvm {padding-top: 10px !important; padding-bottom: 10px !important;}
+.pvl {padding-top: 20px !important; padding-bottom: 20px !important;}
 
-.pvs {padding-top: 5px; padding-bottom: 5px;}
-.pvm {padding-top: 10px; padding-bottom: 10px;}
-.pvl {padding-top: 20px; padding-bottom: 20px;}
+.tac {text-align: center !important; }
+.tal {text-align: left !important; }
+.tar {text-align: right !important; }
 
-.tac {text-align: center; }
-.tal {text-align: left; }
-.tar {text-align: right; }
-
-.fss {font-size: 10px;}
-.fsn {font-size: 12px;}
-.fsm {font-size: 14px;}
-.fsl {font-size: 16px;}
-.fsxl {font-size: 18px;}
+.fss {font-size: 10px !important;}
+.fsn {font-size: 12px !important;}
+.fsm {font-size: 14px !important;}
+.fsl {font-size: 16px !important;}
+.fsxl {font-size: 18px !important;}
 
 .text-small {
-	font-size: 10px;
+	font-size: 10px !important;
 }
 
 .text-normal {
-	font-size: 12px;
+	font-size: 12px !important;
 }
 
 .text-medium {
-	font-size: 14px;
+	font-size: 14px !important;
 }
 
 .text-large {
-	font-size: 16px;
+	font-size: 16px !important;
 }
 
 .text-xlarge {
-	font-size: 18px;
+	font-size: 18px !important;
 }
 
 .ellipsis {
@@ -3020,6 +3023,16 @@ body {
 	position: absolute;
 	left: 50%;
 	top:50%;
+}
+
+.user-logo-default-size{
+	width: 50px !important;
+	height: 50px !important;
+}
+
+
+.li-style-type-none{
+	list-style-type:none;
 }
 
 

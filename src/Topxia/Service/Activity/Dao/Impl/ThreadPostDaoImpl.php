@@ -12,7 +12,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
 	public function getPost($id)
 	{
-		return $this->fetch($id);
+		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+		
 	}
 
 	public function findPostsByThreadId($threadId, $orderBy, $start, $limit)
@@ -30,13 +32,17 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
 	public function addPost(array $post)
 	{
-		$id = $this->insert($post);
-		return $this->getPost($id);
+
+		$affected = $this->getConnection()->insert($this->table, $post);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert ActivityThreadPost error.');
+        }
+        return $this->getPost($this->getConnection()->lastInsertId());
 	}
 
 	public function deletePost($id)
 	{
-		return $this->delete($id);
+		return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
 	}
 
 	public function deletePostsByThreadId($threadId)

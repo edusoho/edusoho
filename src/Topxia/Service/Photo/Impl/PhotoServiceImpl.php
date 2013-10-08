@@ -57,11 +57,13 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 	}
 
 	public function updatePhoto($id, $fields){
-		$activity = $this->getPhotoDao()->getPhoto($id);
-		if (empty($activity)) {
-			throw $this->createServiceException('活动不存在，更新失败！');
+		$photo = $this->getPhotoDao()->getPhoto($id);
+		if (empty($photo)) {
+			throw $this->createServiceException('专辑不存在，更新失败！');
 		}
+		var_dump($fields);
 		$fields = $this->_filterPhotoFields($fields);
+		var_dump($fields);
 		$fields = PhotoSerialize::serialize($fields);
 		return $this->getPhotoDao()->updatePhoto($id, $fields);
 	}
@@ -114,7 +116,7 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagIds', 'price', 'startTime', 'endTime', 'locationId', 'address'
+			'id', 'name','userId','createdTime'
 		));
 
 
@@ -234,7 +236,7 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagIds', 'price', 'startTime', 'endTime', 'locationId', 'address'
+			'id','groupId', 'userId','url','title','content','createdTime'
 		));
 
 
@@ -277,7 +279,7 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 		}
 		$activity['imgId']= !empty($file['imgId']) ? $file['imgId'] : '';
         $activity['content']= !empty($file['content']) ? $file['content'] : '';
-        $activity['userid']= $this->getCurrentUser()->id;
+        $activity['userId']= $this->getCurrentUser()->id;
 		$activity['createdTime'] = time();
 		$activity = $this->getPhotoCommentDao()->addComment(CommentSerialize::serialize($activity));
 		return $this->getComment($activity['id']);
@@ -342,9 +344,8 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagIds', 'price', 'startTime', 'endTime', 'locationId', 'address'
+			'id','imgId','userId','content','createdTime'
 		));
-
 
 		if (isset($fields['tagIds'])) {
 			$fields['tagIds'] = $fields['tagIds'] ? : array();

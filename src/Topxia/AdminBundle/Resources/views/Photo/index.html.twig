@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Photo:layout.html.twig' %}
 
-{% block title %}专辑管理 - {{ parent() }}{% endblock %}
+{% block title %}相册管理 - {{ parent() }}{% endblock %}
 
 {% set menu = 'photo' %}
 
@@ -8,8 +8,8 @@
 
 {% block main %}
 	<div class="page-header">
-    <a href="{{ path('photoview_create') }}" class="btn btn-info btn-sm pull-right" target="_blank">创建专辑</a>
-    <h1>专辑管理</h1>
+    <a href="{{ path('photoview_create') }}" class="btn btn-info btn-sm pull-right" target="_blank">创建相册</a>
+    <h1>相册管理</h1>
   </div>
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -23,7 +23,7 @@
     <thead>
     <tr>
 
-      <th width="80%">专辑名称</th>
+      <th width="80%">相册名称</th>
       <th>操作</th>
     </tr>
     </thead>
@@ -31,7 +31,7 @@
       {% for course in courses %}
         {% include 'TopxiaAdminBundle:Photo:tr.html.twig' %}
       {% else %}
-        <tr><td colspan="6"><div class="empty">无专辑记录</div></td></tr>
+        <tr><td colspan="6"><div class="empty">无相册记录</div></td></tr>
       {% endfor %}
     </tbody>
   </table>

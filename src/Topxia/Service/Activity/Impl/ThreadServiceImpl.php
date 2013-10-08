@@ -79,7 +79,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException('问题不存在，操作失败！');
 		}
 
-		$field['postnum']=(int)$thread['postnum']+1;
+		$field['postNum']=(int)$thread['postNum']+1;
 		//$user=$this->getUserService()->getUser($userId);
 		//if(empty($user)&&$user['id']>0){
 			//ROLE_TEACHER
@@ -98,12 +98,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread['activityId'])) {
 			throw $this->createServiceException('Course ID can not be empty.');
 		}
-		$thread['userid'] = $this->getCurrentUser()->id;
+		$thread['userId'] = $this->getCurrentUser()->id;
 		// @todo filter it.
 		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
 		$thread['content'] = empty($thread['content']) ? '' : $thread['content'];
 		$thread['createdTime'] = time();
-		$thread['latestPostUserId'] = $thread['userid'];
+		$thread['latestPostUserId'] = $thread['userId'];
 		$thread['latesPostTime'] = $thread['createdTime'];
 		return $this->getThreadDao()->addThread($thread);
 	}

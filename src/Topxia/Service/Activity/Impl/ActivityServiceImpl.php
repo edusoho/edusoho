@@ -47,17 +47,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			throw $this->createServiceException('缺少必要字段，创建活动失败！');
 		}
 
-		$activity = ArrayToolkit::parts($activity, array('title', 'about', 'categoryId', 'tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$activity = ArrayToolkit::parts($activity, array('title', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
 
 		$activity['status'] = 'draft';
         $activity['about'] = !empty($activity['about']) ? $this->getHtmlPurifier()->purify($activity['about']) : '';
-        $activity['tagsid'] = !empty($activity['tagsid']) ? $activity['tagsid'] : '';
+        $activity['tags'] = !empty($activity['tags']) ? $activity['tags'] : '';
         $activity['address'] = !empty($activity['address']) ? $activity['address'] : '';
         $activity['startTime'] = empty($activity['startTime']) ? 0 : (int) $activity['startTime'];
         $activity['endTime'] = empty($activity['endTime']) ? 0 : (int) $activity['endTime'];
 		$activity['userId'] = $this->getCurrentUser()->id;
 		$activity['createdTime'] = time();
-		$activity['experterid'] = array($activity['userId']);
+		$activity['experterId'] = array($activity['userId']);
 		$activity = $this->getActivityDao()->addActivity(ActivitySerialize::serialize($activity));
 		return $this->getActivity($activity['id']);
 	}
@@ -173,7 +173,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryid', 'subtitle','tagsid', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form','onlineAddress'
+			'type', 'title', 'about', 'categoryId', 'subtitle','tags', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form','onlineAddress'
 		));
 
 		//TODO 暂时先注释，以后可能会用到
@@ -181,9 +181,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		// 	$this->getHtmlPurifier()->purify($fields['about']);
 		// }
 
-		if (isset($fields['tagsid'])) {
-			$fields['tagsid'] = $fields['tagsid'] ? : array();
-			array_walk($fields['tagsid'], function(&$item, $key) {
+		if (isset($fields['tags'])) {
+			$fields['tags'] = $fields['tags'] ? : array();
+			array_walk($fields['tags'], function(&$item, $key) {
 				$item = (int) $item;
 			});
 		}
@@ -245,25 +245,25 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(300, 300));
+        $largeImage->resize(new Box(470, 300));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
+        $largeImage->save($largeFilePath, array('quality' => 100));
         $largeFileRecord = $this->getFileService()->uploadFile('activity', new File($largeFilePath));
 
-        $largeImage->resize(new Box(160, 160));
+        $largeImage->resize(new Box(300, 170));
         $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
-        $largeImage->save($middleFilePath, array('quality' => 90));
+        $largeImage->save($middleFilePath, array('quality' => 100));
         $middleFileRecord = $this->getFileService()->uploadFile('activity', new File($middleFilePath));
 
-        $largeImage->resize(new Box(230, 129));
+        $largeImage->resize(new Box(160, 91));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        $largeImage->save($smallFilePath, array('quality' => 90));
+        $largeImage->save($smallFilePath, array('quality' => 100));
         $smallFileRecord = $this->getFileService()->uploadFile('activity', new File($smallFilePath));
 
         return $this->getActivityDao()->updateActivity($courseId, array(
         	'smallPicture' => $smallFileRecord['uri'],
         	'middlePicture' => $middleFileRecord['uri'],
-        	'largePiceture' => $largeFileRecord['uri'],
+        	'largePicture' => $largeFileRecord['uri'],
     	));
 	}
 
@@ -325,27 +325,27 @@ class ActivitySerialize
 {
     public static function serialize(array &$activity)
     {
-    	if (isset($activity['tagsid'])) {
-    		if (is_array($activity['tagsid']) and !empty($activity['tagsid'])) {
-    			$activity['tagsid'] = '|' . implode('|', $activity['tagsid']) . '|';
+    	if (isset($activity['tags'])) {
+    		if (is_array($activity['tags']) and !empty($activity['tags'])) {
+    			$activity['tags'] = '|' . implode('|', $activity['tags']) . '|';
     		} else {
-    			$activity['tagsid'] = '';
+    			$activity['tags'] = '';
     		}
     	}
     	
-    	if (isset($activity['experterid'])) {
-    		if (is_array($activity['experterid']) and !empty($activity['experterid'])) {
-    			$activity['experterid'] = '|' . implode('|', $activity['experterid']) . '|';
+    	if (isset($activity['experterId'])) {
+    		if (is_array($activity['experterId']) and !empty($activity['experterId'])) {
+    			$activity['experterId'] = '|' . implode('|', $activity['experterId']) . '|';
     		} else {
-    			$activity['experterid'] = null;
+    			$activity['experterId'] = null;
     		}
     	}
 
-    	if (isset($activity['photoid'])) {
-    		if (is_array($activity['photoid']) and !empty($activity['photoid'])) {
-    			$activity['photoid'] = '|' . implode('|', $activity['photoid']) . '|';
+    	if (isset($activity['photoId'])) {
+    		if (is_array($activity['photoId']) and !empty($activity['photoId'])) {
+    			$activity['photoId'] = '|' . implode('|', $activity['photoId']) . '|';
     		} else {
-    			$activity['photoid'] = null;
+    			$activity['photoId'] = null;
     		}
     	}
 
@@ -381,19 +381,19 @@ class ActivitySerialize
     		return $activity;
     	}
 
-		$activity['tagsid'] = empty($activity['tagsid']) ? array() : explode('|', trim($activity['tagsid'], '|'));
+		$activity['tags'] = empty($activity['tags']) ? array() : explode('|', trim($activity['tags'], '|'));
 
 
-		if(empty($activity['experterid'] )) {
-			$activity['experterid'] = array();
+		if(empty($activity['experterId'] )) {
+			$activity['experterId'] = array();
 		} else {
-			$activity['experterid'] = explode('|', trim($activity['experterid'], '|'));
+			$activity['experterId'] = explode('|', trim($activity['experterId'], '|'));
 		}
 
-		if(empty($activity['photoid'] )) {
-			$activity['photoid'] = array();
+		if(empty($activity['photoId'] )) {
+			$activity['photoId'] = array();
 		} else {
-			$activity['photoid'] = explode('|', trim($activity['photoid'], '|'));
+			$activity['photoId'] = explode('|', trim($activity['photoId'], '|'));
 		}
 
 

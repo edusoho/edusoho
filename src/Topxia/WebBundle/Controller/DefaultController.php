@@ -12,11 +12,19 @@ class DefaultController extends BaseController
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
-        $feild['istimeout']=1;
+        $feild['istimeout']=0;//0表示未结束。
+        $feild['status']='published';//0表示未开始并未结束。
+
         $nextActivity=$this->getActivityService()->searchActivitys($feild,'latest',0,1);
         
-        $nextActivity=count($nextActivity)>0?$nextActivity[0]:null;
-        $activitTerchar=empty($nextActivity['experterid'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterid']);
+        $nextActivity=count($nextActivity)>0?$nextActivity[0]:array('largePicture' =>'',
+                                                                    'subtitle'=>'',
+                                                                    'title'=>'',
+                                                                    'startTime'=>'',
+                                                                    'locationId'=>'0',
+                                                                    'id'=>0);
+
+        $activitTerchar=empty($nextActivity['experterId'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterId']);
         $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
         //地址
         $Locations=$this->getLocationService()->getAllLocations();
@@ -31,7 +39,7 @@ class DefaultController extends BaseController
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
         $activityIds=ArrayToolkit::column($activityThreads,'activityId');
         $activitys=$this->getActivityService()->findActivityByIds($activityIds);
-        $threadUserIds=ArrayToolkit::column($activityThreads,'userid');
+        $threadUserIds=ArrayToolkit::column($activityThreads,'userId');
         $threadUsers=$this->getUserService()->findUsersByIds($threadUserIds);
         $threadUsers[0]=array(
             "id"=>0,

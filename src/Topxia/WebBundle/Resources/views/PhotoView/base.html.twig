@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}开源阅图 - {{ parent() }}{% endblock %}
+{% block title %}开源悦图 - {{ parent() }}{% endblock %}
 
 {% set nav = 'photoview' %}
 
@@ -8,189 +8,138 @@
 
 {% set bodyClass = 'photo-view-page' %}
 
-{% block body %}
+{% block contentlg %}
 
-	<header class="navbar navbar-inverse navbar-fixed-top" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
-  <div class="container"> 
-    <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          {% if setting('site.logo') %}
-            <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
-          {% else %}
-            <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
-          {% endif %}
-        </div>
-    <nav class="nav navbar-nav navbar-right">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ path('homepage') }}">首页</a></li>
-        {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
-        {% if app.user %}
-            {% if is_granted('ROLE_TEACHER') %}
-              <li><a href="{{ path('course_create') }}"><i class="glyphicon glyphicon-plus"></i> 创建课程</a></li>
-            {% endif %}
-              <li><a href="{{ path('my') }}"> 我的课程 </a></li>
-              <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
-                <span class="glyphicon glyphicon-bell"></span>
-                {% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
-              <li><a href="{{ path('message') }}" class="badge-container message-badge-container"><span class="glyphicon glyphicon-envelope"></span>{% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
-                  <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
-                  <li class="divider"></li>
-                  {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
-                    <li class="divider"></li>
-                  {% endif %}
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
-                </ul>
-              </li>
-        {% else %}
-              <li><a href="{{ path('login') }}">登录</a></li>
-              <li><a href="{{ path('register') }}">注册</a></li>
-        {% endif %}
-      </ul>           
-    </nav>    
-  </div>  
-</header> 
-<div class="slide"></div>
-  <div class="photoview-container row col-md-12">
 
-  		<div class="photoview-nav col-md-3">
+
+<div class="photoview-nav col-md-3">
   			<div class="widget">
-  			  <div class="content clear-pleft clear-pright">
-  			    <img src="#" alt="logo" class="img-rounded">
+  			  <div new="content clear-pleft clear-pright">
+  			    <img src="/assets/img/default/ablum-logo.png" class="img-responsive" alt="Responsive image" >
   			    <hr class="divider" />
-  				<ul class="nav nav-pills nav-mini">
-            {% for tag in tags %}
-  				  <li><a href="{{ path('photoview',{tagId:tag.id}) }}">{{ tag.name }}</a></li>
-            {% endfor %}
-  				</ul>
+    				<ul class="nav nav-pills nav-mini">
+              {% for tag in tags %}
+    				  <li><a href="{{ path('photoview',{tagId:tag.id}) }}">{{ tag.name }}</a></li>
+              {% endfor %}
+    				</ul>
   			    <hr class="divider" />
-  				<ul class="photo-nav">
-            {% for photo in photos %}
-              {% if loop.index==loop.last %}
-                <li class="photo-border-r"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
-              {% elseif loop.index0%2==0 %}
-                <li class="photo-border-r photo-border-b"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
-              {% else %}
-               <li class="photo-border-b"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
-              {% endif %}
-            {% endfor %}
-  				</ul>
-          <hr class="divider" />
-          <p class="photo-copyright">© 1997-2013 开源力量版权所有</p>
+    				<ul class="photo-nav pz text-normal" >
+              {% for photo in photos %}
+                {% if loop.index==loop.last %}
+                  <li class="photo-border-r"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
+                {% elseif loop.index0%2==0 %}
+                  <li class="photo-border-r photo-border-b"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
+                {% else %}
+                 <li class="photo-border-b"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
+                {% endif %}
+              {% endfor %}
+    				</ul>
+            <hr class="divider" />
+            <p class="photo-copyright">© 1997-2013 开源力量版权所有</p>
+			    </div>
 			  </div>
-			</div>
-    </div>
-    <div class="col-md-3"></div>
+</div>
 
-  	<div class="photoview-list col-md-9" data-list-ids='{"ids":[
-    {% for file in photofile %}
-      {% if loop.index==loop.last %}
-        {{file.id}}
-      {% else %}
-        {{file.id}},
-      {% endif %}
-    {% endfor %}
-    ]}' >
-          
-          {% for line in layoutdata %}
-            {% if loop.index%2==0 %}
-                <div class="photoview-list-line">
-                  {% for item in line %}
-                    {% if loop.index==1 %}
-                        <div class="photoview-list-item box-lg">
-                          <p class="photoview-item-tag">{{ photos[item.groupId].name }}</p>
-                          <img  alt="img" class="photoview-item-pic ajax-popup-link lazy"  data-original="{{  file_path(item.url) }}" data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
-                          <div class="photoview-item-title">
-                            <h4>{{item.title}}</h4> 
-                          </div>
-                        </div>
-                    {% elseif loop.index==2 %}
-                        <div class="photoview-list-item box-sm box-left">
-                          <div class="photoview-item-text box3">
-                            <h4 class="photoview-item-name">{{item.title}}</h4>
-                            <p class="photoview-item-time">{{ item.createdTime }}</p>
-                            <p class="photoview-item-comment">23223</p>
-                            <i class="photoview-item-arrow arrow-right"></i>
-                          </div>
-                          <div class="box7 box7-left">
-                            <img  alt="img" class="photoview-item-pic ajax-popup-link lazy" data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}"  data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
-                          </div>
-                        </div>
-                    {% elseif loop.index==3 %}
-                        <div class="photoview-list-item box-sm box-left box-top">
-                            <div class="box7">
-                              <img  alt="img" class="photoview-item-pic ajax-popup-link lazy"  data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
-                            </div>
-                            <div class="photoview-item-text box3 box3-left">
-                              <h4 class="photoview-item-name">{{item.title}}</h4>
-                              <p class="photoview-item-time">{{ item.createdTime }}</p>
-                              <p class="photoview-item-comment">23223</p>
-                              <i class="photoview-item-arrow arrow-left" ></i>
-                            </div>
-                        </div>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-            {% else %}
-                  <div class="photoview-list-line">
-                    {% for item in line %}
-                      {% if loop.index==1 %}
-                        <div class="photoview-list-item box-sm">
-                           <div class="photoview-item-text box3">
-                            <h4 class="photoview-item-name">{{ item.title }}</h4>
-                            <p class="photoview-item-time">{{ item.createdTime }}</p>
-                            <p class="photoview-item-comment">2322</p>
-                            <i class="photoview-item-arrow arrow-right"></i>
-                          </div>
-                          <div class="box7 box7-left">
-                            <img  alt="img" class="photoview-item-pic ajax-popup-link lazy" data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
-                          </div>
-                        </div>
-                      {% elseif loop.index==2 %}
-                          <div class="photoview-list-item box-sm box-top">
+<div class="col-md-3"></div>
 
-                             <div class="box7">
-                              <img  alt="img" class="photoview-item-pic ajax-popup-link lazy"  data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
-                            </div>
-                            <div class="photoview-item-text box3 box3-left">
-                              <h4 class="photoview-item-name">{{ item.title }}</h4>
-                              <p class="photoview-item-time">{{ item.createdTime }}</p>
-                              <p class="photoview-item-comment">23223</p>
-                              <i class="photoview-item-arrow arrow-left" ></i>
-                            </div>
+<div class="photoview-list col-md-9" data-list-ids='{"ids":[
+{% for file in photofile %}
+  {% if loop.index==loop.last %}
+    {{file.id}}
+  {% else %}
+    {{file.id}},
+  {% endif %}
+{% endfor %}
+]}' >
+      
+      {% for line in layoutdata %}
+        {% if loop.index%2==0 %}
+            <div class="photoview-list-line">
+              {% for item in line %}
+                {% if loop.index==1 %}
+                    <div class="photoview-list-item box-lg">
+                      <p class="photoview-item-tag">{{ photos[item.groupId].name }}</p>
+                      <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive"  data-original="{{  file_path(item.url) }}" data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
+                      <div class="photoview-item-title">
+                        <h4>{{item.title}}</h4> 
+                      </div>
+                    </div>
+                {% elseif loop.index==2 %}
+                    <div class="photoview-list-item box-sm box-left">
+                      <div class="photoview-item-text box3">
+                        <h4 class="photoview-item-name">{{item.title}}</h4>
+                        <p class="photoview-item-time">{{ item.createdTime }}</p>
+                        <p class="photoview-item-comment">23223</p>
+                        <i class="photoview-item-arrow arrow-right"></i>
+                      </div>
+                      <div class="box7 box7-left">
+                        <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive" data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}"  data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
+                      </div>
+                    </div>
+                {% elseif loop.index==3 %}
+                    <div class="photoview-list-item box-sm box-left box-top">
+                        <div class="box7">
+                          <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive"  data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
+                        </div>
+                        <div class="photoview-item-text box3 box3-left">
+                          <h4 class="photoview-item-name">{{item.title}}</h4>
+                          <p class="photoview-item-time">{{ item.createdTime }}</p>
+                          <p class="photoview-item-comment">23223</p>
+                          <i class="photoview-item-arrow arrow-left" ></i>
+                        </div>
+                    </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+        {% else %}
+              <div class="photoview-list-line">
+                {% for item in line %}
+                  {% if loop.index==1 %}
+                    <div class="photoview-list-item box-sm">
+                       <div class="photoview-item-text box3">
+                        <h4 class="photoview-item-name">{{ item.title }}</h4>
+                        <p class="photoview-item-time">{{ item.createdTime }}</p>
+                        <p class="photoview-item-comment">2322</p>
+                        <i class="photoview-item-arrow arrow-right"></i>
+                      </div>
+                      <div class="box7 box7-left">
+                        <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive" data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
+                      </div>
+                    </div>
+                  {% elseif loop.index==2 %}
+                      <div class="photoview-list-item box-sm box-top">
+                        <div class="box7">
+                          <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive"  data-original="{{  file_path(item.url) }}"  data-comment="{{ path('photoview_comment',{id:item.id})}}" data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
+                        </div>
+                        <div class="photoview-item-text box3 box3-left">
+                          <h4 class="photoview-item-name">{{ item.title }}</h4>
+                          <p class="photoview-item-time">{{ item.createdTime }}</p>
+                          <p class="photoview-item-comment">23223</p>
+                          <i class="photoview-item-arrow arrow-left" ></i>
+                        </div>
+                      </div>
+                  {% elseif loop.index==3 %}
+                      <div class="photoview-list-item box-lg box-left">
+                        <p class="photoview-item-tag">{{ photos[item.groupId].name }}</p>
+                        <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive"  data-original="{{  file_path(item.url) }}" data-comment="{{ path('photoview_comment',{id:item.id})}}"  data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
+                        <div class="photoview-item-title">
+                          <h4>{{ item.title }}</h4>
+                        </div>
+                      </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+        {% endif %}
+      {% endfor %}
+</div>
 
-                          </div>
-                      {% elseif loop.index==3 %}
-                          <div class="photoview-list-item box-lg box-left">
-                            <p class="photoview-item-tag">{{ photos[item.groupId].name }}</p>
-                            <img  alt="img" class="photoview-item-pic ajax-popup-link lazy"  data-original="{{  file_path(item.url) }}" data-comment="{{ path('photoview_comment',{id:item.id})}}"  data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
-                            <div class="photoview-item-title">
-                              <h4>{{ item.title }}</h4>
-                            </div>
-                          </div>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-            {% endif %}
-          {% endfor %}
-		<div>
-  </div>
-  
-   <div class="popup-gallery" 
+<div class="popup-gallery" 
       data-url="{{ path('photoview_content',{id:0}) }}" 
       data-comment="{{ path('photoview_comment',{id:0})}}" 
       data-create="{{ path('photoview_comment_create',{id:0}) }}" >
       <div class="popup-box-l">
         <div class="popup-gallery-photoarea">
-          <img src="/assets/img/photoview/IMG_0235.JPG" />
+          <img src="/assets/img/default/ablum-logo.png" class="img-responsive">
         </div>
         <div class="popup-gallery-lbtn"></div>
         <div class="popup-gallery-rbtn"></div>
@@ -222,5 +171,5 @@
         </ul>
         <div class="popup-gallery-close"><p>返回</p></div>
       </div>
-    </div>
+</div>
 {% endblock %}

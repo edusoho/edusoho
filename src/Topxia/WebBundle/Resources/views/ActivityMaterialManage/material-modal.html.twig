@@ -12,7 +12,7 @@
     活动附件
   </div>
   <div class="panel-body">
-    <form id="course-material-form" class="form-horizontal" action="{{ path('activity_material_upload', {id:course.id}) }}" enctype="multipart/form-data" method="post">
+    <form id="course-material-form" class="form-horizontal" action="{{ path('activity_material_upload', {id:activity.id}) }}" enctype="multipart/form-data" method="post">
       <div class="form-group">
         <div class="col-lg-10 col-lg-offset-1  controls">
           <ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>

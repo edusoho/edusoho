@@ -15,12 +15,12 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			throw $this->createServiceException('参数缺失，上传失败！');
 		}
 
-		$course = $this->getActivityService()->getActivity($material['activityId']);
-		if (empty($course)) {
-			throw $this->createServiceException('课程不存在，上传资料失败！');
+		$Activity = $this->getActivityService()->getActivity($material['activityId']);
+		if (empty($Activity)) {
+			throw $this->createServiceException('活动不存在，上传资料失败！');
 		}
 
-		$file = $this->getFileService()->uploadFile('course_private', $material['file']);
+		$file = $this->getFileService()->uploadFile('activity_private', $material['file']);
 
 		$fields = array(
 			'activityId' => $material['activityId'],
@@ -45,10 +45,10 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		$this->getMaterialDao()->deleteMaterial($materialId);
 	}
 
-	public function getMaterial($courseId, $materialId)
+	public function getMaterial($activityId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
-		if (empty($material) or $material['activityId'] != $courseId) {
+		if (empty($material) or $material['activityId'] != $activityId) {
 			return null;
 		}
 		return $material;

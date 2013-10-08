@@ -36,18 +36,18 @@
 </style>
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">专辑管理</div>
+  <div class="panel-heading">活动相册</div>
   <div class="panel-body">
 
     <form id="teachers-form" class="form-horizontal" method="post">
       {{ web_macro.flash_messages() }}
 
       <div class="form-group" id="teachers-form-group">
-        <div class="col-lg-2 control-label"><label>专辑绑定</label></div>
+        <div class="col-lg-2 control-label"><label>相册绑定</label></div>
         <div class="col-lg-8 controls">
           <ul class="list-group teacher-list-group sortable-list" data-role="list" style="display:none;"></ul>
           <div class="input-group">
-            {% set url = path('activity_manage_pictures_match', {id:course.id}) ~ '?q={{query}}' %}
+            {% set url = path('activity_manage_pictures_match', {id:activity.id}) ~ '?q={{query}}' %}
             <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>

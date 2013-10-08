@@ -15,15 +15,15 @@ class ActivityMaterialController extends BaseController
         $activity = $this->getActivityService()->getActivity($id);
         $materials = $this->getMaterialService()->findActivityMaterials($activity['id'], 0, 100);
         return $this->render('TopxiaWebBundle:ActivityMaterialManage:material-modal.html.twig', array(
-            'course' => $activity,
+            'activity' => $activity,
             'materials' => $materials,
         ));
     }
 
-    public function downloadAction(Request $request, $courseId, $materialId)
+    public function downloadAction(Request $request, $activityId, $materialId)
     {
-        $course = $this->getActivityService()->getActivity($courseId);
-        $material = $this->getMaterialService()->getMaterial($course['id'], $materialId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $material = $this->getMaterialService()->getMaterial($activity['id'], $materialId);
         return $this->createPrivateFileDownloadResponse($material['fileUri']);
     }
 
@@ -38,8 +38,8 @@ class ActivityMaterialController extends BaseController
     public function uploadAction(Request $request, $id)
     {
 
-        $course = $this->getActivityService()->getActivity($id);
-        if (empty($course)) {
+        $activity = $this->getActivityService()->getActivity($id);
+        if (empty($activity)) {
             throw $this->createNotFoundException();
         }
         if ($request->getMethod() == 'POST') {
@@ -47,17 +47,17 @@ class ActivityMaterialController extends BaseController
             $fields = $request->request->all();
             $fields['file'] = $request->files->get('file');
             $fields['title'] = $fields['file']->getClientOriginalName();
-            $fields['activityId'] = $course['id'];
+            $fields['activityId'] = $activity['id'];
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
             return $this->render('TopxiaWebBundle:ActivityMaterialManage:list-item.html.twig', array(
-                'material' => $material,
+                'material' => $material
             ));
         }
 
         return $this->render('TopxiaWebBundle:ActivityMaterial:upload-modal.html.twig', array(
             'form' => $form->createView(),
-            'course' => $course,
+            'activity' => $activity,
         ));
 
     }
@@ -87,6 +87,18 @@ class ActivityMaterialController extends BaseController
     }
 
     private function createPrivateFileDownloadResponse($fileUri)
+    {
+        $setting = $this->setting('file');
+        $parsed = $this->getFileService()->parseFileUri($fileUri);
+
+        $directory = $this->container->getParameter('topxia.upload.private_directory');
+
+        $filename = $directory . '/' .  $parsed['path'];
+
+        return BinaryFileResponse::create($filename, 200, array(), false, 'attachment');
+    }
+
+    private function createPublicFileDownloadResponse($fileUri)
     {
         $setting = $this->setting('file');
         $parsed = $this->getFileService()->parseFileUri($fileUri);

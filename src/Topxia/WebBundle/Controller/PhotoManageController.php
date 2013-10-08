@@ -30,7 +30,7 @@ class PhotoManageController extends BaseController
             if($form->isValid()){
                 $courseBaseInfo = $form->getData();
                 $this->getPhotoService()->updatePhoto($id, $courseBaseInfo);
-                $this->setFlashMessage('success', '活动基本信息已保存！');
+                $this->setFlashMessage('success', '专辑基本信息已保存！');
                 return $this->redirect($this->generateUrl('photoview_manage_base',array('id' => $id))); 
             }
         }

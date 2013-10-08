@@ -20,7 +20,7 @@ class AjaxExceptionListener
         $exception = $event->getException();
         $request = $event->getRequest();
  
-        if (! $request->isXmlHttpRequest()) {
+        if (!$request->isXmlHttpRequest()) {
             return;
         }
 

@@ -44,7 +44,7 @@
           <li {% if nav == 'content' %}class="active"{% endif %}><a href="{{ path('admin_navigation') }}">内容</a></li>
           <li {% if nav == 'activity' %}class="active"{% endif %}><a href="{{ path('admin_activity') }}">活动</a></li>
 
-          <li {% if nav == 'photo' %}class="active"{% endif %}><a href="{{ path('admin_photo') }}">专辑</a></li>
+          <li {% if nav == 'photo' %}class="active"{% endif %}><a href="{{ path('admin_photo') }}">相册</a></li>
           {% if is_granted('ROLE_SUPER_ADMIN') %}
             <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
           {% endif %}

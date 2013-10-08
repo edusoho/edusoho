@@ -9,7 +9,8 @@
 {% set script_controller = 'homepage' %}
 
 {% block contentlg %}
- <section class="row">  
+ 
+<section class="row">  
   <!-- banner -->
   <div class="banner clear-mtop">  
     <!-- 广告 -->
@@ -18,8 +19,9 @@
         <div class="top">
           <div class="pull-left bulletin">
             <div class="index-img-box">
-              <img class="activity-img-sm" src="{{ file_path(nextActivity.smallPicture,'course-large.png')  }}">    
-              <h4 class="activity-img-title">{{nextActivity.title }}<br />{{nextActivity.subtitle }}</span></h4>
+              <img class="open-class-logo-midll-size" src="{{ file_path(nextActivity.largePicture,'open-class-default-logo.jpg')  }}">    
+              <h5 class="activity-img-title mbz">{{nextActivity.subtitle }}</h5>
+              <h4 class="activity-img-title mz">{{nextActivity.title }}</h4>
             </div>
           </div>
           <div class="pull-left info">
@@ -31,9 +33,11 @@
             </div>
             <div class="info-content clearfix">             
               <div id="photo" class="photo-wall pull-left">
+               
                 {% for user in users%}
                 <span class="list-item">
-                  <img class="tip" class="tip" src="{{ asset('bundles/topxiaweb/img/5969313944_e5d6d67b23_s.gif')}}" alt="user icon">
+                  
+                  <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'avatar.png')  }}" alt="user icon">
                   <span class="todos-thumb-span text-left">
                     <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
                     <span class="user-tag">{{ user.title }}</span>
@@ -80,22 +84,19 @@
 
   <div class="row">
     <div class="container clear-pleft clear-pright">   
-      <!-- <div class="curriculum"> -->
-   
-
       <!-- 课程资源 -->
-      <div class="Resources">
-        <!-- 课程资源库 -->
-        <div class="mod TopicList">     
-          <div class="header clearfix">
-            <h3>课程资源库</h3>
-            <a href="{{ path('course_page') }}" target="_blank" class="pull-right">查看全部课程资源</a>
-            <div class="height-down"></div>
+      <div class="Resources row  mtl">
+       
+        <div class="mod TopicList col-md-12">     
+          <div class="kytitle clearfix">
+            <h3>课程资源</h3>
+            <a href="{{ path('course_page') }}" target="_blank" class="pull-right">全部课程资源>></a>
+            
           </div>
           <div class="hp-tab-newprd">       
             <div class="newprd-clip" style="height: 350px;">
                 <div class="tempWrap" style="overflow:hidden; position:relative; width:1185px">
-                      <ul class="grids" style="float: left; width: 1185px; ">
+                      <ul class="grids pll prl" style="float: left;">
                         {% for course in courses%}
                         <li class="grid">
                           <div class="imageblock clearfix">
@@ -121,47 +122,46 @@
           </div>        
         </div>
       </div>
-
+      <!-- 讨论，学员，牛人，谁在学，最新点评-->
       <div class="row">
         <div class="col-md-8">          
           <!-- 问答讨论 -->
           <div class="mod k_postlist discussion">
             <div class="kytitle clearfix">
-              <h3>问答讨论</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>              
+              <h3>问答讨论</h3>          
             </div>
             <div class="content">       
-              <ul>
+              <ul class="pz">
                 {% for activityThread in activityThreads %}
                 <li>
                   <div class="imageblock clearfix">
                     <div class="imageblock-image">
                       <a href="#" class="show-user-card user-link user-avatar-link" >
-                        {% if activityThread['userid']==0 %}
+                        {% if activityThread['userId']==0 %}
                         <img src="/assets/img/default/avatar.png" alt="ae120"></a>
                         {% else %}
-                        <a href="{{ path('user_show',{id:activityThread['userid']})}}"><img src="{{ file_path(threadUsers[activityThread.userid].smallAvatar,'avatar.png') }}" alt="ae120"></a>
+                        <a href="{{ path('user_show',{id:activityThread['userId']})}}"><img src="{{ file_path(threadUsers[activityThread.userId].smallAvatar,'avatar.png') }}" alt="ae120"></a>
                         {% endif %}
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
                         <a href="
-                          {% if activityThread['userid']==0 %}
+                          {% if activityThread['userId']==0 %}
                             #
                           {% else %}
-                             {{ path('user_show',{id:activityThread['userid'] }) }}
+                             {{ path('user_show',{id:activityThread['userId'] }) }}
 
                           {% endif %}
                           "
-                        >{{ threadUsers[activityThread.userid].nickname }}</a>
+                        >{{ threadUsers[activityThread.userId].nickname }}</a>
                         在 {{activitys[activityThread.activityId].subtitle}} 提问到：
                       </p>
                       <p class="metas">
-                        <a href="#" class="show-user-card">{{ activityThread.content }}</a>
+                        <span class="show-user-card">{{ activityThread.content }}</span>
                         <time class="pull-right">{{ activityThread.createdTime|smart_time }}</time>
                       </p>
                       <p class="scan">
-                        <span>{{ activityThread.postnum }}回复</span>
+                        <span class="">{{ activityThread.postNum }}回复</span>
                         <span class="highlight"></span>
                       </p>
                     </div>
@@ -174,10 +174,10 @@
           <!-- 新加入学员 -->
           <div class="mod trainee">
             <div class="kytitle">
-              <h3>新加入学员</h3>              
+              <h3>新学员</h3>              
             </div>            
             <div class="mod-content">
-              <ul class="grids smallpic-grids">
+              <ul class="grids smallpic-grids pz">
                 {% for studnet in students %}
                 <li class="grid">
                   <a href="{{ path('user_show',{id:studnet['id'] }) }}" class="user-link user-avatar-link">
@@ -194,11 +194,11 @@
           <!-- 开源教练组 -->
           <div class="mod coach">
             <div class="kytitle clearfix">
-              <h3>开源教练组</h3>
+              <h3>牛人团</h3>
               <a href="{{ path('teacher') }}" target="_blank" class="pull-right cm_go">更多»</a>
             </div>
             <div class="mod-content">
-              <ul class="grids">
+              <ul class="grids  pz">
                 {% for teacher in teachers %}
                 <li class="grid">
                   <a href="{{ path('user_show',{id:teacher.id }) }}">
@@ -219,11 +219,10 @@
           <!-- 大家正在学 -->
           <div class="widget k_postlist shadow studying">
             <div class="kytitle clearfix bor-l-green">
-              <h3>大家这在学</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
+              <h3>大家正在学</h3>
             </div>
             <div class="content">       
-              <ul>
+              <ul class="pz">
                 {% for userAction in userActions %}
                 <li>
                   <div class="imageblock clearfix">
@@ -252,10 +251,9 @@
           <div class="widget k_postlist shadow">
             <div class="kytitle clearfix bor-l-green">
               <h3>最新点评</h3>
-              <a href="#" target="_blank" class="pull-right cm_go">更多»</a>
-            </div>
+              </div>
             <div class="content">       
-              <ul>
+              <ul class="pz">
                 {% for review in reviews%}
                 <li>
                   <div class="shadow speak">
@@ -268,7 +266,7 @@
                     </div>
                     <div class="imageblock-content">
                       <p class="title">
-                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} 刚刚点评了</a>
+                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} </a>刚刚点评了
                       </p>
                       <p class="metas">
                         <a href="{{ path('course_show', {id:review.courseId }) }}" class="show-user-card " data-uid="1272156">
@@ -287,4 +285,5 @@
     </div>
   </div>  
 </section>
+
 {% endblock %}

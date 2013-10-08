@@ -22,22 +22,22 @@ class ActivityManageController extends BaseController
 
     public function baseAction(Request $request, $id)
     {
-        $course = $this->getActivityService()->getActivity($id);
-        $form = $this->createActivityBaseForm($course);
+        $activity = $this->getActivityService()->getActivity($id);
+        $form = $this->createActivityBaseForm($activity);
         if($request->getMethod() == 'POST'){
             $form->bind($request);
             if($form->isValid()){
-                $courseBaseInfo = $form->getData();
-                $this->getActivityService()->updateActivity($id, $courseBaseInfo);
+                $activityBaseInfo = $form->getData();
+                $this->getActivityService()->updateActivity($id, $activityBaseInfo);
                 $this->setFlashMessage('success', '活动基本信息已保存！');
                 return $this->redirect($this->generateUrl('activity_manage_base',array('id' => $id))); 
             }
         }
-        $course['strstartTime']=$course['startTime'];
-        $course['strendTime']=$course['endTime'];
-        $newcourse=$course;
+        $activity['strstartTime']=$activity['startTime'];
+        $activity['strendTime']=$activity['endTime'];
+        $newActivity=$activity;
         return $this->render('TopxiaWebBundle:ActivityManage:base.html.twig', array(
-            'course' => $newcourse,
+            'activity' => $newActivity,
             'form' => $form->createView(),
         ));
     }
@@ -45,7 +45,7 @@ class ActivityManageController extends BaseController
     public function detailAction(Request $request, $id)
     {
         
-        $course = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
 
         if($request->getMethod() == 'POST'){
             $detail = $request->request->all();
@@ -59,18 +59,18 @@ class ActivityManageController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:ActivityManage:detail.html.twig', array(
-            'course' => $course
+            'activity' => $activity
         ));
     }
 
     public function pictureAction(Request $request, $id)
     {
         //$course = $this->getCourseService()->tryManageCourse($id);
-        $course = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
         if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
 
-            $filenamePrefix = "course_{$course['id']}_";
+            $filenamePrefix = "activity_{$activity['id']}_";
             $hash = substr(md5($filenamePrefix . time()), -8);
             $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();
 
@@ -79,20 +79,20 @@ class ActivityManageController extends BaseController
             $file = $file->move($directory, $filename);
 
             return $this->redirect($this->generateUrl('activity_manage_picture_crop', array(
-                'id' => $course['id'],
+                'id' => $activity['id'],
                 'file' => $file->getFilename())
             ));
         }
 
         return $this->render('TopxiaWebBundle:ActivityManage:picture.html.twig', array(
-            'course' => $course,
+            'activity' => $activity,
         ));
     }
 
     public function pictureCropAction(Request $request, $id)
     {
         //$course = $this->getCourseService()->tryManageCourse($id);
-        $course = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
 
         //@todo 文件名的过滤
         $filename = $request->query->get('file');
@@ -102,8 +102,8 @@ class ActivityManageController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $c = $request->request->all();
-            $this->getActivityService()->changeActivityPicture($course['id'], $pictureFilePath, $c);
-            return $this->redirect($this->generateUrl('activity_manage_picture', array('id' => $course['id'])));
+            $this->getActivityService()->changeActivityPicture($activity['id'], $pictureFilePath, $c);
+            return $this->redirect($this->generateUrl('activity_manage_picture', array('id' => $activity['id'])));
         }
 
         $imagine = new Imagine();
@@ -114,7 +114,7 @@ class ActivityManageController extends BaseController
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
 
         return $this->render('TopxiaWebBundle:ActivityManage:picture-crop.html.twig', array(
-            'course' => $course,
+            'activity' => $activity,
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
@@ -129,9 +129,9 @@ class ActivityManageController extends BaseController
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-        $course = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
         return $this->render('TopxiaWebBundle:ActivityManage:price.html.twig', array(
-            'course' => $course
+            'activity' => $activity
         ));
         
     }
@@ -143,7 +143,7 @@ class ActivityManageController extends BaseController
             $data = $request->request->all();
             $data['ids'] = empty($data['ids']) ? array() : array_values($data['ids']);
 
-            $field['experterid']=$data['ids'];
+            $field['experterId']=$data['ids'];
             $this->getActivityService()->setActivityTeachers($id,$field);
             $this->setFlashMessage('success', '教师设置成功！');
 
@@ -152,7 +152,7 @@ class ActivityManageController extends BaseController
         }
 
         $teacherMembers = $this->getActivityService()->getActivity($id);
-        $users = $this->getUserService()->findUsersByIds($teacherMembers['experterid']);
+        $users = $this->getUserService()->findUsersByIds($teacherMembers['experterId']);
 
         $teachers = array();
         foreach ($users as $member) {
@@ -167,7 +167,7 @@ class ActivityManageController extends BaseController
             );
         }
         return $this->render('TopxiaWebBundle:ActivityManage:teachers.html.twig', array(
-            'course' => $this->getActivityService()->getActivity($id),
+            'activity' => $this->getActivityService()->getActivity($id),
             'teachers' => $teachers
         ));
     }
@@ -269,7 +269,7 @@ class ActivityManageController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:ActivityManage:course.html.twig', array(
-            'course' => $activity,
+            'activity' => $activity,
             'teachers' => $teachers
         ));
 
@@ -280,7 +280,7 @@ class ActivityManageController extends BaseController
             
             $data = $request->request->all();
             $data['ids'] = empty($data['ids']) ? array() : array_values($data['ids']);
-            $field['photoid']=$data['ids'];
+            $field['photoId']=$data['ids'];
             $this->getActivityService()->setActivitypictures($id,$field);
             $this->setFlashMessage('success', '专辑设置成功！');
 
@@ -290,8 +290,8 @@ class ActivityManageController extends BaseController
 
         $teacherMembers = $this->getActivityService()->getActivity($id);
         $photos=array();
-        if(!empty($teacherMembers['photoid'])){
-            $photos = $this->getPhotoService()->findPhotoByIds($teacherMembers['photoid']);    
+        if(!empty($teacherMembers['photoId'])){
+            $photos = $this->getPhotoService()->findPhotoByIds($teacherMembers['photoId']);    
         }
 
         $teachers = array();
@@ -306,7 +306,7 @@ class ActivityManageController extends BaseController
             );
         }
         return $this->render('TopxiaWebBundle:ActivityManage:pictures.html.twig', array(
-            'course' => $this->getActivityService()->getActivity($id),
+            'activity' => $this->getActivityService()->getActivity($id),
             'teachers' => $teachers
         ));
 
@@ -319,22 +319,23 @@ class ActivityManageController extends BaseController
         ));      
     }
 
-    private function createActivityBaseForm($course)
+    private function createActivityBaseForm($activity)
     {
-        $builder = $this->createNamedFormBuilder('activity', $course)
+        $builder = $this->createNamedFormBuilder('activity', $activity)
             ->add('title', 'text')
             ->add('subtitle', 'textarea')
-            ->add('locationId','text')
-            ->add('tagsid', 'tags')
+            ->add('locationId','location'
+            )
+            ->add('tags', 'tags')
             ->add('address','text')
             ->add('onlineAddress','text')
             ->add('form','text')
             ->add('strstartTime','text')
             ->add('strendTime','text')
-            ->add('categoryid', 'default_category', array(
+            ->add('categoryId', 'default_category', array(
                 'empty_value' => '请选择分类'
-            )
-        );
+                )
+            );
 
         return $builder->getForm();
     }
