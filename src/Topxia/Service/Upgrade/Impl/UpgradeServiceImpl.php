@@ -18,12 +18,25 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
 		$installedPackage['installlog'] = 'result-success';
 		$installedPackage['installTime'] = time();
-		return $this->getInstalledPackageDao()->addInstalledPackage($installedPackage);
+		$existPackage = $this->getInstalledPackageDao()->getInstalledPackageByEname($packageInfo['ename']);
+		if(empty($existPackage)){
+			return $this->getInstalledPackageDao()->addInstalledPackage($installedPackage);
+		} else {
+			return $this->getInstalledPackageDao()->updateInstalledPackage($existPackage['id'], 
+				$installedPackage);
+		}
 	}
 
 	public function getRemoteInstallPackageInfo($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->install($id);
+		$package = (array)$package;
+		return $package;
+	}
+
+	public function getRemoteUpgradePackageInfo($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->upgrade($id);
 		$package = (array)$package;
 		return $package;
 	}
@@ -73,12 +86,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	public function upgrade($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->upgrade($id);
-
+		$package = (array)$package;
 		$result = $this->checkDepends($package['depends']);
 		if(!empty($result)){
 			return $result;
 		}
-
 		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 		$dirPath = $this->extractFile($path);
 

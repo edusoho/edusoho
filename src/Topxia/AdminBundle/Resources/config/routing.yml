@@ -359,6 +359,10 @@ admin_upgrade_install:
     pattern:  /upgrade/{id}/install
     defaults: { _controller: TopxiaAdminBundle:Upgrade:install }
 
+admin_upgrade_upgrade:
+    pattern:  /upgrade/{id}/upgrade
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:upgrade }
+
 admin_category:
     pattern:  /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }

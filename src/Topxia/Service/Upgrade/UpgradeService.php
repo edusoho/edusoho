@@ -13,6 +13,8 @@ interface UpgradeService
 	
 	public function getRemoteInstallPackageInfo($id);
 
+	public function getRemoteUpgradePackageInfo($id);
+
 	public function searchPackageCount();
 
 	public function searchPackages($start, $limit);

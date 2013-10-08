@@ -40,6 +40,14 @@ class UpgradeController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
+    public function upgradeAction(Request $request, $id)
+    {
+        $this->getUpgradeService()->upgrade($id);
+        $package = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
+        $this->getUpgradeService()->addInstalledPackage($package);
+        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
+    }
+
     private function getUpgradeService()
     {
         return $this->getServiceKernel()->createService('Upgrade.UpgradeService');
