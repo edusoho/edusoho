@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\QiniuClient;
+use Topxia\Service\Util\CloudClient;
 
 class CourseLessonController extends BaseController
 {
@@ -72,7 +72,7 @@ class CourseLessonController extends BaseController
             $user = $this->getCurrentUser();
 
             $setting = $this->setting('storage');
-            $client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+            $client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 
             if ($lesson['type'] == 'video') {
                 $url = $client->generateDownloadUrl($uri['bucket'], $uri['key'], $this->container->getParameter('topxia.disk.cloud_video_fop'));

@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\QiniuClient;
+use Topxia\Service\Util\CloudClient;
 
 class CourseLessonManageController extends BaseController
 {
@@ -45,7 +45,7 @@ class CourseLessonManageController extends BaseController
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
-	    	$client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+	    	$client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 	    	$uploadToken = $client->generateUploadToken(array(
 	            'endUser' => $user['id'],
 	            'asyncOps' => $this->container->getParameter('topxia.disk.cloud_video_fop')
@@ -91,7 +91,7 @@ class CourseLessonManageController extends BaseController
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
-	    	$client = new QiniuClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+	    	$client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
 	    	$uploadToken = $client->generateUploadToken(array(
 	            'endUser' => $user['id'],
 	            'asyncOps' => $this->container->getParameter('topxia.disk.cloud_video_fop')

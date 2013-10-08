@@ -174,9 +174,11 @@ class WebExtension extends \Twig_Extension
 
     public function getFilePath($uri, $default = '', $absolute = false)
     {
+        $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
         if (empty($uri)) {
-            $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
+            $url = $assets->getUrl('assets/img/default/' . $default);
+            // $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
             if ($absolute) {
                 $url = $request->getSchemeAndHttpHost() . $url;
             }
@@ -184,7 +186,10 @@ class WebExtension extends \Twig_Extension
         }
         $uri = $this->parseFileUri($uri);
         if ($uri['access'] == 'public') {
-            return rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
+            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
+            $url = ltrim($url, ' /');
+            $url = $assets->getUrl($url);
+            return $url;
         } else {
 
         }

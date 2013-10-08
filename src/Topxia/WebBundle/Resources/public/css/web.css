@@ -3059,3 +3059,15 @@ body {
 	display: inline-block;
 	margin-right: 20px;
 }
+
+.lt-ie8 .hidden-lt-ie8 {
+  display: none !important;
+}
+
+.visible-lt-ie8 {
+  display: none !important;
+}
+
+.lt-ie8 .visible-lt-ie8 {
+  display: block !important;
+}

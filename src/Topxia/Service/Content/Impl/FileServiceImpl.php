@@ -68,7 +68,9 @@ class FileServiceImpl extends BaseService implements FileService
 		$record = array();
 		$record['userId'] = $user['id'];
 		$record['groupId'] = $group['id'];
-		$record['mime'] = $file->getMimeType();
+		// @todo fix it.
+		$record['mime'] = '';
+		// $record['mime'] = $file->getMimeType();
 		$record['size'] = $file->getSize();
 		$record['uri'] = $this->generateUri($group, $file);
 		$record['createdTime'] = time();
@@ -160,9 +162,9 @@ class FileServiceImpl extends BaseService implements FileService
 		$parsed = $this->parseFileUri($uri);
 
 		if ($parsed['access'] == 'public') {
-			$directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
+			$directory = $this->getKernel()->getParameter('topxia.upload.public_directory');
 		} else {
-			$directory = $this->getContainer()->getParameter('topxia.upload.private_directory');
+			$directory = $this->getKernel()->getParameter('topxia.upload.private_directory');
 		}
 
 		if (!is_writable($directory)) {
@@ -209,12 +211,12 @@ class FileServiceImpl extends BaseService implements FileService
     	$parsed['directory'] = dirname($parsed['path']);
     	$parsed['name'] = basename($parsed['path']);
 
-    	$directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
+    	$directory = $this->getKernel()->getParameter('topxia.upload.public_directory');
 
 		if ($parsed['access'] == 'public') {
-			$directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
+			$directory = $this->getKernel()->getParameter('topxia.upload.public_directory');
 		} else {
-			$directory = $this->getContainer()->getParameter('topxia.upload.private_directory');
+			$directory = $this->getKernel()->getParameter('topxia.upload.private_directory');
 		}
 		$parsed['fullpath'] = $directory . '/' . $parsed['path'];
 

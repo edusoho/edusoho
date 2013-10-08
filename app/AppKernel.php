@@ -37,16 +37,6 @@ class AppKernel extends Kernel {
         parent::init();
     }
 
-    public function boot ()
-    {
-        if (true === $this->booted) {
-            return;
-        }
-        parent::boot();
-        ServiceKernel::create($this->getContainer(), $this->getEnvironment(), $this->isDebug())
-            ->setRootPath(realpath($this->getRootDir() . '/../'));
-    }
-
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');

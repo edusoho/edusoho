@@ -51,7 +51,7 @@ class DiskServiceImpl extends BaseService implements DiskService
         if ($isLocal) {
             $result['type'] = 'local';
             $result['path'] = $maches[1];
-            $result['fullpath'] = $this->getContainer()->getParameter('topxia.disk.local_directory'). '/' . $result['path'];
+            $result['fullpath'] = $this->getKernel()->getParameter('topxia.disk.local_directory'). '/' . $result['path'];
 
             return $result;
         }
@@ -75,7 +75,7 @@ class DiskServiceImpl extends BaseService implements DiskService
             throw $this->createServiceException('用户不存在，上传失败！');
         }
 
-        $diskDirectory = $this->getContainer()->getParameter('topxia.disk.local_directory');
+        $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
 
         $disk = new UserLocalDisk($user, $diskDirectory);
 

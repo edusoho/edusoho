@@ -1,0 +1,44 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form class="form-horizontal" id="create-database-form" method="post">
+
+    <div class="form-group">
+      <label for="database-host-field" class="col-sm-4 control-label">数据库服务器</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="database-host-field" name="database_host" value="127.0.0.1">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-user-field" class="col-sm-4 control-label">数据库用户名</label>
+      <div class="col-sm-5">
+        <input type="text" id="database-user-field" name="database_user" class="form-control" value="root">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-password-field" class="col-sm-4 control-label">数据库密码</label>
+      <div class="col-sm-5">
+        <input type="password" class="form-control" id="database-password-field" name="database_password">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="database-name-field" class="col-sm-4 control-label">数据库名</label>
+      <div class="col-sm-5">
+        <input type="text" id="database-name-field" name="database_name" value="edusoho" class="form-control">
+      </div>
+    </div> 
+
+    <div class="actions">
+      <button type="submit" id="create-database-btn" class="btn btn-primary btn-lg">创建数据库</button>
+    </div>
+
+  </form>
+
+{% endblock %}

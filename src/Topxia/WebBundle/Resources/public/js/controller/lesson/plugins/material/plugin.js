@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 		name: '资料',
 		iconClass: 'glyphicon glyphicon-download-alt',
 		api: {
-			init: '/lessonplugin/material/init'
+			init: '../../lessonplugin/material/init'
 		},
 		execute: function() {
 			if (!this.pane) {

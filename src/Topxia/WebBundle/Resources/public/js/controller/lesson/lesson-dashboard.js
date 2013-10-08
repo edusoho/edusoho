@@ -63,7 +63,7 @@ define(function(require, exports, module) {
 		_startLesson: function() {
 			var toolbar = this._toolbar,
 				self = this;
-			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
+			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
 			$.post(url, function(result) {
 				if (result == true) {
 					toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
@@ -75,7 +75,7 @@ define(function(require, exports, module) {
 			var $btn = this.element.find('[data-role=finish-lesson]'),
 				toolbar = this._toolbar,
 				self = this;
-			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
+			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
 			$.post(url, function(json) {
 				$btn.addClass('btn-success');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
@@ -86,7 +86,7 @@ define(function(require, exports, module) {
 			var $btn = this.element.find('[data-role=finish-lesson]'),
 				toolbar = this._toolbar,
 				self = this;
-			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/cancel';
+			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/cancel';
 			$.post(url, function(json) {
 				$btn.removeClass('btn-success');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});

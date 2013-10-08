@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Util;
 
-class QiniuClient
+class CloudClient
 {
 
 	protected $accessKey;
@@ -103,7 +103,7 @@ class QiniuClient
             $deadline = time() + 60;
         }
 
-        $url = "http://{$bucket}.qiniudn.com/{$key}";
+        $url = "http://{$bucket}.edusoho.net/{$key}";
         if (empty($fop)) {
             $url .= "?e={$deadline}";
         } else {

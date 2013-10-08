@@ -2,14 +2,6 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
-install_init_system:
-    pattern:  /install/init/system
-    defaults: { _controller: TopxiaWebBundle:Install:initSystem }
-
-install_welcome:
-    pattern:  /install/welcome
-    defaults: { _controller: TopxiaWebBundle:Install:welcome }
-
 login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:Login:index }

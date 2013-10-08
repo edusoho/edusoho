@@ -1,0 +1,43 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form class="form-horizontal" id="init-form" method="post">
+
+    <div class="form-group">
+      <label for="sitename-field" class="col-sm-4 control-label">网站名称</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="sitename-field" name="sitename" value="{{ request.sitename|default('EduSoho网络课堂') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="admin-email-field" class="col-sm-4 control-label">管理员Email地址</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="admin-email-field" name="admin[email]" value="{{ request.admin.email|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="admin-nickname-field" class="col-sm-4 control-label">管理员昵称</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="admin-nickname-field" name="admin[nickname]" value="{{ request.admin.nickname|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="admin-password-field" class="col-sm-4 control-label">管理员密码</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="admin-password-field" name="admin[password]" value="{{ request.admin.password|default('') }}">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="init-btn" class="btn btn-primary btn-lg">初始化系统</button>
+    </div>
+
+  </form>
+{% endblock %}

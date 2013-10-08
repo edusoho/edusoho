@@ -1,6 +1,6 @@
 <VirtualHost *:80>
-    ServerName esdev.com
-    ServerAlias www.esdev.com
+    ServerName example.com
+    ServerAlias www.example.com
 
     DocumentRoot /var/www/edusoho/web
 
@@ -15,6 +15,6 @@
         Allow from All
     </Directory>
 
-    ErrorLog /var/log/apache2/project_error.log
-    CustomLog /var/log/apache2/project_access.log combined
+    ErrorLog /var/log/apache2/example.com_error.log
+    CustomLog /var/log/apache2/example.com_access.log combined
 </VirtualHost>

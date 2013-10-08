@@ -57,7 +57,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('packaging...');
 
 		chdir($this->buildDirectory);
-		$command = "tar czvf edusoho-1.0.tar.gz edusoho/";
+		$command = "tar czvf edusoho-1.0RC1.tar.gz edusoho/";
 		exec($command);
 	}
 
@@ -74,12 +74,16 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mkdir("{$this->distDirectory}/app");
 		$this->filesystem->mkdir("{$this->distDirectory}/app/cache");
 		$this->filesystem->mkdir("{$this->distDirectory}/app/data");
+		$this->filesystem->mkdir("{$this->distDirectory}/app/data/udisk");
+		$this->filesystem->mkdir("{$this->distDirectory}/app/data/private_files");
 		$this->filesystem->mkdir("{$this->distDirectory}/app/logs");
 		$this->filesystem->mirror("{$this->rootDirectory}/app/Resources", "{$this->distDirectory}/app/Resources");
 		$this->filesystem->mirror("{$this->rootDirectory}/app/config", "{$this->distDirectory}/app/config");
 
 		$this->filesystem->chmod("{$this->distDirectory}/app/cache", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/data", 0777);
+		$this->filesystem->chmod("{$this->distDirectory}/app/data/udisk", 0777);
+		$this->filesystem->chmod("{$this->distDirectory}/app/data/private_files", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/logs", 0777);
 
 		$this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
@@ -90,6 +94,11 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml.dist");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
 
+		$this->filesystem->copy("{$this->rootDirectory}/app/AppCache.php", "{$this->distDirectory}/app/AppCache.php");
+		$this->filesystem->copy("{$this->rootDirectory}/app/AppKernel.php", "{$this->distDirectory}/app/AppKernel.php");
+		$this->filesystem->copy("{$this->rootDirectory}/app/autoload.php", "{$this->distDirectory}/app/autoload.php");
+		$this->filesystem->copy("{$this->rootDirectory}/app/bootstrap.php.cache", "{$this->distDirectory}/app/bootstrap.php.cache");
+
 	}
 
 	public function buildDocDirectory()
@@ -97,7 +106,9 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('build doc/ .');
 
 		$this->filesystem->mkdir("{$this->distDirectory}/doc");
-		$this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
+		// $this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
+		$this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
+		$this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
 	}
 
 	public function buildSrcDirectory()
@@ -135,6 +146,9 @@ class BuildCommand extends BaseCommand
 			'doctrine/common/lib/Doctrine',
 			'doctrine/dbal/lib/Doctrine',
 			'doctrine/doctrine-bundle',
+			'doctrine/doctrine-migrations-bundle',
+			'doctrine/migrations/lib',
+			'doctrine/orm/lib',
 			'ezyang/htmlpurifier/library',
 			'imagine/imagine/lib',
 			'jdorn/sql-formatter/lib',
@@ -147,7 +161,9 @@ class BuildCommand extends BaseCommand
 			'symfony/icu',
 			'symfony/monolog-bundle',
 			'symfony/swiftmailer-bundle',
-			'symfony/symfony/src'
+			'symfony/symfony/src',
+			'twig/twig/lib',
+			'twig/extensions/lib',
 		);
 
 		foreach ($directories as $dir) {
@@ -175,6 +191,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('build web/ .');
 
 		$this->filesystem->mkdir("{$this->distDirectory}/web");
+		$this->filesystem->mkdir("{$this->distDirectory}/web/files");
 		$this->filesystem->mkdir("{$this->distDirectory}/web/bundles");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/assets", "{$this->distDirectory}/web/assets");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/customize", "{$this->distDirectory}/web/customize");
@@ -185,6 +202,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->copy("{$this->rootDirectory}/web/favicon.ico", "{$this->distDirectory}/web/favicon.ico");
 		$this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
 
+		$this->filesystem->chmod("{$this->distDirectory}/web/files", 0777);
 
 		$finder = new Finder();
 		$finder->files()->in("{$this->distDirectory}/web/assets/libs");

@@ -17,7 +17,11 @@
 
   <div class="row">
     <div class="col-md-12">
-    	{{ content.body|raw }}
+      {% if content.body %}
+      	{{ content.body|raw }}
+      {% else %}
+        <div class="empty">当前页面尚未编辑内容，请在管理后台编辑。</div>
+      {% endif %}
     </div>
   </div>
 

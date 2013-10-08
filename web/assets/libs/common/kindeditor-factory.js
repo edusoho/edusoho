@@ -35,7 +35,7 @@ define(function(require, exports, module) {
     var defaultConfig = {
         width: '100%',
         resizeType: 1,
-        uploadJson: '/kindeditor/upload',
+        uploadJson: app.config.editor_upload_path,
         extraFileUploadParams: {},
         filePostName: 'file',
         cssData: contentCss.join('\n')
