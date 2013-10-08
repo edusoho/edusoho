@@ -1,27 +1,8 @@
+{% extends "layout.html.twig" %}
 
-<?php
-require_once('./header.php');
-?>
+{% block main %}
 
-<body>
-
-<div class="container" style="width:940px">
-    
-  <div class="es-row-wrap">
-
-    <div class="row">
-
-      <div class="col-lg-12">
-
-        <div class="setup-wizard">
-          <span class="pull-left text-primary" style="font-weight:900;font-size:250%">Edusoho</span>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <span class="text-success" style="font-weight:900;font-size:250%">安装向导</span>
-        </div>
-          <h3>EduSoho授权协议V1.0</h3>
-
-        <hr>          <div class="protocol">
-            <pre class="pact" readonly="readonly">
+<pre class="agreement">
 版权所有 (c) 2011-2013，杭州阔知网络科技有限公司
 
 保留所有权利。
@@ -61,20 +42,9 @@ EduSoho ，中文全称为 EduSoho 课堂，以下简称 EduSoho。
   
   电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始安装 EduSoho，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。
             </pre>
-          </div>
-        
-          <div class="next" style="text-align:center">
-            <a style="margin-bottom:20px;" href="./envDetect.php" class="btn btn-primary btn-lg" role="button" >接受</a>
-          </div>
 
-      </div>
-
-    </div>
-
-  </div>
-
+<div class="actions">
+	<a href="install.php?step=1" class="btn btn-primary">同意协议，并开始安装！</a>
 </div>
 
-</body>
-
-</html>
+{% endblock %}
