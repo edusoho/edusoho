@@ -116,6 +116,7 @@ function install_step3()
 		$init->initStorageSetting();
 		$init->initTag();
 		$init->initCategory();
+		$init->initFile();
 		$init->initPages();
 		$init->initNavigations();
 		$init->initBlocks();
