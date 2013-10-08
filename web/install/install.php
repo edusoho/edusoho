@@ -1,5 +1,11 @@
 <?php
 
+if (file_exists(__DIR__ . '/../../app/data/install.lock')) {
+	exit('already install.');
+}
+
+
+
 use Composer\Autoload\ClassLoader;
 
 require __DIR__.'/../../vendor/autoload.php';
@@ -59,6 +65,9 @@ function install_step1()
 	foreach ($paths as $path) {
 		$checkedPath = __DIR__ . '/../../' . $path;
 		$checked = is_executable($checkedPath) && is_writable($checkedPath) && is_readable($checkedPath);
+		if (PHP_OS == 'WINNT') {
+			$checked = true;
+		}
 		if (!$checked) {
 			$pass = false;
 		}
@@ -120,6 +129,7 @@ function install_step3()
 		$init->initPages();
 		$init->initNavigations();
 		$init->initBlocks();
+		$init->initLockFile();
 
 		header("Location: install.php?step=4");
 		exit();
@@ -472,6 +482,11 @@ EOD;
 <a href="#"><img src="assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
 		$this->getBlockService()->updateBlock($block['id'], array('content'=>$body));
+	}
+
+	public function initLockFile()
+	{
+		file_put_contents(__DIR__ . '/../../app/data/install.lock', '');
 	}
 
 	private function getUserService()
