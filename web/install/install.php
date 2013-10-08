@@ -49,9 +49,9 @@ function install_step1()
 	$env['phpVersionOk'] = version_compare(PHP_VERSION, '5.3.0') >= 0;
 	$env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
 	$env['uploadMaxFilesize'] = ini_get('upload_max_filesize');
-	$env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 20;
+	$env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 2;
 	$env['postMaxsize'] = ini_get('post_max_size');
-	$env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 20;
+	$env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 8;
 	$env['maxExecutionTime'] = ini_get('max_execution_time');
 	$env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
 
@@ -486,9 +486,9 @@ EOD;
         ));
 
         $content = <<<'EOD'
-<a href=""><img src="assets/img/placeholder/carousel-1200x256-1.png" /></a>
-<a href="#"><img src="assets/img/placeholder/carousel-1200x256-2.png" /></a>
-<a href="#"><img src="assets/img/placeholder/carousel-1200x256-3.png" /></a>
+<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
 		$this->getBlockService()->updateContent($block['id'], $content);
 	}
