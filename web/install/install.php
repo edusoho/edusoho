@@ -448,32 +448,30 @@ EOD;
 
 	public function initNavigations()
 	{
-		$baseUri = str_replace('install/install.php', '', $_SERVER['SCRIPT_NAME']);
-
         $this->getNavigationService()->createNavigation(array(
             'name'=>'师资力量', 
-            'url'=> $baseUri . 'teacher', 
+            'url'=> 'teacher', 
             'sequence' => 1,
             'isNewWin'=>0,
-            'isOpen'=>0,
+            'isOpen'=> 1,
             'type'=>'top'
         ));
 
         $this->getNavigationService()->createNavigation(array(
             'name'=>'常见问题', 
-            'url'=> $baseUri . 'page/questions', 
+            'url'=> 'page/questions', 
             'sequence' => 2,
             'isNewWin'=>0,
-            'isOpen'=>0,
+            'isOpen'=> 1,
             'type'=>'top'
         ));
 
         $this->getNavigationService()->createNavigation(array(
             'name' => '关于我们', 
-            'url' => $baseUri . 'page/aboutus',
+            'url' => 'page/aboutus',
             'sequence' => 2,
             'isNewWin' => 0,
-            'isOpen' => 0,
+            'isOpen' => 1,
             'type' => 'top'
         ));
 	}
