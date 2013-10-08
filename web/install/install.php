@@ -240,39 +240,12 @@ function _create_connection()
      return $connection;
 }
 
-
-
-function _getUserService()
-{
-	return ServiceKernel::instance()->createService('User.UserService');
-}
-
-function _getSettingService()
-{
-	return ServiceKernel::instance()->createService('System.SettingService');
-}
-
-function _getCategoryService()
-{
-	return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
-}
-
-function _getTagService()
-{
-	return ServiceKernel::instance()->createService('Taxonomy.TagService');
-}
-
-function _getFileService()
-{
-	return ServiceKernel::instance()->createService('Content.FileService');
-}
-
 class SystemInit
 {
 
 	public function initAdmin($user)
 	{
-	    $user = $user = _getUserService()->register($user);
+	    $user = $user = $this->getUserService()->register($user);
 	    $user['roles'] =  array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
 	    $user['currentIp'] = '127.0.0.1';
 
