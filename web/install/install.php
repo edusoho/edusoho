@@ -54,6 +54,11 @@ function install_step1()
 	$env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 8;
 	$env['maxExecutionTime'] = ini_get('max_execution_time');
 	$env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
+	$env['mbstringOk'] = extension_loaded('mbstring');
+	$env['curlOk'] = extension_loaded('curl');
+	$env['fileinfoOk'] = extension_loaded('fileinfo');
+	
+
 
 	if (!$env['phpVersionOk'] or !$env['pdoMysqlOk'] or !$env['uploadMaxFilesizeOk'] or !$env['postMaxsizeOk'] or !$env['maxExecutionTimeOk']) {
 		$pass = false;
