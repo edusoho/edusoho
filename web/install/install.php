@@ -455,7 +455,7 @@ EOD;
             'url'=> $baseUri . 'teacher', 
             'sequence' => 1,
             'isNewWin'=>0,
-            'isOpen'=>1,
+            'isOpen'=>0,
             'type'=>'top'
         ));
 
@@ -464,7 +464,7 @@ EOD;
             'url'=> $baseUri . 'page/questions', 
             'sequence' => 2,
             'isNewWin'=>0,
-            'isOpen'=>1,
+            'isOpen'=>0,
             'type'=>'top'
         ));
 
@@ -473,7 +473,7 @@ EOD;
             'url' => $baseUri . 'page/aboutus',
             'sequence' => 2,
             'isNewWin' => 0,
-            'isOpen' => 1,
+            'isOpen' => 0,
             'type' => 'top'
         ));
 	}
