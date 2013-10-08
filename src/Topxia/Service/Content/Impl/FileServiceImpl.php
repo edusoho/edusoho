@@ -68,7 +68,9 @@ class FileServiceImpl extends BaseService implements FileService
 		$record = array();
 		$record['userId'] = $user['id'];
 		$record['groupId'] = $group['id'];
-		$record['mime'] = $file->getMimeType();
+		// @todo fix it.
+		$record['mime'] = '';
+		// $record['mime'] = $file->getMimeType();
 		$record['size'] = $file->getSize();
 		$record['uri'] = $this->generateUri($group, $file);
 		$record['createdTime'] = time();
