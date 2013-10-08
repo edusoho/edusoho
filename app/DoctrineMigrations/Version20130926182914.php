@@ -29,11 +29,7 @@ class Version20130926182914 extends AbstractMigration
 				  PRIMARY KEY (`id`)
 				) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='用户行为' AUTO_INCREMENT=3;
        	");
-       $this->addSql("
-       		ALTER TABLE  `activity` ADD `onlineAddress` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '线上地址' ");
-
-       $this->addSql("
-       		ALTER TABLE  `activity` ADD `teacherPostNum` int(11) unsigned DEFAULT '0' COMMENT '老师回复数' ");
+      
 
     }
 
