@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 		noactive: true,
 		iconClass: 'glyphicon glyphicon-ok',
 		api: {
-			init: '../../../lessonplugin/quiz/init'
+			init: '../../lessonplugin/quiz/init'
 		},
 		execute: function() {	
 			var initUrl = this.api.init+"/"+this.toolbar.get('courseId')+"/"+this.toolbar.get('lessonId');

@@ -9,11 +9,11 @@ define(function(require, exports, module) {
 		name: '问答',
 		iconClass: 'glyphicon glyphicon-question-sign',
 		api: {
-			init: '../../../lessonplugin/question/init',
-			list: '../../../lessonplugin/question/list',
-			show: '../../../lessonplugin/question/show',
-			create: '../../../lessonplugin/question/create',
-			answer: '../../../lessonplugin/question/answer'
+			init: '../../lessonplugin/question/init',
+			list: '../../lessonplugin/question/list',
+			show: '../../lessonplugin/question/show',
+			create: '../../lessonplugin/question/create',
+			answer: '../../lessonplugin/question/answer'
 		},
 		execute: function() {
 			if (!this.pane) {

@@ -9,8 +9,8 @@ define(function(require, exports, module) {
 		name: '笔记',
 		iconClass: 'glyphicon glyphicon-edit',
 		api: {
-			init: '../../../lessonplugin/note/init',
-			save: '../../../lessonplugin/note/save'
+			init: '../../lessonplugin/note/init',
+			save: '../../lessonplugin/note/save'
 		},
 		execute: function() {
 			if (!this.pane) {
