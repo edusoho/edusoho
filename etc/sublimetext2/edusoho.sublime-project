@@ -6,7 +6,8 @@
 			[
 				"web/bundles",
 				"app/cache/dev/twig",
-				"app/cache/dev/profiler"
+				"app/cache/dev/profiler",
+				"build"
 			],
 			"path": "/var/www/edusoho"
 		}
