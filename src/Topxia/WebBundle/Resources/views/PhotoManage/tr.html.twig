@@ -1,11 +1,10 @@
 {% import "TopxiaWebBundle::macro.html.twig" as admin_macro %}
 <tr id="course-tr-{{ course.id }}">
   <td>
-    <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
-    <br>
+    <img src="{{ file_path(course.url,'avatar.png') }}" class="admin-photo-list-img"/>
   </td>
    <td>
-    <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank"><strong>{{ course.content }}</strong></a>
+    <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank" class="admin-photo-list-about"><strong>{{ course.content }}</strong></a>
     <br>
   </td>
   <td>

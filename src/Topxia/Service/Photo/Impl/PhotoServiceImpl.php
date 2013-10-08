@@ -460,7 +460,7 @@ class CommentSerialize
     		return $activity;
     	}
 
-    	$activity['createdTime']=empty($activity['createdTime'])?'':date('Y-m-d',$activity['createdTime']);
+    	// $activity['createdTime']=empty($activity['createdTime'])?'':date('Y-m-d',$activity['createdTime']);
 
 		return $activity;
     }

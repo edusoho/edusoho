@@ -1,4 +1,4 @@
 {% for comment in comments %}
-<li class="comment-tr-{{comment.id}}"><a>{{ users[comment.userid].nickname }}:</a> {{ comment.content }}
-<span> . {{ comment.createdTime }}</span></li>
+<li class="comment-tr-{{comment.id}}"><a>{{ users[comment.userId].nickname }}:</a> {{ comment.content }}
+<span> . {{ comment.createdTime|smart_time }}</span></li>
 {% endfor %}

@@ -138,7 +138,7 @@ class PhotoManageController extends BaseController
         $largeImage = $rawImage->copy();
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
-        $largeFileRecord = $this->getFileService()->uploadFile('photo', new File($largeFilePath));
+        $largeFileRecord = $this->getFileService()->uploadImgFile('photo', new File($largeFilePath));
         return $largeFileRecord['uri'];
     } 
 
