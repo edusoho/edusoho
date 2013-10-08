@@ -490,7 +490,7 @@ EOD;
 <a href="#"><img src="assets/img/placeholder/carousel-1200x256-2.png" /></a>
 <a href="#"><img src="assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
-		$this->getBlockService()->updateBlock($block['id'], array('content'=>$body));
+		$this->getBlockService()->updateContent($block['id'], $content);
 	}
 
 	public function initLockFile()
