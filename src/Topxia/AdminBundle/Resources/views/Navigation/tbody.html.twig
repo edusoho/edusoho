@@ -1,7 +1,7 @@
 <tbody>
   {% for navigation in navigations %}
 		<tr id="navigations-tr-{{ navigation.id }}">
-		  <td> <a href="{{navigation.url}}" target="_blank"> {{navigation.name}} </a></td>
+		  <td> <a href="{{navigation.url|navigation_url}}" target="_blank"> {{navigation.name}} </a></td>
 		  <td>
 				{% if navigation.isNewWin == 0 %}否{% else %}是{% endif %}
   		</td>
