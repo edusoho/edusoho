@@ -3065,9 +3065,9 @@ body {
 }
 
 .visible-lt-ie8 {
-  display: none;
+  display: none !important;
 }
 
 .lt-ie8 .visible-lt-ie8 {
-  display: block;
+  display: block !important;
 }
