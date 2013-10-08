@@ -10,13 +10,48 @@ use Topxia\System;
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
 
+	public function searchPackageCount()
+	{
+		return $this->getInstalledPackageDao()->searchPackageCount();
+	}
+
+	public function searchPackages($start, $limit)
+	{
+		return $this->getInstalledPackageDao()->findPackages($start, $limit);
+	}
+
 	public function check()
 	{
 		$packages = $this->getInstalledPackageDao()->findInstalledPackages();
 		if(!$this->checkMainVersion($packages)){
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
-		return $this->getEduSohoUpgradeService()->check($packages);
+		
+		$packagesToUpgrade =  $this->getEduSohoUpgradeService()->check($packages);
+		$packagesToUpgradeOfArray = array();
+
+		if(empty($packagesToUpgrade)){
+			return array();
+		} else {
+			foreach ($packagesToUpgrade as &$packageToUpgrade) {
+				$packageToUpgrade = (array)$packageToUpgrade;
+				$packageToUpgrade['comments'] = strip_tags($packageToUpgrade['comments']);
+				$packagesToUpgradeOfArray[] = $packageToUpgrade;
+			}
+
+			return $packagesToUpgradeOfArray;
+		}
+		
+	}
+
+	public function install($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->install($id);
+		$package = (array)$package;
+		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
+		$dirPath = $this->extractFile($path);
+		return $dirPath;
+
 	}
 
 	public function upgrade($id)
@@ -33,7 +68,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	}
 
-	private function extractFile($path){
+	private function extractFile($path)
+	{
 		$dir = $this->getContainer()->getParameter('topxia.disk.upgrade_dir');
 		$extractDir = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
 		$zip = new ZipArchive;
@@ -68,12 +104,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 		return $message;
 	}
-
-	public function install($id)
-	{
-		return $this->getEduSohoUpgradeService()->install($id);
-	}
-
 
 	private function checkMainVersion($packages)
 	{

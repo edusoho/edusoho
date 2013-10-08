@@ -347,6 +347,18 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_upgrade:
+    pattern:  /upgrade
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:index }
+
+admin_upgrade_check:
+    pattern:  /upgrade/check
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:check }
+
+admin_upgrade_install:
+    pattern:  /upgrade/{id}/install
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:install }
+
 admin_category:
     pattern:  /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }

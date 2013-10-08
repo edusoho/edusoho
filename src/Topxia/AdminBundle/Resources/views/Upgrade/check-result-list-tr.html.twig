@@ -1,0 +1,56 @@
+<tr id="package-tr-{{ package.id }}">
+
+  <td>{{ package.id }}</td>
+  <td>{{ package.ename }}</td>
+  <td>
+  	{% if package.type == 0 %} 安装包
+  	{% elseif package.type == 1 %} 升级包
+  	{% endif %}
+  </td>
+  <td>
+  	{% if package.type == 0 %} 
+  		{{package.version}}
+  	{% elseif package.type == 1 %}
+  		{{package.fromVersion}} => {{package.version}}
+  	{% endif %}
+  </td>
+
+  <td>
+  	{% if package.level == 1 %} <strong class="text-info"> 一般 </strong>
+  	{% elseif package.level == 2 %} <strong class="text-warning"> 重要 </strong>
+  	{% elseif package.level == 3 %}  <strong class="text-danger"> 紧急 </strong>
+  	{% endif %}
+  </td>
+
+  <td>
+  	{{package.comments | raw }}
+  	<br>
+	<a class="btn btn-sm btn-info detail" data-placement="left" data-toggle="popover"
+	data-title="软件包详情" 
+	data-content="
+	ID:{{package.id}} 
+	<br>
+	英文名:{{package.ename}}
+	<br>
+	中文名:{{package.cname}}
+	<br>
+	前一版本:{{package.fromVersion}}
+	<br>
+	当前版本:{{package.version}}
+	<br>
+	文件名:{{package.filename}}
+	<br>
+	更新说明:{{package.comments}}
+	<br>
+	依赖关系：{{package.depends}}
+	">详情</a>
+
+  </td>
+  <td>
+  	{% if package.type == 0 %} 
+  		<button class="btn btn-success btn-sm install" data-url="{{path('admin_upgrade_install', {id:package.id})}}"> 安装 </button>
+  	{% elseif package.type == 1 %}
+  		<button class="btn btn-primary btn-sm upgrade" href="/admin/upgrade/check"> 更新 </button>
+  	{% endif %}
+  </td>
+</tr>
