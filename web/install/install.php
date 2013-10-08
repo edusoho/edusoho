@@ -58,9 +58,14 @@ function install_step1()
 	$env['curlOk'] = extension_loaded('curl');
 	$env['fileinfoOk'] = extension_loaded('fileinfo');
 	
-
-
-	if (!$env['phpVersionOk'] or !$env['pdoMysqlOk'] or !$env['uploadMaxFilesizeOk'] or !$env['postMaxsizeOk'] or !$env['maxExecutionTimeOk']) {
+	if (!$env['phpVersionOk'] or 
+		!$env['pdoMysqlOk'] or 
+		!$env['uploadMaxFilesizeOk'] or 
+		!$env['postMaxsizeOk'] or 
+		!$env['maxExecutionTimeOk'] or
+		!$env['mbstringOk'] or
+		!$env['curlOk'] or
+		!$env['fileinfoOk']) {
 		$pass = false;
 	}
 
