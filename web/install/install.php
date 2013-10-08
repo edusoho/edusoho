@@ -1,8 +1,6 @@
 <?php
 
-if (file_exists(__DIR__ . '/../../app/data/install.lock')) {
-	exit('already install.');
-}
+
 
 
 
@@ -24,14 +22,23 @@ $functionName();
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 
+function check_installed()
+{
+	if (file_exists(__DIR__ . '/../../app/data/install.lock')) {
+		exit('already install.');
+	}
+}
+
 function install_step0()
 {
+	check_installed();
 	global $twig;
 	echo $twig->render('step-0.html.twig', array('step' => 0));
 }
 
 function install_step1()
 {
+	check_installed();
 	global $twig;
 
 	$pass = true;
@@ -84,6 +91,7 @@ function install_step1()
 
 function install_step2()
 {
+	check_installed();
 	global $twig;
 
 	$error = null;
@@ -106,6 +114,7 @@ function install_step2()
 
 function install_step3()
 {
+	check_installed();
 	global $twig;
 
 	$connection = _create_connection();
