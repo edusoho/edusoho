@@ -72,7 +72,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
     	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     	$data = curl_exec($ch);
     	curl_close($ch);
-    	$path = $this->getKernel()->getParameter('topxia.disk.upgrade_dir').DIRECTORY_SEPARATOR.$filename;
+    	$path = $this->getKernel()->getParameter('topxia.disk.upgrade_dir').DIRECTORY_SEPARATOR.$filename;    	
     	file_put_contents($path, $data);	
     	return 	$path;
 	}

@@ -9,6 +9,24 @@ use Topxia\System;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
+	public function addInstalledPackage($packageInfo)
+	{
+		$installedPackage = array();
+		$installedPackage['ename'] = $packageInfo['ename'];
+		$installedPackage['cname'] = $packageInfo['cname'];
+		$installedPackage['version'] = $packageInfo['version'];
+		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
+		$installedPackage['installlog'] = 'result-success';
+		$installedPackage['installTime'] = time();
+		return $this->getInstalledPackageDao()->addInstalledPackage($installedPackage);
+	}
+
+	public function getRemoteInstallPackageInfo($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->install($id);
+		$package = (array)$package;
+		return $package;
+	}
 
 	public function searchPackageCount()
 	{
@@ -50,8 +68,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$package = (array)$package;
 		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 		$dirPath = $this->extractFile($path);
-		return $dirPath;
-
 	}
 
 	public function upgrade($id)
@@ -70,9 +86,9 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function extractFile($path)
 	{
-		$dir = $this->getContainer()->getParameter('topxia.disk.upgrade_dir');
+		$dir = $this->getKernel()->getParameter('topxia.disk.upgrade_dir');
 		$extractDir = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
-		$zip = new ZipArchive;
+		$zip = new \ZipArchive;
 		if ($zip->open($path) === TRUE) {
     		$zip->extractTo($extractDir);
     		$zip->close();

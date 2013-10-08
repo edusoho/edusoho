@@ -14,7 +14,14 @@ define(function(require, exports, module) {
             if (!confirm('确认要安装此软件包吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {
-               console.log(response);
+
+               if(response.status == 'ok'){
+                $('#' + $btn.data('target')).remove();
+                    Notify.success('安装成功！');
+               } else {
+                    alert('服务器错误!');
+                }
+
             }, 'json');
 
         });

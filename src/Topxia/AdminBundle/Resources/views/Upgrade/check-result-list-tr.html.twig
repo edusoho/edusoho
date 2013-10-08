@@ -1,4 +1,4 @@
-<tr id="package-tr-{{ package.id }}">
+<tr id="package-tr-{{ package.id }}" >
 
   <td>{{ package.id }}</td>
   <td>{{ package.ename }}</td>
@@ -48,7 +48,7 @@
   </td>
   <td>
   	{% if package.type == 0 %} 
-  		<button class="btn btn-success btn-sm install" data-url="{{path('admin_upgrade_install', {id:package.id})}}"> 安装 </button>
+  		<button class="btn btn-success btn-sm install" data-url="{{path('admin_upgrade_install', {id:package.id})}}" data-target="package-tr-{{ package.id }}"> 安装 </button>
   	{% elseif package.type == 1 %}
   		<button class="btn btn-primary btn-sm upgrade" href="/admin/upgrade/check"> 更新 </button>
   	{% endif %}
