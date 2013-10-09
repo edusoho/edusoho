@@ -17,7 +17,7 @@ class PhotoCommentController extends BaseController
 
         $feild['id']=$id;
         $comments=$this->getPhotoService()->findCommentsByFileId($feild,'latest',0,100);
-        $userids=ArrayToolkit::column($comments,'userid');
+        $userids=ArrayToolkit::column($comments,'userId');
         $users=$this->getUserService()->findUsersByIds($userids);
 		return $this->render('TopxiaWebBundle:PhotoComment:commit-list.html.twig',array(
             'comments'=>$comments,

@@ -633,3 +633,13 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 	width: 1200px !important;
 	height: 204px !important;
 }
+
+
+
+/* admin photo style */
+
+.admin-photo-list-img{
+	width: 100px;
+	height: 100px;
+}
+

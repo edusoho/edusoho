@@ -47,6 +47,8 @@ interface FileService
 	 */
 	public function uploadFile($group, File $file, $target = null);
 
+	public function uploadImgFile($group, File $file, $target = null);
+
 	/**
 	 * 删除文件
 	 * 

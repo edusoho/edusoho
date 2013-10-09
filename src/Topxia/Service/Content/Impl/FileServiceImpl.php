@@ -80,6 +80,28 @@ class FileServiceImpl extends BaseService implements FileService
 		return $record;
 	}
 
+	public function uploadImgFile($group, File $file, $target = null)
+	{
+		$extensions = 'jpg jpeg gif png txt pdf doc docx xls xlsx ppt pptx pps mp4 mp3 avi zip rar gz tar 7z swf';
+		$errors = $this->validateFileExtension($file, $extensions);
+		if ($errors) {
+			throw $this->createServiceException(join("\n", $errors));
+		}
+
+		$group = $this->getGroupDao()->findGroupByCode($group);
+		$user = $this->getCurrentUser();
+		$record = array();
+		$record['userId'] = $user['id'];
+		$record['groupId'] = $group['id'];
+		$record['mime'] = $file->getMimeType();
+		$record['size'] = $file->getSize();
+		$record['uri'] = $this->generateUri($group, $file);
+		$record['createdTime'] = time();
+		$record['file'] = $this->saveFile($file, $record['uri']);
+
+		return $record;
+	}
+
 	protected function validateFileExtension(File $file, $extensions)
 	{
 		if ($file instanceof UploadedFile) {
@@ -175,7 +197,7 @@ class FileServiceImpl extends BaseService implements FileService
 		return $file->move($directory, $parsed['name']);
 	}
 
-    private function generateUri ($group, $file)
+    public function generateUri ($group, $file)
     {
 		if ($file instanceof UploadedFile) {
 			$filename = $file->getClientOriginalName();
