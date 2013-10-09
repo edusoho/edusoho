@@ -13,7 +13,7 @@ class Version20131009174124 extends AbstractMigration
     public function up(Schema $schema)
     {
     	$this->addSql("
-    		CREATE TABLE `upgradeBackup` (
+    		CREATE TABLE IF NOT EXISTS `upgradeBackup` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `type` enum('database','directory') NOT NULL COMMENT '备份类型，database是数据库备份，directory是文件夹备份',
 			  `fileId` int(11) NOT NULL COMMENT '备份处理并上传后的文件ID',
@@ -26,7 +26,7 @@ class Version20131009174124 extends AbstractMigration
     	");
 
     	$this->addSql("
-			INSERT INTO  `1`.`file_group` (`id` ,`name` ,`code` ,`public`) VALUES ('5',  '升级包备份',  'upgradeBackup',  '1');
+			INSERT INTO  `file_group` (`id` ,`name` ,`code` ,`public`) VALUES ('99',  '升级包备份',  'upgradeBackup',  '1');
     	");
 
     }
