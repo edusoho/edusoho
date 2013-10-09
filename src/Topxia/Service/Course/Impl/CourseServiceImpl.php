@@ -977,6 +977,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'role' => 'teacher',
 				'seq' => $index,
 				'isVisible' => empty($teacher['isVisible']) ? 0 : 1,
+				'createdTime' => time(),
 			);
 		}
 

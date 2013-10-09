@@ -29,25 +29,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserProfile($id)
     {
-
-        $profile = $this->getProfileDao()->getProfile($id);
-
-        if($profile ==  false){
-            return array(
-                'truename'=>'', 
-                'gender'=>'', 
-                'job'=> '', 
-                'title'=>'', 
-                'signature'=>'', 
-                'about'=>'',
-                'site'=>'',
-                'weibo'=>'',
-                'weixin'=>'',
-                'qq'=>'');
-        } else {
-            return $profile;
-        }
-
+       return $this->getProfileDao()->getProfile($id);
     }
 
     public function getUserByNickname($nickname){
@@ -323,6 +305,15 @@ class UserServiceImpl extends BaseService implements UserService
         if (!empty($fields['qq']) && !SimpleValidator::qq($fields['qq'])) {
             throw $this->createServiceException('QQ不正确，更新用户失败。');
         }
+
+        foreach ($fields as $key => $value) {
+            if (empty($value)) {
+                $fields[$key] = '';
+            }
+        }
+
+        // @todo 这个字段先干掉，目前界面上还没有。
+        unset($fields['birthday']);
 
         if(isset($fields['about'])){
             $fields['about'] = $this->purifyHtml($fields['about']);
