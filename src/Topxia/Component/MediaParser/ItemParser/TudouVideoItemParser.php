@@ -16,7 +16,8 @@ class TudouVideoItemParser extends AbstractItemParser
             throw $this->createParseException("获取土豆视频({$url})页面内容失败！");
         }
 
-        $matched = preg_match('/itemData\s*=\s*\{\s*iid:\s*(\d+).*?icode:\s*\'(.*?)\'.*?pic:\s*\'(.*?)\'.*?kw:\s*\'(.*?)\'/s', $response['content'], $matches);
+        // $matched = preg_match('/itemData\s*=\s*\{\s*iid:\s*(\d+).*?icode:\s*\'(.*?)\'.*?pic:\s*\'(.*?)\'.*?kw:\s*\'(.*?)\'/s', $response['content'], $matches);
+        $matched = preg_match('/,iid:\s*(\d+).*?,icode:\s*\'(.*?)\'.*?,pic:\s*\'(.*?)\'.*?,kw:\s*\'(.*?)\'/s', $response['content'], $matches);
         if (!$matched) {
             throw $this->createParseException("解析土豆视频信息失败");
         }
@@ -27,7 +28,7 @@ class TudouVideoItemParser extends AbstractItemParser
         $item['source'] = 'tudou';
         $item['uuid'] = 'tudou:' . $videoId;
 
-        $item['name'] = iconv('gbk', 'utf-8', $matches[4]);
+        $item['name'] = $matches[4];
         $item['page'] = "http://www.tudou.com/programs/view/{$videoId}/";
         $item['pictures'] = array(
             array('url' => $matches[3])
