@@ -24,6 +24,7 @@ class Version20131006183702 extends AbstractMigration
       			(6, '相册', 'photo', 1),
       			(7, '活动', 'activity', 1),
       			(8, '活动私有文件', 'activity_private', 0);
+          DELETE FROM  `location` ;
           INSERT INTO `location` (`id`, `parentId`, `name`, `pinyin`) VALUES
             (1, 0, '北京', 'beijing'),
             (2, 0, '上海', 'shanghai');
