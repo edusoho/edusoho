@@ -9,9 +9,8 @@
 .header-top { margin-top:56px;}
 
 .index-img-box{
-	position: relative;
-	
-	height: 200px;
+	position: relative;	
+	/*height: 200px;*/
 }
 
 .activity-img-sm{
@@ -20,8 +19,8 @@
 }
 
 .activity-img-title{
-	height: 28px;
-	line-height: 27px;
+	/*lheight: 28px;
+	line-height: 27px;*/
 	text-align: center;
 	width: 100%;
 }

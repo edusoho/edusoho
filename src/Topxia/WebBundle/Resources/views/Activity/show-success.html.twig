@@ -7,6 +7,38 @@
 
 {% block content %}
 
+<div class="row">
+  <ul class='col-md-12'>
+    <li class="widget shadow pz">
+      <div class="clearfix">
+        <div class="imageblock-image">
+          <a href="#" class="show-user-card" >
+            <img class="open-class-logo-large-size"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}"></a>
+        </div>
+        <div class="imageblock-content prm">
+          <p class="title">
+            <h4>{{ activity.subtitle }}</h4>
+            <h3>{{ activity.title }}</h3>
+          </p>
+          <p>开始时间： {{activity.startTime}}</p>
+          <p>结束时间： {{activity.endTime}}</p>
+          <p>地点： {{ activity.address }}</p>
+          {% if current_user.id!=0  %}
+          <p>线上地址: {{ activity.onlineAddress }}</p>
+          {% endif %}
+          <p>形式：  {{ activity.form }}</p>
+          <p>费用： {{ activity.price}}</p>
+          <div class="text-right">
+            <p>
+              <h3> <span class='label label-default'>课程已结束</span></h3>
+            </p>
+          </div>
+        </div>
+      </div>
+    </li>  
+  </ul>  
+</div>
+
 <section class="row"> 
  
        <!-- 视频播放-->

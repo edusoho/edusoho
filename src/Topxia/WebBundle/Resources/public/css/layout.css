@@ -21,9 +21,6 @@ h6,
 .h5,
 .h6 {
   font-family: Microsoft YaHei, "微软雅黑", Lucida, Verdana, Hiragino Sans GB, STHeiti, WenQuanYi Micro Hei, Droid Sans Fallback, SimSun, sans-serif;
-  font-weight: 500;
-  line-height: 1.1;
-  color: inherit;
 }
 
 ul li,ol li{list-style-type: none;}

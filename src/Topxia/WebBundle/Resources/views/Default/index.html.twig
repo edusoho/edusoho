@@ -19,9 +19,11 @@
         <div class="top">
           <div class="pull-left bulletin">
             <div class="index-img-box">
-              <img class="open-class-logo-midll-size" src="{{ file_path(nextActivity.largePicture,'open-class-default-logo.jpg')  }}">    
-              <h5 class="activity-img-title mbz">{{nextActivity.subtitle }}</h5>
-              <h4 class="activity-img-title mz">{{nextActivity.title }}</h4>
+              <a href="{{ path('activity_show',{id:nextActivity.id})}}">
+                <img class="open-class-logo-midll-size" src="{{ file_path(nextActivity.largePicture,'open-class-default-logo.jpg')  }}" >  
+              </a>  
+              <h6 class="activity-img-title ">{{nextActivity.subtitle }}</h6>
+              <h4 class="activity-img-title ">{{nextActivity.title }}</h4>
             </div>
           </div>
           <div class="pull-left info">
@@ -62,8 +64,8 @@
       <div class="kyitem">
           <ul class='guide center-block row'>
               <li class="everyone col-md-3">
-                <p>告别弯路</p>
-                  <strong>人人是我师，我乃人人师</strong>  
+                <p>没有门道？</p>
+                  <strong>大牛是我师</strong>  
                 </li>
                 <li class="ky-time col-md-3">
                   <p>告别懒惰</p>
@@ -82,7 +84,7 @@
     </div>        
   </div>
 
-  <div class="row">
+  <div class="row  prl pll">
     <div class="container clear-pleft clear-pright">   
       <!-- 课程资源 -->
       <div class="Resources row  mtl">

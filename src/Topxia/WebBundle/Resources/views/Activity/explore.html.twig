@@ -9,9 +9,9 @@
 {% block content %} 
 
   <section class="row"> 
-    <div class="row">
-        <div class="banner-bg" >
-           <img  class='open-class-banner-size' src="{{ asset('assets/img/default/open-class-default-banner.jpg') }}" alt="title" />
+    <div class="row prd pld">
+        <div class="col-md-12 mbl mts" >
+           <img  class='img-responsive' src="{{ asset('assets/img/default/open-class-default-banner.jpg') }}" alt="title" />
          <!--
           <div class="top">
             <div id="focus">
@@ -30,14 +30,14 @@
         -->
         </div>  
     </div> 
-    <div class="row">
+    <div class="row  prd pld">
           <div class="col-md-12">  
             <div class="mod k_postlist filter">
               <div class="kytitle clearfix">
                 <h3>条件筛选</h3>             
               </div>
               <div class="content">
-                <ul>
+                <ul class="plm">
                   <li> <strong>地点：</strong>
                     <a href="{{ path('activity_home') }}">全部</a>
                     {% for location in locations %}
@@ -117,7 +117,7 @@
                           {% if activity.isExpired==1 %}
                             <a class='mar-l btn btn-warning  green' 
                             href="{{ path('activity_showsuccess',{id:activity.id})}}">
-                              活动内容
+                            课程已结束
                             </a>
                           {% else %}
                             <a class='mar-l btn btn-success  green' 

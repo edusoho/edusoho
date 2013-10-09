@@ -1,7 +1,7 @@
 .top{margin-top:2em; background-color: white;overflow: hidden;}
 .bulletin{width: 248px;}
-.bulletin div{padding: 10px}
-.bulletin div h4{padding: 0 10px}
+.bulletin div{padding: 10px 10px 2px 10px}
+.bulletin div h4{padding: 2px}
 /*注册登录*/
 .reg{margin-left:2em;border: 1px solid #000;border-top: none;border-bottom: none;}
 .reg a{padding: 0;float: left;}
