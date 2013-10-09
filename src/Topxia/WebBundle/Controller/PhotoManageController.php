@@ -120,7 +120,7 @@ class PhotoManageController extends BaseController
         $image = $imagine->open($pictureFilePath);
 
         $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(400)->heighten(300);
+        $scaledSize = $naturalSize->widen(400);
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
 
         return $this->render('TopxiaWebBundle:PhotoManage:picture-crop.html.twig', array(
@@ -136,13 +136,16 @@ class PhotoManageController extends BaseController
         $imagine = new Imagine();
         $rawImage = $imagine->open($filePath);
         $largeImage = $rawImage->copy();
+        
+        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        
         if(!empty($options['width'])){
             $options['width']=$options['width']>800?800:$options['width'];
         }
         if(!empty($options['height'])){
             $options['height']=$options['height']>600?600:$options['height'];
         }
-        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+
         $largeImage->resize(new Box($options['width'],$options['height']));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 100));

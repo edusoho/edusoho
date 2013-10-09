@@ -19,8 +19,8 @@ define(function(require, exports, module) {
             cropedWidth = 800,
             cropedHeight =600,
             ratio = cropedWidth / cropedHeight,
-            selectWidth = 400 * (naturalWidth/scaledWidth),
-            selectHeight = 300 * (naturalHeight/scaledHeight);
+            selectWidth = 800 * (naturalWidth/scaledWidth),
+            selectHeight = 600 * (naturalHeight/scaledHeight);
 
         $picture.Jcrop({
             trueSize: [naturalWidth, naturalHeight],

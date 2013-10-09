@@ -100,8 +100,8 @@ define(function(require, exports, module) {
   }
 
   var windowChangeLayout=function(){
-    var photoviewWidth = $('.photoview-list').width()/2/4*3;
-    $('.photoview-list-line').css({'height':photoviewWidth});
+    var photoviewHeighth = $('.photoview-list').width()/2*(3/4);
+    $('.photoview-list-line').css({'height':photoviewHeighth});
   }
 
   exports.run = function() {
