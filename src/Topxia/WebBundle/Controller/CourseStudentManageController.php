@@ -11,7 +11,7 @@ class CourseStudentManageController extends BaseController
 
     public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $paginator = new Paginator(
             $request,
@@ -90,7 +90,7 @@ class CourseStudentManageController extends BaseController
 
     public function removeAction(Request $request, $courseId, $userId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryAdminCourse($courseId);
 
         $this->getCourseService()->removeStudent($courseId, $userId);
 
@@ -105,7 +105,7 @@ class CourseStudentManageController extends BaseController
 
     public function remarkAction(Request $request, $courseId, $userId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
         $user = $this->getUserService()->getUser($userId);
         $member = $this->getCourseService()->getCourseMember($courseId, $userId);
 

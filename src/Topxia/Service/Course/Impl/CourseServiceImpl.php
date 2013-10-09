@@ -260,7 +260,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$fields = $this->_filterCourseFields($fields);
 		$fields = CourseSerialize::serialize($fields);
-		return $this->getCourseDao()->updateCourse($id, $fields);
+		return CourseSerialize::unserialize(
+			$this->getCourseDao()->updateCourse($id, $fields)
+		);
 	}
 
 	public function updateCourseCounter($id, $counter)
@@ -1061,7 +1063,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'userId' => $userId,
 			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
 			'role' => 'student',
-			'remark' => empty($info['remark']) ? '' : $remark,
+			'remark' => empty($info['remark']) ? '' : $info['remark'],
 			'createdTime' => time()
 		);
 

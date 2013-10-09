@@ -22,7 +22,7 @@ class CourseManageController extends BaseController
 
 	public function baseAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
+		$course = $this->getCourseService()->tryManageCourse($id);
 		$form = $this->createCourseBaseForm($course);
 	    if($request->getMethod() == 'POST'){
 	        $form->bind($request);
@@ -65,7 +65,7 @@ class CourseManageController extends BaseController
 	public function detailAction(Request $request, $id)
 	{
         
-		$course = $this->getCourseService()->getCourse($id);
+		$course = $this->getCourseService()->tryManageCourse($id);
 
 	    if($request->getMethod() == 'POST'){
             $detail = $request->request->all();
@@ -147,13 +147,13 @@ class CourseManageController extends BaseController
 
     public function priceAction(Request $request, $id)
     {
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         if ($request->getMethod() == 'POST') {
-            $this->getCourseService()->updateCourse($id, $request->request->all());
+            $course = $this->getCourseService()->updateCourse($id, $request->request->all());
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-        $course = $this->getCourseService()->getCourse($id);
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course
         ));
@@ -162,6 +162,8 @@ class CourseManageController extends BaseController
 
     public function teachersAction(Request $request, $id)
     {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
         if($request->getMethod() == 'POST'){
         	
             $data = $request->request->all();
@@ -197,7 +199,7 @@ class CourseManageController extends BaseController
         }
         
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
-            'course' => $this->getCourseService()->getCourse($id),
+            'course' => $course,
             'teachers' => $teachers
         ));
     }

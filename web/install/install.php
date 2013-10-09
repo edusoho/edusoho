@@ -54,8 +54,18 @@ function install_step1()
 	$env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 8;
 	$env['maxExecutionTime'] = ini_get('max_execution_time');
 	$env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
-
-	if (!$env['phpVersionOk'] or !$env['pdoMysqlOk'] or !$env['uploadMaxFilesizeOk'] or !$env['postMaxsizeOk'] or !$env['maxExecutionTimeOk']) {
+	$env['mbstringOk'] = extension_loaded('mbstring');
+	$env['curlOk'] = extension_loaded('curl');
+	$env['fileinfoOk'] = extension_loaded('fileinfo');
+	
+	if (!$env['phpVersionOk'] or 
+		!$env['pdoMysqlOk'] or 
+		!$env['uploadMaxFilesizeOk'] or 
+		!$env['postMaxsizeOk'] or 
+		!$env['maxExecutionTimeOk'] or
+		!$env['mbstringOk'] or
+		!$env['curlOk'] or
+		!$env['fileinfoOk']) {
 		$pass = false;
 	}
 
@@ -230,39 +240,12 @@ function _create_connection()
      return $connection;
 }
 
-
-
-function _getUserService()
-{
-	return ServiceKernel::instance()->createService('User.UserService');
-}
-
-function _getSettingService()
-{
-	return ServiceKernel::instance()->createService('System.SettingService');
-}
-
-function _getCategoryService()
-{
-	return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
-}
-
-function _getTagService()
-{
-	return ServiceKernel::instance()->createService('Taxonomy.TagService');
-}
-
-function _getFileService()
-{
-	return ServiceKernel::instance()->createService('Content.FileService');
-}
-
 class SystemInit
 {
 
 	public function initAdmin($user)
 	{
-	    $user = $user = _getUserService()->register($user);
+	    $user = $user = $this->getUserService()->register($user);
 	    $user['roles'] =  array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
 	    $user['currentIp'] = '127.0.0.1';
 
