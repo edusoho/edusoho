@@ -47,6 +47,8 @@ interface PhotoService
 
 	public function updatePhotoFile($id, $fields);
 
+	public function addPhotoCommentNum($id);
+
 	
 	/**
 	 *  photo Comment 
