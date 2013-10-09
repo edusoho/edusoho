@@ -1,8 +1,11 @@
 <tr id="content-{{ content.id }}">
 	<td>
 		<a href="{{ path('content_' ~ content.type ~ '_show', {alias:content.alias|default(content.id)}) }}" target="_blank">{{ content.title }}</a><br />
+		{% if type == 'page' %}
+		  <span class="text-muted text-sm">地址：page/{{ content.alias|default(content.id) }}</span>
+		{% endif %}
 		{% if category %}
-			<span class="text-muted">分类：{{ category.name }}</span>
+			<span class="text-muted text-sm">分类：{{ category.name }}</span>
 		{% endif %}
 	</td>
 	<td>{{ dict_text('contentType', content.type) }}</td>

@@ -25,6 +25,7 @@ class WebExtension extends \Twig_Extension
             'plain_text' => new \Twig_Filter_Method($this, 'plainTextFilter', array('is_safe' => array('html'))),
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
+            'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
         );
     }
 
@@ -105,6 +106,20 @@ class WebExtension extends \Twig_Extension
         $names = ArrayToolkit::column($tags, 'name');
 
         return join($names, ',');
+    }
+
+    public function navigationUrlFilter($url)
+    {
+        $url = (string) $url;
+        if (strpos($url, '://')) {
+            return $url;
+        }
+
+        if (!empty($url[0]) and ($url[0] == '/')) {
+            return $url;
+        }
+
+        return $this->container->get('request')->getBaseUrl() . '/' . $url;
     }
 
     /**

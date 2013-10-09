@@ -1,0 +1,42 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}安装与升级 - {{ parent() }}{% endblock %}
+
+{% set menu = 'upgrade' %}
+
+{% block main %}
+
+<div class="page-header">
+  <a class="btn btn-info btn-sm pull-right" 
+  href="{{ path('admin_upgrade_check') }}"> 检查更新 </a>
+	<h1>所有已安装与升级的软件包</h1>
+</div>
+
+<table id="block-table" class="table table-striped">
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>英文包名称</th>
+      <th>中文包名称</th>
+      <th>版本号</th>
+      <th>安装来源</th>
+      <th>安装日志</th>
+      <th>安装时间</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  {% for package in packages %}
+    {% include 'TopxiaAdminBundle:Upgrade:list-tr.html.twig' with {package: package} %}
+  {% else %}
+    <tr><td colspan="6"><div class="empty">尚未安装任何软件包</div></td></tr>
+  {% endfor %}
+
+  </tbody>
+
+</table>
+
+{{ web_macro.paginator(paginator) }} 
+
+{% endblock %}

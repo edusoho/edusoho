@@ -61,7 +61,7 @@
 					  <span class="text-danger">X {{ env.uploadMaxFilesize }}</span>
 				  {% endif %}
 				</td>
-				<td>20M</td>
+				<td>2M</td>
       </tr>
 
       <tr>
@@ -77,7 +77,7 @@
 					  <span class="text-danger">X {{ env.postMaxsize }}</span>
 				  {% endif %}
 				</td>
-				<td>20M</td>
+				<td>8M</td>
       </tr>
 
       <tr>
@@ -94,6 +94,54 @@
 				  {% endif %}
 				</td>
 				<td>30秒</td>
+      </tr>
+
+      <tr>
+				<td>
+				  PHP扩展：mbstring
+				  <div class="text-muted">该扩展用于处理中文字符</div>
+				</td>
+				<td>必须</td>
+				<td>
+				  {% if env.mbstringOk %}
+					  <span class="text-success">√ 已安装</span>
+				  {% else %}
+					  <span class="text-danger">X 尚未安装</span>
+				  {% endif %}
+				</td>
+				<td>必须</td>
+      </tr>
+
+      <tr>
+				<td>
+				  PHP扩展：curl
+				  <div class="text-muted">该扩展用于远程读取文件</div>
+				</td>
+				<td>必须</td>
+				<td>
+				  {% if env.curlOk %}
+					  <span class="text-success">√ 已安装</span>
+				  {% else %}
+					  <span class="text-danger">X 尚未安装</span>
+				  {% endif %}
+				</td>
+				<td>必须</td>
+      </tr>
+
+      <tr>
+				<td>
+				  PHP扩展：fileinfo
+				  <div class="text-muted">该扩展用于读取文件元信息</div>
+				</td>
+				<td>必须</td>
+				<td>
+				  {% if env.fileinfoOk %}
+					  <span class="text-success">√ 已安装</span>
+				  {% else %}
+					  <span class="text-danger">X 尚未安装</span>
+				  {% endif %}
+				</td>
+				<td>必须</td>
       </tr>
 
 		</tbody>

@@ -9,6 +9,47 @@ use Topxia\System;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
+	public function addInstalledPackage($packageInfo)
+	{
+		$installedPackage = array();
+		$installedPackage['ename'] = $packageInfo['ename'];
+		$installedPackage['cname'] = $packageInfo['cname'];
+		$installedPackage['version'] = $packageInfo['version'];
+		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
+		$installedPackage['installlog'] = 'result-success';
+		$installedPackage['installTime'] = time();
+		$existPackage = $this->getInstalledPackageDao()->getInstalledPackageByEname($packageInfo['ename']);
+		if(empty($existPackage)){
+			return $this->getInstalledPackageDao()->addInstalledPackage($installedPackage);
+		} else {
+			return $this->getInstalledPackageDao()->updateInstalledPackage($existPackage['id'], 
+				$installedPackage);
+		}
+	}
+
+	public function getRemoteInstallPackageInfo($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->install($id);
+		$package = (array)$package;
+		return $package;
+	}
+
+	public function getRemoteUpgradePackageInfo($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->upgrade($id);
+		$package = (array)$package;
+		return $package;
+	}
+
+	public function searchPackageCount()
+	{
+		return $this->getInstalledPackageDao()->searchPackageCount();
+	}
+
+	public function searchPackages($start, $limit)
+	{
+		return $this->getInstalledPackageDao()->findPackages($start, $limit);
+	}
 
 	public function check()
 	{
@@ -16,33 +57,59 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!$this->checkMainVersion($packages)){
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
-		return $this->getEduSohoUpgradeService()->check($packages);
+		
+		$packagesToUpgrade =  $this->getEduSohoUpgradeService()->check($packages);
+		$packagesToUpgradeOfArray = array();
+
+		if(empty($packagesToUpgrade)){
+			return array();
+		} else {
+			foreach ($packagesToUpgrade as &$packageToUpgrade) {
+				$packageToUpgrade = (array)$packageToUpgrade;
+				$packageToUpgrade['comments'] = strip_tags($packageToUpgrade['comments']);
+				$packagesToUpgradeOfArray[] = $packageToUpgrade;
+			}
+
+			return $packagesToUpgradeOfArray;
+		}
+		
+	}
+
+	public function install($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->install($id);
+		$package = (array)$package;
+		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
+		$dirPath = $this->extractFile($path);
+		return $dirPath;
 	}
 
 	public function upgrade($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->upgrade($id);
-
+		$package = (array)$package;
 		$result = $this->checkDepends($package['depends']);
 		if(!empty($result)){
 			return $result;
 		}
-
 		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 		$dirPath = $this->extractFile($path);
+		return $dirPath;
 
 	}
 
-	private function extractFile($path){
-		$dir = $this->getContainer()->getParameter('topxia.disk.upgrade_dir');
+	private function extractFile($path)
+	{
+		$dir = $this->getKernel()->getParameter('topxia.disk.upgrade_dir');
 		$extractDir = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
-		$zip = new ZipArchive;
+		$zip = new \ZipArchive;
 		if ($zip->open($path) === TRUE) {
     		$zip->extractTo($extractDir);
     		$zip->close();
 		} else {
     		throw new \Exception('无法解压缩安装包！');
-		}	
+		}
+		return $extractDir;
 	}
 	
 
@@ -68,12 +135,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 		return $message;
 	}
-
-	public function install($id)
-	{
-		return $this->getEduSohoUpgradeService()->install($id);
-	}
-
 
 	private function checkMainVersion($packages)
 	{

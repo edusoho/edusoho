@@ -3,8 +3,8 @@ namespace Topxia\Service\Upgrade;
 
 interface EduSohoUpgradeService 
 {
-	function check($packages);
-	function upgrade($packId);
-	function install($packId);
-	function download($uri,$filename);
+	public function check($packages);
+	public function upgrade($packId);
+	public function install($packId);
+	public function downloadPackage($uri,$filename);
 }

@@ -111,9 +111,6 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
 	}
 
-
-
-
 	public function buildSrcDirectory()
 	{
 		$this->output->writeln('build src/ .');

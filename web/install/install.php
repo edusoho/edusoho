@@ -49,13 +49,23 @@ function install_step1()
 	$env['phpVersionOk'] = version_compare(PHP_VERSION, '5.3.0') >= 0;
 	$env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
 	$env['uploadMaxFilesize'] = ini_get('upload_max_filesize');
-	$env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 20;
+	$env['uploadMaxFilesizeOk'] = intval($env['uploadMaxFilesize']) >= 2;
 	$env['postMaxsize'] = ini_get('post_max_size');
-	$env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 20;
+	$env['postMaxsizeOk'] = intval($env['postMaxsize']) >= 8;
 	$env['maxExecutionTime'] = ini_get('max_execution_time');
 	$env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
-
-	if (!$env['phpVersionOk'] or !$env['pdoMysqlOk'] or !$env['uploadMaxFilesizeOk'] or !$env['postMaxsizeOk'] or !$env['maxExecutionTimeOk']) {
+	$env['mbstringOk'] = extension_loaded('mbstring');
+	$env['curlOk'] = extension_loaded('curl');
+	$env['fileinfoOk'] = extension_loaded('fileinfo');
+	
+	if (!$env['phpVersionOk'] or 
+		!$env['pdoMysqlOk'] or 
+		!$env['uploadMaxFilesizeOk'] or 
+		!$env['postMaxsizeOk'] or 
+		!$env['maxExecutionTimeOk'] or
+		!$env['mbstringOk'] or
+		!$env['curlOk'] or
+		!$env['fileinfoOk']) {
 		$pass = false;
 	}
 
@@ -230,39 +240,12 @@ function _create_connection()
      return $connection;
 }
 
-
-
-function _getUserService()
-{
-	return ServiceKernel::instance()->createService('User.UserService');
-}
-
-function _getSettingService()
-{
-	return ServiceKernel::instance()->createService('System.SettingService');
-}
-
-function _getCategoryService()
-{
-	return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
-}
-
-function _getTagService()
-{
-	return ServiceKernel::instance()->createService('Taxonomy.TagService');
-}
-
-function _getFileService()
-{
-	return ServiceKernel::instance()->createService('Content.FileService');
-}
-
 class SystemInit
 {
 
 	public function initAdmin($user)
 	{
-	    $user = $user = _getUserService()->register($user);
+	    $user = $user = $this->getUserService()->register($user);
 	    $user['roles'] =  array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
 	    $user['currentIp'] = '127.0.0.1';
 
@@ -448,29 +431,27 @@ EOD;
 
 	public function initNavigations()
 	{
-		$baseUri = str_replace('install/install.php', '', $_SERVER['SCRIPT_NAME']);
-
         $this->getNavigationService()->createNavigation(array(
             'name'=>'师资力量', 
-            'url'=> $baseUri . 'teacher', 
+            'url'=> 'teacher', 
             'sequence' => 1,
             'isNewWin'=>0,
-            'isOpen'=>1,
+            'isOpen'=> 1,
             'type'=>'top'
         ));
 
         $this->getNavigationService()->createNavigation(array(
             'name'=>'常见问题', 
-            'url'=> $baseUri . 'page/questions', 
+            'url'=> 'page/questions', 
             'sequence' => 2,
             'isNewWin'=>0,
-            'isOpen'=>1,
+            'isOpen'=> 1,
             'type'=>'top'
         ));
 
         $this->getNavigationService()->createNavigation(array(
             'name' => '关于我们', 
-            'url' => $baseUri . 'page/aboutus',
+            'url' => 'page/aboutus',
             'sequence' => 2,
             'isNewWin' => 0,
             'isOpen' => 1,
@@ -486,9 +467,9 @@ EOD;
         ));
 
         $content = <<<'EOD'
-<a href=""><img src="assets/img/placeholder/carousel-1200x256-1.png" /></a>
-<a href="#"><img src="assets/img/placeholder/carousel-1200x256-2.png" /></a>
-<a href="#"><img src="assets/img/placeholder/carousel-1200x256-3.png" /></a>
+<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
 		$this->getBlockService()->updateContent($block['id'], $content);
 	}
