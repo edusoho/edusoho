@@ -81,6 +81,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$package = (array)$package;
 		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 		$dirPath = $this->extractFile($path);
+		return $dirPath;
 	}
 
 	public function upgrade($id)
@@ -93,6 +94,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 		$dirPath = $this->extractFile($path);
+		return $dirPath;
 
 	}
 
@@ -106,7 +108,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
     		$zip->close();
 		} else {
     		throw new \Exception('无法解压缩安装包！');
-		}	
+		}
+		return $extractDir;
 	}
 	
 
