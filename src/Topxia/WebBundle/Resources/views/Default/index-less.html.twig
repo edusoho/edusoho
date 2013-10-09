@@ -17,9 +17,13 @@
       <div class="es-box">
         <div class="es-box-heading"><h2>课程</h2></div>
         <div class="es-box-body">
-          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
-          {% if courses|length >= 12 %}
-            <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
+          {% if courses %}
+            {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+            {% if courses|length >= 12 %}
+              <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
+            {% endif %}
+          {% else %}
+            <div class="empty">还没有发布的课程</div>
           {% endif %}
         </div>
       </div>

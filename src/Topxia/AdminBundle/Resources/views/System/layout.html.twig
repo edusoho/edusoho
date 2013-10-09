@@ -12,6 +12,7 @@
         <a href="{{ url('admin_setting_payment') }}" class="list-group-item {% if menu == 'payment' %}active{% endif %}">支付方式</a>
         <a href="{{ url('admin_setting_mailer') }}" class="list-group-item {% if menu == 'mailer' %}active{% endif %}">电子邮件</a>
         <a href="{{ path('admin_setting_storage') }}" class="list-group-item {% if menu == 'storage' %}active{% endif %}">云存储设置</a>
+        <a href="{{ path('admin_setting_refund') }}" class="list-group-item {% if menu == 'refund' %}active{% endif %}">退款设置</a>
         <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
       </div>
     {% endblock %}

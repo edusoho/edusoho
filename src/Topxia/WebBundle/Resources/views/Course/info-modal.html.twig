@@ -15,7 +15,7 @@
   {% if category %}
   <dt>分类</dt>
   <dd>
-    <a href="#">{{ category.name }}</a>
+    <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
   </dd>
   {% endif %}
 
@@ -24,7 +24,7 @@
     <dd>
       <ul class="list-inline">
         {% for tag in tags %}
-          <li><a href="#">{{ tag.name }}</a></li>
+          <li>{{ tag.name }}</li>
         {% else %}
           <li>暂无标签</li>
         {% endfor %}

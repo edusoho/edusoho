@@ -9,12 +9,12 @@ class ServiceKernel
     protected $environment;
     protected $debug;
     protected $booted;
-    protected $container;
-    protected $rootPath;
+
+    protected $currentUser;
 
     protected $pool = array();
 
-    public static function create($container, $environment, $debug)
+    public static function create($environment, $debug)
     {
         if (self::$_instance) {
             return self::$_instance;
@@ -23,7 +23,6 @@ class ServiceKernel
         $instance = new self();
         $instance->environment = $environment;
         $instance->debug = (Boolean) $debug;
-        $instance->container = $container;
 
         self::$_instance = $instance;
 
@@ -46,19 +45,45 @@ class ServiceKernel
         }
     }
 
-    public function getContainer()
+    public function setParameterBag($parameterBag)
     {
-        return $this->container;
+        $this->parameterBag = $parameterBag;
     }
 
-    public function setRootPath($rootPath)
+    public function getParameter($name)
     {
-        $this->rootPath = $rootPath;
+        if (is_null($this->parameterBag)) {
+            throw new \RuntimeException('尚未初始化ParameterBag');
+        }
+        return $this->parameterBag->get($name);
     }
 
-    public function getRootPath()
+    public function setCurrentUser($currentUser)
     {
-        return $this->rootPath;
+        $this->currentUser = $currentUser;
+        return $this;
+    }
+
+    public function getCurrentUser()
+    {
+        if (is_null($this->currentUser)) {
+            throw new \RuntimeException('尚未初始化CurrentUser');
+        }
+        return $this->currentUser;
+    }
+
+    public function getConnection()
+    {
+        if (is_null($this->connection)) {
+            throw new \RuntimeException('尚未初始化数据库连接');
+        }
+        return $this->connection;
+    }
+
+    public function setConnection($connection)
+    {
+        $this->connection = $connection;
+        return $this;
     }
 
     public function createService($name)
@@ -79,7 +104,7 @@ class ServiceKernel
             list($module, $className) = explode('.', $name);
             $class = $namespace . '\\' . $module. '\\Dao\\Impl\\' . $className . 'Impl';
             $dao = new $class();
-            $dao->setConnection($this->container->get('database_connection'));
+            $dao->setConnection($this->getConnection());
             $this->pool[$name] = $dao;
         }
         return $this->pool[$name];

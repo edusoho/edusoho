@@ -182,6 +182,29 @@ class SettingController extends BaseController
         ));
     }
 
+    public function refundAction(Request $request)
+    {
+        $refundSetting = $this->getSettingService()->get('refund', array());
+        $default = array(
+            'maxRefundDays' => 0,
+            'applyNotification' => '',
+            'successNotification' => '',
+            'failedNotification' => '',
+        );
+
+        $refundSetting = array_merge($default, $refundSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $refundSetting = $request->request->all();
+            $this->getSettingService()->set('refund', $refundSetting);
+            $this->setFlashMessage('success', '退款设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:refund.html.twig', array(
+            'refundSetting' => $refundSetting,
+        ));
+    }
+
     public function ipBlacklistAction(Request $request)
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());

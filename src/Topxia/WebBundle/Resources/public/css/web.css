@@ -450,11 +450,12 @@ body {
 
 
 .course-cover {
+	font-size: 13px;
 
 }
 
 .course-cover-heading {
-	padding-top: 5px;
+	padding-top: 25px;
 	margin-bottom: 20px;
 }
 
@@ -1191,6 +1192,7 @@ body {
 .course-item-list-multi .item-object .item-length {
 	position: absolute;
 	bottom: 0;
+	left: 0;
 	text-align: center;
 	width: 100%;
 	color: #ffffff;
@@ -1231,6 +1233,27 @@ body {
 	overflow: hidden;
 }
 
+.lt-ie8 .course-item-list-multi .row {
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.lt-ie8 .course-item-list-multi .item {
+	float: left;
+	width: 30%;
+	padding-left: 1.6%;
+	padding-right: 1.6%;
+	height: 56px;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+.lt-ie8 .course-item-list-multi .item-title {
+	display: inline;
+
+}
 
 
 /**
@@ -1324,6 +1347,18 @@ body {
 
 }
 
+@media (max-width: 767px) {
+	.lesson-dashboard .dashboard-content,
+	.lesson-dashboard-open .dashboard-content {
+		right: 20px;
+	}
+
+	.lesson-dashboard .toolbar {
+		display: none;
+	}
+}
+
+
 .lesson-dashboard .toolbar-nav-stacked {
 	margin:0;
 	padding: 0;
@@ -1359,6 +1394,15 @@ body {
 	bottom: 0;
 	left: 0;
 	right: 0;
+}
+
+.lesson-dashboard #lesson-toolbar-secondary .hide-pane {
+	text-align: center;
+
+}
+
+.lesson-dashboard #lesson-toolbar-secondary .hide-pane .glyphicon {
+	display: inline;
 }
 
 .lesson-dashboard .dashboard-header {
@@ -3036,8 +3080,19 @@ body {
 }
 
 
+.site-footer-links li {
+	display: inline-block;
+	margin-right: 20px;
+}
 
+.lt-ie8 .hidden-lt-ie8 {
+  display: none !important;
+}
 
+.visible-lt-ie8 {
+  display: none !important;
+}
 
-
-
+.lt-ie8 .visible-lt-ie8 {
+  display: block !important;
+}

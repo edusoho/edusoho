@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的订单 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'orders' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">我的订单</div>
+  <div class="panel-body">
+
+    {% set main_nav = main_nav|default(null) %}
+    <ul class="nav nav-pills nav-pills-mini clearfix">
+      <li{% if main_nav == 'orders' %} class="active"{% endif %}><a href="{{ path('my_orders') }}">全部订单</a></li>
+      <li{% if main_nav == 'refunds' %} class="active"{% endif %}><a href="{{ path('my_refunds') }}">退款记录</a></li>
+    </ul>
+
+    {% block main_body %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

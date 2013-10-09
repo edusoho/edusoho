@@ -65,11 +65,6 @@ interface CourseService
 
 	public function closeCourse($id);
 
-	public function joinCourse($userId, $courseId, $remark);
-
-	public function exitCourse($userId, $courseId);
-
-
 
 	/**
 	 * Lesson API
@@ -156,6 +151,28 @@ interface CourseService
 	public function cancelTeacherInAllCourses($userId);
 
 	public function remarkStudent($courseId, $userId, $remark);
+
+	/**
+	 * 成为学员，即加入课程的学习
+	 */
+	public function becomeStudent($courseId, $userId);
+
+	/**
+	 * 退学
+	 */
+	public function removeStudent($courseId, $userId);
+
+
+
+	/**
+	 * 封锁学员，封锁之后学员不能再查看该课程
+	 */
+	public function lockStudent($courseId, $userId);
+
+	/**
+	 * 解封学员
+	 */
+	public function unlockStudent($courseId, $userId);
 	
 	/**
 	 * 尝试管理课程, 无权限则抛出异常

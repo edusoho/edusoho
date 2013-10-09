@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Common\SimpleValidator;
@@ -689,7 +690,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     private function getPasswordEncoder()
     {
-        return $this->getContainer()->get('security.encoder_factory')->getEncoder(new CurrentUser());
+        return new MessageDigestPasswordEncoder('sha256');
     }
 
 }

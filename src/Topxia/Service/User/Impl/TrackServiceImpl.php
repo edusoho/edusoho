@@ -41,7 +41,7 @@ class TrackServiceImpl extends BaseService implements TrackService
     {
         $user = $this->getCurrentUser();
         $track = array();
-        $track['userId'] = empty($user) ? 0 : $user['id'];
+        $track['userId'] = $user->id;
         $track['action'] = $action;
         if (is_string($target)) {
             $target = array('target' => $target);
@@ -52,7 +52,7 @@ class TrackServiceImpl extends BaseService implements TrackService
         $track['target'] = $target['target'];
         $track['parent'] = empty($target['parent']) ? null : $target['parent'];
         $track['holder'] = empty($target['holder']) ? null : $target['holder'];
-        $track['ip'] =  $this->getRequest()->getClientIp();
+        $track['ip'] =  $user->currentIp;
         $track['note'] = empty($note) ? '' : $note;
         $track['createdTime'] = time();
 

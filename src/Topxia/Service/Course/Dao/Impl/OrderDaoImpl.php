@@ -22,6 +22,17 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 
+    public function findOrdersByIds(array $ids)
+    {
+        if(empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
 	public function addOrder($order)
 	{
         $affected = $this->getConnection()->insert($this->table, $order);

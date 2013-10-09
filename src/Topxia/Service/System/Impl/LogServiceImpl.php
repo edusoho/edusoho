@@ -5,9 +5,6 @@ namespace Topxia\Service\System\Impl;
 use Topxia\Service\System\LogService;
 use Topxia\Service\Common\BaseService;
 
-use Symfony\Component\HttpFoundation\Request;
-
-
 class LogServiceImpl extends BaseService implements  LogService
 {	
 

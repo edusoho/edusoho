@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 		name: '目录',
 		iconClass: 'glyphicon glyphicon-th-list',
 		api: {
-			list: '/lessonplugin/lesson/list'
+			list: '../../lessonplugin/lesson/list'
 		},
 		execute: function() {
 			this.pane.show();

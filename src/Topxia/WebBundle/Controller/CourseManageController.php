@@ -130,7 +130,12 @@ class CourseManageController extends BaseController
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(480)->heighten(270);
+
+        // @todo fix it.
+        $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = ltrim($pictureUrl, ' /');
+        $pictureUrl = $assets->getUrl($pictureUrl);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
             'course' => $course,

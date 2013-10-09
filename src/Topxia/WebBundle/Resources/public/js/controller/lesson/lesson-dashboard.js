@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 
 		onFinishLesson: function(e) {
 			var $btn = this.element.find('[data-role=finish-lesson]');
-			if ($btn.hasClass('disabled')) {
+			if ($btn.hasClass('btn-success')) {
 				this._onCancelLearnLesson();
 			} else {
 				this._onFinishLearnLesson();
@@ -61,10 +61,9 @@ define(function(require, exports, module) {
 		},
 
 		_startLesson: function() {
-			var $btn = this.element.find('[data-role=finish-lesson]'),
-				toolbar = this._toolbar,
+			var toolbar = this._toolbar,
 				self = this;
-			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
+			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
 			$.post(url, function(result) {
 				if (result == true) {
 					toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
@@ -76,9 +75,9 @@ define(function(require, exports, module) {
 			var $btn = this.element.find('[data-role=finish-lesson]'),
 				toolbar = this._toolbar,
 				self = this;
-			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
+			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
 			$.post(url, function(json) {
-				$btn.addClass('disabled');
+				$btn.addClass('btn-success');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 			}, 'json');
 		},
@@ -87,9 +86,9 @@ define(function(require, exports, module) {
 			var $btn = this.element.find('[data-role=finish-lesson]'),
 				toolbar = this._toolbar,
 				self = this;
-			var url = '/course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/cancel';
+			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/cancel';
 			$.post(url, function(json) {
-				$btn.removeClass('disabled');
+				$btn.removeClass('btn-success');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
 			}, 'json');
 		},
@@ -138,10 +137,14 @@ define(function(require, exports, module) {
             }
             this._toolbar.set('lessonId', id);
 
+            if (VideoJS.players["lesson-video-player"]) {
+            	VideoJS.players["lesson-video-player"].dispose();
+            	$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
+            }
+
             var player = VideoJS("lesson-video-player", {
             	techOrder: ['flash','html5']
             });
-            player.pause();
             swfobject.removeSWF('lesson-swf-player');
 
             this.element.find('[data-role=lesson-content]').hide();
@@ -194,6 +197,8 @@ define(function(require, exports, module) {
             		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
             		$("#lesson-text-content").show();
             		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+					$("#lesson-text-content").scrollTop(0);
+					$("#lesson-text-content").perfectScrollbar('update');
             	}
             	that._toolbar.set('lesson', lesson);
             	that._startLesson();
@@ -202,9 +207,9 @@ define(function(require, exports, module) {
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {
             	var $finishButton = that.element.find('[data-role=finish-lesson]');
             	if (json.status != 'finished') {
-	            	$finishButton.removeClass('disabled');
+	            	$finishButton.removeClass('btn-success');
             	} else {
-            		$finishButton.addClass('disabled');
+            		$finishButton.addClass('btn-success');
             	}
             }, 'json');
 
