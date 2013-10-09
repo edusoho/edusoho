@@ -46,7 +46,12 @@
           <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.site, '个人主页') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.site, {attr:{class:'form-control'}}) }} </div>
-          </div>   
+          </div>  
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"> {{ form_label(form.mobile, '手机') }} </div>
+            <div class="col-md-7 controls"> {{ form_widget(form.mobile, {attr:{class:'form-control'}}) }} </div>
+          </div>  
 
           <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.weibo, '微博') }} </div>
@@ -61,7 +66,8 @@
           <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.qq, {attr:{class:'form-control'}}) }} </div>
-          </div>                         
+          </div>  
+                           
 
           <div class="row">
             <div class="col-md-7 col-md-offset-2">
