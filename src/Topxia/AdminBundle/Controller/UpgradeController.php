@@ -34,7 +34,8 @@ class UpgradeController extends BaseController
 
     public function installAction(Request $request, $id)
     {
-        $this->getUpgradeService()->install($id);
+        $result = $this->getUpgradeService()->install($id);
+        //TODO 
         $package = $this->getUpgradeService()->getRemoteInstallPackageInfo($id);
         $this->getUpgradeService()->addInstalledPackage($package);
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
