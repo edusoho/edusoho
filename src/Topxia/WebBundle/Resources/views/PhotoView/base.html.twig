@@ -10,8 +10,6 @@
 
 {% block contentlg %}
 
-
-
 <div class="photoview-nav col-md-3">
   			<div class="widget">
   			  <div new="content clear-pleft clear-pright">
@@ -68,8 +66,8 @@
                     <div class="photoview-list-item box-sm box-left">
                       <div class="photoview-item-text box3">
                         <h4 class="photoview-item-name">{{item.title}}</h4>
-                        <p class="photoview-item-time">{{ item.createdTime }}</p>
-                        <p class="photoview-item-comment">23223</p>
+                        <p class="photoview-item-time">{{ item.content }}</p>
+                        <p class="photoview-item-comment">{{ item.commentNum }}评论</p>
                         <i class="photoview-item-arrow arrow-right"></i>
                       </div>
                       <div class="box7 box7-left">
@@ -83,8 +81,8 @@
                         </div>
                         <div class="photoview-item-text box3 box3-left">
                           <h4 class="photoview-item-name">{{item.title}}</h4>
-                          <p class="photoview-item-time">{{ item.createdTime }}</p>
-                          <p class="photoview-item-comment">23223</p>
+                          <p class="photoview-item-time">{{ item.content }}</p>
+                          <p class="photoview-item-comment">{{ item.commentNum }} 评论</p>
                           <i class="photoview-item-arrow arrow-left" ></i>
                         </div>
                     </div>
@@ -98,8 +96,8 @@
                     <div class="photoview-list-item box-sm">
                        <div class="photoview-item-text box3">
                         <h4 class="photoview-item-name">{{ item.title }}</h4>
-                        <p class="photoview-item-time">{{ item.createdTime }}</p>
-                        <p class="photoview-item-comment">2322</p>
+                        <p class="photoview-item-time">{{ item.content }}</p>
+                        <p class="photoview-item-comment">{{ item.commentNum }} 评论</p>
                         <i class="photoview-item-arrow arrow-right"></i>
                       </div>
                       <div class="box7 box7-left">
@@ -113,8 +111,8 @@
                         </div>
                         <div class="photoview-item-text box3 box3-left">
                           <h4 class="photoview-item-name">{{ item.title }}</h4>
-                          <p class="photoview-item-time">{{ item.createdTime }}</p>
-                          <p class="photoview-item-comment">23223</p>
+                          <p class="photoview-item-time">{{ item.content }}</p>
+                          <p class="photoview-item-comment">{{ item.commentNum }} 评论</p>
                           <i class="photoview-item-arrow arrow-left" ></i>
                         </div>
                       </div>
@@ -123,7 +121,7 @@
                         <p class="photoview-item-tag">{{ photos[item.groupId].name }}</p>
                         <img  alt="img" class="photoview-item-pic ajax-popup-link lazy img-responsive"  data-original="{{  file_path(item.url) }}" data-comment="{{ path('photoview_comment',{id:item.id})}}"  data-comment-create="{{ path('photoview_comment_create',{id:item.id }) }}"/>
                         <div class="photoview-item-title">
-                          <h4>{{ item.title }}</h4>
+                          <h4>{{ item.title }} </h4>
                         </div>
                       </div>
                   {% endif %}

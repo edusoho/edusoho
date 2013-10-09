@@ -61,9 +61,7 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 		if (empty($photo)) {
 			throw $this->createServiceException('专辑不存在，更新失败！');
 		}
-		var_dump($fields);
 		$fields = $this->_filterPhotoFields($fields);
-		var_dump($fields);
 		$fields = PhotoSerialize::serialize($fields);
 		return $this->getPhotoDao()->updatePhoto($id, $fields);
 	}
@@ -73,42 +71,8 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 		return true;
 	}
 
-	
-
 	private function _preparePhotoConditions($conditions)
 	{
-		if (isset($conditions['createdTime'])) {
-			$dates = array(
-				'this_week' => array(
-					strtotime('Monday'),
-					strtotime('Monday next week'),
-				),
-				'last_week' => array(
-					strtotime('Monday last week'),
-					strtotime('Monday'),
-				),
-				'next_week' => array(
-					strtotime('Monday next week'),
-					strtotime('Monday next week', strtotime('Monday next week')),
-				),
-				'this_month' => array(
-					strtotime('first day of this month midnight'), 
-					strtotime('first day of next month midnight'),
-				),
-				'last_month' => array(
-					strtotime('first day of last month midnight'),
-					strtotime('first day of this month midnight'),
-				),
-				'next_month' => array(
-					strtotime('first day of next month midnight'),
-					strtotime('first day of next month midnight', strtotime('first day of next month midnight')),
-				),
-			);
-
-			
-
-		}
-
 		return $conditions;
 	}
 
@@ -186,11 +150,20 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 	}
 
 	public function updatePhotoFile($id, $fields){
-
+		$photoFile = $this->getPhotoFileDao()->getFile($id);
+		if (empty($photoFile)) {
+			throw $this->createServiceException('图片不存在，更新失败！');
+		}
+		$fields = $this->_preparePhotoFileConditions($fields);
+		$fields = FileSerialize::serialize($fields);
+		return $this->getPhotoFileDao()->updateFile($id, $fields);
 	}
 
-
-
+	public function addPhotoCommentNum($id){
+		$photoFile=$this->getPhotoFile($id);
+		$field['commentNum']=$photoFile['commentNum']+1;
+		return $this->updatePhotoFile($id,$field);
+	}
 
 	private function _preparePhotoFileConditions($conditions)
 	{
@@ -277,12 +250,13 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 		if (!ArrayToolkit::requireds($file, array('imgId'))) {
 			throw $this->createServiceException('缺少必要字段，创建活动失败！');
 		}
-		$activity['imgId']= !empty($file['imgId']) ? $file['imgId'] : '';
-        $activity['content']= !empty($file['content']) ? $file['content'] : '';
-        $activity['userId']= $this->getCurrentUser()->id;
-		$activity['createdTime'] = time();
-		$activity = $this->getPhotoCommentDao()->addComment(CommentSerialize::serialize($activity));
-		return $this->getComment($activity['id']);
+		$feild['imgId']= !empty($file['imgId']) ? $file['imgId'] : '';
+        $feild['content']= !empty($file['content']) ? $file['content'] : '';
+        $feild['userId']= $this->getCurrentUser()->id;
+		$feild['createdTime'] = time();
+		$feild = $this->getPhotoCommentDao()->addComment(CommentSerialize::serialize($feild));
+		$this->addPhotoCommentNum($feild['imgId']);
+		return $this->getComment($feild['id']);
 	}
 
 	public function updateComment($id, $fields){

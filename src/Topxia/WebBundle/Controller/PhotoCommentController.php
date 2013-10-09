@@ -31,7 +31,6 @@ class PhotoCommentController extends BaseController
                 $fields = $form->getData();
                 $fields['imgId']=$id;
                 $vals=$fields;
-                
                 $qustion=$this->getPhotoService()->addComment($vals);
                 $comments=array();
                 $users=array();

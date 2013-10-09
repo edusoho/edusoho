@@ -99,16 +99,25 @@ define(function(require, exports, module) {
 
   }
 
+  var windowChangeLayout=function(){
+    var photoviewWidth = $('.photoview-list').width()/2/4*3;
+    $('.photoview-list-line').css({'height':photoviewWidth});
+  }
 
   exports.run = function() {
-     buiderImg();
 
-    $(function() {
-          $("img.lazy").lazyload({
-              effect : "fadeIn"
-          });
-      });
+    windowChangeLayout();
 
+    buiderImg();
+
+    $(window).resize(function(){
+        windowChangeLayout();
+    });
+
+    $("img.lazy").lazyload({
+        effect : "fadeIn"
+    });
+      
     //获取图片数据集合
     var ids=$('.photoview-list').attr('data-list-ids');
     piclist=$.parseJSON(ids);

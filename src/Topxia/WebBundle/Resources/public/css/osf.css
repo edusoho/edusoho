@@ -208,8 +208,10 @@
 }
 
 .photoview-item-tag{
-	width: 80px;
+
 	height: 40px;
+	padding-right: 5px;
+	padding-left: 5px;
 	top: 0px;
 	left: 0px;	
 	line-height: 40px;
@@ -310,7 +312,7 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 
 .photoview-item-arrow{
 	display: block;
-	border-width: 12px;
+	border-width: 13px;
 	font-size: 0;
 	width: 0;
 	height: 0;
@@ -358,10 +360,10 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 
 .box3,.box7{  height: 100%; position: absolute; }
 
-.box3{ width: 35%; }
-.box7{ width: 65% }
-.box3-left{ left:65%;}
-.box7-left{ left:35%}
+.box3{ width: 49.5%; }
+.box7{ width: 50.5% }
+.box3-left{ left:50.5%;}
+.box7-left{ left:49.5%}
 
 
 

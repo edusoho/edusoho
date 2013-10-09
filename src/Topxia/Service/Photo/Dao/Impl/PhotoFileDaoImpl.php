@@ -37,6 +37,7 @@ class PhotoFileDaoImpl extends BaseDao implements PhotoFileDao
     public function findFiles($start, $limit){
 
     }
+    
     public function searchFileCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
