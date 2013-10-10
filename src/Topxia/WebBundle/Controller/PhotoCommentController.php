@@ -25,6 +25,11 @@ class PhotoCommentController extends BaseController
 	}
 
     public function createAction(Request $request,$id){
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        
          $form = $this->createActivityForm();
          if ($request->getMethod() == 'POST') {
             $form->bind($request); 

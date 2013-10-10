@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}
+  编辑图片信息
+{% endblock %}
+
+{% block body %}
+
+<form id="course-chapter-form" class="form-horizontal" method="post" 
+  action="{{ path('photoview_manage_picture_info',{id:photofile.id}) }}"
+  >
+
+  <div class="form-group">
+        <div class="col-lg-2 control-label">{{ form_label(form.content, '图片表述信息') }}</div>
+        <div class="col-lg-8 controls">{{ form_widget(form.content, {attr:{class:'form-control'}}) }}</div>
+  </div>
+  </form>
+
+  <script>app.load('photo-manage/picture-modal')</script>
+  
+{% endblock %}
+
+
+
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">保存</button>
+  
+{% endblock %}
+
+
+
+{% set hideFooter = true %}

@@ -40,6 +40,33 @@ class PhotoManageController extends BaseController
         ));
     }
 
+    public function infoAction(Request $request, $id)
+    {
+        $photoFile=$this->getPhotoService()->getPhotoFile($id);
+
+        $form=$this->createPhotoFileBaseForm($photoFile);
+
+        if($request->getMethod() == 'POST'){
+            $form->bind($request);
+            $photoBaseInfo = $form->getData();
+            $this->getPhotoService()->updatePhotoFile($id, $photoBaseInfo);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaWebBundle:PhotoManage:picture-model.html.twig',
+            array('form' => $form->createView(),
+                "photofile"=>$photoFile));
+    }
+
+    private function createPhotoFileBaseForm($photofile)
+    {
+        $builder = $this->createNamedFormBuilder('photofile', $photofile)
+            ->add('content', 'text');
+
+        return $builder->getForm();
+    }
+
+
     public function detailAction(Request $request, $id)
     {
         

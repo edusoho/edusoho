@@ -34,7 +34,7 @@
               {% else %}
                 <a href="{{ path('activity_activityform',{id:activity.id}) }}" class="mar-l btn btn-success  green" >活动报名</a>
               {% endif %}
-              <a href="#media-qustion" class="mar-l btn btn-success  green">课前提问</a>
+              <a href="javascript:void(0)" id="media-qustion" class="mar-l btn btn-success  green">课前提问</a>
             </p>
           </div>
         </div>
@@ -113,9 +113,9 @@
                 <li class="media">
                   <a class="pull-left user-link user-avatar-link" href="javascript:">
                     {% if qustion['userId']==0 %}
-                    <img src="/assets/img/default/avatar.png" alt="ae120"></a>
+                    <img src="/assets/img/default/avatar.png" ></a>
                     {% else %}
-                    <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" alt="ae120"></a>
+                    <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" ></a>
                     {% endif %}
                   </a>
                   <div class="media-body">
@@ -144,6 +144,7 @@
   </div>
 </div>
 <div class="row">
+  <div class="col-md-12">
         <!-- 小伙伴们正在看 -->
         <div class="widget k_postlist shadow">
           <div class="kytitle clearfix bor-l-gray">
@@ -157,7 +158,8 @@
               {% endfor %}
               <span class="justify_fix"></span>         
           </div>
-        </div>         
+        </div>
+      </div>   
 </div>
     
 

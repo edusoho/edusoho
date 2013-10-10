@@ -64,6 +64,11 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+
+        $('#media-qustion').click(function(){
+            $('#qustiontext').focus();
+        });
+
         $('#teacher-carousel').carousel({interval: 0});
         $('#teacher-carousel').on('slide.bs.carousel', function (e) {
             var teacherId = $(e.relatedTarget).data('id');

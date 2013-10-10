@@ -962,6 +962,10 @@ photoview_manage_base:
     pattern:  /photoview/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:PhotoManage:base }
 
+photoview_manage_picture_info:
+    pattern:  /photoview/{id}/manage/picture/info
+    defaults: { _controller: TopxiaWebBundle:PhotoManage:info }
+
 photoview_manage_picture:
     pattern: /photoview/{id}/manage/picture
     defaults: { _controller: TopxiaWebBundle:PhotoManage:picture }

@@ -195,11 +195,7 @@ class PhotoServiceImpl extends BaseService implements PhotoService
 				),
 			);
 
-			if (array_key_exists($conditions['date'], $dates)) {
-				$conditions['startTimeGreaterThan'] = $dates[$conditions['date']][0];
-				$conditions['startTimeLessThan'] = $dates[$conditions['date']][1];
-				unset($conditions['date']);
-			}
+		
 		}
 
 		return $conditions;

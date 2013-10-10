@@ -37,23 +37,34 @@
     </form>
 
   </div>
+
+
+  <div class="panel-heading">
+    相册
+  </div>
+
   <div class="panel-body">
-      <table class="table table-striped table-hover" id="photo-table">
-      <thead>
-      <tr>
-        <th width="50%">名称</th>
-        <th>描述</th>
-        <th>操作</th>
-      </tr>
-      </thead>
-      <tbody>
+      <ul class="photo-manage-list">
         {% for course in courses %}
-          {% include 'TopxiaWebBundle:PhotoManage:tr.html.twig' %}
+          <li>
+          <img  src="{{ file_path(course.url,'avatar.png') }}" class="photo-manage-img"/>
+          <div class="photo-manage-tools btn-toolbar">
+            <a class="btn-group photo-manage-item-del" href="javascript:"
+              data-url="{{ path('photoview_manage_file_delete', {id:course.id}) }}"
+            >
+              <span class="glyphicon glyphicon-trash"></span>
+            </a>
+            <a class="btn-group photo-manage-item-set" href="#modal"
+              data-toggle="modal" data-target="#modal" data-url="{{ path('photoview_manage_picture_info',{id:course.id}) }}"
+            >
+              <span class="glyphicon glyphicon-cog"></span>
+            </a>
+          </div>
+        </li>
         {% else %}
           <tr><td colspan="6"><div class="empty">无专辑记录</div></td></tr>
         {% endfor %}
-      </tbody>
-    </table>
+      </ul>
   </div>
 </div>
 

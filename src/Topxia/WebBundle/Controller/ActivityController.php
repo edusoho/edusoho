@@ -291,10 +291,16 @@ class ActivityController extends BaseController
                     // login
                 }
             }else{
-                $member=array();
+ 
                 $member['activityId']=$id;
                 $this->getActivityService()->addMeberByActivity($member);
                 $test= $this->getActivityService()->addActivityStudentNum($id);
+            }
+
+            if(!empty($member['question'])){
+                $fields['content']=$member['question'];
+                $fields['activityId']=$id;
+                $this->getActivityThreadService()->createThread($fields);    
             }
         }
         return $this->redirect($this->generateUrl("activity_success",array(
@@ -409,7 +415,12 @@ class ActivityController extends BaseController
     }
 
 
-    public function qustioncreateAction(Request $request,$id){
+    public function qustioncreateAction(Request $request,$id){        
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
 
         $form = $this->createForm(new QustionType());
 
@@ -482,6 +493,10 @@ class ActivityController extends BaseController
     }
 
     public function postcreateAction(Request $request,$id,$qid){
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
         $form = $this->createForm(new ActivitypostType());
         if ($request->getMethod() == 'POST') {
                 $form->bind($request);

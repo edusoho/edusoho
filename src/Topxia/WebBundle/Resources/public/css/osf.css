@@ -32,7 +32,7 @@
 
 .photoview-nav{
 	position: fixed;
-	top:65px;
+	top:61px;
 	z-index: 2;
 }
 
@@ -388,7 +388,7 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 	left: 0px;
 	position: fixed;
 	background-color: black;
-	z-index: 10000;
+	z-index: 1040;
 	display: none;
 }
 
@@ -640,11 +640,42 @@ background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.56) 64%, rgba(0, 0, 
 }
 
 
+/* photo manage style */
 
-/* admin photo style */
-
-.admin-photo-list-img{
-	width: 100px;
-	height: 100px;
+.photo-manage-list{
+	margin: 0px;
+	padding: 0px;
 }
 
+.photo-manage-list li{
+	width: 170px;
+	height: 130px;
+	border: 1px dashed #eee;
+	float: left;
+	padding: 4px;
+	margin: 5px;
+	position: relative;
+}
+.photo-manage-list li:hover .photo-manage-tools{
+	display: block;
+}
+
+.photo-manage-img{
+	width: 160px;
+	height: 120px;
+}
+
+.photo-manage-tools{
+	height: 30px;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	display: none;
+}
+
+.photo-manage-item-del , .photo-manage-item-set{
+	width: 30px;
+	height: 30px;
+	line-height: 29px;
+	text-align: center;
+}
