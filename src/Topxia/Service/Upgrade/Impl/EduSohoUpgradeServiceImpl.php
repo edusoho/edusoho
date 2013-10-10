@@ -25,7 +25,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		$result = json_decode(curl_exec($ch));
+		$result = json_decode(curl_exec($ch),true);
 		curl_close($ch);
 		return $result;
 	}
@@ -43,7 +43,8 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		$result = json_decode(curl_exec($ch));
+		$result = json_decode(curl_exec($ch),true);
+		var_dump($result);
 		curl_close($ch);
 		return $result;
 	}
@@ -61,7 +62,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		$result = json_decode(curl_exec($ch));
+		$result = json_decode(curl_exec($ch),true);
 		curl_close($ch);
 		return $result;
 	}

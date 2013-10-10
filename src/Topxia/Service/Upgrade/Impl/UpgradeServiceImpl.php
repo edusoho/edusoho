@@ -15,7 +15,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$installedPackage['ename'] = $packageInfo['ename'];
 		$installedPackage['cname'] = $packageInfo['cname'];
 		$installedPackage['version'] = $packageInfo['version'];
-		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
+		$installedPackage['from'] = $packageInfo['fromVersion'];
 		$installedPackage['installlog'] = 'result-success';
 		$installedPackage['installTime'] = time();
 		$existPackage = $this->getInstalledPackageDao()->getInstalledPackageByEname($packageInfo['ename']);
@@ -30,14 +30,12 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	public function getRemoteInstallPackageInfo($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->install($id);
-		$package = (array)$package;
 		return $package;
 	}
 
 	public function getRemoteUpgradePackageInfo($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->upgrade($id);
-		$package = (array)$package;
 		return $package;
 	}
 
@@ -58,49 +56,45 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
 		
-		$packagesToUpgrade =  $this->getEduSohoUpgradeService()->check($packages);
-		$packagesToUpgradeOfArray = array();
-
-		if(empty($packagesToUpgrade)){
-			return array();
-		} else {
-			foreach ($packagesToUpgrade as &$packageToUpgrade) {
-				$packageToUpgrade = (array)$packageToUpgrade;
-				$packageToUpgrade['comments'] = strip_tags($packageToUpgrade['comments']);
-				$packagesToUpgradeOfArray[] = $packageToUpgrade;
-			}
-
-			return $packagesToUpgradeOfArray;
-		}
-		
+		return $this->getEduSohoUpgradeService()->check($packages);
 	}
 
 	public function install($id)
 	{
-		$package = $this->getEduSohoUpgradeService()->install($id);
-		$package = (array)$package;
-		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
-		$dirPath = $this->extractFile($path);
-		return $dirPath;
+		$this->upgrade($id);
 	}
 
 	public function upgrade($id)
 	{
+		$result = $this->checkPathWritePermission($this->getDownloadPath());
+		if(!empty($result)) return $result;
 		$package = $this->getEduSohoUpgradeService()->upgrade($id);
-		$package = (array)$package;
-		$result = $this->checkDepends($package['depends']);
-		if(!empty($result)){
-			return $result;
-		}
-		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
-		$dirPath = $this->extractFile($path);
-		return $dirPath;
 
+		$result = $this->checkDepends($package['depends']);
+
+		if(!empty($result)) return $result;
+
+		try{
+			$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
+			$dirPath = $this->extractFile($path);
+		}catch(\Exception $e){
+			$result .= $e->getMessage().' \n';
+		}
+
+		var_dump($result);
+
+	}
+	private function checkPathWritePermission($path)
+	{
+		if(!is_writable($path)){
+			return ' 没有下载目录权限';
+		}
+		return '';
 	}
 
 	private function extractFile($path)
 	{
-		$dir = $this->getKernel()->getParameter('topxia.disk.upgrade_dir');
+		$dir = $this->getDownloadPath();
 		$extractDir = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
 		$zip = new \ZipArchive;
 		if ($zip->open($path) === TRUE) {
@@ -126,7 +120,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 				continue;
 			}
 			if(!version_compare($installed['version'],$depend['v'],$depend['o'])){
-				$message.= " 依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n";
+				$message.= " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n";
 			}
 		}
 		if(!is_writable($this->getContainer()->getParameter('topxia.disk.upgrade_dir'))){
@@ -155,6 +149,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			);
 		$this->getInstalledPackageDao()->addInstalledPackage($mainPackage);
 		return $this->getInstalledPackageDao()->findInstalledPackages();
+	}
+
+	private function getDownloadPath(){
+		return $this->getKernel()->getParameter('topxia.disk.upgrade_dir');
 	}
 
     private function getInstalledPackageDao ()
