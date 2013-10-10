@@ -89,22 +89,52 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$result = $this->checkPathWritePermission($this->getDownloadPath());
 		if(!empty($result)) return $result;
+
 		$package = $this->getEduSohoUpgradeService()->upgrade($id);
 
 		$result = $this->checkDepends($package['depends']);
 
 		if(!empty($result)) return $result;
+		
+		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 
-		try{
-			$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
-			$dirPath = $this->extractFile($path);
-		}catch(\Exception $e){
-			$result .= $e->getMessage().' \n';
-		}
+		$dirPath = $this->extractFile($path);
 
-		var_dump($result);
+		$result .= $this->checkUpgradeFilesPermisson($dirPath);
+
+		return $result;
 
 	}
+
+	private function checkUpgradeFilesPermisson($dirPath)
+	{
+		if(!file_exists($dirPath)) return '';
+
+		$dirPath .= DIRECTORY_SEPARATOR.'source';
+		$message = '';
+		foreach(new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS),
+			 \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+			if($path->isFile() && $path->getFilename()!='.DS_Store'){
+
+				$fullPath = $path->getPathname();
+				$realPath = $this->getKernel()->getParameter('kernel.root_dir');
+				$realPath .= DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR;
+				$realFile = $realPath.str_replace($dirPath,'',$fullPath);
+				if(!is_writable($realFile)){
+					$relativePath = str_replace($dirPath,'',$fullPath);
+					$message .= '{$relativePath} \n';
+				}
+
+			}
+
+		}
+		if(!empty($message)) return '以下文件不可写 \n' .  $message;
+		return '';
+	}
+
+
+
 	private function checkPathWritePermission($path)
 	{
 		if(!is_writable($path)){
@@ -115,8 +145,12 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function extractFile($path)
 	{
+		if(!class_exists('ZipArchive')){
+ 		   throw new Exception("Php5-zip包未安装");
+		}
 		$dir = $this->getDownloadPath();
-		$extractDir = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
+		$extractPath = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
+		$this->deleteDir($extractPath);
 		$zip = new \ZipArchive;
 		if ($zip->open($path) === TRUE) {
     		$zip->extractTo($dir);
@@ -124,7 +158,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		} else {
     		throw new \Exception('无法解压缩安装包！');
 		}
-		return $extractDir;
+		return $extractPath;
 	}
 	
 
@@ -151,68 +185,13 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $message;
 	}
 
-	private function Zip($source, $destination, $include_dir = false)
-	{
-		if (!extension_loaded('zip') || !file_exists($source)) {
-        	return false;
-    	}
-
-	    if (file_exists($destination)) {
-	        unlink ($destination);
-	    }
-
-	    $zip = new ZipArchive();
-	    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
-	        return false;
-	    }
-	    $source = str_replace('\\', '/', realpath($source));
-
-	    if (is_dir($source) === true)
-	    {
-
-	        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
-
-	        if ($include_dir) {
-
-	            $arr = explode("/",$source);
-	            $maindir = $arr[count($arr)- 1];
-
-	            $source = "";
-	            for ($i=0; $i < count($arr) - 1; $i++) { 
-	                $source .= '/' . $arr[$i];
-	            }
-
-	            $source = substr($source, 1);
-
-	            $zip->addEmptyDir($maindir);
-
-	        }
-
-	        foreach ($files as $file)
-	        {
-	            $file = str_replace('\\', '/', $file);
-
-	            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
-	                continue;
-
-	            $file = realpath($file);
-
-	            if (is_dir($file) === true)
-	            {
-	                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-	            }
-	        	else if (is_file($file) === true)
-	        	{
-	            	$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
-	        	}
-	        }
-	    }
-	    else if (is_file($source) === true)
-		{
-	    	$zip->addFromString(basename($source), file_get_contents($source));
+	
+	private function deleteDir($dirPath){
+		if(!file_exists($dirPath)) return ;
+		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+    		$path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
 		}
-
-    	return $zip->close();
+		rmdir($dirPath);
 	}
 
 	private function checkMainVersion($packages)
