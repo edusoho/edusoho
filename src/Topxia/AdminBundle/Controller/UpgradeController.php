@@ -29,21 +29,24 @@ class UpgradeController extends BaseController
         $packagesToUpgrade = $this->getUpgradeService()->check();
         return $this->render('TopxiaAdminBundle:Upgrade:check-result-list.html.twig',array(
             'packages'=>$packagesToUpgrade
-            ));
+        ));
     }
 
     public function installAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->install($id);
-        //TODO 
+
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
     public function upgradeAction(Request $request, $id)
     {
-        $this->getUpgradeService()->upgrade($id);
-        $package = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
-        $this->getUpgradeService()->addInstalledPackage($package);
+        $directoryAfterUnZip = $this->getUpgradeService()->upgrade($id);
+        // TODO
+        // $this->getUpgradeService()->backUpdirectories($directoryAfterUnZip);
+
+        // $package = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
+        // $this->getUpgradeService()->addInstalledPackage($package);
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 

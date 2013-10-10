@@ -71,7 +71,6 @@ function Zip($source, $destination, $include_dir = false)
 
 // Zip($directory, './installPackage.zip', true);
 
-
 function rrmdir($dir) 
 {
    if (is_dir($dir)) {
