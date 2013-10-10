@@ -233,10 +233,13 @@ class SettingController extends BaseController
         $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'upload_mode'=>'local',
-            'cloud_access_key'=>'',
-            'cloud_secret_key'=>'',
-            'cloud_bucket'=>'',
+            'upload_mode' => 'local',
+            'cloud_access_key' => '',
+            'cloud_secret_key' => '',
+            'cloud_bucket' => '',
+            'cloud_bucket_domain' => '',
+            'cloud_mac_index' => '',
+            'cloud_mac_key' =>  '', 
         );
 
         $storageSetting = array_merge($default, $storageSetting);

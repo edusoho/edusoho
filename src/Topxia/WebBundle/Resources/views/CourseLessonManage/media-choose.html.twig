@@ -20,9 +20,10 @@
             <div class="media-chooser-uploader-control">
               <span id="video-choose-uploader-btn" 
                 data-role="uploader-btn"
+                data-key="{{ fileKey }}"
                 data-token="{{ uploadToken }}"
-                data-url="{% if storageSetting.upload_mode == 'cloud' %}http://upload.edusoho.net/{% else %}{{ path('disk_upload') }}{% endif %}"
-                data-filepath="course-{{ course.id }}"
+                data-url="{% if storageSetting.upload_mode == 'cloud' %}http://up.qiniu.com/{% else %}{{ path('disk_upload') }}{% endif %}"
+                data-filepath="{{ filePath }}"
                 data-filetypes="{% if storageSetting.upload_mode == 'local' %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
@@ -89,9 +90,10 @@
             <div class="media-chooser-uploader-control">
               <span id="audio-choose-uploader-btn" 
                 data-role="uploader-btn"
+                data-key="{{ fileKey }}"
                 data-token="{{ uploadToken }}"
-                data-url="{% if storageSetting.upload_mode == 'cloud' %}http://upload.edusoho.net/{% else %}{{ path('disk_upload') }}{% endif %}"
-                data-filepath="course-{{ course.id }}"
+                data-url="{% if storageSetting.upload_mode == 'cloud' %}http://up.qiniu.com/{% else %}{{ path('disk_upload') }}{% endif %}"
+                data-filepath="{{ filePath }}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
                 data-progressbar="#audio-chooser-progress"></span>

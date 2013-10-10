@@ -72,13 +72,18 @@ class CourseLessonController extends BaseController
             $user = $this->getCurrentUser();
 
             $setting = $this->setting('storage');
-            $client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
+            $client = new CloudClient(
+                $setting['cloud_access_key'],
+                $setting['cloud_secret_key'],
+                $setting['cloud_bucket'],
+                $setting['cloud_bucket_domain'],
+                $setting['cloud_mac_index'],
+                $setting['cloud_mac_key']
+            );
 
-            if ($lesson['type'] == 'video') {
-                $url = $client->generateDownloadUrl($uri['bucket'], $uri['key'], $this->container->getParameter('topxia.disk.cloud_video_fop'));
-            } else {
-                $url = $client->generateDownloadUrl($uri['bucket'], $uri['key']);
-            }
+            $url = $client->getDownloadUrl($uri['key']);
+            $cookieToken = $client->generateDownloadCookieToken($url, time() + 3600);
+            setrawcookie('qiniuToken', $cookieToken, 0, '/', 'edusoho.net', false, true);
 
             return $this->redirect($url);
         }

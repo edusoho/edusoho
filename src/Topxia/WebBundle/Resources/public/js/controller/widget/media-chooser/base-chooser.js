@@ -124,6 +124,7 @@ define(function(require, exports, module) {
             var settings = $.extend({}, {
                 upload_url : $btn.data('url'),
                 post_params : {
+                    "key" : $btn.data('key'),
                     "token" : $btn.data('token'),
                     "x:filepath": $btn.data('filepath')
                 },
@@ -173,6 +174,7 @@ define(function(require, exports, module) {
 
                 upload_success_handler: function(file, serverData) {
                     progressbar.setComplete().hide();
+                    console.log(serverData);
                     serverData = $.parseJSON(serverData);
 
                     if ($btn.data('callback')) {

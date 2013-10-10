@@ -45,16 +45,27 @@ class CourseLessonManageController extends BaseController
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
-	    	$client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
-	    	$uploadToken = $client->generateUploadToken(array(
-	            'endUser' => $user['id'],
-	            'asyncOps' => $this->container->getParameter('topxia.disk.cloud_video_fop')
-	        ));
+
+	        $client = new CloudClient(
+	            $setting['cloud_access_key'],
+	            $setting['cloud_secret_key'],
+	            $setting['cloud_bucket'],
+	            $setting['cloud_bucket_domain'],
+	            $setting['cloud_mac_index'],
+	            $setting['cloud_mac_key']
+	        );
+
+	    	$uploadToken = $client->generateUploadToken(array());
     	}
+
+    	$filePath = "course-{$course['id']}";
+    	$fileKey = "{$filePath}/" . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'uploadToken' => $uploadToken,
+			'filePath' => $filePath,
+			'fileKey' => $fileKey,
 			'storageSetting' => $setting,
 		));
 	}
@@ -91,17 +102,27 @@ class CourseLessonManageController extends BaseController
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
-	    	$client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
-	    	$uploadToken = $client->generateUploadToken(array(
-	            'endUser' => $user['id'],
-	            'asyncOps' => $this->container->getParameter('topxia.disk.cloud_video_fop')
-	        ));
+	        $client = new CloudClient(
+	            $setting['cloud_access_key'],
+	            $setting['cloud_secret_key'],
+	            $setting['cloud_bucket'],
+	            $setting['cloud_bucket_domain'],
+	            $setting['cloud_mac_index'],
+	            $setting['cloud_mac_key']
+	        );
+
+	    	$uploadToken = $client->generateUploadToken(array());
     	}
+
+    	$filePath = "course-{$course['id']}";
+    	$fileKey = "{$filePath}/" . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
 			'uploadToken' => $uploadToken,
+			'filePath' => $filePath,
+			'fileKey' => $fileKey,
 			'storageSetting' => $setting
 		));
 	}
