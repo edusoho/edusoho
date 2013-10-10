@@ -9,6 +9,8 @@ interface UpgradeService
 
 	public function install($id);
 
+	public function backUpdirectories($directory);
+
 	public function addInstalledPackage($packageInfo);
 	
 	public function getRemoteInstallPackageInfo($id);
