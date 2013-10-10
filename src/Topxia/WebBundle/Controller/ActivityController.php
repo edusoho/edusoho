@@ -236,15 +236,12 @@ class ActivityController extends BaseController
     }
 
     public function successAction(Request $request,$id){
-        $islogin=$this->get('session')->get('activity_islogin');
-        $randomuser=$this->get('session')->get('activity_randomuser');
-        $randomPassworld=$this->get('session')->get('activity_RandomPassworld');
-        if(!empty($randomPassworld)){
-            $randomuser['password']=$randomPassworld;
-        }
+        $islogin=true;
+        $randomuser=$this->getCurrentUser();
+        
         return $this->render("TopxiaWebBundle:Activity:activity-success.html.twig",array(
             "activityid"=>$id,
-            "state"=>true,"islogin"=>$islogin,"randomuser"=>$randomuser));
+            "state"=>true,"islogin"=>true,"randomuser"=>$randomuser));
     }
     
     public function joinAction(Request $request,$id)
@@ -263,23 +260,33 @@ class ActivityController extends BaseController
                     $newuser['nickname']=$member['nickname'];
                     //$newuser['password']=$this->getUserService()->createRandomPassworld();
                     $newuser['password']='abcd1234';
-                    $randomuser=$this->getUserService()->register($newuser);
-                    $this->get('session')->set('activity_islogin', true);
-                    $this->get('session')->set('activity_randomuser', $randomuser );
-                    $this->get('session')->set('activity_RandomPassworld',$newuser['password']);
+                    $newuser['createdIp'] = $request->getClientIp();
+
+                    $auth = $this->getSettingService()->get('auth', array());
+
+                    $user=$this->getUserService()->register($newuser);
+
+                    $this->authenticateUser($user);
+
+                    $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
+                   
                     $member['activityId']=$id;
-                    $member['userId']=$randomuser['id'];
+                    $member['userId']=$user['id'];
+
                     $this->getActivityService()->addMeberByActivity($member);
-                    $test= $this->getActivityService()->addActivityStudentNum($id);
+                    $this->getActivityService()->addActivityStudentNum($id);
+                    
+                    $activity=$this->getActivityService()->getActivity($id);
+                   
+                    $hash=$this->makeHash($user);
+                    
+                    $user = $this->checkHash($user['id'], $hash);
 
-                    $hash=$this->makeHash($randomuser);
-                    $id=$randomuser['id'];
-                    $user = $this->checkHash($id, $hash);
                     $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-                    $this->sendVerifyEmail($token,$user);
+                   
+                    $this->sendVerifyEmail($token,$user,$activity);
 
-                    return $this->redirect($this->generateUrl("activity_success",array(
-                    "id"=>$id)));
+                    return $this->redirect($this->generateUrl("activity_success",array("id"=>$id)));
                 }else{
                     // login
                 }
@@ -524,20 +531,31 @@ class ActivityController extends BaseController
 
    
 
-    private function sendVerifyEmail($token, $user)
+    private function sendVerifyEmail($token, $user,$activity)
     {
-        $auth = $this->getSettingService()->get('auth', array());
-        $site = $this->getSettingService()->get('site', array());
-        $emailTitle = $this->setting('auth.email_activation_title', 
-            '请激活你的帐号 完成注册');
-        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
-        $www="http://new.osforce.cn";
-        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
-        $verifyurl = $this->generateUrl('register_email_activa', array('token' => $token));
-        $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $www.$verifyurl);
-        $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
-        $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-        $this->sendEmail($user['email'], $emailTitle, $emailBody);
+        // $auth = $this->getSettingService()->get('auth', array());
+        // $site = $this->getSettingService()->get('site', array());
+        // $emailTitle = $this->setting('auth.email_activation_title', 
+        //     '请激活你的帐号 完成注册');
+        // $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+        // $www="http://new.osforce.cn";
+        // $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
+        // $verifyurl = $this->generateUrl('register_email_activa', array('token' => $token));
+        // $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $www.$verifyurl);
+        // $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
+        // $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
+        // $this->sendEmail($user['email'], $emailTitle, $emailBody);
+
+         $this->sendEmail(
+                $user['email'],
+                "{$activity['subtitle']}之【{$activity['title']}】报名确认，设置您在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                    'activity'=>$activity,
+                )), 'html'
+        );
+
     }
 
     private function makeHash($user)
@@ -595,6 +613,23 @@ class ActivityController extends BaseController
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getWelcomeBody($user)
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        $site = $this->getSettingService()->get('site', array());
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
+        $welcomeBody = $this->setting('auth.welcome_body', '注册欢迎内容');
+        $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
+        return $welcomeBody;
     }
 
 

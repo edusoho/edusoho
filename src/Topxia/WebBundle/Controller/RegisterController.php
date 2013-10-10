@@ -198,6 +198,37 @@ class RegisterController extends BaseController
            }
         } 
         return true;      
-    }    
+    }
+
+
+    public function emailActivaAction(Request $request, $token)
+    {
+
+        $token = $this->getUserService()->getToken('email-verify', $token);
+        if (empty($token)) {
+            $currentUser = $this->getCurrentUser();
+            if (empty($currentUser)) {
+                return $this->render('TopxiaWebBundle:Register:email-verify-error.html.twig');
+            } else {
+               return $this->redirect($this->generateUrl('settings'));
+            }
+        }
+
+        $user = $this->getUserService()->getUser($token['userId']);
+        if (empty($user)) {
+            return $this->createNotFoundException();
+        }
+
+        $this->getUserService()->setEmailVerified($user['id']);
+
+        $this->getUserService()->deleteToken('email-verify', $token['token']);
+
+        $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
+               
+        return $this->redirect($this->generateUrl('password_reset_update', array(
+                'token' => $token)
+            )
+        );
+    }
 
 }

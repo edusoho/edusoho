@@ -23,7 +23,7 @@
               <a    {% if nextActivity.id %} href="{{ path('activity_show',{id:nextActivity.id})}}"  {% endif %}>
                 <img class="open-class-logo-midll-size" src="{{ file_path(nextActivity.largePicture,'open-class-default-logo.jpg')  }}" >  
               </a>  
-              <h6 class="activity-img-title ">{{nextActivity.subtitle}}</h6>
+              <h5 class="activity-img-title ">{{nextActivity.subtitle}}</h5>
               <h4 class="activity-img-title "><a href="{{ path('activity_show',{id:nextActivity.id})}}">{{nextActivity.title }}</a></h4>
             </div>
             
