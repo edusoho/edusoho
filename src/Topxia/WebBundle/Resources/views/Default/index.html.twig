@@ -18,27 +18,30 @@
       <div class="banner-bg">
         <div class="top">
           <div class="pull-left bulletin">
+
             <div class="index-img-box">
-              <a href="{{ path('activity_show',{id:nextActivity.id})}}">
+              <a    {% if nextActivity.id %} href="{{ path('activity_show',{id:nextActivity.id})}}"  {% endif %}>
                 <img class="open-class-logo-midll-size" src="{{ file_path(nextActivity.largePicture,'open-class-default-logo.jpg')  }}" >  
               </a>  
-              <h6 class="activity-img-title ">{{nextActivity.subtitle }}</h6>
-              <h4 class="activity-img-title ">{{nextActivity.title }}</h4>
+              <h6 class="activity-img-title ">{{nextActivity.subtitle}}</h6>
+              <h4 class="activity-img-title "><a href="{{ path('activity_show',{id:nextActivity.id})}}">{{nextActivity.title }}</a></h4>
             </div>
+            
           </div>
           <div class="pull-left info">
             <div class="info-header">
-              <span class="ky-times">{{ nextActivity.startTime }} - 21：30</span>
-              <span class="ky-address ">{{ Locations[nextActivity.locationId].name}}</span>
-              <span class="ky-jiangshi">{{ activitTerchar.nickname|default('') }}</span>
+              {% if nextActivity.id %} 
+                <span class="ky-times">{{ nextActivity.startTime|default('每周二.晚.7:00-9:00') }} </span>
+                <span class="ky-address ">{{ nextActivity.address|default('北京.海淀区海淀西大街70号.3W咖啡二楼') }}</span>
+                <span class="ky-jiangshi"> <a href="{{ path('user_show',{id:activitTerchar['id'] }) }}">{{ activitTerchar.nickname|default('') }}</a></span>
+              {% endif %}
               <div class="fix-right font18">64231人报名公开课</div>
             </div>
-            <div class="info-content clearfix">             
+            <div class="info-content clearfix">
               <div id="photo" class="photo-wall pull-left">
                
                 {% for user in users%}
                 <span class="list-item">
-                  
                   <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'avatar.png')  }}" alt="user icon">
                   <span class="todos-thumb-span text-left">
                     <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
@@ -46,14 +49,17 @@
                   </span>
                 </span>
                 {% endfor %}
-
-                
+              
                 <span class="justify_fix"></span>
               </div>
               <div class="info-ad pull-left">
                 <div class="info-btn">
                 <p>还等什么呢就差你了</p>
+                {% if nextActivity.id %}
                 <a class="btn center-block" href="{{ path('activity_activityform',{id:nextActivity.id}) }}">我要报名</a>
+                {% else %}
+                <a class="btn center-block" >我要报名</a>
+                {% endif %}
                 </div>
               </div>
             </div>
@@ -142,7 +148,7 @@
                         {% if activityThread['userId']==0 %}
                         <img src="/assets/img/default/avatar.png" alt="ae120"></a>
                         {% else %}
-                        <a href="{{ path('user_show',{id:activityThread['userId']})}}"><img src="{{ file_path(threadUsers[activityThread.userId].smallAvatar,'avatar.png') }}" alt="ae120"></a>
+                        <a class="user-link user-avatar-link" href="{{ path('user_show',{id:activityThread['userId']})}}" ><img src="{{ file_path(threadUsers[activityThread.userId].smallAvatar,'avatar.png') }}" class="thumb"></a>
                         {% endif %}
                     </div>
                     <div class="imageblock-content">
@@ -152,19 +158,26 @@
                             #
                           {% else %}
                              {{ path('user_show',{id:activityThread['userId'] }) }}
-
                           {% endif %}
                           "
                         >{{ threadUsers[activityThread.userId].nickname }}</a>
                         在 {{activitys[activityThread.activityId].subtitle}} 提问到：
+
                       </p>
                       <p class="metas">
-                        <span class="show-user-card">{{ activityThread.content }}</span>
+                        <span class="show-user-card">
+                          <a href="{{ path('activity_show',{id:activityThread.activityId})}}">
+                             {{ activityThread.content }}
+                          </a>
+                        </span>
                         <time class="pull-right">{{ activityThread.createdTime|smart_time }}</time>
                       </p>
                       <p class="scan">
-                        <span class="">{{ activityThread.postNum }}回复</span>
-                        <span class="highlight"></span>
+                        <a href="{{ path('activity_show',{id:activityThread.activityId})}}">
+                          <span class="highlight mz">{{ activityThread.postNum }}</span>
+                        </a>
+                        <span >个回复</span>
+                        
                       </p>
                     </div>
                   </div>

@@ -25,6 +25,10 @@
 	width: 100%;
 }
 
+.activity-img-title  a {
+	color: #333333;
+}
+
 
 .photoview-nav{
 	position: fixed;

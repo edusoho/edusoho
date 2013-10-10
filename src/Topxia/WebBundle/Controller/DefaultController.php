@@ -21,8 +21,9 @@ class DefaultController extends BaseController
                                                                     'subtitle'=>'',
                                                                     'title'=>'',
                                                                     'startTime'=>'',
-                                                                    'locationId'=>'0',
-                                                                    'id'=>0);
+                                                                    'locationId'=>'1',
+                                                                    'address'=>'北京.海淀区海淀西大街70号.3W咖啡二楼',
+                                                                    'id'=>'0');
 
         $activitTerchar=empty($nextActivity['experterId'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterId']);
         $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
