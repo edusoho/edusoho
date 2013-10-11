@@ -1214,15 +1214,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($course);
 	}
 
-	public function canManageCourse($courseId,$userId=null)
+	public function canManageCourse($courseId)
 	{
-		if(!$userId){
-			$userId = $this->getCurrentUser()->id;
+		$user = $this->getCurrentUser();
+		if ($user->isAdmin()) {
+			return true;
 		}
-		if(!$courseId || !$userId){
-			return false;
+
+		$course = $this->getCourseService()->getCourse($id);
+		if (empty($course)) {
+			return $user->isAdmin();
 		}
-		return $this->hasCourseManagerRole($courseId, $userId);
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if ($member and ($member['role'] == 'teacher')) {
+			return true;
+		}
+
+		return false;
 	}
 
 
