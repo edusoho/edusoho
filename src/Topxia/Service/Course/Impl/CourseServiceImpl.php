@@ -281,6 +281,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'type', 'title', 'about', 'categoryId','goals','audiences', 'subtitle','tags', 'price', 'startTime', 'endTime', 'locationId', 'address'
 		));
 
+		
+
 		if (isset($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about']);
 		}
@@ -977,6 +979,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'role' => 'teacher',
 				'seq' => $index,
 				'isVisible' => empty($teacher['isVisible']) ? 0 : 1,
+				'createdTime' => time(),
 			);
 		}
 

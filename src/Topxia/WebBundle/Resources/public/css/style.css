@@ -70,7 +70,6 @@ display: table-cell;
 vertical-align: top;
 width: 10000px;
 +width: auto;
-color: #999;
 line-height: 1.5em;
 }
 
@@ -292,7 +291,7 @@ line-height: 21px;
 background-position: 0 -448px;}
 /*footer*/
 .footer{background-color: #dedede;padding: 28px 0;}
-.footer .pull-left{padding:15px 12px;height: 180px;}
+.footer .pull-left{padding:0px 0px;height: 180px;}
 .footer-ad{float: left; padding-right:55px }
 .links{margin: 0 15px}
 .about{float: left;margin-right: 15px;}
@@ -304,8 +303,12 @@ background-position: 0 -448px;}
 #photo{
 	
 }
-.list-item{margin-right: -3px;*margin-right: 1px; position: relative; width:52px; display:inline-block; padding-bottom:2px; text-align:center; vertical-align:top;
+.list-item{margin-right: 1px; position: relative; width:51px; display:inline-block; padding-bottom:1px; text-align:center; vertical-align:top;
 }
+
+.list-waiting{margin-right: 1px; position: relative; display:inline-block; padding-bottom:1px; text-align:center; vertical-align:top;
+}
+
 .list-item .tip{position: relative;}
 .list-item .i-active{z-index: 10;}
 .todos-thumb-span{position: absolute;

@@ -773,9 +773,6 @@ activity_zhaoxin:
     pattern: /openclass/zhaoxin/
     defaults: { _controller: TopxiaWebBundle:Activity:zhaoxin }
 
-activity_activityform:
-    pattern: /openclass/{id}/activityform
-    defaults: { _controller: TopxiaWebBundle:Activity:activityform }
 
 activity_create:
     pattern:  /openclass/create

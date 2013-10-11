@@ -120,13 +120,8 @@ class ActivityController extends BaseController
 
         $activity=$this->getActivityService()->getActivity($id);
         $threads=$this->getActivityThreadService()->findThreadsByType($activity['id'],'latestCreated',0,100);
-
         
         $activitys=$this->getActivityService()->searchActivitys(array('status'=>'published'),'latestCreated',0,4);
-        
-        
-
-     
         
         $files=array();
         if(!empty($activity['photoId'])){
@@ -220,20 +215,6 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function activityformAction(Request $request, $id){
-        $filename="activity-form";
-        $activity=$this->getActivityService()->getActivity($id);
-        $user=$this->getCurrentUser();
-        $userprofile=array();
-        if(!empty($user['id'])){
-            $userprofile=$this->getUserService()->getUserProfile($user['id']);
-            $filename="activity-form-ex";
-        }
-        return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
-            "activity"=>$activity,
-            "user"=>$user,
-            "profile"=>$userprofile));
-    }
 
     public function successAction(Request $request,$id){
         $islogin=true;
@@ -245,8 +226,7 @@ class ActivityController extends BaseController
     }
     
     public function joinAction(Request $request,$id)
-    {   
-
+    {  
         $user = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
             $form = $this->createForm(new ActivityMemberType());
@@ -288,24 +268,37 @@ class ActivityController extends BaseController
 
                     return $this->redirect($this->generateUrl("activity_success",array("id"=>$id)));
                 }else{
-                    // login
+
                 }
-            }else{
- 
+            }else{ 
                 $member['activityId']=$id;
                 $this->getActivityService()->addMeberByActivity($member);
-                $test= $this->getActivityService()->addActivityStudentNum($id);
-            }
-
-            if(!empty($member['question'])){
-                $fields['content']=$member['question'];
-                $fields['activityId']=$id;
-                $this->getActivityThreadService()->createThread($fields);    
+                $this->getActivityService()->addActivityStudentNum($id);
+                if(!empty($member['question'])){
+                    $fields['content']=$member['question'];
+                    $fields['activityId']=$id;
+                    $this->getActivityThreadService()->createThread($fields);  
+                }
+                return $this->redirect($this->generateUrl("activity_success",array(
+                    "id"=>$id,"islogin"=>false))
+                );  
+                        
             }
         }
-        return $this->redirect($this->generateUrl("activity_success",array(
-                    "id"=>$id,"islogin"=>false))
-                );
+
+        $filename="activity-form-vistor";
+        $activity=$this->getActivityService()->getActivity($id);
+        $userprofile=array();
+        if(!empty($user['id'])){
+            $userprofile=$this->getUserService()->getUserProfile($user['id']);
+            $filename="activity-form-member";
+        }
+        return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
+            "activity"=>$activity,
+            "user"=>$user,
+            "profile"=>$userprofile)
+        );
+        
     }
 
     public function removeAction(Request $request,$id){
