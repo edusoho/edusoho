@@ -16,6 +16,19 @@ define(function(require, exports, module) {
 			$(this).siblings().css("opacity", "1");
 			$(this).find(".todos-thumb-span").fadeOut("slow");
 		});
+
+
+		// $(".course-grids .course-grid").mouseenter(function(){
+		// 	$(this).addClass("i-active");
+		// 	$(this).siblings().css("opacity", "0.6");
+			
+		// });
+
+		// $(".course-grids .course-grid").mouseleave(function(){
+		// 	$(this).addClass("i-active");
+		// 	$(this).siblings().css("opacity", "1");
+			
+		// });
     	
 
     };
