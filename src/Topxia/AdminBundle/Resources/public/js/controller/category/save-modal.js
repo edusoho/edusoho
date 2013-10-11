@@ -21,7 +21,9 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);
                     Notify.success('保存分类成功！');
-				});
+				}).fail(function() {
+                    Notify.danger("表单输入的字段有误或者包含非法字符,请重新编辑并保存!");
+                });
 
             }
         });
