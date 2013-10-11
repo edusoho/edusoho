@@ -7,4 +7,5 @@ interface EduSohoUpgradeService
 	public function upgrade($packId);
 	public function install($packId);
 	public function downloadPackage($uri,$filename);
+	public function getPackage($packId);
 }

@@ -8,6 +8,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 {
 	CONST CHECK_URL = 'http://www.edusoho-dev.com/upgrade/check';
 	CONST UPGRADE_URL = 'http://www.edusoho-dev.com/upgrade/upgrade';
+	CONST GET_URL = 'http://www.edusoho-dev.com/upgrade/get';
 	CONST INSTALL_URL = 'http://www.edusoho-dev.com/upgrade/install';
 	CONST BASE_URL = 'http://www.edusoho-dev.com/';
 	CONST FILES_URL = 'http://www.edusoho-dev.com/files/';
@@ -44,9 +45,25 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 				'Content-Length: ' . strlen($sendJsonData))
 		);
 		$result = json_decode(curl_exec($ch),true);
-		var_dump($result);
 		curl_close($ch);
 		return $result;
+	}
+
+	public function getPackage($packId){
+		$postData = $packId;
+		$sendJsonData = json_encode($postData);
+		$ch = curl_init(self::UPGRADE_URL);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($sendJsonData))
+		);
+		$result = json_decode(curl_exec($ch),true);
+		var_dump($result);
+		curl_close($ch);
+		return $result;		
 	}
 
 	public function install($packId)

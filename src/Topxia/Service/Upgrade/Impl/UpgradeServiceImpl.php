@@ -85,63 +85,136 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$this->upgrade($id);
 	}
 
+	public function checkEnvironment(){
+		$result = array();
+		if (!is_writable($this->getDownloadPath())){
+			$result[] = '下载目录无写权限';
+		}
+		if (!is_writable($this->getBackUpPath())){
+			$result[] = '备份目录无写权限';
+		}
+		if(!is_writable($this->getSystemRootPath().'app')){
+			$result[] = 'app目录无写权限';
+		}
+		if(!is_writable($this->getSystemRootPath().'src')){
+			$result[] = 'src目录无写权限';
+		}
+		if(!is_writable($this->getSystemRootPath().'web')){
+			$result[] = 'web目录无写权限';
+		}
+		if(!is_writable($this->getSystemRootPath().'app'.DIRECTORY_SEPARATOR.'cache')){
+			$result[] = 'app/cache目录无写权限';
+		}		
+		return $result;
+	}
+
+	public function checkDepends($id){
+		$result = array();
+		try{
+			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		 }catch(\Exception $e){
+			$result[] = $e->getMessage();
+			return $result;
+		}
+
+		$depends = $package['depends'];	
+
+		if(empty($depends)){
+			return $result;
+		}
+		foreach ($depends as $key => $depend) {
+			$installed = $this->getInstalledPackageDao()->getInstalledPackageByEname($key);
+			if(empty($installed)){
+				$result[]= " 没有安装 {$depend['o']} {$depend['v']} 版本的{$depend['cname']} \n";
+				continue;
+			}
+			if(!version_compare($installed['version'],$depend['v'],$depend['o'])){
+				$result[]=  " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n";
+			}
+		}
+		return $result;			
+	}
+
+	public function downloadAndExtract($id){
+		$result = array();
+		try{
+			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+			$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
+			$dirPath = $this->extractFile($path);		
+	    }catch(\Exception $e){
+	    	$result[] = $e->getMessage();
+	    }
+	    return $result;
+	}
+
+	public function backUpSystem($id){
+		$result = array();
+		try{
+			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		 }catch(\Exception $e){
+			$result[] = $e->getMessage();
+			return $result;
+		}	
+		//TODO backDatabase
+		//TODO backFiles;
+
+	}
+
+
 	public function upgrade($id)
 	{
-		$result = $this->checkPathWritePermission($this->getDownloadPath());
-		if(!empty($result)) return $result;
 
-		$package = $this->getEduSohoUpgradeService()->upgrade($id);
-
-		$result = $this->checkDepends($package['depends']);
-
-		if(!empty($result)) return $result;
 		
-		$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
 
-		$dirPath = $this->extractFile($path);
+		//TODO 
+		//  1、备份
+		//      1.1 备份数据库； 1.2 备份文件
+		//  2、覆盖
+		//  3、执行UPDATE.PHP
+		//	   之中发生任何异常, 异常，先恢复数据库，然后再恢复文件
+		//  4、删除cache
+		//$this->backUpOldFiles($dirPath);
 
-		$result .= $this->checkUpgradeFilesPermisson($dirPath);
+
+
+
 
 		return $result;
 
 	}
 
-	private function checkUpgradeFilesPermisson($dirPath)
-	{
-		if(!file_exists($dirPath)) return '';
+	
 
-		$dirPath .= DIRECTORY_SEPARATOR.'source';
-		$message = '';
-		foreach(new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS),
-			 \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
-			if($path->isFile() && $path->getFilename()!='.DS_Store'){
+	// private function checkUpgradeFilesPermisson($dirPath)
+	// {
+	// 	if(!file_exists($dirPath)) return '';
 
-				$fullPath = $path->getPathname();
-				$realPath = $this->getKernel()->getParameter('kernel.root_dir');
-				$realPath .= DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR;
-				$realFile = $realPath.str_replace($dirPath,'',$fullPath);
-				if(!is_writable($realFile)){
-					$relativePath = str_replace($dirPath,'',$fullPath);
-					$message .= '{$relativePath} \n';
-				}
+	// 	$dirPath .= DIRECTORY_SEPARATOR.'source';
+	// 	$message = '';
+	// 	foreach(new \RecursiveIteratorIterator(
+	// 		new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS),
+	// 		 \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+	// 		if($path->isFile() && $path->getFilename()!='.DS_Store'){
 
-			}
+	// 			$fullPath = $path->getPathname();
+	// 			$realPath = $this->getKernel()->getParameter('kernel.root_dir');
+	// 			$realPath .= DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR;
+	// 			$realFile = $realPath.str_replace($dirPath,'',$fullPath);
+	// 			if(!is_writable($realFile)){
+	// 				$relativePath = str_replace($dirPath,'',$fullPath);
+	// 				$message .= '{$relativePath} \n';
+	// 			}
 
-		}
-		if(!empty($message)) return '以下文件不可写 \n' .  $message;
-		return '';
-	}
+	// 		}
+
+	// 	}
+	// 	if(!empty($message)) return '以下文件不可写 \n' .  $message;
+	// 	return '';
+	// }
 
 
 
-	private function checkPathWritePermission($path)
-	{
-		if(!is_writable($path)){
-			return ' 没有下载目录权限';
-		}
-		return '';
-	}
+
 
 	private function extractFile($path)
 	{
@@ -161,29 +234,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $extractPath;
 	}
 	
-
-	private function checkDepends($depends)
-	{
-		if(empty($depends)){
-			return '';
-		}
-		$message = '';
-		foreach ($depends as $key => $depend) {
-			$installed = $this->getInstalledPackageDao()->getInstalledPackageByEname($key);
-			if(empty($installed)){
-				$message.= " 没有安装 {$depend['o']} {$depend['v']} 版本的{$depend['cname']} \n";
-				continue;
-			}
-			if(!version_compare($installed['version'],$depend['v'],$depend['o'])){
-				$message.= " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n";
-			}
-		}
-		if(!is_writable($this->getContainer()->getParameter('topxia.disk.upgrade_dir'))){
-			$downloadPath = $this->getContainer()->getParameter('topxia.disk.upgrade_dir');
-			$message.= " 路径:{$downloadPath} 无法写数据，权限不足! \n";
-		}
-		return $message;
-	}
 
 	
 	private function deleteDir($dirPath){
@@ -215,8 +265,21 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $this->getInstalledPackageDao()->findInstalledPackages();
 	}
 
-	private function getDownloadPath(){
+	private function getDownloadPath()
+	{
 		return $this->getKernel()->getParameter('topxia.disk.upgrade_dir');
+	}
+
+	private function getBackUpPath()
+	{
+		return $this->getKernel()->getParameter('topxia.disk.backup_dir');
+	}	
+
+	private function getSystemRootPath()
+	{
+		$realPath = $this->getKernel()->getParameter('kernel.root_dir');
+		$realPath .= DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR;
+		return $realPath;
 	}
 
     private function getInstalledPackageDao ()
