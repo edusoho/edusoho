@@ -179,7 +179,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
 		}
 
-		$this->getCourseService()->tryManageCourse($thread['courseId']);
+		if (!$this->getCourseService()->canManageCourse($thread['courseId'])) {
+			throw $this->createServiceException('您无权限删除该话题');
+		}
 
 		$this->getThreadPostDao()->deletePostsByThreadId($threadId);
 		$this->getThreadDao()->deleteThread($threadId);

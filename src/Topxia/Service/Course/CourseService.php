@@ -185,10 +185,11 @@ interface CourseService
 
 	/**
 	 * 是否可以管理课程
-	 * @param  [mixed] $course ID或Course数组。
-	 * @return [Boolean] 可以管理返回true，否则返回false
+	 * 
+	 * 注意： 如果课程不存在，且当前操作用户为管理员时，返回true。
+	 * 
 	 */
-	public function canManageCourse($courseId,$userId=null);
+	public function canManageCourse($courseId);
 
 	/**
 	 * 尝试使用课程
