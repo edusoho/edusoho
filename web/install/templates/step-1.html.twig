@@ -114,6 +114,22 @@
 
       <tr>
 				<td>
+				  PHP扩展：intl
+				  <div class="text-muted">该扩展用于处理国际化支持</div>
+				</td>
+				<td>必须</td>
+				<td>
+				  {% if env.intlOk %}
+					  <span class="text-success">√ 已安装</span>
+				  {% else %}
+					  <span class="text-danger">X 尚未安装</span>
+				  {% endif %}
+				</td>
+				<td>必须</td>
+      </tr>
+
+      <tr>
+				<td>
 				  PHP扩展：curl
 				  <div class="text-muted">该扩展用于远程读取文件</div>
 				</td>
