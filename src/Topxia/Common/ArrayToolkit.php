@@ -70,14 +70,32 @@ class ArrayToolkit
         return $indexedArray;
     }
 
-    public static function filterEmptyValue(array $array, array $specValues)
+    public static function filter(array $array, array $specialValues)
     {
-    	foreach ($array as $key => $value) {
-    		if (empty($value)) {
-    			$array[$key] = array_key_exists($key, $specValues) ? $specValues[$key] : '';
+    	$filtered = array();
+    	foreach ($specialValues as $key => $value) {
+    		if (!array_key_exists($key, $array)) {
+    			continue;
     		}
+
+			if (is_array($value)) {
+				$filtered[$key] = (array) $array[$key];
+			} elseif (is_int($value)) {
+				$filtered[$key] = (int) $array[$key];
+			} elseif (is_float($value)) {
+				$filtered[$key] = (float) $array[$key];
+			} elseif (is_bool($value)) {
+				$filtered[$key] = (bool) $array[$key];
+			} else {
+				$filtered[$key] = (string) $array[$key];
+			}
+
+			if (empty($filtered[$key])) {
+				$filtered[$key] = $value;
+			}
     	}
-    	return $array;
+
+    	return $filtered;
     }
 
 }

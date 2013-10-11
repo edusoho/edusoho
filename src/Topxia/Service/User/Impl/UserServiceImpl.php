@@ -279,17 +279,24 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，更新用户失败。');
         }
 
-        $availableFields = array(
-            'truename', 'gender', 'birthday', 'city', 'mobile', 'qq', 'company', 'job', 'signature', 'title',  'about', 'weibo', 'weixin', 'site'
-        );
-
-        $fields = ArrayToolkit::parts($fields, $availableFields);
-        $fields = ArrayToolkit::filterEmptyValue($fields, array(
+        $fields = ArrayToolkit::filter($fields, array(
+            'truename' => '',
             'gender' => 'secret',
             'birthday' => null,
+            'city' => '',
+            'mobile' => '',
+            'qq' => '',
+            'company' => '',
+            'job' => '',
+            'signature' => '',
+            'title' => '',
+            'about' => '',
+            'weibo' => '',
+            'weixin' => '',
+            'site' => '',
         ));
 
-        if (array_key_exists('title', $fields)) {
+        if (isset($fields['title'])) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
         }
         unset($fields['title']);
@@ -310,16 +317,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('QQ不正确，更新用户失败。');
         }
 
-        foreach ($fields as $key => $value) {
-            if (empty($value)) {
-                $fields[$key] = '';
-            }
-        }
-
-        // @todo 这个字段先干掉，目前界面上还没有。
-        unset($fields['birthday']);
-
-        if(isset($fields['about'])){
+        if(!empty($fields['about'])){
             $fields['about'] = $this->purifyHtml($fields['about']);
         }
         
