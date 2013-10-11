@@ -95,49 +95,25 @@
   <div class="row  prl pll">
     <div class="container clear-pleft clear-pright">   
       <!-- 课程资源 -->
-      <div class="Resources row  mtl">
-       
-        <div class="mod TopicList col-md-12">     
-          <div class="kytitle clearfix">
+      <div class="es-row-wrap container-gap mtl">
+        <div class="mod col-md-12">     
+          <div class="kytitle clearfix es-box-heading mtm">
             <h3>课程资源</h3>
-            <a href="{{ path('course_page') }}" target="_blank" class="pull-right">全部课程资源>></a>
-            
+            <a href="{{ path('course_explore') }}" target="_blank" class="pull-right">全部课程资源>></a>
           </div>
-          <div class="hp-tab-newprd">       
-            <div class="newprd-clip" style="height: 350px;">
-                <div class="tempWrap" style="overflow:hidden; position:relative; width:1185px">
-                      <ul class="grids pll prl" style="float: left;">
-                        {% for course in courses%}
-                        <li class="grid">
-                          <div class="imageblock clearfix">
-                            <div class="imageblock-image">
-                              <a href="{{ path('course_show', {id:course.id}) }}" class="show-user-card">
-                                <img src="{{asset('bundles/topxiaweb/img/145-145.jpg')}}" alt="ae120"></a>
-                            </div>
-                            <div class="imageblock-content">
-                              <p class="title">
-                                <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
-                              </p>
-                              <p class="stars-{{ (course.rating/2)|number_format }}"></p>
-                              <p>{{ course.lessonNum}}课时{{ course.studentNum }}人学习</p>
-                            </div>
-                          </div>
-                        </li>
-                        {% endfor %}
-
-                      </ul>
-      
-                </div>
-            </div>
-          </div>        
+           
+          <div class="es-box-body plll">
+            {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+          </div>    
+             
         </div>
       </div>
       <!-- 讨论，学员，牛人，谁在学，最新点评-->
       <div class="row">
-        <div class="col-md-8">          
+        <div class="col-md-8 ">          
           <!-- 问答讨论 -->
-          <div class="mod k_postlist discussion">
-            <div class="kytitle clearfix">
+          <div class=" es-row-wrap container-gap mod k_postlist discussion mod">
+            <div class="kytitle clearfix es-box-heading mtm">
               <h3>问答讨论</h3>          
             </div>
             <div class="content">       
