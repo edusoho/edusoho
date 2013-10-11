@@ -276,38 +276,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function _filterCourseFields($fields)
 	{
-
-		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryId','goals','audiences', 'subtitle','tags', 'price', 'startTime', 'endTime', 'locationId', 'address'
+		$fields = ArrayToolkit::filter($fields, array(
+			'title' => '',
+			'subtitle' => '',
+			'about' => '',
+			'categoryId' => 0,
+			'goals' => array(),
+			'audiences' => array(),
+			'tags' => array(),
+			'price' => 0.00,
+			'startTime' => 0,
+			'endTime'  => 0,
+			'locationId' => 0,
+			'address' => '',
 		));
 
-		
-
-		if (isset($fields['about'])) {
+		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about']);
 		}
 
-		if (isset($fields['tags'])) {
-			$fields['tags'] = $fields['tags'] ? : array();
+		if (!empty($fields['tags'])) {
 			array_walk($fields['tags'], function(&$item, $key) {
 				$item = (int) $item;
 			});
-		}
-
-		if (isset($fields['startTime'])) {
-			$fields['startTime'] = (int) $fields['startTime'];
-		}
-
-		if (isset($fields['rating'])) {
-			$fields['rating'] = (int) $fields['rating'];
-		}
-		
-		if (isset($fields['ratingNum'])) {
-			$fields['ratingNum'] = (int) $fields['ratingNum'];
-		}
-
-		if (isset($fields['endTime'])) {
-			$fields['endTime'] = (int) $fields['endTime'];
 		}
 
 		return $fields;
