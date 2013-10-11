@@ -2,25 +2,7 @@ p{margin: 0.2em 0}
 
 body {
   font-family: Microsoft YaHei, "微软雅黑", Lucida, Verdana, Hiragino Sans GB, STHeiti, WenQuanYi Micro Hei, Droid Sans Fallback, SimSun, sans-serif;
-  font-size: 14px;
-  line-height: 1.428571429;
-  color: #333333;
   background-color: #f8f8f8;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-  font-family: Microsoft YaHei, "微软雅黑", Lucida, Verdana, Hiragino Sans GB, STHeiti, WenQuanYi Micro Hei, Droid Sans Fallback, SimSun, sans-serif;
 }
 
 ul li,ol li{list-style-type: none;}

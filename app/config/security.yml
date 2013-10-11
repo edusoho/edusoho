@@ -60,6 +60,8 @@ security:
                 target: /
             anonymous:  true
     access_control:
+        - { path: ^/openclass/\d/manage.*, role: ROLE_SUPER_ADMIN }
+        - { path: ^/photoview/\d/manage.*, role: ROLE_SUPER_ADMIN }
         - { path: ^/task, role: ROLE_USER }
         - { path: ^/me, role: ROLE_USER }
         - { path: ^/settings, role: ROLE_USER }

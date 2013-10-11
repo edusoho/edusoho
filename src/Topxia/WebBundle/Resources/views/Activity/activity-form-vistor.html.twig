@@ -3,7 +3,7 @@
 {% set nav = 'openclass' %}
 
 {% set bodyClass = 'homepage' %}
-{% set script_controller = 'activity/activityform' %}
+{% set script_controller = 'activity/activity-form-vistor' %}
 
 {% block content %}
 
@@ -41,7 +41,7 @@
 					</ul>
 					<div class="row">
 						<div class="col-md-12">
-							<!-- 讲师介绍 -->
+							<!-- 报名 -->
 						<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
 							<div class="widget k_postlist shadow">
 								<div class="kytitle clearfix bor-l-green">

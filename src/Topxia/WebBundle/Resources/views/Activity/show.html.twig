@@ -32,7 +32,7 @@
               {% if activity.id in ids %}
                 <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mar-l btn btn-warning" >取消报名</a>
               {% else %}
-                <a href="{{ path('activity_activityform',{id:activity.id}) }}" class="mar-l btn btn-success  green" >活动报名</a>
+                <a href="{{ path('activity_join',{id:activity.id}) }}" class="mar-l btn btn-success  green" >活动报名</a>
               {% endif %}
               <a href="javascript:void(0)" id="media-qustion" class="mar-l btn btn-success  green">课前提问</a>
             </p>

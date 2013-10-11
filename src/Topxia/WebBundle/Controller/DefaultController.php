@@ -31,7 +31,7 @@ class DefaultController extends BaseController
         $Locations=$this->getLocationService()->getAllLocations();
         //公开课报名用户
         $feild['roles']='ROLE_USER';
-        $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,42);
+        $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,38);
         //视频资源库
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 8);

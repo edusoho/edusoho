@@ -39,10 +39,12 @@
             </div>
             <div class="info-content clearfix">
               <div id="photo" class="photo-wall pull-left">
-               
+                <span class=" list-waiting pull-right">
+                   <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
+                </span>
                 {% for user in users%}
-                <span class="list-item">
-                  <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'avatar.png')  }}" alt="user icon">
+                <span class="list-item  pull-right">
+                  <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%21~'.gif')  }}" alt="user icon">
                   <span class="todos-thumb-span text-left">
                     <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
                     <span class="user-tag">{{ user.title }}</span>
@@ -56,7 +58,7 @@
                 <div class="info-btn">
                 <p>还等什么呢就差你了</p>
                 {% if nextActivity.id %}
-                <a class="btn center-block" href="{{ path('activity_activityform',{id:nextActivity.id}) }}">我要报名</a>
+                <a class="btn center-block" href="{{ path('activity_join',{id:nextActivity.id}) }}">我要报名</a>
                 {% else %}
                 <a class="btn center-block" >我要报名</a>
                 {% endif %}
@@ -217,7 +219,7 @@
                 {% for teacher in teachers %}
                 <li class="grid">
                   <a href="{{ path('user_show',{id:teacher.id }) }}">
-                    <img src=" {{ file_path(teacher.mediumAvatar,'avatar.png')  }}" alt="用户" class="thumb"></a>
+                    <img src="{{ file_path(teacher.mediumAvatar,'avatar.png')  }}" alt="用户" class="thumb"></a>
                   <p>
                     <h5><a href="{{ path('user_show',{id:teacher.id }) }}">{{teacher.nickname}}</a></h5>
                   </p>
