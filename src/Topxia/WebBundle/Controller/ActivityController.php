@@ -217,12 +217,19 @@ class ActivityController extends BaseController
 
 
     public function successAction(Request $request,$id){
-        $islogin=true;
-        $randomuser=$this->getCurrentUser();
+       
+        $user=$this->getCurrentUser();
+        
+        $activity=$this->getActivityService()->getActivity($id);
+
+        $isNew = $request->query->get('isNew');
         
         return $this->render("TopxiaWebBundle:Activity:activity-success.html.twig",array(
             "activityid"=>$id,
-            "state"=>true,"islogin"=>true,"randomuser"=>$randomuser));
+            "isNew"=>$isNew,
+            "user"=>$user,
+            "activity"=>$activity)
+        );
     }
     
     public function joinAction(Request $request,$id)
@@ -233,43 +240,42 @@ class ActivityController extends BaseController
             $form->bind($request);
             $member = $form->getData();
             if (empty($user['id'])) {
-                $isfind=$this->getUserService()->isEmailAvaliable($member['email']);
-                if($isfind){
-                    // regitser 
-                    $newuser['email']=$member['email'];
-                    $newuser['nickname']=$member['nickname'];
-                    //$newuser['password']=$this->getUserService()->createRandomPassworld();
-                    $newuser['password']='abcd1234';
-                    $newuser['createdIp'] = $request->getClientIp();
+                // regitser 
+                $newuser['email']=$member['email'];
+                $newuser['nickname']=$member['nickname'];
+                //$newuser['password']=$this->getUserService()->createRandomPassworld();
+                $newuser['password']='abcd1234';
+                $newuser['createdIp'] = $request->getClientIp();
 
-                    $auth = $this->getSettingService()->get('auth', array());
+                $auth = $this->getSettingService()->get('auth', array());
 
-                    $user=$this->getUserService()->register($newuser);
+                $user=$this->getUserService()->register($newuser);
 
-                    $this->authenticateUser($user);
+                $this->authenticateUser($user);
 
-                    $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
-                   
-                    $member['activityId']=$id;
-                    $member['userId']=$user['id'];
+                $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
+               
+                $member['activityId']=$id;
+                $member['userId']=$user['id'];
 
-                    $this->getActivityService()->addMeberByActivity($member);
-                    $this->getActivityService()->addActivityStudentNum($id);
-                    
-                    $activity=$this->getActivityService()->getActivity($id);
-                   
-                    $hash=$this->makeHash($user);
-                    
-                    $user = $this->checkHash($user['id'], $hash);
+                $this->getActivityService()->addMeberByActivity($member);
+                $this->getActivityService()->addActivityStudentNum($id);
+                
+                $activity=$this->getActivityService()->getActivity($id);
+               
+                $hash=$this->makeHash($user);
+                
+                $user = $this->checkHash($user['id'], $hash);
 
-                    $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-                   
-                    $this->sendVerifyEmail($token,$user,$activity);
+                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
+                $this->sendVerifyEmail($token,$user,$activity);
 
-                    return $this->redirect($this->generateUrl("activity_success",array("id"=>$id)));
-                }else{
-
-                }
+                return $this->redirect($this->generateUrl("activity_success",array(
+                    "id"=>$id,
+                    "isNew"=>true))
+                );
+              
             }else{ 
                 $member['activityId']=$id;
                 $this->getActivityService()->addMeberByActivity($member);
@@ -280,7 +286,8 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($fields);  
                 }
                 return $this->redirect($this->generateUrl("activity_success",array(
-                    "id"=>$id,"islogin"=>false))
+                    "id"=>$id,
+                    "isNew"=>false))
                 );  
                         
             }
