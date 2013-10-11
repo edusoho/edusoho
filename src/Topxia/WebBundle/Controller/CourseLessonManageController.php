@@ -28,6 +28,7 @@ class CourseLessonManageController extends BaseController
         	if ($lesson['media']) {
         		$lesson['media'] = json_decode($lesson['media'], true);
         	}
+        	
         	if ($lesson['length']) {
         		$lesson['length'] = $this->textToSeconds($lesson['length']);
         	}

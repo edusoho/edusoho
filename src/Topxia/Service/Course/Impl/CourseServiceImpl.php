@@ -539,6 +539,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
+		if (!in_array($lesson['type'], array('text', 'audio', 'video'))) {
+			throw $this->createServiceException('课时类型不正确，添加失败！');
+		}
+
+		if (in_array($lesson['type'], array('video', 'audio'))) {
+			if (empty($lesson['media']) or empty($lesson['media']['type']) or empty($lesson['media']['name'])) {
+				throw $this->createServiceException("media参数不正确，添加课时失败！");
+			}
+		} else {
+			$lesson['media'] = array();
+		}
+
+
 		//课程内容的过滤 @todo
 		// if(isset($lesson['content'])){
 		// 	$lesson['content'] = $this->purifyHtml($lesson['content']);
@@ -589,7 +602,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// }
 
 		if (in_array($lesson['type'], array('video', 'audio'))) {
-			if (empty($fields['media'])) {
+			if (empty($fields['media']) or empty($fields['media']['type']) or empty($fields['media']['name'])) {
 				throw $this->createServiceException("参数不正确，缺少media参数。");
 			}
 		} else {
@@ -1170,6 +1183,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    $lesson = $this->getLessonDao()->getLesson($lessonId);
 	    $lesson['materialNum'] = $count;
 	    $this->getLessonDao()->updateLesson($lesson['id'],$lesson);
+	}
+
+	public function setMemberNoteNumber($courseId, $userId, $number)
+	{
+		$member = $this->getCourseMember($courseId, $userId);
+		if (empty($member)) {
+			return false;
+		}
+
+		$this->getMemberDao()->updateMember($member['id'], array(
+			'noteNum' => (int) $number,
+			'noteLastUpdateTime' => time(),
+		));
+
+		return true;
 	}
 
 
