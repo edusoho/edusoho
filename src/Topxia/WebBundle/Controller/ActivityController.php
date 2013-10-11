@@ -442,13 +442,12 @@ class ActivityController extends BaseController
                     $qustion['usernickname']=$currentuser['nickname'];
                     $qustion['usersmallAvatar']=$this->getWebExtension()->getFilePath($currentuser['smallAvatar']);
                 }
-                $newqustion=$qustion;
-                return $this->createJsonResponse($newqustion);
+                $newqustion=$qustion; 
+                return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
+                    'qustion'=>$newqustion
+                ));
         }
-        return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
-            'form' => $form->createView(),
-            'activityid'=>$id
-        ));
+        
     }
 
     private function sendWeibo($castweibo,$fields){
@@ -513,7 +512,9 @@ class ActivityController extends BaseController
                     $post['usernickname']=$currentuser['nickname'];
                 }
                 $newpost=$post;
-                return $this->createJsonResponse($newpost);
+                return $this->render('TopxiaWebBundle:Activity:qustion-post-create.html.twig', array(
+                    'post'=>$newpost
+                ));
             }
         return $this->createJsonResponse(false);
     }

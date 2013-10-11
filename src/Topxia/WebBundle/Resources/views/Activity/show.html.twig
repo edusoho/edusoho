@@ -64,9 +64,11 @@
       <div class="kytitle clearfix bor-l-green">
         <h3>已报名的小伙伴</h3>             
       </div>
-      <div class="content">
+      <div class="content model-over-h">
         {% for student in students %}
-          <a href="" class="user-link user-avatar-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}"></a>
+          <a href="{{ path('user_show',{id:student.id}) }}" class="user-link user-avatar-link activity-user-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}">
+            <p>{{ student.nickname}}</p>
+          </a>
         {% endfor %}
         <span class="justify_fix"></span>         
       </div>
@@ -83,7 +85,7 @@
           <div class="padding">
             <div class="clearfix mar-b">
               <div class="imageblock-image">
-                <a href="#" class="show-user-card user-avatar-link pull-left" >
+                <a href="javascript:" class="show-user-card user-avatar-link pull-left" >
                   {% if current_user['id']==0 %}
                   <img src="/assets/img/default/avatar.png" alt="ae120"></a>
                   {% else %}
@@ -121,14 +123,14 @@
                   <div class="media-body">
                     <p class="media-content"><a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a> {{qustion.content}}
                     </p>
-                    <div class="media-content" style="margin-bottom:5px;">
-                      <a hef="javascript:" class="reply btn btn-link">回复</a>
-                      <a hef="javascript:" style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</a>
+                    <div class="reply-tools media-content">
+                    <a hef="javascript:" class="reply btn btn-link"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+                      <p style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</p>
                     </div>
                     <div class="post-list media-content">
                       {% for post in qustion.bindpost %}
-                        <div class="well well-sm">
-                                  <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>:{{post.content}}
+                        <div class="post-item">
+                                  <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>:{{post.content}} <span class="post-item-time">{{ post.createdTime|smart_time }}</span>
                         </div>
                       {% endfor %}
                     </div>
@@ -150,10 +152,13 @@
           <div class="kytitle clearfix bor-l-gray">
             <h3>小伙伴们正在看</h3>              
           </div>                  
-          <div class="content daren"> 
+          <div class="content daren imgpanel"> 
               {% for item in activitys %}
                 <a href="{{ path('activity_showsuccess',{id:item.id})}}">
-                  <img class="open-class-logo-middle-size" src="{{ file_path(item.middlePicture,'activity-large.jpg') }}">
+                  <img class="open-class-logo-middle-size" src="{{ file_path(item.middlePicture,'activity-large.jpg') }}" />
+                  <div class="tit">
+                          <p>{{ item.title }}</p>
+                  </div>
                 </a>
               {% endfor %}
               <span class="justify_fix"></span>         
@@ -163,22 +168,6 @@
 </div>
     
 
-<script type="reply-templete" id="reply-templete">
-          <li class="media">
-            <a class="user-link user-avatar-link pull-left" href="javascript:">
-              <img src="{ usersmallAvatar }"></img>
-            </a>
-            <div class="media-body">
-              <p class="media-content"><a>{ usernickname }:</a> { content }</p>
-              <div class="media-content" style="margin-bottom:5px;">
-                <a hef="javascript:" class="btn btn-link reply">回复</a>
-                <a hef="javascript:" style="float:right;" class="huifu">刚刚</a>
-              </div>
-              <div class="post-list media-content"></div>
-              <div class="reply-box media-content" style="display:none;" action='{ action }'></div>
-            </div>
-          </li>
-</script>
 <script type="reply-templete" id="post-templete">
           <div class="input-group well well-sm">
             <input type="text" name="activitypost[content]" class="form-control" id="posttest" />
@@ -187,9 +176,5 @@
             </span>
           </div>
 </script>
-<script type="reply-templete" id="post-reply-templete">
-          <div class="well well-sm">
-            <a href="#">{ usernickname }</a>:{ content }
-          </div>
-</script>
+
 {% endblock %}

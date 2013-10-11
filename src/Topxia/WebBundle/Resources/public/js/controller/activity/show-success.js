@@ -53,12 +53,11 @@ define(function(require, exports, module) {
         var text=$(parent).find("input");
 
         $.post(action,{'activitypost[content]':text.val()}, function(json) {
-            var model=TempleteBindDate("#post-reply-templete",postcanvertFun,json); //业务逻辑
-            $(postlist).append(model); //业务逻辑 
+            $(postlist).append(json); //业务逻辑 
             $(text).val('');
             $(pparent).hide();
             $(pparent).html('');
-        }, 'json');
+        });
         
     }
 
@@ -83,12 +82,11 @@ define(function(require, exports, module) {
             }
             $.post($form.attr('action'), $form.serialize(), function(json) {
                $("#qustiontext").val("");  //UI逻辑
-               var model=TempleteBindDate("#reply-templete",postcanvertFun,json); //业务逻辑
-               $("#qustion-media-list").prepend(model); //业务逻辑
+               $("#qustion-media-list").prepend(json); //业务逻辑
                $(".reply").unbind("click"); //UI逻辑
                $(".reply").bind("click",createReply); //UI逻辑
 
-            }, 'json');
+            });
         });
 
 
@@ -98,11 +96,12 @@ define(function(require, exports, module) {
             hasTriggers: false,
             easing: 'easeOutStrong',
             effect: 'scrollx',
-            step: 3,
-            viewSize: [350],
+            step: 4,
+            viewSize: [280],
             circular: false,
             autoplay: true
         }).render();
+
         //视频
 
         var videourl=$('.activity-video-player').attr('data-url');

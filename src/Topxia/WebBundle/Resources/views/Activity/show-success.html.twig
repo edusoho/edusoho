@@ -78,16 +78,20 @@
 
 <section class="row">
   <div class="col-md-12 ">
-    <div class="widget k_postlist shadow">
-      <div class="content " >
+
           {% if pics %}
           <div id="carousel-demo-1" class="carousel-demo">
-              <span class="ui-switchable-prev-btn" data-role="prev">&lsaquo;</span>
-              <span class="ui-switchable-next-btn" data-role="next">&rsaquo;</span>
+              <span class="ui-switchable-prev-btn glyphicon glyphicon-chevron-left" data-role="prev"></span>
+              <span class="ui-switchable-next-btn glyphicon glyphicon-chevron-right" data-role="next"></span>
               <div class="scroller">
                   <div class="ui-switchable-content" data-role="content">
                     {% for pic in pics %}
-                      <a href="#"><img  src="{{ file_path(pic.url,'course-large.png') }}" alt="" class="ui-switchable-panel"></a>
+                      <a href="{{ path('photoview',{id:pic.groupId }) }}">
+                        <img  src="{{ file_path(pic.url,'course-large.png') }}" alt="" class="ui-switchable-panel" />
+                        <div class="tit">
+                          <p>{{ pic.content }}</p>
+                        </div>
+                      </a>
                     {% endfor %}
                   </div>
               </div>
@@ -95,9 +99,9 @@
           {% else %}
               <p class="empty-info">暂无活动图片信息</p>
           {% endif %}
-        </div>
+       
       </div>
-    </div>
+
 </section>
 
 <section class="row"> 
@@ -122,9 +126,11 @@
       <div class="kytitle clearfix bor-l-green">
         <h3>已报名的小伙伴</h3>             
       </div>
-      <div class="content">
+      <div class="content model-over-h">
         {% for student in students %}
-          <a href="" class="user-link user-avatar-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}"></a>
+          <a href="{{ path('user_show',{id:student.id}) }}" class="user-link user-avatar-link activity-user-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}">
+            <p>{{ student.nickname}}</p>
+          </a>
         {% endfor %}
         <span class="justify_fix"></span>         
       </div>
@@ -142,7 +148,7 @@
           <div class="padding">
             <div class="clearfix mar-b">
               <div class="imageblock-image">
-                <a href="#" class="show-user-card user-avatar-link pull-left" >
+                <a href="javascript:" class="show-user-card user-avatar-link pull-left" >
                   {% if current_user['id']==0 %}
                   <img src="/assets/img/default/avatar.png" alt="ae120"></a>
                   {% else %}
@@ -172,7 +178,7 @@
                 <li class="media">
                   <a class="pull-left user-link user-avatar-link" href="javascript:">
                     {% if qustion['userId']==0 %}
-                    <img src="/assets/img/default/avatar.png" alt="ae120"></a>
+                    <img src="/assets/img/default/avatar.png"></a>
                     {% else %}
                     <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" alt="ae120"></a>
                     {% endif %}
@@ -180,14 +186,14 @@
                   <div class="media-body">
                     <p class="media-content"><a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a> {{qustion.content}}
                     </p>
-                    <div class="media-content" style="margin-bottom:5px;">
-                      <a hef="javascript:" class="reply btn btn-link">回复</a>
-                      <a hef="javascript:" style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</a>
+                    <div class="reply-tools media-content " >
+                      <a hef="javascript:" class="reply btn btn-link"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+                      <p style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</p>
                     </div>
                     <div class="post-list media-content">
                       {% for post in qustion.bindpost %}
-                        <div class="well well-sm">
-                                  <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>:{{post.content}}
+                        <div class="post-item">
+                                  <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>:{{post.content}} <span class="post-item-time">{{ post.createdTime|smart_time }}</span>
                         </div>
                       {% endfor %}
                     </div>
@@ -205,43 +211,28 @@
 
 
 <!-- 小伙伴们正在看 -->
-<section class="row"> 
-<div class="col-md-12">
-  <div class="widget k_postlist shadow">
-    <div class="kytitle clearfix bor-l-green">
-      <h3>小伙伴们正在看</h3>              
-    </div>                  
-      <div class="content daren"> 
-        {% for item in activitys %}
-          <a href="{{ path('activity_showsuccess',{id:item.id})}}">
-            <img src="{{ file_path(item.middlePicture,'avatar.png') }}">
-          </a>
-        {% endfor %}
-      <span class="justify_fix"></span>         
-    </div>
-  </div>  
-</div>
+<div class="row">
+  <div class="col-md-12">
+        <!-- 小伙伴们正在看 -->
+        <div class="widget k_postlist shadow">
+          <div class="kytitle clearfix bor-l-gray">
+            <h3>小伙伴们正在看</h3>              
+          </div>                  
+          <div class="content daren imgpanel"> 
+              {% for item in activitys %}
+                <a href="{{ path('activity_showsuccess',{id:item.id})}}">
+                  <img class="open-class-logo-middle-size" src="{{ file_path(item.middlePicture,'activity-large.jpg') }}" />
+                  <div class="tit">
+                          <p>{{ item.title }}</p>
+                  </div>
+                </a>
+              {% endfor %}
+              <span class="justify_fix"></span>         
+          </div>
+        </div>
+      </div>  
 </section>
 
-
-
-
-  <script type="reply-templete" id="reply-templete">
-          <li class="media">
-            <a class="user-link user-avatar-link pull-left" href="javascript:">
-              <img src="{ usersmallAvatar }"></img>
-            </a>
-            <div class="media-body">
-              <p class="media-content"><a>{ usernickname }:</a> { content }</p>
-              <div class="media-content" style="margin-bottom:5px;">
-                <a hef="javascript:" class="btn btn-link reply">回复</a>
-                <a hef="javascript:" style="float:right;" class="huifu">刚刚</a>
-              </div>
-              <div class="post-list media-content"></div>
-              <div class="reply-box media-content" style="display:none;" action='{ action }'></div>
-            </div>
-          </li>
-  </script>
   <script type="reply-templete" id="post-templete">
                     <div class="input-group well well-sm">
                       <input type="text" name="activitypost[content]" class="form-control" id="posttest" />
@@ -250,10 +241,6 @@
                       </span>
                     </div>
   </script>
-  <script type="reply-templete" id="post-reply-templete">
-    <div class="well well-sm">
-      <a href="#">{ usernickname }</a>:{ content }
-    </div>
-  </script>
+
 
 {% endblock %}
