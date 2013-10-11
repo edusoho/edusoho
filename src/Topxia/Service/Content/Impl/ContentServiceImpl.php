@@ -87,7 +87,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 		$type = ContentTypeFactory::create($content['type']);
 		$fields = $type->convert($fields);
 		$fields = ArrayToolkit::parts($fields, $type->getFields());
-        
+
         if(isset($fields['body'])){
             $fields['body'] = $this->purifyHtml($fields['body']);
         }

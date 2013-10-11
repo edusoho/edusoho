@@ -1,7 +1,7 @@
 <tr id="content-{{ content.id }}">
 	<td>
 		<a href="{{ path('content_' ~ content.type ~ '_show', {alias:content.alias|default(content.id)}) }}" target="_blank">{{ content.title }}</a><br />
-		{% if type == 'page' %}
+		{% if content.type == 'page' %}
 		  <span class="text-muted text-sm">地址：page/{{ content.alias|default(content.id) }}</span>
 		{% endif %}
 		{% if category %}
