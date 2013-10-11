@@ -284,13 +284,17 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $fields = ArrayToolkit::parts($fields, $availableFields);
+        $fields = ArrayToolkit::filterEmptyValue($fields, array(
+            'gender' => 'secret',
+            'birthday' => null,
+        ));
 
         if (array_key_exists('title', $fields)) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
         }
         unset($fields['title']);
 
-        if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female'))) {
+        if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
             throw $this->createServiceException('性别不正确，更新用户失败。');
         }
 

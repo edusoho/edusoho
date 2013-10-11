@@ -70,4 +70,14 @@ class ArrayToolkit
         return $indexedArray;
     }
 
+    public static function filterEmptyValue(array $array, array $specValues)
+    {
+    	foreach ($array as $key => $value) {
+    		if (empty($value)) {
+    			$array[$key] = array_key_exists($key, $specValues) ? $specValues[$key] : '';
+    		}
+    	}
+    	return $array;
+    }
+
 }
