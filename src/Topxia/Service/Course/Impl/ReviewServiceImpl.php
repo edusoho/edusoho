@@ -70,8 +70,8 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		$course = $this->getCourseService()->tryTakeCourse($fields['courseId']);
 
 		$userId = $this->getCurrentUser()->id;
-		if($course['status']!='published' || in_array($userId, $course['teacherIds'])){
-			throw $this->createServiceException('您不能评价未发布课程和自己的课程！');
+		if($course['status'] != 'published'){
+			throw $this->createServiceException('不能评价未发布课程！');
 		}		
 
 		if (empty($course)) {
