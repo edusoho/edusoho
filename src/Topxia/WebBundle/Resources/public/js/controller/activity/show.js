@@ -11,25 +11,9 @@ define(function(require, exports, module) {
     require('jquery.raty');
     require('common/validator-rules').inject(Validator);
 
-
-
-
-    var TempleteBindDate=function(templeteBindDate,canvertFun,data){
-        var htmlcontent=$(templeteBindDate).html();
-        return canvertFun(htmlcontent,data);
-    }
-
     var createReplyObject=function(templeteHtml){
         return $(templeteHtml);
     }
-
-    var postcanvertFun=function(templete,data){
-        $.each(data,function(key,val){
-            templete=templete.replace('{ '+key+' }',val);
-        });
-        return templete;
-    }
-
 
     var createReply=function(){
         var replybox=$(this).parent().parent().find(".reply-box");
@@ -53,12 +37,11 @@ define(function(require, exports, module) {
         var text=$(parent).find("input");
 
         $.post(action,{'activitypost[content]':text.val()}, function(json) {
-            var model=TempleteBindDate("#post-reply-templete",postcanvertFun,json); //业务逻辑
-            $(postlist).append(model); //业务逻辑 
+            $(postlist).append(json); //业务逻辑 
             $(text).val('');
             $(pparent).hide();
             $(pparent).html('');
-        }, 'json');
+        });
         
     }
 
@@ -97,12 +80,11 @@ define(function(require, exports, module) {
             }
             $.post($form.attr('action'), $form.serialize(), function(json) {
                $("#qustiontext").val("");  //UI逻辑
-               var model=TempleteBindDate("#reply-templete",postcanvertFun,json); //业务逻辑
-               $("#qustion-media-list").prepend(model); //业务逻辑
+               $("#qustion-media-list").prepend(json); //业务逻辑
                $(".reply").unbind("click"); //UI逻辑
                $(".reply").bind("click",createReply); //UI逻辑
 
-            }, 'json');
+            });
         });
 
 

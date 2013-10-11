@@ -1,0 +1,5 @@
+<div class="post-item">
+     <a  href="{{ path('user_show',{id:post.userId }) }}">
+     	{{ post.usernickname }}</a>:{{post.content}} 
+     	<span class="post-item-time">{{ post.createdTime|smart_time }}</span>
+</div>
