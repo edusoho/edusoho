@@ -104,7 +104,7 @@
     {% block content %}{% endblock %}
 </div>
 <!-- container -->
-<footer class=" row footer">
+<footer class="footer">
     <div class="container clearfix">    
       <div class="pull-left bor-r col-md-5">
         <img class="footer-ad" src="{{ asset('bundles/topxiaweb/img/kaiyuan.jpg') }}" >
@@ -154,7 +154,7 @@
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 
-{{ setting('site.analytics')|raw }}
+<div  style="display:none">{{ setting('site.analytics')|raw }}</div>
 
 </body>
 </html>
