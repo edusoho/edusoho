@@ -3,10 +3,18 @@
 
 .clear-mtop{ margin-top:0px;}
 
+.home-page>.container{
+	width: 100% !important;
+	padding: 0px !important;
+	margin: 0px !important;
+}
+
 
 /*头部高度*/
 
 .header-top { margin-top:56px;}
+
+
 
 .index-img-box{
 	position: relative;	
@@ -29,10 +37,15 @@
 	color: #333333;
 }
 
+.photo-view-page>.container{
+	width: 100% !important;
+	padding: 0px !important;
+	margin: 0px !important;
+}
 
 .photoview-nav{
 	position: fixed;
-	top:61px;
+	top:65px;
 	z-index: 2;
 }
 

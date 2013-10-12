@@ -37,7 +37,7 @@
 {% set nav = 'df' %}
 
 {% block body %}
-<header class="navbar navbar-inverse site-navbar navbar-fixed-top" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
+<header class="navbar navbar-inverse site-navbar navbar-fixed-top mz pz" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
     <div class="container"> 
       <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -90,8 +90,7 @@
 </header> 
 
 <div class="slide"></div>
-  
-{% block contentlg %}{% endblock %}
+ 
 <!-- container -->
 <div id="content-container" class="container">
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
@@ -103,6 +102,8 @@
     {% endif %}
     {% block content %}{% endblock %}
 </div>
+
+{% block bottom %}
 <!-- container -->
 <footer class="footer">
     <div class="container clearfix">    
@@ -146,7 +147,7 @@
     </div>
 </footer>
 
-{% block bottom %}{% endblock %}
+{% endblock %}
 
 <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
 <div id="modal" class="modal"></div>
