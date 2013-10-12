@@ -46,10 +46,11 @@
                   </li>
                   
                   <li> <strong>状态：</strong>
-                    <a href="{{ path('activity_home') }}">全部</a>
                     {% set istimeout=filters.istimeout|default('') %}
-                    <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:0})) }}" {% if filters.istimeout=='1' %} class="active"{% endif %}>未开始</a>
-                    <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:1})) }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>已结束</a>
+                    <a href="{{ path('activity_home') }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>全部</a>
+                    <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:0})) }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>未开始</a>
+                    <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:1})) }}" {% if filters.istimeout %} class="active"{% endif %}
+                    >已结束</a>
                   
                   <li>
                     <strong>标签：</strong>
