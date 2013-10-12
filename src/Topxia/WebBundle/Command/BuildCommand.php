@@ -57,7 +57,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('packaging...');
 
 		chdir($this->buildDirectory);
-		$command = "tar czvf edusoho-1.0RC1.tar.gz edusoho/";
+		$command = "tar czvf edusoho-1.0RC2.tar.gz edusoho/";
 		exec($command);
 	}
 

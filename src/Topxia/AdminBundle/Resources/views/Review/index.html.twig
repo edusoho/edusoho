@@ -47,6 +47,7 @@
       <tbody>
         {% for review in reviews %}
           {% set author = users[review.userId]|default(null) %}
+          {% set course = courses[review.courseId]|default(null) %}
           <tr id="review-table-tr-{{review.id}}" data-role="item">
             <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
             <td>
@@ -57,7 +58,11 @@
                 <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">(收起)</span></div>
               </div>
               <div class="mts">
-                <a class="text-success text-sm" href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}</a>
+                {% if course %}
+                  <a class="text-success text-sm" href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}</a>
+                {% else %}
+                  <span class="text-muted text-sm">课程已删除</span>
+                {% endif %}
               </div>
             </td>
             <td>{{ review.rating }}星</td>

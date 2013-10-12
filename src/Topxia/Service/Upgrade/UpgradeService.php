@@ -9,6 +9,16 @@ interface UpgradeService
 
 	public function install($id);
 
+	public function checkEnvironment();
+	public function checkDepends($id);
+	public function downloadAndExtract($id);
+	public function backUpSystem($id);
+	public function beginUpgrade($id);
+	public function refreshCache();
+	public function recovery();
+
+	public function backUpdirectories($directory);
+
 	public function addInstalledPackage($packageInfo);
 	
 	public function getRemoteInstallPackageInfo($id);
