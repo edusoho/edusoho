@@ -16,7 +16,7 @@ class CategoryGroupDaoImpl extends BaseDao implements CategoryGroupDao
     }
 
     public function findGroupByCode($code)
-    {
+    {        
         $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($code));
     }

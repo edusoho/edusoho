@@ -20,15 +20,15 @@ define(function(require, exports, module) {
             this._chooses = {};
             this.on('change', this.onChanged);
 
+            this._initTabs();
+            this._initDiskBrowser();
+            this._initUploadPane();
+
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
             }
 
-            this._initTabs();
-
-            this._initDiskBrowser();
-            this._initUploadPane();
         },
 
         open: function() {

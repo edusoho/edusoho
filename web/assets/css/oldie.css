@@ -422,6 +422,11 @@
   background: #f5f5f5;
 }
 
+.breadcrumb > .active {
+  color: #999999;
+  margin-left: 1px;
+}
+
 .popover .arrow {
     display: none;
 }
