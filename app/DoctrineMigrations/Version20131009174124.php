@@ -26,7 +26,7 @@ class Version20131009174124 extends AbstractMigration
     	");
 
     	$this->addSql("
-			INSERT INTO  `1`.`file_group` (`id` ,`name` ,`code` ,`public`) VALUES ('5',  '升级包备份',  'upgradeBackup',  '1');
+			INSERT INTO  `file_group` (`id` ,`name` ,`code` ,`public`) VALUES (null,  '升级包备份',  'upgradeBackup',  '1');
     	");
 
     }
