@@ -4685,6 +4685,10 @@ textarea.input-group-sm > .input-group-btn > .btn {
   content: "/\00a0";
 }
 
+.breadcrumb > .active {
+  color: #999999;
+}
+
 .pagination {
   display: inline-block;
   padding-left: 0;
