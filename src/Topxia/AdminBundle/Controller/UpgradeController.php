@@ -34,14 +34,31 @@ class UpgradeController extends BaseController
 
     public function installAction(Request $request, $id)
     {
-        $result = $this->getUpgradeService()->install($id);
+        $result = $this->getUpgradeService()->checkDepends($id);
+        var_dump($result);
+        $result = $this->getUpgradeService()->downloadAndExtract($id);
+         var_dump($result);
+        // $result = $this->getUpgradeService()->backUpSystem($id);
+        //  var_dump($result);
 
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
     public function upgradeAction(Request $request, $id)
     {
-        $directoryAfterUnZip = $this->getUpgradeService()->upgrade($id);
+        $result = $this->getUpgradeService()->checkDepends($id);
+        var_dump($result);
+        $result = $this->getUpgradeService()->downloadAndExtract($id);
+         var_dump($result);
+        $result = $this->getUpgradeService()->backUpSystem($id);
+         var_dump($result);
+
+    // public function checkDepends($id);
+    // public function downloadAndExtract($id);
+    // public function backUpSystem($id);
+    // public function beginUpgrade($id);
+
+
         // TODO
         // $this->getUpgradeService()->backUpdirectories($directoryAfterUnZip);
 

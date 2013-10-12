@@ -6,6 +6,7 @@ use Topxia\Service\Upgrade\UpgradeService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\System;
+use Topxia\Service\Util\MySQLDumper;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
@@ -85,8 +86,16 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$this->upgrade($id);
 	}
 
-	public function checkEnvironment(){
+	public function checkEnvironment()
+	{
 		$result = array();
+		if(!class_exists('ZipArchive')){
+ 		   $result[] = "php-zip包未激活";
+		}
+
+		if(!function_exists('curl_init')){
+ 		   $result[] = "php-curl包未激活";
+		}
 		if (!is_writable($this->getDownloadPath())){
 			$result[] = '下载目录无写权限';
 		}
@@ -104,11 +113,14 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 		if(!is_writable($this->getSystemRootPath().'app'.DIRECTORY_SEPARATOR.'cache')){
 			$result[] = 'app/cache目录无写权限';
-		}		
+		}	
+
+
 		return $result;
 	}
 
-	public function checkDepends($id){
+	public function checkDepends($id)
+	{
 		$result = array();
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
@@ -135,7 +147,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $result;			
 	}
 
-	public function downloadAndExtract($id){
+	public function downloadAndExtract($id)
+	{
 		$result = array();
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
@@ -147,16 +160,114 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	    return $result;
 	}
 
-	public function backUpSystem($id){
+	public function backUpSystem($id)
+	{
 		$result = array();
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
 		 }catch(\Exception $e){
 			$result[] = $e->getMessage();
 			return $result;
-		}	
-		//TODO backDatabase
-		//TODO backFiles;
+		}
+		$backupDbFile = $this->backUpDb($package);
+		$backupFilesDirs = $this->backUpFiles($package);
+
+	}
+
+	private function backUpFiles($package)
+	{
+		$backupFilesDirs = array();
+		$backUpdir = $this->getPackageBackUpDir($package);
+		$backupFilesDirs['src'] = $this->getPackageBackUpDir($package).'src';
+		$backupFilesDirs['app'] = $this->getPackageBackUpDir($package).'app';
+		$backupFilesDirs['web'] = $this->getPackageBackUpDir($package).'web';
+
+		$this->deepCopy($this->getSystemRootPath().'src',$backupFilesDirs['src']);
+		$this->deepCopy($this->getSystemRootPath().'app',$backupFilesDirs['app']);
+		$this->deepCopy($this->getSystemRootPath().'web',$backupFilesDirs['web']);
+		return $backupFilesDirs;	
+	}
+
+	private function getFilters()
+	{
+		return array('app'.DIRECTORY_SEPARATOR.'data',
+			   'app'.DIRECTORY_SEPARATOR.'cache',
+			   'app'.DIRECTORY_SEPARATOR.'logs',
+			   'app'.DIRECTORY_SEPARATOR.'logs',
+			   'app'.DIRECTORY_SEPARATOR.'logs',
+			   'web'.DIRECTORY_SEPARATOR.'files'
+		);
+	}
+
+	private function xcopy($src,$dest)
+	{
+		 foreach  (scandir($src) as $file) {
+		   if (!is_readable($src.DIRECTORY_SEPARATOR.$file)) continue;
+		   if (is_dir($file) && ($file!='.') && ($file!='..') ) {
+		       mkdir($dest . DIRECTORY_SEPARATOR . $file);
+		       xcopy($src.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file);
+		   } else {
+		       copy($src.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file);
+		   }
+		}
+ 	}
+
+ 	private function deepCopy($src,$dest)
+ 	{
+ 		$filters = $this->getFilters();	
+		if(!file_exists($src)) return ;
+		mkdir($dest,0666,true);
+		foreach(new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
+			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
+			$relativeFile = str_replace($path->getPathname(),'',$src);
+			$destFile = $dest.$relativeFile;
+
+			if($path->isDir()){
+				if($this->patternMatch($path->getPathname(),$filters)){
+					conitinue;
+				}
+				mkdir($destFile);
+			}else{
+				copy($path->getPathname(),$destFile);
+			}
+		}
+ 	}
+
+ 	private function patternMatch($path,&$filters)
+ 	{
+ 		foreach ($filters as $filter) {
+ 			if(strrpos($path,$filter)!==false){
+ 				return true;
+ 			}
+ 		}
+ 		return false;
+ 	}
+
+	private function backUpDb($package)
+	{
+		$dbSetting = array('exclude'=>array('session','cache'));
+		$dump = new MySQLDumper($this->getKernel()->getConnection());
+		$date = date('YmdHis');
+		$backUpdir = $this->getPackageBackUpDir($package);
+		$this->emptyDir($backUpdir);
+		return 	$dump->export($backUpdir.$date);	
+	}
+
+	private function getPackageBackUpDir($package){
+		if(isset($package['type']) && $package['type']==1){
+			$dir = $this->getBackUpPath().DIRECTORY_SEPARATOR;
+			$dir .= 'upgrade_'.$package['ename'].'_'.$package['fromVersion'];
+			$dir .= DIRECTORY_SEPARATOR;
+		}else{
+			$dir = $this->getBackUpPath().DIRECTORY_SEPARATOR;
+			$dir .= 'install_'.$package['ename'].'_'.$package['version'];			
+			$dir .= DIRECTORY_SEPARATOR;
+		}
+		if(!file_exists($dir)){
+			mkdir($dir,0666,true);
+		}
+		return $dir;
 
 	}
 
@@ -218,12 +329,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function extractFile($path)
 	{
-		if(!class_exists('ZipArchive')){
- 		   throw new Exception("Php5-zip包未安装");
-		}
+
 		$dir = $this->getDownloadPath();
 		$extractPath = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
-		$this->deleteDir($extractPath);
+		$this->emptyDir($extractPath);
 		$zip = new \ZipArchive;
 		if ($zip->open($path) === TRUE) {
     		$zip->extractTo($dir);
@@ -236,12 +345,14 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	
 
 	
-	private function deleteDir($dirPath){
+	private function emptyDir($dirPath,$includeDir=false){
 		if(!file_exists($dirPath)) return ;
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
     		$path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
 		}
-		rmdir($dirPath);
+		if($includeDir){
+			rmdir($dirPath);
+		}
 	}
 
 	private function checkMainVersion($packages)
