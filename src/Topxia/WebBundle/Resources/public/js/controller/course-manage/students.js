@@ -4,6 +4,8 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        require('./header').run();
+
         var $list = $("#course-student-list");
 
         $list.on('click', '.student-remove', function(){

@@ -72,7 +72,6 @@ class ContentController extends BaseController
 
     public function editAction(Request $request, $id)
     {
-
         $content = $this->getContentService()->getContent($id);
         $type = ContentTypeFactory::create($content['type']);
         $record = array();
@@ -86,6 +85,7 @@ class ContentController extends BaseController
                 $content['picture'] = $record['uri'];
             }
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
+
             return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
                 'content' => $content,
                 'category' => $this->getCategoryService()->getCategory($content['categoryId']),

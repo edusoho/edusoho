@@ -76,12 +76,15 @@
 				  <div class="panel-heading">模版</div>
 				  <div class="panel-body">
 					  {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
+					  {% set templates = {'default': '默认模版'} %}
 					  <select class="form-control" name="template">
 					  	{{ select_options(templates, field_value(content, 'template')) }}
 					  </select>
 				  </div>
 				</div>
 			{% endif %}
+
+			<input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
 
 			{#
 			{% if 'picture' in type.basicFields %}

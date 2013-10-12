@@ -312,7 +312,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $pathinfo = pathinfo($filePath);
-
         $imagine = new Imagine();
         $rawImage = $imagine->open($filePath);
 
@@ -513,6 +512,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function createLesson($lesson)
 	{
+		$lesson = ArrayToolkit::filter($lesson, array(
+			'courseId' => 0,
+			'chapterId' => 0,
+			'free' => 0,
+			'title' => '',
+			'summary' => '',
+			'tags' => array(),
+			'type' => 'text',
+			'content' => '',
+			'media' => array(),
+			'length' => 0,
+		));
+
+		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
+			throw $this->createServiceException('参数缺失，创建课时失败！');
+		}
+
 		if (empty($lesson['courseId'])) {
 			throw $this->createServiceException('添加课时失败，课程ID为空。');
 		}
@@ -522,20 +538,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		//课程内容的过滤
+		if (!in_array($lesson['type'], array('text', 'audio', 'video'))) {
+			throw $this->createServiceException('课时类型不正确，添加失败！');
+		}
+
+		if (in_array($lesson['type'], array('video', 'audio'))) {
+			if (empty($lesson['media']) or empty($lesson['media']['type']) or empty($lesson['media']['name'])) {
+				throw $this->createServiceException("media参数不正确，添加课时失败！");
+			}
+		} else {
+			$lesson['media'] = array();
+		}
+
+
+		//课程内容的过滤 @todo
 		// if(isset($lesson['content'])){
 		// 	$lesson['content'] = $this->purifyHtml($lesson['content']);
 		// }
 
 		// 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
 		$lesson['status'] = $course['status'] == 'published' ? 'unpublished' : 'published';
-
-		$lesson['title'] = empty($lesson['title']) ? '' : $lesson['title'];
-		$lesson['summary'] = empty($lesson['summary']) ? null : $lesson['summary'];
 		$lesson['free'] = empty($lesson['free']) ? 0 : 1;
 		$lesson['number'] = $this->getNextLessonNumber($lesson['courseId']);
 		$lesson['seq'] = $this->getNextCourseItemSeq($lesson['courseId']);
-		$lesson['content'] = empty($lesson['content']) ? null : $lesson['content'];
 		$lesson['userId'] = $this->getCurrentUser()->id;
 		$lesson['createdTime'] = time();
 
@@ -562,22 +587,30 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
-		$fields = ArrayToolkit::parts($fields, array('title', 'summary', 'content', 'media', 'free', 'length'));
-		// if (isset($fields['content'])) {
+		$fields = ArrayToolkit::filter($fields, array(
+			'title' => '',
+			'summary' => '',
+			'content' => '',
+			'media' => array(),
+			'free' => 0,
+			'length' => 0,
+		));
+
+		// if (isset($fields['content'])) { @todo
 		// 	$fields['content'] = $this->purifyHtml($fields['content']);
 		// }
 
 		if (in_array($lesson['type'], array('video', 'audio'))) {
-			if (empty($fields['media'])) {
+			if (empty($fields['media']) or empty($fields['media']['type']) or empty($fields['media']['name'])) {
 				throw $this->createServiceException("参数不正确，缺少media参数。");
 			}
 		} else {
-			$fields['media'] = null;
+			$fields['media'] = array();
 		}
 
-		$fields = LessonSerialize::serialize($fields);
-
-		return $this->getLessonDao()->updateLesson($lessonId, $fields);
+		return LessonSerialize::unserialize(
+			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
+		);
 	}
 
 	public function deleteLesson($courseId, $lessonId)
@@ -1151,6 +1184,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    $this->getLessonDao()->updateLesson($lesson['id'],$lesson);
 	}
 
+	public function setMemberNoteNumber($courseId, $userId, $number)
+	{
+		$member = $this->getCourseMember($courseId, $userId);
+		if (empty($member)) {
+			return false;
+		}
+
+		$this->getMemberDao()->updateMember($member['id'], array(
+			'noteNum' => (int) $number,
+			'noteLastUpdateTime' => time(),
+		));
+
+		return true;
+	}
+
 
 	/**
 	 * @todo refactor it.
@@ -1193,15 +1241,27 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($course);
 	}
 
-	public function canManageCourse($courseId,$userId=null)
+	public function canManageCourse($courseId)
 	{
-		if(!$userId){
-			$userId = $this->getCurrentUser()->id;
-		}
-		if(!$courseId || !$userId){
+		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
 			return false;
 		}
-		return $this->hasCourseManagerRole($courseId, $userId);
+		if ($user->isAdmin()) {
+			return true;
+		}
+
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			return $user->isAdmin();
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user->id);
+		if ($member and ($member['role'] == 'teacher')) {
+			return true;
+		}
+
+		return false;
 	}
 
 
