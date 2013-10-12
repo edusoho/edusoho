@@ -223,12 +223,15 @@ class ActivityController extends BaseController
         $activity=$this->getActivityService()->getActivity($id);
 
         $isNew = $request->query->get('isNew');
-        
+
+        $hash=$this->makeHash($user);
+
         return $this->render("TopxiaWebBundle:Activity:activity-success.html.twig",array(
             "activityid"=>$id,
             "isNew"=>$isNew,
             "user"=>$user,
-            "activity"=>$activity)
+            "activity"=>$activity,
+            "hash"=>$hash)
         );
     }
     
@@ -244,7 +247,7 @@ class ActivityController extends BaseController
                 $newuser['email']=$member['email'];
                 $newuser['nickname']=$member['nickname'];
                 //$newuser['password']=$this->getUserService()->createRandomPassworld();
-                $newuser['password']='abcd1234';
+                $newuser['password']='y**7^ian91!@MWSK';
                 $newuser['createdIp'] = $request->getClientIp();
 
                 $auth = $this->getSettingService()->get('auth', array());
@@ -265,6 +268,13 @@ class ActivityController extends BaseController
 
                 $this->getUserService()->updateUserProfile($user['id'],$userprofile);
 
+                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
+                $this->sendActivaEmail($token,$user);
+
+
+
+
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
 
@@ -277,16 +287,6 @@ class ActivityController extends BaseController
                     $activity_thread['activityId']=$id;
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
-                
-                $activity=$this->getActivityService()->getActivity($id);
-               
-                $hash=$this->makeHash($user);
-                
-                $user = $this->checkHash($user['id'], $hash);
-
-                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-               
-                $this->sendVerifyEmail($token,$user,$activity);
 
                 return $this->redirect($this->generateUrl("activity_success",array(
                     "id"=>$id,
@@ -574,32 +574,18 @@ class ActivityController extends BaseController
 
    
 
-    private function sendVerifyEmail($token, $user,$activity)
+    private function sendActivaEmail($token, $user)
     {
-        // $auth = $this->getSettingService()->get('auth', array());
-        // $site = $this->getSettingService()->get('site', array());
-        // $emailTitle = $this->setting('auth.email_activation_title', 
-        //     '请激活你的帐号 完成注册');
-        // $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
-        // $www="http://new.osforce.cn";
-        // $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
-        // $verifyurl = $this->generateUrl('register_email_activa', array('token' => $token));
-        // $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $www.$verifyurl);
-        // $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
-        // $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-        // $this->sendEmail($user['email'], $emailTitle, $emailBody);
-
-         $this->sendEmail(
+        $this->sendEmail(
                 $user['email'],
-                "请激活您在{$this->setting('site.name', 'EDUSOHO')}的账号并修改密码",
+                "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
                 $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
                     'user' => $user,
                     'token' => $token,
-                    'activity'=>$activity,
                 )), 'html'
         );
-
     }
+
 
     private function makeHash($user)
     {

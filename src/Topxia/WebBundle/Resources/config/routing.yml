@@ -72,9 +72,16 @@ register_email_verify:
     pattern:  /register/email/verify/{token}
     defaults: { _controller: TopxiaWebBundle:Register:emailVerify }
 
+
 register_email_activa:
     pattern:  /register/email/activa/{token}
     defaults: { _controller: TopxiaWebBundle:Register:emailActiva }
+
+
+register_email_activaed_send:
+    pattern:  /register/activaed/{id}/{hash}
+    defaults: { _controller: TopxiaWebBundle:Register:activaedSend }
+
 
 register_email_check:
     pattern:  /register/email/check
@@ -799,6 +806,7 @@ activity_showsuccess:
 activity_success:
     pattern: /openclass/{id}/success
     defaults: { _controller:TopxiaWebBundle:Activity:success }
+
 
 activity_qustioncreate:
     pattern: /openclass/{id}/question/create

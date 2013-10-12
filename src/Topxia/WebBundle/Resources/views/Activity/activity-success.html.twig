@@ -4,6 +4,8 @@
 
 {% set bodyClass = 'homepage' %}
 
+{% set script_controller = 'activity/activa-sended' %}
+
 {% block content %} 
 	<div class="row ">
 			<div class="col-md-6 col-md-offset-3 ptl ">
@@ -14,18 +16,19 @@
 						   
 								{% if isNew %}
 									<p class="text-success">
-										小伙伴，这是您<strong class="text-danger">第一次</strong>报名参加开源力量公开课，我们已经为您注册一个账号：<strong class="text-danger">{{ user.email }}</strong>，并生成随机密码。
+										小伙伴，这是您<strong class="text-danger">第一次</strong>报名参加开源力量公开课，我们已经用您填写的Email地址<strong class="text-danger">{{ user.email }}</strong>为您注册一个账号,并将注册确认信已经发到你的邮箱。
 	 								</p>
 
 	 								<p class="text-success">
-										注册确认信已经发到你的邮箱，你需要登陆邮箱箱进行验证并修改密码，这样，您就能参加我们的线上直播课啦！
+										你需要通过登陆邮箱进行验证并初始化密码，完成注册和报名，这样，您就和其他小伙伴们一起参加我们的线上直播课啦！
 									</p>
 								<div class="alert pz ptl">
 						          <h5>没有收到确认信怎么办？</h5>
 						          <ul class="pll">
-						            <li>检查一下上面Email地址是否正确，错了就重新<a class="text-muted" href="{{ path('register') }}">注册</a>一次吧 :)</li>
+						            <li>检查一下上面Email地址是否正确，错了就重新<a  href="{{ path('register') }}">注册</a>一次吧 :)</li>
 						            <li>看看是否在邮箱的垃圾箱里?</li>
-						            <li>稍等几分钟，若仍旧没收到确认信，请和我们联系。</li>
+						            <li>稍等几分钟，若仍旧没收到确认信，那就再<a id="resend-email"  href="javascript:" data-url="{{ path('register_email_activaed_send', {id:user.id, hash:hash}) }}">重发</a>一次吧。</li>
+						            <li>等了好久，，，，，，还是没有邮件，那和我们联系吧。</li>
 						          </ul>
 						        </div>
 								{% endif %}
