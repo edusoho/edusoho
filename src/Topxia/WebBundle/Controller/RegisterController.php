@@ -252,7 +252,7 @@ class RegisterController extends BaseController
     {
         $this->sendEmail(
                 $user['email'],
-                "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
+                "欢迎注册开源力量在线学习网站，请激活您的账号并初始化密码",
                 $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
                     'user' => $user,
                     'token' => $token,
