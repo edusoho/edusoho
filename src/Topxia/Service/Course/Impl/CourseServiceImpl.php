@@ -1244,16 +1244,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function canManageCourse($courseId)
 	{
 		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
+			return false;
+		}
 		if ($user->isAdmin()) {
 			return true;
 		}
 
-		$course = $this->getCourseService()->getCourse($id);
+		$course = $this->getCourse($courseId);
 		if (empty($course)) {
 			return $user->isAdmin();
 		}
 
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user->id);
 		if ($member and ($member['role'] == 'teacher')) {
 			return true;
 		}
