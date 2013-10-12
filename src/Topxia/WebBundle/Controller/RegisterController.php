@@ -231,4 +231,34 @@ class RegisterController extends BaseController
         );
     }
 
+    public function activaedSendAction(Request $request, $id, $hash)
+    { 
+
+        $user = $this->checkHash($id, $hash);
+        if (empty($user)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
+        $this->sendActivaEmail($token,$user);
+       
+
+        return $this->createJsonResponse(true);
+    }
+
+
+    private function sendActivaEmail($token, $user)
+    {
+        $this->sendEmail(
+                $user['email'],
+                "欢迎注册开源力量在线学习网站，请激活您的账号并初始化密码",
+                $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                )), 'html'
+        );
+    }
+
+
 }

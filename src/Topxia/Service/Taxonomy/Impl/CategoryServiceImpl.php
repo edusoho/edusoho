@@ -59,7 +59,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $group = $this->getGroupByCode($groupCode);
         if (empty($group)) {
             throw $this->createServiceException("分类Group #{$groupCode}，不存在");
-        }
+        }        
         return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($group['id'], 0);
     }
 

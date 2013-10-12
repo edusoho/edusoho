@@ -182,7 +182,9 @@ define(function(require, exports, module) {
 			            player.play();
             		} else {
             			$("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-            			swfobject.embedSWF(lesson.media.files[0].url, 'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {wmode:'opaque'});
+            			swfobject.embedSWF(lesson.media.files[0].url, 
+            				'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+            				{wmode:'opaque',allowFullScreen:'true'});
             			$("#lesson-swf-content").show();
             		}
             	} else if (lesson.type == 'audio') {

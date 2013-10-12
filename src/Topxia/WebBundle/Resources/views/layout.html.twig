@@ -37,7 +37,7 @@
 {% set nav = 'df' %}
 
 {% block body %}
-<header class="navbar navbar-inverse navbar-fixed-top" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
+<header class="navbar navbar-inverse site-navbar navbar-fixed-top mz pz" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
     <div class="container"> 
       <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -90,8 +90,7 @@
 </header> 
 
 <div class="slide"></div>
-  
-{% block contentlg %}{% endblock %}
+ 
 <!-- container -->
 <div id="content-container" class="container">
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
@@ -103,12 +102,14 @@
     {% endif %}
     {% block content %}{% endblock %}
 </div>
+
+{% block bottom %}
 <!-- container -->
 <footer class="footer">
     <div class="container clearfix">    
-      <div class="pull-left bor-r">
+      <div class="pull-left bor-r col-md-5">
         <img class="footer-ad" src="{{ asset('bundles/topxiaweb/img/kaiyuan.jpg') }}" >
-        <ul class="about">
+        <ul class="about plm">
           <li>关于我们</li>
           <li>使用帮助</li>
           <li>意见反馈</li>
@@ -116,7 +117,7 @@
           <li>招聘信息</li>
         </ul>     
       </div>
-      <div class="pull-left bor-l bor-r">
+      <div class="pull-left bor-l bor-r col-md-2">
         <ul class="links">
           <li>好知网</li>
           <li></li>
@@ -125,16 +126,16 @@
           <li>友情链接</li>
         </ul>
       </div>
-      <div class="pull-left bor-l bor-r">
+      <div class="pull-left bor-l bor-r col-md-3">
         <p>开源力量创始人</p>
         <p>
           <img src="{{ asset('bundles/topxiaweb/img/ceo1.png')}}">     
           <img src="{{ asset('bundles/topxiaweb/img/ceo2.png')}}"></p>
         <div class="contact">
-          <p>如果你遇到任何疑问,欢迎随时给我们留言</p>
+          <p>如果你遇到任何疑问,<br>欢迎随时给我们留言</p>
         </div>
       </div>
-      <div class="pull-left bor-l">
+      <div class="pull-right bor-l col-md-2">
         <div class="social-media">
           <p class="ky-sina">新浪微博</p>
           <p class="ky-weixin">微信</p>
@@ -146,7 +147,7 @@
     </div>
 </footer>
 
-{% block bottom %}{% endblock %}
+{% endblock %}
 
 <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
 <div id="modal" class="modal"></div>
@@ -154,7 +155,7 @@
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 
-{{ setting('site.analytics')|raw }}
+<div  style="display:none">{{ setting('site.analytics')|raw }}</div>
 
 </body>
 </html>

@@ -4,25 +4,45 @@
 
 {% set bodyClass = 'homepage' %}
 
+{% set script_controller = 'activity/activa-sended' %}
+
 {% block content %} 
-	<div class="row es-row-light">
-			<div class="col-lg-12">
-				<p>
-					{% if state %}
-						报名成功  <a href="{{ path("activity_show",{id:activityid}) }}">查看活动详情>></a>
-					{% else %}
-						报名失败
-					{% endif %}
-				</p>
-				{% if islogin %}
-					<p>您的账号：{{ randomuser.email }}</p>
-				{% endif %}
-				<p>活动管理员将会发送系统消息、短信以及邮件通知，请注意查收！</p>
-				<p>你可以去 : 
-					<a href="{{ path("homepage") }}" >主页</a>
-					<a href="{{ path('activity_home') }}" >浏览其他公开课</a>
-					<a href="{{ path('settings') }}" >完善个人信息</a>
-				</P>
+	<div class="row ">
+			<div class="col-md-6 col-md-offset-3 ptl ">
+				 <div class="panel panel-default panel-page">
+				 	<div class="panel-heading"><h2>报名成功</h2></div>
+						<div id="email-sending" class="alert alert-info" style="display:none;">正在发送注册验证邮件，请稍等...</div>
+						<div id="email-send-success">
+						   
+								{% if isNew %}
+									<p class="text-success">
+										小伙伴，这是您<strong class="text-danger">第一次</strong>报名参加开源力量公开课，我们已经用您填写的Email地址<strong class="text-danger">{{ user.email }}</strong>为您注册一个账号,并将注册确认信已经发到你的邮箱。
+	 								</p>
+
+	 								<p class="text-success">
+										你需要通过登陆邮箱进行验证并初始化密码，完成注册和报名，这样，您就和其他小伙伴们一起参加我们的线上直播课啦！
+									</p>
+								<div class="alert pz ptl">
+						          <h5>没有收到确认信怎么办？</h5>
+						          <ul class="pll">
+						            <li>检查一下上面Email地址是否正确，错了就重新<a  href="{{ path('register') }}">注册</a>一次吧 :)</li>
+						            <li>看看是否在邮箱的垃圾箱里?</li>
+						            <li>稍等几分钟，若仍旧没收到确认信，那就再<a id="resend-email"  href="javascript:" data-url="{{ path('register_email_activaed_send', {id:user.id, hash:hash}) }}">重发</a>一次吧。</li>
+						            <li>等了好久，，，，，，还是没有邮件，那和我们联系吧。</li>
+						          </ul>
+						        </div>
+								{% endif %}
+							
+							<br>
+							<p>接下来，您可以去 : 
+ 
+								<a href="{{ path("homepage") }}" >主页</a>
+								 <a href="{{ path("activity_show",{id:activityid}) }}">查看本公开课详情</a>
+								<a href="{{ path('activity_home') }}" >浏览其他公开课</a>
+								<a href="{{ path('settings') }}" >完善个人信息</a>
+							</P>
+						</div>
+				</div>
 			</div>
 	</div>
 {% endblock %}

@@ -1,6 +1,7 @@
-hi，小伙伴，{{ user.nickname }}，欢迎报名参加{{activity['subtitle']}}之【{{activity['title']}}】!
+hi，小伙伴，{{ user.nickname }}，这是您第一次参加开源力量公开课！
 
-我们已经收到您的公开课报名信息，请点击下面的链接确认，并修改您在{{ setting('site.name') }} 的登录密码：
+我们已经为您注册一个账号{{ user.email }}，您需要点击下面的链接来完成邮箱验证并初始化密码，这样，您就能参加我们的线上直播课啦！
+
 
 {{ url('register_email_activa', {token:token}) }}
 

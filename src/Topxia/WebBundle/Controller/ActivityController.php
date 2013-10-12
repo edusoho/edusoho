@@ -217,12 +217,22 @@ class ActivityController extends BaseController
 
 
     public function successAction(Request $request,$id){
-        $islogin=true;
-        $randomuser=$this->getCurrentUser();
+       
+        $user=$this->getCurrentUser();
         
+        $activity=$this->getActivityService()->getActivity($id);
+
+        $isNew = $request->query->get('isNew');
+
+        $hash=$this->makeHash($user);
+
         return $this->render("TopxiaWebBundle:Activity:activity-success.html.twig",array(
             "activityid"=>$id,
-            "state"=>true,"islogin"=>true,"randomuser"=>$randomuser));
+            "isNew"=>$isNew,
+            "user"=>$user,
+            "activity"=>$activity,
+            "hash"=>$hash)
+        );
     }
     
     public function joinAction(Request $request,$id)
@@ -233,54 +243,78 @@ class ActivityController extends BaseController
             $form->bind($request);
             $member = $form->getData();
             if (empty($user['id'])) {
-                $isfind=$this->getUserService()->isEmailAvaliable($member['email']);
-                if($isfind){
-                    // regitser 
-                    $newuser['email']=$member['email'];
-                    $newuser['nickname']=$member['nickname'];
-                    //$newuser['password']=$this->getUserService()->createRandomPassworld();
-                    $newuser['password']='abcd1234';
-                    $newuser['createdIp'] = $request->getClientIp();
+                // regitser 
+                $newuser['email']=$member['email'];
+                $newuser['nickname']=$member['nickname'];
+                //$newuser['password']=$this->getUserService()->createRandomPassworld();
+                $newuser['password']='y**7^ian91!@MWSK';
+                $newuser['createdIp'] = $request->getClientIp();
 
-                    $auth = $this->getSettingService()->get('auth', array());
+                $auth = $this->getSettingService()->get('auth', array());
 
-                    $user=$this->getUserService()->register($newuser);
+                $user=$this->getUserService()->register($newuser);
 
-                    $this->authenticateUser($user);
+                $this->authenticateUser($user);
 
-                    $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
-                   
-                    $member['activityId']=$id;
-                    $member['userId']=$user['id'];
+                $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
+               
 
-                    $this->getActivityService()->addMeberByActivity($member);
-                    $this->getActivityService()->addActivityStudentNum($id);
-                    
-                    $activity=$this->getActivityService()->getActivity($id);
-                   
-                    $hash=$this->makeHash($user);
-                    
-                    $user = $this->checkHash($user['id'], $hash);
 
-                    $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-                   
-                    $this->sendVerifyEmail($token,$user,$activity);
+                $userprofile['id']=$user['id'];
+                $userprofile['truename']=$member['truename'];
+                $userprofile['mobile']= $member['mobile'];
+                $userprofile['job']=$member['job'];
+                $userprofile['company']=$member['company'];
 
-                    return $this->redirect($this->generateUrl("activity_success",array("id"=>$id)));
-                }else{
+                $this->getUserService()->updateUserProfile($user['id'],$userprofile);
 
+                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
+                $this->sendActivaEmail($token,$user);
+
+
+
+
+                $member['activityId']=$id;
+                $member['userId']=$user['id'];
+
+                $this->getActivityService()->addMeberByActivity($member);
+
+                $this->getActivityService()->addActivityStudentNum($id);
+
+                if(!empty($member['question'])){
+                    $activity_thread['content']=$member['question'];
+                    $activity_thread['activityId']=$id;
+                    $this->getActivityThreadService()->createThread($activity_thread);  
                 }
+
+                return $this->redirect($this->generateUrl("activity_success",array(
+                    "id"=>$id,
+                    "isNew"=>true))
+                );
+              
             }else{ 
+
+                $userprofile['id']=$user['id'];
+                $userprofile['truename']=$member['truename'];
+                $userprofile['mobile']= $member['mobile'];
+                $userprofile['job']=$member['job'];
+                $userprofile['company']=$member['company'];
+
+                $this->getUserService()->updateUserProfile($user['id'],$userprofile);
+
+
                 $member['activityId']=$id;
                 $this->getActivityService()->addMeberByActivity($member);
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
-                    $fields['content']=$member['question'];
-                    $fields['activityId']=$id;
-                    $this->getActivityThreadService()->createThread($fields);  
+                    $activity_thread['content']=$member['question'];
+                    $activity_thread['activityId']=$id;
+                    $this->getActivityThreadService()->createThread($activity_thread);  
                 }
                 return $this->redirect($this->generateUrl("activity_success",array(
-                    "id"=>$id,"islogin"=>false))
+                    "id"=>$id,
+                    "isNew"=>false))
                 );  
                         
             }
@@ -540,32 +574,18 @@ class ActivityController extends BaseController
 
    
 
-    private function sendVerifyEmail($token, $user,$activity)
+    private function sendActivaEmail($token, $user)
     {
-        // $auth = $this->getSettingService()->get('auth', array());
-        // $site = $this->getSettingService()->get('site', array());
-        // $emailTitle = $this->setting('auth.email_activation_title', 
-        //     '请激活你的帐号 完成注册');
-        // $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
-        // $www="http://new.osforce.cn";
-        // $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
-        // $verifyurl = $this->generateUrl('register_email_activa', array('token' => $token));
-        // $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $www.$verifyurl);
-        // $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
-        // $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-        // $this->sendEmail($user['email'], $emailTitle, $emailBody);
-
-         $this->sendEmail(
+        $this->sendEmail(
                 $user['email'],
-                "{$activity['subtitle']}之【{$activity['title']}】报名确认，设置您在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
                 $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
                     'user' => $user,
                     'token' => $token,
-                    'activity'=>$activity,
                 )), 'html'
         );
-
     }
+
 
     private function makeHash($user)
     {
