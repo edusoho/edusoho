@@ -193,8 +193,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return array('app'.DIRECTORY_SEPARATOR.'data',
 			   'app'.DIRECTORY_SEPARATOR.'cache',
 			   'app'.DIRECTORY_SEPARATOR.'logs',
-			   'app'.DIRECTORY_SEPARATOR.'logs',
-			   'app'.DIRECTORY_SEPARATOR.'logs',
 			   'web'.DIRECTORY_SEPARATOR.'files'
 		);
 	}
@@ -204,7 +202,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		 foreach  (scandir($src) as $file) {
 		   if (!is_readable($src.DIRECTORY_SEPARATOR.$file)) continue;
 		   if (is_dir($file) && ($file!='.') && ($file!='..') ) {
-		       mkdir($dest . DIRECTORY_SEPARATOR . $file);
+		       mkdir($dest . DIRECTORY_SEPARATOR . $file,0777,true);
 		       xcopy($src.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file);
 		   } else {
 		       copy($src.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file);
@@ -216,19 +214,25 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  	{
  		$filters = $this->getFilters();	
 		if(!file_exists($src)) return ;
-		mkdir($dest,0666,true);
+		mkdir($dest,0777,true);
 		foreach(new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
 			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
-			$relativeFile = str_replace($path->getPathname(),'',$src);
-			$destFile = $dest.$relativeFile;
 
+			if($this->patternMatch($path->getPathname(),$filters)){
+					continue;
+			}
+		
+			$relativeFile = str_replace($src,'',$path->getPathname());
+
+			$destFile = $dest.$relativeFile;	
+					
 			if($path->isDir()){
-				if($this->patternMatch($path->getPathname(),$filters)){
-					conitinue;
-				}
-				mkdir($destFile);
+				mkdir($destFile,0777,true);
 			}else{
+				if(strpos( $path->getFilename(), ".") ===0 ){
+					continue;
+				}
 				copy($path->getPathname(),$destFile);
 			}
 		}
@@ -237,7 +241,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  	private function patternMatch($path,&$filters)
  	{
  		foreach ($filters as $filter) {
- 			if(strrpos($path,$filter)!==false){
+ 			if(strpos($path,$filter)!==false){
  				return true;
  			}
  		}
@@ -265,7 +269,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$dir .= DIRECTORY_SEPARATOR;
 		}
 		if(!file_exists($dir)){
-			mkdir($dir,0666,true);
+			mkdir($dir,0777,true);
 		}
 		return $dir;
 
