@@ -220,9 +220,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		if(empty($member['activityId'])){
 			throw new Exception("Error Processing Request", 1);
 		}
+		if(empty($member['userId'])){
+			throw new Exception("Error Processing Request", 1);
+		}
 
-		$thread['activityid']=$member['activityId'];
-		$thread['userid']=$this->getCurrentUser()->id;
+		$thread['activityId']=$member['activityId'];
+		$thread['userId']=$member['userId'];
 		$thread['truename']=$member['truename'];
 		$thread['createdTime']=time();
 		$thread['mobile']=empty($member['mobile'])?'':$member['mobile'];

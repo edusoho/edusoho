@@ -39,6 +39,7 @@ class ActivityController extends BaseController
         $tags = $this->getTagService()->findAllTags(0, 100);
         //已经报名的用户
         $members=$this->getActivityService()->searchMember(array(),0,100);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members,'userId'));
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
@@ -250,15 +251,11 @@ class ActivityController extends BaseController
                 $newuser['password']='y**7^ian91!@MWSK';
                 $newuser['createdIp'] = $request->getClientIp();
 
-                $auth = $this->getSettingService()->get('auth', array());
-
                 $user=$this->getUserService()->register($newuser);
 
                 $this->authenticateUser($user);
 
                 $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
-               
-
 
                 $userprofile['id']=$user['id'];
                 $userprofile['truename']=$member['truename'];
@@ -288,10 +285,10 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
-                return $this->redirect($this->generateUrl("activity_success",array(
-                    "id"=>$id,
-                    "isNew"=>true))
-                );
+                // return $this->redirect($this->generateUrl("activity_success",array(
+                //     "id"=>$id,
+                //     "isNew"=>true))
+                // );
               
             }else{ 
 
@@ -305,6 +302,8 @@ class ActivityController extends BaseController
 
 
                 $member['activityId']=$id;
+                $member['userId']=$user['id'];
+                
                 $this->getActivityService()->addMeberByActivity($member);
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
