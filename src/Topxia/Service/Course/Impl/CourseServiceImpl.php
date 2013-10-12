@@ -312,7 +312,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $pathinfo = pathinfo($filePath);
-
         $imagine = new Imagine();
         $rawImage = $imagine->open($filePath);
 
