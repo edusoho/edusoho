@@ -86,8 +86,8 @@
               <div class="scroller">
                   <div class="ui-switchable-content" data-role="content">
                     {% for pic in pics %}
-                      <a href="{{ path('photoview',{id:pic.groupId }) }}">
-                        <img  src="{{ file_path(pic.url,'course-large.png') }}" alt="" class="ui-switchable-panel" />
+                      <a href="{{ path('photoview',{id:pic.groupId }) }}" class="ui-switchable-panel">
+                        <img  src="{{ file_path(pic.url,'course-large.png') }}" alt=""  />
                         <div class="tit">
                           <p>{{ pic.content }}</p>
                         </div>
