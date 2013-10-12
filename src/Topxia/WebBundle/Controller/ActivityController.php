@@ -255,11 +255,28 @@ class ActivityController extends BaseController
 
                 $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
                
+
+
+                $userprofile['id']=$user['id'];
+                $userprofile['truename']=$member['truename'];
+                $userprofile['mobile']= $member['mobile'];
+                $userprofile['job']=$member['job'];
+                $userprofile['company']=$member['company'];
+
+                $this->getUserService()->updateUserProfile($user['id'],$userprofile);
+
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
 
                 $this->getActivityService()->addMeberByActivity($member);
+
                 $this->getActivityService()->addActivityStudentNum($id);
+
+                if(!empty($member['question'])){
+                    $activity_thread['content']=$member['question'];
+                    $activity_thread['activityId']=$id;
+                    $this->getActivityThreadService()->createThread($activity_thread);  
+                }
                 
                 $activity=$this->getActivityService()->getActivity($id);
                
@@ -277,13 +294,23 @@ class ActivityController extends BaseController
                 );
               
             }else{ 
+
+                $userprofile['id']=$user['id'];
+                $userprofile['truename']=$member['truename'];
+                $userprofile['mobile']= $member['mobile'];
+                $userprofile['job']=$member['job'];
+                $userprofile['company']=$member['company'];
+
+                $this->getUserService()->updateUserProfile($user['id'],$userprofile);
+
+
                 $member['activityId']=$id;
                 $this->getActivityService()->addMeberByActivity($member);
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
-                    $fields['content']=$member['question'];
-                    $fields['activityId']=$id;
-                    $this->getActivityThreadService()->createThread($fields);  
+                    $activity_thread['content']=$member['question'];
+                    $activity_thread['activityId']=$id;
+                    $this->getActivityThreadService()->createThread($activity_thread);  
                 }
                 return $this->redirect($this->generateUrl("activity_success",array(
                     "id"=>$id,
@@ -564,7 +591,7 @@ class ActivityController extends BaseController
 
          $this->sendEmail(
                 $user['email'],
-                "{$activity['subtitle']}之【{$activity['title']}】报名确认，设置您在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                "请激活您在{$this->setting('site.name', 'EDUSOHO')}的账号并修改密码",
                 $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
                     'user' => $user,
                     'token' => $token,

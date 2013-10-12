@@ -13,12 +13,16 @@
 						<div id="email-send-success">
 						   
 								{% if isNew %}
-								 <p class="text-success">
-									小伙伴，这是您<strong class="text-danger">第一次</strong>报名参加开源力量公开课，我们已经为您注册一个账号：<strong class="text-danger">{{ user.email }}</strong>，注册确认信已经发到你的邮箱，你需要点击邮件中的确认链接来完成邮箱验证并修改密码，这样，您就能参加我们的线上直播课啦！
-								 </p>
+									<p class="text-success">
+										小伙伴，这是您<strong class="text-danger">第一次</strong>报名参加开源力量公开课，我们已经为您注册一个账号：<strong class="text-danger">{{ user.email }}</strong>，并生成随机密码。
+	 								</p>
+
+	 								<p class="text-success">
+										注册确认信已经发到你的邮箱，你需要登陆邮箱箱进行验证并修改密码，这样，您就能参加我们的线上直播课啦！
+									</p>
 								<div class="alert pz ptl">
 						          <h5>没有收到确认信怎么办？</h5>
-						          <ul>
+						          <ul class="pll">
 						            <li>检查一下上面Email地址是否正确，错了就重新<a class="text-muted" href="{{ path('register') }}">注册</a>一次吧 :)</li>
 						            <li>看看是否在邮箱的垃圾箱里?</li>
 						            <li>稍等几分钟，若仍旧没收到确认信，请和我们联系。</li>

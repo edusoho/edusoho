@@ -285,8 +285,9 @@ class UserServiceImpl extends BaseService implements UserService
 
         $fields = ArrayToolkit::parts($fields, $availableFields);
 
+       
         if (array_key_exists('title', $fields)) {
-            $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
+             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
         }
         unset($fields['title']);
 

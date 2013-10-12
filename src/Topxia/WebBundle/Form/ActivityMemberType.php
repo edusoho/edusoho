@@ -13,11 +13,11 @@ class ActivityMemberType extends AbstractType
     {
         $builder->add("email","text");
         $builder->add("nickname","text");
-        $builder->add("username","text");
+        $builder->add("truename","text");
         $builder->add("mobile","text");
-        $builder->add("title","text");
+        $builder->add("company","text");
         $builder->add("job","text");
-        $builder->add("aboutinfo","text");
+        $builder->add("aboutInfo","text");
         $builder->add("question","text");
     }
 
