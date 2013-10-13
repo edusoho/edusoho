@@ -27,21 +27,13 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="activitymember[email]"]',
             required: true,
-            rule: 'email remote',
-            onItemValidated: function(err, msg, ele) {
-                if(msg=="该Email地址已经被占用了"){
-                    $("#email_info").html("该Email地址已经存在 <a href='javascript:void(0)' id='photo_login'>请点击登陆</a>");
-                    buidlerLogin();
-                    return;
-                }
-            }
-            
+            rule: 'email', 
         });
 
         validator.addItem({
             element: '[name="activitymember[nickname]"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14}'
         });
 
         validator.addItem({
@@ -55,6 +47,7 @@ define(function(require, exports, module) {
             required: true,
             rule: 'truename byte_minlength{min:2} byte_maxlength{max:12}'
         });
+
 
       
 

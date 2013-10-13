@@ -772,13 +772,10 @@ teacher:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
+
 activity_home:
     pattern:  /openclass/explore/
     defaults: { _controller: TopxiaWebBundle:Activity:explore }
-
-activity_zhaoxin:
-    pattern: /openclass/zhaoxin/
-    defaults: { _controller: TopxiaWebBundle:Activity:zhaoxin }
 
 
 activity_create:
@@ -789,23 +786,21 @@ activity_join:
     pattern: /openclass/{id}/join
     defaults: { _controller: TopxiaWebBundle:Activity:join }
 
+activity_join_success:
+    pattern: /openclass/{id}/join/success
+    defaults: { _controller: TopxiaWebBundle:Activity:success }
+
 activity_remove:
     pattern: /openclass/{id}/remove
     defaults: { _controller:TopxiaWebBundle:Activity:remove}
 
 activity_show:
-    pattern:  /openclass/{id}
-    defaults: { _controller: TopxiaWebBundle:Activity:show }
+    pattern:  /openclass/{id}/show
+    defaults: { _controller: TopxiaWebBundle:Activity:showPrepare }
 
-
-activity_showsuccess:
-    pattern: /openclass/{id}/show
-    defaults: { _controller: TopxiaWebBundle:Activity:showsuccess }
-
-
-activity_success:
-    pattern: /openclass/{id}/success
-    defaults: { _controller:TopxiaWebBundle:Activity:success }
+activity_end_show:
+    pattern:  /openclass/{id}/show/ended
+    defaults: { _controller: TopxiaWebBundle:Activity:showEnd }
 
 
 activity_qustioncreate:

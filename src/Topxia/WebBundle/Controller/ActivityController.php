@@ -53,10 +53,19 @@ class ActivityController extends BaseController
         ));
     }
 
-	public function showAction(Request $request, $id)
-    {   
+	public function showPrepareAction(Request $request, $id)
+    {
         //活动信息
         $activity=$this->getActivityService()->getActivity($id);
+
+        if($activity['expired']==1||(time()>$activity['endTime'])&&!empty($activity['endTime']))
+        {
+            return $this->redirect($this->generateUrl("activity_end_show",array(
+                    "id"=>$id,
+                    "isNew"=>false))
+       );  
+
+        }
         //tag信息
         $tags = $this->getTagService()->findAllTags(0, 100);
         //报名的学生
@@ -104,7 +113,7 @@ class ActivityController extends BaseController
             "id" =>  0,
           "nickname" =>"游客");
 
-        return $this->render("TopxiaWebBundle:Activity:show.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:show-activity-prepare.html.twig",array(
             "activity"=>$activity,
             "tags"=>$tags,
             "students"=>$students,
@@ -117,7 +126,7 @@ class ActivityController extends BaseController
     }
   
 
-    public function showsuccessAction(Request $request,$id){
+    public function showEndAction(Request $request,$id){
 
         $activity=$this->getActivityService()->getActivity($id);
         $threads=$this->getActivityThreadService()->findThreadsByType($activity['id'],'latestCreated',0,100);
@@ -176,7 +185,7 @@ class ActivityController extends BaseController
             $appendix=$this->getMaterialService()->findActivityMaterials($activity['id'],0,2);
         }
 
-        return $this->render("TopxiaWebBundle:Activity:show-success.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:show-activity-ended.html.twig",array(
             "activity"=>$activity,
             "activitys"=>$activitys,
             "qustions"=>$sss,
@@ -227,7 +236,7 @@ class ActivityController extends BaseController
 
         $hash=$this->makeHash($user);
 
-        return $this->render("TopxiaWebBundle:Activity:activity-success.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
             "activityid"=>$id,
             "isNew"=>$isNew,
             "user"=>$user,
@@ -285,10 +294,10 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
-                // return $this->redirect($this->generateUrl("activity_success",array(
-                //     "id"=>$id,
-                //     "isNew"=>true))
-                // );
+                return $this->redirect($this->generateUrl("activity_join_success",array(
+                    "id"=>$id,
+                    "isNew"=>true))
+                );
               
             }else{ 
 
@@ -311,7 +320,7 @@ class ActivityController extends BaseController
                     $activity_thread['activityId']=$id;
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
-                return $this->redirect($this->generateUrl("activity_success",array(
+                return $this->redirect($this->generateUrl("activity_join_success",array(
                     "id"=>$id,
                     "isNew"=>false))
                 );  
@@ -319,12 +328,12 @@ class ActivityController extends BaseController
             }
         }
 
-        $filename="activity-form-vistor";
+        $filename="join-activity-form-vistor";
         $activity=$this->getActivityService()->getActivity($id);
         $userprofile=array();
         if(!empty($user['id'])){
             $userprofile=$this->getUserService()->getUserProfile($user['id']);
-            $filename="activity-form-member";
+            $filename="join-activity-form-member";
         }
         return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
             "activity"=>$activity,
@@ -342,9 +351,13 @@ class ActivityController extends BaseController
         $result=$this->getActivityService()->removeMember($id,$user['id']);
         if ($result>0) {
             $this->getActivityService()->reduceActivityStudentNum($id);
-            return $this->redirect($this->generateUrl("activity_home"));
+            return $this->redirect($this->generateUrl("activity_show",array(
+                'id' => $id))
+            );
         }   
-        return $this->redirect($this->generateUrl("activity_home"));
+        return $this->redirect($this->generateUrl("activity_show",array('id'=>$id
+            ))
+        );
     }
 
     private function getThreadSearchFilters($request)

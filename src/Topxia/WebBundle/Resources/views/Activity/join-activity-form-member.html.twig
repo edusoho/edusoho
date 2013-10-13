@@ -3,6 +3,7 @@
 {% set nav = 'openclass' %}
 
 {% set bodyClass = 'homepage' %}
+{% set script_controller = 'activity/activity-form-member' %}
 
 {% set userTitle=user.title|default(NULL) %}
 {% block content %}
@@ -42,16 +43,16 @@
 					<div class="col-md-12">
 						<!-- 报名 -->
 					<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
-						<div class="widget k_postlist shadow">
+						<div class="widget  shadow">
 							<div class="kytitle clearfix bor-l-green">
 								<h3>报名信息</h3>
 							</div>
-							<div class="content lecturer">
+							<div class="content clearfix">
 								<div class="col-md-7">
 									<div class="form-group">
 			            				<label class="col-lg-3 control-label" for="activity_email">Email地址</label>
 			            				<div class="col-lg-9">
-				              				<input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}"  value="{{user.email}}" required />
+				              				<input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}"  value="{{user.email}}" required readonly/>
 				              					 <p class="help-block">填写你常用的邮箱作为登录帐号</p>
 			           					 </div>
 					        		</div>
@@ -59,21 +60,23 @@
 							            <label class="col-lg-3 control-label" for="activity_nickname">昵称</label>
 							            <div class="col-lg-9">
 							              <input id="activity_nickname" class="form-control" type="text" name="activitymember[nickname]" 
-							                data-url="{{ path('register_nickname_check') }}"  value="{{user.nickname}}"  required />
+							                data-url="{{ path('register_nickname_check') }}"  value="{{user.nickname}}"  required readonly/>
 							               <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
 							            </div>
 							        </div>
 							        <div class="form-group">
-							            <label class="col-lg-3 control-label" for="activity_username">真实姓名</label>
+							            <label class="col-lg-3 control-label" for="activity_truename">真实姓名</label>
 							            <div class="col-lg-9">
 							              <input id="activity_truename" class="form-control" type="text" name="activitymember[truename]" value="{{profile.truename}}" required />
+							               <p class="help-block">请输入真实姓名，必须是中文或英文姓名</p>
 							            </div>
 							        </div>
 							        <div class="form-group">
-							            <label class="col-lg-3 control-label" for="activity_phone">手机号码</label>
+							            <label class="col-lg-3 control-label" for="activity_mobile">手机号码</label>
 							            <div class="col-lg-9">
-							              <input id="activity_phone" class="form-control" type="text" name="activitymember[mobile]"
+							              <input id="activity_mobile" class="form-control" type="text" name="activitymember[mobile]"
 							               value="{{profile.mobile}}" required />
+							               <p class="help-block">请收入正确的11位手机号码</p>
 							            </div>
 							        </div>
 							        <div class="form-group">

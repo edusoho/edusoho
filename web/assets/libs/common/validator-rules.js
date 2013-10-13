@@ -16,6 +16,11 @@ define(function(require, exports, module) {
             '{{display}}必须是中文字'
         ],
         [
+            'truename',
+            /^([\u4E00-\uFA29]|[a-zA-Z])*$/i,
+            '{{display}}必须是中文或英文姓名'
+        ],
+        [
             'chinese_alphanumeric',
             /^([\u4E00-\uFA29]|[a-zA-Z0-9_])*$/i,
             '{{display}}必须是中文字、英文字母、数字及下划线组成'
@@ -63,6 +68,12 @@ define(function(require, exports, module) {
             /^[+-]?\d+$/,
             '{{display}}必须为整数'
         ],
+        [
+            'mobile',
+            /^1\d{10}$/,
+            '{{display}}格式不正确'
+        ],
+       
         [
             'remote',
             function(options, commit) {

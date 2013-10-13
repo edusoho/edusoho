@@ -229,6 +229,7 @@ color: #999;
 .openstack .content{padding: 10px}
 .openstack .content li{margin-bottom: 2em; padding: 0px 15px;background-color: white;position: relative;}
 .openstack .content .text-right{position: absolute;bottom: 1em;right: 1em;font-weight: bold;}
+.openstack .content .text-icon{position: absolute;top:10px;right: 20px;font-weight: bold;}
 
 /*公开课列表*/
 .openclass .list-item li{margin-bottom: 2em; background-color: white;position: relative;}

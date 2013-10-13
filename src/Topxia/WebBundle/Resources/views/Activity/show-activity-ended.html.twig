@@ -1,10 +1,12 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set nav = 'openclass' %}
+
 {% set bodyClass = 'homepage' %}
-{% set script_controller = 'activity/show' %}
+
+{% set script_controller = 'activity/show-success' %}
 
 {% block content %}
-   
+
 <div class="row">
   <ul class='col-md-12'>
     <li class="widget shadow pz">
@@ -28,13 +30,7 @@
           <p>费用： {{ activity.price}}</p>
           <div class="text-right">
             <p>
-              {{activity.studentNum}}人已报名
-              {% if activity.id in ids %}
-                <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mar-l btn btn-warning" >取消报名</a>
-              {% else %}
-                <a href="{{ path('activity_join',{id:activity.id}) }}" class="mar-l btn btn-success  green" >活动报名</a>
-              {% endif %}
-              <a href="javascript:void(0)" id="media-qustion" class="mar-l btn btn-success  green">课前提问</a>
+              <h3> <span class='label label-default'>课程已结束</span></h3>
             </p>
           </div>
         </div>
@@ -42,20 +38,86 @@
     </li>  
   </ul>  
 </div>
-<div class="row">
-  <div class="col-md-8">
-    <!-- 课程大纲 -->
-    <div class="widget k_postlist shadow">
-      <div class="kytitle clearfix bor-l-green">
-        <h3>课程大纲</h3>
-      </div>
-      <div class="content">
-        <div class="padding">
-          {{ activity.about|raw}}
+
+<section class="row"> 
+ 
+       <!-- 视频播放-->
+      <div class="col-md-8">
+        <div class="mod k_postlist openstack">
+            <ul class="pz">
+              <li class="shadow pz">
+                {% if activity.courseId %}
+               <div class="activity-video-player" 
+                data-url="{{ path('course_lesson_media',{courseId:activity.courseId[0],lessonId:lessonid}) }}">
+                <video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>
+              </div>
+                {% else %}
+                  <p class="empty-info">暂无视频信息</p>
+                {% endif %}
+              </li>           
+            </ul>         
         </div>
       </div>
+      <!-- 附件下载-->
+      <div class="col-md-4">
+        <div class="widget k_postlist shadow">
+          <div class="kytitle clearfix bor-l-green">
+            <h3>附件下载</h3>
+          </div>
+          <div class="content outline mod-h-sm">
+          
+              {% for appendix in appendixs %}
+                {{ appendix.title }}  . <a href="{{ path('activity_material_download', {activityId:activity.id, materialId: appendix.id}) }}">下载</a>
+              {% endfor %}
+          
+          </div>
+        </div>
+      </div>
+   
+</section>
+
+<section class="row">
+  <div class="col-md-12 ">
+
+          {% if pics %}
+          <div id="carousel-demo-1" class="carousel-demo">
+              <span class="ui-switchable-prev-btn glyphicon glyphicon-chevron-left" data-role="prev"></span>
+              <span class="ui-switchable-next-btn glyphicon glyphicon-chevron-right" data-role="next"></span>
+              <div class="scroller">
+                  <div class="ui-switchable-content" data-role="content">
+                    {% for pic in pics %}
+                      <a href="{{ path('photoview',{id:pic.groupId }) }}" class="ui-switchable-panel">
+                        <img  src="{{ file_path(pic.url,'course-large.png') }}" alt=""  />
+                        <div class="tit">
+                          <p>{{ pic.content }}</p>
+                        </div>
+                      </a>
+                    {% endfor %}
+                  </div>
+              </div>
+          </div>
+          {% else %}
+              <p class="empty-info">暂无活动图片信息</p>
+          {% endif %}
+       
+      </div>
+
+</section>
+
+<section class="row"> 
+  <!-- 课程大纲 -->
+  <div class="col-md-8">
+    <div class="widget k_postlist shadow">
+        <div class="kytitle clearfix bor-l-green">
+          <h3>课程大纲</h3>
+        </div>
+        <div class="content outline">
+          <div class="padding">
+            {{ activity.about|raw}}
+          </div>
+        </div>
     </div>
-  </div>
+  </div> 
   <div class="col-md-4">
     <!-- 讲师介绍 -->                
     {{ render(controller('TopxiaWebBundle:Activity:expertersBlock',{activity:activity}))}}
@@ -74,8 +136,9 @@
       </div>
     </div>
   </div>
-</div>
-<div class="row">
+
+</section>
+<section class="row"> 
   <div class="col-md-12">
       <div class="widget k_postlist shadow">
         <div class="kytitle clearfix bor-l-green">
@@ -115,16 +178,16 @@
                 <li class="media">
                   <a class="pull-left user-link user-avatar-link" href="javascript:">
                     {% if qustion['userId']==0 %}
-                    <img src="/assets/img/default/avatar.png" ></a>
+                    <img src="/assets/img/default/avatar.png"></a>
                     {% else %}
-                    <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" ></a>
+                    <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" alt="ae120"></a>
                     {% endif %}
                   </a>
                   <div class="media-body">
                     <p class="media-content"><a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a> {{qustion.content}}
                     </p>
-                    <div class="reply-tools media-content">
-                    <a hef="javascript:" class="reply btn btn-link"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
+                    <div class="reply-tools media-content " >
+                      <a hef="javascript:" class="reply btn btn-link"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
                       <p style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</p>
                     </div>
                     <div class="post-list media-content">
@@ -144,7 +207,10 @@
         </div>
       </div>
   </div>
-</div>
+</section>
+
+
+<!-- 小伙伴们正在看 -->
 <div class="row">
   <div class="col-md-12">
         <!-- 小伙伴们正在看 -->
@@ -154,7 +220,7 @@
           </div>                  
           <div class="content daren imgpanel"> 
               {% for item in activitys %}
-                <a href="{{ path('activity_showsuccess',{id:item.id})}}">
+                <a href="{{ path('activity_show',{id:item.id})}}">
                   <img class="open-class-logo-middle-size" src="{{ file_path(item.middlePicture,'activity-large.jpg') }}" />
                   <div class="tit">
                           <p>{{ item.title }}</p>
@@ -164,17 +230,17 @@
               <span class="justify_fix"></span>         
           </div>
         </div>
-      </div>   
-</div>
-    
+      </div>  
+</section>
 
-<script type="reply-templete" id="post-templete">
-          <div class="input-group well well-sm">
-            <input type="text" name="activitypost[content]" class="form-control" id="posttest" />
-            <span class="input-group-btn">
-              <button class="btn btn-info reply-btn" type="button">回复</button>
-            </span>
-          </div>
-</script>
+  <script type="reply-templete" id="post-templete">
+                    <div class="input-group well well-sm">
+                      <input type="text" name="activitypost[content]" class="form-control" id="posttest" />
+                      <span class="input-group-btn">
+                        <button class="btn btn-info reply-btn" type="button">回复</button>
+                      </span>
+                    </div>
+  </script>
+
 
 {% endblock %}

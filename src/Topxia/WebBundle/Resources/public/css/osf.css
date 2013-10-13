@@ -9,6 +9,14 @@
 	margin: 0px !important;
 }
 
+.ps-rela{
+	position: relative !important;
+}
+
+.ps-abso{
+	position: absolute !important;
+}
+
 
 /*头部高度*/
 
@@ -18,7 +26,6 @@
 
 .index-img-box{
 	position: relative;	
-	/*height: 200px;*/
 }
 
 .activity-img-sm{

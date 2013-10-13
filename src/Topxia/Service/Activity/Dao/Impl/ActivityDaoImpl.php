@@ -77,12 +77,12 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
            unset($conditions['startTimeGreaterThan']);
         }
 
-        
-
-        if(isset($conditions['istimeout'])){
-            
-            $conditions['isExpired']=$conditions['istimeout'];
-            unset($conditions['istimeout']);
+        if(empty($conditions['expired'])){
+            unset($conditions['expired']);       
+        }
+      
+        if(empty($conditions['recommended'])){
+            unset($conditions['recommended']);       
         }
 
         if(empty($conditions['status'])){
@@ -98,7 +98,8 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             ->andWhere('tags = :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
-            ->andWhere('isExpired = :isExpired');
+            ->andWhere('expired = :expired')
+            ->andWhere('recommended = :recommended');
     }
 
     public function addActivity($course)

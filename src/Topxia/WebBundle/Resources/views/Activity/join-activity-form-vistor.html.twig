@@ -2,13 +2,12 @@
 
 {% set nav = 'openclass' %}
 
-{% set bodyClass = 'homepage' %}
+{% set bodyClass = 'activity-form-vistor' %}
 {% set script_controller = 'activity/activity-form-vistor' %}
 
 {% block content %}
 
-<section class="row">	
-	<div class="row">
+<div class="row">
 		<div class="col-md-12">
 				<!-- item-list -->
 			<div class="mod k_postlist openstack pz">
@@ -43,11 +42,11 @@
 						<div class="col-md-12">
 							<!-- 报名 -->
 						<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
-							<div class="widget k_postlist shadow">
+							<div class="widget  shadow">
 								<div class="kytitle clearfix bor-l-green">
 									<h3>报名信息</h3>
 								</div>
-								<div class="content lecturer">
+								<div class="content clearfix">
 									<div class="col-md-7">
 										<div class="form-group">
 								            <label class="col-lg-3 control-label" for="activity_email">Email地址</label>
@@ -66,16 +65,17 @@
 								            </div>
 								        </div>
 								        <div class="form-group">
-								            <label class="col-lg-3 control-label" for="activity_username">真实姓名</label>
+								            <label class="col-lg-3 control-label" for="activity_truename">真实姓名</label>
 								            <div class="col-lg-9">
 								              <input id="activity_truename" class="form-control" type="text" name="activitymember[truename]" required />
+								               <p class="help-block">请输入真实姓名，必须是中文或英文姓名</p>
 								            </div>
 								        </div>
 								        <div class="form-group">
-								            <label class="col-lg-3 control-label" for="activity_phone">手机号码</label>
+								            <label class="col-lg-3 control-label" for="activity_mobile">手机号码</label>
 								            <div class="col-lg-9">
-								              <input id="activity_phone" class="form-control" type="text" name="activitymember[mobile]"
-								               required />
+								              <input id="activity_mobile" class="form-control" type="text" name="activitymember[mobile]" required />
+								                <p class="help-block">请收入正确的11位手机号码</p>
 								            </div>
 								        </div>
 								        <div class="form-group">
@@ -121,8 +121,8 @@
 				</div>
 			</div>
 		</div>
-	</div>		
-</section>
+</div>		
+
 
 
 

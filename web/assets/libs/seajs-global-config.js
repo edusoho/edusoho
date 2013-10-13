@@ -1,7 +1,7 @@
 seajs.config({
 	alias: {
-		'jquery': 'jquery/jquery/1.10.1/jquery',
-		'$': 'jquery/jquery/1.10.1/jquery',
+		'jquery': 'jquery/jquery/1.10.1/jquery-debug',
+		'$': 'jquery/jquery/1.10.1/jquery-debug',
 		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
 		"jquery.form": "jquery-plugin/form/3.44.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
