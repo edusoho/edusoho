@@ -110,6 +110,8 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
     	return true;
 	}
 
+
+
 	private function getClientInfo()
 	{
 		return array(
