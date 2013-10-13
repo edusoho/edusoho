@@ -2,97 +2,169 @@
 
 namespace Topxia\Service\Util;
 
+
 class MySQLDumper
 {
-	private $connection;
 
-    public function __construct ($connection)
+
+
+    public $target = '';
+    private $dbSettings = array();
+    private $internelSetting = array(
+        'exclude' => array(),
+        'isDropTable' => true,
+        'hasTransaction' => true,
+        'lockread' => true,
+        'lockwrite' => true,
+        'isextend' => true
+        );
+
+    private $connection;
+
+    public function __construct ($connection, $settings = array())
     {
-    	$this->connection = $connection;
+        $this->connection = $connection;
+        $this->dbSettings = $settings;
+        $this->connection->exec("SET NAMES utf8");
+ 
     }
 
-    /**
-     * 获得数据库的所有表名
-     * 
-     * @return array 数据库所有表名的数组
-     */
-    public function getTables()
-    {
-    	$rows = $this->connection->executeQuery("SHOW TABLES")->fetchAll();
-    	if (empty($rows)) {
-    		return array();
-    	}
-
-    	$tables = array();
-    	foreach ($rows as $row) {
-    		$row = array_values($row);
-    		$tables[] = $row[0];
-    	}
-
-    	return $tables;
+    private function getSet($key){
+        if(array_key_exists($key, $this->dbSettings)){
+            return $this->dbSettings[$key];
+        }else{
+            return $this->internelSetting[$key];
+        }
     }
 
-    /**
-     * 导出整个数据库
-     *
-     * @param  string $dumpTable 导出表结构
-     * @param  string $dumpData 导出表数据
-     * 
-     * @return [type] [description]
-     */
-    public function dumpDatabase($dumpTable = true, $dumpData = true)
+
+ 
+    public function export($target)
     {
-    	$sqls = array();
-    	$tables = $this->getTables();
-    	foreach ($tables as $table) {
-    		if ($dumpTable === true) {
-    			$sqls[] = $this->dumpTable($table);
-    		}
+       $target .=  ".gz";
 
-    		if ($dumpData === true) {
-    			$sqls[] = $this->dumpTableData($table);
-    		}
-    	}
+       if ( !is_writable( dirname($target)) ) {
+             throw new \Exception("无导出目录写权限，无法导出数据库", 1);
+       }
 
-    	return implode("\n", $sqls);
-    }
+        $tables = array();
+        foreach ($this->connection->query("SHOW TABLES") as $table) {
+            $tables[] = current($table);
+        }
+ 
+        $file =  gzopen($target, "wb");
 
-    /**
-     * 导出表名为$table的表结构
-     * 
-     * @param  string $table 表名
-     * @return string        表结构SQL
-     */
-    public function dumpTable($table)
-    {
-        $tableCreateSql = $this->connection->fetchColumn("SHOW CREATE TABLE {$table}", array(), 1) . ";";
-        $tableDropSql = "DROP TABLE IF EXISTS `{$table}`;";
+        $this->lineWrite($file, "-- --------------------------------------------------\n");
+        $this->lineWrite($file, "-- ---------------- 导出数据库\n");
+        $this->lineWrite($file, "-- ---------------- 时间:". date('Y-m-d H:i:s')."\n\n");
+        $this->lineWrite($file, "-- ---------------- 数据库:{$this->connection->getDatabase()} \n\n");
+        $this->lineWrite($file, "-- ---------------- 主机:{$this->connection->getHost()} \n\n");
+        $this->lineWrite($file, "-- --------------------------------------------------\n\n\n");
 
-        return $tableDropSql . "\n" . $tableCreateSql;
-    }
-
-    /**
-     * 导出表名为$table的数据
-     * 
-     * @param  string $table 表名
-     * @return string        表数据SQL
-     */
-    public function dumpTableData($table)
-    {
-        $sqls = array();
-        $rows = $this->connection->fetchAll("SELECT * FROM {$table}");
-        foreach ($rows as $row) {
-            $values = '';
-            foreach (array_values($row) as $value) {
-                $value = str_replace("'", "''", $value);
-                $values .= "'" . $value . "', ";
+        foreach ($tables as $table) {
+            if ($this->exportTableCreateSql($file,$table)) {
+                if ( in_array($table, $this->getSet('exclude'), true) ) {
+                    continue;
+                }                
+                try{
+                    $this->exportValues($file,$table);
+                }catch(\Exception $e){
+                    $this->connection->rollback();
+                    if ( $this->getSet('lockread') ) {
+                        $this->connection->exec("UNLOCK TABLES");
+                    }
+                    throw new \Exception($e->getMessage());
+                }
             }
+        }
+       gzclose($file);
+       return $target;
+    }
 
-            $values = substr($values, 0, -2);
-            $sqls[] = 'INSERT INTO ' . $table . ' VALUES (' . $values . ');';
+    private function lineWrite($file,$line)
+    {
+        gzwrite($file, $line);
+    }
+
+
+    private function exportTableCreateSql($file,$table)
+    {
+        $sql = "SHOW CREATE TABLE {$table}";
+        foreach ($this->connection->query($sql) as $row) {
+            if (isset($row['Create Table']) ) {
+                $line  = "-- --------------------------------------------------\n\n";
+                $line .= "-- -------------- 表:{$table} 的表结构  -------------- \n\n";
+                $line .= "-- --------------------------------------------------\n\n";
+
+                if ( $this->getSet('isDropTable') ) {
+                    $line .= " DROP TABLE IF EXISTS {$table} ; \n";
+                }
+                $line .= $row['Create Table'];
+                $line .= ";\n\n";
+                $this->lineWrite($file,$line);
+                return true;
+            }
+            if ( isset($row['Create View']) ) {
+                $line  = "-- --------------------------------------------------\n\n";
+                $line .= "-- -------------- 视图:{$table} 的表结构  -------------- \n\n";
+                $line .= "-- --------------------------------------------------\n\n";
+                $line .= $row['Create View'];
+                $line .= ";\n\n";
+                               
+                $this->lineWrite($file,$line);
+
+                return false;
+            }
+        }
+    }
+
+
+    private function exportValues($file,$table)
+    {
+        $this->lineWrite($file,"-- ----------- {$table} 的数据 ---------\n\n");
+
+        if ( $this->getSet('hasTransaction') ) {
+            $this->connection->setTransactionIsolation(3);
+            $this->connection->beginTransaction();
+        }
+        if ( $this->getSet('lockread') ) {
+            $this->connection->exec("LOCK TABLES `$table` READ LOCAL");
         }
 
-        return implode("\n", $sqls);
-    }
+        if ( $this->getSet('lockwrite') ) {
+            $this->lineWrite($file,"LOCK TABLES `$table` WRITE;\n");
+        }
 
+        $insertExclude = true; 
+        $sql = "SELECT * FROM `$table`";
+        foreach ($this->connection->query($sql, \PDO::FETCH_NUM) as $row) {
+            $vals = array();
+            foreach ($row as $val) {
+                $vals[] = is_null($val) ? "NULL" :
+                    $this->connection->quote($val);
+            }
+            if ($insertExclude || !$this->getSet('isextend') ) {
+                $this->lineWrite($file,
+                    "INSERT INTO {$table} VALUES (" .implode(",", $vals) . ")");
+                $insertExclude = false;
+            } else {
+                $this->lineWrite($file,",(" .implode(",", $vals) . ")");
+            }
+        }
+        if ( !$insertExclude ) {
+           $this->lineWrite($file,";\n\n");
+        }
+        if ( $this->getSet('lockwrite') ) {
+            $this->lineWrite($file,"UNLOCK TABLES;\n");
+        }
+        if ( $this->getSet('hasTransaction') ) {
+            $this->connection->commit();
+        }
+        if ( $this->getSet('lockread') ) {
+            $this->connection->exec("UNLOCK TABLES");
+        }
+        $this->lineWrite($file,"\n\n");
+        $this->lineWrite($file,"-- ----------- {$table} 的数据结束 ---------\n\n");
+    }
 }
+
