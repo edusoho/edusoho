@@ -171,7 +171,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$deletes = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'delete';
 			$this->deleteFiles($deletes);
 		}catch(\Exception $e){
-			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage}";
+			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage()}";
 			return $result;
 		}
 	
@@ -179,7 +179,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		try{
 			$this->deepCopy($source,$this->getSystemRootPath());
 		}catch(\Exception $e){
-			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage}";
+			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage()}";
 			return $result;
 		}
 
