@@ -14,7 +14,7 @@ interface UpgradeService
 	public function downloadAndExtract($id);
 	public function backUpSystem($id);
 	public function beginUpgrade($id);
-	// public function refreshCache();
+	public function refreshCache();
 	// public function recovery();
 
 
