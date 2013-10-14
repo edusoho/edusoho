@@ -19,6 +19,7 @@ class ActivityController extends BaseController
 
 	public function exploreAction(Request $request)
     {
+        $currentuser=$this->getCurrentUser();
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($filters);
         $paginator = new Paginator(
@@ -36,17 +37,23 @@ class ActivityController extends BaseController
         $Locations=$this->getLocationService()->getAllLocations();
         //tag
         $tags = $this->getTagService()->findAllTags(0, 100);
-        //已经报名的用户
-        $members=$this->getActivityService()->searchMember(array(),0,100);
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members,'userId'));
+        //我参加的活动
+        $userId=$currentuser['id'];
+    
+
+        $actIds = ArrayToolkit::column($activity,'id');
+
+
+        $joinedActivitys=$this->getActivityService()->findMemberByActIds($actIds,$userId);
+
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
             'activitys' => $activity,
             'paginator' => $paginator,
             'conditions' => $conditions,
             'tags' => $tags,
-            'users' => $users,
+            "current_user"=> $currentuser,
             'filters'=>$filters,
             'locations'=>$Locations,
         ));

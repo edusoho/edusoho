@@ -301,6 +301,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
 
+
+
+	public function findMemberByActIds(array $actIds,$userId)
+    {
+       
+          $members=  $this->getMemberDao()->findMembersByIds($actIds,$userId);
+      
+          return ArrayToolkit::index($members, 'activityId');
+    }
+
 	public function updateActivityMember($id, $fields)
 	{
 		return $this->getMemberDao()->updateMember($id, $fields);

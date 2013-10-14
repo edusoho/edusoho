@@ -22,7 +22,17 @@ class MemberDaoImpl extends BaseDao implements MemberDao
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit);
+        
         return $builder->execute()->fetchAll() ? : array(); 
+    }
+
+
+    public function findMembersByIds(array $actIds,$userId)
+    {
+        if(empty($actIds)){ return array(); }
+        $marks = str_repeat('?,', count($actIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE userId= $userId  and  activityId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $actIds);
     }
 
     private function _createSearchQueryBuilder($conditions)
@@ -30,7 +40,7 @@ class MemberDaoImpl extends BaseDao implements MemberDao
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'activity_member')
             ->andWhere('userId = :userId')
-            ->andWhere('noteNum > :noteNumGreaterThan');
+            ->andWhere('activityId = :activityId');
     }
 
     public function getMemberCountByUserId($userId)

@@ -8,31 +8,29 @@
 
 {% block content %} 
 
-  <section class="row"> 
-    <div class="row prd pld">
-        <div class="col-md-12 mbl mts" >
-           <img  class='img-responsive' src="{{ asset('assets/img/default/open-class-default-banner.jpg') }}" alt="title" />
-         <!--
+ 
+    <div class="row">
+        <div class="col-md-12 mbl mts " >
           <div class="top">
             <div id="focus">
               <div id="slides">
                 <div class="slides_container">
                   <a href="#" title="title" rel="external">
-                  <img src="{{ asset('bundles/topxiaweb/img/home-slide/home-slide.jpg') }}" alt="title" /></a>
+                  <img class='img-responsive' src="{{ asset('bundles/topxiaweb/img/home-slide/home-slide.jpg') }}" alt="title" /></a>
                   <a href="#" title="title" rel="external">
-                  <img src="{{ asset('bundles/topxiaweb/img/home-slide/ticket_banner.png') }}" alt="title" /></a>
+                  <img class='img-responsive'  src="{{ asset('bundles/topxiaweb/img/home-slide/ticket_banner.png') }}" alt="title" /></a>
                   <a href="#" title="title" rel="external">
-                  <img src="{{ asset('bundles/topxiaweb/img/home-slide/coupon.jpg') }}" alt="title" /></a>
+                  <img class='img-responsive'  src="{{ asset('bundles/topxiaweb/img/home-slide/coupon.jpg') }}" alt="title" /></a>
                 </div>
               </div>
             </div>
           </div>
-        -->
+       
         </div>  
     </div> 
-    <div class="row  prd pld">
-          <div class="col-md-12">  
-            <div class="mod k_postlist filter">
+    <div class="row ">
+        <div class="col-md-12 ">  
+           <div class="mod k_postlist filter">
               <div class="kytitle clearfix">
                 <h3>条件筛选</h3>             
               </div>
@@ -89,10 +87,12 @@
                   </li>
                 </ul>
               </div>
-            </div>        
-            <!-- item-list -->
-            <div class="mod k_postlist openstack">            
-              <div class="content pz">       
+           </div> 
+        </div>
+    </div>        
+    <div class="row  ">
+        <div class="col-md-12 ">
+           <div class="mod  openstack">
                 <ul class="content pz">
                   {% for activity in activitys %}
                   <li class="shadow pz">
@@ -102,41 +102,57 @@
                           <img class="open-class-logo-large-size" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
                       </div>
                       <div class="imageblock-content">
-                       
-                        <h4>{{ activity.subtitle}}</h4>
+                        {% if activity.expired==1 %}
+                        <h4><span >{{ activity.subtitle}}</span></h4>
+                        {% endif %}
+
+                         {% if activity.expired==0 %}
+                        <h4><span >{{ activity.subtitle}}</span></h4>
+                        {% endif %}
+                        
+
                         <h3>{{ activity.title}}</h3>
                        
                         <p>开始时间： {{activity.startTime}}</p>
                         <p>结束时间： {{activity.endTime}}</p>
-                        <p>地点： {{ activity.address }}</p>
-                        <p>形式： {{ activity.form }}</p>
+
+                        <p>形式：  {{ activity.form }}</p>
+                        <p>现场地址： {{ activity.address }}</p>
+                        <p>直播地址: {% if current_user.id!=0  %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
                         <p>费用： {{ activity.price}}</p>
 
                          {% if activity.expired==1 %}
                            
-                            <h3 class="text-icon mz"> <span class='label label-default'>课程已结束</span></h3>
+                            <h3 class="text-icon mz"> <span class='label label-default'>已结束</span></h3>
+
+                            <div class="text-right">
+                              <p>
+                                {{ activity.studentNum }}人已报名<a class='mar-l btn btn-warning'  href="{{ path('activity_show',{id:activity.id})}}">回看详情</a>
+                              </p>
+                            </div>
                          
                           {% endif %}
 
-                        <div class="text-right">
-                          <p>
-                            {{ activity.studentNum }}人已报名
-                                                  <a class='mar-l btn btn-success  green' 
-                            href="{{ path('activity_show',{id:activity.id})}}">
-                              查看详情
-                            </a>
+                          {% if activity.expired==0 %}
                           
-                          </p>
-                        </div>
+                            <div class="text-right">
+                              <p>
+                                {{ activity.studentNum }}人已报名<a class='mar-l btn btn-success'  href="{{ path('activity_show',{id:activity.id})}}">查看详情</a>
+                              </p>
+                            </div>
+                         
+                          {% endif %}
+
+                        
                       </div>
                     </div>
                   </li>
                   {% endfor %}
                 </ul>
                 {{ web_macro.paginator(paginator) }}         
-              </div>
-            </div>
-          </div>
+              
+           </div>
+        </div>
     </div>    
-  </section>
+
 {% endblock %}
