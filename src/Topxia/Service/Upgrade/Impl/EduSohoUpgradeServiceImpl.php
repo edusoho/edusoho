@@ -6,19 +6,19 @@ use Topxia\Service\Common\BaseService;
 
 class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeService 
 {
-	CONST CHECK_URL = 'http://www.edusoho-dev.com/upgrade/check';
-	CONST UPGRADE_URL = 'http://www.edusoho-dev.com/upgrade/upgrade';
-	CONST GET_URL = 'http://www.edusoho-dev.com/upgrade/get';
-	CONST INSTALL_URL = 'http://www.edusoho-dev.com/upgrade/install';
 	CONST BASE_URL = 'http://www.edusoho-dev.com/';
-	CONST FILES_URL = 'http://www.edusoho-dev.com/files/';
+
+	CONST CHECK_URL = 'upgrade/check';
+	CONST UPGRADE_URL = 'upgrade/upgrade';
+	CONST GET_URL = 'upgrade/get';
+	CONST INSTALL_URL = 'upgrade/install';
 
 	public function check($packages)
 	{
 		$postData = array('packages'=>$packages);
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
-		$ch = curl_init(self::CHECK_URL);
+		$ch = curl_init(self::BASE_URL.self::CHECK_URL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -36,7 +36,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 		$postData = array('id'=>$packId);
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
-		$ch = curl_init(self::UPGRADE_URL);
+		$ch = curl_init(self::BASE_URL.self::UPGRADE_URL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -52,7 +52,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 	public function getPackage($packId){
 		$postData = $packId;
 		$sendJsonData = json_encode($postData);
-		$ch = curl_init(self::UPGRADE_URL);
+		$ch = curl_init(self::BASE_URL.self::GET_URL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -61,7 +61,6 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 				'Content-Length: ' . strlen($sendJsonData))
 		);
 		$result = json_decode(curl_exec($ch),true);
-		var_dump($result);
 		curl_close($ch);
 		return $result;		
 	}
@@ -71,7 +70,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 		$postData = array('id'=>$packId);
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
-		$ch = curl_init(self::INSTALL_URL);
+		$ch = curl_init(self::BASE_URL.self::INSTALL_URL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -86,14 +85,32 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 
 	public function downloadPackage($uri,$filename)
 	{
-		$ch = curl_init(self::FILES_URL.$uri);
-    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    	$data = curl_exec($ch);
-    	curl_close($ch);
-    	$path = $this->getKernel()->getParameter('topxia.disk.upgrade_dir').DIRECTORY_SEPARATOR.$filename;    	
-    	file_put_contents($path, $data);	
+    	$path = $this->getKernel()->getParameter('topxia.disk.upgrade_dir').
+    			DIRECTORY_SEPARATOR.$filename;    	
+    	$this->download(str_replace(" ","%20",self::BASE_URL.$uri),$path);
     	return 	$path;
 	}
+
+	private function download($file_source, $file_target) 
+	{
+	    $rh = fopen($file_source, 'rb');
+	    $wh = fopen($file_target, 'w+b');
+	    if (!$rh || !$wh) {
+	        	return false;
+	    }
+	    while (!feof($rh)) {
+	        if (fwrite($wh, fread($rh, 4096)) === FALSE) {
+	            return false;
+	        }
+	        flush();
+	    }
+
+	    fclose($rh);
+	    fclose($wh);
+    	return true;
+	}
+
+
 
 	private function getClientInfo()
 	{

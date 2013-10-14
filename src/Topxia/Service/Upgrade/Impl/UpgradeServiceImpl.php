@@ -6,28 +6,11 @@ use Topxia\Service\Upgrade\UpgradeService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\System;
+use Topxia\Service\Util\MySQLDumper;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
-	public function backUpdirectories($directory)
-	{
-		$directoryConf = $directory.'/directories2Backup.conf';
-		$content = file_get_contents($directoryConf);
-		$directories2Backup = array_keys((array)json_decode($content));
-		
-		foreach ($directories2Backup as $directory2Backup) {
-			$this->backUpDirectory($directory2Backup);
-		}
-
-		return true;
-	}
-
-	private function backUpDirectory($directory2Backup)
-	{
-		$destinationPath = '/var/www/edusoho/'.$directory2Backup.time().'.zip';
-		$this->Zip($directory2Backup, $destinationPath, true);
-		$fileRecord = $this->getFileService()->uploadFile('upgradeBackup', new File($destinationPath));
-	}
+	private $fileCount=0;
 
 	public function addInstalledPackage($packageInfo)
 	{
@@ -59,6 +42,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $package;
 	}
 
+//	public function getExtractFiles
+
 	public function searchPackageCount()
 	{
 		return $this->getInstalledPackageDao()->searchPackageCount();
@@ -85,30 +70,41 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$this->upgrade($id);
 	}
 
-	public function checkEnvironment(){
+	public function checkEnvironment()
+	{
 		$result = array();
-		if (!is_writable($this->getDownloadPath())){
+		if(!class_exists('ZipArchive')){
+ 		   $result[] = "php-zip包未激活";
+		}
+
+		if(!function_exists('curl_init')){
+ 		   $result[] = "php-curl包未激活";
+		}
+		if (!$this->is_writable($this->getDownloadPath())){
 			$result[] = '下载目录无写权限';
 		}
-		if (!is_writable($this->getBackUpPath())){
+		if (!$this->is_writable($this->getBackUpPath())){
 			$result[] = '备份目录无写权限';
 		}
-		if(!is_writable($this->getSystemRootPath().'app')){
+		if(!$this->is_writable($this->getSystemRootPath().'app')){
 			$result[] = 'app目录无写权限';
 		}
-		if(!is_writable($this->getSystemRootPath().'src')){
+		if(!$this->is_writable($this->getSystemRootPath().'src')){
 			$result[] = 'src目录无写权限';
 		}
-		if(!is_writable($this->getSystemRootPath().'web')){
+		if(!$this->is_writable($this->getSystemRootPath().'web')){
 			$result[] = 'web目录无写权限';
 		}
-		if(!is_writable($this->getSystemRootPath().'app'.DIRECTORY_SEPARATOR.'cache')){
+		if(!$this->is_writable($this->getSystemRootPath().'app'.DIRECTORY_SEPARATOR.'cache')){
 			$result[] = 'app/cache目录无写权限';
-		}		
+		}	
+
+
 		return $result;
 	}
 
-	public function checkDepends($id){
+	public function checkDepends($id)
+	{
 		$result = array();
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
@@ -135,7 +131,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $result;			
 	}
 
-	public function downloadAndExtract($id){
+	public function downloadAndExtract($id)
+	{
 		$result = array();
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
@@ -147,16 +144,164 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	    return $result;
 	}
 
-	public function backUpSystem($id){
+	public function backUpSystem($id)
+	{
 		$result = array();
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
 		 }catch(\Exception $e){
 			$result[] = $e->getMessage();
 			return $result;
-		}	
-		//TODO backDatabase
-		//TODO backFiles;
+		}
+		$backupDbFile = $this->backUpDb($package);
+		$backupFilesDirs = $this->backUpFiles($package);
+	}
+
+	public function beginUpgrade($id)
+	{
+		$result = array();
+		try{
+			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		 }catch(\Exception $e){
+			$result[] = $e->getMessage();
+			return $result;
+		}
+		
+		try{
+			$deletes = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'delete';
+			$this->deleteFiles($deletes);
+		}catch(\Exception $e){
+			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage()}";
+			return $result;
+		}
+	
+		$source = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
+		try{
+			$this->deepCopy($source,$this->getSystemRootPath());
+		}catch(\Exception $e){
+			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage()}";
+			return $result;
+		}
+
+		$upgradeFile = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'Upgrade.php';
+		if(!file_exists($upgradeFile)) return $result;
+		include_once($upgradeFile);
+		$upgrade = new \Upgrade($kernel);
+		if(method_exists($upgrade, 'update')){
+			$upgrade->update();
+		}
+	}
+
+	private function deleteFiles($deletes){
+		if(!file_exists($deletes)) return ;
+		$fh = fopen($deletes,'r');
+		$this->fileCount = 0;
+		while ($line = fgets($fh)) {
+  			unlink($this->getSystemRootPath().DIRECTORY_SEPARATOR.$line);
+  			$this->fileCount ++;
+		}
+		fclose($fh);		
+	}
+
+	private function  is_writable($path) {
+	    $path .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.tmp';
+	    $rm = file_exists($path);
+	    $f = @fopen($path, 'a');
+	    if ($f===false)
+	        return false;
+	    fclose($f);
+	    if (!$rm)
+	        unlink($path);
+	    return true;
+	}
+
+	private function backUpFiles($package)
+	{
+		$backupFilesDirs = array();
+		$backUpdir = $this->getPackageBackUpDir($package);
+		$backupFilesDirs['src'] = $this->getPackageBackUpDir($package).'src';
+		$backupFilesDirs['app'] = $this->getPackageBackUpDir($package).'app';
+		$backupFilesDirs['web'] = $this->getPackageBackUpDir($package).'web';
+
+		$this->deepCopy($this->getSystemRootPath().'src',$backupFilesDirs['src']);
+		$this->deepCopy($this->getSystemRootPath().'app',$backupFilesDirs['app'],$this->getFilters());
+		$this->deepCopy($this->getSystemRootPath().'web',$backupFilesDirs['web']);
+		return $backupFilesDirs;	
+	}
+
+	private function getFilters()
+	{
+		return array('app'.DIRECTORY_SEPARATOR.'data',
+			   'app'.DIRECTORY_SEPARATOR.'cache',
+			   'app'.DIRECTORY_SEPARATOR.'logs',
+			   'web'.DIRECTORY_SEPARATOR.'files'
+		);
+	}
+
+
+
+ 	private function deepCopy($src,$dest,$filters=array())
+ 	{
+		if(!file_exists($src)) return ;
+		if(!file_exists($dest)){
+			mkdir($dest,0777,true);
+		}
+		foreach(new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
+			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
+			if($this->patternMatch($path->getPathname(),$filters)){
+					continue;
+			}
+			$relativeFile = str_replace($src,'',$path->getPathname());
+
+			$destFile = $dest.$relativeFile;	
+			if($path->isDir() ){
+				if(!file_exists($destFile))
+					mkdir($destFile,0777,true);
+			}else{
+				if(strpos( $path->getFilename(), ".") ===0 ){
+					continue;
+				}
+				copy($path->getPathname(),$destFile);
+				$this->fileCount ++;
+			}
+		}
+ 	}
+
+ 	private function patternMatch($path,&$filters)
+ 	{
+ 		foreach ($filters as $filter) {
+ 			if(!(strpos($path,$filter)===false)){
+ 				return true;
+ 			}
+ 		}
+ 		return false;
+ 	}
+
+	private function backUpDb($package)
+	{
+		$dbSetting = array('exclude'=>array('session','cache'));
+		$dump = new MySQLDumper($this->getKernel()->getConnection());
+		$date = date('YmdHis');
+		$backUpdir = $this->getPackageBackUpDir($package);
+		$this->emptyDir($backUpdir);
+		return 	$dump->export($backUpdir.$date);	
+	}
+
+	private function getPackageBackUpDir($package){
+		if(isset($package['type']) && $package['type']==1){
+			$dir = $this->getBackUpPath().DIRECTORY_SEPARATOR;
+			$dir .= 'upgrade_'.$package['ename'].'_'.$package['fromVersion'];
+			$dir .= DIRECTORY_SEPARATOR;
+		}else{
+			$dir = $this->getBackUpPath().DIRECTORY_SEPARATOR;
+			$dir .= 'install_'.$package['ename'].'_'.$package['version'];			
+			$dir .= DIRECTORY_SEPARATOR;
+		}
+		if(!file_exists($dir)){
+			mkdir($dir,0777,true);
+		}
+		return $dir;
 
 	}
 
@@ -218,12 +363,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function extractFile($path)
 	{
-		if(!class_exists('ZipArchive')){
- 		   throw new Exception("Php5-zip包未安装");
-		}
+
 		$dir = $this->getDownloadPath();
 		$extractPath = $dir.DIRECTORY_SEPARATOR.basename($path, ".zip");
-		$this->deleteDir($extractPath);
+		$this->emptyDir($extractPath);
 		$zip = new \ZipArchive;
 		if ($zip->open($path) === TRUE) {
     		$zip->extractTo($dir);
@@ -236,12 +379,14 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	
 
 	
-	private function deleteDir($dirPath){
+	private function emptyDir($dirPath,$includeDir=false){
 		if(!file_exists($dirPath)) return ;
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
     		$path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
 		}
-		rmdir($dirPath);
+		if($includeDir){
+			rmdir($dirPath);
+		}
 	}
 
 	private function checkMainVersion($packages)
@@ -273,6 +418,12 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private function getBackUpPath()
 	{
 		return $this->getKernel()->getParameter('topxia.disk.backup_dir');
+	}	
+
+	private function getExtractPath($package)
+	{
+    	return $this->getDownloadPath().
+    			DIRECTORY_SEPARATOR.basename($package['filename'], ".zip"); 	
 	}	
 
 	private function getSystemRootPath()
