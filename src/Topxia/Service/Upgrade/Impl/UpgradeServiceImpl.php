@@ -246,7 +246,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!file_exists($dest)){
 			mkdir($dest,0777,true);
 		}
-		$this->$fileCount = 0 ;
 		foreach(new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
 			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
@@ -264,7 +263,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 					continue;
 				}
 				copy($path->getPathname(),$destFile);
-				$fileCount ++;
+				$this->fileCount ++;
 			}
 		}
  	}
