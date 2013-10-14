@@ -52,7 +52,7 @@
 									<div class="form-group">
 			            				<label class="col-lg-3 control-label" for="activity_email">Email地址</label>
 			            				<div class="col-lg-9">
-				              				<input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}"  value="{{user.email}}" required readonly/>
+				              				<input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}"  value="{{user.email}}" required disabled/>
 				              					 <p class="help-block">填写你常用的邮箱作为登录帐号</p>
 			           					 </div>
 					        		</div>
@@ -60,7 +60,7 @@
 							            <label class="col-lg-3 control-label" for="activity_nickname">昵称</label>
 							            <div class="col-lg-9">
 							              <input id="activity_nickname" class="form-control" type="text" name="activitymember[nickname]" 
-							                data-url="{{ path('register_nickname_check') }}"  value="{{user.nickname}}"  required readonly/>
+							                data-url="{{ path('register_nickname_check') }}"  value="{{user.nickname}}"  required disabled/>
 							               <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
 							            </div>
 							        </div>

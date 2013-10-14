@@ -12,6 +12,7 @@ class UserProfileType extends AbstractType
         $builder->add('truename', 'text', array('required' => false));
         $builder->add('gender', 'gender', array('expanded' => true, 'required' => true));
         $builder->add('job', 'text', array('required' => false));
+        $builder->add('company', 'text', array('required' => false));
         $builder->add('title', 'text', array('required' => false));
         $builder->add('about', 'textarea', array('required' => false));
         $builder->add('signature', 'text', array('required' => false));        

@@ -112,7 +112,7 @@ class ActivityController extends BaseController
             "id" =>  0,
           "nickname" =>"游客");
 
-        return $this->render("TopxiaWebBundle:Activity:show-activity-prepare.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:show-activity.html.twig",array(
             "activity"=>$activity,
             "tags"=>$tags,
             "students"=>$students,
@@ -184,7 +184,7 @@ class ActivityController extends BaseController
             $appendix=$this->getMaterialService()->findActivityMaterials($activity['id'],0,2);
         }
 
-        return $this->render("TopxiaWebBundle:Activity:show-activity-ended.html.twig",array(
+        return $this->render("TopxiaWebBundle:Activity:show-expired-activity.html.twig",array(
             "activity"=>$activity,
             "activitys"=>$activitys,
             "qustions"=>$sss,
