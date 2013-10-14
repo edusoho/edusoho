@@ -10,7 +10,7 @@ use Topxia\Service\Util\MySQLDumper;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
-
+	private $fileCount=0;
 
 	public function addInstalledPackage($packageInfo)
 	{
@@ -166,12 +166,23 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$result[] = $e->getMessage();
 			return $result;
 		}
-		$deletes = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'delete';
-		$this->deleteFiles($deletes);
-
-		$source = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
-		deepCopy($src,$this->getSystemRootPath());
 		
+		try{
+			$deletes = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'delete';
+			$this->deleteFiles($deletes);
+		}catch(\Exception $e){
+			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage}";
+			return $result;
+		}
+	
+		$source = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
+		try{
+			$this->deepCopy($source,$this->getSystemRootPath());
+		}catch(\Exception $e){
+			$result[]= "当前总共升级了{$this->fileCount}个文件，升级文件无法覆盖，原因: {$e->getMessage}";
+			return $result;
+		}
+
 		$upgradeFile = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'Upgrade.php';
 		if(!file_exists($upgradeFile)) return $result;
 		include_once($upgradeFile);
@@ -184,8 +195,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private function deleteFiles($deletes){
 		if(!file_exists($deletes)) return ;
 		$fh = fopen($deletes,'r');
+		$this->fileCount = 0;
 		while ($line = fgets($fh)) {
   			unlink($this->getSystemRootPath().DIRECTORY_SEPARATOR.$line);
+  			$this->fileCount ++;
 		}
 		fclose($fh);		
 	}
@@ -211,7 +224,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$backupFilesDirs['web'] = $this->getPackageBackUpDir($package).'web';
 
 		$this->deepCopy($this->getSystemRootPath().'src',$backupFilesDirs['src']);
-		$this->deepCopy($this->getSystemRootPath().'app',$backupFilesDirs['app']);
+		$this->deepCopy($this->getSystemRootPath().'app',$backupFilesDirs['app'],$this->getFilters());
 		$this->deepCopy($this->getSystemRootPath().'web',$backupFilesDirs['web']);
 		return $backupFilesDirs;	
 	}
@@ -227,30 +240,31 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 
 
- 	private function deepCopy($src,$dest)
+ 	private function deepCopy($src,$dest,$filters=array())
  	{
- 		$filters = $this->getFilters();	
 		if(!file_exists($src)) return ;
-		mkdir($dest,0777,true);
+		if(!file_exists($dest)){
+			mkdir($dest,0777,true);
+		}
+		$this->$fileCount = 0 ;
 		foreach(new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
 			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
-
 			if($this->patternMatch($path->getPathname(),$filters)){
 					continue;
 			}
-		
 			$relativeFile = str_replace($src,'',$path->getPathname());
 
 			$destFile = $dest.$relativeFile;	
-					
-			if($path->isDir()){
-				mkdir($destFile,0777,true);
+			if($path->isDir() ){
+				if(!file_exists($destFile))
+					mkdir($destFile,0777,true);
 			}else{
 				if(strpos( $path->getFilename(), ".") ===0 ){
 					continue;
 				}
 				copy($path->getPathname(),$destFile);
+				$fileCount ++;
 			}
 		}
  	}
@@ -258,7 +272,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  	private function patternMatch($path,&$filters)
  	{
  		foreach ($filters as $filter) {
- 			if(strpos($path,$filter)!==false){
+ 			if(!(strpos($path,$filter)===false)){
  				return true;
  			}
  		}
