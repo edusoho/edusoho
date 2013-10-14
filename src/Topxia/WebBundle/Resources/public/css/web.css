@@ -2170,6 +2170,7 @@ body {
 .mts {margin-top: 5px !important;}
 .mtm {margin-top: 10px !important;}
 .mtl {margin-top: 20px !important;}
+.mt-m {margin-top: -10px !important;}
 
 .mrs {margin-right: 5px !important;}
 .mrm {margin-right: 10px !important;}

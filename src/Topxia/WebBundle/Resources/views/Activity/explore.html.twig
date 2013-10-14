@@ -8,26 +8,26 @@
 
 {% block content %} 
 
- 
-    <div class="row">
-        <div class="col-md-12 mbl mts " >
-          <div class="top">
-            <div id="focus">
-              <div id="slides">
-                <div class="slides_container">
-                  <a href="#" title="title" rel="external">
-                  <img class='img-responsive' src="{{ asset('bundles/topxiaweb/img/home-slide/home-slide.jpg') }}" alt="title" /></a>
-                  <a href="#" title="title" rel="external">
-                  <img class='img-responsive'  src="{{ asset('bundles/topxiaweb/img/home-slide/ticket_banner.png') }}" alt="title" /></a>
-                  <a href="#" title="title" rel="external">
-                  <img class='img-responsive'  src="{{ asset('bundles/topxiaweb/img/home-slide/coupon.jpg') }}" alt="title" /></a>
-                </div>
-              </div>
-            </div>
+<section >
+
+    <div class="row banner1 ptl">
+       <div class="container">  
+          <div class="col-md-12 mbz mtl img-content" >                               
+                  <img class='img-responsive' src="{{ asset('/assets/img/default/openclass-banner.png') }}" alt="title" />
           </div>
-       
         </div>  
     </div> 
+     <div class="row banner2">
+       <div class="container">  
+          <div class="col-md-8 mbl  img-content" >                               
+               
+          </div>
+        </div>  
+    </div> 
+</section> 
+
+<section class="container ptl">
+
     <div class="row ">
         <div class="col-md-12 ">  
            <div class="mod k_postlist filter">
@@ -90,7 +90,7 @@
            </div> 
         </div>
     </div>        
-    <div class="row  ">
+    <div class="row">
         <div class="col-md-12 ">
            <div class="mod  openstack">
                 <ul class="content pz">
@@ -153,6 +153,8 @@
               
            </div>
         </div>
-    </div>    
+    </div> 
+
+</section>
 
 {% endblock %}

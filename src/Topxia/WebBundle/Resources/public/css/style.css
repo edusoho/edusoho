@@ -2,9 +2,8 @@
 .bulletin{width: 248px;}
 .bulletin div{padding: 10px 10px 2px 10px}
 .bulletin div h4{padding: 2px}
-/*注册登录*/
-.reg{margin-left:2em;border: 1px solid #000;border-top: none;border-bottom: none;}
-.reg a{padding: 0;float: left;}
+
+
 .info .info-content{padding: 10px 10px 10px 0;}
 
 .info-header{overflow: hidden;zoom:1; padding: 0 15px;line-height: 32px;height: 32px;border-bottom: 1px solid #e5e5e5;background-color: #f0f0f0;position: relative;}
@@ -221,6 +220,35 @@ color: #999;
 .filter li a{color: #999;margin-right: 1em;}
 
 /*公开课首页*/
+
+.activity-explore>.container{
+	width: 100% !important;
+	padding: 0px !important;
+	margin: 0px !important;
+}
+
+.activity-explore .container .banner1{
+
+	background-color: #ededed;
+}
+
+.activity-explore .container .banner1 .img-content {
+
+}
+
+
+.activity-explore .container .banner2{
+
+	background-color: #5fa17b;
+	margin-top: -4px !important;
+	height: 40px;
+
+
+
+}
+
+
+
 /*slide*/
 .banner,.slide{margin-top: 54px;}
 .openstack .imageblock{padding: 0;margin-top: 0}
