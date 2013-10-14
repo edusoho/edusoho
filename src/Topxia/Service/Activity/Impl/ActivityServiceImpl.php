@@ -30,7 +30,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		$conditions = $this->_prepareActivityConditions($conditions);
 		if ($sort == 'popular') {
 			$orderBy =  array('viewNum', 'DESC');
-		} else {
+		} else if ($sort == 'recommendedTime-DESC'){
+			$orderBy = array('recommendedTime', 'DESC');
+		} else  {
 			$orderBy = array('createdTime', 'DESC');
 		}
 		return ActivitySerialize::unserializes($this->getActivityDao()->searchActivitys($conditions, $orderBy, $start, $limit));
@@ -109,13 +111,31 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	}
 
 
-	public function endActivity($id){
-		return $this->getActivityDao()->updateActivity($id, array('isExpired' => 1));	
+	public function closeRegistrationActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('expired' => 1));	
+	}
+
+	public function openRegistrationActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('expired' => 0));
+	}
+
+	public function recommendActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('recommended' => 1,'recommendedTime'=>time()));	
+	}
+
+	public function cancelRecommendActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('recommended' => 0,'recommendedTime' => 0));	
 	}
 
 	public function defaultActivity($id){
-		return $this->getActivityDao()->updateActivity($id, array('isExpired' => 0));
+		return $this->getActivityDao()->updateActivity($id, array('expired' => 0));	
 	}
+
+	public function endActivity($id){
+		return $this->getActivityDao()->updateActivity($id, array('expired' => 1));	
+	}
+
+
 
 	public function setActivityCourse($courseId, $teachers){
 		$this->getActivityDao()->updateActivity($courseId,ActivitySerialize::serialize($teachers));

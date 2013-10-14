@@ -77,13 +77,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
            unset($conditions['startTimeGreaterThan']);
         }
 
-        if(empty($conditions['expired'])){
-            unset($conditions['expired']);       
-        }
-      
-        if(empty($conditions['recommended'])){
-            unset($conditions['recommended']);       
-        }
+
 
         if(empty($conditions['status'])){
             unset($conditions['status']);       

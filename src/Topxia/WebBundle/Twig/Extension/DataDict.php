@@ -7,16 +7,28 @@ class DataDict
 		'courseStatus' => array(
 			'draft' => '未发布',
 			'published' => '已发布',
-			'closed' => '已关闭'
+			'closed' => '未发布'
 		),
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
-			'closed' => '<span class="text-danger">已关闭</span>'
+			'closed' => '<span class="text-danger">未发布</span>'
+		),
+		'activityExpired' => array(
+			'0' => '开放报名中',
+			'1' => '已关闭报名'
 		),
 		'activityExpired:html' => array(
-			'openning' => '<span class="text-muted">开放中</span>',
-			'closed' => '<span class="text-success">已结束</span>'
+			'0' => '<span class="text-success">开放报名中</span>',
+			'1' => '<span class="text-danger">已关闭报名</span>'
+		),
+		'activityRecommended' => array(
+			'0' => '未置顶',
+			'1' => '已置顶'
+		),
+		'activityRecommended:html' => array(
+			'0' => '<span class="text-muted">未置顶</span>',
+			'1' => '<span class="text-danger">已置顶</span>'
 		),
 		'orderStatus' => array(
 			'created' => '未付款',

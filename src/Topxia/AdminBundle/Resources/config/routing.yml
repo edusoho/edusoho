@@ -431,18 +431,21 @@ admin_activity_close:
     pattern: /activity/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Activity:close }
 
-admin_activity_end:
-    pattern: /activity/{id}/end
-    defaults: { _controller: TopxiaAdminBundle:Activity:end }
+admin_activity_openning:
+    pattern: /activity/{id}/registration/open
+    defaults: { _controller: TopxiaAdminBundle:Activity:openRegistration }
 
-admin_activity_default:
-    pattern: /activity/{id}/default
-    defaults: { _controller: TopxiaAdminBundle:Activity:default }
+admin_activity_expired:
+    pattern: /activity/{id}/registration/close
+    defaults: { _controller: TopxiaAdminBundle:Activity:closeRegistration }
 
+admin_activity_recommend:
+    pattern: /activity/{id}/recommended
+    defaults: { _controller: TopxiaAdminBundle:Activity:recommend }
 
-admin_activity_close:
-    pattern: /activity/{id}/close
-    defaults: { _controller: TopxiaAdminBundle:Activity:close }
+admin_activity_cancel_recommend:
+    pattern: /activity/{id}/cannel/recommended
+    defaults: { _controller: TopxiaAdminBundle:Activity:cancelRecommend }
 
 admin_activity_category:
     pattern: /activity/category

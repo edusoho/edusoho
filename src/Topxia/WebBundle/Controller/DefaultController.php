@@ -12,10 +12,11 @@ class DefaultController extends BaseController
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
-        $feild['recommended']=1;//1表示首页置顶公开课。
-        $feild['status']='published';//0表示未开始并未结束。
+        $feild['recommended']=1;//1表示置顶。
+        $feild['status']='published';
+        $feild['expired']='0';//0表示开放报名。
 
-        $nextActivity=$this->getActivityService()->searchActivitys($feild,'latest',0,1);
+        $nextActivity=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
         
         $nextActivity=count($nextActivity)>0?$nextActivity[0]:array('largePicture' =>'',
                                                                     'subtitle'=>'',
