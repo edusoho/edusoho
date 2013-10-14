@@ -28,7 +28,7 @@ class ActivityController extends BaseController
             , 5
         );
         //活动
-        $activity = $this->getActivityService()->searchActivitys(
+        $activitys = $this->getActivityService()->searchActivitys(
             $conditions, 'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -42,14 +42,35 @@ class ActivityController extends BaseController
         $userId=$currentuser['id'];
     
 
-        $actIds = ArrayToolkit::column($activity,'id');
+        $actIds = ArrayToolkit::column($activitys,'id');
 
 
         $joinedActivitys=$this->getActivityService()->findMemberByActIds($actIds,$userId);
 
 
+        $joinActIds = ArrayToolkit::column($joinedActivitys,'activityId');
+
+      
+        $mixActivitys= array();
+
+        foreach ($activitys as $item) {
+         
+            if(empty($item['expired'])){
+                $item['expired']=empty($item['endTime'])?$item['expired']:time()>$item['endTime'];
+            }
+            $item['join']=false;
+            
+            if (in_array($item['id'], $joinActIds)) {
+              $item['join']=true;
+            }
+            $mixActivitys[]= $item;
+        }
+
+
+
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
-            'activitys' => $activity,
+            'activitys' => $mixActivitys,
+            'joinActIds'=>$joinActIds,
             'paginator' => $paginator,
             'conditions' => $conditions,
             'tags' => $tags,
