@@ -227,23 +227,17 @@ color: #999;
 	margin: 0px !important;
 }
 
-.activity-explore .container .banner1{
+.activity-explore .container .banner-pic{
 
 	background-color: #ededed;
 }
 
-.activity-explore .container .banner1 .img-content {
 
-}
-
-
-.activity-explore .container .banner2{
+.activity-explore .container .banner-text{
 
 	background-color: #5fa17b;
 	margin-top: -4px !important;
-	height: 40px;
-
-
+	height: 100px;
 
 }
 
