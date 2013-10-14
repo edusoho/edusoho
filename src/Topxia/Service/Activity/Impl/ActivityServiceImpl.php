@@ -231,6 +231,55 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 		return $fields;
 	}
+	
+	public function mixActivitys($activitys, $joinActIds)
+	{
+		$mixActivitys= array();
+
+        foreach ($activitys as $item) {
+         
+            if(empty($item['expired'])){
+                $item['expired']=empty($item['endTime'])?$item['expired']:time()>$item['endTime'];
+            }
+            $item['join']=false;
+            
+            if (in_array($item['id'], $joinActIds)) {
+              $item['join']=true;
+            }
+            $mixActivitys[]= $item;
+        }
+
+        return $mixActivitys;
+
+	}
+
+
+	public function mixActivity($activity, $userId)
+	{
+		
+		$mixActivity= $activity;
+
+		 if(empty($mixActivity['expired'])){
+                $mixActivity['expired']=empty($mixActivity['endTime'])?$mixActivity['expired']:time()>$mixActivity['endTime'];
+            }
+
+        $condi['userId']=$userId;
+        $condi['activityId']=$mixActivity['id'];
+
+        $member = $this->searchMember($condi,0,1);
+
+        $mixActivity['join']=false;
+
+        if(!empty($member) ){
+        	$mixActivity['join']=true;
+
+        }
+
+        return $mixActivity;
+
+	}
+
+
 	// Member API
 
 

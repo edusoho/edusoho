@@ -22,11 +22,10 @@
           </p>
           <p>开始时间： {{activity.startTime}}</p>
           <p>结束时间： {{activity.endTime}}</p>
-          <p>地点： {{ activity.address }}</p>
-          {% if current_user.id!=0  %}
-          <p>线上地址: {{ activity.onlineAddress }}</p>
-          {% endif %}
           <p>形式：  {{ activity.form }}</p>
+          <p>现场地址： {{ activity.address }}</p>
+          <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
+      
           <p>费用： {{ activity.price}}</p>
           <div class="text-right">
             <p>

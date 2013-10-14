@@ -51,21 +51,7 @@ class ActivityController extends BaseController
         $joinActIds = ArrayToolkit::column($joinedActivitys,'activityId');
 
       
-        $mixActivitys= array();
-
-        foreach ($activitys as $item) {
-         
-            if(empty($item['expired'])){
-                $item['expired']=empty($item['endTime'])?$item['expired']:time()>$item['endTime'];
-            }
-            $item['join']=false;
-            
-            if (in_array($item['id'], $joinActIds)) {
-              $item['join']=true;
-            }
-            $mixActivitys[]= $item;
-        }
-
+        $mixActivitys= $this->getActivityService()->mixActivitys($activitys,$joinActIds);
 
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
@@ -84,13 +70,17 @@ class ActivityController extends BaseController
     {
         //活动信息
         $activity=$this->getActivityService()->getActivity($id);
+        ///获取当前学生报名的活动ids
+        $currentuser=$this->getCurrentUser();
 
-        if($activity['expired']==1||(time()>$activity['endTime'])&&!empty($activity['endTime']))
+        $activity= $this->getActivityService()->mixActivity($activity,$currentuser['id']);
+
+        if($activity['expired']==1)
         {
             return $this->redirect($this->generateUrl("activity_end_show",array(
                     "id"=>$id,
                     "isNew"=>false))
-       );  
+            );
 
         }
         //tag信息
@@ -99,15 +89,8 @@ class ActivityController extends BaseController
         $students=$this->getActivityService()->findActivityStudents($id,0,50);
         $studentIds=ArrayToolkit::column($students,'userId');
         $students = $this->getUserService()->findUsersByIds($studentIds);
-        ///获取当前学生报名的活动ids
-        $currentuser=$this->getCurrentUser();
-
-
-        $Ids=array();
-        if(!empty($currentuser['id'])){
-            $currrentUsers=$this->getActivityService()->findStudentActivitys($currentuser['id'],0,100);
-            $Ids=ArrayToolkit::column($currrentUsers,"activityId");
-        }
+        
+        
         //老师信息查询
 
         //小伙伴们正在看的活动
@@ -144,7 +127,7 @@ class ActivityController extends BaseController
             "activity"=>$activity,
             "tags"=>$tags,
             "students"=>$students,
-            "ids"=>$Ids,
+            
             "qustions"=>$sss,
             "activitys"=>$activitys,
             "current_user"=> $currentuser,
@@ -156,6 +139,13 @@ class ActivityController extends BaseController
     public function showEndAction(Request $request,$id){
 
         $activity=$this->getActivityService()->getActivity($id);
+        
+        ///获取当前学生报名的活动ids
+        $currentuser=$this->getCurrentUser();
+
+        $activity= $this->getActivityService()->mixActivity($activity,$currentuser['id']);
+
+
         $threads=$this->getActivityThreadService()->findThreadsByType($activity['id'],'latestCreated',0,100);
         
         $activitys=$this->getActivityService()->searchActivitys(array('status'=>'published'),'latestCreated',0,4);
@@ -170,7 +160,7 @@ class ActivityController extends BaseController
             $lessons=$fristlessonid=$this->getCourseService()->getCourseLessons($activity['courseId'][0]);
             $lessionid=count($lessons)>0?$lessons[0]['id']:0;
         }
-        $currentuser=$this->getCurrentUser();
+       
 
         $studentIds = array();
 
@@ -275,6 +265,16 @@ class ActivityController extends BaseController
     public function joinAction(Request $request,$id)
     {  
         $user = $this->getCurrentUser();
+        $activity=$this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->mixActivity($activity,$user['id']);
+
+        if( $activity['join']){
+
+            return $this->redirect($this->generateUrl("activity_show",array(
+                "id"=>$id))
+            );
+        }
+
         if ($request->getMethod() == 'POST') {
             $form = $this->createForm(new ActivityMemberType());
             $form->bind($request);
@@ -355,8 +355,8 @@ class ActivityController extends BaseController
             }
         }
 
-        $filename="join-activity-form-vistor";
-        $activity=$this->getActivityService()->getActivity($id);
+        $filename="join-activity-form-vistor";       
+
         $userprofile=array();
         if(!empty($user['id'])){
             $userprofile=$this->getUserService()->getUserProfile($user['id']);
