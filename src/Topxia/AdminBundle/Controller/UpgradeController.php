@@ -67,6 +67,8 @@ class UpgradeController extends BaseController
 
     public function upgradeAction(Request $request, $id)
     {
+        $result =  $this->getUpgradeService()->hasLastError($id);
+        var_dump($result);
         $result = $this->getUpgradeService()->checkEnvironment();
             var_dump($result);
     
