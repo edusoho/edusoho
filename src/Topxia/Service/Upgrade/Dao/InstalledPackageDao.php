@@ -17,7 +17,7 @@ interface InstalledPackageDao
 
 	public function findInstalledPackages();
 
-	public function searchPackageCount();
+	public function searchPackageCount($conditions);
 
-	public function searchPackages($start, $limit);
+	public function searchPackages($conditions, $start, $limit);
 }

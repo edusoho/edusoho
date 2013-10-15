@@ -2,10 +2,15 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 
-		$(".detail").popover({
-			html: true,
-			trigger: 'hover'
-		});
+		$("a[rel=popover]")
+			.popover({
+				html: true,
+				placement: 'left',
+				trigger: 'hover'
+			})
+			.click(function(e) {
+				e.preventDefault()
+			});
 
 	};
 

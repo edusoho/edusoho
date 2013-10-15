@@ -25,18 +25,20 @@
   <td>
   	{{package.comments | plain_text(10) }}
   	<br>
-	<a class="btn btn-sm btn-info detail" data-placement="left" data-toggle="popover"
-	data-title="软件包详情" 
-	data-content="<br>
-	更新说明:{{package.comments}}
-	">详情</a>
+    
+    <div>
+        <a href="#" class="btn btn-sm btn-info" rel="popover" data-content="{{package.comments}}" >详情</a>
+    </div>
 
   </td>
   <td>
   	{% if package.type == 0 %} 
-  		<button class="btn btn-success btn-sm install" data-url="{{path('admin_upgrade_install', {id:package.id})}}" data-target="package-tr-{{ package.id }}"> 安装 </button>
+
+      <a href="#modal" class="btn btn-success btn-sm" data-toggle="modal" data-url="{{path('admin_upgrade_trigger_install_modal', {id:package.id})}}">安装</a>
+
   	{% elseif package.type == 1 %}
-  		<button class="btn btn-primary btn-sm upgrade" data-url="{{path('admin_upgrade_upgrade', {id:package.id})}}" data-target="package-tr-{{ package.id }}"> 更新 </button>
+  		<a href="#modal" class="btn btn-primary btn-sm" data-toggle="modal" data-url="{{path('admin_upgrade_trigger_update_modal', {id:package.id})}}">更新</a>
+
   	{% endif %}
   </td>
 </tr>

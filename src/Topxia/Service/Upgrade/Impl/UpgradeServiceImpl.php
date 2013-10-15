@@ -45,24 +45,24 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	}
 
 
-	public function searchPackageCount()
+	public function searchPackageCount($conditions)
 	{
-		return $this->getInstalledPackageDao()->searchPackageCount();
+		return $this->getInstalledPackageDao()->searchPackageCount($conditions);
 	}
 
-	public function searchLogCount()
+	public function searchLogCount($conditions)
 	{
-		return $this->getUpgradeLogDao()->searchLogCount();
+		return $this->getUpgradeLogDao()->searchLogCount($conditions);
 	}
 
-	public function searchLogs($start, $limit)
+	public function searchLogs($conditions, $start, $limit)
 	{
-		return $this->getUpgradeLogDao()->searchLogs($start, $limit);
+		return $this->getUpgradeLogDao()->searchLogs($conditions, $start, $limit);
 	}
 
-	public function searchPackages($start, $limit)
+	public function searchPackages($conditions, $start, $limit)
 	{
-		return $this->getInstalledPackageDao()->searchPackages($start, $limit);
+		return $this->getInstalledPackageDao()->searchPackages($conditions, $start, $limit);
 	}
 
 	public function check()
@@ -71,9 +71,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!$this->checkMainVersion($packages)){
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
-		
 		return $this->getEduSohoUpgradeService()->check($packages);
-
 	}
 
 	public function install($id)

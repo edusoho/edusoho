@@ -45,9 +45,10 @@
   <td> 
     {{ log.reason | plain_text(10)}}
     <br>
-    <a class="btn btn-sm btn-info detail" data-placement="left" data-toggle="popover"
-  data-title="失败原因" 
-  data-content="{{log.reason}}">详情</a>
+     <div>
+    <a href="#" class="btn btn-sm btn-info" rel="popover" data-content="{{log.reason}}">详情</a>
+    </div>
+
   </td>
 
   <td>

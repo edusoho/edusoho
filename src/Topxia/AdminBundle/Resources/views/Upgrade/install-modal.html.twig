@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modal_size = 'large' %}
+
+
+{% block title %} 安装软件包{% endblock %}
+
+{% block body %}
+
+<div>
+	{{dump(installPackage)}}
+</div>
+
+<script type="text/javascript"> app.load('upgrade/install-modal') </script>
+{% endblock %}
+
+{% block footer %}
+
+footer
+
+{% endblock %}
