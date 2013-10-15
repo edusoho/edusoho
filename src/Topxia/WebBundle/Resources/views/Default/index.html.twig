@@ -45,7 +45,7 @@
                 {% for user in users%}
                 <span class="list-item  pull-right">
                   <a href="{{ path('user_show',{id:user.id}) }}">
-                    <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%21~'.gif')  }}" alt="user icon">
+                    <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
                   </a>
                   <span class="todos-thumb-span text-left">
                     <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
