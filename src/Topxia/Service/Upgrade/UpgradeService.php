@@ -18,7 +18,6 @@ interface UpgradeService
 	// public function recovery();
 
 
-	public function addInstalledPackage($packageInfo);
 	
 	public function getRemoteInstallPackageInfo($id);
 

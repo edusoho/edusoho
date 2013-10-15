@@ -482,21 +482,7 @@ CREATE TABLE `notification` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `packages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ename` varchar(255) NOT NULL COMMENT '包名称',
-  `cname` varchar(255) NOT NULL COMMENT '包中文名称',
-  `fromVersion` varchar(255) DEFAULT NULL COMMENT '从哪个版本升级',
-  `version` varchar(255) NOT NULL COMMENT '版本',
-  `filename` varchar(255) NOT NULL COMMENT '压缩包文件名',
-  `comments` text COMMENT '更新说明',
-  `level` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '重要等级',
-  `depends` text NOT NULL COMMENT '依赖包们及版本',
-  `packType` tinyint(4) NOT NULL COMMENT '0:安装包；1:升级包',
-  `createTime` int(11) NOT NULL COMMENT '发布时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `packname` (`ename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='升级包';
+
 
 CREATE TABLE `session` (
   `session_id` varchar(255) NOT NULL,
@@ -521,20 +507,7 @@ CREATE TABLE `tag` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `upgradeLogs` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `operation` varchar(32) NOT NULL COMMENT 'check: 检查 upgrade:更新 install:安装',
-  `packages` text COMMENT '已安装的版本',
-  `packageId` int(11) DEFAULT NULL COMMENT '升级id',
-  `fromv` varchar(255) DEFAULT NULL COMMENT '从某版本升级',
-  `tov` varchar(255) DEFAULT NULL COMMENT '安装版本',
-  `ip` varchar(32) NOT NULL COMMENT '来源ip',
-  `host` varchar(255) DEFAULT NULL COMMENT '来源host',
-  `logtime` int(11) NOT NULL COMMENT '日期',
-  `ename` varchar(255) NOT NULL,
-  `cname` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='更新日志';
+
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -638,3 +611,22 @@ CREATE TABLE `user_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`(6))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `upgrade_logs` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `remoteId` int(11) NOT NULL COMMENT 'packageId',
+        `installedId` int(11) DEFAULT NULL COMMENT '本地已安装id',
+        `ename` varchar(32) NOT NULL COMMENT '名称',
+        `cname` varchar(32) NOT NULL COMMENT '中文名称',
+        `fromv` varchar(32) DEFAULT NULL COMMENT '初始版本',
+        `tov` varchar(32) NOT NULL COMMENT '目标版本',
+        `type` smallint(6) NOT NULL COMMENT '升级类型',
+        `dbBackPath` text NOT NULL COMMENT '数据库备份文件',
+        `srcBackPath` text NOT NULL COMMENT '源文件备份地址',
+        `status` varchar(32) NOT NULL COMMENT '状态(ROLLBACK,ERROR,SUCCESS,RECOVERED)',
+        `logtime` int(11) NOT NULL COMMENT '升级时间',
+        `uid` int(10) unsigned NOT NULL COMMENT 'uid',
+        `ip` varchar(32) DEFAULT NULL COMMENT 'ip',
+        `reason` text COMMENT '失败原因',
+          PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='本地升级日志表' ;

@@ -14,14 +14,13 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private $fileCount=0;
 	private $fileSystem = null;
 
-	public function addInstalledPackage($packageInfo)
+	private function addInstalledPackage($packageInfo)
 	{
 		$installedPackage = array();
 		$installedPackage['ename'] = $packageInfo['ename'];
 		$installedPackage['cname'] = $packageInfo['cname'];
 		$installedPackage['version'] = $packageInfo['version'];
-		$installedPackage['from'] = $packageInfo['fromVersion'];
-		$installedPackage['installlog'] = 'result-success';
+		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
 		$installedPackage['installTime'] = time();
 		$existPackage = $this->getInstalledPackageDao()->getInstalledPackageByEname($packageInfo['ename']);
 		if(empty($existPackage)){
@@ -100,8 +99,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
 			$result[] = 'app/cache目录无写权限';
 		}	
-
-
 		return $result;
 	}
 
@@ -197,7 +194,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			}
 			return $result;
 		}
+		$this->addInstalledPackage($package);
+
 		$this->createUpgradeLog($package);
+		$this->getLogService()->info('upgrade', 'upgrade', "更新包-{$package['cname']}({$package['ename']})");
+
 		return $result;
 	}
 
@@ -206,6 +207,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$path = $this->getCachePath();
 		$this->emptyDir($path);
 	}
+
+
 
 	private function createUpgradeLog($package,$status='SUCCESS',$reason=null)
 	{
@@ -469,4 +472,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
     	}
     	return $this->fileSystem;
     }
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');        
+    }  
 }

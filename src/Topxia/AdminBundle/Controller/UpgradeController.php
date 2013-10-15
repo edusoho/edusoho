@@ -35,14 +35,13 @@ class UpgradeController extends BaseController
     public function installAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkEnvironment();
-            var_dump($result);
+        var_dump($result);
 
         $result = $this->getUpgradeService()->checkDepends($id);
         var_dump($result);
         $result = $this->getUpgradeService()->downloadAndExtract($id);
         var_dump($result);
-        // $result = $this->getUpgradeService()->backUpSystem($id);
-        //  var_dump($result);
+
 
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
@@ -62,17 +61,8 @@ class UpgradeController extends BaseController
                $result = $this->getUpgradeService()->beginUpgrade($id);
          var_dump($result);
 
-    // public function checkDepends($id);
-    // public function downloadAndExtract($id);
-    // public function backUpSystem($id);
-    // public function beginUpgrade($id);
+         $this->refreshCache();
 
-
-        // TODO
-        // $this->getUpgradeService()->backUpdirectories($directoryAfterUnZip);
-
-        // $package = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
-        // $this->getUpgradeService()->addInstalledPackage($package);
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
