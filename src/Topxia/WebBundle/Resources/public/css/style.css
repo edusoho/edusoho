@@ -230,6 +230,19 @@ color: #999;
 .activity-explore .container .banner-pic{
 
 	background-color: #ededed;
+	text-align:center;
+}
+
+.activity-explore .container .banner-pic .banner-pic-box{
+
+	text-align:center;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.activity-explore .container .banner-pic .banner-pic-box .banner-pic-box-img{
+	
+	display:inline !important;
 }
 
 
