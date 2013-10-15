@@ -15,10 +15,10 @@ interface UpgradeService
 	public function backUpSystem($id);
 	public function beginUpgrade($id);
 	public function refreshCache();
+	public function hasLastError($id);
 	// public function recovery();
 
 
-	public function addInstalledPackage($packageInfo);
 	
 	public function getRemoteInstallPackageInfo($id);
 

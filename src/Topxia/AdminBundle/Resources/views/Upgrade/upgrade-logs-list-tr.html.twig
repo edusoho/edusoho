@@ -42,20 +42,18 @@
     </strong>
     {% endif %}
   </td>
+
   <td> 
+    {% if log.reason %}
+
     {{ log.reason | plain_text(10)}}
     <br>
-     <div>
-    <a href="#" class="btn btn-sm btn-info" rel="popover" data-content="{{log.reason}}">详情</a>
+    <div>
+      <a href="#" class="btn btn-sm btn-info" rel="popover" data-content="{{log.reason}}">详情</a>
     </div>
 
+    {% endif %}
   </td>
 
-  <td>
-  {% if log.status == 'ROLLBACK'%}
-    <a href="#">回滚</a>  
-  {% else %}
-    无
-  {% endif %}
-  </td>
+
 </tr>

@@ -29,11 +29,14 @@ define(function(require, exports, module) {
 
             $('#modal').on('hide.bs.modal', function(e) {
                 if($("#quiz").find(".quiz-forms").is(":visible")){
+
                     if (!confirm("真的要退出本次测验吗？")) {
                         return false;
                     } else {
                         $("#modal").off('hide.bs.modal');
                     }
+
+                    $("#modal").off('hide.bs.modal');
                 }
             });
         },

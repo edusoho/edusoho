@@ -364,6 +364,11 @@ admin_upgrade_check_environment:
     defaults: { _controller: TopxiaAdminBundle:Upgrade:checkEnvironment }
     methods: [POST]
 
+admin_upgrade_has_last_error:
+    pattern: /upgrade/{id}/has/last/error
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:hasLastError }
+    methods: [POST]
+
 admin_upgrade_check_depends:
     pattern: /upgrade/{id}/check/depends
     defaults: { _controller: TopxiaAdminBundle:Upgrade:checkDepends }

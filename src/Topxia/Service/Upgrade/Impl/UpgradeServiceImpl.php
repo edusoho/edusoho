@@ -14,14 +14,13 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private $fileCount=0;
 	private $fileSystem = null;
 
-	public function addInstalledPackage($packageInfo)
+	private function addInstalledPackage($packageInfo)
 	{
 		$installedPackage = array();
 		$installedPackage['ename'] = $packageInfo['ename'];
 		$installedPackage['cname'] = $packageInfo['cname'];
 		$installedPackage['version'] = $packageInfo['version'];
-		$installedPackage['from'] = $packageInfo['fromVersion'];
-		$installedPackage['installlog'] = 'result-success';
+		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
 		$installedPackage['installTime'] = time();
 		$existPackage = $this->getInstalledPackageDao()->getInstalledPackageByEname($packageInfo['ename']);
 		if(empty($existPackage)){
@@ -79,6 +78,17 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$this->upgrade($id);
 	}
 
+	public function hasLastError($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		if(empty($package)) throw $this->createServiceException("不存在{$id}");
+		$log = $this->getLogService()->getUpdateLogByEnameAndVersion($package['ename'],$package['version']);
+		if('ROLLBACK' == $log['status']){
+			return true;
+		}
+		return false;
+	}
+
 	public function checkEnvironment()
 	{
 		$result = array();
@@ -108,8 +118,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
 			$result[] = 'app/cache目录无写权限';
 		}	
-
-
 		return $result;
 	}
 
@@ -200,12 +208,18 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			}
 			if($touched){
 				$this->createUpgradeLog($package,'ROLLBACK',$e->getMessage());
+				$this->getLogService()->info('upgrade', 'upgrade', "更新失败，需要恢复备份！ 更新包-{$package['cname']}({$package['ename']})");
 			}else{
 				$this->createUpgradeLog($package,'ERROR',$e->getMessage());
+				$this->getLogService()->info('upgrade', 'upgrade', "更新失败，更新包-{$package['cname']}({$package['ename']})");
 			}
 			return $result;
 		}
+		$this->addInstalledPackage($package);
+
 		$this->createUpgradeLog($package);
+		$this->getLogService()->info('upgrade', 'upgrade', "成功更新包-{$package['cname']}({$package['ename']})");
+
 		return $result;
 	}
 
@@ -214,6 +228,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$path = $this->getCachePath();
 		$this->emptyDir($path);
 	}
+
+
 
 	private function createUpgradeLog($package,$status='SUCCESS',$reason=null)
 	{
@@ -226,14 +242,16 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  			'fromv'=>$package['fromVersion'],
  			'tov'=>$package['version'],
  			'type'=>$package['type'],
- 			'dbBackPath'=>$this->getBackupFilePath($package),
- 			'srcBackPath'=>$this->getPackageBackUpDir($package),
  			'status'=>$status,
  			'logtime'=>time(),
  			'uid'=>$this->getCurrentUser()->id,
  			'ip'=>$this->getCurrentUser()->currentIp,
  			'reason'=>$reason
 		);
+		if($package['backupDB'])
+		 	$result['dbBackPath']=$this->getBackupFilePath($package).'.gz';
+		if($package['backupFile'])
+ 			$result['srcBackPath']=$this->getPackageBackUpDir($package);
 		return $this->getUpgradeLogDao()->addLog($result);
 	}
 
@@ -345,7 +363,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function getBackupFilePath($package){
 		$backUpdir = $this->getPackageBackUpDir($package);
-		$backUpdir .= basename($backUpdir).'.gz';
+		$backUpdir .= basename($backUpdir);
 		return $backUpdir;
 	}
 
@@ -477,4 +495,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
     	}
     	return $this->fileSystem;
     }
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');        
+    }  
 }
