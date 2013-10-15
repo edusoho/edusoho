@@ -191,18 +191,42 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 				$touched = true;
 			}
 			if($touched){
-				//TODO 升级失败，做点什么，让某某需要恢复
+				$this->createUpgradeLog($package,'ROLLBACK',$e->getMessage());
 			}else{
-				//TODO 升级失败，没有实质性损害，随他去吧，不管了
+				$this->createUpgradeLog($package,'ERROR',$e->getMessage());
 			}
 			return $result;
 		}
+		$this->createUpgradeLog($package);
 		return $result;
 	}
+
 
 	public function refreshCache(){
 		$path = $this->getCachePath();
 		$this->emptyDir($path);
+	}
+
+	private function createUpgradeLog($package,$status='SUCCESS',$reason=null)
+	{
+		$installed = $this->getInstalledPackageDao()->getInstalledPackageByEname($package['ename']);
+		;
+ 		$result = array('remoteId'=>$package['id'],
+ 			'installedId'=>$installed['id'],
+ 			'ename'=>$package['ename'],
+ 			'cname'=>$package['cname'],
+ 			'fromv'=>$package['fromVersion'],
+ 			'tov'=>$package['version'],
+ 			'type'=>$package['type'],
+ 			'dbBackPath'=>$this->getBackupFilePath($package),
+ 			'srcBackPath'=>$this->getPackageBackUpDir($package),
+ 			'status'=>$status,
+ 			'logtime'=>time(),
+ 			'uid'=>$this->getCurrentUser()->id,
+ 			'ip'=>$this->getCurrentUser()->currentIp,
+ 			'reason'=>$reason
+		);
+		return $this->getUpgradeLogDao()->addLog($result);
 	}
 
 	private function deleteFiles($deletes){
@@ -301,10 +325,20 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$dbSetting = array('exclude'=>array('session','cache'));
 		$dump = new MySQLDumper($this->getKernel()->getConnection());
-		$date = date('YmdHis');
 		$backUpdir = $this->getPackageBackUpDir($package);
 		$this->emptyDir($backUpdir);
-		return 	$dump->export($backUpdir.$date);	
+		return 	$dump->export($this->getBackupFilePath($package));	
+	}
+
+	private function getBackupFilename($package){
+		$backUpdir = $this->getPackageBackUpDir($package);
+		return basename($backUpdir);
+	}
+
+	private function getBackupFilePath($package){
+		$backUpdir = $this->getPackageBackUpDir($package);
+		$backUpdir .= basename($backUpdir).'.gz';
+		return $backUpdir;
 	}
 
 	private function getPackageBackUpDir($package){
@@ -416,6 +450,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
     private function getInstalledPackageDao ()
     {
         return $this->createDao('Upgrade.InstalledPackageDao');
+    }	
+
+    private function getUpgradeLogDao ()
+    {
+        return $this->createDao('Upgrade.UpgradeLogDao');
     }	
 
     private function getEduSohoUpgradeService ()
