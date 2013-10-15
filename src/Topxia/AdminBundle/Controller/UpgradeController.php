@@ -49,15 +49,15 @@ class UpgradeController extends BaseController
 
     public function upgradeAction(Request $request, $id)
     {
-        // $result = $this->getUpgradeService()->checkEnvironment();
-        //     var_dump($result);
+        $result = $this->getUpgradeService()->checkEnvironment();
+            var_dump($result);
     
-        // $result = $this->getUpgradeService()->checkDepends($id);
-        // var_dump($result);
-        // $result = $this->getUpgradeService()->downloadAndExtract($id);
-        //  var_dump($result);
-        // $result = $this->getUpgradeService()->backUpSystem($id);
-        //  var_dump($result);  
+        $result = $this->getUpgradeService()->checkDepends($id);
+        var_dump($result);
+        $result = $this->getUpgradeService()->downloadAndExtract($id);
+         var_dump($result);
+        $result = $this->getUpgradeService()->backUpSystem($id);
+         var_dump($result);  
 
                $result = $this->getUpgradeService()->beginUpgrade($id);
          var_dump($result);
