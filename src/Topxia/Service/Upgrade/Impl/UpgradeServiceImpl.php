@@ -301,10 +301,14 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$dbSetting = array('exclude'=>array('session','cache'));
 		$dump = new MySQLDumper($this->getKernel()->getConnection());
-		$date = date('YmdHis');
 		$backUpdir = $this->getPackageBackUpDir($package);
 		$this->emptyDir($backUpdir);
-		return 	$dump->export($backUpdir.$date);	
+		return 	$dump->export($backUpdir.$this->getBackupFilename($package));	
+	}
+
+	private function getBackupFilename($package){
+		$backUpdir = $this->getPackageBackUpDir($package);
+		return basename($backUpdir);
 	}
 
 	private function getPackageBackUpDir($package){
