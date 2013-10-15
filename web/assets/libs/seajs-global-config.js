@@ -13,6 +13,7 @@ seajs.config({
 		"jquery.jcrop": "jquery-plugin/jcrop/0.9.12/jcrop",
 		"jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
+		"mediaelementplayer": "jquery-plugin/mediaelement/2.13.1/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.0.0/bootstrap',
 		'kindeditor': 'gallery2/kindeditor/4.1.7/kindeditor',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',

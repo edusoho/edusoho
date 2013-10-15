@@ -15,9 +15,8 @@ interface UpgradeService
 	public function backUpSystem($id);
 	public function beginUpgrade($id);
 	public function refreshCache();
-	public function recovery();
+	// public function recovery();
 
-	public function backUpdirectories($directory);
 
 	public function addInstalledPackage($packageInfo);
 	

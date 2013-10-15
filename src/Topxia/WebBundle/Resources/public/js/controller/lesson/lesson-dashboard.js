@@ -7,6 +7,8 @@ define(function(require, exports, module) {
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
 
+    require('mediaelementplayer');
+
 	var Toolbar = require('./lesson-toolbar');
 
 	var Dashboard = Widget.extend({
@@ -132,19 +134,23 @@ define(function(require, exports, module) {
 		},
 
 		_onChangeLessonId: function(id) {
+			var self = this;
             if (!this._toolbar) {
             	return ;
             }
             this._toolbar.set('lessonId', id);
 
-            if (VideoJS.players["lesson-video-player"]) {
-            	VideoJS.players["lesson-video-player"].dispose();
-            	$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
+            // FIX BUG: #1892
+            if (this.get('videoPlayer')) {
+            	this.get('videoPlayer').dispose();
+            	this.set('videoPlayer', null);
             }
 
-            var player = VideoJS("lesson-video-player", {
-            	techOrder: ['flash','html5']
-            });
+            if (this.get('audioPlayer')) {
+            	this.get('audioPlayer').remove();
+            	this.set('audioPlayer', null);
+            }
+
             swfobject.removeSWF('lesson-swf-player');
 
             this.element.find('[data-role=lesson-content]').hide();
@@ -166,6 +172,12 @@ define(function(require, exports, module) {
 
             	if (lesson.type == 'video') {
             		if (lesson.media.source == 'self') {
+            			$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
+
+			            var player = VideoJS("lesson-video-player", {
+			            	techOrder: ['flash','html5']
+			            });
+
 			            player.dimensions('100%', '100%');
 			            player.src(lesson.media.files[0].url);
 			            player.on('ended', function(){
@@ -180,6 +192,9 @@ define(function(require, exports, module) {
 			            });
 			            $("#lesson-video-content").show();
 			            player.play();
+
+			            that.set('videoPlayer', player);
+
             		} else {
             			$("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
             			swfobject.embedSWF(lesson.media.files[0].url, 
@@ -188,13 +203,26 @@ define(function(require, exports, module) {
             			$("#lesson-swf-content").show();
             		}
             	} else if (lesson.type == 'audio') {
-            		player.dimensions('100%', '100%');
-            		player.src(lesson.media.files[0].url);
-		            player.on('ended', function(){
-		            	that._onFinishLearnLesson();
-		            });
-            		$("#lesson-video-content").show();
-            		player.play();
+            		var html = '<audio id="lesson-audio-player" width="500" height="50">';
+            		html += '<source src="' + lesson.media.files[0].url + '" type="audio/mp3" />';
+            		html += '</audio>';
+
+            		$("#lesson-audio-content").html(html);
+
+					var audioPlayer = new MediaElementPlayer('#lesson-audio-player', {
+						mode:'auto_plugin',
+						enablePluginDebug: false,
+						enableAutosize:true,
+						success: function(media) {
+							media.addEventListener("ended", function() {
+								that._onFinishLearnLesson();
+							});
+							media.play();
+						}
+					});
+					that.set('audioPlayer', audioPlayer);
+            		$("#lesson-audio-content").show();
+
             	} else if (lesson.type == 'text') {
             		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
             		$("#lesson-text-content").show();
