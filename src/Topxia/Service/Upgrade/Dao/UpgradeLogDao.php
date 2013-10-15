@@ -13,8 +13,8 @@ interface UpgradeLogDao
 
 
 
-	public function searchLogs($conditions, $start, $limit);
+	public function searchLogs($start, $limit);
 
-	public function searchLogCount($conditions);
+	public function searchLogCount();
 	// 日志操作一般不设计更新,所以忽略update操作
 }

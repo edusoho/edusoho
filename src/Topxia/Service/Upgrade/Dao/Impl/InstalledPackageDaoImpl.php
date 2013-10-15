@@ -16,7 +16,7 @@ class InstalledPackageDaoImpl extends BaseDao implements InstalledPackageDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findPackages($start, $limit)
+    public function searchPackages($start, $limit)
     {
         $sql = "SELECT * FROM {$this->table}  ORDER BY installTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());

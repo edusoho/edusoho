@@ -27,4 +27,9 @@ interface UpgradeService
 	public function searchPackageCount();
 
 	public function searchPackages($start, $limit);
+
+	public function searchLogCount();
+
+	public function searchLogs($start, $limit);
+
 }

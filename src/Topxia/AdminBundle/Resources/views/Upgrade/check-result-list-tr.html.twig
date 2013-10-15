@@ -23,26 +23,12 @@
   </td>
 
   <td>
-  	{{package.comments | raw }}
+  	{{package.comments | plain_text(10) }}
   	<br>
 	<a class="btn btn-sm btn-info detail" data-placement="left" data-toggle="popover"
 	data-title="软件包详情" 
-	data-content="
-	ID:{{package.id}} 
-	<br>
-	英文名:{{package.ename}}
-	<br>
-	中文名:{{package.cname}}
-	<br>
-	前一版本:{{package.fromVersion}}
-	<br>
-	当前版本:{{package.version}}
-	<br>
-	文件名:{{package.filename}}
-	<br>
+	data-content="<br>
 	更新说明:{{package.comments}}
-	<br>
-	依赖关系：{{package.depends}}
 	">详情</a>
 
   </td>
