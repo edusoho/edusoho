@@ -24,7 +24,7 @@ class SettingServiceImpl extends BaseService implements SettingService
     public function get($name, $default = NULL)
     {
         if (is_null($this->cached)) {
-            $this->cached = $this->getCacheService()->get(self::CACHE_NAME) ? : array();
+            $this->cached = $this->getCacheService()->get(self::CACHE_NAME);
             if (is_null($this->cached)) {
                 $settings = $this->getSettingDao()->findAllSettings();
                 foreach ($settings as $setting) {
