@@ -24,6 +24,7 @@
                 data-token="{{ uploadToken }}"
                 data-url="{% if storageSetting.upload_mode == 'cloud' %}http://up.qiniu.com/{% else %}{{ path('disk_upload') }}{% endif %}"
                 data-filepath="{{ filePath }}"
+                data-convert-key="{{ convertKey }}"
                 data-filetypes="{% if storageSetting.upload_mode == 'local' %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
@@ -37,8 +38,8 @@
             <div class="alert alert-info">
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>支持<strong>mp4, avi, flv</strong>格式的视频文件上传，且文件大小不能超过<strong>300 MB</strong>。</li>
-                  <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程通常需5至10分钟时间，在这个过程中视频将无法播放。</li>
+                  <li>支持<strong>mp4, avi, flv, wmv</strong>格式的视频文件上传。</li>
+                  <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
                 {% else %}
                   <li>支持<strong>mp4</strong>格式的视频文件上传，且文件大小不能超过<strong>300 MB</strong>。</li>
                   <li>视频将上传到<strong>网站服务器</strong>，如需使用视频云存储，请联系EduSoho官方购买。使用视频云存储，将获得更好的播放体验。</li>
@@ -94,6 +95,7 @@
                 data-token="{{ uploadToken }}"
                 data-url="{% if storageSetting.upload_mode == 'cloud' %}http://up.qiniu.com/{% else %}{{ path('disk_upload') }}{% endif %}"
                 data-filepath="{{ filePath }}"
+                data-convert-key="{{ convertKey }}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
                 data-progressbar="#audio-chooser-progress"></span>

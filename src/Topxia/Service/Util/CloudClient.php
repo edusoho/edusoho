@@ -26,6 +26,8 @@ class CloudClient
         'imageInfo' => '$(imageInfo)',
         'userId' => '$(endUser)',
         'filepath' => '$(x:filepath)',
+        'convertId' => '$(persistentId)',
+        'convertKey' => '$(x:convertKey)',
     );
 
     public function __construct ($accessKey, $secretKey, $bucket = null, $bucketDomain = null, $macIndex = 1, $macKey = '')
@@ -44,7 +46,7 @@ class CloudClient
 
         $policy = array();
         $policy['scope'] = $this->bucket;
-        $policy['deadline'] = empty($policy['deadline']) ? time()+3600 : intval($policy['deadline']);
+        $policy['deadline'] = empty($rawPolicy['deadline']) ? time()+3600 : intval($rawPolicy['deadline']);
 
         if (isset($rawPolicy['endUser'])) {
             $policy['endUser'] = (string) $rawPolicy['endUser'];
@@ -60,7 +62,12 @@ class CloudClient
             $policy['returnBody'] = $this->serializeUploadNotifyBodyPolicy('return', $policy['returnBody']);
         }
 
-    	$encodedPolicy = $this->encodeSafely(json_encode($policy));
+        if ($rawPolicy['PersistentOps'] and $rawPolicy['PersistentNotifyUrl']) {
+            $policy['PersistentOps'] = $rawPolicy['PersistentOps'];
+            $policy['PersistentNotifyUrl'] = $rawPolicy['PersistentNotifyUrl'];
+        }
+
+        $encodedPolicy = $this->encodeSafely(json_encode($policy));
 
 		$sign = hash_hmac('sha1', $encodedPolicy, $this->secretKey, true);
 		return $this->accessKey . ':' . $this->encodeSafely($sign) . ':' . $encodedPolicy;
@@ -87,6 +94,15 @@ class CloudClient
     public function getDownloadUrl($key)
     {
         return $this->bucketDomain . '/' . $key;
+    }
+
+    public static function getVideoConvertCommands()
+    {
+        return array(
+            'sd' => 'avthumb/mp4/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac',
+            'hd' => 'avthumb/mp4/r/24/vb/512k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac',
+            'shd' => 'avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac',
+        );
     }
 
     private function encodeSafely($string)

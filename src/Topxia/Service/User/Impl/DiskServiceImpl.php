@@ -115,13 +115,24 @@ class DiskServiceImpl extends BaseService implements DiskService
     	$diskFile['size'] = (int) $file['size'];
     	$diskFile['mimeType'] = $file['mimeType'];
     	$diskFile['etag'] = $file['etag'];
+        if (empty($file['convertId']) or empty($file['convertKey'])) {
+            $diskFile['convertHash'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+            $diskFile['convertStatus'] = 'none';
+        } else {
+            $diskFile['convertHash'] = "{$file['convertId']}:{$file['convertKey']}";
+            $diskFile['convertStatus'] = 'waiting';
+        }
     	$diskFile['storage'] = $file['storage'];
     	$diskFile['bucket'] = $file['bucket'];
     	$diskFile['type'] = $this->getFileType($diskFile['mimeType']);
     	$diskFile['uri'] = $this->makeFileUri($file);
     	$diskFile['updatedTime'] = $diskFile['createdTime'] = time();
 
-    	return $this->getFileDao()->addFile($diskFile);
+    	$diskFile = $this->getFileDao()->addFile($diskFile);
+
+        $this->getLogService()->info('disk', 'add_cloud_file', json_encode($file));
+
+        return $diskFile;
     }
 
     public function renameFile($id, $newFilename)
@@ -177,6 +188,10 @@ class DiskServiceImpl extends BaseService implements DiskService
         return $this->createService('User.UserService');
     }
 
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');        
+    }
 
 }
 

@@ -3,6 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use Topxia\Service\Util\CloudClient;
+
 class DiskController extends BaseController
 {
 
@@ -42,6 +44,68 @@ class DiskController extends BaseController
         ), 'lastestUpdated', 0, 1000);
 
         return $this->createFilesJsonResponse($files);
+    }
+
+    public function convertCallbackAction(Request $request, $key)
+    {
+        $key = $request->query->get('key');
+        if (empty($key)) {
+            throw \RuntimeException('key不能为空');
+        }
+
+        $data = $request->request->all();
+        if (empty($data['id'])) {
+            throw \RuntimeException('数据中id不能为空');
+        }
+
+        $hash = "{$data['id']}:{$key}";
+
+        $file = $this->getDiskService()->getFileByConvertHash($hash);
+        if (empty($file)) {
+            throw \RuntimeException('文件不存在');
+        }
+
+        if ($data['code'] != 0) {
+            throw \RuntimeException('转换失败');
+        }
+
+        $cmds = array_flip(CloudClient::getVideoConvertCommands());
+
+        $formats = array();
+        foreach ($data['items'] ? : array() as $item) {
+            if (!isset($cmds[$item['cmd']])) {
+                continue;
+            }
+
+            if ($item['code'] != 0) {
+                continue;
+            }
+
+            if (empty($item['key'])) {
+                continue;
+            }
+
+            $formats[$cmds[$item['cmd']]] = array('cmd' => $item['cmd'], 'key' => $item['key']);
+        }
+
+        $file = $this->getDiskService()->setFileFormats($file['id'], $formats);
+
+        return $this->createJsonResponse($file['formats']);
+    }
+
+    public function convertStatusAction(Request $request)
+    {
+        $hash = $request->query->get('hash');
+        if (empty($hash)) {
+            throw \RuntimeException('hash不能为空');
+        }
+
+        $file = $this->getDiskService()->getFileByConvertHash($hash);
+        if (empty($file)) {
+            throw $this->createNotFoundException('文件不存在');
+        }
+
+        return $this->createJsonResponse(array('status' => $file['convertStatus']));
     }
 
     private function createFilesJsonResponse($files)

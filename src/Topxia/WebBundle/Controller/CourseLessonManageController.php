@@ -56,17 +56,25 @@ class CourseLessonManageController extends BaseController
 	            $setting['cloud_mac_key']
 	        );
 
-	    	$uploadToken = $client->generateUploadToken(array());
+	        $fops = array_values($client->getVideoConvertCommands());
+
+	    	$uploadToken = $client->generateUploadToken(array(
+	    		'PersistentOps' => implode(';', $fops),
+	    		'PersistentNotifyUrl' => 'http://www.esdev.com/'
+    		));
     	}
 
+    	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
     	$filePath = "course-{$course['id']}";
-    	$fileKey = "{$filePath}/" . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
+    	$fileKey = "{$filePath}/" . $randString;
+    	$convertKey = $randString;
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'uploadToken' => $uploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
+			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
 		));
 	}
@@ -116,7 +124,7 @@ class CourseLessonManageController extends BaseController
     	}
 
     	$filePath = "course-{$course['id']}";
-    	$fileKey = "{$filePath}/" . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
+    	$fileKey = "{$filePath}/" . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,

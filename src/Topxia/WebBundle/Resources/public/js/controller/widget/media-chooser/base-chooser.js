@@ -126,7 +126,8 @@ define(function(require, exports, module) {
                 post_params : {
                     "key" : $btn.data('key'),
                     "token" : $btn.data('token'),
-                    "x:filepath": $btn.data('filepath')
+                    "x:filepath": $btn.data('filepath'),
+                    "x:convertKey": $btn.data('convertKey')
                 },
                 file_types : "*.*",
                 file_size_limit : "10 MB",
@@ -177,8 +178,10 @@ define(function(require, exports, module) {
                     console.log(serverData);
                     serverData = $.parseJSON(serverData);
 
+                            console.log(serverData);
                     if ($btn.data('callback')) {
                         $.post($btn.data('callback'), serverData, function(response) {
+                            console.log(response);
                             var media = self._convertFileToMedia(response);
                             self.trigger('change',  media);
                             Notify.success('文件上传成功！');
