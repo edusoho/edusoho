@@ -80,6 +80,17 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$this->upgrade($id);
 	}
 
+	public function hasLastError($id)
+	{
+		$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		if(empty($package)) throw $this->createServiceException("不存在{$id}");
+		$log = $this->getLogService()->getUpdateLogByEnameAndVersion($package['ename'],$package['version']);
+		if('ROLLBACK' == $log['status']){
+			return true;
+		}
+		return false;
+	}
+
 	public function checkEnvironment()
 	{
 		$result = array();
@@ -199,15 +210,17 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			}
 			if($touched){
 				$this->createUpgradeLog($package,'ROLLBACK',$e->getMessage());
+				$this->getLogService()->info('upgrade', 'upgrade', "更新失败，需要恢复备份！ 更新包-{$package['cname']}({$package['ename']})");
 			}else{
 				$this->createUpgradeLog($package,'ERROR',$e->getMessage());
+				$this->getLogService()->info('upgrade', 'upgrade', "更新失败，更新包-{$package['cname']}({$package['ename']})");
 			}
 			return $result;
 		}
 		$this->addInstalledPackage($package);
 
 		$this->createUpgradeLog($package);
-		$this->getLogService()->info('upgrade', 'upgrade', "更新包-{$package['cname']}({$package['ename']})");
+		$this->getLogService()->info('upgrade', 'upgrade', "成功更新包-{$package['cname']}({$package['ename']})");
 
 		return $result;
 	}
@@ -231,14 +244,16 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  			'fromv'=>$package['fromVersion'],
  			'tov'=>$package['version'],
  			'type'=>$package['type'],
- 			'dbBackPath'=>$this->getBackupFilePath($package).'.gz',
- 			'srcBackPath'=>$this->getPackageBackUpDir($package),
  			'status'=>$status,
  			'logtime'=>time(),
  			'uid'=>$this->getCurrentUser()->id,
  			'ip'=>$this->getCurrentUser()->currentIp,
  			'reason'=>$reason
 		);
+		if($package['backupDB'])
+		 	$result['dbBackPath']=$this->getBackupFilePath($package).'.gz';
+		if($package['backupFile'])
+ 			$result['srcBackPath']=$this->getPackageBackUpDir($package);
 		return $this->getUpgradeLogDao()->addLog($result);
 	}
 
@@ -350,7 +365,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function getBackupFilePath($package){
 		$backUpdir = $this->getPackageBackUpDir($package);
-		$backUpdir .= basename($backUpdir).'.gz';
+		$backUpdir .= basename($backUpdir);
 		return $backUpdir;
 	}
 
