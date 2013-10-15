@@ -351,6 +351,10 @@ admin_upgrade:
     pattern:  /upgrade
     defaults: { _controller: TopxiaAdminBundle:Upgrade:index }
 
+admin_upgrade_logs:
+    pattern:  /upgrade/logs
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:logs }
+
 admin_upgrade_check:
     pattern:  /upgrade/check
     defaults: { _controller: TopxiaAdminBundle:Upgrade:check }

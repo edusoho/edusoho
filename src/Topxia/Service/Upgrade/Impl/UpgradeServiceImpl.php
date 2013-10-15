@@ -49,9 +49,19 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $this->getInstalledPackageDao()->searchPackageCount();
 	}
 
+	public function searchLogCount()
+	{
+		return $this->getUpgradeLogDao()->searchLogCount();
+	}
+
+	public function searchLogs($start, $limit)
+	{
+		return $this->getUpgradeLogDao()->searchLogs($start, $limit);
+	}
+
 	public function searchPackages($start, $limit)
 	{
-		return $this->getInstalledPackageDao()->findPackages($start, $limit);
+		return $this->getInstalledPackageDao()->searchPackages($start, $limit);
 	}
 
 	public function check()

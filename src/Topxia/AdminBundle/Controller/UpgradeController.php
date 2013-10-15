@@ -24,6 +24,25 @@ class UpgradeController extends BaseController
             ));
     }
 
+
+    public function logsAction(Request $request)
+    {
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUpgradeService()->searchLogCount(),
+            20
+        );
+
+        $logs = $this->getUpgradeService()->searchLogs($paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+        return $this->render('TopxiaAdminBundle:Upgrade:upgrade-logs-list.html.twig',array(
+            'logs'=>$logs,
+            'paginator' => $paginator
+            ));
+    }
+
+
     public function checkAction(Request $request)
     {
         $packagesToUpgrade = $this->getUpgradeService()->check();

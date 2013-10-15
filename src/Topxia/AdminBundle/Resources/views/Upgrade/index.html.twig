@@ -3,14 +3,17 @@
 {% block title %}安装与升级 - {{ parent() }}{% endblock %}
 
 {% set menu = 'upgrade' %}
+{% set tab = 'installed-package' %}
 
 {% block main %}
 
 <div class="page-header">
   <a class="btn btn-info btn-sm pull-right" 
   href="{{ path('admin_upgrade_check') }}"> 检查更新 </a>
-	<h1>所有已安装与升级的软件包</h1>
+	<h1>已安装包</h1>
 </div>
+
+{% include 'TopxiaAdminBundle:Upgrade:upgrade-tab.html.twig' %}
 
 <table id="block-table" class="table table-striped">
 

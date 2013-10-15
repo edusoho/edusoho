@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-	var Notify = require('common/bootstrap-notify');
+    var Notify = require('common/bootstrap-notify');
 
-	exports.run = function() {
-        
+    exports.run = function() {
+
         $(".detail").popover({
             html: true,
             trigger: 'hover'
@@ -15,10 +15,10 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {
 
-               if(response.status == 'ok'){
-                $('#' + $btn.data('target')).remove();
+                if (response.status == 'ok') {
+                    $('#' + $btn.data('target')).remove();
                     Notify.success('安装成功！');
-               } else {
+                } else {
                     alert('服务器错误!');
                 }
 
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {
 
-               if(response.status == 'ok'){
+                if (response.status == 'ok') {
                     $('#' + $btn.data('target')).remove();
                     Notify.success('升级成功！');
                 } else {
@@ -42,6 +42,6 @@ define(function(require, exports, module) {
 
         });
 
-	};
+    };
 
 });
