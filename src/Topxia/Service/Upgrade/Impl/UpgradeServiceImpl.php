@@ -231,7 +231,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  			'fromv'=>$package['fromVersion'],
  			'tov'=>$package['version'],
  			'type'=>$package['type'],
- 			'dbBackPath'=>$this->getBackupFilePath($package),
+ 			'dbBackPath'=>$this->getBackupFilePath($package).'.gz',
  			'srcBackPath'=>$this->getPackageBackUpDir($package),
  			'status'=>$status,
  			'logtime'=>time(),

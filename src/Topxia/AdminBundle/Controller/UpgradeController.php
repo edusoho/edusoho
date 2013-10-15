@@ -80,7 +80,7 @@ class UpgradeController extends BaseController
                $result = $this->getUpgradeService()->beginUpgrade($id);
          var_dump($result);
 
-         $this->refreshCache();
+         $this->getUpgradeService()->refreshCache();
 
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
