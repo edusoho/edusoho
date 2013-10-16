@@ -105,6 +105,7 @@ class UpgradeController extends BaseController
     {
         $result = $this->getUpgradeService()->checkEnvironment();
 
+
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
@@ -116,8 +117,7 @@ class UpgradeController extends BaseController
     public function checkDependsAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkDepends($id);
-          
-        
+
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
@@ -160,8 +160,10 @@ class UpgradeController extends BaseController
         }
     }
 
+
     public function beginUpgradeAction(Request $request, $id)
     {
+
         $result = $this->getUpgradeService()->beginUpgrade($id);
 
         if(empty($result)){

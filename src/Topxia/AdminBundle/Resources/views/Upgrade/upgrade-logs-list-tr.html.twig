@@ -20,8 +20,21 @@
   </td>
 
   <td> {{ log.tov }}</td>
-  <td> {{ log.dbBackPath }}</td>
-  <td> {{ log.srcBackPath }}</td>
+  <td>
+      {% if log.dbBackPath is empty %}
+        无备份数据库
+      {% else %}
+       {{ log.dbBackPath }}
+     {% endif %}
+
+ </td>
+  <td>
+    {% if log.srcBackPath is empty %}
+        无备份文件夹
+      {% else %}
+       {{ log.srcBackPath }}
+     {% endif %}
+  </td>
   <td> {{ log.logtime | date('Y-n-d H:i:s')}}</td>
   <td> 
     {% if log.status == 'ROLLBACK' %}
