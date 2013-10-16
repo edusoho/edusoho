@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 		var checkEnvironmentUrl = $('#post-url').find('[data-type=check-environment]').data('url');
 		var checkDependsUrl = $('#post-url').find('[data-type=check-depends]').data('url');
 		var downloadExtractUrl = $('#post-url').find('[data-type=download-extract]').data('url');
+		var beginInstallUrl = $('#post-url').find('[data-type=begin-install]').data('url');
 
 		var postDonwloadExtract = function()
 		{
@@ -26,12 +27,44 @@ define(function(require, exports, module) {
 
 				return false;
 
-				} else {
-				
-					$("#download-extract-result").append("<h4 style='color:green; text-align: center'>下载并解压软件包成功!</h4><br><strong style='color:green'>安装成功!</strong>")
-					.hide().show({
-						duration: 3000
-					});
+			}
+
+				if (downloadExtractResponse.status == 'ok') {
+
+					$("#download-extract-result").append("<h4 style='color:green; text-align: center'>下载并解压软件包成功!</h4><br>")
+						.hide().show({
+							duration: 3000
+						});
+
+						$.post(beginInstallUrl, function(beginInstallResponse) {
+
+							$('#begining-install').hide().show({
+								duration: 3000
+							});
+
+							if (beginInstallResponse.status == 'error') {
+
+								$("#begining-install-result").append('<h4 style="text-align: center">安装软件包失败！</h4>')
+										.append(beginInstallResponse.result)
+										.append('请在正确配置环境之后，重新安装！')
+										.hide().show({
+											duration: 3000
+										});
+
+								return false;
+
+							}
+
+							if (beginInstallResponse.status == 'ok') {
+
+								$("#begining-install-result").append("<h4 style='color:green; text-align: center'>安装软件包成功!</h4>")
+									.hide().show({
+										duration: 3000
+								});
+
+							}
+
+						});
 
 				}
 

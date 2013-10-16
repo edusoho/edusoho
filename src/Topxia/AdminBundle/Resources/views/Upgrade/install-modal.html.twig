@@ -12,6 +12,8 @@
 
 	<input type="hidden" data-type="download-extract" data-url="{{path('admin_upgrade_download_and_extract', {id:installPackage.id})}}">
 
+	<input type="hidden" data-type="begin-install" data-url="{{path('admin_upgrade_begin_install', {id:installPackage.id})}}">
+
 </div>
 
 <button id="begin-install" type="button" class="btn btn-success pull-right">开始安装</button>
@@ -80,6 +82,13 @@
 			<h5>3: 下载与解压</h5>
 			<h5 id="downloading-extract" style='color:green; display:none; text-align: left'>正在下载并解压软件包................</h5>
 			<p id="download-extract-result" style="color:red ; text-align: center"></p>
+		</div>
+		<hr>
+
+		<div id="begin-install">
+			<h5>4: 开始安装</h5>
+			<h5 id="begining-install" style='color:green; display:none; text-align: left'>正在安装软件包................</h5>
+			<p id="begining-install-result" style="color:red ; text-align: center"></p>
 		</div>
 
 </div>

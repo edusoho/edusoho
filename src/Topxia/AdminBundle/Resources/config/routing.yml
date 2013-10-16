@@ -384,6 +384,11 @@ admin_upgrade_backup_system:
     defaults: { _controller: TopxiaAdminBundle:Upgrade:backupSystem }
     methods: [POST]
 
+admin_upgrade_begin_install:
+    pattern: /upgrade/{id}/begin/install
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:beginInstall }
+    methods: [POST]
+
 admin_upgrade_begin_upgrade:
     pattern: /upgrade/{id}/begin/upgrade
     defaults: { _controller: TopxiaAdminBundle:Upgrade:beginUpgrade }

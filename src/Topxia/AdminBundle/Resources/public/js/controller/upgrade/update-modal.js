@@ -144,9 +144,9 @@ define(function(require, exports, module) {
 
 				if (checkingLastErrorResponse.status == 'error') {
 
-					$("#check-last-error-result").append('<h4 style="text-align: center">上次存在错误!</h4>')
+					$("#check-last-error-result").append('<h4 style="text-align: center">上次操作存在错误!</h4>')
 						.append(checkingLastErrorResponse.result)
-						.append('请在处理完上次存在的错误之后，重新升级软件包！')
+						.append('请在系统回滚并恢复到正常版本之后，重新升级软件包！')
 						.hide().show({
 							duration: 1000
 						});
@@ -155,7 +155,7 @@ define(function(require, exports, module) {
 
 				} else {
 
-					$("#check-last-error-result").append("<h4 style='color:green;text-align: center'>上次不存在错误!</h4>")
+					$("#check-last-error-result").append("<h4 style='color:green;text-align: center'>上次操作不存在错误!</h4>")
 						.hide().show({
 							duration: 1000
 						});
