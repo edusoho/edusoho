@@ -11,7 +11,7 @@ interface UpgradeLogDao
 
 	public function updateLog($id,$log);
 
-	public function getUpdateLogByEnameAndVersion($ename,$version);
+	public function getUpdateLogByEnameAndVersion($ename,$tov);
 
 	public function searchLogs($conditions, $start, $limit);
 

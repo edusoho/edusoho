@@ -23,6 +23,7 @@ class MediaParseDaoImpl extends BaseDao implements MediaParseDao
 
     public function findMediaParseByHash($hash)
     {
+
         $sql = "SELECT * FROM {$this->table} WHERE hash = ?";
         return $this->getConnection()->fetchAssoc($sql, array($hash));
     }

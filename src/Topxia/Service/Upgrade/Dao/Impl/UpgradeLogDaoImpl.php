@@ -48,10 +48,10 @@ class UpgradeLogDaoImpl extends BaseDao implements UpgradeLogDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function getUpdateLogByEnameAndVersion($ename,$version)
+    public function getUpdateLogByEnameAndVersion($ename,$tov)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ename = ? AND version = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($ename, $version));
+        $sql = "SELECT * FROM {$this->table} WHERE ename = ? AND tov = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($ename, $tov));
     }
 
     private function createLogQueryBuilder($conditions)
