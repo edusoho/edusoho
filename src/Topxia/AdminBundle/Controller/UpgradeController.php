@@ -80,8 +80,7 @@ class UpgradeController extends BaseController
         var_dump($result);
         $result = $this->getUpgradeService()->downloadAndExtract($id);
         var_dump($result);
-
-
+        
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
@@ -100,7 +99,7 @@ class UpgradeController extends BaseController
         $result = $this->getUpgradeService()->backUpSystem($id);
          var_dump($result);  
 
-               $result = $this->getUpgradeService()->beginUpgrade($id);
+       $result = $this->getUpgradeService()->beginUpgrade($id);
          var_dump($result);
 
          $this->getUpgradeService()->refreshCache();
@@ -111,6 +110,9 @@ class UpgradeController extends BaseController
     public function checkEnvironmentAction(Request $request)
     {
         $result = $this->getUpgradeService()->checkEnvironment();
+            
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
@@ -121,6 +123,9 @@ class UpgradeController extends BaseController
     public function checkDependsAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkDepends($id);
+            
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
@@ -147,10 +152,12 @@ class UpgradeController extends BaseController
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
     }
-    
+
     public function backupSystemAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->backUpSystem($id);
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
@@ -160,12 +167,18 @@ class UpgradeController extends BaseController
 
     public function beginUpgradeAction(Request $request, $id)
     {
+
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
+
         $result = $this->getUpgradeService()->beginUpgrade($id);
+
         if(empty($result)){
+            $this->getUpgradeService()->refreshCache();
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
+
     }
 
     private function getUpgradeService()

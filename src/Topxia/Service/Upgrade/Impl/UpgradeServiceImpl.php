@@ -82,7 +82,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$package = $this->getEduSohoUpgradeService()->getPackage($id);
 		if(empty($package)) throw $this->createServiceException("不存在{$id}");
-		$log = $this->getLogService()->getUpdateLogByEnameAndVersion($package['ename'],$package['version']);
+		$log = $this->getUpgradeLogDao()->getUpdateLogByEnameAndVersion($package['ename'], $package['version']);
 		if('ROLLBACK' == $log['status']){
 			return true;
 		}
@@ -101,22 +101,22 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 
 		if (!$this->is_writable($this->getDownloadPath())){
-			$result[] = '下载目录无写权限';
+			$result[] = '下载目录无写权限<br>';
 		}
 		if (!$this->is_writable($this->getBackUpPath())){
-			$result[] = '备份目录无写权限';
+			$result[] = '备份目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app')){
-			$result[] = 'app目录无写权限';
+			$result[] = 'app目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'src')){
-			$result[] = 'src目录无写权限';
+			$result[] = 'src目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'web')){
-			$result[] = 'web目录无写权限';
+			$result[] = 'web目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
-			$result[] = 'app/cache目录无写权限';
+			$result[] = 'app/cache目录无写权限<br>';
 		}	
 		return $result;
 	}
@@ -140,11 +140,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		foreach ($depends as $key => $depend) {
 			$installed = $this->getInstalledPackageDao()->getInstalledPackageByEname($key);
 			if(empty($installed)){
-				$result[]= " 没有安装 {$depend['o']} {$depend['v']} 版本的{$depend['cname']} \n";
+				$result[]= " 没有安装 {$depend['o']} {$depend['v']} 版本的{$depend['cname']} \n <br>";
 				continue;
 			}
 			if(!version_compare($installed['version'],$depend['v'],$depend['o'])){
-				$result[]=  " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n";
+				$result[]=  " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n <br>";
 			}
 		}
 		return $result;			
@@ -176,7 +176,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			}
 
 		}catch(\Exception $e){
-			$result[] = $e->getMessage();
+			$result[] = $e->getMessage().'<br>';
 			return $result;
 		}	
 		return $result;	
