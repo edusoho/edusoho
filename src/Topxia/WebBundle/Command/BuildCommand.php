@@ -57,7 +57,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('packaging...');
 
 		chdir($this->buildDirectory);
-		$command = "tar czvf edusoho-1.0RC2.tar.gz edusoho/";
+		$command = "tar czvf edusoho-1.0RC3.tar.gz edusoho/";
 		exec($command);
 	}
 
@@ -143,10 +143,15 @@ class BuildCommand extends BaseCommand
 
 		$directories = array(
 			'composer',
+			'doctrine/annotations/lib',
+			'doctrine/cache/lib',
+			'doctrine/collections/lib',
 			'doctrine/common/lib/Doctrine',
 			'doctrine/dbal/lib/Doctrine',
 			'doctrine/doctrine-bundle',
 			'doctrine/doctrine-migrations-bundle',
+			'doctrine/inflector/lib',
+			'doctrine/lexer/lib',
 			'doctrine/migrations/lib',
 			'doctrine/orm/lib',
 			'ezyang/htmlpurifier/library',
