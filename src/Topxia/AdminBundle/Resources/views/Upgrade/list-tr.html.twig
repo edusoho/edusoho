@@ -1,11 +1,18 @@
 <tr id="package-tr-{{ package.id }}">
 
-  <td>{{ package.id }}</td>
+  <td>
+    {{ package.id }}
+  </td>
   <td>{{ package.ename }}</td>
   <td>{{ package.cname }}</td>
   <td>{{ package.version }}</td>
-  <td>{{ package.fromVersion }}</td>
-  <td>{{ package.installlog }}</td>
-  <td>{{ package.installTime |date('Y-n-d H:i') }}</td>
+  <td>
+  
+  {% if package.installTime == 0 %}
+  	<strong class="text-warning"> 初始版本<br>无安装时间 </strong>
+  {% else %}
+  	{{ package.installTime |date('Y-n-d H:i') }}
+  {% endif  %}
+  </td>
   
 </tr>

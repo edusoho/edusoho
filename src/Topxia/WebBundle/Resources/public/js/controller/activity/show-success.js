@@ -111,7 +111,7 @@ define(function(require, exports, module) {
         player.pause();
         player.dimensions('100%', '100%');
         player.src(videourl);
-        player.play();
+        //player.play();
 
 
     };

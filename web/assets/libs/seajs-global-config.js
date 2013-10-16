@@ -16,6 +16,7 @@ seajs.config({
 		"jquery.lazyload" : "jquery-plugin/lazyload/jquery.lazyload.min.js",
 		'jquery.slides' : 'jquery-plugin/slide/slide.js',
 		'jquery.slides-css' : 'jquery-plugin/slide/slide.css',
+		"mediaelementplayer": "jquery-plugin/mediaelement/2.13.1/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.0.0/bootstrap',
 		'kindeditor': 'gallery2/kindeditor/4.1.7/kindeditor',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',

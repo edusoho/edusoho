@@ -1481,6 +1481,16 @@ body {
 	position: relative;
 }
 
+.lesson-dashboard .lesson-content-audio {
+	overflow: hidden;
+}
+
+.lesson-dashboard .lesson-content-audio .mejs-container {
+	margin: 0 auto;
+	margin-top: 100px;
+
+}
+
 .lesson-dashboard .lesson-content-text {
 	
 	overflow: hidden;
@@ -1895,17 +1905,19 @@ body {
 	padding: 8px 0;
 }
 
+
 /**
  * VideoJS
  */
 .container .vjs-default-skin .vjs-big-play-button {
-	top: 50%;
-	left: 50%;
-	margin-top: -40px;
-	margin-left: -50px;
-	width: 100px;
-	height: 80px;
+   top: 50%;
+   left: 50%;
+   margin-top: -40px;
+   margin-left: -50px;
+   width: 100px;
+   height: 80px;
 }
+
 
 /**
  * USER

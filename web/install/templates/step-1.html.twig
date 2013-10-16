@@ -156,6 +156,17 @@
       </tr>
     </thead>
     <tbody>
+      <tr>
+      	<td> 安全模式 </td>
+      	<td>
+	      	{% if safemode == 'Off' %}
+	            <span class="text-danger">√ 开启</span>
+	        {% else %}
+	        	<span class="text-success">√ 关闭</span>
+	        {% endif %}
+	    </td>
+         <td>关闭</td>
+      </tr>
       {% for path, status in paths %}
         <tr>
           <td>{{ path }}</td>
@@ -163,7 +174,7 @@
           	{% if status == true %}
           	  <span class="text-success">√ 可写</span>
           	{% else %}
-          	  <span class="text-danger">√ 不可写</span>
+          	  <span class="text-danger">X 不可写</span>
           	{% endif %}
           </td>
           <td>可写</td>

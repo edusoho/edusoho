@@ -14,17 +14,22 @@ interface UpgradeService
 	public function downloadAndExtract($id);
 	public function backUpSystem($id);
 	public function beginUpgrade($id);
-	// public function refreshCache();
+	public function refreshCache();
+	public function hasLastError($id);
 	// public function recovery();
 
 
-	public function addInstalledPackage($packageInfo);
 	
 	public function getRemoteInstallPackageInfo($id);
 
 	public function getRemoteUpgradePackageInfo($id);
 
-	public function searchPackageCount();
+	public function searchPackageCount($conditions);
 
-	public function searchPackages($start, $limit);
+	public function searchPackages($conditions, $start, $limit);
+
+	public function searchLogCount($conditions);
+
+	public function searchLogs($conditions, $start, $limit);
+
 }

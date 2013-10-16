@@ -1,0 +1,122 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %} 升级软件包{% endblock %}
+
+{% block body %}
+
+<div id="post-url">
+	
+
+	<input type="hidden" data-type="check-environment" data-url="{{path('admin_upgrade_check_environment')}}">
+
+	<input type="hidden" data-type="check-depends" data-url="{{path('admin_upgrade_check_depends', {id:updatePackage.id})}}">
+
+	<input type="hidden" data-type="check-last-error" data-url="{{path('admin_upgrade_has_last_error', {id:updatePackage.id})}}">
+
+	<input type="hidden" data-type="backup-system" data-url="{{path('admin_upgrade_backup_system', {id:updatePackage.id})}}">
+
+	<input type="hidden" data-type="begin-upgrade" data-url="{{path('admin_upgrade_begin_upgrade', {id:updatePackage.id})}}">
+
+	<input type="hidden" data-type="download-extract" data-url="{{path('admin_upgrade_download_and_extract', {id:updatePackage.id})}}">
+
+</div>
+
+<button id="begin-update" type="button" class="btn btn-success pull-right">开始升级</button>
+
+<table class="table">
+	<thead>
+	  <tr>
+	    <th>英文名</th>
+	    <th>中文名</th>
+	    <th>当前版本</th>
+	    <th>文件名称</th>
+	    <th>依赖关系</th>
+	    <th>备份数据库</th>
+	    <th>备份文件</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+	    <td>{{updatePackage.ename}}</td>
+	    <td>{{updatePackage.cname}}</td>
+	    <td>{{updatePackage.version}}</td>
+	    <td>{{updatePackage.filename}}</td>
+	    <td>
+	    	{% if updatePackage.depends %}
+	        	{{ updatePackage.depends | plain_text(10) }}
+	    	{% else %}
+	    		无依赖关系
+	    	{% endif %}
+	    </td>
+	    <td>
+	    {% if updatePackage.backupDB == 1 %}
+	    是
+	    {% elseif updatePackage.backupDB == 0 %}
+	    否
+	    {% endif %}
+	    </td>
+	    <td>
+	    {% if updatePackage.backupFile == 1 %}
+	    是
+	    {% elseif updatePackage.backupFile == 0 %}
+	    否
+	    {% endif %}
+	    </td>
+	  </tr>
+	</tbody>
+</table>
+<hr>
+
+<div id="install-animate">
+
+		<div id="check-last-error">
+			<h5>1: 检测上次是否存在错误</h5>
+			<h5 id="checking-last-error" style='color:green; display:none; text-align: left'>正在检测上次是否存在错误................</h5>
+			<p id="check-last-error-result" style="color:red; text-align: center"></p>
+		</div>
+		<hr>
+
+		<div id="check-environment">
+			<h5>2: 检查环境</h5>
+			<h5 id="checking-environment" style='color:green; display:none; text-align: left'>正在检查环境................</h5>
+			<div id="check-environment-result" style="color:red; text-align: center"></div>
+		</div>
+		<hr>
+
+		<div id="check-depends">
+			<h5>3: 检查依赖关系</h5>
+			<h5 id="checking-depends" style='color:green; display:none; text-align: left'>正在检查依赖关系................</h5>
+			<p id="check-depends-result" style="color:red ; text-align: center"></p>
+		</div>
+		<hr>
+		
+		<div id="download-extract">
+			<h5>4: 下载与解压</h5>
+			<h5 id="downloading-extract" style='color:green; display:none; text-align: left'>正在下载并解压软件包................</h5>
+			<p id="download-extract-result" style="color:red ; text-align: center"></p>
+		</div>
+		<hr>
+
+		<div id="backup-system">
+			<h5>5: 备份系统</h5>
+			<h5 id="backuping-system" style='color:green; display:none; text-align: left'>正在备份系统................</h5>
+			<p id="backup-system-result" style="color:red ; text-align: center"></p>
+		</div>
+		<hr>
+
+		<div id="begin-update">
+			<h5>6: 开始升级</h5>
+			<h5 id="begining-update" style='color:green; display:none; text-align: left'>正在开始升级软件包................</h5>
+			<p id="begin-update-result" style="color:red ; text-align: center"></p>
+		</div>
+
+</div>
+
+<script type="text/javascript"> app.load('upgrade/update-modal') </script>
+{% endblock %}
+
+{% block footer %}
+
+  <button type="button" class="btn btn-primary dismiss" data-dismiss="modal">关闭</button>
+
+{% endblock %}

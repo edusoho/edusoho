@@ -351,6 +351,48 @@ admin_upgrade:
     pattern:  /upgrade
     defaults: { _controller: TopxiaAdminBundle:Upgrade:index }
 
+admin_upgrade_trigger_install_modal:
+    pattern:  /upgrade/trigger/install/{id}/modal
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:triggerInstallModal }
+
+admin_upgrade_trigger_update_modal:
+    pattern:  /upgrade/trigger/update/{id}/modal
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:triggerUpdateModal }
+
+admin_upgrade_check_environment:
+    pattern: /upgrade/check/environment
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:checkEnvironment }
+    methods: [POST]
+
+admin_upgrade_has_last_error:
+    pattern: /upgrade/{id}/has/last/error
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:hasLastError }
+    methods: [POST]
+
+admin_upgrade_check_depends:
+    pattern: /upgrade/{id}/check/depends
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:checkDepends }
+    methods: [POST]
+
+admin_upgrade_download_and_extract:
+    pattern: /upgrade/{id}/download/extract
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:downloadAndExtract }
+    methods: [POST]
+
+admin_upgrade_backup_system:
+    pattern: /upgrade/{id}/backup/system
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:backupSystem }
+    methods: [POST]
+
+admin_upgrade_begin_upgrade:
+    pattern: /upgrade/{id}/begin/upgrade
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:beginUpgrade }
+    methods: [POST]
+
+admin_upgrade_logs:
+    pattern:  /upgrade/logs
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:logs }
+
 admin_upgrade_check:
     pattern:  /upgrade/check
     defaults: { _controller: TopxiaAdminBundle:Upgrade:check }

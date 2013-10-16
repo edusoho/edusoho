@@ -9,13 +9,16 @@ class UpgradeController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $conditons = array();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUpgradeService()->searchPackageCount(),
+            $this->getUpgradeService()->searchPackageCount($conditons),
             20
         );
 
-        $findedPackages = $this->getUpgradeService()->searchPackages($paginator->getOffsetCount(),
+        $findedPackages = $this->getUpgradeService()->searchPackages(
+            $conditons,
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
         return $this->render('TopxiaAdminBundle:Upgrade:index.html.twig',array(
@@ -23,6 +26,28 @@ class UpgradeController extends BaseController
             'paginator' => $paginator
             ));
     }
+
+    public function logsAction(Request $request)
+    {
+        $conditions = array();
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUpgradeService()->searchLogCount($conditions),
+            20
+        );
+
+        $logs = $this->getUpgradeService()->searchLogs(
+            $conditions,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+        return $this->render('TopxiaAdminBundle:Upgrade:upgrade-logs-list.html.twig',array(
+            'logs'=>$logs,
+            'paginator' => $paginator
+            ));
+    }
+
 
     public function checkAction(Request $request)
     {
@@ -32,48 +57,128 @@ class UpgradeController extends BaseController
         ));
     }
 
+    public function triggerInstallModalAction(Request $request, $id)
+    {
+        $installPackage = $this->getUpgradeService()->getRemoteInstallPackageInfo($id);
+        return $this->render('TopxiaAdminBundle:Upgrade:install-modal.html.twig', array(
+            'installPackage'=>$installPackage));
+    }
+
+    public function triggerUpdateModalAction(Request $request, $id)
+    {
+        $updatePackage = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
+        return $this->render('TopxiaAdminBundle:Upgrade:update-modal.html.twig',array(
+            'updatePackage'=>$updatePackage));
+    }
+
     public function installAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkEnvironment();
-            var_dump($result);
+        var_dump($result);
 
         $result = $this->getUpgradeService()->checkDepends($id);
         var_dump($result);
         $result = $this->getUpgradeService()->downloadAndExtract($id);
         var_dump($result);
-        // $result = $this->getUpgradeService()->backUpSystem($id);
-        //  var_dump($result);
+        
+        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
+    }
+
+
+    public function upgradeAction(Request $request, $id)
+    {
+        $result =  $this->getUpgradeService()->hasLastError($id);
+        var_dump($result);
+        $result = $this->getUpgradeService()->checkEnvironment();
+            var_dump($result);
+    
+        $result = $this->getUpgradeService()->checkDepends($id);
+        var_dump($result);
+        $result = $this->getUpgradeService()->downloadAndExtract($id);
+         var_dump($result);
+        $result = $this->getUpgradeService()->backUpSystem($id);
+         var_dump($result);  
+
+       $result = $this->getUpgradeService()->beginUpgrade($id);
+         var_dump($result);
+
+         $this->getUpgradeService()->refreshCache();
 
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
-    public function upgradeAction(Request $request, $id)
+    public function checkEnvironmentAction(Request $request)
     {
-        // $result = $this->getUpgradeService()->checkEnvironment();
-        //     var_dump($result);
-    
-        // $result = $this->getUpgradeService()->checkDepends($id);
-        // var_dump($result);
-        // $result = $this->getUpgradeService()->downloadAndExtract($id);
-        //  var_dump($result);
-        // $result = $this->getUpgradeService()->backUpSystem($id);
-        //  var_dump($result);  
+        $result = $this->getUpgradeService()->checkEnvironment();
+            
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
 
-               $result = $this->getUpgradeService()->beginUpgrade($id);
-         var_dump($result);
+        if(empty($result)){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        }
+    }
 
-    // public function checkDepends($id);
-    // public function downloadAndExtract($id);
-    // public function backUpSystem($id);
-    // public function beginUpgrade($id);
+    public function checkDependsAction(Request $request, $id)
+    {
+        $result = $this->getUpgradeService()->checkDepends($id);
+            
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        
+        if(empty($result)){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        }
+    }
 
+    public function downloadAndExtractAction(Request $request, $id)
+    {
+        $result = $this->getUpgradeService()->downloadAndExtract($id);
+        if(empty($result)){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        }
+    }
 
-        // TODO
-        // $this->getUpgradeService()->backUpdirectories($directoryAfterUnZip);
+    public function hasLastErrorAction(Request $request, $id)
+    {
+        $result = $this->getUpgradeService()->hasLastError($id);
+        if(empty($result)){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        }
+    }
 
-        // $package = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
-        // $this->getUpgradeService()->addInstalledPackage($package);
-        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
+    public function backupSystemAction(Request $request, $id)
+    {
+        $result = $this->getUpgradeService()->backUpSystem($id);
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+
+        if(empty($result)){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        }
+    }
+
+    public function beginUpgradeAction(Request $request, $id)
+    {
+
+        return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
+
+        $result = $this->getUpgradeService()->beginUpgrade($id);
+
+        if(empty($result)){
+            $this->getUpgradeService()->refreshCache();
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        }
+
     }
 
     private function getUpgradeService()
