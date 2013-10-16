@@ -11,194 +11,88 @@ define(function(require, exports, module) {
 
 		var postCheckDepends = function()
 		{
-			
+			$("#step2-process").append("开始系统依赖包检查......");
 			$.post(checkDependsUrl, function(checkDependsResponse) {
-								
-				$('#checking-depends').hide().show({
-					duration: 3000
-				});
-
 				if (checkDependsResponse.status == 'error') {
-
-					$("#check-depends-result").append('<h4 style="text-align: center">检查依赖关系未通过！</h4>')
-							.append(checkDependsResponse.result)
-							.append('请重新检查软件包的依赖关系之后，重新升级！')
-							.hide().show({
-								duration: 3000
-							});
-
+					textResult = $("#step2-result").attr('style','color:#FF0000').append('系统依赖包检查失败！ <br/>');
+					for(var i=0; i<checkDependsResponse.result.length;i++){
+						textResult = textResult.append(checkDependsResponse.result[i]+'<br/>');
+					}
+					$("#step6").append("系统更新失败！");
 					return false;
-				} 
-
-				if (checkDependsResponse.status == 'ok'){
-
-					$("#check-depends-result")
-						.append("<h4 style='color:green; text-align: center'>检查依赖关系通过!</h4>")
-						.hide().show({duration: 3000});
-
-						$.post(downloadExtractUrl, function(downloadExtractResponse) {
-								
-								$('#downloading-extract').hide().show({
-									duration: 4000
-								});
-
-								if (downloadExtractResponse.status == 'error') {
-
-								$("#download-extract-result").append('<h4 style="text-align: center">下载并解压软件包失败！</h4>')
-										.append(downloadExtractResponse.result)
-										.append('请在正确配置环境之后，重新升级！')
-										.hide().show({
-											duration: 4000
-										});
-
-								return false;
-
-								}
-
-
-								if (downloadExtractResponse.status == 'ok') {
-
-								$("#download-extract-result").append("<h4 style='color:green; text-align: center'>下载并解压软件包成功!")
-									.hide().show({
-										duration: 4000
-									});
-
-
-									$.post(backupSystemUrl, function(backupSystemResponse) {
-
-										$('#backuping-system').hide().show({
-											duration: 5000
-										});
-
-										if (backupSystemResponse.status == 'error') {
-
-											$("#backup-system-result").append('<h4 style="text-align: center">备份系统失败！</h4>')
-													.append(backupSystemResponse.result)
-													.append('请在正确检查相应文件夹目录之后，重新升级！')
-													.hide().show({
-														duration: 5000
-													});
-
-											return false;
-
-										}
-
-										if(backupSystemResponse.status == 'ok'){
-												
-												$("#backup-system-result").append("<h4 style='color:green; text-align: center'>备份系统成功!")
-												.hide().show({
-													duration: 5000
-												});
-
-												$.post(beginUpgradeUrl, function(beginUpgradeResponse) {
-
-														$('#begining-update').hide().show({
-															duration: 6000
-														});
-
-														if (beginUpgradeResponse.status == 'error') {
-
-															$("#begin-update-result").append('<h4 style="text-align: center">升级软件包失败！</h4>')
-																	.append(beginUpgradeResponse.result)
-																	.append('请在正确检查相应文件夹目录之后，重新升级！')
-																	.hide().show({
-																		duration: 6000
-																	});
-
-															return false;
-
-														}
-
-														if (beginUpgradeResponse.status == 'ok') {
-
-															$("#begin-update-result").append("<h4 style='color:green; text-align: center'>升级软件包成功!")
-																.hide().show({duration: 6000});
-
-														}
-
-												});
-
-										}
-
-									});
-
-								}
-
-						});
-
+				} else {
+					textResult = $("#step2-result").attr('style','color:#096').append('系统依赖包检查OK！');
 				}
 
+				$("#step3-process").append("开始下载、解压缩更新包......");
+				$.post(downloadExtractUrl, function(downloadExtractResponse) {
+					if (downloadExtractResponse.status == 'error') {
+						textResult = $("#step3-result").attr('style','color:#FF0000').append('下载、解压缩更新包失败！ <br/>');
+						for(var i=0; i<downloadExtractResponse.result.length;i++){
+							textResult = textResult.append(downloadExtractResponse.result[i]+'<br/>');
+						}
+						$("#step6").append("系统更新失败！");
+						return false;
+					} else {
+						textResult = $("#step3-result").attr('style','color:#096').append('下载、解压缩更新包OK！');
+					}
+					$("#step4-process").append("开始备份系统、数据库......");
+					$.post(backupSystemUrl, function(backupSystemResponse) {
+						if (backupSystemResponse.status == 'error') {
+							textResult = $("#step4-result").attr('style','color:#FF0000').append('备份系统、数据库失败！ <br/>');
+							for(var i=0; i<backupSystemResponse.result.length;i++){
+								textResult = textResult.append(backupSystemResponse.result[i]+'<br/>');
+							}
+							$("#step6").append("系统更新失败！");
+							return false;
+						} else {
+							textResult = $("#step4-result").attr('style','color:#096').append('备份系统、数据库OK！');
+						}
+						$("#step5-process").append("更新数据以及系统文件......");
+						$.post(beginUpgradeUrl, function(beginUpgradeResponse) {
+							    console.log(beginUpgradeResponse);
+								if (beginUpgradeResponse.status == 'error') {
+									textResult = $("#step5-result").attr('style','color:#FF0000').append('更新数据以及系统文件失败！ <br/>');
+									for(var i=0; i<beginUpgradeResponse.result.length;i++){
+										textResult = textResult.append(beginUpgradeResponse.result[i]+'<br/>');
+									}
+									$("#step6").append("系统更新失败！");
+									return false;
+								} else {
+									textResult = $("#step5-result").attr('style','color:#096').append('更新数据以及系统文件OK！');
+									$("#step6").append("系统更新成功！");
+								}
+						});
+					});
+				});
 			});
 
 		}
 
 		$('.modal-body').on('click', '#begin-update', function() {
-
 			$(this).attr('disabled', true);
-
 			$.post(checkLastErrorUrl, function(checkingLastErrorResponse) {
+				if (checkingLastErrorResponse.status == 'error') {
+					if(!confirm('上次更新系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？')){
+						return false;
+					}
+				} 
+				$("#step1-process").append("开始检查环境......");
+				$.post(checkEnvironmentUrl, function(checkEnvironmentResponse) {
+					if (checkEnvironmentResponse.status == 'error') {
+						textResult = $("#step1-result").attr('style','color:#FF0000').append('环境检测失败！ <br/>');
+						for(var i=0; i<checkEnvironmentResponse.result.length;i++){
+    						textResult = textResult.append(checkEnvironmentResponse.result[i]+'<br/>');
+						}
+						$("#step6").append("系统更新失败！");
+						return false;
+					} else {
+						textResult = $("#step1-result").attr('style','color:#096').append('环境检测OK！');
+					}
+					return postCheckDepends();
 
-				$('#checking-last-error').hide().show({
-					duration: 1000
 				});
 
-				if (checkingLastErrorResponse.status == 'error') {
-
-					$("#check-last-error-result").append('<h4 style="text-align: center">上次存在错误!</h4>')
-						.append(checkingLastErrorResponse.result)
-						.append('请在处理完上次存在的错误之后，重新升级软件包！')
-						.hide().show({
-							duration: 1000
-						});
-
-					return false;
-
-				} else {
-
-					$("#check-last-error-result").append("<h4 style='color:green;text-align: center'>上次不存在错误!</h4>")
-						.hide().show({
-							duration: 1000
-						});
-
-				}
-
-				if (checkingLastErrorResponse.status == 'ok') {
-
-					$.post(checkEnvironmentUrl, function(checkEnvironmentResponse) {
-
-						$('#checking-environment').hide().show({
-							duration: 2000
-						});
-
-						if (checkEnvironmentResponse.status == 'error') {
-
-							$("#check-environment-result").append('<h4 style="text-align: center">环境检测失败！</h4>')
-									.append(checkEnvironmentResponse.result)
-									.append('请重新检查相应目录的写操作权限之后，重新升级！')
-									.hide().show({
-										duration: 2000
-									});
-
-						return false;
-
-						} else {
-
-							$("#check-environment-result").append("<h4 style='color:green; text-align: center'>检查环境通过!</h4>")
-								.hide().show({
-									duration: 2000
-								});
-
-						}
-
-						if (checkEnvironmentResponse.status == 'ok') {
-
-							postCheckDepends();
-
-						}
-
-					});
-
-				}
 
 			});
 

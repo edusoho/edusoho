@@ -5,9 +5,7 @@ interface UpgradeService
 {
 	public function check();
 
-	public function upgrade($id);
-
-	public function install($id);
+	public function commit($id,$result);
 
 	public function checkEnvironment();
 	public function checkDepends($id);

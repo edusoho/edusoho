@@ -31,6 +31,12 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 	}
 
+	public function commit($id,$result)
+	{
+		$this->getEduSohoUpgradeService()->commit($id,$result);
+	}
+
+
 	public function getRemoteInstallPackageInfo($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->install($id);
@@ -39,7 +45,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	public function getRemoteUpgradePackageInfo($id)
 	{
-		$package = $this->getEduSohoUpgradeService()->upgrade($id);
+		$package = $this->getEduSohoUpgradeService()->getPackage($id);
 		return $package;
 	}
 
@@ -71,11 +77,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
 		return $this->getEduSohoUpgradeService()->check($packages);
-	}
-
-	public function install($id)
-	{
-		$this->upgrade($id);
 	}
 
 	public function hasLastError($id)
@@ -382,13 +383,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $dir;
 
 	}
-
-
-	public function upgrade($id)
-	{
-		return $result;
-	}
-
 
 
 
