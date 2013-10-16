@@ -130,7 +130,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$result[] = $e->getMessage();
 			return $result;
 		}
-		//TODO 查看是否已经安装过了，安装过了就别再启动了
 
 		$depends = $package['depends'];	
 

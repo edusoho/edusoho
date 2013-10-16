@@ -90,12 +90,16 @@ function install_step1()
 		}
 		$checkedPaths[$path] = $checked;
 	}
+	$safemode = ini_get('safe_mode');
+	if($safemode == 'On')
+	   $pass = false;
 
 	echo $twig->render('step-1.html.twig', array(
 		'step' => 1,
 		'env' => $env,
 		'paths' => $checkedPaths,
-		'pass' => $pass,
+		'safemode' => $safemode,
+		'pass' => $pass
 	));
 }
 
