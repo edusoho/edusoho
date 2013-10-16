@@ -153,6 +153,7 @@ function install_step3()
 		$init->initNavigations();
 		$init->initBlocks();
 		$init->initLockFile();
+		$init->initRefundSetting();
 
 		header("Location: install.php?step=4");
 		exit();
@@ -260,6 +261,19 @@ class SystemInit
 	    $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN'));
 	    return $this->getUserService()->getUser($user['id']);
 	}
+
+	public function initRefundSetting()
+	{
+
+		$setting = array(
+            'maxRefundDays' => 10,
+            'applyNotification' => '您好，您退款的课程为{{course}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'successNotification' => '您好，您申请退款课程{{course}} 审核通过，将为您退款{{amount}}元。',
+            'failedNotification' => '您好，您申请退款课程{{course}} 审核未通过，请与管理员再协商解决纠纷。',
+        );
+        $setting = $this->getSettingService()->set('refund', $setting);
+
+	}	
 
 	public function initSiteSettings($settings)
 	{
