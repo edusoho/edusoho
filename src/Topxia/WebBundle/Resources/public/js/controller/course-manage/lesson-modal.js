@@ -97,6 +97,9 @@ define(function(require, exports, module) {
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            if (item.status == 'waiting') {
+                
+            }
         });
 
         audioChooser.on('change', function(item) {

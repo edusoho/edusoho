@@ -8,6 +8,10 @@ interface DiskService
 
     public function getFile($id);
 
+    public function getFileByConvertHash($hash);
+
+    public function findFilesByIds(array $ids);
+
     public function getUserFiles($userId, $storage, $path = '/');
 
     /**
@@ -32,5 +36,9 @@ interface DiskService
     public function renameFile($id, $newFilename);
 
     public function deleteFile($id);
+
+    public function setFileFormats($id, array $formats);
+
+    public function changeFileConvertStatus($id, $status);
 
 }

@@ -67,6 +67,11 @@ define(function(require, exports, module) {
                     html = item.name;
                 }
                 this.element.find('[data-role=placeholder]').html(html);
+                if (item.status == 'waiting') {
+                    this.element.find('[data-role=waiting-tip]').show();
+                } else {
+                    this.element.find('[data-role=waiting-tip]').hide();
+                }
                 this.close();
             }
         },
@@ -100,13 +105,11 @@ define(function(require, exports, module) {
 
         _convertFileToMedia: function(file) {
             var media = {};
+            media.id = file.id ? file.id : 0;
+            media.status = file.convertStatus ? file.convertStatus : 'none';
             media.type = file.type;
             media.source = 'self';
             media.name = file.filename;
-            media.files = [
-                {url: file.uri, type: 'mp4'}
-            ];
-
             return media;
         },
 

@@ -4,6 +4,7 @@
     <div class="media-chooser-bar">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+      <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。</div>
     </div>
 
     <div class="media-chooser-main">
@@ -18,7 +19,7 @@
           <div class="media-chooser-uploader">
             <div class="media-chooser-uploader-label">选择你要上传的视频文件：</div>
             <div class="media-chooser-uploader-control">
-              <span id="video-choose-uploader-btn" 
+              <span id="video-choose-uploader-btn"
                 data-role="uploader-btn"
                 data-key="{{ fileKey }}"
                 data-token="{{ uploadToken }}"

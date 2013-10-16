@@ -62,7 +62,7 @@ class CloudClient
             $policy['returnBody'] = $this->serializeUploadNotifyBodyPolicy('return', $policy['returnBody']);
         }
 
-        if ($rawPolicy['PersistentOps'] and $rawPolicy['PersistentNotifyUrl']) {
+        if (!empty($rawPolicy['PersistentOps']) and !empty($rawPolicy['PersistentNotifyUrl'])) {
             $policy['PersistentOps'] = $rawPolicy['PersistentOps'];
             $policy['PersistentNotifyUrl'] = $rawPolicy['PersistentNotifyUrl'];
         }
@@ -99,9 +99,9 @@ class CloudClient
     public static function getVideoConvertCommands()
     {
         return array(
-            'sd' => 'avthumb/mp4/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac',
-            'hd' => 'avthumb/mp4/r/24/vb/512k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac',
-            'shd' => 'avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac',
+            'avthumb/mp4/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac' => 'sd',
+            'avthumb/mp4/r/24/vb/512k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac' => 'hd',
+            'avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac' => 'shd',
         );
     }
 

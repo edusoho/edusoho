@@ -171,7 +171,7 @@ define(function(require, exports, module) {
             	}
 
             	if (lesson.type == 'video') {
-            		if (lesson.media.source == 'self') {
+            		if (lesson.mediaSource == 'self') {
             			$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
 
 			            var player = VideoJS("lesson-video-player", {
@@ -179,7 +179,7 @@ define(function(require, exports, module) {
 			            });
 
 			            player.dimensions('100%', '100%');
-			            player.src(lesson.media.files[0].url);
+			            player.src(lesson.mediaUri);
 			            player.on('ended', function(){
 			            	that._onFinishLearnLesson();
 			            	player.currentTime(0);
@@ -197,14 +197,14 @@ define(function(require, exports, module) {
 
             		} else {
             			$("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-            			swfobject.embedSWF(lesson.media.files[0].url, 
+            			swfobject.embedSWF(lesson.mediaUri, 
             				'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
             				{wmode:'opaque',allowFullScreen:'true'});
             			$("#lesson-swf-content").show();
             		}
             	} else if (lesson.type == 'audio') {
             		var html = '<audio id="lesson-audio-player" width="500" height="50">';
-            		html += '<source src="' + lesson.media.files[0].url + '" type="audio/mp3" />';
+            		html += '<source src="' + lesson.mediaUri + '" type="audio/mp3" />';
             		html += '</audio>';
 
             		$("#lesson-audio-content").html(html);

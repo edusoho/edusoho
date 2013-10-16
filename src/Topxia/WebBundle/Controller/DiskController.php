@@ -46,49 +46,36 @@ class DiskController extends BaseController
         return $this->createFilesJsonResponse($files);
     }
 
-    public function convertCallbackAction(Request $request, $key)
+    public function convertCallbackAction(Request $request)
     {
+        $data = $request->getContent();
+
+        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调:{$data}");
+
         $key = $request->query->get('key');
         if (empty($key)) {
-            throw \RuntimeException('key不能为空');
+            throw new \RuntimeException('key不能为空');
         }
-
-        $data = $request->request->all();
+        
+        $data = json_decode($data, true);
         if (empty($data['id'])) {
-            throw \RuntimeException('数据中id不能为空');
+            throw new \RuntimeException('数据中id不能为空');
         }
 
         $hash = "{$data['id']}:{$key}";
 
         $file = $this->getDiskService()->getFileByConvertHash($hash);
         if (empty($file)) {
-            throw \RuntimeException('文件不存在');
+            throw new \RuntimeException('文件不存在');
         }
 
         if ($data['code'] != 0) {
-            throw \RuntimeException('转换失败');
+            $this->getDiskService()->changeFileConvertStatus($file['id'], 'error');
+            throw new \RuntimeException('转换失败');
         }
 
-        $cmds = array_flip(CloudClient::getVideoConvertCommands());
-
-        $formats = array();
-        foreach ($data['items'] ? : array() as $item) {
-            if (!isset($cmds[$item['cmd']])) {
-                continue;
-            }
-
-            if ($item['code'] != 0) {
-                continue;
-            }
-
-            if (empty($item['key'])) {
-                continue;
-            }
-
-            $formats[$cmds[$item['cmd']]] = array('cmd' => $item['cmd'], 'key' => $item['key']);
-        }
-
-        $file = $this->getDiskService()->setFileFormats($file['id'], $formats);
+        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $file = $this->getDiskService()->setFileFormats($file['id'], $data['items']);
 
         return $this->createJsonResponse($file['formats']);
     }
@@ -97,7 +84,7 @@ class DiskController extends BaseController
     {
         $hash = $request->query->get('hash');
         if (empty($hash)) {
-            throw \RuntimeException('hash不能为空');
+            throw new \RuntimeException('hash不能为空');
         }
 
         $file = $this->getDiskService()->getFileByConvertHash($hash);

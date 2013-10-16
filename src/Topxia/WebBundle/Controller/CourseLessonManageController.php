@@ -11,12 +11,39 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 		$courseItems = $this->getCourseService()->getCourseItems($course['id']);
+
+		$mediaMap = array();
+		foreach ($courseItems as $item) {
+			if ($item['itemType'] != 'lesson') {
+				continue;
+			}
+
+			if (empty($item['mediaId'])) {
+				continue;
+			}
+
+			if (empty($mediaMap[$item['mediaId']])) {
+				$mediaMap[$item['mediaId']] = array();
+			}
+			$mediaMap[$item['mediaId']][] = $item['id'];
+		}
+
+		$mediaIds = array_keys($mediaMap);
+		$files = $this->getDiskService()->findFilesByIds($mediaIds);
+		foreach ($files as $file) {
+			$lessonIds = $mediaMap[$file['id']];
+			foreach ($lessonIds as $lessonId) {
+				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
+			}
+		}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems
 		));
 	}
 
+	// @todo refactor it.
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
@@ -42,6 +69,12 @@ class CourseLessonManageController extends BaseController
 
     	$user = $this->getCurrentUser();
 
+    	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+    	$filePath = "course-{$course['id']}";
+    	$fileKey = "{$filePath}/" . $randString;
+    	$convertKey = $randString;
+
+
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
@@ -56,18 +89,12 @@ class CourseLessonManageController extends BaseController
 	            $setting['cloud_mac_key']
 	        );
 
-	        $fops = array_values($client->getVideoConvertCommands());
-
+	        $commands = array_keys($client->getVideoConvertCommands());
 	    	$uploadToken = $client->generateUploadToken(array(
-	    		'PersistentOps' => implode(';', $fops),
-	    		'PersistentNotifyUrl' => 'http://www.esdev.com/'
+	    		'PersistentOps' => implode(';', $commands),
+	    		'PersistentNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
     		));
     	}
-
-    	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-    	$filePath = "course-{$course['id']}";
-    	$fileKey = "{$filePath}/" . $randString;
-    	$convertKey = $randString;
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
@@ -79,6 +106,7 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
+	// @todo refactor it.
 	public function editAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
@@ -104,9 +132,38 @@ class CourseLessonManageController extends BaseController
 			));
         }
 
+        if ($lesson['mediaId']) {
+	    	$file = $this->getDiskService()->getFile($lesson['mediaId']);
+	    	if (!empty($file)) {
+	    		$lesson['media'] = array(
+		        	'id' => 0,
+		        	'status' => $file['convertStatus'],
+		        	'source' => 'self',
+		        	'name' => $file['filename'],
+		        	'uri' => '',
+    			);
+	    	} else {
+	    		$lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '', 'uri' => '');
+	    	}
+        } else {
+	        $lesson['media'] = array(
+	        	'id' => 0,
+	        	'status' => 'none',
+	        	'source' => $lesson['mediaSource'],
+	        	'name' => $lesson['mediaName'],
+	        	'uri' => $lesson['mediaUri'],
+	    	);
+        }
+
         $lesson['length'] = $this->secondsToText($lesson['length']);
 
         $user = $this->getCurrentUser();
+
+    	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+    	$filePath = "course-{$course['id']}";
+    	$fileKey = "{$filePath}/" . $randString;
+    	$convertKey = $randString;
+
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
@@ -120,11 +177,12 @@ class CourseLessonManageController extends BaseController
 	            $setting['cloud_mac_key']
 	        );
 
-	    	$uploadToken = $client->generateUploadToken(array());
+	        $commands = array_keys($client->getVideoConvertCommands());
+	    	$uploadToken = $client->generateUploadToken(array(
+	    		'PersistentOps' => implode(';', $commands),
+	    		'PersistentNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
+    		));
     	}
-
-    	$filePath = "course-{$course['id']}";
-    	$fileKey = "{$filePath}/" . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
@@ -132,6 +190,7 @@ class CourseLessonManageController extends BaseController
 			'uploadToken' => $uploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
+			'convertKey' => $convertKey,
 			'storageSetting' => $setting
 		));
 	}
@@ -193,6 +252,11 @@ class CourseLessonManageController extends BaseController
     private function getCourseMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+
+    private function getDiskService()
+    {
+        return $this->getServiceKernel()->createService('User.DiskService');
     }
 
 }

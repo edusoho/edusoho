@@ -720,6 +720,7 @@ disk_browse:
 disk_convert_callback:
     pattern: /disk/convert/callback
     defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
+    methods: [POST]
 
 disk_convert_status:
     pattern: /disk/convert/status

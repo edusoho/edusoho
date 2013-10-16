@@ -47,9 +47,13 @@ class CourseLessonController extends BaseController
         $json['status'] = $lesson['status'];
         $json['quizNum'] = $lesson['quizNum'];
         $json['materialNum'] = $lesson['materialNum'];
+        $json['mediaId'] = $lesson['mediaId'];
+        $json['mediaSource'] = $lesson['mediaSource'];
 
-        if (!empty($lesson['media'])) {
-            $json['media'] = $this->convertMedia($lesson);
+        if ($json['mediaSource'] == 'self') {
+            $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$lesson['courseId'], 'lessonId'=> $lesson['id']));
+        } else {
+            $json['mediaUri'] = $lesson['mediaUri'];
         }
 
     	return $this->createJsonResponse($json);
@@ -58,7 +62,7 @@ class CourseLessonController extends BaseController
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
-        if (empty($lesson) || empty($lesson['media']) || ($lesson['media']['source'] != 'self') ) {
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
             throw $this->createNotFoundException();
         }
 
@@ -66,10 +70,28 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $uri = $this->getDiskService()->parseFileUri($lesson['media']['files'][0]['url']);
+        $file = $this->getDiskService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
 
-        if ($uri['type'] == 'cloud') {
-            $user = $this->getCurrentUser();
+        if ($file['storage'] == 'cloud') {
+            if (empty($file['formats']) || !is_array($file['formats'])) {
+                throw $this->createNotFoundException();
+            }
+
+            $formats = $file['formats'];
+            $key = null;
+            foreach (array('hd', 'shd', 'sd') as $type) {
+                if (!empty($formats[$type])) {
+                    $key = $formats[$type]['key'];
+                    break;
+                }
+            }
+
+            if (empty($key)){
+                throw $this->createNotFoundException();
+            }
 
             $setting = $this->setting('storage');
             $client = new CloudClient(
@@ -81,13 +103,14 @@ class CourseLessonController extends BaseController
                 $setting['cloud_mac_key']
             );
 
-            $url = $client->getDownloadUrl($uri['key']);
+            $url = $client->getDownloadUrl($key);
             $cookieToken = $client->generateDownloadCookieToken($url, time() + 3600);
             setrawcookie('qiniuToken', $cookieToken, 0, '/', 'edusoho.net', false, true);
 
             return $this->redirect($url);
         }
 
+        $uri = $this->getDiskService()->parseFileUri($lesson['mediaUri']);
         return $this->createLocalMediaResponse($uri);
     }
 
@@ -114,17 +137,6 @@ class CourseLessonController extends BaseController
     {
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
         return $this->createJsonResponse(true);
-    }
-
-    private function convertMedia($lesson)
-    {
-        $media = $lesson['media'];
-        if ($media['source'] == 'self') {
-            foreach ($media['files'] as $index => $file) {
-                $media['files'][$index]['url'] = $this->generateUrl('course_lesson_media', array('courseId'=>$lesson['courseId'], 'lessonId'=> $lesson['id']));
-            }
-        }
-        return $media;
     }
 
     private function createLocalMediaResponse($uri)
