@@ -30,28 +30,24 @@
 
        
     <div class="row">
-        <div class="col-md-12 ">
+        <div class="col-md-12 pz">
            <div class="kytitle clearfix">
-                <h3>所有活动</h3>             
+                <h3>公开课一览</h3>             
            </div>  
            <div class="mod  openstack">
                 <ul class="content pz">
                   {% for activity in activitys %}
-                  <li class="shadow pz">
-                    <div class="imageblock clearfix">
-                      <div class="imageblock-image">
+                  <li class=" shadow pz">
+                    <div class="row  pz mz">
+                      <div class="col-md-4 pz">
                         <a href="#" class="show-user-card" >
-                          <img class="open-class-logo-large-size" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
-                      </div>
-                      <div class="imageblock-content">
-                        {% if activity.expired==1 %}
-                        <h4><span >{{ activity.subtitle}}</span></h4>
-                        {% endif %}
+                          <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
 
-                         {% if activity.expired==0 %}
+
+                      </div>
+                      <div class="col-md-8 pll prl">
+
                         <h4><span >{{ activity.subtitle}}</span></h4>
-                        {% endif %}
-                        
 
                         <h3>{{ activity.title}}</h3>
                        
@@ -65,7 +61,7 @@
 
                          {% if activity.expired==1 %}
                            
-                            <h3 class="text-icon mz"> <span class='label label-default'>已结束</span></h3>
+                            <h3 class="ps-ab ps-tps ps-rtl"> <span class='label label-default'>已结束</span></h3>
 
                             <div class="text-right">
                               <p>
@@ -83,9 +79,7 @@
                               </p>
                             </div>
                          
-                          {% endif %}
-
-                        
+                          {% endif %}                      
                       </div>
                     </div>
                   </li>
