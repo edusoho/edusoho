@@ -5,6 +5,10 @@ define(function(require, exports, module) {
         VideoJS = require('video-js'),
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar');
+    
+    require('mediaelementplayer');
+
+    
 
     var $=require('jquery');
     var Validator = require('bootstrap.validator');
@@ -104,14 +108,36 @@ define(function(require, exports, module) {
 
         //视频
 
-        var videourl=$('.activity-video-player').attr('data-url');
-        
+       if ($("#lesson-preview-video-player").length > 0) {
 
-        var player = VideoJS("lesson-video-player");
-        player.pause();
-        player.dimensions('100%', '100%');
-        player.src(videourl);
-        //player.play();
+            var videoPlayer = VideoJS("lesson-preview-video-player", {
+                techOrder: ['flash','html5']
+            });
+            videoPlayer.width('100%');
+            videoPlayer.play();
+
+           
+        }
+
+        if ($("#lesson-preview-audio-player").length > 0) {
+            var audioPlayer = new MediaElementPlayer('#lesson-preview-audio-player',{
+                mode:'auto_plugin',
+                enablePluginDebug: false,
+                enableAutosize:true,
+                success: function(media) {
+                    media.play();
+                }
+            });
+
+          
+
+        }
+
+        if ($("#lesson-preview-swf-player").length > 0) {
+            swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '500', "9.0.0");
+
+          
+        }
 
 
     };

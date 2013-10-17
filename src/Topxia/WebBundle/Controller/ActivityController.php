@@ -154,10 +154,11 @@ class ActivityController extends BaseController
             $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoId'][0]),'    latest',0,100);
         }
 
-        $lessionid=0;
+        $lession=array();
         if(!empty($activity['courseId'])){
             $lessons=$fristlessonid=$this->getCourseService()->getCourseLessons($activity['courseId'][0]);
-            $lessionid=count($lessons)>0?$lessons[0]['id']:0;
+           
+            $lession=count($lessons)>0?$lessons[0]:array();
         }
        
 
@@ -207,7 +208,7 @@ class ActivityController extends BaseController
             "qustions"=>$sss,
             "pics"=>$files,
             "students"=>$students,
-            'lessonid'=>$lessionid,
+            'lesson'=>$lession,
             'attachments'=>$attachments,
             "current_user"=> $currentuser,
             "qustion_users"=>$qustionUsers,
