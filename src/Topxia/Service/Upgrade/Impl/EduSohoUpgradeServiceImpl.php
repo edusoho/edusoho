@@ -6,7 +6,7 @@ use Topxia\Service\Common\BaseService;
 
 class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeService 
 {
-	CONST BASE_URL = 'http://www.edusoho-dev.com/';
+	CONST BASE_URL = 'http://www.edusoho.com/';
 
 	CONST CHECK_URL = 'upgrade/check';
 	CONST COMMIT_URL = 'upgrade/commit';
