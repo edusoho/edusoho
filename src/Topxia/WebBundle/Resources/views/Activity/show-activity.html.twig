@@ -5,7 +5,7 @@
 
 {% block content %}
    
-<div class="row widget shadow  pz ">
+<div class="row widget shadow ps-re pz ">
 
     <div class="col-md-4  pz">
           <a href="#" class="show-user-card" >
@@ -24,7 +24,9 @@
           <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后获取 </span>{% endif %}</p>
                    
           <p>费用： {{ activity.price}}</p>
-          <div class="text-right">
+         
+    </div> 
+     <div class="ps-ab ps-bt ps-rtl">
             <p>
               {{activity.studentNum}}人已报名
               {% if activity.join %}
@@ -34,8 +36,7 @@
               {% endif %}
               <a href="javascript:void(0)" id="media-qustion" class="mar-l btn btn-success  green">课前提问</a>
             </p>
-          </div>     
-    </div>  
+      </div>      
  
 </div>
 
