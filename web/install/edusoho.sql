@@ -41,7 +41,7 @@ CREATE TABLE `category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uri` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `category_group` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE `category_group` (
   `name` varchar(255) NOT NULL,
   `depth` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -122,7 +122,7 @@ CREATE TABLE `course` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_announcement` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -220,7 +220,7 @@ CREATE TABLE `course_member` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_note` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -349,7 +349,7 @@ CREATE TABLE `course_thread` (
   `latestPostTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_thread_post` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -396,12 +396,11 @@ CREATE TABLE `installed_packages` (
   `ename` varchar(255) NOT NULL COMMENT '包名称',
   `cname` varchar(255) NOT NULL,
   `version` varchar(255) NOT NULL COMMENT 'version',
-  `installlog` text NOT NULL COMMENT '安装日志',
   `installTime` int(11) NOT NULL COMMENT '安装时间',
-  `fromVersion` varchar(255) NOT NULL COMMENT '来源',
+  `fromVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '来源',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cname` (`ename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已安装包';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装包';
 
 CREATE TABLE `location` (
   `id` bigint(20) unsigned NOT NULL,
@@ -522,7 +521,7 @@ CREATE TABLE `upgrade_logs` (
   `ip` varchar(32) DEFAULT NULL COMMENT 'ip',
   `reason` text COMMENT '失败原因',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
