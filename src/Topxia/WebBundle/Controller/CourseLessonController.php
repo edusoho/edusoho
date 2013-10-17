@@ -110,7 +110,7 @@ class CourseLessonController extends BaseController
             return $this->redirect($url);
         }
 
-        $uri = $this->getDiskService()->parseFileUri($lesson['mediaUri']);
+        $uri = $this->getDiskService()->parseFileUri($file['uri']);
         return $this->createLocalMediaResponse($uri);
     }
 
