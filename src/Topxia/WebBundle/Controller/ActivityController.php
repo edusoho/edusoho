@@ -25,7 +25,7 @@ class ActivityController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getActivityService()->searchActivityCount($conditions)
-            , 5
+            , 4
         );
         //活动
         $activitys = $this->getActivityService()->searchActivitys(

@@ -11,16 +11,16 @@
  
    
       <div class="container widget shadow ptm plm prm pbm mbl ps-re">
-        <div class="col-md-3">
+        <div class="col-md-2">
           <img class="img-responsive"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}">
         </div>
-        <div class=" col-md-9 ">
-          <p class="title">
-            <h4>{{ activity.subtitle }}</h4>
-            <h3>{{ activity.title }}</h3>
-          </p>
-          <p>时间： {{activity.startTime}}</p>
-          <p>现场地址： {{ activity.address }}</p>  
+        <div class=" col-md-10 pz">
+            <h5 class="ps-ab ps-tp ps-rtl">{{ activity.subtitle }} </h5>
+            <h4>{{ activity.title }} </h4>
+         
+            <p>时间： {{activity.startTime}} </p> 
+            <p>现场地址： {{ activity.address }}</p> 
+         
         </div> 
         <h3 class="ps-ab ps-bt ps-rtl">
             <span class='label label-default'>已结束</span>
@@ -192,16 +192,18 @@
           <div class="kytitle clearfix bor-l-gray">
             <h3>小伙伴们正在看</h3>              
           </div>                  
-          <div class="content daren imgpanel"> 
+          <div class="row content daren imgpanel prd plz mz"> 
               {% for item in activitys %}
+              <div class="col-md-3 pll prz">
                 <a href="{{ path('activity_show',{id:item.id})}}">
                   <img class="img-responsive" width="280px"  src="{{ file_path(item.largePicture,'activity-large.jpg') }}" />
                   <div class="tit">
                           <p>{{ item.title }}</p>
                   </div>
                 </a>
+              </div>
               {% endfor %}
-              <span class="justify_fix"></span>         
+                   
           </div>
         </div>
       </div>  
