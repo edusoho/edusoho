@@ -13,6 +13,7 @@ class Version20131017104113 extends AbstractMigration
     public function up(Schema $schema)
     {
   		$this->addSql("ALTER TABLE  `installed_packages` DROP  `installlog`");
+  		$this->addSql("ALTER TABLE  `installed_packages` CHANGE  `fromVersion`  `fromVersion` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' COMMENT  '来源';");
 
     }
 

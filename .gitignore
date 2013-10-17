@@ -5,6 +5,8 @@
 /app/logs/*
 /app/data/udisk/*
 /app/data/private_files/*
+/app/data/backup/*
+/app/data/upgrade/*
 /build/
 /vendor/
 /bin/
