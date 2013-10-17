@@ -76,6 +76,8 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mkdir("{$this->distDirectory}/app/data");
 		$this->filesystem->mkdir("{$this->distDirectory}/app/data/udisk");
 		$this->filesystem->mkdir("{$this->distDirectory}/app/data/private_files");
+		$this->filesystem->mkdir("{$this->distDirectory}/app/data/upgrade");
+		$this->filesystem->mkdir("{$this->distDirectory}/app/data/backup");
 		$this->filesystem->mkdir("{$this->distDirectory}/app/logs");
 		$this->filesystem->mirror("{$this->rootDirectory}/app/Resources", "{$this->distDirectory}/app/Resources");
 		$this->filesystem->mirror("{$this->rootDirectory}/app/config", "{$this->distDirectory}/app/config");
@@ -84,6 +86,8 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->chmod("{$this->distDirectory}/app/data", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/data/udisk", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/data/private_files", 0777);
+		$this->filesystem->chmod("{$this->distDirectory}/app/data/upgrade", 0777);
+		$this->filesystem->chmod("{$this->distDirectory}/app/data/backup", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/logs", 0777);
 
 		$this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
