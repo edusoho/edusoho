@@ -102,10 +102,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 
 		if (!$this->is_writable($this->getDownloadPath())){
-			$result[] = '下载目录无写权限<br>';
+			$result[] = "下载目录({$this->getDownloadPath()})无写权限<br>";
 		}
 		if (!$this->is_writable($this->getBackUpPath())){
-			$result[] = '备份目录无写权限<br>';
+			$result[] = "备份目录{$this->getBackUpPath()})无写权限<br>";
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app')){
 			$result[] = 'app目录无写权限<br>';
