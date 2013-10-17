@@ -89,7 +89,7 @@
 <div class="row">
   <div class="col-md-12  pz ">
 
-          {% if pics %}
+    {% if pics %}
           <div id="carousel-demo-1" class="carousel-demo">
               <span class="ui-switchable-prev-btn glyphicon glyphicon-chevron-left" data-role="prev"></span>
               <span class="ui-switchable-next-btn glyphicon glyphicon-chevron-right" data-role="next"></span>
@@ -106,46 +106,11 @@
                   </div>
               </div>
           </div>
-          {% else %}
-              <p class="empty-info">暂无活动图片信息</p>
-          {% endif %}
-       
-      </div>
+    {% endif %}       
+  </div>
 
 </div>
 
-<!--div class="row"> 
-  
-  <div class="col-md-8  pz">
-    <div class="widget k_postlist shadow">
-        <div class="kytitle clearfix bor-l-green">
-          <h3>课程大纲</h3>
-        </div>
-        <div class="content outline">
-          <div class="padding">
-            {{ activity.about|raw}}
-          </div>
-        </div>
-    </div>
-  </div> 
-  <div class="col-md-4 prz">
-   
-    <div class="widget k_postlist shadow">
-      <div class="kytitle clearfix bor-l-green">
-        <h3>参加的小伙伴</h3>             
-      </div>
-      <div class="content model-over-h">
-        {% for student in students %}
-          <a href="{{ path('user_show',{id:student.id}) }}" class="user-link user-avatar-link activity-user-link"><img src="{{ file_path(student.smallAvatar,'avatar.png') }}">
-            <p>{{ student.nickname}}</p>
-          </a>
-        {% endfor %}
-        <span class="justify_fix"></span>         
-      </div>
-    </div>
-  </div> 
-
-</div-->
 
 <section class="row"> 
   <div class="col-md-12  pz">
@@ -230,7 +195,7 @@
           <div class="content daren imgpanel"> 
               {% for item in activitys %}
                 <a href="{{ path('activity_show',{id:item.id})}}">
-                  <img class="open-class-logo-middle-size" src="{{ file_path(item.middlePicture,'activity-large.jpg') }}" />
+                  <img class="img-responsive" width="280px"  src="{{ file_path(item.largePicture,'activity-large.jpg') }}" />
                   <div class="tit">
                           <p>{{ item.title }}</p>
                   </div>
