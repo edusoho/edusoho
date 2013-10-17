@@ -6,12 +6,11 @@ use Topxia\Service\Common\BaseService;
 
 class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeService 
 {
-	CONST BASE_URL = 'http://www.edusoho-dev.com/';
+	CONST BASE_URL = 'http://www.edusoho.com/';
 
 	CONST CHECK_URL = 'upgrade/check';
-	CONST UPGRADE_URL = 'upgrade/upgrade';
+	CONST COMMIT_URL = 'upgrade/commit';
 	CONST GET_URL = 'upgrade/get';
-	CONST INSTALL_URL = 'upgrade/install';
 
 	public function check($packages)
 	{
@@ -31,12 +30,13 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 		return $result;
 	}
 
-	public function upgrade($packId)
+	public function commit($id,$result)
 	{
-		$postData = array('id'=>$packId);
+		$postData = array('id'=>$id);
+		$postData['result'] = $result;
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
-		$ch = curl_init(self::BASE_URL.self::UPGRADE_URL);
+		$ch = curl_init(self::BASE_URL.self::COMMIT_URL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -44,9 +44,8 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 				'Content-Type: application/json',
 				'Content-Length: ' . strlen($sendJsonData))
 		);
-		$result = json_decode(curl_exec($ch),true);
+		curl_exec($ch);
 		curl_close($ch);
-		return $result;
 	}
 
 	public function getPackage($packId){
@@ -63,24 +62,6 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 		$result = json_decode(curl_exec($ch),true);
 		curl_close($ch);
 		return $result;		
-	}
-
-	public function install($packId)
-	{
-		$postData = array('id'=>$packId);
-		$postData['client'] = $this->getClientInfo();
-		$sendJsonData = json_encode($postData);
-		$ch = curl_init(self::BASE_URL.self::INSTALL_URL);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				'Content-Type: application/json',
-				'Content-Length: ' . strlen($sendJsonData))
-		);
-		$result = json_decode(curl_exec($ch),true);
-		curl_close($ch);
-		return $result;
 	}
 
 	public function downloadPackage($uri,$filename)

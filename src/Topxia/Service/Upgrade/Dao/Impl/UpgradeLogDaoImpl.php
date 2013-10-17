@@ -31,16 +31,39 @@ class UpgradeLogDaoImpl extends BaseDao implements UpgradeLogDao
         return $this->getInstalledPackage($id);
     }
 
-
-
     public function searchLogCount($conditions)
     {
-        
+        $builder = $this->createLogQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function searchLogs($conditions, $start, $limit)
     {
+        $builder = $this->createLogQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
-       
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function getUpdateLogByEnameAndVersion($ename,$tov)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE ename = ? AND tov = ? ORDER BY logtime DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($ename, $tov));
+    }
+
+    private function createLogQueryBuilder($conditions)
+    {
+        return $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'upgrade_logs')
+            ->andWhere('remoteId = :remoteId')
+            ->andWhere('ename = :ename')
+            ->andWhere('cname = :cname')
+            ->andWhere('dbBackPath LIKE :dbBackPath')
+            ->andWhere('srcBackPath LIKE :srcBackPath')
+            ->andWhere('status = :status')
+            ->orderBy('logtime','DESC');
     }
 }

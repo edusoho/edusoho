@@ -697,7 +697,7 @@ Default options
         // overrides the type specified, useful for dynamic instantiation
         type: "",
         // path to Flash and Silverlight plugins
-        pluginPath: mejs.Utility.getScriptPath([ "mediaelement-and-player.js", "mediaelement-and-player-debug.js" ]),
+        pluginPath: require.resolve("./"),
         // name of flash file
         flashName: "flashmediaelement.swf",
         // streamer for RTMP streaming

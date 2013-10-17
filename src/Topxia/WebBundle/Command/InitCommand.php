@@ -30,8 +30,24 @@ class InitCommand extends BaseCommand
 		$this->initCategory($output);
 		$this->initTag($output);
 		$this->initFile($output);
+		$this->initRefundSetting($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
+	}
+
+	private function initRefundSetting($output)
+	{
+		$output->write('  初始化退款设置');
+
+		$setting = array(
+            'maxRefundDays' => 10,
+            'applyNotification' => '您好，您退款的课程为{{course}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'successNotification' => '您好，您申请退款课程{{course}} 审核通过，将为您退款{{amount}}元。',
+            'failedNotification' => '您好，您申请退款课程{{course}} 审核未通过，请与管理员再协商解决纠纷。',
+        );
+        $setting = $this->getSettingService()->set('refund', $setting);
+        $output->writeln(' ...<info>成功</info>');
+
 	}
 
 	private function initSiteSetting($output)
@@ -56,7 +72,6 @@ class InitCommand extends BaseCommand
 
         $site = $this->getSettingService()->set('site', $default);
 
-        $output->writeln(' ...<info>成功</info>');
 
 	}
 

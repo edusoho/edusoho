@@ -14,14 +14,13 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private $fileCount=0;
 	private $fileSystem = null;
 
-	public function addInstalledPackage($packageInfo)
+	private function addInstalledPackage($packageInfo)
 	{
 		$installedPackage = array();
 		$installedPackage['ename'] = $packageInfo['ename'];
 		$installedPackage['cname'] = $packageInfo['cname'];
 		$installedPackage['version'] = $packageInfo['version'];
-		$installedPackage['from'] = $packageInfo['fromVersion'];
-		$installedPackage['installlog'] = 'result-success';
+		$installedPackage['fromVersion'] = $packageInfo['fromVersion'];
 		$installedPackage['installTime'] = time();
 		$existPackage = $this->getInstalledPackageDao()->getInstalledPackageByEname($packageInfo['ename']);
 		if(empty($existPackage)){
@@ -32,6 +31,12 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 	}
 
+	public function commit($id,$result)
+	{
+		$this->getEduSohoUpgradeService()->commit($id,$result);
+	}
+
+
 	public function getRemoteInstallPackageInfo($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->install($id);
@@ -40,19 +45,29 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	public function getRemoteUpgradePackageInfo($id)
 	{
-		$package = $this->getEduSohoUpgradeService()->upgrade($id);
+		$package = $this->getEduSohoUpgradeService()->getPackage($id);
 		return $package;
 	}
 
 
-	public function searchPackageCount()
+	public function searchPackageCount($conditions)
 	{
-		return $this->getInstalledPackageDao()->searchPackageCount();
+		return $this->getInstalledPackageDao()->searchPackageCount($conditions);
 	}
 
-	public function searchPackages($start, $limit)
+	public function searchLogCount($conditions)
 	{
-		return $this->getInstalledPackageDao()->findPackages($start, $limit);
+		return $this->getUpgradeLogDao()->searchLogCount($conditions);
+	}
+
+	public function searchLogs($conditions, $start, $limit)
+	{
+		return $this->getUpgradeLogDao()->searchLogs($conditions, $start, $limit);
+	}
+
+	public function searchPackages($conditions, $start, $limit)
+	{
+		return $this->getInstalledPackageDao()->searchPackages($conditions, $start, $limit);
 	}
 
 	public function check()
@@ -61,14 +76,18 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!$this->checkMainVersion($packages)){
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
-		
 		return $this->getEduSohoUpgradeService()->check($packages);
-
 	}
 
-	public function install($id)
+	public function hasLastError($id)
 	{
-		$this->upgrade($id);
+		$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		if(empty($package)) throw $this->createServiceException("不存在{$id}");
+		$log = $this->getUpgradeLogDao()->getUpdateLogByEnameAndVersion($package['ename'], $package['version']);
+		if('ROLLBACK' == $log['status']){
+			return true;
+		}
+		return false;
 	}
 
 	public function checkEnvironment()
@@ -83,25 +102,23 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		}
 
 		if (!$this->is_writable($this->getDownloadPath())){
-			$result[] = '下载目录无写权限';
+			$result[] = "下载目录({$this->getDownloadPath()})无写权限<br>";
 		}
 		if (!$this->is_writable($this->getBackUpPath())){
-			$result[] = '备份目录无写权限';
+			$result[] = "备份目录{$this->getBackUpPath()})无写权限<br>";
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app')){
-			$result[] = 'app目录无写权限';
+			$result[] = 'app目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'src')){
-			$result[] = 'src目录无写权限';
+			$result[] = 'src目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'web')){
-			$result[] = 'web目录无写权限';
+			$result[] = 'web目录无写权限<br>';
 		}
 		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
-			$result[] = 'app/cache目录无写权限';
+			$result[] = 'app/cache目录无写权限<br>';
 		}	
-
-
 		return $result;
 	}
 
@@ -114,7 +131,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$result[] = $e->getMessage();
 			return $result;
 		}
-		//TODO 查看是否已经安装过了，安装过了就别再启动了
 
 		$depends = $package['depends'];	
 
@@ -124,11 +140,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		foreach ($depends as $key => $depend) {
 			$installed = $this->getInstalledPackageDao()->getInstalledPackageByEname($key);
 			if(empty($installed)){
-				$result[]= " 没有安装 {$depend['o']} {$depend['v']} 版本的{$depend['cname']} \n";
+				$result[]= " 没有安装 {$depend['o']} {$depend['v']} 版本的{$depend['cname']} \n <br>";
 				continue;
 			}
 			if(!version_compare($installed['version'],$depend['v'],$depend['o'])){
-				$result[]=  " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n";
+				$result[]=  " 该安装包依赖 {$depend['o']} {$depend['v']} 版本的{$depend['cname']}，而当前版本为:{$installed['version']} \n <br>";
 			}
 		}
 		return $result;			
@@ -160,7 +176,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			}
 
 		}catch(\Exception $e){
-			$result[] = $e->getMessage();
+			$result[] = $e->getMessage().'<br>';
 			return $result;
 		}	
 		return $result;	
@@ -192,12 +208,18 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			}
 			if($touched){
 				$this->createUpgradeLog($package,'ROLLBACK',$e->getMessage());
+				$this->getLogService()->info('upgrade', 'upgrade', "更新失败，需要恢复备份！ 更新包-{$package['cname']}({$package['ename']})");
 			}else{
 				$this->createUpgradeLog($package,'ERROR',$e->getMessage());
+				$this->getLogService()->info('upgrade', 'upgrade', "更新失败，更新包-{$package['cname']}({$package['ename']})");
 			}
 			return $result;
 		}
+		$this->addInstalledPackage($package);
+
 		$this->createUpgradeLog($package);
+		$this->getLogService()->info('upgrade', 'upgrade', "成功更新包-{$package['cname']}({$package['ename']})");
+
 		return $result;
 	}
 
@@ -206,6 +228,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$path = $this->getCachePath();
 		$this->emptyDir($path);
 	}
+
+
 
 	private function createUpgradeLog($package,$status='SUCCESS',$reason=null)
 	{
@@ -218,14 +242,16 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  			'fromv'=>$package['fromVersion'],
  			'tov'=>$package['version'],
  			'type'=>$package['type'],
- 			'dbBackPath'=>$this->getBackupFilePath($package),
- 			'srcBackPath'=>$this->getPackageBackUpDir($package),
  			'status'=>$status,
  			'logtime'=>time(),
  			'uid'=>$this->getCurrentUser()->id,
  			'ip'=>$this->getCurrentUser()->currentIp,
  			'reason'=>$reason
 		);
+		if($package['backupDB'])
+		 	$result['dbBackPath']=$this->getBackupFilePath($package).'.gz';
+		if($package['backupFile'])
+ 			$result['srcBackPath']=$this->getPackageBackUpDir($package);
 		return $this->getUpgradeLogDao()->addLog($result);
 	}
 
@@ -337,7 +363,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	private function getBackupFilePath($package){
 		$backUpdir = $this->getPackageBackUpDir($package);
-		$backUpdir .= basename($backUpdir).'.gz';
+		$backUpdir .= basename($backUpdir);
 		return $backUpdir;
 	}
 
@@ -357,13 +383,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $dir;
 
 	}
-
-
-	public function upgrade($id)
-	{
-		return $result;
-	}
-
 
 
 
@@ -469,4 +488,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
     	}
     	return $this->fileSystem;
     }
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');        
+    }  
 }

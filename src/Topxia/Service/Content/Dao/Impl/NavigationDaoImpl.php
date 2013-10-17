@@ -10,8 +10,8 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function getNavigationsCountByType($type)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE type = '$type' ";
-        return $this->getConnection()->fetchColumn($sql, array());
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  type = ?";
+        return $this->getConnection()->fetchColumn($sql, array($type));
     }
 
     public function getNavigation($id)
@@ -48,8 +48,8 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function findNavigationsByType($type, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = '$type' ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($type));
     }
 
     public function findNavigations($start, $limit)
