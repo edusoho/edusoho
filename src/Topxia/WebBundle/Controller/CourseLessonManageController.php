@@ -136,7 +136,7 @@ class CourseLessonManageController extends BaseController
 	    	$file = $this->getDiskService()->getFile($lesson['mediaId']);
 	    	if (!empty($file)) {
 	    		$lesson['media'] = array(
-		        	'id' => 0,
+		        	'id' => $file['id'],
 		        	'status' => $file['convertStatus'],
 		        	'source' => 'self',
 		        	'name' => $file['filename'],

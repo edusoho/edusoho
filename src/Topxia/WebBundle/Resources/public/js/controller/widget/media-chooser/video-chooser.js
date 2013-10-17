@@ -39,7 +39,14 @@ define(function(require, exports, module) {
             $btn.button('loading');
 
             $.get($btn.data('url'), {url:url}, function(video){
-                self.trigger('change', video);
+                var media = {
+                    status: 'none',
+                    type: video.type,
+                    source: video.source,
+                    name: video.name,
+                    uri: video.files[0].url
+                };
+                self.trigger('change', media);
                 $urlInput.val('');
             }, 'json').error(function(jqXHR, textStatus, errorThrown) {
                 Notify.danger('读取视频页面信息失败，请检查您的输入的页面地址后重试');
