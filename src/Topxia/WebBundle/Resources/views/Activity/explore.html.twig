@@ -28,70 +28,12 @@
 
 <section class="container ptl">
 
-    <div class="row ">
-        <div class="col-md-12 ">  
-           <div class="mod k_postlist filter">
-              <div class="kytitle clearfix">
-                <h3>条件筛选</h3>             
-              </div>
-              <div class="content">
-                <ul class="plm">
-                  <li> <strong>地点：</strong>
-                    <a href="{{ path('activity_home') }}">全部</a>
-                    {% for location in locations %}
-                      <a href="{{ path('activity_home', {location:location.id}) }}" {% if filters.locationId == location.id %} class="active"{% endif %}>{{location.name}}</a>
-                    {% endfor %}
-                  </li>
-                  
-                  <li> <strong>状态：</strong>
-                    {% set istimeout=filters.istimeout|default('') %}
-                    <a href="{{ path('activity_home') }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>全部</a>
-                    <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:0})) }}" {% if filters.istimeout=='0' %} class="active"{% endif %}>未开始</a>
-                    <a href="{{ path('activity_home', {}|merge(filters)|merge({istimeout:1})) }}" {% if filters.istimeout %} class="active"{% endif %}
-                    >已结束</a>
-                  
-                  <li>
-                    <strong>标签：</strong>
-                     <a href="{{ path('activity_home') }}">全部</a>
-                      {% for tag in tags %}              
-                        <a href="{{ path('activity_home', {tagsid:tag.id}) }}" 
-                        {% if filters.tagId == tag.id %} class="active"{% endif %}>
-                          {{ tag.name }}
-                        </a>
-                      {% endfor %}
-                  </li>
-                  <li>
-                    <strong>时间：</strong>
-                     <a href="{{ path('activity_home') }}">全部</a>
-                
-                  <a href="{{ path('activity_home', {time:'thisweek'}) }}"
-                  {% if filters.time == 'thisweek' %} class="active"{% endif %}>本周</a>
-                
-                
-                  <a href="{{ path('activity_home', {time:'lastweek'}) }}"
-                  {% if filters.time == 'lastweek' %} class="active"{% endif %}>上周</a>
-                
-                
-                  <a href="{{ path('activity_home', {time:'nextweek'}) }}"
-                  {% if filters.time == 'nextweek' %} class="active"{% endif %}>下周</a>
-                
-                  <a href="{{ path('activity_home', {time:'thismonth'}) }}"
-                  {% if filters.time == 'thismonth' %} class="active"{% endif %}>本月</a>
-                
-                  <a href="{{ path('activity_home', {time:'lastmonth'}) }}"
-                  {% if filters.time == 'lastmonth' %} class="active"{% endif %}>上月</a>
-
-                  <a href="{{ path('activity_home', {time:'nextmonth'}) }}"
-                  {% if filters.time == 'nextmonth' %} class="active"{% endif %}>下月</a>
-
-                  </li>
-                </ul>
-              </div>
-           </div> 
-        </div>
-    </div>        
+       
     <div class="row">
         <div class="col-md-12 ">
+           <div class="kytitle clearfix">
+                <h3>所有活动</h3>             
+           </div>  
            <div class="mod  openstack">
                 <ul class="content pz">
                   {% for activity in activitys %}
