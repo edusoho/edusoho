@@ -57,12 +57,6 @@ class UpgradeController extends BaseController
         ));
     }
 
-    public function triggerInstallModalAction(Request $request, $id)
-    {
-        $installPackage = $this->getUpgradeService()->getRemoteInstallPackageInfo($id);
-        return $this->render('TopxiaAdminBundle:Upgrade:install-modal.html.twig', array(
-            'installPackage'=>$installPackage));
-    }
 
     public function triggerUpdateModalAction(Request $request, $id)
     {
@@ -107,15 +101,15 @@ class UpgradeController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
     }
 
-    public function checkEnvironmentAction(Request $request)
+    public function checkEnvironmentAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkEnvironment();
-            
-        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+
 
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
+            $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
     }
@@ -123,12 +117,11 @@ class UpgradeController extends BaseController
     public function checkDependsAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkDepends($id);
-            
-        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
-        
+
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
+            $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
     }
@@ -136,9 +129,11 @@ class UpgradeController extends BaseController
     public function downloadAndExtractAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->downloadAndExtract($id);
+
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
+            $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
     }
@@ -156,26 +151,30 @@ class UpgradeController extends BaseController
     public function backupSystemAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->backUpSystem($id);
-        return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
 
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
+            $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
     }
 
+
     public function beginUpgradeAction(Request $request, $id)
     {
-
-        return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
 
         $result = $this->getUpgradeService()->beginUpgrade($id);
 
         if(empty($result)){
-            $this->getUpgradeService()->refreshCache();
+            try{
+                $this->getUpgradeService()->refreshCache();
+            }catch(\Exception $e){
+            }
+            $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
+            $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
 

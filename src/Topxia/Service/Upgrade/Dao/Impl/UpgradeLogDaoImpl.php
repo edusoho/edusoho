@@ -50,7 +50,7 @@ class UpgradeLogDaoImpl extends BaseDao implements UpgradeLogDao
 
     public function getUpdateLogByEnameAndVersion($ename,$tov)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ename = ? AND tov = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE ename = ? AND tov = ? ORDER BY logtime DESC LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($ename, $tov));
     }
 
@@ -63,6 +63,7 @@ class UpgradeLogDaoImpl extends BaseDao implements UpgradeLogDao
             ->andWhere('cname = :cname')
             ->andWhere('dbBackPath LIKE :dbBackPath')
             ->andWhere('srcBackPath LIKE :srcBackPath')
-            ->andWhere('status = :status');
+            ->andWhere('status = :status')
+            ->orderBy('logtime','DESC');
     }
 }

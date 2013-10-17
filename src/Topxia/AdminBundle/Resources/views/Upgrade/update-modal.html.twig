@@ -1,13 +1,13 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %} 升级软件包{% endblock %}
+{% block title %} 安装/升级软件包{% endblock %}
 
 {% block body %}
 
 <div id="post-url">
 	
 
-	<input type="hidden" data-type="check-environment" data-url="{{path('admin_upgrade_check_environment')}}">
+	<input type="hidden" data-type="check-environment" data-url="{{path('admin_upgrade_check_environment',{id:updatePackage.id})}}">
 
 	<input type="hidden" data-type="check-depends" data-url="{{path('admin_upgrade_check_depends', {id:updatePackage.id})}}">
 
@@ -68,47 +68,14 @@
 <hr>
 
 <div id="install-animate">
+	<p id='step1'>1、检查环境: <span id='step1-process'></span><span id='step1-result'></span></p>
+	<p id='step2'>2、检查依赖包: <span id='step2-process'></span><span id='step2-result'></span></p>
+	<p id='step3'>3、下载解压缩安装包: <span id='step3-process'></span><span id='step3-result'></span></p>
+	<p id='step4'>4、备份系统: <span id='step4-process'></span><span id='step4-result'></span></p>
+	<p id='step5'>5、更新系统文件和数据: <span id='step5-process'></span><span id='step5-result'></span></p>
+	<h2 id='step6'></h2>
 
-		<div id="check-last-error">
-			<h5>1: 检测上次是否存在错误</h5>
-			<h5 id="checking-last-error" style='color:green; display:none; text-align: left'>正在检测上次是否存在错误................</h5>
-			<p id="check-last-error-result" style="color:red; text-align: center"></p>
-		</div>
-		<hr>
-
-		<div id="check-environment">
-			<h5>2: 检查环境</h5>
-			<h5 id="checking-environment" style='color:green; display:none; text-align: left'>正在检查环境................</h5>
-			<div id="check-environment-result" style="color:red; text-align: center"></div>
-		</div>
-		<hr>
-
-		<div id="check-depends">
-			<h5>3: 检查依赖关系</h5>
-			<h5 id="checking-depends" style='color:green; display:none; text-align: left'>正在检查依赖关系................</h5>
-			<p id="check-depends-result" style="color:red ; text-align: center"></p>
-		</div>
-		<hr>
 		
-		<div id="download-extract">
-			<h5>4: 下载与解压</h5>
-			<h5 id="downloading-extract" style='color:green; display:none; text-align: left'>正在下载并解压软件包................</h5>
-			<p id="download-extract-result" style="color:red ; text-align: center"></p>
-		</div>
-		<hr>
-
-		<div id="backup-system">
-			<h5>5: 备份系统</h5>
-			<h5 id="backuping-system" style='color:green; display:none; text-align: left'>正在备份系统................</h5>
-			<p id="backup-system-result" style="color:red ; text-align: center"></p>
-		</div>
-		<hr>
-
-		<div id="begin-update">
-			<h5>6: 开始升级</h5>
-			<h5 id="begining-update" style='color:green; display:none; text-align: left'>正在开始升级软件包................</h5>
-			<p id="begin-update-result" style="color:red ; text-align: center"></p>
-		</div>
 
 </div>
 

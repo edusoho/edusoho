@@ -26,6 +26,11 @@ define(function(require, exports, module) {
             '{{display}}必须是中文字、英文字母、数字及下划线组成'
         ],
         [
+            'alphanumeric',
+            /^[a-zA-Z0-9_]+$/i,
+            '{{display}}必须是英文字母、数字及下划线组成'
+        ],
+        [
             'byte_minlength',
             function(options) {
                 var element = options.element;

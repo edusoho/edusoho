@@ -34,7 +34,7 @@
   <td>
   	{% if package.type == 0 %} 
 
-      <a href="#modal" class="btn btn-success btn-sm" data-toggle="modal" data-url="{{path('admin_upgrade_trigger_install_modal', {id:package.id})}}">安装</a>
+      <a href="#modal" class="btn btn-success btn-sm" data-toggle="modal" data-url="{{path('admin_upgrade_trigger_update_modal', {id:package.id})}}">安装</a>
 
   	{% elseif package.type == 1 %}
   		<a href="#modal" class="btn btn-primary btn-sm" data-toggle="modal" data-url="{{path('admin_upgrade_trigger_update_modal', {id:package.id})}}">更新</a>
