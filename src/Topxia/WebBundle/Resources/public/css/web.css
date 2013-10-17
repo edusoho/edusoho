@@ -2177,6 +2177,26 @@ body {
  * 通用属性
  */
 
+
+.ps-ab{	position: absolute !important;}
+.ps-re{	position: relative !important;}
+
+.ps-tp{top:10px !important;}
+.ps-tps{top:5px !important;}
+.ps-tpl{top:15px !important;}
+
+.ps-rt{right:10px !important;}
+.ps-rts{right:5px !important;}
+.ps-rtl{right:15px !important;}
+
+.ps-lt{left:10px !important;}
+.ps-lts{left:5px !important;}
+.ps-ltl{left:15px !important;}
+
+.ps-bt{bottom:10px !important;}
+.ps-bts{bottom:5px !important;}
+.ps-btl{bottom:15px !important;}
+
 .mz  { margin: 0px !important;}
 .mtz {margin-top: 0px !important;}
 .mts {margin-top: 5px !important;}
@@ -2206,18 +2226,23 @@ body {
 .mvl {margin-top: 20px !important; margin-bottom: 20px !important;}
 
 .pz  {padding: 0px !important;} 
+
+.ptz {padding-top: 0px !important;}
 .pts {padding-top: 5px !important;}
 .ptm {padding-top: 10px !important;}
+.ptd {padding-top: 115px !important;}
 .ptl {padding-top: 20px !important;}
 
-.prz {padding-right: 05px !important;}
+.prz {padding-right: 0px !important;}
 .prs {padding-right: 5px !important;}
 .prm {padding-right: 10px !important;}
 .prd {padding-right: 15px !important;}
 .prl {padding-right: 20px !important;}
 
+.pbz {padding-bottom: 0px !important;}
 .pbs {padding-bottom: 5px !important;}
 .pbm {padding-bottom: 10px !important;}
+.pbd {padding-bottom: 15px !important;}
 .pbl {padding-bottom: 20px !important;}
 
 .plz {padding-left: 0px !important;}

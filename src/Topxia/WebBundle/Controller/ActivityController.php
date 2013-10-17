@@ -66,7 +66,7 @@ class ActivityController extends BaseController
         ));
     }
 
-	public function showPrepareAction(Request $request, $id)
+	public function showAction(Request $request, $id)
     {
         //活动信息
         $activity=$this->getActivityService()->getActivity($id);
@@ -77,9 +77,8 @@ class ActivityController extends BaseController
 
         if($activity['expired']==1)
         {
-            return $this->redirect($this->generateUrl("activity_end_show",array(
-                    "id"=>$id,
-                    "isNew"=>false))
+            return $this->redirect($this->generateUrl("activity_expired",array(
+                    "id"=>$id))
             );
 
         }
@@ -136,7 +135,7 @@ class ActivityController extends BaseController
     }
   
 
-    public function showEndAction(Request $request,$id){
+    public function expiredAction(Request $request,$id){
 
         $activity=$this->getActivityService()->getActivity($id);
         

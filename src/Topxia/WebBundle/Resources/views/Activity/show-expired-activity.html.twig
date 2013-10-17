@@ -8,75 +8,69 @@
 {% block content %}
 
 <div class="row">
-  <ul class='col-md-12'>
-    <li class="widget shadow pz">
-      <div class="clearfix">
-        <div class="imageblock-image">
-          <a href="#" class="show-user-card" >
-            <img class="open-class-logo-large-size"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}"></a>
+ 
+   
+      <div class="container widget shadow ptm plm prm pbm ps-re">
+        <div class="col-md-3">
+          <img class="img-responsive"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}">
         </div>
-        <div class="imageblock-content prm">
+        <div class=" col-md-9 ">
           <p class="title">
             <h4>{{ activity.subtitle }}</h4>
             <h3>{{ activity.title }}</h3>
           </p>
-          <p>开始时间： {{activity.startTime}}</p>
-          <p>结束时间： {{activity.endTime}}</p>
-          <p>形式：  {{ activity.form }}</p>
-          <p>现场地址： {{ activity.address }}</p>
-          <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
-      
-          <p>费用： {{ activity.price}}</p>
-          <div class="text-right">
-            <p>
-              <h3> <span class='label label-default'>课程已结束</span></h3>
-            </p>
-          </div>
-        </div>
+          <p>时间： {{activity.startTime}}</p>
+          <p>现场地址： {{ activity.address }}</p>  
+        </div> 
+        <h3 class="ps-ab ps-bt ps-rtl">
+            <span class='label label-default'>已结束</span>
+        </h3>           
       </div>
-    </li>  
-  </ul>  
 </div>
 
-<section class="row"> 
- 
+<div class="row">  
        <!-- 视频播放-->
-      <div class="col-md-8">
-        <div class="mod k_postlist openstack">
-            <ul class="pz">
-              <li class="shadow pz">
-                {% if activity.courseId %}
+  <div class="col-md-8 pz"> 
+        <div class="widget shadow ">
+            <div class="kytitle mbz">
+              <h3>现场回放</h3>
+            </div>
+            <div class="plm ptm prm pbm">
+              {% if activity.courseId %}
                <div class="activity-video-player" 
                 data-url="{{ path('course_lesson_media',{courseId:activity.courseId[0],lessonId:lessonid}) }}">
                 <video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>
-              </div>
-                {% else %}
-                  <p class="empty-info">暂无视频信息</p>
-                {% endif %}
-              </li>           
-            </ul>         
-        </div>
-      </div>
-      <!-- 附件下载-->
-      <div class="col-md-4">
-        <div class="widget k_postlist shadow">
-          <div class="kytitle clearfix bor-l-green">
-            <h3>附件下载</h3>
+               </div>
+              {% else %}
+                      <p class="empty-info">暂无视频信息</p>
+
+              {% endif %}
+                      
+            </div>
+        </div>                    
+  </div>
+      <!-- 本期看点，讲师PPT-->
+  <div class="col-md-4 prz">
+    
+    <!-- 讲师介绍 --> 
+    {{ render(controller('TopxiaWebBundle:Activity:expertersBlock',{activity:activity}))}}
+
+    <!-- PPT -->
+    <div class="widget  shadow">
+          <div class="kytitle  bor-l-green">
+            <h3>PPT</h3>
           </div>
-          <div class="content outline mod-h-sm">
-          
+          <div class="content  ">
               {% for appendix in appendixs %}
                 {{ appendix.title }}  . <a href="{{ path('activity_material_download', {activityId:activity.id, materialId: appendix.id}) }}">下载</a>
               {% endfor %}
-          
           </div>
         </div>
-      </div>
-   
-</section>
+  </div>   
+</div>
 
-<section class="row">
-  <div class="col-md-12 ">
+<div class="row">
+  <div class="col-md-12  pz ">
 
           {% if pics %}
           <div id="carousel-demo-1" class="carousel-demo">
@@ -101,11 +95,11 @@
        
       </div>
 
-</section>
+</div>
 
-<section class="row"> 
+<div class="row"> 
   <!-- 课程大纲 -->
-  <div class="col-md-8">
+  <div class="col-md-8  pz">
     <div class="widget k_postlist shadow">
         <div class="kytitle clearfix bor-l-green">
           <h3>课程大纲</h3>
@@ -117,13 +111,11 @@
         </div>
     </div>
   </div> 
-  <div class="col-md-4">
-    <!-- 讲师介绍 -->                
-    {{ render(controller('TopxiaWebBundle:Activity:expertersBlock',{activity:activity}))}}
-    <!-- 已报名 -->
+  <div class="col-md-4 prz">
+     <!-- 已报名 -->
     <div class="widget k_postlist shadow">
       <div class="kytitle clearfix bor-l-green">
-        <h3>已报名的小伙伴</h3>             
+        <h3>参加的小伙伴</h3>             
       </div>
       <div class="content model-over-h">
         {% for student in students %}
@@ -134,11 +126,12 @@
         <span class="justify_fix"></span>         
       </div>
     </div>
-  </div>
+  </div> 
 
-</section>
+</div>
+
 <section class="row"> 
-  <div class="col-md-12">
+  <div class="col-md-12  pz">
       <div class="widget k_postlist shadow">
         <div class="kytitle clearfix bor-l-green">
           <h3>提问与交流</h3><span>如果在公开课前进行提问，我们会挑选关注度最高的几个问题让老师进行回答</span>
@@ -210,8 +203,8 @@
 
 
 <!-- 小伙伴们正在看 -->
-<div class="row">
-  <div class="col-md-12">
+<section class="row">
+  <div class="col-md-12 pz">
         <!-- 小伙伴们正在看 -->
         <div class="widget k_postlist shadow">
           <div class="kytitle clearfix bor-l-gray">
@@ -240,6 +233,5 @@
                       </span>
                     </div>
   </script>
-
 
 {% endblock %}
