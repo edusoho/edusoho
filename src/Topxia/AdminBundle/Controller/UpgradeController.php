@@ -65,42 +65,6 @@ class UpgradeController extends BaseController
             'updatePackage'=>$updatePackage));
     }
 
-    public function installAction(Request $request, $id)
-    {
-        $result = $this->getUpgradeService()->checkEnvironment();
-        var_dump($result);
-
-        $result = $this->getUpgradeService()->checkDepends($id);
-        var_dump($result);
-        $result = $this->getUpgradeService()->downloadAndExtract($id);
-        var_dump($result);
-        
-        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
-    }
-
-
-    public function upgradeAction(Request $request, $id)
-    {
-        $result =  $this->getUpgradeService()->hasLastError($id);
-        var_dump($result);
-        $result = $this->getUpgradeService()->checkEnvironment();
-            var_dump($result);
-    
-        $result = $this->getUpgradeService()->checkDepends($id);
-        var_dump($result);
-        $result = $this->getUpgradeService()->downloadAndExtract($id);
-         var_dump($result);
-        $result = $this->getUpgradeService()->backUpSystem($id);
-         var_dump($result);  
-
-       $result = $this->getUpgradeService()->beginUpgrade($id);
-         var_dump($result);
-
-         $this->getUpgradeService()->refreshCache();
-
-        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
-    }
-
     public function checkEnvironmentAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkEnvironment();
