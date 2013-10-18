@@ -169,10 +169,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
 			if(isset($package['backupDB']) && $package['backupDB']){
-				$backupDbFile = $this->backUpDb($package);
+				@$this->backUpDb($package) or $this->makeException();
 			}
 			if(isset($package['backupFile']) && $package['backupFile']){
-				$backupFilesDirs = $this->backUpFiles($package);
+				@$this->backUpFiles($package) or $this->makeException();
 			}
 
 		}catch(\Exception $e){
@@ -223,6 +223,12 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $result;
 	}
 
+	private function makeException()
+	{
+		throw new \Exception('权限的原因无法写文件，请检查文件访问权限以及文件的用户和用户组！');		
+	}
+
+
 
 	public function refreshCache(){
 		$path = $this->getCachePath();
@@ -270,7 +276,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private function  is_writable($path) {
 	    $path .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.tmp';
 	    $rm = $this->getFileSystem()->exists($path);
-	    $f = @fopen($path, 'a');
+	    $f = fopen($path, 'a');
 	    if ($f===false)
 	        return false;
 	    fclose($f);
@@ -313,7 +319,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  	{
 		if(!$this->getFileSystem()->exists($src)) return ;
 		if(!$this->getFileSystem()->exists($dest)){
-			$this->getFileSystem()->mkdir($dest,0777);
+			$this->getFileSystem()->mkdir($dest,0777) ;
 		}
 		foreach(new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),

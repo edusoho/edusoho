@@ -80,6 +80,7 @@ class UpgradeController extends BaseController
 
     public function checkDependsAction(Request $request, $id)
     {
+
         $result = $this->getUpgradeService()->checkDepends($id);
 
         if(empty($result)){
@@ -92,6 +93,7 @@ class UpgradeController extends BaseController
 
     public function downloadAndExtractAction(Request $request, $id)
     {
+
         $result = $this->getUpgradeService()->downloadAndExtract($id);
 
         if(empty($result)){
@@ -105,15 +107,16 @@ class UpgradeController extends BaseController
     public function hasLastErrorAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->hasLastError($id);
-        if(empty($result)){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        if(!$result){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
         } else {
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>array()));
         }
     }
 
     public function backupSystemAction(Request $request, $id)
     {
+        
         $result = $this->getUpgradeService()->backUpSystem($id);
 
         if(empty($result)){
@@ -134,6 +137,9 @@ class UpgradeController extends BaseController
             try{
                 $this->getUpgradeService()->refreshCache();
             }catch(\Exception $e){
+                return $this->createJsonResponse(
+                    array('status' => 'error', 
+                        'result'=>array('升级成功了，但缓存未刷新，请检查 app/cache 权限！')));
             }
             $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
