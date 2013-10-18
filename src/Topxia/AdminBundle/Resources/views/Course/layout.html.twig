@@ -22,7 +22,7 @@
 
         <a href="{{ url('admin_tag') }}" class="list-group-item {% if menu == 'tag' %}active{% endif %}">标签管理</a>
 
-        <a href="{{ url('admin_course_disk') }}" class="list-group-item {% if menu == 'course-disk' %}active{% endif %}">文件管理</a>
+        <a href="{{ url('admin_course_disk') }}" class="list-group-item {% if menu == 'course-disk' %}active{% endif %}" style="display:none;">文件管理</a>
 
       </div>
     {% endblock %}
