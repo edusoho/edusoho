@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\DiskService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClient;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -12,7 +13,17 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function getFile($id)
     {
-        return $this->getDiskFileDao()->getFile($id);
+        return DiskFileSerialize::unserialize($this->getFileDao()->getFile($id));
+    }
+
+    public function getFileByConvertHash($hash)
+    {
+        return $this->getFileDao()->getFileByConvertHash($hash);
+    }
+
+    public function findFilesByIds(array $ids)
+    {
+        return $this->getFileDao()->findFilesByIds($ids);
     }
 
     public function getUserFiles($userId, $storage, $path = '/')
@@ -142,13 +153,24 @@ class DiskServiceImpl extends BaseService implements DiskService
     	$diskFile['size'] = (int) $file['size'];
     	$diskFile['mimeType'] = $file['mimeType'];
     	$diskFile['etag'] = $file['etag'];
+        if (empty($file['convertId']) or empty($file['convertKey'])) {
+            $diskFile['convertHash'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+            $diskFile['convertStatus'] = 'none';
+        } else {
+            $diskFile['convertHash'] = "{$file['convertId']}:{$file['convertKey']}";
+            $diskFile['convertStatus'] = 'waiting';
+        }
     	$diskFile['storage'] = $file['storage'];
     	$diskFile['bucket'] = $file['bucket'];
     	$diskFile['type'] = $this->getFileType($diskFile['mimeType']);
     	$diskFile['uri'] = $this->makeFileUri($file);
     	$diskFile['updatedTime'] = $diskFile['createdTime'] = time();
 
-    	return $this->getDiskFileDao()->addFile($diskFile);
+    	$diskFile = $this->getFileDao()->addFile($diskFile);
+
+        $this->getLogService()->info('disk', 'add_cloud_file', json_encode($file));
+
+        return $diskFile;
     }
 
     public function renameFile($id, $newFilename)
@@ -171,6 +193,49 @@ class DiskServiceImpl extends BaseService implements DiskService
         foreach ($ids as $id) {
             $this->deleteFile($id);
         }
+    }
+
+    public function setFileFormats($id, array $items)
+    {
+        $cmds = CloudClient::getVideoConvertCommands();
+
+        $formats = array();
+        foreach ($items as $item) {
+            $type = empty($cmds[$item['cmd']]) ? null : $cmds[$item['cmd']];
+            if (empty($type)) {
+                continue;
+            }
+
+            if ($item['code'] != 0) {
+                continue;
+            }
+
+            if (empty($item['key'])) {
+                continue;
+            }
+
+            $formats[$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
+        }
+
+        if (empty($formats)) {
+            $fields = array('convertStatus' => 'error', 'formats' => $formats);
+        } else {
+            $fields = array('convertStatus' => 'success', 'formats' => $formats);
+        }
+
+        return DiskFileSerialize::unserialize(
+            $this->getFileDao()->updateFile($id, DiskFileSerialize::serialize($fields))
+        );
+    }
+
+    public function changeFileConvertStatus($id, $status)
+    {
+        $statuses = array('none', 'waiting', 'doing', 'success', 'error');
+        if (!in_array($status, $statuses)) {
+            throw $this->createServiceException('状态不正确，变更文件转换状态失败！');
+        }
+
+        $this->getFileDao()->updateFile($id, array('convertStatus' => $status));
     }
 
     private function filterFilepath($filepath)
@@ -214,6 +279,11 @@ class DiskServiceImpl extends BaseService implements DiskService
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');        
     }
 
 }
@@ -277,4 +347,32 @@ class UserLocalDisk
         return $directory;
     }
 
+}
+
+class DiskFileSerialize
+{
+    public static function serialize(array $file)
+    {
+        if (isset($file['formats'])) {
+            $file['formats'] = !empty($file['formats']) ? $file['formats'] : array();
+            $file['formats'] = json_encode($file['formats']);
+        }
+        return $file;
+    }
+
+    public static function unserialize(array $file = null)
+    {
+        if (empty($file)) {
+            return null;
+        }
+        $file['formats'] = json_decode($file['formats'], true);
+        return $file;
+    }
+
+    public static function unserializes(array $files)
+    {
+        return array_map(function($file) {
+            return LessonSerialize::unserialize($file);
+        }, $files);
+    }
 }

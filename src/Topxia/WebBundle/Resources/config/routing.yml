@@ -717,6 +717,15 @@ disk_browse:
     pattern: /disk/browse
     defaults: {_controller: TopxiaWebBundle:Disk:browse }
 
+disk_convert_callback:
+    pattern: /disk/convert/callback
+    defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
+    methods: [POST]
+
+disk_convert_status:
+    pattern: /disk/convert/status
+    defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
+
 content_article_show:
     pattern: /article/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:articleShow }
