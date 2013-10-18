@@ -53,7 +53,11 @@ class SettingsController extends BaseController
                 $file = $data['avatar'];
                 $filenamePrefix = "user_{$user['id']}_";
                 $hash = substr(md5($filenamePrefix . time()), -8);
-                $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();
+                $ext = $file->getClientOriginalExtension();
+                if (!in_array($ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+                    throw $this->createAccessDeniedException();
+                }
+                $filename = $filenamePrefix . $hash . '.' . $ext;
                 $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
                 $file = $file->move($directory, $filename);
 

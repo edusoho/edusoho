@@ -21,7 +21,7 @@
         <input type="radio" id="upload_mode_0" name="upload_mode" value="local"
         {% if storageSetting.upload_mode == 'local' %} checked="checked" {% endif %}>
         <label for="upload_mode_0" class="required">网站本地存储</label>
-        <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" disabled 
+        <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" 
         {% if storageSetting.upload_mode == 'cloud' %} checked="checked" {% endif %}>
         <label for="upload_mode_1" class="required">云存储</label>
       </div>
@@ -32,6 +32,15 @@
 
       </div>
 
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="cloud_api_server" >云存储API地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
     </div>
   </div>
 
@@ -62,8 +71,6 @@
     </div>
   </div>
 
-  <br>
-  
   <div class="row form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">

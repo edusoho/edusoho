@@ -14,6 +14,20 @@ class DataDict
 			'published' => '<span class="text-success">已发布</span>',
 			'closed' => '<span class="text-danger">已关闭</span>'
 		),
+		'fileType' => array(
+			'video' => '视频',
+			'audio' => '音频',
+			'document' => '文档',
+			'image' => '图片',
+			'other' => '其他'
+		),
+		'fileType:html' => array(
+			'video' => '<span class="text-muted">视频</span>',
+			'audio' => '<span class="text-success">音频</span>',
+			'document' => '<span class="text-warning">文档</span>',
+			'image' => '<span class="text-danger">图片</span>',
+			'other' => '<span class="text-danger">其他</span>',
+		),
 		'orderStatus' => array(
 			'created' => '未付款',
 			'paid' => '已付款',

@@ -3,6 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use Topxia\Service\Util\CloudClient;
+
 class DiskController extends BaseController
 {
 
@@ -13,9 +15,7 @@ class DiskController extends BaseController
         if (empty($token)) {
             throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
         }
-
         $file = $this->get('request')->files->get('file');
-
         $file = $this->getDiskService()->addLocalFile($file, $token['userId'], '/');
 
         return $this->createJsonResponse($file);
@@ -42,6 +42,55 @@ class DiskController extends BaseController
         ), 'lastestUpdated', 0, 1000);
 
         return $this->createFilesJsonResponse($files);
+    }
+
+    public function convertCallbackAction(Request $request)
+    {
+        $data = $request->getContent();
+
+        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调:{$data}");
+
+        $key = $request->query->get('key');
+        if (empty($key)) {
+            throw new \RuntimeException('key不能为空');
+        }
+        
+        $data = json_decode($data, true);
+        if (empty($data['id'])) {
+            throw new \RuntimeException('数据中id不能为空');
+        }
+
+        $hash = "{$data['id']}:{$key}";
+
+        $file = $this->getDiskService()->getFileByConvertHash($hash);
+        if (empty($file)) {
+            throw new \RuntimeException('文件不存在');
+        }
+
+        if ($data['code'] != 0) {
+            $this->getDiskService()->changeFileConvertStatus($file['id'], 'error');
+            throw new \RuntimeException('转换失败');
+        }
+
+        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $file = $this->getDiskService()->setFileFormats($file['id'], $data['items']);
+
+        return $this->createJsonResponse($file['formats']);
+    }
+
+    public function convertStatusAction(Request $request)
+    {
+        $hash = $request->query->get('hash');
+        if (empty($hash)) {
+            throw new \RuntimeException('hash不能为空');
+        }
+
+        $file = $this->getDiskService()->getFileByConvertHash($hash);
+        if (empty($file)) {
+            throw $this->createNotFoundException('文件不存在');
+        }
+
+        return $this->createJsonResponse(array('status' => $file['convertStatus']));
     }
 
     private function createFilesJsonResponse($files)
