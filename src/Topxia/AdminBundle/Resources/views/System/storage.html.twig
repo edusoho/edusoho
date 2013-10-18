@@ -37,6 +37,15 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
+      <label for="cloud_api_server" >云存储API地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
       <label for="cloud_access_key" >云存储AccessKey</label>
     </div>
     <div class="controls col-md-8 radios">
@@ -59,33 +68,6 @@
     </div>
     <div class="controls col-md-8 radios">
       <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_bucket" >云存储BucketDomain</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_bucket_domain" class="form-control" name="cloud_bucket_domain" value="{{storageSetting.cloud_bucket_domain}}">
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_bucket" >云存储MacIndex</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_mac_index" class="form-control" name="cloud_mac_index" value="{{storageSetting.cloud_mac_index}}">
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_bucket" >云存储MacKey</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_mac_key" class="form-control" name="cloud_mac_key" value="{{storageSetting.cloud_mac_key}}">
     </div>
   </div>
 

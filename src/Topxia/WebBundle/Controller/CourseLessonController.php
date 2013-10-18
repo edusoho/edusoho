@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClient;
+use Topxia\Service\Util\EdusohoCloudClient;
 
 class CourseLessonController extends BaseController
 {
@@ -94,20 +94,14 @@ class CourseLessonController extends BaseController
             }
 
             $setting = $this->setting('storage');
-            $client = new CloudClient(
+            $client = new EdusohoCloudClient(
+                $setting['cloud_api_server'],
                 $setting['cloud_access_key'],
-                $setting['cloud_secret_key'],
-                $setting['cloud_bucket'],
-                $setting['cloud_bucket_domain'],
-                $setting['cloud_mac_index'],
-                $setting['cloud_mac_key']
+                $setting['cloud_secret_key']
             );
 
-            $url = $client->getDownloadUrl($key);
-            $cookieToken = $client->generateDownloadCookieToken($url, time() + 3600);
-            setrawcookie('qiniuToken', $cookieToken, 0, '/', 'edusoho.net', false, true);
+            $client->download($file['bucket'], $key);
 
-            return $this->redirect($url);
         }
 
         $uri = $this->getDiskService()->parseFileUri($file['uri']);

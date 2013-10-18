@@ -237,9 +237,7 @@ class SettingController extends BaseController
             'cloud_access_key' => '',
             'cloud_secret_key' => '',
             'cloud_bucket' => '',
-            'cloud_bucket_domain' => '',
-            'cloud_mac_index' => '',
-            'cloud_mac_key' =>  '', 
+            'cloud_api_server' => '',
         );
 
         $storageSetting = array_merge($default, $storageSetting);
