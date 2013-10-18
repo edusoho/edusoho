@@ -250,6 +250,19 @@ admin_course_category:
     pattern: /course/category
     defaults: { _controller: TopxiaAdminBundle:Course:category }
 
+admin_course_disk:
+    pattern: /course/disk
+    defaults: { _controller: TopxiaAdminBundle:CourseDisk:index }
+
+admin_course_disk_delete:
+    pattern: /disk/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:CourseDisk:delete }
+
+admin_course_disk_batch_delete:
+    pattern: /disk/batch_delete
+    defaults: { _controller: TopxiaAdminBundle:CourseDisk:batchDelete }
+    methods: [POST]
+
 admin_course_tag:
     pattern:  /course/tag
     defaults: { _controller: TopxiaAdminBundle:Tag:tagCourse }

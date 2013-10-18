@@ -12,7 +12,7 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function getFile($id)
     {
-
+        return $this->getDiskFileDao()->getFile($id);
     }
 
     public function getUserFiles($userId, $storage, $path = '/')
@@ -22,21 +22,51 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function searchFiles($conditions, $sort, $start, $limit)
     {
-        $sorts = array(
-            'latestUpdated' => array('updatedTime', 'DESC'),
-            'oldestUpdated' => array('updatedTime', 'ASC'),
-            'latestCreated' => array('createdTime', 'DESC'),
-            'oldestCreated' => array('createdTime', 'ASC'),
-        );
 
-        $orderBy = empty($sorts[$sort]) ? $sorts['latestUpdated'] : $sorts[$sort];
+        switch ($sort) {
+            case 'latestUpdated':
+                $orderBy = array('updatedTime', 'DESC');
+                break;
+            case 'oldestUpdated':
+                $orderBy =  array('updatedTime', 'ASC');
+                break; 
+            case 'latestCreated':
+                $orderBy =  array('createdTime', 'DESC');
+                break;
+            case 'oldestCreated':
+                $orderBy =  array('createdTime', 'ASC');
+                break;
+            default:
+                throw $this->createServiceException('参数sort不正确。');
+        }
 
-        return $this->getFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+        $conditions = $this->prepareSearchConditions($conditions);
+
+        return $this->getDiskFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+    }
+
+    private function prepareSearchConditions($conditions)
+    {
+        $conditions = array_filter($conditions);
+
+        if (isset($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            if(empty($user)){
+                 $conditions['userId'] = 9999999999;
+            } else {
+                $conditions['userId'] = $user['id'];
+                
+            }
+            unset($conditions['nickname']);
+        }
+
+        return $conditions;
     }
 
     public function searchFileCount($conditions)
     {
-        return $this->getFileDao()->searchFileCount($conditions);
+        $conditions = $this->prepareSearchConditions($conditions);
+        return $this->getDiskFileDao()->searchFileCount($conditions);
     }
 
     public function parseFileUri($uri)
@@ -76,11 +106,8 @@ class DiskServiceImpl extends BaseService implements DiskService
         }
 
         $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
-
         $disk = new UserLocalDisk($user, $diskDirectory);
-
         $savedFile = $disk->saveFile($originalFile, $path);
-
         $diskfile = array();
         $diskFile['userId'] = $this->getCurrentUser()->id;
         $diskFile['filename'] = $originalFile->getClientOriginalName();
@@ -95,7 +122,7 @@ class DiskServiceImpl extends BaseService implements DiskService
         $diskFile['uri'] = 'disk://local/' . substr($savedFile->getPathname(), strlen(realpath($diskDirectory))+1);
         $diskFile['updatedTime'] = $diskFile['createdTime'] = time();
 
-        $diskFile = $this->getFileDao()->addFile($diskFile);
+        $diskFile = $this->getDiskFileDao()->addFile($diskFile);
 
         return $diskFile;
     }
@@ -121,7 +148,7 @@ class DiskServiceImpl extends BaseService implements DiskService
     	$diskFile['uri'] = $this->makeFileUri($file);
     	$diskFile['updatedTime'] = $diskFile['createdTime'] = time();
 
-    	return $this->getFileDao()->addFile($diskFile);
+    	return $this->getDiskFileDao()->addFile($diskFile);
     }
 
     public function renameFile($id, $newFilename)
@@ -131,7 +158,19 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function deleteFile($id)
     {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException("文件(#{$id})不存在，删除失败");
+        }
 
+        return $this->getDiskFileDao()->deleteFile($id);
+    }
+
+    public function deleteFiles(array $ids)
+    {
+        foreach ($ids as $id) {
+            $this->deleteFile($id);
+        }
     }
 
     private function filterFilepath($filepath)
@@ -167,7 +206,7 @@ class DiskServiceImpl extends BaseService implements DiskService
     	return $uri;
     }
 
-    private function getFileDao()
+    private function getDiskFileDao()
     {
         return $this->createDao('User.DiskFileDao');
     }
@@ -176,7 +215,6 @@ class DiskServiceImpl extends BaseService implements DiskService
     {
         return $this->createService('User.UserService');
     }
-
 
 }
 
@@ -200,6 +238,7 @@ class UserLocalDisk
 
     public function saveFile($file, $path = '/')
     {
+
         $directory = $this->getUserDirectory($path);
         $ext = $file->guessExtension();
         if ($ext) {

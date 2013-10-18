@@ -32,6 +32,11 @@ class DiskFileDaoImpl extends BaseDao implements DiskFileDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function deleteFile($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+    
     public function addFile(array $file)
     {
         $affected = $this->getConnection()->insert($this->table, $file);
@@ -43,8 +48,15 @@ class DiskFileDaoImpl extends BaseDao implements DiskFileDao
 
     private function createSearchQueryBuilder($conditions)
     {
+        
+        if (isset($conditions['filename'])) {
+            $conditions['filenameLike'] = "%{$conditions['filename']}%";
+            unset($conditions['filename']);
+        }
+
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
+            ->andWhere('filename LIKE :filenameLike')
             ->andWhere('userId = :userId')
             ->andWhere('type = :type');
     }

@@ -11,4 +11,6 @@ interface DiskFileDao
 	public function searchFileCount($conditions);
 
     public function addFile(array $file);
+
+    public function deleteFile($id);
 }

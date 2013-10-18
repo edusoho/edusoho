@@ -33,4 +33,6 @@ interface DiskService
 
     public function deleteFile($id);
 
+    public function deleteFiles(array $ids);
+
 }
