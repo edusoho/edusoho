@@ -169,10 +169,10 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		try{
 			$package = $this->getEduSohoUpgradeService()->getPackage($id);
 			if(isset($package['backupDB']) && $package['backupDB']){
-				@$this->backUpDb($package) or $this->makeException();
+				$this->backUpDb($package);
 			}
 			if(isset($package['backupFile']) && $package['backupFile']){
-				@$this->backUpFiles($package) or $this->makeException();
+				$this->backUpFiles($package);
 			}
 
 		}catch(\Exception $e){
