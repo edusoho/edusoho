@@ -29,7 +29,7 @@ CREATE TABLE `cache` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `expiredTime` (`expiredTime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -165,7 +165,10 @@ CREATE TABLE `course_lesson` (
   `tags` text,
   `type` enum('text','video','audio') NOT NULL,
   `content` text,
-  `media` text,
+  `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID(user_disk_file.id)',
+  `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
+  `mediaName` varchar(255) NOT NULL DEFAULT '' COMMENT '媒体文件名称',
+  `mediaUri` varchar(1024) NOT NULL DEFAULT '' COMMENT '媒体文件资源名',
   `length` int(11) unsigned DEFAULT NULL,
   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
   `quizNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '测验题目数量',
@@ -400,7 +403,7 @@ CREATE TABLE `installed_packages` (
   `fromVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '来源',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cname` (`ename`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装包';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已安装包';
 
 CREATE TABLE `location` (
   `id` bigint(20) unsigned NOT NULL,
@@ -421,7 +424,7 @@ CREATE TABLE `log` (
   `level` char(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `message` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '私信Id',
@@ -494,7 +497,7 @@ CREATE TABLE `setting` (
   `value` longblob,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -521,7 +524,7 @@ CREATE TABLE `upgrade_logs` (
   `ip` varchar(32) DEFAULT NULL COMMENT 'ip',
   `reason` text COMMENT '失败原因',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -551,7 +554,7 @@ CREATE TABLE `user` (
   `createdIp` varchar(64) NOT NULL DEFAULT '',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_bind` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -577,12 +580,16 @@ CREATE TABLE `user_disk_file` (
   `size` int(11) NOT NULL DEFAULT '0',
   `mimeType` varchar(255) NOT NULL DEFAULT '',
   `etag` varchar(128) NOT NULL DEFAULT '',
+  `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件格式转换的HashID',
+  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
+  `formats` text,
   `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other',
   `storage` enum('local','cloud') NOT NULL,
   `bucket` varchar(255) NOT NULL DEFAULT '',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `convertHash` (`convertHash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_fortune_log` (
