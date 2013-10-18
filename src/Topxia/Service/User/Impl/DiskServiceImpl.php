@@ -13,17 +13,17 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function getFile($id)
     {
-        return DiskFileSerialize::unserialize($this->getFileDao()->getFile($id));
+        return DiskFileSerialize::unserialize($this->getDiskFileDao()->getFile($id));
     }
 
     public function getFileByConvertHash($hash)
     {
-        return $this->getFileDao()->getFileByConvertHash($hash);
+        return $this->getDiskFileDao()->getFileByConvertHash($hash);
     }
 
     public function findFilesByIds(array $ids)
     {
-        return $this->getFileDao()->findFilesByIds($ids);
+        return $this->getDiskFileDao()->findFilesByIds($ids);
     }
 
     public function getUserFiles($userId, $storage, $path = '/')
@@ -166,7 +166,7 @@ class DiskServiceImpl extends BaseService implements DiskService
     	$diskFile['uri'] = $this->makeFileUri($file);
     	$diskFile['updatedTime'] = $diskFile['createdTime'] = time();
 
-    	$diskFile = $this->getFileDao()->addFile($diskFile);
+    	$diskFile = $this->getDiskFileDao()->addFile($diskFile);
 
         $this->getLogService()->info('disk', 'add_cloud_file', json_encode($file));
 
@@ -224,7 +224,7 @@ class DiskServiceImpl extends BaseService implements DiskService
         }
 
         return DiskFileSerialize::unserialize(
-            $this->getFileDao()->updateFile($id, DiskFileSerialize::serialize($fields))
+            $this->getDiskFileDao()->updateFile($id, DiskFileSerialize::serialize($fields))
         );
     }
 
@@ -235,7 +235,7 @@ class DiskServiceImpl extends BaseService implements DiskService
             throw $this->createServiceException('状态不正确，变更文件转换状态失败！');
         }
 
-        $this->getFileDao()->updateFile($id, array('convertStatus' => $status));
+        $this->getDiskFileDao()->updateFile($id, array('convertStatus' => $status));
     }
 
     private function filterFilepath($filepath)

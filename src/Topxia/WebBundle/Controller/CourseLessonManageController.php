@@ -92,11 +92,13 @@ class CourseLessonManageController extends BaseController
 	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
     		));
 
+    		$uploadToken = $uploadToken['token'];
+
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
-			'uploadToken' => $uploadToken['token'],
+			'uploadToken' => $uploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
@@ -166,20 +168,20 @@ class CourseLessonManageController extends BaseController
     	if ($setting['upload_mode'] == 'local') {
     		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
-	        $client = new CloudClient(
+
+	        $client = new EdusohoCloudClient(
+	            $setting['cloud_api_server'],
 	            $setting['cloud_access_key'],
-	            $setting['cloud_secret_key'],
-	            $setting['cloud_bucket'],
-	            $setting['cloud_bucket_domain'],
-	            $setting['cloud_mac_index'],
-	            $setting['cloud_mac_key']
+	            $setting['cloud_secret_key']
 	        );
 
 	        $commands = array_keys($client->getVideoConvertCommands());
-	    	$uploadToken = $client->generateUploadToken(array(
-	    		'PersistentOps' => implode(';', $commands),
-	    		'PersistentNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
+	    	$uploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
+	    		'convertCommands' => implode(';', $commands),
+	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
     		));
+
+    		$uploadToken = $uploadToken['token'];
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(

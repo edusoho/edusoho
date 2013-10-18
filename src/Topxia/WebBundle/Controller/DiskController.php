@@ -39,7 +39,7 @@ class DiskController extends BaseController
         $files = $this->getDiskService()->searchFiles(array(
             'userId' => $user['id'],
             'type' => $type,
-        ), 'lastestUpdated', 0, 1000);
+        ), 'latestUpdated', 0, 1000);
 
         return $this->createFilesJsonResponse($files);
     }
@@ -74,6 +74,17 @@ class DiskController extends BaseController
 
         $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
         $file = $this->getDiskService()->setFileFormats($file['id'], $data['items']);
+
+        // @todo refactor
+        $lesson = $this->getCourseService()->getLessonByMediaId($file['id']);
+        if ($lesson) {
+            $this->getNotificationService()->notify($file['userId'], 'cloud-file-converted', array(
+                'lessonId' => $lesson['id'],
+                'courseId' => $lesson['courseId'],
+                'filename' => $file['filename'],
+            ));
+
+        }
 
         return $this->createJsonResponse($file['formats']);
     }
@@ -122,6 +133,16 @@ class DiskController extends BaseController
     private function getDiskService()
     {
         return $this->getServiceKernel()->createService('User.DiskService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }

@@ -17,6 +17,8 @@ interface LessonDao
 
     public function findLessonsByChapterId($chapterId);
 
+    public function getLessonByMediaId($mediaId);
+
     public function addLesson($course);
 
     public function updateLesson($id, $fields);
