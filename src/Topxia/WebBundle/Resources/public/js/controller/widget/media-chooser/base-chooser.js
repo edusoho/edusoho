@@ -178,13 +178,10 @@ define(function(require, exports, module) {
 
                 upload_success_handler: function(file, serverData) {
                     progressbar.setComplete().hide();
-                    console.log(serverData);
                     serverData = $.parseJSON(serverData);
 
-                            console.log(serverData);
                     if ($btn.data('callback')) {
                         $.post($btn.data('callback'), serverData, function(response) {
-                            console.log(response);
                             var media = self._convertFileToMedia(response);
                             self.trigger('change',  media);
                             Notify.success('文件上传成功！');

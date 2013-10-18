@@ -50,7 +50,6 @@ define(function(require, exports, module) {
 						}
 						$("#step5-process").append("更新数据以及系统文件......");
 						$.post(beginUpgradeUrl, function(beginUpgradeResponse) {
-							    console.log(beginUpgradeResponse);
 								if (beginUpgradeResponse.status == 'error') {
 									textResult = $("#step5-result").attr('style','color:#FF0000').append('更新数据以及系统文件失败！ <br/>');
 									for(var i=0; i<beginUpgradeResponse.result.length;i++){
