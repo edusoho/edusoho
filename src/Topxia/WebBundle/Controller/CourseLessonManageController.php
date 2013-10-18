@@ -89,7 +89,7 @@ class CourseLessonManageController extends BaseController
 	        $commands = array_keys($client->getVideoConvertCommands());
 	    	$uploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
 	    		'convertCommands' => implode(';', $commands),
-	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
+	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
     		));
 
     		$uploadToken = $uploadToken['token'];
@@ -178,7 +178,7 @@ class CourseLessonManageController extends BaseController
 	        $commands = array_keys($client->getVideoConvertCommands());
 	    	$uploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
 	    		'convertCommands' => implode(';', $commands),
-	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey)),
+	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
     		));
 
     		$uploadToken = $uploadToken['token'];
