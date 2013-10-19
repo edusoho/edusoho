@@ -2,38 +2,30 @@
 
 {% block title %}评价课程{% endblock %}
 {% block body %}
-  {%  if course.status != 'published' %}
-    <div class="alert alert-danger">当前课程未发布，不能评价！</div>
-  {% else %}
-    <form id="review-form" method="post" action="{{ path('course_review_create', {id:course.id}) }}">
-        {{ web_macro.flash_messages() }}
+  <form id="review-form" method="post" action="{{ path('course_review_create', {id:course.id}) }}">
+      {{ web_macro.flash_messages() }}
 
-      <div class="form-group">
-        <div class="controls">
-          请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" class="mrm"></span>
-          {{ form_widget(form.rating) }}
-        </div>
+    <div class="form-group">
+      <div class="controls">
+        请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" class="mrm"></span>
+        {{ form_widget(form.rating) }}
       </div>
+    </div>
 
-      <div class="form-group">
-        <div class="controls">
-          {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'评价详细内容', 'data-display':'评价详细内容', rows:8}}) }}
-        </div>
+    <div class="form-group">
+      <div class="controls">
+        {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'评价详细内容', 'data-display':'评价详细内容', rows:8}}) }}
       </div>
+    </div>
 
-      {{ form_rest(form) }}
-    </form>
-    <script>
-        app.load('course/review-modal');
-    </script>
-  {% endif %}
+    {{ form_rest(form) }}
+  </form>
+  <script>
+      app.load('course/review-modal');
+  </script>
 {% endblock %}
 
 {% block footer %}
-  {%  if course.status == 'published' %}
     <button class="btn btn-link" data-dismiss="modal">取消</button>
     <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form">保存</button>
-  {% else %}
-    <button class="btn btn-primary" data-dismiss="modal">关闭</button>
-  {% endif %}
 {% endblock %}

@@ -63,10 +63,11 @@
           <span class="member-text">人</span>
         </p>
         <p>
-          状　态：
           {% if course.status=='closed' %}  
+          状　态：
             <span class="label label-danger ">已关闭</span>
           {% elseif course.status=='draft' %}
+          状　态：
             <span class="label label-warning ">未发布</span>
           {% endif %}          
         </p>
