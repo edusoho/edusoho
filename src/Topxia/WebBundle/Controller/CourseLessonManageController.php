@@ -77,7 +77,7 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-    		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
+    		$videoUploadToken = $audioUploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
 
 	        $client = new EdusohoCloudClient(
@@ -87,18 +87,21 @@ class CourseLessonManageController extends BaseController
 	        );
 
 	        $commands = array_keys($client->getVideoConvertCommands());
-	    	$uploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
+	    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
 	    		'convertCommands' => implode(';', $commands),
 	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
     		));
+    		$videoUploadToken = $videoUploadToken['token'];
 
-    		$uploadToken = $uploadToken['token'];
+    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+    		$audioUploadToken = $audioUploadToken['token'];
 
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
-			'uploadToken' => $uploadToken,
+			'videoUploadToken' => $videoUploadToken,
+			'audioUploadToken' => $audioUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
@@ -166,7 +169,7 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-    		$uploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
+    		$videoUploadToken = $audioUploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
     	} else {
 
 	        $client = new EdusohoCloudClient(
@@ -176,18 +179,21 @@ class CourseLessonManageController extends BaseController
 	        );
 
 	        $commands = array_keys($client->getVideoConvertCommands());
-	    	$uploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
+	    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
 	    		'convertCommands' => implode(';', $commands),
 	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
     		));
+    		$videoUploadToken = $videoUploadToken['token'];
 
-    		$uploadToken = $uploadToken['token'];
+    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+    		$audioUploadToken = $audioUploadToken['token'];
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
-			'uploadToken' => $uploadToken,
+			'videoUploadToken' => $videoUploadToken,
+			'audioUploadToken' => $audioUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,

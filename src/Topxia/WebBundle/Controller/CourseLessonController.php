@@ -76,17 +76,22 @@ class CourseLessonController extends BaseController
         }
 
         if ($file['storage'] == 'cloud') {
-            if (empty($file['formats']) || !is_array($file['formats'])) {
-                throw $this->createNotFoundException();
-            }
 
-            $formats = $file['formats'];
             $key = null;
-            foreach (array('hd', 'shd', 'sd') as $type) {
-                if (!empty($formats[$type])) {
-                    $key = $formats[$type]['key'];
-                    break;
+            if ($file['type'] == 'video') {
+                if (empty($file['formats']) || !is_array($file['formats'])) {
+                    throw $this->createNotFoundException();
                 }
+                $formats = $file['formats'];
+                foreach (array('hd', 'shd', 'sd') as $type) {
+                    if (!empty($formats[$type])) {
+                        $key = $formats[$type]['key'];
+                        break;
+                    }
+                }
+            } else {
+                $uri = $this->getDiskService()->parseFileUri($file['uri']);
+                $key = $uri['key'];
             }
 
             if (empty($key)){
