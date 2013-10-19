@@ -28,6 +28,16 @@ abstract class BaseController extends Controller
         throw new \RuntimeException('获得当前登录用户的API变更为：getCurrentUser()。');
     }
 
+    protected function createErrorMessageResponse()
+    {
+
+    }
+
+    protected function createErrorMessageModalResponse()
+    {
+        
+    }
+
     protected function authenticateUser ($user)
     {
         $user['currentIp'] = $this->container->get('request')->getClientIp();
