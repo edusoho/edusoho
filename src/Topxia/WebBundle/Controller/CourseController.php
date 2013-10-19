@@ -143,7 +143,7 @@ class CourseController extends BaseController
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
         if(!$this->canCourseShow($course,$user)){
-           return $this->createErrorMessageResponse('抱歉,课程已经关闭！不能再观看，如有疑问请联系管理员!','课程已关闭！');     
+           return $this->createErrorMessageResponse('抱歉,课程已经关闭！不能参加学习了，如有疑问请联系管理员!','课程已关闭！');     
         }
         
 
@@ -181,7 +181,8 @@ class CourseController extends BaseController
     {
         return  !($course['status']==='closed' && 
             !$this->isAdminOnline() && 
-            !$this->getCourseService()->isCourseTeacher($course['id'],$user['id']));
+            !$this->getCourseService()->isCourseTeacher($course['id'],$user['id'])
+            && !$this->getCourseService()->isCourseStudent($course['id'],$user['id']));
     }
 
     private function previewAsMember($as, $member, $course)
