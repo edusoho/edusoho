@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set typeNames = {login:'登录', 'logout': '退出'} %}
+
+{% block title %}{{ typeNames[type] }}成功 - {{ parent() }}{% endblock %}
+{% block head_scripts %}{{ script|raw }}{% endblock %}
+{% set script_controller = 'default/message' %}
+
+{% block content %}
+
+<div id="page-message-container" class="page-message-container" data-goto="{{ target }}">
+  <div class="page-message-panel">
+    <div class="page-message-heading">
+      <h2 class="page-message-title">{{ typeNames[type] }}成功</h2>
+    </div>
+    <div class="page-message-body">
+      正在跳转页面，请稍等....
+    </div>
+  </div>
+</div>
+{% endblock %}

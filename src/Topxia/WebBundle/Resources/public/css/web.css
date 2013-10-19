@@ -3072,6 +3072,36 @@ body {
 	margin-right: 20px;
 }
 
+/**
+ * PAGE MESSAGE
+ */
+
+.page-message-container {
+	width: 700px;
+	margin: 0 auto;
+}
+
+.page-message-panel {
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: 50px 50px;
+}
+
+.page-message-heading {
+	margin-bottom: 25px;
+}
+
+.page-message-title {
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+	font-size: 24px;
+}
+
+.page-message-body {
+	font-size: 16px;
+}
+
 .lt-ie8 .hidden-lt-ie8 {
   display: none !important;
 }
