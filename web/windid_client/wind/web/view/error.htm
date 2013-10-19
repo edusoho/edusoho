@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+<title><?php echo WindSecurity::escapeHTML($title); ?></title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,p,blockquote,th,td {
+	margin: 0;
+	padding: 0;
+}
+
+ul,li {
+	list-style: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+th {
+	text-align: left;
+}
+
+td,th,div {
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+form {
+	display: inline;
+}
+
+* {
+	outline: none
+}
+
+img {
+	border: 0;
+}
+
+em,cite {
+	font-style: normal;
+}
+
+blockquote {
+	quotes: none;
+}
+
+html {
+	font-size: 12px;
+}
+
+body {
+	font: 12px/1.5 Verdana;
+	color: #333;
+	background: #f3f3f3;
+}
+
+.wrap {
+	width: 70%;
+	margin: 50px auto;
+	border: 1px solid #ccc;
+	background: #fff;
+}
+
+h1 {
+	border-bottom: 1px solid #ccc;
+	line-height: 40px;
+	height: 40px;
+	padding: 0 20px;
+	margin: 0;
+	font-size: 16px;
+	background:#f9f9f9;
+	background-repeat: no-repeat;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#f4f4f4));
+	background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #f4f4f4);
+	background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #f4f4f4);
+	background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #f4f4f4);
+	background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #f4f4f4);
+	background-image: linear-gradient(#ffffff, #ffffff 25%, #f4f4f4);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f4f4f4', GradientType=0);
+}
+
+h1 span {
+	color: #dd5925;
+}
+
+.main {
+	padding: 20px;
+	line-height: 1.8;
+}
+
+h2 {
+	color: #dd5925;
+	font-size: 14px;
+	background: #f9eeea;
+	margin-bottom: 10px;
+	line-height: 25px;
+	padding: 0 10px;
+}
+
+h3 {
+	padding-left: 24px;
+	background: #f7f7f7;
+	font-weight: 100;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+
+ul {
+	padding-left: 48px;
+	margin-bottom: 10px;
+}
+
+ul li:hover {
+	background: #f3f3f3;
+}
+
+.err {
+	color: #ff0000;
+	background: #faf6f4;
+}
+
+.tips {
+	padding: 5px 10px;
+	background: #ffffe3;
+	border: 1px solid #cccccc;
+	line-height: 20px;
+	color: #333;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="main">
+<h2><?php echo "Uncaught error with message '".WindSecurity::escapeHTML($message)."'"; ?></h2>
+<?php if(isset($debug)) {?>
+<h3><?php echo WindSecurity::escapeHTML($debug['file'].': '.$debug['line']); ?></h3>
+<ul>
+	<?php foreach($debug['fileLines'] as $key => $value){
+		if($key == ($debug['line']-1)){?>
+	<li class="err"><?php echo WindSecurity::escapeHTML($value); ?></li>
+	<?php }else{ ?>
+	<li><?php echo WindSecurity::escapeHTML($value); ?></li>
+	<?php }} ?>
+</ul>
+
+<h3>__Stack:</h3>
+<ul>
+	<?php foreach($debug['trace'] as $value){ ?>
+	<li><?php echo WindSecurity::escapeHTML($value); ?></li>
+	<?php } ?>
+</ul>
+<?php } ?>
+<div class="tips">The server encountered an internal error and failed to process your request. 
+Please try again later. If this error is temporary, reloading the page might resolve the problem.
+<br>If you are able to contact the administrator report this error message.(http://www.windframework.com/)</div>
+</div>
+</div>
+</body>
+</html>
