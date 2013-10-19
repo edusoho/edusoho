@@ -23,14 +23,22 @@ abstract class BaseController extends Controller
         return $this->getUserService()->getCurrentUser();
     }
 
+    protected function isAdminOnline()
+    {
+        return $this->get('security.context')->isGranted('ROLE_ADMIN');
+    }
+
     public function getUser()
     {
         throw new \RuntimeException('获得当前登录用户的API变更为：getCurrentUser()。');
     }
 
-    protected function createErrorMessageResponse()
+    protected function createErrorMessageResponse($message='',$title='警告')
     {
-
+        return $this->render('TopxiaWebBundle:Default:error.html.twig', array(
+            'message' => $message,
+            'title' => $title
+        ));
     }
 
     protected function createErrorMessageModalResponse()
