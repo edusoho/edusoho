@@ -1,10 +1,27 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
-
-{% block title %}{% if not category.id %}全部课程{% else %}{{ category.name }} 课程{% endif %} 第{{ app.request.get('page', 1)}}页- {{ parent() }}{% endblock %}
-
-{% block keywords %}{% if category.id %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
-{% block description %}{% if category.id %}{{category.name}}的{% endif %}课程列表，第{{ app.request.get('page', 1)}}页。{% endblock %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}{{title}} - {{ parent() }}{% endblock %}
 
 {% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-info panel-page ">
+      <div class="panel-heading">
+        <h2>{{title}}</h2>
+      </div>
+      <ul class="media-list notification-list">
+          <li class="media">
+            <div class="pull-left">
+              <span class="glyphicon glyphicon-warning-sign "></span>
+            </div>
+            <div class="media-body">
+              <div class="notification-body">
+                {{ message }}
+              </div>
+            </div>
+          </li>
+      </ul>
+    </div><!-- /panel -->
+  </div>
+</div>
 
 {% endblock %}
