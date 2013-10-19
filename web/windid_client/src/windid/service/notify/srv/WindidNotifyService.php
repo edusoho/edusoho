@@ -76,7 +76,7 @@ class WindidNotifyService {
 			}
 			if (!$val['issyn'] || $val['id'] == $appid) continue;
 			$array = array(
-				'windidkey' => WindidUtility::appKey($val['id'],$time, $val['secretkey'], array('uid'=>$uid), array()),
+				'windidkey' => WindidUtility::appKey($val['id'],$time, $val['secretkey'], array('uid'=>$uid, 'operation' => $operation), array()),
 				'operation' => $operation,
 				'uid' => $uid,
 				'clientid' => $val['id'],

@@ -17,7 +17,6 @@ if (!$method) showMessage('fail');
 $notify = new notify();  //定义一个通知处理类 在这时定义为下一步所示的notify
 if(!method_exists($notify, $method)) showMessage('success');//不指定的方法，默认返回成功状态
 
-file_put_contents('/tmp/windid.txt', getInput($args,'request'));
 $result = call_user_func_array(array($notify,$method), getInput($args,'request'));
 
 
