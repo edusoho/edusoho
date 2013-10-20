@@ -84,6 +84,7 @@ class PartnerController extends BaseController
 
         $currentTimestamp = \Pw::getTime();
 
+        unset($_GET['operation']);
         if (\WindidUtility::appKey(WINDID_CLIENT_ID, $queryTime, WINDID_CLIENT_KEY, $_GET, $_POST) != $windidKey) {
             return $this->createWindidResponse('sign error.');
         }
@@ -103,8 +104,12 @@ class PartnerController extends BaseController
             return $this->createWindidResponse('success');
         }
 
-        $result = call_user_func_array(array($notify, $method), $request->request->all());
+        $filteredArgs = array();
+        foreach ($args as $key) {
+            $filteredArgs[$key] = $request->get($key);
+        }
 
+        $result = call_user_func_array(array($notify, $method), $filteredArgs);
 
         if ($result == true) {
             return $this->createWindidResponse('success');
@@ -159,6 +164,17 @@ class WindidNotify
     }
         
     public function synLogin($uid) {
+        $api = \WindidApi::api('user');
+        $user = $api->getUser($uid);
+
+        // $newUser = array();
+        // $newUser['nickname'] = $user['username'];
+        // $newUser['email'] = $user['email'];
+        // $newUser['']
+
+        // file_put_contents('/tmp/synlogin.txt', json_encode($user));
+
+
         return true;
     }
             
