@@ -67,7 +67,7 @@ class FileToolkit
         } else {
             $ext = $file->getExtension();
         }
-        return in_array($ext, explode(' ', self::getImageExtensions()));
+        return in_array(strtolower($ext), explode(' ', self::getImageExtensions()));
     }
 
     public static function getSecureFileExtensions()
