@@ -4,7 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\DiskService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClient;
+use Topxia\Service\Util\EdusohoCloudClient;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -197,7 +197,7 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function setFileFormats($id, array $items)
     {
-        $cmds = CloudClient::getVideoConvertCommands();
+        $cmds = EdusohoCloudClient::getVideoConvertCommands();
 
         $formats = array();
         foreach ($items as $item) {
