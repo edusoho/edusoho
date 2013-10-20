@@ -15,6 +15,7 @@
 /web/files/*
 !/web/files/.gitkeep
 /web/customize/*
+/web/windid_client_old
 !/web/customize/.gitkeep
 .DS_Store
 .tags*

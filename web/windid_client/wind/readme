@@ -1,0 +1,41 @@
+windframework是一个轻量级的php开源框架。它以组件工厂为核心，提供了像MVC，数据持久化，视图模板引擎等应用技术。 
+此外windframework采取了一种组件化的开发模式。虽然目前的组件库还不算丰富健壮，但是基于这种开发模式，
+使组件的扩展变得非常的容易。 windframework拥有一个强健的内核，它实现了基于配置的Ioc控制反转技术。
+开发者只需要简单的配置，就可以实现类的依赖注入，完全实现了类与类的松耦合
+
+https://github.com/phpwind/windframework
+http://phpwind.github.com/windframework/
+
+环境要求：
+php5.1.2及以上版本。
+可发布的web环境，apache或nginx
+
+当前版本说明：
+wind_0.8.0
+release date: 2011.09.29
+description:
+8.0这个版本集中的优化了框架的核心机制,调整了框架的体系架构,使其性能效率上有了非常明显的改进,扩展能力上也更出色.
+
+历史版本:
+wind_0.3.0.v1882_20110315_b
+wind_0.3.0.v1882_20110315
+wind_0.1.0.v849_20101227
+
+Feature list:
+1. 去掉默认模板的默认设置.
+2. 增加log立即flush支持.
+3. 增加windcache组件,基于框架cache组件机制.实现cache策略的无缝切换.
+4. 安全,基于模板体系的输出安全过滤.
+5. 多路由协议支持,UrlRewrite支持.
+6. 基于action监听过滤的表单处理机制.
+7. 支持action监听过滤链.
+8. 重定义默认应用配置.
+9. 组件对象,配置信息注册.
+10.支持多应用处理能力.
+
+Fixed bug list:
+BUG[2106] WindHttpRequest 中增加getRequest()方法
+BUG[2129] module/view配置文件获取错误
+BUG[2133] 关于Call to undefined method WindDbException::getError() 的异常错误
+BUG[2351] 异常处理;当没有处理action句柄被找到或者句柄错误时抛出错误
+BUG[2366] 输出变量安全过滤

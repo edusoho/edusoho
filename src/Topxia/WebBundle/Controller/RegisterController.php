@@ -17,14 +17,34 @@ class RegisterController extends BaseController
                 $registration = $form->getData();
                 $registration['createdIp'] = $request->getClientIp();
                 $auth = $this->getSettingService()->get('auth', array());
-                $user = $this->getUserService()->register($registration);
-                $this->authenticateUser($user);
+
+                $userPartner = $this->container->getParameter('user_partner');
+                if ($userPartner == 'phpwind') {
+                    define('WEKIT_TIMESTAMP', time());
+                    require_once __DIR__ .'/../../../../web/windid_client/src/windid/WindidApi.php';
+                    $api = \WindidApi::api('user');
+
+                    $apiUserId = $api->register($registration['nickname'], $registration['email'], $registration['password']);
+                    if ($apiUserId < 1) {
+                        return $this->createMessageResponse('error', 'WINDID注册失败！');
+                    }
+
+                    $user = $this->getUserService()->register($registration);
+                    $this->authenticateUser($user);
+                }
 
                 $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
-                
-                return $this->redirect($this->generateUrl('register_submited', array(
-                    'id' => $user['id'], 'hash' => $this->makeHash($user))
+
+                $goto = $this->generateUrl('register_submited', array(
+                    'id' => $user['id'], 'hash' => $this->makeHash($user)
                 ));
+
+                
+                if ($userPartner == 'phpwind') {
+                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+                }
+
+                return $this->redirect($goto);
             }
         }
         $loginEnable  = $this->isLoginEnabled();

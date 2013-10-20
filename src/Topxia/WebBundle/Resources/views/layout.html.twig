@@ -28,6 +28,8 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 
+  {% block head_scripts %}{% endblock %}
+
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 

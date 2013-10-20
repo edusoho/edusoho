@@ -46,6 +46,31 @@ abstract class BaseController extends Controller
         
     }
 
+    /**
+     * 创建消息提示响应
+     * 
+     * @param  string  $type        消息类型：info, warning, error
+     * @param  string  $message     消息内容
+     * @param  string  $title       消息抬头
+     * @param  integer $duration    消息显示持续的时间
+     * @param  string  $goto        消息跳转的页面
+     * @return Response
+     */
+    protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
+    {
+        if (!in_array($type, array('info', 'warning', 'error'))) {
+            throw new \RuntimeException('type不正确');
+        }
+
+        return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
+            'type' => $type,
+            'message' => $message,
+            'title' => $title,
+            'duration' => $duration,
+            'goto' => $goto,
+        ));
+    }
+
     protected function authenticateUser ($user)
     {
         $user['currentIp'] = $this->container->get('request')->getClientIp();
