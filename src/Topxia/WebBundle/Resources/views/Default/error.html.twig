@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}{{title}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-info panel-page ">
+      <div class="panel-heading">
+        <h2>{{title}}</h2>
+      </div>
+      <ul class="media-list notification-list">
+          <li class="media">
+            <div class="pull-left">
+              <span class="glyphicon glyphicon-warning-sign "></span>
+            </div>
+            <div class="media-body">
+              <div class="notification-body">
+                {{ message }}
+              </div>
+            </div>
+          </li>
+      </ul>
+    </div><!-- /panel -->
+  </div>
+</div>
+
+{% endblock %}

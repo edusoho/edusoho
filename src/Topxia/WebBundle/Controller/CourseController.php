@@ -133,13 +133,21 @@ class CourseController extends BaseController
         if (empty($course)) {
             throw $this->createNotFoundException();
         }
-        
+
+        $previewAs = $request->query->get('previewAs');
+
         $user = $this->getCurrentUser();
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-        $member = $this->previewAsMember($request->query->get('previewAs'), $member, $course);
+
+        if(!$this->canCourseShow($course,$user)){
+           return $this->createErrorMessageResponse('抱歉,课程已经关闭！不能参加学习了，如有疑问请联系管理员!','课程已关闭！');     
+        }
+        
+
+        $member = $this->previewAsMember($previewAs, $member, $course);
 
         if ($member && empty($member['locked'])) {
             $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -167,6 +175,14 @@ class CourseController extends BaseController
             'tags' => $tags,
         ));
 
+    }
+
+    private function canCourseShow($course,$user)
+    {
+        return  !($course['status']==='closed' && 
+            !$this->isAdminOnline() && 
+            !$this->getCourseService()->isCourseTeacher($course['id'],$user['id'])
+            && !$this->getCourseService()->isCourseStudent($course['id'],$user['id']));
     }
 
     private function previewAsMember($as, $member, $course)

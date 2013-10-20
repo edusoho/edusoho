@@ -65,6 +65,11 @@
               <div class="action"><span class="btn btn-primary btn-sm">继续学习</span></div>
             {% endif %}
           </div>
+          {% if course.status == 'draft' %}
+            <span class="label  label-warning course-status">未发布</span>
+          {% elseif course.status == 'closed' %}
+            <span class="label label-danger course-status">已关闭</span>
+          {% endif %}       
         {% endif %}
 
         {% if mode == 'teach' %}

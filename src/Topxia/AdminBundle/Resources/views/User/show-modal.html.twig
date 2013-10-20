@@ -38,7 +38,16 @@
 
   <tr>
     <th>最近登录时间/IP</th>
-    <td>{{ user.loginTime|date('Y-n-d H:i:s') }} / {{ user.loginIp }}</td>
+    <td> 
+      {% if user.loginTime == 0 %}
+          --
+      {% else %}
+          {{ user.loginTime|date('Y-n-d H:i:s') }}
+      {% endif %}
+      {% if user.loginIp|default is not empty %}
+           / {{ user.loginIp }}
+      {% endif %}
+     </td>
   </tr>
 
   <tr>

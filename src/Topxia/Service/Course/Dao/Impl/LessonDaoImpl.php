@@ -53,6 +53,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, array($chapterId));
     }
 
+    public function getLessonByMediaId($mediaId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE mediaId = ? order by createdTime DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($mediaId)) ? : null;
+    }
+
     public function addLesson($lesson)
     {
         $affected = $this->getConnection()->insert($this->table, $lesson);

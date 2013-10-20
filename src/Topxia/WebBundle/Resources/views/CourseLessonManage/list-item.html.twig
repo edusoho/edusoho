@@ -1,18 +1,37 @@
 <li class="item-lesson" id="lesson-{{ lesson.id }}">
 	<div class="item-line"></div>
 	<div class="item-content">
+	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
 		
 		{% if lesson.type == 'video' %}
+		  {% if mediaStatus == 'waiting' %}
+			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
+		  {% elseif mediaStatus == 'doing' %}
+			<span class="glyphicon glyphicon-facetime-video text-info"></span>
+		  {% elseif mediaStatus == 'error' %}
+			<span class="glyphicon glyphicon-facetime-video text-danger"></span>
+		  {% else %}
 			<span class="glyphicon glyphicon-facetime-video text-success"></span>
+		  {% endif %}
 		{% elseif lesson.type == 'audio' %}
 			<span class="glyphicon glyphicon-volume-up text-success"></span>
 		{% else %}
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
+
 		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
 		{% if lesson.type in ['video', 'audio'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
+		{% endif %}
+
+		{% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
+		{% if mediaStatus == 'waiting' %}
+		  <span class="text-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
+		{% elseif mediaStatus == 'doing' %}
+		  <span class="text-info">(正在转换{{ mediaTypeName }}格式)</span>
+		{% elseif mediaStatus == 'error' %}
+		  <span class="text-danger">({{ mediaTypeName }}格式转换失败)</span>
 		{% endif %}
 
 		{% if lesson.status == 'unpublished' %}

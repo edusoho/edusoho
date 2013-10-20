@@ -57,7 +57,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('packaging...');
 
 		chdir($this->buildDirectory);
-		$command = "tar czvf edusoho-1.0RC3.tar.gz edusoho/";
+		$command = "tar czvf edusoho-1.0RC4.tar.gz edusoho/";
 		exec($command);
 	}
 
@@ -122,6 +122,8 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/AdminBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Resources/public");
+
+		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Command");
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->distDirectory}/src/");

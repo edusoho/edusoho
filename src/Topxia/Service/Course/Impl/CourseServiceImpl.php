@@ -542,13 +542,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
-		if (in_array($lesson['type'], array('video', 'audio'))) {
-			if (empty($lesson['media']) or empty($lesson['media']['type']) or empty($lesson['media']['name'])) {
-				throw $this->createServiceException("media参数不正确，添加课时失败！");
-			}
-		} else {
-			$lesson['media'] = array();
-		}
+		$this->fillLessonMediaFields($lesson);
+
 
 
 		//课程内容的过滤 @todo
@@ -571,6 +566,47 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
+
+		return $lesson;
+	}
+
+	private function fillLessonMediaFields(&$lesson)
+	{
+
+		if (in_array($lesson['type'], array('video', 'audio'))) {
+			$media = empty($lesson['media']) ? null : $lesson['media'];
+			if (empty($media) or empty($media['source']) or empty($media['name'])) {
+				throw $this->createServiceException("media参数不正确，添加课时失败！");
+			}
+
+			if ($media['source'] == 'self') {
+				$media['id'] = intval($media['id']);
+				if (empty($media['id'])) {
+					throw $this->createServiceException("media id参数不正确，添加课时失败！");
+				}
+				$file = $this->getDiskService()->getFile($media['id']);
+
+				$lesson['mediaId'] = $file['id'];
+				$lesson['mediaName'] = $file['filename'];
+				$lesson['mediaSource'] = 'self';
+				$lesson['mediaUri'] = '';
+			} else {
+				if (empty($media['uri'])) {
+					throw $this->createServiceException("media uri参数不正确，添加课时失败！");
+				}
+				$lesson['mediaId'] = 0;
+				$lesson['mediaName'] = $media['name'];
+				$lesson['mediaSource'] = $media['source'];
+				$lesson['mediaUri'] = $media['uri'];
+			}
+		} else {
+			$lesson['mediaId'] = 0;
+			$lesson['mediaName'] = '';
+			$lesson['mediaSource'] = '';
+			$lesson['mediaUri'] = '';
+		}
+
+		unset($lesson['media']);
 
 		return $lesson;
 	}
@@ -600,13 +636,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// 	$fields['content'] = $this->purifyHtml($fields['content']);
 		// }
 
-		if (in_array($lesson['type'], array('video', 'audio'))) {
-			if (empty($fields['media']) or empty($fields['media']['type']) or empty($fields['media']['name'])) {
-				throw $this->createServiceException("参数不正确，缺少media参数。");
-			}
-		} else {
-			$fields['media'] = array();
-		}
+		$fields['type'] = $lesson['type'];
+		$this->fillLessonMediaFields($fields);
 
 		return LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
@@ -783,6 +814,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return null;
 		}
 		return $this->getLessonDao()->getLesson($nextLearnLessonId);
+	}
+
+	public function getLessonByMediaId($mediaId)
+	{
+		return $this->getLessonDao()->getLessonByMediaId($mediaId);
 	}
 
 	public function getChapter($courseId, $chapterId)
@@ -1490,6 +1526,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('System.LogService');        
     }
 
+    private function getDiskService()
+    {
+        return $this->createService('User.DiskService');
+    }
+
 }
 
 class CourseSerialize
@@ -1574,19 +1615,11 @@ class LessonSerialize
 {
     public static function serialize(array $lesson)
     {
-    	if (isset($lesson['media'])) {
-	    	$lesson['media'] = !empty($lesson['media']) ? $lesson['media'] : array();
-	        $lesson['media'] = json_encode($lesson['media']);
-    	}
         return $lesson;
     }
 
     public static function unserialize(array $lesson = null)
     {
-        if (empty($lesson)) {
-            return null;
-        }
-        $lesson['media'] = json_decode($lesson['media'], true);
         return $lesson;
     }
 

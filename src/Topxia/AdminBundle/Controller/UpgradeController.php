@@ -65,42 +65,6 @@ class UpgradeController extends BaseController
             'updatePackage'=>$updatePackage));
     }
 
-    public function installAction(Request $request, $id)
-    {
-        $result = $this->getUpgradeService()->checkEnvironment();
-        var_dump($result);
-
-        $result = $this->getUpgradeService()->checkDepends($id);
-        var_dump($result);
-        $result = $this->getUpgradeService()->downloadAndExtract($id);
-        var_dump($result);
-        
-        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
-    }
-
-
-    public function upgradeAction(Request $request, $id)
-    {
-        $result =  $this->getUpgradeService()->hasLastError($id);
-        var_dump($result);
-        $result = $this->getUpgradeService()->checkEnvironment();
-            var_dump($result);
-    
-        $result = $this->getUpgradeService()->checkDepends($id);
-        var_dump($result);
-        $result = $this->getUpgradeService()->downloadAndExtract($id);
-         var_dump($result);
-        $result = $this->getUpgradeService()->backUpSystem($id);
-         var_dump($result);  
-
-       $result = $this->getUpgradeService()->beginUpgrade($id);
-         var_dump($result);
-
-         $this->getUpgradeService()->refreshCache();
-
-        return $this->createJsonResponse(array('status' => 'ok', 'packageId'=>$id));
-    }
-
     public function checkEnvironmentAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->checkEnvironment();
@@ -116,6 +80,7 @@ class UpgradeController extends BaseController
 
     public function checkDependsAction(Request $request, $id)
     {
+
         $result = $this->getUpgradeService()->checkDepends($id);
 
         if(empty($result)){
@@ -128,6 +93,7 @@ class UpgradeController extends BaseController
 
     public function downloadAndExtractAction(Request $request, $id)
     {
+
         $result = $this->getUpgradeService()->downloadAndExtract($id);
 
         if(empty($result)){
@@ -141,15 +107,16 @@ class UpgradeController extends BaseController
     public function hasLastErrorAction(Request $request, $id)
     {
         $result = $this->getUpgradeService()->hasLastError($id);
-        if(empty($result)){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
+        if(!$result){
+            return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
         } else {
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+            return $this->createJsonResponse(array('status' => 'error', 'result'=>array()));
         }
     }
 
     public function backupSystemAction(Request $request, $id)
     {
+        
         $result = $this->getUpgradeService()->backUpSystem($id);
 
         if(empty($result)){
@@ -170,6 +137,9 @@ class UpgradeController extends BaseController
             try{
                 $this->getUpgradeService()->refreshCache();
             }catch(\Exception $e){
+                return $this->createJsonResponse(
+                    array('status' => 'error', 
+                        'result'=>array('升级成功了，但缓存未刷新，请检查 app/cache 权限！')));
             }
             $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));

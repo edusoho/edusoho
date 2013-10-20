@@ -20,8 +20,11 @@ define(function(require, exports, module) {
 					}
 					$("#step6").append("系统更新失败！");
 					return false;
-				} else {
+				} else if (checkDependsResponse.status ==  'ok'){
 					textResult = $("#step2-result").attr('style','color:#096').append('系统依赖包检查OK！');
+				} else {
+					textResult = $("#step2-result").attr('style','color:#FF0000').append('发生未知错误:' + checkDependsResponse);
+  					return false;
 				}
 
 				$("#step3-process").append("开始下载、解压缩更新包......");
@@ -33,9 +36,13 @@ define(function(require, exports, module) {
 						}
 						$("#step6").append("系统更新失败！");
 						return false;
-					} else {
+					} else if (downloadExtractResponse.status ==  'ok'){
 						textResult = $("#step3-result").attr('style','color:#096').append('下载、解压缩更新包OK！');
+					} else {
+						textResult = $("#step3-result").attr('style','color:#FF0000').append('发生未知错误:' + downloadExtractResponse);
+						return false;
 					}
+
 					$("#step4-process").append("开始备份系统、数据库......");
 					$.post(backupSystemUrl, function(backupSystemResponse) {
 						if (backupSystemResponse.status == 'error') {
@@ -45,12 +52,14 @@ define(function(require, exports, module) {
 							}
 							$("#step6").append("系统更新失败！");
 							return false;
-						} else {
+						} else if (backupSystemResponse.status ==  'ok'){
 							textResult = $("#step4-result").attr('style','color:#096').append('备份系统、数据库OK！');
+						} else {
+							textResult = $("#step4-result").attr('style','color:#FF0000').append('发生未知错误:' + backupSystemResponse);
+							return false;							
 						}
 						$("#step5-process").append("更新数据以及系统文件......");
 						$.post(beginUpgradeUrl, function(beginUpgradeResponse) {
-							    console.log(beginUpgradeResponse);
 								if (beginUpgradeResponse.status == 'error') {
 									textResult = $("#step5-result").attr('style','color:#FF0000').append('更新数据以及系统文件失败！ <br/>');
 									for(var i=0; i<beginUpgradeResponse.result.length;i++){
@@ -58,9 +67,12 @@ define(function(require, exports, module) {
 									}
 									$("#step6").append("系统更新失败！");
 									return false;
-								} else {
+								} else  if (beginUpgradeResponse.status ==  'ok'){
 									textResult = $("#step5-result").attr('style','color:#096').append('更新数据以及系统文件OK！');
 									$("#step6").append("系统更新成功！");
+								} else {
+									textResult = $("#step5-result").attr('style','color:#FF0000').append('发生未知错误:' + beginUpgradeResponse);
+									$("#step6").append("未知错误，请查看日志！");
 								}
 						});
 					});
@@ -86,8 +98,11 @@ define(function(require, exports, module) {
 						}
 						$("#step6").append("系统更新失败！");
 						return false;
-					} else {
+					} else  if (checkEnvironmentResponse.status == 'ok'){
 						textResult = $("#step1-result").attr('style','color:#096').append('环境检测OK！');
+					} else{
+						textResult = $("#step1-result").attr('style','color:#FF0000').append('发生未知错误:' + checkEnvironmentResponse);
+						return false;
 					}
 					return postCheckDepends();
 

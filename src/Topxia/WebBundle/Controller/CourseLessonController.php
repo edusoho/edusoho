@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClient;
+use Topxia\Service\Util\EdusohoCloudClient;
 
 class CourseLessonController extends BaseController
 {
@@ -47,9 +47,13 @@ class CourseLessonController extends BaseController
         $json['status'] = $lesson['status'];
         $json['quizNum'] = $lesson['quizNum'];
         $json['materialNum'] = $lesson['materialNum'];
+        $json['mediaId'] = $lesson['mediaId'];
+        $json['mediaSource'] = $lesson['mediaSource'];
 
-        if (!empty($lesson['media'])) {
-            $json['media'] = $this->convertMedia($lesson);
+        if ($json['mediaSource'] == 'self') {
+            $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$lesson['courseId'], 'lessonId'=> $lesson['id']));
+        } else {
+            $json['mediaUri'] = $lesson['mediaUri'];
         }
 
     	return $this->createJsonResponse($json);
@@ -58,7 +62,7 @@ class CourseLessonController extends BaseController
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
-        if (empty($lesson) || empty($lesson['media']) || ($lesson['media']['source'] != 'self') ) {
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
             throw $this->createNotFoundException();
         }
 
@@ -66,23 +70,46 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $uri = $this->getDiskService()->parseFileUri($lesson['media']['files'][0]['url']);
-
-        if ($uri['type'] == 'cloud') {
-            $user = $this->getCurrentUser();
-
-            $setting = $this->setting('storage');
-            $client = new CloudClient($setting['cloud_access_key'], $setting['cloud_secret_key'], $setting['cloud_bucket']);
-
-            if ($lesson['type'] == 'video') {
-                $url = $client->generateDownloadUrl($uri['bucket'], $uri['key'], $this->container->getParameter('topxia.disk.cloud_video_fop'));
-            } else {
-                $url = $client->generateDownloadUrl($uri['bucket'], $uri['key']);
-            }
-
-            return $this->redirect($url);
+        $file = $this->getDiskService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
         }
 
+        if ($file['storage'] == 'cloud') {
+
+            $key = null;
+            if ($file['type'] == 'video') {
+                if (empty($file['formats']) || !is_array($file['formats'])) {
+                    throw $this->createNotFoundException();
+                }
+                $formats = $file['formats'];
+                foreach (array('hd', 'shd', 'sd') as $type) {
+                    if (!empty($formats[$type])) {
+                        $key = $formats[$type]['key'];
+                        break;
+                    }
+                }
+            } else {
+                $uri = $this->getDiskService()->parseFileUri($file['uri']);
+                $key = $uri['key'];
+            }
+
+            if (empty($key)){
+                throw $this->createNotFoundException();
+            }
+
+            $setting = $this->setting('storage');
+            $client = new EdusohoCloudClient(
+                $setting['cloud_api_server'],
+                $setting['cloud_access_key'],
+                $setting['cloud_secret_key']
+            );
+
+            $client->download($file['bucket'], $key);
+
+        }
+
+        $uri = $this->getDiskService()->parseFileUri($file['uri']);
         return $this->createLocalMediaResponse($uri);
     }
 
@@ -109,17 +136,6 @@ class CourseLessonController extends BaseController
     {
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
         return $this->createJsonResponse(true);
-    }
-
-    private function convertMedia($lesson)
-    {
-        $media = $lesson['media'];
-        if ($media['source'] == 'self') {
-            foreach ($media['files'] as $index => $file) {
-                $media['files'][$index]['url'] = $this->generateUrl('course_lesson_media', array('courseId'=>$lesson['courseId'], 'lessonId'=> $lesson['id']));
-            }
-        }
-        return $media;
     }
 
     private function createLocalMediaResponse($uri)

@@ -4,7 +4,6 @@ namespace Topxia\Service\Util;
 
 class CloudClient
 {
-
 	protected $accessKey;
 
 	protected $secretKey;
@@ -12,6 +11,10 @@ class CloudClient
     protected $uploadTokenDuration = 3600;
 
     protected $defaultBucket;
+
+    protected $macIndex;
+
+    protected $macKey;
 
     protected $defaultResponseData = array(
         'bucket' => '$(bucket)',
@@ -23,53 +26,51 @@ class CloudClient
         'imageInfo' => '$(imageInfo)',
         'userId' => '$(endUser)',
         'filepath' => '$(x:filepath)',
+        'convertId' => '$(persistentId)',
+        'convertKey' => '$(x:convertKey)',
     );
 
-    public function __construct ($accessKey, $secretKey, $defaultBucket = null)
+    public function __construct ($accessKey, $secretKey, $bucket = null, $bucketDomain = null, $macIndex = 1, $macKey = '')
     {
     	$this->accessKey = $accessKey;
     	$this->secretKey = $secretKey;
-        $this->defaultBucket = $defaultBucket;
+        $this->bucket = $bucket;
+        $this->bucketDomain = rtrim($bucketDomain, '/');
+        $this->macIndex = $macIndex;
+        $this->macKey = $macKey;
     }
 
-    public function generateUploadToken($params = array())
+    public function generateUploadToken($policy = array())
     {
-        if (empty($params['scope'])) {
-            if (empty($this->defaultBucket)) {
-                throw \InvalidArgumentException('默认空间(defaultBucket)未设置，scope参数不能为空。');
-            }
-            $params['scope'] = $this->defaultBucket;
+        $rawPolicy = $policy;
+
+        $policy = array();
+        $policy['scope'] = $this->bucket;
+        $policy['deadline'] = empty($rawPolicy['deadline']) ? time()+3600 : intval($rawPolicy['deadline']);
+
+        if (isset($rawPolicy['endUser'])) {
+            $policy['endUser'] = (string) $rawPolicy['endUser'];
         }
 
-        if (empty($params['deadline'])) {
-            $params['deadline'] = time() + 3600;
-        }
-
-        $availableParamKeys = array('scope', 'deadline', 'endUser', 'returnUrl', 'returnBody', 'callbackBody', 'callbackUrl', 'asyncOps');
-        $notAllowedParamKeys = array_diff(array_keys($params), $availableParamKeys);
-        if ($notAllowedParamKeys) {
-            $notAllowedParamKeys = implode(',', $notAllowedParamKeys);
-            throw \InvalidArgumentException('参数{$notAllowedParamKeys}非法。');
-        }
-
-        if (array_key_exists('callbackUrl', $params)) {
-            if (empty($params['callbackBody'])) {
-                $params['callbackBody'] = $this->defaultResponseData;
-            }
-            $params['callbackBody'] = $this->serializeCallbackBody($params['callbackBody']);
+        $notifyType = array_key_exists('callbackUrl', $policy) ? 'callback' : (array_key_exists('returnUrl', $policy) ? 'return' : null);
+        if ($notifyType) {
+            $policy["{$notifyType}Url"] = $rawPolicy["{$notifyType}Url"];
+            $policy["{notifyType}Body"] = empty($rawPolicy["{$notifyType}Body"]) ? $this->defaultResponseData : $rawPolicy["{$notifyType}Body"];
+            $policy["{notifyType}Body"] = $this->serializeUploadNotifyBodyPolicy($notifyType, $policy["{notifyType}Body"]);
         } else {
-            if (empty($params['returnBody'])) {
-                $params['returnBody'] = $this->defaultResponseData;
-            }
-            $params['returnBody'] = $this->serializeReturnBody($params['returnBody']);
+            $policy['returnBody'] = empty($rawPolicy['returnBody']) ? $this->defaultResponseData : $rawPolicy['returnBody'];
+            $policy['returnBody'] = $this->serializeUploadNotifyBodyPolicy('return', $policy['returnBody']);
         }
 
-        $encodedParams = json_encode($params);
-        // var_dump($encodedParams);exit();
-    	$encodedParams = $this->encodeSafely($encodedParams);
+        if (!empty($rawPolicy['PersistentOps']) and !empty($rawPolicy['PersistentNotifyUrl'])) {
+            $policy['PersistentOps'] = $rawPolicy['PersistentOps'];
+            $policy['PersistentNotifyUrl'] = $rawPolicy['PersistentNotifyUrl'];
+        }
 
-		$sign = hash_hmac('sha1', $encodedParams, $this->secretKey, true);
-		return $this->accessKey . ':' . $this->encodeSafely($sign) . ':' . $encodedParams;
+        $encodedPolicy = $this->encodeSafely(json_encode($policy));
+
+		$sign = hash_hmac('sha1', $encodedPolicy, $this->secretKey, true);
+		return $this->accessKey . ':' . $this->encodeSafely($sign) . ':' . $encodedPolicy;
     }
 
     public function generateDownloadCookieToken($url, $deadline = 0)
@@ -78,40 +79,30 @@ class CloudClient
             $deadline = time() + 60;
         }
 
-        $macKey = 'MowmlzHiXJDiggdY7--PgmKgUTf_nW2o7QNA75Zt';
-
+        $url = str_replace(array('http://', 'https://'), '' , $url);
         $url = str_replace('?', '\\\\?', $url);
 
-        $policy = "{\"E\":\"{$deadline}\", \"S\":\"{$url}\"}";
+        $policy = json_encode(array('E' => $deadline, 'S' => $url));
 
-        // $policy = array('E' => "$deadline", 'S' => $url);
         $ctx = $this->encodeSafely($policy);
-
-        $sign = hash_hmac('sha1', $ctx, $macKey);
-
+        $sign = hash_hmac('sha1', $ctx, $this->macKey, true);
         $sign = $this->encodeSafely($sign);
-        var_dump($sign);exit();
 
-        $token = "1:{$sign}:{$ctx}";
-
-        return $token;
+        return "{$this->macIndex}:{$sign}:{$ctx}";
     }
 
-    public function generateDownloadUrl($bucket, $key, $fop = '', $deadline = 0)
+    public function getDownloadUrl($key)
     {
-        if (empty($deadline)) {
-            $deadline = time() + 60;
-        }
+        return $this->bucketDomain . '/' . $key;
+    }
 
-        $url = "http://{$bucket}.edusoho.net/{$key}";
-        if (empty($fop)) {
-            $url .= "?e={$deadline}";
-        } else {
-            $url .= "?{$fop}&e={$deadline}";
-        }
-
-        $sign = hash_hmac('sha1', $url, $this->secretKey, true);
-        return  $url . '&token=' . $this->accessKey . ':' . $this->encodeSafely($sign);
+    public static function getVideoConvertCommands()
+    {
+        return array(
+            'avthumb/mp4/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac' => 'sd',
+            'avthumb/mp4/r/24/vb/512k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac' => 'hd',
+            'avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac' => 'shd',
+        );
     }
 
     private function encodeSafely($string)
@@ -121,21 +112,20 @@ class CloudClient
 		return str_replace($find, $replace, base64_encode($string));
     }
 
-    private function serializeCallbackBody($data)
+    private function serializeUploadNotifyBodyPolicy($type, $policy)
     {
         $parts = array();
-        foreach ($data as $key => $value) {
-            $parts[] = "{$key}={$value}";
+        if ($type == 'return') {
+            foreach ($policy as $key => $value) {
+                $parts[] = "\"{$key}\":{$value}";
+            }
+            $serialzePolicy = '{'. implode(',', $parts) . '}';
+        } else {
+            foreach ($policy as $key => $value) {
+                $parts[] = "{$key}={$value}";
+            }
+            $serialzePolicy = implode('&', $parts);
         }
-        return implode('$', $parts);
-    }
-
-    private function serializeReturnBody($data)
-    {
-        $parts = array();
-        foreach ($data as $key => $value) {
-            $parts[] = "\"{$key}\":{$value}";
-        }
-        return '{'. implode(',', $parts) . '}';
+        return $serialzePolicy;
     }
 }
