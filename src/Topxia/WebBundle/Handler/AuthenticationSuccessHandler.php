@@ -21,6 +21,15 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new JsonResponse($content, 200);
         }
 
+        $userPartner = ServiceKernel::instance()->getParameter('user_partner');
+
+        if ($userPartner == 'phpwind') {
+            $url = $this->httpUtils->generateUri($request, 'partner_login');
+            $queries = array('goto' => $this->determineTargetUrl($request));
+            $url = $url . '?' . http_build_query($queries);
+            return $this->httpUtils->createRedirectResponse($request, $url);
+        }
+
         return parent::onAuthenticationSuccess($request, $token);
     }
 
