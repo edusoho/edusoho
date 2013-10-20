@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -50,17 +51,19 @@ class SettingController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-
         $site = $this->getSettingService()->get('site', array());
 
         $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
 
         $this->getSettingService()->set('site', $site);
 
-        return $this->createJsonResponse(array(
+        $response = array(
             'path' => $site['logo'],
             'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['logo']),
-        ));
+        );
+
+        return new Response(json_encode($response));
+
     }
 
     public function logoRemoveAction(Request $request)
