@@ -4,6 +4,8 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Topxia\Service\Common\ServiceKernel;
+
 /**
  * @todo 需要加个sign，来防止页面能直接打开
  */
@@ -19,7 +21,7 @@ class PartnerController extends BaseController
 
     	$api = $this->createWindidApi('user');
 
-    	$apiUser = $api->getUser($user['email'], 3);
+    	$apiUser = $api->getUser($user['nickname'], 2);
     	if (empty($apiUser)) {
     		return $this->createMessageResponse('error', 'WINDID中不存在该用户！');
     	}
@@ -84,10 +86,14 @@ class PartnerController extends BaseController
 
         $currentTimestamp = \Pw::getTime();
 
-        unset($_GET['operation']);
+        if (in_array($operation, array(111, 112))) {
+            unset($_GET['operation']);
+        }
+
         if (\WindidUtility::appKey(WINDID_CLIENT_ID, $queryTime, WINDID_CLIENT_KEY, $_GET, $_POST) != $windidKey) {
             return $this->createWindidResponse('sign error.');
         }
+
 
         if ($currentTimestamp -> $queryTime >120) {
             return $this->createWindidResponse('timeout.');
@@ -109,13 +115,45 @@ class PartnerController extends BaseController
             $filteredArgs[$key] = $request->get($key);
         }
 
-        $result = call_user_func_array(array($notify, $method), $filteredArgs);
+        if ($method == 'synLogin') {
+            $result = $this->synLoginNotify($filteredArgs['uid']);
+        } else if ($method == 'synLogout') {
+            $result = $this->synLogoutNotify($filteredArgs['uid']);
+        } else {
+            $result = call_user_func_array(array($notify, $method), $filteredArgs);
+        }
 
         if ($result == true) {
             return $this->createWindidResponse('success');
         }
 
         return $this->createWindidResponse('fail');
+    }
+
+    private function synLoginNotify($uid)
+    {
+        $api = \WindidApi::api('user');
+        $user = $api->getUser($uid);
+        if (empty($user)) {
+            return true;
+        }
+
+        $user = $this->getUserService()->getUserByNickname($user['username']);
+        if (empty($user)) {
+            return true;
+        }
+
+        $this->authenticateUser($user);
+
+        return true;
+    }
+
+    private function synLogoutNotify($uid)
+    {
+        $this->get('security.context')->setToken(null);
+        $this->get('request')->getSession()->invalidate();
+        file_put_contents('/tmp/logout', 'bbb');
+        return true;
     }
 
     private function getWindidMethod($operation)
@@ -149,36 +187,42 @@ class WindidNotify
     }
             
     public function addUser($uid) {
-        $api = WindidApi::api('user');
-        $user = $api->getUser($uid);
-            //客户端系统处理添加新用户
-         return true;
+        $api = \WindidApi::api('user');
+        $user = $api->getUser($uid, 1, 7);
+
+        $registration = array();
+        $registration['nickname'] = $user['username'];
+        $registration['email'] = $user['email'];
+        $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
+        $registration['createdIp'] = $user['regip'];
+
+        try {
+            $newUser = $this->getUserService()->register($registration);
+            
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return $newUser ? true : false;
     }
             
     public function editUser($uid) {
-        global $cfg_ml,$dsql;
-        $api = WindidApi::api('user');
+        $api = \WindidApi::api('user');
         $user = $api->getUser($uid);
           //客户端系统处理修改用户信息
         return true;
     }
-        
+
     public function synLogin($uid) {
-        $api = \WindidApi::api('user');
-        $user = $api->getUser($uid);
-
-        // $newUser = array();
-        // $newUser['nickname'] = $user['username'];
-        // $newUser['email'] = $user['email'];
-        // $newUser['']
-
-        // file_put_contents('/tmp/synlogin.txt', json_encode($user));
-
-
         return true;
     }
             
     public function synLogout($uid) {
         return true;
+    }
+
+    private function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

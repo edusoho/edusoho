@@ -210,7 +210,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
 
-        if($type == 'default') {
+        if(in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
@@ -223,7 +223,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
         $this->getProfileDao()->addProfile(array('id' => $user['id']));
-        if ($type != 'default') {
+        if (!in_array($type, array('default', 'phpwind', 'discuz'))) {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 

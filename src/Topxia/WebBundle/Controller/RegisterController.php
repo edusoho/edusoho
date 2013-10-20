@@ -28,10 +28,10 @@ class RegisterController extends BaseController
                     if ($apiUserId < 1) {
                         return $this->createMessageResponse('error', 'WINDID注册失败！');
                     }
-
-                    $user = $this->getUserService()->register($registration);
-                    $this->authenticateUser($user);
                 }
+
+                $user = $this->getUserService()->register($registration);
+                $this->authenticateUser($user);
 
                 $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
 
