@@ -44,7 +44,7 @@ class FileToolkit
     public static function validateFileExtension(File $file, $extensions = array())
     {
         if (empty($extensions)) {
-            $extensions = self::$getSecureFileExtensions();
+            $extensions = self::getSecureFileExtensions();
         }
 
         if ($file instanceof UploadedFile) {
@@ -64,7 +64,7 @@ class FileToolkit
 
     public static function getSecureFileExtensions()
     {
-        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv zip rar gz tar 7z';
+        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma zip rar gz tar 7z';
     }
 
     public static function getImageExtensions()

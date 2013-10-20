@@ -60,7 +60,8 @@ class FileServiceImpl extends BaseService implements FileService
 	{
 		$errors = FileToolkit::validateFileExtension($file);
 		if ($errors) {
-			throw $this->createServiceException(join("\n", $errors));
+			@unlink($file->getRealPath());
+			throw $this->createServiceException("该文件格式，不允许上传。");
 		}
 
 		$group = $this->getGroupDao()->findGroupByCode($group);
