@@ -1,11 +1,13 @@
-define("gallery2/bootstrap/3.0.0/bootstrap-debug", [ "$-debug" ], function(require) {
+define("gallery2/bootstrap/3.0.1/bootstrap-debug", [ "$-debug" ], function(require) {
     var jQuery = require("$-debug");
-    /**
-* bootstrap.js v3.0.0 by @fat and @mdo
-* Copyright 2013 Twitter Inc.
-* http://www.apache.org/licenses/LICENSE-2.0
-*/
-    if (!jQuery) {
+    /*!
+ * Bootstrap v3.0.0 by @fat and @mdo
+ * Copyright 2013 Twitter, Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+    if (typeof jQuery === "undefined") {
         throw new Error("Bootstrap requires jQuery");
     }
     /* ========================================================================
@@ -1270,7 +1272,7 @@ define("gallery2/bootstrap/3.0.0/bootstrap-debug", [ "$-debug" ], function(requi
         Tab.prototype.show = function() {
             var $this = this.element;
             var $ul = $this.closest("ul:not(.dropdown-menu)");
-            var selector = $this.attr("data-target");
+            var selector = $this.data("target");
             if (!selector) {
                 selector = $this.attr("href");
                 selector = selector && selector.replace(/.*(?=#[^\s]*$)/, "");
