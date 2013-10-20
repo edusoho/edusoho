@@ -762,6 +762,10 @@ partner_logout:
     pattern: /partner/logout
     defaults: {_controller: TopxiaWebBundle:Partner:logout }
 
+partner_windid:
+    pattern: /partner/windid
+    defaults: {_controller: TopxiaWebBundle:Partner:windid }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
