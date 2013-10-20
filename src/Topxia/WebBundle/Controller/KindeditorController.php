@@ -9,15 +9,23 @@ class KindeditorController extends BaseController
 
 	public function uploadAction(Request $request)
 	{
-		$group = $request->request->get('group');
+		try {
+			$group = $request->request->get('group');
 
-		$file = $request->files->get('file');
-		$record = $this->getFileService()->uploadFile($group, $file);
+			$file = $request->files->get('file');
+			$record = $this->getFileService()->uploadFile($group, $file);
 
-		$response = array(
-	    	'error' => 0,
-	    	'url' => $this->get('topxia.twig.web_extension')->getFilePath($record['uri'])
-    	);
+			$response = array(
+		    	'error' => 0,
+		    	'url' => $this->get('topxia.twig.web_extension')->getFilePath($record['uri'])
+	    	);
+			
+		} catch (\Exception $e) {
+			$response = array(
+		    	'error' => 1,
+		    	'message' => '文件上传失败！'
+	    	);
+		}
 
     	return new Response(json_encode($response));
 	}

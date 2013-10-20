@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Form\UserProfileType;
 use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Common\FileToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -51,13 +52,16 @@ class SettingsController extends BaseController
             if ($form->isValid()) {
                 $data = $form->getData();
                 $file = $data['avatar'];
+
+                if (!FileToolkit::isImageFile($file)) {
+                    throw $this->createAccessDeniedException();
+                }
+
                 $filenamePrefix = "user_{$user['id']}_";
                 $hash = substr(md5($filenamePrefix . time()), -8);
                 $ext = $file->getClientOriginalExtension();
-                if (!in_array($ext, array('jpg', 'jpeg', 'png', 'gif'))) {
-                    throw $this->createAccessDeniedException();
-                }
                 $filename = $filenamePrefix . $hash . '.' . $ext;
+
                 $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
                 $file = $file->move($directory, $filename);
 
@@ -91,9 +95,9 @@ class SettingsController extends BaseController
             $imagine = new Imagine();
             $image = $imagine->open($pictureFilePath);
         } catch (\Exception $e) {
+            @unlink($pictureFilePath);
             return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
         }
-
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);

@@ -40,7 +40,6 @@ class FileToolkit
         return $filename;
     }
 
-
     public static function validateFileExtension(File $file, $extensions = array())
     {
         if (empty($extensions)) {
@@ -61,6 +60,15 @@ class FileToolkit
         return $errors;
     }
 
+    public static function isImageFile(File $file) 
+    {
+        if ($file instanceof UploadedFile) {
+            $ext = $file->getClientOriginalExtension();
+        } else {
+            $ext = $file->getExtension();
+        }
+        return in_array($ext, explode(' ', self::getImageExtensions()));
+    }
 
     public static function getSecureFileExtensions()
     {

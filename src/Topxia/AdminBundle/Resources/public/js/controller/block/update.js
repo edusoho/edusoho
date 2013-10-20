@@ -44,6 +44,9 @@ define(function(require, exports, module) {
                     var html = '<img src="' + response.url + '">';
                     $("#blockContent").val($("#blockContent").val() + '\n' + html);
                     Notify.success('插入图片成功！');
+                },
+                error: function(response) {
+                    Notify.danger('上传图片失败，请重试！');
                 }
             });
 

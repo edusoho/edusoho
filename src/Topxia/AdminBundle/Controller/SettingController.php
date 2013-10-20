@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 
 class SettingController extends BaseController
@@ -45,8 +46,11 @@ class SettingController extends BaseController
     public function logoUploadAction(Request $request)
     {
         $file = $request->files->get('logo');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
 
-        $filename = 'logo_' . time() . '.' . $file->guessExtension();
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
