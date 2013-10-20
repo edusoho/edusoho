@@ -7,7 +7,7 @@
 
     <div class="form-group">
       <div class="controls">
-        请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" class="mrm"></span>
+        请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
         {{ form_widget(form.rating) }}
       </div>
     </div>
