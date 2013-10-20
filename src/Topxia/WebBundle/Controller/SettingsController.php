@@ -54,7 +54,7 @@ class SettingsController extends BaseController
                 $file = $data['avatar'];
 
                 if (!FileToolkit::isImageFile($file)) {
-                    throw $this->createAccessDeniedException();
+                    return $this->createMessageResponse('error', '请上传图片格式的文件。');
                 }
 
                 $filenamePrefix = "user_{$user['id']}_";

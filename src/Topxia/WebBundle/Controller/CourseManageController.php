@@ -91,7 +91,7 @@ class CourseManageController extends BaseController
         if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
             if (!FileToolkit::isImageFile($file)) {
-                throw $this->createAccessDeniedException();
+                return $this->createMessageResponse('error', '请上传图片格式的文件。');
             }
 
             $filenamePrefix = "course_{$course['id']}_";
