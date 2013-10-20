@@ -553,8 +553,13 @@ body {
 
 .course-modal-infos dd {
 	margin-bottom: 20px;
-
 }
+
+#course-about-pane img {
+	max-width: 100%;
+	height: auto;
+}
+
 
 #course-goal-pane .media-list,
 #course-audience-pane .media-list {
