@@ -2,11 +2,11 @@ define(function(require, exports, module) {
 
     exports.run = function() {
     	var $message = $("#page-message-container");
+        var gotoUrl = $message.data('goto');
     	var duration = $message.data('duration');
-    	if (duration > 0) {
+    	if (duration > 0 && gotoUrl) {
 	        setTimeout(function() {
-	        	var goto = $message.data('goto');
-	            window.location.href= goto;
+	            window.location.href= gotoUrl;
 	        }, 2000);
     	}
 
