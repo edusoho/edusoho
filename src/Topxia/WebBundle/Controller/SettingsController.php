@@ -238,12 +238,14 @@ class SettingsController extends BaseController
         return $this->redirect($this->generateUrl('settings_binds'));
     }
 
-    public function bindAction(Request $request, $type){
+    public function bindAction(Request $request, $type)
+    {
         $this->checkBindsName($type);
         $callback = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $settings = $this->setting('login_bind');
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
         $client = OAuthClientFactory::create($type, $config);
+
         return $this->redirect($client->getAuthorizeUrl($callback));
     }
 

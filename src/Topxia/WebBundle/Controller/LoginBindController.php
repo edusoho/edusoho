@@ -10,6 +10,7 @@ class LoginBindController extends BaseController
 
     public function indexAction (Request $request, $type)
     {
+
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
