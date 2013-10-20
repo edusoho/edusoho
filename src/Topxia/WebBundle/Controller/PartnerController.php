@@ -98,7 +98,6 @@ class PartnerController extends BaseController
             return $this->createWindidResponse('fail');
         }
 
-
         $notify = new WindidNotify();  //定义一个通知处理类 在这时定义为下一步所示的notify
         if(!method_exists($notify, $method)) {
             return $this->createWindidResponse('success');
@@ -121,7 +120,6 @@ class PartnerController extends BaseController
         $args = isset($config[$operation]['args']) ? $config[$operation]['args'] : array();
         return array($method, $args);
     }
-
 
     private function createWindidApi($name)
     {
