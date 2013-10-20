@@ -197,7 +197,7 @@ class WindidNotify
         $registration['createdIp'] = $user['regip'];
 
         try {
-            $newUser = $this->getUserService()->register($registration);
+            $newUser = $this->getUserService()->register($registration, 'phpwind');
             
         } catch (\Exception $e) {
             return false;
