@@ -58,6 +58,7 @@ class SettingController extends BaseController
         $site = $this->getSettingService()->get('site', array());
 
         $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['logo'] = ltrim($site['logo'], '/');
 
         $this->getSettingService()->set('site', $site);
 
