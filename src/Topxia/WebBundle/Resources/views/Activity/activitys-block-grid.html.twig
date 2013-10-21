@@ -1,0 +1,21 @@
+{% set mode = mode|default('default') %}
+<ul class="page-grids course-grids">
+  {% for activity in activitys %}
+    <li class="card course-grid ps-rela">
+      <a  href="{{ path('activity_show',{id:activity.id})}}" class="grid-body">
+        <div class="grid-img ps-rela">
+          <img class="img-responsive thumb" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
+          <div class="desc">
+            {{ activity.subtitle }}
+          </div>              
+        </div>
+
+        <span class="title pvz mvs">{{ activity.title }}</span>
+  
+        <span class=" pvz phm mvs">讲师：</span>
+ 
+      </a>
+
+    </li>
+  {% endfor %}
+</ul>

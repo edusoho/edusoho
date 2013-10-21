@@ -121,6 +121,45 @@ text-align: center;
 margin: 0 0px 15px 0;
 +float: left;
 }
+
+
+.page-grids .card .grid-img .desc {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.4);
+color: white;
+padding: 5px;
+opacity: 0;
+pointer-events: none;
+font-size: 13px;
+}
+
+
+.page-grids .card  .post_date{
+    width:58px;
+    height:75px;
+    padding:0px 3px 6px 2px;
+    margin:0px auto;
+    overflow:hidden;
+    text-align:center;
+    vertical-align:middle;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -khtml-border-radius:5px;
+    -webkit-border-radius:5px;
+    font-weight:bold;
+   	font-family:"宋体";
+	font-weight:bold;
+    background-color: #046f9e;
+    color: #f3f3f3;
+    
+}
+
+
+
 .trainee a {
 color: #999;
 font-size: 13px;
@@ -164,7 +203,7 @@ box-shadow:  0 .2em .35em .07em rgba(117, 117, 117, 0.22);
 .TopicList .grid{margin-right:13px; background-color: #fff;width: 282px;*width: 268px;height: 158px;*height: 144px;overflow: hidden;border: 1px solid #c5c4c4;padding: 6px;}
 .TopicList .imageblock{margin: 0;padding: 0;}
 /*banner*/
-.banner{background-color: #ebebeb;height: 350px;}
+.banner{background-color: #ebebeb;}
 .banner-bg{padding-bottom: 56px;background: url(../img/shadow.png) no-repeat bottom center;}
 .kyitem{
 margin-top: -1.5em;

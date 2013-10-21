@@ -20,15 +20,16 @@ define(function(require, exports, module) {
 		});
 
 
+
 		 $(".course-grids .course-grid").mouseenter(function(){
-	    	$(this).addClass("i-active");
-			$(this).css("opacity", "0.6");
+	  
+			$(this).find(".desc").css("opacity", "1");
 			
 		 });
 
 		 $(".course-grids .course-grid").mouseleave(function(){
-			$(this).addClass("i-active");
-			$(this).css("opacity", "1");
+			
+			$(this).find(".desc").css("opacity", "0");
 			
 		});
     	

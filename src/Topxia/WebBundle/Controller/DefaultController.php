@@ -12,10 +12,15 @@ class DefaultController extends BaseController
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
-        $feild['recommended']=1;//1表示置顶。
+      
         $feild['status']='published';
         $feild['expired']='0';//0表示开放报名。
 
+
+        $lastActivitys=$this->getActivityService()->searchActivitys($feild,'last',0,4);
+
+
+        $feild['recommended']=1;//1表示置顶。
         $nextActivity=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
         
         $nextActivity=count($nextActivity)>0?$nextActivity[0]:array('largePicture' =>'',
@@ -41,27 +46,19 @@ class DefaultController extends BaseController
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
         $activityIds=ArrayToolkit::column($activityThreads,'activityId');
         $activitys=$this->getActivityService()->findActivityByIds($activityIds);
+        
         $threadUserIds=ArrayToolkit::column($activityThreads,'userId');
         $threadUsers=$this->getUserService()->findUsersByIds($threadUserIds);
-        $threadUsers[0]=array(
-            "id"=>0,
-            "nickname"=>"游客");
+      
         
-        //大家正在学 ---加入行为过滤器
-        $userActions=$this->getUserActionService()->searchUserActions(array(),array('createTime','DESC'),0,6);
-        $userActionIds=ArrayToolkit::column($userActions,'userId');
-        $userActionUsers=$this->getUserService()->findUsersByIds($userActionIds);
-        $userActionUsers[0]=array(
-            "id"=>0,
-            "nickname"=>"游客");
+       
 
         //最新点评
         $reviews=$this->getReviewService()->searchReviews(array(),'latest',0,4);
         $reviewUserIds=ArrayToolkit::column($reviews,'userId');
         $reviewUsers=$this->getUserService()->findUsersByIds($reviewUserIds);
-        $reviewUsers[0]=array(
-            "id"=>0,
-            "nickname"=>"游客");
+       
+
         $reviewCourseIds=ArrayToolkit::column($reviews,'courseId');
         $reviewCourse=$this->getCourseService()->findCoursesByIds($reviewCourseIds);
 
@@ -77,11 +74,12 @@ class DefaultController extends BaseController
 
         return $this->render('TopxiaWebBundle:Default:index.html.twig',array(
             "nextActivity"=>$nextActivity,
+            "lastActivitys"=>$lastActivitys,
             "activitTerchar"=>$activitTerchar,
             "users"=>$users,
             "Locations"=>$Locations,
-            "userActions"=>$userActions,
-            "userActionUsers"=>$userActionUsers,
+          
+           
             "courses"=>$courses,
             "activityThreads"=>$activityThreads,
             "activitys"=>$activitys,

@@ -31,7 +31,7 @@
           <div class="pull-left info">
             <div class="info-header">
               {% if nextActivity.id %} 
-                <span class="ky-times">{{ nextActivity.startTime|default('每周二.晚.7:00-9:00') }} </span>
+                <span class="ky-times">{{ nextActivity.startTime|default('本周二.晚.7:00-9:00') }} </span>
                 <span class="ky-address ">{{ nextActivity.address|default('北京.海淀区海淀西大街70号.3W咖啡二楼') }}</span>
                 <span class="ky-jiangshi"> <a href="{{ path('user_show',{id:activitTerchar['id'] }) }}">{{ activitTerchar.nickname|default('') }}</a></span>
               {% endif %}
@@ -76,13 +76,31 @@
   </div>
 
   <div class="container  pz">
-    <div class="container clear-pleft clear-pright">   
-      <!-- 课程资源 -->
+    <div class="container clear-pleft clear-pright">  
+     
+     <!-- 公开课 -->
+     <div class="es-row-wrap container-gap mtl">
+        <div class="mod col-md-12">     
+          <div class="kytitle clearfix es-box-heading mtm">
+            <h3>公开课</h3>
+            <span class="mll">每周二线上线下同时开课，开放免费，无大牛，不学习!</span>
+            <a href="{{ path('activity_home') }}" target="_blank" class="pull-right">更多>></a>
+          </div>
+           
+           <div class="es-box-body plll">
+            {{ render(controller('TopxiaWebBundle:Activity:activityBlockGrid', {activitys:lastActivitys, view: 'grid'})) }}
+          </div>   
+             
+        </div>
+      </div>
+
+      <!-- 专业课 -->
       <div class="es-row-wrap container-gap mtl">
         <div class="mod col-md-12">     
           <div class="kytitle clearfix es-box-heading mtm">
-            <h3>课程资源</h3>
-            <a href="{{ path('course_explore') }}" target="_blank" class="pull-right">全部课程资源>></a>
+            <h3>在线课程</h3>
+            <span class="mll">视频+在线辅导</span>
+            <a href="{{ path('course_explore') }}" target="_blank" class="pull-right">更多>></a>
           </div>
            
           <div class="es-box-body plll">
@@ -91,6 +109,9 @@
              
         </div>
       </div>
+
+
+
       <!-- 讨论，学员，牛人，谁在学，最新点评-->
       <div class="row">
         <div class="col-md-8 ">          
@@ -192,38 +213,7 @@
 
         <!-- 侧栏 -->
         <aside class="col-md-4">
-          <!-- 大家正在学 -->
-          <div class="widget k_postlist shadow studying">
-            <div class="kytitle clearfix bor-l-green">
-              <h3>大家正在学</h3>
-            </div>
-            <div class="content">       
-              <ul class="pz">
-                {% for userAction in userActions %}
-                <li>
-                  <div class="imageblock clearfix">
-                    <div class="imageblock-image">
-                      <a href="{{ path('user_show',{id:userAction['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
-                        <img src=" {{ file_path(userActionUsers[userAction.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
-                    </div>
-                    <div class="imageblock-content">
-                      <p class="title">
-                        <a href="{{ path('user_show',{id:userAction['userId'] }) }}">
-                          {{ userActionUsers[userAction.userId].nickname  }}
-                        </a> 刚刚学习了
-                      </p>
-                      <p class="metas">
-                        <a href="#" class="show-user-card ">{{ userAction.courseName}} 
-                          第{{ userAction.chapterName }}章 第{{ userAction.lessonName }}课时</a>
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                {% endfor %}
-              </ul>           
-            </div>
-          </div>
-          <!-- 大家正在学 -->
+          <!-- 最新点评 -->
           <div class="widget k_postlist shadow">
             <div class="kytitle clearfix bor-l-green">
               <h3>最新点评</h3>

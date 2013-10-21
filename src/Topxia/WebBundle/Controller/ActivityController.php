@@ -66,6 +66,25 @@ class ActivityController extends BaseController
         ));
     }
 
+
+    public function activityBlockGridAction($activitys, $mode = 'default')
+    {
+      
+        return $this->render("TopxiaWebBundle:Activity:activitys-block-grid.html.twig", array(
+            'activitys' => $activitys,           
+            'mode' => $mode,
+        ));
+    }
+
+    public function activityBlockSameAction($activitys)
+    {
+      
+        return $this->render("TopxiaWebBundle:Activity:activitys-block-same.html.twig", array(
+            'activitys' => $activitys, 
+        ));
+    }
+
+
 	public function showAction(Request $request, $id)
     {
         //活动信息
