@@ -7,6 +7,7 @@ use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -89,13 +90,16 @@ class CourseManageController extends BaseController
 
         if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
+            if (!FileToolkit::isImageFile($file)) {
+                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+            }
 
             $filenamePrefix = "course_{$course['id']}_";
             $hash = substr(md5($filenamePrefix . time()), -8);
-            $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();
+            $ext = $file->getClientOriginalExtension();
+            $filename = $filenamePrefix . $hash . '.' . $ext;
 
             $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-
             $file = $file->move($directory, $filename);
 
             return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
@@ -125,8 +129,13 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
+        try {
         $imagine = new Imagine();
-        $image = $imagine->open($pictureFilePath);
+            $image = $imagine->open($pictureFilePath);
+        } catch (\Exception $e) {
+            @unlink($pictureFilePath);
+            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+        }
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(480)->heighten(270);

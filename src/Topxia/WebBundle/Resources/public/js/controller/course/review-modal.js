@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $('#my-course-rate').raty({
-            path: '/assets/img/raty',
+            path: $('#my-course-rate').data('imgPath'),
             hints: ['很差', '较差', '还行', '推荐', '力荐'],
             score: function() {
                 return $(this).attr('data-rating');

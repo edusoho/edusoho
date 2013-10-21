@@ -206,6 +206,10 @@ textarea {
 }
 
 
+.lt-ie9 .row .panel-body .breadcrumb li {
+	padding-left: 5px;
+}
+
 
 /**
  * <global>
@@ -550,8 +554,13 @@ body {
 
 .course-modal-infos dd {
 	margin-bottom: 20px;
-
 }
+
+#course-about-pane img {
+	max-width: 100%;
+	height: auto;
+}
+
 
 #course-goal-pane .media-list,
 #course-audience-pane .media-list {
@@ -3129,6 +3138,45 @@ body {
 .site-footer-links li {
 	display: inline-block;
 	margin-right: 20px;
+}
+
+/**
+ * PAGE MESSAGE
+ */
+
+.page-message-container {
+	width: 700px;
+	margin: 0 auto;
+}
+
+.modal .page-message-container {
+	width: auto;
+	margin: 20px 20px;
+}
+
+.page-message-panel {
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: 50px 50px;
+}
+
+.modal .page-message-panel {
+	border:none;
+}
+
+.page-message-heading {
+	margin-bottom: 25px;
+}
+
+.page-message-title {
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+	font-size: 24px;
+}
+
+.page-message-body {
+	font-size: 16px;
 }
 
 .lt-ie8 .hidden-lt-ie8 {

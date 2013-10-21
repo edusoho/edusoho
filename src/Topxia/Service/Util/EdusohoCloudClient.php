@@ -20,6 +20,14 @@ class EdusohoCloudClient
 
     public function __construct ($apiServer, $accessKey, $secretKey)
     {
+    	if (substr($apiServer, 0, 7) != 'http://') {
+    		throw new \RuntimeException('云存储apiServer参数不正确，请更改云存储设置。');
+    	}
+
+    	if (empty($accessKey) or empty($secretKey)) {
+    		throw new \RuntimeException('云存储accessKey/secretKey不能为空，请更改云存储设置。');
+    	}
+    	
     	$this->apiServer = rtrim($apiServer, '/');
     	$this->accessKey = $accessKey;
     	$this->secretKey = $secretKey;
@@ -76,9 +84,9 @@ class EdusohoCloudClient
     public static function getVideoConvertCommands()
     {
         return array(
-            'avthumb/mp4/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac' => 'sd',
-            'avthumb/mp4/r/24/vb/512k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac' => 'hd',
-            'avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/128k/acodec/libfaac' => 'shd',
+            'avthumb/flv/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libmp3lame' => 'sd',
+            'avthumb/flv/r/24/vb/512k/vcodec/libx264/ar/44100/ab/64k/acodec/libmp3lame' => 'hd',
+            'avthumb/flv/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/64k/acodec/libmp3lame' => 'shd',
         );
     }
 

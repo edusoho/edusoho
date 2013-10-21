@@ -15,8 +15,11 @@ class DiskController extends BaseController
         if (empty($token)) {
             throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
         }
+
+        $filepath = '/' . $request->request->get('x:filepath', '');
+
         $file = $this->get('request')->files->get('file');
-        $file = $this->getDiskService()->addLocalFile($file, $token['userId'], '/');
+        $file = $this->getDiskService()->addLocalFile($file, $token['userId'], $filepath);
 
         return $this->createJsonResponse($file);
     }

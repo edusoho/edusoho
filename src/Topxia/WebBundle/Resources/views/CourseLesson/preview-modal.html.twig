@@ -6,12 +6,12 @@
 
 {% block body %}
   {% if lesson.type == 'video' %}
-    {% if lesson.media.source == 'self' %}
+    {% if lesson.mediaSource == 'self' %}
 	    <video id="lesson-preview-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360">
-	       <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='video/mp4' />
+	       <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='video/x-flv' />
 	    </video>
     {% else %}
-      <div id="lesson-preview-swf-player" data-url="{{ lesson.media.files[0].url }}"></div>
+      <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
     {% endif %}
   {% elseif lesson.type == 'audio' %}
     

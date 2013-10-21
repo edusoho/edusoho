@@ -214,7 +214,8 @@ function _create_config($config)
     mailer_user: null
     mailer_password: null
     locale: zh_CN
-    secret: {$secret}";
+    secret: {$secret}
+    user_partner: none";
 
     file_put_contents(__DIR__ . "/../../app/config/parameters.yml", $config);
 }

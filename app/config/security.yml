@@ -19,6 +19,9 @@ services:
     topxia.authentication.success_handler:
         class: Topxia\WebBundle\Handler\AuthenticationSuccessHandler
         parent: security.authentication.success_handler
+    topxia.logout.success_handler:
+        class: Topxia\WebBundle\Handler\LogoutSuccessHandler
+        parent: security.logout.success_handler
 
 security:
     encoders:
@@ -58,6 +61,7 @@ security:
             logout:
                 path:   logout
                 target: /
+                success_handler: topxia.logout.success_handler
             anonymous:  true
     access_control:
         - { path: ^/openclass/\d/manage.*, role: ROLE_SUPER_ADMIN }

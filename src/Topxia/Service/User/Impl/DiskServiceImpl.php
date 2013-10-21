@@ -4,7 +4,8 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\DiskService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClient;
+use Topxia\Service\Util\EdusohoCloudClient;
+use Topxia\Common\FileToolkit;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -111,9 +112,21 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function addLocalFile(UploadedFile $originalFile, $userId, $path = '/')
     {
+        $errors = FileToolkit::validateFileExtension($originalFile);
+        if ($errors) {
+            @unlink($originalFile->getRealPath());
+            throw $this->createServiceException("该文件格式，不允许上传。");
+        }
+
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
+            @unlink($originalFile->getRealPath());
             throw $this->createServiceException('用户不存在，上传失败！');
+        }
+
+        if (!preg_match('/^[a-zA-z0-9_\-\/]+$/u', $path)) {
+            @unlink($originalFile->getRealPath());
+            throw $this->createServiceException('上传路径不正确，上传失败！');
         }
 
         $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
@@ -197,7 +210,7 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function setFileFormats($id, array $items)
     {
-        $cmds = CloudClient::getVideoConvertCommands();
+        $cmds = EdusohoCloudClient::getVideoConvertCommands();
 
         $formats = array();
         foreach ($items as $item) {
@@ -310,12 +323,8 @@ class UserLocalDisk
     {
 
         $directory = $this->getUserDirectory($path);
-        $ext = $file->guessExtension();
-        if ($ext) {
-            $ext = $ext == 'jpeg' ? '.jpg' : ".$ext";
-        } else {
-            $ext = '';
-        }
+
+        $ext = FileToolkit::getFileExtension($file);
 
         $filename = '';
         for ($i = 0; $i<10; $i++) {

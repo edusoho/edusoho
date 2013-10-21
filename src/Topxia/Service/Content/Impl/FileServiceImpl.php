@@ -9,6 +9,7 @@ use Imagine\Imagick\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
+use Topxia\Common\FileToolkit;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -56,11 +57,11 @@ class FileServiceImpl extends BaseService implements FileService
 	}
 
 	public function uploadFile($group, File $file, $target = null)
-	{		
-		$extensions = 'jpg jpeg gif png txt pdf doc docx xls xlsx ppt pptx pps mp4 mp3 avi zip rar gz tar 7z swf';
-		$errors = $this->validateFileExtension($file, $extensions);
+	{
+		$errors = FileToolkit::validateFileExtension($file);
 		if ($errors) {
-			throw $this->createServiceException(join("\n", $errors));
+			@unlink($file->getRealPath());
+			throw $this->createServiceException("该文件格式，不允许上传。");
 		}
 
 		$group = $this->getGroupDao()->findGroupByCode($group);

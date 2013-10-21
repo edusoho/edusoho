@@ -17,7 +17,7 @@ class SimpleValidator
 	public static function nickname($value, array $option = array())
 	{
 		$option = array_merge(
-			array('minLength' => 4, 'maxLength' => 14),
+			array('minLength' => 4, 'maxLength' => 20),
 			$option
 		);
 

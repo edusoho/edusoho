@@ -6,7 +6,6 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var $form = $("#site-form");
-
         var uploader = new Uploader({
             trigger: '#site-logo-upload',
             name: 'logo',
@@ -16,6 +15,7 @@ define(function(require, exports, module) {
                 Notify.danger('上传网站LOGO失败，请重试！')
             },
             success: function(response) {
+                response = eval("(" + response + ")");
                 $("#site-logo-container").html('<img src="' + response.url + '">');
                 $form.find('[name=logo]').val(response.path);
                 $("#site-logo-remove").show();

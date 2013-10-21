@@ -10,6 +10,7 @@ class LoginBindController extends BaseController
 
     public function indexAction (Request $request, $type)
     {
+
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
@@ -84,12 +85,18 @@ class LoginBindController extends BaseController
         $registration = array();
 
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $$oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
+
+        $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
+        if ($nameLength > 10) {
+            $oauthUser['name'] = mb_substr($oauthUser['name'], 0, 11, 'utf-8');
+        }
 
         $nicknames = array();
         $nicknames[] = $oauthUser['name'];
-        $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 0, 3);
-        $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 3, 3);
-        $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 6, 3);
+        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 0, 3);
+        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 3, 3);
+        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 6, 3);
 
         foreach ($nicknames as $name) {
             if ($this->getUserService()->isNicknameAvaliable($name)) {

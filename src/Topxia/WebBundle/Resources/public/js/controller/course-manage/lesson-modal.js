@@ -22,6 +22,8 @@ define(function(require, exports, module) {
                 return;
             }
 
+            var $panel = $('.lesson-manage-panel');
+
             $.post($form.attr('action'), $form.serialize(), function(html) {
                 var id = '#' + $(html).attr('id'),
                     $item = $(id);
@@ -29,6 +31,7 @@ define(function(require, exports, module) {
                     $item.replaceWith(html);
                     Notify.success('课时已保存');
                 } else {
+                    $panel.find('.empty').remove();
                     $("#course-item-list").append(html);
                     Notify.success('添加课时成功');
                 }

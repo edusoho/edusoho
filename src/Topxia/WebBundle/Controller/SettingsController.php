@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Form\UserProfileType;
 use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Common\FileToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -52,13 +53,16 @@ class SettingsController extends BaseController
             if ($form->isValid()) {
                 $data = $form->getData();
                 $file = $data['avatar'];
+
+                if (!FileToolkit::isImageFile($file)) {
+                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+                }
+
                 $filenamePrefix = "user_{$user['id']}_";
                 $hash = substr(md5($filenamePrefix . time()), -8);
                 $ext = $file->getClientOriginalExtension();
-                if (!in_array($ext, array('jpg', 'jpeg', 'png', 'gif'))) {
-                    throw $this->createAccessDeniedException();
-                }
                 $filename = $filenamePrefix . $hash . '.' . $ext;
+
                 $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
                 $file = $file->move($directory, $filename);
 
@@ -88,8 +92,13 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_avatar'));
         }
 
-        $imagine = new Imagine();
-        $image = $imagine->open($pictureFilePath);
+        try {
+            $imagine = new Imagine();
+            $image = $imagine->open($pictureFilePath);
+        } catch (\Exception $e) {
+            @unlink($pictureFilePath);
+            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+        }
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
@@ -239,12 +248,14 @@ class SettingsController extends BaseController
         return $this->redirect($this->generateUrl('settings_binds'));
     }
 
-    public function bindAction(Request $request, $type){
+    public function bindAction(Request $request, $type)
+    {
         $this->checkBindsName($type);
         $callback = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $settings = $this->setting('login_bind');
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
         $client = OAuthClientFactory::create($type, $config);
+
         return $this->redirect($client->getAuthorizeUrl($callback));
     }
 

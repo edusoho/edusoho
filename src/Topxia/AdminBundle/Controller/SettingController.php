@@ -4,7 +4,9 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 
 class SettingController extends BaseController
@@ -44,23 +46,29 @@ class SettingController extends BaseController
     public function logoUploadAction(Request $request)
     {
         $file = $request->files->get('logo');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
 
-        $filename = 'logo_' . time() . '.' . $file->guessExtension();
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-
         $site = $this->getSettingService()->get('site', array());
 
         $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['logo'] = ltrim($site['logo'], '/');
 
         $this->getSettingService()->set('site', $site);
 
-        return $this->createJsonResponse(array(
+        $response = array(
             'path' => $site['logo'],
             'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['logo']),
-        ));
+        );
+
+        return new Response(json_encode($response));
+
     }
 
     public function logoRemoveAction(Request $request)
