@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             }
 
             $.post($(this).data('url'), function() {
-                // window.location.reload();
+                window.location.reload();
             });
 
         });

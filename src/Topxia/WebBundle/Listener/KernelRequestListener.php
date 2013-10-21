@@ -33,6 +33,8 @@ class KernelRequestListener
 
     		if ($token != $expectedToken) {
 
+                // @todo 需要区分ajax的response
+
     			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
     				'type' => 'error',
     				'message' => '数据来路不明，请回到原始页面，刷新后重试！',
