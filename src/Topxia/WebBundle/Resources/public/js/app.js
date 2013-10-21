@@ -45,4 +45,10 @@ define(function(require, exports, module) {
 		$('body').prepend(message);
 	}
 
+	$( document ).ajaxSend(function(a, b, c) {
+		if (c.type == 'POST') {
+			b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+		}
+	});
+
 });

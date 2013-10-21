@@ -105,7 +105,9 @@
       <div class="col-md-7 controls">
         <input type="text" id="weixin" name="weixin" class="form-control" value="{{profile.weixin}}">
      </div>
-    </div>            
+    </div> 
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">           
 
 
 </form>
