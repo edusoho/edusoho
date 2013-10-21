@@ -192,6 +192,13 @@ define(function(require, exports, module) {
 			            });
 			            $("#lesson-video-content").show();
 			            player.play();
+			            player.on('fullscreenchange', function(e) {
+			            	if ($(e.target).hasClass('vjs-fullscreen')) {
+			            		$("#site-navbar").hide();
+			            	} else {
+			            		$("#site-navbar").show();
+			            	}
+			            });
 
 			            that.set('videoPlayer', player);
 
