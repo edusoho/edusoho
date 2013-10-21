@@ -86,6 +86,12 @@ class LoginBindController extends BaseController
 
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
 
+        // var_dump($oauthUser['name']);exit();
+
+        // mb_strlen($oauthUser['name'])
+
+
+
         $nicknames = array();
         $nicknames[] = $oauthUser['name'];
         $nicknames[] = $oauthUser['name'] . '_' . substr($randString, 0, 3);
