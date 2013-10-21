@@ -4,30 +4,34 @@
 
 {% set side_nav = 'binds' %}
 
+{% set settings = setting('login_bind', []) %}
+
 {% block main %}
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     {% block heading %}第三方登录{% endblock %}
     {% block body %}
        <ul class="media-list">
           {% for type, bind in binds %} 
-          <li class="media">
-            <img src="{{ bind.image }}" class=" media-object pull-left">
-            <div class="media-body">
-              {% if bind.state == 'bind' %}
-              <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">取消绑定</a>
-              {% else %}
-              <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">绑定</a>
-              {% endif %}
+          {% if settings[type ~ '_enabled']|default(false) %}
+            <li class="media">
+              <img src="{{ bind.image }}" class=" media-object pull-left">
+              <div class="media-body">
+                {% if bind.state == 'bind' %}
+                <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">取消绑定</a>
+                {% else %}
+                <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">绑定</a>
+                {% endif %}
 
-              <div>{{ bind.type }}</div>
-              {% if bind.state == 'bind' %}
-                <div class="text-success">已绑定</div>
-              {% else %}
-                <div class="text-muted">未绑定</div>
-              {% endif %}
+                <div>{{ bind.type }}</div>
+                {% if bind.state == 'bind' %}
+                  <div class="text-success">已绑定</div>
+                {% else %}
+                  <div class="text-muted">未绑定</div>
+                {% endif %}
 
-            </div>
-          </li>
+              </div>
+            </li>
+          {% endif %}
         {% endfor %} 
       </ul>
     {% endblock %}
