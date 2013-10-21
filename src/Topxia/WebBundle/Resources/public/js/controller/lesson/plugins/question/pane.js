@@ -68,7 +68,7 @@ define(function(require, exports, module) {
             });
 
             validator.on('formValidate', function(elemetn, event) {
-                this.get('editor').sync();
+                editor.sync();
             });
 
             validator.on('formValidated', function(err, msg, ele) {
