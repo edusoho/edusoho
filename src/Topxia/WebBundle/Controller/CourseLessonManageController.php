@@ -77,7 +77,11 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-    		$videoUploadToken = $audioUploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
+    		$videoUploadToken = $audioUploadToken = array(
+	    		'token' => $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours')),
+	    		'url' => $this->generateUrl('disk_upload'),
+			);
+
     	} else {
 
 	        $client = new EdusohoCloudClient(
@@ -91,11 +95,8 @@ class CourseLessonManageController extends BaseController
 	    		'convertCommands' => implode(';', $commands),
 	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
     		));
-    		$videoUploadToken = $videoUploadToken['token'];
 
     		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
-    		$audioUploadToken = $audioUploadToken['token'];
-
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
@@ -169,7 +170,10 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-    		$videoUploadToken = $audioUploadToken = $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours'));
+    		$videoUploadToken = $audioUploadToken = array(
+	    		'token' => $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours')),
+	    		'url' => $this->generateUrl('disk_upload'),
+			);
     	} else {
 
 	        $client = new EdusohoCloudClient(
@@ -183,10 +187,8 @@ class CourseLessonManageController extends BaseController
 	    		'convertCommands' => implode(';', $commands),
 	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
     		));
-    		$videoUploadToken = $videoUploadToken['token'];
 
     		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
-    		$audioUploadToken = $audioUploadToken['token'];
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
