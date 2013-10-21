@@ -41,11 +41,6 @@ abstract class BaseController extends Controller
         ));
     }
 
-    protected function createErrorMessageModalResponse()
-    {
-        
-    }
-
     /**
      * 创建消息提示响应
      * 
@@ -63,6 +58,17 @@ abstract class BaseController extends Controller
         }
 
         return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
+            'type' => $type,
+            'message' => $message,
+            'title' => $title,
+            'duration' => $duration,
+            'goto' => $goto,
+        ));
+    }
+
+    protected function createMessageModalResponse($type, $message, $title = '', $duration = 0, $goto = null)
+    {
+        return $this->render('TopxiaWebBundle:Default:message-modal.html.twig', array(
             'type' => $type,
             'message' => $message,
             'title' => $title,

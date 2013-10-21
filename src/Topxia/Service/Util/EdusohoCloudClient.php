@@ -20,6 +20,14 @@ class EdusohoCloudClient
 
     public function __construct ($apiServer, $accessKey, $secretKey)
     {
+    	if (substr($apiServer, 0, 7) != 'http://') {
+    		throw new \RuntimeException('云存储apiServer参数不正确，请更改云存储设置。');
+    	}
+
+    	if (empty($accessKey) or empty($secretKey)) {
+    		throw new \RuntimeException('云存储accessKey/secretKey不能为空，请更改云存储设置。');
+    	}
+    	
     	$this->apiServer = rtrim($apiServer, '/');
     	$this->accessKey = $accessKey;
     	$this->secretKey = $secretKey;

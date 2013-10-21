@@ -84,19 +84,30 @@ class CourseLessonManageController extends BaseController
 
     	} else {
 
-	        $client = new EdusohoCloudClient(
-	            $setting['cloud_api_server'],
-	            $setting['cloud_access_key'],
-	            $setting['cloud_secret_key']
-	        );
+    		try {
+		        $client = new EdusohoCloudClient(
+		            $setting['cloud_api_server'],
+		            $setting['cloud_access_key'],
+		            $setting['cloud_secret_key']
+		        );
+    		
+		        $commands = array_keys($client->getVideoConvertCommands());
+		    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
+		    		'convertCommands' => implode(';', $commands),
+		    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
+	    		));
+	    		if (!empty($videoUploadToken['error'])) {
+	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
+	    		}
 
-	        $commands = array_keys($client->getVideoConvertCommands());
-	    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
-	    		'convertCommands' => implode(';', $commands),
-	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
-    		));
-
-    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+	    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+	    		if (!empty($audioUploadToken['error'])) {
+	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
+	    		}
+    		}
+    		 catch (\Exception $e) {
+    			return $this->createMessageModalResponse('error', $e->getMessage());
+    		}
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
@@ -176,19 +187,30 @@ class CourseLessonManageController extends BaseController
 			);
     	} else {
 
-	        $client = new EdusohoCloudClient(
-	            $setting['cloud_api_server'],
-	            $setting['cloud_access_key'],
-	            $setting['cloud_secret_key']
-	        );
+    		try {
+		        $client = new EdusohoCloudClient(
+		            $setting['cloud_api_server'],
+		            $setting['cloud_access_key'],
+		            $setting['cloud_secret_key']
+		        );
+    		
+		        $commands = array_keys($client->getVideoConvertCommands());
+		    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
+		    		'convertCommands' => implode(';', $commands),
+		    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
+	    		));
+	    		if (!empty($videoUploadToken['error'])) {
+	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
+	    		}
 
-	        $commands = array_keys($client->getVideoConvertCommands());
-	    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
-	    		'convertCommands' => implode(';', $commands),
-	    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
-    		));
-
-    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+	    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+	    		if (!empty($audioUploadToken['error'])) {
+	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
+	    		}
+    		}
+    		 catch (\Exception $e) {
+    			return $this->createMessageModalResponse('error', $e->getMessage());
+    		}
     	}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
