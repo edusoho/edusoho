@@ -62,12 +62,13 @@ class FileToolkit
 
     public static function isImageFile(File $file) 
     {
-        if ($file instanceof UploadedFile) {
-            $ext = $file->getClientOriginalExtension();
-        } else {
-            $ext = $file->getExtension();
-        }
+        $ext = self::getFileExtension($file);
         return in_array(strtolower($ext), explode(' ', self::getImageExtensions()));
+    }
+
+    public static function getFileExtension(File $file)
+    {
+        return $file instanceof UploadedFile ? $file->getClientOriginalExtension() : $file->getExtension();
     }
 
     public static function getSecureFileExtensions()
