@@ -16,6 +16,7 @@ class CourseAnnouncementController extends BaseController
 		return $this->render('TopxiaWebBundle:Course:announcement-show-modal.html.twig',array(
 			'announcement' => $announcement,
 			'course' => $course,
+			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
 		));
 	}
 
