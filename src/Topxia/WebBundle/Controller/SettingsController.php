@@ -54,7 +54,7 @@ class SettingsController extends BaseController
                 $file = $data['avatar'];
 
                 if (!FileToolkit::isImageFile($file)) {
-                    return $this->createMessageResponse('error', '请上传图片格式的文件。');
+                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
                 }
 
                 $filenamePrefix = "user_{$user['id']}_";
