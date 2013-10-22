@@ -27,6 +27,7 @@
             <input id="course-create-btn" class="btn btn-fat btn-primary" type="submit" value="创建">
           </div>
         </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
       </form>
 
