@@ -69,9 +69,19 @@ class ActivityController extends BaseController
 
     public function activityBlockGridAction($activitys, $mode = 'default')
     {
+        $userIds = array();
+
+        foreach ($activitys as $activity) {
+            $userIds = array_merge($userIds, $activity['experterId']);
+        }
+       
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+       
       
         return $this->render("TopxiaWebBundle:Activity:activitys-block-grid.html.twig", array(
-            'activitys' => $activitys,           
+            'activitys' => $activitys,
+            'users'=>$users,        
             'mode' => $mode,
         ));
     }

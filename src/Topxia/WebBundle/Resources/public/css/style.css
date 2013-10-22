@@ -158,6 +158,11 @@ font-size: 13px;
     
 }
 
+.page-grids .card .s-title {
+	color: #555;
+	font-weight: bold;
+}
+
 
 
 .trainee a {

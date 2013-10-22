@@ -6,14 +6,40 @@
         <div class="grid-img ps-rela">
           <img class="img-responsive thumb" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
           <div class="desc">
-            {{ activity.subtitle }}
-          </div>              
+           <span class="label label-danger text-large">{{ activity.subtitle }}</span> 
+          </div>          
         </div>
 
-        <span class="title pvz mvs">{{ activity.title }}</span>
-  
-        <span class=" pvz phm mvs">讲师：</span>
- 
+        <div class="title pvm mvz">{{ activity.title }}</div>
+        
+   
+         <div class="phm ptz pbs mvz ps-rela">
+          <span  class="s-title ">时间：</span>{{ activity.startTime }}
+          <div class="ps-abso ps-bt ps-rt">
+            <img  src="{{ asset('assets/img/default/live.png')}}">  
+            <!--span class="label label-info text-large">有直播</span--> 
+          </div>
+        </div>
+
+
+        {% if mode in ['default'] %}
+          {% set user = users[activity.experterId|first]|default(null) %}
+          {% if user %}
+            <span class="teacher clearfix">
+              <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+              <span class="nickname ellipsis">{{ user.nickname }}</span>
+              <span class="user-title ellipsis">{{ user.title }}</span>
+            </span>
+          {% endif %}
+        {% endif  %}
+
+
+      
+
+        <!--div class="post_date ps-abso ps-bts ps-rts">
+              <div class="pvs">十一月</div>
+              <h3 class="mz pvs">02</h3>
+        </div-->    
       </a>
 
     </li>

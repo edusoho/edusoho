@@ -21,9 +21,10 @@ class DefaultController extends BaseController
 
 
         $feild['recommended']=1;//1表示置顶。
-        $nextActivity=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
         
-        $nextActivity=count($nextActivity)>0?$nextActivity[0]:array('largePicture' =>'',
+        $recommended=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
+        
+        $recommended=count($recommended)>0?$recommended[0]:array('largePicture' =>'',
                                                                     'subtitle'=>'',
                                                                     'title'=>'',
                                                                     'startTime'=>'',
@@ -31,7 +32,7 @@ class DefaultController extends BaseController
                                                                     'address'=>'北京.海淀区海淀西大街70号.3W咖啡二楼',
                                                                     'id'=>'0');
 
-        $activitTerchar=empty($nextActivity['experterId'])?null:$this->getUserService()->findUsersByIds($nextActivity['experterId']);
+        $activitTerchar=empty($recommended['experterId'])?null:$this->getUserService()->findUsersByIds($recommended['experterId']);
         $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
         //地址
         $Locations=$this->getLocationService()->getAllLocations();
@@ -50,8 +51,7 @@ class DefaultController extends BaseController
         $threadUserIds=ArrayToolkit::column($activityThreads,'userId');
         $threadUsers=$this->getUserService()->findUsersByIds($threadUserIds);
       
-        
-       
+               
 
         //最新点评
         $reviews=$this->getReviewService()->searchReviews(array(),'latest',0,4);
@@ -73,13 +73,11 @@ class DefaultController extends BaseController
         $teacherinfos=$this->getUserService()->findUserProfilesByIds($teacherIds);
 
         return $this->render('TopxiaWebBundle:Default:index.html.twig',array(
-            "nextActivity"=>$nextActivity,
+            "recommended"=>$recommended,
             "lastActivitys"=>$lastActivitys,
             "activitTerchar"=>$activitTerchar,
             "users"=>$users,
             "Locations"=>$Locations,
-          
-           
             "courses"=>$courses,
             "activityThreads"=>$activityThreads,
             "activitys"=>$activitys,
