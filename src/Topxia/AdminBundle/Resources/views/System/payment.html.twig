@@ -22,14 +22,14 @@
   </div>
 
   <fieldset>
-    <legend>支付宝</legend>
+    <legend>支付宝-即时到帐接口</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >支付宝</label>
+        <label >支付宝-即时到帐接口</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('alipay_enabled', {1:'开启', 0:'关闭'}, payment.alipay_enabled) }}
-        <div class="help-block"><a href="http://www.edusoho.com/guide/39#payment" target="_blank">如何申请支付宝接口？</a></div>
+        <div class="help-block"><a href="http://www.edusoho.com/guide/39#payment" target="_blank">如何申请支付宝即时到帐接口？</a></div>
       </div>
     </div>
 
@@ -58,6 +58,7 @@
       </div>
     </div>
   </fieldset>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
 {% endblock %}

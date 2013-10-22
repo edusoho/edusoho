@@ -8,7 +8,7 @@ CREATE TABLE `block` (
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `block_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -17,7 +17,7 @@ CREATE TABLE `block_history` (
   `userId` int(11) NOT NULL COMMENT 'userId',
   `createdTime` int(11) unsigned NOT NULL COMMENT 'createdTime',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='历史表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='历史表';
 
 CREATE TABLE `cache` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -29,7 +29,7 @@ CREATE TABLE `cache` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `expiredTime` (`expiredTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -41,7 +41,7 @@ CREATE TABLE `category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uri` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `category_group` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE `category_group` (
   `name` varchar(255) NOT NULL,
   `depth` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -92,7 +92,7 @@ CREATE TABLE `content` (
   `publishedTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -122,7 +122,7 @@ CREATE TABLE `course` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_announcement` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -142,7 +142,7 @@ CREATE TABLE `course_chapter` (
   `title` varchar(255) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_favorite` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '收藏的id',
@@ -177,7 +177,7 @@ CREATE TABLE `course_lesson` (
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_lesson_learn` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -190,7 +190,7 @@ CREATE TABLE `course_lesson_learn` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId_lessonId` (`userId`,`lessonId`),
   KEY `userId_courseId` (`userId`,`courseId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_material` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -204,7 +204,7 @@ CREATE TABLE `course_material` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_member` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -223,7 +223,7 @@ CREATE TABLE `course_member` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_note` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -236,7 +236,7 @@ CREATE TABLE `course_note` (
   `createdTime` int(10) NOT NULL COMMENT '笔记创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_order` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -255,7 +255,7 @@ CREATE TABLE `course_order` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_order_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -268,7 +268,7 @@ CREATE TABLE `course_order_log` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `orderId` (`orderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_order_refund` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -296,7 +296,7 @@ CREATE TABLE `course_quiz` (
   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成';
 
 CREATE TABLE `course_quiz_item` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -310,7 +310,7 @@ CREATE TABLE `course_quiz_item` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '课时测验创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表';
 
 CREATE TABLE `course_quiz_item_answer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -321,7 +321,7 @@ CREATE TABLE `course_quiz_item_answer` (
   `isCorrect` tinyint(1) NOT NULL COMMENT '测验正确与否结果',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容';
 
 CREATE TABLE `course_review` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -332,7 +332,7 @@ CREATE TABLE `course_review` (
   `rating` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '评价创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_thread` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -352,7 +352,7 @@ CREATE TABLE `course_thread` (
   `latestPostTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_thread_post` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -376,7 +376,7 @@ CREATE TABLE `file` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `file_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -384,7 +384,7 @@ CREATE TABLE `file_group` (
   `code` varchar(255) NOT NULL,
   `public` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `friend` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -403,7 +403,7 @@ CREATE TABLE `installed_packages` (
   `fromVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '来源',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cname` (`ename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已安装包';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装包';
 
 CREATE TABLE `location` (
   `id` bigint(20) unsigned NOT NULL,
@@ -424,7 +424,7 @@ CREATE TABLE `log` (
   `level` char(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `message` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '私信Id',
@@ -433,7 +433,7 @@ CREATE TABLE `message` (
   `content` text NOT NULL,
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `message_conversation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '会话Id',
@@ -446,7 +446,7 @@ CREATE TABLE `message_conversation` (
   `unreadNum` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `message_relation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -454,7 +454,7 @@ CREATE TABLE `message_relation` (
   `messageId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消息Id',
   `isRead` enum('0','1') NOT NULL DEFAULT '0' COMMENT '0表示未读',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `migration_versions` (
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -472,7 +472,7 @@ CREATE TABLE `navigation` (
   `isOpen` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认1，为开启',
   `isNewWin` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认为1,另开窗口',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='导航数据表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表';
 
 CREATE TABLE `notification` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -482,7 +482,7 @@ CREATE TABLE `notification` (
   `createdTime` int(10) unsigned NOT NULL,
   `isRead` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `session` (
   `session_id` varchar(255) NOT NULL,
@@ -497,7 +497,7 @@ CREATE TABLE `setting` (
   `value` longblob,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -505,7 +505,7 @@ CREATE TABLE `tag` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `upgrade_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -554,7 +554,7 @@ CREATE TABLE `user` (
   `createdIp` varchar(64) NOT NULL DEFAULT '',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_bind` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -568,7 +568,7 @@ CREATE TABLE `user_bind` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`fromId`),
   UNIQUE KEY `type_2` (`type`,`toId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_disk_file` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -590,7 +590,7 @@ CREATE TABLE `user_disk_file` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `convertHash` (`convertHash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_fortune_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -631,4 +631,4 @@ CREATE TABLE `user_token` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`(6))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

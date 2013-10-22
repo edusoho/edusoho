@@ -33,6 +33,8 @@
           <button class="btn btn-fat btn-primary" id="upload-picture-btn" type="submit">上传</button>
         </div>
       </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       
     </form>
 

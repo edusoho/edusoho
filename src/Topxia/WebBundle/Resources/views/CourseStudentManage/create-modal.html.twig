@@ -31,6 +31,8 @@
     <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能添加学员，请课程发布后再添加。</div>
   {% endif %}
 
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
 </form>
 
 {% endblock %}

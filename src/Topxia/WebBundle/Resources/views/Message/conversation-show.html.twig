@@ -22,6 +22,8 @@
           {{ form_rest(form) }}
           <button id="course-reply-btn" class="btn btn-primary pull-right disabled">发送</button>
         </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
       <ul class="media-list message-list">

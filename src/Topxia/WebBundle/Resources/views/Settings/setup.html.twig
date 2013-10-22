@@ -37,6 +37,8 @@
               <button type="submit" class="btn btn-fat btn-primary btn-large" data-loading-text="正在保存..." data-goto="{{ path('homepage') }}">保存</button>
             </div>
           </div>
+
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
       {% else %}
         <div class="alert alert-danger">

@@ -57,7 +57,7 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('packaging...');
 
 		chdir($this->buildDirectory);
-		$command = "tar czvf edusoho-1.0RC4.tar.gz edusoho/";
+		$command = "tar czvf edusoho-1.0.0.tar.gz edusoho/";
 		exec($command);
 	}
 
@@ -111,7 +111,7 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->mkdir("{$this->distDirectory}/doc");
 		// $this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
-		$this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
+		// $this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
 		$this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
 	}
 
@@ -207,6 +207,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/assets", "{$this->distDirectory}/web/assets");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/customize", "{$this->distDirectory}/web/customize");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/install", "{$this->distDirectory}/web/install");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/windid_client", "{$this->distDirectory}/web/windid_client");
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
 		$this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");

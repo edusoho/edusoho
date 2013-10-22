@@ -42,6 +42,7 @@
     {% endif %}
     <input type="hidden" name="courseId" value="{{ course.id }}" />
     <input type="hidden" name="payment" value="alipay" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 {% endblock %}
 

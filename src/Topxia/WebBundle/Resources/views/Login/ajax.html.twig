@@ -29,6 +29,8 @@
     <button type="submit" class="btn btn-primary btn-fat pull-left">登录</button>
   </div>
 
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
 </form>
 <script>
 	app.load('auth/login-ajax');
