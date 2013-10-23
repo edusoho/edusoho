@@ -328,7 +328,7 @@ class UserLocalDisk
 
         $filename = '';
         for ($i = 0; $i<10; $i++) {
-            $newFilename = time() . '_' . rand(10000, 99999) . $ext;
+            $newFilename = time() . '_' . rand(10000, 99999) . ".$ext";
             if (!file_exists($directory . '/' . $newFilename)) {
                 $filename = $newFilename;
                 break;
