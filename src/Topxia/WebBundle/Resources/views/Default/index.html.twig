@@ -23,7 +23,7 @@
               <a {% if recommended.id %} href="{{ path('activity_show',{id:recommended.id})}}"  {% endif %}>
                 <img class="img-responsive thumb" src="{{ file_path(recommended.largePicture,'open-class-default-logo.jpg')  }}" >  
               </a>  
-              <h5 class="ps-abso ps-tps ps-ltl label label-warning text-large">{{recommended.subtitle}}</h5>
+              <h5 class="ps-abso ps-tps ps-rtl label label-danger text-large">{{recommended.subtitle}}</h5>
               <h4 class="activity-img-title "><a href="{{ path('activity_show',{id:recommended.id})}}">{{recommended.title }}</a></h4>
             </div>
             
@@ -39,18 +39,18 @@
             </div>
             <div class="info-content clearfix">
               <div id="photo" class="photo-wall pull-left">
-                <span class=" list-waiting pull-right">
+                <span id="wait-you" class=" list-waiting pull-right">
                    <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
                 </span>
                 {% for user in users%}
-                <span class="list-item  pull-right">
+                <span class="list-item  pull-right" >
                   <a href="{{ path('user_show',{id:user.id}) }}">
                     <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
                   </a>
-                  <span class="todos-thumb-span text-left">
+                  <div class="todos-thumb-span">
                     <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
                     <span class="user-tag">{{ user.title }}</span>
-                  </span>
+                  </div>
                 </span>
                 {% endfor %}
               

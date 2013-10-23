@@ -396,25 +396,33 @@ background-position: 0 -448px;}
 
 .list-item .tip{position: relative;}
 .list-item .i-active{z-index: 10;}
-.todos-thumb-span{position: absolute;
+.todos-thumb-span{
+position: absolute;
 background-color: #32a764;
 color: white;
-width: 167px;*width: 107px;
-height: 55px;
-padding-left: 60px;
+width: 0px;
+height: 54px;
 top: -2px;
-margin-left: -28px;
-margin-left: -56px\9;
 z-index: 9;
 display: none;
-/*-webkit-box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
+-webkit-box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
 -moz-box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
 box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
-*/
+
 /* For IE 8 */
 -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
 /* For IE 5.5 - 7 */
 filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+}
+
+.todos-thumb-span-right{
+padding-right: 60px;
+right: -2px;
+}
+
+.todos-thumb-span-left{
+padding-left: 60px;
+left: -2px;
 }
 
 /* Firefox 1 - 2 */

@@ -7,16 +7,36 @@ define(function(require, exports, module) {
     exports.run = function() {
 
     	$("#photo .list-item").mouseenter(function(){
+
 			$(this).find(".tip").addClass("i-active");
-			//$(this).siblings().css("opacity", "0.6");
-			$(this).find(".todos-thumb-span").fadeIn("fast");
-			$(this).find(".todos-thumb-span").css("opacity", "0.6");
+			
+			console.log($(this).offset().left);
+			console.log($("#wait-you").offset().left);
+
+			if($("#wait-you").offset().left-$(this).offset().left > 150){
+				$(this).find(".todos-thumb-span").addClass("todos-thumb-span-left");
+				$(this).find(".todos-thumb-span").addClass("text-left");
+
+			}else{
+				$(this).find(".todos-thumb-span").addClass("todos-thumb-span-right");
+				$(this).find(".todos-thumb-span").addClass("text-right");
+			}
+			$(this).find(".todos-thumb-span").css({width:"0px"});	
+			$(this).find(".todos-thumb-span").css({display:"block"});
+			$(this).find(".todos-thumb-span").animate({width:"157px"},300);
+			
+		
 		});
 		$("#photo .list-item").mouseleave(function(){
 			$(this).find(".tip").removeClass("i-active");
-			//$(this).siblings().css("opacity", "1");
-			$(this).find(".todos-thumb-span").fadeOut("slow");
-			$(this).find(".todos-thumb-span").css("opacity", "1");
+			if($("#wait-you").offset().left-$(this).offset().left > 150){
+				$(this).find(".todos-thumb-span").removeClass("todos-thumb-span-left");
+				$(this).find(".todos-thumb-span").removeClass("text-left");
+			}else{
+				$(this).find(".todos-thumb-span").removeClass("todos-thumb-span-right");
+				$(this).find(".todos-thumb-span").removeClass("text-right");
+			}
+			$(this).find(".todos-thumb-span").css({display:'none'});
 		});
 
 
