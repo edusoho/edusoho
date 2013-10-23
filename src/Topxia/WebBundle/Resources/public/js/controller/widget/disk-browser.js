@@ -31,6 +31,7 @@ define(function(require, exports, module) {
             var self = this;
 
             $.get(this.get('url'), function(files) {
+                            
                 if (files.length > 0) {
                     var html = '<ul class="disk-browser-file-list">';
                     $.each(files, function(i, file){
