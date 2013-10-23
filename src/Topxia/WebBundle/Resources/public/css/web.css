@@ -2185,7 +2185,11 @@ body {
 /**
  * 通用属性
  */
+.op-normal{
+	opacity:0.8;
+	filter:alpha(opacity=80);
 
+}
 
 .ps-ab{	position: absolute !important;}
 .ps-re{	position: relative !important;}

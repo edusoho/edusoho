@@ -405,9 +405,9 @@ height: 54px;
 top: -2px;
 z-index: 9;
 display: none;
--webkit-box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
--moz-box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
-box-shadow: 0 0 .625em .07em rgba(0, 0, 0, 0.66);
+-webkit-box-shadow: 0.625em 0.07em 0.625em 0.07em rgba(0, 0, 0, 0.66);
+-moz-box-shadow: 0.625em 0.07em 0.625em 0.07em rgba(0, 0, 0, 0.66);
+box-shadow: 0.625em 0.07em 0.625em 0.07em rgba(0, 0, 0, 0.66);
 
 /* For IE 8 */
 -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
