@@ -277,6 +277,10 @@ class CourseController extends BaseController
 
 	public function createAction(Request $request)
 	{
+        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
+            throw $this->createAccessDeniedException();
+        }
+
 		$form = $this->createCourseForm();
 
         if ($request->getMethod() == 'POST') {
