@@ -9,6 +9,10 @@ class UpgradeController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
+
         $conditons = array();
         $paginator = new Paginator(
             $this->get('request'),
@@ -23,12 +27,16 @@ class UpgradeController extends BaseController
 
         return $this->render('TopxiaAdminBundle:Upgrade:index.html.twig',array(
             'packages'=>$findedPackages,
-            'paginator' => $paginator
+            'paginator' => $paginator,
             ));
     }
 
     public function logsAction(Request $request)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
+
         $conditions = array();
 
         $paginator = new Paginator(
@@ -51,6 +59,10 @@ class UpgradeController extends BaseController
 
     public function checkAction(Request $request)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
+
         $packagesToUpgrade = $this->getUpgradeService()->check();
         return $this->render('TopxiaAdminBundle:Upgrade:check-result-list.html.twig',array(
             'packages'=>$packagesToUpgrade
@@ -60,6 +72,10 @@ class UpgradeController extends BaseController
 
     public function triggerUpdateModalAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
+
         $updatePackage = $this->getUpgradeService()->getRemoteUpgradePackageInfo($id);
         return $this->render('TopxiaAdminBundle:Upgrade:update-modal.html.twig',array(
             'updatePackage'=>$updatePackage));
@@ -67,6 +83,10 @@ class UpgradeController extends BaseController
 
     public function checkEnvironmentAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
+
         $result = $this->getUpgradeService()->checkEnvironment();
 
 
@@ -80,6 +100,9 @@ class UpgradeController extends BaseController
 
     public function checkDependsAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
 
         $result = $this->getUpgradeService()->checkDepends($id);
 
@@ -93,6 +116,9 @@ class UpgradeController extends BaseController
 
     public function downloadAndExtractAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
 
         $result = $this->getUpgradeService()->downloadAndExtract($id);
 
@@ -106,6 +132,10 @@ class UpgradeController extends BaseController
 
     public function hasLastErrorAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
+
         $result = $this->getUpgradeService()->hasLastError($id);
         if(!$result){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
@@ -116,6 +146,9 @@ class UpgradeController extends BaseController
 
     public function backupSystemAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
         
         $result = $this->getUpgradeService()->backUpSystem($id);
 
@@ -130,6 +163,9 @@ class UpgradeController extends BaseController
 
     public function beginUpgradeAction(Request $request, $id)
     {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createDisabledResponse();
+        }
 
         $result = $this->getUpgradeService()->beginUpgrade($id);
 
@@ -153,6 +189,25 @@ class UpgradeController extends BaseController
     private function getUpgradeService()
     {
         return $this->getServiceKernel()->createService('Upgrade.UpgradeService');
+    }
+
+    private function isDisabledUpgrade()
+    {
+        if (!$this->container->hasParameter('disabled_features')) {
+            return false;
+        }
+
+        $disableds = $this->container->getParameter('disabled_features');
+        if (!is_array($disableds) or empty($disableds)) {
+            return false;
+        }
+
+        return in_array('upgrade', $disableds);
+    }
+
+    private function createDisabledResponse()
+    {
+        return $this->createMessageResponse('error', '自动升级功能已经被关闭！');
     }
 
 }
