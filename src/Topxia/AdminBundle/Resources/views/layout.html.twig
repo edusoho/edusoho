@@ -40,7 +40,6 @@
 
         <ul class="nav navbar-nav">
           <li {% if nav == 'course' %}class="active"{% endif %}><a href="{{ path('admin_course') }}">课程</a></li>
-          <li {% if nav == 'group' %}class="active"{% endif %} style="display:none;"><a href="{{ path('admin_group') }}">小组</a></li>
           <li {% if nav == 'user' %}class="active"{% endif %}><a href="{{ path('admin_user') }}">用户</a></li>
           <li {% if nav == 'content' %}class="active"{% endif %}><a href="{{ path('admin_navigation') }}">内容</a></li>
           {% if is_granted('ROLE_SUPER_ADMIN') %}
