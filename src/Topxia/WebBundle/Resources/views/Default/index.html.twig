@@ -19,11 +19,11 @@
         <div class="top">
           <div class="pull-left bulletin">
 
-            <div class="index-img-box">
-              <a    {% if recommended.id %} href="{{ path('activity_show',{id:recommended.id})}}"  {% endif %}>
-                <img class="open-class-logo-midll-size" src="{{ file_path(recommended.largePicture,'open-class-default-logo.jpg')  }}" >  
+            <div class="index-img-box ps-rela">
+              <a {% if recommended.id %} href="{{ path('activity_show',{id:recommended.id})}}"  {% endif %}>
+                <img class="img-responsive thumb" src="{{ file_path(recommended.largePicture,'open-class-default-logo.jpg')  }}" >  
               </a>  
-              <h5 class="activity-img-title ">{{recommended.subtitle}}</h5>
+              <h5 class="ps-abso ps-tps ps-ltl label label-warning text-large">{{recommended.subtitle}}</h5>
               <h4 class="activity-img-title "><a href="{{ path('activity_show',{id:recommended.id})}}">{{recommended.title }}</a></h4>
             </div>
             
