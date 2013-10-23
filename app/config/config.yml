@@ -1,6 +1,10 @@
 imports:
+    - { resource: parameters_default.yml }
     - { resource: parameters.yml }
     - { resource: security.yml }
+
+parameters:
+    disabled_features: []
 
 framework:
     # esi:             ~
@@ -27,6 +31,8 @@ twig:
     strict_variables: %kernel.debug%
     paths:
         "%kernel.root_dir%/../web/customize": customize
+    globals:
+        disabled_features: %disabled_features%
 
 # Assetic Configuration
 assetic:
