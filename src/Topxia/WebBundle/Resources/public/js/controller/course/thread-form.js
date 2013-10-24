@@ -26,6 +26,16 @@ define(function(require, exports, module) {
             editor.sync();
         });
 
+        validator.on('formValidated', function(err, msg, $form) {
+            if (err == true) {
+                return ;
+            }
+
+            $form.find('[type=submit]').attr('disabled', 'disabled');
+
+            return true;
+        });
+
     };
 
 });
