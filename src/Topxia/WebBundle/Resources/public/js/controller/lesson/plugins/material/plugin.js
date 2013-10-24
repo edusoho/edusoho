@@ -30,9 +30,9 @@ define(function(require, exports, module) {
 				return;
 			}
 			if(lesson.materialNum>0){
-				$('.glyphicon-download-alt').attr('style','color:#096');
+				$('.glyphicon-download-alt').addClass('text-success');
 			}else{
-				$('.glyphicon-download-alt').removeAttr('style');
+				$('.glyphicon-download-alt').removeClass('text-success');
 			}
 		}
 	});

@@ -190,7 +190,7 @@ function _create_database($config, $converDatabase)
 		if($converDatabase){
 			$dropResult = $pdo->exec("drop database `{$config['database_name']}`;");
 			if (empty($dropResult)) {
-				return "数据库{$config['database_name']}删除失败！";
+				return "数据库{$config['database_name']}删除失败,或者数据库{$config['database_name']}并不存在！";
 			}
 		}
 

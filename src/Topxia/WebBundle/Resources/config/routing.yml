@@ -70,10 +70,12 @@ register_nickname_check:
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
+    methods: [POST]
 
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
+    methods: [POST]
 
 course_explore:
     pattern:  /course/explore/{category}
@@ -98,6 +100,7 @@ course_buy:
 course_order_pay:
     pattern:  /course/order/pay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
+    methods: [POST]
 
 course_order_pay_return:
     pattern:  /course/order/pay/{name}/return
@@ -182,22 +185,16 @@ course_lesson_plugin_quiz_init:
 course_lesson_plugin_quiz_item_post:
     pattern:  /lessonplugin/quiz/item/post/{quizId}/{quizItemId}
     defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:postItem }
+    methods: [POST]
 
 course_lesson_plugin_quiz_check_result:
     pattern:  /lessonplugin/quiz/check/result/{quizId}
     defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:checkResult }
+    methods: [POST]
 
 course_lesson_plugin_quiz_start:
     pattern:  /lessonplugin/quiz/start/{courseId}/{lessonId}
     defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:start }
-
-course_lesson_plugin_quiz_continue:
-    pattern:  /lessonplugin/quiz/continue/{quizId}
-    defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:continue }
-
-course_lesson_plugin_quiz_scan:
-    pattern:  /lessonplugin/quiz/scan/{quizId}
-    defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:scan }
 
 course_lesson_plugin_material_init:
     pattern:  /lessonplugin/material/init
@@ -207,17 +204,10 @@ course_lesson_plugin_note_init:
     pattern:  /lessonplugin/note/init
     defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:init }
 
-course_lesson_plugin_note_create:
-    pattern:  /lessonplugin/note/create
-    defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:create }
-
 course_lesson_plugin_note_save:
     pattern:  /lessonplugin/note/save
     defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:save }
-
-course_lesson_plugin_note_update:
-    pattern:  /lessonplugin/note/update
-    defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:update }
+    methods: [POST]
 
 course_review_create:
     pattern:  /course/{id}/review/create
@@ -242,10 +232,12 @@ course_members:
 course_favorite:
     pattern: /course/{id}/favorite
     defaults: { _controller: TopxiaWebBundle:Course:favorite }
+    methods: [POST]
 
 course_unfavorite:
     pattern: /course/{id}/unfavorite
     defaults: { _controller: TopxiaWebBundle:Course:unfavorite }
+    methods: [POST]
 
 course_materials:
     pattern:  /course/{id}/material/
@@ -258,6 +250,7 @@ course_material_download:
 course_material_delete:
     pattern:  /course/{id}/material/{materialId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseMaterial:delete }
+    methods: [POST]
 
 course_threads:
     pattern:  /course/{id}/thread
@@ -352,6 +345,7 @@ course_manage_student_create:
 course_manage_student_remove:
     pattern:  /course/{courseId}/manage/student/{userId}/remove
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }
+    methods: [POST]
 
 course_manage_student_remark:
     pattern:  /course/{courseId}/manage/student/{userId}/remark
@@ -404,6 +398,7 @@ course_manage_quiz:
 course_manage_quiz_item_save:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/quiz/saveitem
     defaults: { _controller: TopxiaWebBundle:CourseQuizManage:saveItem }
+    methods: [POST]
 
 course_manage_quiz_item_delete:
     pattern: /course/{courseId}/manage/quiz/{itemId}/delete
@@ -421,6 +416,7 @@ course_manage_chapter_edit:
 course_manage_chapter_delete:
     pattern:  /course/{courseId}/manage/chapter/{chapterId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseChapterManage:delete }
+    methods: [POST]
 
 course_manage_material:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/material
@@ -429,18 +425,16 @@ course_manage_material:
 course_manage_material_upload:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/material/upload
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:upload }
+    methods: [POST]
 
 course_manage_material_delete:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/material/{materialId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:delete }
+    methods: [POST]
 
 course_manage_media_library:
     pattern:  /course/{id}/manage/media/library
     defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
-
-course_manage_media_upload:
-    pattern:  /course/{id}/manage/media/upload
-    defaults: { _controller: TopxiaWebBundle:CourseMediaManage:upload }
 
 course_manage_media_import:
     pattern:  /course/{id}/manage/media/import
@@ -449,10 +443,7 @@ course_manage_media_import:
 course_manage_publish:
     pattern:  /course/{id}/manage/publish
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
-
-course_manage_preview:
-    pattern:  /course/{id}/manage/preview
-    defaults: { _controller: TopxiaWebBundle:CourseManage:preview }
+    methods: [POST]
 
 course_announcement_show_all:
     pattern:  /course/{courseId}/announcement/all
@@ -559,7 +550,6 @@ comment_widget_init:
 comment_widget_create:
     pattern:  /comment-widget/create
     defaults: { _controller: TopxiaWebBundle:CommentWidget:create }
-    methods: [POST]
 
 comment_widget_delete:
     pattern:  /comment-widget/delete

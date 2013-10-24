@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
 	require('common/validator-rules').inject(Validator);
-
+    
 	exports.run = function() {
 		var $form = $('#category-form');
 		var $modal = $form.parents('.modal');

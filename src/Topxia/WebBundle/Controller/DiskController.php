@@ -43,7 +43,7 @@ class DiskController extends BaseController
             'userId' => $user['id'],
             'type' => $type,
         ), 'latestUpdated', 0, 1000);
-
+        
         return $this->createFilesJsonResponse($files);
     }
 
