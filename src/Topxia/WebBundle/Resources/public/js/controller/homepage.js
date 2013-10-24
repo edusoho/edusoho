@@ -8,10 +8,7 @@ define(function(require, exports, module) {
 
     	$("#photo .list-item").mouseenter(function(){
 
-			$(this).find(".tip").addClass("i-active");
-			
-			console.log($(this).offset().left);
-			console.log($("#wait-you").offset().left);
+			$(this).find(".tip").addClass("i-active");			
 
 			if($("#wait-you").offset().left-$(this).offset().left > 150){
 				$(this).find(".todos-thumb-span").addClass("todos-thumb-span-left");
@@ -42,14 +39,21 @@ define(function(require, exports, module) {
 
 
 		 $(".course-grids .course-grid").mouseenter(function(){
+
+		   $(this).find(".desc").css({display:"block"});
 	  
 			$(this).find(".desc").css("opacity", "1");
+			$(this).find(".desc").css("filter", "alpha(opacity=50)");
+		
+
 			
 		 });
 
 		 $(".course-grids .course-grid").mouseleave(function(){
 			
 			$(this).find(".desc").css("opacity", "0");
+			$(this).find(".desc").css("filter", "alpha(opacity=0)");
+			$(this).find(".desc").css({display:"none"});
 			
 		});
     	

@@ -103,7 +103,8 @@
       </div>
     {% endif %}
     {% block content %}{% endblock %}
-</div>
+</div><!-- /container -->
+
 
 {% block bottom %}
 <!-- container -->
@@ -145,6 +146,21 @@
       </div>
     </div>
 </footer>
+
+  <div class="site-footer container clearfix">
+    {% if setting('site.icp') %}
+      <div class="pull-right"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>
+    {% endif %}
+    
+    {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+
+    <p class="text-gray" data-role="default-foot-bar">
+      Powered by 
+      <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
+      ©2013 
+      <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+    </p>
+  </div>
 
 {% endblock %}
 

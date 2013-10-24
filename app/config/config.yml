@@ -3,9 +3,6 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 
-parameters:
-    disabled_features: []
-
 framework:
     # esi:             ~
     translator:      { fallback: %locale% }

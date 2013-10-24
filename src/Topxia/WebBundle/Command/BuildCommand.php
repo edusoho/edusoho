@@ -6,6 +6,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Topxia\System;
 
 class BuildCommand extends BaseCommand
 {
@@ -57,7 +58,8 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('packaging...');
 
 		chdir($this->buildDirectory);
-		$command = "tar czvf edusoho-1.0.0.tar.gz edusoho/";
+
+		$command = "tar czvf edusoho-" . System::VERSION . ".tar.gz edusoho/";
 		exec($command);
 	}
 
