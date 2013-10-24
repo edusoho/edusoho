@@ -74,21 +74,11 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 
 	private function download($file_source, $file_target) 
 	{
-	    $rh = fopen($file_source, 'rb');
-	    $wh = fopen($file_target, 'w+b');
-	    if (!$rh || !$wh) {
-	        	return false;
-	    }
-	    while (!feof($rh)) {
-	        if (fwrite($wh, fread($rh, 4096)) === FALSE) {
-	            return false;
-	        }
-	        flush();
-	    }
-
-	    fclose($rh);
-	    fclose($wh);
-    	return true;
+		$ch = curl_init($file_source);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    	$data = curl_exec($ch);
+    	curl_close($ch);
+    	file_put_contents($file_target, $data);
 	}
 
 

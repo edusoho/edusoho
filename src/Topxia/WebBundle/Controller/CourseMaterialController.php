@@ -13,7 +13,7 @@ class CourseMaterialController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryTakeCourse($id);
 
         $paginator = new Paginator(
             $request,

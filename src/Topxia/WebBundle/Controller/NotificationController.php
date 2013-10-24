@@ -13,6 +13,9 @@ class NotificationController extends BaseController
     public function indexAction (Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
         
         $paginator = new Paginator(
             $request,

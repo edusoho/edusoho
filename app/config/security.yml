@@ -65,7 +65,7 @@ security:
             anonymous:  true
     access_control:
         - { path: ^/task, role: ROLE_USER }
-        - { path: ^/me, role: ROLE_USER }
+        - { path: ^/my, role: ROLE_USER }
         - { path: ^/settings, role: ROLE_USER }
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }

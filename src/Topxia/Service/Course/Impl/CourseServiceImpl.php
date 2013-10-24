@@ -192,10 +192,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher',!$includeDraft);
 	}
 
-	public function findUserTeachCourses($userId, $start, $limit,$includeOther=false)
+	public function findUserTeachCourses($userId, $start, $limit, $includeOther=false)
 	{
 		$includeDraft = $this->isCurrentUser($userId);
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit,!$includeDraft);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit, !$includeDraft);
+
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
 		/**
