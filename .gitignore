@@ -3,6 +3,8 @@
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
+/build
+/files
 /app/data/udisk/*
 /app/data/private_files/*
 /app/data/backup/*
