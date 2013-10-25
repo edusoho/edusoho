@@ -123,8 +123,8 @@ class NoteServiceImpl extends BaseService implements NoteService
             throw $this->createServiceException("笔记(#{$id})不存在，删除失败");
         }
 
-        $user = $this->getCurrentUser();
-        if (($note['userId'] != $user['id']) && !$this->getCourseService()->canManageCourse($note['courseId'])) {
+        $currentUser = $this->getCurrentUser();
+        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->canManageCourse($note['courseId'])) {
             throw $this->createServiceException("你没有权限删除笔记(#{$id})");
         }
 
@@ -135,6 +135,10 @@ class NoteServiceImpl extends BaseService implements NoteService
             $note['userId'], 
             $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId'])
         );
+
+        if ($note['userId'] != $currentUser['id']) {
+            $this->getLogService()->info('note', 'delete', "删除笔记#{$id}");
+        }
 	}
 
     public function deleteNotes(array $ids)
@@ -164,5 +168,10 @@ class NoteServiceImpl extends BaseService implements NoteService
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 }

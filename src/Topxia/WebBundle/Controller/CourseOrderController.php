@@ -56,7 +56,7 @@ class CourseOrderController extends BaseController
 
     public function payReturnAction(Request $request, $name)
     {
-        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知：" . json_encode($request->query->all()));
+        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
@@ -67,7 +67,7 @@ class CourseOrderController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知：" . json_encode($request->request->all()));
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
         $response = $this->createPaymentResponse($name, $request->request->all());
 
         $payData = $response->getPayData();

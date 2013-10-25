@@ -38,6 +38,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 
 	protected function createLogQueryBuilder($conditions)
 	{
+		$conditions = array_filter($conditions);
 		return $this->createDynamicQueryBuilder($conditions)
 			->andWhere('module = :module')
 			->andWhere('action = :action')

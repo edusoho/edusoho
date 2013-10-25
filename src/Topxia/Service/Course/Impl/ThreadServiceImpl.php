@@ -185,6 +185,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 		$this->getThreadPostDao()->deletePostsByThreadId($threadId);
 		$this->getThreadDao()->deleteThread($threadId);
+
+		$this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
 	}
 
 	public function stickThread($courseId, $threadId)
@@ -380,6 +382,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	private function getNotifiactionService()
     {
       	return $this->createService('User.NotificationService');
+    }
+
+    private function getLogService()
+    {
+    	return $this->createService('System.LogService');
     }
 
 }

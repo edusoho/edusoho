@@ -302,6 +302,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
 
+        $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
+
     }
 
     public function cancelRefundOrder($id)
@@ -464,6 +466,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }
