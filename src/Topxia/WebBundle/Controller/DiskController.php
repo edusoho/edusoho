@@ -51,7 +51,7 @@ class DiskController extends BaseController
     {
         $data = $request->getContent();
 
-        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调:{$data}");
+        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调", array('content' => $data));
 
         $key = $request->query->get('key');
         if (empty($key)) {

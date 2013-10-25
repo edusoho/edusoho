@@ -181,7 +181,7 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     	$diskFile = $this->getDiskFileDao()->addFile($diskFile);
 
-        $this->getLogService()->info('disk', 'add_cloud_file', json_encode($file));
+        $this->getLogService()->info('disk', 'add_cloud_file', '上传文件到云存储', json_encode($file));
 
         return $diskFile;
     }

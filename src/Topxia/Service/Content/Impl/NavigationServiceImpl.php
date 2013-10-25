@@ -44,7 +44,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $fields['createdTime'] = $fields['updateTime'] = time();
         $result = $this->getNavigationDao()->addNavigation($fields);
 
-        $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}");
+        $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}", $result);
 
         return $result;
     }
