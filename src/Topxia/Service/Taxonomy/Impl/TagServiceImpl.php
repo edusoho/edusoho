@@ -60,7 +60,11 @@ class TagServiceImpl extends BaseService implements TagService
         $this->filterTagFields($tag);
         $tag['createdTime'] = time();
 
-        return $this->getTagDao()->addTag($tag);
+        $tag = $this->getTagDao()->addTag($tag);
+
+        $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
+
+        return $tag;
     }
 
     public function updateTag($id, array $fields)
@@ -73,12 +77,16 @@ class TagServiceImpl extends BaseService implements TagService
         $fields = ArrayToolkit::parts($fields, array('name'));
         $this->filterTagFields($fields, $tag);
 
+        $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
+
         return $this->getTagDao()->updateTag($id, $fields);
     }
 
     public function deleteTag($id)
     {
         $this->getTagDao()->deleteTag($id);
+
+        $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
     private function filterTagFields(&$tag, $relatedTag = null)
@@ -101,5 +109,10 @@ class TagServiceImpl extends BaseService implements TagService
 	{
         return $this->createDao('Taxonomy.TagDao');
 	}
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
+    }
 
 }  

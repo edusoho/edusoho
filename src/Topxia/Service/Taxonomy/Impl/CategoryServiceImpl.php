@@ -126,7 +126,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->filterCategoryFields($category);
 
-        return $this->getCategoryDao()->addCategory($category);
+        $category = $this->getCategoryDao()->addCategory($category);
+
+        $this->getLogService()->info('category', 'create', "添加分类 {$category['name']}(#{$category['id']})", $category);
+
+        return $category;
     }
 
     public function updateCategory($id, array $fields)
@@ -146,6 +150,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->filterCategoryFields($fields, $category);
 
+        $this->getLogService()->info('category', 'update', "编辑分类 {$fields['name']}(#{$id})", $fields);
+
         return $this->getCategoryDao()->updateCategory($id, $fields);
     }
 
@@ -161,6 +167,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         foreach ($ids as $id) {
             $this->getCategoryDao()->deleteCategory($id);
         }
+
+        $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
     }
 
     /**
@@ -265,6 +273,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     private function getGroupDao()
     {
         return $this->createDao('Taxonomy.CategoryGroupDao');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }

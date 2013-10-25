@@ -38,6 +38,7 @@ class CourseNoteController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         $note = $this->getNoteService()->deleteNote($id);
+
         return $this->createJsonResponse(true);
     }
 
