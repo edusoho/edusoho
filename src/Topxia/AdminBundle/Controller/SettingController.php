@@ -35,6 +35,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
             $this->getSettingService()->set('site', $site);
+            $this->getLogService()->info('system', 'update_settings', "更新站点设置", $site);
             $this->setFlashMessage('success', '站点信息设置已保存！');
         }
 
@@ -62,6 +63,8 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('site', $site);
 
+        $this->getLogService()->info('system', 'update_settings', "更新站点LOGO", array('logo' => $site['logo']));
+
         $response = array(
             'path' => $site['logo'],
             'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['logo']),
@@ -77,6 +80,8 @@ class SettingController extends BaseController
         $setting['logo'] = '';
 
         $this->getSettingService()->set('site', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除站点LOGO");
 
         return $this->createJsonResponse(true);
     }
@@ -104,6 +109,10 @@ class SettingController extends BaseController
                 $auth['welcome_methods'] = array();
             }
             $this->getSettingService()->set('auth', $auth);
+
+            $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
+
+
             $this->setFlashMessage('success','注册设置已保存！');
         }
 
@@ -128,6 +137,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
+            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailer);
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
@@ -157,6 +167,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
+            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->setFlashMessage('success','登录设置已保存！');
         }
 
@@ -182,6 +193,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
             $this->getSettingService()->set('payment', $payment);
+            $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
         }
 
@@ -205,6 +217,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新退款设置", $refundSetting);
             $this->setFlashMessage('success', '退款设置已保存！');
         }
 
@@ -226,8 +239,11 @@ class SettingController extends BaseController
             $data = $request->request->all();
             $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r")," ",$data['ips'])));
             $this->getSettingService()->set('blacklist_ip', $ips);
+            $this->getLogService()->info('system', 'update_settings', "更新IP黑名单", $ips);
+
             $ips = $this->getSettingService()->get('blacklist_ip', array());
             $ips['ips'] =  join("\n", $ips['ips']);
+
             $this->setFlashMessage('success','保存成功！');
         }
 
@@ -252,6 +268,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新云存储设置", $storageSetting);
             $this->setFlashMessage('success', '云存储设置已保存！');
         }
 
