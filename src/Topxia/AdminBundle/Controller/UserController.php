@@ -87,42 +87,6 @@ class UserController extends BaseController {
         return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
     } 
 
-    public function logsAction(Request $request)
-    {
-        $fields = $request->query->all();
-        $conditions = array(
-            'startDateTime'=>'',
-            'endDateTime'=>'',
-            'nickname'=>'',
-            'level'=>''
-        );
-
-        if(!empty($fields)){
-            $conditions =$fields;
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getLogService()->searchLogCount($conditions),
-            30
-        );
-
-        $logs = $this->getLogService()->searchLogs(
-            $conditions, 
-            'created', 
-            $paginator->getOffsetCount(), 
-            $paginator->getPerPageCount()
-        );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:User:logs.html.twig', array(
-            'logs' => $logs,
-            'paginator' => $paginator,
-            'users' => $users
-        ));
-    }
-
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);

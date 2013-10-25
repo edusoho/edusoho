@@ -116,10 +116,6 @@ admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
 
-admin_user_logs:
-    pattern:  /user/logs
-    defaults: { _controller: TopxiaAdminBundle:User:logs }
-
 admin_user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
@@ -333,6 +329,10 @@ admin_setting_refund:
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
+
+admin_logs:
+    pattern:  /logs
+    defaults: { _controller: TopxiaAdminBundle:Log:index }
 
 admin_upgrade:
     pattern:  /upgrade
