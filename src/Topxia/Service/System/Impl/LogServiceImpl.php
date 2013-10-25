@@ -8,19 +8,19 @@ use Topxia\Service\Common\BaseService;
 class LogServiceImpl extends BaseService implements  LogService
 {	
 
-	public function info($module, $action, $message)
+	public function info($module, $action, $message, array $data = null)
 	{
-		return $this->addLog('info', $module, $action, $message);
+		return $this->addLog('info', $module, $action, $message, $data);
 	}
 
-	public function warning($module, $action, $message)
+	public function warning($module, $action, $message, array $data = null)
 	{
-		return $this->addLog('warning', $module, $action, $message);
+		return $this->addLog('warning', $module, $action, $message, $data);
 	}
 	
-	public function error($module, $action, $message)
+	public function error($module, $action, $message, array $data = null)
 	{
-		return $this->addLog('error', $module, $action, $message);
+		return $this->addLog('error', $module, $action, $message, $data);
 	}
 
 	public function searchLogs($conditions, $sort, $start, $limit)
@@ -37,21 +37,29 @@ class LogServiceImpl extends BaseService implements  LogService
 				break;
 		}
 
-		return $this->getLogDao()->searchLogs($conditions, $sort, $start, $limit);
+		$logs = $this->getLogDao()->searchLogs($conditions, $sort, $start, $limit);
+
+		foreach ($logs as &$log) {
+			$log['data'] = empty($log['data']) ? array() : json_decode($log['data'], true);
+			unset($log);
+		}
+
+		return $logs;
 	}
 
 	public function searchLogCount($conditions)
 	{
 		$conditions = $this->prepareSearchConditions($conditions);
-		return $this->getLogDao()->searchLogCount($conditions);
+		$logs = $this->getLogDao()->searchLogCount($conditions);
 	}
 
-	protected function addLog($level, $module, $action, $message)
+	protected function addLog($level, $module, $action, $message, array $data = null)
 	{
 		return $this->getLogDao()->addLog(array(
 			'module' => $module,
 			'action' => $action,
 			'message' => $message,
+			'data' => empty($data) ? '' : json_encode($data),
 			'userId' => $this->getCurrentUser()->id,
 			'ip' => $this->getCurrentUser()->currentIp,
 			'createdTime' => time(),

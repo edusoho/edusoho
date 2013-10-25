@@ -56,7 +56,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         }
         $fields['updateTime'] = time();
 
-        $this->getLogService()->info('info', 'navigation_update', "编辑导航导航#{$id}:" . json_encode($fields));
+        $this->getLogService()->info('info', 'navigation_update', "编辑导航#{$id}", $fields);
 
         return $this->getNavigationDao()->updateNavigation($id, $fields);
     }

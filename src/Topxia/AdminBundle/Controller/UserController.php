@@ -111,7 +111,7 @@ class UserController extends BaseController {
             $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
-        
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
 
         return $this->render('TopxiaAdminBundle:User:logs.html.twig', array(

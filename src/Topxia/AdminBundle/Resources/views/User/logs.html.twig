@@ -36,7 +36,7 @@
 
 </form>
 
-  <table class="table table-hover">
+  <table class="table table-hover" id="log-table">
     <tr>
       <th width="15%">用户</th>
       <th width="55%">操作</th>
@@ -53,8 +53,14 @@
             --
           {% endif %}
         <td>
-          <div style="word-break: break-all;word-wrap: break-word;">{{ log.message }}</div>
-          <br />
+          <div style="word-break: break-all;word-wrap: break-word;">
+            {{ log.message }}
+            {% if log.data %}
+              <a href="javascript:;" class="text-sm text-warning show-data">查看数据</a>
+              <a href="javascript:;" class="text-sm text-warning hide-data" style="display:none;">隐藏数据</a>
+              <div class="data" style="display:none;">{{ log.data|json_encode }}</div>
+            {% endif %}
+          </div>
           <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
         </td>
         <td>{{ dict('logLevel:html')[log.level]|raw }}</td>
