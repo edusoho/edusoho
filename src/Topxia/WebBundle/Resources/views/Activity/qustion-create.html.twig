@@ -1,6 +1,6 @@
  <li class="media">
     <a class="pull-left user-link user-avatar-link" href="javascript:">
-      <img src="{{ qustion.usersmallAvatar }}"></a>
+      <img src="{{ file_path(user.mediumAvatar,'avatar.png') }}" >
     </a>
     <div class="media-body">
       <p class="media-content"><a  href="{{ path('user_show',{id:qustion.userId }) }}">{{qustion.usernickname }}:</a> {{qustion.content}}

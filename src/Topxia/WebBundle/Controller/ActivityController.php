@@ -523,7 +523,7 @@ class ActivityController extends BaseController
             $form->bind($request); 
                 $fields = $form->getData();
                 $fields['activityId']= $id;
-                $this->sendWeibo($fields['castweibo'],$fields);
+                //$this->sendWeibo($fields['castweibo'],$fields);
                 unset($fields['castweibo']);
                 $qustion=$this->getActivityThreadService()->createThread($fields);
                 $url = $this->get('router')->generate('activity_qustionpost', array('id' =>$qustion['activityId'] ,'qid'=> $qustion['id']));
@@ -539,7 +539,8 @@ class ActivityController extends BaseController
                 }
                 $newqustion=$qustion; 
                 return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
-                    'qustion'=>$newqustion
+                    'qustion'=>$newqustion,
+                    'user'=>$currentuser,
                 ));
         }
         
