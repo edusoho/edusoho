@@ -63,6 +63,13 @@ class TagDaoImpl extends BaseDao implements TagDao
         return $this->getConnection()->fetchAssoc($sql, array($name));
     }
 
+    public function getTagByLikeName($name)
+    {
+        $name = "%{$name}%";
+        $sql = "SELECT * FROM {$this->table} WHERE name LIKE ?";
+        return $this->getConnection()->fetchAll($sql, array($name));
+    }
+
     public function findAllTagsCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} ";

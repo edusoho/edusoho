@@ -9,19 +9,35 @@ define(function(require, exports, module) {
         
         require('./header').run();
         
-        // 标签选择组件初始化
-        require.async(app.arguments.tagUrl + '#', function(tags) {
             $('#course_tags').select2({
-                width: 'off',
-                multiple: true,
-                maximumSelectionSize: 20,
-                id: 'name',
-                data: {results:tags, key:'name'},
-                formatSelection: function(item) {
-                    return item.name;
-                },
-                formatResult: function(item) {
-                    return item.name;
+            
+                ajax: {
+                    url: app.arguments.tagMatchUrl+'#',
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term, page) { 
+                        return {
+                            q: term, 
+                            page_limit: 10
+                        };
+                    },
+                    results: function (data) {
+
+                        var results = [];
+
+                        $.each(data, function(index, item){
+
+                            results.push({
+                              id: item.name,
+                              name: item.name
+                            });
+                        });
+
+                        return {
+                            results: results
+                        };
+
+                    }
                 },
                 initSelection : function (element, callback) {
                     var data = [];
@@ -29,11 +45,23 @@ define(function(require, exports, module) {
                         data.push({id: this, name: this});
                     });
                     callback(data);
-                }
+                },
+                formatSelection: function(item) {
+                    return item.name;
+                },
+                formatResult: function(item) {
+                    return item.name;
+                },
+                width: 'off',
+                multiple: true,
+                maximumSelectionSize: 20,
+                placeholder: "请输入标签",
+                width: 'off',
+                multiple: true,
+                createSearchChoice: function() { return null; },
+                maximumSelectionSize: 20
             });
-        });
 
-        // 表单校验
         var validator = new Validator({
             element: '#course-form',
             failSilently: true,
