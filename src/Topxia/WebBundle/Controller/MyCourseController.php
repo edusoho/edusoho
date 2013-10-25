@@ -12,10 +12,10 @@ class MyCourseController extends BaseController
     {
         $user = $this->getCurrentUser();
         if(in_array('ROLE_TEACHER', $user['roles'])) {
-            return $this->forward('TopxiaWebBundle:MyCourse:teaching');
+            return $this->forward('TopxiaWebBundle:MyCourse:teaching', array(), array('page' => $request->query->get('page')));
         }
 
-        return $this->forward('TopxiaWebBundle:MyCourse:learning');
+        return $this->forward('TopxiaWebBundle:MyCourse:learning', array(), array('page' => $request->query->get('page')));
     }
 
     public function teachingAction(Request $request)
