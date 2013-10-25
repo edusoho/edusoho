@@ -543,6 +543,10 @@ tag_all:
     pattern: /tag/all.jsonm
     defaults: { _controller: TopxiaWebBundle:Tag:all }
 
+tag_match:
+    pattern: /tag/match.jsonp
+    defaults: { _controller: TopxiaWebBundle:Tag:match }
+
 comment_widget_init:
     pattern:  /comment-widget/init
     defaults: { _controller: TopxiaWebBundle:CommentWidget:init }

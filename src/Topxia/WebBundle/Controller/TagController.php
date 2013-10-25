@@ -1,6 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class TagController extends BaseController
 {
     /**
@@ -17,6 +20,18 @@ class TagController extends BaseController
             $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
         }
         return $this->createJsonmResponse($data);
+    }
+
+    public function matchAction(Request $request)
+    {
+        $data = array();
+        $queryString = $request->query->get('q');
+        $callback = $request->query->get('callback');
+        $tags = $this->getTagService()->getTagByLikeName($queryString);
+        foreach ($tags as $tag) {
+            $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
+        }
+        return new JsonResponse($data);
     }
 
     protected function getTagService()

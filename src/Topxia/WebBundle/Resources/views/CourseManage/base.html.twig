@@ -4,11 +4,12 @@
 
 {% set side_nav = 'base' %}
 {% set script_controller = 'course-manage/base' %}
-{% set script_arguments = {
-  categoryUrl: path('category_all'),
-  tagUrl: path('tag_all'),
-  locationUrl: path('location_all')
-} 
+{% 
+	set script_arguments = {
+	  categoryUrl: path('category_all'),
+	  tagMatchUrl: path('tag_match'),
+	  locationUrl: path('location_all')
+	} 
 %}
 {% block main %}
 
@@ -18,8 +19,6 @@
 		<form class="form-horizontal" id="course-form" method="post">
 
 		  {{ web_macro.flash_messages() }}
-
-		  {{ form_errors(form) }}
 
 			<div class="form-group">
 				<div class="col-md-2 control-label">{{ form_label(form.title, '标题') }}</div>
