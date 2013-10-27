@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoCloudClient;
+use Topxia\Service\Util\CloudClientFactory;
 
 class CourseLessonManageController extends BaseController
 {
@@ -74,7 +74,6 @@ class CourseLessonManageController extends BaseController
     	$fileKey = "{$filePath}/" . $randString;
     	$convertKey = $randString;
 
-
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$videoUploadToken = $audioUploadToken = array(
@@ -85,14 +84,12 @@ class CourseLessonManageController extends BaseController
     	} else {
 
     		try {
-		        $client = new EdusohoCloudClient(
-		            $setting['cloud_api_server'],
-		            $setting['cloud_access_key'],
-		            $setting['cloud_secret_key']
-		        );
+
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
     		
 		        $commands = array_keys($client->getVideoConvertCommands());
-		    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
+		    	$videoUploadToken = $client->generateUploadToken($client->getBucket(), array(
 		    		'convertCommands' => implode(';', $commands),
 		    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
 	    		));
@@ -100,7 +97,7 @@ class CourseLessonManageController extends BaseController
 	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
 	    		}
 
-	    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
+	    		$audioUploadToken = $client->generateUploadToken($client->getBucket(), array());
 	    		if (!empty($audioUploadToken['error'])) {
 	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
 	    		}
@@ -188,12 +185,10 @@ class CourseLessonManageController extends BaseController
     	} else {
 
     		try {
-		        $client = new EdusohoCloudClient(
-		            $setting['cloud_api_server'],
-		            $setting['cloud_access_key'],
-		            $setting['cloud_secret_key']
-		        );
-    		
+
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+
 		        $commands = array_keys($client->getVideoConvertCommands());
 		    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
 		    		'convertCommands' => implode(';', $commands),

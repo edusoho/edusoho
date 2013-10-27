@@ -3,8 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Service\Util\CloudClient;
-
 class DiskController extends BaseController
 {
 

@@ -4,7 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\DiskService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoCloudClient;
+use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\FileToolkit;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -181,7 +181,7 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     	$diskFile = $this->getDiskFileDao()->addFile($diskFile);
 
-        $this->getLogService()->info('disk', 'add_cloud_file', '上传文件到云存储', json_encode($file));
+        $this->getLogService()->info('disk', 'add_cloud_file', '上传文件到云存储', $file);
 
         return $diskFile;
     }
@@ -210,7 +210,8 @@ class DiskServiceImpl extends BaseService implements DiskService
 
     public function setFileFormats($id, array $items)
     {
-        $cmds = EdusohoCloudClient::getVideoConvertCommands();
+        $factory = new CloudClientFactory();
+        $cmds = $factory->createClient()->getVideoConvertCommands();
 
         $formats = array();
         foreach ($items as $item) {
