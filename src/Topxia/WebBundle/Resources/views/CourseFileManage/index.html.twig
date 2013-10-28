@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}文件管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'files' %}
+{% set tab = 'courseWare' %}
+{% set script_controller = 'course-manage-file/index' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+
+  {% include 'TopxiaWebBundle:CourseFileManage:panel-heading.html.twig' %}
+
+  <div class="panel-body">  
+    <table class="table table-striped" id="course-student-list">
+      <thead>
+        <tr>
+          <th> <input type="checkbox"  data-role="batch-select"> 选中</th>
+          <th>文件名</th>
+          <th>文件类型</th>
+          <th>大小</th>
+          <th>修改日期</th>
+          <th>修改人</th>
+          <th>创建时间</th>
+          <th>创建人</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for courseWare in courseWares %}
+          {% include 'TopxiaWebBundle:CourseFileManage:tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="8">无课件记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {# {{ web_macro.paginator(paginator) }} #}
+
+  </div>
+
+</div>
+
+
+{% endblock %}

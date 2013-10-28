@@ -46,6 +46,22 @@ admin_content_alias_check:
     pattern:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
 
+admin_user_logs:
+    pattern:  /user/logs
+    defaults: { _controller: TopxiaAdminBundle:User:logs }
+
+admin_net_disk:
+    pattern:  /net/disk
+    defaults: { _controller: TopxiaAdminBundle:NetDisk:index }
+
+admin_net_disk_course_upload_files:
+    pattern:  /net/disk/course/upload/files/{courseId}
+    defaults: { _controller: TopxiaAdminBundle:NetDisk:uploadFiles }
+
+admin_net_disk_course_find_files:
+    pattern:  /net/disk/course/find/files/{courseId}
+    defaults: { _controller: TopxiaAdminBundle:NetDisk:findCourseFiles }
+
 admin_block:
     pattern:  /block
     defaults: { _controller: TopxiaAdminBundle:Block:index }
@@ -115,10 +131,6 @@ admin_user_create_email_check:
 admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
-
-admin_user_logs:
-    pattern:  /user/logs
-    defaults: { _controller: TopxiaAdminBundle:User:logs }
 
 admin_user_show:
     pattern:  /user/{id}
@@ -333,6 +345,10 @@ admin_setting_refund:
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
+
+admin_logs:
+    pattern:  /logs
+    defaults: { _controller: TopxiaAdminBundle:Log:index }
 
 admin_upgrade:
     pattern:  /upgrade

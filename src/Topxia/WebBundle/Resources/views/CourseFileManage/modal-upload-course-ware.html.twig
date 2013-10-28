@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}
+  上传课件
+{% endblock %}
+
+{% block body %}
+
+
+
+<script>app.load('course-manage-file/upload-course-ware')</script>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">保存</button>
+{% endblock %}
+
+{% set hideFooter = true %}
