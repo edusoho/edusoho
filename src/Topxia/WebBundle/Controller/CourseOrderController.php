@@ -90,10 +90,12 @@ class CourseOrderController extends BaseController
             throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能退学。');
         }
 
+
         $order = $this->getOrderService()->getOrder($member['orderId']);
         if (empty($order)) {
             throw $this->createNotFoundException();
         }
+
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);

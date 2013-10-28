@@ -33,14 +33,6 @@ abstract class BaseController extends Controller
         throw new \RuntimeException('获得当前登录用户的API变更为：getCurrentUser()。');
     }
 
-    protected function createErrorMessageResponse($message='',$title='警告')
-    {
-        return $this->render('TopxiaWebBundle:Default:error.html.twig', array(
-            'message' => $message,
-            'title' => $title
-        ));
-    }
-
     /**
      * 创建消息提示响应
      * 
