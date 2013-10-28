@@ -5,7 +5,9 @@ interface TagService
 {
 	public function getTag($id);
 
-	public function getTagByName($name);
+    public function getTagByName($name);
+
+	public function getTagByLikeName($name);
 
     public function findAllTags($start, $limit);
 

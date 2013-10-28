@@ -9,6 +9,11 @@ admin_popular_courses:
 admin_question_remind_teachers:
     pattern: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
+    methods:  [POST]
+
+admin_dashboard:
+    pattern:  dashboard
+    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
 
 admin_content:
     pattern:  /content
@@ -37,14 +42,9 @@ admin_content_delete:
     defaults: { _controller: TopxiaAdminBundle:Content:delete }
     methods:  [POST]
 
-
 admin_content_alias_check:
     pattern:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
-
-admin_content_picture_upload:
-    pattern:  /content/picture/upload
-    defaults: { _controller: TopxiaAdminBundle:Content:pictureUpload }
 
 admin_block:
     pattern:  /block
@@ -116,10 +116,6 @@ admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
 
-admin_user_logs:
-    pattern:  /user/logs
-    defaults: { _controller: TopxiaAdminBundle:User:logs }
-
 admin_user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
@@ -131,10 +127,16 @@ admin_user_edit:
 admin_user_lock:
     pattern:  /user/{id}/lock
     defaults: { _controller: TopxiaAdminBundle:User:lock }
+    methods:  [POST]
 
 admin_user_unlock:
     pattern:  /user/{id}/unlock
     defaults: { _controller: TopxiaAdminBundle:User:unlock }
+    methods:  [POST]
+
+admin_user_roles:
+    pattern:  /user/{id}/roles
+    defaults: { _controller: TopxiaAdminBundle:User:roles }
 
 admin_teacher:
     pattern:  /teacher
@@ -143,22 +145,22 @@ admin_teacher:
 admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
+    methods:  [POST]
 
 admin_teacher_promote_cancel:
     pattern:  /teacher/{id}/promote/cancel
     defaults: { _controller: TopxiaAdminBundle:Teacher:promoteCancel }
-
-admin_user_roles:
-    pattern:  /user/{id}/roles
-    defaults: { _controller: TopxiaAdminBundle:User:roles }
+    methods:  [POST]
 
 admin_user_send_passwordreset_email:
     pattern:  /user/{id}/send_passwordreset_email
     defaults: { _controller: TopxiaAdminBundle:User:sendPasswordResetEmail }
+    methods:  [POST]
 
 admin_user_send_emailverify_email:
     pattern:  /user/{id}/send_emailverify_email
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
+    methods:  [POST]
 
 admin_comment:
     pattern:  /comment
@@ -211,6 +213,7 @@ admin_note:
 admin_note_delete:
     pattern: /note/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:CourseNote:delete }
+    methods: [POST]
 
 admin_note_batch_delete:
     pattern: /note/batch_delete
@@ -257,15 +260,12 @@ admin_course_disk:
 admin_course_disk_delete:
     pattern: /disk/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:CourseDisk:delete }
+    methods: [POST]
 
 admin_course_disk_batch_delete:
     pattern: /disk/batch_delete
     defaults: { _controller: TopxiaAdminBundle:CourseDisk:batchDelete }
     methods: [POST]
-
-admin_course_tag:
-    pattern:  /course/tag
-    defaults: { _controller: TopxiaAdminBundle:Tag:tagCourse }
 
 admin_course_order_manage:
     pattern: /course/order/manage
@@ -288,38 +288,6 @@ admin_order_audit_refund:
     pattern: /order/{id}/audit_refund
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:auditRefund }
 
-admin_group:
-    pattern:  /group
-    defaults: { _controller: TopxiaAdminBundle:Group:index }
-
-admin_group_discussions:
-    pattern:  /groups/discusse
-    defaults: { _controller: TopxiaAdminBundle:Group:discusses }
-
-admin_group_delete:
-    pattern:  /group/{group}/delete
-    defaults: { _controller: TopxiaAdminBundle:Group:delete }
-
-admin_group_tag:
-    pattern:  /group/{group}/tag
-    defaults: { _controller: TopxiaAdminBundle:Tag:tagGroup }
-
-admin_group_term:
-    pattern:  /group/{group}/term
-    defaults: { _controller: TopxiaAdminBundle:Group:term }
-
-admin_question_questions:
-    pattern:  /question/questions
-    defaults: { _controller: TopxiaAdminBundle:Question:questions }
-
-admin_question_answers:
-    pattern:  /question/answers
-    defaults: { _controller: TopxiaAdminBundle:Question:answers }
-
-admin_dashboard:
-    pattern:  dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-
 admin_setting_site:
     pattern:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:Setting:site }
@@ -327,10 +295,12 @@ admin_setting_site:
 admin_setting_logo_upload:
     pattern:  /setting/logo/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:logoUpload }
+    methods: [POST]
 
 admin_setting_logo_remove:
     pattern:  /setting/logo/remove
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
+    methods: [POST]
 
 admin_setting_auth:
     pattern:  /setting/auth
@@ -359,6 +329,10 @@ admin_setting_refund:
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
+
+admin_logs:
+    pattern:  /logs
+    defaults: { _controller: TopxiaAdminBundle:Log:index }
 
 admin_upgrade:
     pattern:  /upgrade
@@ -406,8 +380,6 @@ admin_upgrade_check:
     pattern:  /upgrade/check
     defaults: { _controller: TopxiaAdminBundle:Upgrade:check }
 
-
-
 admin_category:
     pattern:  /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
@@ -427,6 +399,7 @@ admin_category_edit:
 admin_category_delete:
     pattern:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
+    methods: [POST]
 
 admin_file:
     pattern:  /file

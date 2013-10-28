@@ -211,6 +211,13 @@ textarea {
 }
 
 
+.dynamic-collection .list-group-item {
+	word-break: break-all;
+	word-wrap: break-word;	
+}
+
+
+
 /**
  * <global>
  */

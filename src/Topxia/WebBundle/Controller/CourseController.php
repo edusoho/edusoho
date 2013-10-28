@@ -27,6 +27,7 @@ class CourseController extends BaseController
             $category = array('id' => null);
         }
 
+
         $sort = $request->query->get('sort', 'popular');
 
         $conditions = array(
@@ -48,7 +49,7 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $categories = $this->getCategoryService()->findGroupRootCategories('course');
+        $categories = $this->getCategoryService()->findAllCategories();
 
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,

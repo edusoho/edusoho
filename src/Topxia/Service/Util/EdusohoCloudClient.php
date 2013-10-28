@@ -4,7 +4,7 @@ namespace Topxia\Service\Util;
 
 use \RuntimeException;
 
-class EdusohoCloudClient
+class EdusohoCloudClient implements CloudClient
 {
 	protected $accessKey;
 
@@ -18,19 +18,26 @@ class EdusohoCloudClient
 
 	protected $apiServer;
 
-    public function __construct ($apiServer, $accessKey, $secretKey)
+    protected $bucket;
+
+    protected $videoCommands = array();
+
+    public function __construct (array $options)
     {
-    	if (substr($apiServer, 0, 7) != 'http://') {
+    	if (substr($options['apiServer'], 0, 7) != 'http://') {
     		throw new \RuntimeException('云存储apiServer参数不正确，请更改云存储设置。');
     	}
 
-    	if (empty($accessKey) or empty($secretKey)) {
+    	if (empty($options['accessKey']) or empty($options['secretKey'])) {
     		throw new \RuntimeException('云存储accessKey/secretKey不能为空，请更改云存储设置。');
     	}
     	
-    	$this->apiServer = rtrim($apiServer, '/');
-    	$this->accessKey = $accessKey;
-    	$this->secretKey = $secretKey;
+    	$this->apiServer = rtrim($options['apiServer'], '/');
+    	$this->accessKey = $options['accessKey'];
+    	$this->secretKey = $options['secretKey'];
+        $this->bucket = $options['bucket'];
+        $this->videoCommands = $options['videoCommands'];
+        $this->audioCommands = $options['audioCommands'];
     }
 
 	public function generateUploadToken($bucket, array $params)
@@ -69,7 +76,7 @@ class EdusohoCloudClient
 		return json_decode($content, true);
 	}
 
-	public function download($bucket, $key)
+	public function download($bucket, $key, $duration = 3600)
 	{
 		$params = array('bucket' => $bucket, 'key' => $key);
 		$encodedParams = base64_encode(json_encode($params));
@@ -81,13 +88,22 @@ class EdusohoCloudClient
 		exit();
 	}
 
-    public static function getVideoConvertCommands()
+    public function getBucket()
     {
-        return array(
-            'avthumb/flv/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libmp3lame' => 'sd',
-            'avthumb/flv/r/24/vb/512k/vcodec/libx264/ar/44100/ab/64k/acodec/libmp3lame' => 'hd',
-            'avthumb/flv/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/64k/acodec/libmp3lame' => 'shd',
-        );
+        if (empty($this->bucket)) {
+            throw new \RuntimeException('云存储bucket不能为空，请更改云存储设置。');
+        }
+        return $this->bucket;
+    }
+
+    public function getVideoConvertCommands()
+    {
+        return $this->videoCommands;
+    }
+
+    public function getAudioConvertCommands()
+    {
+        return $this->audioCommands;
     }
 
     private function getUploadTokenUrl()

@@ -25,19 +25,19 @@ define(function(require, exports, module) {
                 return ;
             }
             
-            var $submitButton = $('#thread-post-form').find('button[type=submit]');
-            $submitButton.addClass("disabled");
-
             $('.thread-post-list').find('li.empty').remove();
             var $form = $("#thread-post-form");
+
+            $form.find('[type=submit]').attr('disabled', 'disabled');
+            console.log($form.find('[type=submit]'));
             $.post($form.attr('action'), $form.serialize(), function(html) {
                 $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
                 var id = $(html).appendTo('.thread-post-list').attr('id');
                 editor.html('');
 
-                $submitButton.removeClass("disabled");
-                window.location.href = '#' + id;
+                $form.find('[type=submit]').removeAttr('disabled');
 
+                window.location.href = '#' + id;
             });
 
             return false;

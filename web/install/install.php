@@ -109,8 +109,15 @@ function install_step2()
 	global $twig;
 
 	$error = null;
+	$converDatabase = null;
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-		$error = _create_database($_POST);
+		if(isset($_POST['conver_database'])){
+			$converDatabase = true;
+		} else {
+			$converDatabase = false;
+		}
+
+		$error = _create_database($_POST, $converDatabase);
 		if (empty($error)) {
 			$error = _create_config($_POST);
 		}
@@ -175,13 +182,21 @@ function install_step4()
 	));
 }
 
-function _create_database($config)
+function _create_database($config, $converDatabase)
 {
 	try {
 		$pdo = new PDO("mysql:host={$config['database_host']}", "{$config['database_user']}", "{$config['database_password']}", array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'));
+
+		if($converDatabase){
+			$dropResult = $pdo->exec("drop database `{$config['database_name']}`;");
+			if (empty($dropResult)) {
+				return "数据库{$config['database_name']}删除失败,或者数据库{$config['database_name']}并不存在！";
+			}
+		}
+
 		$result = $pdo->exec("create database `{$config['database_name']}`;");
 		if (empty($result)) {
-			return "数据库{$config['database_name']}已存在，创建失败，请删除后再安装！";
+			return "数据库{$config['database_name']}已存在，创建失败，请删除或者选择覆盖数据库之后再安装！";
 		}
 
 		$pdo->exec("USE `{$config['database_name']}`;");

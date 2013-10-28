@@ -51,7 +51,7 @@ class MessageController extends BaseController
        } else {
            return $this->createJsonResponse(array("status" =>"success")); 
        }
-        
+    
     }
 
     private function convertConditions($conditions)

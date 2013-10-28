@@ -3,8 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Service\Util\CloudClient;
-
 class DiskController extends BaseController
 {
 
@@ -43,7 +41,7 @@ class DiskController extends BaseController
             'userId' => $user['id'],
             'type' => $type,
         ), 'latestUpdated', 0, 1000);
-
+        
         return $this->createFilesJsonResponse($files);
     }
 
@@ -51,7 +49,7 @@ class DiskController extends BaseController
     {
         $data = $request->getContent();
 
-        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调:{$data}");
+        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调", array('content' => $data));
 
         $key = $request->query->get('key');
         if (empty($key)) {

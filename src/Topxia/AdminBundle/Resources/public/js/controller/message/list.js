@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 	require("$");
 
     exports.run = function() {
-    	
+    	        
         var $container = $('#message-table-container');
         var $table = $("#message-table");
         require('../../util/short-long-text')($table);

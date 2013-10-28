@@ -9,6 +9,7 @@ class KindeditorController extends BaseController
 
 	public function uploadAction(Request $request)
 	{
+
 		try {
 			$group = $request->request->get('group');
 

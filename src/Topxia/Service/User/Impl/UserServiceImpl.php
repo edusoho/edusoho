@@ -216,7 +216,7 @@ class UserServiceImpl extends BaseService implements UserService
             $user['setup'] = 1;
         } else {
             $user['salt'] = '';
-            $user['password'] = ''; 
+            $user['password'] = '';
             $user['setup'] = 0;
         }
         $user = UserSerialize::unserialize(

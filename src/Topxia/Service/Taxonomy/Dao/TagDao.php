@@ -17,6 +17,8 @@ interface TagDao
 
     public function getTagByName($name);
 
+    public function getTagByLikeName($name);
+
     public function findAllTagsCount();
 
     public function deleteTag($id);

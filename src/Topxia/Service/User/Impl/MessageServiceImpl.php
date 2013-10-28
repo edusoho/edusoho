@@ -42,15 +42,15 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     public function deleteConversationMessage($conversationId, $messageId)
     {
+
         $relation = $this->getRelationDao()->getRelationByConversationIdAndMessageId($conversationId, $messageId);
         $conversation = $this->getConversationDao()->getConversation($conversationId);
+
         if($relation['isRead'] == self::RELATION_ISREAD_OFF){
-            $this->getConversationDao()->updateConversation($conversationId, 
-                array('messageNum'=>$conversation['messageNum']-1,
-                    'unreadNum'=>$conversation['unreadNum']-1));  
+            $this->safelyUpdateConversationMessageNum($conversation);
+            $this->safelyUpdateConversationunreadNum($conversation);
         } else {
-            $this->getConversationDao()->updateConversation($conversationId, 
-                array('messageNum'=>$conversation['messageNum']-1));
+            $this->safelyUpdateConversationMessageNum($conversation);
         }
         
         $this->getRelationDao()->deleteConversationMessage($conversationId, $messageId);
@@ -61,7 +61,8 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     }
 
-    public function deleteMessagesByIds(array $ids=null){
+    public function deleteMessagesByIds(array $ids=null)
+    {
         if(empty($ids)){
              throw $this->createServiceException("Please select message item !");
         }
@@ -79,7 +80,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
             $this->getMessageDao()->deleteMessage($id);
         }
-            return true;
+        return true;
     }
 
     public function findUserConversations($userId, $start, $limit)
@@ -133,16 +134,6 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function clearUserNewMessageCounter($userId)
     {
         $this->getUserService()->clearUserCounter($userId, 'newMessageNum');
-    }
-
-    private function sortMessages($messages)
-    {
-        usort($messages ,function($a, $b){
-            if($a['createdTime'] > $b['createdTime']) return -1;
-            if($a['createdTime'] ==  $b['createdTime']) return 0;
-            if($a['createdTime'] < $b['createdTime']) return 1;
-        });
-        return $messages;
     }
 
     public function getConversationByFromIdAndToId($fromId, $toId)
@@ -227,6 +218,37 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation = $this->getRelationDao()->addRelation($relation);
     }
 
+    private function safelyUpdateConversationMessageNum($conversation)
+    {
+        if ($conversation['messageNum'] <= 0) {
+            $this->getConversationDao()->updateConversation($conversation['id'], 
+            array('messageNum'=>0));
+        } else {
+            $this->getConversationDao()->updateConversation($conversation['id'], 
+            array('messageNum'=>$conversation['messageNum']-1));
+        }
+    }
+
+    private function safelyUpdateConversationunreadNum($conversation)
+    {
+        if ($conversation['unreadNum'] <= 0) {
+            $this->getConversationDao()->updateConversation($conversation['id'], 
+            array('unreadNum'=>0));
+        } else {
+            $this->getConversationDao()->updateConversation($conversation['id'], 
+            array('unreadNum'=>$conversation['unreadNum']-1));
+        }
+    }
+
+    private function sortMessages($messages)
+    {
+        usort($messages ,function($a, $b){
+            if($a['createdTime'] > $b['createdTime']) return -1;
+            if($a['createdTime'] ==  $b['createdTime']) return 0;
+            if($a['createdTime'] < $b['createdTime']) return 1;
+        });
+        return $messages;
+    }
 
     private function getMessageDao()
     {

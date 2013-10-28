@@ -45,11 +45,6 @@ class CourseMediaManageController extends BaseController
     	return $this->createJsonResponse($files);
     }
 
-    public function uploadAction()
-    {
-
-    }
-
     public function importAction(Request $request, $id)
     {
     	$url = $request->query->get('url');

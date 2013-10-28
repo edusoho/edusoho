@@ -74,7 +74,11 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$id = $this->getContentDao()->addContent(ContentSerialize::serialize($content));
 
-		return $this->getContent($id);
+		$content = $this->getContent($id);
+
+        $this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
+
+		return $content;
 	}
 
 	public function updateContent($id, $fields)
@@ -94,22 +98,29 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$this->getContentDao()->updateContent($id, ContentSerialize::serialize($fields));
 
-		return $this->getContent($id);
+		$content = $this->getContent($id);
+
+		$this->getLogService()->info('content', 'update', "内容《({$content['title']})》({$content['id']})更新", $content);
+
+		return $content;
 	}
 
 	public function trashContent($id)
 	{
 		$this->getContentDao()->updateContent($id, $fields = array('status' => 'trash'));
+		$this->getLogService()->info('content', 'trash', "内容#{$id}移动到回收站");
 	}
 
 	public function deleteContent($id)
 	{
 		$this->getContentDao()->deleteContent($id);
+		$this->getLogService()->info('content', 'delete', "内容#{$id}永久删除");
 	}
 
 	public function publishContent($id)
 	{
 		$this->getContentDao()->updateContent($id, $fields = array('status' => 'published'));
+		$this->getLogService()->info('content', 'publish', "内容#{$id}发布");
 	}
 
 	public function isAliasAvaliable($alias)
@@ -129,6 +140,11 @@ class ContentServiceImpl extends BaseService implements ContentService
     private function getCategoryService()
     {
         return $this->createService('Taxonomy.CategoryService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }

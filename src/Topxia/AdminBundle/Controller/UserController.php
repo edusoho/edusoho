@@ -80,46 +80,12 @@ class UserController extends BaseController {
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
 
+            $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
+
             return $this->redirect($this->generateUrl('admin_user'));
         }
         return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
     } 
-
-    public function logsAction(Request $request)
-    {
-        $fields = $request->query->all();
-        $conditions = array(
-            'startDateTime'=>'',
-            'endDateTime'=>'',
-            'nickname'=>'',
-            'level'=>''
-        );
-
-        if(!empty($fields)){
-            $conditions =$fields;
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getLogService()->searchLogCount($conditions),
-            30
-        );
-
-        $logs = $this->getLogService()->searchLogs(
-            $conditions, 
-            'created', 
-            $paginator->getOffsetCount(), 
-            $paginator->getPerPageCount()
-        );
-        
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:User:logs.html.twig', array(
-            'logs' => $logs,
-            'paginator' => $paginator,
-            'users' => $users
-        ));
-    }
 
     public function editAction(Request $request, $id)
     {
@@ -129,7 +95,11 @@ class UserController extends BaseController {
         $profile['title'] = $user['title'];
 
         if ($request->getMethod() == 'POST') {
-            $this->getUserService()->updateUserProfile($user['id'], $request->request->all());
+            $profile = $this->getUserService()->updateUserProfile($user['id'], $request->request->all());
+
+            $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
+
+
             return $this->redirect($this->generateUrl('settings'));
         }
 
@@ -191,7 +161,7 @@ class UserController extends BaseController {
         ));
     }
 
-    public function sendPasswordResetEmail(Request $request, $id)
+    public function sendPasswordResetEmailAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
         if (empty($user)) {
@@ -207,6 +177,8 @@ class UserController extends BaseController {
                 'token' => $token,
             )), 'html'
         );
+
+        $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
 
         return $this->createJsonResponse(true);
     }
@@ -228,6 +200,8 @@ class UserController extends BaseController {
                 'token' => $token,
             ))
         );
+
+        $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
 
         return $this->createJsonResponse(true);
     }

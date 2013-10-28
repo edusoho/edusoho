@@ -80,6 +80,8 @@ class CourseStudentManageController extends BaseController
                 'courseTitle' => $course['title'],
             ));
 
+            $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+
             return $this->createStudentTrResponse($course, $member);
         }
 

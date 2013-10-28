@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var BaseChooser = require('./base-chooser');
     var Notify = require('common/bootstrap-notify');
+    require('jquery.perfect-scrollbar');
 
     var VideoChooser = BaseChooser.extend({
     	attrs: {
@@ -18,6 +19,9 @@ define(function(require, exports, module) {
 
     	setup: function() {
     		VideoChooser.superclass.setup.call(this);
+            $('#disk-browser-video').perfectScrollbar({
+                wheelSpeed: 50
+            });
     	},
 
     	onImport: function(e) {
