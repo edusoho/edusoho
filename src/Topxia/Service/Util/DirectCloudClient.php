@@ -1,7 +1,7 @@
 <?php
 
 namespace Topxia\Service\Util;
-use Topxia\Service\Util\CloudClient
+use Topxia\Service\Util\CloudClient;
 use \RuntimeException;
 
 class DirectCloudClient implements CloudClient
