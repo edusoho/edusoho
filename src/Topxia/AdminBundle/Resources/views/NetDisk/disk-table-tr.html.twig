@@ -1,0 +1,37 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+
+<tr id="course-table-tr-{{ course.id }}" class="folder" 
+data-url="{{path('admin_net_disk_find_course_files', {courseId:course.id})}}"
+>
+
+  <td>
+    <strong class="text-success text-sm">
+      <i class="glyphicon glyphicon-folder-close"></i> {{course.title}}
+    </strong>
+  </td>
+
+    <td>
+      <span class="text-primary text-sm">文件夹</span>
+    </td>
+
+      <td class="text-info">
+        {{ admin_macro.bytesToSize(1000) }}
+      </td>
+
+      <td class="text-info">
+        {{ course.createdTime |date('Y-n-d H:i:s') }}
+      </td>
+
+      <td class="text-info">
+         <strong>{{ createUser.nickname }}</strong>
+      </td>
+
+      <td class="text-info">
+        {{ course.createdTime |date('Y-n-d H:i:s') }}
+      </td>
+
+      <td class="text-info">
+         <strong>{{ createUser.nickname }}</strong>
+      </td>
+
+</tr>
