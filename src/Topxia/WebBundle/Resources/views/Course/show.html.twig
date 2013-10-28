@@ -64,17 +64,19 @@
         </p>
         <p>
           {% if course.status=='closed' %}  
-          状　态：
-            <span class="label label-danger ">已关闭</span>
+            状　态： <span class="label label-danger ">已关闭</span>
           {% elseif course.status=='draft' %}
-          状　态：
-            <span class="label label-warning ">未发布</span>
+            状　态： <span class="label label-warning ">未发布</span>
           {% endif %}          
         </p>
       </div>
       <div class="actions clearfix">
         <div class="pull-left">
-          <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >购买课程</a>
+          {% if course.status != 'published' %}
+            <a class="btn btn-primary disabled" href="javascript:">购买课程</a>
+          {% else %}
+            <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">购买课程</a>
+          {% endif %}
         </div>
         <div class="pull-right">
           <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
