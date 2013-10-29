@@ -239,7 +239,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         foreach ($activitys as $item) {
          
             if(empty($item['expired'])){
-                $item['expired']=empty($item['endTime'])?$item['expired']:time()>$item['endTime'];
+                $item['expired']=empty($item['endTime'])?$item['expired']:time()>$item['endTimeNum'];
             }
             $item['join']=false;
             
