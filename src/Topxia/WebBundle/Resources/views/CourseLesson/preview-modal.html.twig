@@ -20,11 +20,11 @@
       </audio>
     {% else %}
       {{ lesson.content|raw }}
-      <script>app.load('course/lesson-preview')</script>
     {% endif %}
   {% else %}
     <div class="empty">课时尚未发布，无法预览！</div>
   {% endif %}
+    <script>app.load('course/lesson-preview')</script>
 {% endblock %}
 
 {% block footer %}
