@@ -334,6 +334,18 @@ course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
+course_manage_files:
+    pattern:  /course/{id}/manage/files
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
+
+course_manage_upload_course_ware:
+    pattern:  /course/{id}/manage/files/upload/course/ware
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseWare }
+
+course_manage_upload_course_material:
+    pattern:  /course/{id}/manage/files/upload/course/material
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterial }
+
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
