@@ -259,8 +259,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		
 		$mixActivity= $activity;
 
-		 if(empty($mixActivity['expired'])){
-                $mixActivity['expired']=empty($mixActivity['endTime'])?$mixActivity['expired']:time()>$mixActivity['endTime'];
+		 if(empty($mixActivity['expired'])){		 	
+                $mixActivity['expired']=empty($mixActivity['endTime'])?$mixActivity['expired']:time()>$mixActivity['endTimeNum'];
             }
 
         $condi['userId']=$userId;
@@ -489,6 +489,7 @@ class ActivitySerialize
 		if(empty($activity['startTime'])){
 			$activity['startTime']='';
 		}else{
+			$activity['startTimeNum']=$activity['startTime'];
 			$activity['startTime']=date("Y-m-d H:i",$activity['startTime']);
 		}
 		
@@ -496,6 +497,7 @@ class ActivitySerialize
 		if(empty($activity['endTime'])){
 			$activity['endTime']='';
 		}else{
+			$activity['endTimeNum']=$activity['endTime'];
 			$activity['endTime']=date("Y-m-d H:i",$activity['endTime']);
 		}
 

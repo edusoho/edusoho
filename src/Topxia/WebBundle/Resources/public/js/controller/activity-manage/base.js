@@ -4,7 +4,9 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
+   
     require('jquery.bootstrap-datetimepicker');
+
 
     exports.run = function() {
 
@@ -47,23 +49,23 @@ define(function(require, exports, module) {
         });
         //日期时间选择
         $('#activity_strstartTime').datetimepicker({
-            format: 'yyyy-mm-dd hh:mm',
-            language: 'en',
+            format: 'yyyy-mm-dd hh:ii',
+            language: 'zh-CN',
             pickDate: true,
             pickTime: true,
             hourStep: 1,
-            minuteStep: 15,
+            minuteStep: 30,
             secondStep: 30,
             inputMask: true
       });
 
         $('#activity_strendTime').datetimepicker({
-            format: 'yyyy-mm-dd hh:mm',
-            language: 'en',
+            format: 'yyyy-mm-dd hh:ii',
+            language: 'zh-CN',
             pickDate: true,
             pickTime: true,
             hourStep: 1,
-            minuteStep: 15,
+            minuteStep: 30,
             secondStep: 30,
             inputMask: true
       });

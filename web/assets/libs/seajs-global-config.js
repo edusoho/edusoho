@@ -13,6 +13,7 @@ seajs.config({
 		"jquery.jcrop": "jquery-plugin/jcrop/0.9.12/jcrop",
 		"jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
+		'jquery.bootstrap-datetimepicker.cn': "jquery-plugin/bootstrap-datetimepicker/1.0.0/i18n/zh-cn.js",
 		"jquery.lazyload" : "jquery-plugin/lazyload/jquery.lazyload.min.js",
 		'jquery.slides' : 'jquery-plugin/slide/slide.js',
 		'jquery.slides-css' : 'jquery-plugin/slide/slide.css',
