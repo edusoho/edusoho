@@ -14,4 +14,8 @@ interface CloudClient
 
     public function getAudioConvertCommands();
 
+    public function getVideoInfo($bucket, $key);
+
+    public function getAudioInfo($bucket, $key);
+
 }

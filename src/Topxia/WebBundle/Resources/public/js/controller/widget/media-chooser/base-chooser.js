@@ -27,6 +27,7 @@ define(function(require, exports, module) {
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
+                self.trigger('fileinfo.fetched', {});
             }
 
         },
@@ -100,6 +101,7 @@ define(function(require, exports, module) {
 
             browser.on('select', function(file) {
                 self.trigger('change', self._convertFileToMedia(file));
+                self.trigger('fileinfo.fetched', {});
             });
         },
 
@@ -185,10 +187,15 @@ define(function(require, exports, module) {
                             var media = self._convertFileToMedia(response);
                             self.trigger('change',  media);
                             Notify.success('文件上传成功！');
+                            self.trigger('fileinfo.fetching');
+                            $.get($btn.data('fileinfoUrl'), {key:$btn.data('key')}, function(info){
+                                self.trigger('fileinfo.fetched', info);
+                            }, 'json');
                         }, 'json');
                     } else {
                         var media = self._convertFileToMedia(serverData);
                         self.trigger('change',  media);
+                        self.trigger('fileinfo.fetched', {});
                         Notify.success('文件上传成功！');
                     }
 

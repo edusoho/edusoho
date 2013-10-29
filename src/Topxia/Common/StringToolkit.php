@@ -28,4 +28,21 @@ class StringToolkit
 
         return md5(json_encode($data) . $key);
     }
+
+    public static function secondsToText($value)
+    {
+        $minutes = intval($value / 60);
+        $seconds = $value - $minutes * 60;
+        return sprintf('%02d', $minutes) . ':' . sprintf('%02d', $seconds);
+    }
+
+    public static function textToSeconds($text)
+    {
+        if (strpos($text, ':') === false) {
+            return 0;
+        }
+        list($minutes, $seconds) = explode(':', $text, 2);
+        return intval($minutes) * 60 + intval($seconds);
+    }
+
 }
