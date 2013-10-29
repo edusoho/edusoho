@@ -2,7 +2,7 @@
 namespace Topxia\Service\File\Impl;
 
 
-interface CourseFileService
+interface UploadFileService
 {   
-
+	getFile($id);
 }
