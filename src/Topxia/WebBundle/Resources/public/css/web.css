@@ -2313,6 +2313,18 @@ body {
 	font-size: 18px !important;
 }
 
+.text-xIndent{
+  text-indent: 15px !important;
+}
+
+.text-color-gray{
+	color: #777 !important;
+}
+
+.text-color-green{
+	color: #008000 !important;
+}
+
 
 .ellipsis {
 	display: block;
