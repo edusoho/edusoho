@@ -27,7 +27,7 @@ define(function(require, exports, module) {
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
-                self.trigger('fileinfo.fetched', {});
+                this.trigger('fileinfo.fetched', {});
             }
 
         },
