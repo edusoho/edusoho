@@ -49,7 +49,12 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $categories = $this->getCategoryService()->findAllCategories();
+        $group = $this->getCategoryService()->getGroupByCode('course');
+        if (empty($group)) {
+            $categories = array();
+        } else {
+            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+        }
 
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
