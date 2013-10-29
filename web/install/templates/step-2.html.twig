@@ -10,7 +10,7 @@
     <div class="form-group">
       <label for="database-host-field" class="col-sm-4 control-label">数据库服务器</label>
       <div class="controls col-sm-5">
-        <input type="text" class="form-control" id="database-host-field" name="database_host" value="localhost">
+        <input type="text" class="form-control" id="database-host-field" name="database_host" value="{{ post.database_host|default('localhost') }}">
         <div class="help-block">数据库服务器地址，一般为localhost</div>
       </div>
     </div>
@@ -18,28 +18,31 @@
     <div class="form-group">
       <label for="database-user-field" class="col-sm-4 control-label">数据库用户名</label>
       <div class="controls col-sm-5">
-        <input type="text" id="database-user-field" name="database_user" class="form-control" value="root">
+        <input type="text" id="database-user-field" name="database_user" class="form-control" value="{{ post.database_user|default('root') }}">
       </div>
     </div>
 
     <div class="form-group">
       <label for="database-password-field" class="col-sm-4 control-label">数据库密码</label>
       <div class="controls col-sm-5">
-        <input type="password" class="form-control" id="database-password-field" name="database_password">
+        <input type="password" class="form-control" id="database-password-field" name="database_password"  value="{{ post.database_password|default('') }}">
       </div>
     </div>
 
     <div class="form-group">
       <label for="database-name-field" class="col-sm-4 control-label">数据库名</label>
       <div class="controls col-sm-5">
-        <input type="text" id="database-name-field" name="database_name" class="form-control">
+        <input type="text" id="database-name-field" name="database_name" class="form-control" value="{{ post.database_name|default('edusoho') }}">
       </div>
     </div> 
 
     <div class="form-group">
-      <label for="conver-database-field" class="col-sm-4 control-label"> 覆盖现有数据库</label>
-       <div class="controls col-sm-5">
-          <input type="checkbox" style="width: 20px;height: 20px;" name="conver_database" value="yes">
+       <div class="controls col-sm-offset-4 col-sm-5">
+         <div class="checkbox">
+           <label>
+            <input type="checkbox" name="database_replace" value="1" {% if post.database_replace %}checked{% endif %}> 覆盖现有数据库
+           </label>
+         </div>
       </div>
     </div>
 
@@ -58,7 +61,24 @@
     var $form = $("#create-database-form");
 
     var validator = new Validator({
-        element: $form
+        element: $form,
+        autoSubmit: false,
+        onFormValidated: function(error, results, $form) {
+            if (error) {
+                return false;
+            }
+            
+            var checked = $form.find('[name=database_replace]').is(':checked');
+
+            if (checked) {
+              if (!confirm('覆盖数据库，会删除原有的数据。您真的要覆盖当前数据库吗？')) {
+                return false;
+              }
+            }
+
+            $form[0].submit();
+
+        }        
     });
 
     validator.addItem({
