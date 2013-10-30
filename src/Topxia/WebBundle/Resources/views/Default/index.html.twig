@@ -204,7 +204,7 @@
                   <p>
                     <h5><a href="{{ path('user_show',{id:teacher.id }) }}">{{teacher.nickname}}</a></h5>
                   </p>
-                  <p>{{ teacherinfos[teacher.id].about|raw }}</p>
+                  <p>{{ teacher.title }}</p>
                 </li>
                 {% endfor %}
               </ul>
