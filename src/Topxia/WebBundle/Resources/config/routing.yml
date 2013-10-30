@@ -744,6 +744,11 @@ disk_convert_status:
     pattern: /disk/convert/status
     defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
 
+disk_file_info:
+    pattern: /disk/file/{type}/info
+    defaults: {_controller: TopxiaWebBundle:Disk:fileInfo }
+
+
 content_article_show:
     pattern: /article/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:articleShow }

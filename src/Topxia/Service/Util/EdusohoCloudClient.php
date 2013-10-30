@@ -106,9 +106,51 @@ class EdusohoCloudClient implements CloudClient
         return $this->audioCommands;
     }
 
+    public function getVideoInfo($bucket, $key)
+    {
+        $token = $this->generateViewToken($bucket, $key);
+
+        $content = $this->getRequest($token['url'] . '?avinfo' , array(), $token['cookie']);
+        $result = json_decode($content, true);
+
+        if (empty($result)) {
+            return null;
+        }
+
+        $info = array(
+            'duration' => intval($result['format']['duration']),
+            'filesize' => intval($result['format']['size'])
+        );
+
+        return $info;
+    }
+
+    public function getAudioInfo($bucket, $key)
+    {
+        return $this->getVideoInfo($bucket, $key);
+    }
+
+    private function generateViewToken($bucket, $key)
+    {
+        $params = array('bucket' => $bucket, 'key' => $key);
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->getViewTokenUrl(), array('token' => $token));
+
+        return json_decode($content, true);
+    }
+
     private function getUploadTokenUrl()
     {
     	return $this->apiServer . '/upload_token.php';
+    }
+
+    private function getViewTokenUrl()
+    {
+        return $this->apiServer . '/view_token.php';
     }
 
     private function getDownloadUrl()
@@ -116,7 +158,7 @@ class EdusohoCloudClient implements CloudClient
     	return $this->apiServer . '/download.php';
     }
 
-    private function getRequest($url, $params)
+    private function getRequest($url, $params = array(), $cookie = array())
     {
 
     	$curl = curl_init();
@@ -128,7 +170,15 @@ class EdusohoCloudClient implements CloudClient
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_HEADER, 0);
 
-    	$url = $url . '?' . http_build_query($params);
+        if (!empty($params)) {
+        	$url = $url . '?' . http_build_query($params);
+        }
+
+        if ($cookie) {
+            $cookie = "{$cookie['name']}={$cookie['value']}";
+            curl_setopt($curl, CURLOPT_COOKIE, $cookie);
+        }
+
 		curl_setopt($curl, CURLOPT_URL, $url );
 
 		$response = curl_exec($curl);

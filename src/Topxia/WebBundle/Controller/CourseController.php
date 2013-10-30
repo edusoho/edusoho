@@ -49,7 +49,12 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $categories = $this->getCategoryService()->findAllCategories();
+        $group = $this->getCategoryService()->getGroupByCode('course');
+        if (empty($group)) {
+            $categories = array();
+        } else {
+            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+        }
 
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
@@ -143,11 +148,10 @@ class CourseController extends BaseController
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
-        if(!$this->canCourseShow($course,$user)){
-           return $this->createErrorMessageResponse('抱歉,课程已经关闭！不能参加学习了，如有疑问请联系管理员!','课程已关闭！');     
+        if(!$this->canShowCourse($course, $user)) {
+            return $this->createMessageResponse('info', '抱歉，课程已关闭或未发布，不能参加学习，如有疑问请联系管理员！');
         }
         
-
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         if ($member && empty($member['locked'])) {
@@ -178,12 +182,12 @@ class CourseController extends BaseController
 
     }
 
-    private function canCourseShow($course,$user)
+    private function canShowCourse($course, $user)
     {
-        return  !($course['status']==='closed' && 
-            !$this->isAdminOnline() && 
-            !$this->getCourseService()->isCourseTeacher($course['id'],$user['id'])
-            && !$this->getCourseService()->isCourseStudent($course['id'],$user['id']));
+        return ($course['status'] == 'published') or 
+            $user->isAdmin() or 
+            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) or
+            $this->getCourseService()->isCourseStudent($course['id'],$user['id']);
     }
 
     private function previewAsMember($as, $member, $course)

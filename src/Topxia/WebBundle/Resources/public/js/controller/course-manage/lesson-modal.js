@@ -110,6 +110,31 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        var mediaFileInfoFetchingCallback = function () {
+            var $group = $("#lesson-length-form-group").show();
+            var $help = $group.find('.help-block');
+            $help.data('help', $help.text());
+            $help.text('正在读取时长，请稍等...');
+        };
+
+        var mediaFileInfoFetchedCallback = function (info) {
+            var $group = $("#lesson-length-form-group").show();
+            var $help = $group.find('.help-block');
+            if ($help.data('help')) {
+                $help.text($help.data('help'));
+            }
+
+            if (info.duration) {
+                $("#lesson-length-field").val(info.duration);
+            }
+        }
+
+        videoChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
+        videoChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
+        
+        audioChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
+        audioChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
+
         var validator = createValidator($form);
 
         $form.on('change', '[name=type]', function(e) {
