@@ -290,6 +290,12 @@ class ActivityController extends BaseController
             "hash"=>$hash)
         );
     }
+
+    public function buyAction(Request $request,$id)
+    {
+        
+
+    }
     
     public function joinAction(Request $request,$id)
     {  
