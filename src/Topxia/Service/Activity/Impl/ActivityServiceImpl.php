@@ -502,7 +502,7 @@ class ActivitySerialize
 		}
 
 		if(empty($activity['price'])||$activity['price']<=0){
-			$activity['price']="免费";
+			//$activity['price']="免费";
 		}
 
 		return $activity;

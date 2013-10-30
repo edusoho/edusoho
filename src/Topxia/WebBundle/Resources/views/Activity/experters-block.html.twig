@@ -17,7 +17,6 @@
                    <h4 class="media-heading"> <a href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></h4>
                    <p class="text-color-gray text-normal">{{ user.title }}</p>                  
                 </div>
-
                 <div class="pts" >{% if profile.about %}<strong >介绍：</strong>{% endif %} {{ profile.about | raw }}</div>
                </li>
             {% endif %}

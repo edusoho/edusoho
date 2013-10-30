@@ -23,7 +23,7 @@
           <p>现场地址： {{ activity.address }}</p>
           <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
                    
-          <p>费用： {{ activity.price}}</p>
+          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
          
     </div> 
      <div class="ps-ab ps-bt ps-rtl">
@@ -46,7 +46,7 @@
     <!-- 课程大纲 -->
     <div class="widget k_postlist shadow">
       <div class="kytitle clearfix bor-l-green">
-        <h3>课程大纲</h3>
+        <h3>课程信息</h3>
       </div>
       <div class="content">
         <div class="padding">

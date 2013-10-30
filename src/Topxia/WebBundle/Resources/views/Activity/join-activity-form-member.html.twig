@@ -23,12 +23,7 @@
           <p>形式：  {{ activity.form }}</p>
           <p>现场地址： {{ activity.address }}</p>
           <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
-          <p>费用： {{ activity.price}}</p>
-		<div class="text-right">
-			<p>
-				{{activity.studentNum}}人已报名
-			</p>
-		</div>
+          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
 	</div>
 </div>
 
