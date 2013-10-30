@@ -121,10 +121,9 @@
         </ul>     
       </div>
       <div class="pull-left bor-l bor-r col-md-2">
-        <ul class="links">
-          <li><a href="/page/about">好知网</a></li>
-          <li><a href="/page/about">Edusoho</a></li>
-        </ul>
+       
+        {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+
       </div>
       <div class="pull-left bor-l bor-r col-md-2">
         <p>开源力量创始人</p>
@@ -147,20 +146,7 @@
     </div>
 </footer>
 
-  <div class="site-footer container clearfix">
-    {% if setting('site.icp') %}
-      <div class="pull-right"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>
-    {% endif %}
-    
-    {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
 
-    <p class="text-gray" data-role="default-foot-bar">
-      Powered by 
-      <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
-      ©2013 
-      <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
-    </p>
-  </div>
 
 {% endblock %}
 

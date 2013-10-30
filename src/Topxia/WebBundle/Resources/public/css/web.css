@@ -2978,7 +2978,7 @@ body {
 
 @media (min-width: 1200px) {
     .contentpage #content-container {
-         width: 970px;
+        /* width: 970px;*/
     }
 }
 

@@ -1,0 +1,7 @@
+<ul class="links">
+	{% for nav in navigations %}
+	  {% if nav.isOpen %}
+		  <li><a href="{{ nav.url }}" {% if nav.isNewWin %}target="_blank"{% endif %}>{{ nav.name }}</a></li>
+		{% endif %}
+	{% endfor %}
+</ul>

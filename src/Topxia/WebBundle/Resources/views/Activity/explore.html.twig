@@ -53,13 +53,12 @@
                   <p>形式：  {{ activity.form }}</p>
                   <p>现场地址：{{ activity.address }}</p>
                   <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
-                  <p>费用： {{ activity.price}}</p>   
+                   <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
                 </div>
 
                 {% if activity.expired==1 %}
                      
                       <h3 class="ps-ab ps-tps ps-rtl"> <span class='label label-default'>已结束</span></h3>
-
                       <div class="ps-ab ps-bt ps-rtl">
                         <p>
                           {{ activity.studentNum }}人已报名<a class='mar-l btn btn-warning'  href="{{ path('activity_show',{id:activity.id})}}">回看详情</a>
