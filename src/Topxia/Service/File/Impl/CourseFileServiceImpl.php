@@ -92,8 +92,8 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
         //TODO fileBridge 把差异化交给fileBridge做
-
-
+        
+        
         if ($errors) {
             @unlink($originalFile->getRealPath());
             throw $this->createServiceException("该文件格式，不允许上传。");

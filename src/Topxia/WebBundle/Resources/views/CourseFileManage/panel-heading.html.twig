@@ -1,13 +1,21 @@
-  <div class="panel-heading">
+  <div class="panel-body">
+    
       {% if tab == 'courseWare' %}
-      
-        <button class="btn btn-info btn-sm pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_ware', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 上传课件</button>
+        
+        <button class="btn btn-info btn-sm pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_ware', {id:course.id}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传课件</button>
+
       {% elseif tab == 'courseMaterial' %}
-        <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_material', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i>上传资料</button>
+
+          <button class="btn btn-info btn-sm pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_material', {id:course.id}) }}">
+            <i class="glyphicon glyphicon-cloud-upload"></i>上传资料</button>
+
       {% endif %}
 
-      <ul class="nav nav-pills">
-        <li {% if tab == 'courseWare' %} class="active" {% endif %}><a href="#">课件管理</a></li>
-        <li {% if tab == 'courseMaterial' %} class="active" {% endif %}><a href="#">资料管理</a></li>
+      <ul class="nav nav-tabs">
+        <li {% if tab == 'courseWare' %} class="active" {% endif %}>
+          <a href="{{ path('course_manage_files', {id:course.id}) }}">课件管理</a></li>
+        <li {% if tab == 'courseMaterial' %} class="active" {% endif %}><a href="{{ path('course_manage_files_material', {id:course.id}) }}">资料管理</a></li>
       </ul>
+
   </div>

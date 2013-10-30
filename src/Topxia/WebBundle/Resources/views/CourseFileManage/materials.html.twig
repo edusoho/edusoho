@@ -1,9 +1,9 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}文件管理 - {{ parent() }}{% endblock %}
+{% block title %}资料管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'files' %}
-{% set tab = 'courseWare' %}
+{% set tab = 'courseMaterial' %}
 {% set script_controller = 'course-manage-file/index' %}
 
 {% block main %}
@@ -14,17 +14,16 @@
 
   {% include 'TopxiaWebBundle:CourseFileManage:button-group-operation.html.twig' %}
 
-  <div class="panel-body"> 
-
-    <table class="table table-striped" id="course-ware-list">
+  <div class="panel-body">  
+    <table class="table table-striped" id="course-material-list">
       <thead>
         {% include 'TopxiaWebBundle:CourseFileManage:thead-tr.html.twig' %}
       </thead>
       <tbody>
-        {% for uploadFile in courseWares %}
+        {% for uploadFile in courseMaterials %}
           {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
         {% else %}
-          <tr class="empty"><td colspan="8">无课件记录</td></tr>
+          <tr class="empty"><td colspan="8">无资料记录</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -34,5 +33,6 @@
   </div>
 
 </div>
+
 
 {% endblock %}

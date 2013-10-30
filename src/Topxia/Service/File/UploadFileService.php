@@ -4,5 +4,5 @@ namespace Topxia\Service\File\Impl;
 
 interface UploadFileService
 {   
-	getFile($id);
+	public function getFile($id);
 }
