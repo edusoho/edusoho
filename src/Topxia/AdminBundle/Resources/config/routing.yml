@@ -50,18 +50,6 @@ admin_user_logs:
     pattern:  /user/logs
     defaults: { _controller: TopxiaAdminBundle:User:logs }
 
-admin_net_disk:
-    pattern:  /net/disk
-    defaults: { _controller: TopxiaAdminBundle:NetDisk:index }
-
-admin_net_disk_course_upload_files:
-    pattern:  /net/disk/course/upload/files/{courseId}
-    defaults: { _controller: TopxiaAdminBundle:NetDisk:uploadFiles }
-
-admin_net_disk_course_find_files:
-    pattern:  /net/disk/course/find/files/{courseId}
-    defaults: { _controller: TopxiaAdminBundle:NetDisk:findCourseFiles }
-
 admin_block:
     pattern:  /block
     defaults: { _controller: TopxiaAdminBundle:Block:index }

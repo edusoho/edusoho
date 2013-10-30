@@ -105,10 +105,6 @@ legend {
   border-bottom: 0;
 }
 
-tr.folder {
-  cursor: pointer
-}
-
 .page-header {
   padding-bottom: 12px;
   margin: 0 0 20px 0;

@@ -5,18 +5,18 @@
 {% block title %}
   上传课件
 {% endblock %}
-
+	
 {% block body %}
-
-
+	
+	<form id="form" method="post" action="../dump.php">
+		<div id="uploader">
+			<p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+		</div>
+		<br />
+		<input type="submit" value="Submit" />
+	</form>
 
 <script>app.load('course-manage-file/upload-course-ware')</script>
-
-{% endblock %}
-
-{% block footer %}
-    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">保存</button>
 {% endblock %}
 
 {% set hideFooter = true %}
