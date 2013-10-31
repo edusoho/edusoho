@@ -17,7 +17,7 @@
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('activity_manage_base', {id:activity.id}) }}">基本信息</a>
               <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('activity_manage_detail', {id:activity.id}) }}">详细信息</a>
-              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('activity_manage_picture', {id:activity.id}) }}">活动图标</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('activity_manage_picture', {id:activity.id}) }}">活动海报</a>
               <a class="list-group-item {% if side_nav == 'activity' %}active{% endif %}" href="{{ path('activity_manage_course', {id:activity.id}) }}">活动课程</a>
               <a class="list-group-item {% if side_nav == 'pictures' %}active{% endif %}" href="{{ path('activity_manage_pictures', {id:activity.id}) }}">活动相册</a>
               <a class="list-group-item {% if side_nav == 'attachment' %}active{% endif %}" href="{{ path('activity_materials', {id:activity.id}) }}">活动附件</a>

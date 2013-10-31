@@ -33,6 +33,8 @@ define(function(require, exports, module) {
                     $("#email_info").html("该Email地址已经存在 <a href='javascript:void(0)' id='photo_login'>请点击登陆</a>");
                     buidlerLogin();
                     return;
+                }else{
+                     $("#email_info").html(msg);
                 }
             },
             showMessage:function(msg){

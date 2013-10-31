@@ -291,15 +291,13 @@ class ActivityController extends BaseController
         );
     }
 
-    public function buyAction(Request $request,$id)
-    {
-        
-
-    }
     
     public function joinAction(Request $request,$id)
     {  
+      
         $user = $this->getCurrentUser();
+
+
         $activity=$this->getActivityService()->getActivity($id);
         $activity = $this->getActivityService()->mixActivity($activity,$user['id']);
 
@@ -314,6 +312,7 @@ class ActivityController extends BaseController
             $form = $this->createForm(new ActivityMemberType());
             $form->bind($request);
             $member = $form->getData();
+
             if (empty($user['id'])) {
                 // regitser 
                 $newuser['email']=$member['email'];
@@ -397,6 +396,7 @@ class ActivityController extends BaseController
             $userprofile=$this->getUserService()->getUserProfile($user['id']);
             $filename="join-activity-form-member";
         }
+       
         return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
             "activity"=>$activity,
             "user"=>$user,
