@@ -7,7 +7,7 @@ interface ActivityDao
 
     public function getActivity($id);
 
-    public function findActivityByIds(array $ids);
+    public function findActivitysByIds(array $ids);
 
 	public function searchActivitys($conditions, $orderBy, $start, $limit);
 

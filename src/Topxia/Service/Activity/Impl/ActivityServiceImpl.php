@@ -18,9 +18,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			return ActivitySerialize::unserialize($this->getActivityDao()->getActivity($id));
 	}
 
-	public function findActivityByIds(array $ids){
+	public function findActivitysByIds(array $ids){
 		$activity = ActivitySerialize::unserializes(
-            $this->getActivityDao()->findActivityByIds($ids)
+            $this->getActivityDao()->findActivitysByIds($ids)
         );
         return ArrayToolkit::index($activity, 'id');
 	}

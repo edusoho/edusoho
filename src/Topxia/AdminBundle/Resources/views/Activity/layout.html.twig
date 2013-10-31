@@ -8,6 +8,8 @@
       <div class="list-group">
         <a href="{{ path('admin_activity') }}" class="list-group-item {% if menu == 'activity' %}active{% endif %}">活动管理</a>
 
+        <a href="{{ url('admin_activity_thread') }}" class="list-group-item {% if menu == 'thread' %}active{% endif %}">提问管理</a>
+
       </div>
     {% endblock %}
   </div>

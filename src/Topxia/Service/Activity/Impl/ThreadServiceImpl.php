@@ -108,15 +108,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->addThread($thread);
 	}
 
-	public function deleteThread($activityId, $threadId)
+	public function deleteThread($threadId)
 	{
-		$thread = $this->getThread($activityId, $threadId);
+		
+		$thread = $this->getThreadDao()->getThread($threadId);
 		if (empty($thread)) {
-			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
 		}
 
-		$this->getThreadPostDao()->deletePostsByThreadId($thread['id']);
-		$this->getThreadDao()->deleteThread($thread['id']);
+		$this->getThreadPostDao()->deletePostsByThreadId($threadId);
+		$this->getThreadDao()->deleteThread($threadId);
+
+		$this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
+
 	}
 
 	public function stickThread($activityId, $threadId)
@@ -203,14 +207,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->addThreadPostNum($threadId,$userId);
 
 
-		// 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
-		//$threadFields = array(
-		//	'postNum' => $thread['postNum'] + 1,
-		//	'latestPostUserId' => $post['userId'],
-		///	'latestPostTime' => $post['createdTime'],
-		//);
-		//$this->getThreadDao()->updateThread($thread['id'], $threadFields);
-
 		return $post;
 	}
 
@@ -247,6 +243,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	private function getUserService()
     {
       	return $this->createService('User.UserService');
+    }
+
+    private function getNotifiactionService()
+    {
+      	return $this->createService('User.NotificationService');
+    }
+
+    private function getLogService()
+    {
+    	return $this->createService('System.LogService');
     }
 
 }

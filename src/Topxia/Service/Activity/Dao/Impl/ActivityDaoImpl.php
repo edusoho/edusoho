@@ -15,7 +15,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
     
-    public function findActivityByIds(array $ids)
+    public function findActivitysByIds(array $ids)
     {
         if(empty($ids)){
             return array();

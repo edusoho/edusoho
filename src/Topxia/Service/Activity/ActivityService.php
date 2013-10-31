@@ -11,7 +11,7 @@ interface ActivityService
 	*/
 	public function getActivity($id);
 
-	public function findActivityByIds(array $ids);
+	public function findActivitysByIds(array $ids);
 
 	public function searchActivitys($conditions, $sort = 'latest', $start, $limit);
 

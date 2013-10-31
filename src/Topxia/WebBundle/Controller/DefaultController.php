@@ -46,7 +46,7 @@ class DefaultController extends BaseController
         //问题讨论
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
         $activityIds=ArrayToolkit::column($activityThreads,'activityId');
-        $activitys=$this->getActivityService()->findActivityByIds($activityIds);
+        $activitys=$this->getActivityService()->findActivitysByIds($activityIds);
         
         $threadUserIds=ArrayToolkit::column($activityThreads,'userId');
         $threadUsers=$this->getUserService()->findUsersByIds($threadUserIds);

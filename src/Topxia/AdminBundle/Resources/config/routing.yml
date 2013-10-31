@@ -477,6 +477,20 @@ admin_activity_category:
     pattern: /activity/category
     defaults: { _controller: TopxiaAdminBundle:Activity:category }
 
+admin_activity_thread:
+    pattern:  /activity/threads
+    defaults: { _controller: TopxiaAdminBundle:ActivityThread:index }
+
+admin_activity_thread_delete:
+    pattern: /activity/threads/{id}/delete
+    defaults: {_controller: TopxiaAdminBundle:ActivityThread:delete }
+    methods: [POST]
+
+admin_activity_thread_batch_delete:
+    pattern: /activity/threads/batch_delete
+    defaults: {_controller: TopxiaAdminBundle:ActivityThread:batchDelete }
+    methods: [POST]
+
 
 admin_photo:
     pattern: /photo
