@@ -1,20 +1,32 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<tr id="student-{{ user.id }}-tr">
-  <td class="media">
-    {{ web_macro.user_avatar(user, 'pull-left') }}
-    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-    {% if student.remark %}
-      <div class="text-muted text-sm">备注：{{ student.remark }}</div>
-    {% endif %}
-    <div class="text-muted text-sm">{{ student.createdTime|date('Y-n-d H:i') }}加入</div>
+<tr id="student-tr-{{uploadFile.id}}" data-role="item">
+
+   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
+
+  <td class="text-danger"> {{uploadFile.fileName}} </td>
+  <td> 
+    {{ dict_text('fileType:html', uploadFile.fileType) }}
+  </td>
+  <td class="text-info"> {{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
+  <td class="text-primary"> 
+    {{ uploadFile.updateTime|date('Y-n-d')}}
+      <br>
+    {{ uploadFile.updateTime|date('H:i:s')}}
   </td>
 
-  <td>
-    <div class="progress" title="已学{{ progress.number }}课时">
-      <div class="progress-bar" style="width: {{ progress.percent }}">
-      </div>
-    </div>
+  <td class="text-info"> 
+    {{ web_macro.user_link(uploadFile.updateUser) }}
+  </td>
+
+  <td class="text-primary"> 
+    {{ uploadFile.createdTime|date('Y-n-d')}}
+      <br>
+    {{ uploadFile.createdTime|date('H:i:s')}}
+  </td>
+
+  <td class="text-info"> 
+    {{ web_macro.user_link(uploadFile.createdUser) }}
   </td>
 
 </tr>

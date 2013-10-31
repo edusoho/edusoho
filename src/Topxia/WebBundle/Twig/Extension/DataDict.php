@@ -22,11 +22,11 @@ class DataDict
 			'other' => '其他'
 		),
 		'fileType:html' => array(
-			'video' => '<span class="text-muted">视频</span>',
-			'audio' => '<span class="text-success">音频</span>',
-			'document' => '<span class="text-warning">文档</span>',
-			'image' => '<span class="text-danger">图片</span>',
-			'other' => '<span class="text-danger">其他</span>',
+			'video' => '<span class="glyphicon glyphicon-facetime-video text-muted">视频</span>',
+			'audio' => '<span class="glyphicon glyphicon-music text-success">音频</span>',
+			'document' => '<span class="glyphicon glyphicon-briefcase text-warning">文档</span>',
+			'image' => '<span class="glyphicon glyphicon-picture text-danger">图片</span>',
+			'other' => '<span class="glyphicon glyphicon-question-sign text-danger">其他</span>',
 		),
 		'orderStatus' => array(
 			'created' => '未付款',

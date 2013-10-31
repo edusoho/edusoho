@@ -3,6 +3,14 @@ seajs.config({
 		'jquery': 'jquery/jquery/1.10.1/jquery',
 		'$': 'jquery/jquery/1.10.1/jquery',
 		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
+		// ******* //
+		// "moxie": "jquery-plugin/plupload/2.0.0/js/moxie.js",
+		// "moxie.swf": "jquery-plugin/plupload/2.0.0/js/Moxie.swf",
+		// "moxie.xap": "jquery-plugin/plupload/2.0.0/js/Moxie.xap",
+		// "plupload": "jquery-plugin/plupload/2.0.0/js/plupload.dev.js",
+		// "ui.plupload": "jquery-plugin/plupload/2.0.0/js/jquery.ui.plupload/jquery.ui.plupload.js",
+		// "plupload.queue": "jquery-plugin/plupload/2.0.0/js/jquery.plupload.queue/jquery.plupload.queue.js",
+		// ******* //
 		"jquery.form": "jquery-plugin/form/3.44.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",

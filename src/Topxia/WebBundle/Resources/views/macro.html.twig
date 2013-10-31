@@ -20,6 +20,29 @@
   {% endfor %}
 {% endmacro %}
 
+{% macro bytesToSize(bytes) %}
+  {% spaceless %}
+      
+      {% set kilobyte = 1024 %}
+      {% set megabyte = kilobyte * 1024 %}
+      {% set gigabyte = megabyte * 1024 %}
+      {% set terabyte = gigabyte * 1024 %}
+
+      {% if bytes < kilobyte %}
+          {{ bytes ~ ' B' }}
+      {% elseif bytes < megabyte %}
+          {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
+      {% elseif bytes < gigabyte %}
+          {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
+      {% elseif bytes < terabyte %}
+          {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
+      {% else %}
+          {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
+      {% endif %}
+
+  {% endspaceless %}
+{% endmacro %}
+
 {% macro paginator(paginator) %}
   {% if paginator.lastPage > 1 %}
     <ul  class="pagination">

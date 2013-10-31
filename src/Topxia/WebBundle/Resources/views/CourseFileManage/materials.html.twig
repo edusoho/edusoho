@@ -4,18 +4,16 @@
 
 {% set side_nav = 'files' %}
 {% set tab = 'courseMaterial' %}
-{% set script_controller = 'course-manage-file/index' %}
+{% set script_controller = 'course-manage-file/materials' %}
 
 {% block main %}
 
 <div class="panel panel-default panel-col">
 
   {% include 'TopxiaWebBundle:CourseFileManage:panel-heading.html.twig' %}
-
-  {% include 'TopxiaWebBundle:CourseFileManage:button-group-operation.html.twig' %}
-
-  <div class="panel-body">  
-    <table class="table table-striped" id="course-material-list">
+  
+  <div class="panel-body" id="course-material-table-container">  
+    <table class="table table-striped table-hover" id="course-material-table">
       <thead>
         {% include 'TopxiaWebBundle:CourseFileManage:thead-tr.html.twig' %}
       </thead>
@@ -27,6 +25,10 @@
         {% endfor %}
       </tbody>
     </table>
+
+     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+     
+     {% include 'TopxiaWebBundle:CourseFileManage:operations-button-group.html.twig' %}
 
     {{ web_macro.paginator(paginator) }}
 

@@ -1,7 +1,13 @@
 define(function(require, exports, module) {
 
+	require('moxie');
+	require('moxie.swf');
+	require('moxie.xap');
+	require('plupload');
+	require('ui.plupload');
+	require('plupload.queue');
+
     exports.run = function() {
-    	
 
     	$("#uploader").pluploadQueue({
 
@@ -27,10 +33,8 @@ define(function(require, exports, module) {
 		});
 
 		$('#form').submit(function(e) {
-		// Files in queue upload them first
 			if ($('#uploader').plupload('getFiles').length > 0) {
 
-				// When all files are uploaded submit form
 				$('#uploader').on('complete', function() {
 					$('#form')[0].submit();
 				});
@@ -39,7 +43,7 @@ define(function(require, exports, module) {
 			} else {
 				alert("You must have at least one file in the queue.");
 			}
-			return false; // Keep the form from submitting
+			return false;
 
 		});
 

@@ -8,27 +8,21 @@
 	
 {% block body %}
 
-	<form id="form" method="post" action="dump.php">
-
-		<h1>Queue widget example</h1>
-
-		<p>Shows the jQuery Plupload Queue widget and under different runtimes.</p>
-
+	<form id="form" method="post" action="{{ path('course_manage_process_uploading_course_ware', {id:course.id}) }}">
+		
 		<div style="float: left; margin-right: 20px">
-			<h3>Flash runtime</h3>
 			<div id="uploader" style="width: 500px; height: 330px;">
-				xxxx
+				上传课件
 			</div>
-			
 		</div>
 
-		<br style="clear: both" />
-
+		<br style="clear:both" />
 		<input type="submit" value="Send"/>
 
 	</form>
 
 <script>app.load('course-manage-file/upload-course-ware')</script>
+
 {% endblock %}
 
 {% block footer %}

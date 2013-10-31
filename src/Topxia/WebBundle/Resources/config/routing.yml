@@ -355,6 +355,10 @@ course_manage_upload_course_ware:
     pattern:  /course/{id}/manage/files/upload/course/ware
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseWare }
 
+course_manage_process_uploading_course_ware:
+    pattern:  /course/{id}/process/uploading/course/ware
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:processingUploadingCourseWare }
+
 course_manage_upload_course_material:
     pattern:  /course/{id}/manage/files/upload/course/material
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterial }
