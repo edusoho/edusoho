@@ -11,7 +11,8 @@ use Topxia\Service\File\UploadFileService;
     
 class UploadFileServiceImpl extends BaseDao implements UploadFileService
 {
-	private $fileBridge = null;
+	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor');
+
 
     public function getFile($id)
     {
@@ -88,51 +89,12 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
 
     
 
-    public function addLocalFile(UploadedFile $originalFile, $userId, $path = '/')
+    public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
-        $errors = FileToolkit::validateFileExtension($originalFile);
-        //TODO fileBridge 把差异化交给fileBridge做
-        
-        
-        if ($errors) {
-            @unlink($originalFile->getRealPath());
-            throw $this->createServiceException("该文件格式，不允许上传。");
-        }
-
-
-
-        $user = $this->getUserService()->getUser($userId);
-        if (empty($user)) {
-            @unlink($originalFile->getRealPath());
-            throw $this->createServiceException('用户不存在，上传失败！');
-        }
-
-        if (!preg_match('/^[a-zA-z0-9_\-\/]+$/u', $path)) {
-            @unlink($originalFile->getRealPath());
-            throw $this->createServiceException('上传路径不正确，上传失败！');
-        }
-
-        $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
-        $disk = new UserLocalDisk($user, $diskDirectory);
-        $savedFile = $disk->saveFile($originalFile, $path);
-        $diskfile = array();
-        $diskFile['userId'] = $this->getCurrentUser()->id;
-        $diskFile['filename'] = $originalFile->getClientOriginalName();
-        $diskFile['filepath'] = $path;
-        $diskFile['isDirectory'] = 0;
-        $diskFile['size'] = $savedFile->getSize();
-        $diskFile['mimeType'] = $savedFile->getMimeType();
-        $diskFile['etag'] = md5_file($savedFile->getPathname());
-        $diskFile['storage'] = 'local';
-        $diskFile['bucket'] = '';
-        $diskFile['type'] = $this->getFileType($diskFile['mimeType']);
-        $diskFile['uri'] = 'disk://local/' . substr($savedFile->getPathname(), strlen(realpath($diskDirectory))+1);
-        $diskFile['updatedTime'] = $diskFile['createdTime'] = time();
-
-        $diskFile = $this->getUploadFileDao()->addFile($diskFile);
-
-        return $diskFile;
+        $file = $this->getFieImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
+        return $this->getUploadFileDao()->addFile($file);
     }
+
 
     public function addCloudFile(array $file)
     {
@@ -265,6 +227,11 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    private function getFieImplementor($key)
+    {
+        return $this->createService(self::$IMPEMNTORMAP[$key]);
     }
 
     private function getLogService()

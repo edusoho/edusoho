@@ -66,6 +66,10 @@ class FileToolkit
         return in_array(strtolower($ext), explode(' ', self::getImageExtensions()));
     }
 
+    public static function uniqid($prefix = ""){
+        return uniqid($prefix, true);
+    }
+
     public static function getFileExtension(File $file)
     {
         return $file instanceof UploadedFile ? $file->getClientOriginalExtension() : $file->getExtension();
