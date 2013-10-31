@@ -49,18 +49,23 @@ class BuildPackageCommand extends BaseCommand
 		{
 		    $currentLine = fgets($file) ;
 		    if($currentLine[0]=='M' || $currentLine[0]=='A'){
+		    	echo "增加更新文件：{$currentLine}";
 		    	$this->copyFileAndDir($currentLine,$path);
 		    }else if($currentLine[0]=='D'){
+		    	echo "增加删除文件：{$currentLine}";
 		    	$this->insertDelete($currentLine,$path);
-		    }
+		    }else{
+			    echo "无法处理该文件：{$currentLine}";
+			}
+
 		}   
 	}
 
 	private function insertDelete($line,$path)
 	{
-		$file = trim(substr($line,1),"\n  \r");
+		$file = trim(substr($line,1)," ");
 		$destPath = $path.'/delete';
-		$f = fopen($destPath,'wb'); 
+		$f = fopen($destPath,'a+'); 
 		fwrite($f,$file,strlen($file)); 
 		fclose($f);
 	}
