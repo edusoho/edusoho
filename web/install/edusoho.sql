@@ -680,3 +680,25 @@ CREATE TABLE `user_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`(6))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `upload_files` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
+  `targetId` int(11) NOT NULL COMMENT '所存目标id',
+  `targetType` enum('resource','lesson','item','other') NOT NULL DEFAULT 'lesson' COMMENT '目标类型',
+  `filename` varchar(1024) NOT NULL DEFAULT '',
+  `ext` varchar(12) DEFAULT NULL COMMENT '后缀',
+  `size` bigint(20) NOT NULL DEFAULT '0',
+  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
+  `metas` text,
+  `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other',
+  `storage` enum('local','cloud') NOT NULL,
+  `canDownload` smallint(6) NOT NULL DEFAULT '0' COMMENT '是否可下载',
+  `updatedUid` int(10) unsigned DEFAULT NULL COMMENT '更新用户名',
+  `updatedTime` int(10) unsigned DEFAULT '0',
+  `createdUid` int(10) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hashId` (`hashId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
