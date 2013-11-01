@@ -30,21 +30,24 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId));
     }
 
-    public function findMembersByUserIdAndRole($userId, $role, $start, $limit,$exceptDraft = true)
+    public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $exceptDraft = true)
     {
         $sql  = "SELECT m.* FROM {$this->table} m ";
-        $sql.= ' INNER JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
+        $sql.= ' JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
         $sql .= " AND m.role =  ? AND m.courseId = c.id ";
         if($exceptDraft){
             $sql .= " AND c.status <> 'draft' ";
-        }        
+        }
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
         return $this->getConnection()->fetchAll($sql, array($userId, $role));
     }
 
-    public function findMemberCountByUserIdAndRole($userId, $role,$exceptDraft = true)
+    public function findMemberCountByUserIdAndRole($userId, $role, $exceptDraft = true)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql.= " INNER JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
+        $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
         $sql.= " AND m.role =  ? AND m.courseId = c.id ";
         if($exceptDraft){
             $sql.= " AND c.status <> 'draft' ";

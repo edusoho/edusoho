@@ -235,6 +235,8 @@ textarea {
 
 .site-navbar .navbar-brand-logo {
 	margin-left: -15px;
+	padding-left: 15px;
+	padding-right: 15px;
 	float: left;
 }
 

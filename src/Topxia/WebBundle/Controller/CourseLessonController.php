@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoCloudClient;
+use Topxia\Service\Util\CloudClientFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -98,12 +98,9 @@ class CourseLessonController extends BaseController
                 throw $this->createNotFoundException();
             }
 
-            $setting = $this->setting('storage');
-            $client = new EdusohoCloudClient(
-                $setting['cloud_api_server'],
-                $setting['cloud_access_key'],
-                $setting['cloud_secret_key']
-            );
+            $clientParameters = $this->container->getParameter('cloud_client');
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient($clientParameters['name']);
 
             $client->download($file['bucket'], $key);
 

@@ -43,6 +43,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         }
         $fields['createdTime'] = $fields['updateTime'] = time();
         $result = $this->getNavigationDao()->addNavigation($fields);
+
+        $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}");
+
         return $result;
     }
 
@@ -52,6 +55,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             unset($fields['id']);
         }
         $fields['updateTime'] = time();
+
+        $this->getLogService()->info('info', 'navigation_update', "编辑导航#{$id}", $fields);
+
         return $this->getNavigationDao()->updateNavigation($id, $fields);
     }
 
@@ -63,6 +69,11 @@ class NavigationServiceImpl extends BaseService implements NavigationService
     private function getNavigationDao()
     {
         return $this->createDao('Content.NavigationDao');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');        
     }
     
 }

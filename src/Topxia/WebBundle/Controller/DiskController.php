@@ -3,7 +3,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Service\Util\CloudClient;
+use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Common\StringToolkit;
 
 class DiskController extends BaseController
 {
@@ -51,7 +52,7 @@ class DiskController extends BaseController
     {
         $data = $request->getContent();
 
-        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调:{$data}");
+        $this->getLogService()->info('disk', 'convert_callback', "文件云处理回调", array('content' => $data));
 
         $key = $request->query->get('key');
         if (empty($key)) {
@@ -105,6 +106,32 @@ class DiskController extends BaseController
         }
 
         return $this->createJsonResponse(array('status' => $file['convertStatus']));
+    }
+
+    public function fileInfoAction(Request $request, $type)
+    {
+        $key = $request->query->get('key', '');
+
+        if (empty($key)) {
+            return $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        if ($type == 'video') {
+            $info = $client->getVideoInfo($client->getBucket(), $key);
+        } else if ($type == 'audio') {
+            $info = $client->getAudioInfo($client->getBucket(), $key);
+        } else {
+            $info = array();
+        }
+
+        if ($info['duration']) {
+            $info['duration'] = StringToolkit::secondsToText($info['duration']);
+        }
+
+        return $this->createJsonResponse($info);
     }
 
     private function createFilesJsonResponse($files)

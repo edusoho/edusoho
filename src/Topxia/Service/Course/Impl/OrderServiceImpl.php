@@ -49,6 +49,10 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createNotFoundException();
         }
 
+        if ($course['status'] != 'published') {
+            throw $this->createServiceException('课程处于关闭或未发布状态，不能创建订单！');
+        }
+
         if (!in_array($order['payment'], array('none', 'alipay', 'tenpay'))) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
@@ -302,6 +306,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
 
+        $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
+
     }
 
     public function cancelRefundOrder($id)
@@ -464,6 +470,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }

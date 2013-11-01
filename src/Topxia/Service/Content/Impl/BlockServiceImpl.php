@@ -100,6 +100,10 @@ class BlockServiceImpl extends BaseService implements BlockService
             'createdTime'=>time()
             );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
+
+        $this->getLogService()->info('block', 'update', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
+
+
         return $updatedBlock;
     }
 
@@ -133,6 +137,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (!$block) {
             throw $this->createServiceException("此编辑区不存在，更新失败!");
         }
+
         // $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($id, array('content'=>$content));
     }
@@ -145,5 +150,10 @@ class BlockServiceImpl extends BaseService implements BlockService
     private function getBlockHistoryDao()
     {
         return $this->createDao('Content.BlockHistoryDao');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 }

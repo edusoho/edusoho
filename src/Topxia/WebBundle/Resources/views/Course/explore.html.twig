@@ -17,23 +17,16 @@
   <div class="row row-3-9">
     <div class="col-md-3">
       <ul class="nav nav-pills nav-stacked">
-        <li {% if not category.id %}class="active"{% endif %}>
-          <a class="text-danger" href="{{ path('course_explore') }}">全部</a>
-        </li>
-        
+        <li {% if not category.id %}class="active"{% endif %}><a href="{{ path('course_explore') }}">全部</a></li>
         {% for cat in categories %}
-            {% if cat.parentId == 0 %}
-              <li {% if category.id == cat.id %}class="active"{% endif %}>
-                <a class="text-info" href="{{ path('course_explore', {category:cat.code|default(cat.id)}) }}">{{ cat.name }}</a>
-              </li>
-          {% else %}
-              <li style="left:10px" {% if category.id == cat.id %}class="active"{% endif %}>
-                <a class="text-success" href="{{ path('course_explore', {category:cat.code|default(cat.id)}) }}">{{ cat.name }}</a>
-              </li>
-          {% endif %}
-
+          <li {% if category.id == cat.id %}class="active"{% endif %}>
+            <a href="{{ path('course_explore', {category:cat.code|default(cat.id)}) }}">
+            {% if cat.depth > 1 %}
+              {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
+            {% endif %}
+            {{ cat.name }}</a>
+          </li>
         {% endfor %}
-
       </ul>
     </div>
     <div class="col-md-9">

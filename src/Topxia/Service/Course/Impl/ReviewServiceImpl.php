@@ -110,6 +110,8 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		$this->getReviewDao()->deleteReview($id);
 
 		$this->calculateCourseRating($review['courseId']);
+
+		$this->getLogService()->info('review', 'delete', "删除评价#{$id}");
 	}
 
 	private function calculateCourseRating($courseId)
@@ -146,6 +148,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     private function getCourseService()
     {
     	return $this->createService('Course.CourseService');
+    }
+
+    private function getLogService()
+    {
+    	return $this->createService('System.LogService');
     }
 
 }

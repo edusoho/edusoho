@@ -192,10 +192,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher',!$includeDraft);
 	}
 
-	public function findUserTeachCourses($userId, $start, $limit,$includeOther=false)
+	public function findUserTeachCourses($userId, $start, $limit, $includeOther=false)
 	{
 		$includeDraft = $this->isCurrentUser($userId);
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit,!$includeDraft);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit, !$includeDraft);
+
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
 		/**
@@ -248,7 +249,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getMemberDao()->addMember($member);
 
-		return $this->getCourse($course['id']);
+		$course = $this->getCourse($course['id']);
+
+		$this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
+
+		return $course;
 	}
 
 	public function updateCourse($id, $fields)
@@ -259,7 +264,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields = $this->_filterCourseFields($fields);
+		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
+
 		$fields = CourseSerialize::serialize($fields);
+
 		return CourseSerialize::unserialize(
 			$this->getCourseDao()->updateCourse($id, $fields)
 		);
@@ -331,12 +339,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('course', new File($smallFilePath));
-        
-        return $this->getCourseDao()->updateCourse($courseId, array(
+
+        $fields = array(
         	'smallPicture' => $smallFileRecord['uri'],
         	'middlePicture' => $middleFileRecord['uri'],
         	'largePicture' => $largeFileRecord['uri'],
-    	));
+    	);
+
+		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+        
+        return $this->getCourseDao()->updateCourse($courseId, $fields);
     }
 
 	public function recommendCourse($id)
@@ -567,6 +579,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
 
+		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
+
 		return $lesson;
 	}
 
@@ -639,9 +653,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields['type'] = $lesson['type'];
 		$this->fillLessonMediaFields($fields);
 
-		return LessonSerialize::unserialize(
+		$lesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);
+
+		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$lesson['title']}》({$lesson['id']})", $lesson);
+
+		return $lesson;
 	}
 
 	public function deleteLesson($courseId, $lessonId)
@@ -1063,6 +1081,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 		}
 
+		$this->getLogService()->info('course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+
 		// 更新课程的teacherIds，该字段为课程可见教师的ID列表
 		$fields = array('teacherIds' => $visibleTeacherIds);
 		$this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
@@ -1156,6 +1176,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->updateCourse($courseId, array(
 			'studentNum' => $this->getCourseStudentCount($courseId),
 		));
+
+		$this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
 	}
 
 	public function lockStudent($courseId, $userId)
