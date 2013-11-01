@@ -40,7 +40,7 @@ class EdusohoCloudClient implements CloudClient
         $this->audioCommands = $options['audioCommands'];
     }
 
-	public function generateUploadToken($bucket, array $params)
+	public function generateUploadToken($bucket, array $params = array())
 	{
 		$cleanParams = array();
 

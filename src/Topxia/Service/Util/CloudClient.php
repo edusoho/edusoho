@@ -4,7 +4,7 @@ namespace Topxia\Service\Util;
 
 interface CloudClient
 {
-    public function generateUploadToken($bucket, array $params);
+    public function generateUploadToken($bucket, array $params = array());
 
     public function download($bucket, $key, $duration = 3600);
 

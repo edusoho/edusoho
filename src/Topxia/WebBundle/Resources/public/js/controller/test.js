@@ -1,46 +1,82 @@
 define(function(require, exports, module) {
 
-    require('kindeditor');
-
-    var simpleItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source'];
-
-    var standardItems = [
-        'bold', 'italic', 'underline', 'strikethrough', 'removeformat', '|',
-        'fontsize', 'forecolor', 'hilitecolor',   '|', 
-        'link', 'unlink', '|',
-        'image', 'flash',  'code',  '|',
-        'insertorderedlist', 'insertunorderedlist','indent', 'outdent', '|',
-        'justifyleft', 'justifycenter', 'justifyright', '|',
-        'source',  'fullscreen', 'about'
-    ];
-
-    var fullItems = [
-        'bold', 'italic', 'underline', 'strikethrough', '|',
-        'link', 'unlink', '|',
-        'insertorderedlist', 'insertunorderedlist','indent', 'outdent', '|',
-         'image', 'flash', 'insertfile', 'code', 'table', 'hr', '/',
-        'formatblock', 'fontname', 'fontsize', '|',
-        'forecolor', 'hilitecolor',   '|', 
-        'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',  '|',
-        'removeformat', 'clearhtml', '|',
-        'source', 'preview',  'fullscreen', '|',
-        'about'
-    ];
+    require('jquery.plupload-queue-css');
+    require('jquery.plupload-queue');
 
     exports.run = function() {
 
-        var editor ;
+        var params = $('#pickfile').data();
 
-        KindEditor.ready(function(K) {
-            editor = K.create('#editor_id', {
-                resizeType: 1,
-                width: '100%',
-                extraFileUploadParams: {},
-                filePostName: 'file',
-                items: standardItems
-            });
+    $("#uploader").pluploadQueue({
+        // General settings
+        runtimes : 'html5, flash',
+        url : params.uploadUrl
+    });
 
+    return;
+
+
+
+
+
+
+        console.log(params);
+
+        var uploader = new plupload.Uploader({
+            runtimes : 'html5,flash',
+            browse_button : 'pickfile',
+            max_file_size : '100mb',
+            url : params.uploadUrl,
+            filters : [
+                {title : "Video files", extensions : "mp4,avi"}
+            ],
+            multipart_params: {
+                "key" : 'test.mp4',
+                "token" : params.uploadToken,
+            }
         });
+
+        uploader.bind('FilesAdded', function(up, files) {
+            console.log('FilesAdded', uploader);
+            // uploader.refresh();
+            // uploader.start();
+        });
+
+        uploader.bind('FileUploaded', function(uploader, file, response){
+            console.log('FileUploaded', file, response);
+        });
+
+        uploader.bind('BeforeUpload', function(uploader, file){
+            console.log('BeforeUpload', file, file);
+        });
+
+        uploader.bind('UploadProgress', function(uploader, file){
+            console.log('UploadProgress', file);
+        });
+
+        uploader.bind('UploadFileevent', function(uploader, file){
+            console.log('UploadFileevent', file);
+        });
+
+        uploader.bind('Error', function(uploader, error){
+            console.log('Error', error);
+        });
+
+        uploader.bind('QueueChanged', function(uploader){
+            console.log('QueueChanged', uploader);
+            // uploader.start();
+        });
+
+    $('#uploadfile').click(function(e) {
+        uploader.start();
+        e.preventDefault();
+    });
+
+
+        uploader.init();
+
+        console.log('init:', uploader);
+
 
     };
 
