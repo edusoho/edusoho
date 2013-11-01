@@ -11,22 +11,29 @@ use Topxia\Service\File\UploadFileService;
     
 class UploadFileServiceImpl extends BaseDao implements UploadFileService
 {
-	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor');
+	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor','cloud' => 'File.CloudFileImplementor');
 
 
     public function getFile($id)
     {
-        return DiskFileSerialize::unserialize($this->getUploadFileDao()->getFile($id));
+       $file = $this->getUploadFileDao()->getFile($id);
+       return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
     public function getFileByHashId($hashId)
     {
-        return $this->getUploadFileDao()->getFileByHashId($hashId);
+       $file = $this->getUploadFileDao()->getFileByHashId($hashId);
+       return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
     public function findFilesByIds(array $ids)
     {
-        return $this->getUploadFileDao()->findFilesByIds($ids);
+       return  $this->getUploadFileDao()->findFilesByIds($ids);
+       // $result = array();
+       // foreach ($files as $file) {
+       //     $result[] = $this->getFileImplementorByFile($file)->getFile($file);
+       // }
+
     }
 
     public function searchFiles($conditions, $sort, $start, $limit)
@@ -96,46 +103,10 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
     }
 
 
-    public function addCloudFile(array $file)
-    {
-          //TODO fileBridge 把差异化交给fileBridge做
-  	
-    	$diskFile = array();
-
-    	if (!ArrayToolkit::requireds($file, array('filename', 'filepath', 'storage', 'bucket', 'size', 'etag'))) {
-    		throw $this->createServiceException('参数缺失，添加用户文件失败!');
-    	}
-
-        $diskFile['userId'] = $this->getCurrentUser()->id;
-    	$diskFile['filename'] = $file['filename'];
-    	$diskFile['filepath'] = $this->filterFilepath($file['filepath']);
-    	$diskFile['isDirectory'] = !empty($file['isDirectory']) ? 1 : 0;
-    	$diskFile['size'] = (int) $file['size'];
-    	$diskFile['mimeType'] = $file['mimeType'];
-    	$diskFile['etag'] = $file['etag'];
-        if (empty($file['convertId']) or empty($file['convertKey'])) {
-            $diskFile['convertHash'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $diskFile['convertStatus'] = 'none';
-        } else {
-            $diskFile['convertHash'] = "{$file['convertId']}:{$file['convertKey']}";
-            $diskFile['convertStatus'] = 'waiting';
-        }
-    	$diskFile['storage'] = $file['storage'];
-    	$diskFile['bucket'] = $file['bucket'];
-    	$diskFile['type'] = $this->getFileType($diskFile['mimeType']);
-    	$diskFile['uri'] = $this->makeFileUri($file);
-    	$diskFile['updatedTime'] = $diskFile['createdTime'] = time();
-
-    	$diskFile = $this->getUploadFileDao()->addFile($diskFile);
-
-        $this->getLogService()->info('disk', 'add_cloud_file', json_encode($file));
-
-        return $diskFile;
-    }
-
     public function renameFile($id, $newFilename)
     {
-
+        $this->getUploadFileDao()->updateFile($id,array('filename'=>$newFilename));
+        return $this->getFile($id);
     }
 
     public function deleteFile($id)
@@ -144,6 +115,7 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
         if (empty($file)) {
             throw $this->createServiceException("文件(#{$id})不存在，删除失败");
         }
+        $this->getFieImplementor($file)->deleteFile($file);
 
         return $this->getUploadFileDao()->deleteFile($id);
     }
@@ -217,7 +189,10 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
     	return 'other';
     }
 
-
+    private function getFileImplementorByFile($file)
+    {
+        return $this->getFieImplementor($file['storage']);
+    }
 
     private function getUploadFileDao()
     {
