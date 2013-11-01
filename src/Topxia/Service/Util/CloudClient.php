@@ -18,4 +18,8 @@ interface CloudClient
 
     public function getAudioInfo($bucket, $key);
 
+    public function removeFile($key);
+
+    public function getFileUrl($key,$targetId,$targetType);
+
 }

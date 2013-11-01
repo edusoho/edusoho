@@ -130,6 +130,14 @@ class EdusohoCloudClient implements CloudClient
         return $this->getVideoInfo($bucket, $key);
     }
 
+    public function removeFile($key){
+
+    }
+
+    public function getFileUrl($key,$targetId,$targetType){
+        
+    }
+
     private function generateViewToken($bucket, $key)
     {
         $params = array('bucket' => $bucket, 'key' => $key);
