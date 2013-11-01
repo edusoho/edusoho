@@ -34,7 +34,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['ext'] = $path_parts['extension'];
         $uploadFile['size'] = (int) $fileInfo['size'];
         $uploadFile['targetId'] = $targetId;
-        $uploadFile['targetType'] = $targetType;       
+        $uploadFile['targetType'] = $targetType; 
+        $uploadFile['metas'] = $this->encodeMetas($fileInfo['metas']);      
         
         if (empty($fileInfo['convertId']) or empty($fileInfo['convertKey'])) {
             $uploadFile['hashId'] = FileToolkit::uniqid($targetType);
@@ -44,8 +45,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $uploadFile['convertStatus'] = 'waiting';
         }
         $uploadFile['storage'] = $fileInfo['storage'];
-        $uploadFile['canDownload'] = $fileInfo['canDownload'];
-        $uploadFile['type'] = $this->getFileType($uploadFile['mimeType']);
+        $uploadFile['canDownload'] = isset($fileInfo['canDownload']) ? $fileInfo['canDownload'] : false;
+        $uploadFile['type'] = $this->getFileType($fileInfo['mimeType']);
         $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
 
 
