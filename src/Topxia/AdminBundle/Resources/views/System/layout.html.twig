@@ -7,12 +7,7 @@
     {% block sidebar %}
       <div class="list-group">
         <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置</a>
-        <a href="{{ path('admin_setting_auth') }}" class="list-group-item {% if menu == 'auth' %}active{% endif %}">注册设置</a>
-        <a href="{{ url('admin_setting_login_bind') }}" class="list-group-item {% if menu == 'login_bind' %}active{% endif %}">登录设置</a>
-        <a href="{{ url('admin_setting_payment') }}" class="list-group-item {% if menu == 'payment' %}active{% endif %}">支付方式</a>
-        <a href="{{ url('admin_setting_mailer') }}" class="list-group-item {% if menu == 'mailer' %}active{% endif %}">邮件服务器设置</a>
-        <a href="{{ path('admin_setting_storage') }}" class="list-group-item {% if menu == 'storage' %}active{% endif %}">云存储设置</a>
-        <a href="{{ path('admin_setting_refund') }}" class="list-group-item {% if menu == 'refund' %}active{% endif %}">退款设置</a>
+        <a href="{{ path('admin_setting_auth') }}" class="list-group-item {% if menu == 'operation' %}active{% endif %}">全局设置</a>
         <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
 
         {% if 'upgrade' not in disabled_features %}

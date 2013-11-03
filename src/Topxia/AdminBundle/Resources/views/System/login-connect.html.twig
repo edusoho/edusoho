@@ -1,14 +1,13 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
 
 {% block title %}登录设置 - {{ parent() }}{% endblock %}
 
-{% set menu = 'login_bind' %}
-
-{% block main %}
-
+{% set submenu = 'login_bind' %}
+{% block maincontent %}
 <div class="page-header"><h1>登录设置</h1></div>
 
 {{ web_macro.flash_messages() }}
+
 <form class="form-horizontal" method="post" novalidate>
 
   <fieldset>
