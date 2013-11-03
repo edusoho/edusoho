@@ -284,7 +284,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$backupFilesDirs['web'] = $this->getPackageBackUpDir($package).'web';
 		$count = FileUtil::deepCopy($this->getAbsoluteDir('src'),$backupFilesDirs['src']);
 		$this->fileCount += $count;
-		$count = FileUtil::deepCopy($this->getAbsoluteDir('app'),$backupFilesDirs['app'],array($this,'getFilters'));
+		$count = FileUtil::deepCopy($this->getAbsoluteDir('app'),$backupFilesDirs['app'],array($this,'patternMatch'));
 		$this->fileCount += $count;
 		$count = FileUtil::deepCopy($this->getAbsoluteDir('web'),$backupFilesDirs['web']);
 		$this->fileCount += $count;
@@ -307,8 +307,9 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	}
 
 
- 	private function patternMatch($path,&$filters)
+ 	public function patternMatch($path)
  	{
+ 		$filters = $this->getFilters();
  		foreach ($filters as $filter) {
  			if(!(strpos($path,$filter)===false)){
  				return true;

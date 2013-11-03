@@ -38,7 +38,7 @@ class FileUtil
 			$fileSystem->mkdir($dest,0777) ;
 		}
 		$match = false;
-		if(!emtpy($patternMatch) && count($patternMatch) == 2){
+		if(!empty($patternMatch) && count($patternMatch) == 2){
 			$match = true;
 		}
 		$fileCount = 0;
@@ -47,7 +47,7 @@ class FileUtil
 			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
 			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
 			
-			if($match && $patternMatch[0]->$patternMatch[1]($path->getPathname(),$filters)){
+			if($match && $patternMatch[0]->$patternMatch[1]($path->getPathname())){
 					continue;
 			}
 
