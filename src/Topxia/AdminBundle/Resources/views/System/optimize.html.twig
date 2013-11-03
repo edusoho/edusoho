@@ -1,0 +1,17 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}优化和备份 - {{ parent() }}{% endblock %}
+
+{% set menu = 'optimize' %}
+
+{% set script_controller = 'log/list' %}
+
+{% block main %}
+
+	<div class="page-header"><h1>优化和备份</h1></div>
+
+	{{ web_macro.flash_messages() }}
+
+
+
+{% endblock %}
