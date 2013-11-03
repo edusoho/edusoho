@@ -8,6 +8,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\System;
 use Topxia\Service\Util\MySQLDumper;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Service\Util\FileUtil;
 
 class UpgradeServiceImpl extends BaseService implements UpgradeService
 {
@@ -101,22 +102,22 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
  		   $result[] = "php-curl包未激活";
 		}
 
-		if (!$this->is_writable($this->getDownloadPath())){
+		if (!FileUtil::is_writable($this->getDownloadPath())){
 			$result[] = "下载目录({$this->getDownloadPath()})无写权限<br>";
 		}
-		if (!$this->is_writable($this->getBackUpPath())){
+		if (!FileUtil::is_writable($this->getBackUpPath())){
 			$result[] = "备份目录{$this->getBackUpPath()})无写权限<br>";
 		}
-		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app')){
 			$result[] = 'app目录无写权限<br>';
 		}
-		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'src')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'src')){
 			$result[] = 'src目录无写权限<br>';
 		}
-		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'web')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'web')){
 			$result[] = 'web目录无写权限<br>';
 		}
-		if(!$this->is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
 			$result[] = 'app/cache目录无写权限<br>';
 		}	
 		return $result;
@@ -191,7 +192,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 			$deletes = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'delete';
 			$this->deleteFiles($deletes);
 			$source = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
-			$this->deepCopy($source,$this->getSystemRootPath());
+			$count = FileUtil::deepCopy($source,$this->getSystemRootPath());
+			$this->fileCount += $count;
 			$upgradeFile = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'Upgrade.php';
 			if($this->getFileSystem()->exists($upgradeFile)){
 				include_once($upgradeFile);
@@ -232,7 +234,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	public function refreshCache(){
 		$path = $this->getCachePath();
-		$this->emptyDir($path);
+		FileUtil::emptyDir($path);
 	}
 
 
@@ -273,18 +275,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		fclose($fh);		
 	}
 
-	private function  is_writable($path) {
-	    $path .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.tmp';
-	    $rm = $this->getFileSystem()->exists($path);
-	    $f = fopen($path, 'a');
-	    if ($f===false)
-	        return false;
-	    fclose($f);
-	    if (!$rm)
-	        $this->getFileSystem()->remove($path);
-	    return true;
-	}
-
 	private function backUpFiles($package)
 	{
 		$backupFilesDirs = array();
@@ -292,10 +282,13 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$backupFilesDirs['src'] = $this->getPackageBackUpDir($package).'src';
 		$backupFilesDirs['app'] = $this->getPackageBackUpDir($package).'app';
 		$backupFilesDirs['web'] = $this->getPackageBackUpDir($package).'web';
+		$count = FileUtil::deepCopy($this->getAbsoluteDir('src'),$backupFilesDirs['src']);
+		$this->fileCount += $count;
+		$count = FileUtil::deepCopy($this->getAbsoluteDir('app'),$backupFilesDirs['app'],array($this,'getFilters'));
+		$this->fileCount += $count;
+		$count = FileUtil::deepCopy($this->getAbsoluteDir('web'),$backupFilesDirs['web']);
+		$this->fileCount += $count;
 
-		$this->deepCopy($this->getAbsoluteDir('src'),$backupFilesDirs['src']);
-		$this->deepCopy($this->getAbsoluteDir('app'),$backupFilesDirs['app'],$this->getFilters());
-		$this->deepCopy($this->getAbsoluteDir('web'),$backupFilesDirs['web']);
 		return $backupFilesDirs;	
 	}
 
@@ -314,35 +307,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	}
 
 
-
- 	private function deepCopy($src,$dest,$filters=array())
- 	{
-		if(!$this->getFileSystem()->exists($src)) return ;
-		if(!$this->getFileSystem()->exists($dest)){
-			$this->getFileSystem()->mkdir($dest,0777) ;
-		}
-		foreach(new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator($src, \FilesystemIterator::SKIP_DOTS),
-			 \RecursiveIteratorIterator::SELF_FIRST ) as $path) {
-			if($this->patternMatch($path->getPathname(),$filters)){
-					continue;
-			}
-			$relativeFile = str_replace($src,'',$path->getPathname());
-
-			$destFile = $dest.$relativeFile;	
-			if($path->isDir() ){
-				if(!$this->getFileSystem()->exists($destFile))
-					$this->getFileSystem()->mkdir($destFile,0777);
-			}else{
-				if(strpos( $path->getFilename(), ".") ===0 ){
-					continue;
-				}
-				$this->getFileSystem()->copy($path->getPathname(),$destFile,true);
-				$this->fileCount ++;
-			}
-		}
- 	}
-
  	private function patternMatch($path,&$filters)
  	{
  		foreach ($filters as $filter) {
@@ -358,7 +322,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$dbSetting = array('exclude'=>array('session','cache'));
 		$dump = new MySQLDumper($this->getKernel()->getConnection());
 		$backUpdir = $this->getPackageBackUpDir($package);
-		$this->emptyDir($backUpdir);
+		FileUtil::emptyDir($backUpdir);
 		return 	$dump->export($this->getBackupFilePath($package));	
 	}
 
@@ -391,9 +355,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	}
 
 
-
-
-
 	private function extractFile($path)
 	{
 
@@ -411,18 +372,6 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $extractPath;
 	}
 	
-
-	
-	private function emptyDir($dirPath,$includeDir=false){
-		if(!$this->getFileSystem()->exists($dirPath)) return ;
-		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
-    		$path->isFile() ? $this->getFileSystem()->remove($path->getPathname()) : rmdir($path->getPathname());
-		}
-		if($includeDir){
-			rmdir($dirPath);
-		}
-	}
-
 	private function checkMainVersion($packages)
 	{
 		foreach ($packages as $package) {
