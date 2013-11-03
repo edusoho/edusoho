@@ -14,6 +14,8 @@
           <a href="{{ url('admin_upgrade') }}" class="list-group-item {% if menu == 'upgrade' %}active{% endif %}">安装与升级</a>
         {% endif %}
 
+       <a href="{{ url('admin_optimize') }}" class="list-group-item {% if menu == 'optimize' %}active{% endif %}">优化和备份</a>   
+
         <a href="{{ url('admin_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">系统日志</a>   
 
       </div>
