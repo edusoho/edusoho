@@ -338,6 +338,15 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_setting_theme:
+    pattern:  /setting/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:index }
+
+admin_setting_theme_change:
+    pattern:  /setting/theme/change
+    defaults: { _controller: TopxiaAdminBundle:Theme:change }
+    methods:  [POST]
+
 admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
@@ -440,3 +449,4 @@ admin_thread_batch_delete:
     pattern: /thread/batch_delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
+

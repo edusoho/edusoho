@@ -31,3 +31,9 @@ services:
     topxia.timemachine:
         class:			Topxia\Common\TimeMachine
         arguments:		['Asia/Shanghai']
+
+    topxia.file_locator:
+        class:          Topxia\WebBundle\Theme\FileLocator
+        arguments:      [@kernel, '%kernel.root_dir%/Resources']
+    file_locator:
+        alias:          topxia.file_locator
