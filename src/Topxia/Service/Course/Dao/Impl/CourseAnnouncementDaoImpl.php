@@ -17,6 +17,7 @@ class CourseAnnouncementDaoImpl extends BaseDao implements CourseAnnouncementDao
 
     public function findAnnouncementsByCourseId($courseId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql ="SELECT * FROM {$this->table} WHERE courseId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }

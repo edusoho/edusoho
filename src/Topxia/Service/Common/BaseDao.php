@@ -55,4 +55,10 @@ abstract class BaseDao
         return new DynamicQueryBuilder($this->getConnection(), $conditions);
     }
 
+    protected function filterStartLimit(&$start, &$limit)
+    {
+       $start = (int) $start;
+       $limit = (int) $limit; 
+    }
+
 }

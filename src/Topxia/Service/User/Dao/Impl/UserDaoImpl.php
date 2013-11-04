@@ -39,6 +39,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function searchUsers($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createUserQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])

@@ -40,6 +40,7 @@ class UpgradeLogDaoImpl extends BaseDao implements UpgradeLogDao
 
     public function searchLogs($conditions, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createLogQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)

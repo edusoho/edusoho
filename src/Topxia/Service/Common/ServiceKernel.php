@@ -89,9 +89,7 @@ class ServiceKernel
     public function createService($name)
     {
         if (empty($this->pool[$name])) {
-            $namespace = substr(__NAMESPACE__, 0, -strlen('Common')-1);
-            list($module, $className) = explode('.', $name);
-            $class = $namespace . '\\' . $module. '\\Impl\\' . $className . 'Impl';
+            $class = $this->getClassName('service', $name);
             $this->pool[$name] = new $class();
         }
         return $this->pool[$name];
@@ -100,14 +98,29 @@ class ServiceKernel
     public function createDao($name)
     {
         if (empty($this->pool[$name])) {
-            $namespace = substr(__NAMESPACE__, 0, -strlen('Common')-1);
-            list($module, $className) = explode('.', $name);
-            $class = $namespace . '\\' . $module. '\\Dao\\Impl\\' . $className . 'Impl';
+            $class = $this->getClassName('dao', $name);
             $dao = new $class();
             $dao->setConnection($this->getConnection());
             $this->pool[$name] = $dao;
         }
         return $this->pool[$name];
+    }
+
+    private function getClassName($type, $name)
+    {
+        if (strpos($name, ':') > 0) {
+            list($namespace, $name) = explode(':', $name, 2);
+            $namespace .= '\\Service';
+        } else {
+            $namespace = substr(__NAMESPACE__, 0, -strlen('Common')-1);
+        }
+        list($module, $className) = explode('.', $name);
+
+        $type = strtolower($type);
+        if ($type == 'dao') {
+            return $namespace . '\\' . $module. '\\Dao\\Impl\\' . $className . 'Impl';
+        }
+        return $namespace . '\\' . $module. '\\Impl\\' . $className . 'Impl';
     }
 
 }

@@ -23,6 +23,7 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
 
     public function findCourseFavoritesByUserId($userId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId)) ? : array();
     }

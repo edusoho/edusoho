@@ -54,6 +54,7 @@ class MessageRelationDaoImpl extends BaseDao implements MessageRelationDao
 
     public function findRelationsByConversationId($conversationId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE conversationId = ? ORDER BY messageId DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($conversationId));
     }
