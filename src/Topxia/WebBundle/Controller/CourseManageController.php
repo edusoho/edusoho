@@ -29,8 +29,6 @@ class CourseManageController extends BaseController
 	        $form->bind($request);
 	        if($form->isValid()){
 	            $courseBaseInfo = $form->getData();
-                // var_dump($courseBaseInfo['tags']);
-                // exit();
 	            $this->getCourseService()->updateCourse($id, $courseBaseInfo);
 	            $this->setFlashMessage('success', '课程基本信息已保存！');
 	            return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 

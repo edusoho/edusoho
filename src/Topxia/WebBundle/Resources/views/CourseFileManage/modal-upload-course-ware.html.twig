@@ -8,15 +8,18 @@
 	
 {% block body %}
 
-	<form id="form" method="post" action="{{ path('course_manage_process_uploading_course_ware', {id:course.id}) }}">
+	<input type="hidden" id="upload-course-ware-as-chunk" value="{{ path('course_manage_upload_course_ware_as_chunk', {id:course.id}) }}">
+
+	<form id="form" method="post" action="{{ path('course_manage_submit_upload_course_wares', {id:course.id}) }}">
 		
 		<div style="float: left; margin-right: 20px">
-			<div id="uploader" style="width: 500px; height: 330px;">
+			<div id="uploader" style="width: 850px;">
 				上传课件
 			</div>
 		</div>
 
-		<br style="clear:both" />
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+		<br style="clear:both" /> <hr>
 		<input type="submit" value="Send"/>
 
 	</form>

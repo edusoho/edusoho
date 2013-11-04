@@ -1,14 +1,42 @@
   <div class="panel-body">
     
-      {% if tab == 'courseWare' %}
-        
-        <button class="btn btn-info btn-sm pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_ware', {id:course.id}) }}">
-          <i class="glyphicon glyphicon-cloud-upload"></i>上传课件</button>
+      {% if tab == 'courseWare' %}    
+
+    <div class="btn-group pull-right">
+      <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_ware', {id:course.id}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传本地课件</button>
+      <a href="#" type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+          <li>
+            <a class="btn btn-sm" id="lesson-create-btn" data-target="#modal" 
+            data-toggle="modal" data-role="publish-item" data-url="{{ path('course_manage_upload_course_ware', {id:course.id}) }}">
+              <i class="glyphicon glyphicon-cloud-upload"></i>
+              上传云端课件
+            </a>
+          </li>
+      </ul>
+    </div>
 
       {% elseif tab == 'courseMaterial' %}
 
-          <button class="btn btn-info btn-sm pull-right mhs" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_material', {id:course.id}) }}">
-            <i class="glyphicon glyphicon-cloud-upload"></i>上传资料</button>
+        <div class="btn-group pull-right">
+          <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_material', {id:course.id}) }}">
+              <i class="glyphicon glyphicon-cloud-upload"></i>上传本地资料</button>
+          <a href="#" type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+              <li>
+                <a class="btn btn-sm" id="lesson-create-btn" data-target="#modal" 
+                data-toggle="modal" data-role="publish-item" data-url="{{ path('course_manage_upload_course_material', {id:course.id}) }}">
+                  <i class="glyphicon glyphicon-cloud-upload"></i>
+                  上传云端资料
+                </a>
+              </li>
+          </ul>
+        </div>
 
       {% endif %}
 

@@ -1,18 +1,16 @@
 define(function(require, exports, module) {
 
-	require('moxie');
-	require('moxie.swf');
-	require('moxie.xap');
-	require('plupload');
-	require('ui.plupload');
-	require('plupload.queue');
+	require('jquery.plupload-queue-css');
+    require('jquery.plupload-queue');
+    require('plupload');
 
     exports.run = function() {
+    	var uploadCourseWareAsChunk = $("#upload-course-ware-as-chunk").attr('value');
 
-    	$("#uploader").pluploadQueue({
+    	var uploader = $("#uploader").pluploadQueue({
 
 			runtimes : 'html5,flash,silverlight,html4',
-			url : '../upload.php',
+			url : uploadCourseWareAsChunk,
 			chunk_size : '1mb',
 			unique_names : true,
 			
@@ -20,33 +18,17 @@ define(function(require, exports, module) {
 				max_file_size : '10mb',
 				mime_types: [
 					{title : "Audio Files", extensions : "mp3,wma,mp2,wav,aiff,aif,m4a,ra,dss"},
-		            {title : "Video files", extensions : "mov,mp4,wmv,rm"},
+		  		 	{title : "Video files", extensions : "mov,mp4,wmv,rm,flv"},
 					{title : "Image files", extensions : "jpg,gif,png"},
 					{title : "Zip files", extensions : "zip"}
 				]
 			},
 
-			resize : {width : 320, height : 240, quality : 90},
-
-			flash_swf_url : '../../js/Moxie.swf',
-			silverlight_xap_url : '../../js/Moxie.xap'
-		});
-
-		$('#form').submit(function(e) {
-			if ($('#uploader').plupload('getFiles').length > 0) {
-
-				$('#uploader').on('complete', function() {
-					$('#form')[0].submit();
-				});
-
-				$('#uploader').plupload('start');
-			} else {
-				alert("You must have at least one file in the queue.");
-			}
-			return false;
-
-		});
-
+			resize : {width : 500, height : 500, quality : 90},
+			flash_swf_url : '/assets/libs/jquery-plugin/plupload-queue/2.0.0/Moxie.swf',
+			silverlight_xap_url : '/assets/libs/jquery-plugin/plupload-queue/2.0.0/Moxie.xap'
+			
+		}); 
 
     };
 
