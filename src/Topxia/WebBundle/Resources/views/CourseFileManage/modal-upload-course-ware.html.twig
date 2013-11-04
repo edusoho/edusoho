@@ -3,24 +3,25 @@
 {% set modal_size = 'xlarge' %}
 
 {% block title %}
-  上传课件
+{% if type == 'local' %}
+  上传本地课件
+{% elseif type == 'cloud' %}
+  上传云端课件
+{% endif %}
 {% endblock %}
 	
 {% block body %}
 
-	<input type="hidden" id="upload-course-ware-as-chunk" value="{{ path('course_manage_upload_course_ware_as_chunk', {id:course.id}) }}">
+	<input type="hidden" id="upload-course-ware-as-chunk" 
+	value="{{ path('course_manage_upload_course_ware_as_chunk', {id:course.id, type:type}) }}">
 
-	<form id="form" method="post" action="{{ path('course_manage_submit_upload_course_wares', {id:course.id}) }}">
-		
+	<form id="upload-course-wares" method="post" 
+	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, storageType:type, fileType:'ware'}) }}">
 		<div style="float: left; margin-right: 20px">
-			<div id="uploader" style="width: 850px;">
-				上传课件
-			</div>
+			<div id="uploader" style="width: 850px;"> </div>
 		</div>
 
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-		<br style="clear:both" /> <hr>
-		<input type="submit" value="Send"/>
 
 	</form>
 
@@ -30,5 +31,5 @@
 
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">保存</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#upload-course-wares">提交</button>
 {% endblock %}

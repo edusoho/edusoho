@@ -3,35 +3,33 @@
 {% set modal_size = 'xlarge' %}
 
 {% block title %}
-  上传资料
+{% if type == 'local' %}
+  上传本地资料
+{% elseif type == 'cloud' %}
+  上传云端资料
+{% endif %}
 {% endblock %}
 	
 {% block body %}
 
-	<form id="form" method="post" action="dump.php">
+	<input type="hidden" id="upload-course-material-as-chunk" 
+	value="{{ path('course_manage_upload_course_material_as_chunk', {id:course.id, type:type}) }}">
 
-		<h1>Queue widget example</h1>
-
-		<p>Shows the jQuery Plupload Queue widget and under different runtimes.</p>
-
+	<form id="upload-course-materials" method="post" 
+	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, storageType:type, fileType:'material'}) }}">
+		
 		<div style="float: left; margin-right: 20px">
-			<h3>Flash runtime</h3>
-			<div id="uploader" style="width: 500px; height: 330px;">
-				xxxx
-			</div>
-
+			<div id="uploader" style="width: 850px;"> </div>
 		</div>
-
-		<br style="clear: both" />
-
-		<input type="submit" value="Send"/>
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 	</form>
 
 <script>app.load('course-manage-file/upload-course-material')</script>
+
 {% endblock %}
 
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">保存</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#upload-course-materials">提交</button>
 {% endblock %}
