@@ -1660,40 +1660,40 @@ body {
 	margin-bottom: 10px;
 }
 
-.disk-browser {
+.file-browser {
 	padding: 10px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
 }
 
-.disk-browser-file-list {
+.file-browser-list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.disk-browser-file-list li {
+.file-browser-list li {
 	padding: 5px 10px;
 }
 
-.disk-browser-file-list li:hover {
+.file-browser-list li:hover {
 	background: #eee;
 }
 
-.disk-browser-file-list .filename {
+.file-browser-list .filename {
 	float: left;
 	width: 50%;
 	cursor: default;
 }
 
-.disk-browser-file-list .filesize {
+.file-browser-list .filesize {
 	float: left;
 	width: 20%;
 	color: #777;
 	cursor: default;
 }
 
-.disk-browser-file-list .filetime {
+.file-browser-list .filetime {
 	float: left;
 	width: 30%;
 	color: #777;

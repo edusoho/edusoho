@@ -16,6 +16,7 @@ class CourseMaterialManageController extends BaseController
 			'course' => $course,
 			'lesson' => $lesson,
 			'materials' => $materials,
+            'storageSetting' => $this->setting('storage'),
 		));
 	}
 

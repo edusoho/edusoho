@@ -72,6 +72,20 @@ file_upload:
     defaults: { _controller: TopxiaWebBundle:File:upload }
     methods: [POST]
 
+uploadfile_upload:
+    pattern:  /uploadfile/upload
+    defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
+    methods: [POST]
+
+uploadfile_browser:
+    pattern:  /uploadfile/browser
+    defaults: { _controller: TopxiaWebBundle:UploadFile:browser }
+
+uploadfile_params:
+    pattern:  /uploadfile/params
+    defaults: { _controller: TopxiaWebBundle:UploadFile:params }
+
+
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }

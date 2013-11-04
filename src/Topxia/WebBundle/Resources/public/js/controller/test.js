@@ -16,10 +16,6 @@ define(function(require, exports, module) {
     return;
 
 
-
-
-
-
         console.log(params);
 
         var uploader = new plupload.Uploader({
@@ -54,8 +50,8 @@ define(function(require, exports, module) {
             console.log('UploadProgress', file);
         });
 
-        uploader.bind('UploadFileevent', function(uploader, file){
-            console.log('UploadFileevent', file);
+        uploader.bind('UploadFile', function(uploader, file){
+            console.log('UploadFile', file);
         });
 
         uploader.bind('Error', function(uploader, error){
@@ -75,7 +71,7 @@ define(function(require, exports, module) {
 
         uploader.init();
 
-        console.log('init:', uploader);
+        console.log('init:', uploader.state);
 
 
     };
