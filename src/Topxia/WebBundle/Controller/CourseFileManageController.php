@@ -99,6 +99,8 @@ class CourseFileManageController extends BaseController
 
     public function uploadCourseWareAsChunkAction(Request $request, $id, $type)
     {
+        var_dump($this->getCurrentUser());
+        var_dump($request->request->all());
         // flash 只会上传一次token
         $file = $request->files->get('file');
         $uploadedChunk = $request->request->all();
