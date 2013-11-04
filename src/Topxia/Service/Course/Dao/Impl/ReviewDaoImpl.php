@@ -17,6 +17,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function findReviewsByCourseId($courseId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }
@@ -63,6 +64,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function searchReviews($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createReviewSearchBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])

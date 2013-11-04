@@ -17,6 +17,7 @@ class FileDaoImpl extends BaseDao implements FileDao
 
 	public function findFiles($start, $limit)
 	{
+        $this->filterStartLimit($start, $limit);
 		$sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql);
 	}
@@ -29,6 +30,7 @@ class FileDaoImpl extends BaseDao implements FileDao
 
 	public function findFilesByGroupId($groupId, $start, $limit)
 	{
+        $this->filterStartLimit($start, $limit);
 		$sql = "SELECT * FROM {$this->table} WHERE groupId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($groupId));
 	}
