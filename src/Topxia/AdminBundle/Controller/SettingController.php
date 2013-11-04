@@ -159,6 +159,7 @@ class SettingController extends BaseController
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
+            'verify_code' => '',
         );
 
         $loginConnect = array_merge($default, $loginConnect);

@@ -334,6 +334,38 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_setting_theme:
+    pattern:  /setting/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:index }
+
+admin_setting_theme_change:
+    pattern:  /setting/theme/change
+    defaults: { _controller: TopxiaAdminBundle:Theme:change }
+    methods:  [POST]
+admin_optimize:
+    pattern:  /optimize
+    defaults: { _controller: TopxiaAdminBundle:Optimize:index }
+
+admin_optimize_remove_cache:
+    pattern:  /optimize/remove-cache
+    defaults: { _controller: TopxiaAdminBundle:Optimize:removeCache }
+    methods: [POST]
+
+admin_optimize_remove_tmp:
+    pattern:  /optimize/remove-tmp
+    defaults: { _controller: TopxiaAdminBundle:Optimize:removeTemp }
+    methods: [POST]
+
+admin_optimize_remove_backup:
+    pattern:  /optimize/remove-backup
+    defaults: { _controller: TopxiaAdminBundle:Optimize:removeBackup }
+    methods: [POST]
+
+admin_optimize_backupdb:
+    pattern:  /optimize/backupdb
+    defaults: { _controller: TopxiaAdminBundle:Optimize:backupdb }
+    methods: [POST]
+
 admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
@@ -436,3 +468,4 @@ admin_thread_batch_delete:
     pattern: /thread/batch_delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
+

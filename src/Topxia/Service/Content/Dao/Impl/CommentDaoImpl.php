@@ -31,12 +31,14 @@ class CommentDaoImpl extends BaseDao implements CommentDao
 
 	public function findCommentsByObjectTypeAndObjectId($objectType, $objectId, $start, $limit)
 	{
+        $this->filterStartLimit($start, $limit);
 		$sql = "SELECT * FROM {$this->table} WHERE objectType = ? AND objectId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($objectType, $objectId));
 	}
 
 	public function findCommentsByObjectType($objectType, $start, $limit)
 	{
+        $this->filterStartLimit($start, $limit);
 		$sql = "SELECT * FROM {$this->table} WHERE objectType = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($objectType));
 	}

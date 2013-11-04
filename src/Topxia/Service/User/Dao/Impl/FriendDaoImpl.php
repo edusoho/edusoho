@@ -51,6 +51,7 @@ class FriendDaoImpl extends BaseDao implements FriendDao
 
     public function findFriendsByToId($toId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($toId));
     }

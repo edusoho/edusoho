@@ -19,6 +19,7 @@ class AppKernel extends Kernel {
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Custom\WebBundle\CustomWebBundle(),
             );
 
 

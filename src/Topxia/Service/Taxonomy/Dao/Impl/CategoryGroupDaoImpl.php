@@ -23,6 +23,7 @@ class CategoryGroupDaoImpl extends BaseDao implements CategoryGroupDao
 
     public function findGroups($start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array()) ? : array();
     }

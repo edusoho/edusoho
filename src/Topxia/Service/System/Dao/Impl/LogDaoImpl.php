@@ -19,6 +19,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 
 	public function searchLogs($conditions, $sort, $start, $limit)
 	{
+		$this->filterStartLimit($start, $limit);
 		$builder = $this->createLogQueryBuilder($conditions)
 	        ->select('*')
 	        ->from($this->table, $this->table);

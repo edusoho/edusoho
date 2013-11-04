@@ -1,14 +1,13 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
 
 {% block title %}登录设置 - {{ parent() }}{% endblock %}
 
-{% set menu = 'login_bind' %}
-
-{% block main %}
-
+{% set submenu = 'login_bind' %}
+{% block maincontent %}
 <div class="page-header"><h1>登录设置</h1></div>
 
 {{ web_macro.flash_messages() }}
+
 <form class="form-horizontal" method="post" novalidate>
 
   <fieldset>
@@ -112,6 +111,19 @@
       </div>
       <div class="controls col-md-8">
         <input type="text" id="renren_secret" name="renren_secret" class="form-control" value="{{loginConnect.renren_secret}}">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>登录接口验证代码</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="verify_code" >验证代码</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="verify_code" name="verify_code" class="form-control" rows="5">{{loginConnect.verify_code}}</textarea>
+        <div class="help-block">在申请QQ登录等接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。</div>
       </div>
     </div>
   </fieldset>

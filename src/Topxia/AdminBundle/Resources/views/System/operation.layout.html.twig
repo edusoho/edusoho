@@ -1,0 +1,37 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}全局设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'operation' %}
+
+{% block main %}
+<ul class="nav nav-tabs">
+  <li class="{% if submenu == 'auth' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_auth') }}">注册设置
+  	</a>
+  </li>	
+  <li class="{% if submenu == 'login_bind' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_login_bind') }}">登录设置
+  	</a>
+  </li>
+  <li class="{% if submenu == 'payment' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_payment') }}">支付方式
+  	</a>
+  </li>
+  <li class="{% if submenu == 'mailer' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_mailer') }}">邮件服务器设置
+  	</a>
+  </li>  
+  <li class="{% if submenu == 'storage' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_storage') }}">云存储设置
+  	</a>
+  </li>
+  <li class="{% if submenu == 'refund' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_refund') }}">退款设置
+  	</a>
+  </li>
+</ul>
+  <p></p>
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}
