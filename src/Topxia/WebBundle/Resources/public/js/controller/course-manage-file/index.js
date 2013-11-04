@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 	    var $table = $("#course-ware-table");
 	    require('../../util/batch-select')($container);
 	    require('../../util/batch-delete')($container);
-	    require('../../util/batch-rename')($container);
 
     };
 

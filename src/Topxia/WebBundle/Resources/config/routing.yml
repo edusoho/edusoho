@@ -361,27 +361,28 @@ course_manage_upload_course_delete_files:
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
     methods: [POST]
 
-course_manage_upload_course_rename_files:
-    pattern:  /course/{id}/rename/files/{type}
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:renameCourseFiles }
-
 course_manage_upload_course_ware:
-    pattern:  /course/{id}/manage/files/upload/course/ware
+    pattern:  /course/{id}/manage/files/upload/course/ware/{type}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseWare }
 
-course_manage_submit_upload_course_wares:
-    pattern:  /course/{id}/submit/upload/course/wares
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:submitUploadCourseWares }
+course_manage_upload_course_material:
+    pattern:  /course/{id}/manage/files/upload/course/material/{type}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterial }
+
+course_manage_submit_upload_course_files:
+    pattern:  /course/{id}/submit/upload/course/{fileType}/files/{storageType}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:submitUploadCourseFiles }
     methods: [POST]
 
 course_manage_upload_course_ware_as_chunk:
-    pattern:  /course/{id}/upload/courseware/as/chunk
+    pattern:  /course/{id}/upload/courseware/as/chunk/{type}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseWareAsChunk }
     methods: [POST]
 
-course_manage_upload_course_material:
-    pattern:  /course/{id}/manage/files/upload/course/material
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterial }
+course_manage_upload_course_material_as_chunk:
+    pattern:  /course/{id}/upload/coursematerial/as/chunk/{type}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterialAsChunk }
+    methods: [POST]
 
 course_manage_students:
     pattern:  /course/{id}/manage/students
