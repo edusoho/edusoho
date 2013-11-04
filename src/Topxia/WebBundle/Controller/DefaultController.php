@@ -17,7 +17,7 @@ class DefaultController extends BaseController
         $feild['expired']='0';//0表示开放报名。
 
 
-        $lastActivitys=$this->getActivityService()->searchActivitys($feild,'last',0,4);
+        $lastActivitys=$this->getActivityService()->searchActivitys($feild,'last',0,3);
 
 
         $feild['recommended']=1;//1表示置顶。
@@ -38,8 +38,8 @@ class DefaultController extends BaseController
         $Locations=$this->getLocationService()->getAllLocations();
         //公开课报名用户
         $feild['roles']='ROLE_USER';
-        $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,38);
-        //视频资源库
+        $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,35);
+        //
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 8);
 
@@ -65,7 +65,7 @@ class DefaultController extends BaseController
 
         //新加入学员
         $feild['roles']='ROLE_USER';
-        $students=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,16);
+        $students=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,2);
         //开源教练组
         $feild['roles']='ROLE_TEACHER';
         $teachers=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,5);

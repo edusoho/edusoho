@@ -8,26 +8,25 @@
 {% set userTitle=user.title|default(NULL) %}
 {% block content %}
 
-<div class="row  widget shadow pz  mbl">
-	<div class="col-md-4  phs pvs">
+<div class="row  widget shadow pz mbl">
+	<div class="panel-title mbz ">
+		<h3 class="text-center">你正在报名参加</h3>
+	</div>
+	<div class="col-md-10 plm">
+          <p class="title">
+            <h4>{{ activity.subtitle }}</h4>
+            <h4>{{ activity.title }}</h4>
+          </p>
+          
+          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
+	</div>
+	<div class="col-md-2  phs pvs">
 		<a href="#" class="show-user-card" >
 			<img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="openstack30"></a>
 	</div>
-	<div class="col-md-8 plm">
-          <p class="title">
-            <h4>{{ activity.subtitle }}</h4>
-            <h3>{{ activity.title }}</h3>
-          </p>
-          <p>开始时间： {{activity.startTime}}</p>
-          <p>结束时间： {{activity.endTime}}</p>
-          <p>形式：  {{ activity.form }}</p>
-          <p>现场地址： {{ activity.address }}</p>
-          {% if activity.onlineAddress %} <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>{% endif %}
-          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
-	</div>
 </div>
 
-<div class="row">
+<div class="row mbl">
 	<!-- 报名 -->
 	<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
 		<div class="widget  shadow">
@@ -35,7 +34,7 @@
 				<h3>报名信息</h3>
 			</div>
 			<div class="content clearfix">
-				<div class="col-md-7">
+				<div class="col-md-6">
 					<div class="form-group">
         				<label class="col-lg-3 control-label" for="activity_email">Email地址</label>
         				<div class="col-lg-9">
@@ -85,26 +84,23 @@
 			            </div>
 			        </div>
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-6">
 					<div>
 						<p>问题出干货--高质量问题互动，才能点燃老师在公开课上的激情，亲，让我们一起吧讲师编成蜡炬的灰吧～～</p>
 					</div>
-					<div><textarea rows="10" class="form-control" name="activitymember[question]"></textarea></div>
-					<div class="form-group">
-			            <div class="col-lg-12">
-			              <div class="checkbox">
-					        <label>
-					          <input type="checkbox" checked="checked" /> 转发微博
-					       	</label>
-					      </div>
-					      <button type="submit" class="form-control btn btn-fat btn-primary btn-large">立即报名</button>
-			            </div>
-			        </div>
+					<div class="mbl"><textarea rows="10" class="form-control" name="activitymember[question]"></textarea></div>
+					
+			        <button type="submit" class="form-control btn  btn-primary btn-large">立即报名</button>
 				</div>
 			</div>
 		</div>
-		 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+		
+		
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+		
 	</form>
  </div>
 
 {% endblock %}
+

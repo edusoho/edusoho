@@ -40,18 +40,20 @@
 
 {% block body %}
 <header class="navbar navbar-inverse site-navbar navbar-fixed-top mz pz" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
-    <div class="container"> 
-      <div class="navbar-header">
+    <div class="container  plz prz"> 
+      <div class="navbar-header pts">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            {% if setting('site.logo') %}
+         
+            {% if  setting('site.logo') %}
               <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
             {% else %}
               <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
             {% endif %}
+           
       </div>
       <nav class="nav navbar-nav navbar-right">
         <ul class="nav navbar-nav">
@@ -94,7 +96,7 @@
 <div class="slide"></div>
  
 <!-- container -->
-<div id="content-container" class="container">
+<div id="content-container" class="container plz prz">
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
       <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -109,31 +111,8 @@
 {% block bottom %}
 <!-- container -->
 <footer class="footer">
-    <div class="container clearfix">    
-      <div class="pull-left bor-r col-md-5">
-        <img class="footer-ad" src="{{ asset('bundles/topxiaweb/img/kaiyuan.jpg') }}" >
-        <ul class="about plm">
-        <li><a href="/page/about">关于我们</a></li>
-        <li><a href="/page/help">使用帮助</a></li>
-        <li><a href="/page/job">工作机会</a></li>
-        <li><a href="/page/investor">投资人关系</a></li>
-        </ul>     
-      </div>
-      <div class="pull-left bor-l bor-r col-md-2">
-       
-        {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-
-      </div>
-      <div class="pull-left bor-l bor-r col-md-2">
-        <p>开源力量创始人</p>
-        <p>
-          <img src="{{ asset('bundles/topxiaweb/img/ceo1.png')}}">     
-          <img src="{{ asset('bundles/topxiaweb/img/ceo2.png')}}"></p>
-        <div class="contact">
-          <p>遇到任何疑问,<br>给我们留言</p>
-        </div>
-      </div>
-      <div class="pull-right bor-l col-md-3">
+    <div class="container clearfix  plz prz">  
+      <div class="pull-left bor-l col-md-3">
         <div class="social-media">
           <p class="ky-sina">微博：@开源力量</p>
           <p class="ky-weixin">微信：osforce</p>
@@ -142,6 +121,31 @@
           </div>
         </div>
       </div>
+
+      <div class="pull-left bor-r col-md-3">
+        
+        <ul class="about plm">
+        <li><a href="/page/about">关于我们</a></li>
+        <li><a href="/page/help">使用帮助</a></li>
+        <li><a href="/page/job">工作机会</a></li>
+        <li><a href="/page/investor">投资人关系</a></li>
+        </ul>     
+      </div>
+      <div class="pull-left bor-l bor-r col-md-3">
+       
+        {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+
+      </div>
+      <div class="pull-left bor-l bor-r col-md-3">
+        <p>开源力量创始人</p>
+        <p>
+          <img src="{{ asset('bundles/topxiaweb/img/ceo1.png')}}">     
+          <img src="{{ asset('bundles/topxiaweb/img/ceo2.png')}}"></p>
+        <div class="contact">
+          <p>遇到任何疑问,<br>给我们留言</p>
+        </div>
+      </div>
+   
     </div>
 </footer>
 

@@ -388,8 +388,23 @@ class ActivityController extends BaseController
                         
             }
         }
-
-        $filename="join-activity-form-vistor";       
+        //默认是未登陆用户报名
+        $filename="join-activity-form-vistor";  
+        //需要付费的活动，并且是线上支付模式
+        if($activity['price']*100>0 and $activity['payment']=='onlinePay')
+        {
+            $userprofile=array();
+            if(!empty($user['id'])){
+                $userprofile=$this->getUserService()->getUserProfile($user['id']);
+                $filename="join-activity-form-member-buy";
+            }
+            return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
+                "activity"=>$activity,
+                "user"=>$user,
+                "profile"=>$userprofile)
+            );
+        }
+            
 
         $userprofile=array();
         if(!empty($user['id'])){

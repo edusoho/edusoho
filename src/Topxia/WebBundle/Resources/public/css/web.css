@@ -2866,7 +2866,7 @@ body {
 
 @media (min-width: 1200px) {
 	.teacherpage #content-container {
-	     width: 970px;
+	    /* width: 970px;*/
 	}	
 }
 
@@ -2886,7 +2886,7 @@ body {
 
 @media (min-width: 1200px) {
     .userpage #content-container {
-         width: 970px;
+       /*  width: 970px;*/
     }
 }
 

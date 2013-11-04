@@ -133,4 +133,28 @@ class DirectCloudClient implements CloudClient
         return str_replace($find, $replace, base64_encode($string));
     }
 
+    public function getVideoInfo($bucket, $key)
+    {
+        $token = $this->generateViewToken($bucket, $key);
+
+        $content = $this->getRequest($token['url'] . '?avinfo' , array(), $token['cookie']);
+        $result = json_decode($content, true);
+
+        if (empty($result)) {
+            return null;
+        }
+
+        $info = array(
+            'duration' => intval($result['format']['duration']),
+            'filesize' => intval($result['format']['size'])
+        );
+
+        return $info;
+    }
+
+    public function getAudioInfo($bucket, $key)
+    {
+        return $this->getVideoInfo($bucket, $key);
+    }
+
 }
