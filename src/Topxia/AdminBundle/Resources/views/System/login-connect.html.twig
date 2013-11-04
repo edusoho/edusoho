@@ -115,6 +115,19 @@
     </div>
   </fieldset>
 
+  <fieldset>
+    <legend>登录接口验证代码</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="verify_code" >验证代码</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="verify_code" name="verify_code" class="form-control" rows="5">{{loginConnect.verify_code}}</textarea>
+        <div class="help-block">在申请QQ登录等接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。</div>
+      </div>
+    </div>
+  </fieldset>
+
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
       <button type="submit" class="btn btn-primary">提交</button>
