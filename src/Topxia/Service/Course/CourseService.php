@@ -36,9 +36,9 @@ interface CourseService
 
 	public function findUserLeanedCourses($userId, $start, $limit);
 
-	public function findUserTeachCourseCount($userId,$includeOther=false);
+	public function findUserTeachCourseCount($userId, $onlyPublished = true);
 	
-	public function findUserTeachCourses($userId, $start, $limit,$includeOther=false);
+	public function findUserTeachCourses($userId, $start, $limit, $onlyPublished = true);
 
 	public function findUserFavoritedCourseCount($userId);
 

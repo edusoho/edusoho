@@ -23,14 +23,15 @@ class MyCourseController extends BaseController
         $user = $this->getCurrentUser();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id']),
+            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
             12
         );
         
         $courses = $this->getCourseService()->findUserTeachCourses(
             $user['id'],
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            $paginator->getPerPageCount(),
+            false
         );
 
         return $this->render('TopxiaWebBundle:MyCourse:teaching.html.twig', array(
