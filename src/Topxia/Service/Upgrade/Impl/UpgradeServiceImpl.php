@@ -321,7 +321,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	private function backUpDb($package)
 	{
 		$dbSetting = array('exclude'=>array('session','cache'));
-		$dump = new MySQLDumper($this->getKernel()->getConnection());
+		$dump = new MySQLDumper($this->getKernel()->getConnection(),$dbSetting);
 		$backUpdir = $this->getPackageBackUpDir($package);
 		FileUtil::emptyDir($backUpdir);
 		return 	$dump->export($this->getBackupFilePath($package));	
