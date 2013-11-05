@@ -12,7 +12,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 {   
 	public function getFile($file)
 	{
-		// $file['path'] = $this->getFileFullName($file);
+		$file['fullpath'] = $this->getFileFullPath($file);
 		return $file;
 	}
     public function addFile($targetType, $targetId, array $fileInfo=array(), UploadedFile $originalFile=null)
@@ -66,14 +66,13 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function deleteFile($file)
     {
-    	$filename = $this->getFileFullName($file);
+    	$filename = $this->getFileFullPath($file);
     	@unlink($filename);
     }
 
-    private function getFileFullName($file)
+    private function getFileFullPath($file)
     {
-        $path= $this->getFilePath($file['targetType'],$file['targetId']);
-        return $path . DIRECTORY_SEPARATOR . $file['hashId'];
+        return $this->getKernel()->getParameter('topxia.disk.local_directory') . DIRECTORY_SEPARATOR . $file['hashId'];
     }
 
     private function getFilePath($targetType, $targetId)

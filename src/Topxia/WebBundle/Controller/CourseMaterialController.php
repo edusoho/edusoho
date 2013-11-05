@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\CloudClientFactory;
 
 class CourseMaterialController extends BaseController
 {
@@ -51,14 +52,13 @@ class CourseMaterialController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($['storage'] == 'cloud') {
-
+        if ($file['storage'] == 'cloud') {
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient();
+            $client->download($client->getBucket(), $file['hashId']);
         } else {
             return $this->createPrivateFileDownloadResponse($file);
         }
-
-        var_dump($file);exit();
-
     }
 
     public function deleteAction(Request $request, $id, $materialId)
@@ -98,15 +98,8 @@ class CourseMaterialController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    private function createPrivateFileDownloadResponse($fileUri)
+    private function createPrivateFileDownloadResponse($file)
     {
-        $setting = $this->setting('file');
-        $parsed = $this->getFileService()->parseFileUri($fileUri);
-
-        $directory = $this->container->getParameter('topxia.upload.private_directory');
-
-        $filename = $directory . '/' .  $parsed['path'];
-
-        return BinaryFileResponse::create($filename, 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        return BinaryFileResponse::create($file['fullpath'], 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }
 }
