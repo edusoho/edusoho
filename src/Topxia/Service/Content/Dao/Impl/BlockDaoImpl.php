@@ -43,6 +43,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function findBlocks($start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table}  ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }

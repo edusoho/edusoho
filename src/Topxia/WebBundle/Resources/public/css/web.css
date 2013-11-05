@@ -1343,6 +1343,15 @@ body {
 	background-color: #fff;
 }
 
+.ps-container .ps-scrollbar-y-rail {
+	visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+}
+
+.ps-container:hover .ps-scrollbar-y-rail,
+.ps-container.hover .ps-scrollbar-y-rail {
+    visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+}
+
 .lesson-dashboard .toolbar-pane-container .ps-container .ps-scrollbar-y {
 	right: 0px;
 }
@@ -1350,7 +1359,6 @@ body {
 .lesson-dashboard .toolbar-pane-container .ps-container .ps-scrollbar-x {
 	display: none;
 }
-
 
 @media (max-width: 1024px) {
 

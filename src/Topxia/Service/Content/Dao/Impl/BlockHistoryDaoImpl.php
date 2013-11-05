@@ -42,6 +42,7 @@ class BlockHistoryDaoImpl extends BaseDao implements BlockHistoryDao
     
     public function findBlockHistorysByBlockId($blockId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE blockId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($blockId));
     }

@@ -22,9 +22,14 @@ class FileLocator extends BaseFileLocator
             $paths[] = $path;
         }
 
-        $theme = $this->getSettingService()->get('theme', array());
+        try {
+            $theme = $this->getSettingService()->get('theme', array());
+        } catch (\Exception $e) {
+            $theme = array();
+        }
+
         if (!empty($theme['uri'])) {
-            $themePath = $this->kernel->getRootDir() . '../web/themes/' . $theme['uri'];
+            $themePath = $this->kernel->getRootDir() . '/../web/themes/' . $theme['uri'];
             if (is_dir($themePath)) {
                 $this->themePath = $themePath;
             }

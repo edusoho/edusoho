@@ -57,6 +57,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     public function searchMessages($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
         }

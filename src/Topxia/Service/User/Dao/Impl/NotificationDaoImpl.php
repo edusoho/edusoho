@@ -32,6 +32,7 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
 
     public function findNotificationsByUserId($userId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId));
     }

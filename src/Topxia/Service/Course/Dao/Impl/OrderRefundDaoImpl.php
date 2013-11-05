@@ -23,12 +23,14 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
 
     public function findRefundsByUserId($userId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId)) ? : array();
     }
 
     public function searchRefunds($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])

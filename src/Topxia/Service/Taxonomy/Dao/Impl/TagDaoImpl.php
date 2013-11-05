@@ -53,6 +53,7 @@ class TagDaoImpl extends BaseDao implements TagDao
 
     public function findAllTags($start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }

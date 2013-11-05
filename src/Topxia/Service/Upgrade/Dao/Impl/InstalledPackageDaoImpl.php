@@ -18,6 +18,7 @@ class InstalledPackageDaoImpl extends BaseDao implements InstalledPackageDao
 
     public function searchPackages($conditions, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createPackageQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
