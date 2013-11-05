@@ -1,32 +1,32 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<tr id="student-tr-{{uploadFile.id}}" data-role="item">
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item">
 
-   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
+  <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
 
-  <td class="text-danger"> {{uploadFile.fileName}} </td>
+  <td class="text-danger"> {{uploadFile.filename}} </td>
   <td> 
-    {{ dict_text('fileType:html', uploadFile.fileType) }}
+    {{ dict_text('fileType:html', uploadFile.type) }}
   </td>
-  <td class="text-info"> {{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
-  <td class="text-primary"> 
-    {{ uploadFile.updateTime|date('Y-n-d')}}
+  <td class="text-info"> {{ web_macro.bytesToSize(uploadFile.size) }}</td>
+  <td class="text-danger"> 
+    {{ uploadFile.updatedTime|date('Y-n-d')}}
       <br>
-    {{ uploadFile.updateTime|date('H:i:s')}}
+    {{ uploadFile.updatedTime|date('H:i:s')}}
   </td>
 
-  <td class="text-info"> 
-    {{ web_macro.user_link(uploadFile.updateUser) }}
+  <td> 
+    {{ web_macro.user_link(updatedUsers[uploadFile.updatedUserId]) }}
   </td>
 
-  <td class="text-primary"> 
+  <td class="text-danger"> 
     {{ uploadFile.createdTime|date('Y-n-d')}}
       <br>
     {{ uploadFile.createdTime|date('H:i:s')}}
   </td>
 
-  <td class="text-info"> 
-    {{ web_macro.user_link(uploadFile.createdUser) }}
+  <td> 
+    {{ web_macro.user_link(createdUsers[uploadFile.createdUserId]) }}
   </td>
 
 </tr>
