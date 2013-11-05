@@ -42,7 +42,23 @@ class CourseMaterialController extends BaseController
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
-        return $this->createPrivateFileDownloadResponse($material['fileUri']);
+        if (empty($material)) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($material['fileId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($['storage'] == 'cloud') {
+
+        } else {
+            return $this->createPrivateFileDownloadResponse($file);
+        }
+
+        var_dump($file);exit();
+
     }
 
     public function deleteAction(Request $request, $id, $materialId)
@@ -75,6 +91,11 @@ class CourseMaterialController extends BaseController
     private function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     private function createPrivateFileDownloadResponse($fileUri)

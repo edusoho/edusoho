@@ -33,8 +33,10 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $uploadFile['ext'] =  FileToolkit::getFileExtension($originalFile);;
         $uploadFile['size'] = $originalFile->getSize();
+
+        $filename = FileToolkit::generateFilename($uploadFile['ext']);
         
-        $uploadFile['hashId'] = FileToolkit::generateFilename($uploadFile['ext']);
+        $uploadFile['hashId'] = "{$uploadFile['targetType']}/{$uploadFile['targetId']}/{$filename}";
 
         $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
         $uploadFile['convertStatus'] = 'none';
@@ -48,7 +50,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $targetPath = $this->getFilePath($targetType, $targetId);
 
-        $originalFile->move($targetPath, $uploadFile['hashId']);
+        $originalFile->move($targetPath, $filename);
 
         return $uploadFile;
     }
