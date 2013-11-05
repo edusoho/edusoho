@@ -1,110 +1,100 @@
 define(function(require, exports, module) {
 
- var Notify = require('common/bootstrap-notify');
-		require('jquery.plupload-queue-css');
+		var Notify = require('common/bootstrap-notify');
+    require('jquery.plupload-queue-css');
     require('jquery.plupload-queue');
     require('plupload');
 
-  exports.run = function() {
-	
-	var uploadCourseLessonAsOne = $("#upload-course-lesson-as-one").attr('value');
+		exports.run = function() {
+				$div= $("#file-chooser-uploader-div");
+		    var divData = $div.data();
 
+		    var uploader = $div.pluploadQueue({
+			    	runtimes : 'flash',
+	          max_file_size: '2gb',
+	          url : divData.uploadUrl,
+	          resize : {width : 500, height : 500, quality : 90},
+	          init : {
 
-	var uploader = $("#uploader").pluploadQueue({
+								FileUploaded: function(up, file, info) {
 
-			runtimes : 'html5,flash,silverlight,html4',
-			url : uploadCourseLessonAsOne,
-			max_file_size : '10mb',
-			unique_names : true,
-			filters : {
-				max_file_size : '10mb',
-				mime_types: [
-					{title : "Audio Files", extensions : "mp3,wma,mp2,wav,aiff,aif,m4a,ra,dss"},
-					{title : "Video files", extensions : "mov,mp4,wmv,rm,flv"},
-					{title : "Image files", extensions : "jpg,gif,png"},
-					{title : "Zip files", extensions : "zip"}
-				]
-			},
+									response = $.parseJSON(info.response);
+				          if (divData.callback) {
+				              $.post(divData.callback, response, function(response) {
+				                 Notify.success(file.name+'文件上传成功！');
+				                  if (divData.fileinfoUrl) {
+				                      $.get($div.data('fileinfoUrl'), {key:response.hashId}, function(info){
+				                      }, 'json');
+				                  } 
+						           }, 'json');
+									} else {
+						        Notify.success(file.name+'文件上传成功！');
+						      }
+								},
 
-			resize : {width : 500, height : 500, quality : 90},
-			flash_swf_url : '/assets/libs/jquery-plugin/plupload-queue/2.0.0/Moxie.swf',
-			silverlight_xap_url : '/assets/libs/jquery-plugin/plupload-queue/2.0.0/Moxie.xap',
-			preinit : {
-				Init: function(up, info) {
-					
-				},
+								Error: function(up, args) {
+									Notify.danger('文件上传失败，请重试！');
+								},
 
-				UploadFile: function(up, file) {
-					
-					// You can override settings before the file is uploaded
-					// up.settings.url = 'upload.php?id=' + file.id;
-					up.settings.url = uploadCourseLessonAsOne+'?id=' + file.id;
-					// up.settings.multipart_params = {param1 : 'value1', param2 : 'value2'};
-					up.settings.multipart_params = {id : file.id };
-				}
-			},
+								UploadProgress: function(up,file){
 
-			init : {
-				Refresh: function(up) {
-					// Called when upload shim is moved
-					
-				},
+									 $('#modal').on('hide.bs.modal', function(e) {
+											
+									 		if(file.percent < 100){
+									 			
+										 		if (!confirm('退出对话框会中断正在上传中的文件，是否继续？')) {
+										 			$("#modal").off('hide.bs.modal');
+										 			return false;
+										 		}
 
-				StateChanged: function(up) {
-					// Called when the state of the queue is changed
-					
-				},
+										 		up.stop();
+										 		$("#modal").off('hide.bs.modal');
+										 			
+										 	}
+										 	
+									 });
+									 	
+								},
 
-				QueueChanged: function(up) {
-					
-				},
+								BeforeUpload: function(up, file){
+										$.ajax({
+					              url: divData.paramsUrl,
+					              async: false,
+					              dataType: 'json',
+					              cache: false,
+					              success: function(response, status, jqXHR) {
+					                  up.settings.url = response.url;
+					                  up.settings.multipart_params = response.postParams;
+					                  up.refresh();
+					              },
+					              error: function(jqXHR, status, error) {
+					                  Notify.danger('请求上传授权码失败！');
+					                  up.stop();
+					              }
+					          });
+								}
 
-				UploadProgress: function(up, file) {
-					
-				},
+						}
 
-				FilesAdded: function(up, files) {
-					// Callced when files are added to queue
+		    });
 
-					plupload.each(files, function(file) {
-					});
-				},
+				$('form').submit(function(e) {
+						var uploader = $('#file-chooser-uploader-div').pluploadQueue();
+						if (uploader.total.uploaded == 0) {
+								if (uploader.files.length > 0) {
+									uploader.bind('UploadProgress', function() {
+										if (uploader.total.uploaded == uploader.files.length)
+											$('form').submit();
+									});
+									uploader.start();
+								} else
+									alert('你必须至少上传一个文件！');
+								e.preventDefault();
+						}
+				});
+			   
+	      uploader.init();
 
-				FilesRemoved: function(up, files) {
-
-					plupload.each(files, function(file) {
-						
-					});
-				},
-
-				FileUploaded: function(up, file, info) {
-				},
-
-				Error: function(up, args) {
-				}
-			}
-
-		});
-
-		$('form').submit(function(e) {
-			var uploader = $('#uploader').pluploadQueue();
-
-		if (uploader.total.uploaded == 0) {
-				if (uploader.files.length > 0) {
-					// When all files are uploaded submit form
-					uploader.bind('UploadProgress', function() {
-						if (uploader.total.uploaded == uploader.files.length)
-							$('form').submit();
-					});
-
-					uploader.start();
-				} else
-					alert('你必须至少上传一个文件！');
-				e.preventDefault();
-			}
-		});
-
-
-    };
+		};
 
 });
