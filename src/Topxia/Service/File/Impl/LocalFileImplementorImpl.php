@@ -12,7 +12,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 {   
 	public function getFile($file)
 	{
-		$file['path'] = $this->getFileFullName($file);
+		// $file['path'] = $this->getFileFullName($file);
 		return $file;
 	}
     public function addFile($targetType, $targetId, array $fileInfo=array(), UploadedFile $originalFile=null)
