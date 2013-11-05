@@ -13,23 +13,23 @@ define(function(require, exports, module) {
         });
         $('#removeTmp').on('click',  function() {
             $.post($(this).data('url'), function(response) {
-                Notify.success('移除临时数据成功！');
+                Notify.success('优化磁盘空间成功！');
             }).error(function(response){
-                Notify.danger('移除临时数据失败！');
+                Notify.danger('优化磁盘空间失败！');
             });
         });
         $('#removeBackup').on('click',  function() {
-            if (!confirm('确认要移除自动升级过程中产生的备份数据吗？')) return false;
+            if (!confirm('确认要清空系统备份数据吗？')) return false;
             $.post($(this).data('url'), function(response) {
-                Notify.success('移除备份数据成功！');
+                Notify.success('清空系统备份数据成功！');
             }).error(function(response){
-                Notify.danger('移除备份数据失败！');
+                Notify.danger('清空系统备份数据失败！');
             });
         });
         $('#backupDatabase').on('click',  function() {
             $.post($(this).data('url'), function(response) {
                 if(response.status=='ok'){
-                    Notify.success('备份数据库成功，请下载数据库，并及时清除临时文件！');
+                    Notify.success('备份数据库成功，请下载数据库，并及时优化磁盘空间！');
                     $('#dbbackup').removeClass('hide');
                     $('#dbdownload').attr('href',response.result);
                 }

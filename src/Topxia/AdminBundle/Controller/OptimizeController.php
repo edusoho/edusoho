@@ -21,14 +21,18 @@ class OptimizeController extends BaseController
     }
     public function removeTempAction()
     {
-         FileUtil::emptyDir(SystemUtil::getDownloadPath());
+        if(!$this->isDisabledUpgrade()){
+            FileUtil::emptyDir(SystemUtil::getDownloadPath());
+        }
          FileUtil::emptyDir(SystemUtil::getUploadTmpPath());
         return $this->createJsonResponse(true);
     }    
 
     public function removeBackupAction()
     {
-         FileUtil::emptyDir(SystemUtil::getBackUpPath());
+        if(!$this->isDisabledUpgrade()){
+             FileUtil::emptyDir(SystemUtil::getBackUpPath());
+         }
         return $this->createJsonResponse(true);
     }
     public function backupdbAction()
@@ -36,6 +40,20 @@ class OptimizeController extends BaseController
         $db = SystemUtil::backupdb();
         $downloadFile = '/files/tmp/'.basename($db);
         return $this->createJsonResponse(array('status' => 'ok', 'result'=>$downloadFile));
+    }
+
+    private function isDisabledUpgrade()
+    {
+        if (!$this->container->hasParameter('disabled_features')) {
+            return false;
+        }
+
+        $disableds = $this->container->getParameter('disabled_features');
+        if (!is_array($disableds) or empty($disableds)) {
+            return false;
+        }
+
+        return in_array('upgrade', $disableds);
     }
 
 }
