@@ -101,25 +101,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-
-
-    private function getFileType($mimeType)
-    {
-    	if (strpos($mimeType, 'video') === 0) {
-    		return 'video';
-    	} elseif (strpos($mimeType, 'audio') === 0) {
-    		return 'audio';
-    	} elseif (strpos($mimeType, 'image') === 0) {
-    		return 'image';
-    	} elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
-            or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
-            or strpos($mimeType, 'application/pdf') === 0) {
-    		return 'document';
-    	}
-
-    	return 'other';
-    }
-
     private function getFileImplementorByFile($file)
     {
         return $this->getFieImplementor($file['storage']);
