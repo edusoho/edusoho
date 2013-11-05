@@ -382,16 +382,6 @@ course_manage_submit_upload_course_files:
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:submitUploadCourseFiles }
     methods: [POST]
 
-course_manage_upload_course_lesson_as_one:
-    pattern:  /course/{id}/upload/courselesson/as/one
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseLessonAsOne }
-    methods: [POST]
-
-course_manage_upload_course_material_as_one:
-    pattern:  /course/{id}/upload/coursematerial/as/one
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterialAsOne }
-    methods: [POST]
-
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }

@@ -71,6 +71,7 @@ function install_step1()
 		'app/data/private_files',
 		'web/files',
 		'app/cache',
+		'app/data',
 		'app/logs',
 	);
 
