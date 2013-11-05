@@ -5,13 +5,12 @@ define(function(require, exports, module) {
     require('plupload');
 
     exports.run = function() {
-    	var uploadCourseWareAsChunk = $("#upload-course-material-as-chunk").attr('value');
+    	var uploadCourseMaterialAsOne = $("#upload-course-material-as-one").attr('value');
 
     	var uploader = $("#uploader").pluploadQueue({
 
 			runtimes : 'html5,flash,silverlight,html4',
-			url : uploadCourseWareAsChunk,
-			chunk_size : '1mb',
+			url : uploadCourseMaterialAsOne,
 			unique_names : true,
 			
 			filters : {

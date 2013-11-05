@@ -3,20 +3,20 @@
 {% set modal_size = 'xlarge' %}
 
 {% block title %}
-{% if type == 'local' %}
+  {% if  storageSetting.upload_mode == 'local' %}
   上传本地资料
-{% elseif type == 'cloud' %}
+  {% elseif storageSetting.upload_mode == 'cloud' %}
   上传云端资料
-{% endif %}
+  {% endif %}
 {% endblock %}
 	
 {% block body %}
 
-	<input type="hidden" id="upload-course-material-as-chunk" 
-	value="{{ path('course_manage_upload_course_material_as_chunk', {id:course.id, type:type}) }}">
+	<input type="hidden" id="upload-course-material-as-one" 
+	value="{{ path('course_manage_upload_course_material_as_one', {id:course.id}) }}">
 
 	<form id="upload-course-materials" method="post" 
-	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, storageType:type, fileType:'material'}) }}">
+	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, fileType:'material'}) }}">
 		
 		<div style="float: left; margin-right: 20px">
 			<div id="uploader" style="width: 850px;"> </div>

@@ -71,7 +71,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     private function getFileFullName($file)
     {
         $path= $this->getFilePath($file['targetType'],$file['targetId']);
-        return $path . DIRECTORY_SEPARATOR . $file['hashId']};
+        return $path . DIRECTORY_SEPARATOR . $file['hashId'];
     }
 
     private function getFilePath($targetType, $targetId)

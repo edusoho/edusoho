@@ -1,159 +1,159 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
+
+use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Common\StringToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
+
 
 class CourseFileManageController extends BaseController
 {
 
     public function indexAction(Request $request, $id)
     {
-    	$paginator = new Paginator($request, 1);
         $course = $this->getCourseService()->tryManageCourse($id);
-        $user = $this->getCurrentUser();
-        $courseWares = array(
-            array(
-                'id'=>1,
-                'fileName'=>'从入门到精通',
-                'fileType'=>'audio',
-                'fileSize'=>1000,
-                'updateTime'=>1383190130,
-                'updateUser'=>$user,
-                'createdTime'=>1383190130,
-                'createdUser'=>$user
-                ),
-            array(
-                'id'=>2,
-                'fileName'=>'从入门到精通',
-                'fileType'=>'audio',
-                'fileSize'=>1000,
-                'updateTime'=>1383190130,
-                'updateUser'=>$user,
-                'createdTime'=>1383190130,
-                'createdUser'=>$user
-                ));
+        $conditions = array(
+            'targetType'=>'courselesson', 
+            'targetId'=>$course['id']
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
+
+        $courseLessons = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            'latestCreated',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $updatedUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'updatedUserId'));
+        $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'createdUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'course' => $course,
-            'courseWares' => $courseWares,
+            'courseLessons' => $courseLessons,
+            'updatedUsers' => $updatedUsers,
+            'createdUsers' => $createdUsers,
             'paginator' => $paginator
         ));
     }
 
     public function materialAction(Request $request, $id)
     {
-        $paginator = new Paginator($request, 1);
+        
         $course = $this->getCourseService()->tryManageCourse($id);
-        $user = $this->getCurrentUser();
-        $courseMaterials = array(
-            array(
-                'id'=>1,
-                'fileName'=>'从入门到精通',
-                'fileType'=>'audio',
-                'fileSize'=>1000,
-                'updateTime'=>1383190130,
-                'updateUser'=>$user,
-                'createdTime'=>1383190130,
-                'createdUser'=>$user
-                ),
-            array(
-                'id'=>2,
-                'fileName'=>'从入门到精通',
-                'fileType'=>'audio',
-                'fileSize'=>1000,
-                'updateTime'=>1383190130,
-                'updateUser'=>$user,
-                'createdTime'=>1383190130,
-                'createdUser'=>$user
-        ));
+        $conditions = array(
+            'targetType'=>'coursematerial', 
+            'targetId'=>$course['id']
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
+
+        $courseMaterials = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            'latestCreated',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $updatedUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseMaterials, 'updatedUserId'));
+        $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseMaterials, 'createdUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:materials.html.twig', array(
             'course' => $course,
             'courseMaterials' => $courseMaterials,
+            'updatedUsers' => $updatedUsers,
+            'createdUsers' => $createdUsers,
             'paginator' => $paginator
         ));
     }
 
-    public function uploadCourseWareAction(Request $request, $id, $type)
+    public function uploadCourseLessonAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-ware.html.twig', array(
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-lesson.html.twig', array(
             'course' => $course,
-            'type' => $type
+            'storageSetting' => $storageSetting
         ));
     }
 
-    public function submitUploadCourseFilesAction(Request $request, $id, $storageType, $fileType )
-    {
-        if($fileType =='ware'){
-            return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id)));
-        } elseif ($fileType == 'material') {
-            return $this->redirect($this->generateUrl('course_manage_files_material',array('id'=>$id)));
-        }
-    }
-
-    public function uploadCourseWareAsChunkAction(Request $request, $id, $type)
-    {
-        var_dump($this->getCurrentUser());
-        var_dump($request->request->all());
-        // flash 只会上传一次token
-        $file = $request->files->get('file');
-        $uploadedChunk = $request->request->all();
-        $fileName = $this->getUploadedFilename($uploadedChunk, $file);
-        $tmpDirectory = $this->getTmpDirectory();
-        $filePath = $tmpDirectory . DIRECTORY_SEPARATOR . $fileName;
-        $chunk = isset($uploadedChunk["chunk"]) ? intval($uploadedChunk["chunk"]) : 0;
-        $chunks = isset($uploadedChunk["chunks"]) ? intval($uploadedChunk["chunks"]) : 0;
-
-        $this->removeOldTmpFiles($filePath, $tmpDirectory);
-        $this->openTmpFiles($chunks, $chunk, $filePath, $file);
-
-        // 当为最后一个chunk的时候,可以执行一些操作： 上传文件，更新数据库等等
-        if (!$chunks || $chunk == $chunks - 1) {
-            // $result = $this->getFileService()->uploadFile('course_private', new File($filePath));
-            return $this->createJsonResponse(array('status' => 'ok', 'file' => 'file'));
-        } else {
-            return $this->createJsonResponse(array('status' => 'uploading', 'message' => '正在上传...'));
-        }
-    }
-
-    public function uploadCourseMaterialAsChunkAction(Request $request, $id, $type)
-    {
-        // flash 只会上传一次token
-        $file = $request->files->get('file');
-        $uploadedChunk = $request->request->all();
-        $fileName = $this->getUploadedFilename($uploadedChunk, $file);
-        $tmpDirectory = $this->getTmpDirectory();
-        $filePath = $tmpDirectory . DIRECTORY_SEPARATOR . $fileName;
-        $chunk = isset($uploadedChunk["chunk"]) ? intval($uploadedChunk["chunk"]) : 0;
-        $chunks = isset($uploadedChunk["chunks"]) ? intval($uploadedChunk["chunks"]) : 0;
-
-        $this->removeOldTmpFiles($filePath, $tmpDirectory);
-        $this->openTmpFiles($chunks, $chunk, $filePath, $file);
-
-        // 当为最后一个chunk的时候,可以执行一些操作： 上传文件，更新数据库等等
-        if (!$chunks || $chunk == $chunks - 1) {
-            // $result = $this->getFileService()->uploadFile('course_private', new File($filePath));
-            return $this->createJsonResponse(array('status' => 'ok', 'file' => 'file'));
-        } else {
-            return $this->createJsonResponse(array('status' => 'uploading', 'message' => '正在上传...'));
-        }
-
-    }
-    
-    public function uploadCourseMaterialAction(Request $request, $id, $type)
+    public function uploadCourseMaterialAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
+        $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-material.html.twig', array(
             'course' => $course,
-            'type' => $type
+            'storageSetting' => $storageSetting
         ));
     }
+
+    public function submitUploadCourseFilesAction(Request $request, $id, $fileType )
+    {
+        return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id)));
+    }
+
+    public function uploadCourseLessonAsOneAction(Request $request, $id)
+    {
+        $file = $request->files->get('file');
+        $uploadedChunk = $request->request->all();
+        $fileName = $this->getUploadedFilename($uploadedChunk, $file);
+        $tmpDirectory = $this->getTmpDirectory();
+        $filePath = $tmpDirectory . DIRECTORY_SEPARATOR . $fileName;
+        $chunk = isset($uploadedChunk["chunk"]) ? intval($uploadedChunk["chunk"]) : 0;
+        $chunks = isset($uploadedChunk["chunks"]) ? intval($uploadedChunk["chunks"]) : 0;
+
+        $this->removeOldTmpFiles($filePath, $tmpDirectory);
+        $this->openTmpFiles($chunks, $chunk, $filePath, $file);
+
+        // 当为最后一个chunk的时候,可以执行一些操作： 上传文件，更新数据库等等
+        if (!$chunks || $chunk == $chunks - 1) {
+            // $result = $this->getFileService()->uploadFile('course_private', new File($filePath));
+            return $this->createJsonResponse(array('status' => 'ok', 'file' => 'file'));
+        } else {
+            return $this->createJsonResponse(array('status' => 'uploading', 'message' => '正在上传...'));
+        }
+    }
+
+    public function uploadCourseMaterialAsOneAction(Request $request, $id)
+    {
+        // flash 只会上传一次token
+        $file = $request->files->get('file');
+        $uploadedChunk = $request->request->all();
+        $fileName = $this->getUploadedFilename($uploadedChunk, $file);
+        $tmpDirectory = $this->getTmpDirectory();
+        $filePath = $tmpDirectory . DIRECTORY_SEPARATOR . $fileName;
+        $chunk = isset($uploadedChunk["chunk"]) ? intval($uploadedChunk["chunk"]) : 0;
+        $chunks = isset($uploadedChunk["chunks"]) ? intval($uploadedChunk["chunks"]) : 0;
+
+        $this->removeOldTmpFiles($filePath, $tmpDirectory);
+        $this->openTmpFiles($chunks, $chunk, $filePath, $file);
+
+        // 当为最后一个chunk的时候,可以执行一些操作： 上传文件，更新数据库等等
+        if (!$chunks || $chunk == $chunks - 1) {
+            // $result = $this->getFileService()->uploadFile('course_private', new File($filePath));
+            return $this->createJsonResponse(array('status' => 'ok', 'file' => 'file'));
+        } else {
+            return $this->createJsonResponse(array('status' => 'uploading', 'message' => '正在上传...'));
+        }
+
+    }
+
 
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
@@ -254,6 +254,11 @@ class CourseFileManageController extends BaseController
     private function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
