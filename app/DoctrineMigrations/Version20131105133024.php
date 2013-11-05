@@ -20,7 +20,7 @@ class Version20131105133024 extends AbstractMigration
 
           $this->addSql("
 
-            ALTER TABLE  `activity` ADD  `type`  enum('openclass','training') NOT NULL DEFAULT 'openclass' COMMENT '活动类型'    AFTER  `subtitle`
+            ALTER TABLE  `activity` ADD  `actType`  VARCHAR( 255 ) NOT NULL DEFAULT '公开课' COMMENT '活动类型：公开课、培训'    AFTER  `subtitle`
             ");
 
 
