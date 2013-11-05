@@ -79,28 +79,26 @@ class CourseLessonController extends BaseController
 
             $key = null;
             if ($file['type'] == 'video') {
-                if (empty($file['formats']) || !is_array($file['formats'])) {
+                if (empty($file['metas']) || !is_array($file['metas'])) {
                     throw $this->createNotFoundException();
                 }
-                $formats = $file['formats'];
+                $metas = $file['metas'];
                 foreach (array('hd', 'shd', 'sd') as $type) {
-                    if (!empty($formats[$type])) {
-                        $key = $formats[$type]['key'];
+                    if (!empty($metas[$type])) {
+                        $key = $metas[$type]['key'];
                         break;
                     }
                 }
             } else {
-                $uri = $this->getDiskService()->parseFileUri($file['uri']);
-                $key = $uri['key'];
+                $key = $file['hashId'];
             }
 
             if (empty($key)){
                 throw $this->createNotFoundException();
             }
 
-            $clientParameters = $this->container->getParameter('cloud_client');
             $factory = new CloudClientFactory();
-            $client = $factory->createClient($clientParameters['name']);
+            $client = $factory->createClient();
 
             $client->download($file['bucket'], $key);
 
