@@ -26,8 +26,10 @@
                 data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
                 data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
               {% endif %}
-              >上传</button>
-            <span></span>
+              {% if uploadSettings|default(null) %}
+                data-upload-settings="{{ uploadSettings|json_encode }}"
+              {% endif %}
+            >上传</button>
           </div>
           <div class="progress" data-role="progress" style="display:none;">
             <div class="progress-bar" role="progressbar" style="width: 0%;"></div>

@@ -55,7 +55,7 @@ class CourseLessonManageController extends BaseController
         	if ($lesson['media']) {
         		$lesson['media'] = json_decode($lesson['media'], true);
         	}
-        	
+
         	if ($lesson['length']) {
         		$lesson['length'] = $this->textToSeconds($lesson['length']);
         	}
@@ -70,15 +70,18 @@ class CourseLessonManageController extends BaseController
     	$user = $this->getCurrentUser();
 
     	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-    	$filePath = "course-{$course['id']}";
+    	$filePath = "courselesson/{$course['id']}";
     	$fileKey = "{$filePath}/" . $randString;
     	$convertKey = $randString;
+
+        $targetType = 'courselesson';
+        $targetId = $course['id'];
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$videoUploadToken = $audioUploadToken = array(
-	    		'token' => $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours')),
-	    		'url' => $this->generateUrl('disk_upload'),
+	    		'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+	    		'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
 			);
 
     	} else {

@@ -33,8 +33,8 @@ define(function(require, exports, module) {
         },
 
         open: function() {
-            this.element.find(".media-chooser-bar").hide();
-            this.element.find(".media-chooser-main").show();
+            this.element.find(".file-chooser-bar").hide();
+            this.element.find(".file-chooser-main").show();
             return this;
         },
 
@@ -44,8 +44,8 @@ define(function(require, exports, module) {
         },
 
         close: function() {
-            this.element.find(".media-chooser-main").hide();
-            this.element.find(".media-chooser-bar").show();
+            this.element.find(".file-chooser-main").hide();
+            this.element.find(".file-chooser-bar").show();
             this.get('uploaderProgressbar').reset().hide();
             return this;
         },
@@ -79,12 +79,12 @@ define(function(require, exports, module) {
 
         _initTabs: function() {
             var self = this;
-            this.$('.media-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
-                if ($(e.target).hasClass('media-chooser-uploader-tab')) {
+            this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
+                if ($(e.target).hasClass('file-chooser-uploader-tab')) {
                     self.get('uploaderProgressbar').reset().hide();
                 }
 
-                if ($(e.relatedTarget).hasClass('media-chooser-uploader-tab')) {
+                if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
                     if (self.isUploading()) {
                         return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
                     }

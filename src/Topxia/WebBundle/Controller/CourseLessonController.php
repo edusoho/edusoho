@@ -70,7 +70,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $file = $this->getDiskService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
@@ -106,8 +106,7 @@ class CourseLessonController extends BaseController
 
         }
 
-        $uri = $this->getDiskService()->parseFileUri($file['uri']);
-        return $this->createLocalMediaResponse($uri);
+        return $this->createLocalMediaResponse($file);
     }
 
     public function learnStatusAction(Request $request, $courseId, $lessonId)
@@ -135,16 +134,9 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function createLocalMediaResponse($uri)
+    private function createLocalMediaResponse($file)
     {
-
-        if (!file_exists($uri['fullpath'])) {
-            return $this->createNotFoundException();
-        }
-
-        // var_dump($uri);exit();
-
-        $response = BinaryFileResponse::create($uri['fullpath'], 200, array(), false);
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
         $response->setContentDisposition(
@@ -169,6 +161,11 @@ class CourseLessonController extends BaseController
     private function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
 }
