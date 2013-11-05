@@ -1,6 +1,7 @@
 <?php
-namespace Topxia\Service\File\Impl;
+namespace Topxia\Service\File;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UploadFileService
 {   
@@ -14,7 +15,7 @@ interface UploadFileService
 
     public function searchFileCount($conditions);
 
-    public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null);
+    public function addFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null);
 
     public function renameFile($id, $newFilename);
 

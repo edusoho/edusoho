@@ -117,41 +117,83 @@ define(function(require, exports, module) {
         },
 
         _initUploadPane: function() {
-            var $btn = this.$('[data-role=uploader-btn]');
-            var progressbar = new UploadProgressBar($btn.data('progressbar'));
+            var $btn = this.$('[data-role=uploader-btn]'),
+                progressbar = new UploadProgressBar(this.$('[data-role=progress]'));
 
             this.set('progressbar', progressbar);
-            this.set('uploader', this._createUploader($btn));
-            // this.set('uploader', this._createSWFUpload($btn, progressbar));
+            this.set('uploader', this._createUploader($btn, progressbar));
         },
 
-        _createUploader: function($btn) {
+        _createUploader: function($btn, progressbar) {
+            var self = this;
             var btnData = $btn.data();
 
             var uploader = new plupload.Uploader({
                 runtimes : 'flash',
+                max_file_size: '2gb',
                 browse_button : $btn.attr('id'),
                 url : btnData.uploadUrl
             });
 
-            uploader.bind('FilesAdded', function(up, files) {
-                console.log('FilesAdded', up);
-                up.refresh();
+            uploader.bind('FilesAdded', function(uploader, files) {
+                console.log('FilesAdded', uploader);
+                uploader.refresh();
                 setTimeout(function(){
-                    up.start();
+                    uploader.start();
                 }, 1);
             });
 
-            uploader.bind('BeforeUpload', function(up, file) {
-                console.log('BeforeUpload', file);
+            uploader.bind('BeforeUpload', function(uploader, file) {
+                $.ajax({
+                    url: btnData.paramsUrl,
+                    async: false,
+                    dataType: 'json',
+                    cache: false,
+                    success: function(response, status, jqXHR) {
+                        uploader.settings.url = response.url;
+                        uploader.settings.multipart_params = response.postParams;
+                        uploader.refresh();
+                    },
+                    error: function(jqXHR, status, error) {
+                        Notify.danger('请求上传授权码失败！');
+                        uploader.stop();
+                    }
+                });
+                progressbar.reset().show();
             });
 
-            uploader.bind('StateChanged', function(up){
-                console.log('StateChanged', up.state);
+            uploader.bind('UploadProgress', function(uploader, file) {
+                progressbar.setProgress(file.percent);
             });
 
-            uploader.bind('FileUploaded', function(up, file) {
-                $('#' + file.id + " b").html("100%");
+            uploader.bind('FileUploaded', function(uploader, file, response) {
+                progressbar.setComplete().hide();
+                response = $.parseJSON(response.response);
+
+                if (btnData.callback) {
+                    $.post(btnData.callback, response, function(response) {
+                        var media = self._convertFileToMedia(response);
+                        self.trigger('change',  media);
+                        Notify.success('文件上传成功！');
+                        self.trigger('fileinfo.fetching');
+                        if (btnData.fileinfoUrl) {
+                            $.get($btn.data('fileinfoUrl'), {key:response.hashId}, function(info){
+                                self.trigger('fileinfo.fetched', info);
+                            }, 'json');
+                        } else {
+                            self.trigger('fileinfo.fetched', {});
+                        }
+                    }, 'json');
+                } else {
+                    var media = self._convertFileToMedia(response);
+                    self.trigger('change',  media);
+                    self.trigger('fileinfo.fetched', {});
+                    Notify.success('文件上传成功！');
+                }
+            });
+
+            uploader.bind('Error', function(uploader) {
+                Notify.danger('文件上传失败，请重试！');
             });
 
             uploader.init();
@@ -199,19 +241,6 @@ define(function(require, exports, module) {
                         return ;
                     }
                     this.startUpload();
-                },
-
-                upload_start_handler: function(file) {
-                    progressbar.reset().show();
-                },
-
-                upload_progress_handler: function(file, bytesLoaded, bytesTotal) {
-                    var percentage = Math.ceil((bytesLoaded / bytesTotal) * 100);
-                    progressbar.setProgress(percentage);
-                },
-
-                upload_error_handler: function(file, errorCode, message) {
-                    Notify.danger('文件上传失败，请重试！');
                 },
 
                 upload_success_handler: function(file, serverData) {

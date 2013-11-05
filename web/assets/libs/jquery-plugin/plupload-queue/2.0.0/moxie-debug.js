@@ -589,11 +589,6 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                 sv: "MSIE"
             }, {
                 s1: navigator.userAgent,
-                s2: "Trident",
-                id: "IE",
-                sv: "rv"
-            }, {
-                s1: navigator.userAgent,
                 s2: "Gecko",
                 id: "Mozilla",
                 sv: "rv"
@@ -767,10 +762,11 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 	@param {String} name Class name
 	*/
             var hasClass = function(obj, name) {
-                if (!obj.className) {
+                var regExp;
+                if (obj.className === "") {
                     return false;
                 }
-                var regExp = new RegExp("(^|\\s+)" + name + "(\\s+|$)");
+                regExp = new RegExp("(^|\\s+)" + name + "(\\s+|$)");
                 return regExp.test(obj.className);
             };
             /**
@@ -783,7 +779,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 	*/
             var addClass = function(obj, name) {
                 if (!hasClass(obj, name)) {
-                    obj.className = !obj.className ? name : obj.className.replace(/\s+$/, "") + " " + name;
+                    obj.className = obj.className === "" ? name : obj.className.replace(/\s+$/, "") + " " + name;
                 }
             };
             /**
@@ -795,12 +791,10 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 	@param {String} name Class name
 	*/
             var removeClass = function(obj, name) {
-                if (obj.className) {
-                    var regExp = new RegExp("(^|\\s+)" + name + "(\\s+|$)");
-                    obj.className = obj.className.replace(regExp, function($0, $1, $2) {
-                        return $1 === " " && $2 === " " ? " " : "";
-                    });
-                }
+                var regExp = new RegExp("(^|\\s+)" + name + "(\\s+|$)");
+                obj.className = obj.className.replace(regExp, function($0, $1, $2) {
+                    return $1 === " " && $2 === " " ? " " : "";
+                });
             };
             /**
 	Returns a given computed style of a DOM element.
@@ -1155,7 +1149,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@return {Boolean} true by default and false if any handler returned false
 			*/
                     dispatchEvent: function(type) {
-                        var uid, list, args, tmpEvt, evt = {}, result = true;
+                        var uid, list, args, tmpEvt, evt = {};
                         if (Basic.typeOf(type) !== "string") {
                             // we can't use original object directly (because of Silverlight)
                             tmpEvt = type;
@@ -1211,12 +1205,10 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                                 }
                             });
                             if (queue.length) {
-                                Basic.inSeries(queue, function(err) {
-                                    result = !err;
-                                });
+                                Basic.inSeries(queue);
                             }
                         }
-                        return result;
+                        return true;
                     },
                     /**
 			Alias for addEventListener
@@ -1252,7 +1244,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@protected
 			*/
                     trigger: function() {
-                        return this.dispatchEvent.apply(this, arguments);
+                        this.dispatchEvent.apply(this, arguments);
                     },
                     /**
 			Converts properties of on[event] type to corresponding event handlers,
@@ -1449,9 +1441,9 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 	@param {String} type Sanitized name of the runtime
 	@param {Object} [caps] Set of capabilities that differentiate specified runtime
 	@param {Object} [modeCaps] Set of capabilities that do require specific operational mode
-	@param {String} [preferredMode='browser'] Preferred operational mode to choose if no required capabilities were requested
+	@param {String} [defaultMode='browser'] Default operational mode to choose if no required capabilities were requested
 	*/
-            function Runtime(options, type, caps, modeCaps, preferredMode) {
+            function Runtime(options, type, caps, modeCaps, defaultMode) {
                 /**
 		Dispatched when runtime is initialized and ready.
 		Results in RuntimeInit on a connected component.
@@ -1464,8 +1456,54 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 
 		@event Error
 		*/
-                var self = this, _shim, _uid = Basic.guid(type + "_"), defaultMode = preferredMode || "browser";
-                options = options || {};
+                var self = this, _shim, _uid = Basic.guid(type + "_");
+                /**
+		Runtime (not native one) may operate in browser or client mode.
+		
+		@method _setMode
+		@private
+		@param {Object} [modeCaps] Set of capabilities that do require specific operational mode
+		@param {Object} [defaultMode] The mode to switch to if modeCaps or requiredCaps are empty
+		*/
+                function _setMode(modeCaps, defaultMode) {
+                    var mode = null, rc = options && options.required_caps;
+                    defaultMode = defaultMode || "browser";
+                    // mode can be effectively set only once
+                    if (this.mode !== null) {
+                        return this.mode;
+                    }
+                    if (rc && !Basic.isEmptyObj(modeCaps)) {
+                        // loop over required caps and check if they do require the same mode
+                        Basic.each(rc, function(value, cap) {
+                            if (modeCaps.hasOwnProperty(cap)) {
+                                var capMode = modeCaps[cap](value);
+                                // make sure we always have an array
+                                if (typeof capMode === "string") {
+                                    capMode = [ capMode ];
+                                }
+                                if (!mode) {
+                                    mode = capMode;
+                                } else if (!(mode = Basic.arrayIntersect(mode, capMode))) {
+                                    // if cap requires conflicting mode - runtime cannot fulfill required caps
+                                    return mode = false;
+                                }
+                            }
+                        });
+                        if (mode) {
+                            this.mode = Basic.inArray(defaultMode, mode) !== -1 ? defaultMode : mode[0];
+                        } else if (mode === false) {
+                            this.mode = false;
+                        }
+                    }
+                    // if mode still not defined
+                    if (this.mode === null) {
+                        this.mode = defaultMode;
+                    }
+                    // once we got the mode, test against all caps
+                    if (this.mode && rc && !this.can(rc)) {
+                        this.mode = false;
+                    }
+                }
                 // register runtime in private hash
                 runtimes[_uid] = this;
                 /**
@@ -1527,10 +1565,6 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                     // e.g. runtime.can('use_http_method', 'put')
                     use_http_method: true
                 }, caps);
-                // default to the mode that is compatible with preferred caps
-                if (options.preferred_caps) {
-                    defaultMode = Runtime.getMode(modeCaps, options.preferred_caps, defaultMode);
-                }
                 // small extension factory here (is meant to be extended with actual extensions constructors)
                 _shim = function() {
                     var objpool = {};
@@ -1594,7 +1628,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@private
 			@type {String|Boolean} current mode or false, if none possible
 			*/
-                    mode: Runtime.getMode(modeCaps, options.required_caps, defaultMode),
+                    mode: null,
                     /**
 			id of the DOM container for the runtime (if available)
 
@@ -1735,10 +1769,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                         _uid = self = _shim = shimContainer = null;
                     }
                 });
-                // once we got the mode, test against all caps
-                if (this.mode && options.required_caps && !this.can(options.required_caps)) {
-                    this.mode = false;
-                }
+                _setMode.call(this, modeCaps, defaultMode);
             }
             /**
 	Default order to try different runtime types
@@ -1860,47 +1891,6 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                     }
                 }
                 return null;
-            };
-            /**
-	Figure out an operational mode for the specified set of capabilities.
-
-	@method getMode
-	@static
-	@param {Object} modeCaps Set of capabilities that depend on particular runtime mode
-	@param {Object} [requiredCaps] Supplied set of capabilities to find operational mode for
-	@param {String|Boolean} [defaultMode='browser'] Default mode to use 
-	@return {String|Boolean} Compatible operational mode
-	*/
-            Runtime.getMode = function(modeCaps, requiredCaps, defaultMode) {
-                var mode = null;
-                if (Basic.typeOf(defaultMode) === "undefined") {
-                    // only if not specified
-                    defaultMode = "browser";
-                }
-                if (requiredCaps && !Basic.isEmptyObj(modeCaps)) {
-                    // loop over required caps and check if they do require the same mode
-                    Basic.each(requiredCaps, function(value, cap) {
-                        if (modeCaps.hasOwnProperty(cap)) {
-                            var capMode = modeCaps[cap](value);
-                            // make sure we always have an array
-                            if (typeof capMode === "string") {
-                                capMode = [ capMode ];
-                            }
-                            if (!mode) {
-                                mode = capMode;
-                            } else if (!(mode = Basic.arrayIntersect(mode, capMode))) {
-                                // if cap requires conflicting mode - runtime cannot fulfill required caps
-                                return mode = false;
-                            }
-                        }
-                    });
-                    if (mode) {
-                        return Basic.inArray(defaultMode, mode) !== -1 ? defaultMode : mode[0];
-                    } else if (mode === false) {
-                        return false;
-                    }
-                }
-                return defaultMode;
             };
             /**
 	Capability check that always returns true
@@ -2437,14 +2427,6 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			*/
                     ruid: null,
                     /**
-			Unique id of the runtime container. Useful to get hold of it for various manipulations.
-
-			@property shimid
-			@protected
-			@type {String}
-			*/
-                    shimid: null,
-                    /**
 			Array of selected mOxie.File objects
 
 			@property files
@@ -2461,7 +2443,6 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                         self.convertEventPropsToHandlers(dispatches);
                         self.bind("RuntimeInit", function(e, runtime) {
                             self.ruid = runtime.uid;
-                            self.shimid = runtime.shimid;
                             self.bind("Ready", function() {
                                 self.trigger("Refresh");
                             }, 999);
@@ -2979,43 +2960,37 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 	@method parseUrl
 	@for Utils
 	@static
-	@param {String} url Url to parse (defaults to empty string if undefined)
+	@param {String} str Url to parse (defaults to empty string if undefined)
 	@return {Object} Hash containing extracted uri components
 	*/
-            var parseUrl = function(url, currentUrl) {
+            var parseUrl = function(str) {
                 var key = [ "source", "scheme", "authority", "userInfo", "user", "pass", "host", "port", "relative", "path", "directory", "file", "query", "fragment" ], i = key.length, ports = {
                     http: 80,
                     https: 443
-                }, uri = {}, regex = /^(?:([^:\/?#]+):)?(?:\/\/()(?:(?:()(?:([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?()(?:(()(?:(?:[^?#\/]*\/)*)()(?:[^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/, m = regex.exec(url || "");
+                }, uri = {}, regex = /^(?:([^:\/?#]+):)?(?:\/\/()(?:(?:()(?:([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?()(?:(()(?:(?:[^?#\/]*\/)*)()(?:[^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/, m = regex.exec(str || "");
                 while (i--) {
                     if (m[i]) {
                         uri[key[i]] = m[i];
                     }
                 }
-                // when url is relative, we set the origin and the path ourselves
-                if (!uri.scheme) {
-                    // come up with defaults
-                    if (!currentUrl || typeof currentUrl === "string") {
-                        currentUrl = parseUrl(currentUrl || document.location.href);
+                if (/^[^\/]/.test(uri.path) && !uri.scheme) {
+                    // when url is relative, we need to figure out the path ourselves
+                    var path = document.location.pathname;
+                    // if path ends with a filename, strip it
+                    if (!/(\/|\/[^\.]+)$/.test(path)) {
+                        path = path.replace(/[^\/]+$/, "");
                     }
-                    uri.scheme = currentUrl.scheme;
-                    uri.host = currentUrl.host;
-                    uri.port = currentUrl.port;
-                    var path = "";
-                    // for urls without trailing slash we need to figure out the path
-                    if (/^[^\/]/.test(uri.path)) {
-                        path = currentUrl.path;
-                        // if path ends with a filename, strip it
-                        if (!/(\/|\/[^\.]+)$/.test(path)) {
-                            path = path.replace(/\/[^\/]+$/, "/");
-                        } else {
-                            path += "/";
-                        }
-                    }
+                    uri.host = document.location.hostname;
                     uri.path = path + (uri.path || "");
                 }
+                if (!uri.scheme) {
+                    uri.scheme = document.location.protocol.replace(/:$/, "");
+                }
+                if (!uri.host) {
+                    uri.host = document.location.hostname;
+                }
                 if (!uri.port) {
-                    uri.port = ports[uri.scheme] || 80;
+                    uri.port = document.location.port || ports[uri.scheme] || 80;
                 }
                 uri.port = parseInt(uri.port, 10);
                 if (!uri.path) {
@@ -3142,7 +3117,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 	@constructor
 	*/
             function FormData() {
-                var _blob, _fields = [];
+                var _blobField, _fields = {}, _name = "";
                 Basic.extend(this, {
                     /**
 			Append another key-value pair to the FormData object
@@ -3153,28 +3128,28 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			*/
                     append: function(name, value) {
                         var self = this, valueType = Basic.typeOf(value);
-                        // according to specs value might be either Blob or String
                         if (value instanceof Blob) {
-                            _blob = {
-                                name: name,
-                                value: value
-                            };
+                            if (_blobField) {
+                                delete _fields[_blobField];
+                            }
+                            _blobField = name;
+                            _fields[name] = [ value ];
                         } else if ("array" === valueType) {
                             name += "[]";
                             Basic.each(value, function(value) {
-                                self.append(name, value);
+                                self.append.call(self, name, value);
                             });
                         } else if ("object" === valueType) {
                             Basic.each(value, function(value, key) {
-                                self.append(name + "[" + key + "]", value);
+                                self.append.call(self, name + "[" + key + "]", value);
                             });
-                        } else if ("null" === valueType || "undefined" === valueType || "number" === valueType && isNaN(value)) {
-                            self.append(name, "false");
                         } else {
-                            _fields.push({
-                                name: name,
-                                value: value.toString()
-                            });
+                            value = value.toString();
+                            // according to specs value might be either Blob or String
+                            if (!_fields[name]) {
+                                _fields[name] = [];
+                            }
+                            _fields[name].push(value);
                         }
                     },
                     /**
@@ -3184,7 +3159,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@return {Boolean}
 			*/
                     hasBlob: function() {
-                        return !!this.getBlob();
+                        return !!_blobField;
                     },
                     /**
 			Retrieves blob.
@@ -3193,7 +3168,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@return {Object} Either Blob if found or null
 			*/
                     getBlob: function() {
-                        return _blob && _blob.value || null;
+                        return _fields[_blobField] && _fields[_blobField][0] || null;
                     },
                     /**
 			Retrieves blob field name.
@@ -3202,7 +3177,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@return {String} Either Blob field name or null
 			*/
                     getBlobName: function() {
-                        return _blob && _blob.name || null;
+                        return _blobField || null;
                     },
                     /**
 			Loop over the fields in FormData and invoke the callback for each of them.
@@ -3211,16 +3186,16 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
 			@param {Function} cb Callback to call for each field
 			*/
                     each: function(cb) {
-                        Basic.each(_fields, function(field) {
-                            cb(field.value, field.name);
+                        Basic.each(_fields, function(value, name) {
+                            Basic.each(value, function(value) {
+                                cb(value, name);
+                            });
                         });
-                        if (_blob) {
-                            cb(_blob.value, _blob.name);
-                        }
                     },
                     destroy: function() {
-                        _blob = null;
-                        _fields = [];
+                        _blobField = null;
+                        _name = "";
+                        _fields = {};
                     }
                 });
             }
@@ -4108,6 +4083,275 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
             Transporter.prototype = EventTarget.instance;
             return Transporter;
         });
+        // Included from: src/javascript/core/JSON.js
+        /**
+ * JSON.js
+ *
+ * Copyright 2013, Moxiecode Systems AB
+ * Released under GPL License.
+ *
+ * License: http://www.plupload.com/license
+ * Contributing: http://www.plupload.com/contributing
+ */
+        /*jshint smarttabs:true */
+        define("moxie/core/JSON", [], function() {
+            /**
+	Parse string into the JSON object in a safe way
+	@credits Douglas Crockford: https://github.com/douglascrockford/JSON-js/blob/master/json_parse.js
+
+	@method parse
+	@static
+	@protected
+	@param {Object} obj Object to add property to
+	@param {String} prop Property name
+	@param {Object} desc Set of key-value pairs defining descriptor for the property
+	*/
+            return !!window.JSON && JSON.parse || function() {
+                "use strict";
+                // This is a function that can parse a JSON text, producing a JavaScript
+                // data structure. It is a simple, recursive descent parser. It does not use
+                // eval or regular expressions, so it can be used as a model for implementing
+                // a JSON parser in other languages.
+                // We are defining the function inside of another function to avoid 
+                // creating global variables.
+                var at, // The index of the current character
+                ch, // The current character
+                escapee = {
+                    '"': '"',
+                    "\\": "\\",
+                    "/": "/",
+                    b: "\b",
+                    f: "\f",
+                    n: "\n",
+                    r: "\r",
+                    t: "	"
+                }, text, error = function(m) {
+                    // Call error when something is wrong.
+                    throw {
+                        name: "SyntaxError",
+                        message: m,
+                        at: at,
+                        text: text
+                    };
+                }, next = function(c) {
+                    // If a c parameter is provided, verify that it matches the current character.
+                    if (c && c !== ch) {
+                        error("Expected '" + c + "' instead of '" + ch + "'");
+                    }
+                    // Get the next character. When there are no more characters,
+                    // return the empty string.
+                    ch = text.charAt(at);
+                    at += 1;
+                    return ch;
+                }, number = function() {
+                    // Parse a number value.
+                    var number, string = "";
+                    if (ch === "-") {
+                        string = "-";
+                        next("-");
+                    }
+                    while (ch >= "0" && ch <= "9") {
+                        string += ch;
+                        next();
+                    }
+                    if (ch === ".") {
+                        string += ".";
+                        while (next() && ch >= "0" && ch <= "9") {
+                            string += ch;
+                        }
+                    }
+                    if (ch === "e" || ch === "E") {
+                        string += ch;
+                        next();
+                        if (ch === "-" || ch === "+") {
+                            string += ch;
+                            next();
+                        }
+                        while (ch >= "0" && ch <= "9") {
+                            string += ch;
+                            next();
+                        }
+                    }
+                    number = +string;
+                    if (!isFinite(number)) {
+                        error("Bad number");
+                    } else {
+                        return number;
+                    }
+                }, string = function() {
+                    // Parse a string value.
+                    var hex, i, string = "", uffff;
+                    // When parsing for string values, we must look for " and \ characters.
+                    if (ch === '"') {
+                        while (next()) {
+                            if (ch === '"') {
+                                next();
+                                return string;
+                            } else if (ch === "\\") {
+                                next();
+                                if (ch === "u") {
+                                    uffff = 0;
+                                    for (i = 0; i < 4; i += 1) {
+                                        hex = parseInt(next(), 16);
+                                        if (!isFinite(hex)) {
+                                            break;
+                                        }
+                                        uffff = uffff * 16 + hex;
+                                    }
+                                    string += String.fromCharCode(uffff);
+                                } else if (typeof escapee[ch] === "string") {
+                                    string += escapee[ch];
+                                } else {
+                                    break;
+                                }
+                            } else {
+                                string += ch;
+                            }
+                        }
+                    }
+                    error("Bad string");
+                }, white = function() {
+                    // Skip whitespace.
+                    while (ch && ch <= " ") {
+                        next();
+                    }
+                }, word = function() {
+                    // true, false, or null.
+                    switch (ch) {
+                      case "t":
+                        next("t");
+                        next("r");
+                        next("u");
+                        next("e");
+                        return true;
+
+                      case "f":
+                        next("f");
+                        next("a");
+                        next("l");
+                        next("s");
+                        next("e");
+                        return false;
+
+                      case "n":
+                        next("n");
+                        next("u");
+                        next("l");
+                        next("l");
+                        return null;
+                    }
+                    error("Unexpected '" + ch + "'");
+                }, value, // Place holder for the value function.
+                array = function() {
+                    // Parse an array value.
+                    var array = [];
+                    if (ch === "[") {
+                        next("[");
+                        white();
+                        if (ch === "]") {
+                            next("]");
+                            return array;
+                        }
+                        while (ch) {
+                            array.push(value());
+                            white();
+                            if (ch === "]") {
+                                next("]");
+                                return array;
+                            }
+                            next(",");
+                            white();
+                        }
+                    }
+                    error("Bad array");
+                }, object = function() {
+                    // Parse an object value.
+                    var key, object = {};
+                    if (ch === "{") {
+                        next("{");
+                        white();
+                        if (ch === "}") {
+                            next("}");
+                            return object;
+                        }
+                        while (ch) {
+                            key = string();
+                            white();
+                            next(":");
+                            if (Object.hasOwnProperty.call(object, key)) {
+                                error('Duplicate key "' + key + '"');
+                            }
+                            object[key] = value();
+                            white();
+                            if (ch === "}") {
+                                next("}");
+                                return object;
+                            }
+                            next(",");
+                            white();
+                        }
+                    }
+                    error("Bad object");
+                };
+                value = function() {
+                    // Parse a JSON value. It could be an object, an array, a string, a number,
+                    // or a word.
+                    white();
+                    switch (ch) {
+                      case "{":
+                        return object();
+
+                      case "[":
+                        return array();
+
+                      case '"':
+                        return string();
+
+                      case "-":
+                        return number();
+
+                      default:
+                        return ch >= "0" && ch <= "9" ? number() : word();
+                    }
+                };
+                // Return the json_parse function. It will have access to all of the above
+                // functions and variables.
+                return function(source, reviver) {
+                    var result;
+                    text = source;
+                    at = 0;
+                    ch = " ";
+                    result = value();
+                    white();
+                    if (ch) {
+                        error("Syntax error");
+                    }
+                    // If there is a reviver function, we recursively walk the new structure,
+                    // passing each name/value pair to the reviver function for possible
+                    // transformation, starting with a temporary root object that holds the result
+                    // in an empty key. If there is not a reviver function, we simply return the
+                    // result.
+                    return typeof reviver === "function" ? function walk(holder, key) {
+                        var k, v, value = holder[key];
+                        if (value && typeof value === "object") {
+                            for (k in value) {
+                                if (Object.prototype.hasOwnProperty.call(value, k)) {
+                                    v = walk(value, k);
+                                    if (v !== undefined) {
+                                        value[k] = v;
+                                    } else {
+                                        delete value[k];
+                                    }
+                                }
+                            }
+                        }
+                        return reviver.call(holder, key, value);
+                    }({
+                        "": result
+                    }, "") : result;
+                };
+            }();
+        });
         // Included from: src/javascript/image/Image.js
         /**
  * Image.js
@@ -4118,7 +4362,7 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
  * License: http://www.plupload.com/license
  * Contributing: http://www.plupload.com/contributing
  */
-        define("moxie/image/Image", [ "moxie/core/utils/Basic", "moxie/core/utils/Dom", "moxie/core/Exceptions", "moxie/file/FileReaderSync", "moxie/xhr/XMLHttpRequest", "moxie/runtime/Runtime", "moxie/runtime/RuntimeClient", "moxie/runtime/Transporter", "moxie/core/utils/Env", "moxie/core/EventTarget", "moxie/file/Blob", "moxie/file/File", "moxie/core/utils/Encode" ], function(Basic, Dom, x, FileReaderSync, XMLHttpRequest, Runtime, RuntimeClient, Transporter, Env, EventTarget, Blob, File, Encode) {
+        define("moxie/image/Image", [ "moxie/core/utils/Basic", "moxie/core/utils/Dom", "moxie/core/Exceptions", "moxie/file/FileReaderSync", "moxie/xhr/XMLHttpRequest", "moxie/runtime/Runtime", "moxie/runtime/RuntimeClient", "moxie/runtime/Transporter", "moxie/core/utils/Env", "moxie/core/EventTarget", "moxie/file/Blob", "moxie/file/File", "moxie/core/utils/Encode", "moxie/core/JSON" ], function(Basic, Dom, x, FileReaderSync, XMLHttpRequest, Runtime, RuntimeClient, Transporter, Env, EventTarget, Blob, File, Encode, parseJSON) {
             /**
 	Image preloading and manipulation utility. Additionally it provides access to image meta info (Exif, GPS) and raw binary data.
 
@@ -4479,11 +4723,23 @@ define("jquery-plugin/plupload-queue/2.0.0/moxie-debug", [], function(require, e
                     if (!info) {
                         info = this.getRuntime().exec.call(this, "Image", "getInfo");
                     }
-                    this.size = info.size;
-                    this.width = info.width;
-                    this.height = info.height;
-                    this.type = info.type;
-                    this.meta = info.meta;
+                    if (info) {
+                        if (Basic.typeOf(info.meta) === "string") {
+                            // might be a JSON string
+                            try {
+                                this.meta = parseJSON(info.meta);
+                            } catch (ex) {}
+                        } else {
+                            this.meta = info.meta;
+                        }
+                    }
+                    Basic.extend(this, {
+                        // info object might be non-enumerable (as returned from SilverLight for example)
+                        size: parseInt(info.size, 10),
+                        width: parseInt(info.width, 10),
+                        height: parseInt(info.height, 10),
+                        type: info.type
+                    });
                     // update file name, only if empty
                     if (this.name === "") {
                         this.name = info.name;
@@ -4624,11 +4880,11 @@ Defines constructor for HTML5 runtime.
                     }()),
                     return_response_headers: True,
                     return_response_type: function(responseType) {
-                        if (responseType === "json" && !!window.JSON) {
-                            // we can fake this one even if it's not supported
+                        if (responseType === "json") {
                             return true;
+                        } else {
+                            return Env.can("return_response_type", responseType);
                         }
-                        return Env.can("return_response_type", responseType);
                     },
                     return_status_code: True,
                     report_upload_progress: Test(window.XMLHttpRequest && new XMLHttpRequest().upload),
@@ -4642,8 +4898,7 @@ Defines constructor for HTML5 runtime.
                         return I.can("select_file") && Env.browser === "Chrome" && Env.version >= 21;
                     },
                     select_multiple: function() {
-                        // it is buggy on Safari Windows and iOS
-                        return I.can("select_file") && !(Env.browser === "Safari" && Env.OS === "Windows") && Env.OS !== "iOS";
+                        return I.can("select_file") && !(Env.browser === "Safari" && Env.OS === "Windows");
                     },
                     send_binary_string: Test(window.XMLHttpRequest && (new XMLHttpRequest().sendAsBinary || window.Uint8Array && window.ArrayBuffer)),
                     send_custom_headers: Test(window.XMLHttpRequest),
@@ -4968,15 +5223,14 @@ Defines constructor for HTML5 runtime.
                         }
                     },
                     destroy: function() {
-                        var I = this.getRuntime(), shim = I.getShim(), shimContainer = I.getShimContainer();
+                        var I = this.getRuntime(), shimContainer = I.getShimContainer();
                         Events.removeAllEvents(shimContainer, this.uid);
                         Events.removeAllEvents(_options && Dom.get(_options.container), this.uid);
                         Events.removeAllEvents(_options && Dom.get(_options.browse_button), this.uid);
                         if (shimContainer) {
                             shimContainer.innerHTML = "";
                         }
-                        shim.removeInstance(this.uid);
-                        _files = _options = shimContainer = shim = null;
+                        _files = _options = null;
                     }
                 });
             }
@@ -5186,9 +5440,9 @@ Defines constructor for HTML5 runtime.
 @class moxie/runtime/html5/xhr/XMLHttpRequest
 @private
 */
-        define("moxie/runtime/html5/xhr/XMLHttpRequest", [ "moxie/runtime/html5/Runtime", "moxie/core/utils/Basic", "moxie/core/utils/Mime", "moxie/core/utils/Url", "moxie/file/File", "moxie/file/Blob", "moxie/xhr/FormData", "moxie/core/Exceptions", "moxie/core/utils/Env" ], function(extensions, Basic, Mime, Url, File, Blob, FormData, x, Env) {
+        define("moxie/runtime/html5/xhr/XMLHttpRequest", [ "moxie/runtime/html5/Runtime", "moxie/core/utils/Basic", "moxie/core/utils/Mime", "moxie/core/utils/Url", "moxie/file/File", "moxie/file/Blob", "moxie/xhr/FormData", "moxie/core/Exceptions", "moxie/core/utils/Env", "moxie/core/JSON" ], function(extensions, Basic, Mime, Url, File, Blob, FormData, x, Env, parseJSON) {
             function XMLHttpRequest() {
-                var self = this, _xhr, _filename;
+                var _xhr, _filename;
                 Basic.extend(this, {
                     send: function(meta, data) {
                         var target = this, isGecko2_5_6 = Env.browser === "Mozilla" && Env.version >= 4 && Env.version < 7, isAndroidBrowser = Env.browser === "Android Browser", mustSendAsBinary = false;
@@ -5372,7 +5626,7 @@ Defines constructor for HTML5 runtime.
 
                               case "json":
                                 if (!Env.can("return_response_type", "json")) {
-                                    return _xhr.status === 200 && !!window.JSON ? JSON.parse(_xhr.responseText) : null;
+                                    return _xhr.status === 200 ? parseJSON(_xhr.responseText) : null;
                                 }
                                 return _xhr.response;
 
@@ -6664,17 +6918,17 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                     }
                 }
                 function _downsize(width, height, crop, preserveHeaders) {
-                    var self = this, scale, mathFn, x = 0, y = 0, img, destWidth, destHeight, orientation;
+                    var self = this, ctx, scale, mathFn, x, y, img, imgWidth, imgHeight, orientation;
                     _preserveHeaders = preserveHeaders;
-                    // we will need to check this on export (see getAsBinaryString())
+                    // we will need to check this on export
                     // take into account orientation tag
                     orientation = this.meta && this.meta.tiff && this.meta.tiff.Orientation || 1;
                     if (Basic.inArray(orientation, [ 5, 6, 7, 8 ]) !== -1) {
                         // values that require 90 degree rotation
                         // swap dimensions
-                        var tmp = width;
+                        var mem = width;
                         width = height;
-                        height = tmp;
+                        height = mem;
                     }
                     img = _getImg();
                     // unify dimensions
@@ -6686,33 +6940,28 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                         this.trigger("Resize");
                         return;
                     }
+                    imgWidth = Math.round(img.width * scale);
+                    imgHeight = Math.round(img.height * scale);
                     // prepare canvas if necessary
                     if (!_canvas) {
                         _canvas = document.createElement("canvas");
                     }
-                    // calculate dimensions of proportionally resized image
-                    destWidth = Math.round(img.width * scale);
-                    destHeight = Math.round(img.height * scale);
+                    ctx = _canvas.getContext("2d");
                     // scale image and canvas
                     if (crop) {
                         _canvas.width = width;
                         _canvas.height = height;
-                        // if dimensions of the resulting image still larger than canvas, center it
-                        if (destWidth > width) {
-                            x = Math.round((destWidth - width) / 2);
-                        }
-                        if (destHeight > height) {
-                            y = Math.round((destHeight - height) / 2);
-                        }
                     } else {
-                        _canvas.width = destWidth;
-                        _canvas.height = destHeight;
+                        _canvas.width = imgWidth;
+                        _canvas.height = imgHeight;
                     }
-                    // rotate if required, according to orientation tag
+                    // if dimensions of the resulting image still larger than canvas, center it
+                    x = imgWidth > _canvas.width ? Math.round((imgWidth - _canvas.width) / 2) : 0;
+                    y = imgHeight > _canvas.height ? Math.round((imgHeight - _canvas.height) / 2) : 0;
                     if (!_preserveHeaders) {
                         _rotateToOrientaion(_canvas.width, _canvas.height, orientation);
                     }
-                    _drawToCanvas.call(this, img, _canvas, -x, -y, destWidth, destHeight);
+                    _drawToCanvas.call(this, img, _canvas, -x, -y, imgWidth, imgHeight);
                     this.width = _canvas.width;
                     this.height = _canvas.height;
                     _modified = true;
@@ -6886,10 +7135,7 @@ Defines constructor for Flash runtime.
                     resize_image: Runtime.capTrue,
                     return_response_headers: false,
                     return_response_type: function(responseType) {
-                        if (responseType === "json" && !!window.JSON) {
-                            return true;
-                        }
-                        return !Basic.arrayDiff(responseType, [ "", "text", "document" ]) || I.mode === "browser";
+                        return !Basic.arrayDiff(responseType, [ "", "text", "json", "document" ]) || I.mode === "browser";
                     },
                     return_status_code: function(code) {
                         return I.mode === "browser" || !Basic.arrayDiff(code, [ 200, 404 ]);
@@ -6950,8 +7196,8 @@ Defines constructor for Flash runtime.
                         return Basic.parseSizeStr(size) >= 2097152 ? "client" : "browser";
                     }
                 }, "client");
-                // minimal requirement for Flash Player version
-                if (getShimVersion() < 11.3) {
+                // minimal requirement Flash Player 10
+                if (getShimVersion() < 10) {
                     this.mode = false;
                 }
                 Basic.extend(this, {
@@ -7184,7 +7430,7 @@ Defines constructor for Flash runtime.
 @class moxie/runtime/flash/xhr/XMLHttpRequest
 @private
 */
-        define("moxie/runtime/flash/xhr/XMLHttpRequest", [ "moxie/runtime/flash/Runtime", "moxie/core/utils/Basic", "moxie/file/Blob", "moxie/file/File", "moxie/file/FileReaderSync", "moxie/xhr/FormData", "moxie/runtime/Transporter" ], function(extensions, Basic, Blob, File, FileReaderSync, FormData, Transporter) {
+        define("moxie/runtime/flash/xhr/XMLHttpRequest", [ "moxie/runtime/flash/Runtime", "moxie/core/utils/Basic", "moxie/file/Blob", "moxie/file/File", "moxie/file/FileReaderSync", "moxie/xhr/FormData", "moxie/runtime/Transporter", "moxie/core/JSON" ], function(extensions, Basic, Blob, File, FileReaderSync, FormData, Transporter, parseJSON) {
             var XMLHttpRequest = {
                 send: function(meta, data) {
                     var target = this, self = target.getRuntime();
@@ -7261,11 +7507,13 @@ Defines constructor for Flash runtime.
                         } else if (!!~Basic.inArray(responseType, [ "", "text" ])) {
                             frs = new FileReaderSync();
                             return frs.readAsText(blob);
-                        } else if ("arraybuffer" === responseType) {} else if ("json" === responseType && !!window.JSON) {
+                        } else if ("arraybuffer" === responseType) {} else if ("json" === responseType) {
                             frs = new FileReaderSync();
                             try {
-                                return JSON.parse(frs.readAsText(blob));
-                            } catch (ex) {}
+                                return parseJSON(frs.readAsText(blob));
+                            } catch (ex) {
+                                return null;
+                            }
                         }
                     }
                     return null;
@@ -7447,13 +7695,7 @@ Defines constructor for Silverlight runtime.
                     return_response_headers: function(value) {
                         return value && I.mode === "client";
                     },
-                    return_response_type: function(responseType) {
-                        if (responseType !== "json") {
-                            return true;
-                        } else {
-                            return !!window.JSON;
-                        }
-                    },
+                    return_response_type: Runtime.capTrue,
                     return_status_code: function(code) {
                         return I.mode === "client" || !Basic.arrayDiff(code, [ 200, 404 ]);
                     },
@@ -7706,42 +7948,7 @@ Defines constructor for Silverlight runtime.
 @private
 */
         define("moxie/runtime/silverlight/image/Image", [ "moxie/runtime/silverlight/Runtime", "moxie/core/utils/Basic", "moxie/runtime/flash/image/Image" ], function(extensions, Basic, Image) {
-            return extensions.Image = Basic.extend({}, Image, {
-                getInfo: function() {
-                    var self = this.getRuntime(), grps = [ "tiff", "exif", "gps" ], info = {
-                        meta: {}
-                    }, rawInfo = self.shimExec.call(this, "Image", "getInfo");
-                    if (rawInfo.meta) {
-                        Basic.each(grps, function(grp) {
-                            var meta = rawInfo.meta[grp], tag, i, length, value;
-                            if (meta && meta.keys) {
-                                info.meta[grp] = {};
-                                for (i = 0, length = meta.keys.length; i < length; i++) {
-                                    tag = meta.keys[i];
-                                    value = meta[tag];
-                                    if (value) {
-                                        // convert numbers
-                                        if (/^(\d|[1-9]\d+)$/.test(value)) {
-                                            // integer (make sure doesn't start with zero)
-                                            value = parseInt(value, 10);
-                                        } else if (/^\d*\.\d+$/.test(value)) {
-                                            // double
-                                            value = parseFloat(value);
-                                        }
-                                        info.meta[grp][tag] = value;
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    info.width = parseInt(rawInfo.width, 10);
-                    info.height = parseInt(rawInfo.height, 10);
-                    info.size = parseInt(rawInfo.size, 10);
-                    info.type = rawInfo.type;
-                    info.name = rawInfo.name;
-                    return info;
-                }
-            });
+            return extensions.Image = Basic.extend({}, Image);
         });
         // Included from: src/javascript/runtime/html4/Runtime.js
         /**
@@ -7780,10 +7987,7 @@ Defines constructor for HTML4 runtime.
                     report_upload_progress: false,
                     return_response_headers: false,
                     return_response_type: function(responseType) {
-                        if (responseType === "json" && !!window.JSON) {
-                            return true;
-                        }
-                        return !!~Basic.inArray(responseType, [ "text", "document", "" ]);
+                        return !!~Basic.inArray(responseType, [ "json", "text", "document", "" ]);
                     },
                     return_status_code: function(code) {
                         return !Basic.arrayDiff(code, [ 200, 404 ]);
@@ -7801,7 +8005,7 @@ Defines constructor for HTML4 runtime.
                     },
                     summon_file_dialog: Test(function() {
                         // yeah... some dirty sniffing here...
-                        return Env.browser === "Firefox" && Env.version >= 4 || Env.browser === "Opera" && Env.version >= 12 || !!~Basic.inArray(Env.browser, [ "Chrome", "Safari" ]);
+                        return Env.browser === "Firefox" && Env.version >= 4 || Env.browser === "Opera" && Env.version >= 12 || Env.browser === "IE" && Env.version >= 10 || !!~Basic.inArray(Env.browser, [ "Chrome", "Safari" ]);
                     }()),
                     upload_filesize: True,
                     use_http_method: function(methods) {
@@ -7873,7 +8077,7 @@ Defines constructor for HTML4 runtime.
                     input = document.createElement("input");
                     input.setAttribute("id", uid);
                     input.setAttribute("type", "file");
-                    input.setAttribute("name", _options.name || "Filedata");
+                    input.setAttribute("name", "Filedata");
                     input.setAttribute("accept", _mimes.join(","));
                     Basic.extend(input.style, {
                         fontSize: "999px",
@@ -7912,9 +8116,8 @@ Defines constructor for HTML4 runtime.
                         // clear event handler
                         addInput.call(comp);
                         // after file is initialized as o.File, we need to update form and input ids
-                        comp.bind("change", function onChange() {
+                        comp.bind("change", function() {
                             var input = Dom.get(uid), form = Dom.get(uid + "_form"), file;
-                            comp.unbind("change", onChange);
                             if (comp.files.length && input && form) {
                                 file = comp.files[0];
                                 input.setAttribute("id", file.uid);
@@ -7941,6 +8144,11 @@ Defines constructor for HTML4 runtime.
                     }
                     _uid = uid;
                     shimContainer = currForm = browseButton = null;
+                    // trigger ready event asynchronously
+                    comp.trigger({
+                        type: "ready",
+                        async: true
+                    });
                 }
                 Basic.extend(this, {
                     init: function(options) {
@@ -7980,11 +8188,6 @@ Defines constructor for HTML4 runtime.
                         })();
                         addInput.call(this);
                         shimContainer = null;
-                        // trigger ready event asynchronously
-                        comp.trigger({
-                            type: "ready",
-                            async: true
-                        });
                     },
                     getFiles: function() {
                         return _files;
@@ -7996,15 +8199,14 @@ Defines constructor for HTML4 runtime.
                         }
                     },
                     destroy: function() {
-                        var I = this.getRuntime(), shim = I.getShim(), shimContainer = I.getShimContainer();
+                        var I = this.getRuntime(), shimContainer = I.getShimContainer();
                         Events.removeAllEvents(shimContainer, this.uid);
                         Events.removeAllEvents(_options && Dom.get(_options.container), this.uid);
                         Events.removeAllEvents(_options && Dom.get(_options.browse_button), this.uid);
                         if (shimContainer) {
                             shimContainer.innerHTML = "";
                         }
-                        shim.removeInstance(this.uid);
-                        _uid = _files = _mimes = _options = shimContainer = shim = null;
+                        _uid = _files = _mimes = _options = null;
                     }
                 });
             }
@@ -8041,7 +8243,7 @@ Defines constructor for HTML4 runtime.
 @class moxie/runtime/html4/xhr/XMLHttpRequest
 @private
 */
-        define("moxie/runtime/html4/xhr/XMLHttpRequest", [ "moxie/runtime/html4/Runtime", "moxie/core/utils/Basic", "moxie/core/utils/Dom", "moxie/core/utils/Url", "moxie/core/Exceptions", "moxie/core/utils/Events", "moxie/file/Blob", "moxie/xhr/FormData" ], function(extensions, Basic, Dom, Url, x, Events, Blob, FormData) {
+        define("moxie/runtime/html4/xhr/XMLHttpRequest", [ "moxie/runtime/html4/Runtime", "moxie/core/utils/Basic", "moxie/core/utils/Dom", "moxie/core/utils/Url", "moxie/core/Exceptions", "moxie/core/utils/Events", "moxie/file/Blob", "moxie/xhr/FormData", "moxie/core/JSON" ], function(extensions, Basic, Dom, Url, x, Events, Blob, FormData, parseJSON) {
             function XMLHttpRequest() {
                 var _status, _response, _iframe;
                 function cleanup(cb) {
@@ -8108,8 +8310,8 @@ Defines constructor for HTML4 runtime.
                                 try {
                                     el = _iframe.contentWindow.document || _iframe.contentDocument || window.frames[_iframe.id].document;
                                     // try to detect some standard error pages
-                                    if (/^4(0[0-9]|1[0-7]|2[2346])\s/.test(el.title)) {
-                                        // test if title starts with 4xx HTTP error
+                                    if (/^4\d{2}\s/.test(el.title) && el.getElementsByTagName("address").length) {
+                                        // standard Apache style
                                         _status = el.title.replace(/^(\d+).*$/, "$1");
                                     } else {
                                         _status = 200;
@@ -8180,12 +8382,7 @@ Defines constructor for HTML4 runtime.
                                         name: name,
                                         value: value
                                     });
-                                    // make sure that input[type="file"], if it's there, comes last
-                                    if (input) {
-                                        form.insertBefore(hidden, input);
-                                    } else {
-                                        form.appendChild(hidden);
-                                    }
+                                    form.appendChild(hidden);
                                 }
                             });
                         }
@@ -8201,9 +8398,9 @@ Defines constructor for HTML4 runtime.
                     getResponse: function(responseType) {
                         if ("json" === responseType) {
                             // strip off <pre>..</pre> tags that might be enclosing the response
-                            if (Basic.typeOf(_response) === "string" && !!window.JSON) {
+                            if (Basic.typeOf(_response) === "string") {
                                 try {
-                                    return JSON.parse(_response.replace(/^\s*<pre[^>]*>/, "").replace(/<\/pre>\s*$/, ""));
+                                    return parseJSON(_response.replace(/^\s*<pre[^>]*>/, "").replace(/<\/pre>\s*$/, ""));
                                 } catch (ex) {
                                     return null;
                                 }
@@ -8250,7 +8447,7 @@ Defines constructor for HTML4 runtime.
         define("moxie/runtime/html4/image/Image", [ "moxie/runtime/html4/Runtime", "moxie/runtime/html5/image/Image" ], function(extensions, Image) {
             return extensions.Image = Image;
         });
-        expose([ "moxie/core/utils/Basic", "moxie/core/I18n", "moxie/core/utils/Mime", "moxie/core/utils/Env", "moxie/core/utils/Dom", "moxie/core/Exceptions", "moxie/core/EventTarget", "moxie/core/utils/Encode", "moxie/runtime/Runtime", "moxie/runtime/RuntimeClient", "moxie/file/Blob", "moxie/file/File", "moxie/file/FileInput", "moxie/file/FileDrop", "moxie/runtime/RuntimeTarget", "moxie/file/FileReader", "moxie/core/utils/Url", "moxie/file/FileReaderSync", "moxie/xhr/FormData", "moxie/xhr/XMLHttpRequest", "moxie/runtime/Transporter", "moxie/image/Image", "moxie/core/utils/Events" ]);
+        expose([ "moxie/core/utils/Basic", "moxie/core/I18n", "moxie/core/utils/Mime", "moxie/core/utils/Env", "moxie/core/utils/Dom", "moxie/core/Exceptions", "moxie/core/EventTarget", "moxie/core/utils/Encode", "moxie/runtime/Runtime", "moxie/runtime/RuntimeClient", "moxie/file/Blob", "moxie/file/File", "moxie/file/FileInput", "moxie/file/FileDrop", "moxie/runtime/RuntimeTarget", "moxie/file/FileReader", "moxie/core/utils/Url", "moxie/file/FileReaderSync", "moxie/xhr/FormData", "moxie/xhr/XMLHttpRequest", "moxie/runtime/Transporter", "moxie/core/JSON", "moxie/image/Image", "moxie/core/utils/Events" ]);
     })(this);
     /**
  * o.js

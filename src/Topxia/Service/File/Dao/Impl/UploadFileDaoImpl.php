@@ -70,7 +70,8 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     private function createSearchQueryBuilder($conditions)
     {
-        
+        $conditions = array_filter($conditions);
+
         if (isset($conditions['filename'])) {
             $conditions['filenameLike'] = "%{$conditions['filename']}%";
             unset($conditions['filename']);
@@ -78,8 +79,10 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
-            ->andWhere('filename LIKE :filenameLike')
-            ->andWhere('type = :type');
+            ->andWhere('targetType = :targetType')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('type = :type')
+            ->andWhere('filename LIKE :filenameLike');
     }
 
 }

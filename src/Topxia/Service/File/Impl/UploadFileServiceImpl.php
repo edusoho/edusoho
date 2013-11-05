@@ -2,14 +2,14 @@
 
 namespace Topxia\Service\File\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoCloudClient;
-use Topxia\Common\FileToolkit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Util\EdusohoCloudClient;
 use Topxia\Service\File\UploadFileService;
     
-class UploadFileServiceImpl extends BaseDao implements UploadFileService
+class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
 	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor','cloud' => 'File.CloudFileImplementor');
 
@@ -62,18 +62,13 @@ class UploadFileServiceImpl extends BaseDao implements UploadFileService
                 throw $this->createServiceException('参数sort不正确。');
         }
 
-
         return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
     }
-
-
 
     public function searchFileCount($conditions)
     {
         return $this->getUploadFileDao()->searchFileCount($conditions);
     }
-
-    
 
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {

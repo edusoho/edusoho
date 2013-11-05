@@ -85,6 +85,14 @@ uploadfile_params:
     pattern:  /uploadfile/params
     defaults: { _controller: TopxiaWebBundle:UploadFile:params }
 
+uploadfile_cloud_callback:
+    pattern:  /uploadfile/cloud_callback
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
+
+uploadfile_cloud_fileinfo:
+    pattern:  /uploadfile/cloud_fileinfo
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudFileinfo }
+
 
 kindeditor_upload:
     pattern:  /kindeditor/upload
