@@ -1664,6 +1664,8 @@ body {
 	padding: 10px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
+	height: 200px;
+	overflow-y: scroll;
 }
 
 .file-browser-list {

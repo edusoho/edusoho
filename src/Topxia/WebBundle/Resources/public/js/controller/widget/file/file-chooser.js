@@ -48,6 +48,11 @@ define(function(require, exports, module) {
         },
 
         close: function() {
+            if (this.$('.file-chooser-uploader-tab').parent().hasClass('active')) {
+                this._destoryUploader();
+                this.$('.file-chooser-uploader-tab').parent().removeClass('active');
+            }
+            
             this.get('progressbar').reset().hide();
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
@@ -85,7 +90,6 @@ define(function(require, exports, module) {
             var self = this;
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
-                    console.log('show upload pane.');
                     self._createUploader();
                     self.get('progressbar').reset().hide();
                 }
@@ -94,6 +98,7 @@ define(function(require, exports, module) {
                     if (self.isUploading()) {
                         return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
                     }
+                    self._destoryUploader();
                 }
             });
         },
@@ -127,14 +132,12 @@ define(function(require, exports, module) {
 
         _destoryUploader: function() {
             if (this.get('uploader')) {
-                console.log('destory uploader');
                 this.get('uploader').destroy();
                 this.set('uploader', null);
             }
         },
 
         _createUploader: function() {
-            console.log('create uploader');
             var self = this,
                 $btn = this.$('[data-role=uploader-btn]'),
                 progressbar = this.get('progressbar'),
@@ -143,12 +146,16 @@ define(function(require, exports, module) {
             var uploader = new plupload.Uploader({
                 runtimes : 'flash',
                 max_file_size: '2gb',
+                multi_selection: false,
                 browse_button : $btn.attr('id'),
                 url : btnData.uploadUrl
             });
 
             uploader.bind('FilesAdded', function(uploader, files) {
-                console.log('FilesAdded', uploader);
+                if (uploader.files.length > 0) {
+                    Notify.danger('文件正在上传中，请等待本次上传完毕后，再上传。');
+                    uploader.removeFile(files[0]);
+                }
                 uploader.refresh();
                 setTimeout(function(){
                     uploader.start();
@@ -216,82 +223,6 @@ define(function(require, exports, module) {
             this.set('uploader', uploader);
 
             return uploader;
-        },
-
-        _createSWFUpload: function($btn, progressbar) {
-            var self = this;
-
-            var settings = $.extend({}, {
-                upload_url : $btn.data('url'),
-                post_params : {
-                    "key" : $btn.data('key'),
-                    "token" : $btn.data('token'),
-                    "x:filepath": $btn.data('filepath'),
-                    "x:convertKey": $btn.data('convertKey')
-                },
-                file_types : "*.*",
-                file_size_limit : "10 MB",
-                file_upload_limit : 1,
-                file_queue_limit: 1,
-                file_post_name: 'file',
-
-                button_placeholder_id : $btn.attr('id'),
-                button_width: "75",
-                button_height: "35",
-                button_text: "<span class=\"btnText\">上传</span>",
-                button_text_style : ".btnText { color: #333; font-size:16px;}",
-                button_text_left_padding : 18,
-                button_text_top_padding : 5,
-                button_image_url: $btn.data('buttonImage'),
-
-                file_dialog_complete_handler: function(numFilesSelected, numFilesQueued) {
-                    if (numFilesSelected == 0) {
-                        return;
-                    }
-                    if (numFilesSelected > 1) {
-                        Notify.danger('一次只能上传一个文件，请重新选择。');
-                        return ;
-                    }
-
-                    if (numFilesQueued == 0) {
-                        Notify.info('文件正在上传中，请等待本次上传完毕后，再上传。');
-                        return ;
-                    }
-                    this.startUpload();
-                },
-
-                upload_success_handler: function(file, serverData) {
-                    progressbar.setComplete().hide();
-                    serverData = $.parseJSON(serverData);
-
-                    if ($btn.data('callback')) {
-                        $.post($btn.data('callback'), serverData, function(response) {
-                            var media = self._convertFileToMedia(response);
-                            self.trigger('change',  media);
-                            Notify.success('文件上传成功！');
-                            self.trigger('fileinfo.fetching');
-                            $.get($btn.data('fileinfoUrl'), {key:$btn.data('key')}, function(info){
-                                self.trigger('fileinfo.fetched', info);
-                            }, 'json');
-                        }, 'json');
-                    } else {
-                        var media = self._convertFileToMedia(serverData);
-                        self.trigger('change',  media);
-                        self.trigger('fileinfo.fetched', {});
-                        Notify.success('文件上传成功！');
-                    }
-
-
-                }
-            }, this.get('uploaderSettings'));
-
-            if ($btn.data('filetypes')) {
-                settings.file_types = $btn.data('filetypes');
-            }
-
-            var swfu = new SWFUpload(settings);
-
-            return swfu;
         }
 
     });

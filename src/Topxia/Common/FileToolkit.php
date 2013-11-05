@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileToolkit
 {
 
-    /**
-     * this code from drupal 8
-     */
     public static function mungeFilename($filename, $extensions)
     {
         $original = $filename;

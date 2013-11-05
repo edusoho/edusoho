@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set modal_size = 'xlarge' %}
+
 {% block title %}添加资料{% endblock %}
 {% block body %}
 
@@ -20,6 +22,7 @@
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
       {% include 'TopxiaWebBundle:CourseMaterialManage:file-chooser.html.twig' %}
+      <input type="hidden" name="fileId">
     </div>
   </div>
 
@@ -31,7 +34,7 @@
 
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1 controls">
-      <button class="btn btn-primary" id="material-upload-btn" type="submit" data-uploading-text="正在上传, 请稍后...">上传</button>
+      <button class="btn btn-primary" id="material-upload-btn" type="submit">添加</button>
     </div>
   </div>
 

@@ -8,12 +8,15 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        var $form = $("#course-material-form");
+
         var materialChooser = new FileChooser({
             element: '#material-file-chooser'
         });
 
-
-        var $form = $("#course-material-form");
+        materialChooser.on('change', function(item) {
+            $form.find('[name="fileId"]').val(item.id);
+        });
 
         $form.on('click', '.delete-btn', function(){
             var $btn = $(this);
@@ -25,6 +28,17 @@ define(function(require, exports, module) {
                 $btn.parents('.list-group-item').remove();
                 Notify.success('资料已删除');
             });
+        });
+
+        $form.on('submit', function(){
+            if ($form.find('[name="fileId"]').val().length == 0) {
+                Notify.danger('请先上传文件！');
+                return false;
+            }
+            $.post($form.attr('action'), $form.serialize(), function(response){
+                console.log(response);
+            });
+            return false;
         });
 
     };

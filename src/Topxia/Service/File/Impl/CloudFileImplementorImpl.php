@@ -16,8 +16,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
 	public function getFile($file)
 	{
-       $file['metas'] = $this->decodeMetas($file['metas']);
-	   $file['path'] = $this->getCloudClient()->getFileUrl($file['hashId'],$file['targetId'],$file['targetType']);
+    //    $file['metas'] = $this->decodeMetas($file['metas']);
+	   // $file['path'] = $this->getCloudClient()->getFileUrl($file['hashId'],$file['targetId'],$file['targetType']);
        return $file;
 	}
 
