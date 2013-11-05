@@ -2,8 +2,6 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    require('jquery.form');
-
     var FileChooser = require('../widget/file/file-chooser');
 
     exports.run = function() {
@@ -35,8 +33,15 @@ define(function(require, exports, module) {
                 Notify.danger('请先上传文件！');
                 return false;
             }
-            $.post($form.attr('action'), $form.serialize(), function(response){
-                console.log(response);
+            $.post($form.attr('action'), $form.serialize(), function(html){
+                Notify.success('资料上传成功！');
+                $("#material-list").append(html).show();
+                $form.find('.text-warning').hide();
+                $form.find('[name="fileId"]').val('');
+                $form.find('[name="description"]').val('');
+                materialChooser.open();
+            }).fail(function(){
+                Notify.success('资料上传失败，请重试！');
             });
             return false;
         });
