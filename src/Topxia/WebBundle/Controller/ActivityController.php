@@ -22,6 +22,9 @@ class ActivityController extends BaseController
         $currentuser=$this->getCurrentUser();
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($filters);
+        $conditions['actType']='公开课';
+        $conditions['expired']='0';//0表示开放报名。
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getActivityService()->searchActivityCount($conditions)
@@ -66,35 +69,7 @@ class ActivityController extends BaseController
         ));
     }
 
-
-    public function activityBlockGridAction($activitys, $mode = 'default')
-    {
-        $userIds = array();
-
-        foreach ($activitys as $activity) {
-            $userIds = array_merge($userIds, $activity['experters']);
-        }
-       
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-       
-      
-        return $this->render("TopxiaWebBundle:Activity:activitys-block-grid.html.twig", array(
-            'activitys' => $activitys,
-            'users'=>$users,        
-            'mode' => $mode,
-        ));
-    }
-
-    public function activityBlockSameAction($activitys)
-    {
-      
-        return $this->render("TopxiaWebBundle:Activity:activitys-block-same.html.twig", array(
-            'activitys' => $activitys, 
-        ));
-    }
-
-
+    //显示公开课未结束的页面
 	public function showAction(Request $request, $id)
     {
         //活动信息
@@ -163,7 +138,7 @@ class ActivityController extends BaseController
             "post_users"=>$postUsers));
     }
   
-
+   //显示公开课已结束的页面
     public function expiredAction(Request $request,$id){
 
         $activity=$this->getActivityService()->getActivity($id);
@@ -245,53 +220,7 @@ class ActivityController extends BaseController
             "appendixs"=>$appendix));
     }
 
-
-    public function headerAction($activity, $manage = false)
-    {
-        $user = $this->getCurrentUser();
-
-        $users = empty($activity['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-        return $this->render('TopxiaWebBundle:Activity:header.html.twig', array(
-            'activity' => $activity,
-            'users' => $users,
-            'manage' => $manage,
-        ));
-    }
-
-    public function expertersBlockAction($activity)
-    {
-        $users = $this->getUserService()->findUsersByIds($activity['experters']);
-        $profiles = $this->getUserService()->findUserProfilesByIds($activity['experters']);
-
-        return $this->render('TopxiaWebBundle:Activity:experters-block.html.twig', array(
-            'activity' => $activity,
-            'users' => $users,
-            'profiles' => $profiles,
-        ));
-    }
-
-
-    public function successAction(Request $request,$id){
-       
-        $user=$this->getCurrentUser();
-        
-        $activity=$this->getActivityService()->getActivity($id);
-
-        $isNew = $request->query->get('isNew');
-
-        $hash=$this->makeHash($user);
-
-        return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
-            "activityid"=>$id,
-            "isNew"=>$isNew,
-            "user"=>$user,
-            "activity"=>$activity,
-            "hash"=>$hash)
-        );
-    }
-
-    
+    //公开课报名，根据用户是否登陆和是否设置价格及支付方式进入不同的报名页面
     public function joinAction(Request $request,$id)
     {  
       
@@ -338,8 +267,6 @@ class ActivityController extends BaseController
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
                
                 $this->sendActivaEmail($token,$user);
-
-
 
 
                 $member['activityId']=$id;
@@ -390,21 +317,6 @@ class ActivityController extends BaseController
         }
         //默认是未登陆用户报名
         $filename="join-activity-form-vistor";  
-        //需要付费的活动，并且是线上支付模式
-        if($activity['price']*100>0 and $activity['payment']=='onlinePay')
-        {
-            $userprofile=array();
-            if(!empty($user['id'])){
-                $userprofile=$this->getUserService()->getUserProfile($user['id']);
-                $filename="join-activity-form-member-buy";
-            }
-            return $this->render("TopxiaWebBundle:Activity:".$filename.".html.twig",array(
-                "activity"=>$activity,
-                "user"=>$user,
-                "profile"=>$userprofile)
-            );
-        }
-            
 
         $userprofile=array();
         if(!empty($user['id'])){
@@ -420,6 +332,27 @@ class ActivityController extends BaseController
         
     }
 
+    //如果免费，显示公开课报名成功页面，如果收费，并且线上支付，进入支付页面，如果收费，并且线下支付，进入报名成功页面，提示支付告知页面
+    public function successAction(Request $request,$id){
+       
+        $user=$this->getCurrentUser();
+        
+        $activity=$this->getActivityService()->getActivity($id);
+
+        $isNew = $request->query->get('isNew');
+
+        $hash=$this->makeHash($user);
+
+        return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
+            "activityid"=>$id,
+            "isNew"=>$isNew,
+            "user"=>$user,
+            "activity"=>$activity,
+            "hash"=>$hash)
+        );
+    }
+
+    //公开课取消报名
     public function removeAction(Request $request,$id){
         $user = $this->getCurrentUser();
         if (empty($user['id'])) {
@@ -436,6 +369,61 @@ class ActivityController extends BaseController
             ))
         );
     }
+
+
+    public function activityBlockGridAction($activitys, $mode = 'default')
+    {
+        $userIds = array();
+
+        foreach ($activitys as $activity) {
+            $userIds = array_merge($userIds, $activity['experters']);
+        }
+       
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+       
+      
+        return $this->render("TopxiaWebBundle:Activity:activitys-block-grid.html.twig", array(
+            'activitys' => $activitys,
+            'users'=>$users,        
+            'mode' => $mode,
+        ));
+    }
+
+    public function activityBlockSameAction($activitys)
+    {
+      
+        return $this->render("TopxiaWebBundle:Activity:activitys-block-same.html.twig", array(
+            'activitys' => $activitys, 
+        ));
+    }
+
+    public function headerAction($activity, $manage = false)
+    {
+        $user = $this->getCurrentUser();
+
+        $users = empty($activity['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return $this->render('TopxiaWebBundle:Activity:header.html.twig', array(
+            'activity' => $activity,
+            'users' => $users,
+            'manage' => $manage,
+        ));
+    }
+
+    public function expertersBlockAction($activity)
+    {
+        $users = $this->getUserService()->findUsersByIds($activity['experters']);
+        $profiles = $this->getUserService()->findUserProfilesByIds($activity['experters']);
+
+        return $this->render('TopxiaWebBundle:Activity:experters-block.html.twig', array(
+            'activity' => $activity,
+            'users' => $users,
+            'profiles' => $profiles,
+        ));
+    }
+
+    
 
     private function getThreadSearchFilters($request)
     {
@@ -637,34 +625,7 @@ class ActivityController extends BaseController
         return $this->createJsonResponse(false);
     }
 
-    public function zhaoxinAction(Request $request){
-       // $currentuser=$this->getCurrentUser();
-        //$binduser=$this->getUserService()->getUserBindByTypeAndUserId("weibo",$currentuser['id']);
-        ///$token=$binduser['token'];
-        //$c = new SaeTClientV2("2639729631","fe8353fc845437c64eb1107d5ba76f38",$token);
-        //$ms  = $c->home_timeline();
-        //$uid_get = $c->get_uid();
-        //$uid = $uid_get['uid'];
-        //$user_message = $c->show_user_by_id( $uid);
-
-        $ret = $c->update("Hello wrold");
-        if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
-            return $this->createJsonResponse(false);   
-        } else {
-            return $this->createJsonResponse(true);   
-        }
-
-        ///$ret = $c->update("Hello wrold");
-        //if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
-         //   return $this->createJsonResponse(false);   
-        //} else {
-         //   return $this->createJsonResponse(true);   
-        //}
-        return $this->render('TopxiaWebBundle:Activity:show-success.html.twig');
-    }
-
-   
-
+ 
     private function sendActivaEmail($token, $user)
     {
         $this->sendEmail(

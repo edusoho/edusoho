@@ -13,12 +13,14 @@
 		<h3 class="text-center">你正在报名参加</h3>
 	</div>
 	<div class="col-md-10 plm">
-          <p class="title">
-            <h5>{{ activity.subtitle }}</h5>
-            <h4>{{ activity.title }}</h4>
+          <p  class="text-danger">
+            {{ activity.subtitle }}            
           </p>
+           <p  class="text-danger">           
+            {{ activity.title }}
+          </p >
           
-          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
+          <p  class="text-danger">费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
 	</div>
 	<div class="col-md-2  phs pvs">
 		<a href="#" class="show-user-card" >
@@ -29,12 +31,20 @@
 <div class="row">
 	<!-- 报名 -->
 	<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
+		<div class=" widget  shadow">
+			<div class="panel-title mbz ">
+				<h4>选择票价</h4>
+			</div>
+			<div class="content">
+
+			</div>
+		</div>
 		<div class="widget  shadow">
-			<div class="kytitle clearfix bor-l-green">
-				<h3>报名信息</h3>
+			<div class="panel-title mbl">
+				<h4>报名信息</h4>
 			</div>
 			<div class="content clearfix">
-				<div class="col-md-7">
+				<div class="col-md-6">
 					<div class="form-group">
         				<label class="col-lg-3 control-label" for="activity_email">Email地址</label>
         				<div class="col-lg-9">
@@ -84,7 +94,7 @@
 			            </div>
 			        </div>
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-6">
 					<div>
 						<p>问题出干货--高质量问题互动，才能点燃老师在公开课上的激情，亲，让我们一起吧讲师编成蜡炬的灰吧～～</p>
 					</div>
