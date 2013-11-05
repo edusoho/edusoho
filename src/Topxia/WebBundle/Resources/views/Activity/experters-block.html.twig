@@ -5,9 +5,9 @@
     <h3 class="panel-title">讲师</h3>
   </div>
   <div class="panel-body pbz ptz">
-    {% if activity.experterId %}
+    {% if activity.experters %}
      <ul class="media-list">
-            {% for teacherId in activity.experterId  %}
+            {% for teacherId in activity.experters  %}
               {% set user = users[teacherId] %}
               {% if profiles %}
               {% set profile = profiles[teacherId] %}

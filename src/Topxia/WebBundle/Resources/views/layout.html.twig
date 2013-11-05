@@ -93,7 +93,7 @@
     </div>     
 </header> 
 
-<div class="slide"></div>
+<div class="slide-osf"></div>
  
 <!-- container -->
 <div id="content-container" class="container plz prz">
@@ -105,11 +105,10 @@
       </div>
     {% endif %}
     {% block content %}{% endblock %}
-</div><!-- /container -->
+</div><!--/container -->
 
 
 {% block bottom %}
-<!-- container -->
 <footer class="footer">
     <div class="container clearfix  plz prz">  
       <div class="pull-left bor-l col-md-3">
@@ -148,10 +147,8 @@
    
     </div>
 </footer>
-
-
-
 {% endblock %}
+
 
 <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
 <div id="modal" class="modal"></div>

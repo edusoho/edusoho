@@ -319,7 +319,7 @@ color: #999;
 
 
 /*slide*/
-.banner,.slide{margin-top: 54px;}
+.slide-osf{margin-top: 54px;}
 
 /*公开课列表*/
 .openclass .list-item li{margin-bottom: 2em; background-color: white;position: relative;}

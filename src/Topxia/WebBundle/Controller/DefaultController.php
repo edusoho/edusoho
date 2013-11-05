@@ -14,6 +14,7 @@ class DefaultController extends BaseController
         //下一期公开课
       
         $feild['status']='published';
+        $feild['actType']='公开课';
         $feild['expired']='0';//0表示开放报名。
 
 
@@ -28,11 +29,11 @@ class DefaultController extends BaseController
                                                                     'subtitle'=>'',
                                                                     'title'=>'',
                                                                     'startTime'=>'',
-                                                                    'locationId'=>'1',
+                                                                    'city'=>'北京',
                                                                     'address'=>'北京.海淀区海淀西大街70号.3W咖啡二楼',
                                                                     'id'=>'0');
 
-        $activitTerchar=empty($recommended['experterId'])?null:$this->getUserService()->findUsersByIds($recommended['experterId']);
+        $activitTerchar=empty($recommended['experters'])?null:$this->getUserService()->findUsersByIds($recommended['experters']);
         $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
         //地址
         $Locations=$this->getLocationService()->getAllLocations();

@@ -72,7 +72,7 @@ class ActivityController extends BaseController
         $userIds = array();
 
         foreach ($activitys as $activity) {
-            $userIds = array_merge($userIds, $activity['experterId']);
+            $userIds = array_merge($userIds, $activity['experters']);
         }
        
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -261,8 +261,8 @@ class ActivityController extends BaseController
 
     public function expertersBlockAction($activity)
     {
-        $users = $this->getUserService()->findUsersByIds($activity['experterId']);
-        $profiles = $this->getUserService()->findUserProfilesByIds($activity['experterId']);
+        $users = $this->getUserService()->findUsersByIds($activity['experters']);
+        $profiles = $this->getUserService()->findUserProfilesByIds($activity['experters']);
 
         return $this->render('TopxiaWebBundle:Activity:experters-block.html.twig', array(
             'activity' => $activity,
@@ -604,7 +604,8 @@ class ActivityController extends BaseController
     private function createActivityForm()
     {
         return $this->createNamedFormBuilder('activity')
-            ->add('title', 'text')
+            ->add('title', 'text',array('required'=>true))
+            ->add('actType', 'act_type',array('multiple'=>false,'expanded'=>false,'required'=>true))
             ->getForm();
     }
 

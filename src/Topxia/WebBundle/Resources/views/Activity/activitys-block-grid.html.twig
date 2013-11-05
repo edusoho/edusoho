@@ -21,7 +21,7 @@
 
 
         {% if mode in ['default'] %}
-          {% set user = users[activity.experterId|first]|default(null) %}
+          {% set user = users[activity.experters|first]|default(null) %}
           {% if user %}
             <span class="teacher clearfix">
               <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">

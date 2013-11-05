@@ -10,35 +10,39 @@
 
 {% block content%}
  
-<section class="pz">  
-  <!-- banner -->
-  <div class="banner clear-mtop">  
-    <!-- 广告 -->
-    <div class="container clear-pleft clear-pright">
-      <div class="banner-bg">
-        <div class="top">
-          <div class="pull-left bulletin">
 
-            <div class="index-img-box ps-rela">
-              <a {% if recommended.id %} href="{{ path('activity_show',{id:recommended.id})}}"  {% endif %}>
-                <img class="img-responsive thumb" src="{{ file_path(recommended.largePicture,'open-class-default-logo.jpg')  }}" >  
-              </a>  
-              <!--h3 class="ps-abso ps-tpl ps-ltl mz btn btn-success text-large op-normal">{{recommended.subtitle}}</h3-->
-              <h4 class="activity-img-title "><a href="{{ path('activity_show',{id:recommended.id})}}">{{recommended.title }}</a></h4>
+  <!-- banner -->
+  <div class="container  pz mtl">  
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+          <div class="item active">
+            <img  src="{{ asset('bundles/topxiaweb/img/home-slide/home-slide.jpg')}}" >
+            <div class="carousel-caption">
+              ...
             </div>
-            
           </div>
-        
+          ...
         </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
       </div>
-      
-    
-    </div>        
   </div>
 
   <div class="container  pz">
-    
-      
      <!-- 公开课 -->
       <div class="row mtl">
         <div class="mod col-md-9 "> 
@@ -125,9 +129,7 @@
                             <span class="highlight mz">{{ activityThread.postNum }}</span>
                           </a>
                         个回复
-                        </span>                       
-                     
-
+                        </span>
                       </p>
                       
                     </div>
@@ -239,8 +241,7 @@
           </div>          
         </aside>
       </div>
-   
   </div>  
-</section>
+
 
 {% endblock %}

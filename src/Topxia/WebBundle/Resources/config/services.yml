@@ -24,6 +24,16 @@ services:
         tags:
             - { name: form.type, alias: location }
 
+    form.type.act_type:
+        class: Topxia\WebBundle\Form\Common\ActTypeType
+        tags:
+            - { name: form.type, alias: act_type }
+
+    form.type.city:
+        class: Topxia\WebBundle\Form\Common\CityType
+        tags:
+            - { name: form.type, alias: city }
+
     topxia.data_dict.user_role:
         class: Topxia\WebBundle\DataDict\UserRoleDict
 

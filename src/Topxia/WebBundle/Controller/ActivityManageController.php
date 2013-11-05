@@ -143,7 +143,7 @@ class ActivityManageController extends BaseController
             $data = $request->request->all();
             $data['ids'] = empty($data['ids']) ? array() : array_values($data['ids']);
 
-            $field['experterId']=$data['ids'];
+            $field['experters']=$data['ids'];
             $this->getActivityService()->setActivityTeachers($id,$field);
             $this->setFlashMessage('success', '教师设置成功！');
 
@@ -152,7 +152,7 @@ class ActivityManageController extends BaseController
         }
 
         $teacherMembers = $this->getActivityService()->getActivity($id);
-        $users = $this->getUserService()->findUsersByIds($teacherMembers['experterId']);
+        $users = $this->getUserService()->findUsersByIds($teacherMembers['experters']);
 
         $teachers = array();
         foreach ($users as $member) {
@@ -232,9 +232,6 @@ class ActivityManageController extends BaseController
 
         return $this->createJsonResponse($teachers);
     }
-
-
-
 
 
     public function courseAction(Request $request,$id){
@@ -324,12 +321,13 @@ class ActivityManageController extends BaseController
         $builder = $this->createNamedFormBuilder('activity', $activity)
             ->add('title', 'text')
             ->add('subtitle', 'textarea')
-            ->add('locationId','location'
-            )
-            ->add('tags', 'tags')
+            ->add('actType', 'act_type',array('multiple'=>false,'expanded'=>false,'required'=>true))
+            ->add('city', 'city',array('multiple'=>false,'expanded'=>false,'required'=>true))         
             ->add('address','text')
+            ->add('tags', 'tags')
             ->add('onlineAddress','text')
             ->add('form','text')
+            ->add('duration','text')
             ->add('strstartTime','text')
             ->add('strendTime','text')
             ->add('categoryId', 'default_category', array(

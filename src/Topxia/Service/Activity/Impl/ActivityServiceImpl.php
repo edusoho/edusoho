@@ -49,7 +49,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			throw $this->createServiceException('缺少必要字段，创建活动失败！');
 		}
 
-		$activity = ArrayToolkit::parts($activity, array('title', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$activity = ArrayToolkit::parts($activity, array('title', 'actType','about', 'categoryId', 'tagsId', 'price', 'startTime', 'endTime', 'city', 'address'));
 
 		$activity['status'] = 'draft';
         $activity['about'] = !empty($activity['about']) ? $this->getHtmlPurifier()->purify($activity['about']) : '';
@@ -59,7 +59,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity['endTime'] = empty($activity['endTime']) ? 0 : (int) $activity['endTime'];
 		$activity['userId'] = $this->getCurrentUser()->id;
 		$activity['createdTime'] = time();
-		$activity['experterId'] = array($activity['userId']);
+		$activity['experters'] = array($activity['userId']);
 		$activity = $this->getActivityDao()->addActivity(ActivitySerialize::serialize($activity));
 		return $this->getActivity($activity['id']);
 	}
@@ -193,13 +193,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'type', 'title', 'about', 'categoryId', 'subtitle','tags', 'price', 'startTime', 'endTime', 'locationId', 'address','strstartTime','strendTime','form','onlineAddress'
+			'id', 'title', 'subtitle','actType','status','price','needApproval','payment','income','rating','ratingNum', 'categoryId','tags', 'about', 'startTime', 'endTime','duration', 'city', 'address','strstartTime','strendTime','form','onlineAddress'
 		));
 
-		//TODO 暂时先注释，以后可能会用到
-		// if (isset($fields['about'])) {
-		// 	$this->getHtmlPurifier()->purify($fields['about']);
-		// }
 
 		if (isset($fields['tags'])) {
 			$fields['tags'] = $fields['tags'] ? : array();
@@ -216,10 +212,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			$fields['rating'] = (int) $fields['rating'];
 		}
 		
-		
-		if (isset($fields['locationId'])) {
-			$fields['locationId'] = (int) $fields['locationId'];
-		}
 
 		if (isset($fields['ratingNum'])) {
 			$fields['ratingNum'] = (int) $fields['ratingNum'];
@@ -416,11 +408,11 @@ class ActivitySerialize
     		}
     	}
     	
-    	if (isset($activity['experterId'])) {
-    		if (is_array($activity['experterId']) and !empty($activity['experterId'])) {
-    			$activity['experterId'] = '|' . implode('|', $activity['experterId']) . '|';
+    	if (isset($activity['experters'])) {
+    		if (is_array($activity['experters']) and !empty($activity['experters'])) {
+    			$activity['experters'] = '|' . implode('|', $activity['experters']) . '|';
     		} else {
-    			$activity['experterId'] = null;
+    			$activity['experters'] = null;
     		}
     	}
 
@@ -467,10 +459,10 @@ class ActivitySerialize
 		$activity['tags'] = empty($activity['tags']) ? array() : explode('|', trim($activity['tags'], '|'));
 
 
-		if(empty($activity['experterId'] )) {
-			$activity['experterId'] = array();
+		if(empty($activity['experters'] )) {
+			$activity['experters'] = array();
 		} else {
-			$activity['experterId'] = explode('|', trim($activity['experterId'], '|'));
+			$activity['experters'] = explode('|', trim($activity['experters'], '|'));
 		}
 
 		if(empty($activity['photoId'] )) {

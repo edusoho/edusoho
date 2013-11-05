@@ -30,7 +30,11 @@
 				<div class="col-lg-2 control-label">{{ form_label(form.subtitle, '副标题') }}</div>
 				<div class="col-lg-8 controls">{{ form_widget(form.subtitle, {attr:{class:'form-control'}}) }}</div>
 			</div>
-			
+
+			<div class="form-group">
+	          <div class="col-lg-2 control-label">{{ form_label(form.actType, '类型') }}</div>
+	          <div class="col-lg-8 controls">{{ form_widget(form.actType, {attr:{class:'form-control  width-input width-input-large'}}) }}</div>
+	        </div>
 
 			
 
@@ -47,9 +51,8 @@
 			</div>
 
 			<div class="form-group">
-			  <div class="col-lg-2 control-label">{{ form_label(form.locationId, '举办城市') }}</div>
-			  <div class="col-lg-8 controls">
-			    {{ form_widget(form.locationId, {attr:{class:'form-control width-input width-input-large'}}) }}
+			  <div class="col-lg-2 control-label">{{ form_label(form.city, '举办城市') }}</div>
+			  <div class="col-lg-8 controls">{{ form_widget(form.city, {attr:{class:'form-control width-input width-input-large'}}) }}
 			  </div>
 			</div>
 
@@ -72,6 +75,13 @@
 			  <div class="col-lg-2 control-label">{{ form_label(form.form, '活动形式') }}</div>
 			  <div class="col-lg-8 controls">
 			    {{ form_widget(form.form, {attr:{class:'form-control width-input width-input-large width-full'}}) }}
+			  </div>
+			</div>
+
+			<div class="form-group">
+			  <div class="col-lg-2 control-label">{{ form_label(form.duration, '时长') }}</div>
+			  <div class="col-lg-8 controls">
+			    {{ form_widget(form.duration, {attr:{class:'form-control width-input width-input-large width-full'}}) }}
 			  </div>
 			</div>
 

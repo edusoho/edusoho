@@ -1,5 +1,6 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="course-tr-{{ course.id }}">
+  <td>{{ course.actType }}</td>
   <td>
     <a href="{{ path('activity_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     <br>

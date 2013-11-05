@@ -9,7 +9,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="course[title]"]',
+            element: '[name="activity[title]"]',
+            required: true
+        });
+
+         validator.addItem({
+            element: '[name="activity[actType]"]',
             required: true
         });
 
