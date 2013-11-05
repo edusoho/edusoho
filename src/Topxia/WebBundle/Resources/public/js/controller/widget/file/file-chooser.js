@@ -29,13 +29,16 @@ define(function(require, exports, module) {
             if (choosed) {
                 this.trigger('change', choosed);
                 this.trigger('fileinfo.fetched', {});
+            } else {
+                this.open();
             }
-
         },
 
         open: function() {
-            this.element.find(".file-chooser-bar").hide();
-            this.element.find(".file-chooser-main").show();
+            this.show();
+            this.$(".file-chooser-bar").hide();
+            this.$(".file-chooser-main").show();
+            this.$(".file-chooser-uploader-tab").tab('show');
             return this;
         },
 
@@ -45,9 +48,9 @@ define(function(require, exports, module) {
         },
 
         close: function() {
+            this.get('progressbar').reset().hide();
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
-            this.get('progressbar').reset().hide();
             return this;
         },
 
@@ -82,6 +85,8 @@ define(function(require, exports, module) {
             var self = this;
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
+                    console.log('show upload pane.');
+                    self._createUploader();
                     self.get('progressbar').reset().hide();
                 }
 
@@ -117,16 +122,23 @@ define(function(require, exports, module) {
         },
 
         _initUploadPane: function() {
-            var $btn = this.$('[data-role=uploader-btn]'),
-                progressbar = new UploadProgressBar(this.$('[data-role=progress]'));
-
-            this.set('progressbar', progressbar);
-            this.set('uploader', this._createUploader($btn, progressbar));
+            this.set('progressbar', new UploadProgressBar(this.$('[data-role=progress]')));
         },
 
-        _createUploader: function($btn, progressbar) {
-            var self = this;
-            var btnData = $btn.data();
+        _destoryUploader: function() {
+            if (this.get('uploader')) {
+                console.log('destory uploader');
+                this.get('uploader').destroy();
+                this.set('uploader', null);
+            }
+        },
+
+        _createUploader: function() {
+            console.log('create uploader');
+            var self = this,
+                $btn = this.$('[data-role=uploader-btn]'),
+                progressbar = this.get('progressbar'),
+                btnData = $btn.data();
 
             var uploader = new plupload.Uploader({
                 runtimes : 'flash',
@@ -167,6 +179,8 @@ define(function(require, exports, module) {
             });
 
             uploader.bind('FileUploaded', function(uploader, file, response) {
+                uploader.removeFile(file);
+                uploader.refresh();
                 progressbar.setComplete().hide();
                 response = $.parseJSON(response.response);
 
@@ -193,10 +207,13 @@ define(function(require, exports, module) {
             });
 
             uploader.bind('Error', function(uploader) {
+
                 Notify.danger('文件上传失败，请重试！');
             });
 
             uploader.init();
+
+            this.set('uploader', uploader);
 
             return uploader;
         },
