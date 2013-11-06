@@ -29,7 +29,8 @@ class CourseLessonManageController extends BaseController
 		}
 
 		$mediaIds = array_keys($mediaMap);
-		$files = $this->getDiskService()->findFilesByIds($mediaIds);
+
+		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 		foreach ($files as $file) {
 			$lessonIds = $mediaMap[$file['id']];
 			foreach ($lessonIds as $lessonId) {
@@ -150,7 +151,7 @@ class CourseLessonManageController extends BaseController
         }
 
         if ($lesson['mediaId']) {
-	    	$file = $this->getDiskService()->getFile($lesson['mediaId']);
+	    	$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 	    	if (!empty($file)) {
 	    		$lesson['media'] = array(
 		        	'id' => $file['id'],
@@ -176,10 +177,13 @@ class CourseLessonManageController extends BaseController
 
         $user = $this->getCurrentUser();
 
-    	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-    	$filePath = "course-{$course['id']}";
-    	$fileKey = "{$filePath}/" . $randString;
-    	$convertKey = $randString;
+        $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+        $filePath = "courselesson/{$course['id']}";
+        $fileKey = "{$filePath}/" . $randString;
+        $convertKey = $randString;
+
+        $targetType = 'courselesson';
+        $targetId = $course['id'];
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
@@ -216,6 +220,8 @@ class CourseLessonManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
+            'targetType' => $targetType,
+            'targetId' => $targetId,
 			'videoUploadToken' => $videoUploadToken,
 			'audioUploadToken' => $audioUploadToken,
 			'filePath' => $filePath,
@@ -287,6 +293,11 @@ class CourseLessonManageController extends BaseController
     private function getDiskService()
     {
         return $this->getServiceKernel()->createService('User.DiskService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
 }
