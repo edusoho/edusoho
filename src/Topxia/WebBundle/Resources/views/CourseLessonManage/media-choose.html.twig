@@ -47,19 +47,14 @@
                   <li>视频将上传到<strong>网站服务器</strong>，如需使用视频云存储，请联系EduSoho官方购买。使用视频云存储，将获得更好的播放体验。</li>
                 {% endif %}
               </ul>
-              <p></p>
-              <p></p>
-              <p></p>
-
             </div>
 
           </div>
 
         </div>
         <div class="tab-pane" id="video-chooser-disk-pane">
-            <div id="disk-browser-video" data-role="disk-browser" 
-            style="width:621px;height:200px;overflow: hidden"
-            data-url="{{ path('disk_browse', {type:'video'}) }}" 
+            <div id="file-browser-video" data-role="file-browser"
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'video'}) }}" 
             data-empty="暂无视频文件，请先上传。">
             </div>
         </div>
@@ -126,9 +121,8 @@
 
         </div>
         <div class="tab-pane" id="audio-chooser-disk-pane">
-          <div id="disk-browser-audio" data-role="disk-browser" 
-          style="width:621px; height:200px; overflow: hidden"
-          data-url="{{ path('disk_browse', {type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+          <div id="file-browser-audio" data-role="file-browser"
+          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
         </div>
       </div>
     </div>

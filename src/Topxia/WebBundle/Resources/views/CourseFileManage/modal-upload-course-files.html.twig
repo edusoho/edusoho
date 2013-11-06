@@ -1,0 +1,69 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}
+  {% if targetType == 'courselesson' %} 上传课时文件 {% elseif targetType == 'coursematerial' %} 上传资料文件 {% endif %}
+{% endblock %}
+	
+{% block body %}
+
+<style>
+  .plupload_filelist_footer {
+    height: 40px;
+    line-height: 20px;
+  }
+
+
+</style>
+
+	<div id="file-uploader-container" 
+    class="mbl" 
+    data-target-type="{{targetType}}" 
+    data-upload-mode="{{ storageSetting.upload_mode }}" >
+	
+     <div
+      id="file-chooser-uploader-div"
+      data-role="uploader-div"
+      data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
+      data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
+      {% if storageSetting.upload_mode == 'cloud' %}
+        data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
+        data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
+      {% endif %}
+     ></div>
+	
+	</div>
+
+  {% if targetType == 'courselesson' %}
+    <div class="alert alert-info">
+      <ul>
+        {% if storageSetting.upload_mode == 'cloud' %}
+          <li>支持<strong>mp3, mp4, avi, flv, wmv</strong>格式的文件上传。</li>
+          <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+        {% else %}
+          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>300 MB</strong>。</li>
+          <li>视频将上传到<strong>网站服务器</strong>，如需使用视频云存储，请联系EduSoho官方购买。</li>
+        {% endif %}
+      </ul>
+    </div>
+  {% elseif targetType == 'coursematerial' %}
+    <div class="alert alert-info">
+      <ul>
+        <li>支持常见文档、图片、音视频、压缩包文件格式。</li>
+        {% if storageSetting.upload_mode == 'cloud' %}
+          <li>文件将上传到<strong>云服务器</strong>。</li>
+        {% else %}
+          <li>文件将上传到<strong>网站服务器</strong>，如需使用云存储，请联系EduSoho官方购买。</li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <script>app.load('course-manage-file/upload-course-files')</script>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}

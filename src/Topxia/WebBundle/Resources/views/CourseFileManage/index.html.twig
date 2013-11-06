@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}课件管理 - {{ parent() }}{% endblock %}
+{% block title %}文件管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
@@ -10,26 +10,63 @@
 
 <div class="panel panel-default panel-col">
 
-  {% include 'TopxiaWebBundle:CourseFileManage:panel-heading.html.twig' %}
+  <div class="panel-heading">
 
-  <div class="panel-body" id="course-lesson-table-container"> 
+      {% if type == 'courselesson' %}    
+
+      <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'courselesson'}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传课时文件
+        </button>
+
+      {% elseif type == 'coursematerial' %}
+
+        <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传资料文件
+        </button>
+
+      {% endif %}
+
+    文件管理
+  </div>
+
+
+  <div class="panel-body" id="file-manage-panel"> 
+
+    <ul class="nav nav-tabs mbm">
+      <li {% if type == 'courselesson' %} class="active" {% endif %}>
+        <a href="{{ path('course_manage_files', {id:course.id, type:'courselesson'}) }}">课时文件</a></li>
+      <li {% if type == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">资料文件</a></li>
+    </ul>
 
     <table class="table table-striped table-hover" id="course-lesson-table">
       <thead>
-        {% include 'TopxiaWebBundle:CourseFileManage:thead-tr.html.twig' %}
+        <tr>
+          <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
+          <th>文件名</th>
+          <th>类型</th>
+          <th>大小</th>
+          <th>最后更新</th>
+        </tr>
       </thead>
       <tbody>
         {% for uploadFile in courseLessons %}
           {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
         {% else %}
-          <tr class="empty"><td colspan="8">无课件记录</td></tr>
+          <tr class="empty"><td colspan="8">无文件记录</td></tr>
         {% endfor %}
       </tbody>
     </table>
     
-    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+    <label class="checkbox-inline mrm"><input type="checkbox" data-role="batch-select"> 全选</label>
     
-    {% include 'TopxiaWebBundle:CourseFileManage:operations-button-group.html.twig' %}
+
+    <div class="btn-group">
+      <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="文件纪录" data-url="{{ path('course_manage_upload_course_delete_files', {id:course.id, type:tab}) }}">
+        <i class="glyphicon glyphicon-trash"></i>
+      删除</button>
+    </div>
+
+
 
     {{ web_macro.paginator(paginator) }}
 

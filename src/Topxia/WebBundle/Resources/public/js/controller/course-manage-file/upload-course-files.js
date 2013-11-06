@@ -8,18 +8,38 @@ define(function(require, exports, module) {
 	require('jquery.plupload-queue-zh-cn');
 
 	exports.run = function() {
-		$div = $("#file-chooser-uploader-div");
+		var $container = $("#file-uploader-container"),
+			targetType = $container.data('targetType'),
+			uploadMode = $container.data('uploadMode')
+
+
+			var extensions = '';
+		if (targetType == 'courselesson') {
+			if (uploadMode == 'cloud') {
+				extensions = 'mp3,mp4,avi,flv,wmv';
+			} else {
+				extensions = 'mp3,mp4';
+			}
+		} else if (targetType == 'coursematerial') {
+			extensions = 'jpg,jpeg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx,pps,ods,odp,mp4,mp3,avi,flv,wmv,wma,zip,rar,gz,tar,7z';
+		}
+
+		var filters = [];
+		if (extensions.length > 0) {
+			filters = [{
+				title: "Files",
+				extensions: extensions
+			}];
+		}
+
+		var $div = $("#file-chooser-uploader-div");
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
-			runtimes: 'flash',
+			runtimes: 'html5,flash',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
-			resize: {
-				width: 500,
-				height: 500,
-				quality: 90
-			},
+			filters: filters,
 			init: {
 
 				FileUploaded: function(up, file, info) {
@@ -27,15 +47,23 @@ define(function(require, exports, module) {
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
-							Notify.success(file.name + '文件上传成功！');
+							// Notify.success(file.name + '文件上传成功！');
 							if (divData.fileinfoUrl) {
 								$.get($div.data('fileinfoUrl'), {
 									key: response.hashId
 								}, function(info) {}, 'json');
 							}
 						}, 'json');
-					} else {
-						Notify.success(file.name + '文件上传成功！');
+					}
+					
+					// else {
+					// 	Notify.success(file.name + '文件上传成功！');
+					// }
+
+					 if (up.total.uploaded == up.files.length) {
+						$(".plupload_buttons").css("display", "inline");
+						$(".plupload_upload_status").css("display", "inline");
+						$(".plupload_start").addClass("plupload_disabled");
 					}
 				},
 
@@ -43,31 +71,17 @@ define(function(require, exports, module) {
 					Notify.danger('文件上传失败，请重试！');
 				},
 
-				UploadProgress: function(up, file) {
-
-					$('#modal').on('hide.bs.modal', function(e) {
-
-						if (file.percent < 100) {
-
-							if (!confirm('退出对话框会中断正在上传中的文件，是否继续？')) {
-								$("#modal").off('hide.bs.modal');
-								return false;
-							}
-
-							up.stop();
-							$("#modal").off('hide.bs.modal');
-
-						}
-
-					});
-
-				},
-
 				BeforeUpload: function(up, file) {
+					var data = {};
+					if (targetType == 'courselesson' && uploadMode == 'cloud') {
+						data.convertor = 'video';
+					}
+
 					$.ajax({
 						url: divData.paramsUrl,
 						async: false,
 						dataType: 'json',
+						data: data,
 						cache: false,
 						success: function(response, status, jqXHR) {
 							up.settings.url = response.url;
@@ -85,22 +99,9 @@ define(function(require, exports, module) {
 
 		});
 
-		$('form').submit(function(e) {
-			var uploader = $('#file-chooser-uploader-div').pluploadQueue();
-			if (uploader.total.uploaded == 0) {
-				if (uploader.files.length > 0) {
-					uploader.bind('UploadProgress', function() {
-						if (uploader.total.uploaded == uploader.files.length)
-							$('form').submit();
-					});
-					uploader.start();
-				} else
-					alert('你必须至少上传一个文件！');
-				e.preventDefault();
-			}
+		$('#modal').on('hide.bs.modal', function(e) {
+			window.location.reload();
 		});
-
-		uploader.init();
 
 	};
 

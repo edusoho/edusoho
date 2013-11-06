@@ -29,7 +29,6 @@ define(function(require, exports, module) {
             var $form = $("#thread-post-form");
 
             $form.find('[type=submit]').attr('disabled', 'disabled');
-            console.log($form.find('[type=submit]'));
             $.post($form.attr('action'), $form.serialize(), function(html) {
                 $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
                 var id = $(html).appendTo('.thread-post-list').attr('id');

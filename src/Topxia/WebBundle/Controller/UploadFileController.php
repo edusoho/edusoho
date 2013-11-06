@@ -65,11 +65,17 @@ class UploadFileController extends BaseController
             } elseif ($convertor == 'audio') {
             }
 
+            //@todo refacor it. 
+            $keySuffix = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+            $key = "{$targetType}-{$targetId}/{$keySuffix}";
+            $convertKey = null;
+
             $clientParams = array();
             if ($commands) {
+                $convertKey = $keySuffix;
                 $clientParams = array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
                 );
             }
 
@@ -80,14 +86,14 @@ class UploadFileController extends BaseController
 
             $params['url'] = $uploadToken['url'];
 
-            //@todo refacor it.
-            $keySuffix = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
-            $key = "{$targetType}-{$targetId}/{$keySuffix}";
-
             $params['postParams'] = array(
                 'token' => $uploadToken['token'],
                 'key' => $key,
             );
+
+            if ($convertKey) {
+                $params['postParams']['x:convertKey'] = $convertKey;
+            }
 
         } else {
             $params['mode'] = 'local';
@@ -174,16 +180,10 @@ class UploadFileController extends BaseController
         $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
         $file = $this->getUploadFileService()->convertFile($file['id'], 'success', $data['items']);
 
-        // @todo refactor
-        $lesson = $this->getCourseService()->getLessonByMediaId($file['id']);
-        if ($lesson) {
-            $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
-                'lessonId' => $lesson['id'],
-                'courseId' => $lesson['courseId'],
-                'filename' => $file['filename'],
-            ));
-
-        }
+        $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
+            'courseId' => $file['targetId'],
+            'filename' => $file['filename'],
+        ));
 
         return $this->createJsonResponse($file['metas']);
     }

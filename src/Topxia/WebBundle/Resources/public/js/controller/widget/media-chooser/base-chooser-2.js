@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     require('swfupload');
     var Widget = require('widget');
-    var DiskBrowser = require('../disk-browser');
+    var FileBrowser = require('../file/file-browser');
     var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
             this.on('change', this.onChanged);
 
             this._initTabs();
-            this._initDiskBrowser();
+            this.FileBrowser();
             this._initUploadPane();
 
             var choosed = this.get('choosed');
@@ -92,11 +92,11 @@ define(function(require, exports, module) {
             });
         },
 
-        _initDiskBrowser: function() {
+        FileBrowser: function() {
             var self = this;
 
-            var browser = new DiskBrowser({
-                element: this.$('[data-role=disk-browser]')
+            var browser = new FileBrowser({
+                element: this.$('[data-role=file-browser]')
             }).show();
 
             browser.on('select', function(file) {

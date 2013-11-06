@@ -110,6 +110,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function deleteFile($file)
     {
+        return ;
     	$file = $this->getFile($file);
         if(empty($file['metas'])){
             return;
