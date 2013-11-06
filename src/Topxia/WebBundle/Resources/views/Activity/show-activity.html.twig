@@ -23,7 +23,12 @@
           <p>现场地址： {{ activity.address }}</p>
           {% if activity.onlineAddress %}<p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>{% endif %}
                    
-          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
+          <p>
+            {% if  activity.onlinePrice>0 %} 线上：{{ activity.onlinePrice}}元{% else %} 线上：免费 {% endif %}
+          </p>
+          <p>
+            {% if  activity.price>0  %}  线下： {{ activity.price}}元{% else %} 线下：免费 {% endif %}
+          </p>
          
     </div> 
      <div class="ps-ab ps-bt ps-rtl">
