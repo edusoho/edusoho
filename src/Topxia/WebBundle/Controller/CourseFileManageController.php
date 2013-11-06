@@ -88,35 +88,23 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function uploadCourseLessonAction(Request $request, $id)
+    public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         $storageSetting = $this->getSettingService()->get('storage', array());
-        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-lesson.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
             'course' => $course,
             'storageSetting' => $storageSetting,
-            'targetType' => 'courselesson',
-            'targetId'=>$course['id']
+            'targetType' => $targetType,
+            'targetId'=>$course['id'],
         ));
     }
 
-    public function uploadCourseMaterialAction(Request $request, $id)
+    public function submitUploadCourseFilesAction(Request $request, $id, $targetType )
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-material.html.twig', array(
-            'course' => $course,
-            'storageSetting' => $storageSetting,
-            'targetType' => 'coursematerial',
-            'targetId'=>$course['id']
-        ));
-    }
-
-    public function submitUploadCourseFilesAction(Request $request, $id, $fileType )
-    {
-        if($fileType == 'material'){
+        if($targetType == 'coursematerial'){
             return $this->redirect($this->generateUrl('course_manage_files_material',array('id'=>$id)));
-        } elseif ($fileType == 'lesson'){
+        } elseif ($targetType == 'courselesson'){
             return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id)));
         }
     }
