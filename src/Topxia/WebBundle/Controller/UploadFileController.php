@@ -142,9 +142,64 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($info);
     }
 
+    private function cloudConvertCallback(Request $request)
+    {
+        $data = $request->getContent();
+
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
+
+        $key = $request->query->get('key');
+        if (empty($key)) {
+            throw new \RuntimeException('key不能为空');
+        }
+        
+        $data = json_decode($data, true);
+        if (empty($data['id'])) {
+            throw new \RuntimeException('数据中id不能为空');
+        }
+
+        $hash = "{$data['id']}:{$key}";
+
+        $file = $this->getUploadFileService()->getFileByConvertHash($hash);
+        if (empty($file)) {
+            throw new \RuntimeException('文件不存在');
+        }
+
+        if ($data['code'] != 0) {
+            $this->getUploadFileService()->convertFile($file['id'], 'error');
+            throw new \RuntimeException('转换失败');
+        }
+
+        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $file = $this->getUploadFileService()->convertFile($file['id'], 'success', $data['items']);
+
+        // @todo refactor
+        $lesson = $this->getCourseService()->getLessonByMediaId($file['id']);
+        if ($lesson) {
+            $this->getNotificationService()->notify($file['userId'], 'cloud-file-converted', array(
+                'lessonId' => $lesson['id'],
+                'courseId' => $lesson['courseId'],
+                'filename' => $file['filename'],
+            ));
+
+        }
+
+        return $this->createJsonResponse($file['formats']);
+    }
+
     private function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
     private function createFilesJsonResponse($files)

@@ -28,7 +28,7 @@
                 data-convert-key="{{ convertKey }}"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-fileinfo-url="{{ path('disk_file_info', {type:'video'}) }}"
                 data-progressbar="#video-chooser-progress"></span>
             </div>

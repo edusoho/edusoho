@@ -8,7 +8,6 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor;
 use Topxia\Service\Util\CloudClientFactory;
 
-
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {   
 
@@ -55,9 +54,41 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $uploadFile; 
     }
 
-    public function convertFile($file,$status,$metas=null,$callback = null)
+    public function convertFile($file, $status, $result=null, $callback = null)
     {
+        if ($status != 'success') {
+            $file['convertStatus'] = $status;
+        } else {
+            $cmds = $this->getCloudClient()->getVideoConvertCommands();
 
+            $file['metas'] = array();
+            foreach ($result as $item) {
+                $type = empty($cmds[$item['cmd']]) ? null : $cmds[$item['cmd']];
+                if (empty($type)) {
+                    continue;
+                }
+
+                if ($item['code'] != 0) {
+                    continue;
+                }
+
+                if (empty($item['key'])) {
+                    continue;
+                }
+
+                $file['metas'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
+            }
+
+            if (empty($file['metas'])) {
+                $file['convertStatus'] = 'error';
+            } else {
+                $file['convertStatus'] = 'success';
+            }
+        }
+
+        $file['metas'] = $this->encodeMetas(empty($file['metas']) ? array() : $file['metas']);
+
+        return $file;
     }
 
     public function deleteSubFile($file,$subFileHashId)

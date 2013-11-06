@@ -54,7 +54,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         return $uploadFile;
     }
-    public function convertFile($file,$status,$metas=null,$callback = null)
+
+    public function convertFile($file, $status, $result=null, $callback = null)
     {
     	throw $this->createServiceException('本地文件暂不支持转换');
     }
@@ -81,5 +82,4 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
             . DIRECTORY_SEPARATOR. $targetType 
             . DIRECTORY_SEPARATOR . $targetId;
     }
-
 }

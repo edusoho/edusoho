@@ -8,6 +8,8 @@ interface UploadFileDao
 
 	public function getFileByHashId($hash);
 
+    public function getFileByConvertHash($hash);
+
 	public function findFilesByIds($ids);
 
 	public function searchFiles($conditions, $sort, $start, $limit);

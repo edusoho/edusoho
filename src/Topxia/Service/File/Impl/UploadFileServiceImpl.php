@@ -13,7 +13,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
 	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor','cloud' => 'File.CloudFileImplementor');
 
-
     public function getFile($id)
     {
        $file = $this->getUploadFileDao()->getFile($id);
@@ -24,6 +23,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
        $file = $this->getUploadFileDao()->getFileByHashId($hashId);
        return $this->getFileImplementorByFile($file)->getFile($file);
+    }
+
+    public function getFileByConvertHash($hash)
+    {
+        return $this->getUploadFileDao()->getFileByConvertHash($hash);
     }
 
     public function findFilesByIds(array $ids)
@@ -76,7 +80,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getUploadFileDao()->addFile($file);
     }
 
-
     public function renameFile($id, $newFilename)
     {
         $this->getUploadFileDao()->updateFile($id,array('filename'=>$newFilename));
@@ -99,6 +102,28 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         foreach ($ids as $id) {
             $this->deleteFile($id);
         }
+    }
+
+    public function convertFile($id, $status, array $result = array())
+    {
+        $statuses = array('none', 'waiting', 'doing', 'success', 'error');
+        if (!in_array($status, $statuses)) {
+            throw $this->createServiceException('状态不正确，变更文件转换状态失败！');
+        }
+
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+        }
+
+        $file = $this->getFileImplementorByFile($file)->convertFile($id, $status, $result);
+
+        $this->getUploadFileDao()->updateFile($id, array(
+            'convertStatus' => $file['convertStatus'],
+            'metas' => $file['metas']
+        ));
+
+        return $this->getFile($id);
     }
 
     private function getFileImplementorByFile($file)

@@ -93,6 +93,10 @@ uploadfile_cloud_fileinfo:
     pattern:  /uploadfile/cloud_fileinfo
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudFileinfo }
 
+uploadfile_cloud_convert_callback:
+    pattern:  /uploadfile/cloud_convertcallback
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
+
 
 kindeditor_upload:
     pattern:  /kindeditor/upload

@@ -9,6 +9,8 @@ interface UploadFileService
 
     public function getFileByHashId($hashId);
 
+    public function getFileByConvertHash($hash);
+
     public function findFilesByIds(array $ids);
 
     public function searchFiles($conditions, $sort, $start, $limit);
@@ -22,6 +24,8 @@ interface UploadFileService
     public function deleteFile($id);
 
     public function deleteFiles(array $ids);
+
+    public function convertFile($id, $status, array $result = array());
 
 
 }
