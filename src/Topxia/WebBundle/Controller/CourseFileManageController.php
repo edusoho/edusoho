@@ -89,8 +89,13 @@ class CourseFileManageController extends BaseController
 
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
-        $ids = $request->request->get('ids', array());
         $course = $this->getCourseService()->tryManageCourse($id);
+
+        $ids = $request->request->get('ids', array());
+
+        $this->getUploadFileService()->deleteFiles($ids);
+
+
         return $this->createJsonResponse(true);
     }
 
