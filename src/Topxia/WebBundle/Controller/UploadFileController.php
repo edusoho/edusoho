@@ -153,11 +153,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('key不能为空');
         }
 
-        $data = '{"content":"{\"id\":\"16cfnpuavnib044f12\",\"code\":0,\"desc\":\"The fop was completed successfully\",\"items\":[{\"cmd\":\"avthumb\/flv\/r\/24\/vb\/256k\/vcodec\/libx264\/ar\/22050\/ab\/64k\/acodec\/libmp3lame\",\"code\":0,\"desc\":\"The fop was completed successfully\",\"error\":\"\",\"hash\":\"FpMlabbHDMGwMLcElZUWu0VM-N8M\",\"key\":\"qRB7qorh6SAEPaBARuKstF-mobI=\/FszJD0IZdhPEnrz2G7qLNFOesieI\"},{\"cmd\":\"avthumb\/flv\/r\/24\/vb\/512k\/vcodec\/libx264\/ar\/44100\/ab\/64k\/acodec\/libmp3lame\",\"code\":0,\"desc\":\"The fop was completed successfully\",\"error\":\"\",\"hash\":\"FuxgF9VqVmtjkOlh2yM4Qi552l2J\",\"key\":\"g1Q7guknjlc9veCVhZoYQPrqCbQ=\/FszJD0IZdhPEnrz2G7qLNFOesieI\"},{\"cmd\":\"avthumb\/flv\/r\/24\/vb\/1024k\/vcodec\/libx264\/ar\/44100\/ab\/64k\/acodec\/libmp3lame\",\"code\":0,\"desc\":\"The fop was completed successfully\",\"error\":\"\",\"hash\":\"Fo2UJbTcf7Jd8u2FYTLy9Xc_Qani\",\"key\":\"odbOnIU15yLr42cXjm1wP7yMLXU=\/FszJD0IZdhPEnrz2G7qLNFOesieI\"}]}"}';
-
         $data = json_decode($data, true);
-
-        $data = json_decode($data['content'], true);
 
         if (empty($data['id'])) {
             throw new \RuntimeException('数据中id不能为空');
