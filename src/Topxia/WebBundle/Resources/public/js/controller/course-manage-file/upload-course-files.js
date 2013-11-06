@@ -8,18 +8,35 @@ define(function(require, exports, module) {
 	require('jquery.plupload-queue-zh-cn');
 
 	exports.run = function() {
+		var $container = $("#file-uploader-container"),
+			targetType = $container.data('targetType'),
+			uploadMode = $container.data('uploadMode')
+
+
+		var extensions = '';
+		if (targetType == 'courselesson') {
+			if (uploadMode == 'cloud') {
+				extensions = 'mp3,mp4,avi,flv,wmv';
+			} else {
+				extensions = 'mp3,mp4';
+			}
+		} else if (targetType == 'coursematerial') {
+			extensions = 'jpg,jpeg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx,pps,ods,odp,mp4,mp3,avi,flv,wmv,wma,zip,rar,gz,tar,7z';
+		}
+
+		var filters = [];
+		if (extensions.length > 0) {
+			filters = [{title: "Files", extensions: extensions}];
+		}
+
 		$div = $("#file-chooser-uploader-div");
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
-			runtimes: 'html5,flash,html4,silverlight',
+			runtimes: 'html5,flash',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
-			resize: {
-				width: 500,
-				height: 500,
-				quality: 90
-			},
+			filters : filters,
 			init: {
 
 				FileUploaded: function(up, file, info) {
