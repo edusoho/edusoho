@@ -2,24 +2,17 @@
 
 {% block topbanner %}
 
-<div>
+    {% set content_blocks = service('Content.BlockService', 'getContentsByCodes', [['autumn:home_top_banner']]) %}
+
+    {% if content_blocks['autumn:home_top_banner'] %}
+        <div>
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                     <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
                     <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
                 </ol>
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <img src="themes/autumn/img/slide-1.jpg">
-                    </div>
-                    <div class="item">
-                        <img src="themes/autumn/img/slide-2.jpg">
-                    </div>
-                    <div class="item">
-                        <img src="themes/autumn/img/slide-3.jpg">
-                    </div>
-                </div>
+                <div class="carousel-inner">{{ content_blocks['autumn:home_top_banner'] }}</div>
                 <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
@@ -28,6 +21,7 @@
                 </a>
             </div>
         </div>
+    {% endif %}
 
 {% endblock %}
 
@@ -43,6 +37,7 @@
             </div>
             <div class="panel-body">
               {% set courses = datas('course', {status:'published', recommended:1}, 'recommended', 0, 8) %}
+              {% if courses %}
                 <ul class="list-unstyled list-inline">
                   {% for course in courses %}
                     <li>
@@ -59,6 +54,9 @@
                     </li>
                   {% endfor %}
                 </ul>
+                {% else %}
+                  <div class="empty">无推荐课程，请在后台课程管理设置。</div>
+                {% endif %}
             </div>
         </div>
         <div class="row mtop20">
@@ -70,6 +68,7 @@
                 </div>
                 <div class="panel-body">
                   {% set courses = datas('course', {status:'published'}, 'latest', 0, 8) %}
+                  {% if courses %}
                     <ul class="courses-list2 media-list">
                       {% for course in courses %}
                         <li class="media">
@@ -92,6 +91,9 @@
                         </li>
                       {% endfor %}
                     </ul>
+                  {% else %}
+                    <div class="empty">尚未发布课程，请先发布。</div>
+                  {% endif %}
                 </div>
             </div>
             <div class="col-md-3">
@@ -103,6 +105,7 @@
                     </div>
                     <div class="panel-body">
                       {% set courses = service('Course.CourseService', 'searchCourses', [{status:'published'}, 'popular', 0, 10]) %}
+                      {% if courses %}
                         <ul class="list-top10 media-list">
                           {% for course in courses %}
                             <li class="media">
@@ -115,6 +118,9 @@
                             </li>
                           {% endfor %}
                         </ul>
+                      {% else %}
+                        <div class="empty">无课程排行记录</div>
+                      {% endif %}
                     </div>
                 </div>
             </div>
@@ -128,6 +134,7 @@
                 </div>
                 <div class="teacher panel-body">
                   {% set teachers = service('User.UserService', 'findLatestPromotedTeacher', [0, 8]) %}
+                  {% if teachers %}
                     <ul class="teacher-list list-unstyled list-inline media-list">
                       {% for teacher in teachers %}
                         <li class="media">
@@ -139,6 +146,9 @@
                         </li>
                       {% endfor %}
                     </ul>
+                  {% else %}
+                    <div class="empty">尚未设置推荐老师，请在管理后台设置。</div>
+                  {% endif %}
                 </div>
             </div>
         </div>
