@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\CloudClientFactory;
 
 class CourseMaterialController extends BaseController
 {
@@ -42,7 +43,22 @@ class CourseMaterialController extends BaseController
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
-        return $this->createPrivateFileDownloadResponse($material['fileUri']);
+        if (empty($material)) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($material['fileId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient();
+            $client->download($client->getBucket(), $file['hashId']);
+        } else {
+            return $this->createPrivateFileDownloadResponse($file);
+        }
     }
 
     public function deleteAction(Request $request, $id, $materialId)
@@ -77,15 +93,13 @@ class CourseMaterialController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function createPrivateFileDownloadResponse($fileUri)
+    private function getUploadFileService()
     {
-        $setting = $this->setting('file');
-        $parsed = $this->getFileService()->parseFileUri($fileUri);
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
 
-        $directory = $this->container->getParameter('topxia.upload.private_directory');
-
-        $filename = $directory . '/' .  $parsed['path'];
-
-        return BinaryFileResponse::create($filename, 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+    private function createPrivateFileDownloadResponse($file)
+    {
+        return BinaryFileResponse::create($file['fullpath'], 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }
 }

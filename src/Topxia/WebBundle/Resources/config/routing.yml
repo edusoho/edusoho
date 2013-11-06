@@ -72,6 +72,32 @@ file_upload:
     defaults: { _controller: TopxiaWebBundle:File:upload }
     methods: [POST]
 
+uploadfile_upload:
+    pattern:  /uploadfile/upload
+    defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
+    methods: [POST]
+
+uploadfile_browser:
+    pattern:  /uploadfile/browser
+    defaults: { _controller: TopxiaWebBundle:UploadFile:browser }
+
+uploadfile_params:
+    pattern:  /uploadfile/params
+    defaults: { _controller: TopxiaWebBundle:UploadFile:params }
+
+uploadfile_cloud_callback:
+    pattern:  /uploadfile/cloud_callback
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
+
+uploadfile_cloud_fileinfo:
+    pattern:  /uploadfile/cloud_fileinfo
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudFileinfo }
+
+uploadfile_cloud_convert_callback:
+    pattern:  /uploadfile/cloud_convertcallback
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
+
+
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
@@ -333,6 +359,32 @@ course_manage_price:
 course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
+
+course_manage_files:
+    pattern:  /course/{id}/manage/files
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
+
+course_manage_files_material:
+    pattern:  /course/{id}/manage/files/material
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:material }
+
+course_manage_upload_course_delete_files:
+    pattern:  /course/{id}/delete/files/{type}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
+    methods: [POST]
+
+course_manage_upload_course_lesson:
+    pattern:  /course/{id}/manage/files/upload/course/lesson
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseLesson }
+
+course_manage_upload_course_material:
+    pattern:  /course/{id}/manage/files/upload/course/material
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterial }
+
+course_manage_submit_upload_course_files:
+    pattern:  /course/{id}/submit/upload/course/{fileType}/files
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:submitUploadCourseFiles }
+    methods: [POST]
 
 course_manage_students:
     pattern:  /course/{id}/manage/students

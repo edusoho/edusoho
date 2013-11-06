@@ -5,7 +5,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class FileUtil
 {
-	public static function  is_writable($path) 
+	
+	// TODO 这个函数只能测试文件夹存在与否，不能测试文件存在与否
+	public static function is_writable($path) 
 	{
 	    $path .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.tmp';
 	    $fileSystem = new FileSystem();

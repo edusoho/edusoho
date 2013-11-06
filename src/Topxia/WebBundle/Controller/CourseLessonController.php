@@ -70,7 +70,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $file = $this->getDiskService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
@@ -79,35 +79,32 @@ class CourseLessonController extends BaseController
 
             $key = null;
             if ($file['type'] == 'video') {
-                if (empty($file['formats']) || !is_array($file['formats'])) {
+                if (empty($file['metas']) || !is_array($file['metas'])) {
                     throw $this->createNotFoundException();
                 }
-                $formats = $file['formats'];
+                $metas = $file['metas'];
                 foreach (array('hd', 'shd', 'sd') as $type) {
-                    if (!empty($formats[$type])) {
-                        $key = $formats[$type]['key'];
+                    if (!empty($metas[$type])) {
+                        $key = $metas[$type]['key'];
                         break;
                     }
                 }
             } else {
-                $uri = $this->getDiskService()->parseFileUri($file['uri']);
-                $key = $uri['key'];
+                $key = $file['hashId'];
             }
 
             if (empty($key)){
                 throw $this->createNotFoundException();
             }
 
-            $clientParameters = $this->container->getParameter('cloud_client');
             $factory = new CloudClientFactory();
-            $client = $factory->createClient($clientParameters['name']);
+            $client = $factory->createClient();
 
             $client->download($file['bucket'], $key);
 
         }
 
-        $uri = $this->getDiskService()->parseFileUri($file['uri']);
-        return $this->createLocalMediaResponse($uri);
+        return $this->createLocalMediaResponse($file);
     }
 
     public function learnStatusAction(Request $request, $courseId, $lessonId)
@@ -135,16 +132,9 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function createLocalMediaResponse($uri)
+    private function createLocalMediaResponse($file)
     {
-
-        if (!file_exists($uri['fullpath'])) {
-            return $this->createNotFoundException();
-        }
-
-        // var_dump($uri);exit();
-
-        $response = BinaryFileResponse::create($uri['fullpath'], 200, array(), false);
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
         $response->setContentDisposition(
@@ -169,6 +159,11 @@ class CourseLessonController extends BaseController
     private function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
 }

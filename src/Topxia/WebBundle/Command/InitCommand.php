@@ -6,6 +6,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Topxia\Service\User\CurrentUser;
+use Symfony\Component\ClassLoader\ApcClassLoader;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class InitCommand extends BaseCommand
 {
@@ -13,6 +16,25 @@ class InitCommand extends BaseCommand
 	protected function configure()
 	{
 		$this->setName ( 'topxia:init' );
+		require_once __DIR__.'/../../../../app/AppKernel.php';
+		$kernel = new \AppKernel('prod', false);
+		$kernel->loadClassCache();
+		Request::enableHttpMethodParameterOverride();
+		$request = Request::createFromGlobals();
+
+		$kernel->boot();
+
+		$serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
+		$serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
+		$serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
+		$currentUser = new CurrentUser();
+		$currentUser->fromArray(array(
+		    'id' => 0,
+		    'nickname' => '游客',
+		    'currentIp' =>  '127.0.0.1',
+		    'roles' => array(),
+		));
+		$serviceKernel->setCurrentUser($currentUser);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -29,8 +51,8 @@ class InitCommand extends BaseCommand
 
 		$this->initCategory($output);
 		$this->initTag($output);
-		$this->initFile($output);
 		$this->initRefundSetting($output);
+		$this->initFile($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}

@@ -55,7 +55,7 @@ class CourseLessonManageController extends BaseController
         	if ($lesson['media']) {
         		$lesson['media'] = json_decode($lesson['media'], true);
         	}
-        	
+
         	if ($lesson['length']) {
         		$lesson['length'] = $this->textToSeconds($lesson['length']);
         	}
@@ -70,15 +70,18 @@ class CourseLessonManageController extends BaseController
     	$user = $this->getCurrentUser();
 
     	$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-    	$filePath = "course-{$course['id']}";
+    	$filePath = "courselesson/{$course['id']}";
     	$fileKey = "{$filePath}/" . $randString;
     	$convertKey = $randString;
+
+        $targetType = 'courselesson';
+        $targetId = $course['id'];
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
     		$videoUploadToken = $audioUploadToken = array(
-	    		'token' => $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours')),
-	    		'url' => $this->generateUrl('disk_upload'),
+	    		'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+	    		'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
 			);
 
     	} else {
@@ -91,7 +94,7 @@ class CourseLessonManageController extends BaseController
 		        $commands = array_keys($client->getVideoConvertCommands());
 		    	$videoUploadToken = $client->generateUploadToken($client->getBucket(), array(
 		    		'convertCommands' => implode(';', $commands),
-		    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
+		    		'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
 	    		));
 	    		if (!empty($videoUploadToken['error'])) {
 	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
@@ -109,6 +112,8 @@ class CourseLessonManageController extends BaseController
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
+            'targetType' => $targetType,
+            'targetId' => $targetId,
 			'videoUploadToken' => $videoUploadToken,
 			'audioUploadToken' => $audioUploadToken,
 			'filePath' => $filePath,
@@ -192,7 +197,7 @@ class CourseLessonManageController extends BaseController
 		        $commands = array_keys($client->getVideoConvertCommands());
 		    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
 		    		'convertCommands' => implode(';', $commands),
-		    		'convertNotifyUrl' => $this->generateUrl('disk_convert_callback', array('key' => $convertKey), true),
+		    		'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
 	    		));
 	    		if (!empty($videoUploadToken['error'])) {
 	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);

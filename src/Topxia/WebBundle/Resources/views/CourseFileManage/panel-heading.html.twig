@@ -1,0 +1,23 @@
+  <div class="panel-body">
+    
+      {% if tab == 'courseLesson' %}    
+
+      <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_lesson', {id:course.id}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传课件
+        </button>
+
+      {% elseif tab == 'courseMaterial' %}
+
+        <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_upload_course_material', {id:course.id}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传资料
+        </button>
+
+      {% endif %}
+
+      <ul class="nav nav-tabs">
+        <li {% if tab == 'courseLesson' %} class="active" {% endif %}>
+          <a href="{{ path('course_manage_files', {id:course.id}) }}">课件管理</a></li>
+        <li {% if tab == 'courseMaterial' %} class="active" {% endif %}><a href="{{ path('course_manage_files_material', {id:course.id}) }}">资料管理</a></li>
+      </ul>
+
+  </div>
