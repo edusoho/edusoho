@@ -1,15 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
-
-use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Common\StringToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 
 
@@ -54,40 +47,6 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function materialAction(Request $request, $id)
-    {
-        
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $conditions = array(
-            'targetType'=>'coursematerial', 
-            'targetId'=>$course['id']
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getUploadFileService()->searchFileCount($conditions),
-            20
-        );
-
-        $courseMaterials = $this->getUploadFileService()->searchFiles(
-            $conditions,
-            'latestCreated',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $updatedUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseMaterials, 'updatedUserId'));
-        $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseMaterials, 'createdUserId'));
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:materials.html.twig', array(
-            'course' => $course,
-            'courseMaterials' => $courseMaterials,
-            'updatedUsers' => $updatedUsers,
-            'createdUsers' => $createdUsers,
-            'paginator' => $paginator
-        ));
-    }
-
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -103,9 +62,9 @@ class CourseFileManageController extends BaseController
     public function submitUploadCourseFilesAction(Request $request, $id, $targetType )
     {
         if($targetType == 'coursematerial'){
-            return $this->redirect($this->generateUrl('course_manage_files_material',array('id'=>$id)));
+            return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id, 'type'=>'coursematerial')));
         } elseif ($targetType == 'courselesson'){
-            return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id)));
+            return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id, 'type'=>'coursematerial')));
         }
     }
 
