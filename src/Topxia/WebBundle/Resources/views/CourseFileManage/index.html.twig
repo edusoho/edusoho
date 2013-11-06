@@ -32,7 +32,7 @@
 
   <div class="panel-body" id="file-manage-panel"> 
 
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs mbm">
       <li {% if type == 'courselesson' %} class="active" {% endif %}>
         <a href="{{ path('course_manage_files', {id:course.id, type:'courselesson'}) }}">课时文件</a></li>
       <li {% if type == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">资料文件</a></li>
@@ -41,14 +41,11 @@
     <table class="table table-striped table-hover" id="course-lesson-table">
       <thead>
         <tr>
-          <th> <input type="checkbox"  data-role="batch-select"> 选中</th>
+          <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
           <th>文件名</th>
           <th>类型</th>
           <th>大小</th>
-          <th>修改日期</th>
-          <th>修改人</th>
-          <th>创建时间</th>
-          <th>创建人</th>
+          <th>最后更新</th>
         </tr>
       </thead>
       <tbody>
