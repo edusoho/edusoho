@@ -65,11 +65,17 @@ class UploadFileController extends BaseController
             } elseif ($convertor == 'audio') {
             }
 
+            //@todo refacor it. 
+            $keySuffix = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+            $key = "{$targetType}-{$targetId}/{$keySuffix}";
+            $convertKey = null;
+
             $clientParams = array();
             if ($commands) {
+                $convertKey = $keySuffix;
                 $clientParams = array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
                 );
             }
 
@@ -80,14 +86,14 @@ class UploadFileController extends BaseController
 
             $params['url'] = $uploadToken['url'];
 
-            //@todo refacor it.
-            $keySuffix = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
-            $key = "{$targetType}-{$targetId}/{$keySuffix}";
-
             $params['postParams'] = array(
                 'token' => $uploadToken['token'],
                 'key' => $key,
             );
+
+            if ($convertKey) {
+                $params['postParams']['x:convertKey'] = $convertKey;
+            }
 
         } else {
             $params['mode'] = 'local';

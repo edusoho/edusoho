@@ -61,10 +61,16 @@ define(function(require, exports, module) {
 				},
 
 				BeforeUpload: function(up, file) {
+					var data = {};
+					if (targetType == 'courselesson' && uploadMode == 'cloud') {
+						data.convertor = 'video';
+					}
+
 					$.ajax({
 						url: divData.paramsUrl,
 						async: false,
 						dataType: 'json',
+						data: data,
 						cache: false,
 						success: function(response, status, jqXHR) {
 							up.settings.url = response.url;
