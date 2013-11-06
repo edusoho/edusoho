@@ -70,7 +70,12 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        return $this->fileAction($request, $lesson['mediaId']);
+    }
+
+    public function fileAction(Request $request, $fileId)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
         if (empty($file)) {
             throw $this->createNotFoundException();
         }

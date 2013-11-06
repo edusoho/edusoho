@@ -4,11 +4,23 @@
 
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
 
-  <td class="text-danger"> {{uploadFile.filename}} </td>
+  <td>
+    {% if uploadFile.convertStatus == 'waiting' %}
+      {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
+    {% elseif uploadFile.convertStatus == 'error' %}
+      {{uploadFile.filename}}<br><span class="text-danger text-sm">文件格式转换失败</span>
+    {% else %}
+      {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
+        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename }}</a>
+      {% else %}
+        {{ uploadFile.filename }}
+      {% endif %}
+    {% endif %}
+  </td>
   <td> 
     {{ dict_text('fileType', uploadFile.type) }}
   </td>
-  <td class="text-info"> {{ web_macro.bytesToSize(uploadFile.size) }}</td>
+  <td>{{ web_macro.bytesToSize(uploadFile.size) }}</td>
   <td> 
     <span class="text-sm">{{ web_macro.user_link(updatedUsers[uploadFile.updatedUserId]) }}</span>
     <br>

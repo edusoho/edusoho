@@ -363,6 +363,10 @@ course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
 
+course_manage_file_show:
+    pattern:  /course/{id}/manage/file/{fileId}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:show }
+
 course_manage_upload_course_delete_files:
     pattern:  /course/{id}/delete/files/{type}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }

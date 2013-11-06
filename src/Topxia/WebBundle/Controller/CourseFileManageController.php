@@ -4,6 +4,9 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 class CourseFileManageController extends BaseController
@@ -47,6 +50,31 @@ class CourseFileManageController extends BaseController
         ));
     }
 
+    public function showAction(Request $request, $id, $fileId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['targetType'] == 'courselesson') {
+            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id']));
+        } else if ($file['targetType'] == 'coursematerial') {
+
+            if ($file['storage'] == 'cloud') {
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+                $client->download($client->getBucket(), $file['hashId']);
+            } else {
+                return $this->createPrivateFileDownloadResponse($file);
+            }
+        }
+
+        throw $this->createNotFoundException();
+    }
+
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -79,6 +107,11 @@ class CourseFileManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function createPrivateFileDownloadResponse($file)
+    {
+        return BinaryFileResponse::create($file['fullpath'], 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }
 
 }
