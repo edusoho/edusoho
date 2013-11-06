@@ -146,8 +146,6 @@ class UploadFileController extends BaseController
     {
         $data = $request->getContent();
 
-        file_put_contents('/tmp/cloudconvertcallback', $data);
-
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
 
         $key = $request->query->get('key');
