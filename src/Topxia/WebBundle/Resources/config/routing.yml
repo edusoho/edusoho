@@ -373,16 +373,12 @@ course_manage_upload_course_delete_files:
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
     methods: [POST]
 
-course_manage_upload_course_lesson:
-    pattern:  /course/{id}/manage/files/upload/course/lesson
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseLesson }
-
-course_manage_upload_course_material:
-    pattern:  /course/{id}/manage/files/upload/course/material
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseMaterial }
+course_manage_upload_course_files:
+    pattern:  /course/{id}/manage/upload/course/files/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
 
 course_manage_submit_upload_course_files:
-    pattern:  /course/{id}/submit/upload/course/{fileType}/files
+    pattern:  /course/{id}/submit/upload/course/{targetType}/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:submitUploadCourseFiles }
     methods: [POST]
 

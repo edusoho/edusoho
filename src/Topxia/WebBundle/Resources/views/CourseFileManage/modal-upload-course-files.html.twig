@@ -3,17 +3,23 @@
 {% set modal_size = 'xlarge' %}
 
 {% block title %}
-{% if  storageSetting.upload_mode == 'local' %}
-  上传本地资料
-  {% elseif storageSetting.upload_mode == 'cloud' %}
+
+{% if  storageSetting.upload_mode == 'local' and targetType == 'courselesson' %}
+  上传本地课件
+  {% elseif storageSetting.upload_mode == 'cloud' and targetType == 'courselesson' %}
+  上传云端课件
+  {% elseif storageSetting.upload_mode == 'cloud' and targetType == 'coursematerial' %}
   上传云端资料
+  {% elseif storageSetting.upload_mode == 'local' and targetType == 'coursematerial' %}
+  上传本地资料
   {% endif %}
+
 {% endblock %}
 	
 {% block body %}
 
-	<form id="upload-course-materials" method="post" 
-	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, fileType:'material'}) }}">
+	<form id="upload-course-files" method="post" 
+	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, targetType:targetType}) }}">
 	
 			       <div
               id="file-chooser-uploader-div"
@@ -30,11 +36,11 @@
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
 
-<script>app.load('course-manage-file/upload-course-material')</script>
+<script>app.load('course-manage-file/upload-course-files')</script>
 
 {% endblock %}
 
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#upload-course-materials">提交</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#upload-course-files">提交</button>
 {% endblock %}
