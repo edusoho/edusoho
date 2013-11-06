@@ -97,7 +97,6 @@ uploadfile_cloud_convert_callback:
     pattern:  /uploadfile/cloud_convertcallback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
 
-
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
