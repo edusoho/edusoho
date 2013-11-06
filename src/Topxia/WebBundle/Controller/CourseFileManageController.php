@@ -19,8 +19,12 @@ class CourseFileManageController extends BaseController
     public function indexAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
+
+        $type = $request->query->get('type');
+        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
+
         $conditions = array(
-            'targetType'=>'courselesson', 
+            'targetType'=> $type, 
             'targetId'=>$course['id']
         );
 
@@ -41,6 +45,7 @@ class CourseFileManageController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'createdUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
+            'type' => $type,
             'course' => $course,
             'courseLessons' => $courseLessons,
             'updatedUsers' => $updatedUsers,
