@@ -9,25 +9,6 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $template = ucfirst($this->setting('site.homepage_template', 'less'));
-        return $this->forward("TopxiaWebBundle:Default:index{$template}");
-    }
-
-    public function indexLessAction()
-    {
-        $conditions = array('status' => 'published');
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
-
-        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
-
-        return $this->render('TopxiaWebBundle:Default:index-less.html.twig', array(
-            'courses' => $courses,
-            'blocks' => $blocks,
-        ));
-    }
-
-    public function indexMoreAction()
-    {
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
@@ -35,7 +16,7 @@ class DefaultController extends BaseController
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
-        return $this->render('TopxiaWebBundle:Default:index-more.html.twig', array(
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks
