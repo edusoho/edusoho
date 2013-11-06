@@ -26,3 +26,4 @@ src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
 app/data/install.lock
 /web/themes/*
+!/web/themes/autumn
