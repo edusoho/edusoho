@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 			uploadMode = $container.data('uploadMode')
 
 
-		var extensions = '';
+			var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
 				extensions = 'mp3,mp4,avi,flv,wmv';
@@ -26,17 +26,20 @@ define(function(require, exports, module) {
 
 		var filters = [];
 		if (extensions.length > 0) {
-			filters = [{title: "Files", extensions: extensions}];
+			filters = [{
+				title: "Files",
+				extensions: extensions
+			}];
 		}
 
-		$div = $("#file-chooser-uploader-div");
+		var $div = $("#file-chooser-uploader-div");
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
 			runtimes: 'html5,flash',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
-			filters : filters,
+			filters: filters,
 			init: {
 
 				FileUploaded: function(up, file, info) {
@@ -44,15 +47,23 @@ define(function(require, exports, module) {
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
-							Notify.success(file.name + '文件上传成功！');
+							// Notify.success(file.name + '文件上传成功！');
 							if (divData.fileinfoUrl) {
 								$.get($div.data('fileinfoUrl'), {
 									key: response.hashId
 								}, function(info) {}, 'json');
 							}
 						}, 'json');
-					} else {
-						Notify.success(file.name + '文件上传成功！');
+					}
+					
+					// else {
+					// 	Notify.success(file.name + '文件上传成功！');
+					// }
+
+					 if (up.total.uploaded == up.files.length) {
+						$(".plupload_buttons").css("display", "inline");
+						$(".plupload_upload_status").css("display", "inline");
+						$(".plupload_start").addClass("plupload_disabled");
 					}
 				},
 
@@ -88,10 +99,8 @@ define(function(require, exports, module) {
 
 		});
 
-		uploader.init();
-
 		$('#modal').on('hide.bs.modal', function(e) {
-            window.location.reload();
+			window.location.reload();
 		});
 
 	};
