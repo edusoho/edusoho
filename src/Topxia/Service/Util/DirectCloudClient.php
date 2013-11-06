@@ -157,4 +157,17 @@ class DirectCloudClient implements CloudClient
         return $this->getVideoInfo($bucket, $key);
     }
 
+    private function generateViewToken($bucket, $key)
+    {
+        $params = array('bucket' => $bucket, 'key' => $key);
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->getViewTokenUrl(), array('token' => $token));
+
+        return json_decode($content, true);
+    }
+
 }

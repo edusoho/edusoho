@@ -8,40 +8,45 @@
 {% set userTitle=user.title|default(NULL) %}
 {% block content %}
 
-<div class="row  widget shadow pz mbl">
-	<div class="panel-title mbz ">
-		<h3 class="text-center">你正在报名参加</h3>
-	</div>
-	<div class="col-md-10 plm ">
-          <h4  class="text-danger">
-            {{ activity.subtitle }}            
-          </h4>
-           <h4  class="text-danger">           
-            {{ activity.title }}
-          </h4 >
-          
-          <p  class="text-danger">费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
-	</div>
-	<div class="col-md-2  phs pvs">
-		<a href="#" class="show-user-card" >
-			<img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="openstack30"></a>
+<div class="row pld prd">	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="text-center">你正在报名参加</h3>
+		</div>
+		<div class="panel-body  ">
+			<div class="col-lg-10 plm">
+		          
+		            <h5>{{ activity.subtitle }}</h5>
+		            <h4>{{ activity.title }}</h4>
+		          
+		          
+		          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
+			</div>
+			<div class="col-lg-2  phs pvs">
+				<a href="#" class="show-user-card" >
+					<img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="openstack30"></a>
+			</div>
+		</div>
 	</div>
 </div>
 
-<div class="row">
-	<!-- 报名 -->
-	<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
-		<div class=" widget  shadow">
-			<div class="panel-title mbz ">
-				<h4>选择票价</h4>
+<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">					
+<div class="row pld prd mbl">
+	{% if  activity.price>0 and activity.payment=='线上支付'  %}
+		<div class="widget shadow">
+			<div class="kytitle clearfix bor-l-green">
+				<h4>选择参与方式</h4>
 			</div>
-			<div class="content">
-
+			<div class="content clearfix">
+				
 			</div>
 		</div>
+	{% endif %}
+		
+		<!-- 报名 -->
 		<div class="widget  shadow">
-			<div class="panel-title mbl">
-				<h4>报名信息</h4>
+			<div class="kytitle clearfix bor-l-green">
+				<h4>基本信息</h4>
 			</div>
 			<div class="content clearfix">
 				<div class="col-md-6">
@@ -95,25 +100,22 @@
 			        </div>
 				</div>
 				<div class="col-md-6">
-					<div>
+					<div class="mbm">
 						<p>问题出干货--高质量问题互动，才能点燃老师在公开课上的激情，亲，让我们一起吧讲师编成蜡炬的灰吧～～</p>
 					</div>
-					<div><textarea rows="10" class="form-control" name="activitymember[question]"></textarea></div>
-					<div class="form-group">
-			            <div class="col-lg-12">
-			              <div class="checkbox">
-					        <label>
-					          <input type="checkbox" checked="checked" /> 转发微博
-					       	</label>
-					      </div>
-					      <button type="submit" class="form-control btn btn-fat btn-primary btn-large">立即报名</button>
-			            </div>
-			        </div>
+					<div><textarea rows="22" class="form-control" name="activitymember[question]"></textarea></div>
+					
 				</div>
 			</div>
 		</div>
+
 		 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-	</form>
+
+		<div class="col-md-4 col-md-offset-4">
+			<button type="submit" class="btn btn-primary btn-lg btn-block">立即报名</button>
+		</div>
+	
  </div>
+</form>
 
 {% endblock %}

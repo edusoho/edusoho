@@ -123,19 +123,45 @@ class ActivityManageController extends BaseController
 
     public function priceAction(Request $request, $id)
     {
+        $activity = $this->getActivityService()->getActivity($id);
 
-        if ($request->getMethod() == 'POST') {
-            $this->getActivityService()->updateActivity($id, $request->request->all());
-            $this->setFlashMessage('success', '课程价格已经修改成功!');
+        $form = $this->createActivityPriceForm($activity);
+        
+        if($request->getMethod() == 'POST'){
+            $form->bind($request);
+
+            $activityBaseInfo = $form->getData();     
+
+            if($form->isValid()){
+
+                $activityBaseInfo = $form->getData();
+                if(isset($activityBaseInfo['startTime']))
+                {
+                    unset($activityBaseInfo['startTime']);
+                }
+                if(isset($activityBaseInfo['endTime']))
+                {
+                    unset($activityBaseInfo['endTime']);
+                }
+                if(isset($activityBaseInfo['recommentTime']))
+                {
+                    unset($activityBaseInfo['recommentTime']);
+                }
+                $this->getActivityService()->updateActivity($id, $activityBaseInfo);
+                $this->setFlashMessage('success', '价格已保存！');
+              
+            }
         }
 
-        $activity = $this->getActivityService()->getActivity($id);
+       
         return $this->render('TopxiaWebBundle:ActivityManage:price.html.twig', array(
-            'activity' => $activity
+            'activity' => $activity,
+            'form' => $form->createView(),
         ));
         
     }
 
+  
     public function teachersAction(Request $request, $id)
     {
         if($request->getMethod() == 'POST'){
@@ -334,8 +360,18 @@ class ActivityManageController extends BaseController
                 'empty_value' => '请选择分类'
                 )
             );
-
         return $builder->getForm();
+    }
+
+
+    private function createActivityPriceForm($activity)
+    {
+        return $this->createNamedFormBuilder('activity', $activity)
+            ->add('price', 'text',array('required'=>true))
+            ->add('onlinePrice', 'text',array('required'=>true))
+            ->add('payment', 'choice',array('choices'=>array('线上支付'=>'线上支付','线下支付'=>'线下支付'),'multiple'=>false,'expanded'=>false,'required'=>true))
+
+            ->getForm();
     }
 
 

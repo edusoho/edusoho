@@ -14,6 +14,7 @@ use Imagine\Image\ImageInterface;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
+
 	public function getActivity($id){
 			return ActivitySerialize::unserialize($this->getActivityDao()->getActivity($id));
 	}
@@ -65,12 +66,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	}
 
 	public function updateActivity($id, $fields){
+
 		$activity = $this->getActivityDao()->getActivity($id);
 		if (empty($activity)) {
 			throw $this->createServiceException('活动不存在，更新失败！');
 		}
+
+
+
 		$fields = $this->_filterActivityFields($fields);
+
+		
+
 		$fields = ActivitySerialize::serialize($fields);
+
+	
+
 		return $this->getActivityDao()->updateActivity($id, $fields);
 	}
 
@@ -193,7 +204,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'id', 'title', 'subtitle','actType','status','price','needApproval','payment','income','rating','ratingNum', 'categoryId','tags', 'about', 'startTime', 'endTime','duration', 'city', 'address','strstartTime','strendTime','form','onlineAddress'
+			'id', 'title', 'subtitle','actType','status','price','priceMode','onlinePrice','onlinePriceMode','needApproval','payment','income','rating','ratingNum', 'categoryId','tags', 'about', 'startTime', 'endTime','duration', 'city', 'address','strstartTime','strendTime','form','onlineAddress'
 		));
 
 

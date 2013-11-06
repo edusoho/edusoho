@@ -10,20 +10,30 @@
 	<div class="panel-heading">价格设置
 	</div>
 	<div class="panel-body">
+
+		{{ form_errors(form) }}
 		{{ web_macro.flash_messages() }}
+
 		
 		<form class="form-horizontal" id="price-form" method="post" >
 
 			<div class="form-group">
-				<div class="col-lg-2 control-label">
-					<label for="price" class="required">价格(元)</label>
-				</div>
-				<div class="col-lg-8 controls">
-					<input type="text" id="price" name="price" class="form-control" value="{{activity.price}}">
-					<div class="help-block" style="display:none;"></div>
-				</div>
+				<div class="col-lg-2 control-label">{{ form_label(form.payment, '支付方式') }}</div>
+				 <div class="col-lg-5 controls">{{ form_widget(form.payment, {attr:{class:'form-control'}}) }}</div>			
 			</div>
 
+			<div class="form-group">
+				<div class="col-lg-2 control-label">{{ form_label(form.onlinePrice, '直播价格（元）') }}</div>
+				<div class="col-lg-5 controls">{{ form_widget(form.onlinePrice, {attr:{class:'form-control'}}) }}</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-lg-2 control-label">{{ form_label(form.price, '现场价格（元）') }}</div>
+				 <div class="col-lg-5 controls">{{ form_widget(form.price, {attr:{class:'form-control'}}) }}</div>
+			</div>
+
+
+			{{ form_rest(form) }}
 			<div class="form-group">
 				<div class="col-lg-offset-2 col-lg-8 controls">
 					<button class="btn btn-fat btn-primary" id="price-save-btn" type="submit">保存</button>

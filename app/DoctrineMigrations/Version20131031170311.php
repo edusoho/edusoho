@@ -22,14 +22,7 @@ class Version20131031170311 extends AbstractMigration
          
             ALTER TABLE  `activity` ADD  `hitNum` INT(10) NOT NULL  DEFAULT '0' COMMENT  '活动总计浏览人次'  AFTER  `studentNum`          
              ");
-
-        $this->addSql("
-         
-            ALTER TABLE  `activity` ADD  `payment`  enum('onlinePay','livePay') NOT NULL DEFAULT 'onlinePay' COMMENT '支付方式'  AFTER  `price`");
-
-        $this->addSql("
-         
-            ALTER TABLE `activity` ADD  `needApproval`  enum('yes','no') NOT NULL DEFAULT 'no' COMMENT '报名是否需要审核'  AFTER  `price`");
+    
 
         $this->addSql("
           

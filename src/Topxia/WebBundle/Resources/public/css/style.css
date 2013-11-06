@@ -14,15 +14,7 @@
 .info-ad p {text-align: center;color: #fff;}
 ul{margin-left: 0}
 
-.panel-title{
 
-padding: 0 10px;
-
-overflow: hidden;
-position: relative;
-z-index: 9;
-border-bottom: 1px solid #DDD;
-}
 
 .kytitle{height: 38px;
 padding: 0 10px;
