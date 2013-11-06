@@ -142,7 +142,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($info);
     }
 
-    private function cloudConvertCallback(Request $request)
+    private function cloudConvertCallbackAction(Request $request)
     {
         $data = $request->getContent();
 
