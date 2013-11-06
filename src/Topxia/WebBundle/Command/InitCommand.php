@@ -88,8 +88,7 @@ class InitCommand extends BaseCommand
             'icp'=>' 浙ICP备13006852号-1',
             'analytics'=>'',
             'status'=>'open',
-            'closed_note'=>'',
-            'homepage_template'=>'less'
+            'closed_note'=>''
         );
 
         $site = $this->getSettingService()->set('site', $default);

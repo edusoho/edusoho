@@ -27,7 +27,6 @@ class SettingController extends BaseController
             'analytics'=>'',
             'status'=>'open',
             'closed_note'=>'',
-            'homepage_template'=>'less'
         );
 
         $site = array_merge($default, $site);

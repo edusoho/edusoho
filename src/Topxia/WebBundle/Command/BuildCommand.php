@@ -211,6 +211,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/customize", "{$this->distDirectory}/web/customize");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/install", "{$this->distDirectory}/web/install");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/windid_client", "{$this->distDirectory}/web/windid_client");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes", "{$this->distDirectory}/web/themes");
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
 		$this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");

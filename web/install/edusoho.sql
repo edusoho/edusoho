@@ -212,6 +212,7 @@ CREATE TABLE `course_material` (
   `lessonId` int(10) unsigned NOT NULL DEFAULT '0',
   `title` varchar(1024) NOT NULL,
   `description` text,
+  `fileId` int(10) unsigned NOT NULL,
   `fileUri` varchar(255) NOT NULL DEFAULT '',
   `fileMime` varchar(255) NOT NULL DEFAULT '',
   `fileSize` int(10) unsigned NOT NULL DEFAULT '0',
@@ -558,8 +559,8 @@ CREATE TABLE `upgrade_logs` (
   `fromv` varchar(32) DEFAULT NULL COMMENT '初始版本',
   `tov` varchar(32) NOT NULL COMMENT '目标版本',
   `type` smallint(6) NOT NULL COMMENT '升级类型',
-  `dbBackPath` text NOT NULL COMMENT '数据库备份文件',
-  `srcBackPath` text NOT NULL COMMENT '源文件备份地址',
+  `dbBackPath` text COMMENT '数据库备份文件',
+  `srcBackPath` text COMMENT '源文件备份地址',
   `status` varchar(32) NOT NULL COMMENT '状态(ROLLBACK,ERROR,SUCCESS,RECOVERED)',
   `logtime` int(11) NOT NULL COMMENT '升级时间',
   `uid` int(10) unsigned NOT NULL COMMENT 'uid',
@@ -567,6 +568,29 @@ CREATE TABLE `upgrade_logs` (
   `reason` text COMMENT '失败原因',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
+
+DROP TABLE IF EXISTS `upload_files`;
+CREATE TABLE `upload_files` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
+  `targetId` int(11) NOT NULL COMMENT '所存目标id',
+  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
+  `filename` varchar(1024) NOT NULL DEFAULT '',
+  `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
+  `size` bigint(20) NOT NULL DEFAULT '0',
+  `convertHash` varchar(256) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
+  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
+  `metas` text,
+  `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other',
+  `storage` enum('local','cloud') NOT NULL,
+  `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
+  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户名',
+  `updatedTime` int(10) unsigned DEFAULT '0',
+  `createdUserId` int(10) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hashId` (`hashId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -679,27 +703,4 @@ CREATE TABLE `user_token` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`(6))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `upload_files` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
-  `targetId` int(11) NOT NULL COMMENT '所存目标id',
-  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
-  `filename` varchar(1024) NOT NULL DEFAULT '',
-  `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
-  `size` bigint(20) NOT NULL DEFAULT '0',
-  `convertHash` varchar(256) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
-  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
-  `metas` text,
-  `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other',
-  `storage` enum('local','cloud') NOT NULL,
-  `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
-  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户名',
-  `updatedTime` int(10) unsigned DEFAULT '0',
-  `createdUserId` int(10) unsigned NOT NULL,
-  `createdTime` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `hashId` (`hashId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

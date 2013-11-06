@@ -155,6 +155,7 @@ function install_step3()
 		$init->initPages();
 		$init->initNavigations();
 		$init->initBlocks();
+        $init->initThemes();
 		$init->initLockFile();
 		$init->initRefundSetting();
 
@@ -481,6 +482,11 @@ EOD;
             'type' => 'top'
         ));
 	}
+
+    public function initThemes()
+    {
+        $this->getSettingService()->set('theme', array('uri' => 'default'));
+    }
 
 	public function initBlocks()
 	{
