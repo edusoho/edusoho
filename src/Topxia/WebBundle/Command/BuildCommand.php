@@ -124,6 +124,7 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/AdminBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Resources/public");
+		$this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
 
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Command");
 
