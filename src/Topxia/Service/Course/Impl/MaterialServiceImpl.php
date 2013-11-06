@@ -11,36 +11,37 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 	public function uploadMaterial($material)
 	{
-		if (!ArrayToolkit::requireds($material, array('courseId', 'file'))) {
+		if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
 			throw $this->createServiceException('参数缺失，上传失败！');
 		}
 
 		$course = $this->getCourseService()->getCourse($material['courseId']);
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，上传资料失败！');
-		}		
+		}
 
-		$file = $this->getFileService()->uploadFile('course_private', $material['file']);
-		if(empty($file)){
-			throw $this->createServiceException('上传的文件内容不符合规范，有可能为非法伪造的文件，上传资料失败！');
+		$file = $this->getUploadFileService()->getFile($material['fileId']);
+		if (empty($file)) {
+			throw $this->createServiceException('文件不存在，上传资料失败！');
 		}
 
 		$fields = array(
 			'courseId' => $material['courseId'],
 			'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
-			'title' => empty($material['title']) ? '' : $material['title'],
+			'fileId' => $material['fileId'],
+			'title' => $file['filename'],
 			'description'  => empty($material['description']) ? '' : $material['description'],
-			'fileUri' => $file['uri'],
-			'fileMime' => $file['mime'],
+			'fileUri' => '',
+			'fileMime' => '',
 			'fileSize' => $file['size'],
 			'userId' => $this->getCurrentUser()->id,
 			'createdTime' => time(),
 		);
 
-
-
 		$material =  $this->getMaterialDao()->addMaterial($fields);
+
 		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
+
 		return $material;
 	}
 
@@ -96,7 +97,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     	return $this->createDao('Course.CourseMaterialDao');
     }
 
-
     private function getCourseService()
     {
     	return $this->createService('Course.CourseService');
@@ -105,6 +105,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     private function getFileService()
     {
     	return $this->createService('Content.FileService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 
 }

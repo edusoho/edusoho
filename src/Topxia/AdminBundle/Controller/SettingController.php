@@ -111,8 +111,6 @@ class SettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
-
-
             $this->setFlashMessage('success','注册设置已保存！');
         }
 
@@ -161,6 +159,7 @@ class SettingController extends BaseController
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
+            'verify_code' => '',
         );
 
         $loginConnect = array_merge($default, $loginConnect);

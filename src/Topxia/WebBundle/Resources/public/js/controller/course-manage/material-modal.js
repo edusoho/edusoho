@@ -2,45 +2,18 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    require('jquery.form');
+    var FileChooser = require('../widget/file/file-chooser');
 
     exports.run = function() {
+
         var $form = $("#course-material-form");
 
-        validator = new Validator({
-            element: $form,
-            autoSubmit: false
+        var materialChooser = new FileChooser({
+            element: '#material-file-chooser'
         });
 
-        validator.addItem({
-            element: '#material-file-field',
-            required: true,
-            errormessageRequired: '请选择要上传的资料文件'
-        });
-
-        validator.on('formValidated', function(error, msg, $form) {
-            if (error) {
-                return;
-            }
-
-            $form.ajaxSubmit({
-                beforeSubmit: function(arr, $form, options) {
-                    $form.find('[type=submit]').button('uploading');
-                },
-                success: function(html, status, jqr, $form) {
-                    Notify.success('资料上传成功！');
-                    $form.find('[type=submit]').button('reset');
-                    $("#material-list").append(html).show();
-                    $form.find('.text-warning').hide();
-                    clearForm($form, validator);
-                },
-                error: function(jqr, textStatus, errorThrown, $form) {
-                    Notify.danger(jqr.responseJSON.error.message);
-                    $form.find('[type=submit]').button('reset');
-                    clearForm($form, validator);
-                }
-            });
-
+        materialChooser.on('change', function(item) {
+            $form.find('[name="fileId"]').val(item.id);
         });
 
         $form.on('click', '.delete-btn', function(){
@@ -55,21 +28,24 @@ define(function(require, exports, module) {
             });
         });
 
+        $form.on('submit', function(){
+            if ($form.find('[name="fileId"]').val().length == 0) {
+                Notify.danger('请先上传文件！');
+                return false;
+            }
+            $.post($form.attr('action'), $form.serialize(), function(html){
+                Notify.success('资料上传成功！');
+                $("#material-list").append(html).show();
+                $form.find('.text-warning').hide();
+                $form.find('[name="fileId"]').val('');
+                $form.find('[name="description"]').val('');
+                materialChooser.open();
+            }).fail(function(){
+                Notify.success('资料上传失败，请重试！');
+            });
+            return false;
+        });
 
     };
-
-    function clearForm($form, validator)
-    {
-        $form.clearForm();
-        // 在ie下清除:file类型的input时，会clone该input并插入，然后删除原来的input。
-        // 所以这里得重新添加校验
-        if (/MSIE/.test(navigator.userAgent)) {
-            validator.addItem({
-                element: '#material-file-field',
-                required: true,
-                errormessageRequired: '请选择要上传的资料文件'
-            });
-        }
-    }
 
 });

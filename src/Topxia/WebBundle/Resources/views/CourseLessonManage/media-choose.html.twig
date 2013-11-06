@@ -1,34 +1,34 @@
 <div id="media-choosers">
 
-  <div class="media-chooser" id="video-chooser" style="display:none;">
-    <div class="media-chooser-bar">
+  <div class="file-chooser" id="video-chooser" style="display:none;">
+    <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
       <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。</div>
     </div>
 
-    <div class="media-chooser-main">
-      <ul class="nav nav-pills nav-pills-mini mbs media-chooser-tabs">
-        <li class="active"><a class="media-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
         <li><a href="#video-chooser-disk-pane" data-toggle="tab">从视频库中选择</a></li>
         <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="video-chooser-upload-pane">
 
-          <div class="media-chooser-uploader">
-            <div class="media-chooser-uploader-label">选择你要上传的视频文件：</div>
-            <div class="media-chooser-uploader-control">
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的视频文件：</div>
+            <div class="file-chooser-uploader-control">
               <span id="video-choose-uploader-btn"
                 data-role="uploader-btn"
                 data-key="{{ fileKey }}"
                 data-token="{{ videoUploadToken.token }}"
-                data-url="{% if storageSetting.upload_mode == 'cloud' %}{{ videoUploadToken.url }}{% else %}{{ path('disk_upload') }}{% endif %}"
+                data-url="{{ videoUploadToken.url }}"
                 data-filepath="{{ filePath }}"
                 data-convert-key="{{ convertKey }}"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-fileinfo-url="{{ path('disk_file_info', {type:'video'}) }}"
                 data-progressbar="#video-chooser-progress"></span>
             </div>
@@ -78,23 +78,23 @@
 
 
 
-  <div class="media-chooser" id="audio-chooser" style="display:none;">
-    <div class="media-chooser-bar">
+  <div class="file-chooser" id="audio-chooser" style="display:none;">
+    <div class="file-chooser-bar">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
     </div>
 
-    <div class="media-chooser-main">
-      <ul class="nav nav-pills nav-pills-mini mbs media-chooser-tabs">
-        <li class="active"><a class="media-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
         <li><a href="#audio-chooser-disk-pane" data-toggle="tab">从音频库中选择</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="audio-chooser-upload-pane">
 
-          <div class="media-chooser-uploader">
-            <div class="media-chooser-uploader-label">选择你要上传的音频文件：</div>
-            <div class="media-chooser-uploader-control">
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的音频文件：</div>
+            <div class="file-chooser-uploader-control">
               <span id="audio-choose-uploader-btn" 
                 data-role="uploader-btn"
                 data-key="{{ fileKey }}"

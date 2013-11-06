@@ -1,0 +1,60 @@
+<div class="file-chooser">
+  <div class="file-chooser-bar" style="display:none;">
+    <span data-role="placeholder"></span>
+    <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+  </div>
+
+  <div class="file-chooser-main">
+    <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
+      <li><a class="file-chooser-uploader-tab" href="#file-chooser-upload-pane" data-toggle="tab">上传文件</a></li>
+      <li><a href="#file-chooser-browser-pane" data-toggle="tab">从文件库中选择</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane" id="file-chooser-upload-pane">
+
+        <div class="file-chooser-uploader">
+          <div class="file-chooser-uploader-label">选择你要上传的文件：</div>
+          <div class="file-chooser-uploader-control">
+            <button 
+              id="file-chooser-uploader-btn"
+              type="button"
+              class="btn btn-default btn-sm"
+              data-role="uploader-btn"
+              data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
+              data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
+              {% if storageSetting.upload_mode == 'cloud' %}
+                data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
+                data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
+              {% endif %}
+              {% if uploadSettings|default(null) %}
+                data-upload-settings="{{ uploadSettings|json_encode }}"
+              {% endif %}
+            >上传</button>
+          </div>
+          <div class="progress" data-role="progress" style="display:none;">
+            <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+          </div>
+
+          <div class="alert alert-info">
+            <ul>
+              <li>支持常见文档、图片、音视频、压缩包文件格式。</li>
+              {% if storageSetting.upload_mode == 'cloud' %}
+                <li>文件将上传到<strong>云服务器</strong></li>
+              {% else %}
+                <li>文件将上传到<strong>网站服务器</strong>，如需使用云存储，请联系EduSoho官方购买。</li>
+              {% endif %}
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="tab-pane" id="file-chooser-browser-pane">
+          <div id="file-browser" data-role="file-browser"
+          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId}) }}" 
+          data-empty="暂无文件，请先上传。">
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -186,16 +186,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $sortedCourses;
 	}
 
-	public function findUserTeachCourseCount($userId,$includeOther=false)
+	public function findUserTeachCourseCount($userId, $onlyPublished = true)
 	{
-		$includeDraft = $this->isCurrentUser($userId);
-		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher',!$includeDraft);
+		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', $onlyPublished);
 	}
 
-	public function findUserTeachCourses($userId, $start, $limit, $includeOther=false)
+	public function findUserTeachCourses($userId, $start, $limit, $onlyPublished = true)
 	{
-		$includeDraft = $this->isCurrentUser($userId);
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit, !$includeDraft);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit, $onlyPublished);
 
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -596,9 +594,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			if ($media['source'] == 'self') {
 				$media['id'] = intval($media['id']);
 				if (empty($media['id'])) {
-					throw $this->createServiceException("media id参数不正确，添加课时失败！");
+					throw $this->createServiceException("media id参数不正确，添加/编辑课时失败！");
 				}
-				$file = $this->getDiskService()->getFile($media['id']);
+				$file = $this->getUploadFileService()->getFile($media['id']);
+				if (empty($file)) {
+					throw $this->createServiceException('文件不存在，添加/编辑课时失败！');
+				}
 
 				$lesson['mediaId'] = $file['id'];
 				$lesson['mediaName'] = $file['filename'];
@@ -606,7 +607,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$lesson['mediaUri'] = '';
 			} else {
 				if (empty($media['uri'])) {
-					throw $this->createServiceException("media uri参数不正确，添加课时失败！");
+					throw $this->createServiceException("media uri参数不正确，添加/编辑课时失败！");
 				}
 				$lesson['mediaId'] = 0;
 				$lesson['mediaName'] = $media['name'];
@@ -1551,6 +1552,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getDiskService()
     {
         return $this->createService('User.DiskService');
+    }
+
+
+    private function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 
 }

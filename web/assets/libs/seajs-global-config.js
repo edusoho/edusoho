@@ -1,7 +1,7 @@
 seajs.config({
 	alias: {
-		'jquery': 'jquery/jquery/1.10.1/jquery-debug',
-		'$': 'jquery/jquery/1.10.1/jquery-debug',
+		'jquery': 'jquery/jquery/1.10.1/jquery',
+		'$': 'jquery/jquery/1.10.1/jquery',
 		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
 		"jquery.form": "jquery-plugin/form/3.44.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
@@ -17,6 +17,10 @@ seajs.config({
 		"jquery.lazyload" : "jquery-plugin/lazyload/jquery.lazyload.min.js",
 		'jquery.slides' : 'jquery-plugin/slide/slide.js',
 		'jquery.slides-css' : 'jquery-plugin/slide/slide.css',
+		"plupload": "jquery-plugin/plupload-queue/2.0.0/plupload",
+		"jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
+		"jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
+		"jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
 		"mediaelementplayer": "jquery-plugin/mediaelement/2.13.1/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.0.1/bootstrap',
 		'kindeditor': 'gallery2/kindeditor/4.1.7/kindeditor',

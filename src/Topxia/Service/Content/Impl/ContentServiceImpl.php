@@ -68,9 +68,9 @@ class ContentServiceImpl extends BaseService implements ContentService
 			$content['publishedTime'] = $content['createdTime'];
 		}
 
-		if(isset($content['body'])){
-            $content['body'] = $this->purifyHtml($content['body']);
-        }
+		// if(isset($content['body'])){
+  //           $content['body'] = $this->purifyHtml($content['body']);
+  //       }
 
 		$id = $this->getContentDao()->addContent(ContentSerialize::serialize($content));
 
@@ -92,9 +92,9 @@ class ContentServiceImpl extends BaseService implements ContentService
 		$fields = $type->convert($fields);
 		$fields = ArrayToolkit::parts($fields, $type->getFields());
 
-        if(isset($fields['body'])){
-            $fields['body'] = $this->purifyHtml($fields['body']);
-        }
+        // if(isset($fields['body'])){
+        //     $fields['body'] = $this->purifyHtml($fields['body']);
+        // }
 
 		$this->getContentDao()->updateContent($id, ContentSerialize::serialize($fields));
 

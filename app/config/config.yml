@@ -122,7 +122,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
 
-
     topxia.twig.web_extension:
         class: Topxia\WebBundle\Twig\Extension\WebExtension
         arguments:    [@service_container]

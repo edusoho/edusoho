@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}
+{% if  storageSetting.upload_mode == 'local' %}
+  上传本地资料
+  {% elseif storageSetting.upload_mode == 'cloud' %}
+  上传云端资料
+  {% endif %}
+{% endblock %}
+	
+{% block body %}
+
+	<form id="upload-course-materials" method="post" 
+	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, fileType:'material'}) }}">
+	
+			       <div
+              id="file-chooser-uploader-div"
+              data-role="uploader-div"
+              data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
+              data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
+              {% if storageSetting.upload_mode == 'cloud' %}
+                data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
+                data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
+              {% endif %}
+             ></div>
+
+	
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+
+<script>app.load('course-manage-file/upload-course-material')</script>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#upload-course-materials">提交</button>
+{% endblock %}

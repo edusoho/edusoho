@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileToolkit
 {
 
-    /**
-     * this code from drupal 8
-     */
     public static function mungeFilename($filename, $extensions)
     {
         $original = $filename;
@@ -66,6 +63,12 @@ class FileToolkit
         return in_array(strtolower($ext), explode(' ', self::getImageExtensions()));
     }
 
+    public static function generateFilename($ext = '')
+    {
+        $filename = date('Yndhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
+        return $filename . '.' . $ext;
+    }
+
     public static function getFileExtension(File $file)
     {
         return $file instanceof UploadedFile ? $file->getClientOriginalExtension() : $file->getExtension();
@@ -79,6 +82,39 @@ class FileToolkit
     public static function getImageExtensions()
     {
         return 'jpg jpeg gif png';
+    }
+
+    public static function getFileTypeByMimeType($mimeType)
+    {
+        if (strpos($mimeType, 'video') === 0) {
+            return 'video';
+        } elseif (strpos($mimeType, 'audio') === 0) {
+            return 'audio';
+        } elseif (strpos($mimeType, 'image') === 0) {
+            return 'image';
+        } elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
+            or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
+            or strpos($mimeType, 'application/pdf') === 0) {
+            return 'document';
+        }
+
+        return 'other';
+    }
+
+    public static function formatFileSize($size)
+    {
+        $currentValue = $currentUnit = null;
+        $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
+        foreach ($unitExps as $unit => $exp) {
+            $divisor = pow(1000, $exp);
+            $currentUnit = $unit;
+            $currentValue = $size / $divisor;
+            if ($currentValue < 1000) {
+                break;
+            }
+        }
+
+        return sprintf('%.1f', $currentValue) . $currentUnit;
     }
 
 }

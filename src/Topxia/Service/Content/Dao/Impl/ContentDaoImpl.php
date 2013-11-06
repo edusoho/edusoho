@@ -22,6 +22,7 @@ class ContentDaoImpl extends BaseDao implements ContentDao
 
 	public function searchContents($conditions, $orderBy, $start, $limit)
 	{
+		$this->filterStartLimit($start, $limit);
 		$builder = $this->_createSearchQueryBuilder($conditions)
 			->select('*')
 			->addOrderBy($orderBy[0], $orderBy[1])

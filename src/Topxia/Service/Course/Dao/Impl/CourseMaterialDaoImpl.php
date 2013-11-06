@@ -17,12 +17,14 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
 
     public function findMaterialsByCourseId($courseId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql ="SELECT * FROM {$this->table} WHERE courseId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }
 
     public function findMaterialsByLessonId($lessonId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql ="SELECT * FROM {$this->table} WHERE lessonId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($lessonId)) ? : array();
     }

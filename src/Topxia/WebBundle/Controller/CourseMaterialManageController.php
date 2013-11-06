@@ -16,6 +16,9 @@ class CourseMaterialManageController extends BaseController
 			'course' => $course,
 			'lesson' => $lesson,
 			'materials' => $materials,
+            'storageSetting' => $this->setting('storage'),
+            'targetType' => 'coursematerial',
+            'targetId' => $course['id'],
 		));
 	}
 
@@ -25,13 +28,21 @@ class CourseMaterialManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         if (empty($lesson)) {
-        	throw $this->createNotFoundException();
+            throw $this->createNotFoundException();
         }
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $fields['file'] = $request->files->get('file');
-            $fields['title'] = $fields['file']->getClientOriginalName();
+
+            if (empty($fields['fileId'])) {
+                throw $this->createNotFoundException();
+            }
+
+            $file = $this->getUploadFileService()->getFile($fields['fileId']);
+            if (empty($file)) {
+            	throw $this->createNotFoundException();
+            }
+
             $fields['courseId'] = $course['id'];
             $fields['lessonId'] = $lesson['id'];
 
@@ -64,5 +75,10 @@ class CourseMaterialManageController extends BaseController
     private function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

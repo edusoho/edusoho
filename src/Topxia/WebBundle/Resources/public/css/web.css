@@ -1344,6 +1344,15 @@ body {
 	background-color: #fff;
 }
 
+.ps-container .ps-scrollbar-y-rail {
+	visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+}
+
+.ps-container:hover .ps-scrollbar-y-rail,
+.ps-container.hover .ps-scrollbar-y-rail {
+    visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+}
+
 .lesson-dashboard .toolbar-pane-container .ps-container .ps-scrollbar-y {
 	right: 0px;
 }
@@ -1351,7 +1360,6 @@ body {
 .lesson-dashboard .toolbar-pane-container .ps-container .ps-scrollbar-x {
 	display: none;
 }
-
 
 @media (max-width: 1024px) {
 
@@ -1634,59 +1642,61 @@ body {
 	display: block;
 }
 
-.media-chooser-bar {
-	display: none;
-}
-
-.media-chooser-uploader {
+.file-chooser-uploader {
 	padding: 20px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
 }
 
-.media-chooser-uploader-label {
+.file-chooser-uploader-label {
 	margin-bottom: 10px;
 	font-weight: bold;
 }
 
-.media-chooser-uploader-control {
+.file-chooser-uploader-control {
 	margin-bottom: 10px;
 }
 
-.disk-browser {
+.file-chooser-uploader .alert-info {
+	margin-bottom: 0;
+}
+
+.file-browser {
 	padding: 10px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
+	height: 200px;
+	overflow-y: scroll;
 }
 
-.disk-browser-file-list {
+.file-browser-list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.disk-browser-file-list li {
+.file-browser-list li {
 	padding: 5px 10px;
 }
 
-.disk-browser-file-list li:hover {
+.file-browser-list li:hover {
 	background: #eee;
 }
 
-.disk-browser-file-list .filename {
+.file-browser-list .filename {
 	float: left;
 	width: 50%;
 	cursor: default;
 }
 
-.disk-browser-file-list .filesize {
+.file-browser-list .filesize {
 	float: left;
 	width: 20%;
 	color: #777;
 	cursor: default;
 }
 
-.disk-browser-file-list .filetime {
+.file-browser-list .filetime {
 	float: left;
 	width: 30%;
 	color: #777;

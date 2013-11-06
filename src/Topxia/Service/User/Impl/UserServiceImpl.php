@@ -103,6 +103,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，头像更新失败！');
         }
 
+
         $pathinfo = pathinfo($filePath);
 
         $imagine = new Imagine();

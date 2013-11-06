@@ -3,7 +3,9 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
     module.exports = function($element) {
+        
         $element.on('click', '[data-role=batch-delete]', function() {
+            
         	var $btn = $(this);
         		name = $btn.data('name');
 

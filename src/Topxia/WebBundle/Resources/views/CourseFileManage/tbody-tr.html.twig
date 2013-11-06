@@ -1,0 +1,32 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item">
+
+  <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
+
+  <td class="text-danger"> {{uploadFile.filename}} </td>
+  <td> 
+    {{ dict_text('fileType:html', uploadFile.type) }}
+  </td>
+  <td class="text-info"> {{ web_macro.bytesToSize(uploadFile.size) }}</td>
+  <td class="text-danger"> 
+    {{ uploadFile.updatedTime|date('Y-n-d')}}
+      <br>
+    {{ uploadFile.updatedTime|date('H:i:s')}}
+  </td>
+
+  <td> 
+    {{ web_macro.user_link(updatedUsers[uploadFile.updatedUserId]) }}
+  </td>
+
+  <td class="text-danger"> 
+    {{ uploadFile.createdTime|date('Y-n-d')}}
+      <br>
+    {{ uploadFile.createdTime|date('H:i:s')}}
+  </td>
+
+  <td> 
+    {{ web_macro.user_link(createdUsers[uploadFile.createdUserId]) }}
+  </td>
+
+</tr>
