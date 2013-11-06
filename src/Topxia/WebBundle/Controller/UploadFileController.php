@@ -180,16 +180,10 @@ class UploadFileController extends BaseController
         $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
         $file = $this->getUploadFileService()->convertFile($file['id'], 'success', $data['items']);
 
-        // @todo refactor
-        $lesson = $this->getCourseService()->getLessonByMediaId($file['id']);
-        if ($lesson) {
-            $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
-                'lessonId' => $lesson['id'],
-                'courseId' => $lesson['courseId'],
-                'filename' => $file['filename'],
-            ));
-
-        }
+        $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
+            'courseId' => $file['targetId'],
+            'filename' => $file['filename'],
+        ));
 
         return $this->createJsonResponse($file['metas']);
     }
