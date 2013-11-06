@@ -22,7 +22,10 @@
     <tbody>
       {% for theme in themes %}
         <tr>
-          <td>{{ theme.name }}</td>
+          <td>
+            <img src="{{ asset('themes/' ~ theme.uri ~ '/' ~ theme.thumb) }}" width="150">
+            <span class="mlm">{{ theme.name }}</span>
+          </td>
           <td>{{ theme.version }}</td>
           <td>{{ theme.author }}</td>
           <td>
