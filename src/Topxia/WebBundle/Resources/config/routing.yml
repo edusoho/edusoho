@@ -372,11 +372,6 @@ course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
 
-course_manage_submit_upload_course_files:
-    pattern:  /course/{id}/submit/upload/course/{targetType}/files
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:submitUploadCourseFiles }
-    methods: [POST]
-
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }

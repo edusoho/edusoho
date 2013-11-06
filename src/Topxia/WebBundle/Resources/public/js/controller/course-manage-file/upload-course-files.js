@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
-			runtimes: 'flash',
+			runtimes: 'html5,flash,html4,silverlight',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
 			resize: {
@@ -43,26 +43,6 @@ define(function(require, exports, module) {
 					Notify.danger('文件上传失败，请重试！');
 				},
 
-				UploadProgress: function(up, file) {
-
-					$('#modal').on('hide.bs.modal', function(e) {
-
-						if (file.percent < 100) {
-
-							if (!confirm('退出对话框会中断正在上传中的文件，是否继续？')) {
-								$("#modal").off('hide.bs.modal');
-								return false;
-							}
-
-							up.stop();
-							$("#modal").off('hide.bs.modal');
-
-						}
-
-					});
-
-				},
-
 				BeforeUpload: function(up, file) {
 					$.ajax({
 						url: divData.paramsUrl,
@@ -85,22 +65,11 @@ define(function(require, exports, module) {
 
 		});
 
-		$('form').submit(function(e) {
-			var uploader = $('#file-chooser-uploader-div').pluploadQueue();
-			if (uploader.total.uploaded == 0) {
-				if (uploader.files.length > 0) {
-					uploader.bind('UploadProgress', function() {
-						if (uploader.total.uploaded == uploader.files.length)
-							$('form').submit();
-					});
-					uploader.start();
-				} else
-					alert('你必须至少上传一个文件！');
-				e.preventDefault();
-			}
-		});
-
 		uploader.init();
+
+		$('#modal').on('hide.bs.modal', function(e) {
+            window.location.reload();
+		});
 
 	};
 

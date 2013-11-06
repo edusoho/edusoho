@@ -59,15 +59,6 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function submitUploadCourseFilesAction(Request $request, $id, $targetType )
-    {
-        if($targetType == 'coursematerial'){
-            return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id, 'type'=>'coursematerial')));
-        } elseif ($targetType == 'courselesson'){
-            return $this->redirect($this->generateUrl('course_manage_files',array('id'=>$id, 'type'=>'coursematerial')));
-        }
-    }
-
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
         $ids = $request->request->get('ids', array());

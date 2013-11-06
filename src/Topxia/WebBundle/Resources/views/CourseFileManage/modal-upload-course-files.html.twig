@@ -5,32 +5,31 @@
 {% block title %}
 
 {% if  storageSetting.upload_mode == 'local' and targetType == 'courselesson' %}
-  上传本地课件
+  上传本地课时文件
   {% elseif storageSetting.upload_mode == 'cloud' and targetType == 'courselesson' %}
-  上传云端课件
+  上传云端课时文件
   {% elseif storageSetting.upload_mode == 'cloud' and targetType == 'coursematerial' %}
-  上传云端资料
+  上传云端资料文件
   {% elseif storageSetting.upload_mode == 'local' and targetType == 'coursematerial' %}
-  上传本地资料
+  上传本地资料文件
   {% endif %}
 
 {% endblock %}
 	
 {% block body %}
 
-	<form id="upload-course-files" method="post" 
-	action="{{ path('course_manage_submit_upload_course_files', {id:course.id, targetType:targetType}) }}">
+	<form id="upload-course-files" method="post" >
 	
-			       <div
-              id="file-chooser-uploader-div"
-              data-role="uploader-div"
-              data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
-              data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
-              {% if storageSetting.upload_mode == 'cloud' %}
-                data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
-                data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
-              {% endif %}
-             ></div>
+     <div
+      id="file-chooser-uploader-div"
+      data-role="uploader-div"
+      data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
+      data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
+      {% if storageSetting.upload_mode == 'cloud' %}
+        data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
+        data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
+      {% endif %}
+     ></div>
 
 	
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -41,6 +40,5 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#upload-course-files">提交</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
 {% endblock %}
