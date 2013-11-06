@@ -100,8 +100,7 @@ class CourseLessonController extends BaseController
             $factory = new CloudClientFactory();
             $client = $factory->createClient();
 
-            $client->download($file['bucket'], $key);
-
+            $client->download($client->getBucket(), $key);
         }
 
         return $this->createLocalMediaResponse($file);

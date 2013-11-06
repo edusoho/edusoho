@@ -116,7 +116,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException("文件(#{$id})不存在，转换失败");
         }
 
-        $file = $this->getFileImplementorByFile($file)->convertFile($id, $status, $result);
+        $file = $this->getFileImplementorByFile($file)->convertFile($file, $status, $result);
 
         $this->getUploadFileDao()->updateFile($id, array(
             'convertStatus' => $file['convertStatus'],
