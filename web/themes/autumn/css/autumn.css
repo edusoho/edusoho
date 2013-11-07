@@ -1,3 +1,8 @@
+.panel-autumn-primary .panel-body ul li {
+    width: 285px;
+    margin: 17px 10px 0 0;
+}
+
 @media (min-width: 1200px) {
     .panel-autumn-primary .panel-body ul li {
         width: 285px;
@@ -186,6 +191,8 @@ a:hover {
 
 .panel-autumn-primary h3 {
     margin-top: 0px;
+    height: 30px;
+    overflow: hidden;
 }
 
 .panel-autumn-primary .panel-body ul {
@@ -194,6 +201,7 @@ a:hover {
 }
 
 .panel-autumn-primary .panel-body ul li {
+    background: #fff;
     border: 1px solid #e2e2e2;
     padding: 0px;
 }
@@ -207,7 +215,6 @@ a:hover {
 }
 
 .panel-autumn-primary .panel-body ul li>div div {
-    padding: 0px 0px 0px 10px;
     margin-top: 10px;
 }
 
@@ -222,7 +229,7 @@ a:hover {
 }
 
 .panel-autumn-primary .panel-body ul li img {
-    width: 75%;
+    width: 100%;
 }
 
 .panel-autumn-primary .panel-body ul li .course-btn {
@@ -259,18 +266,27 @@ a:hover {
     border: 1px solid #ddd;
 }
 
-.courses-list2 li {
+.courses-list2 li.media {
     width: 100%;
     border-bottom: 1px solid #DDD;
     padding: 25px 0;
     color: #666;
 }
 
+.courses-list2 li.media .pic-link {
+    padding: 8px;
+    border: 1px solid #DDD;
+}
+
+.courses-list2 .teachers-bar {
+    margin-top: 12px;
+}
+
+
 .courses-list2 li a img {
     width: 120px;
     height: 90px;
-    padding: 8px;
-    border: 1px solid #DDD;
+    
 }
 
 .courses-list2 li h4 {
@@ -299,6 +315,7 @@ a:hover {
     border-radius: 0px;
     border-style: none;
     color: #fff;
+    margin-top: -12px;
 }
 
 .courses-list2 .btn:hover {
@@ -370,6 +387,20 @@ a:hover {
     left: 0px;
 }
 
+.list-top10 h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.list-top10 p {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+    line-height: 18px;
+}
+
 .panel-autumn-primary .panel-body .teacher-list {
     margin-right: -20px;
     font-size: 0px;
@@ -382,6 +413,11 @@ a:hover {
 
 .panel-autumn-primary .panel-body .teacher-list li a {
     margin: 12px 0px 12px 12px;
+}
+
+.panel-autumn-primary .panel-body .teacher-list li h4 a {
+    margin: 5px 0 12px 0;
+    display: block;
 }
 
 .panel-autumn-primary .panel-body .teacher-list li img {

@@ -45,10 +45,9 @@
                             <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
                             <div>
                                 <span><a href="{{ path('course_show', {id:course.id}) }}"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a></span>
-                                <span class="course-btn glyphicon glyphicon-circle-arrow-right"></span>
                             </div>
                             <div>
-                                <p>{{ course.subtitle }}</p>
+                                <p>{{ course.about|plain_text(60) }}</p>
                             </div>
                         </div>
                     </li>
@@ -72,25 +71,28 @@
                     <ul class="courses-list2 media-list">
                       {% for course in courses %}
                         <li class="media">
-                            <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a>
+                            <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a>
                             <div class="media-body">
                                 <h4><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
-                                <div class="course-disc"><p>{{ course.subtitle }}</p></div>
+                                <div class="course-disc"><p>{{ course.about|plain_text(100) }}</p></div>
                                 <div class="course-teachers">
                                     <a class="btn btn-default btn-sm pull-right" href="{{ path('course_show', {id:course.id}) }}">查看课程</a>
-                                    <span>
+                                    <div class="teachers-bar">
                                         <span class="glyphicon glyphicon-user"></span>老师
                                         {% set teachers = service('User.UserService', 'findUsersByIds', [course.teacherIds]) %}
                                         {% for teacher in teachers %}
                                           {{ web_macro.user_link(teacher, 'text-muted') }}
 
                                         {% endfor %}
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </li>
                       {% endfor %}
                     </ul>
+
+                    <a class="btn btn-default btn-lg btn-block" href="/course/explore">更多课程</a>
+                    
                   {% else %}
                     <div class="empty">尚未发布课程，请先发布。</div>
                   {% endif %}
