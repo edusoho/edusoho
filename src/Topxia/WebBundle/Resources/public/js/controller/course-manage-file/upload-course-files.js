@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
-			runtimes: 'html5,flash',
+			runtimes: 'html5,gears,flash,silverlight,browserplus,html4',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
 			filters: filters,
@@ -47,7 +47,6 @@ define(function(require, exports, module) {
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
-							// Notify.success(file.name + '文件上传成功！');
 							if (divData.fileinfoUrl) {
 								$.get($div.data('fileinfoUrl'), {
 									key: response.hashId
@@ -55,22 +54,25 @@ define(function(require, exports, module) {
 							}
 						}, 'json');
 					}
-					
-					// else {
-					// 	Notify.success(file.name + '文件上传成功！');
-					// }
 
-					 if (up.total.uploaded == up.files.length) {
+					if (up.total.uploaded == up.files.length) {
 						$(".plupload_buttons").css("display", "inline");
 						$(".plupload_upload_status").css("display", "inline");
 						$(".plupload_start").addClass("plupload_disabled");
 					}
+
+				},
+
+				QueueChanged: function(up){
+					$(".plupload_start").removeClass("plupload_disabled");
 				},
 
 				Error: function(up, args) {
 					Notify.danger('文件上传失败，请重试！');
 				},
-
+				UploadComplete: function(up, files) {
+		            up.refresh();
+		        },
 				BeforeUpload: function(up, file) {
 					var data = {};
 					if (targetType == 'courselesson' && uploadMode == 'cloud') {
