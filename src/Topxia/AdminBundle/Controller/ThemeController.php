@@ -40,7 +40,7 @@ class ThemeController extends BaseController
 
         $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
         $finder = new Finder();
-        foreach ($finder->directories()->in($dir) as $directory) {
+        foreach ($finder->directories()->in($dir)->depth('== 0') as $directory) {
             $theme = $this->getTheme($directory->getBasename());
 
             if ($theme) {
