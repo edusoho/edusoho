@@ -416,6 +416,11 @@ a:hover {
     margin: 12px 0px 12px 12px;
 }
 
+.panel-autumn-primary .panel-body .teacher-list li h4 a {
+    margin: 5px 0 12px 0;
+    display: block;
+}
+
 .panel-autumn-primary .panel-body .teacher-list li img {
     width: 80px;
 }
