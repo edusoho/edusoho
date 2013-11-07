@@ -114,18 +114,18 @@
           <div>
             <ul class="list-unstyled">
               <li>
+               <div>
                 {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+
+                  {% if setting('site.icp') %} <a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a> {% endif %}
+
+              </div>
 
                 <span class="mlr20">Powered by 
       <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
       ©2013 
       <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a></span>
 
-              </li>
-              <li class="mtop15">
-                  {% if setting('site.icp') %}
-      <div class="pull-right"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>
-    {% endif %}
               </li>
             </ul>
           </div>
