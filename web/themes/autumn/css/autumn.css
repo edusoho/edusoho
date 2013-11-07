@@ -215,7 +215,6 @@ a:hover {
 }
 
 .panel-autumn-primary .panel-body ul li>div div {
-    padding: 0px 0px 0px 10px;
     margin-top: 10px;
 }
 
@@ -230,7 +229,7 @@ a:hover {
 }
 
 .panel-autumn-primary .panel-body ul li img {
-    width: 75%;
+    width: 100%;
 }
 
 .panel-autumn-primary .panel-body ul li .course-btn {

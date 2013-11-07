@@ -45,7 +45,6 @@
                             <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
                             <div>
                                 <span><a href="{{ path('course_show', {id:course.id}) }}"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a></span>
-                                <a href="{{ path('course_show', {id:course.id}) }}"><span class="course-btn glyphicon glyphicon-circle-arrow-right"></span></a>
                             </div>
                             <div>
                                 <p>{{ course.about|plain_text(60) }}</p>
