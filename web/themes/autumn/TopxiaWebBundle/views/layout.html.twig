@@ -109,31 +109,20 @@
   </div><!-- /container -->
 
 
-<div class="footer-autumn-primary">
-        <div class="container">
-          <div>
-            <ul class="list-unstyled">
-              <li>
-               <div>
-                {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+  <div class="footer-autumn">
+    <div class="container">
 
-                  {% if setting('site.icp') %} <a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a> {% endif %}
-
-              </div>
-
-                <span class="mlr20">Powered by 
-      <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
-      ©2013 
-      <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a></span>
-
-              </li>
-            </ul>
-          </div>
-        </div>
+      <div class="footer-links">
+        {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+        {% if setting('site.icp') %} <a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a> {% endif %}
       </div>
 
+      <div class="footer-copyright">
+        Powered by <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a> ©2013 <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+      </div>
 
-
+    </div>
+  </div>
 
 
   {% block bottom %}{% endblock %}
