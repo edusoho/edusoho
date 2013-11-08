@@ -45,8 +45,8 @@
   <div class="container  pz">
      <!-- 公开课 -->
       <div class="row mtl">
-        <div class="mod col-md-9 "> 
-          <div class="mod es-row-wrap container-gap">
+        <div class="col-md-9 "> 
+          <div class="es-row-wrap container-gap">
             <div class="kytitle clearfix es-box-heading mtm">
               <h3 >近期公开课</h3>
               <span class="mll">每周二线上线下同时开课，开放免费，无大牛，不学习!</span>
@@ -58,8 +58,8 @@
             </div> 
           </div>
         </div>
-        <div class="mod col-md-3 pz prd"> 
-          <div class="mod es-row-wrap container-gap  pz">
+        <div class="col-md-3 pz prd"> 
+          <div class="es-row-wrap container-gap  pz">
            <img class="img-responsive" src="{{ file_path('','current-openclass.png')  }}">
           </div>
         </div>
@@ -69,7 +69,7 @@
       
       <div class="row mtl">
         <div class="col-md-12"> 
-          <div class="mod es-row-wrap container-gap">   
+          <div class="es-row-wrap container-gap">   
             <div class="kytitle clearfix es-box-heading mtm">
               <h3>在线课程</h3>
               <span class="mll">视频+在线辅导</span>
@@ -86,61 +86,8 @@
       <!-- 讨论，学员，牛人，谁在学，最新点评-->
       <div class="row">
         <aside class="col-md-9 ">          
-          <!-- 问答讨论 -->
-          <div class=" es-row-wrap container-gap mod k_postlist discussion mod">
-            <div class="kytitle clearfix es-box-heading mtm">
-              <h3 >问答讨论</h3>          
-            </div>
-            <div class="content ">       
-              <ul class="pz">
-                {% for activityThread in activityThreads %}
-                <li>
-                  <div class="imageblock clearfix">
-                    <div class="imageblock-image">
-                      <a href="#" class="show-user-card user-link user-avatar-link" >
-                        {% if activityThread['userId']==0 %}
-                        <img src="/assets/img/default/avatar.png" alt="ae120"></a>
-                        {% else %}
-                        <a class="user-link user-avatar-link" href="{{ path('user_show',{id:activityThread['userId']})}}" ><img src="{{ file_path(threadUsers[activityThread.userId].smallAvatar,'avatar.png') }}" class="thumb"></a>
-                        {% endif %}
-                    </div>
-                    <div class="imageblock-content">
-                      <p class="title">
-                        <a href="
-                          {% if activityThread['userId']==0 %}
-                            #
-                          {% else %}
-                             {{ path('user_show',{id:activityThread['userId'] }) }}
-                          {% endif %}
-                          "
-                        >{{ threadUsers[activityThread.userId].nickname }}</a>
-                        {{ activityThread.createdTime|smart_time }}    
-                        在 {{activitys[activityThread.activityId].subtitle}} 提问到：
-
-                      </p>
-                      <p class="metas">
-                        <span class="show-user-card">
-                          <a href="{{ path('activity_show',{id:activityThread.activityId})}}">
-                             {{ activityThread.content }}
-                          </a>
-                        </span>
-                        <span class="pull-right">
-                          <a href="{{ path('activity_show',{id:activityThread.activityId})}}">
-                            <span class="highlight mz">{{ activityThread.postNum }}</span>
-                          </a>
-                        个回复
-                        </span>
-                      </p>
-                      
-                    </div>
-                  </div>
-                </li>
-                {% endfor %}
-              </ul>           
-            </div>
-          </div>
           <!-- 新加入学员 -->
-          <div class="mod trainee">
+          <div class="trainee">
             <div class="kytitle">
               <h3>新学员</h3> <div class="fix-right font18">64231人已在学习</div>             
             </div>            
@@ -182,7 +129,7 @@
             </div>
           </div>
           <!-- 开源教练组 -->
-          <div class="mod coach">
+          <div class="coach">
             <div class="kytitle clearfix">
               <h3>牛人团</h3>
               <a href="{{ path('teacher') }}" target="_blank" class="pull-right cm_go">更多»</a>
@@ -207,38 +154,7 @@
         <!-- 侧栏 -->
         <aside class="col-md-3">
           <!-- 最新点评 -->
-          <div class="widget k_postlist shadow">
-            <div class="kytitle clearfix bor-l-green">
-              <h3>最新点评</h3>
-              </div>
-            <div class="content">       
-              <ul class="pz">
-                {% for review in reviews%}
-                <li>
-                  <div class="shadow speak">
-                    <p>{{ review.content }}</p>
-                  </div>
-                  <div class="imageblock clearfix">
-                    <div class="imageblock-image">
-                      <a href="{{ path('user_show',{id:review['userId'] }) }}" class="show-user-card user-link user-avatar-link" >
-                        <img src="{{ file_path( reviewUsers[review.userId].mediumAvatar,'avatar.png')  }}" alt="ae120"></a>
-                    </div>
-                    <div class="imageblock-content">
-                      <p class="title">
-                        <a href="{{ path('user_show',{id:review['userId'] }) }}">{{ reviewUsers[review.userId].nickname }} </a>刚刚点评了
-                      </p>
-                      <p class="metas">
-                        <a href="{{ path('course_show', {id:review.courseId }) }}" class="show-user-card " data-uid="1272156">
-                          课程 {{ reviewCourse[review.courseId].title }}
-                        </a>
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                {% endfor %}
-              </ul>           
-            </div>
-          </div>          
+        
         </aside>
       </div>
   </div>  
