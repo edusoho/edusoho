@@ -13,6 +13,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('data', array($this, 'getData'), $options),
             new \Twig_SimpleFunction('datas', array($this, 'getDatas'), $options),
             new \Twig_SimpleFunction('datas_count', array($this, 'getDatasCount'), $options),
+            new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
         );
     }
 
@@ -41,6 +42,13 @@ class DataExtension extends \Twig_Extension
             throw new \RuntimeException("尚未定义获取'{$name}'数据的记录条数");
         }
         return $this->{$method}($condihtions);
+    }
+
+    public function callService($name, $method, $arguments)
+    {
+        $service = $this->createService($name);
+        $reflectionClass = new \ReflectionClass($service);
+        return $reflectionClass->getMethod($method)->invokeArgs($service, $arguments);
     }
 
     public function getName ()

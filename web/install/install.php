@@ -155,6 +155,7 @@ function install_step3()
 		$init->initPages();
 		$init->initNavigations();
 		$init->initBlocks();
+        $init->initThemes();
 		$init->initLockFile();
 		$init->initRefundSetting();
 
@@ -482,11 +483,16 @@ EOD;
         ));
 	}
 
+    public function initThemes()
+    {
+        $this->getSettingService()->set('theme', array('uri' => 'default'));
+    }
+
 	public function initBlocks()
 	{
         $block = $this->getBlockService()->createBlock(array(
             'code'=>'home_top_banner',
-            'title'=>'网站首页-顶部-图片轮播 '
+            'title'=>'默认主题：首页头部图片轮播'
         ));
 
         $content = <<<'EOD'
@@ -495,6 +501,25 @@ EOD;
 <a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
 		$this->getBlockService()->updateContent($block['id'], $content);
+
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'autumn:home_top_banner',
+            'title'=>'清秋主题：首页头部图片轮播'
+        ));
+
+        $content = <<<'EOD'
+<div class="item active">
+    <img src="../themes/autumn/img/slide-1.jpg">
+</div>
+<div class="item">
+    <img src="../themes/autumn/img/slide-2.jpg">
+</div>
+<div class="item">
+    <img src="../themes/autumn/img/slide-3.jpg">
+</div>
+EOD;
+        $this->getBlockService()->updateContent($block['id'], $content);
+
 	}
 
 	public function initLockFile()

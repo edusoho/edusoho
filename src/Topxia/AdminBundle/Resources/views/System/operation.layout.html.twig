@@ -23,8 +23,11 @@
   	</a>
   </li>  
   <li class="{% if submenu == 'storage' %}active{% endif %}">
-  	<a href="{{ url('admin_setting_storage') }}">云存储设置
-  	</a>
+    <a href="{{ url('admin_setting_storage') }}">云存储设置
+    </a>
+  </li>
+  <li class="{% if submenu == 'theme' %}active{% endif %}">
+       <a href="{{ path('admin_setting_theme') }}">主题设置</a>
   </li>
   <li class="{% if submenu == 'refund' %}active{% endif %}">
   	<a href="{{ url('admin_setting_refund') }}">退款设置
