@@ -73,7 +73,9 @@ class DefaultController extends BaseController
         $teacherIds=ArrayToolkit::column($teachers,'id');
         $teacherinfos=$this->getUserService()->findUserProfilesByIds($teacherIds);
 
-        return $this->render('TopxiaWebBundle:Default:index.html.twig',array(
+        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+
+        return $this->render('TopxiaWebBundle:Default:index-osf.html.twig',array(
             "recommended"=>$recommended,
             "lastActivitys"=>$lastActivitys,
             "activitTerchar"=>$activitTerchar,
@@ -88,7 +90,8 @@ class DefaultController extends BaseController
             "reviewCourse"=>$reviewCourse,
             "students"=>$students,
             "teachers"=>$teachers,
-            "teacherinfos"=>$teacherinfos
+            "teacherinfos"=>$teacherinfos,
+              'blocks' => $blocks
             ));
     }
 
