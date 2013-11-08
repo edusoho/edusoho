@@ -162,7 +162,7 @@ class DefaultController extends BaseController
     {
         $navigations = $this->getNavigationService()->findNavigationsByType('foot', 0, 100);
 
-        return $this->render('TopxiaWebBundle:Default:foot-navigation-osf.html.twig', array(
+        return $this->render('TopxiaWebBundle:Default:foot-navigation.html.twig', array(
             'navigations' => $navigations,
         ));
     }

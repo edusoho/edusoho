@@ -44,7 +44,7 @@ class DirectCloudClient implements CloudClient
         $this->audioCommands = $options['audioCommands'];
     }
 
-    public function generateUploadToken($bucket, array $params)
+    public function generateUploadToken($bucket, array $params = array())
     {
 
         $policy = array();
@@ -94,11 +94,7 @@ class DirectCloudClient implements CloudClient
         exit();
     }
 
-    private function parseDomain($url)
-    {
-        preg_match('/\w+\.\w+$/', $url, $matches);
-        return $matches ? $matches[0] : null;
-    }
+   
 
     public function getBucket()
     {
@@ -115,23 +111,9 @@ class DirectCloudClient implements CloudClient
         return $this->audioCommands;
     }
 
-    private function serializeUploadReturnBody($body)
-    {
-        $parts = array();
+   
 
-        foreach ($body as $key => $value) {
-            $parts[] = "\"{$key}\":{$value}";
-        }
-
-        return '{'. implode(',', $parts) . '}';
-    }
-
-    private function encodeSafely($string)
-    {
-        $find = array('+', '/');
-        $replace = array('-', '_');
-        return str_replace($find, $replace, base64_encode($string));
-    }
+   
 
     public function getVideoInfo($bucket, $key)
     {
@@ -157,6 +139,18 @@ class DirectCloudClient implements CloudClient
         return $this->getVideoInfo($bucket, $key);
     }
 
+    public function removeFile($key){
+
+    }
+
+
+
+    public function getFileUrl($key,$targetId,$targetType){
+        
+    }
+
+
+
     private function generateViewToken($bucket, $key)
     {
         $params = array('bucket' => $bucket, 'key' => $key);
@@ -168,6 +162,30 @@ class DirectCloudClient implements CloudClient
         $content = $this->getRequest($this->getViewTokenUrl(), array('token' => $token));
 
         return json_decode($content, true);
+    }
+
+    private function parseDomain($url)
+    {
+        preg_match('/\w+\.\w+$/', $url, $matches);
+        return $matches ? $matches[0] : null;
+    }
+
+    private function serializeUploadReturnBody($body)
+    {
+        $parts = array();
+
+        foreach ($body as $key => $value) {
+            $parts[] = "\"{$key}\":{$value}";
+        }
+
+        return '{'. implode(',', $parts) . '}';
+    }
+
+    private function encodeSafely($string)
+    {
+        $find = array('+', '/');
+        $replace = array('-', '_');
+        return str_replace($find, $replace, base64_encode($string));
     }
 
 }
