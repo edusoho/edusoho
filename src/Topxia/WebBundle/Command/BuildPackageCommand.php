@@ -72,7 +72,7 @@ class BuildPackageCommand extends BaseCommand
 
 	private function copyFileAndDir($line,$path)
 	{
-		$file = trim(substr($line,1),"\n  \r");
+		$file = trim(substr($line,1),"\n  \t\r");
 		$destPath = $path.'/source/'.$file;
 		if(!file_exists(dirname($destPath))){
 			mkdir(dirname($destPath), 0777, true);
