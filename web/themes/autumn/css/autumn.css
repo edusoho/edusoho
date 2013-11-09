@@ -44,7 +44,7 @@ a:hover {
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-right: -20px;
+    margin-right: -25px;
     letter-spacing:-4px;
     zoom:1;
 }
@@ -55,7 +55,7 @@ a:hover {
     *zoom:1;
     vertical-align:top;
     letter-spacing:0;
-    width: 285px;
+    width: 277px;
     margin: 17px 10px 0 0;
     background: #fff;
     border: 1px solid #e2e2e2;
@@ -68,26 +68,30 @@ a:hover {
 
 @media (min-width: 1200px) {
     .autumn-grid {
-        width: 285px;
+        width: 277px;
         margin: 17px 10px 0 0;
     }
 }
 
 @media (min-width: 980px ) and ( max-width: 1199px ) {
     .autumn-grid {
-        width: 310px;
-        margin: 17px 20px 0 0;
+        width: 299px;
+        margin: 20px 20px 0 0;
     }
 }
 
 @media (min-width: 768px ) and ( max-width: 979px ) {
     .autumn-grid {
-        width: 365px;
-        margin: 17px 20px 0 0;
+        width: 349px;
+        margin: 20px 20px 0 0;
     }
 }
 
 @media ( max-width: 767px ) {
+    .autumn-grids {
+        margin-right: 0;
+    }
+
     .autumn-grid {
         width: 100%;
         margin: 17px 20px 0 0;
@@ -118,12 +122,23 @@ a:hover {
 }
 
 .autumn-course-grid .course-about {
-    margin: 10px 20px 20px;
+    margin: 10px 20px;
     font-size: 12px;
     height: 30px;
     color: #999;
     overflow: hidden;
 }
+
+.autumn-course-grid .course-metas {
+    margin:10px 20px 20px;
+}
+
+.autumn-course-grid .price {
+    float: right;
+    color: #f78a4b;
+    font-weight: bold;
+}
+
 
 .autumn-course-list {
 
@@ -145,6 +160,12 @@ a:hover {
 .autumn-course-list .course-about {
     font-size: 13px;
     color: #777;
+}
+
+.autumn-course-list .price {
+    float: right;
+    color: #f78a4b;
+    font-weight: bold;
 }
 
 
