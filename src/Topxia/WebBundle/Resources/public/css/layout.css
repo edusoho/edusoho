@@ -3,9 +3,7 @@ p{margin: 0.2em 0}
 body,h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6  {
   font-family: 'microsoft yahei', '微软雅黑','Microsoft YaHei', Arial, sans-serif,Helvetica;
 }
-body  {
-  background-color: #f8f8f8;
-}
+
 
 ul li,ol li{list-style-type: none;}
 
