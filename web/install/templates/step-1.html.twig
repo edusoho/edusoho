@@ -143,7 +143,21 @@
 				</td>
 				<td>必须</td>
       </tr>
-
+      <tr>
+				<td>
+				  PHP扩展：GD
+				  <div class="text-muted">该扩展用于处理图片</div>
+				</td>
+				<td>必须</td>
+				<td>
+				  {% if env.gdOk %}
+					  <span class="text-success">√ 已安装</span>
+				  {% else %}
+					  <span class="text-danger">X 尚未安装</span>
+				  {% endif %}
+				</td>
+				<td>必须</td>
+      </tr>
 		</tbody>
 	</table>
 
