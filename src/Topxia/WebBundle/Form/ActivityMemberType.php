@@ -19,6 +19,8 @@ class ActivityMemberType extends AbstractType
         $builder->add("job","text");
         $builder->add("aboutInfo","text");
         $builder->add("question","text");
+        $builder->add("joinMode","text");
+        $builder->add("approvalStatus","text");
     }
 
     public function getName ()

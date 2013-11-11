@@ -29,98 +29,110 @@
 	</div>
 </div>
 					
-<div class="row pld prd">
-	<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">
+<form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">					
+<div class="row pld prd mbl">
 		
 		<div class="widget shadow">
 			<div class="kytitle clearfix bor-l-green">
-				<h3>选择票价</h3>
+				<h4>选择参与方式</h4>
 			</div>
 			<div class="content clearfix">
-				
+				<div class="form-group">
+        				
+        				<div class="col-md-2 col-md-offset-4">
+              				<label class="input-group ">
+						      
+						        <input type="radio" id="activity_joinMode"  name="activitymember[joinMode]"  value="线上" class="mrm" />线上
+						      
+						    
+						    </label><!-- /input-group -->
+       					</div>
+       					<div class="col-md-2">
+              				<label class="input-group">
+						      
+						       <input type="radio" id="activity_joinMode" name="activitymember[joinMode]"  value="线下"  class="mrm" />线下
+						     
+						    </label><!-- /input-group -->
+       					</div>
+       					
+	        	</div>
 			</div>
 		</div>
 
 
 
 
+	<div class="widget shadow">
+		<div class="kytitle clearfix bor-l-green">
+			<h3>基本信息</h3>
+		</div>
+		<div class="content clearfix">
+			<div class="col-md-6">
+				<div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_email">Email地址</label>
+		            <div class="col-lg-9">
 
-		<div class="widget shadow">
-			<div class="kytitle clearfix bor-l-green">
-				<h3>基本信息</h3>
+		              <input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}" required />
+		               <p class="help-block" id="email_info">填写你常用的邮箱作为登录帐号</p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_nickname">昵称</label>
+		            <div class="col-lg-9">
+		              <input id="activity_nickname" class="form-control" type="text" name="activitymember[nickname]" 
+		                data-url="{{ path('register_nickname_check') }}"    required />
+		               <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_truename">真实姓名</label>
+		            <div class="col-lg-9">
+		              <input id="activity_truename" class="form-control" type="text" name="activitymember[truename]" required />
+		               <p class="help-block">请输入真实姓名，必须是中文或英文姓名</p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_mobile">手机号码</label>
+		            <div class="col-lg-9">
+		              <input id="activity_mobile" class="form-control" type="text" name="activitymember[mobile]" required />
+		                <p class="help-block">请收入正确的11位手机号码</p>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_job">职位</label>
+		            <div class="col-lg-9">
+		              <input id="activity_job" class="form-control" type="text" name="activitymember[job]"   />
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_company">公司</label>
+		            <div class="col-lg-9">
+		              <input id="activity_company" class="form-control" type="text" name="activitymember[company]"   />
+		            </div>
+		        </div>
+		        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="activity_aboutInfo">其他信息</label>
+		            <div class="col-lg-9">
+		              <textarea rows="3" class="form-control" name="activitymember[aboutInfo]"></textarea>
+		            </div>
+		        </div>
 			</div>
-			<div class="content clearfix">
-				<div class="col-md-6">
-					<div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_email">Email地址</label>
-			            <div class="col-lg-9">
-
-			              <input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}" required />
-			               <p class="help-block" id="email_info">填写你常用的邮箱作为登录帐号</p>
-			            </div>
-			        </div>
-			        <div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_nickname">昵称</label>
-			            <div class="col-lg-9">
-			              <input id="activity_nickname" class="form-control" type="text" name="activitymember[nickname]" 
-			                data-url="{{ path('register_nickname_check') }}"    required />
-			               <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
-			            </div>
-			        </div>
-			        <div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_truename">真实姓名</label>
-			            <div class="col-lg-9">
-			              <input id="activity_truename" class="form-control" type="text" name="activitymember[truename]" required />
-			               <p class="help-block">请输入真实姓名，必须是中文或英文姓名</p>
-			            </div>
-			        </div>
-			        <div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_mobile">手机号码</label>
-			            <div class="col-lg-9">
-			              <input id="activity_mobile" class="form-control" type="text" name="activitymember[mobile]" required />
-			                <p class="help-block">请收入正确的11位手机号码</p>
-			            </div>
-			        </div>
-			        <div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_job">职位</label>
-			            <div class="col-lg-9">
-			              <input id="activity_job" class="form-control" type="text" name="activitymember[job]"   />
-			            </div>
-			        </div>
-			        <div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_company">公司</label>
-			            <div class="col-lg-9">
-			              <input id="activity_company" class="form-control" type="text" name="activitymember[company]"   />
-			            </div>
-			        </div>
-			        <div class="form-group">
-			            <label class="col-lg-3 control-label" for="activity_aboutInfo">其他信息</label>
-			            <div class="col-lg-9">
-			              <textarea rows="3" class="form-control" name="activitymember[aboutInfo]"></textarea>
-			            </div>
-			        </div>
-				</div>
-				<div class="col-md-6">
-					<div>
+			<div class="col-md-6">
+					<div class="mbm">
 						<p>问题出干货--高质量问题互动，才能点燃老师在公开课上的激情，亲，让我们一起吧讲师编成蜡炬的灰吧～～</p>
 					</div>
-					<div><textarea rows="10" class="form-control" name="activitymember[question]"></textarea></div>
-					<div class="form-group">
-			            <div class="col-lg-12">
-			              <div class="checkbox">
-					        <label>
-					          <input type="checkbox" checked="checked" /> 转发微博
-					       	</label>
-					      </div>
-					      <button type="submit" class="form-control btn btn-fat btn-primary btn-large">立即报名</button>
-			            </div>
-			        </div>
-				</div>
+					<div><textarea rows="22" class="form-control" name="activitymember[question]"></textarea></div>					
 			</div>
 		</div>
+	</div>
+
 	 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-	</form>
+
+	 <div class="col-md-4 col-md-offset-4">
+			<button type="submit" class="btn btn-primary btn-lg btn-block">立即报名</button>
+	</div>	
 </div>
+</form>
 
 
 {% endblock %}

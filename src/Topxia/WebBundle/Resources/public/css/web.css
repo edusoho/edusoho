@@ -2213,6 +2213,8 @@ body {
 .ps-ab{	position: absolute !important;}
 .ps-re{	position: relative !important;}
 
+.ps-ptp{top:15% !important;}
+
 .ps-tp{top:10px !important;}
 .ps-tps{top:5px !important;}
 .ps-tpl{top:15px !important;}
@@ -2221,6 +2223,7 @@ body {
 .ps-rts{right:5px !important;}
 .ps-rtl{right:15px !important;}
 
+.ps-pld{left:50% !important;}
 .ps-lt{left:10px !important;}
 .ps-lts{left:5px !important;}
 .ps-ltl{left:15px !important;}
@@ -2325,18 +2328,45 @@ body {
 	font-size: 18px !important;
 }
 
+.text-xxlarge {
+	font-size: 24px !important;
+}
+
 .text-xIndent{
   text-indent: 15px !important;
 }
 
 .text-color-gray{
-	color: #777 !important;
+	color: #000777 !important;
 }
 
 .text-color-green{
 	color: #008000 !important;
 }
 
+.text-color-white{
+	color: #ffffff !important;
+}
+
+.text-color-black{
+	color: #000000 !important;
+}
+
+.border-color-maroon{
+	border: 3px solid #800000 !important;
+}
+
+
+
+.text-weight {
+	font-weight: bold !important;
+}
+
+
+.li-no{
+	list-style: none !important;
+
+}
 
 .ellipsis {
 	display: block;

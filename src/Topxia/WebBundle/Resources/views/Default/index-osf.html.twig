@@ -59,8 +59,40 @@
           </div>
         </div>
         <div class="col-md-3 pz prd"> 
-          <div class="es-row-wrap container-gap  pz">
+          <div class="es-row-wrap container-gap ps-re pz">
            <img class="img-responsive" src="{{ file_path('','current-openclass.png')  }}">
+           <div style="margin-top:-320px" class="ps-re">
+
+              <h3 class=" text-center text-color-white text-xlarge text-weight  " >
+                {{recommended.title}}
+              </h3>
+
+              <h3 class=" text-center text-color-black text-large text-weight ptl" >
+                 主讲人：  {{activitTerchar.nickname}}
+              </h3>
+
+              <li class="pll prl ptm ps-re media li-no">
+                <a class="pull-left">
+                  <img class="user-logo-default-size border-color-maroon" src="{{ file_path(activitTerchar.smallAvatar, 'avatar.png') }}" >                  
+                </a>
+                <div class="media-body text-normal">
+                   <span  >{{ activitTerchar.title }}Hadoop大数据红象(RedHadoop)云腾公司创始人</span>
+                </div>                  
+              </li>
+
+              <h3 class="text-center text-color-white text-large text-weight ptl mbl" >
+                 北京.3W咖啡
+              </h3>
+
+
+              <h3 class="text-center text-color-white text-large text-weight ptl" >
+                 {{ recommended.startTime }}
+              </h3>
+
+
+             
+           </div>
+          
           </div>
         </div>
       </div>

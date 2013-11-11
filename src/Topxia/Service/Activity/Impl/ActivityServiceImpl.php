@@ -298,12 +298,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 		$thread['activityId']=$member['activityId'];
 		$thread['userId']=$member['userId'];
+
+		$thread['joinMode']=empty($member['joinMode'])?'':$member['joinMode'];
+
 		$thread['truename']=$member['truename'];
 		$thread['createdTime']=time();
 		$thread['mobile']=empty($member['mobile'])?'':$member['mobile'];
         $thread['company']=empty($member['company'])?'':$member['company'];
         $thread['job']=empty($member['job'])?'':$member['job'];
         $thread['aboutInfo']=empty($member['aboutInfo'])?'':$member['aboutInfo'];
+        
 		return $this->getMemberDao()->addMember($thread);
 	}
 

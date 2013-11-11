@@ -241,6 +241,9 @@ class ActivityController extends BaseController
             $form = $this->createForm(new ActivityMemberType());
             $form->bind($request);
             $member = $form->getData();
+            if ($activity['needApproval']=='需要' or $activity['needApproval']=='yes') {
+                $member['approvalStatus']='checking';
+            }
 
             if (empty($user['id'])) {
                 // regitser 
@@ -302,6 +305,7 @@ class ActivityController extends BaseController
                 $member['userId']=$user['id'];
                 
                 $this->getActivityService()->addMeberByActivity($member);
+
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
                     $activity_thread['content']=$member['question'];
