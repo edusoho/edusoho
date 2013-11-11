@@ -12,6 +12,8 @@ class Version20131015165757 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
+    	
+
         $this->addSql(
             "CREATE TABLE `upgrade_logs` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -32,6 +34,9 @@ class Version20131015165757 extends AbstractMigration
   			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='本地升级日志表' ;"
         );
+
+
+
     }
 
     public function down(Schema $schema)
