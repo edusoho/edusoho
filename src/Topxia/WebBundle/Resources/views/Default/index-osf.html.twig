@@ -59,15 +59,18 @@
           </div>
         </div>
         <div class="col-md-3 pz prd"> 
+           {% if recommended.title %}
           <div class="es-row-wrap container-gap ps-re pz">
            <img class="img-responsive" src="{{ file_path('','current-openclass.png')  }}">
            <div style="margin-top:-320px" class="ps-re">
 
               <h3 class=" text-center text-color-white text-xlarge text-weight  " >
-               {{recommended.title}}
+               <a  class='text-color-white' href="{{ path('activity_show',{id:recommended.id})}}">
+                {{recommended.title|default('无')}}
+               </a>
               </h3>
               
-              
+
               <h3 class=" text-center text-color-black text-large text-weight ptl" >
                 {% if activitTerchar %}  主讲人：  {{activitTerchar.nickname}} {% endif %}
               </h3>
@@ -84,7 +87,7 @@
 
 
               <h3 class="text-center text-color-white text-large text-weight ptl pbd" >
-                 {{ recommended.startTime }}
+                 {{ recommended.startTime|default('每周二晚.') }}
               </h3>
 
 
@@ -93,8 +96,8 @@
               </h3>
              
            </div>
-          
           </div>
+           {% endif %}
         </div>
       </div>
 
