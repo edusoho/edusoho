@@ -40,10 +40,13 @@ define(function(require, exports, module) {
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
 			filters: filters,
+			preinit: {
+                Init: function (up, info) {
+                	$("#file-chooser-uploader-div_container").removeAttr("title");
+                }
+            },			
 			init: {
-
 				FileUploaded: function(up, file, info) {
-
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
