@@ -64,11 +64,11 @@
            <div style="margin-top:-320px" class="ps-re">
 
               <h3 class=" text-center text-color-white text-xlarge text-weight  " >
-                {{recommended.title}}
+               {{recommended.title}}
               </h3>
 
               <h3 class=" text-center text-color-black text-large text-weight ptl" >
-                 主讲人：  {{activitTerchar.nickname}}
+                {% if activitTerchar %}  主讲人：  {{activitTerchar.nickname}} {% endif %}
               </h3>
 
               <li class="pll prl ptm ps-re media li-no">
@@ -80,9 +80,6 @@
                 </div>                  
               </li>
 
-              <h3 class="text-center text-color-white text-large text-weight ptl mbl" >
-                 北京.3W咖啡
-              </h3>
 
 
               <h3 class="text-center text-color-white text-large text-weight ptl" >
@@ -90,6 +87,9 @@
               </h3>
 
 
+              <h3 class="text-center text-color-white text-large text-weight ptl mbl" >
+                 {{ recommended.address }}
+              </h3>
              
            </div>
           

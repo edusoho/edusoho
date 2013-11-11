@@ -34,7 +34,8 @@ class DefaultController extends BaseController
                                                                     'id'=>'0');
 
         $activitTerchar=empty($recommended['experters'])?null:$this->getUserService()->findUsersByIds($recommended['experters']);
-        $activitTerchar=count($activitTerchar)>0?current($activitTerchar):null;
+        $activitTerchar=count($activitTerchar)>0?current($activitTerchar):array('nickname'=>'',
+                                                                                'title'=>'');
         //地址
         $Locations=$this->getLocationService()->getAllLocations();
         //公开课报名用户
