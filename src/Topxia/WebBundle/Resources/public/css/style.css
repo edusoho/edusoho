@@ -334,7 +334,7 @@ body:empty .todos-thumb-span
 
 .footer .footer-bar {
     height: 50px;
-    background-color: #ddd;
+    background-color: #dedede;
 }
 
 .footer .footer-bar dl {
@@ -367,7 +367,7 @@ body:empty .todos-thumb-span
 }
 
 .footer-autumn-primary {
-    background-color: #333;
+    background-color: #dedede;
     color: #666;
     text-align: center;
 }
