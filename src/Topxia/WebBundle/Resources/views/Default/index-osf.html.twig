@@ -66,7 +66,8 @@
               <h3 class=" text-center text-color-white text-xlarge text-weight  " >
                {{recommended.title}}
               </h3>
-
+              
+              
               <h3 class=" text-center text-color-black text-large text-weight ptl" >
                 {% if activitTerchar %}  主讲人：  {{activitTerchar.nickname}} {% endif %}
               </h3>
@@ -76,18 +77,18 @@
                   <img class="user-logo-default-size border-color-maroon" src="{{ file_path(activitTerchar.smallAvatar, 'avatar.png') }}" >                  
                 </a>
                 <div class="media-body text-normal">
-                   <span  >{{ activitTerchar.title }}Hadoop大数据红象(RedHadoop)云腾公司创始人</span>
+                   <span  > {% if activitTerchar %} {{ activitTerchar.title }} {% endif %}</span>
                 </div>                  
               </li>
 
 
 
-              <h3 class="text-center text-color-white text-large text-weight ptl" >
+              <h3 class="text-center text-color-white text-large text-weight ptl pbd" >
                  {{ recommended.startTime }}
               </h3>
 
 
-              <h3 class="text-center text-color-white text-large text-weight ptl mbl" >
+              <h3 class="text-center text-color-white text-large text-weight ptl phl mhl" >
                  {{ recommended.address }}
               </h3>
              
@@ -149,7 +150,7 @@
                   <div class="info-btn">
                   <p>还等什么呢就差你了</p>
                   {% if recommended.id %}
-                  <a class="btn center-block" href="{{ path('activity_join',{id:recommended.id}) }}">我要学习</a>
+                  <a class="btn center-block" href="{{ path('register') }}">我要学习</a>
                   {% else %}
                   <a class="btn center-block" >我要学习</a>
                   {% endif %}
