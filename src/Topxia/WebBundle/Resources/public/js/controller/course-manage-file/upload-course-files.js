@@ -12,8 +12,7 @@ define(function(require, exports, module) {
 			targetType = $container.data('targetType'),
 			uploadMode = $container.data('uploadMode')
 
-
-			var extensions = '';
+		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
 				extensions = 'mp3,mp4,avi,flv,wmv';
@@ -36,7 +35,7 @@ define(function(require, exports, module) {
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
-			runtimes: 'html5,gears,flash,silverlight,browserplus,html4',
+			runtimes: 'html5,flash,html4',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
 			filters: filters,

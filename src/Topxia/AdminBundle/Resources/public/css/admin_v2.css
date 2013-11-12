@@ -270,3 +270,8 @@ legend {
   background-color: #f1f1f1;
   border-color: #ddd;
 }
+
+.log-table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}

@@ -21,20 +21,25 @@
 
   <td> {{ log.tov }}</td>
   <td>
-      {% if log.dbBackPath is empty %}
-        无备份数据库
-      {% else %}
-       {{ log.dbBackPath }}
-     {% endif %}
-
+      <span class="label label-default">数据库备份:</span><br/>
+      <small>
+        {% if log.dbBackPath is empty %}
+          无
+        {% else %}
+         {{ log.dbBackPath }}
+       {% endif %}
+      </small>
+     <br/>
+     <span class="label label-default">系统文件备份:</span><br/>
+      <small>
+        {% if log.srcBackPath is empty %}
+          无
+        {% else %}
+         {{ log.srcBackPath }}
+        {% endif %}
+    </small>
+  
  </td>
-  <td>
-    {% if log.srcBackPath is empty %}
-        无备份文件夹
-      {% else %}
-       {{ log.srcBackPath }}
-     {% endif %}
-  </td>
   <td> {{ log.logtime | date('Y-n-d H:i:s')}}</td>
   <td> 
     {% if log.status == 'ROLLBACK' %}
