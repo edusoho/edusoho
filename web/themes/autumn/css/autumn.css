@@ -56,7 +56,7 @@ a:hover {
     vertical-align:top;
     letter-spacing:0;
     width: 277px;
-    margin: 17px 10px 0 0;
+    margin: 0px 10px 17px 0;
     background: #fff;
     border: 1px solid #e2e2e2;
     padding: 0px;
@@ -69,21 +69,21 @@ a:hover {
 @media (min-width: 1200px) {
     .autumn-grid {
         width: 277px;
-        margin: 17px 10px 0 0;
+        margin: 0px 10px 17px 0;
     }
 }
 
 @media (min-width: 980px ) and ( max-width: 1199px ) {
     .autumn-grid {
         width: 299px;
-        margin: 20px 20px 0 0;
+        margin: 0px 20px 20px 0;
     }
 }
 
 @media (min-width: 768px ) and ( max-width: 979px ) {
     .autumn-grid {
         width: 349px;
-        margin: 20px 20px 0 0;
+        margin: 0px 20px 20px 0;
     }
 }
 
@@ -94,12 +94,14 @@ a:hover {
 
     .autumn-grid {
         width: 100%;
-        margin: 17px 20px 0 0;
+        margin: 0px 20px 20px 0;
     }
 }
 
 .autumn-course-grid .course-name {
     margin: 10px 20px;
+    height: 50px;
+    overflow: hidden;
 }
 
 .autumn-course-grid .course-name a {
@@ -113,7 +115,7 @@ a:hover {
 }
 
 .autumn-course-grid .course-picture {
-    margin: 0 20px;
+    margin: 20px 20px 10px;
     display: block;
 }
 
@@ -122,9 +124,9 @@ a:hover {
 }
 
 .autumn-course-grid .course-about {
-    margin: 10px 20px;
+    margin: 10px 20px 15px;
     font-size: 12px;
-    height: 30px;
+    height: 32px;
     color: #999;
     overflow: hidden;
 }
@@ -263,6 +265,11 @@ a:hover {
 
 .teacher-media .media-object {
     width: 100px;
+}
+
+.teacher-media .teacher-title {
+    color: #666;
+    font-size: 13px;
 }
 
 .footer-autumn {

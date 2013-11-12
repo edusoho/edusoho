@@ -86,7 +86,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 	private function getClientInfo()
 	{
 		return array(
-			'ip'=>$_SERVER['SERVER_ADDR'],
+			'ip'=> gethostbyname($_SERVER['SERVER_NAME']),
 			'host'=>$_SERVER['SERVER_NAME']
 			);
 	}

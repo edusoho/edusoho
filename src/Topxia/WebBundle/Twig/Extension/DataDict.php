@@ -94,7 +94,7 @@ class DataDict
 			'ROLE_SUPER_ADMIN' => '超级管理员'
 		),
 		'userKeyWordType' => array(
-			'nickname' => '昵称',
+			'nickname' => '用户名',
 			'email' => '邮件地址',
 			'loginIp' => '登陆IP'
 		),

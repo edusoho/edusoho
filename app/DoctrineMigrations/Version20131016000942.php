@@ -505,12 +505,6 @@ class Version20131016000942 extends AbstractMigration
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-			DROP TABLE IF EXISTS `migration_versions`;
-			CREATE TABLE `migration_versions` (
-			  `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-			  PRIMARY KEY (`version`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 			DROP TABLE IF EXISTS `navigation`;
 			CREATE TABLE `navigation` (
 			  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
