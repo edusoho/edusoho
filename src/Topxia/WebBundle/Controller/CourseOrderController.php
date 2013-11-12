@@ -232,14 +232,17 @@ class CourseOrderController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'alipaydouble');
+
+        $payNames = array('alipay');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
-                $enableds[] = $payName;
+                $enableds[$payName] = array(
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
+                );
             }
         }
 
-        return $payNames;
+        return $enableds;
     }
 
 }
