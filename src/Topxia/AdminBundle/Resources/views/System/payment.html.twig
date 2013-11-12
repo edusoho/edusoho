@@ -22,14 +22,23 @@
   </div>
 
   <fieldset>
-    <legend>支付宝-即时到帐接口</legend>
+    <legend>支付宝</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >支付宝-即时到帐接口</label>
+        <label>接口状态</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('alipay_enabled', {1:'开启', 0:'关闭'}, payment.alipay_enabled) }}
-        <div class="help-block"><a href="http://www.edusoho.com/guide/39#payment" target="_blank">如何申请支付宝即时到帐接口？</a></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="alipay_key">接口类型</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('alipay_type', {'direct':'立即到帐接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
+        <div class="help-block">由于支付宝政策限制，"立即到帐接口"只能以企业的名义申请，个人用户请申请“标准双接口”。<br><a href="http://www.edusoho.com/guide/39#payment" target="_blank">如何申请？</a></div>
       </div>
     </div>
 
@@ -51,13 +60,16 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label"></div>
-      <div class="controls col-md-8">
-        <button type="submit" class="btn btn-primary">提交</button>
-      </div>
-    </div>
   </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
