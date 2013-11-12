@@ -6,9 +6,9 @@ abstract class Response
 
     protected $userAgent = 'Topxia Payment Client 1.0';
 
-    protected $connectTimeout = 3;
+    protected $connectTimeout = 10;
 
-    protected $timeout = 3;
+    protected $timeout = 10;
 
     public function __construct(array $options)
     {
