@@ -183,13 +183,15 @@ class SettingController extends BaseController
             'alipay_enabled'=>0,
             'alipay_key'=>'',
             'alipay_secret' => '',
+            'alipay_type' => 'direct',
             'alipaydouble_enabled' => 0,
             'alipaydouble_key' => '',
             'alipaydouble_secret' => '',
             'tenpay_enabled'=>0,
             'tenpay_key'=>'',
             'tenpay_secret'=>''
-            );
+        );
+
         $payment = array_merge($default, $payment);
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();

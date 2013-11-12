@@ -22,14 +22,23 @@
   </div>
 
   <fieldset>
-    <legend>支付宝 - 即时到帐接口</legend>
+    <legend>支付宝</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label>接口状态</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('alipay_enabled', {1:'开启', 0:'关闭'}, payment.alipay_enabled) }}
-        <div class="help-block">企业用户请申请此接口， <a href="http://www.edusoho.com/guide/39#payment" target="_blank">如何申请？</a></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="alipay_key">接口类型</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('alipay_type', {'direct':'立即到帐接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
+        <div class="help-block">由于支付宝政策限制，"立即到帐接口"只能以企业的名义申请，个人用户请申请“标准双接口”。<br><a href="http://www.edusoho.com/guide/39#payment" target="_blank">如何申请？</a></div>
       </div>
     </div>
 
@@ -52,48 +61,6 @@
     </div>
 
   </fieldset>
-
-
-
-  <fieldset>
-    <legend>支付宝 - 双功能接口</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>接口状态</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('alipaydouble_enabled', {1:'开启', 0:'关闭'}, payment.alipaydouble_enabled) }}
-        <div class="help-block">个人用户请申请此接口， <a href="https://b.alipay.com/order/productDetail.htm?productId=2012111300373136" target="_blank">如何申请？</a></div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipaydouble_key">PID</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="alipaydouble_key" name="alipaydouble_key" class="form-control" value="{{payment.alipaydouble_key}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipaydouble_secret">Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="alipaydouble_secret" name="alipaydouble_secret" class="form-control" value="{{payment.alipaydouble_secret}}">
-      </div>
-    </div>
-
-  </fieldset>
-
-
-
-
-
-
-
-
 
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
