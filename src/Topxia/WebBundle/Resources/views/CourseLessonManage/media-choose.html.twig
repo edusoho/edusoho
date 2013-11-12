@@ -72,9 +72,8 @@
   </div>
 
 
-
   <div class="file-chooser" id="audio-chooser" style="display:none;">
-    <div class="file-chooser-bar">
+    <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
     </div>
@@ -94,11 +93,11 @@
                 data-role="uploader-btn"
                 data-key="{{ fileKey }}"
                 data-token="{{ audioUploadToken.token }}"
-                data-url="{% if storageSetting.upload_mode == 'cloud' %}{{ audioUploadToken.url }}{% else %}{{ path('disk_upload') }}{% endif %}"
+                data-url="{{ audioUploadToken.url }}"
                 data-filepath="{{ filePath }}"
                 data-convert-key="{{ convertKey }}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('disk_upload_callback') }}{% endif %}" 
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-fileinfo-url="{{ path('disk_file_info', {type:'audio'}) }}"
                 data-progressbar="#audio-chooser-progress"></span>
             </div>
