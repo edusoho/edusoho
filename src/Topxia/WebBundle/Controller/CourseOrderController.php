@@ -27,6 +27,7 @@ class CourseOrderController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
+            'payments' => $this->getEnabledPayments(),
             'form' => $form->createView()
         ));
     }
@@ -218,6 +219,26 @@ class CourseOrderController extends BaseController
     private function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getEnabledPayments()
+    {
+        $enableds = array();
+
+        $setting = $this->setting('payment', array());
+
+        if (empty($setting['enabled'])) {
+            return $enableds;
+        }
+
+        $payNames = array('alipay', 'alipaydouble');
+        foreach ($payNames as $payName) {
+            if (!empty($setting[$payName . '_enabled'])) {
+                $enableds[] = $payName;
+            }
+        }
+
+        return $payNames;
     }
 
 }

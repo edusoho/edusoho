@@ -183,6 +183,9 @@ class SettingController extends BaseController
             'alipay_enabled'=>0,
             'alipay_key'=>'',
             'alipay_secret' => '',
+            'alipaydouble_enabled' => 0,
+            'alipaydouble_key' => '',
+            'alipaydouble_secret' => '',
             'tenpay_enabled'=>0,
             'tenpay_key'=>'',
             'tenpay_secret'=>''
