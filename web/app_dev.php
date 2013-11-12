@@ -46,7 +46,14 @@ $currentUser->fromArray(array(
 $serviceKernel->setCurrentUser($currentUser);
 // END: init service kernel
 
+// NOTICE: 防止请求捕捉失败而做异常处理 
+// 包括：数据库连接失败等
+try {
+	$response = $kernel->handle($request);
+} catch (\RuntimeException $e) {
+    echo "Error!  ". $e->getMessage();
+    die();
+}
 
-$response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

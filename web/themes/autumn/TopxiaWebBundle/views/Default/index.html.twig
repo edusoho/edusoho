@@ -5,17 +5,17 @@
   {% set content_blocks = service('Content.BlockService', 'getContentsByCodes', [['autumn:home_top_banner']]) %}
 
   {% if content_blocks['autumn:home_top_banner'] %}
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <div id="autumn-carousel" class="carousel slide hidden-xs" data-ride="carousel">
       <ol class="carousel-indicators">
-          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
-          <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+          <li data-target="#autumn-carousel" data-slide-to="0" class="active"></li>
+          <li data-target="#autumn-carousel" data-slide-to="1" class=""></li>
+          <li data-target="#autumn-carousel" data-slide-to="2" class=""></li>
       </ol>
       <div class="carousel-inner">{{ content_blocks['autumn:home_top_banner']|raw }}</div>
-      <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+      <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
-      <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+      <a class="right carousel-control" href="#autumn-carousel" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
     </div>
@@ -36,8 +36,8 @@
                 <ul class="autumn-grids">
                   {% for course in courses %}
                     <li class="autumn-grid autumn-course-grid">
-                        <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
                         <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a>
+                        <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
                         <div class="course-about">{{ course.about|plain_text(60) }}</div>
 
                         <div class="course-metas">
@@ -148,8 +148,8 @@
                     <div class="media teacher-media">
                       <a href="" class="pull-left"><img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}"></a>
                       <div class="media-body">
-                          <h4 class="media-heading">{{ web_macro.user_link(teacher) }}</h4>
-                          <p>{{ teacher.title }}</p>
+                        <h4 class="media-heading">{{ web_macro.user_link(teacher) }}</h4>
+                        <div class="teacher-title">{{ teacher.title }}</div>
                       </div>
                     </div>
                   </li>
