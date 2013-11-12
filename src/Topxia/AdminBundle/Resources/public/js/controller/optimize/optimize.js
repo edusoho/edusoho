@@ -40,7 +40,6 @@ define(function(require, exports, module) {
         $('#optimizeFile').on('click',  function() {
             $.post($(this).data('url'), function(response) {
                     Notify.success('优化课程视频和相关资料文件成功！');
-                }
             }).error(function(response){
                 Notify.danger('优化课程视频和相关资料文件失败！');
             });
