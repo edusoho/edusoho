@@ -1,3 +1,27 @@
+/**
+ * 对web.css的修改
+ */
+
+
+@media (min-width: 1200px) {
+	.teacherpage #content-container {
+	     width: 1170px;
+	}	
+}
+
+
+@media (min-width: 1200px) {
+    .userpage #content-container {
+        width: 1170px;
+    }
+}
+
+
+#content-container {
+	padding-top: 20px;
+}
+
+
 
 /**
  * 通用属性
