@@ -275,3 +275,7 @@ legend {
     table-layout: fixed;
     word-wrap: break-word;
 }
+
+.more-question{
+  margin: -9px;
+}

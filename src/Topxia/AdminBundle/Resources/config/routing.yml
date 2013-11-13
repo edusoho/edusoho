@@ -474,3 +474,10 @@ admin_thread_batch_delete:
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
 
+admin_question:
+    pattern:  /question
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
+
+admin_question_all:
+    pattern:  /question/all
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestion:all }
