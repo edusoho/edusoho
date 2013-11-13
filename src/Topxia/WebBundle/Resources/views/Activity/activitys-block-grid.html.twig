@@ -1,9 +1,9 @@
 {% set mode = mode|default('default') %}
 <ul class="page-grids course-grids">
   {% for activity in activitys %}
-    <li class="card course-grid ps-rela">
+    <li class="card course-grid ps-re">
       <a  href="{{ path('activity_show',{id:activity.id})}}" class="grid-body">
-        <div class="grid-img ps-rela">
+        <div class="grid-img ps-re">
           <img class="img-responsive thumb" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
           <div class="desc">
            <span class="label label-danger text-large text">{{ activity.subtitle }}</span> 
@@ -11,9 +11,9 @@
         </div>
 
         <div class="title pvm mvz">{{ activity.title }}</div>
-         <div class="phm ptz pbs mvz ps-rela">
+         <div class="phm ptz pbs mvz ps-re">
           <span  >时间：</span>{{ activity.startTime }}
-          <div class="ps-abso ps-bt ps-rt">
+          <div class="ps-ab ps-bt ps-rt">
             <img  src="{{ asset('assets/img/default/live.png')}}">  
             <!--span class="label label-info text-large">有直播</span--> 
           </div>
@@ -34,10 +34,7 @@
 
       
 
-        <!--div class="post_date ps-abso ps-bts ps-rts">
-              <div class="pvs">十一月</div>
-              <h3 class="mz pvs">02</h3>
-        </div-->    
+
       </a>
 
     </li>

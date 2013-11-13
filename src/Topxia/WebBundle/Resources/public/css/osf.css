@@ -10,16 +10,6 @@
 }
 
 
-
-.ps-rela{
-	position: relative !important;
-}
-
-.ps-abso{
-	position: absolute !important;
-}
-
-
 /*头部高度*/
 
 .header-top { margin-top:56px;}

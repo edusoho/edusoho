@@ -23,7 +23,7 @@ class DefaultController extends BaseController
 
         $feild['recommended']=1;//1表示置顶。
         
-        $recommended=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
+        $recommendd=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
         
         $recommended=count($recommended)>0?$recommended[0]:array('largePicture' =>'',
                                                                     'subtitle'=>'',

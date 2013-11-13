@@ -23,8 +23,9 @@ class ActivityController extends BaseController
 	public function exploreAction(Request $request)
     {
         $currentuser=$this->getCurrentUser();
-        $filters = $this->getThreadSearchFilters($request);
-        $conditions = $this->convertFiltersToConditions($filters);
+      
+
+        $conditions['status']='published';
         $conditions['actType']='公开课';
         $conditions['expired']='0';//0表示开放报名。
 
@@ -67,7 +68,7 @@ class ActivityController extends BaseController
             'conditions' => $conditions,
             'tags' => $tags,
             "current_user"=> $currentuser,
-            'filters'=>$filters,
+          
             'locations'=>$Locations,
         ));
     }
