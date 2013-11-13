@@ -19,7 +19,7 @@ class CourseOrderController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $data = array('courseId' => $course['id'], 'payment' => 'alipay');
+        $data = array('courseId' => $course['id'], 'payment' => 'alipaydouble');
         $form = $this->createNamedFormBuilder('course_order', $data)
             ->add('courseId', 'hidden')
             ->add('payment', 'hidden')
@@ -27,6 +27,7 @@ class CourseOrderController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
+            'payments' => $this->getEnabledPayments(),
             'form' => $form->createView()
         ));
     }
@@ -200,6 +201,7 @@ class CourseOrderController extends BaseController
         $options = array(
             'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
+            'type' => $settings["{$payment}_type"]
         );
 
         return $options;
@@ -218,6 +220,29 @@ class CourseOrderController extends BaseController
     private function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getEnabledPayments()
+    {
+        $enableds = array();
+
+        $setting = $this->setting('payment', array());
+
+        if (empty($setting['enabled'])) {
+            return $enableds;
+        }
+
+
+        $payNames = array('alipay');
+        foreach ($payNames as $payName) {
+            if (!empty($setting[$payName . '_enabled'])) {
+                $enableds[$payName] = array(
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
+                );
+            }
+        }
+
+        return $enableds;
     }
 
 }

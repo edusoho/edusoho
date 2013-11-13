@@ -366,6 +366,11 @@ admin_optimize_backupdb:
     defaults: { _controller: TopxiaAdminBundle:Optimize:backupdb }
     methods: [POST]
 
+admin_optimize_remove_upload_files:
+    pattern:  /optimize/remove-unusedfiles
+    defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
+    methods: [POST]
+
 admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }

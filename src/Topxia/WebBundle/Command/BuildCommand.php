@@ -26,6 +26,7 @@ class BuildCommand extends BaseCommand
 		$this->buildSrcDirectory();
 		$this->buildVendorDirectory();
 		$this->buildWebDirectory();
+		$this->cleanMacosDirectory();
 
 		$this->package();
 
@@ -235,6 +236,18 @@ class BuildCommand extends BaseCommand
 			$this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
 		}
 
+	}
+
+	public function cleanMacosDirectory()
+	{
+		$finder = new Finder();
+		$finder->files()->in($this->distDirectory)->ignoreDotFiles(false);
+		foreach ($finder as $dir) {
+
+			if ($dir->getBasename() == '.DS_Store') {
+				$this->filesystem->remove($dir->getRealpath());
+			}
+		}
 	}
 
 }

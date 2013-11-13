@@ -53,7 +53,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('课程处于关闭或未发布状态，不能创建订单！');
         }
 
-        if (!in_array($order['payment'], array('none', 'alipay', 'tenpay'))) {
+        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay'))) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
 

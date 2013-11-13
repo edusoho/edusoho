@@ -51,6 +51,7 @@ function install_step1()
 	$env['maxExecutionTime'] = ini_get('max_execution_time');
 	$env['maxExecutionTimeOk'] = ini_get('max_execution_time') >= 30;
 	$env['mbstringOk'] = extension_loaded('mbstring');
+	$env['gdOk'] = extension_loaded('gd');
 	$env['curlOk'] = extension_loaded('curl');
 	$env['fileinfoOk'] = extension_loaded('fileinfo');
 	
@@ -61,6 +62,7 @@ function install_step1()
 		!$env['maxExecutionTimeOk'] or
 		!$env['mbstringOk'] or
 		!$env['curlOk'] or
+		!$env['gdOk'] or
 		!$env['fileinfoOk']) {
 		$pass = false;
 	}

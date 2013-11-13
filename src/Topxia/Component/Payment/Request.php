@@ -18,7 +18,7 @@ abstract class Request {
         return $this;
     }
 
-
+    abstract public function form();
 
     abstract public function signParams($params);
 }

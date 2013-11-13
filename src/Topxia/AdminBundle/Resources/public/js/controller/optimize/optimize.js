@@ -37,24 +37,13 @@ define(function(require, exports, module) {
                 Notify.danger('备份数据库失败！');
             });
         });
-
-        // $("#popular-courses-type").on('change', function() {
-        //     $.get($(this).data('url'), {dateType: this.value}, function(html) {
-        //         $('#popular-courses-table').html(html);
-        //     });
-        // }).trigger('change');
-
-        // $("#site-logo-remove").on('click', function(){
-        //     var $btn = $(this);
-
-        //     $.post($btn.data('url'), function(){
-        //         $("#site-logo-container").html('');
-        //         $form.find('[name=logo]').val('');
-        //         $btn.hide();
-        //         Notify.success('删除网站LOGO成功！');
-        //     }).error(function(){
-        //         Notify.danger('删除网站LOGO失败！');
-        //     });
+        $('#optimizeFile').on('click',  function() {
+            $.post($(this).data('url'), function(response) {
+                    Notify.success('优化课程视频和相关资料文件成功！');
+            }).error(function(response){
+                Notify.danger('优化课程视频和相关资料文件失败！');
+            });
+        });
 
 
     };

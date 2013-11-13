@@ -31,13 +31,20 @@ class AlipayRequest extends Request {
         }
         $sign = substr($sign, 0, - 1);
         $sign .=$this->options['secret'];
+
         return md5($sign);
     }
 
-    private function convertParams($params)
+    protected function convertParams($params)
     {
         $converted = array();
-        $converted['service'] = 'create_direct_pay_by_user';
+
+        if ($this->getPaymentType() == 'dualfun') {
+            $converted['service'] = 'trade_create_by_buyer';
+        } else {
+            $converted['service'] = 'create_direct_pay_by_user';
+        }
+
         $converted['partner'] = $this->options['key'];
         $converted['payment_type'] = 1;
         $converted['_input_charset'] = 'utf-8';
@@ -45,7 +52,16 @@ class AlipayRequest extends Request {
         $converted['out_trade_no'] = $params['orderSn'];
         $converted['subject'] = $this->filterText($params['title']);
         $converted['seller_id'] = $this->options['key'];
-        $converted['total_fee'] = $params['amount'];
+
+        if ($this->getPaymentType() == 'dualfun') {
+            $converted['price'] = $params['amount'];
+            $converted['quantity'] = 1;
+            $converted['logistics_type'] = 'POST';
+            $converted['logistics_fee'] = '0.00';
+            $converted['logistics_payment'] = 'BUYER_PAY';
+        } else {
+            $converted['total_fee'] = $params['amount'];
+        }
 
         if (!empty($params['notifyUrl'])) {
             $converted['notify_url'] = $params['notifyUrl'];
@@ -68,9 +84,14 @@ class AlipayRequest extends Request {
         return $converted;
     }
 
-    private function filterText($text)
+    protected function filterText($text)
     {
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
+    }
+
+    private function getPaymentType()
+    {
+        return empty($this->options['type']) ? 'direct' : $this->options['type'];
     }
 
 }
