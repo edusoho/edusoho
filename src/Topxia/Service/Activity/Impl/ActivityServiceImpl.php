@@ -465,6 +465,8 @@ class ActivitySerialize
         return $activity;
     }
 
+    //将数据库原始数据变成规格数据。。。以|连接的字符串变为时间,时间戳变成时间字符串。。。。
+
     public static function unserialize(array $activity = null)
     {
     	if (empty($activity)) {
@@ -506,10 +508,6 @@ class ActivitySerialize
 		}else{
 			$activity['endTimeNum']=$activity['endTime'];
 			$activity['endTime']=date("Y-m-d H:i",$activity['endTime']);
-		}
-
-		if(empty($activity['price'])||$activity['price']<=0){
-			//$activity['price']="免费";
 		}
 
 		return $activity;

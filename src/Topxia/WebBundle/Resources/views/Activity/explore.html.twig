@@ -30,9 +30,9 @@
 
        
     <div class="row">
-        <div class="col-md-12 pz">
+        <div class="col-md-8 pz">
            <div class="kytitle clearfix">
-                <h3>公开课一览</h3>             
+                <h3>往期回顾</h3>             
            </div>  
            
           <ul class="pz">
@@ -48,12 +48,8 @@
                 <div class="col-md-8 pll prl">
                   <h4><span >{{ activity.subtitle}}</span></h4>
                   <h3>{{ activity.title}}</h3>                       
-                  <p>开始时间： {{activity.startTime}}</p>
-                   <p>结束时间： {{activity.endTime}}</p>
-                  <p>形式：  {{ activity.form }}</p>
-                  <p>现场地址：{{ activity.address }}</p>
-                  <p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>
-                   <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
+                  <p>时间： {{activity.startTime}}----{{activity.endTime}}</p>
+                                  
                 </div>
 
                 {% if activity.expired==1 %}
@@ -80,8 +76,6 @@
             {% endfor %}
           </ul>
           {{ web_macro.paginator(paginator) }}         
-              
-         
         </div>
     </div> 
 
