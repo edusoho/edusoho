@@ -61,6 +61,28 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		return $builder->execute()->fetchColumn(0);
 	}
 
+	public function searchThreadCountInCourseIds($conditions)
+	{
+		$builder = $this->createThreadSearchQueryBuilder($conditions)
+			->select('COUNT(id)');
+
+		return $builder->execute()->fetchColumn(0);
+	}
+
+	public function searchThreadInCourseIds($conditions, $orderBys, $start, $limit)
+	{
+		$this->filterStartLimit($start, $limit);
+		$builder = $this->createThreadSearchQueryBuilder($conditions)
+			->select('*')
+			->setFirstResult($start)
+			->setMaxResults($limit);
+		foreach ($orderBys as $orderBy) {
+			$builder->addOrderBy($orderBy[0], $orderBy[1]);
+		}
+		
+		return $builder->execute()->fetchAll() ? : array();
+	}
+
 	private function createThreadSearchQueryBuilder($conditions)
 	{
 		if (isset($conditions['title'])) {
@@ -71,7 +93,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			$conditions['content'] = "%{$conditions['content']}%";
 		}
 		
-		return $this->createDynamicQueryBuilder($conditions)
+		$builder = $this->createDynamicQueryBuilder($conditions)
 			->from($this->table, $this->table)
 			->andWhere('courseId = :courseId')
 			->andWhere('lessonId = :lessonId')
@@ -83,6 +105,21 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('postNum > :postNumLargerThan')
 			->andWhere('title LIKE :title')
 			->andWhere('content LIKE :content');
+
+		if (isset($conditions['courseIds'])) {
+			$courseIds = array();
+			foreach ($conditions['courseIds'] as $courseId) {
+				if (ctype_digit($courseId)) {
+					$courseIds[] = $courseId;
+				}
+			}
+			if ($courseIds) {
+				$courseIds = join(',', $courseIds);
+				$builder->andStaticWhere("courseId IN ($courseIds)");
+			}
+		}
+
+		return $builder;
 	}
 
 	public function addThread($fields)
