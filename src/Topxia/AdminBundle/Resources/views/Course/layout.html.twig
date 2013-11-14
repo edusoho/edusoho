@@ -16,7 +16,7 @@
 
         <a href="{{ url('admin_thread') }}" class="list-group-item {% if menu == 'thread' %}active{% endif %}">讨论区管理</a>
 
-        <a href="{{ url('admin_question') }}" class="list-group-item {% if menu == 'question' %}active{% endif %}">问答管理</a>
+        <a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}" class="list-group-item {% if menu == 'question' %}active{% endif %}">问答管理</a>
 
         <a href="{{ url('admin_note') }}" class="list-group-item {% if menu == 'note' %}active{% endif %}" >笔记管理</a>
 

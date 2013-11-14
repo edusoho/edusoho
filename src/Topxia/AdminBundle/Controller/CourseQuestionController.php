@@ -8,13 +8,14 @@ use Topxia\Common\ArrayToolkit;
 class CourseQuestionController extends BaseController
 {
 
-    // 这里默认显示所有未回复的问答
-    public function indexAction (Request $request)
+    public function indexAction (Request $request, $postStatus)
     {
 
 		$conditions = $request->query->all();        
         $conditions['type'] = 'question';
-        $conditions['postNum'] = 0;
+        if($postStatus == 'unPosted'){
+            $conditions['postNum'] = 0;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -28,6 +29,7 @@ class CourseQuestionController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($questions, 'lessonId'));
@@ -38,42 +40,9 @@ class CourseQuestionController extends BaseController
             'users'=> $users,
             'courses' => $courses,
             'lessons' => $lessons,
-            'type' => 'unPosted'
+            'type' => $postStatus
     	));
     }
-
-    public function allAction (Request $request)
-    {
-
-        $conditions = $request->query->all();        
-        $conditions['type'] = 'question';
-
-        $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchThreadCount($conditions),
-            20
-        );
-
-        $questions = $this->getThreadService()->searchThreads(
-            $conditions,
-            'createdNotStick',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($questions, 'lessonId'));
-
-        return $this->render('TopxiaAdminBundle:CourseQuestion:index.html.twig', array(
-            'paginator' => $paginator,
-            'questions' => $questions,
-            'users'=> $users,
-            'courses' => $courses,
-            'lessons' => $lessons,
-            'type' => 'all'
-        ));
-    }
-
 
     public function deleteAction(Request $request, $id)
     {

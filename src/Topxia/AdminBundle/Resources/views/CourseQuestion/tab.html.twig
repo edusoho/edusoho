@@ -5,11 +5,11 @@
     {% if type == 'unPosted'%}
     class="active"
     {% endif %}
-    ><a href="{{path('admin_question')}}">未回复</a></li>
+    ><a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}">未回复</a></li>
     <li
     {% if type == 'all'%}
     class="active"
     {% endif %}
-    ><a href="{{ path('admin_question_all') }}">所有</a></li>
+    ><a href=" {{ url('admin_question', {postStatus: 'all'}) }}">所有</a></li>
   </ul>
 </div>
