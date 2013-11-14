@@ -80,6 +80,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			->andWhere('isStick = :isStick')
 			->andWhere('isElite = :isElite')
             ->andWhere('postNum = :postNum')
+            ->andWhere('postNum > :postNumLargerThan')
 			->andWhere('title LIKE :title')
 			->andWhere('content LIKE :content');
 	}

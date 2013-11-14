@@ -475,9 +475,5 @@ admin_thread_batch_delete:
     methods: [POST]
 
 admin_question:
-    pattern:  /question
+    pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
-
-admin_question_all:
-    pattern:  /question/all
-    defaults: { _controller: TopxiaAdminBundle:CourseQuestion:all }
