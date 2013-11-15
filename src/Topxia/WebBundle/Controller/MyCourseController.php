@@ -18,6 +18,11 @@ class MyCourseController extends BaseController
         return $this->forward('TopxiaWebBundle:MyCourse:learning', array(), array('page' => $request->query->get('page')));
     }
 
+    public function myCoursesAction(Request $request)
+    {
+        return $this->forward('TopxiaWebBundle:MyCourse:learning', array(), array('page' => $request->query->get('page')));
+    }
+
     public function teachingAction(Request $request)
     {
         $user = $this->getCurrentUser();

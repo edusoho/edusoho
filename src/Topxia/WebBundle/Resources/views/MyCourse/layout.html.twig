@@ -1,26 +1,14 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的课程 - {{ parent() }}{% endblock %}
+{% block title %}我的教学 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'courses' %}
+{% set side_nav = 'my-teaching' %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">我的课程</div>
+  <div class="panel-heading">在教课程</span></div>
   <div class="panel-body">
-
-  	{% set main_nav = main_nav|default(null) %}
-		<ul class="nav nav-pills clearfix">
-			{% if 'ROLE_TEACHER' in app.user.roles %}
-				<li{% if main_nav == 'teaching' %} class="active"{% endif %}><a href="{{ path('my_courses_teaching') }}">在教</a></li>
-			{% endif %}
-			<li{% if main_nav == 'learning' %} class="active"{% endif %}><a href="{{ path('my_courses_learning') }}">学习中</a></li>
-			<li{% if main_nav == 'learned' %} class="active"{% endif %}><a href="{{ path('my_courses_learned') }}">已学完</a></li>
-			<li{% if main_nav == 'favorited' %} class="active"{% endif %}><a href="{{ path('my_courses_favorited') }}">收藏</a></li>
-		</ul>
-
 		{% block main_body %}{% endblock %}
-
   </div>
 </div>
 {% endblock %}

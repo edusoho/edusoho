@@ -1,14 +1,31 @@
-{% extends 'TopxiaWebBundle:MyCourse:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}在学 - {{ parent() }}{% endblock %}
+{% block title %}我的课程 - {{ parent() }}{% endblock %}
 
-{% set main_nav = 'learning' %}
+{% set main_nav = 'my-learning' %}
 
-{% block main_body %}
- {% if courses %}
-     {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
-		{{ web_macro.paginator(paginator) }} 
-  {% else %}
-    <div class="empty">暂无学习中的课程</div>
-  {% endif %}
+{% block main %}
+	
+	<div class="panel panel-default panel-col">
+	  <div class="panel-heading">我的课程</span></div>
+
+	  <div class="panel-body">
+  		  	<ul class="nav nav-pills">
+				<li{% if main_nav == 'learning' %} class="active"{% endif %}><a href="{{ path('my_courses_learning') }}">学习中</a></li>
+				<li{% if main_nav == 'learned' %} class="active"{% endif %}><a href="{{ path('my_courses_learned') }}">已学完</a></li>
+				<li{% if main_nav == 'favorited' %} class="active"{% endif %}><a href="{{ path('my_courses_favorited') }}">收藏</a></li>
+			</ul>
+	  	 {% if courses %}
+		     {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
+				{{ web_macro.paginator(paginator) }} 
+		  {% else %}
+		    <div class="empty">暂无学习中的课程</div>
+		  {% endif %}
+	  </div>
+	</div>
+
 {% endblock %}
+
+
+
+
