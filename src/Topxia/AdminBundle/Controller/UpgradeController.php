@@ -69,6 +69,16 @@ class UpgradeController extends BaseController
         ));
     }
 
+    public function checkCountAction()
+    {
+        if ($this->isDisabledUpgrade()) {
+            return $this->createJsonResponse(false);
+        }
+        $packagesToUpgrade = $this->getUpgradeService()->check();
+
+        return $this->createJsonResponse(count($packagesToUpgrade));
+    }
+
 
     public function triggerUpdateModalAction(Request $request, $id)
     {

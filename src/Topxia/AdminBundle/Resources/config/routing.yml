@@ -421,6 +421,10 @@ admin_upgrade_check:
     pattern:  /upgrade/check
     defaults: { _controller: TopxiaAdminBundle:Upgrade:check }
 
+admin_upgrade_check_count:
+    pattern:  /upgrade/check-count
+    defaults: { _controller: TopxiaAdminBundle:Upgrade:checkCount }
+
 admin_category:
     pattern:  /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
