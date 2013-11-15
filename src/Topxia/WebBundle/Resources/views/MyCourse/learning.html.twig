@@ -1,20 +1,14 @@
-{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:MyCourse:layout.html.twig' %}
 
-{% block title %}我的课程 - {{ parent() }}{% endblock %}
+{% block title %}学习中 - {{ parent() }}{% endblock %}
 
-{% set main_nav = 'my-learning' %}
+{% set tab_nav = 'learning' %}
 
 {% block main %}
-	
 	<div class="panel panel-default panel-col">
 	  <div class="panel-heading">我的课程</span></div>
-
 	  <div class="panel-body">
-  		  	<ul class="nav nav-pills">
-				<li{% if main_nav == 'learning' %} class="active"{% endif %}><a href="{{ path('my_courses_learning') }}">学习中</a></li>
-				<li{% if main_nav == 'learned' %} class="active"{% endif %}><a href="{{ path('my_courses_learned') }}">已学完</a></li>
-				<li{% if main_nav == 'favorited' %} class="active"{% endif %}><a href="{{ path('my_courses_favorited') }}">收藏</a></li>
-			</ul>
+  		  	 {% include 'TopxiaWebBundle:MyCourse:nav-pill.html.twig' %}
 	  	 {% if courses %}
 		     {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
 				{{ web_macro.paginator(paginator) }} 

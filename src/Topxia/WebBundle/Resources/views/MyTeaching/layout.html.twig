@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的教学 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">在教课程</span></div>
+  <div class="panel-body">
+		{% block main_body %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

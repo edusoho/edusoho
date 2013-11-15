@@ -4,15 +4,24 @@
 
 {% if type == 'question' %}
 	学员问答
+{% set side_nav = 'my-teaching-questions' %}
+
 {% elseif type == 'discussion' %}
 	学员话题
+{% set side_nav = 'my-teaching-discussions' %}
+
 {% endif %}
 
 - {{ parent() }}
 
 {% endblock %}
 
-{% set side_nav = 'myTeaching' %}
+
+{% if type == 'question' %}
+	{% set side_nav = 'my-teaching-questions' %}
+{% elseif type == 'discussion' %}
+	{% set side_nav = 'my-teaching-discussions' %}
+{% endif %}
 
 {% block main %}
 

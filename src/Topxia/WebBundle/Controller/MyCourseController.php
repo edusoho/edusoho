@@ -10,11 +10,6 @@ class MyCourseController extends BaseController
 
     public function indexAction (Request $request)
     {
-        $user = $this->getCurrentUser();
-        if(in_array('ROLE_TEACHER', $user['roles'])) {
-            return $this->forward('TopxiaWebBundle:MyCourse:teaching', array(), array('page' => $request->query->get('page')));
-        }
-
         return $this->forward('TopxiaWebBundle:MyCourse:learning', array(), array('page' => $request->query->get('page')));
     }
 
