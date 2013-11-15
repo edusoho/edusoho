@@ -7,6 +7,8 @@ use Topxia\Service\Util\SystemUtilService;
 class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 {
 
+
+    //TODO 删除之前检查该文件是否被其他课程使用
 	public function removeUnusedUploadFiles()
 	{
 		$targets = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
