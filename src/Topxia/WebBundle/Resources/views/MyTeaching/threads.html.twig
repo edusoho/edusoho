@@ -5,7 +5,7 @@
 {% if type == 'question' %}
 	学员问答
 {% elseif type == 'discussion' %}
-	学员讨论
+	学员话题
 {% endif %}
 
 - {{ parent() }}
@@ -21,7 +21,7 @@
 		{% if type == 'question' %}
 			学员问答
 		{% elseif type == 'discussion' %}
-			学员讨论
+			学员话题
 		{% endif %}
 	</div>
 
@@ -34,7 +34,7 @@
 	  	{% if type == 'question' %}
 			<div class="empty">您的课程中还没有学员提问过...</div>
 		{% elseif type == 'discussion' %}
-			<div class="empty">您的课程中还没有学员讨论过...</div>
+			<div class="empty">您的课程中还没有学员话题...</div>
 		{% endif %}
 	    
 	  {% endif %}
