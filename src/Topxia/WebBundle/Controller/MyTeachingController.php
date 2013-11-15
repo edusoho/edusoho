@@ -8,6 +8,28 @@ use Topxia\Common\ArrayToolkit;
 class MyTeachingController extends BaseController
 {
     
+    public function coursesAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
+            12
+        );
+        
+        $courses = $this->getCourseService()->findUserTeachCourses(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount(),
+            false
+        );
+
+        return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
+            'courses'=>$courses,
+            'paginator' => $paginator
+        ));
+    }
+
 	public function threadsAction(Request $request, $type)
 	{
 

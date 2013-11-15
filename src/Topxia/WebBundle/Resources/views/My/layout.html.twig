@@ -9,57 +9,57 @@
 
     {% if 'ROLE_TEACHER' in app.user.roles %}
 
-      <div class="panel panel-success">
-        <div class="panel-heading"> 
-           <h3 class="panel-title">我的教学</h3>
-        </div>
+      <div class="panel panel-default">
         <div class="panel-body">
+          <div class="list-group-block">
+            <div class="list-group-panel">
+              <div class="list-group-heading">我的教学</div>
+              <ul class="list-group">
+               <a class="list-group-item
+               {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
+               href="{{path('my_teaching_courses')}}">在教课程</a>
+               <a class="list-group-item 
+               {% if side_nav == 'my-teaching-questions' %} active {% endif %}" 
+                href="{{path('my_teaching_threads', {type:'question'}) }}">学员问答</a>
+               <a class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}"
+                href="{{path('my_teaching_threads', {type:'discussion'}) }}">学员话题</a>
+              </ul>
+            </div>
 
-          <ul class="nav nav-pills nav-stacked">
-            <li><a href="{{path('my_courses_teaching')}}">在教课程</a></li>
-            <li><a href="{{path('my_teaching_threads', {type:'question'}) }}">学员问答</a></li>
-            <li><a href="{{path('my_teaching_threads', {type:'discussion'}) }}">学员话题</a></li>
-          </ul>
-          
+            <div class="list-group-panel">
+              <div class="list-group-heading">我的学习</div>
+              <ul class="list-group">
+                 <a class="list-group-item
+                 {% if side_nav == 'my-learning' %} active {% endif %}" 
+                 href="{{path('my_courses')}}">我的课程</a>
+                 <a class="list-group-item
+                 {% if side_nav == 'my-questions' %} active {% endif %}" 
+                href="{{path('my_questions')}}">我的问答</a>
+                 <a class="list-group-item
+                 {% if side_nav == 'my-discussions' %} active {% endif %}" 
+                href="{{path('my_discussions')}}">我的话题</a>
+                 <a class="list-group-item
+                 {% if side_nav == 'my-notes' %} active {% endif %}" 
+                  href="{{path('my_notebooks')}}">我的笔记</a>
+              </ul>
+            </div>
+
+            <div class="list-group-panel">
+              <div class="list-group-heading">订单</div>
+              <ul class="list-group">
+                 <a class="list-group-item 
+                 {% if side_nav == 'my-orders' %} active {% endif %} " 
+                 href="{{path('my_orders')}}">我的订单</a>
+              </ul>
+            </div>
+
+
+
+          </div>
         </div>
       </div>
 
     {% endif %}
-
-
-    <div class="panel panel-success">
-      <div class="panel-heading"> 
-          <h3 class="panel-title">我的学习</h3>
-      </div>
-      <div class="panel-body">
-
-        <ul class="nav nav-pills nav-stacked">
-          <li><a href="{{path('my_courses')}}">我的课程</a></li>
-          <li><a href="{{path('my_questions')}}">我的问答</a></li>
-          <li><a href="{{path('my_discussions')}}">我的话题</a></li>
-          <li><a href="{{path('my_notebooks')}}">我的笔记</a></li>
-        </ul>
-        
-      </div>
-    </div>
-
-    <div class="panel panel-success">
-      <div class="panel-heading"> 
-          <h3 class="panel-title">订单</h3>
-      </div>
-      <div class="panel-body">
-
-        <ul class="nav nav-pills nav-stacked">
-          <li><a href="{{path('my_orders')}}">我的订单</a></li>
-          {#    
-          <li><a href="#">账户余额</a></li>
-          <li><a href="#">账户充值</a></li> 
-          #}
-        </ul>
-        
-      </div>
-    </div>
-
   </div>
   <div class="col-md-9">{% block main %}{% endblock %}</div>
 </div>
