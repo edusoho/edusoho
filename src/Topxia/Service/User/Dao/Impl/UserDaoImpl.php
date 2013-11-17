@@ -58,6 +58,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     private function createUserQueryBuilder($conditions)
     {
+        $conditions = array_filter($conditions);
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }

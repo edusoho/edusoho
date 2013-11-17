@@ -42,6 +42,12 @@ class OptimizeController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok', 'result'=>$downloadFile));
     }
 
+    public function removeUnusedFilesAction()
+    {
+        $this->getSystemUtilService()->removeUnusedUploadFiles();
+        return $this->createJsonResponse(true);       
+    }
+
     private function isDisabledUpgrade()
     {
         if (!$this->container->hasParameter('disabled_features')) {
@@ -55,5 +61,11 @@ class OptimizeController extends BaseController
 
         return in_array('upgrade', $disableds);
     }
+
+    private function getSystemUtilService()
+    {
+        return $this->getServiceKernel()->createService('Util.SystemUtilService');
+    }
+
 
 }

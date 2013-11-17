@@ -8,10 +8,18 @@
   	{% endif %}
   </td>
   <td>
-  	{% if package.type == 0 %} 
-  		{{package.version}}
-  	{% elseif package.type == 1 %}
-  		{{package.fromVersion}} => {{package.version}}
+    {% if package.type == 0 %} 
+      {{package.version}}
+    {% elseif package.type == 1 %}
+      {{package.fromVersion}} => {{package.version}}
+    {% endif %}
+  </td>
+
+  <td>
+  	{% if package.author is defined %} 
+      <a href="{{package.authorUrl}}" target="_blank">{{package.author}}</a>
+  	{% else %}
+  		<a href="http://www.edusoho.com" target="_blank">官方</a>
   	{% endif %}
   </td>
 
@@ -25,7 +33,6 @@
   <td>
   	{{package.comments | plain_text(10) }}
   	<br>
-    
     <div>
         <a href="#" class="btn btn-sm btn-info" rel="popover" data-content="{{package.comments}}" >详情</a>
     </div>

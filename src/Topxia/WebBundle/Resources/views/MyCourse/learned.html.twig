@@ -2,13 +2,22 @@
 
 {% block title %}已学完 - {{ parent() }}{% endblock %}
 
-{% set main_nav = 'learned' %}
+{% set tab_nav = 'learned' %}
 
-{% block main_body %}
+{% block main %}
+	<div class="panel panel-default panel-col">
+	  <div class="panel-heading">我的课程</span></div>
+	  	<div class="panel-body">
+		  	 
+		  	 {% include 'TopxiaWebBundle:MyCourse:nav-pill.html.twig' %}
+
  {% if courses %}
 		{{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
 		{{ web_macro.paginator(paginator) }} 
   {% else %}
     <div class="empty">暂无已学完的课程</div>
   {% endif %}
+
+  	  </div>
+	</div>
 {% endblock %}

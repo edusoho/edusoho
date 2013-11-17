@@ -1,0 +1,52 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %} 
+
+{% if type == 'question' %}
+	学员问答
+{% set side_nav = 'my-teaching-questions' %}
+
+{% elseif type == 'discussion' %}
+	学员话题
+{% set side_nav = 'my-teaching-discussions' %}
+
+{% endif %}
+
+- {{ parent() }}
+
+{% endblock %}
+
+
+{% if type == 'question' %}
+	{% set side_nav = 'my-teaching-questions' %}
+{% elseif type == 'discussion' %}
+	{% set side_nav = 'my-teaching-discussions' %}
+{% endif %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  	<div class="panel-heading">
+		{% if type == 'question' %}
+			学员问答
+		{% elseif type == 'discussion' %}
+			学员话题
+		{% endif %}
+	</div>
+
+  <div class="panel-body">
+
+    {% if threads %}
+	    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: type} %}
+	  {% else %}
+	  
+	  	{% if type == 'question' %}
+			<div class="empty">您的课程中还没有学员提问过...</div>
+		{% elseif type == 'discussion' %}
+			<div class="empty">您的课程中还没有学员话题...</div>
+		{% endif %}
+	    
+	  {% endif %}
+  </div>
+</div>
+{% endblock %}

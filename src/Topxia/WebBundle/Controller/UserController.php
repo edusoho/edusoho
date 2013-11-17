@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\StringToolkit;
 
 class UserController extends BaseController
 {
@@ -137,7 +138,13 @@ class UserController extends BaseController
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+
         $this->getUserService()->unFollow($user['id'], $id);
+
+        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
+        $this->getNotificationService()->notify($id, 'default', $message);
+
         return $this->createJsonResponse(true);
     }
 
@@ -148,6 +155,11 @@ class UserController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $this->getUserService()->follow($user['id'], $id);
+
+        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经关注了你！";
+        $this->getNotificationService()->notify($id, 'default', $message);
+
         return $this->createJsonResponse(true);
     }
 
@@ -169,6 +181,11 @@ class UserController extends BaseController
     protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
     private function tryGetUser($id)

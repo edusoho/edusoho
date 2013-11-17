@@ -39,7 +39,7 @@
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}
-          <li>支持<strong>mp3, mp4, avi, flv, wmv</strong>格式的文件上传。</li>
+          <li>支持<strong>mp3, mp4, avi, flv, wmv</strong>格式的文件上传，文件大小不能超过<strong>500 MB</strong>。</li>
           <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
         {% else %}
           <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>300 MB</strong>。</li>
