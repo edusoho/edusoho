@@ -32,7 +32,6 @@ class UserController extends BaseController {
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator
@@ -85,7 +84,7 @@ class UserController extends BaseController {
             return $this->redirect($this->generateUrl('admin_user'));
         }
         return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
-    } 
+    }
 
     public function editAction(Request $request, $id)
     {
@@ -155,7 +154,7 @@ class UserController extends BaseController {
     public function unlockAction($id)
     {
         $this->getUserService()->unlockUser($id);
-        
+
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
         ));
@@ -208,17 +207,17 @@ class UserController extends BaseController {
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');        
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');        
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');        
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }
