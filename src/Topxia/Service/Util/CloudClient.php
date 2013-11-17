@@ -6,7 +6,7 @@ interface CloudClient
 {
     public function generateUploadToken($bucket, array $params = array());
 
-    public function download($bucket, $key, $duration = 3600);
+    public function download($bucket, $key, $duration = 3600, $asFilename=null);
 
     public function getBucket();
 
