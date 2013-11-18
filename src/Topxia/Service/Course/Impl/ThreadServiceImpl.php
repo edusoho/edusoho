@@ -38,6 +38,34 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function searchThreads($conditions, $sort, $start, $limit)
 	{
+		
+		$orderBys = $this->filterSort($sort);
+		$conditions = $this->prepareThreadSearchConditions($conditions);
+		return $this->getThreadDao()->searchThreads($conditions, $orderBys, $start, $limit);
+	}
+
+
+	public function searchThreadCount($conditions)
+	{	
+		$conditions = $this->prepareThreadSearchConditions($conditions);
+		return $this->getThreadDao()->searchThreadCount($conditions);
+	}
+
+	public function searchThreadCountInCourseIds($conditions)
+	{
+		$conditions = $this->prepareThreadSearchConditions($conditions);
+		return $this->getThreadDao()->searchThreadCountInCourseIds($conditions);
+	}
+
+	public function searchThreadInCourseIds($conditions, $sort, $start, $limit)
+	{
+		$orderBys = $this->filterSort($sort);
+		$conditions = $this->prepareThreadSearchConditions($conditions);
+		return $this->getThreadDao()->searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
+	}
+	
+	private function filterSort($sort)
+	{
 		switch ($sort) {
 			case 'created':
 				$orderBys = array(
@@ -64,15 +92,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			default:
 				throw $this->createServiceException('参数sort不正确。');
 		}
-
-		$conditions = $this->prepareThreadSearchConditions($conditions);
-		return $this->getThreadDao()->searchThreads($conditions, $orderBys, $start, $limit);
-	}
-
-	public function searchThreadCount($conditions)
-	{	
-		$conditions = $this->prepareThreadSearchConditions($conditions);
-		return $this->getThreadDao()->searchThreadCount($conditions);
+		return $orderBys;
 	}
 
 	private function prepareThreadSearchConditions($conditions)

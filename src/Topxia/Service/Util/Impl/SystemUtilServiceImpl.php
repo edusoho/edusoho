@@ -7,14 +7,17 @@ use Topxia\Service\Util\SystemUtilService;
 class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 {
 
+
+    //TODO 删除之前检查该文件是否被其他课程使用
 	public function removeUnusedUploadFiles()
 	{
 		$targets = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
 		if(empty($targets)) return ;
+		$targets = $this->plainTargetId($targets);
 		foreach ($targets as $target) {
 	        $conditions = array(
 	            'targetType'=> 'courselesson', 
-	            'targetId'=>$target['targetId']
+	            'targetId'=>$target
 	        );
         	$uploadFiles = $this->getUploadFileService()->searchFiles(
 	            $conditions,
@@ -24,6 +27,15 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	        );
 			$this->removeUploadFiles($uploadFiles);
 		}
+	}
+
+	private function plainTargetId($targets)
+	{
+		$result = array();
+		foreach ($targets as $target) {
+			$result[] = $target['targetId'];
+		}
+		return $result;
 	}
 
 	private function removeUploadFiles($uploadFiles)

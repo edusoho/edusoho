@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
  
 class AjaxExceptionListener
@@ -36,6 +37,7 @@ class AjaxExceptionListener
                 $error = array('name' => 'Error', 'message' => $exception->getMessage());
             } else {
                 $error = array('name' => 'Error', 'message' => 'Error');
+                $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
             }
         }
 
@@ -68,4 +70,10 @@ class AjaxExceptionListener
 
         return $user;
     }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
 }

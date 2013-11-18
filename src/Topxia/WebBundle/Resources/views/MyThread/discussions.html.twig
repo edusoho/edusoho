@@ -2,13 +2,15 @@
 
 {% block title %}我的话题 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'discussions' %}
+{% set side_nav = 'my-discussions' %}
 
 {% block main %}
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">我的话题</div>
+
   <div class="panel-body">
+
     {% if threads %}
 	    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: 'discussion'} %}
 	  {% else %}
