@@ -36,18 +36,23 @@ class MoneyCardDaoImpl extends BaseDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addMoneyCard ($moneyCards, $number)
+    public function addMoneyCard ($moneyCards)
     {
         if(empty($moneyCards)){ return array(); }
 
-        $sql = "INSERT INTO $this->table (cardId, password, validTime, rechargeStatus, batchId)     VALUE ";
-        for ($i=0; $i < $number; $i++) {
+        $moneyCardsForSQL = array();
+        foreach ($moneyCards as $value) {
+            $moneyCardsForSQL = array_merge($moneyCardsForSQL, array_values($value));
+        }
+
+        $sql = "INSERT INTO $this->table (cardId, password, deadline, cardStatus, batchId)     VALUE ";
+        for ($i=0; $i < count($moneyCards); $i++) {
             $sql .= "(?, ?, ?, ?, ?),";
         }
 
         $sql = substr($sql, 0, -1);
 
-        return $this->getConnection()->executeUpdate($sql, $moneyCards);
+        return $this->getConnection()->executeUpdate($sql, $moneyCardsForSQL);
     }
 
     public function isCardIdAvaliable ($moneyCardIds)
@@ -73,24 +78,24 @@ class MoneyCardDaoImpl extends BaseDao
         $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function updateBatch ($identifier, $fields)
+    public function updateBatchByCardStatus ($identifier, $fields)
     {
         $this->getConnection()->update($this->table, $fields, $identifier);
     }
 
-    public function deleteBatch ($fields)
+    public function deleteBatchByCardStatus ($fields)
     {
-        $sql = "DELETE FROM ".$this->table." WHERE batchId = ? AND rechargeStatus != ?";
+        $sql = "DELETE FROM ".$this->table." WHERE batchId = ? AND cardStatus != ?";
         $this->getConnection()->executeUpdate($sql, $fields);
     }
 
     private function createMoneyCardQueryBuilder($conditions)
     {
+        $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'money_card')
-            ->andWhere('promoted = :promoted')
             ->andWhere('cardId = :cardId')
-            ->andWhere('validTime = :validTime')
+            ->andWhere('deadline = :deadline')
             ->andWhere('batchId = :batchId');
     }
 

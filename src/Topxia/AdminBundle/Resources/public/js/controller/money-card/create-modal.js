@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
         .addItem({
-            element: '[name="validTime"]',
+            element: '[name="deadline"]',
             required: true,
             rule: ''
         })
@@ -58,7 +58,7 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
 
-        $("#validTimeCreate").datetimepicker({
+        $("#deadlineCreate").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',

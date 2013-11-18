@@ -17,7 +17,7 @@
   </td>
 
   <td>
-    <span class="text-sm">{{ batch.validTime }}</span>
+    <span class="text-sm">{{ batch.deadline }}</span>
   </td>
 
   <td>
@@ -40,11 +40,8 @@
 
   <td>
     <span class="text-sm"><a href="javascript:;" class="btn btn-link delete" data-url="{{ path('admin_money_card_batch_delete', {id:batch.id}) }}">删除</a></span>
-    {% if batch.cardStatus == 'normal' %}
-      <span class="text-sm"><a class="btn btn-link lock-money-card-batch" href="javascript:" title="作废批次为{{ batch.id }}的充值卡" data-url="{{ path('admin_money_card_lock_batch', {id:batch.id }) }}">作废</a></span>
-    {% elseif batch.cardStatus == 'invalid' %}
-      <span class="text-sm"><a class="btn btn-link unlock-money-card-batch" href="javascript:;" title="启用批次为{{ batch.id }}的充值卡" data-url="{{ path('admin_money_card_unlock_batch', {id:batch.id }) }}">启用</a></span>
-    {% endif %}
+    <span class="text-sm"><a class="btn btn-link lock-money-card-batch" href="javascript:" title="作废批次为{{ batch.id }}的充值卡" data-url="{{ path('admin_money_card_lock_batch', {id:batch.id }) }}">作废</a></span>
+    <span class="text-sm"><a class="btn btn-link unlock-money-card-batch" href="javascript:;" title="启用批次为{{ batch.id }}的充值卡" data-url="{{ path('admin_money_card_unlock_batch', {id:batch.id }) }}">启用</a></span>
     <span class="text-sm"><a href="{{ path('admin_money_card_batch_export_csv', {batchId:batch.id}) }}" class="btn btn-link" target='_blank'>导出CSV</a></span>
   </td>
 </tr>

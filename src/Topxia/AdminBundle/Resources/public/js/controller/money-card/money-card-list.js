@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             });
         });
 
-        $("#validTimeSearch").datetimepicker({
+        $("#deadlineSearch").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',

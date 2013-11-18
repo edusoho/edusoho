@@ -166,7 +166,7 @@ class MoneyCardController extends BaseController
         $response->headers->set('Content-type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $response->headers->set('Content-length', strlen($str));
-        $response->setContent($moneyCards['str']);
+        $response->setContent($str);
 
         return $response;
     }

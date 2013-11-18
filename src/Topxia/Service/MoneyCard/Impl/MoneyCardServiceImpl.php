@@ -19,30 +19,21 @@ class MoneyCardServiceImpl extends BaseService
 
 	public function searchMoneyCards (array $conditions, array $oderBy, $start, $limit)
     {
-		$conditions = array_filter($conditions);
-
         return $this->getMoneyCardDao()->searchMoneyCards($conditions, $oderBy, $start, $limit);
     }
 
     public function searchMoneyCardsCount(array $conditions)
     {
-
-    	$conditions = array_filter($conditions);
-
         return $this->getMoneyCardDao()->searchMoneyCardsCount($conditions);
     }
 
     public function searchBatchs(array $conditions, array $oderBy, $start, $limit)
     {
-        $conditions = array_filter($conditions);
-
         return $this->getMoneyCardBatchDao()->searchBatchs($conditions, $oderBy, $start, $limit);
     }
 
     public function searchBatchsCount(array $conditions)
     {
-        $conditions = array_filter($conditions);
-
         return $this->getMoneyCardBatchDao()->searchBatchsCount($conditions);
     }
 
@@ -54,7 +45,7 @@ class MoneyCardServiceImpl extends BaseService
             'cardLength',
             'number',
             'note',
-            'validTime'
+            'deadline'
         ));
 
         $batch['money'] = (int)$batch['money'];
@@ -83,25 +74,18 @@ class MoneyCardServiceImpl extends BaseService
 
         $batch = $this->getMoneyCardBatchDao()->addBatch($batch);
 
-
         $moneyCards = array();
-        $j = 0;
-        foreach ($moneyCardIds as $key => $value) {
-            $moneyCards[$j++] = $key;
-            $moneyCards[$j++] = $value;
-            $moneyCards[$j++] = $moneyCardData['validTime'];
-            $moneyCards[$j++] = "normal";
-            $moneyCards[$j++] = $batch['id'];
+        foreach ($moneyCardIds as $cardid => $cardPassword) {
+            $moneyCards[] = array(
+                'cardId' => $cardid,
+                'password' => $cardPassword,
+                'deadline' => $moneyCardData['deadline'],
+                'cardStatus' => 'normal',
+                'batchId' => $batch['id']
+            );
         }
 
-        $moneyCardsNumber = $this->getMoneyCardDao()->addMoneyCard($moneyCards, $batch['number']);
-
-        if ($moneyCardsNumber != $batch['number']) {
-            $this->getMoneyCardBatchDao()->deleteBatch($batch['id']);
-            $this->getMoneyCardDao()->deleteBatch($batch['id']);
-
-            throw $this->createServiceException('创建充值卡失败！');
-        }
+        $this->getMoneyCardDao()->addMoneyCard($moneyCards);
 
         $this->getLogService()->info('money_card_batch', 'create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
 
@@ -115,10 +99,12 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($moneyCard)) {
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
-        if ($moneyCard['rechargeStatus'] == 'normal') {
-            $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('rechargeStatus' => 'invalid'));
+        if ($moneyCard['cardStatus'] == 'normal') {
+            $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'invalid'));
 
             $this->getLogService()->info('money_card', 'lock', "作废了卡号为{$moneyCard['cardId']}的充值卡");
+        } else {
+            throw $this->createServiceException('只能作废正常状态的充值卡！');
         }
         return $moneyCard;
     }
@@ -129,10 +115,12 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($moneyCard)) {
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
-        if ($moneyCard['rechargeStatus'] == 'invalid') {
-            $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('rechargeStatus' => 'normal'));
+        if ($moneyCard['cardStatus'] == 'invalid') {
+            $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
 
             $this->getLogService()->info('money_card', 'unlock', "启用了卡号为{$moneyCard['cardId']}的充值卡");
+        } else {
+            throw $this->createServiceException('只能启用作废状态的充值卡！');
         }
         return $moneyCard;
     }
@@ -140,10 +128,12 @@ class MoneyCardServiceImpl extends BaseService
     public function deleteMoneyCard ($id)
     {
         $moneyCard = $this->getMoneyCard($id);
-        if ($moneyCard['rechargeStatus'] != 'recharged') {
+        if ($moneyCard['cardStatus'] != 'recharged') {
             $this->getMoneyCardDao()->deleteMoneyCard($id);
 
             $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
+        } else {
+            throw $this->createServiceException('不能删除已经充值的充值卡！');
         }
     }
 
@@ -153,13 +143,12 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($batch)) {
             throw $this->createServiceException('批次不存在，作废失败！');
         }
-        $batch = $this->getMoneyCardBatchDao()->updateBatch($batch['id'], array('cardStatus' => 'invalid'));
-        $this->getMoneyCardDao()->updateBatch(
+        $this->getMoneyCardDao()->updateBatchByCardStatus(
             array(
             'batchId' => $batch['id'],
-            'rechargeStatus' => 'normal'
+            'cardStatus' => 'normal'
             ),
-            array('rechargeStatus' => 'invalid')
+            array('cardStatus' => 'invalid')
         );
 
         $this->getLogService()->info('money_card_batch', 'lock', "作废了批次为{$batch['id']}的充值卡");
@@ -173,13 +162,12 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($batch)) {
             throw $this->createServiceException('批次不存在，作废失败！');
         }
-        $batch = $this->getMoneyCardBatchDao()->updateBatch($batch['id'], array('cardStatus' => 'normal'));
-        $this->getMoneyCardDao()->updateBatch(
+        $this->getMoneyCardDao()->updateBatchByCardStatus(
             array(
             'batchId'    => $batch['id'],
-            'rechargeStatus' => 'invalid'
+            'cardStatus' => 'invalid'
             ),
-            array('rechargeStatus' => 'normal')
+            array('cardStatus' => 'normal')
         );
 
         $this->getLogService()->info('money_card_batch', 'unlock', "启用了批次为{$batch['id']}的充值卡");
@@ -190,7 +178,7 @@ class MoneyCardServiceImpl extends BaseService
     public function deleteBatch ($id)
     {
         $this->getMoneyCardBatchDao()->deleteBatch($id);
-        $this->getMoneyCardDao()->deleteBatch(array($id, 'recharged'));
+        $this->getMoneyCardDao()->deleteBatchByCardStatus(array($id, 'recharged'));
 
         $this->getLogService()->info('money_card_batch', 'delete', "删除了批次为{$id}的充值卡");
     }
