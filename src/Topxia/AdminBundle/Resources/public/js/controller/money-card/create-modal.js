@@ -29,9 +29,6 @@ define(function(require, exports, module) {
 				}).error(function(){
 					Notify.danger('卡号生成失败，请重新生成！');
 				});
-
-
-
             }
         });
 
@@ -46,7 +43,7 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
         .addItem({
-            element: '[name="passwordLength"]',
+            element: '[name="passwordMedian"]',
             required: true,
             rule: 'integer'
         })

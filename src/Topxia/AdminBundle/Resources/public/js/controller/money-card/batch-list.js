@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
 
-    require("jquery.bootstrap-datetimepicker");
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
@@ -30,13 +29,6 @@ define(function(require, exports, module) {
             $.post($(this).data('url'), function(){
                 window.location.reload();
             });
-        });
-
-        $("#validTimeSearch").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
         });
 
 	};
