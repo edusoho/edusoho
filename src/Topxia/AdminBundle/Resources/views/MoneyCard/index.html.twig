@@ -55,11 +55,17 @@
         </tr>
       </thead>
       <tbody>
+      {% if moneyCards %}
         {% for moneyCard in moneyCards %}
             {% include 'TopxiaAdminBundle:MoneyCard:money-card-table-tr.html.twig' with {moneyCard:moneyCard} %}
         {% endfor %}
       </tbody>
     </table>
+      {% else %}
+      </tbody>
+    </table>
+    <div class='empty'>数据库君表示自己非常不给力，啥都没找到~~</div>
+      {% endif %}
   {{ web_macro.paginator(paginator) }}
 
 {% endblock %}
