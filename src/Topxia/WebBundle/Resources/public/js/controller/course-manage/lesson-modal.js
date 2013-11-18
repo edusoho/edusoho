@@ -8,6 +8,11 @@ define(function(require, exports, module) {
 
     function createValidator ($form) {
 
+        Validator.addRule('mediaValueEmpty', function(options) {
+            var value = options.element.val();
+            return value != '""';
+        }, '请选择或上传{{display}}文件');
+
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
         }, '时长格式不正确');
@@ -23,8 +28,8 @@ define(function(require, exports, module) {
             }
 
             var $panel = $('.lesson-manage-panel');
-
             $.post($form.attr('action'), $form.serialize(), function(html) {
+
                 var id = '#' + $(html).attr('id'),
                     $item = $(id);
                 if ($item.length) {
@@ -61,7 +66,8 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '#lesson-media-field',
                     required: true,
-                    errormessageRequired: '请选择或上传' + (type == 'video' ? '视频' : '音频')
+                    rule: 'mediaValueEmpty',
+                    display: type == 'video' ? '视频' : '音频'
                 });
 
                 validator.addItem({
@@ -86,7 +92,7 @@ define(function(require, exports, module) {
 
         var choosedMedia = $form.find('[name="media"]').val();
         choosedMedia = choosedMedia ? $.parseJSON(choosedMedia) : {};
-
+        
         var videoChooser = new VideoChooser({
             element: '#video-chooser',
             choosed: choosedMedia,
@@ -146,6 +152,7 @@ define(function(require, exports, module) {
             if (type == 'video') {
                 videoChooser.show();
                 audioChooser.hide();
+
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
