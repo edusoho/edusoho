@@ -46,7 +46,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ? : array();  
+        return $builder->execute()->fetchAll() ? : array();
     }
 
     public function searchUserCount($conditions)

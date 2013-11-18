@@ -76,13 +76,14 @@ class EdusohoCloudClient implements CloudClient
 		return json_decode($content, true);
 	}
 
-	public function download($bucket, $key, $duration = 3600)
+	public function download($bucket, $key, $duration = 3600, $asFilename=null)
 	{
-		$params = array('bucket' => $bucket, 'key' => $key);
-		$encodedParams = base64_encode(json_encode($params));
+		$params = array('bucket' => $bucket, 'key' => $key, 'duration' => $duration, 'asFilename' => $asFilename);
 
-		$sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
-		$token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
 
 		header("Location: {$this->getDownloadUrl()}?token={$token}");
 		exit();

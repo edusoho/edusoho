@@ -55,7 +55,7 @@ class CourseMaterialController extends BaseController
         if ($file['storage'] == 'cloud') {
             $factory = new CloudClientFactory();
             $client = $factory->createClient();
-            $client->download($client->getBucket(), $file['hashId']);
+            $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
         } else {
             return $this->createPrivateFileDownloadResponse($file);
         }

@@ -10,34 +10,11 @@ class MyCourseController extends BaseController
 
     public function indexAction (Request $request)
     {
-        return $this->forward('TopxiaWebBundle:MyCourse:learning', array(), array('page' => $request->query->get('page')));
-    }
-
-    public function myCoursesAction(Request $request)
-    {
-        return $this->forward('TopxiaWebBundle:MyCourse:learning', array(), array('page' => $request->query->get('page')));
-    }
-
-    public function teachingAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
-            12
-        );
-        
-        $courses = $this->getCourseService()->findUserTeachCourses(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount(),
-            false
-        );
-
-        return $this->render('TopxiaWebBundle:MyCourse:teaching.html.twig', array(
-            'courses'=>$courses,
-            'paginator' => $paginator
-        ));
+        if ($this->getCurrentUser()->isTeacher()) {
+            return $this->redirect($this->generateUrl('my_teaching_courses')); 
+        } else {
+            return $this->redirect($this->generateUrl('my_courses_learning'));
+        }
     }
 
     public function learningAction(Request $request)

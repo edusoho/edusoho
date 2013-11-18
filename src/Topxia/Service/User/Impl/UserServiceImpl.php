@@ -125,7 +125,7 @@ class UserServiceImpl extends BaseService implements UserService
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
-        
+
         return  $this->getUserDao()->updateUser($userId, array(
             'smallAvatar' => $smallFileRecord['uri'],
             'mediumAvatar' => $mediumFileRecord['uri'],
@@ -190,7 +190,7 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::email($registration['email'])) {
             throw $this->createServiceException('email error!');
         }
-        
+
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
         }
@@ -249,7 +249,7 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::email($account['email'])) {
             throw $this->createServiceException('Email地址格式不正确，设置帐号失败！');
         }
-        
+
         if (!SimpleValidator::nickname($account['nickname'])) {
             throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
         }
@@ -321,7 +321,7 @@ class UserServiceImpl extends BaseService implements UserService
         if(!empty($fields['about'])){
             $fields['about'] = $this->purifyHtml($fields['about']);
         }
-        
+
         return $this->getProfileDao()->updateProfile($id, $fields);
     }
 
@@ -350,7 +350,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
 
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
-    } 
+    }
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
     {
@@ -397,7 +397,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserBindDao()->findBindsByToId($userId);
     }
 
-    public function unBindUserByTypeAndToId ($type, $toId) 
+    public function unBindUserByTypeAndToId ($type, $toId)
     {
         $user = $this->getUserDao()->getUser($toId);
         if(empty($user)) {
@@ -454,7 +454,7 @@ class UserServiceImpl extends BaseService implements UserService
             'expiredTime'=>$token['expiredTime']
             ));
     }
-    
+
     public function markLoginInfo()
     {
         $user = $this->getCurrentUser();
@@ -514,7 +514,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，取消推荐失败！');
         }
         $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedTime' => 0));
-        
+
         $this->getLogService()->info('user', 'cancel_recommend', "取消推荐用户{$user['nickname']}(#{$user['id']})");
     }
 
@@ -608,7 +608,7 @@ class UserServiceImpl extends BaseService implements UserService
         if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-        return false;        
+        return false;
     }
 
 
@@ -619,7 +619,7 @@ class UserServiceImpl extends BaseService implements UserService
         if(empty($fromUser)) {
             throw $this->createServiceException('用户不存在，检测关注状态失败！');
         }
-        
+
         if(empty($toUser)) {
             throw $this->createServiceException('被关注者不存在，检测关注状态失败！');
         }
@@ -674,12 +674,12 @@ class UserServiceImpl extends BaseService implements UserService
 
     private function getSettingService()
     {
-        return $this->createService('System.SettingService');        
+        return $this->createService('System.SettingService');
     }
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');        
+        return $this->createService('System.LogService');
     }
 
     private function getPasswordEncoder()
