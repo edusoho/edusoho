@@ -151,6 +151,10 @@
 }
 
 .text-xxlarge {
+	font-size: 22px !important;
+}
+
+.text-xxxlarge {
 	font-size: 24px !important;
 }
 
@@ -159,7 +163,7 @@
 }
 
 .text-color-gray{
-	color: #000777 !important;
+	color: #777 !important;
 }
 
 .text-color-green{
@@ -172,6 +176,11 @@
 
 .text-color-black{
 	color: #000000 !important;
+}
+
+
+.text-color-red{
+	color: #f40 !important;
 }
 
 .border-color-maroon{

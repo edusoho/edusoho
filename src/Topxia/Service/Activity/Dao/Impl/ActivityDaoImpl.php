@@ -32,8 +32,12 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+       
+          
         return $builder->execute()->fetchAll() ? : array(); 
     }
+
 
     public function searchActivityCount($conditions)
     {

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Activity\ActivityService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\DebugToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -19,6 +20,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			return ActivitySerialize::unserialize($this->getActivityDao()->getActivity($id));
 	}
 
+
+	public function findLastActivitys(array $ids){
+		$activity = ActivitySerialize::unserializes(
+            $this->getActivityDao()->findActivitysByIds($ids)
+        );
+        return ArrayToolkit::index($activity, 'id');
+	}
+
+	public function findRecommendedActivity(array $ids){
+		$activity = ActivitySerialize::unserializes(
+            $this->getActivityDao()->findActivitysByIds($ids)
+        );
+        return ArrayToolkit::index($activity, 'id');
+	}
+
+
 	public function findActivitysByIds(array $ids){
 		$activity = ActivitySerialize::unserializes(
             $this->getActivityDao()->findActivitysByIds($ids)
@@ -26,9 +43,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return ArrayToolkit::index($activity, 'id');
 	}
 
-	public function searchActivitys($conditions, $sort = 'latest', $start, $limit){
 
+	public function searchActivitys($conditions, $sort = 'latest', $start, $limit){
+		
 		$conditions = $this->_prepareActivityConditions($conditions);
+
 		if ($sort == 'popular') {
 			$orderBy =  array('viewNum', 'DESC');
 		} else if ($sort == 'recommendedTime-DESC'){
