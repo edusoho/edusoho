@@ -73,7 +73,7 @@ class CourseLessonController extends BaseController
         return $this->fileAction($request, $lesson['mediaId']);
     }
 
-    public function fileAction(Request $request, $fileId)
+    public function fileAction(Request $request, $fileId, $isDownload = false)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
         if (empty($file)) {
@@ -105,10 +105,15 @@ class CourseLessonController extends BaseController
             $factory = new CloudClientFactory();
             $client = $factory->createClient();
 
-            $client->download($client->getBucket(), $key);
+            if ($isDownload) {
+                $client->download($client->getBucket(), $key, 3600, $file['filename']);
+            } else {
+                $client->download($client->getBucket(), $key);
+            }
+
         }
 
-        return $this->createLocalMediaResponse($file);
+        return $this->createLocalMediaResponse($file, $isDownload);
     }
 
     public function learnStatusAction(Request $request, $courseId, $lessonId)
@@ -136,15 +141,15 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function createLocalMediaResponse($file)
+    private function createLocalMediaResponse($file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
         $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_INLINE,
-            'lesson.mp4',
-            iconv('UTF-8', 'ASCII//TRANSLIT', 'lesson.mp4')
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $file['filename'],
+            iconv('UTF-8', 'ASCII//TRANSLIT', $file['filename'])
         );
 
         return $response;

@@ -634,9 +634,13 @@ my:
     pattern: /my
     defaults: { _controller: TopxiaWebBundle:MyCourse:index }
 
-my_courses:
-    pattern: /my/courses
-    defaults: { _controller: TopxiaWebBundle:MyCourse:index }
+my_teaching_courses:
+    pattern: /my/teaching/courses
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses }
+
+my_teaching_threads:
+    pattern: /my/teaching/threads/{type}
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
 
 my_courses_learning:
     pattern: /my/courses/learning
@@ -645,10 +649,6 @@ my_courses_learning:
 my_courses_learned:
     pattern: /my/courses/learned
     defaults: { _controller: TopxiaWebBundle:MyCourse:learned }
-
-my_courses_teaching:
-    pattern: /my/courses/teaching
-    defaults: { _controller: TopxiaWebBundle:MyCourse:teaching }
 
 my_courses_favorited:
     pattern: /my/courses/favorited

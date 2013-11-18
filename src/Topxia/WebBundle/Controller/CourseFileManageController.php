@@ -60,13 +60,12 @@ class CourseFileManageController extends BaseController
         }
 
         if ($file['targetType'] == 'courselesson') {
-            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id']));
+            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
         } else if ($file['targetType'] == 'coursematerial') {
-
             if ($file['storage'] == 'cloud') {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
-                $client->download($client->getBucket(), $file['hashId']);
+                $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
             } else {
                 return $this->createPrivateFileDownloadResponse($file);
             }
@@ -116,7 +115,17 @@ class CourseFileManageController extends BaseController
 
     private function createPrivateFileDownloadResponse($file)
     {
-        return BinaryFileResponse::create($file['fullpath'], 200, array(), false, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_INLINE,
+            $file['filename'],
+            iconv('UTF-8', 'ASCII//TRANSLIT', $file['filename'])
+        );
+
+        return $response;
     }
 
 }

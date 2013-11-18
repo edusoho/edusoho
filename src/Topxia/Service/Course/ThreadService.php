@@ -14,6 +14,10 @@ interface ThreadService
 
 	public function searchThreadCount($conditions);
 
+	public function searchThreadCountInCourseIds($conditions);
+
+	public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
+
 	/**
 	 * 创建话题
 	 */

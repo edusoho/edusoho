@@ -46,7 +46,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ? : array();  
+        return $builder->execute()->fetchAll() ? : array();
     }
 
     public function searchUserCount($conditions)
@@ -58,6 +58,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     private function createUserQueryBuilder($conditions)
     {
+        $conditions = array_filter($conditions);
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }

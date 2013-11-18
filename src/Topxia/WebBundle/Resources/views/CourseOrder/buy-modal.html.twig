@@ -4,6 +4,7 @@
 
 {% block title %}购买课程{% endblock %}
 {% block body %}
+  
   {% if app.request.query.get('preview') %}
     <div class="alert alert-info">该课时非免费课时，不能预览，需购买后才能查看。</div>
   {% endif %}
@@ -26,26 +27,29 @@
     </div>
 
     {% if course.price > 0 %}
-      <div class="form-group">
-        <div class="col-md-3 control-label">选择支付方式</div>
-        <div class="col-md-9 controls">
-          {% for payment, options in payments %}
-          	<input type="radio" checked="checked" />
-          	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
-          {% endfor %}
+      {% if payments %}
+        <div class="form-group">
+          <div class="col-md-3 control-label">选择支付方式</div>
+          <div class="col-md-9 controls">
+            {% for payment, options in payments %}
+            	<input type="radio" checked="checked" />
+            	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
+            {% endfor %}
+          </div>
         </div>
-      </div>
 
-      {% if payments.alipay.type == 'dualfun' %}
-      <div class="row">
-        <div class="col-md-12">
-          <div class="alert alert-info">
-          <h4>付款提示</h4>
-          支付宝支持“担保交易”和“立即到帐交易”两种交易方式。<br>推荐使用<strong>“立即到帐交易”</strong>。“担保交易”需要人工确认发货、付款后才能完成购买课程，会产生较大延迟。</div>
+        {% if payments.alipay.type|default(null) == 'dualfun' %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-info">
+            <h4>付款提示</h4>
+            支付宝支持“担保交易”和“立即到帐交易”两种交易方式。<br>推荐使用<strong>“立即到帐交易”</strong>。“担保交易”需要人工确认发货、付款后才能完成购买课程，会产生较大延迟。</div>
+          </div>
         </div>
-      </div>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-danger">本站尚未开启支付模块，无法购买课程。</div>
       {% endif %}
-
     {% else %}
       <div class="row">
         <div class="col-md-12">
@@ -61,7 +65,9 @@
 
 {% block footer %}
   {% if course.price > 0 %}
-    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+    {% if payments %}
+      <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+    {% endif %}
   {% else %}
     <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
   {% endif %}
