@@ -63,10 +63,7 @@ define(function(require, exports, module) {
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
-        }).on('show', function(ev){
-            $(".datetimepicker").css('z-index','2000');
         });
-
 	};
 
 });
