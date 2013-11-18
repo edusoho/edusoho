@@ -8,6 +8,11 @@ define(function(require, exports, module) {
 
     function createValidator ($form) {
 
+        Validator.addRule('mediaValueEmpty', function(options) {
+            var value = options.element.val();
+            return value != '""';
+        }, '请选择或上传{{display}}文件');
+
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
         }, '时长格式不正确');
@@ -20,13 +25,6 @@ define(function(require, exports, module) {
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
                 return;
-            }
-                
-            var lessonMediaValue = $('#lesson-media-field').val();
-            var type=$('input:radio[name="type"]:checked').val();
-            if(type!='text' && lessonMediaValue == '""'){
-                Notify.danger('请在选择了您要添加的视频或者音频之后再点击[添加]按钮!');
-                return false;
             }
 
             var $panel = $('.lesson-manage-panel');
@@ -68,7 +66,8 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '#lesson-media-field',
                     required: true,
-                    errormessageRequired: '请选择或上传' + (type == 'video' ? '视频' : '音频')
+                    rule: 'mediaValueEmpty',
+                    display: type == 'video' ? '视频' : '音频'
                 });
 
                 validator.addItem({
