@@ -21,10 +21,17 @@ define(function(require, exports, module) {
             if (error) {
                 return;
             }
+                
+            var lessonMediaValue = $('#lesson-media-field').val();
+            var type=$('input:radio[name="type"]:checked').val();
+            if(type!='text' && lessonMediaValue == '""'){
+                Notify.danger('请在选择了您要添加的视频或者音频之后再点击[添加]按钮!');
+                return false;
+            }
 
             var $panel = $('.lesson-manage-panel');
-
             $.post($form.attr('action'), $form.serialize(), function(html) {
+
                 var id = '#' + $(html).attr('id'),
                     $item = $(id);
                 if ($item.length) {
@@ -86,7 +93,7 @@ define(function(require, exports, module) {
 
         var choosedMedia = $form.find('[name="media"]').val();
         choosedMedia = choosedMedia ? $.parseJSON(choosedMedia) : {};
-
+        
         var videoChooser = new VideoChooser({
             element: '#video-chooser',
             choosed: choosedMedia,
@@ -146,6 +153,7 @@ define(function(require, exports, module) {
             if (type == 'video') {
                 videoChooser.show();
                 audioChooser.hide();
+
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
