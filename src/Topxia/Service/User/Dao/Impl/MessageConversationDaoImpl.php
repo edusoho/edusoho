@@ -46,6 +46,7 @@ class MessageConversationDaoImpl extends BaseDao implements MessageConversationD
 
     public function findConversationsByToId($toId, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY latestMessageTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($toId));
     }

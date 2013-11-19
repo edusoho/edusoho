@@ -25,6 +25,7 @@ class UserlevelDaoImpl extends BaseDao implements UserlevelDao
 
 	public function searchUserlevels($conditions, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createUserlevelSearchQueryBuilder($conditions)
         ->select('*')
         ->setFirstResult($start)

@@ -16,7 +16,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
 
 	public function searchBatchs($conditions, $orderBy, $start, $limit)
     {
-        $orderBy = $this->testOrderBy($orderBy, array('id','createdTime'));
+        $orderBy = $this->checkOrderByField($orderBy, array('id','createdTime'));
 
         $this->filterStartLimit($start, $limit);
         $builder = $this->createBatchQueryBuilder($conditions)
@@ -64,20 +64,4 @@ class MoneyCardBatchDaoImpl extends BaseDao
             ->from($this->table, 'batch');
     }
 
-    private function testOrderBy (array $orderBy, array $allowedOrderByFields)
-    {
-        if (count($orderBy) != 2) {
-            throw new Exception("参数错误", 1);
-        }
-
-        $orderBy = array_values($orderBy);
-        if (!in_array($orderBy[0], $allowedOrderByFields)){
-            throw new Exception("参数错误", 1);
-        }
-        if (!in_array($orderBy[1], array('ASC','DESC'))){
-            throw new Exception("参数错误", 1);
-        }
-
-        return $orderBy;
-    }
 }
