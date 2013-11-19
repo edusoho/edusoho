@@ -17,7 +17,6 @@ class MoneyCardDaoImpl extends BaseDao
 	public function searchMoneyCards($conditions, $orderBy, $start, $limit)
     {
         $orderBy = $this->checkOrderByField($orderBy, array('id','createdTime'));
-
         $this->filterStartLimit($start, $limit);
         $builder = $this->createMoneyCardQueryBuilder($conditions)
             ->select('*')

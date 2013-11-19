@@ -44,7 +44,7 @@ class AnnouncementServiceTest extends BaseTestCase
         $createdAnnouncement = $this->getCourseService()->createAnnouncement($createdCourse['id'], array(
         	'content'=>'create_content'));
         $getedAnnouncement = $this->getCourseService()->getCourseAnnouncement($createdCourse['id'], $createdAnnouncement['id']);
-        $this->assertEquals($registeredUser['id'], $getedAnnouncement['userId']);
+        $this->assertEquals($this->getCurrentUser()->id, $getedAnnouncement['userId']);
         $this->assertEquals($createdCourse['id'], $getedAnnouncement['courseId']);
         $this->assertEquals('create_content', $getedAnnouncement['content']);
 	}

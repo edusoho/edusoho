@@ -196,7 +196,6 @@ class CourseController extends BaseController
         if (empty($user->id)) {
             return null;
         }
-        // var_dump($user);
 
 
         if (in_array($as, array('member', 'guest'))) {

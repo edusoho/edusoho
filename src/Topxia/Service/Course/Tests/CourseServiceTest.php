@@ -8,16 +8,17 @@ use Topxia\Common\ArrayToolkit;
 
 class CourseServiceTest extends BaseTestCase
 {
-
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
     public function testFavoriteCourse()
     {
+        
         $course = array(
-            'title' => 'online test course 1',
+            'title' => 'online test course 1'
         );
         $createdCourse = $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->favoriteCourse($createdCourse['id']);
-
-        $this->assertTrue($result);
     }
 
      /**
@@ -35,7 +36,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @group current
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUnFavoriteCourse()
     {
@@ -66,7 +67,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @group current
+     * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testHasFavoritedCourse()
     {
@@ -104,6 +105,7 @@ class CourseServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lesson);
 
@@ -118,6 +120,7 @@ class CourseServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 2',
             'content' => 'test lesson content 2',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lesson);
 
@@ -135,18 +138,21 @@ class CourseServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         ));
 
         $lesson2 = $this->getCourseService()->createLesson(array(
             'courseId' => $course['id'],
             'title' => 'test lesson 2',
             'content' => 'test lesson content 2',
+            'type' => 'text'
         ));
 
         $lesson3 = $this->getCourseService()->createLesson(array(
             'courseId' => $course['id'],
             'title' => 'test lesson 3',
             'content' => 'test lesson content 3',
+            'type' => 'text'
         ));
 
         $this->getCourseService()->deleteLesson($course['id'], $lesson1['id']);
@@ -203,6 +209,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type'=>'text'
         ));
         $this->assertEquals(1, $lesson['number']);
         $this->assertEquals(2, $lesson['seq']);
@@ -212,6 +219,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter['id'],
             'title' => 'test lesson 2',
             'content' => 'test lesson content 2',
+             'type'=>'text'
         ));
         $this->assertEquals(2, $lesson['number']);
         $this->assertEquals(3, $lesson['seq']);
@@ -223,6 +231,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(2, $chapter['number']);
         $this->assertEquals(4, $chapter['seq']);
     }
+
 
     public function testDeleteChapter()
     {
@@ -240,6 +249,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter1['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+             'type'=>'text'
         ));
 
         $lesson2 = $this->getCourseService()->createLesson(array(
@@ -247,6 +257,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter1['id'],
             'title' => 'test lesson 2',
             'content' => 'test lesson content 2',
+             'type'=>'text'
         ));
 
         $chapter2 = $this->getCourseService()->createChapter(array(
@@ -259,6 +270,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter2['id'],
             'title' => 'test lesson 3',
             'content' => 'test lesson content 3',
+             'type'=>'text'
         ));
 
         $chapter3 = $this->getCourseService()->createChapter(array(
@@ -328,6 +340,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => 0,
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         ));
 
         $user = $this->getCurrentUser();
@@ -349,6 +362,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => 0,
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         ));
 
         $user = $this->getCurrentUser();
@@ -370,6 +384,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => 0,
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' =>'text'
         ));
 
         $user = $this->getCurrentUser();
@@ -438,6 +453,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         ));
 
         $lesson = $this->getCourseService()->createLesson(array(
@@ -445,6 +461,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter['id'],
             'title' => 'test lesson 2',
             'content' => 'test lesson content 2',
+            'type' => 'text'
         ));
 
         $chapter = $this->getCourseService()->createChapter(array(
@@ -457,6 +474,7 @@ class CourseServiceTest extends BaseTestCase
             'chapterId' => $chapter['id'],
             'title' => 'test lesson 3',
             'content' => 'test lesson content 3',
+            'type' => 'text'
         ));
 
         return $this->getCourseService()->getCourseItems($course['id']);
