@@ -9,7 +9,7 @@
   </td>
 
   <td>
-    <span class="text-sm">{{ moneyCard.validTime }}</span>
+    <span class="text-sm">{{ moneyCard.deadline }}</span>
   </td>
 
   <td>
@@ -17,9 +17,9 @@
   </td>
 
   <td>
-    {% if moneyCard.rechargeStatus == 'normal' %}
+    {% if moneyCard.cardStatus == 'normal' %}
       <span class="text-sm">正常</span>
-    {% elseif moneyCard.rechargeStatus == 'invalid' %}
+    {% elseif moneyCard.cardStatus == 'invalid' %}
       <span class="text-sm">作废</span>
     {% endif %}
   </td>
@@ -36,9 +36,9 @@
 
   <td>
     <span class="text-sm"><a href="javascript:;" class="btn btn-link delete" data-url="{{ path('admin_money_card_delete', {id:moneyCard.id}) }}">删除</a></span>
-    {% if moneyCard.rechargeStatus == 'normal' %}
+    {% if moneyCard.cardStatus == 'normal' %}
       <span class="text-sm"><a class="btn btn-link lock-money-card" href="javascript:" title="作废充值卡{{ moneyCard.cardId }}" data-url="{{ path('admin_money_card_lock', {id:moneyCard.id }) }}">作废</a></span>
-    {% elseif moneyCard.rechargeStatus == 'invalid' %}
+    {% elseif moneyCard.cardStatus == 'invalid' %}
       <span class="text-sm"><a class="btn btn-link unlock-money-card" href="javascript:" title="启用充值卡{{ moneyCard.cardId }}" data-url="{{ path('admin_money_card_unlock', {id:moneyCard.id }) }}">启用</a></span>
     {% endif %}
   </td>

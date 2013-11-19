@@ -5,7 +5,13 @@
   <div class="container">
     <div class="content">
       <h1>访问被拒绝</h1>
-      <div class="message">你没有权限访问该页面！</div>
+      <div class="message">
+        {% if exception.message %}
+          {{ exception.message }}
+        {% else %}
+           你没有权限访问该页面！
+        {% endif %}
+      </div>
       <div class="actions">
         <a href="{{ path('homepage', {ref:403}) }}">返回首页</a>
       </div>

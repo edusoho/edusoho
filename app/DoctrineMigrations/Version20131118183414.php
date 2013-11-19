@@ -8,11 +8,11 @@ use Doctrine\DBAL\Migrations\AbstractMigration,
 /**
  * Auto-generated Migration: Please modify to your need!
  */
-class Version20131117141314 extends AbstractMigration
+class Version20131118183414 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-    	 $this->addSql("CREATE TABLE IF NOT EXISTS `money_card` (
+        $this->addSql("CREATE TABLE IF NOT EXISTS `money_card` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cardId` varchar(32) NOT NULL,
   `password` varchar(32) NOT NULL,
@@ -27,14 +27,15 @@ class Version20131117141314 extends AbstractMigration
     	 $this->addSql("CREATE TABLE IF NOT EXISTS `money_card_batch` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cardPrefix` varchar(32) CHARACTER SET utf8 NOT NULL,
-  `cardMedian` int(8) NOT NULL,
-  `number` int(12) NOT NULL,
+  `cardLength` int(8) NOT NULL,
+  `number` int(11) NOT NULL,
+  `rechargedNumber` int(11) NOT NULL,
   `validTime` varchar(19) NOT NULL,
   `cardStatus` enum('normal','invalid') NOT NULL,
   `money` int(8) NOT NULL,
-  `createdId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
   `createdTime` int(11) NOT NULL,
-  `disc` varchar(128) CHARACTER SET utf8 NOT NULL,
+  `note` varchar(128) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 

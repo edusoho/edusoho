@@ -34,11 +34,17 @@
         </tr>
       </thead>
       <tbody>
+      {% if batchs %}
         {% for batch in batchs %}
             {% include 'TopxiaAdminBundle:MoneyCard:batch-table-tr.html.twig' with {batch:batch} %}
         {% endfor %}
       </tbody>
     </table>
+      {% else %}
+      </tbody>
+    </table>
+    <div class='empty'>数据库君表示自己非常不给力，啥都没找到~~</div>
+      {% endif %}
     {{ web_macro.paginator(paginator) }}
 
 {% endblock %}

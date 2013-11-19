@@ -29,9 +29,6 @@ define(function(require, exports, module) {
 				}).error(function(){
 					Notify.danger('卡号生成失败，请重新生成！');
 				});
-
-
-
             }
         });
 
@@ -41,7 +38,7 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
         .addItem({
-            element: '[name="cardMedian"]',
+            element: '[name="cardLength"]',
             required: true,
             rule: 'integer'
         })
@@ -51,7 +48,7 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
         .addItem({
-            element: '[name="validTime"]',
+            element: '[name="deadline"]',
             required: true,
             rule: ''
         })
@@ -61,15 +58,12 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
 
-        $("#validTimeCreate").datetimepicker({
+        $("#deadlineCreate").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
-        }).on('show', function(ev){
-            $(".datetimepicker").css('z-index','2000');
         });
-
 	};
 
 });

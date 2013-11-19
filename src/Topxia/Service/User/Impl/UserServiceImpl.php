@@ -79,6 +79,82 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
+    public function getUserlevel($id)
+    {
+        return $this->getUserlevelDao()->getUserlevel($id);
+    }
+
+    public function getUserlevelByName($name)
+    {
+        return $this->getUserlevelDao()->getUserlevelByName($name);
+    }
+
+    public function isUserlevelNameAvailable($name, $exclude=null)
+    {
+        if (empty($name)) {
+            return false;
+        }
+
+        if ($name == $exclude) {
+            return true;
+        }
+
+        $userlevel = $this->getUserlevelByName($name);
+
+        return $userlevel ? false : true;
+    }
+
+    public function searchUserlevelsCount($conditions)
+    {
+        return $this->getUserlevelDao()->searchUserlevelsCount($conditions);
+    }
+
+    public function createUserlevel($userlevel)
+    {   
+        $userlevel['createdTime'] = time();
+        @$userlevel['seq'] = $this->searchUserlevelsCount()+1;
+        $userlevel = $this->getUserlevelDao()->createUserlevel($userlevel);
+
+        $this->getLogService()->info('userlevel', 'create', "添加用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+
+        return $userlevel;
+    }
+
+    public function searchUserlevels($conditions, $start, $limit)
+    {
+        $userlevels = $this->getUserlevelDao()->searchUserlevels($conditions, $start, $limit);
+        return $userlevels;
+    }
+
+    
+    public function updateUserlevel($id,$fields)
+    {   
+        $userlevel = $this->getUserlevelDao()->updateUserlevel($id,$fields);
+        $this->getLogService()->info('userlevel', 'update', "编辑用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        return $userlevel;
+    }
+
+    public function sortUserlevels(array $ids)
+    {       
+        $levelId  = 0;
+        foreach ($ids as $itemId) {
+            list(, $type) = explode("-",$itemId);
+                $levelId ++;
+                $item = $this->getUserlevel($type);
+                $fields = array('number' => $levelId);
+                if ($fields['number'] != $item['number']) {
+                    $this->updateUserlevel($item['id'], $fields);
+            }
+        }
+    }
+
+    public function deleteUserlevel($id)
+    {   
+        $userlevel = $this->getUserlevel($id);
+        $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        return $this->getUserlevelDao()->deleteUserlevel($id);
+    }
+
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
@@ -641,6 +717,11 @@ class UserServiceImpl extends BaseService implements UserService
     private function getUserDao()
     {
         return $this->createDao('User.UserDao');
+    }
+
+    private function getUserlevelDao()
+    {
+        return $this->createDao('User.UserlevelDao');
     }
 
     private function getProfileDao()

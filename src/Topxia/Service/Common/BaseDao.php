@@ -61,4 +61,21 @@ abstract class BaseDao
        $limit = (int) $limit; 
     }
 
+    protected function checkOrderByField (array $orderBy, array $allowedOrderByFields)
+    {
+        if (count($orderBy) != 2) {
+            throw new \Exception("参数错误", 1);
+        }
+
+        $orderBy = array_values($orderBy);
+        if (!in_array($orderBy[0], $allowedOrderByFields)){
+            throw new \Exception("参数错误", 1);
+        }
+        if (!in_array($orderBy[1], array('ASC','DESC'))){
+            throw new \Exception("参数错误", 1);
+        }
+
+        return $orderBy;
+    }
+
 }

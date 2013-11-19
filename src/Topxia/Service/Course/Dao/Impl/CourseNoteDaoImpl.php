@@ -55,6 +55,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
     	
 	public function searchNotes($conditions, $orderBy, $start, $limit)
 	{
+		$this->filterStartLimit($start, $limit);
 		$builder = $this->createSearchNoteQueryBuilder($conditions)
 			->select('*')
 			->addOrderBy($orderBy[0], $orderBy[1])

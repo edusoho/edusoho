@@ -1,0 +1,22 @@
+<tr id="userlevel-{{ userlevel.id }}" class="item-userlevel">
+  <td>
+    <span class="glyphicon glyphicon-move" style="cursor:move"></span>
+  </td>
+  <td>
+    {{ userlevel.Name}}
+  </td>
+  <td>
+    <img src="{{ userlevel.Icon}}">
+  </td>
+  <td>
+    {% if userlevel.enabled %}
+      <span class="text-success">开启</span>
+      <br>
+    {% else %}
+      <span class="text-muted">关闭</span>
+    {% endif %}  
+  </td>
+  <td>
+    <button class="btn btn-default btn-sm" data-url="{{path('admin_user_level_update',{id:userlevel.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+  </td>
+</tr>

@@ -1,0 +1,34 @@
+   {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% block title %}会员等级管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'userlevel' %}
+{% set script_controller = 'userlevel/list' %}
+{% block main %}
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_level_create')}}">添加新会员等级</button>
+  <h1 class="pull-left">会员等级管理</h1>
+</div>
+
+<table id="userlevel-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+    <tr>
+      <th></th>
+      <th>名称</th>
+      <th>图标</th>
+      <th>状态</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody id="userlevel-list" data-sort-url="{{path('admin_user_level_sort')}}" class="sortable-list">
+    {% for userlevel in userlevels %}
+      {% include 'TopxiaAdminBundle:Userlevel:tr.html.twig' with {userlevel:userlevel} %}
+    {% else %}
+      <tr><td colspan="6"><div class="empty">无会员等级记录</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div>
+    {{ web_macro.paginator(paginator) }}
+</div>
+{% endblock %}

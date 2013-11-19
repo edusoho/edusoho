@@ -41,6 +41,7 @@
 {% set nav = 'df' %}
 
 {% block body %}
+
 <header class="navbar navbar-inverse site-navbar navbar-fixed-top mz pz" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
     <div class="container  plz prz"> 
       <div class="navbar-header ptm">
@@ -50,13 +51,13 @@
               <span class="icon-bar"></span>
             </button>
          
-            {% if  setting('site.logo') %}
+          {% if  setting('site.logo') %}
               <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
-            {% else %}
-              <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
-            {% endif %}
-           
+          {% else %}
+            <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+          {% endif %}
       </div>
+      
       <nav class="nav navbar-nav navbar-right">
         <ul class="nav navbar-nav">
           {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
@@ -86,7 +87,7 @@
                     <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
                   </ul>
                 </li>
-              {% else %}
+          {% else %}
                 <li><a href="{{ path('login') }}">登录</a></li>
                 <li><a href="{{ path('register') }}">注册</a></li>
           {% endif %}
