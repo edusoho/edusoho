@@ -1,0 +1,88 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set userlevel = userlevel|default(null) %}
+{% set modalSize = 'large' %}
+{% block title %}
+{% if userlevel %}编辑{% else %}新增{% endif %}用户等级
+{% endblock %}
+
+{% block body %}
+<form id="userlevel-form" class="form-horizontal" method="post" action="{% if userlevel %}{{path('admin_user_level_update',{id:userlevel.id}) }}{% else %}{{ path('admin_user_level_create') }}{% endif %}">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="levelName">名称</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="levelName" data-url="{% if userlevel %}{{ path('admin_user_level_checkname', {exclude:userlevel.Name}) }}{% else %}{{path('admin_user_level_checkname')}}{% endif %}" name="Name" class="form-control" value="{% if userlevel %}{{ userlevel.Name }}{% else %}{% endif %}">
+    </div>
+  </div>
+
+<input type="hidden" id="levelIcon" name="Icon" class="form-control" value="{% if userlevel %}{{ userlevel.Icon }}{% else %}{% endif %}">
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="enabled">状态</label>
+    </div>
+    <div class="col-md-5 radios">
+        <div>
+          {% if userlevel %}
+            <label> 
+             {{ radios('enabled', {'1':'开启', '0':'关闭'}, userlevel.enabled) }}
+            </label>
+          {% else %}
+            <div class="radio-inline">
+              <label>
+                <input type="radio" name="enabled" id="enabled1" value="1" checked="checked">
+                开启
+              </label>
+            </div>
+            <div class="radio-inline">
+              <label>
+                <input type="radio" name="enabled" id="enabled2" value="0">
+                关闭
+              </label>
+            </div>
+          {% endif %}
+        </div>
+    </div>
+  </div>
+</form>
+
+<form id="icon-image-upload-form" action="{{ path('file_upload', {group:'default'}) }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="levelIcon">图标</label>
+    </div>
+    <div class="col-md-9 controls">
+        <div id="icon-container">{% if userlevel %}<img src="{{ userlevel.Icon }}">{% else %}{% endif %}</div>
+        {% if userlevel %}
+          <div id="icon_uploadform_area" style="display:none;">
+            <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;">
+            <button class="btn btn-default btn-sm" id="uploadButton">上传图片</button>
+            <p class="help-block">你可以上传JPG、GIF或PNG格式的文件。</p>
+          </div>
+        {% else %}
+          <input class="btn btn-default btn-sm" type="file" id="uploadarea" name="file" value="上传" style="display:inline-block;">
+          <button id="uploadButton" class="btn btn-default btn-sm">上传图片</button>
+          <p class="help-block">你可以上传JPG、GIF或PNG格式的文件。</p>
+        {% endif %}
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% if userlevel %}
+<button class="btn btn-default btn-sm" id="changeButton">替换图片</button>
+{% endif %}
+<script type="text/javascript">app.load('userlevel/save-modal')</script>
+{% endblock %}
+
+{% block footer %}
+{% if userlevel %}
+  <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_user_level_delete', {id:userlevel.id}) }}" data-target="{{ userlevel.id }}" data-userlevel-id="{{ userlevel.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#userlevel-form">编辑</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% else %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#userlevel-form">添加</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endif %}
+{% endblock %}
+  

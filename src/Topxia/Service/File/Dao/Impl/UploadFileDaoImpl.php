@@ -37,6 +37,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])

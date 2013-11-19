@@ -93,6 +93,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function searchMember($conditions, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
