@@ -12,8 +12,8 @@ class Version20131118230737 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->addSql("ALTER TABLE  `money_card` CHANGE  `cardStatus`  `cardStatus` ENUM(  'normal',  'invalid',  'recharged' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;");
-        $this->addSql("ALTER TABLE  `money_card` CHANGE  `deadline`  `deadline` VARCHAR( 19 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT  '有效时间';");
+        $this->addSql("ALTER TABLE  `money_card` CHANGE  `rechargeStatus`  `cardStatus` ENUM(  'normal',  'invalid',  'recharged' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;");
+        $this->addSql("ALTER TABLE  `money_card` CHANGE  `validTime`  `deadline` VARCHAR( 19 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT  '有效时间';");
         $this->addSql("ALTER TABLE  `money_card_batch` DROP  `cardStatus` ;");
         $this->addSql("ALTER TABLE  `money_card_batch` CHANGE  `validTime`  `deadline` VARCHAR( 19 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;");
     }

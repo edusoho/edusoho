@@ -20,7 +20,7 @@ class CourseFileManageController extends BaseController
         $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
 
         $conditions = array(
-            'targetType'=> $type, 
+            'targetType'=> $type,
             'targetId'=>$course['id']
         );
 
