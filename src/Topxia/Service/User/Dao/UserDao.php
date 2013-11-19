@@ -23,4 +23,5 @@ interface UserDao
 	public function waveCounterById($id, $name, $number);
 
 	public function clearCounterById($id, $name);
+
 }
