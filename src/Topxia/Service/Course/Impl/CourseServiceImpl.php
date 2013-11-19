@@ -1333,7 +1333,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
-			throw $this->createAccessDeniedException('未登录用户，无权操作！');
+			throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
 		}
 
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
@@ -1342,7 +1342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
 		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
-			throw $this->createAccessDeniedException('您不是课程学员，访问被拒绝！');
+			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
 		}
 
 		return $course;

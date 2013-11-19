@@ -1,0 +1,58 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block title %}搜索：{{ keywords }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>搜索</h1></div>
+    </div>
+  </div>
+
+  <div class="row row-3-9">
+    <div class="col-md-9" style="min-height:300px;">
+
+      <ul class="nav nav-mini nav-pills mbm">
+        <li {% if type == 'course' %}class="active"{% endif %}><a href="{{ path('search', {q:keywords, t:'course'}) }}">课程</a></li>
+        <li {% if type == 'thread' %}class="active"{% endif %}><a href="{{ path('search', {q:keywords, t:'thread'}) }}">讨论区</a></li>
+      </ul>
+
+      <form class="well well-sm" action="{{ path('search') }}">
+        <div class="input-group input-group-lg">
+          <input type="text" class="form-control" name="q" value="{{ keywords }}">
+          <input type="hidden" name="t" value="{{ type }}">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="submit">搜索</button>
+          </span>
+        </div>
+      </form>
+
+      {% if keywords  %}
+        {% if type == 'thread' %}
+          {% if threads %}
+            {% include 'TopxiaWebBundle:Search:threads.html.twig' %}
+            {{ web_macro.paginator(paginator) }} 
+          {% else %}
+            <div class="empty">没有搜到相关话题，请换个关键词试试！</div>
+          {% endif %}
+        {% else %}
+          {% if courses %}
+            {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+            {{ web_macro.paginator(paginator) }} 
+          {% else %}
+            <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <div class="empty">请输入搜索关键词！</div>
+      {% endif %}
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

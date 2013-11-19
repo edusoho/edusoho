@@ -508,6 +508,10 @@ course_announcement_delete:
     defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:delete }
     methods: [POST]
 
+search:
+    pattern:  /search
+    defaults: { _controller: TopxiaWebBundle:Search:index }
+
 note_show:
     pattern:  /note/{id}
     defaults: { _controller: TopxiaWebBundle:CourseNote:index }
