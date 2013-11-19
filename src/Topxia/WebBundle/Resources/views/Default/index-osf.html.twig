@@ -91,22 +91,20 @@
 
               <li class="pll prl ptm ps-re media li-no">
                 <a class="pull-left">
-                  <img class="user-logo-default-size border-color-maroon" src="{{ file_path(activitTerchar.smallAvatar, 'avatar.png') }}" >                  
+                  <img class="user-logo-small-size  border-color-maroon" src="{{ file_path(activitTerchar.smallAvatar, 'avatar.png') }}" >                  
                 </a>
                 <div class="media-body text-normal">
                    <span  > {% if activitTerchar %} {{ activitTerchar.title }} {% endif %}</span>
                 </div>                  
               </li>
 
-
-
               <h3 class="text-center text-color-white text-large text-weight ptl pbd" >
-                 {{ recommended.startTime|default('每周二晚.') }}
+                 {{ recommended.startTime|default('每周二晚7点') }}
               </h3>
 
 
               <h3 class="text-center text-color-white text-large text-weight ptl phl mhl" >
-                 {{ recommended.address }}
+                 {{ recommended.address|default('北京.3W咖啡') }}
               </h3>
              
            </div>
@@ -152,7 +150,7 @@
                   {% for user in users%}
                   <span class="list-item  pull-right" >
                     <a href="{{ path('user_show',{id:user.id}) }}">
-                      <img  class="tip user-logo-default-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
+                      <img  class="tip user-logo-small-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
                     </a>
                     <div class="todos-thumb-span">
                       <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
@@ -178,27 +176,7 @@
              
             </div>
           </div>
-          <!-- 开源教练组 -->
-          <div class="coach">
-            <div class="kytitle clearfix">
-              <h3>牛人团</h3>
-              <a href="{{ path('teacher') }}" target="_blank" class="pull-right cm_go">更多»</a>
-            </div>
-            <div class="mod-content">
-              <ul class="grids  pz">
-                {% for teacher in teachers %}
-                <li class="grid">
-                  <a href="{{ path('user_show',{id:teacher.id }) }}">
-                    <img src="{{ file_path(teacher.mediumAvatar,'avatar.png')  }}" alt="用户" class="thumb"></a>
-                  <p>
-                    <h5><a href="{{ path('user_show',{id:teacher.id }) }}">{{teacher.nickname}}</a></h5>
-                  </p>
-                  <p>{{ teacher.title }}</p>
-                </li>
-                {% endfor %}
-              </ul>
-              </div>
-          </div>
+
         </aside>
 
         <!-- 侧栏 -->

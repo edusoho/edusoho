@@ -25,6 +25,25 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+
+    public function findLastActivitys()
+    {       
+        
+        $sql ="SELECT * FROM {$this->table} WHERE expired=0 and status='published' and actType='公开课';";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function findRecommendedActivity()
+    {       
+        
+        $sql ="SELECT * FROM {$this->table} WHERE expired=0 and status='published' and actType='公开课' and recommended='1' order by recommendedTime DESC LIMIT 1;";
+
+        $results =  $this->getConnection()->fetchAll($sql);
+
+        return $results;
+    }
+
+
     public function searchActivitys($conditions, $orderBy, $start, $limit)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)

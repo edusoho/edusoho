@@ -23,53 +23,47 @@ class ActivityController extends BaseController
 	public function exploreAction(Request $request)
     {
         $currentuser=$this->getCurrentUser();
-      
+        $userId=$currentuser['id'];
 
+        //本期活动
+        $recommendedActivitys = $this->getActivityService()->findRecommendedActivity();
+
+        //近期活动
+        $lastActivitys = $this->getActivityService()->findLastActivitys();
+      
         $conditions['status']='published';
         $conditions['actType']='公开课';
-        $conditions['expired']='0';//0表示开放报名。
+        $conditions['expired']='1';//1表示往期。
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getActivityService()->searchActivityCount($conditions)
             , 4
         );
-        //活动
-        $activitys = $this->getActivityService()->searchActivitys(
+
+
+        //往期活动
+        $expiredActivitys = $this->getActivityService()->searchActivitys(
             $conditions, 'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        //地址
-        $Locations=$this->getLocationService()->getAllLocations();
-        //tag
-        $tags = $this->getTagService()->findAllTags(0, 100);
+        $exActIds = ArrayToolkit::column($expiredActivitys,'id');
 
-        //我参加的活动
-        $userId=$currentuser['id'];
-    
+        $joinedExActivitys=$this->getActivityService()->findMemberByActIds($exActIds,$userId);
 
-        $actIds = ArrayToolkit::column($activitys,'id');
-
-
-        $joinedActivitys=$this->getActivityService()->findMemberByActIds($actIds,$userId);
-
-
-        $joinActIds = ArrayToolkit::column($joinedActivitys,'activityId');
-
+        $joinExActIds = ArrayToolkit::column($joinedExActivitys,'activityId');
       
-        $mixActivitys= $this->getActivityService()->mixActivitys($activitys,$joinActIds);
-
+        $mixExActivitys= $this->getActivityService()->mixActivitys($expiredActivitys,$joinExActIds);
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
-            'activitys' => $mixActivitys,
-            'joinActIds'=>$joinActIds,
-            'paginator' => $paginator,
-            'conditions' => $conditions,
-            'tags' => $tags,
+            
+            'recommendedActivitys' =>$recommendedActivitys,
+            'lastActivitys' =>$lastActivitys,
+            'expiredActivitys' => $mixExActivitys,          
+            'paginator' => $paginator,         
             "current_user"=> $currentuser,
           
-            'locations'=>$Locations,
         ));
     }
 

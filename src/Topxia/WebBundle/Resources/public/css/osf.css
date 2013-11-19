@@ -9,11 +9,43 @@
 	margin: 0px !important;
 }
 
+.user-logo-small-size {
+
+	width: 50px !important;
+	height: 50px !important;
+
+}
+
 
 /*头部高度*/
 
 .header-top { margin-top:56px;}
 
+.activity-banner{
+	background-color: #f8f8f8;
+	width: 100% !important;
+}
+
+.activity-last{
+	background-color: #dddddd;
+	width: 100% !important;
+}
+
+.activity-last-bgcolor{
+	background-color: #dddddd;
+	
+}
+
+.activity-last-title{
+	border-bottom: 1px solid #ffffff;
+}
+
+
+
+.activity-expired{
+	background-color: #f8f8f8;
+	width: 100% !important;
+}
 
 
 .index-img-box{
@@ -26,8 +58,6 @@
 }
 
 .activity-img-title{
-	/*lheight: 28px;
-	line-height: 27px;*/
 	text-align: center;
 	width: 100%;
 }

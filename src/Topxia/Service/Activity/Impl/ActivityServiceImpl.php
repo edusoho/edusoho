@@ -20,28 +20,29 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			return ActivitySerialize::unserialize($this->getActivityDao()->getActivity($id));
 	}
 
-
-	public function findLastActivitys(array $ids){
-		$activity = ActivitySerialize::unserializes(
-            $this->getActivityDao()->findActivitysByIds($ids)
-        );
-        return ArrayToolkit::index($activity, 'id');
-	}
-
-	public function findRecommendedActivity(array $ids){
-		$activity = ActivitySerialize::unserializes(
-            $this->getActivityDao()->findActivitysByIds($ids)
-        );
-        return ArrayToolkit::index($activity, 'id');
-	}
-
-
 	public function findActivitysByIds(array $ids){
 		$activity = ActivitySerialize::unserializes(
             $this->getActivityDao()->findActivitysByIds($ids)
         );
         return ArrayToolkit::index($activity, 'id');
 	}
+
+
+	public function findLastActivitys(){
+		$activity = ActivitySerialize::unserializes(
+            $this->getActivityDao()->findLastActivitys()
+        );
+        return ArrayToolkit::index($activity, 'id');
+	}
+	
+
+	public function findRecommendedActivity(){
+		$activity = ActivitySerialize::unserializes(
+            $this->getActivityDao()->findRecommendedActivity()
+        );
+        return ArrayToolkit::index($activity, 'id');
+	}
+
 
 
 	public function searchActivitys($conditions, $sort = 'latest', $start, $limit){
@@ -377,7 +378,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	}
 
 
-
+    // 某个指定的人参加的活动，一个活动一个人只能报名一次。。。。
 	public function findMemberByActIds(array $actIds,$userId)
     {
        
