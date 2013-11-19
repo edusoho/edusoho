@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 		$table.on('click', '.send-passwordreset-email', function(){
             Notify.info('正在发送密码重置验证邮件，请稍等。', 60);
             $.post($(this).data('url'),function(response){
-                Notify.success('密码重置验证邮件，发送成功！');                
+                Notify.success('密码重置验证邮件，发送成功！');
             }).error(function(){
                 Notify.danger('密码重置验证邮件，发送失败');
             });
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 		$table.on('click', '.send-emailverify-email', function(){
             Notify.info('正在发送Email验证邮件，请稍等。', 60);
             $.post($(this).data('url'),function(response){
-                Notify.success('Email验证邮件，发送成功！');                
+                Notify.success('Email验证邮件，发送成功！');
             }).error(function(){
                 Notify.danger('Email验证邮件，发送失败');
             });

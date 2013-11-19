@@ -987,7 +987,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
-
+	
 	public function searchMember($conditions, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);

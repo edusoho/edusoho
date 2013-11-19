@@ -16,6 +16,10 @@ interface ThreadDao
 
 	public function searchThreadCount($conditions);
 
+	public function searchThreadCountInCourseIds($conditions);
+
+	public function searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
+	
 	public function addThread($thread);
 
 	public function deleteThread($id);

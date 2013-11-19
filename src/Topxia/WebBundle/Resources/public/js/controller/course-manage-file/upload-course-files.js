@@ -35,7 +35,7 @@ define(function(require, exports, module) {
 		var divData = $div.data();
 
 		var uploader = $div.pluploadQueue({
-			runtimes: 'html5,flash,html4',
+			runtimes: 'flash,html5,html4',
 			max_file_size: '2gb',
 			url: divData.uploadUrl,
 			filters: filters,

@@ -1,0 +1,15 @@
+
+<div data-role="navigation">
+  <ul class="nav nav-tabs">
+    <li 
+    {% if type == 'unPosted'%}
+    class="active"
+    {% endif %}
+    ><a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}">未回复</a></li>
+    <li
+    {% if type == 'all'%}
+    class="active"
+    {% endif %}
+    ><a href=" {{ url('admin_question', {postStatus: 'all'}) }}">所有</a></li>
+  </ul>
+</div>
