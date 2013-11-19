@@ -17,6 +17,11 @@ class TagServiceImpl extends BaseService implements TagService
     {
         return $this->getTagDao()->getTagByName($name);
     }
+    
+    public function isUserlevelNameAvalieable($name, $exclude)
+    {
+
+    }
 
     public function getTagByLikeName($name)
     {
