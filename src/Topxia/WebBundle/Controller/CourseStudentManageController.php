@@ -61,7 +61,7 @@ class CourseStudentManageController extends BaseController
             $order = $this->getOrderService()->createOrder(array(
                 'courseId' => $course['id'],
                 'userId' => $user['id'],
-                'price' => 0,
+                'price' => $data['price'],
                 'payment' => 'none',
             ));
 
