@@ -203,16 +203,7 @@ class UpgradeController extends BaseController
 
     private function isDisabledUpgrade()
     {
-        if (!$this->container->hasParameter('disabled_features')) {
-            return false;
-        }
-
-        $disableds = $this->container->getParameter('disabled_features');
-        if (!is_array($disableds) or empty($disableds)) {
-            return false;
-        }
-
-        return in_array('upgrade', $disableds);
+        return in_array('upgrade', $this->getDisabledFeatures());
     }
 
     private function createDisabledResponse()
