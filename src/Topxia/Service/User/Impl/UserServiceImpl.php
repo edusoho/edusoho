@@ -680,7 +680,8 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getFriendDao()->deleteFriend($friend['id']);
     }
 
-    public function hasAdminRoles($userId){
+    public function hasAdminRoles($userId)
+    {
         $user = $this->getUser($userId);
         if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
             return true;

@@ -447,7 +447,7 @@ admin_upgrade_check:
     defaults: { _controller: TopxiaAdminBundle:Upgrade:check }
 
 admin_upgrade_check_count:
-    pattern:  /upgrade/check-count
+    pattern:  /check-upgrade-count
     defaults: { _controller: TopxiaAdminBundle:Upgrade:checkCount }
 
 admin_category:

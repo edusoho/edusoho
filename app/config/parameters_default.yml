@@ -1,6 +1,7 @@
 # 请不要修改此文件的参数
 parameters:
     disabled_features: []
+    user_partner: none
     cloud_client:
         name: default
         arguments: 

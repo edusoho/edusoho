@@ -21,3 +21,4 @@ doctrine:
         dbname:   edusoho_test
         user:     root
         password: root123
+

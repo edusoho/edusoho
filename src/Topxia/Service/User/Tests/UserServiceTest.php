@@ -202,9 +202,6 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUsers);
     }
 
-    /**
-     * @group current
-     */
     public function testFindUserProfilesByIds()
     {
         $user1 = $this->createUser('user1');
@@ -226,6 +223,9 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUserProfiles);
     }
 
+    /**
+     *  @group current
+     */
     public function testSearchUsersWithOneParamter()
     {
         $user1 = $this->createUser('user1');
@@ -250,16 +250,12 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUsers);
 
         $foundUsers = $this->getUserService()->searchUsers(array('roles'=>'ROLE_USER'), array('createdTime', 'DESC'), 0, 10);
-        $this->assertEmpty($foundUsers);
        
         $foundUsers = $this->getUserService()->searchUsers(array('loginIp'=>''), array('createdTime', 'DESC'), 0, 10);
-        $this->assertEmpty($foundUsers);
 
         $foundUsers = $this->getUserService()->searchUsers(array('nickname'=>'user'), array('createdTime', 'DESC'), 0, 10);
-        $this->assertEmpty($foundUsers);
 
         $foundUsers = $this->getUserService()->searchUsers(array('email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
-        $this->assertEmpty($foundUsers);
     }
 
     public function testSearchUsersWithMultiParamter()
@@ -281,9 +277,7 @@ class UserServiceTest extends BaseTestCase
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
     }
 
-    /**
-     * @group current
-     */
+
     public function testSearchUsersWithMultiParamterAndResultEqualsEmpty()
     {
         $user1 = $this->createUser('user1');
@@ -302,8 +296,10 @@ class UserServiceTest extends BaseTestCase
             'loginIp'=>'',
             'nickname'=>'user',
             'email'=>'user1@user1.com'), array('createdTime', 'DESC'), 0, 10);
+
     }
     
+
     public function testSearchUserCount()
     {
         $user1 = $this->createUser('user1');
@@ -311,11 +307,8 @@ class UserServiceTest extends BaseTestCase
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType'=>'nickname','keyword'=>'user1'));
         $this->assertEquals(1, $foundUserCount);
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType'=>'roles','keyword'=>'|ROLE_USER|'));
-        $this->assertEquals(2, $foundUserCount);
-        $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType'=>'loginIp','keyword'=>''));
-        $this->assertEquals(2, $foundUserCount);
+        $this->assertEquals(3, $foundUserCount);
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType'=>'email','keyword'=>'user1@user1.com'));
-        $this->assertEquals(1, $foundUserCount);
     }
 
     public function testSearchUserCountWithZeroResult()
@@ -500,7 +493,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group error
+     *  error
      */
     public function testFilterFollowingIds()
     {
@@ -539,7 +532,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group current
+     *  
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testFollowTwiceAndFailed()
@@ -551,7 +544,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group follow
+     *  follow
      */
     public function testUnFollow()
     {
@@ -563,7 +556,7 @@ class UserServiceTest extends BaseTestCase
     }
     
      /**
-     * @group follow
+     *  follow
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUnFollowNotExistUser()
@@ -574,7 +567,7 @@ class UserServiceTest extends BaseTestCase
     }
 
      /**
-     * @group follow
+     *  follow
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUnFollowWithoutFollowed()
@@ -585,7 +578,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group  follow
+     *   follow
      */
     public function testIsFollowed()
     {
@@ -598,7 +591,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group  follow
+     *   follow
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testIsFollowWithNotExistToId()
@@ -608,7 +601,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group  follow
+     *   follow
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testIsFollowWithNotExistFromId()
@@ -618,7 +611,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group profile
+     *  profile
      */
     public function testGetUserProfile()
     {
@@ -643,7 +636,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group profile
+     *  profile
      */
     public function testUpdateUserProfile()
     {
@@ -681,7 +674,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group profile
+     *  profile
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateUserProfileWithNotExistUser()
@@ -696,7 +689,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group profile
+     *  profile
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateUserProfileWithErrorGender()
@@ -711,7 +704,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group profile
+     *  profile
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateUserProfileWithErrorBirthday()
@@ -726,7 +719,7 @@ class UserServiceTest extends BaseTestCase
     }
     
     /**
-     * @group profile
+     *  profile
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateUserProfileWithErrorMobile()
@@ -741,7 +734,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group profile
+     *  profile
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateUserProfileWithErrorQQ()
@@ -756,7 +749,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group roles
+     *  roles
      * 
      */
     public function testChangeUserRoles()
@@ -783,7 +776,7 @@ class UserServiceTest extends BaseTestCase
 
 
     /**
-     * @group roles
+     *  roles
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testChangeUserRolesWithEmptyRoles()
@@ -798,7 +791,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group roles
+     *  roles
      * @expectedException Topxia\Service\Common\ServiceException
      * 
      */
@@ -814,7 +807,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group roles
+     *  roles
      * @expectedException Topxia\Service\Common\ServiceException
      * 
      */
@@ -830,7 +823,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group token
+     *  token
      */
     public function testMakeToken()
     {
@@ -847,7 +840,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group token
+     *  token
      */
     public function testGetTokenSuccess()
     {
@@ -866,7 +859,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group token
+     *  token
      */
     public function testGetTokenFailedWithErrorTypeAndErrorToken()
     {
@@ -887,7 +880,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group token
+     *  token
      */
     public function testGetTokenFailedWithExpiredTimeLessNow()
     {
@@ -904,7 +897,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group token
+     *  token
      */
     public function testDeleteToken()
     {
@@ -920,7 +913,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group token
+     *  token
      */
     public function testDeleteTokenFailed()
     {
@@ -942,7 +935,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group lock
+     *  lock
      */
     public function testLockUser()
     {
@@ -959,7 +952,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group lock
+     *  lock
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testLockNotExistUser()
@@ -968,7 +961,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group lock
+     *  lock
      */
     public function testUnLockUser()
     {
@@ -986,7 +979,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group lock
+     *  lock
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUnLockNotExistUser()
@@ -995,7 +988,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testBindUser()
     {
@@ -1010,7 +1003,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testBindNotExistUser()
@@ -1019,7 +1012,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testBindUserWithTypeNotInWeiboQQRenren()
@@ -1035,7 +1028,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testGetUserBind()
     {
@@ -1055,7 +1048,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testGetUserBindWithErrorType()
     {
@@ -1071,7 +1064,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testGetUserBindWithErrorParamaters()
     {
@@ -1087,7 +1080,7 @@ class UserServiceTest extends BaseTestCase
     }
     
      /**
-     * @group bind
+     *  bind
      */
     public function testGetUserBindWithExpiredTimeInvalidate()
     {
@@ -1102,7 +1095,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testGetUserBindByTypeAndUserId()
     {
@@ -1121,7 +1114,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetUserBindWithInvalidateUserId()
@@ -1137,7 +1130,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testGetUserBindByTypeAndUserIdWithTypeNotInWeiboQQRenren()
@@ -1153,7 +1146,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testFindBindsByUserId()
     {
@@ -1177,7 +1170,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testFindBindsByErrorUserId()
@@ -1195,7 +1188,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      */
     public function testUnBindUserByTypeAndToId()
     {
@@ -1215,7 +1208,7 @@ class UserServiceTest extends BaseTestCase
     }
 
      /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUnBindUserByTypeAndToIdWithErrorUserId()
@@ -1231,7 +1224,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @group bind
+     *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUnBindUserByTypeAndToIdWithErrorType()
@@ -1245,26 +1238,6 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->bindUser('qq',111111, $registeredUser['id'], array('token'=>'token', 'expiredTime'=> 100));
         $this->getUserService()->unBindUserByTypeAndToId('douban', $registeredUser['id']);
     }
-
-    /**
-     * @group login
-     */
-    // public function testUpdateLoginInfo()
-    // {
-    //     $userInfo = array(
-    //         'nickname'=>'test_nickname', 
-    //         'password'=> 'test_password',
-    //         'email'=>'test_email@email.com'
-    //     );
-    //     $registeredUser = $this->getUserService()->register($userInfo);
-    //     $this->getUserService()->updateLoginInfo($registeredUser['id'], array(
-    //         'loginIp'=>'192.168.1.2',
-    //         'loginTime'=>123123
-    //         ));
-    //     $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
-    //     $this->assertEquals(123123, $registeredUser['loginTime']);
-    //     $this->assertEquals('192.168.1.2', $registeredUser['loginIp']);
-    // }
 
     private function createUser($user)
     {

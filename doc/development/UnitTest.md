@@ -4,15 +4,30 @@
 
 本项目跑单元测试的数据库名为：edusoho_test, 该数据库名请自行创建： CREATE DATABASE `edusoho_test`
 
+
+* 默认当前用户信息：
+
+    'nickname' => 'admin',
+    'email' => 'admin@admin.com',
+    'password'=>'admin',
+    'loginIp' => '127.0.0.1',
+    'roles' => array('ROLE_USER','ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
+
 * 运行所有测试
-phpunit -c app/  --coverage-html
-  -c 指定phpunit读取配置文件的目录，默认读取的是phpunit.xml.dist
+
+phpunit -c app/  
+
+遇到错误或者遇到失败就停止
+phpunit --stop-on-error   --stop-on-fail -c app/
+
+-c 指定phpunit读取配置文件的目录，默认读取的是phpunit.xml.dist
 
 * 运行某个目录下的所有测试，例如
   phpunit -c app/ src/Topxia/Service/User/Tests/
 
 * 运行某个测试，例如
 phpunit -c app/ src/Topxia/Service/Course/Tests/CourseServiceTest.php
+phpunit -c app/ src/Topxia/Service/Course/Tests/AnnouncementServiceTest.php
 phpunit -c app/ src/Topxia/Service/User/Tests/UserServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/CommentServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/ContentServiceTest.php

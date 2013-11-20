@@ -21,7 +21,7 @@ class PartnerController extends BaseController
 
     	$api = $this->createWindidApi('user');
 
-    	$apiUser = $api->getUser($user['nickname'], 2);
+    	$apiUser = $api->getUser($user['email'], 3);
     	if (empty($apiUser)) {
     		return $this->createMessageResponse('error', 'WINDID中不存在该用户！');
     	}
@@ -30,14 +30,16 @@ class PartnerController extends BaseController
 
     	$goto = $request->query->get('goto') ? : $this->generateUrl('homepage');
 
-    	return $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
+        $response = $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
             'type' => 'info',
             'title' => '登录成功',
             'message' => '正在跳转页面，请稍等....',
             'duration' => 3000,
             'goto' => $goto,
-    		'script' => $loginScript,
-		));
+            'script' => $loginScript,
+        ));
+
+        return $response;
 	}
 
 	public function logoutAction(Request $request)
@@ -138,7 +140,7 @@ class PartnerController extends BaseController
             return true;
         }
 
-        $user = $this->getUserService()->getUserByNickname($user['username']);
+        $user = $this->getUserService()->getUserByEmail($user['email']);
         if (empty($user)) {
             return true;
         }
@@ -152,7 +154,6 @@ class PartnerController extends BaseController
     {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
-        file_put_contents('/tmp/logout', 'bbb');
         return true;
     }
 
@@ -187,6 +188,10 @@ class WindidNotify
     }
             
     public function addUser($uid) {
+        return true;
+
+        // 下面的做法是不对的，因为取不到密码。
+
         $api = \WindidApi::api('user');
         $user = $api->getUser($uid, 1, 7);
 
@@ -198,7 +203,6 @@ class WindidNotify
 
         try {
             $newUser = $this->getUserService()->register($registration, 'phpwind');
-            
         } catch (\Exception $e) {
             return false;
         }
@@ -207,9 +211,6 @@ class WindidNotify
     }
             
     public function editUser($uid) {
-        $api = \WindidApi::api('user');
-        $user = $api->getUser($uid);
-          //客户端系统处理修改用户信息
         return true;
     }
 

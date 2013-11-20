@@ -3107,6 +3107,7 @@ body {
 .page-message-container {
 	width: 700px;
 	margin: 0 auto;
+	margin-bottom: 40px;
 }
 
 .modal .page-message-container {

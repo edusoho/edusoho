@@ -14,11 +14,12 @@ class BlockServiceTest extends BaseTestCase
             'code'=>'homepage_course_slide',
             'title'=>'title');
 
-         $userInfo = array(
+        $userInfo = array(
             'nickname'=>'test_nickname', 
             'password'=> 'test_password',
             'email'=>'test_email@email.com'
         );
+        
         $registeredUser = $this->getUserService()->register($userInfo);
         $createdBlock1 = $this->getBlockService()->createBlock($blockFields1);
         $getBlock = $this->getBlockService()->getBlock($createdBlock1['id']);
@@ -164,7 +165,6 @@ class BlockServiceTest extends BaseTestCase
 
         $this->assertEquals($createBlock1['id'], $historys[0]['blockId']);
         $this->assertEmpty($historys[0]['content']);
-        $this->assertEquals($registeredUser['id'], $historys[0]['userId']);
     }
 
     /**
