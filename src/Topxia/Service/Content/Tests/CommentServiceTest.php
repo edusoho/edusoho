@@ -10,6 +10,9 @@ use Topxia\Common\ArrayToolkit;
 class CommentServiceTest extends BaseTestCase
 {   
 
+    /**
+    * @group current
+    **/
     public function testCreateCourseComment()
     {
         $user = $this->createUser('user');
@@ -20,10 +23,10 @@ class CommentServiceTest extends BaseTestCase
             "content"=>"content to create"
             );
         $createdComment = $this->getCommentService()->createComment($commentInfo);
-
+        
         $this->assertEquals(CommentService::COMMENT_OBJECTTYPE_COURSE, $createdComment['objectType']);
         $this->assertEquals($course['id'], $createdComment['objectId']);
-        $this->assertEquals($user['id'], $createdComment['userId']);
+        $this->assertEquals($this->getCurrentUser()->id, $createdComment['userId']);
         $this->assertEquals("content to create", $createdComment['content']);
         
     }
@@ -95,7 +98,7 @@ class CommentServiceTest extends BaseTestCase
         foreach ($foundComments as $foundComment) {
             $this->assertEquals(CommentService::COMMENT_OBJECTTYPE_COURSE, $foundComment['objectType']);
             $this->assertEquals($course['id'], $foundComment['objectId']);
-            $this->assertEquals($user['id'], $foundComment['userId']);
+            $this->assertEquals($this->getCurrentUser()->id, $foundComment['userId']);
         }
 
     }
@@ -192,7 +195,7 @@ class CommentServiceTest extends BaseTestCase
         foreach ($foundComments as $foundComment) {
             $this->assertEquals(CommentService::COMMENT_OBJECTTYPE_COURSE, $foundComment['objectType']);
             $this->assertEquals($course['id'], $foundComment['objectId']);
-            $this->assertEquals($user['id'], $foundComment['userId']);
+            $this->assertEquals($this->getCurrentUser()->id, $foundComment['userId']);
             $this->assertEquals('content to create', $foundComment['content']);
         }
     }

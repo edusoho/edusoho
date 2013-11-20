@@ -66,7 +66,7 @@ abstract class BaseDao
         if (count($orderBy) != 2) {
             throw new \Exception("参数错误", 1);
         }
-
+        
         $orderBy = array_values($orderBy);
         if (!in_array($orderBy[0], $allowedOrderByFields)){
             throw new \Exception("参数错误", 1);

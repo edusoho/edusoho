@@ -5,7 +5,7 @@ namespace Topxia\Service\Common;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Topxia\Service\Common\ServiceKernel;
-
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -18,23 +18,13 @@ class BaseTestCase extends WebTestCase
 {
     protected static $isDatabaseCreated = false;
 
-    protected $currentUser = null;
-
-    protected function setCurrentUser ($user)
-    {
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-
-        $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser->getRoles());
-        static::$kernel->getContainer()->get('security.context')->setToken($token);
-
-        $this->currentUser = $currentUser;
-    }
+    protected $serviceKernel = null;
 
     protected function getCurrentUser()
     {
-        return $this->currentUser;
+        return $this->serviceKernel->getCurrentUser();;
     }
+
 
     public static function setUpBeforeClass()
     {
@@ -47,19 +37,53 @@ class BaseTestCase extends WebTestCase
      * 
      * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
      */
+
+    private function setServiceKernel()
+    {
+        $kernel = new \AppKernel('test', false);
+        $kernel->loadClassCache();
+        $kernel->boot();
+        Request::enableHttpMethodParameterOverride();
+        $request = Request::createFromGlobals();
+
+        $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
+        $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
+        $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 1,
+            'nickname' => 'admin',
+            'email' => 'admin@admin.com',
+            'password'=>'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER','ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
+        ));
+        $serviceKernel->setCurrentUser($currentUser);      
+        $this->serviceKernel = $serviceKernel;
+    }
+
+    public function getServiceKernel()
+    {
+        return $this->serviceKernel;
+    }
+
     public function setUp()
     {
+        $this->setServiceKernel();
+
         if (!static::$isDatabaseCreated) {
             $this->createAppDatabase();
             static::$isDatabaseCreated = true;
         }
+        
         $this->emptyAppDatabase();
-        $this->setCurrentUser(array(
-            'id' => 1, 
-            'email' => 'test@edusoho.com',
-            'password' => 'test',
-            'roles' => array('ROLE_ADMIN'),
-            'currentIp' => '127.0.0.1',
+
+        $this->serviceKernel->createService('User.UserService')->register(array(
+            'nickname' => 'admin',
+            'email' => 'admin@admin.com',
+            'password'=>'admin',
+            'loginIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER','ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
         ));
     }
 
@@ -71,11 +95,6 @@ class BaseTestCase extends WebTestCase
     public function tearDown()
     {
     
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     private  function createAppDatabase()
@@ -105,7 +124,8 @@ class BaseTestCase extends WebTestCase
         $connection->exec($sql);
     }
 
-    protected function assertArrayEquals(Array $ary1,Array $ary2,Array $keyAry=array()){
+    protected function assertArrayEquals(Array $ary1,Array $ary2,Array $keyAry=array())
+    {
         if(count($keyAry)>=1){
             foreach ($keyAry as $key){
                 $this->assertEquals($ary1[$key],$ary2[$key]);
@@ -116,4 +136,5 @@ class BaseTestCase extends WebTestCase
             }
         }
     }
+
 }

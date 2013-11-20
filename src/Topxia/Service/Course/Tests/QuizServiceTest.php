@@ -20,6 +20,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -48,6 +49,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -78,6 +80,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -117,6 +120,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -143,6 +147,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -162,6 +167,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -191,6 +197,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -225,6 +232,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -254,6 +262,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -295,6 +304,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -333,6 +343,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
 
@@ -362,6 +373,7 @@ class QuizServiceTest extends BaseTestCase
             'courseId' => $course['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
+            'type' => 'text'
         );
         $createdLesson = $this->getCourseService()->createLesson($lessonInfo);
         $item1 = $this->getQuizService()->createItem(

@@ -138,7 +138,6 @@ class WebExtension extends \Twig_Extension
 
         $len = strlen($format);
         for ($i=0; $i < $len; $i++) {
-        // var_dump($names);exit();
             switch ($format[$i]) {
                 case 'P':
                     $text .= $names['province'];
