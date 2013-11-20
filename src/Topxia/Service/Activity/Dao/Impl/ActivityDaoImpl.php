@@ -29,7 +29,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
     public function findLastActivitys()
     {       
         
-        $sql ="SELECT * FROM {$this->table} WHERE expired=0 and status='published' and actType='公开课';";
+        $sql ="SELECT * FROM {$this->table} WHERE expired=0 and status='published' and actType='公开课' order by startTime ,createdTime DESC ;";
         return $this->getConnection()->fetchAll($sql);
     }
 

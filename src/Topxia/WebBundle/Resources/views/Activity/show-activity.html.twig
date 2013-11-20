@@ -5,12 +5,11 @@
 
 {% block content %}
    
-<div class="row widget shadow ps-re pz ">
+<div class="row widget shadow mhz ps-re ">
 
     <div class="col-md-4  pts pbs pls prs">
           <a href="#" class="show-user-card" >
             <img class="img-responsive"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}"></a>
-     
     </div> 
     <div class="col-md-8  plm">    
           <p class="title">
@@ -28,10 +27,9 @@
           </p>
           <p>
             {% if  activity.price>0  %}  线下： {{ activity.price}}元{% else %} 线下：免费 {% endif %}
-          </p>
-         
+          </p> 
     </div> 
-     <div class="ps-ab ps-bt ps-rtl">
+    <div class="ps-ab ps-bt ps-rtl">
             <p>
               {{activity.studentNum}}人已报名
               {% if activity.join %}
@@ -42,12 +40,12 @@
               {% endif %}
               <a href="javascript:void(0)" id="media-qustion" class="mar-l btn btn-success  green">课前提问</a>
             </p>
-      </div>      
+    </div>      
  
 </div>
 
 
-<div class="row">
+<div class="row mhz">
   <div class="col-md-8 plz">
     <!-- 课程大纲 -->
     <div class="widget k_postlist shadow">
@@ -81,8 +79,8 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12 plz">
+<div class="row mhz">
+  <div class="col-md-12 plz prz">
       <div class="widget k_postlist shadow">
         <div class="kytitle clearfix bor-l-green">
           <h3>提问与交流</h3> ------- <span class="text-right">如果在公开课前进行提问，我们会挑选关注度最高的几个问题让老师进行回答</span>
@@ -154,7 +152,7 @@
 
 
 <!-- 小伙伴们正在看 -->
-<section class="row">
+<section class="row mhz">
   <div class="col-md-12 pz">
         <!-- 小伙伴们正在看 -->
          {{ render(controller('TopxiaWebBundle:Activity:activityBlockSame', {activitys:activitys})) }}

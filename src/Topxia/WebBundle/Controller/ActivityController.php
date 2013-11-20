@@ -25,42 +25,41 @@ class ActivityController extends BaseController
         $currentuser=$this->getCurrentUser();
         $userId=$currentuser['id'];
 
+
         //本期活动
         $recommendedActivitys = $this->getActivityService()->findRecommendedActivity();
+        $recommendedActivitys =  $this->getActivityService()->extActivitys($recommendedActivitys);
+        $recommendedActivitys= $this->getActivityService()->mixActivitys($recommendedActivitys,$userId);
+
 
         //近期活动
         $lastActivitys = $this->getActivityService()->findLastActivitys();
-      
+        $lastActivitys =  $this->getActivityService()->extActivitys($lastActivitys);
+        $lastActivitys= $this->getActivityService()->mixActivitys($lastActivitys,$userId);
+
+
+        //往期活动
         $conditions['status']='published';
         $conditions['actType']='公开课';
         $conditions['expired']='1';//1表示往期。
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getActivityService()->searchActivityCount($conditions)
             , 4
-        );
-
-
-        //往期活动
+        ); 
         $expiredActivitys = $this->getActivityService()->searchActivitys(
             $conditions, 'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $exActIds = ArrayToolkit::column($expiredActivitys,'id');
+        $expiredActivitys =  $this->getActivityService()->extActivitys($expiredActivitys);      
+        $expiredActivitys= $this->getActivityService()->mixActivitys($expiredActivitys,$userId);
 
-        $joinedExActivitys=$this->getActivityService()->findMemberByActIds($exActIds,$userId);
-
-        $joinExActIds = ArrayToolkit::column($joinedExActivitys,'activityId');
-      
-        $mixExActivitys= $this->getActivityService()->mixActivitys($expiredActivitys,$joinExActIds);
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
-            
             'recommendedActivitys' =>$recommendedActivitys,
             'lastActivitys' =>$lastActivitys,
-            'expiredActivitys' => $mixExActivitys,          
+            'expiredActivitys' => $expiredActivitys,          
             'paginator' => $paginator,         
             "current_user"=> $currentuser,
           
@@ -75,6 +74,8 @@ class ActivityController extends BaseController
         ///获取当前学生报名的活动ids
         $currentuser=$this->getCurrentUser();
 
+        $activity= $this->getActivityService()->extActivity($activity);
+
         $activity= $this->getActivityService()->mixActivity($activity,$currentuser['id']);
 
         if($activity['expired']==1)
@@ -84,16 +85,13 @@ class ActivityController extends BaseController
             );
 
         }
-        //tag信息
-        $tags = $this->getTagService()->findAllTags(0, 100);
+       
         //报名的学生
-        $students=$this->getActivityService()->findActivityStudents($id,0,50);
+        $students=$this->getActivityService()->findActivityStudents($id,0,20);
         $studentIds=ArrayToolkit::column($students,'userId');
         $students = $this->getUserService()->findUsersByIds($studentIds);
         
         
-        //老师信息查询
-
         //小伙伴们正在看的活动
         $activitys=$this->getActivityService()->searchActivitys(array('status'=>'published'),'latestCreated',0,4);
         //活动的问题
@@ -102,15 +100,16 @@ class ActivityController extends BaseController
         //问题回答ids
         $postUserIds=array();
         //问题回答
-        $sss=array();
+        $threadPosts=array();
         foreach ($threads as $thread) {
             $thread['bindpost']=$this->getActivityThreadService()->findThreadPosts($activity['id'],$thread['id'],"default",0,20);
             if(!empty($thread['bindpost'])){
                 $postUserIds=array_merge($postUserIds,ArrayToolkit::column($thread['bindpost'],'userId'));
             }
-            $sss[]=$thread;
+            $threadPosts[]=$thread;
         }
-        $qustionUserIds=ArrayToolkit::column($sss,'userId');
+        $qustionUserIds=ArrayToolkit::column($threadPosts,'userId');
+
         $qustionUsers = $this->getUserService()->findUsersByIds($qustionUserIds);
        
         $qustionUsers[0]=array(
@@ -126,10 +125,8 @@ class ActivityController extends BaseController
 
         return $this->render("TopxiaWebBundle:Activity:show-activity.html.twig",array(
             "activity"=>$activity,
-            "tags"=>$tags,
-            "students"=>$students,
-            
-            "qustions"=>$sss,
+            "students"=>$students,            
+            "qustions"=>$threadPosts,
             "activitys"=>$activitys,
             "current_user"=> $currentuser,
             "qustion_users"=>$qustionUsers,
@@ -143,6 +140,8 @@ class ActivityController extends BaseController
         
         ///获取当前学生报名的活动ids
         $currentuser=$this->getCurrentUser();
+
+        $activity= $this->getActivityService()->extActivity($activity);
 
         $activity= $this->getActivityService()->mixActivity($activity,$currentuser['id']);
 
@@ -372,26 +371,26 @@ class ActivityController extends BaseController
         );
     }
 
-
+   //首页公开课列表块
     public function activityBlockGridAction($activitys, $mode = 'default')
     {
-        $userIds = array();
+        $currentuser=$this->getCurrentUser();
+        $userId=$currentuser['id'];
 
-        foreach ($activitys as $activity) {
-            $userIds = array_merge($userIds, $activity['experters']);
-        }
-       
-        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $activitys =  $this->getActivityService()->extActivitys($activitys);
+
+        $activitys= $this->getActivityService()->mixActivitys($activitys,$userId);
 
        
       
         return $this->render("TopxiaWebBundle:Activity:activitys-block-grid.html.twig", array(
-            'activitys' => $activitys,
-            'users'=>$users,        
+            'activitys' => $activitys,      
             'mode' => $mode,
         ));
     }
 
+    //谁还在看公开课列表块
     public function activityBlockSameAction($activitys)
     {
       
@@ -413,15 +412,12 @@ class ActivityController extends BaseController
         ));
     }
 
+    //公开课详细页面讲师块
     public function expertersBlockAction($activity)
     {
-        $users = $this->getUserService()->findUsersByIds($activity['experters']);
-        $profiles = $this->getUserService()->findUserProfilesByIds($activity['experters']);
-
+    
         return $this->render('TopxiaWebBundle:Activity:experters-block.html.twig', array(
             'activity' => $activity,
-            'users' => $users,
-            'profiles' => $profiles,
         ));
     }
 

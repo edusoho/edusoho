@@ -44,7 +44,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	}
 
 
-
 	public function searchActivitys($conditions, $sort = 'latest', $start, $limit){
 		
 		$conditions = $this->_prepareActivityConditions($conditions);
@@ -255,21 +254,87 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		return $fields;
 	}
 	
-	public function mixActivitys($activitys, $joinActIds)
+	public function  extActivitys(array $activitys)
 	{
-		$mixActivitys= array();
+		$extActivitys = array();
+        if (empty($activitys)) {
+            return $extActivitys;
+        }
+
+		foreach ($activitys as $actId => $activity) {
+
+			$users = $this->getUserService()->findUsersByIds($activity['experters']);
+			$profiles = $this->getUserService()->findUserProfilesByIds($activity['experters']);
+
+			$userProfiles = array();
+
+			foreach ($users as $userId => $user) {
+
+				$profile =  $profiles[$userId];
+
+				$userProfile = array_merge($user,$profile);
+
+				$userProfiles[$userId]=$userProfile;
+			}
+
+
+			$activity['userProfiles']=$userProfiles;
+
+		    $extActivitys[$actId] = $activity;
+
+		}
+
+		 return $extActivitys;
+		
+	}
+
+
+	public function  extActivity(array $activity)
+	{
+		
+        if (empty($activity)) {
+            return $activity;
+        }
+
+		$users = $this->getUserService()->findUsersByIds($activity['experters']);
+		$profiles = $this->getUserService()->findUserProfilesByIds($activity['experters']);
+
+		$userProfiles = array();
+
+		foreach ($users as $userId => $user) {
+
+			$profile =  $profiles[$userId];
+
+			$userProfile = array_merge($user,$profile);
+
+			$userProfiles[$userId]=$userProfile;
+		}
+
+		$activity['userProfiles']=$userProfiles;
+
+		return $activity;
+		
+	}
+
+	public function mixActivitys($activitys, $userId)
+	{
+		$actIds = ArrayToolkit::column($activitys,'id');
+
+        $joinedActivitys=$this->findMemberByActIds($actIds,$userId);
+
+        $joinActIds = ArrayToolkit::column($joinedActivitys,'activityId');
+
+        $mixActivitys= array();
 
         foreach ($activitys as $item) {
-         
-            if(empty($item['expired'])){
-                $item['expired']=empty($item['endTime'])?$item['expired']:time()>$item['endTimeNum'];
-            }
+           
             $item['join']=false;
             
             if (in_array($item['id'], $joinActIds)) {
               $item['join']=true;
             }
-            $mixActivitys[]= $item;
+
+            $mixActivitys[$item['id']]= $item;
         }
 
         return $mixActivitys;
@@ -279,12 +344,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 	public function mixActivity($activity, $userId)
 	{
+		if (empty($activity)) {
+            return $activity;
+        }
 		
 		$mixActivity= $activity;
-
-		 if(empty($mixActivity['expired'])){		 	
-                $mixActivity['expired']=empty($mixActivity['endTime'])?$mixActivity['expired']:time()>$mixActivity['endTimeNum'];
-            }
 
         $condi['userId']=$userId;
         $condi['activityId']=$mixActivity['id'];
@@ -387,6 +451,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
           return ArrayToolkit::index($members, 'activityId');
     }
 
+
+
 	public function updateActivityMember($id, $fields)
 	{
 		return $this->getMemberDao()->updateMember($id, $fields);
@@ -428,11 +494,18 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     	return $this->createService('Content.FileService');
     }
 
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
+    }
+
 
 }
 
 class ActivitySerialize
 {
+
+	 //将php对象变成数据库字段。。。以|连接的字符串变为数组,时间戳数字变成时间字符串。。。。
     public static function serialize(array &$activity)
     {
     	if (isset($activity['tags'])) {
@@ -485,7 +558,7 @@ class ActivitySerialize
         return $activity;
     }
 
-    //将数据库原始数据变成规格数据。。。以|连接的字符串变为时间,时间戳变成时间字符串。。。。
+    //将数据库字段变成php对象。。。以|连接的字符串变为数组,时间戳数字变成时间字符串。。。。
 
     public static function unserialize(array $activity = null)
     {

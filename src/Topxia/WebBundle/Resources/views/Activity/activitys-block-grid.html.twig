@@ -19,16 +19,17 @@
           </div>
         </div>
 
-
         {% if mode in ['default'] %}
-          {% set user = users[activity.experters|first]|default(null) %}
-          {% if user %}
-            <span class="teacher clearfix">
-              <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
-              <span class="nickname ellipsis">{{ user.nickname }}</span>
-              <span class="user-title ellipsis">{{ user.title }}</span>
-            </span>
-          {% endif %}
+         {% for user in activity['userProfiles'] %}
+        
+            {% if user %}
+              <span class="teacher clearfix">
+                <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+                <span class="nickname ellipsis">{{ user.nickname }}</span>
+                <span class="user-title ellipsis">{{ user.title }}</span>
+              </span>
+            {% endif %}
+          {% endfor %}
         {% endif  %}
 
 

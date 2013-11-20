@@ -7,9 +7,7 @@
 
 {% block content %}
 
-<div class="row">
- 
-   
+<section class="row ">
       <div class="container widget shadow ptm pbm phz mbl ps-re">
         <div class="col-md-2 phm">
           <img class="img-responsive"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}">
@@ -26,9 +24,9 @@
             <span class='label label-default'>已结束</span>
         </h3>           
       </div>
-</div>
+</section>
 
-<div class="row">  
+<section class="row mhz">  
        <!-- 视频播放-->
   <div class="col-md-8 pz"> 
         <div class="widget shadow ">
@@ -84,11 +82,11 @@
           </div>
         </div>
   </div>   
-</div>
+</section>
 
-<div class="row">
+<!-- 精彩图片 -->
+<section class="row mhz">
   <div class="col-md-12  pz ">
-
     {% if pics %}
           <div id="carousel-demo-1" class="carousel-demo">
               <span class="ui-switchable-prev-btn glyphicon glyphicon-chevron-left" data-role="prev"></span>
@@ -108,11 +106,10 @@
           </div>
     {% endif %}       
   </div>
+</section>
 
-</div>
-
-
-<section class="row"> 
+<!-- 讨论区 -->
+<section class="row mhz"> 
   <div class="col-md-12  pz">
       <div class="widget k_postlist shadow">
         <div class="kytitle clearfix bor-l-green">
@@ -185,7 +182,7 @@
 
 
 <!-- 小伙伴们正在看 -->
-<section class="row">
+<section class="row mhz">
   <div class="col-md-12 pz">
         <!-- 小伙伴们正在看 -->
          {{ render(controller('TopxiaWebBundle:Activity:activityBlockSame', {activitys:activitys})) }}

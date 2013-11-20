@@ -12,20 +12,29 @@ class DefaultController extends BaseController
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
+
+        $currentuser=$this->getCurrentUser();
+        $userId=$currentuser['id'];
+
       
         $feild['status']='published';
         $feild['actType']='公开课';
         $feild['expired']='0';//0表示开放报名。
 
 
-        $lastActivitys=$this->getActivityService()->searchActivitys($feild,'last',0,3);
-
+      
+        //近期活动
+        $lastActivitys = $this->getActivityService()->findLastActivitys();
+        $lastActivitys =  $this->getActivityService()->extActivitys($lastActivitys);
+        $lastActivitys= $this->getActivityService()->mixActivitys($lastActivitys,$userId);
 
         $feild['recommended']=1;//1表示置顶。
         
-        $recommended=$this->getActivityService()->searchActivitys($feild,'recommendedTime-DESC',0,1);
-        
-        $recommended=count($recommended)>0?$recommended[0]:array('largePicture' =>'',
+        $recommended=$this->getActivityService()->findRecommendedActivity();       
+
+
+
+        $recommended=count($recommended)>0?reset($recommended):array('largePicture' =>'',
                                                                     'subtitle'=>'',
                                                                     'title'=>'',
                                                                     'startTime'=>'',
@@ -34,7 +43,7 @@ class DefaultController extends BaseController
                                                                     'id'=>'0');
 
         $activitTerchar=empty($recommended['experters'])?null:$this->getUserService()->findUsersByIds($recommended['experters']);
-        $activitTerchar=count($activitTerchar)>0?current($activitTerchar):array('nickname'=>'',
+        $activitTerchar=count($activitTerchar)>0?reset($activitTerchar):array('nickname'=>'',
                                                                                 'title'=>'',
                                                                                 'smallAvatar'=>'');
         //地址

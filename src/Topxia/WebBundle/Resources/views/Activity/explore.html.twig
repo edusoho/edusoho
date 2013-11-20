@@ -11,7 +11,7 @@
 <section class="activity-banner ">
   <div class="container  pz">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 mtl">
          <div class="kytitle clearfix">
             <h3 >本期公开课</h3>             
          </div>
@@ -39,6 +39,9 @@
           {% endfor %}
        </ul>
       </div>  
+      <div class="col-md-4">
+        <img src="" alt="">
+      </div>
     </div>
   </div>
 </section>
@@ -46,15 +49,15 @@
 <section class="activity-last ">
   <div class="container  pz">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 mtl mbm">
          <div class="kytitle activity-last-title clearfix mbz">
             <h3 >近期公开课</h3>             
          </div>
       </div>
-        <ul class="pz clearfix">
+        <ul class="pz mz clearfix">
             {% for activity in lastActivitys %}
-            <li class="col-md-4  pvl activity-last-bgcolor">
-              <div class="widget pvm phm ">                           
+            <li class="col-md-4 mbl">
+              <div class="activity-last-bgcolor-white pvm phm ">                           
                   <a href="#" class="show-user-card" >
                     <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
                   <h4><span >{{ activity.subtitle}}</span></h4>
@@ -72,7 +75,7 @@
 <section class="activity-expired ">
   <div class="container  pz">
     <div class="row">
-        <div class="col-md-8 ">
+        <div class="col-md-8  mtl mbm">
            <div class="kytitle clearfix">
                 <h3>往期回顾</h3>             
            </div>  

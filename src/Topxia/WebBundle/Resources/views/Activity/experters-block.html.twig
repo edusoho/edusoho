@@ -7,19 +7,16 @@
   <div class="panel-body pbz ptz">
     {% if activity.experters %}
      <ul class="media-list">
-            {% for teacherId in activity.experters  %}
-              {% set user = users[teacherId] %}
-              {% if profiles %}
-              {% set profile = profiles[teacherId] %}
+            {% for userProfile in activity['userProfiles']  %}
               <li class="media">
-                <a class="pull-left" href="{{ path('user_show',{id:user.id}) }}"><img width="150px" class="img-responsive media-object " src="{{ file_path(user.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}"><img width="150px" class="img-responsive media-object " src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                 <div class="media-body">
-                   <h4 class="media-heading"> <a href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></h4>
-                   <p class="text-color-gray text-normal">{{ user.title }}</p>                  
+                   <h4 class="media-heading"> <a href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a></h4>
+                   <p class="text-color-gray text-normal">{{ userProfile.title }}</p>                  
                 </div>
-                <div class="pts" >{% if profile.about %}<strong >介绍：</strong>{% endif %} {{ profile.about | raw }}</div>
+                <div class="pts" >{% if userProfile.about %}<strong >介绍：</strong>{% endif %} {{ userProfile.about | raw }}</div>
                </li>
-            {% endif %}
+           
           {% endfor %}
  
       </ul>
