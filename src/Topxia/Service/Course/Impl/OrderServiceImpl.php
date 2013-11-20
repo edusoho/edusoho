@@ -59,7 +59,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['sn'] = $this->generateOrderSn($order);
         $order['title'] = "购买课程《{$course['title']}》";
-        $order['price'] = empty($order['price']) ? $course['price'] : number_format($order['price'], 2, '.', '');;
+        $order['price'] = !isset($order['price']) ? $course['price'] : number_format($order['price'], 2, '.', '');;
         $order['status'] = 'created';
 
         if (intval($order['price']*100) == 0) {
