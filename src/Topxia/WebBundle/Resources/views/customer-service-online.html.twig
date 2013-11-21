@@ -1,0 +1,56 @@
+  <div class="customer-service-online">
+
+    <div class="float-left"> 
+      <a style="display: block" id="aFloatTools_Show" class="btn-open" title="查看在线客服" 
+      onClick="javascript:
+        $('#divFloatToolsView').animate({width: 'show', opacity: 'show'}, 'normal',function(){ 
+          $('#divFloatToolsView').show();
+        });
+        $('#aFloatTools_Show').attr('style','display:none');
+        $('#aFloatTools_Hide').attr('style','display:block');" 
+        href="javascript:void(0);
+        "> 展开
+      </a>
+
+      <a style="display: none" id="aFloatTools_Hide" class="btn-ctn" title="关闭在线客服" 
+      onClick="javascript:
+        $('#divFloatToolsView').animate({width: 'hide', opacity: 'hide'}, 'normal',function(){ 
+          $('#divFloatToolsView').hide();
+        });
+        $('#aFloatTools_Show').attr('style','display:block');
+        $('#aFloatTools_Hide').attr('style','display:none');" 
+        href="javascript:void(0);"
+        > 收缩
+      </a>
+
+    </div>
+
+    <div id="divFloatToolsView" class="float-right" style="display: none">
+      <div class="service-category">
+
+        <h3>产品销售</h3>
+        <ul>
+          <li><span>客服1</span> 
+            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=123456&site=qq&menu=yes"> <img border="0" src="http://wpa.qq.com/pa?p=2:123456:51" alt="产品销售" title="产品销售" /></a> </li>
+
+          <li><span>客服2</span> 
+            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=123456&site=qq&menu=yes"> <img border="0" src="http://wpa.qq.com/pa?p=2:123456:51" alt="产品销售" title="产品销售" /></a>
+          </li>
+
+        </ul>
+
+        <h3>云主机定制</h3>
+        <ul>
+          <li><span>客服3</span> 
+            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=123456&site=qq&menu=yes"> <img border="0" src="http://wpa.qq.com/pa?p=2:123456:51" alt="云主机" title="云主机" /></a>
+          </li>
+        </ul>
+
+        <h3>售后服务</h3>
+        <ul>
+          <li><span>客服4</span> <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=123456&site=qq&menu=yes"> <img border="0" src="http://wpa.qq.com/pa?p=2:123456:51" alt="售后服务" title="售后服务" /></a></li>
+        </ul>
+
+      </div>
+    </div>
+  </div>

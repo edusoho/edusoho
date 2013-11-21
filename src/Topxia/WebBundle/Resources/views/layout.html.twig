@@ -35,7 +35,10 @@
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
+{% include 'TopxiaWebBundle::customer-service-online.html.twig' %}
+
 {% block body %}
+
   <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
     <div class="container">
       <div class="container-gap">
@@ -117,7 +120,6 @@
       ©2013 
       <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
     </p>
-
   </div>
 
   {% block bottom %}{% endblock %}
