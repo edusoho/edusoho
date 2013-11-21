@@ -14,7 +14,7 @@ define(function(require, exports, module) {
             required: false,
             rule: 'remote',
             hideMessage:function(msg,ele,eve){
-                console.log(typeof msg);
+               
                 if(null != msg ){
                     $("#promoCode_info").html(msg);
                     $("#promoCode_info").addClass('text-color-green');
