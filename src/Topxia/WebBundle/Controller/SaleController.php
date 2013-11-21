@@ -13,13 +13,20 @@ class SaleController extends BaseController
       
     public function codeCheckAction(Request $request)
     {
-        $code = $request->query->get('value');
+        $order =  $request->request->all();
+
+        $code = $order['promoCode'];
+
+        $courseId = $order['courseId'];
         
-        $offsale = $this->getOffsaleService()->isCodeAvaliable($code);
-        if ($offsale) {
-            $response = array('success' => true, 'message' => '感谢使用，立减'.$offsale['reducePrice'].'元！');
+        $offsale = $this->getOffsaleService()->getOffsaleByCode($code);
+
+        $result = $this->getOffsaleService()->isValiable($offsale,$courseId);
+
+        if ("success" == $result) {
+            $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.$offsale['reducePrice'].'元！');
         } else {
-            $response = array('success' => false, 'message' => '该优惠码不存在，请重新输入');
+            $response = array('success' => false, 'message' => $result);
         }
          
         return $this->createJsonResponse($response);

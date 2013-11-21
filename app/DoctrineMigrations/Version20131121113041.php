@@ -16,7 +16,7 @@ class Version20131121113041 extends AbstractMigration
         $this->addSql("                
                 CREATE TABLE IF NOT EXISTS `offsale` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-                  `prodType` varchar( 256 ) CHARACTER SET utf8 DEFAULT NULL COMMENT '优惠商品类型',  
+                  `prodType` varchar( 256 ) CHARACTER SET utf8 DEFAULT '课程' COMMENT '优惠商品类型',  
                   `prodId` int(10) NOT NULL COMMENT '优惠商品Id',
                   `promoCode` varchar( 256 ) CHARACTER SET utf8 DEFAULT NULL COMMENT '优惠码，唯一值',                  
                   `reducePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '优惠价格',

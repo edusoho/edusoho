@@ -88,6 +88,19 @@ define(function(require, exports, module) {
                     commit(response.success, response.message);
                 }, 'json');
             }
+        ],
+
+        [
+            'remotePost',
+            function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    fid = options.fid ? options.fid : (element.data('fid')? element.data('fid'):null);
+                   
+                $.post(url, $("#"+fid).serialize(), function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
         ]
     ];
 

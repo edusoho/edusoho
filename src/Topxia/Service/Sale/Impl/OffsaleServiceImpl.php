@@ -32,13 +32,39 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
     }
 
 
-    public function isCodeAvaliable($code){
+    public function isValiableByCode($code){
 
         if (empty($code)) {
             return false;
         }
+
         $offsale = $this->getOffsaleDao()->getOffsaleByCode($code);
-        return $offsale;
+
+        return  $this->isValiable($offsale);
+       
+
+    }
+
+
+    public function isValiable($offsale,$prodId){
+
+        if (empty($offsale)) {
+            return "该优惠码不存在，注意区分大小写哦";
+        }
+
+        if(empty($offsale['valid'])){
+            return "该优惠码已被使用";
+        }
+
+        if(empty($offsale['validTime'])?false:time() > $offsale['validTime']){
+            return "该优惠码已过期";
+        }
+
+        if($offsale['prodId'] != $prodId){
+            return "该优惠码不适用于该".$offsale['prodType'];
+        }
+
+        return "success";
 
     }
 

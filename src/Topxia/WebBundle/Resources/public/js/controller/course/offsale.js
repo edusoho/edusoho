@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="promoCode"]',
             required: false,
-            rule: 'remote',
+            rule: 'remotePost',
             hideMessage:function(msg,ele,eve){
                
                 if(null != msg ){

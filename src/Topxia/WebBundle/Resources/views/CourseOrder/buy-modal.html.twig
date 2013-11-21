@@ -7,7 +7,7 @@
   {% if app.request.query.get('preview') %}
     <div class="alert alert-info">该课时非免费课时，不能预览，需购买后才能查看。</div>
   {% endif %}
-  <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}" data-auto-submit="false">
+  <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}" >
 
     <div class="form-group">
       <div class="col-md-3 control-label">课程名称</div>
@@ -39,7 +39,7 @@
       <div class="form-group">
                 <label class="col-lg-3 control-label" for="course_promoCode">优惠码</label>
                 <div class="col-lg-7">
-                  <input id="course_promoCode" class="form-control" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"/>
+                  <input id="course_promoCode" class="form-control" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"  data-fid="course-buy-form"/>
                     <p class="help-block" id="promoCode_info">如有，请输入优惠码</p>
                 </div>
       </div>
@@ -55,7 +55,7 @@
         </div>
       </div>
       {% endif %}
-      
+
     {% else %}
       <div class="row">
         <div class="col-md-12">
@@ -76,5 +76,5 @@
   {% else %}
     <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
   {% endif %}
-   <script>app.load('course/offsale')</script>
+  <script type="text/javascript">app.load('course/offsale')</script>
 {% endblock %}
