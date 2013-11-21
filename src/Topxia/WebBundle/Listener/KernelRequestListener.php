@@ -17,7 +17,7 @@ class KernelRequestListener
     {
     	$request = $event->getRequest();
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
-            $whiteList = array('/course/order/pay/alipay/notify', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/windid');
+            $whiteList = array('/course/order/pay/alipay/notify', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/windid', '/discuz/api/uc');
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }
