@@ -9,39 +9,18 @@
 {% block content %} 
 
 <section class="activity-banner ">
-  <div class="container  pz">
-    <div class="row">
-      <div class="col-md-12 mtl">
-         <div class="kytitle clearfix">
-            <h3 >本期公开课</h3>             
-         </div>
-      </div>
-    </div> 
-    <div class="row">
-      <div class="col-md-8"> 
-       <ul class="pz">
+  <div class="container pz">
+    <img class="img-responsive" src="{{ asset('assets/img/default/current-activity-bg.jpg')}}"  >
+    
+    <div class="row ">
+      <div class="col-md-12 activity-banner-content"> 
+       <ul >
           {% for activity in recommendedActivitys %}
-          <li class=" widget shadow pz mbl">
-            <div class="row  pz mz ps-re">
-              
-              <div class="col-md-4 pts pbs pls prs">
-                <a href="#" class="show-user-card" >
-                  <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
-              </div>
-
-              <div class="col-md-8 pll prl">
-                <h4><span >{{ activity.subtitle}}</span></h4>
-                <h3>{{ activity.title}}</h3>                       
-                <p>时间： {{activity.startTime}}  {{activity.endTime}}</p>                              
-              </div>
-            </div>
-          </li>
+        
           {% endfor %}
        </ul>
       </div>  
-      <div class="col-md-4">
-        <img src="" alt="">
-      </div>
+      
     </div>
   </div>
 </section>
@@ -56,15 +35,40 @@
       </div>
         <ul class="pz mz clearfix">
             {% for activity in lastActivitys %}
-            <li class="col-md-4 mbl">
-              <div class="activity-last-bgcolor-white pvm phm ">                           
-                  <a href="#" class="show-user-card" >
+            <li class="col-md-4 mbl ">
+              <div class="activity-last-bgcolor-white pvm phm  ps-re">                           
+                  <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >
                     <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
-                  <h4><span >{{ activity.subtitle}}</span></h4>
+                  <h5>{{ activity.subtitle}}</h5>
                   <h4>{{ activity.title}}</h4>                       
-                  <p>时间： {{activity.startTime}} </p>                              
-            
+                  <p class="text-color-gray  text-normal">时间： {{activity.startTime}} 
+
+                    </p>
+                  <p class="text-color-gray  text-normal"> {{activity.address}} </p>
+                  <p class="text-color-gray  text-normal"> 主讲： 
+                        {% for userProfile in activity['userProfiles'] %} 
+                         <span class="prm"> {{userProfile.nickname}}</span>
+                        {% endfor %}
+                       </p>
+                  <p class="text-danger  text-normal">
+                    {% if  activity.onlinePrice>0 %} 线上{{ activity.onlinePrice}}元{% else %} 线上免费 {% endif %};
+                    {% if  activity.price>0  %}  线下 {{ activity.price}}元{% else %} 线下免费 {% endif %}
+                  </p> 
+
+                  <div class="ps-ab ps-bt ps-rtl">
+                      <p class="text-color-gray  text-normal">
+                        {{activity.studentNum}}人已报名
+                        {% if activity.join %}
+                          <a href="{{ path('activity_remove',{id:activity.id}) }}" class="btn btn-warning btn-xs  text-normal" >取消报名</a>
+                        {% else %}    
+
+                          <a  class="btn btn-success btn-xs  text-normal"   href="{{ path('activity_join',{id:activity.id}) }}" >报名参与</a>
+                        {% endif %}
+                      
+                      </p>
+                  </div>      
               </div>
+             
             </li>
             {% endfor %}
         </ul> 
@@ -86,35 +90,32 @@
               <div class="row  pz mz ps-re">
                 
                 <div class="col-md-4 pts pbs pls prs">
-                  <a href="#" class="show-user-card" >
+                  <a href="{{ path('activity_show',{id:activity.id})}}" class="show-user-card" >
                     <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
                 </div>
 
                 <div class="col-md-8 pll prl">
-                  <h4><span >{{ activity.subtitle}}</span></h4>
-                  <h3>{{ activity.title}}</h3>                       
-                  <p>时间： {{activity.startTime}}----{{activity.endTime}}</p>
-                                  
+                  <h5 class="text-color-gray">{{ activity.subtitle}}</h5>
+                  <h4>{{ activity.title}}</h4>                       
+                  <p class="text-color-gray  text-normal" >时间： {{activity.startTime}}</p>
+                  <p class="text-color-gray  text-normal"> 主讲： 
+                        {% for userProfile in activity['userProfiles'] %} 
+                         <span class="prm"> {{userProfile.nickname}}</span>
+                        {% endfor %}
+                  </p>
+                  
+                  <p class="text-color-gray  text-normal" >简介： {{ (activity.about|raw)}}</p>                   
                 </div>
 
                 {% if activity.expired==1 %}
                      
-                      <h3 class="ps-ab ps-tps ps-rtl"> <span class='label label-default'>已结束</span></h3>
+                      <h3 class="ps-ab ps-tps ps-ltl"> <span class='label label-default'>已结束</span></h3>
                       <div class="ps-ab ps-bt ps-rtl">
-                        <p>
-                          {{ activity.studentNum }}人已报名<a class='mar-l btn btn-warning'  href="{{ path('activity_show',{id:activity.id})}}">回看详情</a>
+                        <p class="text-color-gray  text-normal">
+                          {{ activity.studentNum }}人已报名<a class='mar-l btn btn-default btn-xs  text-normal'  href="{{ path('activity_show',{id:activity.id})}}">回看详情</a>
                         </p>
                       </div>
                 {% endif %}
-
-                {% if activity.expired==0 %}
-
-                      <div class="ps-ab ps-bt ps-rtl">
-                        <p>
-                          {{ activity.studentNum }}人已报名<a class='mar-l btn btn-success'  href="{{ path('activity_show',{id:activity.id})}}">查看详情</a>
-                        </p>
-                      </div>
-                {% endif %}      
 
               </div>
             </li>

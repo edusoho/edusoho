@@ -100,7 +100,7 @@ define(function(require, exports, module) {
             hasTriggers: false,
             easing: 'easeOutStrong',
             effect: 'scrollx',
-            step: 4,
+            step: 2,
             viewSize: [280],
             circular: false,
             autoplay: true

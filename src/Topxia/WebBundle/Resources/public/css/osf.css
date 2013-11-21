@@ -22,8 +22,17 @@
 .header-top { margin-top:56px;}
 
 .activity-banner{
-	background-color: #f8f8f8;
+	background-color: #4f4057;
 	width: 100% !important;
+}
+
+.activity-banner-image{
+	background-image: url("../../../assets/img/default/current-activity-bg.jpg");
+	background-repeat: no-repeat;
+}
+
+.activity-banner-content{
+	margin-top: -260px;
 }
 
 .activity-last{
