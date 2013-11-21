@@ -1048,5 +1048,7 @@ photoview_manage_file_delete:
     pattern:  /photoview/{id}/manage/file/delete
     defaults: { _controller: TopxiaWebBundle:PhotoManage:deleteFile }
 
-
+offsale_code_check:
+    pattern: /sale/off/check
+    defaults: {_controller:TopxiaWebBundle:Sale:codeCheck}
 

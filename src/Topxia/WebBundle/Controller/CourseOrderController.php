@@ -34,7 +34,11 @@ class CourseOrderController extends BaseController
 
     public function payAction(Request $request)
     {
+       
+
         $order = $this->getOrderService()->createOrder($request->request->all());
+
+        
 
         if (intval($order['price']*100) > 0) {
             $paymentRequest = $this->createPaymentRequest($order);
@@ -210,6 +214,11 @@ class CourseOrderController extends BaseController
     private function getOrderService()
     {
         return $this->getServiceKernel()->createService('Course.OrderService');
+    }
+
+    private function getOffsaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.OffsaleService');
     }
 
     private function getCourseService()

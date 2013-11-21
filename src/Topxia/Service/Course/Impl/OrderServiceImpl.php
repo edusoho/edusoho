@@ -42,7 +42,9 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('courseId', 'payment', 'price'));
+        $order = ArrayToolkit::parts($order, array('courseId', 'payment', 'price','promoCode'));
+
+       
 
         $course = $this->getCourseService()->getCourse($order['courseId']);
         if (empty($course)) {
@@ -68,6 +70,22 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['userId'] = $orderUser['id'];
         $order['createdTime'] = time();
+
+        if(!empty($order['promoCode']))
+        {
+
+            $offsale = $this->getOffsaleService()->getOffsaleByCode($order['promoCode']);
+
+            $result = $this->getOffsaleService()->isValiable($offsale,$course['id']);
+
+            if("success" == $result){               
+                 $order['price']=  $order['price']-$offsale['reducePrice'];
+            }else{
+                 throw $this->createServiceException('创建订单失败'.$result);
+            }
+           
+
+        }
 
         $order = $this->getOrderDao()->addOrder($order);
 
@@ -455,6 +473,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getOrderRefundDao()
     {
         return $this->createDao('Course.OrderRefundDao');
+    }
+
+    private function getOffsaleService()
+    {
+        return $this->createService('Sale.OffsaleService');
     }
 
     private function getCourseService()
