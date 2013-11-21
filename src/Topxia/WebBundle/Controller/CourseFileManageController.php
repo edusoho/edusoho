@@ -67,7 +67,7 @@ class CourseFileManageController extends BaseController
                 $client = $factory->createClient();
                 $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
             } else {
-                return $this->createPrivateFileDownloadResponse($file);
+                return $this->createPrivateFileDownloadResponse($request, $file);
             }
         }
 
@@ -113,17 +113,18 @@ class CourseFileManageController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function createPrivateFileDownloadResponse($file)
+    private function createPrivateFileDownloadResponse(Request $request, $file)
     {
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
-        $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_INLINE,
-            $file['filename'],
-            iconv('UTF-8', 'ASCII//TRANSLIT', $file['filename'])
-        );
+        $file['filename'] = urlencode($file['filename']);
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
 
         return $response;
     }

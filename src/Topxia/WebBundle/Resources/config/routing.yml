@@ -835,6 +835,10 @@ partner_windid:
     pattern: /partner/windid
     defaults: {_controller: TopxiaWebBundle:Partner:windid }
 
+cloud_set_server:
+    pattern: /cloud/set-server
+    defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
