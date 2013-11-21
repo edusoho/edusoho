@@ -35,6 +35,16 @@
           {% endfor %}
         </div>
       </div>
+     
+      <div class="form-group">
+                <label class="col-lg-3 control-label" for="course_promoCode">优惠码</label>
+                <div class="col-lg-7">
+                  <input id="course_promoCode" class="form-control" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"/>
+                    <p class="help-block" id="promoCode_info">如有，请输入8位优惠码</p>
+                </div>
+      </div>
+
+
 
       {% if payments.alipay.type == 'dualfun' %}
       <div class="row">
@@ -57,6 +67,7 @@
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
+  
 {% endblock %}
 
 {% block footer %}
@@ -65,4 +76,5 @@
   {% else %}
     <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
   {% endif %}
+   <script>app.load('course/offsale')</script>
 {% endblock %}
