@@ -95,7 +95,7 @@ services:
             - [setAttribute, [3, 2]]
 
         arguments:
-            dsn:      "mysql:dbname=%database_name%"
+            dsn:      "mysql:host=%database_host%;dbname=%database_name%"
             user:     %database_user%
             password: %database_password%
 
