@@ -35,7 +35,7 @@
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
-{% include 'TopxiaWebBundle::customer-service-online.html.twig' %}
+{{ render(controller('TopxiaWebBundle:Default:customerService')) }}
 
 {% block body %}
 

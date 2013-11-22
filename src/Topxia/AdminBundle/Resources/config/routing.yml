@@ -400,6 +400,10 @@ admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 
+admin_customer_service:
+    pattern: /customer/service
+    defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
+
 admin_upgrade:
     pattern:  /upgrade
     defaults: { _controller: TopxiaAdminBundle:Upgrade:index }

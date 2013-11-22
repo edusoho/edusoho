@@ -60,6 +60,7 @@ class DefaultController extends BaseController
 		));
     }
 
+
     public function footNavigationAction()
     {
         $navigations = $this->getNavigationService()->findNavigationsByType('foot', 0, 100);
@@ -67,6 +68,21 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:foot-navigation.html.twig', array(
             'navigations' => $navigations,
         ));
+    }
+
+    public function customerServiceAction()
+    {
+        $customerServiceSetting = $this->getSettingService()->get('customerService', array());
+
+        return $this->render('TopxiaWebBundle:Default:customer-service-online.html.twig', array(
+            'customerServiceSetting' => $customerServiceSetting,
+        ));
+
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getNavigationService()

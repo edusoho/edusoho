@@ -280,6 +280,31 @@ class SettingController extends BaseController
         ));
     }
 
+    public function customerServiceAction(Request $request)
+    {
+        $customerServiceSetting = $this->getSettingService()->get('customerService', array());
+
+        $default = array(
+            'customer_service_mode' => 'closed',
+            'customer_of_qq' => '',
+            'customer_of_mail' => '',
+            'customer_of_phone' => ''
+        );
+
+        $customerServiceSetting = array_merge($default, $customerServiceSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $customerServiceSetting = $request->request->all();
+            $this->getSettingService()->set('customerService', $customerServiceSetting);
+            $this->getLogService()->info('system', 'customerServiceSetting', "客服管理设置", $customerServiceSetting);
+            $this->setFlashMessage('success', '客服管理设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
+            'customerServiceSetting'=>$customerServiceSetting
+        ));
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

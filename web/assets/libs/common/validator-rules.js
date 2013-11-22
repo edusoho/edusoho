@@ -16,6 +16,11 @@ define(function(require, exports, module) {
             '{{display}}必须是中文字'
         ],
         [
+            'phone', 
+            /^1\d{10}$/,
+            '请输入合法的{{display}}'
+        ],
+        [
             'chinese_alphanumeric',
             /^([\u4E00-\uFA29]|[a-zA-Z0-9_])*$/i,
             '{{display}}必须是中文字、英文字母、数字及下划线组成'

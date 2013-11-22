@@ -3159,7 +3159,7 @@ body {
 	background:rgba(51, 51, 51, 0.9);
 	position: fixed;
 	top: 130px;
-	right: 1px;
+	right: 0px;
 	z-index: 999;
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#E5333333', endColorstr='#E5333333');
 }
@@ -3187,15 +3187,12 @@ body {
 }
 
 .customer-service-online .float-right {
-	width: 130px;
-	float: left;
-	padding: 5px;
 	overflow:hidden;
 }
 
 .customer-service-online .float-right .service-category {
 	background: #F7F7F7;
-	width:  130px;
+	width:  148px;
 }
 
 .customer-service-online .service-category h3 {
@@ -3211,9 +3208,11 @@ body {
 }
 
 .customer-service-online .service-category ul li {
-	line-height: 38px;
-	height:38px;
 	border-bottom: solid 1px #E6E4E4;
+}
+
+.customer-service-online .service-category ul li a{
+	padding-left:8px; 
 }
 
 .customer-service-online .service-category ul li span {
