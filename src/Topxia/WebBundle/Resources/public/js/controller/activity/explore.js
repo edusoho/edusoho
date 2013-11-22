@@ -1,4 +1,6 @@
 define(function(require, exports, module) {
+
+	require('wookmark');
     
     exports.run = function() {
 
@@ -9,6 +11,15 @@ define(function(require, exports, module) {
             $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
             $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
         });
+
+
+        $("#last-list li").wookmark({ 
+		    container:$("#last-list"), 
+		    offset:0
+		  	  
+		}); 
+
+
 
 
     }

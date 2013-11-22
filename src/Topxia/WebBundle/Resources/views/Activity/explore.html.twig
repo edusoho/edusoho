@@ -94,16 +94,17 @@
 
 <section class="activity-last ">
   <div class="container  pz">
-    <div class="row">
-      <div class="col-md-12 mtl mbm">
+  
+      <div class="col-md-12 phz mtl mbm">
          <div class="kytitle activity-last-title clearfix mbz">
             <h3 >近期公开课</h3>             
          </div>
       </div>
-        <ul class="pz mz clearfix">
+        <ul id="last-list" class="phz mvl clearfix ps-re">
             {% for activity in lastActivitys %}
-            <li class="col-md-4 mbl ">
-              <div class="activity-last-bgcolor-white pvm phm  ps-re">                           
+            <li class="col-md-4 pvs phs mbl display-no">
+              
+              <div class="activity-last-bgcolor-white pvm phm  ps-re">
                   <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >
                     <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
                   <h5>{{ activity.subtitle}}</h5>
@@ -137,7 +138,7 @@
             </li>
             {% endfor %}
         </ul> 
-    </div>
+  
   </div>
 </section>
 
