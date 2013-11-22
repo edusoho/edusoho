@@ -18,10 +18,6 @@
 
         <a href="{{ url('admin_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">系统日志</a>
 
-         {% if 'customerService' not in disabled_features %}
-          <a href="{{ url('admin_customer_service') }}" class="list-group-item {% if menu == 'customer_service' %}active{% endif %}">在线客户服务</a>
-        {% endif %}   
-
       </div>
     {% endblock %}
   </div>
