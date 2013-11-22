@@ -37,21 +37,25 @@
 
 .ps-ptp{top:15% !important;}
 
-.ps-tp{top:10px !important;}
+.ps-tpz{top:0px !important;}
 .ps-tps{top:5px !important;}
+.ps-tp{top:10px !important;}
 .ps-tpl{top:15px !important;}
 
-.ps-rt{right:10px !important;}
+.ps-rtz{right:0px !important;}
 .ps-rts{right:5px !important;}
+.ps-rt{right:10px !important;}
 .ps-rtl{right:15px !important;}
 
-.ps-pld{left:50% !important;}
-.ps-lt{left:10px !important;}
+.ps-ltz{left:0px !important;}
 .ps-lts{left:5px !important;}
+.ps-lt{left:10px !important;}
 .ps-ltl{left:15px !important;}
+.ps-ltpd{left:50% !important;}
 
-.ps-bt{bottom:10px !important;}
+.ps-btz{bottom:05px !important;}
 .ps-bts{bottom:5px !important;}
+.ps-bt{bottom:10px !important;}
 .ps-btl{bottom:15px !important;}
 
 .mz  { margin: 0px !important;}
@@ -71,6 +75,8 @@
 .mbs {margin-bottom: 5px !important;}
 .mbm {margin-bottom: 10px !important;}
 .mbl {margin-bottom: 20px !important;}
+.mbll {margin-bottom: 40px !important;}
+.mblll {margin-bottom: 60px !important;}
 
 .mlz {margin-left: 0px !important;}
 .mls {margin-left: 5px !important;}

@@ -96,7 +96,7 @@ define(function(require, exports, module) {
 
         //图片
         var carousel = new Carousel({
-            element: '#carousel-demo-1',
+            element: '#carousel-openclass-gallery-1',
             hasTriggers: false,
             easing: 'easeOutStrong',
             effect: 'scrollx',

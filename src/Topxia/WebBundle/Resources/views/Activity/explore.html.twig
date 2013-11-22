@@ -8,22 +8,89 @@
 
 {% block content %} 
 
-<section class="activity-banner ">
+<section class="activity-banner  ">
   <div class="container pz">
-    <img class="img-responsive" src="{{ asset('assets/img/default/current-activity-bg.jpg')}}"  >
-    
-    <div class="row ">
-      <div class="col-md-12 activity-banner-content"> 
-       <ul >
-          {% for activity in recommendedActivitys %}
+    <div class="row mlz mrz  activity-banner-image ps-re">           
+      {% for activity in recommendedActivitys %}
+       <div class="teacher-left-offset pull-left"></div>
+
+       <div class="teacher-box activity-banner-teacher pull-left mtm ps-re" >
+
+          <div class="ps-ab ps-tpl ps-ltl">
+            <span class='text-large text-weight teacher-color'>本期主讲</span>
+          </div>
         
-          {% endfor %}
-       </ul>
-      </div>  
-      
+          <div class="phm pvm ">
+          
+            {% if activity['userProfiles'] %}
+                <div class="teacher-carousel {% if activity['userProfiles']|length == 1 %}teacher-carousel-onlyone{% endif %}">
+                  <div class="carousel slide" id="teacher-carousel">
+                    <div class="carousel-inner ">
+                      {% for user in activity['userProfiles'] %}
+                        <div class="item {% if loop.first %}active{% endif %}" data-id="{{ user.id }}">
+                          <a class="" href="{{ path('user_show', {id:user.id}) }}"><img src="{{ file_path(user.mediumAvatar, 'avatar.png') }}" class="user-logo-avatar center-block"></a>
+                        </div>
+                      {% endfor %}
+                    </div>
+                    <a class="left carousel-control" href="#teacher-carousel" data-slide="prev">
+                      <span class="icon-prev"></span>
+                    </a>
+                    <a class="right carousel-control" href="#teacher-carousel" data-slide="next">
+                      <span class="icon-next"></span>
+                    </a>
+                  </div>
+                  <div class="teacher-detail" id="teacher-detail">
+                    {% for user in activity['userProfiles'] %}
+                       
+                      <div class="teacher-item teacher-item-{{ user.id }} {% if loop.first %}teacher-item-active{% endif %}">
+                        <div class="text-color-white nickname"><a class="text-color-white nickname" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></div>
+                        <div class="text-color-white title">{{ user.title }}</div>
+
+                      </div>          
+                    {% endfor %}
+                  </div>
+                </div>
+              {% else %}
+                <div class="empty">该课程尚未设置教师</div>
+            {% endif %}
+
+          </div>
+         
+
+      </div>
+
+      <div class="pull-left phl pts ">
+       
+        <h3 class=" text-weight text-color-white mbl pbl">本期公开课</h3>
+        <h5 class=" text-weight teacher-color">{{ activity.subtitle}}</h5>
+         
+        <h4 class=" text-weight text-color-white"> <a href="{{ path('activity_show',{id:activity.id})}}"  class="text-color-white" >{{ activity.title}}</a> </h4> 
+
+          
+        <p class="text-color-white  text-large"> {{activity.address}} </p>
+        <p class="teacher-color  text-large">时间： {{activity.startTime}} </p>
+        
+      </div>
+
+        <div class="ps-ab ps-bt ps-rtl">
+                      <p class="text-color-white  text-large">
+                        {{activity.studentNum}}人已报名，还不快来参与！
+                        {% if activity.join %}
+                          <a  class="btn btn-warning btn-lg text-weight "   href="{{ path('activity_remove',{id:activity.id}) }}"  >取消报名</a>
+                        {% else %}    
+
+                          <a  class="btn btn-success btn-lg text-weight "   href="{{ path('activity_join',{id:activity.id}) }}" >立即报名</a>
+                        {% endif %}
+                      
+                      </p>
+         </div>      
+
+      {% endfor %}
     </div>
   </div>
 </section>
+
+
 
 <section class="activity-last ">
   <div class="container  pz">
@@ -40,10 +107,8 @@
                   <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >
                     <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
                   <h5>{{ activity.subtitle}}</h5>
-                  <h4>{{ activity.title}}</h4>                       
-                  <p class="text-color-gray  text-normal">时间： {{activity.startTime}} 
-
-                    </p>
+                  <h4> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >{{ activity.title}}</a></h4>                       
+                  <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
                   <p class="text-color-gray  text-normal"> {{activity.address}} </p>
                   <p class="text-color-gray  text-normal"> 主讲： 
                         {% for userProfile in activity['userProfiles'] %} 
@@ -96,7 +161,7 @@
 
                 <div class="col-md-8 pll prl">
                   <h5 class="text-color-gray">{{ activity.subtitle}}</h5>
-                  <h4>{{ activity.title}}</h4>                       
+                  <h4> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >{{ activity.title}}</a></h4>                       
                   <p class="text-color-gray  text-normal" >时间： {{activity.startTime}}</p>
                   <p class="text-color-gray  text-normal"> 主讲： 
                         {% for userProfile in activity['userProfiles'] %} 
@@ -104,7 +169,7 @@
                         {% endfor %}
                   </p>
                   
-                  <p class="text-color-gray  text-normal" >简介： {{ (activity.about|raw)}}</p>                   
+                  <p class="text-color-gray  text-normal" >简介： </p>                   
                 </div>
 
                 {% if activity.expired==1 %}
@@ -112,7 +177,7 @@
                       <h3 class="ps-ab ps-tps ps-ltl"> <span class='label label-default'>已结束</span></h3>
                       <div class="ps-ab ps-bt ps-rtl">
                         <p class="text-color-gray  text-normal">
-                          {{ activity.studentNum }}人已报名<a class='mar-l btn btn-default btn-xs  text-normal'  href="{{ path('activity_show',{id:activity.id})}}">回看详情</a>
+                          {{ activity.studentNum }}人已报名<a class='mar-l btn btn-info btn-xs  text-normal'  href="{{ path('activity_show',{id:activity.id})}}">回看详情</a>
                         </p>
                       </div>
                 {% endif %}

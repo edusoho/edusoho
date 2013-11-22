@@ -1,22 +1,15 @@
 define(function(require, exports, module) {
-
-    var $=require('jquery');
-    require('jquery.slides');
-    require('jquery.slides-css');
     
     exports.run = function() {
 
-        $(function(){
-            $('#slides').slides({
-                preload: true,
-                preloadImage: '../../bundles/topxiaweb/img/loading.gif',
-                play: 5000,
-                pause: 2500,
-                hoverPause: true,
-                fadeSpeed: 350,
-                effect: 'fade'
-            });
+       $('#teacher-carousel').carousel({interval: 0});
+        $('#teacher-carousel').on('slide.bs.carousel', function (e) {
+            var teacherId = $(e.relatedTarget).data('id');
+
+            $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
+            $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
         });
+
 
     }
 
