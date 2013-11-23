@@ -1,4 +1,13 @@
-/*s首页*/
+/*全局*/
+body,h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6  {
+  font-family: 'microsoft yahei', '微软雅黑','Microsoft YaHei', Arial, sans-serif,Helvetica;
+}
+
+p{margin: 0.2em 0}
+
+ul li,ol li{list-style-type: none;}
+
+/*首页*/
 .home-page > .container{
 	width: 100% !important;
 	padding: 0px !important;
@@ -108,10 +117,7 @@
 .bor-l-gray{border-left: 5px solid #a7a7a7;}
 .bor-l{border-left: 1px solid #ccc;}
 .bor-r{border-right: 1px solid #f6eded;}
-
-.mar-l{margin-left: 1em}
-.mar-t{margin-top: 1em}
-.mar-b{margin-bottom: 1em}
+.bor-maroon{border: 3px solid #800000 !important;}
 
 
 /*首页快来加入*/

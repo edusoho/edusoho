@@ -23,22 +23,22 @@
           {% if activity.onlineAddress %}<p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>{% endif %}
                    
           <p>
-            {% if  activity.onlinePrice>0 %} 线上：{{ activity.onlinePrice}}元{% else %} 线上：免费 {% endif %}
+            {% if  activity.onlinePrice>0 %} 线上：<span class='text-danger'>{{ activity.onlinePrice}}元</span>{% else %} 线上：<span class='text-danger'>免费 </span>{% endif %}
           </p>
           <p>
-            {% if  activity.price>0  %}  线下： {{ activity.price}}元{% else %} 线下：免费 {% endif %}
+            {% if  activity.price>0  %}  线下：<span class='text-danger'> {{ activity.price}}元</span>{% else %} 线下：<span class='text-danger'>免费</span> {% endif %}
           </p> 
     </div> 
     <div class="ps-ab ps-bt ps-rtl">
             <p>
               {{activity.studentNum}}人已报名
               {% if activity.join %}
-                <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mar-l btn btn-warning" >取消报名</a>
+                <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mlm btn btn-warning" >取消报名</a>
               {% else %}    
 
-                <a  class="mar-l btn btn-success  green"   href="{{ path('activity_join',{id:activity.id}) }}" >活动报名</a>
+                <a  class="mlm btn btn-success  green"   href="{{ path('activity_join',{id:activity.id}) }}" >活动报名</a>
               {% endif %}
-              <a href="javascript:void(0)" id="media-qustion" class="mar-l btn btn-success  green">课前提问</a>
+              <a href="javascript:void(0)" id="media-qustion" class="mlm btn btn-success  green">课前提问</a>
             </p>
     </div>      
  
@@ -87,7 +87,7 @@
         </div>
         <div class="content comment">
           <div class="padding">
-            <div class="clearfix mar-b">
+            <div class="clearfix mbm">
               <div class="imageblock-image">
                 <a href="javascript:" class="show-user-card user-avatar-link pull-left" >
                   {% if current_user['id']==0 %}
@@ -114,7 +114,7 @@
               </div>                  
             </div>
           </div>
-          <ul class="mar-b" id="qustion-media-list">
+          <ul class="mbm" id="qustion-media-list">
             {% for qustion in qustions %}
                 <li class="media">
                   <a class="pull-left user-link user-avatar-link" href="javascript:">
