@@ -30,6 +30,21 @@ class RegisterController extends BaseController
                     }
                 }
 
+
+                if ($userPartner == 'discuz') {
+                    define('WEKIT_TIMESTAMP', time());
+                    require_once __DIR__ .'/../../../../web/uc_client/uc_client/client.php';
+
+                    $ucId = uc_user_register($registration['nickname'], $registration['password'], $registration['email']);
+                    if ($ucId < 1) {
+                        return $this->createMessageResponse('error', 'DISCUZ注册失败！');
+                    }
+                }
+
+
+
+
+
                 $user = $this->getUserService()->register($registration);
                 $this->authenticateUser($user);
 
@@ -39,10 +54,20 @@ class RegisterController extends BaseController
                     'id' => $user['id'], 'hash' => $this->makeHash($user)
                 ));
 
-                
+
                 if ($userPartner == 'phpwind') {
                     return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
                 }
+
+
+
+                if ($userPartner == 'discuz') {
+                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+                }
+
+
+
+
 
                 return $this->redirect($goto);
             }
@@ -154,15 +179,15 @@ class RegisterController extends BaseController
     public function getEmailLoginUrl ($email)
     {
         $host = substr($email, strpos($email, '@') + 1);
-        
+
         if ($host == 'hotmail.com') {
             return 'http://www.' . $host;
         }
-        
+
         if ($host == 'gmail.com') {
             return 'http://mail.google.com';
         }
-        
+
         return 'http://mail.' . $host;
     }
 
@@ -195,7 +220,7 @@ class RegisterController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
-        $emailTitle = $this->setting('auth.email_activation_title', 
+        $emailTitle = $this->setting('auth.email_activation_title',
             '请激活你的帐号 完成注册');
         $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
 
@@ -204,7 +229,7 @@ class RegisterController extends BaseController
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
         $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-        $this->sendEmail($user['email'], $emailTitle, $emailBody);    
+        $this->sendEmail($user['email'], $emailTitle, $emailBody);
     }
 
     private function isLoginEnabled()
@@ -214,10 +239,10 @@ class RegisterController extends BaseController
            if($auth['register_mode'] == 'opened'){
                return true;
            }else{
-               return false;  
+               return false;
            }
-        } 
-        return true;      
-    }    
+        }
+        return true;
+    }
 
 }
