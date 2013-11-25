@@ -1,5 +1,5 @@
  
-  {% if customerServiceSetting.customer_service_mode == 'opened' %}
+  {% if customerServiceSetting.customer_service_mode|default(null) == 'opened' %}
     <div class="customer-service-online">
 
       <div class="float-left"> 

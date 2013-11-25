@@ -146,7 +146,7 @@
                 {% for teacher in teachers %}
                   <li class="autumn-grid">
                     <div class="media teacher-media">
-                      <a href="" class="pull-left"><img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}"></a>
+                      <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left"><img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}"></a>
                       <div class="media-body">
                         <h4 class="media-heading">{{ web_macro.user_link(teacher) }}</h4>
                         <div class="teacher-title">{{ teacher.title }}</div>
