@@ -847,7 +847,6 @@ activity_home:
     pattern:  /openclass/explore/
     defaults: { _controller: TopxiaWebBundle:Activity:explore }
 
-
 activity_create:
     pattern:  /openclass/create
     defaults: { _controller: TopxiaWebBundle:Activity:create }
@@ -859,6 +858,10 @@ activity_join:
 activity_join_success:
     pattern: /openclass/{id}/join/success
     defaults: { _controller: TopxiaWebBundle:Activity:success }
+
+activity_email_check:
+    pattern:  /openclass/join/email/check
+    defaults: { _controller: TopxiaWebBundle:Activity:emailCheck }
 
 activity_remove:
     pattern: /openclass/{id}/remove
@@ -872,7 +875,6 @@ activity_expired:
     pattern:  /openclass/{id}/expired
     defaults: { _controller: TopxiaWebBundle:Activity:expired }
 
-
 activity_qustioncreate:
     pattern: /openclass/{id}/question/create
     defaults: { _controller:TopxiaWebBundle:Activity:qustioncreate }
@@ -881,7 +883,6 @@ activity_qustionpost:
     pattern: /openclass/{id}/question/{qid}/postcreate
     defaults: { _controller: TopxiaWebBundle:Activity:postcreate }
 
-
 activity_manage:
     pattern:  /openclass/{id}/manage
     defaults: { _controller: TopxiaWebBundle:ActivityManage:index }
@@ -889,6 +890,14 @@ activity_manage:
 activity_manage_base:
     pattern:  /openclass/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:ActivityManage:base }
+
+activity_manage_outline:
+    pattern:  /openclass/{id}/manage/outline
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:outline }
+
+activity_manage_summary:
+    pattern:  /openclass/{id}/manage/summary
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:summary }
 
 activity_manage_detail:
     pattern:  /openclass/{id}/manage/detail
@@ -930,11 +939,13 @@ activity_manage_teachers:
     pattern:  /openclass/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ActivityManage:teachers }
 
+activity_manage_members:
+    pattern:  /openclass/{id}/manage/members
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:members }
+
 activity_manage_teachers_match:
     pattern: /openclass/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:ActivityManage:teachersMatch }
-
-
 
 activity_manage_quiz:
     pattern: /openclass/{courseId}/manage/lesson/{lessonId}/quiz
@@ -960,7 +971,6 @@ activity_manage_chapter_edit:
 activity_manage_chapter_delete:
     pattern:  /openclass/{courseId}/manage/chapter/{chapterId}/delete
     defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:delete }
-
 
 activity_manage_media_library:
     pattern:  /openclass/{id}/manage/media/library

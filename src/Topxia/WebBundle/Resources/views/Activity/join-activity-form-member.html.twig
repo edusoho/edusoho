@@ -19,12 +19,14 @@
 		            <h5>{{ activity.subtitle }}</h5>
 		            <h4>{{ activity.title }}</h4>
 		          
-		          <p>
-					{% if  activity.onlinePrice>0  %} 线上：{{ activity.onlinePrice}}元{% else %} 线上：免费 {% endif %}
-				  </p>
-				  <p>
-		            {% if  activity.price>0  %}  线下： {{ activity.price}}元{% else %} 线下：免费 {% endif %}
+		           <p>
+		            {% if  activity.onlinePrice>0 %} 线上：<span class='text-danger'>{{ activity.onlinePrice}}元</span>{% else %} 线上：<span class='text-danger'>免费 </span>{% endif %}
 		          </p>
+		          <p>
+		            {% if  activity.price>0  %}  线下：<span class='text-danger'> {{ activity.price}}元</span>{% else %} 线下：<span class='text-danger'>免费</span> {% endif %}
+		          </p> 
+
+		          
 			</div>
 			<div class="col-lg-2  phs pvs">
 				<a href="#" class="show-user-card" >
@@ -47,7 +49,7 @@
         				<div class="col-md-2 col-md-offset-4">
               				<label class="input-group ">
 						      
-						        <input type="radio" id="activity_joinMode"  name="activitymember[joinMode]"  value="线上" class="mrm" required />线上
+						        <input type="radio" id="activity_joinMode"  name="activitymember[joinMode]"  value="线上" class="mrm" checked required />线上
 						      
 						    
 						    </label><!-- /input-group -->

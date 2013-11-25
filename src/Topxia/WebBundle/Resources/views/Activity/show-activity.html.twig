@@ -33,8 +33,7 @@
             <p>
               {{activity.studentNum}}人已报名
               {% if activity.join %}
-                <a href="{{ path('activity_remove',{id:activity.id}) }}" class="mlm btn btn-warning" >取消报名</a>
-              {% else %}    
+              <span class="glyphicon glyphicon-ok-circle label label-default text-size-18 pvm"> 您已报名 </span>            {% else %}    
 
                 <a  class="mlm btn btn-success  green"   href="{{ path('activity_join',{id:activity.id}) }}" >活动报名</a>
               {% endif %}
@@ -50,12 +49,12 @@
     <!-- 课程大纲 -->
     <div class="widget k_postlist shadow">
       <div class="kytitle clearfix bor-l-green">
-        <h3>课程信息</h3>
+        <h3>课程内容</h3>
       </div>
-      <div class="content">
-        <div class="padding">
+      <div class="phl pbl">
+       
           {{ activity.about|raw}}
-        </div>
+        
       </div>
     </div>
   </div>

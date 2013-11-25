@@ -30,15 +30,16 @@ define(function(require, exports, module) {
             rule: 'remote email',
             onItemValidated: function(err, msg, ele) {
                
-                if(msg=="该Email地址已经被占用了"){
+                // if(msg=="该Email地址已经被占用了"){
                     
-                    $("#email_info").html("该Email地址已经存在 <a href='javascript:void(0)' id='photo_login'>请点击登陆</a>");
-                    buidlerLogin();
-                    return;
-                }else{
+                //     $("#email_info").html("该Email地址已经存在 <a href='javascript:void(0)' id='photo_login'>请点击登陆</a>");
+                //     buidlerLogin();
+                //     return;
+                // }else{
                    
-                     $("#email_info").html(msg);
-                }
+                //      $("#email_info").html(msg);
+                // }
+                
             }
             
            
@@ -61,6 +62,12 @@ define(function(require, exports, module) {
             element: '[name="activitymember[truename]"]',
             required: true,
             rule: 'truename byte_minlength{min:2} byte_maxlength{max:12}'
+        });
+
+        validator.addItem({
+            element: '[name="activitymember[joinMode]"]',
+            required: true
+           
         });
 
       

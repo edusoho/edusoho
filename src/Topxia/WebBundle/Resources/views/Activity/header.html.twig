@@ -4,8 +4,8 @@
   <div class="col-lg-12">
     <div class="panel panel-default clearfix course-header">
       <div class="panel-body">
-        <a href="{{ path('activity_show', {id:activity.id}) }}"><img class="picture" src="{{ file_path(activity.largePicture, 'course-default-475x250.png') }}" /></a>
-        <h1 class="title"><a href="{{ path('activity_show', {id:activity.id}) }}">{{ activity.title }}</a></h1>
+        <a href="{{ path('activity_show', {id:activity.id}) }}" target="_blank"><img class="picture" src="{{ file_path(activity.largePicture, 'course-default-475x250.png') }}" /></a>
+        <h1 class="title"><a href="{{ path('activity_show', {id:activity.id}) }}" target="_blank">{{ activity.title }}</a></h1>
         <div class="teachers">
           {% if activity.teacherIds|default(null) %}
             教师：
@@ -33,11 +33,6 @@
           </div>
           {% else %}
 
-            {% if activity.status == 'published' %}
-              <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('activity_show', {id:activity.id}) }}">返回活动主页</a>
-              </div>
-            {% endif %}
 
             <div class="btn-group">
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <span class="caret"></span></button>

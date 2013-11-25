@@ -16,19 +16,22 @@
             <div class="list-group-heading">活动信息</div>
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('activity_manage_base', {id:activity.id}) }}">基本信息</a>
+              <a class="list-group-item {% if side_nav == 'outline' %}active{% endif %}" href="{{ path('activity_manage_outline', {id:activity.id}) }}">简要信息</a>
               <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('activity_manage_detail', {id:activity.id}) }}">详细信息</a>
               <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('activity_manage_picture', {id:activity.id}) }}">活动海报</a>
-              <a class="list-group-item {% if side_nav == 'activity' %}active{% endif %}" href="{{ path('activity_manage_course', {id:activity.id}) }}">活动课程</a>
+              <a class="list-group-item {% if side_nav == 'course' %}active{% endif %}" href="{{ path('activity_manage_course', {id:activity.id}) }}">活动视频</a>
               <a class="list-group-item {% if side_nav == 'pictures' %}active{% endif %}" href="{{ path('activity_manage_pictures', {id:activity.id}) }}">活动相册</a>
               <a class="list-group-item {% if side_nav == 'attachment' %}active{% endif %}" href="{{ path('activity_materials', {id:activity.id}) }}">活动附件</a>
+              <a class="list-group-item {% if side_nav == 'summary' %}active{% endif %}" href="{{ path('activity_manage_summary', {id:activity.id}) }}">活动总结</a>
             </div>
           </div><!-- /list-group-block -->
 
           <div class="list-group-panel">
-            <div class="list-group-heading">活动设置</div>
+            <div class="list-group-heading">活动管理</div>
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'price' %}active{% endif %}" href="{{ path('activity_manage_price', {id:activity.id}) }}">价格设置</a>
               <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('activity_manage_teachers', {id:activity.id}) }}">活动讲师</a>
+              <a class="list-group-item {% if side_nav == 'members' %}active{% endif %}" href="{{ path('activity_manage_members', {id:activity.id}) }}">报名人员</a>
             </div>
           </div><!-- /list-group-block -->
         </div>

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{{ render(controller('TopxiaWebBundle:PhotoManage:header', {course:course, manage: true})) }}
+{{ render(controller('TopxiaWebBundle:PhotoManage:header', {photo:photo, manage: true})) }}
 
 <div class="row">
   <div class="col-lg-3">
@@ -15,8 +15,8 @@
           <div class="list-group-panel">
             <div class="list-group-heading">相册信息</div>
             <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('photoview_manage_base', {id:course.id}) }}">基本信息</a>
-              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('photoview_manage_picture', {id:course.id}) }}">相册图片</a>
+              <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('photoview_manage_base', {id:photo.id}) }}">基本信息</a>
+              <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('photoview_manage_picture', {id:photo.id}) }}">相册图片</a>
             </div>
           </div><!-- /list-group-block -->
 

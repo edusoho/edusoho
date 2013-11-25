@@ -1,14 +1,14 @@
 {% extends 'TopxiaWebBundle:ActivityManage:layout.html.twig' %}
 
-{% block title %}详细描述 - {{ parent() }}{% endblock %}
+{% block title %}活动总结 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'detail' %}
+{% set side_nav = 'summary' %}
 {% set script_controller = 'activity-manage/detail' %}
 
 {% block main %}
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">详细描述</div>
+  <div class="panel-heading">活动总结</div>
 
   <div class="panel-body">
     <form id="course-base-form" class="form-horizontal" method="post">
@@ -17,7 +17,7 @@
       <div class="form-group">
        
         <div class="col-lg-12 controls">
-          <textarea name="about" rows="15" id="course-about-field" class="form-control">{{ field_value(activity, 'about') }}</textarea>
+          <textarea name="summary" rows="15" id="course-about-field" class="form-control">{{ field_value(activity, 'summary') }}</textarea>
         </div>
       </div>
 

@@ -553,6 +553,18 @@ class ActivityController extends BaseController
         
     }
 
+    public function emailCheckAction(Request $request)
+    {
+        $email = $request->query->get('value');
+        $result = $this->getUserService()->isEmailAvaliable($email);
+        if ($result) {
+            $response = array('success' => true, 'message' => '该Email地址可以使用');
+        } else {
+            $response = array('success' => false, 'message' => '该Email地址已注册，如果您是该用户，请登陆！');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     private function sendWeibo($castweibo,$fields){
         if($castweibo){
             $currentuser=$this->getCurrentUser();

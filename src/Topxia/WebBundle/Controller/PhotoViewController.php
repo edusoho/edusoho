@@ -35,7 +35,7 @@ class PhotoViewController extends BaseController
 
         $tags = $this->getTagService()->findAllTags(0, 100);
 
-		return $this->render('TopxiaWebBundle:PhotoView:base.html.twig',array(
+		return $this->render('TopxiaWebBundle:PhotoView:index.html.twig',array(
             'photos'=>$castphotos,
             'tags'=>$tags,
             'photofile'=>$photofile,

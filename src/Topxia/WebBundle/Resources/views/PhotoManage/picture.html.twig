@@ -12,7 +12,7 @@
   </div>
 
   <div class="panel-body">
-    <form id="course-picture-form" method="post" action="{{ path('photoview_manage_picture', {id:course.id}) }}" enctype="multipart/form-data">
+    <form id="course-picture-form" method="post" action="{{ path('photoview_manage_picture', {id:photo.id}) }}" enctype="multipart/form-data">
       {{ web_macro.flash_messages() }}
 
       <div class="form-group clearfix">
@@ -46,17 +46,17 @@
 
   <div class="panel-body">
       <ul class="photo-manage-list">
-        {% for course in courses %}
+        {% for photo in photos %}
           <li>
-          <img  src="{{ file_path(course.url,'avatar.png') }}" class="photo-manage-img"/>
+          <img  src="{{ file_path(photo.url,'avatar.png') }}" class="photo-manage-img"/>
           <div class="photo-manage-tools btn-toolbar">
             <a class="btn-group photo-manage-item-del" href="javascript:"
-              data-url="{{ path('photoview_manage_file_delete', {id:course.id}) }}"
+              data-url="{{ path('photoview_manage_file_delete', {id:photo.id}) }}"
             >
               <span class="glyphicon glyphicon-trash"></span>
             </a>
             <a class="btn-group photo-manage-item-set" href="#modal"
-              data-toggle="modal" data-target="#modal" data-url="{{ path('photoview_manage_picture_info',{id:course.id}) }}"
+              data-toggle="modal" data-target="#modal" data-url="{{ path('photoview_manage_picture_info',{id:photo.id}) }}"
             >
               <span class="glyphicon glyphicon-cog"></span>
             </a>

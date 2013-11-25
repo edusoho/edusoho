@@ -64,7 +64,7 @@
 .ps-ltl{left:15px !important;}
 .ps-ltpd{left:50% !important;}
 
-.ps-btz{bottom:05px !important;}
+.ps-btz{bottom:0px !important;}
 .ps-bts{bottom:5px !important;}
 .ps-bt{bottom:10px !important;}
 .ps-btl{bottom:15px !important;}
@@ -206,6 +206,15 @@
 .text-size-18 {
 	font-size: 18px !important;
 }
+
+.text-size-22 {
+	font-size: 22px !important;
+}
+
+.text-size-24 {
+	font-size: 24px !important;
+}
+
 
 .text-color-333{
 	color: #333 !important;

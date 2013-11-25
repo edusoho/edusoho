@@ -28,14 +28,14 @@ class PhotoManageController extends BaseController
         if($request->getMethod() == 'POST'){
             $form->bind($request);
             if($form->isValid()){
-                $courseBaseInfo = $form->getData();
-                $this->getPhotoService()->updatePhoto($id, $courseBaseInfo);
+                $photoBaseInfo = $form->getData();
+                $this->getPhotoService()->updatePhoto($id, $photoBaseInfo);
                 $this->setFlashMessage('success', '专辑基本信息已保存！');
                 return $this->redirect($this->generateUrl('photoview_manage_base',array('id' => $id))); 
             }
         }
         return $this->render('TopxiaWebBundle:PhotoManage:base.html.twig', array(
-            'course' => $photo,
+            'photo' => $photo,
             'form' => $form->createView(),
         ));
     }
@@ -66,36 +66,16 @@ class PhotoManageController extends BaseController
         return $builder->getForm();
     }
 
-
-    public function detailAction(Request $request, $id)
-    {
-        
-        $course = $this->getActivityService()->getActivity($id);
-
-        if($request->getMethod() == 'POST'){
-            $detail = $request->request->all();
-            $detail['goals'] = (empty($detail['goals']) or !is_array($detail['goals'])) ? array() : $detail['goals'];
-            $detail['audiences'] = (empty($detail['audiences']) or !is_array($detail['audiences'])) ? array() : $detail['audiences'];
-
-            $this->getActivityService()->updateActivity($id, $detail);
-            $this->setFlashMessage('success', '课程详细信息已保存！');
-
-            return $this->redirect($this->generateUrl('activity_manage_detail',array('id' => $id))); 
-        }
-
-        return $this->render('TopxiaWebBundle:ActivityManage:detail.html.twig', array(
-            'course' => $course
-        ));
-    }
+   
 
     public function pictureAction(Request $request, $id)
     {
-        //$course = $this->getCourseService()->tryManageCourse($id);
-        $course = $this->getPhotoService()->getPhoto($id);
+     
+        $photo = $this->getPhotoService()->getPhoto($id);
         if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
 
-            $filenamePrefix = "activity_{$course['id']}_";
+            $filenamePrefix = "photo_{$photo['id']}_";
             $hash = substr(md5($filenamePrefix . time()), -8);
             $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();
 
@@ -103,29 +83,29 @@ class PhotoManageController extends BaseController
 
             $file = $file->move($directory, $filename);
             return $this->redirect($this->generateUrl('photoview_manage_picture_crop', array(
-                'id' => $course['id'],
+                'id' => $photo['id'],
                 'file' => $file->getFilename())
             ));
         }
 
         $conditions = $request->query->all();
-        $conditions['groupId']=$course['id'];
+        $conditions['groupId']=$photo['id'];
         $count = $this->getPhotoService()->searchFileCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $courses = $this->getPhotoService()->searchFiles($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $photos = $this->getPhotoService()->searchFiles($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
         return $this->render('TopxiaWebBundle:PhotoManage:picture.html.twig', array(
-            'course' => $course,
-            'courses' =>$courses
+            'photo' => $photo,
+            'photos' =>$photos
         ));
     }
 
     public function pictureCropAction(Request $request, $id)
     {
         //$course = $this->getCourseService()->tryManageCourse($id);
-        $course = $this->getPhotoService()->getPhoto($id);
+        $photo = $this->getPhotoService()->getPhoto($id);
         $filegroup=$this->getFileService()->getFileGroupByCode('photo');
 
         //@todo 文件名的过滤
@@ -137,10 +117,10 @@ class PhotoManageController extends BaseController
         if($request->getMethod() == 'POST') {
             $c = $request->request->all();
             $c['groupId']=$filegroup['id'];
-            $c['url']=$this->saveFile($course['id'],$pictureFilePath,$c);
-            $c['groupId']=$course['id'];
+            $c['url']=$this->saveFile($photo['id'],$pictureFilePath,$c);
+            $c['groupId']=$photo['id'];
             $this->getPhotoService()->createPhotoFile($c);
-            return $this->redirect($this->generateUrl('photoview_manage_picture', array('id' => $course['id'])));
+            return $this->redirect($this->generateUrl('photoview_manage_picture', array('id' => $photo['id'])));
         }
 
         $imagine = new Imagine();
@@ -151,7 +131,7 @@ class PhotoManageController extends BaseController
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
 
         return $this->render('TopxiaWebBundle:PhotoManage:picture-crop.html.twig', array(
-            'course' => $course,
+            'photo' => $photo,
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
@@ -210,11 +190,11 @@ class PhotoManageController extends BaseController
     }
 
 
-    public function headerAction($course, $manage = false)
+    public function headerAction($photo, $manage = false)
     {
 
         return $this->render('TopxiaWebBundle:PhotoView:header.html.twig', array(
-            'course' => $course,
+            'photo' => $photo,
             'manage' => $manage,
         ));
     }

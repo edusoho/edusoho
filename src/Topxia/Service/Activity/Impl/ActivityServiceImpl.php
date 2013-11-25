@@ -223,7 +223,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 	{
 
 		$fields = ArrayToolkit::parts($fields, array(
-			'id', 'title', 'subtitle','actType','status','price','priceMode','onlinePrice','onlinePriceMode','needApproval','payment','income','rating','ratingNum', 'categoryId','tags', 'about', 'startTime', 'endTime','duration', 'city', 'address','strstartTime','strendTime','form','onlineAddress'
+			'id', 'title', 'subtitle','actType','status','price','priceMode','onlinePrice','onlinePriceMode','needApproval','payment','income','rating','ratingNum', 'categoryId','tags', 'goals','audiences','outline','about','summary', 'startTime', 'endTime','duration', 'city', 'address','strstartTime','strendTime','form','onlineAddress'
 		));
 
 

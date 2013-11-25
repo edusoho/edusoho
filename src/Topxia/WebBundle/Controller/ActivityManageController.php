@@ -42,6 +42,26 @@ class ActivityManageController extends BaseController
         ));
     }
 
+
+    public function outlineAction(Request $request, $id)
+    {
+        
+        $activity = $this->getActivityService()->getActivity($id);
+
+        if($request->getMethod() == 'POST'){
+            $outline = $request->request->all();
+           
+            $this->getActivityService()->updateActivity($id, $outline);
+            $this->setFlashMessage('success', '课程简要信息已保存！');
+
+            return $this->redirect($this->generateUrl('activity_manage_outline',array('id' => $id))); 
+        }
+
+        return $this->render('TopxiaWebBundle:ActivityManage:outline.html.twig', array(
+            'activity' => $activity
+        ));
+    }
+
     public function detailAction(Request $request, $id)
     {
         
@@ -49,8 +69,7 @@ class ActivityManageController extends BaseController
 
         if($request->getMethod() == 'POST'){
             $detail = $request->request->all();
-            $detail['goals'] = (empty($detail['goals']) or !is_array($detail['goals'])) ? array() : $detail['goals'];
-            $detail['audiences'] = (empty($detail['audiences']) or !is_array($detail['audiences'])) ? array() : $detail['audiences'];
+           
 
             $this->getActivityService()->updateActivity($id, $detail);
             $this->setFlashMessage('success', '课程详细信息已保存！');
@@ -59,6 +78,27 @@ class ActivityManageController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:ActivityManage:detail.html.twig', array(
+            'activity' => $activity
+        ));
+    }
+
+
+    public function summaryAction(Request $request, $id)
+    {
+        
+        $activity = $this->getActivityService()->getActivity($id);
+
+        if($request->getMethod() == 'POST'){
+            $detail = $request->request->all();
+           
+
+            $this->getActivityService()->updateActivity($id, $detail);
+            $this->setFlashMessage('success', '课程详细信息已保存！');
+
+            return $this->redirect($this->generateUrl('activity_manage_summary',array('id' => $id))); 
+        }
+
+        return $this->render('TopxiaWebBundle:ActivityManage:summary.html.twig', array(
             'activity' => $activity
         ));
     }
@@ -197,6 +237,40 @@ class ActivityManageController extends BaseController
             'teachers' => $teachers
         ));
     }
+
+    public function membersAction(Request $request, $id)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+
+        $paginator = new Paginator(
+            $request,
+            $activity['studentNum'],
+            20
+        );
+
+        $students = $this->getActivityService()->findActivityStudents(
+            $activity['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $studentUserIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+
+        
+        return $this->render('TopxiaWebBundle:ActivityMemberManage:index.html.twig', array(
+            'activity' => $activity,
+            'students' => $students,
+            'users'=>$users,
+         
+            'paginator' => $paginator
+            
+        ));
+
+
+    }
+
+
 
     public function publishAction(Request $request, $id)
     {

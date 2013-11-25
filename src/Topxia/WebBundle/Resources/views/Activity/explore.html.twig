@@ -151,9 +151,12 @@
             <li class=" widget shadow pz mbl">
               <div class="row  pz mz ps-re">
                 
-                <div class="col-md-4 pts pbs pls prs">
+                <div class="col-md-4 pts pbs pls prs ps-re">
                   <a href="{{ path('activity_show',{id:activity.id})}}" class="show-user-card" >
-                    <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>
+                    <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
+
+                    <img  class="ps-ab ps-bts ps-rtl img-responsive" src="{{ asset('assets/img/default/play_icon_normal.png') }}" alt="{{ activity.subtitle}}">
+                  </a>
                 </div>
 
                 <div class="col-md-8 pll prl">
@@ -166,11 +169,12 @@
                         {% endfor %}
                   </p>
                   
-                  <p class="text-color-gray  text-normal" >简介： </p>                   
+                  <p class="text-color-gray  text-normal" >现场情况：{{ activity.summary |plain_text(100) }} </p>                   
                 </div>
 
                 {% if activity.expired==1 %}
-                     
+
+                    
                       <h3 class="ps-ab ps-tps ps-ltl"> <span class='label label-default'>已结束</span></h3>
                       <div class="ps-ab ps-bt ps-rtl">
                         <p class="text-color-gray  text-normal">

@@ -17,9 +17,14 @@
 		          
 		            <h5>{{ activity.subtitle }}</h5>
 		            <h4>{{ activity.title }}</h4>
-		          
-		          
-		          <p>费用： {% if  activity.price>0  %} {{ activity.price}}元{% else %} 免费 {% endif %}</p>
+		        
+		           <p>
+		            {% if  activity.onlinePrice>0 %} 线上：<span class='text-danger'>{{ activity.onlinePrice}}元</span>{% else %} 线上：<span class='text-danger'>免费 </span>{% endif %}
+		          </p>
+		          <p>
+		            {% if  activity.price>0  %}  线下：<span class='text-danger'> {{ activity.price}}元</span>{% else %} 线下：<span class='text-danger'>免费</span> {% endif %}
+		          </p> 
+
 			</div>
 			<div class="col-lg-2  phs pvs">
 				<a href="#" class="show-user-card" >
@@ -34,7 +39,7 @@
 		
 		<div class="widget shadow">
 			<div class="kytitle clearfix bor-l-green">
-				<h4>选择参与方式</h4>
+				<label for="activity_joinMode">选择参与方式</label>
 			</div>
 			<div class="content clearfix">
 				<div class="form-group">
@@ -42,7 +47,7 @@
         				<div class="col-md-2 col-md-offset-4">
               				<label class="input-group ">
 						      
-						        <input type="radio" id="activity_joinMode"  name="activitymember[joinMode]"  value="线上" class="mrm" />线上
+						        <input type="radio" id="activity_joinMode"  name="activitymember[joinMode]"  value="线上" class="mrm" checked  required />线上
 						      
 						    
 						    </label><!-- /input-group -->
@@ -50,7 +55,7 @@
        					<div class="col-md-2">
               				<label class="input-group">
 						      
-						       <input type="radio" id="activity_joinMode" name="activitymember[joinMode]"  value="线下"  class="mrm" />线下
+						       <input type="radio" id="activity_joinMode" name="activitymember[joinMode]"  value="线下"  class="mrm"  required />线下
 						     
 						    </label><!-- /input-group -->
        					</div>
@@ -72,7 +77,7 @@
 		            <label class="col-lg-3 control-label" for="activity_email">Email地址</label>
 		            <div class="col-lg-9">
 
-		              <input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('register_email_check') }}" required />
+		              <input id="activity_email" type="text" class="form-control"   name="activitymember[email]" data-url="{{ path('activity_email_check') }}" required />
 		               <p class="help-block" id="email_info">填写你常用的邮箱作为登录帐号</p>
 		            </div>
 		        </div>

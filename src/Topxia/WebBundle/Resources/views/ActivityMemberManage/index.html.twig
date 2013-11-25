@@ -1,0 +1,42 @@
+{% extends 'TopxiaWebBundle:ActivityManage:layout.html.twig' %}
+
+{% block title %}报名管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+{% set script_controller = 'activity-manage/students' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">报名管理
+  
+  </div>
+  
+  <div class="panel-body">  
+    <table class="table table-striped" id="course-student-list">
+      <thead>
+        <tr>
+          <th width="30%">成员</th>
+          <th width="50%">详细信息</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+          {% set user = users[student.userId] %}
+       
+          {% include 'TopxiaWebBundle:ActivityMemberManage:tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="3">无报名记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ web_macro.paginator(paginator) }}
+
+  </div>
+
+</div>
+
+
+{% endblock %}

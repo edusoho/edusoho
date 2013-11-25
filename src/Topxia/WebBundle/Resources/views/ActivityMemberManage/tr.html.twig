@@ -1,0 +1,27 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<tr id="student-{{ user.id }}-tr">
+  <td class="media">
+    {{ web_macro.user_avatar(user, 'pull-left') }}
+    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+   
+    <div class="text-muted text-sm">{{ student.createdTime|date('Y-n-d H:i') }}加入</div>
+  </td>
+
+  <td>
+     <p class="text-warning text-sm"> {{ student.truename  }} {{ student.mobile  }}</p> 
+     <span class="text-muted text-sm"> {{ user.email }} </span> 
+
+     <span class="text-muted text-sm">{{ student.job  }} </span> 
+     <span class="text-muted text-sm">  {{ student.company  }}</span>
+  </td>
+
+  <td>
+
+    {% if app.user.id != user.id %}
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+        
+      
+    {% endif %}
+    
+  </td>
+</tr>

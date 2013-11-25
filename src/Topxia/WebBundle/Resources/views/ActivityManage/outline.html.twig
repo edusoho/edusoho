@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle:ActivityManage:layout.html.twig' %}
+
+{% block title %}简要信息 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'outline' %}
+{% set script_controller = '' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">简要信息</div>
+  
+  <div class="panel-body">
+    <form id="course-base-form" class="form-horizontal" method="post">
+      {{ web_macro.flash_messages() }}
+      
+      <div class="form-group">
+       <div class="col-md-2 control-label"><label>活动概要</label></div>
+        <div class="col-lg-8 controls">
+          <textarea name="outline" rows="10" id="course-about-field" class="form-control">{{ field_value(activity, 'outline') }}</textarea>
+        </div>
+      </div>
+
+      <div class="form-group dynamic-collection" id="course-goals-form-group">
+        <div class="col-md-2 control-label"><label>活动目标</label></div>
+        <div class="col-md-8 controls">
+          <textarea name="goals" rows="3" id="course-goals-field" class="form-control">{{ field_value(activity, 'goals') }}</textarea>
+        </div>
+      </div>
+
+      <div class="form-group" id="course-audiences-form-group">
+        <div class="col-md-2 control-label"><label>适应人群</label></div>
+        <div class="col-md-8 controls">
+
+        <textarea name="audiences" rows="3" id="course-goals-field" class="form-control">{{ field_value(activity, 'audiences') }}</textarea>
+
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2 controls">
+            <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
+        </div>
+      </div>
+       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
