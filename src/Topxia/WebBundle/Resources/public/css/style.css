@@ -16,6 +16,14 @@ ul li,ol li{list-style-type: none;}
 .slide-osf{margin-top: 54px;}
 
 
+.index-blackboard-image{
+	background-image: url("../../../assets/img/default/blackboard.png");
+	background-repeat: no-repeat;
+	background-size:  contain;
+	height: 238px !important;
+}
+
+
 /*公共*/
 
 .user-logo-small-size {

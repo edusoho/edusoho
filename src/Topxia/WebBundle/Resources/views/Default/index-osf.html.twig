@@ -72,44 +72,82 @@
             </div> 
           </div>
         </div>
+
         <div class="col-md-3 pz prd"> 
-           {% if recommended.title %}
-          <div class="es-row-wrap container-gap ps-re pz">
-           <img class="img-responsive" src="{{ file_path('','current-openclass.png')  }}">
-           <div style="margin-top:-320px" class="ps-re">
+          <div class="ptz pbl mz ps-re widget clearfix">
+          
+            {% for activity in recommendedActivitys %}
+         
+               <div class="index-blackboard-image phl pts ">
+                  <h5 class=" text-weight text-color-white mbl">本期公开课</h5>
+                
+                 
+                   
+                  <h4 class=" text-weight text-center mbl"> <a href="{{ path('activity_show',{id:activity.id})}}"  class="text-color-white" >{{ activity.title}}</a> </h4> 
 
-              <h3 class=" text-center text-color-white text-xlarge text-weight  " >
-               <a  class='text-color-white' href="{{ path('activity_show',{id:recommended.id})}}">
-                {{recommended.title|default('无')}}
-               </a>
-              </h3>
-              
-
-              <h3 class=" text-center text-color-black text-large text-weight ptl" >
-                {% if activitTerchar %}  主讲人：  {{activitTerchar.nickname}} {% endif %}
-              </h3>
-
-              <li class="pll prl ptm ps-re media li-no">
-                <a class="pull-left">
-                  <img class="user-logo-small-size  bor-maroon" src="{{ file_path(activitTerchar.smallAvatar, 'avatar.png') }}" >                  
-                </a>
-                <div class="media-body text-normal">
-                   <span  > {% if activitTerchar %} {{ activitTerchar.title }} {% endif %}</span>
-                </div>                  
-              </li>
-
-              <h3 class="text-center text-color-white text-large text-weight ptl pbd" >
-                 {{ recommended.startTime|default('每周二晚7点') }}
-              </h3>
+                     <br>
+                  <p class="text-color-white  ptll"> {{activity.address}} </p>
+                  <p class="teacher-color  ">时间： {{activity.startTime}} </p>
+                
+               </div>
 
 
-              <h3 class="text-center text-color-white text-large text-weight ptl phl mhl" >
-                 {{ recommended.address|default('北京.3W咖啡') }}
-              </h3>
-             
-           </div>
+                <div class="teacher-box  mtm ps-re " >
+
+                    <div class="ps-ab ps-tpl ps-ltl">
+                      <span class='text-large text-weight '>讲师：</span>
+                    </div>
+                  
+                    <div class="phm pvm ">
+                    
+                      {% if activity['userProfiles'] %}
+                          <div class="teacher-carousel {% if activity['userProfiles']|length == 1 %}teacher-carousel-onlyone{% endif %}">
+                            <div class="carousel slide" id="teacher-carousel">
+                              <div class="carousel-inner ">
+                                {% for user in activity['userProfiles'] %}
+                                  <div class="item {% if loop.first %}active{% endif %}" data-id="{{ user.id }}">
+                                    <a class="" href="{{ path('user_show', {id:user.id}) }}"><img src="{{ file_path(user.mediumAvatar, 'avatar.png') }}" class="user-logo-avatar center-block"></a>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                              <a class="left carousel-control text-color-555" href="#teacher-carousel" data-slide="prev">
+                                <span class="icon-prev glyphicon glyphicon-chevron-left"></span>
+                              </a>
+                              <a class="right carousel-control text-color-555" href="#teacher-carousel" data-slide="next">
+                                <span class="icon-next glyphicon glyphicon-chevron-right"></span>
+                              </a>
+                            </div>
+                            <div class="teacher-detail" id="teacher-detail">
+                              {% for user in activity['userProfiles'] %}
+                                 
+                                <div class="teacher-item teacher-item-{{ user.id }} {% if loop.first %}teacher-item-active{% endif %}">
+                                  <div class="text-color-555 nickname"><a class="text-color-555 nickname" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></div>
+                                  <div class="text-color-555 title">{{ user.about|plain_text(65) }}</div>
+
+                                </div>          
+                              {% endfor %}
+                            </div>
+                          </div>
+                        {% else %}
+                          <div class="empty">该课程尚未设置教师</div>
+                      {% endif %}
+
+                    </div>
+                </div>
+
+                <div class=" mtll mbl mrm pull-right">
+                              <p class="text-color-555 ">
+                                {{activity.studentNum}}人已报名，还不快来参与！
+                                 
+                                  <a  class="btn btn-success btn-sm text-weight "   href="{{ path('activity_show',{id:activity.id}) }}" >立即报名</a>
+                              
+                              
+                              </p>
+                </div>      
+
+            {% endfor %}
+
           </div>
-           {% endif %}
         </div>
       </div>
 
@@ -164,11 +202,9 @@
                 <div class="info-ad pull-left">
                   <div class="info-btn">
                   <p>还等什么呢就差你了</p>
-                  {% if recommended.id %}
+                 
                   <a class="btn center-block" href="{{ path('register') }}">我要学习</a>
-                  {% else %}
-                  <a class="btn center-block" >我要学习</a>
-                  {% endif %}
+               
                   </div>
                 </div>
               </div>

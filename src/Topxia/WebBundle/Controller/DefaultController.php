@@ -29,25 +29,14 @@ class DefaultController extends BaseController
         $lastActivitys= $this->getActivityService()->mixActivitys($lastActivitys,$userId);
 
         $feild['recommended']=1;//1表示置顶。
+
+        //本期活动
+        $recommendedActivitys = $this->getActivityService()->findRecommendedActivity();
+        $recommendedActivitys =  $this->getActivityService()->extActivitys($recommendedActivitys);
+        $recommendedActivitys= $this->getActivityService()->mixActivitys($recommendedActivitys,$userId);
         
-        $recommended=$this->getActivityService()->findRecommendedActivity();       
-
-
-
-        $recommended=count($recommended)>0?reset($recommended):array('largePicture' =>'',
-                                                                    'subtitle'=>'',
-                                                                    'title'=>'',
-                                                                    'startTime'=>'',
-                                                                    'city'=>'北京',
-                                                                    'address'=>'北京.海淀区海淀西大街70号.3W咖啡二楼',
-                                                                    'id'=>'0');
-
-        $activitTerchar=empty($recommended['experters'])?null:$this->getUserService()->findUsersByIds($recommended['experters']);
-        $activitTerchar=count($activitTerchar)>0?reset($activitTerchar):array('nickname'=>'',
-                                                                                'title'=>'',
-                                                                                'smallAvatar'=>'');
-        //地址
-        $Locations=$this->getLocationService()->getAllLocations();
+        
+       
         //公开课报名用户
         $feild['roles']='ROLE_USER';
         $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,35);
@@ -87,11 +76,11 @@ class DefaultController extends BaseController
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
         return $this->render('TopxiaWebBundle:Default:index-osf.html.twig',array(
-            "recommended"=>$recommended,
+            "recommendedActivitys"=>$recommendedActivitys,
             "lastActivitys"=>$lastActivitys,
-            "activitTerchar"=>$activitTerchar,
+          
             "users"=>$users,
-            "Locations"=>$Locations,
+        
             "courses"=>$courses,
             "activityThreads"=>$activityThreads,
             "activitys"=>$activitys,
