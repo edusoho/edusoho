@@ -120,12 +120,10 @@
                   <div class="ps-ab ps-bt ps-rtl">
                       <p class="text-color-gray  text-normal">
                         {{activity.studentNum}}人已报名
-                        {% if activity.join %}
-                          <a href="{{ path('activity_remove',{id:activity.id}) }}" class="btn btn-warning btn-xs  text-normal" >取消报名</a>
-                        {% else %}    
+                     
 
-                          <a  class="btn btn-success btn-xs  text-normal"   href="{{ path('activity_join',{id:activity.id}) }}" >报名参与</a>
-                        {% endif %}
+                          <a  class="btn btn-success btn-xs  text-normal"   href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
+                      
                       
                       </p>
                   </div>      
