@@ -257,6 +257,20 @@ class usercontrol extends base {
 	}
 	function flashdata_decode($s) {
 	}
+
+
+
+
+
+	function onget_user_password($username) {
+		$status = $_ENV['user']->get_user_by_username($username);
+
+		if($status) {
+			return array($status['uid'],$status['password']);
+		} else {
+			return 0;
+		}
+	}
 }
 
 ?>

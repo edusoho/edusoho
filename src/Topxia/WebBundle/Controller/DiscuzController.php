@@ -15,13 +15,11 @@ class DiscuzController extends BaseController
         $this->initUcenter();
 
         $_DCACHE = $get = $post = array();
-
         $code = @$_GET['code'];
         parse_str(uc_authcode($code, 'DECODE', UC_KEY), $get);
         if(MAGIC_QUOTES_GPC) {
             $get = $this->stripslashes($get);
         }
-
         file_put_contents('/tmp/discuz_code', $get['action'] . "\n\n", FILE_APPEND);
 
         $timestamp = time();
@@ -55,11 +53,19 @@ class DiscuzController extends BaseController
 
     private function doDeleteuser($get, $post)
     {
+        $uids = $get['ids'];
+        !API_DELETEUSER && exit(API_RETURN_FORBIDDEN);
+
         return API_RETURN_SUCCEED;
     }
 
     private function doRenameuser($get, $post)
     {
+
+        $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
+        $user = $this->getUserService()->getUser($bindUser['toId']);
+        $this->getUserService()->changeNickname($user['id'], $get['newusername']);
+
         return API_RETURN_SUCCEED;
     }
 
@@ -70,32 +76,105 @@ class DiscuzController extends BaseController
 
     private function doSynlogin($get, $post)
     {
-        return API_RETURN_SUCCEED;
+        if(!API_SYNLOGIN) {
+            return API_RETURN_FORBIDDEN;
+        }
+
+        $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
+        $user = $this->getUserService()->getUser($bindUser['toId']);
+        $this->authenticateUser($user);
     }
 
     private function doSynlogout($get, $post)
     {
+        if(!API_SYNLOGOUT) {
+            return API_RETURN_FORBIDDEN;
+        }
+        $this->get('security.context')->setToken(null);
+        $this->get('request')->getSession()->invalidate();
+
         return API_RETURN_SUCCEED;
     }
 
     private function doUpdatepw($get, $post)
     {
+        if(!API_UPDATEPW) {
+            return API_RETURN_FORBIDDEN;
+        }
+
+        $this->requireClientFile("model/base.php");
+        $this->requireClientFile("model/user.php");
+        $this->requireClientFile("control/user.php");
+
+        $userControl = new \usercontrol();
+        $userFromDz = $userControl->onget_user_password($get['username']);
+
+        parse_str(uc_authcode($userFromDz, 'DECODE', UC_KEY), $get_user);
+        if(MAGIC_QUOTES_GPC) {
+            $get_user = $this->stripslashes($get_user);
+        }
+        var_dump($get_user);
+        // $user = $this->getUserService()->getUserByNickname($get['username']);
+        // $this->getUserService()->changePassword($user['id'], $get['password']);
         return API_RETURN_SUCCEED;
     }
 
     private function doUpdatebadwords($get, $post)
     {
+        if(!API_UPDATEBADWORDS) {
+            return API_RETURN_FORBIDDEN;
+        }
+        $data = array();
+        if(is_array($post)) {
+            foreach($post as $k => $v) {
+                $data['findpattern'][$k] = $v['findpattern'];
+                $data['replace'][$k] = $v['replacement'];
+            }
+        }
+        $content = "<?php\r\n";
+        $content .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\r\n";
+        $this->writeCacheFile('badwords.php', $content);
         return API_RETURN_SUCCEED;
     }
 
     private function doUpdatehosts($get, $post)
     {
+        if(!API_UPDATEHOSTS) {
+            return API_RETURN_FORBIDDEN;
+        }
+        $content = "<?php\r\n";
+        $content .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\r\n";
+        $this->writeCacheFile('hosts.php', $content);
         return API_RETURN_SUCCEED;
     }
 
     private function doUpdateapps($get, $post)
     {
+        if(!API_UPDATEAPPS) {
+            return API_RETURN_FORBIDDEN;
+        }
+        $UC_API = $post['UC_API'];
 
+        //note 写 app 缓存文件
+        $content = "<?php\r\n";
+        $content .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";
+        $this->writeCacheFile('apps.php', $content);
+
+
+        $clientDirectory = $this->container->getParameter('kernel.root_dir') . '/config/';
+
+        //note 写配置文件
+        if(is_writeable($clientDirectory.'./uc_client_config.php')) {
+            $configfile = trim(file_get_contents($clientDirectory.'./uc_client_config.php'));
+            $configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+            $configfile = preg_replace("/define\('UC_API',\s*'.*?'\);/i", "define('UC_API', '$UC_API');", $configfile);
+            if($fp = @fopen($clientDirectory.'./uc_client_config.php', 'w')) {
+                @fwrite($fp, trim($configfile));
+                @fclose($fp);
+            }
+        }
+
+        return API_RETURN_SUCCEED;
     }
 
     private function doUpdateclient($get, $post)
@@ -151,7 +230,7 @@ class DiscuzController extends BaseController
         define('API_RETURN_FORBIDDEN', '-2');
 
         set_magic_quotes_runtime(0);
-        
+
         defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
         require_once realpath($this->container->getParameter('kernel.root_dir')) . '/config/uc_client_config.php';
         $this->requireClientFile('client.php');
@@ -186,6 +265,6 @@ class DiscuzController extends BaseController
             $string = stripslashes($string);
         }
         return $string;
-    }    
+    }
 
 }

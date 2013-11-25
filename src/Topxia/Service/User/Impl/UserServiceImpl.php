@@ -110,7 +110,7 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     public function createUserlevel($userlevel)
-    {   
+    {
         $userlevel['createdTime'] = time();
         @$userlevel['seq'] = $this->searchUserlevelsCount()+1;
         $userlevel = $this->getUserlevelDao()->createUserlevel($userlevel);
@@ -126,16 +126,16 @@ class UserServiceImpl extends BaseService implements UserService
         return $userlevels;
     }
 
-    
+
     public function updateUserlevel($id,$fields)
-    {   
+    {
         $userlevel = $this->getUserlevelDao()->updateUserlevel($id,$fields);
         $this->getLogService()->info('userlevel', 'update', "编辑用户等级{$userlevel['Name']}(#{$userlevel['id']})");
         return $userlevel;
     }
 
     public function sortUserlevels(array $ids)
-    {       
+    {
         $levelId  = 0;
         foreach ($ids as $itemId) {
             list(, $type) = explode("-",$itemId);
@@ -149,7 +149,7 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     public function deleteUserlevel($id)
-    {   
+    {
         $userlevel = $this->getUserlevel($id);
         $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['Name']}(#{$userlevel['id']})");
         return $this->getUserlevelDao()->deleteUserlevel($id);
@@ -158,6 +158,24 @@ class UserServiceImpl extends BaseService implements UserService
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
+    }
+
+    public function changeNickname ($userId, $nickname)
+    {
+        $user = $this->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，设置帐号失败！');
+        }
+
+        if (!SimpleValidator::nickname($nickname)) {
+            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
+        }
+        $user = $this->getUserDao()->findUserByNickname($nickname);
+        if ($user && $user['id'] != $userId) {
+            throw $this->createServiceException('昵称已存在！');
+        }
+
+        $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 
     public function changeEmail($userId, $email)
