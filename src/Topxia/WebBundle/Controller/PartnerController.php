@@ -67,8 +67,8 @@ class PartnerController extends BaseController
             define('WEKIT_TIMESTAMP', time());
         }
 
-        require_once __DIR__ . '/../../../../web/windid_client/src/windid/WindidApi.php';//引入windid接口类
-        require_once __DIR__ . '/../../../../web/windid_client/src/windid/service/base/WindidUtility.php'; //引入windid工具库
+        require_once __DIR__ . '/../../../../vendor_user/windid_client/src/windid/WindidApi.php';//引入windid接口类
+        require_once __DIR__ . '/../../../../vendor_user/windid_client/src/windid/service/base/WindidUtility.php'; //引入windid工具库
 
         $windidKey = $request->query->get('windidkey');
         $queryTime = $request->query->get('time');
@@ -148,7 +148,7 @@ class PartnerController extends BaseController
 
     private function getWindidMethod($operation)
     {
-        $config = include  __DIR__ . '/../../../../web/windid_client/src/windid/service/base/WindidNotifyConf.php';
+        $config = include  __DIR__ . '/../../../../vendor_user/windid_client/src/windid/service/base/WindidNotifyConf.php';
         $method = isset($config[$operation]['method']) ? $config[$operation]['method'] : '';
         $args = isset($config[$operation]['args']) ? $config[$operation]['args'] : array();
         return array($method, $args);
@@ -159,7 +159,7 @@ class PartnerController extends BaseController
         if (!defined('WEKIT_TIMESTAMP')) {
             define('WEKIT_TIMESTAMP', time());
         }
-        require_once __DIR__ .'/../../../../web/windid_client/src/windid/WindidApi.php';
+        require_once __DIR__ .'/../../../../vendor_user/windid_client/src/windid/WindidApi.php';
         return \WindidApi::api($name);
     }
 

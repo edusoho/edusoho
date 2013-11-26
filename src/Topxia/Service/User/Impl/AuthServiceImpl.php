@@ -43,10 +43,17 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->getAuthProvider()->syncLogout($bind['fromId']);
     }
 
-    public function changeUsername($userId, $newName)
+    public function changeNickname($userId, $newName)
     {
-        $resut = $this->getAuthProvider()->changeUsername($userId, $newName);
-        $this->getUserService()->changeUsername($userId, $newName);
+        if ($this->hasPartnerAuth()) {
+            $providerName = $this->getAuthProvider()->getProviderName();
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            if ($bind) {
+                $this->getAuthProvider()->changeNickanme($bind['fromId'], $newName);
+            }
+        }
+
+        $this->getUserService()->changeNickanme($userId, $newName);
     }
 
     public function changeEmail($userId, $password, $newEmail)

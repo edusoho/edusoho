@@ -19,7 +19,7 @@ class UcenterAuthProvider implements AuthProvider
         return true;
     }
 
-    public function changeUsername($userId, $newName)
+    public function changeNickname($userId, $newName)
     {
         return true;
     }

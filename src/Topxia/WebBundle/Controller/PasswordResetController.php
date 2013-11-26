@@ -73,7 +73,7 @@ class PasswordResetController extends BaseController
             if ($form->isValid()) {
                 $data = $form->getData();
 
-                $this->getUserService()->changePassword($token['userId'], $data['password']);
+                $this->getAuthService()->changePassword($token['userId'], null, $data['password']);
 
                 $this->getUserService()->deleteToken('password-reset', $token['token']);
 
@@ -100,6 +100,11 @@ class PasswordResetController extends BaseController
         }
         
         return 'http://mail.' . $host;
+    }
+
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }
