@@ -70,6 +70,24 @@ class PhpwindAuthProvider implements AuthProvider
         return false;
     }
 
+    public function checkLoginByEmail($email, $password)
+    {
+        $api = $this->getWindidApi('user');
+
+        list($result, $apiUser) = $api->login($email, $password, 3);
+        if ($result != 1) {
+            return null;
+        }
+
+        return array(
+            'id' => $apiUser['uid'],
+            'username' => $apiUser['username'],
+            'email' => $apiUser['email'],
+            'createdTime' => $apiUser['regdate'],
+            'createdIp' => $apiUser['regip'],
+        );
+    }
+
     public function getProviderName()
     {
         return 'phpwind';

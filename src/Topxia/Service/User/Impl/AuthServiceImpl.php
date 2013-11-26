@@ -101,6 +101,11 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->getUserService()->checkPassword($userId, $password);
     }
 
+    public function checkPartnerLoginByEmail($email, $password)
+    {
+        return $this->getAuthProvider()->checkLoginByEmail($email, $password);
+    }
+
     public function hasPartnerAuth()
     {
         return $this->getAuthProvider()->getProviderName() != 'default';

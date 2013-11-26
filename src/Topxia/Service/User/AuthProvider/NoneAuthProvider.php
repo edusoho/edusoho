@@ -49,6 +49,11 @@ class UcenterAuthProvider implements AuthProvider
         return false;
     }
 
+    public function checkLoginByEmail($email, $password)
+    {
+        return false;
+    }
+
     public function getProviderName()
     {
         return 'default';

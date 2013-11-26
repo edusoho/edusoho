@@ -72,27 +72,26 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
 
         try {
-
-            $userPartner = ServiceKernel::instance()->getParameter('user_partner');
-
-            if ($userPartner == 'phpwind') {
+            if ($this->getAuthService()->hasPartnerAuth()) {
                 try {
                     $user = $this->userProvider->loadUserByUsername($username);
                 } catch (UsernameNotFoundException $notFound) {
-                    $api = $this->createWindidApi('user');
 
-                    list($apiStatus, $apiUser) = $api->login($username, $token->getCredentials(), 3);
-                    if ($apiStatus != 1) {
+                    $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
+                    if (empty($partnerUser)) {
                         throw $notFound;
                     }
 
                     $registration = array();
-                    $registration['nickname'] = $apiUser['username'];
-                    $registration['email'] = $apiUser['email'];
+                    $registration['nickname'] = $partnerUser['username'];
+                    $registration['email'] = $partnerUser['email'];
                     $registration['password'] = $token->getCredentials();
-                    $registration['createdIp'] = $apiUser['regip'];
+                    $registration['createdIp'] = $partnerUser['createdIp'];
+                    $registration['token'] = array(
+                        'userId' => $partnerUser['id'],
+                    );
 
-                    $this->getUserService()->register($registration, 'phpwind');
+                    $this->getUserService()->register($registration, $this->getAuthService()->getPartnerName());
 
                     $user = $this->userProvider->loadUserByUsername($username);
                 }
@@ -115,18 +114,14 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
     }
 
-    private function createWindidApi($name)
-    {
-        if (!defined('WEKIT_TIMESTAMP')) {
-            define('WEKIT_TIMESTAMP', time());
-        }
-        require_once __DIR__ .'/../../../../web/windid_client/src/windid/WindidApi.php';
-        return \WindidApi::api($name);
-    }
-
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    private function getAuthService()
+    {
+        return ServiceKernel::instance()->createService('User.AuthService');
     }
 
 }

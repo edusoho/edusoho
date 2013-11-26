@@ -22,6 +22,9 @@ interface AuthProvider
 
     public function checkPassword($userId, $password);
 
+    public function checkLoginByEmail($email, $password);
+
     public function getProviderName();
+
 
 }
