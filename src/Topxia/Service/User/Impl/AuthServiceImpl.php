@@ -46,20 +46,32 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function changeUsername($userId, $newName)
     {
         $resut = $this->getAuthProvider()->changeUsername($userId, $newName);
-
         $this->getUserService()->changeUsername($userId, $newName);
     }
 
-    public function changeEmail($userId, $newEmail)
+    public function changeEmail($userId, $password, $newEmail)
     {
-        $this->getAuthProvider()->changeEmail($userId, $newEmail);
-        $this->getUserService()->changeEmail($userId, $newName);
+        if ($this->hasPartnerAuth()) {
+            $providerName = $this->getAuthProvider()->getProviderName();
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            if ($bind) {
+                $this->getAuthProvider()->changeEmail($bind['fromId'], $password, $newEmail);
+            }
+        }
+        $this->getUserService()->changeEmail($userId, $newEmail);
     }
 
-    public function changePassowrd($userId, $newPassword)
+    public function changePassword($userId, $oldPassword, $newPassword)
     {
-        $this->getAuthProvider()->changePassowrd($userId, $newPassword);
-        $this->getUserService()->changePassowrd($userId, $newName);
+        if ($this->hasPartnerAuth()) {
+            $providerName = $this->getAuthProvider()->getProviderName();
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            if ($bind) {
+                $this->getAuthProvider()->changePassword($bind['fromId'], $oldPassword, $newPassword);
+            }
+        }
+
+        $this->getUserService()->changePassword($userId, $newPassword);
     }
 
     public function checkUsername($username)
