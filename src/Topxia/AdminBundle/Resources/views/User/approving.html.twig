@@ -1,0 +1,43 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% block title %}用户认证审核 - {{ parent() }}{% endblock %}
+
+{% set menu = 'approval_approving' %}
+
+{% block main %}
+
+<div class="page-header"><h1>认证审核</h1></div>
+{% if users %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>用户昵称</th>
+      <th>真实姓名</th>
+      <th>邮件</th>
+      <th>申请时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in users %}
+    <tr id="user-table-tr-{{ user.id }}">
+        <td>{{user.id }}</td>
+        <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
+        <td>{{user.trueName }}</td>
+        <td>{{user.email }}</td>
+        <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
+        <td>
+         <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}" class="btn btn-default btn-sm">审核</a>
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{{ web_macro.paginator(paginator) }}
+{% else %}
+  <div class="empty">暂无数据</div>
+{% endif %}
+
+{% endblock %}

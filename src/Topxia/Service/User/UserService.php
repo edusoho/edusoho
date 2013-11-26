@@ -171,4 +171,17 @@ interface UserService
      */
     public function filterFollowingIds($userId, array $followingIds);
 
+
+    public function getApprovalByUserId($userId);
+
+    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
+
+    public function getApprovingUsers($start, $limit);
+
+    public function getApprovingUserCount();
+
+    public function passApproval($userId, $note = null);
+
+    public function rejectApproval($userId, $note = null);
+
 }

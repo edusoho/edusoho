@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+	var Notify = require('common/bootstrap-notify');
+
 	exports.run = function() {
 
 		var $form = $('#approve-form');
@@ -7,10 +9,12 @@ define(function(require, exports, module) {
 			var submitButton = $(this);
 			var status = submitButton.data('status');
 
-			if (status == 'fail' && $('#form_note').val() == '') {
+			if (status == 'fail' && $('#note').val() == '') {
 				alert('请输入审核失败理由！');
+				Notify.danger()
 				return false;
 			}
+
 			$('#form_status').val(status);
 
 			$.post($form.attr('action'), $form.serialize(), function(response){

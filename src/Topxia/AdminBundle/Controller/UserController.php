@@ -5,7 +5,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class UserController extends BaseController {
+class UserController extends BaseController 
+{
 
     public function indexAction (Request $request)
     {

@@ -76,12 +76,12 @@ class FileToolkit
 
     public static function getSecureFileExtensions()
     {
-        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma zip rar gz tar 7z';
+        return 'bmp jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma zip rar gz tar 7z';
     }
 
     public static function getImageExtensions()
     {
-        return 'jpg jpeg gif png';
+        return 'bmp jpg jpeg gif png';
     }
 
     public static function getFileTypeByMimeType($mimeType)

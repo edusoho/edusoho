@@ -2,10 +2,12 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
 use Topxia\WebBundle\Form\UserProfileType;
 use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -38,6 +40,31 @@ class SettingsController extends BaseController
             'form' => $form->createView()
         ));
 	}
+
+    public function approvalSubmitAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if ($request->getMethod() == 'POST') {
+            $faceImg = $request->files->get('faceImg');
+            $backImg = $request->files->get('backImg');
+            
+            if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg) ) {
+                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+            }
+
+            $directory = $this->container->getParameter('topxia.upload.private_directory') . '/approval';
+            $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
+            $this->setFlashMessage('success', '实名认证提交成功！');
+            return $this->redirect($this->generateUrl('setting_approval_status'));
+        }
+        return $this->render('TopxiaWebBundle:Settings:approval.html.twig',array(
+        ));
+    }
+
+    public function approvalStatusAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Settings:approval-status-info.html.twig');
+    }
 
 	public function avatarAction(Request $request)
 	{
@@ -240,7 +267,8 @@ class SettingsController extends BaseController
 		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array('binds'=>$binds));
 	}
 
-    public function unBindAction(Request $request, $type){
+    public function unBindAction(Request $request, $type)
+    {
         $user = $this->getCurrentUser();
         $this->checkBindsName($type);
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
@@ -290,11 +318,16 @@ class SettingsController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function checkBindsName($type) {
+    private function checkBindsName($type) 
+    {
         $types = array('weibo', 'qq', 'renren');
         if (!in_array($type, $types)) {
             throw new NotFoundHttpException();
         }
     }
 
+    private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
+    }
 }
