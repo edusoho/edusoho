@@ -571,14 +571,19 @@ admin_sale_offsale_create:
     pattern: /sale/offsale/create
     defaults: { _controller: TopxiaAdminBundle:Sale:create }
 
+admin_sale_offsale_prod_check:
+    pattern: /sale/offsale/prod/check
+    defaults: { _controller: TopxiaAdminBundle:Sale:prodCheck }
+    methods: [POST]
+
 admin_sale_offsale_delete_batch:
     pattern: /sale/offsale/delete/batch
-    defaults: { _controller: TopxiaAdminBundle:Sale:deleteBatch }
+    defaults: { _controller: TopxiaAdminBundle:Sale:batchDelete }
     methods: [POST]
 
 admin_sale_offsale_invalid_batch:
     pattern: /sale/offsale/invalid/batch
-    defaults: { _controller: TopxiaAdminBundle:Sale:stopBatch }
+    defaults: { _controller: TopxiaAdminBundle:Sale:batchInvalid }
     methods: [POST]
 
 admin_money_card:

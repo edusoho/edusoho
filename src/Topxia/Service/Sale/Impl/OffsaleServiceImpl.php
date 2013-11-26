@@ -102,13 +102,88 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
 
     public function createOffsale($offsale){
 
+        $offsale = ArrayToolkit::parts($offsale, array('promoName', 'promoCode','reducePrice','prodType', 'prodName', 'prodId', 'reuse', 'valid', 'strvalidTime','validTime', 'createdTime', 'id'));
 
+        $offsale['createdTime']=time();
+
+        $offsale = $this->getOffsaleDao()->addOffsale(OffsaleSerialize::serialize($offsale));
+
+        return $this->getOffsale($offsale['id']);
 
     }
 
-    public function createOffsales($offsaleSetting){
+    public function createOffsales($offsetting){
+
+        if(empty($offsetting)){
+            return 0;
+        }
+
+        if($offsetting['prodType']=='课程')
+        {
+            $course = $this->getCourseService()->getCourse($offsetting['prodId']);
+
+            $offsetting['prodName'] = $course['title'];
+        }
+
+        if($offsetting['prodType']=='活动')
+        {
+            $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
+            $offsetting['prodName'] = $activity['title'];
+        }
+
+        for ($i = 1; $i<= $offsetting['promoNum']; $i++) {
+
+            $offsale['prodType'] = $offsetting['prodType'];
+            $offsale['prodName'] = $offsetting['prodName'];
+            $offsale['prodId']  = $offsetting['prodId'];
+            $offsale['promoName'] = $offsetting['promoName'];
+            $offsale['promoCode']= $this->generateOffsaleCode($offsetting['promoPrefix']);
+            $offsale['reducePrice'] = $offsetting['reducePrice'];
+            $offsale['reuse']= $offsetting['reuse'];
+            $offsale['valid']= '有效';
+            $offsale['strvalidTime']= $offsetting['strvalidTime'];
+           
+            $this->createOffsale($offsale);        
+        }
 
         
+    }
+
+    public function deleteOffsales(array $ids)
+    {
+        foreach ($ids as $id) {
+            $this->getOffsaleDao()->deleteOffsale($id);
+        }
+    }
+
+    public function checkProd($offsetting){
+
+        if(empty($offsetting)){
+            return "该商品不存在，请重新输入";
+        }
+
+        if($offsetting['prodType']=='课程')
+        {
+            $course = $this->getCourseService()->getCourse($offsetting['prodId']);
+
+            if(empty($course)){
+                return "该商品不存在，请重新输入";
+            }
+           
+        }
+       
+        if($offsetting['prodType']=='活动')
+        {
+            $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
+            if(empty($activity)){
+                return "该商品不存在，请重新输入";
+            }
+        }
+
+         return "success";
+
+
+
     }
 
 
@@ -144,9 +219,24 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
     }
 
 
-    private function generateOffsaleCode($order)
+    private function generateOffsaleCode($promoPrefix)
     {
-        return  'CF' . date('YmdHis', time()) . mt_rand(10000,99999);
+        return  $promoPrefix.$this->generateChars(8);
+    }
+
+    private function generateChars( $length = 8 ) {  
+        // 密码字符集，可任意添加你需要的字符  
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $password ="";  
+        for ( $i = 0; $i < $length; $i++ )  
+        {  
+        // 这里提供两种字符获取方式  
+        // 第一种是使用 substr 截取$chars中的任意一位字符；  
+        // 第二种是取字符数组 $chars 的任意元素  
+        // $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);  
+        $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];  
+        }  
+        return $password;  
     }
 
 
@@ -155,7 +245,11 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
         return $this->createDao('Sale.OffsaleDao');
     }
 
-   
+    private function getActivityService()
+    {
+        return $this->createService('Activity.ActivityService');
+    }
+
 
     private function getCourseService()
     {

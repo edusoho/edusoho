@@ -29,24 +29,51 @@ class SaleController extends BaseController
     public function createAction(Request $request)
     {
         if('POST' == $request->getMethod()){
-            $offsaleSetting = $request->request->all();
-          
+            $offsetting = $request->request->all();
 
-            $this->getOffsaleService()->createOffsales($offsaleSetting);
-            return $this->indexAction($request);
+            $this->getOffsaleService()->createOffsales($offsetting);
+            
+            return $this->redirect($this->generateUrl('admin_sale')); 
         }
 
-        $offsaleSetting = array(
+        $offsetting = array(
             'id'=>0,
             'promoName'=>'',
-            'promoCode'=>0,
-            'prodName'=>'',
-
-            'prodId'=>0
+            'reducePrice'=>0,
+            'promoNum'=>1,
+            'promoPrefix'=>'',
+            'prodType'=>'课程',
+            'prodId'=>'',
+            'strvalidTime'=>'',
+            'reuse'=>'不可以'
               );
 
-        return $this->render('TopxiaAdminBundle:Sale:offsale-modal.html.twig',array('offsaleSetting' => $offsaleSetting));
+        return $this->render('TopxiaAdminBundle:Sale:offsale-modal.html.twig',array('offsetting' => $offsetting));
     }
+
+    public function prodCheckAction(Request $request)
+    {
+        $offsetting =  $request->request->all();
+
+        $result = $this->getOffsaleService()->checkProd($offsetting);
+
+        if ("success" == $result) {
+            $response = array('success' => true, 'message' => $result);
+        } else {
+            $response = array('success' => false, 'message' => $result);
+        }
+         
+        return $this->createJsonResponse($response);
+    }
+
+    public function batchDeleteAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array());
+        $this->getOffsaleService()->deleteOffsales($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
    
 
     private function getOffsaleService()

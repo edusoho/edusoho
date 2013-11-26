@@ -5,43 +5,31 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-        var $form = $('#navigation-form');
+        var $form = $('#offsale-form');
         var $modal = $form.parents('.modal');
-        var $table = $('#navigation-table');
+        var $table = $('#offsale-table');
 
         var validator = new Validator({
             element: $form,
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return ;
-                }
-                
-                $.post($form.attr('action'), $form.serialize(), function(html){
-                    $modal.modal('hide');
-                    $table.find('tbody').replaceWith(html);
-                    Notify.success('保存导航成功！');
-                });
-
-            }
-
+            autoSubmit: true
         });
 
         validator.addItem({
-            element: '[name="name"]',
-            required: true
+            element: '[name="promoNum"]',
+            required: true,
+            rule:'integer min{min:1} max{max:500}'
         });
 
         validator.addItem({
-            element: '[name="url"]',
-            required: true
+            element: '[name="reducePrice"]',
+            required: true,
+            rule: 'currency  min{min:1}'
         });
 
         validator.addItem({
-            element: '[name="sequence"]',
-            rule: 'number',
-            required: true
-            
+            element: '[name="prodId"]',         
+            required: true,
+            rule: 'integer remotePost'
         });
 
     };
