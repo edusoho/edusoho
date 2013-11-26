@@ -22,6 +22,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 
+    public function getOrderByPromoCode($code)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE promoCode = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($code));
+    }
+
     public function findOrdersByIds(array $ids)
     {
         if(empty($ids)) {

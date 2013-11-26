@@ -11,6 +11,11 @@ interface OffsaleService
 	public function findOffsalesByIds(array $ids);
 
 	public function createOffsale($offsale);
+
+	public function searchOffsales($conditions,$sort,$start,$limit);
+
+	public function searchOffsaleCount($conditions);
+
 	
 
 }

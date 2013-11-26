@@ -8,6 +8,8 @@ interface OrderService
 
 	public function getOrderBySn($sn);
 
+	public function getOrderByPromocode($code);
+
 	public function findOrdersByIds(array $ids);
 
 	public function searchOrders($conditions, $sort = 'latest', $start, $limit);

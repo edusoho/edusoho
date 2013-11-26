@@ -1062,3 +1062,8 @@ offsale_code_check:
     pattern: /sale/off/check
     defaults: {_controller:TopxiaWebBundle:Sale:codeCheck}
 
+
+offsale_create:
+    pattern: /sale/offsale/create
+    defaults: {_controller:TopxiaWebBundle:Sale:codeCheck}
+

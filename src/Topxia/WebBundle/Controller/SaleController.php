@@ -33,9 +33,6 @@ class SaleController extends BaseController
     }
 
 
-   
-
-
     private function getOffsaleService()
     {
         return $this->getServiceKernel()->createService('Sale.OffsaleService');

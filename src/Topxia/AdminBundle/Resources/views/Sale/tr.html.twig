@@ -1,0 +1,15 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="offsale-table-tr-{{ offsale.id }}" data-role="item">
+  <td><input value="{{offsale.id}}" type="checkbox"  data-role="batch-item" ></td>
+  <td>{{ offsale.promoCode }}</td>
+  <td>{{ offsale.reducePrice}} </td>
+  <td>{{ offsale.prodName }}</td>
+  <td>{{ offsale.promoName }}</td>
+
+  <td>{{ offsale.validTime }}</td>
+
+  <td>{{ offsale.reuse }}</td>
+
+  <td>{{ offsale.valid }}</td>
+
+</tr>

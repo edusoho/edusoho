@@ -562,6 +562,25 @@ admin_photo_delete:
     pattern:  /photo/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Photo:delete }
 
+
+admin_sale:
+    pattern: /sale
+    defaults: { _controller: TopxiaAdminBundle:Sale:index }
+
+admin_sale_offsale_create:
+    pattern: /sale/offsale/create
+    defaults: { _controller: TopxiaAdminBundle:Sale:create }
+
+admin_sale_offsale_delete_batch:
+    pattern: /sale/offsale/delete/batch
+    defaults: { _controller: TopxiaAdminBundle:Sale:deleteBatch }
+    methods: [POST]
+
+admin_sale_offsale_invalid_batch:
+    pattern: /sale/offsale/invalid/batch
+    defaults: { _controller: TopxiaAdminBundle:Sale:stopBatch }
+    methods: [POST]
+
 admin_money_card:
     pattern: /money_card
     defaults: {_controller: TopxiaAdminBundle:MoneyCard:index }
