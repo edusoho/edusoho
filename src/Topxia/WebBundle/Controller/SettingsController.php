@@ -128,7 +128,7 @@ class SettingsController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $passwords = $form->getData();
-                if (!$this->getUserService()->verifyPassword($user['id'], $passwords['currentPassword'])) {
+                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
                 	$this->setFlashMessage('danger', '当前密码不正确，请重试！');
                 } else {
                     $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
