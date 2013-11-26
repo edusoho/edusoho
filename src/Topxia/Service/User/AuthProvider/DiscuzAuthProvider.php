@@ -65,6 +65,23 @@ class DiscuzAuthProvider implements AuthProvider
         return false;
     }
 
+    public function checkLoginByEmail($email, $password)
+    {
+        $this->initDiscuzApi();
+        $result = uc_user_login($email, $password, 2);
+        if ($result[0] <= 0) {
+            return $this->convertApiResult($result);
+        }
+
+        return array(
+            'id' => $result[0],
+            'username' => $result[1],
+            'email' => $result[3],
+            'createdTime' => '',
+            'createdIp' => '',
+        );
+    }
+
     public function getProviderName()
     {
         return 'discuz';
