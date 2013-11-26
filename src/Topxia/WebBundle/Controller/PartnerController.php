@@ -180,7 +180,7 @@ class WindidNotify
     public function test($uid) {
         return $uid ? true : false;
     }
-            
+
     public function addUser($uid) {
         return true;
 
@@ -203,7 +203,7 @@ class WindidNotify
 
         return $newUser ? true : false;
     }
-            
+
     public function editUser($uid) {
         return true;
     }
@@ -211,7 +211,7 @@ class WindidNotify
     public function synLogin($uid) {
         return true;
     }
-            
+
     public function synLogout($uid) {
         return true;
     }

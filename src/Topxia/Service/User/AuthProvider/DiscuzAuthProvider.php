@@ -5,17 +5,30 @@ class DiscuzAuthProvider implements AuthProvider
 {
     public function register($registration)
     {
+        $this->initDiscuzApi();
+
+        $result = uc_user_register($registration['nickname'], $registration['password'], $registration['email']);
+
+        if ($result < 0) {
+            $result = $this->convertApiResult($result);
+            throw new \RuntimeException("{$result[0]}:{$result[1]}");
+        }
+
+        $registration['id'] = $result;
+
         return $registration;
     }
 
     public function syncLogin($userId)
     {
-        return true;
+        $this->initDiscuzApi();
+        return uc_user_synlogin($userId);
     }
 
     public function syncLogout()
     {
-        return true;
+        $this->initDiscuzApi();
+        return uc_user_synlogout();
     }
 
     public function changeUsername($userId, $newName)
@@ -35,12 +48,16 @@ class DiscuzAuthProvider implements AuthProvider
 
     public function checkUsername($username)
     {
-        return true;
+        $this->initDiscuzApi();
+        $result = uc_user_checkname($username);
+        return $this->convertApiResult($result);
     }
 
     public function checkEmail($email)
     {
-        return true;
+        $this->initDiscuzApi();
+        $result = uc_user_checkemail($email);
+        return $this->convertApiResult($result);
     }
 
     public function checkPassword($userId, $password)
@@ -50,6 +67,37 @@ class DiscuzAuthProvider implements AuthProvider
 
     public function getProviderName()
     {
-        return 'ucenter';
+        return 'discuz';
+    }
+
+    private function initDiscuzApi()
+    {
+        require_once __DIR__ .'/../../../../../app/config/uc_client_config.php';
+        require_once __DIR__ .'/../../../../../vendor_user/uc_client/client.php';
+    }
+
+    private function convertApiResult($result)
+    {
+        switch ($result) {
+            case true:
+                return array('success', '');
+            case 0:
+                return array('error_input', '输入不合法');
+            case -1:
+                return array('error_length_invalid', '名称不合法');
+            case -2:
+                return array('error_illegal_char', '名称含有非法字符');
+            case -3:
+                return array('error_duplicate', '名称已被注册');
+            case -4:
+                return array('error_illegal', 'Email格式不正确');
+            case -5:
+                return array('error_white_list', 'Email不允许注册');
+            case -6:
+                return array('error_duplicate', 'Email已存在');
+            case \WindidError::FAIL:
+            default:
+                return array('error_unknown', '未知错误');
+        }
     }
 }
