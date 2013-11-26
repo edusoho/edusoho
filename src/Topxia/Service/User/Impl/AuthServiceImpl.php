@@ -26,7 +26,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $providerName = $this->getAuthProvider()->getProviderName();
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
         if (empty($bind)) {
-            throw $this->createServiceException('未绑定用户中心用户，同步登录失败！');
+            return '';
         }
 
         return $this->getAuthProvider()->syncLogin($bind['fromId']);
@@ -37,7 +37,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $providerName = $this->getAuthProvider()->getProviderName();
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
         if (empty($bind)) {
-            throw $this->createServiceException('未绑定用户中心用户，同步退出失败！');
+            return '';
         }
 
         return $this->getAuthProvider()->syncLogout($bind['fromId']);

@@ -807,17 +807,18 @@ partner_logout:
     pattern: /partner/logout
     defaults: {_controller: TopxiaWebBundle:Partner:logout }
 
-partner_windid:
-    pattern: /partner/windid
-    defaults: {_controller: TopxiaWebBundle:Partner:windid }
+partner_discuz_notify:
+    pattern:  /partner/discuz/api/notify
+    defaults: {_controller: TopxiaWebBundle:PartnerDiscuz:notify }
+
+partner_phpwind_notify:
+    pattern: /partner/phpwind/api/notify
+    defaults: {_controller: TopxiaWebBundle:PartnerPhpwind:notify }
 
 cloud_set_server:
     pattern: /cloud/set-server
     defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
 
-discuz_api:
-    pattern:  /discuz/api/uc
-    defaults: {_controller: TopxiaWebBundle:Discuz:api }
 
 test:
     pattern:  /test/

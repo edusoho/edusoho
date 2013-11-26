@@ -14,7 +14,7 @@ class UcenterAuthProvider implements AuthProvider
         return true;
     }
 
-    public function syncLogout()
+    public function syncLogout($userId)
     {
         return true;
     }

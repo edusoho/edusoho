@@ -8,7 +8,7 @@ interface AuthProvider
 
     public function syncLogin($userId);
 
-    public function syncLogout();
+    public function syncLogout($userId);
 
     public function changeNickname($userId, $newName);
 

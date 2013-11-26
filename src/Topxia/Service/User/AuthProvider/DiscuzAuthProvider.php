@@ -25,7 +25,7 @@ class DiscuzAuthProvider implements AuthProvider
         return uc_user_synlogin($userId);
     }
 
-    public function syncLogout()
+    public function syncLogout($userId)
     {
         $this->initDiscuzApi();
         return uc_user_synlogout();

@@ -6,10 +6,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Topxia\Service\Common\ServiceKernel;
 
-class DiscuzController extends BaseController
+class PartnerDiscuzController extends BaseController
 {
 
-    public function apiAction(Request $request)
+    public function notifyAction(Request $request)
     {
 
         $this->initUcenter();
@@ -20,7 +20,6 @@ class DiscuzController extends BaseController
         if(MAGIC_QUOTES_GPC) {
             $get = $this->stripslashes($get);
         }
-        file_put_contents('/tmp/discuz_code', $get['action'] . "\n\n", FILE_APPEND);
 
         $timestamp = time();
         if($timestamp - $get['time'] > 3600) {

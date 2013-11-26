@@ -24,7 +24,7 @@ class PhpwindAuthProvider implements AuthProvider
          return $api->synLogin($userId);
     }
 
-    public function syncLogout()
+    public function syncLogout($userId)
     {
          $api = $this->getWindidApi('user');
          return $api->synLogout($userId);
