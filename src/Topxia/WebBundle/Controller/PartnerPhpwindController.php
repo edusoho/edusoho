@@ -33,7 +33,6 @@ class PartnerPhpwindController extends BaseController
             return $this->createWindidResponse('sign error.');
         }
 
-
         if ($currentTimestamp -> $queryTime >120) {
             return $this->createWindidResponse('timeout.');
         }
@@ -44,8 +43,9 @@ class PartnerPhpwindController extends BaseController
             return $this->createWindidResponse('fail');
         }
 
-        $notify = new WindidNotify();  //定义一个通知处理类 在这时定义为下一步所示的notify
-        if(!method_exists($notify, $method)) {
+        $method = 'do' . ucfirst($method);
+
+        if (!method_exists($this, $method)) {
             return $this->createWindidResponse('success');
         }
 
@@ -54,14 +54,7 @@ class PartnerPhpwindController extends BaseController
             $filteredArgs[$key] = $request->get($key);
         }
 
-        if ($method == 'synLogin') {
-            $result = $this->synLoginNotify($filteredArgs['uid']);
-        } else if ($method == 'synLogout') {
-            $result = $this->synLogoutNotify($filteredArgs['uid']);
-        } else {
-            $result = call_user_func_array(array($notify, $method), $filteredArgs);
-        }
-
+        $result = $this->$method($filteredArgs);
         if ($result == true) {
             return $this->createWindidResponse('success');
         }
@@ -69,17 +62,42 @@ class PartnerPhpwindController extends BaseController
         return $this->createWindidResponse('fail');
     }
 
-    private function synLoginNotify($uid)
+    private function doTest($args)
+    {
+        return empty($args['testdata']) ? false : true;
+    }
+
+    private function doAddUser($args)
+    {
+        return true;
+    }
+
+    private function doSynLogin($args)
     {
         $api = \WindidApi::api('user');
-        $user = $api->getUser($uid);
-        if (empty($user)) {
+        $partnerUser = $api->getUser($args['uid']);
+        if (empty($partnerUser)) {
             return true;
         }
 
-        $user = $this->getUserService()->getUserByEmail($user['email']);
-        if (empty($user)) {
-            return true;
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId('phpwind', $partnerUser['uid']);
+
+        if (empty($bind)) {
+            $registration = array(
+                'nickname' => $partnerUser['username'],
+                'email' => $partnerUser['email'],
+                'password' => substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36),0, 8),
+                'createdTime' => $partnerUser['regdate'],
+                'createdIp' => $partnerUser['regip'],
+                'token' => array('userId' => $partnerUser['uid']),
+            );
+
+            $user = $this->getUserService()->register($registration, 'phpwind');
+        } else {
+            $user = $this->getUserService()->getUser($bind['toId']);
+            if (empty($user)) {
+                return true;
+            }
         }
 
         $this->authenticateUser($user);
@@ -87,10 +105,70 @@ class PartnerPhpwindController extends BaseController
         return true;
     }
 
-    private function synLogoutNotify($uid)
+    private function doSynLogout($args)
     {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
+        return true;
+    }
+
+    /**
+     * 需要修改的字段有：email
+     * @todo  如果修改密码，则置user_bind表的syncPassword
+     */
+    private function doEditUser($args)
+    {
+        file_put_contents('/tmp/phpwind', json_encode($args). "\n\n", FILE_APPEND);
+        
+        if (!empty($args['changepwd'])) {
+            return true;
+        }
+
+        $api = \WindidApi::api('user');
+        $partnerUser = $api->getUser($args['uid']);
+
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId('phpwind', $partnerUser['uid']);
+        if (empty($bind)) {
+            return true;
+        }
+
+        $this->getUserService()->changeEmail($bind['toId'], $partnerUser['email']);
+
+        return true;
+    }
+
+    private function doEditUserInfo($args)
+    {
+        return true;
+    }
+
+    private function doUploadAvatar($args)
+    {
+        return true;
+    }
+
+    private function doEditCredit($args)
+    {
+        return true;
+    }
+
+    private function doEditMessageNum($args)
+    {
+        return true;
+    }
+
+    private function doDeleteUser($args)
+    {
+        return true;
+    }
+
+    private function doSetCredits($args)
+    {
+        return true;
+    }
+
+    private function doAlterAvatarUrl($args)
+    {
         return true;
     }
 
@@ -116,53 +194,4 @@ class PartnerPhpwindController extends BaseController
         return new Response($content);
     }
 
-}
-
-
-
-class WindidNotify
-{
-    public function test($uid) {
-        return $uid ? true : false;
-    }
-
-    public function addUser($uid) {
-        return true;
-
-        // 下面的做法是不对的，因为取不到密码。
-
-        $api = \WindidApi::api('user');
-        $user = $api->getUser($uid, 1, 7);
-
-        $registration = array();
-        $registration['nickname'] = $user['username'];
-        $registration['email'] = $user['email'];
-        $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
-        $registration['createdIp'] = $user['regip'];
-
-        try {
-            $newUser = $this->getUserService()->register($registration, 'phpwind');
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return $newUser ? true : false;
-    }
-
-    public function editUser($uid) {
-        return true;
-    }
-
-    public function synLogin($uid) {
-        return true;
-    }
-
-    public function synLogout($uid) {
-        return true;
-    }
-
-    private function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User.UserService');
-    }
 }
