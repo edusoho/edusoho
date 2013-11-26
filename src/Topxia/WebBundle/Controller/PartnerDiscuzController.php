@@ -40,17 +40,17 @@ class PartnerDiscuzController extends BaseController
         }
 
         $method = 'do' . ucfirst($get['action']);
-        $result = $this->$method($get, $post);
+        $result = $this->$method($request, $get, $post);
         return new Response($result);
     }
 
-    private function doTest($get, $post)
+    private function doTest($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
 
-    private function doDeleteuser($get, $post)
+    private function doDeleteuser($request, $get, $post)
     {
         $uids = $get['ids'];
         !API_DELETEUSER && exit(API_RETURN_FORBIDDEN);
@@ -58,7 +58,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doRenameuser($get, $post)
+    private function doRenameuser($request, $get, $post)
     {
 
         $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
@@ -68,23 +68,45 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doGettag($get, $post)
+    private function doGettag($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doSynlogin($get, $post)
+    private function doSynlogin($request, $get, $post)
     {
         if(!API_SYNLOGIN) {
             return API_RETURN_FORBIDDEN;
         }
 
-        $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
-        $user = $this->getUserService()->getUser($bindUser['toId']);
+        $partnerUser = uc_get_user($get['uid'], 1);
+
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
+
+        if (empty($bind)) {
+            $registration = array(
+                'nickname' => $get['username'],
+                'email' => $partnerUser[2],
+                'password' => substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36),0, 8),
+                'createdTime' => $get['time'],
+                'createdIp' => $request->getClientIp(),
+                'token' => array('userId' => $get['uid'])
+            );
+
+            $user = $this->getUserService()->register($registration, 'discuz');
+        } else {
+            $user = $this->getUserService()->getUser($bind['toId']);
+            if (empty($user)) {
+                return API_RETURN_SUCCEED;
+            }
+        }
+
         $this->authenticateUser($user);
+
+        return API_RETURN_SUCCEED;
     }
 
-    private function doSynlogout($get, $post)
+    private function doSynlogout($request, $get, $post)
     {
         if(!API_SYNLOGOUT) {
             return API_RETURN_FORBIDDEN;
@@ -95,7 +117,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatepw($get, $post)
+    private function doUpdatepw($request, $get, $post)
     {
         if(!API_UPDATEPW) {
             return API_RETURN_FORBIDDEN;
@@ -118,7 +140,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatebadwords($get, $post)
+    private function doUpdatebadwords($request, $get, $post)
     {
         if(!API_UPDATEBADWORDS) {
             return API_RETURN_FORBIDDEN;
@@ -136,7 +158,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatehosts($get, $post)
+    private function doUpdatehosts($request, $get, $post)
     {
         if(!API_UPDATEHOSTS) {
             return API_RETURN_FORBIDDEN;
@@ -147,7 +169,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdateapps($get, $post)
+    private function doUpdateapps($request, $get, $post)
     {
         if(!API_UPDATEAPPS) {
             return API_RETURN_FORBIDDEN;
@@ -176,7 +198,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdateclient($get, $post)
+    private function doUpdateclient($request, $get, $post)
     {
         if(!API_UPDATECLIENT) {
             return API_RETURN_FORBIDDEN;
@@ -189,17 +211,17 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatecredit($get, $post)
+    private function doUpdatecredit($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doGetcreditsettings($get, $post)
+    private function doGetcreditsettings($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatecreditsettings($get, $post)
+    private function doUpdatecreditsettings($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }

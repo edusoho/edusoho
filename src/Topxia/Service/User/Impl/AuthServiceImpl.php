@@ -22,7 +22,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function syncLogin($userId)
     {
-
         $providerName = $this->getAuthProvider()->getProviderName();
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
         if (empty($bind)) {

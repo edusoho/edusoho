@@ -20,8 +20,9 @@ class PartnerController extends BaseController
         }
 
         $loginScript = $this->getAuthService()->syncLogin($user['id']);
-
-    	$goto = $request->query->get('goto') ? : $this->generateUrl('homepage');
+var_dump($loginScript);
+exit();
+        $goto = $request->query->get('goto') ? : $this->generateUrl('homepage');
 
         $response = $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
             'type' => 'info',
@@ -33,10 +34,10 @@ class PartnerController extends BaseController
         ));
 
         return $response;
-	}
+    }
 
-	public function logoutAction(Request $request)
-	{
+    public function logoutAction(Request $request)
+    {
         $userId = (int) $request->query->get('userId');
 
         $user = $this->getUserService()->getUser($userId);

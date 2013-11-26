@@ -1,13 +1,13 @@
 <?php
- 
+
 namespace Topxia\WebBundle\Handler;
- 
+
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Service\Common\ServiceKernel;
- 
+
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)

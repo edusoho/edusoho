@@ -31,7 +31,7 @@ class DiscuzAuthProvider implements AuthProvider
         return uc_user_synlogout();
     }
 
-    public function changeUsername($userId, $newName)
+    public function changeNickname($userId, $newName)
     {
         return true;
     }
