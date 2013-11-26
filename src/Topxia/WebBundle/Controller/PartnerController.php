@@ -19,14 +19,7 @@ class PartnerController extends BaseController
             return $this->createMessageResponse('error', '用户尚未登录！');
         }
 
-    	$api = $this->createWindidApi('user');
-
-    	$apiUser = $api->getUser($user['email'], 3);
-    	if (empty($apiUser)) {
-    		return $this->createMessageResponse('error', 'WINDID中不存在该用户！');
-    	}
-
-    	$loginScript = $api->synLogin($apiUser['uid']);
+        $loginScript = $this->getAuthService()->syncLogin($user['id']);
 
     	$goto = $request->query->get('goto') ? : $this->generateUrl('homepage');
 
@@ -51,14 +44,10 @@ class PartnerController extends BaseController
             return $this->createMessageResponse('error', '用户不存在，退出登录失败！');
         }
 
-        $api = $this->createWindidApi('user');
+        $logoutScript = $this->getAuthService()->syncLogout($user['id']);
 
-        $apiUser = $api->getUser($user['email'], 3);
-        if (empty($apiUser)) {
-            return $this->createMessageResponse('error', 'WINDID中不存在该用户，同步登出失败！');
-        }
+        var_dump($logoutScript);
 
-        $logoutScript = $api->synLogout($apiUser['uid']);
         $goto = $request->query->get('goto') ? : $this->generateUrl('homepage');
 
         return $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
@@ -177,6 +166,11 @@ class PartnerController extends BaseController
     private function createWindidResponse($content = 'success')
     {
         return new Response($content);
+    }
+
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }

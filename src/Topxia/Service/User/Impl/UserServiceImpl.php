@@ -318,7 +318,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
         $this->getProfileDao()->addProfile(array('id' => $user['id']));
-        if (!in_array($type, array('default', 'phpwind', 'discuz'))) {
+        if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
@@ -521,7 +521,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
         }
 
-        $result = in_array($type, array('qq','renren','weibo'),true);
+        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
         if(!$result) {
             throw $this->createServiceException('获取第三方登陆信息失败,当前只支持weibo,qq,renren');
         }
@@ -535,18 +535,18 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，第三方绑定失败');
         }
-        $result = in_array($type, array('qq','renren','weibo'),true);
+        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
         if(!$result) {
-            throw $this->createServiceException('第三方绑定失败,当前只支持weibo,qq,renren');
+            throw $this->createServiceException('第三方绑定失败,当前只支持weibo,qq,renren, discuz, phpwind');
         }
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,
             'fromId' => $fromId,
             'toId'=>$toId,
-            'token'=>$token['token'],
+            'token'=> empty($token['token']) ? '' : $token['token'],
             'createdTime'=>time(),
-            'expiredTime'=>$token['expiredTime']
-            ));
+            'expiredTime'=>empty($token['expiredTime']) ? 0 : $token['expiredTime'],
+        ));
     }
 
     public function markLoginInfo()
