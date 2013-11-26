@@ -35,14 +35,18 @@ class PhpwindAuthProvider implements AuthProvider
         return true;
     }
 
-    public function changeEmail($userId, $newEmail)
+    public function changeEmail($userId, $password, $newEmail)
     {
-        return true;
+        $api = $this->getWindidApi('user');
+        $result = $api->editUser($userId, $password, array('email' => $newEmail));
+        return $result == 1;
     }
 
-    public function changePassowrd($userId, $newPassword)
+    public function changePassword($userId, $oldPassword, $newPassword)
     {
-        return true;
+        $api = $this->getWindidApi('user');
+        $result = $api->editUser($userId, $oldPassword, array('password' => $newPassword));
+        return $result == 1;
     }
 
     public function checkUsername($username)

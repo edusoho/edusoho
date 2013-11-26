@@ -41,7 +41,7 @@ class DiscuzAuthProvider implements AuthProvider
         return true;
     }
 
-    public function changePassowrd($userId, $newPassword)
+    public function changePassword($userId, $oldPassword, $newPassword)
     {
         return true;
     }

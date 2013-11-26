@@ -131,7 +131,7 @@ class SettingsController extends BaseController
                 if (!$this->getUserService()->verifyPassword($user['id'], $passwords['currentPassword'])) {
                 	$this->setFlashMessage('danger', '当前密码不正确，请重试！');
                 } else {
-	                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                    $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
 	                $this->setFlashMessage('success', '密码修改成功。');
                 }
 
@@ -295,6 +295,11 @@ class SettingsController extends BaseController
         if (!in_array($type, $types)) {
             throw new NotFoundHttpException();
         }
+    }
+
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }

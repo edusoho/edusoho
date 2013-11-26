@@ -12,9 +12,9 @@ interface AuthProvider
 
     public function changeUsername($userId, $newName);
 
-    public function changeEmail($userId, $newEmail);
+    public function changeEmail($userId, $password, $newEmail);
 
-    public function changePassowrd($userId, $newPassword);
+    public function changePassword($userId, $oldPassword, $newPassword);
 
     public function checkUsername($username);
 
