@@ -27,7 +27,8 @@ class AuthController extends BaseController
             $data = $request->request->all();
 
             // @todo
-            $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
+            $isPasswordOk = $this->getAuthService()->checkPassword($user['id'], $data['password']);
+            var_dump($isPasswordOk);exit();
             if (!$isPasswordOk) {
                 $this->setFlashMessage('danger', '密码不正确，请重试。');
                 return $this->redirect($this->generateUrl('auth_email_confirm', array('token' => $token['token'])));

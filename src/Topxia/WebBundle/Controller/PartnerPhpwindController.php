@@ -118,7 +118,7 @@ class PartnerPhpwindController extends BaseController
      */
     private function doEditUser($args)
     {
-        file_put_contents('/tmp/phpwind', json_encode($args). "\n\n", FILE_APPEND);
+        // file_put_contents('/tmp/phpwind', json_encode($args). "\n\n", FILE_APPEND);
         
         if (!empty($args['changepwd'])) {
             return true;

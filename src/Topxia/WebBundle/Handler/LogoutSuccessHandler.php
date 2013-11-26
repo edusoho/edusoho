@@ -11,8 +11,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 	public function onLogoutSuccess(Request $request)
 	{
 
-		$userPartner = ServiceKernel::instance()->getParameter('user_partner');
-		if ($userPartner == 'phpwind') {
+		if ($this->getAuthService()->hasPartnerAuth()) {
 			$user = ServiceKernel::instance()->getCurrentUser();
 			if (!$user->isLogin()) {
 				return parent::onLogoutSuccess($request);
@@ -26,4 +25,9 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
 		return parent::onLogoutSuccess($request);
 	}
+
+    private function getAuthService()
+    {
+        return ServiceKernel::instance()->createService('User.AuthService');
+    }
 }
