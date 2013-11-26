@@ -36,14 +36,20 @@ class DiscuzAuthProvider implements AuthProvider
         return true;
     }
 
-    public function changeEmail($userId, $newEmail)
+    public function changeEmail($userId, $password, $newEmail)
     {
-        return true;
+        $this->initDiscuzApi();
+        $user = uc_get_user($userId, 1);
+        $result = uc_user_edit($user[1], null, null, $newEmail, 1);
+        return $result == 1;
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)
     {
-        return true;
+        $this->initDiscuzApi();
+        $user = uc_get_user($userId, 1);
+        $result = uc_user_edit($user[1], null, $newPassword, null, 1);
+        return $result == 1;
     }
 
     public function checkUsername($username)
