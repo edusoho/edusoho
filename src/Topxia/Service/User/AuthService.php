@@ -9,7 +9,7 @@ interface AuthService
 
     public function syncLogout($userId);
 
-    public function changeUsername($userId, $newName);
+    public function changeNickname($userId, $newName);
 
     public function changeEmail($userId, $password, $newEmail);
 

@@ -263,7 +263,15 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
-            $user = $this->getUserService()->setupAccount($user['id'], $request->request->all());
+            $data = $request->request->all();
+
+            $this->getAuthService()->changeEmail($user['id'], null, $data['email']);
+            $this->getAuthService()->changeNickname($user['id'], $data['nickname']);
+
+echo 'bb';
+            exit();
+
+            $user = $this->getUserService()->setupAccount($user['id']);
             $this->authenticateUser($user);
             return $this->createJsonResponse(true);
         }
