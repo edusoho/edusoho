@@ -73,7 +73,9 @@ class PhpwindAuthProvider implements AuthProvider
 
     public function checkPassword($userId, $password)
     {
-        return false;
+        $api = $this->getWindidApi('user');
+        list($result, $apiUser) = $api->login($userId, $password, 1);
+        return $result == 1;
     }
 
     public function checkLoginByEmail($email, $password)

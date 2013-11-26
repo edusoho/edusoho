@@ -112,10 +112,19 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkPassword($userId, $password)
     {
-        $checked = $this->getAuthProvider()->checkPassword($userId, $password);
-        if ($checked) {
-            return true;
+        if ($this->hasPartnerAuth()) {
+            $providerName = $this->getAuthProvider()->getProviderName();
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            if ($bind) {
+                return false;
+            }
+
+            $checked = $this->getAuthProvider()->checkPassword($bind['fromId'], $password);
+            if ($checked) {
+                return true;
+            }
         }
+
         return $this->getUserService()->checkPassword($userId, $password);
     }
 
