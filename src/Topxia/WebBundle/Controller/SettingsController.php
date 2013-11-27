@@ -267,10 +267,6 @@ class SettingsController extends BaseController
 
             $this->getAuthService()->changeEmail($user['id'], null, $data['email']);
             $this->getAuthService()->changeNickname($user['id'], $data['nickname']);
-
-echo 'bb';
-            exit();
-
             $user = $this->getUserService()->setupAccount($user['id']);
             $this->authenticateUser($user);
             return $this->createJsonResponse(true);
@@ -288,10 +284,11 @@ echo 'bb';
         if ($nickname == $user['nickname']) {
             $response = array('success' => true);
         } else {
-            if ($this->getUserService()->isNicknameAvaliable($nickname)) {
+            list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+            if ($result == 'success') {
                 $response = array('success' => true);
             } else {
-                $response = array('success' => false, 'message' => '该昵称已经被占用了');
+                $response = array('success' => false, 'message' => $message);
             }
         }
 
