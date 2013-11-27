@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
+    require('jquery.bootstrap-datetimepicker');
 
     exports.run = function() {
         var $form = $('#offsale-form');
@@ -31,6 +32,19 @@ define(function(require, exports, module) {
             required: true,
             rule: 'integer remotePost'
         });
+
+
+        //日期时间选择
+        $('#44strvalidTime').datetimepicker({
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            pickDate: true,
+            pickTime: true,
+            hourStep: 1,
+            minuteStep: 30,
+            secondStep: 30,
+            inputMask: true
+      });
 
     };
 
