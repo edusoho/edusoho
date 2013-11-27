@@ -5,7 +5,6 @@
 /app/logs/*
 /build
 /files
-/app/config/uc_client_config.php
 /app/data/udisk/*
 /app/data/private_files/*
 /app/data/backup/*
