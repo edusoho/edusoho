@@ -90,7 +90,12 @@ class DiscuzAuthProvider implements AuthProvider
 
     public function getAvatar($userId, $size = 'middle')
     {
-        
+        $this->initDiscuzApi();
+        if (uc_check_avatar($userId)) {
+            return UC_API."/avatar.php?uid=".$userId."&type=virtual&size=middle";
+        } else {
+            return null;
+        }
     }
 
     public function getProviderName()
