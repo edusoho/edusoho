@@ -726,6 +726,11 @@ class UserServiceImpl extends BaseService implements UserService
             return true;
         }
     }
+    
+    public function getLastestApprovalByUserIdAndStatus($userId, $status)
+    {
+        return $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($userId, $status);
+    }
 
     public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory)
     {
@@ -756,38 +761,30 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
-    public function getApprovalByUserId($userId)
-    {
-        return $this->getUserApprovalDao()->getApprovalByUserId($userId);
-    }
-
     public function passApproval($userId, $note = null)
     {
-        $user = $this->getUser($userId);
+        $user = $this->getUserDao()->getUser($userId);
 
         if (empty($user)) {
             throw $this->createServiceException("用户#{$userId}不存在！");
         }
+
         $this->getUserDao()->updateUser($user['id'], array(
             'approvalStatus' => 'approved',
             'approvalTime' => time()
         ));
+        
+        $currentUser = $this->getCurrentUser();
+        $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
 
         $message = '您的个人实名认证，审核已经通过！' . ($note ? "({$note})" : '');
-        if (in_array($user['roles'], array('ROLE_USER', 'ROLE_ENTERPRISE'))) {
-            $this->setUserRole($userId, 'ROLE_USER_VERIFIED');
-        }
-
-        $this->getMessageService()->sendNotification($user['id'], array(
-            'content'=>$message, 'level' => 'success'
-        ));
-
+        $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;
     }
 
-        public function rejectApproval($userId, $note = null)
+    public function rejectApproval($userId, $note = null)
     {
-        $user = $this->getUser($userId);
+        $user = $this->getUserDao()->getUser($userId);
         if (empty($user)) {
             throw $this->createServiceException("用户#{$userId}不存在！");
         }
@@ -797,32 +794,30 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime' => time(),
         ));
 
-        $this->getUserApprovalDao()->addApproval(array(
-            'userId' => $user['id'],
+        $currentUser = $this->getCurrentUser();
+        $this->getUserApprovalDao()->addApproval(
+            array(
+            'userId'=> $user['id'],
+            'note'=> $note,
             'status' => 'approve_fail',
-            'note' => $note,
-            'operatorId' => $this->getCurrentUser()->id,
-            'createdTime' => time(),
-        ));
+            'operatorId' => $currentUser['id'])
+        );
 
-        
+        $this->getLogService()->info('user', 'approval_fail', "用户{$user['nickname']}实名认证失败，操作人:{$currentUser['nickname']} !" );
+    
         $message = '您的个人实名认证，审核未通过！' . ($note ? "({$note})" : '');
-        $this->getMessageService()->sendNotification($user['id'], array(
-            'content'=>$message, 'level' => 'error'
-        ));
-
+        $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;
     }
 
-
-    public function getApprovingUserCount()
+    public function getUserCountByApprovalStatus($approvalStatus)
     {
-        return $this->getUserDao()->searchUserCount(array('approvalStatus' => 'approving'));
+        return $this->getUserDao()->searchUserCount(array('approvalStatus' => $approvalStatus));
     }
 
-    public function getApprovingUsers($start, $limit)
+    public function getUsersByApprovalStatus($approvalStatus, $start, $limit)
     {
-        return $this->getUserDao()->searchUsers(array('approvalStatus' => 'approving'), 
+        return $this->getUserDao()->searchUsers(array('approvalStatus' => $approvalStatus), 
             array('approvalTime', 'DESC'), $start, $limit);
     }
 

@@ -564,6 +564,10 @@ admin_approval_approving:
     pattern:  approvals/approving
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approving }
 
+admin_approval_approved:
+    pattern:  approvals/approved
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approved }
+
 admin_approval_approve:
     pattern:  approvals/{id}/approve
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
@@ -572,3 +576,7 @@ admin_approval_cancel:
     pattern:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
     methods:  [POST]
+
+show_idcard:
+    pattern:   approvals/idcard/show/{userId}/{type}
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }

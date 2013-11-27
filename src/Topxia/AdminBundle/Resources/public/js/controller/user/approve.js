@@ -10,8 +10,12 @@ define(function(require, exports, module) {
 			var status = submitButton.data('status');
 
 			if (status == 'fail' && $('#note').val() == '') {
-				alert('请输入审核失败理由！');
-				Notify.danger()
+				Notify.danger('请输入审核失败理由！');
+				return false;
+			}
+
+			if($("#note").val().length > 100){
+				Notify.danger('不好意思，备注太长，请限制在100个字以内!');
 				return false;
 			}
 
@@ -23,7 +27,7 @@ define(function(require, exports, module) {
 				$('button').attr('disabled', 'disabled');
 
 				if (response.status == 'error') {
-					alert(response.error.message);
+					Notify.danger(response.error.message);
 					submitButton.text(originText);
 					$('button').attr('disabled', false);
 				} else {

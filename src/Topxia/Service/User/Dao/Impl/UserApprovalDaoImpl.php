@@ -23,9 +23,15 @@ class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
-	public function getApprovalByUserId($userId)
+	public function updateApproval($id, $fields)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId));
+		$this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getApproval($id);
+	}
+
+	public function getLastestApprovalByUserIdAndStatus($userId, $status)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ORDER BY createdTime DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId, $status));
 	}
 }

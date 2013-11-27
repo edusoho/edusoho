@@ -7,5 +7,7 @@ interface UserApprovalDao
 
 	function addApproval($approval);
 
-	function getApprovalByUserId($userId);
+	function updateApproval($id, $fields);
+
+	function getLastestApprovalByUserIdAndStatus($userId, $status);
 }
