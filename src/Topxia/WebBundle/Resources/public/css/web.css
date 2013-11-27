@@ -2169,10 +2169,12 @@ body {
 }
 
 .notebook-note .notebook-note-body {
+	word-break: break-all;
 	display: block;
 }
 
 .notebook-note-collapsed .notebook-note-body {
+	word-break: break-all;
 	display: none;
 }
 
