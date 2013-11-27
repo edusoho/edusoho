@@ -13,6 +13,13 @@ define(function(require, exports, module) {
             requiredErrorMessage: '请选择要上传的头像文件。'
         });
 
+        $('.use-partner-avatar').on('click', function(){
+            var goto = $(this).data('goto');
+            $.post($(this).data('url'), function(){
+                window.location.href = goto;
+            });
+        });
+
     };
 
 });

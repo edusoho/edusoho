@@ -205,12 +205,12 @@ class UserServiceImpl extends BaseService implements UserService
 
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(220, 220));
+        $largeImage->resize(new Box(200, 200));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
         $largeFileRecord = $this->getFileService()->uploadFile('user', new File($largeFilePath));
 
-        $largeImage->resize(new Box(100, 100));
+        $largeImage->resize(new Box(120, 120));
         $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
         $largeImage->save($mediumFilePath, array('quality' => 90));
         $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
@@ -219,6 +219,8 @@ class UserServiceImpl extends BaseService implements UserService
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
+
+        @unlink($filePath);
 
         return  $this->getUserDao()->updateUser($userId, array(
             'smallAvatar' => $smallFileRecord['uri'],

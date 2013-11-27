@@ -66,7 +66,6 @@ class SettingsController extends BaseController
                 $file = $file->move($directory, $filename);
 
                 return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-                    'userId' => $user['id'],
                     'file' => $file->getFilename())
                 ));
             }
@@ -74,7 +73,7 @@ class SettingsController extends BaseController
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
         if ($hasPartnerAuth) {
-            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'middle');
+            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
         } else {
             $partnerAvatar = null;
         }
@@ -86,8 +85,9 @@ class SettingsController extends BaseController
         ));
 	}
 
-    public function avatarCropAction(Request $request, $userId)
+    public function avatarCropAction(Request $request)
     {
+        $currentUser = $this->getCurrentUser();
         $filename = $request->query->get('file');
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
 
@@ -95,7 +95,7 @@ class SettingsController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($userId, $pictureFilePath, $options);
+            $this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
             return $this->redirect($this->generateUrl('settings_avatar'));
         }
 
@@ -116,6 +116,34 @@ class SettingsController extends BaseController
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
         ));
+    }
+
+    public function avatarFetchPartnerAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!$this->getAuthService()->hasPartnerAuth()) {
+            throw $this->createNotFoundException();
+        }
+
+        $url = $this->getAuthService()->getPartnerAvatar($currentUser['id'], 'big');
+        if (empty($url)) {
+            $this->setFlashMessage('danger', '获取论坛头像地址失败！');
+            return $this->createJsonResponse(true);
+        }
+
+        $avatar = $this->fetchAvatar($url);
+        if (!empty($avatar)) {
+            $this->setFlashMessage('danger', '获取论坛头像失败或超时，请重试！');
+            return $this->createJsonResponse(true);
+        }
+
+        $avatarPath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
+
+        file_put_contents($avatarPath, $avatar);
+
+        $this->getUserService()->changeAvatar($currentUser['id'], $avatarPath, array('x'=>0, 'y'=>0, 'width'=>200, 'height' => 200));
+
+        return $this->createJsonResponse(true);
     }
 
 	public function passwordAction(Request $request)
@@ -308,6 +336,27 @@ class SettingsController extends BaseController
         if (!in_array($type, $types)) {
             throw new NotFoundHttpException();
         }
+    }
+
+    public function fetchAvatar($url)
+    {
+
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
     }
 
     private function getAuthService()
