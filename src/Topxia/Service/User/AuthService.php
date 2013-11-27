@@ -23,6 +23,8 @@ interface AuthService
 
     public function checkPartnerLoginByEmail($email, $password);
 
+    public function getPartnerAvatar($userId, $size = 'middle');
+
     public function hasPartnerAuth();
 
     public function getPartnerName();

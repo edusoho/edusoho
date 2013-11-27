@@ -72,9 +72,17 @@ class SettingsController extends BaseController
             }
         }
 
+        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
+        if ($hasPartnerAuth) {
+            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'middle');
+        } else {
+            $partnerAvatar = null;
+        }
+
 		return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
             'form' => $form->createView(),
             'user' => $this->getUserService()->getUser($user['id']),
+            'partnerAvatar' => $partnerAvatar,
         ));
 	}
 

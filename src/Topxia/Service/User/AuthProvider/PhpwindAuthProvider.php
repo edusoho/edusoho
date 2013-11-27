@@ -96,6 +96,18 @@ class PhpwindAuthProvider implements AuthProvider
         );
     }
 
+    public function getAvatar($userId, $size = 'middle')
+    {
+        $api = $this->getWindidApi('avatar');
+        $url = $api->getAvatar($userId, $size);
+
+        if ($this->checkUrlExist($url)) {
+            return $url;
+        }
+
+        return null;
+    }
+
     public function getProviderName()
     {
         return 'phpwind';
@@ -143,6 +155,12 @@ class PhpwindAuthProvider implements AuthProvider
             default:
                 return array('error_unknown', '未知错误');
         }
+    }
+
+    public function checkUrlExist($url)
+    {
+        $headers = get_headers($url);
+        return strpos($headers[0], ' 200 ') > 0;
     }
 
 }

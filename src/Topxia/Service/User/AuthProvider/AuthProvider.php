@@ -24,6 +24,8 @@ interface AuthProvider
 
     public function checkLoginByEmail($email, $password);
 
+    public function getAvatar($userId, $size = 'middle');
+
     public function getProviderName();
 
 

@@ -88,6 +88,11 @@ class DiscuzAuthProvider implements AuthProvider
         );
     }
 
+    public function getAvatar($userId, $size = 'middle')
+    {
+        
+    }
+
     public function getProviderName()
     {
         return 'discuz';

@@ -54,6 +54,11 @@ class UcenterAuthProvider implements AuthProvider
         return false;
     }
 
+    public function getAvatar($userId, $size = 'middle')
+    {
+        throw new \RuntimeException();
+    }
+
     public function getProviderName()
     {
         return 'default';

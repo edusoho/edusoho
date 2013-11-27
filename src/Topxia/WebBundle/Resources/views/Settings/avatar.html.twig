@@ -35,11 +35,24 @@
           <div class="controls col-md-8 controls">
             {{ form_rest(form) }}
             <button type="submit" class="btn btn-primary">上传</button>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           </div>
         </div>
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        {% if partnerAvatar %}
+          <div class="form-group">
+            <div class="col-md-2 control-label"><b>论坛头像</b></div>
+            <div class="controls col-md-8 controls">
+              <img src="{{ partnerAvatar }}" class="mrm">
+              <button class="btn btn-default use-partner-avatar" type="button">使用该头像</button>
+            </div>
+          </div>
+        {% endif %}
+
       </form>
+
+
+
 
 
 
