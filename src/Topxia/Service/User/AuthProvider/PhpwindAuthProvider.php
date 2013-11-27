@@ -133,6 +133,12 @@ class PhpwindAuthProvider implements AuthProvider
                 return array('error_black_list', 'Email处在黑名单');
             case \WindidError::EMAIL_DUPLICATE:
                 return array('error_duplicate', 'Email已存在');
+            case \WindidError::PASSWORD_LEN:
+                return array('error_password_length_invalid', '密码长度不符合');
+            case \WindidError::PASSWORD_ILLEGAL_CHAR:
+                return array('error_password_illegal_char', '密码含有非法字符');
+            case \WindidError::PASSWORD_ERROR:
+                return array('error_password_error', '原密码错误');
             case \WindidError::FAIL:
             default:
                 return array('error_unknown', '未知错误');

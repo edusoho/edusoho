@@ -3,7 +3,7 @@ namespace Topxia\Service\User;
 
 interface AuthService
 {
-    public function register($registration);
+    public function register($registration, $type = 'default');
 
     public function syncLogin($userId);
 

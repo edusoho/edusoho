@@ -9,15 +9,22 @@ class AuthServiceImpl extends BaseService implements AuthService
 {
     private $provider = null;
 
-    public function register($registration)
+    public function register($registration, $type = 'default')
     {
         $authUser = $this->getAuthProvider()->register($registration);
 
-        $registration['token'] = array(
-            'userId' => $authUser['id'],
-        );
+        if ($type == 'default') {
+            $registration['token'] = array(
+                'userId' => $authUser['id'],
+            );
+            $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
 
-        return $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
+        } else {
+            $newUser = $this->getUserService()->register($registration, $type);
+            $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
+        }
+
+        return $newUser;
     }
 
     public function syncLogin($userId)
@@ -48,11 +55,11 @@ class AuthServiceImpl extends BaseService implements AuthService
             $providerName = $this->getAuthProvider()->getProviderName();
             $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
             if ($bind) {
-                $this->getAuthProvider()->changeNickanme($bind['fromId'], $newName);
+                $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
             }
         }
 
-        $this->getUserService()->changeNickanme($userId, $newName);
+        $this->getUserService()->changeNickname($userId, $newName);
     }
 
     public function changeEmail($userId, $password, $newEmail)
