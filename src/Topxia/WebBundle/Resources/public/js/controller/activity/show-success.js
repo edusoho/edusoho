@@ -94,19 +94,6 @@ define(function(require, exports, module) {
             });
         });
 
-
-        //图片
-        var carousel = new Carousel({
-            element: '#carousel-openclass-gallery-1',
-            hasTriggers: false,
-            easing: 'easeOutStrong',
-            effect: 'scrollx',
-            step: 2,
-            viewSize: [280],
-            circular: false,
-            autoplay: true
-        }).render();
-
         //视频
 
        if ($("#lesson-preview-video-player").length > 0) {
@@ -127,15 +114,29 @@ define(function(require, exports, module) {
                 success: function(media) {
                     media.play();
                 }
-            });
-
-           
+            });           
 
         }
 
         if ($("#lesson-preview-swf-player").length > 0) {
             swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '360', "9.0.0");
         }
+
+
+        //图片
+    
+            var carousel = new Carousel({
+                element: '#carousel-openclass-gallery-1',
+                hasTriggers: false,
+                easing: 'easeOutStrong',
+                effect: 'scrollx',
+                step: 2,
+                viewSize: [280],
+                circular: false,
+                autoplay: true
+            }).render();
+        
+        
 
 
 

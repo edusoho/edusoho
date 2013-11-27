@@ -157,9 +157,11 @@ class ActivityController extends BaseController
 
         $lession=array();
         if(!empty($activity['courseId'])){
-            $lessons=$fristlessonid=$this->getCourseService()->getCourseLessons($activity['courseId'][0]);
+            $lessons=$this->getCourseService()->getCourseLessons($activity['courseId'][0]);
            
             $lession=count($lessons)>0?$lessons[0]:array();
+
+
         }
        
 
@@ -177,16 +179,16 @@ class ActivityController extends BaseController
         //问题回答ids
         $postUserIds=array();
 
-        $sss=array();
+        $threadPosts=array();
         foreach ($threads as $thread) {
             $thread['bindpost']=$this->getActivityThreadService()->findThreadPosts($activity['id'],$thread['id'],"default",0,20);
             if(!empty($thread['bindpost'])){
                 $postUserIds=array_merge($postUserIds,ArrayToolkit::column($thread['bindpost'],'userId'));
             }
-            $sss[]=$thread;
+            $threadPosts[]=$thread;
         }
 
-        $qustionUserIds=ArrayToolkit::column($sss,'userId');
+        $qustionUserIds=ArrayToolkit::column($threadPosts,'userId');
         $qustionUsers = $this->getUserService()->findUsersByIds($qustionUserIds);
         $qustionUsers[0]=array(
             "id" =>  0,
@@ -206,7 +208,7 @@ class ActivityController extends BaseController
         return $this->render("TopxiaWebBundle:Activity:show-expired-activity.html.twig",array(
             "activity"=>$activity,
             "activitys"=>$activitys,
-            "qustions"=>$sss,
+            "qustions"=>$threadPosts,
             "pics"=>$files,
             "students"=>$students,
             'lesson'=>$lession,

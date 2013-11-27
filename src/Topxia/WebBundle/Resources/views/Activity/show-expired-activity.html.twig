@@ -83,7 +83,9 @@
 
 <!-- 精彩图片 -->
 <section class="row mhz">
+   
   <div class="col-md-12  pz ">
+
     {% if pics %}
           <div id="carousel-openclass-gallery-1" class="carousel-openclass-gallery">
               <span class="ui-switchable-prev-btn glyphicon glyphicon-chevron-left" data-role="prev"></span>
@@ -91,7 +93,7 @@
               <div class="scroller">
                   <div class="ui-switchable-content" data-role="content">
                     {% for pic in pics %}
-                      <a href="{{ path('photoview',{id:pic.groupId }) }}" class="ui-switchable-panel">
+                      <a href="{{ path('photoview',{id:pic.groupId }) }}" class="ui-switchable-panel" target="_blank">
                         <img  src="{{ file_path(pic.url,'course-large.png') }}" alt=""  />
                         <div class="tit">
                           <p>{{ pic.content }}</p>
