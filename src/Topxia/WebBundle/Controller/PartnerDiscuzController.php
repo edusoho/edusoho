@@ -119,24 +119,6 @@ class PartnerDiscuzController extends BaseController
 
     private function doUpdatepw($request, $get, $post)
     {
-        if(!API_UPDATEPW) {
-            return API_RETURN_FORBIDDEN;
-        }
-
-        $this->requireClientFile("model/base.php");
-        $this->requireClientFile("model/user.php");
-        $this->requireClientFile("control/user.php");
-
-        $userControl = new \usercontrol();
-        $userFromDz = $userControl->onget_user_password($get['username']);
-
-        parse_str(uc_authcode($userFromDz, 'DECODE', UC_KEY), $get_user);
-        if(MAGIC_QUOTES_GPC) {
-            $get_user = $this->stripslashes($get_user);
-        }
-        var_dump($get_user);
-        // $user = $this->getUserService()->getUserByNickname($get['username']);
-        // $this->getUserService()->changePassword($user['id'], $get['password']);
         return API_RETURN_SUCCEED;
     }
 

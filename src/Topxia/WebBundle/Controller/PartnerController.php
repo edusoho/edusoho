@@ -20,6 +20,7 @@ class PartnerController extends BaseController
         }
 
         $loginScript = $this->getAuthService()->syncLogin($user['id']);
+
         $goto = $request->query->get('goto') ? : $this->generateUrl('homepage');
 
         $response = $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
