@@ -37,7 +37,7 @@ class KernelRequestListener
 
     			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
     				'type' => 'error',
-    				'message' => '数据来路不明，请回到原始页面，刷新后重试！',
+    				'message' => '页面已过期，请重新提交数据！',
     				'goto' => '',
     				'duration' => 0,
 				));
