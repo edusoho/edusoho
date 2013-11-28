@@ -49,6 +49,11 @@ class NoneAuthProvider implements AuthProvider
         return false;
     }
 
+    public function checkLoginByNickname($nickname, $password)
+    {
+        return false;
+    }
+
     public function checkLoginByEmail($email, $password)
     {
         return false;

@@ -5,7 +5,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class UserController extends BaseController {
+class UserController extends BaseController 
+{
 
     public function indexAction (Request $request)
     {
@@ -203,6 +204,38 @@ class UserController extends BaseController {
         $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
 
         return $this->createJsonResponse(true);
+    }
+
+    public function changePasswordAction(Request $request, $userId)
+    {
+        $currentUser = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($userId);
+        if(!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])){
+            throw $this->createAccessDeniedException();
+        }
+        
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+
+            $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+
+            $messageToUser = '超级管理员:'.$currentUser['nickname'].'已经成功修改了您的密码,新密码为：'.$formData['newPassword'];
+            $this->getNotificationService()->notify($user['id'], 'default', $messageToUser);
+            $messageToSuperAadmin = '您已经修改了用户:'.$user['nickname'].'的密码，新密码为：'.$formData['newPassword'];
+            $this->getNotificationService()->notify($currentUser['id'], 'default', $messageToSuperAadmin);
+
+            return $this->redirect($this->generateUrl('admin_user'));
+        }
+        
+        return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
+            'user' => $user
+        ));
+
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
     protected function getLogService()

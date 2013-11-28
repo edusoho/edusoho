@@ -71,6 +71,11 @@ class DiscuzAuthProvider implements AuthProvider
         return false;
     }
 
+    public function checkLoginByNickname($nickname, $password)
+    {
+
+    }
+
     public function checkLoginByEmail($email, $password)
     {
         $this->initDiscuzApi();
@@ -81,7 +86,7 @@ class DiscuzAuthProvider implements AuthProvider
 
         return array(
             'id' => $result[0],
-            'username' => $result[1],
+            'nickname' => $result[1],
             'email' => $result[3],
             'createdTime' => '',
             'createdIp' => '',

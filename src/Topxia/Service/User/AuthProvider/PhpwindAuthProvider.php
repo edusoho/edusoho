@@ -78,6 +78,24 @@ class PhpwindAuthProvider implements AuthProvider
         return $result == 1;
     }
 
+    public function checkLoginByNickname($nickname, $password)
+    {
+        $api = $this->getWindidApi('user');
+
+        list($result, $apiUser) = $api->login($nickname, $password, 2);
+        if ($result != 1) {
+            return null;
+        }
+
+        return array(
+            'id' => $apiUser['uid'],
+            'nickname' => $apiUser['username'],
+            'email' => $apiUser['email'],
+            'createdTime' => $apiUser['regdate'],
+            'createdIp' => $apiUser['regip'],
+        );
+    }
+
     public function checkLoginByEmail($email, $password)
     {
         $api = $this->getWindidApi('user');
@@ -89,7 +107,7 @@ class PhpwindAuthProvider implements AuthProvider
 
         return array(
             'id' => $apiUser['uid'],
-            'username' => $apiUser['username'],
+            'nickname' => $apiUser['username'],
             'email' => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
             'createdIp' => $apiUser['regip'],
