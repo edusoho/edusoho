@@ -73,7 +73,19 @@ class DiscuzAuthProvider implements AuthProvider
 
     public function checkLoginByNickname($nickname, $password)
     {
+        $this->initDiscuzApi();
+        $result = uc_user_login($nickname, $password);
+        if ($result[0] <= 0) {
+            return $this->convertApiResult($result);
+        }
 
+        return array(
+            'id' => $result[0],
+            'nickname' => $result[1],
+            'email' => $result[3],
+            'createdTime' => '',
+            'createdIp' => '',
+        );
     }
 
     public function checkLoginByEmail($email, $password)
