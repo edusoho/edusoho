@@ -388,9 +388,9 @@ class SettingController extends BaseController
                 $this->setFlashMessage('danger', '用户名或密码不正确。');
                 goto response;
             } else {
-                $this->getAuthService()->changeEmail($currentUser['id'], null, $partnerUser['email']);
-                $this->getAuthService()->changeNickname($currentUser['id'], $partnerUser['nickname']);
-                $this->getAuthService()->changePassword($currentUser['id'], null,$data['password']);
+                $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
+                $this->getUserService()->changeNickname($currentUser['id'], $partnerUser['nickname']);
+                $this->getUserService()->changePassword($currentUser['id'], $data['password']);
                 $this->getUserService()->bindUser($setting['mode'], $partnerUser['id'], $currentUser['id'], null);
                 $user = $this->getUserService()->getUser($currentUser['id']);
                 $this->authenticateUser($user);

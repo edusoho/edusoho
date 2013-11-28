@@ -75,12 +75,13 @@ class AuthenticationProvider extends UserAuthenticationProvider
             if ($this->getAuthService()->hasPartnerAuth()) {
                 try {
                     $user = $this->userProvider->loadUserByUsername($username);
-
                     $bind = $this->getUserService()->getUserBindByTypeAndUserId($this->getAuthService()->getPartnerName(), $user['id']);
+
                     if ($bind) {
                         $partnerUser = $this->getAuthService()->checkPartnerLoginById($bind['fromId'], $token->getCredentials());
                         if ($partnerUser) {
-                            $this->syncEmailAndPassword($user, $partnerUser, $token);
+
+                            $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                         }
                     }
 
@@ -93,12 +94,13 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
                     $bind = $this->getUserService()->getUserBindByTypeAndFromId($this->getAuthService()->getPartnerName(), $partnerUser['id']);
                     if ($bind) {
+
                         $user = $this->getUserService()->getUser($bind['toId']);
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
 
                         $registration = array();
-                        $registration['nickname'] = $partnerUser['username'];
+                        $registration['nickname'] = $partnerUser['nickname'];
                         $registration['email'] = $partnerUser['email'];
                         $registration['password'] = $token->getCredentials();
                         $registration['createdIp'] = $partnerUser['createdIp'];
@@ -116,6 +118,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
             }
 
             if (!$user instanceof UserInterface) {
+
                 throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
             }
 
@@ -151,9 +154,9 @@ class AuthenticationProvider extends UserAuthenticationProvider
             $this->getLogService()->error('user', 'sync_password', "同步用户(#{$user['id']})密码失败");
         }
 
-        if ($isEmaildChanged or $isPasswordChanged) {
-            $user = $this->userProvider->loadUserByUsername($username);
-        }
+
+        $user = $this->userProvider->loadUserByUsername($user['email']);
+
 
         return $user;
     }
