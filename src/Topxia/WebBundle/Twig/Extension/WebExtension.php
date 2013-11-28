@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Twig\Extension;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 
 class WebExtension extends \Twig_Extension
 {
@@ -40,6 +41,7 @@ class WebExtension extends \Twig_Extension
             'category_choices' => new \Twig_Function_Method($this, 'getCategoryChoices') ,
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
+            'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
         );
     }
 
@@ -310,6 +312,15 @@ class WebExtension extends \Twig_Extension
     public function getDictText($type, $key)
     {
         return DataDict::text($type, $key);
+    }
+
+    public function getUploadMaxFilesize($formated = true)
+    {
+        $max = FileToolkit::getMaxFilesize();
+        if ($formated) {
+            return FileToolkit::formatFileSize($max);
+        }
+        return $max;
     }
 
     public function getName ()

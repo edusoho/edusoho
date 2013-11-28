@@ -26,7 +26,7 @@
           </div>
           <div class="controls col-md-8 controls">
             {{ form_widget(form.avatar,{'attr' : { 'accept': 'image/gif,image/jpeg,image/png'}}) }}
-            <p class="help-block">你可以上传JPG、GIF或PNG格式的文件。</p>
+            <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
           </div>
         </div>
 
