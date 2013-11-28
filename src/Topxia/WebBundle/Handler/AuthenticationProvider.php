@@ -75,6 +75,25 @@ class AuthenticationProvider extends UserAuthenticationProvider
             if ($this->getAuthService()->hasPartnerAuth()) {
                 try {
                     $user = $this->userProvider->loadUserByUsername($username);
+
+                    // 同步Email / password
+                    $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
+                    if ($partnerUser) {
+                        $isEmaildChanged = ($user['email'] != $partnerUser['email']);
+                        if ($isEmaildChanged) {
+                            $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
+                        }
+
+                        $isPasswordChanged = !$this->getUserService()->verifyPassword($user['id'], $token->getCredentials());
+                        if ($isPasswordChanged) {
+                            $this->getUserService()->changePassword($user['id'], $token->getCredentials());
+                        }
+
+                        if ($isEmaildChanged or $isPasswordChanged) {
+                            $user = $this->userProvider->loadUserByUsername($username);
+                        }
+                    }
+
                 } catch (UsernameNotFoundException $notFound) {
 
                     $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
