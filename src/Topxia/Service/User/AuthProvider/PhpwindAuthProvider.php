@@ -82,7 +82,7 @@ class PhpwindAuthProvider implements AuthProvider
     {
         $api = $this->getWindidApi('user');
 
-        list($result, $apiUser) = $api->login($nickname, $password, 1);
+        list($result, $apiUser) = $api->login($userId, $password, 1);
         if ($result != 1) {
             return null;
         }
