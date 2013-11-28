@@ -179,6 +179,7 @@ class SettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled'=>0,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
             'bank_gateway'=>'none',
             'alipay_enabled'=>0,
             'alipay_key'=>'',
