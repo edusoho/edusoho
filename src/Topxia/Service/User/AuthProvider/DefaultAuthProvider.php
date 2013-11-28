@@ -49,6 +49,11 @@ class DefaultAuthProvider implements AuthProvider
         return false;
     }
 
+    public function checkLoginById($userId, $password)
+    {
+        return false;
+    }
+
     public function checkLoginByNickname($nickname, $password)
     {
         return false;

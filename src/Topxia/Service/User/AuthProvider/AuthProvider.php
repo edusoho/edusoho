@@ -22,6 +22,8 @@ interface AuthProvider
 
     public function checkPassword($userId, $password);
 
+    public function checkLoginById($userId, $password);
+
     public function checkLoginByNickname($nickname, $password);
 
     public function checkLoginByEmail($email, $password);

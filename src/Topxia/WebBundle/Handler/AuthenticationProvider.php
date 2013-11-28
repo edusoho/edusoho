@@ -76,21 +76,11 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 try {
                     $user = $this->userProvider->loadUserByUsername($username);
 
-                    // 同步Email / password
-                    $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
-                    if ($partnerUser) {
-                        $isEmaildChanged = ($user['email'] != $partnerUser['email']);
-                        if ($isEmaildChanged) {
-                            $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
-                        }
-
-                        $isPasswordChanged = !$this->getUserService()->verifyPassword($user['id'], $token->getCredentials());
-                        if ($isPasswordChanged) {
-                            $this->getUserService()->changePassword($user['id'], $token->getCredentials());
-                        }
-
-                        if ($isEmaildChanged or $isPasswordChanged) {
-                            $user = $this->userProvider->loadUserByUsername($username);
+                    $bind = $this->getUserService()->getUserBindByTypeAndUserId($this->getAuthService()->getPartnerName(), $user['id']);
+                    if ($bind) {
+                        $partnerUser = $this->getAuthService()->checkPartnerLoginById($bind['fromId'], $token->getCredentials());
+                        if ($partnerUser) {
+                            $this->syncEmailAndPassword($user, $partnerUser, $token);
                         }
                     }
 
@@ -101,18 +91,25 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         throw $notFound;
                     }
 
-                    $registration = array();
-                    $registration['nickname'] = $partnerUser['username'];
-                    $registration['email'] = $partnerUser['email'];
-                    $registration['password'] = $token->getCredentials();
-                    $registration['createdIp'] = $partnerUser['createdIp'];
-                    $registration['token'] = array(
-                        'userId' => $partnerUser['id'],
-                    );
+                    $bind = $this->getUserService()->getUserBindByTypeAndFromId($this->getAuthService()->getPartnerName(), $partnerUser['id']);
+                    if ($bind) {
+                        $user = $this->getUserService()->getUser($bind['toId']);
+                        $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
+                    } else {
 
-                    $this->getUserService()->register($registration, $this->getAuthService()->getPartnerName());
+                        $registration = array();
+                        $registration['nickname'] = $partnerUser['username'];
+                        $registration['email'] = $partnerUser['email'];
+                        $registration['password'] = $token->getCredentials();
+                        $registration['createdIp'] = $partnerUser['createdIp'];
+                        $registration['token'] = array(
+                            'userId' => $partnerUser['id'],
+                        );
 
-                    $user = $this->userProvider->loadUserByUsername($username);
+                        $this->getUserService()->register($registration, $this->getAuthService()->getPartnerName());
+
+                        $user = $this->userProvider->loadUserByUsername($username);
+                    }
                 }
             } else {
                 $user = $this->userProvider->loadUserByUsername($username);
@@ -131,6 +128,34 @@ class AuthenticationProvider extends UserAuthenticationProvider
             $ex->setToken($token);
             throw $ex;
         }
+    }
+
+    private function syncEmailAndPassword($user, $partnerUser, $token) 
+    {
+
+        try {
+            $isEmaildChanged = ($user['email'] != $partnerUser['email']);
+            if ($isEmaildChanged) {
+                $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
+            }
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'sync_email', "同步用户(#{$user['id']})Email失败");
+        }
+
+        try {
+            $isPasswordChanged = !$this->getUserService()->verifyPassword($user['id'], $token->getCredentials());
+            if ($isPasswordChanged) {
+                $this->getUserService()->changePassword($user['id'], $token->getCredentials());
+            }
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'sync_password', "同步用户(#{$user['id']})密码失败");
+        }
+
+        if ($isEmaildChanged or $isPasswordChanged) {
+            $user = $this->userProvider->loadUserByUsername($username);
+        }
+
+        return $user;
     }
 
     private function getUserService()
