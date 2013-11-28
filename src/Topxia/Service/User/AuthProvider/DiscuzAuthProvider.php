@@ -78,7 +78,7 @@ class DiscuzAuthProvider implements AuthProvider
         $this->initDiscuzApi();
         $result = uc_user_login($userId, $password, 1);
         if ($result[0] <= 0) {
-            return $this->convertApiResult($result);
+            return null;
         }
 
         return array(
@@ -95,7 +95,7 @@ class DiscuzAuthProvider implements AuthProvider
         $this->initDiscuzApi();
         $result = uc_user_login($nickname, $password);
         if ($result[0] <= 0) {
-            return $this->convertApiResult($result);
+            return null;
         }
 
         return array(
@@ -112,7 +112,7 @@ class DiscuzAuthProvider implements AuthProvider
         $this->initDiscuzApi();
         $result = uc_user_login($email, $password, 2);
         if ($result[0] <= 0) {
-            return $this->convertApiResult($result);
+            return null;
         }
 
         return array(
