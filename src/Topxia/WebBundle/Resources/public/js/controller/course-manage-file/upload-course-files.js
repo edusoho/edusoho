@@ -78,7 +78,11 @@ define(function(require, exports, module) {
 				BeforeUpload: function(up, file) {
 					var data = {};
 					if (targetType == 'courselesson' && uploadMode == 'cloud') {
-						data.convertor = 'video';
+						if (file.type == 'audio/mpeg') {
+							data.convertor = 'audio';
+						} else {
+							data.convertor = 'video';
+						}
 					}
 
 					$.ajax({
