@@ -1,11 +1,7 @@
 <?php
 namespace Topxia\Service\User\AuthProvider;
 
-<<<<<<< HEAD:src/Topxia/Service/User/AuthProvider/NoneAuthProvider.php
-class NoneAuthProvider implements AuthProvider
-=======
 class DefaultAuthProvider implements AuthProvider
->>>>>>> 0b35d49047d53b29c4fb6564341171641737b321:src/Topxia/Service/User/AuthProvider/DefaultAuthProvider.php
 {
 
     public function register($registration)
