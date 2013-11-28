@@ -57,10 +57,10 @@ class SaleController extends BaseController
 
         $result = $this->getOffsaleService()->checkProd($offsetting);
 
-        if ("success" == $result) {
-            $response = array('success' => true, 'message' => $result);
+        if ("true"==$result['hasProd']) {
+            $response = array('success' => true, 'message' => $result['prodName']);
         } else {
-            $response = array('success' => false, 'message' => $result);
+            $response = array('success' => false, 'message' => $result['prodName']);
         }
          
         return $this->createJsonResponse($response);

@@ -30,20 +30,34 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="prodId"]',         
             required: true,
-            rule: 'integer remotePost'
+            rule: 'integer remotePost',
+            hideMessage:function(msg,ele,eve){
+               
+                if(null != msg ){
+                    $("#prod_info").html(msg);
+                    $("#prod_info").addClass('text-color-green');
+                }
+            }
+        });
+
+        validator.addItem({
+            element: '[name="strvalidTime"]',         
+            required: false,
+            rule: 'datetime-i'
         });
 
 
         //日期时间选择
-        $('#44strvalidTime').datetimepicker({
-            format: 'yyyy-mm-dd',
+        $('#strvalidTime').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
             language: 'zh-CN',
             pickDate: true,
             pickTime: true,
             hourStep: 1,
-            minuteStep: 30,
-            secondStep: 30,
-            inputMask: true
+            minuteStep: 15,
+            secondStep: 15,
+            inputMask: true,
+            autoclose: true
       });
 
     };

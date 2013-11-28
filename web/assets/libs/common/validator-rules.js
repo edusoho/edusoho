@@ -78,7 +78,12 @@ define(function(require, exports, module) {
             /^1\d{10}$/,
             '{{display}}格式不正确'
         ],
-       
+        [
+            'datetime-i', 
+            /^\d{4}\-[01]?\d\-[0-3]?\d [0-2]?\d:[0-5]?\d$/,
+            '{{display}}的格式不正确'
+
+        ],
         [
             'remote',
             function(options, commit) {

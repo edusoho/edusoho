@@ -43,7 +43,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="prodType">选择商品类型</label>
+      <label for="prodType">商品类型</label>
     </div>
     <div class="col-md-8 controls">
       <select name="prodType" id="prodType">
@@ -55,10 +55,11 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="prodId">选择商品编号</label>
+      <label for="prodId">商品编号</label>
     </div>
     <div class="col-md-8 controls">
       <input class="form-control" type="text" id="prodId" value="{{offsetting.prodId}}" name="prodId" data-url="{{ path('admin_sale_offsale_prod_check')}}"  data-fid="offsale-form" required/>
+      <p class="help-block" id="prod_info">请输入商品编号</p>
     </div>
   </div>
 
@@ -66,8 +67,11 @@
     <div class="col-md-3 control-label">
       <label for="strvalidTime">有效期</label>
     </div>
-    <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="strvalidTime" value="{{offsetting.strvalidTime}}" name="strvalidTime"></div>
+    <div class="col-md-6 controls">
+      <div class="input-group">
+        <input class="form-control" type="text" id="strvalidTime" value="{{offsetting.strvalidTime}}" name="strvalidTime" readonly>          
+      </div>
+    </div>
   </div>
 
   <div class="row form-group">

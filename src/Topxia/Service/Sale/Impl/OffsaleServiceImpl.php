@@ -159,7 +159,7 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
     public function checkProd($offsetting){
 
         if(empty($offsetting)){
-            return "该商品不存在，请重新输入";
+            return array('hasProd'=>'false',"prodName"=>"此商品不存在");
         }
 
         if($offsetting['prodType']=='课程')
@@ -167,7 +167,10 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
             if(empty($course)){
-                return "该商品不存在，请重新输入";
+                 return array('hasProd'=>'false',"prodName"=>"此商品不存在");
+            }else {
+
+                 return array('hasProd'=>'true',"prodName"=>$course['title']);
             }
            
         }
@@ -176,11 +179,13 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
         {
             $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
             if(empty($activity)){
-                return "该商品不存在，请重新输入";
+                return array('hasProd'=>'false',"prodName"=>"此商品不存在");
+            }else{
+                 return array('hasProd'=>'true',"prodName"=>$activity['title']);
             }
         }
 
-         return "success";
+        return array('hasProd'=>'false',"prodName"=>"此商品不存在");
 
 
 
@@ -201,7 +206,7 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
 
             $order = $this->getOrderService()->getOrderByPromocode($offsale['promoCode']);
 
-            if (!empty($order))
+            if ("paid"==$order['status'])
             {
                 return "该优惠码已被使用";
             }
