@@ -122,7 +122,7 @@
                                  
                                 <div class="teacher-item teacher-item-{{ user.id }} {% if loop.first %}teacher-item-active{% endif %}">
                                   <div class="text-color-555 nickname"><a class="text-color-555 nickname" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></div>
-                                  <div class="text-color-555 title">{{ user.about|plain_text(65) }}</div>
+                                  <div class="text-color-555 title">{{ user.about|plain_text(55) }}</div>
 
                                 </div>          
                               {% endfor %}
