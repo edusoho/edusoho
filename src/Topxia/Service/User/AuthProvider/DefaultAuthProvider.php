@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\User\AuthProvider;
 
-class UcenterAuthProvider implements AuthProvider
+class DefaultAuthProvider implements AuthProvider
 {
 
     public function register($registration)

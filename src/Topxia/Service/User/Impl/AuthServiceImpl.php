@@ -7,7 +7,7 @@ use Topxia\Service\User\AuthService;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
-    private $provider = null;
+    private $partner = null;
 
     public function register($registration, $type = 'default')
     {
@@ -167,23 +167,34 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     private function getAuthProvider()
     {
-        if (!$this->provider) {
-            $provider = $this->getKernel()->getParameter('user_partner');
-            if (!in_array($provider, array('discuz', 'phpwind', 'none'))) {
+        if (!$this->partner) {
+            $setting = $this->getSettingService()->get('user_partner');
+            if (empty($setting) or empty($setting['mode'])) {
+                $partner = 'default';
+            } else {
+                 $partner = $setting['mode'];
+            }
+
+            if (!in_array($partner, array('discuz', 'phpwind', 'default'))) {
                 throw new \InvalidArgumentException();
             }
 
-            $class = substr(__NAMESPACE__, 0, -5) . "\\AuthProvider\\" . ucfirst($provider) . "AuthProvider";
+            $class = substr(__NAMESPACE__, 0, -5) . "\\AuthProvider\\" . ucfirst($partner) . "AuthProvider";
 
-            $this->provider = new $class();
+            $this->partner = new $class();
         }
 
-        return $this->provider;
+        return $this->partner;
     }
 
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
 }
