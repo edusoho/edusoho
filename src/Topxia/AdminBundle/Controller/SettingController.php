@@ -367,17 +367,44 @@ class SettingController extends BaseController
 
     public function adminSyncAction(Request $request)
     {
+        $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('user_partner', array());
         if (empty($setting['mode']) or !in_array($setting['mode'], array('phpwind', 'discuz'))) {
             return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
-        if ($request->getMethod() == 'POST') {
-
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
+        if ($bind) {
+            goto response;
+        } else {
+            $bind = null;
         }
 
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
+            if (empty($partnerUser)) {
+                $this->setFlashMessage('danger', '用户名或密码不正确。');
+                goto response;
+            } else {
+                
+
+                $this->getAuthService()->changeEmail($currentUser['id'], null, $partnerUser['email']);
+                $this->getAuthService()->changeNickname($currentUser['id'], $partnerUser['nickname']);
+                $this->getUserService()->bindUser($setting['mode'], $partnerUser['id'], $currentUser['id'], null);
+                $user = $this->getUserService()->getUser($currentUser['id']);
+                $this->authenticateUser($user);
+
+                $this->setFlashMessage('success', '管理员帐号同步成功。');
+
+                return $this->redirect($this->generateUrl('admin_setting_user_center'));
+            }
+        }
+
+        response:
         return $this->render('TopxiaAdminBundle:System:admin-sync.html.twig', array(
             'mode' => $setting['mode'],
+            'bind' => $bind,
         ));
     }
 

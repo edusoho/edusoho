@@ -21,6 +21,8 @@ interface AuthService
 
     public function checkPassword($userId, $password);
 
+    public function checkPartnerLoginByNickname($nickname, $password);
+
     public function checkPartnerLoginByEmail($email, $password);
 
     public function getPartnerAvatar($userId, $size = 'middle');

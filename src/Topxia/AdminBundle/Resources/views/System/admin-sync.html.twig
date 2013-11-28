@@ -13,6 +13,8 @@
   <h1>管理员帐号同步</h1>
 </div>
 
+{% if not bind %}
+
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal with-discuz" method="post" novalidate id="sync-discuz-form">
@@ -24,7 +26,7 @@
   <div class="row form-group">
     <div class="col-md-3 control-label"><label>{{ user_center_name }}管理员用户名</label></div>
     <div class="controls col-md-8">
-      <input class="form-control" name="username">
+      <input class="form-control" name="nickname">
     </div>
   </div>
 
@@ -39,9 +41,15 @@
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">
       <button type="submit" class="btn btn-primary">同步</button>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </div>
   </div>
 
 </form>
+
+{% else %}
+  <div class="alert alert-danger">该管理员帐号已同步，无需再同步。</div>
+
+{% endif %}
 
 {% endblock %}
