@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\User\AuthProvider;
 
-class UcenterAuthProvider implements AuthProvider
+class NoneAuthProvider implements AuthProvider
 {
 
     public function register($registration)
@@ -24,7 +24,7 @@ class UcenterAuthProvider implements AuthProvider
         return true;
     }
 
-    public function changeEmail($userId, $newEmail)
+    public function changeEmail($userId, $password, $newEmail)
     {
         return true;
     }
@@ -36,12 +36,12 @@ class UcenterAuthProvider implements AuthProvider
 
     public function checkUsername($username)
     {
-        return true;
+        return array('success', '');
     }
 
     public function checkEmail($email)
     {
-        return true;
+        return array('success', '');
     }
 
     public function checkPassword($userId, $password)

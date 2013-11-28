@@ -20,14 +20,14 @@ class PhpwindAuthProvider implements AuthProvider
 
     public function syncLogin($userId)
     {
-         $api = $this->getWindidApi('user');
-         return $api->synLogin($userId);
+        $api = $this->getWindidApi('user');
+        return $api->synLogin($userId);
     }
 
     public function syncLogout($userId)
     {
-         $api = $this->getWindidApi('user');
-         return $api->synLogout($userId);
+        $api = $this->getWindidApi('user');
+        return $api->synLogout($userId);
     }
 
     public function changeNickname($userId, $newName)

@@ -128,7 +128,6 @@ class DiscuzAuthProvider implements AuthProvider
                 return array('error_white_list', 'Email不允许注册');
             case -6:
                 return array('error_duplicate', 'Email已存在');
-            case \WindidError::FAIL:
             default:
                 return array('error_unknown', '未知错误');
         }
