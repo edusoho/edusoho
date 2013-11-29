@@ -179,6 +179,7 @@ class SettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled'=>0,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
             'bank_gateway'=>'none',
             'alipay_enabled'=>0,
             'alipay_key'=>'',
@@ -280,9 +281,141 @@ class SettingController extends BaseController
         ));
     }
 
+    public function customerServiceAction(Request $request)
+    {
+        $customerServiceSetting = $this->getSettingService()->get('customerService', array());
+
+        $default = array(
+            'customer_service_mode' => 'closed',
+            'customer_of_qq' => '',
+            'customer_of_mail' => '',
+            'customer_of_phone' => ''
+        );
+
+        $customerServiceSetting = array_merge($default, $customerServiceSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $customerServiceSetting = $request->request->all();
+            $this->getSettingService()->set('customerService', $customerServiceSetting);
+            $this->getLogService()->info('system', 'customerServiceSetting', "客服管理设置", $customerServiceSetting);
+            $this->setFlashMessage('success', '客服管理设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
+            'customerServiceSetting'=>$customerServiceSetting
+        ));
+    }
+
+    public function userCenterAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('user_partner', array());
+
+        $default = array(
+            'mode' => 'default',
+        );
+
+        $setting = array_merge($default, $setting);
+
+        $configDirectory = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/';
+        $discuzConfigPath = $configDirectory . 'uc_client_config.php';
+        $phpwindConfigPath = $configDirectory . 'windid_client_config.php';
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $setting = array('mode' => $data['mode']);
+            $this->getSettingService()->set('user_partner', $setting);
+
+            $discuzConfig = $data['discuz_config'];
+            $phpwindConfig = $data['phpwind_config'];
+
+            if ($setting['mode'] == 'discuz') {
+                if (!file_exists($discuzConfigPath) or !is_writeable($discuzConfigPath)) {
+                    $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
+                    goto response;
+                }
+                file_put_contents($discuzConfigPath, $discuzConfig);
+            } elseif ($setting['mode'] == 'phpwind') {
+                if (!file_exists($phpwindConfigPath) or !is_writeable($phpwindConfigPath)) {
+                    $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
+                    goto response;
+                }
+                file_put_contents($phpwindConfigPath, $phpwindConfig);
+            }
+
+            $this->getLogService()->info('system', 'setting', "用户中心设置", $setting);
+            $this->setFlashMessage('success', '用户中心设置已保存！');
+        }
+
+        if (file_exists($discuzConfigPath)) {
+            $discuzConfig = file_get_contents($discuzConfigPath);
+        } else {
+            $discuzConfig = '';
+        }
+
+        if (file_exists($phpwindConfigPath)) {
+            $phpwindConfig = file_get_contents($phpwindConfigPath);
+        } else {
+            $phpwindConfig = '';
+        }
+
+        response:
+        return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
+            'setting' => $setting,
+            'discuzConfig' => $discuzConfig,
+            'phpwindConfig' => $phpwindConfig,
+        ));
+    }
+
+    public function adminSyncAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $setting = $this->getSettingService()->get('user_partner', array());
+        if (empty($setting['mode']) or !in_array($setting['mode'], array('phpwind', 'discuz'))) {
+            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
+        }
+
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
+        if ($bind) {
+            goto response;
+        } else {
+            $bind = null;
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
+            if (empty($partnerUser)) {
+                $this->setFlashMessage('danger', '用户名或密码不正确。');
+                goto response;
+            } else {
+                $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
+                $this->getUserService()->changeNickname($currentUser['id'], $partnerUser['nickname']);
+                $this->getUserService()->changePassword($currentUser['id'], $data['password']);
+                $this->getUserService()->bindUser($setting['mode'], $partnerUser['id'], $currentUser['id'], null);
+                $user = $this->getUserService()->getUser($currentUser['id']);
+                $this->authenticateUser($user);
+
+                $this->setFlashMessage('success', '管理员帐号同步成功。');
+
+                return $this->redirect($this->generateUrl('admin_setting_user_center'));
+            }
+        }
+
+        response:
+        return $this->render('TopxiaAdminBundle:System:admin-sync.html.twig', array(
+            'mode' => $setting['mode'],
+            'bind' => $bind,
+        ));
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }

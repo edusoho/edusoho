@@ -5,7 +5,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class UserController extends BaseController {
+class UserController extends BaseController 
+{
 
     public function indexAction (Request $request)
     {
@@ -41,11 +42,11 @@ class UserController extends BaseController {
     public function emailCheckAction(Request $request)
     {
         $email = $request->query->get('value');
-        $result = $this->getUserService()->isEmailAvaliable($email);
-        if ($result) {
+        list($result, $message) = $this->getAuthService()->checkEmail($email);
+        if ($result == 'success') {
             $response = array('success' => true, 'message' => '该Email地址可以使用');
         } else {
-            $response = array('success' => false, 'message' => '该Email地址已经被占用了');
+            $response = array('success' => false, 'message' => $message);
         }
         return $this->createJsonResponse($response);
     }
@@ -53,11 +54,11 @@ class UserController extends BaseController {
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
-        if ($result) {
+        list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+        if ($result == 'success') {
             $response = array('success' => true, 'message' => '该昵称可以使用');
         } else {
-            $response = array('success' => false, 'message' => '该昵称已经被占用了');
+            $response = array('success' => false, 'message' => $message);
         }
         return $this->createJsonResponse($response);
     }
@@ -70,7 +71,7 @@ class UserController extends BaseController {
             $userData['nickname'] = $formData['nickname'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();
-            $user = $this->getUserService()->register($userData);
+            $this->getAuthService()->register($userData);
             $this->get('session')->set('registed_email', $user['email']);
 
             if(isset($formData['roles'])){
@@ -205,6 +206,38 @@ class UserController extends BaseController {
         return $this->createJsonResponse(true);
     }
 
+    public function changePasswordAction(Request $request, $userId)
+    {
+        $currentUser = $this->getCurrentUser();
+        $user = $this->getUserService()->getUser($userId);
+        if(!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])){
+            throw $this->createAccessDeniedException();
+        }
+        
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+
+            $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+
+            $messageToUser = '超级管理员:'.$currentUser['nickname'].'已经成功修改了您的密码,新密码为：'.$formData['newPassword'];
+            $this->getNotificationService()->notify($user['id'], 'default', $messageToUser);
+            $messageToSuperAadmin = '您已经修改了用户:'.$user['nickname'].'的密码，新密码为：'.$formData['newPassword'];
+            $this->getNotificationService()->notify($currentUser['id'], 'default', $messageToSuperAadmin);
+
+            return $this->redirect($this->generateUrl('admin_user'));
+        }
+        
+        return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
+            'user' => $user
+        ));
+
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
     protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');
@@ -218,6 +251,11 @@ class UserController extends BaseController {
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }

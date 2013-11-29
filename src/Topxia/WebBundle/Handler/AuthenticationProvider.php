@@ -72,35 +72,53 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
 
         try {
-
-            $userPartner = ServiceKernel::instance()->getParameter('user_partner');
-
-            if ($userPartner == 'phpwind') {
+            if ($this->getAuthService()->hasPartnerAuth()) {
                 try {
                     $user = $this->userProvider->loadUserByUsername($username);
-                } catch (UsernameNotFoundException $notFound) {
-                    $api = $this->createWindidApi('user');
+                    $bind = $this->getUserService()->getUserBindByTypeAndUserId($this->getAuthService()->getPartnerName(), $user['id']);
 
-                    list($apiStatus, $apiUser) = $api->login($username, $token->getCredentials(), 3);
-                    if ($apiStatus != 1) {
+                    if ($bind) {
+                        $partnerUser = $this->getAuthService()->checkPartnerLoginById($bind['fromId'], $token->getCredentials());
+                        if ($partnerUser) {
+
+                            $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
+                        }
+                    }
+
+                } catch (UsernameNotFoundException $notFound) {
+
+                    $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
+                    if (empty($partnerUser)) {
                         throw $notFound;
                     }
 
-                    $registration = array();
-                    $registration['nickname'] = $apiUser['username'];
-                    $registration['email'] = $apiUser['email'];
-                    $registration['password'] = $token->getCredentials();
-                    $registration['createdIp'] = $apiUser['regip'];
+                    $bind = $this->getUserService()->getUserBindByTypeAndFromId($this->getAuthService()->getPartnerName(), $partnerUser['id']);
+                    if ($bind) {
 
-                    $this->getUserService()->register($registration, 'phpwind');
+                        $user = $this->getUserService()->getUser($bind['toId']);
+                        $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
+                    } else {
 
-                    $user = $this->userProvider->loadUserByUsername($username);
+                        $registration = array();
+                        $registration['nickname'] = $partnerUser['nickname'];
+                        $registration['email'] = $partnerUser['email'];
+                        $registration['password'] = $token->getCredentials();
+                        $registration['createdIp'] = $partnerUser['createdIp'];
+                        $registration['token'] = array(
+                            'userId' => $partnerUser['id'],
+                        );
+
+                        $this->getUserService()->register($registration, $this->getAuthService()->getPartnerName());
+
+                        $user = $this->userProvider->loadUserByUsername($username);
+                    }
                 }
             } else {
                 $user = $this->userProvider->loadUserByUsername($username);
             }
 
             if (!$user instanceof UserInterface) {
+
                 throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
             }
 
@@ -115,18 +133,42 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
     }
 
-    private function createWindidApi($name)
+    private function syncEmailAndPassword($user, $partnerUser, $token) 
     {
-        if (!defined('WEKIT_TIMESTAMP')) {
-            define('WEKIT_TIMESTAMP', time());
+
+        try {
+            $isEmaildChanged = ($user['email'] != $partnerUser['email']);
+            if ($isEmaildChanged) {
+                $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
+            }
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'sync_email', "同步用户(#{$user['id']})Email失败");
         }
-        require_once __DIR__ .'/../../../../web/windid_client/src/windid/WindidApi.php';
-        return \WindidApi::api($name);
+
+        try {
+            $isPasswordChanged = !$this->getUserService()->verifyPassword($user['id'], $token->getCredentials());
+            if ($isPasswordChanged) {
+                $this->getUserService()->changePassword($user['id'], $token->getCredentials());
+            }
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'sync_password', "同步用户(#{$user['id']})密码失败");
+        }
+
+
+        $user = $this->userProvider->loadUserByUsername($user['email']);
+
+
+        return $user;
     }
 
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    private function getAuthService()
+    {
+        return ServiceKernel::instance()->createService('User.AuthService');
     }
 
 }

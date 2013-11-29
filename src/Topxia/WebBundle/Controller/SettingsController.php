@@ -67,20 +67,28 @@ class SettingsController extends BaseController
                 $file = $file->move($directory, $filename);
 
                 return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-                    'userId' => $user['id'],
                     'file' => $file->getFilename())
                 ));
             }
         }
 
+        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
+        if ($hasPartnerAuth) {
+            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
+        } else {
+            $partnerAvatar = null;
+        }
+
 		return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
             'form' => $form->createView(),
             'user' => $this->getUserService()->getUser($user['id']),
+            'partnerAvatar' => $partnerAvatar,
         ));
 	}
 
-    public function avatarCropAction(Request $request, $userId)
+    public function avatarCropAction(Request $request)
     {
+        $currentUser = $this->getCurrentUser();
         $filename = $request->query->get('file');
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
 
@@ -88,7 +96,7 @@ class SettingsController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($userId, $pictureFilePath, $options);
+            $this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
             return $this->redirect($this->generateUrl('settings_avatar'));
         }
 
@@ -111,6 +119,34 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function avatarFetchPartnerAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!$this->getAuthService()->hasPartnerAuth()) {
+            throw $this->createNotFoundException();
+        }
+
+        $url = $this->getAuthService()->getPartnerAvatar($currentUser['id'], 'big');
+        if (empty($url)) {
+            $this->setFlashMessage('danger', '获取论坛头像地址失败！');
+            return $this->createJsonResponse(true);
+        }
+
+        $avatar = $this->fetchAvatar($url);
+        if (empty($avatar)) {
+            $this->setFlashMessage('danger', '获取论坛头像失败或超时，请重试！');
+            return $this->createJsonResponse(true);
+        }
+
+        $avatarPath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
+
+        file_put_contents($avatarPath, $avatar);
+
+        $this->getUserService()->changeAvatar($currentUser['id'], $avatarPath, array('x'=>0, 'y'=>0, 'width'=>200, 'height' => 200));
+
+        return $this->createJsonResponse(true);
+    }
+
 	public function passwordAction(Request $request)
 	{
         $user = $this->getCurrentUser();
@@ -129,10 +165,10 @@ class SettingsController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $passwords = $form->getData();
-                if (!$this->getUserService()->verifyPassword($user['id'], $passwords['currentPassword'])) {
+                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
                 	$this->setFlashMessage('danger', '当前密码不正确，请重试！');
                 } else {
-	                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                    $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
 	                $this->setFlashMessage('success', '密码修改成功。');
                 }
 
@@ -264,7 +300,11 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
-            $user = $this->getUserService()->setupAccount($user['id'], $request->request->all());
+            $data = $request->request->all();
+
+            $this->getAuthService()->changeEmail($user['id'], null, $data['email']);
+            $this->getAuthService()->changeNickname($user['id'], $data['nickname']);
+            $user = $this->getUserService()->setupAccount($user['id']);
             $this->authenticateUser($user);
             return $this->createJsonResponse(true);
         }
@@ -281,10 +321,11 @@ class SettingsController extends BaseController
         if ($nickname == $user['nickname']) {
             $response = array('success' => true);
         } else {
-            if ($this->getUserService()->isNicknameAvaliable($nickname)) {
+            list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+            if ($result == 'success') {
                 $response = array('success' => true);
             } else {
-                $response = array('success' => false, 'message' => '该昵称已经被占用了');
+                $response = array('success' => false, 'message' => $message);
             }
         }
 
@@ -296,6 +337,34 @@ class SettingsController extends BaseController
         if (!in_array($type, $types)) {
             throw new NotFoundHttpException();
         }
+    }
+
+    public function fetchAvatar($url)
+    {
+
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
+    }
+
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }

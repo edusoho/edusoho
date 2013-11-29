@@ -5,7 +5,7 @@
 {% set menu = 'operation' %}
 
 {% block main %}
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs mbl">
   <li class="{% if submenu == 'auth' %}active{% endif %}">
   	<a href="{{ url('admin_setting_auth') }}">注册设置
   	</a>
@@ -33,8 +33,19 @@
   	<a href="{{ url('admin_setting_refund') }}">退款设置
   	</a>
   </li>
+
+  <li class="{% if submenu == 'customer_service' %}active{% endif %}" style="display:none;">
+    <a href="{{ url('admin_customer_service') }}">在线客户服务
+    </a>
+  </li>
+
+  <li class="{% if submenu == 'user_center' %}active{% endif %}">
+    <a href="{{ url('admin_setting_user_center') }}">用户中心设置
+    </a>
+  </li>
+
 </ul>
-  <p></p>
+
 
   {% block maincontent %}{% endblock %}
 {% endblock %}

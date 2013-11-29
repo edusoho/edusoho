@@ -25,6 +25,7 @@ class BuildCommand extends BaseCommand
 		$this->buildDocDirectory();
 		$this->buildSrcDirectory();
 		$this->buildVendorDirectory();
+		$this->buildVendorUserDirectory();
 		$this->buildWebDirectory();
 		$this->cleanMacosDirectory();
 
@@ -93,13 +94,26 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->chmod("{$this->distDirectory}/app/data/backup", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/logs", 0777);
 
+		$this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/uc_client_config.php");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/windid_client_config.php");
+		
 		$this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
 		$this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
 
-		$this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
-		$this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
+		$this->filesystem->copy("{$this->distDirectory}/app/config/uc_client_config.php.dist", "{$this->distDirectory}/app/config/uc_client_config.php");
+		$this->filesystem->chmod("{$this->distDirectory}/app/config/uc_client_config.php", 0777);
+
+		$this->filesystem->copy("{$this->distDirectory}/app/config/windid_client_config.php.dist", "{$this->distDirectory}/app/config/windid_client_config.php");
+		$this->filesystem->chmod("{$this->distDirectory}/app/config/windid_client_config.php", 0777);
+
+
 		$this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml.dist");
-		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/uc_client_config.php.dist");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/windid_client_config.php.dist");
 
 		$this->filesystem->copy("{$this->rootDirectory}/app/AppCache.php", "{$this->distDirectory}/app/AppCache.php");
 		$this->filesystem->copy("{$this->rootDirectory}/app/AppKernel.php", "{$this->distDirectory}/app/AppKernel.php");
@@ -201,6 +215,12 @@ class BuildCommand extends BaseCommand
 
 	}
 
+	public function buildVendorUserDirectory()
+	{
+		$this->output->writeln('build vendor_user/ .');
+		$this->filesystem->mirror("{$this->rootDirectory}/vendor_user", "{$this->distDirectory}/vendor_user");
+	}
+
 	public function buildWebDirectory()
 	{
 		$this->output->writeln('build web/ .');
@@ -211,7 +231,6 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/assets", "{$this->distDirectory}/web/assets");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/customize", "{$this->distDirectory}/web/customize");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/install", "{$this->distDirectory}/web/install");
-		$this->filesystem->mirror("{$this->rootDirectory}/web/windid_client", "{$this->distDirectory}/web/windid_client");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes", "{$this->distDirectory}/web/themes");
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");

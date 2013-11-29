@@ -1,0 +1,63 @@
+ 
+  {% if customerServiceSetting.customer_service_mode|default(null) == 'opened' %}
+    <div class="customer-service-online">
+
+      <div class="float-left"> 
+        <a style="display: block" id="aFloatTools_Show" class="btn-open" title="查看在线客服" 
+        onClick="javascript:
+          $('#divFloatToolsView').animate({width: 'show', opacity: 'show'}, 'normal',function(){ 
+            $('#divFloatToolsView').show();
+          });
+          $('#aFloatTools_Show').attr('style','display:none');
+          $('#aFloatTools_Hide').attr('style','display:block');" 
+          href="javascript:void(0);
+          "> 展开
+        </a>
+
+        <a style="display: none" id="aFloatTools_Hide" class="btn-ctn" title="关闭在线客服" 
+        onClick="javascript:
+          $('#divFloatToolsView').animate({width: 'hide', opacity: 'hide'}, 'normal',function(){ 
+            $('#divFloatToolsView').hide();
+          });
+          $('#aFloatTools_Show').attr('style','display:block');
+          $('#aFloatTools_Hide').attr('style','display:none');" 
+          href="javascript:void(0);"
+          > 收缩
+        </a>
+
+      </div>
+
+      <div id="divFloatToolsView" class="float-right" style="display: none">
+        <div class="service-category">
+
+          <h3>QQ</h3>
+          <ul>
+            <li><span>客服QQ</span> 
+              <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{customerServiceSetting.customer_of_qq}}&site=qq&menu=yes"> 
+                <img border="0" src="http://wpa.qq.com/pa?p=2:{{customerServiceSetting.customer_of_qq}}:51" alt="客服QQ" title="客服QQ" />
+              </a> 
+            </li>
+          </ul>
+
+          <h3>电话</h3>
+          <ul>
+            <li><span>客服电话</span> 
+              <a target="_blank" href="javascript:;"> 
+                {{customerServiceSetting.customer_of_phone}}
+              </a>
+            </li>
+          </ul>
+
+          <h3>邮件</h3>
+          <ul>
+            <li>
+              <span>反馈邮件</span> 
+              <a target="_blank" href="mailto:{{customerServiceSetting.customer_of_mail}}">
+              {{customerServiceSetting.customer_of_mail}}</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  {% endif %}

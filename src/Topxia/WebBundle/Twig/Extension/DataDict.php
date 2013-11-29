@@ -48,13 +48,15 @@ class DataDict
 			'created' => '未付款',
 			'paid' => '已付款',
 			'refunding' => '退款中',
-			'refunded' => '已退款',
+            'refunded' => '已退款',
+			'cancelled' => '已关闭',
 		),
 		'orderStatus:html' => array(
 			'created' => '<span class="text-muted">未付款</span>',
 			'paid' => '<span class="text-success">已付款</span>',
 			'refunding' => '<span class="text-warning">退款中</span>',
-			'refunded' => '<span class="text-danger">已退款</span>',
+            'refunded' => '<span class="text-danger">已退款</span>',
+			'cancelled' => '<span class="text-muted">已关闭</span>',
 		),
 		'refundStatus' => array(
 			'created'  => '已申请',

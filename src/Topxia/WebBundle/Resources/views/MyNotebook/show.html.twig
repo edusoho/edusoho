@@ -27,9 +27,10 @@
               {% endif %}
               <span class="pull-right notebook-note-length">共{{ note.length }}字</span>
             </div>
-            <div class="notebook-note-summary">{{ note.content|plain_text(100) }}</div>
+            <div class="notebook-note-summary">{{ note.content|plain_text(97) }}</div>
             <div class="notebook-note-body">
-              {{ note.content|raw }}
+                {{ note.content|raw }}
+
               <div class="notebook-note-actions clearfix">
                 <a href="javascript:" data-url="{{ path('my_note_delete', {id:note.id}) }}" class="pull-right notebook-note-delete" title="删除笔记"><span class="glyphicon glyphicon-trash"></span></a>
               </div>

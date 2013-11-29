@@ -5,8 +5,9 @@ if (!defined('WEKIT_VERSION')) {
 	require_once (WINDID_BOOT . '../wekit.php');
 	Wekit::init('windidclient');
 	Wind::application('windidclient', Wekit::S());
-	$database =  include WINDID_BOOT . 'conf/database.php';
-	$windidConfig =  include Wind::getRealPath('WINDID:conf.config.php', true);	
+	$clientConfig = include __DIR__ . '/../../../../app/config/windid_client_config.php';
+	$database =  $clientConfig['database'];
+	$windidConfig =  $clientConfig['conf'];	
 	Wind::register(WINDID_PATH . 'service', 'SRV');
 } else {
 	$windidConfig = Wekit::C('windid');
