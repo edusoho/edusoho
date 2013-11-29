@@ -6,3 +6,10 @@
    z-index: 9999 !important;
 }
 
+.h-divider {
+  border-top: 1px solid #ccc;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+

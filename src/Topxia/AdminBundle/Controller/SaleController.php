@@ -18,9 +18,24 @@ class SaleController extends BaseController
 
         $offsales = $this->getOffsaleService()->searchOffsales($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
+        $codes = ArrayToolkit::column($offsales,"promoCode");
+
+        $orders = $this->getOrderService()->findOrdersByPromoCodes($codes);
+
+        $userIds = ArrayToolkit::column($orders,'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        
+        $orderss = $this->getOrderService()->findOrderssByPromoCodes($codes);
+
         return $this->render('TopxiaAdminBundle:Sale:index.html.twig', array(
             'conditions' => $conditions,
-            'offsales' => $offsales ,  
+            'offsales' => $offsales ,
+            'orderss' => $orderss,
+            'users' => $users,
+            'profiles' => $profiles,
             'paginator' => $paginator
         ));
 
@@ -74,10 +89,14 @@ class SaleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-   
-
     private function getOffsaleService()
     {
         return $this->getServiceKernel()->createService('Sale.OffsaleService');
     }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.OrderService');
+    }
+
 }

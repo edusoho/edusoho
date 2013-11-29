@@ -198,18 +198,21 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
             return "该优惠码不存在，注意区分大小写哦";
         }
 
-        if("无效" == $offsale['valid']){
+        if("无效" == $offsale['valid'] or "停用" == $offsale['valid']){
             return "该优惠码已被停用";
         }
 
         if("不可以" == $offsale['reuse']){
 
-            $order = $this->getOrderService()->getOrderByPromocode($offsale['promoCode']);
+            $orders = $this->getOrderService()->getOrdersByPromoCode($offsale['promoCode']);
 
-            if ("paid"==$order['status'])
-            {
-                return "该优惠码已被使用";
+            foreach ($orders as $order) {
+                if ("paid"==$order['status'])
+                {
+                    return "该优惠码已被使用";
+                }
             }
+            
                 
         }
 

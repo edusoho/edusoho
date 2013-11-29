@@ -86,7 +86,7 @@ define(function(require, exports, module) {
         [
             'datetime-i', 
             /^\d{4}\-[01]?\d\-[0-3]?\d [0-2]?\d:[0-5]?\d$/,
-            '{{display}}的格式不正确'
+            '{{display}}的格式不正确,正确格式为yyyy-mm-dd hh:mm'
 
         ],
         [

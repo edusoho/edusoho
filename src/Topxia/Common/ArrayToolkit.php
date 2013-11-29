@@ -70,6 +70,33 @@ class ArrayToolkit
         return $indexedArray;
     }
 
+    public static function indexs (array $array, $name)
+    {
+        $indexedArray = array();
+        if (empty($array)) {
+            return $indexedArray;
+        }
+        
+        foreach ($array as $item) {
+
+            if (isset($item[$name])) {
+
+            	if(empty($indexedArray[$item[$name]])){
+
+            		$indexedArray[$item[$name]] =array($item);
+
+            	} else{
+
+            		array_push($indexedArray[$item[$name]],($item));
+
+            	}
+                
+                continue;
+            }
+        }
+        return $indexedArray;
+    }
+
     public static function filter(array $array, array $specialValues)
     {
     	$filtered = array();

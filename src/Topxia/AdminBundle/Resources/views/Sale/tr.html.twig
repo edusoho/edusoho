@@ -8,11 +8,35 @@
 
   <td>{{ offsale.validTime }}</td>
 
-  <td>{{ offsale.reuse }}</td>
+  <td >{{ offsale.reuse }}</td>
 
-  <td>{{ offsale.valid }}</td>
+ 
   <td>{{ offsale.promoName }}</td>
-  <td></td>
-  <td></td>
+
+  <td>
+    
+    {% if orders %}
+       已用
+    {% endif %}
+
+  </td>
+  <td class="mz pz">
+    
+    {% for order in orders %}
+    {% set buyer = users[order.userId]|default(null) %}
+    <p class="mz phz pts {% if not loop.first %} h-divider {% endif %}">
+      
+       <span class="text-muted text-sm" >{{ admin_macro.user_link(buyer) }}  
+     {{ order.createdTime|date('Y-n-d H:i') }}
+     {{ dict_text('orderStatus:html', order.status) }} </span>
+
+      <a href="javascript:;" class=" text-sm"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_order_detail', {id:order.id}) }}">查看详细</a>
+       
+    </p>
+   
+   {% endfor %}
+  </td>
+
+ 
 
 </tr>

@@ -22,10 +22,10 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 
-    public function getOrderByPromoCode($code)
+    public function getOrdersByPromoCode($code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE promoCode = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($code));
+        $sql = "SELECT * FROM {$this->table} WHERE promoCode = ? ";
+        return $this->getConnection()->fetchAll($sql, array($code));
     }
 
     public function findOrdersByIds(array $ids)
@@ -37,6 +37,17 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findOrdersByPromoCodes(array $codes)
+    {
+        if(empty($codes)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($codes) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE promoCode IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $codes);
     }
 
 	public function addOrder($order)
