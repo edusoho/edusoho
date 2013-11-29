@@ -60,6 +60,9 @@ class PartnerDiscuzController extends BaseController
 
     private function doRenameuser($request, $get, $post)
     {
+        if (UC_CHARSET == 'gbk') {
+            $get['newusername'] = iconv('gb2312','UTF-8',$get['newusername']);
+        }
 
         $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
         $user = $this->getUserService()->getUser($bindUser['toId']);
@@ -82,6 +85,10 @@ class PartnerDiscuzController extends BaseController
         $partnerUser = uc_get_user($get['uid'], 1);
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
+
+        if (UC_CHARSET == 'gbk') {
+            $get['username'] = iconv('gb2312','UTF-8',$get['username']);
+        }
 
         if (empty($bind)) {
             $registration = array(

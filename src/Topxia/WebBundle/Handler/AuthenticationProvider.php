@@ -91,7 +91,6 @@ class AuthenticationProvider extends UserAuthenticationProvider
                     if (empty($partnerUser)) {
                         throw $notFound;
                     }
-
                     $bind = $this->getUserService()->getUserBindByTypeAndFromId($this->getAuthService()->getPartnerName(), $partnerUser['id']);
                     if ($bind) {
 
