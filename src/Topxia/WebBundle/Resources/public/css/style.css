@@ -193,40 +193,6 @@ body:empty .todos-thumb-span{margin-left: -52px;}
 
 
 /**页脚**/
-.footer {
-    margin-top: 50px;
-}
-
-.footer .footer-bar {
-    height: 50px;
-    background-color: #dedede;
-}
-
-.footer .footer-bar dl {
-    margin: 0px;
-}
-
-.footer-bar dt ,dd {
-    height: 50px;
-    float: left;
-    line-height: 50px;
-    text-align: center;
-}
-
-.footer-bar dd a {
-    display: inline-block;
-    width: 100px;
-}
-
-.footer-bar .nav-pills > li > a:hover {
-    background-color: #ddd;
-    border-radius: 0px;
-}
-
-.footer-bar .nav-pills > li + li {
-    margin-left: 0px;
-}
-
 .footer-autumn-primary a {
     color: #999;
 }
