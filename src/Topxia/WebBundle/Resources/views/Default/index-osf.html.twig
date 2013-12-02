@@ -186,7 +186,7 @@
                      <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
                   </span>
                   {% for user in users%}
-                  <span class="list-item  pull-right" >
+                  <span class="list-item-user  pull-right" >
                     <a href="{{ path('user_show',{id:user.id}) }}">
                       <img  class="tip user-logo-small-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
                     </a>

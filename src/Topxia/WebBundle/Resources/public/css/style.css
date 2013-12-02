@@ -139,12 +139,12 @@ ul li,ol li{list-style-type: none;}
 .font18{font-size: 18px;}
 .fix-right{position: absolute;right: 1em;top:2px;}
 
-.list-item{margin-right: 1px; position: relative; width:51px; display:inline-block; padding-bottom:1px; text-align:center; vertical-align:top;
+.list-item-user{margin-right: 1px; position: relative; width:51px; display:inline-block; padding-bottom:1px; text-align:center; vertical-align:top;
 }
 .list-waiting{margin-right: 1px; position: relative; display:inline-block; padding-bottom:1px; text-align:center; vertical-align:top;
 }
-.list-item .tip{position: relative;}
-.list-item .i-active{z-index: 10;}
+.list-item-user .tip{position: relative;}
+.list-item-user .i-active{z-index: 10;}
 
 
 .todos-thumb-span{

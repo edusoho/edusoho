@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-    	$("#photo .list-item").mouseenter(function(){
+    	$("#photo .list-item-user").mouseenter(function(){
 
 			$(this).find(".tip").addClass("i-active");			
 
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 			
 		
 		});
-		$("#photo .list-item").mouseleave(function(){
+		$("#photo .list-item-user").mouseleave(function(){
 			$(this).find(".tip").removeClass("i-active");
 			if($("#wait-you").offset().left-$(this).offset().left > 150){
 				$(this).find(".todos-thumb-span").removeClass("todos-thumb-span-left");
@@ -61,8 +61,8 @@ define(function(require, exports, module) {
         $('#teacher-carousel').on('slide.bs.carousel', function (e) {
             var teacherId = $(e.relatedTarget).data('id');
 
-            $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
-            $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
+            $('#teacher-detail').find('.teacher-item-user').removeClass('teacher-item-user-active');
+            $('#teacher-detail').find('.teacher-item-user-' + teacherId).addClass('teacher-item-user-active');
         });
     	
 
