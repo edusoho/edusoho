@@ -508,6 +508,20 @@ course_announcement_delete:
     defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:delete }
     methods: [POST]
 
+quiz:
+    pattern: /quiz/
+    defaults: { _controller: TopxiaWebBundle:Quiz:index }
+
+quiz_item_save:
+    pattern: /quiz/{itemId}/saveitem
+    defaults: { _controller: TopxiaWebBundle:Quiz:saveItem }
+    methods: [POST]
+
+quiz_item_delete:
+    pattern: /quiz/{itemId}/delete
+    defaults: { _controller: TopxiaWebBundle:Quiz:deleteItem }
+    methods: [POST]
+
 search:
     pattern:  /search
     defaults: { _controller: TopxiaWebBundle:Search:index }
