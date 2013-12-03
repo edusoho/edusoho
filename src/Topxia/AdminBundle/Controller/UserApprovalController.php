@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ImgConverToData;
 use Topxia\AdminBundle\Form\UserApprovalApproveType;
 
@@ -23,10 +24,14 @@ class UserApprovalController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
+        $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
+        $approvals = ArrayToolkit::index($approvals, 'userId');
+
         return $this->render('TopxiaAdminBundle:User:approving.html.twig', array(
         	'users' => $users,
-        	'paginator' => $paginator
+        	'paginator' => $paginator,
+            'approvals' => $approvals
     	));
     }
     
@@ -43,10 +48,13 @@ class UserApprovalController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
+        $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
+        $userProfiles = ArrayToolkit::index($userProfiles, 'id');
         return $this->render('TopxiaAdminBundle:User:approved.html.twig', array(
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'userProfiles' => $userProfiles
         ));
     }
 
@@ -59,7 +67,6 @@ class UserApprovalController extends BaseController
         if ($request->getMethod() == 'POST') {
             
             $data = $request->request->all();
-
             if($data['form_status'] == 'success'){
                 $this->getUserService()->passApproval($id, $data['note']);
             } else if ($data['form_status'] == 'fail') {

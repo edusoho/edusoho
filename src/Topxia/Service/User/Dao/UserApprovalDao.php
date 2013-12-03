@@ -10,4 +10,6 @@ interface UserApprovalDao
 	function updateApproval($id, $fields);
 
 	function getLastestApprovalByUserIdAndStatus($userId, $status);
+
+	function findApprovalsByUserIds($userIds);
 }

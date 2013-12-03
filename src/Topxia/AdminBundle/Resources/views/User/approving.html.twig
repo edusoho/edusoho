@@ -17,6 +17,7 @@
       <th>ID</th>
       <th>用户昵称</th>
       <th>真实姓名</th>
+      <th>身份证号码</th>
       <th>邮件</th>
       <th>申请时间</th>
       <th>操作</th>
@@ -27,7 +28,8 @@
     <tr id="user-table-tr-{{ user.id }}">
         <td>{{user.id }}</td>
         <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
-        <td>{{user.trueName }}</td>
+        <td> {{approvals[user.id].truename}}</td>
+        <td> {{approvals[user.id].idcard}}</td>
         <td>{{user.email }}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>

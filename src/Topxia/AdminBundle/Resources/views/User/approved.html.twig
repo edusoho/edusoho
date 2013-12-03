@@ -11,7 +11,6 @@
 
 {% include 'TopxiaAdminBundle:User:approval-header.html.twig' %}
 
-
 {% if users %}
 <table id="user-table" class="table table-striped">
   <thead>
@@ -19,6 +18,7 @@
       <th>ID</th>
       <th>用户昵称</th>
       <th>真实姓名</th>
+      <th>身份证号码</th>
       <th>邮件</th>
       <th>申请时间</th>
       <th>操作</th>
@@ -29,8 +29,9 @@
     <tr id="user-table-tr-{{ user.id }}">
         <td>{{user.id }}</td>
         <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
-        <td>{{user.trueName }}</td>
-        <td>{{user.email }}</td>
+        <td>{{userProfiles[user.id].truename}}</td>
+        <td>{{userProfiles[user.id].idcard}}</td>
+        <td>{{user.email}}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
          <a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class="btn btn-default btn-sm cancel-approval">撤销</a>

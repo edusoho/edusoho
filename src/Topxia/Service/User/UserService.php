@@ -169,7 +169,6 @@ interface UserService
      */
     public function filterFollowingIds($userId, array $followingIds);
 
-
     public function getLastestApprovalByUserIdAndStatus($userId, $status);
     
     public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
@@ -177,6 +176,8 @@ interface UserService
     public function getUsersByApprovalStatus($approvalStatus, $start, $limit);
 
     public function getUserCountByApprovalStatus($approvalStatus);
+
+    public function findUserApprovalsByUserIds($userIds);
 
     public function passApproval($userId, $note = null);
 

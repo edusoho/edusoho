@@ -839,15 +839,11 @@ cloud_set_server:
     pattern: /cloud/set-server
     defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
 
-
-test:
-    pattern:  /test/
-    defaults: { _controller: TopxiaWebBundle:Test:index }
-
 setting_approval_submit:
     pattern: /settings/approval/submit
     defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
 
-setting_approval_status:
-    pattern: /settings/approval/status
-    defaults: { _controller: TopxiaWebBundle:Settings:approvalStatus }
+
+test:
+    pattern:  /test/
+    defaults: { _controller: TopxiaWebBundle:Test:index }

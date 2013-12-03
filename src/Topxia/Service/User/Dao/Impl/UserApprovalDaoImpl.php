@@ -34,4 +34,15 @@ class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
 		$sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ORDER BY createdTime DESC LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($userId, $status));
 	}
+
+	public function findApprovalsByUserIds($userIds)
+	{
+		if(empty($userIds)){
+            return array();
+        }
+        
+        $marks = str_repeat('?,', count($userIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $userIds);
+	}
 }

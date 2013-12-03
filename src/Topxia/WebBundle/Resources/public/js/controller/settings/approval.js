@@ -9,13 +9,13 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="idCard"]',
+            element: '[name="idcard"]',
             required: true,
             rule : 'idcard'
         });
 
         validator.addItem({
-            element: '[name="trueName"]',
+            element: '[name="truename"]',
             required: true,
             rule: 'chinese byte_minlength{min:4} byte_maxlength{max:50}'
         });
