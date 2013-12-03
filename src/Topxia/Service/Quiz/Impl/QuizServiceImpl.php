@@ -27,12 +27,6 @@ class QuizServiceImpl extends BaseService implements QuizService
 
 
 
-
-    private function getLessonDao()
-    {
-        return $this-> createdao('Course.LessonDao');
-    }
-
     private function getQuestionCategotyDao()
     {
         return $this->createDao('Quiz.QuestionCategotyDao');
