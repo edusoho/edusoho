@@ -15,7 +15,7 @@ class MyNotebookController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'noteNumGreaterThan' => 1
+            'noteNumGreaterThan' => 0
         );
 
         $paginator = new Paginator(
@@ -23,9 +23,11 @@ class MyNotebookController extends BaseController
             $this->getCourseService()->searchMemberCount($conditions),
             10
         );
+
         $courseMembers = $this->getCourseService()->searchMember($conditions, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+        
         return $this->render('TopxiaWebBundle:MyNotebook:index.html.twig', array(
             'courseMembers'=>$courseMembers,
             'paginator' => $paginator,

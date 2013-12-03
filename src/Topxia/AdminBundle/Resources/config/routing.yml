@@ -156,6 +156,10 @@ admin_teacher_promote_cancel:
     defaults: { _controller: TopxiaAdminBundle:Teacher:promoteCancel }
     methods:  [POST]
 
+admin_user_change_password:
+    pattern:  /user/{userId}/change/password
+    defaults: { _controller: TopxiaAdminBundle:User:changePassword }
+
 admin_user_send_passwordreset_email:
     pattern:  /user/{id}/send_passwordreset_email
     defaults: { _controller: TopxiaAdminBundle:User:sendPasswordResetEmail }
@@ -367,6 +371,15 @@ admin_setting_theme_change:
     pattern:  /setting/theme/change
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
+
+admin_setting_user_center:
+    pattern:  /setting/user-center
+    defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
+
+admin_setting_admin_sync:
+    pattern:  /setting/admin_sync
+    defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
+
 admin_optimize:
     pattern:  /optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }

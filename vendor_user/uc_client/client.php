@@ -309,7 +309,7 @@ function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questi
 
 function uc_user_synlogin($uid) {
 	$uid = intval($uid);
-	if(@include UC_ROOT.'./data/cache/apps.php') {
+	if(@include UC_DATADIR.'apps.php') {
 		if(count($_CACHE['apps']) > 1) {
 			$return = uc_api_post('user', 'synlogin', array('uid'=>$uid));
 		} else {
@@ -320,7 +320,7 @@ function uc_user_synlogin($uid) {
 }
 
 function uc_user_synlogout() {
-	if(@include UC_ROOT.'./data/cache/apps.php') {
+	if(@include UC_DATADIR.'apps.php') {
 		if(count($_CACHE['apps']) > 1) {
 			$return = uc_api_post('user', 'synlogout', array());
 		} else {

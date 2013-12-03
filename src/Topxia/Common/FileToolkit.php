@@ -117,4 +117,22 @@ class FileToolkit
         return sprintf('%.1f', $currentValue) . $currentUnit;
     }
 
+    public static function getMaxFilesize()
+    {
+        $max = strtolower(ini_get('upload_max_filesize'));
+
+        if ('' === $max) {
+            return PHP_INT_MAX;
+        }
+
+        if (preg_match('#^\+?(0x?)?(.*?)([kmg]?)$#', $max, $match)) {
+            $shifts = array('' => 0, 'k' => 10, 'm' => 20, 'g' => 30);
+            $bases = array('' => 10, '0' => 8, '0x' => 16);
+
+            return intval($match[2], $bases[$match[1]]) << $shifts[$match[3]];
+        }
+
+        return 0;
+    }
+
 }

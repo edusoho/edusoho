@@ -1,13 +1,13 @@
 <?php
- 
+
 namespace Topxia\WebBundle\Handler;
- 
+
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Service\Common\ServiceKernel;
- 
+
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
@@ -21,9 +21,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new JsonResponse($content, 200);
         }
 
-        $userPartner = ServiceKernel::instance()->getParameter('user_partner');
-
-        if ($userPartner == 'phpwind') {
+        if ($this->getAuthService()->hasPartnerAuth()) {
             $url = $this->httpUtils->generateUri($request, 'partner_login');
             $queries = array('goto' => $this->determineTargetUrl($request));
             $url = $url . '?' . http_build_query($queries);
@@ -36,5 +34,10 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    private function getAuthService()
+    {
+        return ServiceKernel::instance()->createService('User.AuthService');
     }
 }

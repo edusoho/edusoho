@@ -205,12 +205,12 @@ class UserServiceImpl extends BaseService implements UserService
 
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(220, 220));
+        $largeImage->resize(new Box(200, 200));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
         $largeFileRecord = $this->getFileService()->uploadFile('user', new File($largeFilePath));
 
-        $largeImage->resize(new Box(100, 100));
+        $largeImage->resize(new Box(120, 120));
         $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
         $largeImage->save($mediumFilePath, array('quality' => 90));
         $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
@@ -219,6 +219,8 @@ class UserServiceImpl extends BaseService implements UserService
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
+
+        @unlink($filePath);
 
         return  $this->getUserDao()->updateUser($userId, array(
             'smallAvatar' => $smallFileRecord['uri'],
@@ -318,14 +320,14 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
         $this->getProfileDao()->addProfile(array('id' => $user['id']));
-        if (!in_array($type, array('default', 'phpwind', 'discuz'))) {
+        if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
         return $user;
     }
 
-    public function setupAccount($userId, $account = array())
+    public function setupAccount($userId)
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
@@ -336,32 +338,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
         }
 
-        if (!ArrayToolkit::requireds($account, array('email', 'nickname'))) {
-            throw $this->createServiceException('参数缺失，设置帐号失败！');
-        }
-
-        if (!SimpleValidator::email($account['email'])) {
-            throw $this->createServiceException('Email地址格式不正确，设置帐号失败！');
-        }
-
-        if (!SimpleValidator::nickname($account['nickname'])) {
-            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
-        }
-
-        if (!$this->isEmailAvaliable($account['email'])) {
-            throw $this->createServiceException('Email已存在！');
-        }
-
-        if ($user['nickname'] != $account['nickname']) {
-            if (!$this->isNicknameAvaliable($account['nickname'])) {
-                throw $this->createServiceException('昵称已存在！');
-            }
-        }
-
-        $fields = ArrayToolkit::parts($account, array('email', 'nickname'));
-        $fields['setup'] = 1;
-
-        $this->getUserDao()->updateUser($userId, $fields);
+        $this->getUserDao()->updateUser($userId, array('setup' => 1));
 
         return $this->getUser($userId);
     }
@@ -521,7 +498,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
         }
 
-        $result = in_array($type, array('qq','renren','weibo'),true);
+        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
         if(!$result) {
             throw $this->createServiceException('获取第三方登陆信息失败,当前只支持weibo,qq,renren');
         }
@@ -535,18 +512,18 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，第三方绑定失败');
         }
-        $result = in_array($type, array('qq','renren','weibo'),true);
+        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
         if(!$result) {
-            throw $this->createServiceException('第三方绑定失败,当前只支持weibo,qq,renren');
+            throw $this->createServiceException('第三方绑定失败,当前只支持weibo,qq,renren, discuz, phpwind');
         }
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,
             'fromId' => $fromId,
             'toId'=>$toId,
-            'token'=>$token['token'],
+            'token'=> empty($token['token']) ? '' : $token['token'],
             'createdTime'=>time(),
-            'expiredTime'=>$token['expiredTime']
-            ));
+            'expiredTime'=>empty($token['expiredTime']) ? 0 : $token['expiredTime'],
+        ));
     }
 
     public function markLoginInfo()

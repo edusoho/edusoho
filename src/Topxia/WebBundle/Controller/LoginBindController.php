@@ -30,7 +30,11 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
             $this->authenticateUser($user);
-            return $this->redirect($this->generateUrl('homepage'));
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                return $this->redirect($this->generateUrl('partner_login'));
+            } else {
+                return $this->redirect($this->generateUrl('homepage'));
+            }
         } else {
             $request->getSession()->set('oauth_token', $token);
             return $this->redirect($this->generateUrl('login_bind_choose', array('type'  => $type)));
@@ -47,6 +51,7 @@ class LoginBindController extends BaseController
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
             'client' => $client,
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
     }
 
@@ -110,10 +115,10 @@ class LoginBindController extends BaseController
         }
 
         $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
+        $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
 
-        $user = $this->getUserService()->register($registration, $type);
-
+        $user = $this->getAuthService()->register($registration, $type);
         return $user;
     }
 
@@ -161,6 +166,11 @@ class LoginBindController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }
