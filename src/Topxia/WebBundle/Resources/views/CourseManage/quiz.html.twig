@@ -53,17 +53,10 @@
     </thead>
     <tbody>
       {% for question in questions %}
-            {% include 'TopxiaWebBundle:CourseManage:quiz-tr.html.twig' with {item:question} %}
+        {% include 'TopxiaWebBundle:CourseManage:quiz-tr.html.twig' with {item:question} %}
       {% else %}
-        <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
+        <tr><td colspan="6"><div class="empty">无题目记录</div></td></tr>
       {% endfor %}
-      {#% for course in courses %}
-        {% set user = users[course.userId]|default(null) %}
-        {% set category = categories[course.categoryId]|default(null) %}
-        {% include 'TopxiaAdminBundle:Course:tr.html.twig' %}
-      {% else %}
-        <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
-      {% endfor %#}
     </tbody>
   </table>
   <div>

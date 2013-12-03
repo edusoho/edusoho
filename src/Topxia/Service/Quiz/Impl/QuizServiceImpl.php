@@ -14,11 +14,6 @@ class QuizServiceImpl extends BaseService implements QuizService
         return $this->getQuestionsDao()->getQuestion($id);
     }
 
-    public function findLessonsByCourseId($courseId)
-    {
-        return $this->getLessonDao()->findLessonsByCourseId($courseId);
-    }
-
     public function searchQuestionCount(array $conditions){
         return $this->getQuestionsDao() -> searchQuestionCount($conditions);
     }

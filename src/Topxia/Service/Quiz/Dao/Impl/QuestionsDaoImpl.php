@@ -79,18 +79,22 @@ class QuestionsDaoImpl extends BaseDao implements QuestionsDao
             ->andWhere('targetId = :targetId')
             ->andWhere('targetType = :targetType');
 
-        if (!empty($conditions['target'])){
-            if (is_array($conditions['target'])){
-                foreach ($conditions['target'] as $key => $value) {
-                    if ($key == 'lesson' ){
-                        $value = join(' , ', $value);
+        if (isset($conditions['target'])) {
+            $target = array();
+            foreach ($conditions['target'] as $targetType => $targetIds) {
+                if (is_array($targetIds)) {
+                    foreach ($targetIds as $key => $targetId) {
+                        $targetIds[$key] = (int) $targetId;
                     }
-                    $target[] = " targetType ='".$key."' and targetId in (".$value.")"  ;
+                    $targetIds = join(' , ', $targetIds);
+                } else {
+                    $targetIds = (int) $targetIds;
                 }
-                if (!empty($target)) {
-                    $target = join(' or ', $target);
-                    $builder->andStaticWhere(" ($target) ");
-                }
+                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")"  ;
+            }
+            if (!empty($target)) {
+                $target = join(' or ', $target);
+                $builder->andStaticWhere(" ($target) ");
             }
         }
 

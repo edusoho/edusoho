@@ -11,10 +11,10 @@ class QuizController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
-		$LessonIds = ArrayToolkit::column($this->getQuizService()->findLessonsByCourseId($courseId),'id');
+		$LessonIds = ArrayToolkit::column($this->getCourseService()->getCourseLessons($courseId),'id');
 
 		$conditions['target']['course'] = $courseId;
-		if(!empty($LessonIds)){
+		if(isset($LessonIds)){
 			$conditions['target']['lesson'] = $LessonIds;
 		}
 		
@@ -31,16 +31,18 @@ class QuizController extends BaseController
             $paginator->getPerPageCount()
 		);
 
-		foreach ($questions as $key => $value) {
-			if ($value['targetType'] == 'lesson'){
-				$target['lesson'][] = $value;
-			}else if ($value['targetType'] == 'course'){
-				$target['course'][] = $value;
+		$courses = $lessons = array();
+		foreach ($questions as $key => $question) {
+			if ($question['targetType'] == 'lesson'){
+				$lessons[] = $question;
+			}else if ($question['targetType'] == 'course'){
+				$courses[] = $question;
 			}
 		}
-		$lessons = $this -> getCourseService() -> findCoursesByIds(ArrayToolkit::column($target['lesson'],'targetId'));
 
-		$courses = $this -> getCourseService() -> findLessonsByIds(ArrayToolkit::column($target['course'],'targetId'));
+		$lessons = $this -> getCourseService() -> findCoursesByIds(ArrayToolkit::column($lessons,'targetId'));
+
+		$courses = $this -> getCourseService() -> findLessonsByIds(ArrayToolkit::column($courses,'targetId'));
 
 		$users = $this -> getUserService() -> findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
