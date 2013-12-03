@@ -704,6 +704,18 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function rememberLoginSessionId ($id, $sessionId)
+    {
+        $user = $this->getUser($id);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，检测关注状态失败！');
+        }
+
+        return $this->getUserDao()->updateUser($id, array(
+            'loginSessionId' => $sessionId
+        ));
+    }
+
     private function getFriendDao()
     {
         return $this->createDao("User.FriendDao");

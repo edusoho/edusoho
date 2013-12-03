@@ -148,6 +148,7 @@ class SettingController extends BaseController
         $loginConnect = $this->getSettingService()->get('login_bind', array());
 
         $default = array(
+            'login_limit'=>0,
             'enabled'=>0,
             'weibo_enabled'=>0,
             'weibo_key'=>'',
