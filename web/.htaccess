@@ -52,3 +52,5 @@ AddType text/x-component .htc
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+php_flag magic_quotes_gpc Off
