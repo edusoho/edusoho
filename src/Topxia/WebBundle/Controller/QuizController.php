@@ -17,7 +17,7 @@ class QuizController extends BaseController
 		if(isset($LessonIds)){
 			$conditions['target']['lesson'] = $LessonIds;
 		}
-		
+
 		$paginator = new Paginator(
 			$this -> get('request'),
 			$this -> getQuizService() -> searchQuestionCount($conditions),
@@ -31,18 +31,14 @@ class QuizController extends BaseController
             $paginator->getPerPageCount()
 		);
 
-		$courses = $lessons = array();
-		foreach ($questions as $key => $question) {
+		$lessons = array();
+		foreach ($questions as $question) {
 			if ($question['targetType'] == 'lesson'){
 				$lessons[] = $question;
-			}else if ($question['targetType'] == 'course'){
-				$courses[] = $question;
 			}
 		}
 
-		$lessons = $this -> getCourseService() -> findCoursesByIds(ArrayToolkit::column($lessons,'targetId'));
-
-		$courses = $this -> getCourseService() -> findLessonsByIds(ArrayToolkit::column($courses,'targetId'));
+		$lessons = $this -> getCourseService() -> findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
 
 		$users = $this -> getUserService() -> findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
@@ -51,7 +47,6 @@ class QuizController extends BaseController
 			'questions' => $questions,
 			'users' => $users,
 			'lessons' => $lessons,
-			'courses' => $courses,
 			'paginator' => $paginator,
 		));
 	}

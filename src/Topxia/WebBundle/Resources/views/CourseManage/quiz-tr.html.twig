@@ -6,9 +6,9 @@
   <td>{{item.id}}</td>
   <td>
     {% if item.targetType == 'lesson'%}
-      {{lessons[item.targetId]['title']}}
+      课时{{lessons[item.targetId]['number']}}
     {% elseif item.targetType == 'course' %}
-      {{courses[item.targetId]['title']}}
+      课程
     {% endif %}
   </td>
   <td>
