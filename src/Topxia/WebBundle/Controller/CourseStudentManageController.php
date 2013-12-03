@@ -90,6 +90,60 @@ class CourseStudentManageController extends BaseController
         ));
     }
 
+
+    public function exportAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->getCourseStudentCount($course['id']),
+            1000
+        );
+
+        $students = $this->getCourseService()->findCourseStudents(
+            $course['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $studentUserIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+
+        $studentsInfo="";
+
+        foreach ($users as $user) {
+
+            $profile = $profiles[$user['id']];
+
+            $studentsInfo=$studentsInfo.$user['nickname'].",".$user['email'];
+
+            if(! empty($profile['truename'])){
+                 $studentsInfo =$studentsInfo.",".$profile['truename'];
+            }
+            if(! empty($profile['mobile'])){
+                 $studentsInfo =$studentsInfo.",".$profile['mobile'];
+            }
+            if(! empty($profile['job'])){
+                 $studentsInfo =$studentsInfo.",".$profile['job'];
+            }
+            if(! empty($profile['company'])){
+                 $studentsInfo =$studentsInfo.",".$profile['company'];
+            }
+            $studentsInfo =$studentsInfo."\n";
+               
+
+        }
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:students-modal.html.twig', array(
+            'course' => $course,
+            'studentsInfo' => $studentsInfo,
+           
+            'canManage' => $this->getCourseService()->canManageCourse($course['id']),
+        ));
+
+    }
+
     public function removeAction(Request $request, $courseId, $userId)
     {
         $course = $this->getCourseService()->tryAdminCourse($courseId);
