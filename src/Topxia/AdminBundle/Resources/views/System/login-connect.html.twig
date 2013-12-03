@@ -13,6 +13,18 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
+        <label >用户登录限制</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('login_limit', {1:'开启', 0:'关闭'}, loginConnect.login_limit) }}
+      </div>
+    </div>
+  </fieldset>
+<br>
+
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
         <label >第三方登录</label>
       </div>
       <div class="controls col-md-8 radios">

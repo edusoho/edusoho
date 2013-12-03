@@ -15,7 +15,7 @@
         {% if error %}
           <div class="alert alert-danger">{{ error.message|trans }}</div>
         {% endif %}
-
+{{ web_macro.flash_messages() }}
         <div class="form-group">
           <label class="control-label" for="login_username">Email地址</label>
           <div class="controls">

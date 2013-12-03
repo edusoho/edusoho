@@ -51,6 +51,9 @@ interface UserService
     public function sortUserlevels(array $id);
 
     public function isUserlevelNameAvailable($name, $exclude=null);
+
+    public function rememberLoginSessionId($id, $sessionId);
+
     /**
      * 变更密码
      * 
