@@ -7,6 +7,10 @@ class DiscuzAuthProvider implements AuthProvider
     {
         $this->initDiscuzApi();
 
+        if (UC_CHARSET == 'gbk') {
+            $registration['nickname'] = iconv('UTF-8','gb2312',$registration['nickname']);
+        }
+
         $result = uc_user_register($registration['nickname'], $registration['password'], $registration['email']);
 
         if ($result < 0) {
@@ -55,6 +59,11 @@ class DiscuzAuthProvider implements AuthProvider
     public function checkUsername($username)
     {
         $this->initDiscuzApi();
+
+        if (UC_CHARSET == 'gbk') {
+            $username = iconv('UTF-8','gb2312',$username);
+        }
+
         $result = uc_user_checkname($username);
         return $this->convertApiResult($result);
     }
@@ -81,6 +90,10 @@ class DiscuzAuthProvider implements AuthProvider
             return null;
         }
 
+        if (UC_CHARSET == 'gbk') {
+            $result[1] = iconv('gb2312','UTF-8',$result[1]);
+        }
+
         return array(
             'id' => $result[0],
             'nickname' => $result[1],
@@ -93,9 +106,18 @@ class DiscuzAuthProvider implements AuthProvider
     public function checkLoginByNickname($nickname, $password)
     {
         $this->initDiscuzApi();
+
+        if (UC_CHARSET == 'gbk') {
+            $nickname = iconv('UTF-8','gb2312',$nickname);
+        }
+
         $result = uc_user_login($nickname, $password);
         if ($result[0] <= 0) {
             return null;
+        }
+
+        if (UC_CHARSET == 'gbk') {
+            $result[1] = iconv('gb2312','UTF-8',$result[1]);
         }
 
         return array(
@@ -113,6 +135,10 @@ class DiscuzAuthProvider implements AuthProvider
         $result = uc_user_login($email, $password, 2);
         if ($result[0] <= 0) {
             return null;
+        }
+
+        if (UC_CHARSET == 'gbk') {
+            $result[1] = iconv('gb2312','UTF-8',$result[1]);
         }
 
         return array(
