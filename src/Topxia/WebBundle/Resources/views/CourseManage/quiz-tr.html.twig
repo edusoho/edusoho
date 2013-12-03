@@ -1,0 +1,31 @@
+<tr>
+  <td><input value="{{item.id}}" type="checkbox" data-role="batch-item" ></td>
+  <td>
+    {{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}
+  </td>
+  <td>{{item.id}}</td>
+  <td>
+    {% if item.targetType == 'lesson'%}
+      {{lessons[item.targetId]['title']}}
+    {% elseif item.targetType == 'course' %}
+      {{courses[item.targetId]['title']}}
+    {% endif %}
+  </td>
+  <td>
+    {{ macro.user_link(users[item.userId]) }}
+    <br />
+    <span class="text-muted text-sm">{{item.updatedTime | date('Y-n-d H:i:s')}}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:item.id}) }}" data-url="" class="btn btn-default btn-sm">编辑</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">预览</a></li>
+        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">删除</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>
