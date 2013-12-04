@@ -833,6 +833,10 @@ cloud_set_server:
     pattern: /cloud/set-server
     defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
 
+systeminfo:
+    pattern: /systeminfo
+    defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
+
 
 test:
     pattern:  /test/
