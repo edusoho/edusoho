@@ -1,15 +1,15 @@
 <?php
 
-namespace Topxia\Service\Quiz\Dao\Impl;
+namespace Topxia\Service\QuizQuestion\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\QuestionChoiceDao;
+use Topxia\Service\QuizQuestion\Dao\QuestionChoiceDao;
 use Doctrine\DBAL\Query\QueryBuilder,
     Doctrine\DBAL\Connection;
 
 class QuestionChoiceDaoImpl extends BaseDao implements QuestionChoiceDao
 {
-    protected $table = 'question_choice';
+    protected $table = 'quiz_question_choice';
 
     public function getQuestionChoice($id)
     {

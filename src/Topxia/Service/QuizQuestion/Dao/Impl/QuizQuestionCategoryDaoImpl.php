@@ -1,15 +1,15 @@
 <?php
 
-namespace Topxia\Service\Quiz\Dao\Impl;
+namespace Topxia\Service\QuizQuestion\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\QuestionCategoryDao;
+use Topxia\Service\QuizQuestion\Dao\QuizQuestionCategoryDao;
 use Doctrine\DBAL\Query\QueryBuilder,
     Doctrine\DBAL\Connection;
 
-class QuestionCategoryDaoImpl extends BaseDao implements QuestionCategoryDao
+class QuizQuestionCategoryDaoImpl extends BaseDao implements QuizQuestionCategoryDao
 {
-    protected $table = 'question_category';
+    protected $table = 'quiz_question_category';
 
     public function getQuestionCategory($id)
     {

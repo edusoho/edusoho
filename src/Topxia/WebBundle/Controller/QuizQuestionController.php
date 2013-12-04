@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class QuizController extends BaseController
+class QuizQuestionController extends BaseController
 {
 	public function indexAction(Request $request, $courseId)
 	{
@@ -20,11 +20,11 @@ class QuizController extends BaseController
 
 		$paginator = new Paginator(
 			$this -> get('request'),
-			$this -> getQuizService() -> searchQuestionCount($conditions),
+			$this -> getQuizQuestionService() -> searchQuestionCount($conditions),
 			10
 		);
 
-		$questions = $this -> getQuizService() -> searchQuestions(
+		$questions = $this -> getQuizQuestionService() -> searchQuestion(
 			$conditions,
 			array('createdTime' ,'DESC'),
 			$paginator->getOffsetCount(),
@@ -69,7 +69,7 @@ class QuizController extends BaseController
 			array('type' => 'lesson', 'id' => '1112', 'name' => '课时4'),
 		);
 
-		return $this->render('TopxiaWebBundle:Question:create.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'course' => $course,
 			'type' => $type,
 			'targets' => $targets,
@@ -82,9 +82,9 @@ class QuizController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-   	private function getQuizService()
+   	private function getQuizQuestionService()
    	{
-   		return $this -> getServiceKernel() -> createService('Quiz.QuizService');
+   		return $this -> getServiceKernel() -> createService('QuizQuestion.QuizQuestionService');
    	}
 
 }

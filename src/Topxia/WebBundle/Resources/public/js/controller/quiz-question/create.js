@@ -5,7 +5,8 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var creator = new QuestionCreator({
-            element: '#question-creator-widget'
+            element: '#question-creator-widget',
+            index: 4
         });
 
 

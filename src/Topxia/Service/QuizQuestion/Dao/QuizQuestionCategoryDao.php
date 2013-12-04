@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Service\Quiz\Dao;
+namespace Topxia\Service\QuizQuestion\Dao;
 
-interface QuestionCategoryDao
+interface QuizQuestionCategoryDao
 {
     public function addQuestionCategory($category);
 

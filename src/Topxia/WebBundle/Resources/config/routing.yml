@@ -449,11 +449,11 @@ course_manage_quiz_item_delete:
 
 course_manage_question_d:
     pattern: /course/{courseId}/manage/question
-    defaults: { _controller: TopxiaWebBundle:Quiz:index }
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:index }
 
 course_manage_question_create:
     pattern: /course/{courseId}/manage/question/create
-    defaults: { _controller: TopxiaWebBundle:Quiz:create }
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

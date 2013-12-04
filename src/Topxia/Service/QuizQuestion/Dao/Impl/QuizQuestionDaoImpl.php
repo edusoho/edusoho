@@ -1,15 +1,15 @@
 <?php
 
-namespace Topxia\Service\Quiz\Dao\Impl;
+namespace Topxia\Service\QuizQuestion\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\QuestionsDao;
+use Topxia\Service\QuizQuestion\Dao\QuizQuestionDao;
 use Doctrine\DBAL\Query\QueryBuilder,
     Doctrine\DBAL\Connection;
 
-class QuestionsDaoImpl extends BaseDao implements QuestionsDao
+class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 {
-    protected $table = 'questions';
+    protected $table = 'quiz_question';
 
     public function getQuestion($id)
     {
@@ -39,7 +39,7 @@ class QuestionsDaoImpl extends BaseDao implements QuestionsDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchQuestions($conditions, $orderBy, $start, $limit)
+    public function searchQuestion($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -51,7 +51,7 @@ class QuestionsDaoImpl extends BaseDao implements QuestionsDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function findQuestionsByIds(array $ids)
+    public function findQuestionByIds(array $ids)
     {
         if(empty($ids)){ 
             return array(); 
@@ -61,7 +61,7 @@ class QuestionsDaoImpl extends BaseDao implements QuestionsDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function deleteQuestionsByIds(array $ids)
+    public function deleteQuestionByIds(array $ids)
     {
         if(empty($ids)){ 
             return array(); 
