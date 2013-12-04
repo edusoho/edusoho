@@ -447,9 +447,13 @@ course_manage_quiz_item_delete:
     defaults: { _controller: TopxiaWebBundle:CourseQuizManage:deleteItem }
     methods: [POST]
 
-course_manage_quiz_d:
-    pattern: /course/{courseId}/manage/quiz
+course_manage_question_d:
+    pattern: /course/{courseId}/manage/question
     defaults: { _controller: TopxiaWebBundle:Quiz:index }
+
+course_manage_question_create:
+    pattern: /course/{courseId}/manage/question/create
+    defaults: { _controller: TopxiaWebBundle:Quiz:create }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

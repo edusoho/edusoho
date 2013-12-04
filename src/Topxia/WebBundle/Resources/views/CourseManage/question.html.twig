@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
 
-{% block title %}详细信息 - {{ parent() }}{% endblock %}
+{% block title %}题目管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'base' %}
 {% set script_controller = 'course-manage/list' %}
@@ -53,7 +53,7 @@
     </thead>
     <tbody>
       {% for question in questions %}
-        {% include 'TopxiaWebBundle:CourseManage:quiz-tr.html.twig' with {item:question} %}
+        {% include 'TopxiaWebBundle:CourseManage:question-tr.html.twig' with {item:question} %}
       {% else %}
         <tr><td colspan="6"><div class="empty">无题目记录</div></td></tr>
       {% endfor %}

@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}添加选择题 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'course-manage/base' %}
+{% 
+  set script_arguments = {
+    categoryUrl: path('category_all'),
+    tagMatchUrl: path('tag_match'),
+    locationUrl: path('location_all')
+  } 
+%}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">基本信息</div>
+  <div class="panel-body">
+    <form class="form-horizontal" id="course-form" method="post">
+
+      {{ web_macro.flash_messages() }}
+
+      
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+
+

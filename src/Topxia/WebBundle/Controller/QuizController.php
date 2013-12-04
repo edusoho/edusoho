@@ -42,7 +42,7 @@ class QuizController extends BaseController
 
 		$users = $this -> getUserService() -> findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
-		return $this->render('TopxiaWebBundle:CourseManage:quiz.html.twig', array(
+		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,
 			'questions' => $questions,
 			'users' => $users,
@@ -50,6 +50,25 @@ class QuizController extends BaseController
 			'paginator' => $paginator,
 		));
 	}
+
+	public function createAction(Request $request, $courseId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+
+		return $this->render('TopxiaWebBundle:CourseManage:choice-modal.html.twig', array(
+			'course' => $course,
+		));
+	}
+
+
+
+
+	private function createQuestionChoiceForm(){
+		$builder = $this -> createNameFormBuilder('');
+
+	}
+
 
 	private function getCourseService()
     {
