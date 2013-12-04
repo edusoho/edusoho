@@ -55,18 +55,25 @@ class QuizController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
+		$type = $request->query->get('type');
 
-		return $this->render('TopxiaWebBundle:CourseManage:choice-modal.html.twig', array(
+		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
+			$type = 'choice';
+		}
+
+		$targets = array(
+			array('type' => 'course', 'id' => '1', 'name' => '课程'),
+			array('type' => 'lesson', 'id' => '2', 'name' => '课时1'),
+			array('type' => 'lesson', 'id' => '21', 'name' => '课时2'),
+			array('type' => 'lesson', 'id' => '222', 'name' => '课时3'),
+			array('type' => 'lesson', 'id' => '1112', 'name' => '课时4'),
+		);
+
+		return $this->render('TopxiaWebBundle:Question:create.html.twig', array(
 			'course' => $course,
+			'type' => $type,
+			'targets' => $targets,
 		));
-	}
-
-
-
-
-	private function createQuestionChoiceForm(){
-		$builder = $this -> createNameFormBuilder('');
-
 	}
 
 
