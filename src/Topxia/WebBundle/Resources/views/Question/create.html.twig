@@ -1,0 +1,100 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}添加题目 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'question/create' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">添加题目</div>
+  <div class="panel-body">
+
+    <div id="question-creator-widget">
+      <form id="question-create-form" class="form-horizontal" method="post">
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>从属</label></div>
+          <div class="col-md-8 controls">
+            <select name="target"></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>难度</label></div>
+          <div class="col-md-8 controls">
+            {{ radios('difficulty', {'low':'入门', 'medium': '初级', 'high': '高级'}, question.difficulty|default('medium')) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>题干</label></div>
+          <div class="col-md-8 controls">
+            <textarea name="stem"></textarea>
+          </div>
+        </div>
+
+        {% if type == 'choice' %}
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label>选项</label></div>
+            <div class="col-md-8 controls">
+              <div data-role="choices"></div>
+              <div><button class="btn btn-default" data-role="add-choice" type="button">新增选项</button></div>
+            </div>
+          </div>
+
+        {% elseif type == 'essay' %}
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label>参考答案</label></div>
+            <div class="col-md-8 controls">
+            </div>
+          </div>
+
+        {% elseif type == 'determine' %}
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label></label></div>
+            <div class="col-md-8 controls">
+            </div>
+          </div>
+        {% endif %}
+
+          <div class="form-group">
+            <div class="col-md-8 col-md-offset-2 controls">
+              <button class="btn btn-default">保存并继续</button>
+              <button class="btn btn-default">保存返回</button>
+              <button class="btn btn-default">返回</button>
+            </div>
+          </div>
+      </form>
+
+      <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
+
+      <script type="text/x-handlebars-template" data-role="choice-template">
+        {% verbatim %}
+          <div class="form-group" data-role="choice">
+            <div class="controls">
+              <label class="choice-label">选项{{ code }}</label>
+              <input class="form-control item-input" id="item-input-{{ globalId }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
+              <label class="choice-answer-label"><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
+              <button type="button" data-role="delete-choice" class="btn btn-link btn-sm choice-delete-btn" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>
+            </div>
+          </div>
+        {% endverbatim %}
+      </script>
+
+    </div>
+    
+
+  </div>
+</div>
+
+{% endblock %}
+
+
+

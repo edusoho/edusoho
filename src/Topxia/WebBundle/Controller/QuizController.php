@@ -42,7 +42,7 @@ class QuizController extends BaseController
 
 		$users = $this -> getUserService() -> findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
-		return $this->render('TopxiaWebBundle:CourseManage:quiz.html.twig', array(
+		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,
 			'questions' => $questions,
 			'users' => $users,
@@ -50,6 +50,32 @@ class QuizController extends BaseController
 			'paginator' => $paginator,
 		));
 	}
+
+	public function createAction(Request $request, $courseId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+		$type = $request->query->get('type');
+
+		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
+			$type = 'choice';
+		}
+
+		$targets = array(
+			array('type' => 'course', 'id' => '1', 'name' => '课程'),
+			array('type' => 'lesson', 'id' => '2', 'name' => '课时1'),
+			array('type' => 'lesson', 'id' => '21', 'name' => '课时2'),
+			array('type' => 'lesson', 'id' => '222', 'name' => '课时3'),
+			array('type' => 'lesson', 'id' => '1112', 'name' => '课时4'),
+		);
+
+		return $this->render('TopxiaWebBundle:Question:create.html.twig', array(
+			'course' => $course,
+			'type' => $type,
+			'targets' => $targets,
+		));
+	}
+
 
 	private function getCourseService()
     {
