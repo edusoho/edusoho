@@ -173,9 +173,11 @@ class DiscuzAuthProvider implements AuthProvider
 
     private function convertApiResult($result)
     {
+        if ($result > 0) {
+            return array('success', '');
+        }
+
         switch ($result) {
-            case true:
-                return array('success', '');
             case 0:
                 return array('error_input', '输入不合法');
             case -1:
