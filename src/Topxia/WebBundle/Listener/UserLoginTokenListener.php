@@ -30,7 +30,7 @@ class UserLoginTokenListener
         }
 
         $loginBind = $this->getSettingService()->get('login_bind');
-        if (!$loginBind['login_limit']) {
+        if (empty($loginBind['login_limit'])) {
             return;
         }
 
