@@ -19,12 +19,12 @@ class QuizQuestionController extends BaseController
 		}
 
 		$paginator = new Paginator(
-			$this -> get('request'),
-			$this -> getQuizQuestionService() -> searchQuestionCount($conditions),
+			$this->get('request'),
+			$this->getQuestionService()->searchQuestionCount($conditions),
 			10
 		);
 
-		$questions = $this -> getQuizQuestionService() -> searchQuestion(
+		$questions = $this->getQuestionService()->searchQuestion(
 			$conditions,
 			array('createdTime' ,'DESC'),
 			$paginator->getOffsetCount(),
@@ -38,9 +38,9 @@ class QuizQuestionController extends BaseController
 			}
 		}
 
-		$lessons = $this -> getCourseService() -> findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
+		$lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
 
-		$users = $this -> getUserService() -> findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
+		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
 		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,
@@ -60,6 +60,11 @@ class QuizQuestionController extends BaseController
 		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
 			$type = 'choice';
 		}
+		$targets = array();
+		$targets[] = array('type' => 'course','id' => $course['id'],'name' => '课程');
+
+		$LessonIds = ArrayToolkit::column($this->getCourseService()->getCourseLessons($courseId),'id');
+
 
 		$targets = array(
 			array('type' => 'course', 'id' => '1', 'name' => '课程'),
@@ -68,7 +73,7 @@ class QuizQuestionController extends BaseController
 			array('type' => 'lesson', 'id' => '222', 'name' => '课时3'),
 			array('type' => 'lesson', 'id' => '1112', 'name' => '课时4'),
 		);
-
+		var_dump($LessonIds);
 		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'course' => $course,
 			'type' => $type,
@@ -82,9 +87,9 @@ class QuizQuestionController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-   	private function getQuizQuestionService()
+   	private function getQuestionService()
    	{
-   		return $this -> getServiceKernel() -> createService('QuizQuestion.QuizQuestionService');
+   		return $this -> getServiceKernel() -> createService('Quiz.QuestionService');
    	}
 
 }

@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\Service\QuizQuestion;
+namespace Topxia\Service\Quiz;
 
-interface QuizQuestionService
+interface QuestionService
 {
 
     public function getQuestion($lessonQuizItemId);
