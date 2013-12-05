@@ -7,8 +7,24 @@ use Topxia\Common\ArrayToolkit;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
+    public function getQuestionTarget($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if(empty($courseId)){
+            return array();
+        }
+        
+        $targets = array();
+        $targets[] = array('type' => 'course','id' => $course['id'],'name' => '课程');
 
-    
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        foreach ($lessons as  $lesson) {
+            $targets[] = array('type' => 'lesson','id' => $lesson['id'],'name' => '课时'.$lesson['number']);
+        }
+
+        return $targets;
+    }
+
     public function getQuestion($id)
     {
         return $this->getQuizQuestionsDao()->getQuestion($id);
@@ -24,8 +40,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
 
     
-
-
+    private function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
+    }
 
     private function getQuizQuestionCategotyDao()
     {

@@ -54,26 +54,32 @@ class QuizQuestionController extends BaseController
 	public function createAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-
 		$type = $request->query->get('type');
+		if ($request->getMethod() == 'POST') {
+			var_dump(111); exit();
+            // $content = $request->request->all();
+            // $content['type'] = $type->getAlias();
+
+            // $file = $request->files->get('picture');
+            // if(!empty($file)){
+            //     $record = $this->getFileService()->uploadFile('default', $file);
+            //     $content['picture'] = $record['uri'];
+            // }
+
+            // $content = $this->getContentService()->createContent($this->convertContent($content));
+            // return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
+            //     'content' => $content,
+            //     'category' => $this->getCategoryService()->getCategory($content['categoryId']),
+            //     'user' => $this->getCurrentUser(),
+            // ));
+        }
 
 		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
 			$type = 'choice';
 		}
-		$targets = array();
-		$targets[] = array('type' => 'course','id' => $course['id'],'name' => '课程');
+		
+		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
 
-		$LessonIds = ArrayToolkit::column($this->getCourseService()->getCourseLessons($courseId),'id');
-
-
-		$targets = array(
-			array('type' => 'course', 'id' => '1', 'name' => '课程'),
-			array('type' => 'lesson', 'id' => '2', 'name' => '课时1'),
-			array('type' => 'lesson', 'id' => '21', 'name' => '课时2'),
-			array('type' => 'lesson', 'id' => '222', 'name' => '课时3'),
-			array('type' => 'lesson', 'id' => '1112', 'name' => '课时4'),
-		);
-		var_dump($LessonIds);
 		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'course' => $course,
 			'type' => $type,
