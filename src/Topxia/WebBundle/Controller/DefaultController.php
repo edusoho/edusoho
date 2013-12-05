@@ -75,6 +75,7 @@ class DefaultController extends BaseController
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
+        setcookie("cccccccccccccjjjjjjjjjjjjjjjjjjjjj");
         return $this->render('TopxiaWebBundle:Default:index-osf.html.twig',array(
             "recommendedActivitys"=>$recommendedActivitys,
             "lastActivitys"=>$lastActivitys,

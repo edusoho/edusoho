@@ -59,7 +59,7 @@
   <div class="container  pz">
      <!-- 公开课 -->
       <div class="row mtl">
-        <div class="col-md-9 "> 
+        <div class="col-md-12 "> 
           <div class="es-row-wrap container-gap">
             <div class="kytitle clearfix es-box-heading mtm">
               <h3 >近期公开课</h3>
@@ -73,7 +73,7 @@
           </div>
         </div>
 
-        <div class="col-md-3 pz prd"> 
+        <!--div class="col-md-3 pz prd"> 
           <div class="ptz pbl mz ps-re widget clearfix">
           
             {% for activity in recommendedActivitys %}
@@ -92,48 +92,6 @@
                </div>
 
 
-                <div class="teacher-box  mtm ps-re " >
-
-                    <div class="ps-ab ps-tpl ps-ltl">
-                      <span class='text-large text-weight '>讲师：</span>
-                    </div>
-                  
-                    <div class="phm pvm ">
-                    
-                      {% if activity['userProfiles'] %}
-                          <div class="teacher-carousel {% if activity['userProfiles']|length == 1 %}teacher-carousel-onlyone{% endif %}">
-                            <div class="carousel slide" id="teacher-carousel">
-                              <div class="carousel-inner ">
-                                {% for user in activity['userProfiles'] %}
-                                  <div class="item {% if loop.first %}active{% endif %}" data-id="{{ user.id }}">
-                                    <a class="" href="{{ path('user_show', {id:user.id}) }}"><img src="{{ file_path(user.mediumAvatar, 'avatar.png') }}" class="user-logo-avatar center-block"></a>
-                                  </div>
-                                {% endfor %}
-                              </div>
-                              <a class="left carousel-control text-color-555" href="#teacher-carousel" data-slide="prev">
-                                <span class="icon-prev glyphicon glyphicon-chevron-left"></span>
-                              </a>
-                              <a class="right carousel-control text-color-555" href="#teacher-carousel" data-slide="next">
-                                <span class="icon-next glyphicon glyphicon-chevron-right"></span>
-                              </a>
-                            </div>
-                            <div class="teacher-detail" id="teacher-detail">
-                              {% for user in activity['userProfiles'] %}
-                                 
-                                <div class="teacher-item teacher-item-{{ user.id }} {% if loop.first %}teacher-item-active{% endif %}">
-                                  <div class="text-color-555 nickname"><a class="text-color-555 nickname" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></div>
-                                  <div class="text-color-555 title">{{ user.about|plain_text(55) }}</div>
-
-                                </div>          
-                              {% endfor %}
-                            </div>
-                          </div>
-                        {% else %}
-                          <div class="empty">该课程尚未设置教师</div>
-                      {% endif %}
-
-                    </div>
-                </div>
 
                 <div class=" mtll mbl mrm pull-right">
                               <p class="text-color-555 ">
@@ -148,7 +106,7 @@
             {% endfor %}
 
           </div>
-        </div>
+        </div-->
       </div>
 
       <!-- 专业课 -->

@@ -20,8 +20,8 @@
         </div>
 
         {% if mode in ['default'] %}
-         {% for user in activity['userProfiles'] %}
-        
+         {% set user= activity['userProfiles']|first  %}
+      
             {% if user %}
               <span class="teacher clearfix">
                 <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
@@ -29,7 +29,7 @@
                 <span class="user-title ellipsis">{{ user.title }}</span>
               </span>
             {% endif %}
-          {% endfor %}
+        
         {% endif  %}
 
 
