@@ -3,11 +3,15 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     var Handlebars = require('handlebars');
+    var Validator = require('bootstrap.validator');
+
 
     var QuestionCreator = Widget.extend({
         attrs: {
             targets: [],
-            type: 'choice'
+            type: 'choice',
+            form : null,
+            validator : null
         },
 
         events: {
@@ -16,6 +20,12 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
+            var $form = $('#question-create-form');
+
+            this.set('form', $form);
+
+            this.set('validator', this._createValidator($form));
+
             this._setupFormHtml();
             if(this.get('type') == 'choice'){
                 this._setupChoiceItem();
@@ -54,6 +64,46 @@ define(function(require, exports, module) {
             this.$('[data-role=choice]').each(function(index, item){
                 $(this).find('.choice-label').html('选项' + String.fromCharCode(index + 65));
             });
+        },
+
+        prepareFormData: function(){
+            var answers = [],
+                $form = this.get('form');
+            $form.find(".answer-checkbox").each(function(index){
+                if($(this).prop('checked')) {
+                    answers.push(index);
+                }
+            });
+
+            if (0 == answers.length){
+                Notify.danger("请选择正确答案!");
+                return false;
+            }
+
+            $form.find('[name=answers]').val(answers.join('|'));
+            return true;
+        },
+
+        _createValidator: function($form){
+            var that = this;
+
+            validator = new Validator({
+                element: $form,
+                autoSubmit: false
+            });
+
+            validator.addItem({
+                element: '#question-stem-field',
+                required: true
+            });
+
+            validator.on('formValidated', function(error, msg, $form) {
+                if (error || !that.prepareFormData()) {
+                    return false;
+                }
+                $form.submit();
+            });
+            return validator;
         },
 
         _setupFormHtml: function() {
