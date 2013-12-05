@@ -157,7 +157,7 @@
                   <ul class="media-list">
                     {% for studyLog in studyLogs  %}
                     {% set userProfile = studyLogUsers[studyLog.userId] %}
-                    <li class="media">
+                    <li class="media pbz">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
@@ -192,8 +192,8 @@
                   <ul class="media-list">
                     {% for answerLog in answerLogs  %}
                           {% set userProfile = answerLogUsers[answerLog.userId] %}
-                          {% set qu = questionUsers[answerLog.userId] %}
-                    <li class="media">
+                          {% set qu = questionUsers[answerLog.data.userId] %}
+                    <li class="media  pbz">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
@@ -202,7 +202,7 @@
                           老师
                           <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
                           {{ answerLog.createdTime|smart_time }} 回答了学生
-                          <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ qu.nickname }}</a>
+                          <a class="text-color-gray" href="{{ path('user_show', {id:qu.id}) }}">{{ qu.nickname }}</a>
                           在:
                         </p>
                         <p class="text-color-666 text-size-12">
@@ -231,7 +231,7 @@
                     {% for review in reviews  %}
                           {% set userProfile = reviewUsers[review.userId] %}
                           {% set reviewCourse = reviewCourses[review.courseId] %}
-                    <li class="media">
+                    <li class="media  pbz">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
