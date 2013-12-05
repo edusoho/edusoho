@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\Service\QuizQuestion\Dao\Impl;
+namespace Topxia\Service\Quiz\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\QuizQuestion\Dao\QuizQuestionCategoryDao;
+use Topxia\Service\Quiz\Dao\QuizQuestionCategoryDao;
 use Doctrine\DBAL\Query\QueryBuilder,
     Doctrine\DBAL\Connection;
 

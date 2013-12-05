@@ -6,10 +6,9 @@ define(function(require, exports, module) {
 
     var QuestionCreator = Widget.extend({
         attrs: {
-            targets: []
+            targets: [],
+            type: 'choice'
         },
-
-        index: 4,
 
         events: {
             'click [data-role=add-choice]' : 'onAddChoice',
@@ -17,48 +16,57 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            var targets = $.parseJSON(this.$('[data-role=targets-data]').html());
-            this.set('targets', targets);
-
-            var choiceTemplate = Handlebars.compile(this.$('[data-role=choice-template]').html());
-            this.set('choiceTemplate', choiceTemplate);
-            
-            for (var i = this.get('index'); i > 0; i--) {
-                this.onAddChoice();
+            this._setupFormHtml();
+            if(this.get('type') == 'choice'){
+                this._setupChoiceItem();
             }
         },
 
         onAddChoice: function(event) {
-            var template = this.get('choiceTemplate');
-
             var choiceCount = this.$('[data-role=choice]').length;
-
-            if (choiceCount > 25) {
-                Notify.danger("每道题目的选项不得多于二十六个!");
+            if (choiceCount >= 26) {
+                Notify.danger("选项最多二十六个!");
                 return false;
             }
+            this.addChoice();
+        },
 
+        addChoice: function(){
+            var template = this.get('choiceTemplate');
+            var choiceCount = this.$('[data-role=choice]').length;
             var code = String.fromCharCode(choiceCount + 65);
-
             var choice = {code: code}
-
             var html = template({code:code});
             this.$('[data-role=choices]').append(html);
         },
 
         onDeleteChoice: function(event) {
             var choiceCount = this.$('[data-role=choice]').length;
-            if (choiceCount < 3 ) {
-                Notify.danger("每道题目的选项不得少于两个!");
+            if (choiceCount <= 2 ) {
+                Notify.danger("选项至少要两个!");
                 return false;
             }
+            this.deleteChoice(event);
+        },
 
+        deleteChoice: function(event){
             $(event.currentTarget).parents('[data-role=choice]').remove();
-
             this.$('[data-role=choice]').each(function(index, item){
                 $(this).find('.choice-label').html('选项' + String.fromCharCode(index + 65));
             });
+        },
 
+        _setupFormHtml: function() {
+            var targets = $.parseJSON(this.$('[data-role=targets-data]').html());
+            this.set('targets', targets);
+            var choiceTemplate = Handlebars.compile(this.$('[data-role=choice-template]').html());
+            this.set('choiceTemplate', choiceTemplate);
+        },
+
+        _setupChoiceItem: function() {
+            for (var i = 0; i < 4; i++) {
+                this.addChoice();
+            }
         },
 
         _onChangeTargets: function(targets) {
@@ -68,7 +76,7 @@ define(function(require, exports, module) {
             });
 
             this.$('[name=target]').html(options);
-        }
+        },
 
     });
 

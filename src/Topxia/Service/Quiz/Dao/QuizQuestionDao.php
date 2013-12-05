@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\QuizQuestion\Dao;
+namespace Topxia\Service\Quiz\Dao;
 
 interface QuizQuestionDao
 {

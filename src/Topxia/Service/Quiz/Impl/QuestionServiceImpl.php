@@ -1,13 +1,29 @@
 <?php
-namespace Topxia\Service\QuizQuestion\Impl;
+namespace Topxia\Service\Quiz\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\QuizQuestion\QuizQuestionService;
+use Topxia\Service\Quiz\QuestionService;
 use Topxia\Common\ArrayToolkit;
 
-class QuizQuestionServiceImpl extends BaseService implements QuizQuestionService
+class QuestionServiceImpl extends BaseService implements QuestionService
 {
+    public function getQuestionTarget($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if(empty($courseId)){
+            return array();
+        }
+        
+        $targets = array();
+        $targets[] = array('type' => 'course','id' => $course['id'],'name' => '课程');
 
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        foreach ($lessons as  $lesson) {
+            $targets[] = array('type' => 'lesson','id' => $lesson['id'],'name' => '课时'.$lesson['number']);
+        }
+
+        return $targets;
+    }
 
     public function getQuestion($id)
     {
@@ -23,23 +39,25 @@ class QuizQuestionServiceImpl extends BaseService implements QuizQuestionService
     }
 
 
-
-
-
+    
+    private function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
+    }
 
     private function getQuizQuestionCategotyDao()
     {
-        return $this->createDao('QuizQuestion.QuizQuestionCategotyDao');
+        return $this->createDao('Quiz.QuizQuestionCategotyDao');
     }
 
     private function getQuizQuestionChoiceDao()
     {
-        return $this->createDao('QuizQuestion.QuizQuestionChoiceDao');
+        return $this->createDao('Quiz.QuizQuestionChoiceDao');
     }
 
     private function getQuizQuestionDao()
     {
-        return $this->createDao('QuizQuestion.QuizQuestionDao');
+        return $this->createDao('Quiz.QuizQuestionDao');
     }
 
     
