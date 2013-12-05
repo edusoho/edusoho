@@ -71,7 +71,7 @@
               <button type="submit" class="btn btn-default">返回</button>
             </div>
           </div>
-          <input type="hidden" name='courseId' value="{{course.id}}">
+          <input type="hidden" name="type" value="{{ type }}">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
@@ -83,7 +83,7 @@
             <div class="controls">
               <label class="choice-label">选项{{ code }}</label>
               <input class="form-control item-input" id="item-input-{{ globalId }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
-              <label class="choice-answer-label"><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
+              <label class="choice-answer-label"><input name='answer[]' type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
               <button type="button" data-role="delete-choice" class="btn btn-link btn-sm choice-delete-btn" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>
             </div>
           </div>

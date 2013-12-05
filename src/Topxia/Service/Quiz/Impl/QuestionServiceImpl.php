@@ -10,23 +10,34 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function getQuestionTarget($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        if(empty($courseId)){
-            return array();
+        if(empty($course)){
+            return null;
         }
-        
         $targets = array();
         $targets[] = array('type' => 'course','id' => $course['id'],'name' => '课程');
-
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
         foreach ($lessons as  $lesson) {
             $targets[] = array('type' => 'lesson','id' => $lesson['id'],'name' => '课时'.$lesson['number']);
         }
-
         return $targets;
     }
 
     public function getQuestion($id)
     {
+        return $this->getQuizQuestionsDao()->getQuestion($id);
+    }
+
+    public function addQuestion($type,$question)
+    {
+        if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
+            $type = 'choice';
+        }
+        if($type == 'choice'){
+            if (!ArrayToolkit::requireds($course, array('target','difficulty','stem'))) {
+                throw $this->createServiceException('缺少必要字段，创建课程失败！');
+            }
+        }
+
         return $this->getQuizQuestionsDao()->getQuestion($id);
     }
 

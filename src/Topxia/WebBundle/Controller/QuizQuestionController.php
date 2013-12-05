@@ -54,30 +54,25 @@ class QuizQuestionController extends BaseController
 	public function createAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$type = $request->query->get('type');
-		if ($request->getMethod() == 'POST') {
-            $content = $request->request->all();
-            ArrayToolkit::dx($content);
-            //$content['type'] = $type->getAlias();
-            $file = $request->files->get('picture');
-            if(!empty($file)){
-                $record = $this->getFileService()->uploadFile('default', $file);
-                $content['picture'] = $record['uri'];
-            }
-
-            $content = $this->getContentService()->createContent($this->convertContent($content));
-            return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
-                'content' => $content,
-                'category' => $this->getCategoryService()->getCategory($content['categoryId']),
-                'user' => $this->getCurrentUser(),
-            ));
-        }
-
 		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
 			$type = 'choice';
 		}
 		
 		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
+
+	    if ($request->getMethod() == 'POST') {
+            $question = $request->request->all();
+            ArrayToolkit::dx($question);
+			$this->getQuestionService()->addQuestion($type,$question);
+
+            return $this->render('TopxiaAdminBundle:QuizQuestion:create.html.twig',array(
+                'course' => $course,
+				'type' => $type,
+				'targets' => $targets,
+            ));
+        }
 
 		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'course' => $course,
