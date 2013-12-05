@@ -56,22 +56,21 @@ class QuizQuestionController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$type = $request->query->get('type');
 		if ($request->getMethod() == 'POST') {
-			var_dump(111); exit();
-            // $content = $request->request->all();
-            // $content['type'] = $type->getAlias();
+            $content = $request->request->all();
+            ArrayToolkit::dx($content);
+            //$content['type'] = $type->getAlias();
+            $file = $request->files->get('picture');
+            if(!empty($file)){
+                $record = $this->getFileService()->uploadFile('default', $file);
+                $content['picture'] = $record['uri'];
+            }
 
-            // $file = $request->files->get('picture');
-            // if(!empty($file)){
-            //     $record = $this->getFileService()->uploadFile('default', $file);
-            //     $content['picture'] = $record['uri'];
-            // }
-
-            // $content = $this->getContentService()->createContent($this->convertContent($content));
-            // return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
-            //     'content' => $content,
-            //     'category' => $this->getCategoryService()->getCategory($content['categoryId']),
-            //     'user' => $this->getCurrentUser(),
-            // ));
+            $content = $this->getContentService()->createContent($this->convertContent($content));
+            return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
+                'content' => $content,
+                'category' => $this->getCategoryService()->getCategory($content['categoryId']),
+                'user' => $this->getCurrentUser(),
+            ));
         }
 
 		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {

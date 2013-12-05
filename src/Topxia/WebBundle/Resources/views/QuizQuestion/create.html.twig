@@ -72,6 +72,7 @@
             </div>
           </div>
           <input type="hidden" name='courseId' value="{{course.id}}">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
       <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
