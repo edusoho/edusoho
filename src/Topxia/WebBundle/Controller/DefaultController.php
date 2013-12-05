@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Topxia\System;
 
 class DefaultController extends BaseController
 {
@@ -205,6 +206,15 @@ class DefaultController extends BaseController
             'customerServiceSetting' => $customerServiceSetting,
         ));
 
+    }
+
+    public function systemInfoAction()
+    {
+        $info = array(
+            'version' => System::VERSION,
+        );
+
+        return $this->createJsonResponse($info);
     }
 
     protected function getSettingService()

@@ -1592,6 +1592,7 @@ body {
 	background: #fff;
 	line-height: 40px;
 	margin-bottom: 15px;
+	position: relative;
 }
 
 .lesson-list .item-chapter {
@@ -1610,15 +1611,26 @@ body {
 	height: 20px;
 	width: 20px;
 	margin-left: -21px;
+	float: left;
 }
 
 .lesson-list .item-content {
-	display: inline-block;
 	margin-left: 10px;
+	overflow: hidden;
+	height: 40px;
+	line-height: 40px;
+	float: left;
+
 }
 
 .lesson-list .item-actions {
 	visibility: hidden;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: #f3f3f3;
+	border-left: 1px solid #ddd;
+	margin-left: 10px;
 }
 
 .lesson-list .item-chapter:hover .item-actions, .lesson-list .item-lesson:hover .item-actions  {
