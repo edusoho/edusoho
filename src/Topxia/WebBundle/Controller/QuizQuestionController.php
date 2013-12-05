@@ -59,14 +59,17 @@ class QuizQuestionController extends BaseController
 		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
 			$type = 'choice';
 		}
-		
+
 		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
 
 	    if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
-            ArrayToolkit::dx($question);
-			$this->getQuestionService()->addQuestion($type,$question);
-
+	        if (empty($question['id'])) {
+	            $question = $this->getQuestionService()->addQuestion($courseId, $question);
+	        } else {
+	            $question = $this->getQuestionService()->updateQuestion($question['id'], $question);
+	        }
+			exit('跳转');
             return $this->render('TopxiaAdminBundle:QuizQuestion:create.html.twig',array(
                 'course' => $course,
 				'type' => $type,

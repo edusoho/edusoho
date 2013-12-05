@@ -5,6 +5,8 @@ namespace Topxia\Service\Quiz\Dao;
 interface QuizQuestionChoice
 {
     public function addQuestionChoice($choice);
+    
+    public function updateQuestionChoice($id, $fields);
 
     public function deleteQuestionChoice($id);
 

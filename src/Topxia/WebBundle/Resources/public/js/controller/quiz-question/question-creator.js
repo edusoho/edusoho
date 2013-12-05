@@ -11,19 +11,19 @@ define(function(require, exports, module) {
             targets: [],
             type: 'choice',
             form : null,
-            validator : null
+            validator : null,
         },
 
         events: {
-            'click [data-role=add-choice]' : 'onAddChoice',
-            'click [data-role=delete-choice]' : 'onDeleteChoice',
+            'click [data-role=add-choice]': 'onAddChoice',
+            'click [data-role=delete-choice]': 'onDeleteChoice',
+            'click [data-role=continue-submit]': 'prepareFormData',
         },
 
         setup: function() {
             var $form = $('#question-create-form');
 
             this.set('form', $form);
-
             this.set('validator', this._createValidator($form));
 
             this._setupFormHtml();
@@ -45,9 +45,13 @@ define(function(require, exports, module) {
             var template = this.get('choiceTemplate');
             var choiceCount = this.$('[data-role=choice]').length;
             var code = String.fromCharCode(choiceCount + 65);
-            var choice = {code: code}
-            var html = template({code:code});
-            this.$('[data-role=choices]').append(html);
+            var choice = {code: code,id:choiceCount}
+            var $html = $(template(choice));
+            $html.appendTo(this.$('[data-role=choices]'));
+            this.get("validator").addItem({
+                element: '#item-input-'+choice.id,
+                required: true
+            });
         },
 
         onDeleteChoice: function(event) {
@@ -81,11 +85,10 @@ define(function(require, exports, module) {
             }
 
             $form.find('[name=answers]').val(answers.join('|'));
-            return true;
+            this.get('validator').set('autoSubmit',true);
         },
 
         _createValidator: function($form){
-            var that = this;
 
             validator = new Validator({
                 element: $form,
@@ -96,19 +99,13 @@ define(function(require, exports, module) {
                 element: '#question-stem-field',
                 required: true
             });
-
-            validator.on('formValidated', function(error, msg, $form) {
-                if (error || !that.prepareFormData()) {
-                    return false;
-                }
-                $form.submit();
-            });
             return validator;
         },
 
         _setupFormHtml: function() {
             var targets = $.parseJSON(this.$('[data-role=targets-data]').html());
             this.set('targets', targets);
+
             var choiceTemplate = Handlebars.compile(this.$('[data-role=choice-template]').html());
             this.set('choiceTemplate', choiceTemplate);
         },

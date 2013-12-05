@@ -32,6 +32,12 @@ class QuestionChoiceDaoImpl extends BaseDao implements QuestionChoiceDao
         return $this->getQuestionChoice($this->getConnection()->lastInsertId());
     }
 
+    public function updateQuestionChoice($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getQuestionChoice($id);
+    }
+    
     public function deleteQuestionChoice($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));

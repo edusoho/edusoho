@@ -4,7 +4,7 @@ namespace Topxia\Service\Quiz\Dao;
 
 interface QuizQuestionDao
 {
-    public function addQuestion($questions);
+    public function addQuestion($courseId, $questions);
 
     public function deleteQuestion($id);
 

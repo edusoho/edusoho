@@ -27,18 +27,49 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionsDao()->getQuestion($id);
     }
 
-    public function addQuestion($type,$question)
+    public function addQuestion($courseId, $question)
     {
+        $course = $this->getCourseService()->tryManageCourse($question['courseId']);
+        
         if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
             $type = 'choice';
         }
+
         if($type == 'choice'){
-            if (!ArrayToolkit::requireds($course, array('target','difficulty','stem'))) {
+
+            if (!ArrayToolkit::requireds($question, array('target', 'difficulty', 'stem', 'choices', 'answers', 'type'))) {
                 throw $this->createServiceException('缺少必要字段，创建课程失败！');
             }
+
+            $field = $this->filterQuestionFields($question);
+            
+            $field['userId'] = $this->getCurrentUser()->id;
+            $field['createdTime'] = time();
+            $field['stem'] = $this->purifyHtml($field['stem']);
+            
+            //--------------------answer  choice
+            $result =  QuestionSerialize::unserialize(
+                $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($field))
+            );
+
+            $choiceIds = array();
+            foreach $field['choice'] as $key => $item) {
+                $choice['content'] = $item;
+                $choice = $this->getQuizQuestionChoiceDao()->getQuestionChoice($choice);
+                if(in_array($key, $field['answers'])){
+                    $choiceIds[] = ArrayToolkit::column($choice,'id');
+                }
+            }
+            $field['answers'] =  $choiceIds;
+
+            $choiceField = array('quesitonId' => $result['id']); 
+            foreach ($variable as $choiceId) {
+                $this->getQuizQuestionChoiceDao()->updateQuestionChoice($choiceId , $choiceField);
+            }
+
         }
 
-        return $this->getQuizQuestionsDao()->getQuestion($id);
+        return $result;   
     }
 
     public function searchQuestionCount(array $conditions){
@@ -49,8 +80,51 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao() -> searchQuestion($conditions, $orderBy, $start, $limit);
     }
 
+    private function filterQuestionFields($question)
+    {
+        $fields = array();
+        $fields['target'] = explode('-', $question['target']);
+        $fields['questionType'] = $question['type'];
 
-    
+        if($type =="choice"){
+            $fields['stem'] = $this->purifyHtml($question['stem']);
+            $fields['difficulty'] = $question['difficulty'];//--------------------------------
+            $fields['answers'] = explode('|', $question['answers']);
+            $fields['choices'] = $question['choices'];
+        }
+
+        if (!in_array($fields['questionType'], array('course','lesson'))){
+            throw $this->createServiceException("questionType参数不正确");
+        }
+
+        if (!is_array($fields['choices']) || count($fields['choices']) < 2) {
+            throw $this->createServiceException("choices参数不正确");
+        }
+
+        if (!is_array($fields['answers']) || empty($fields['answers'])) {
+            throw $this->createServiceException("answers参数不正确");
+        }
+
+        if($field['targetType'] == 'course'){
+            $course = $this->getCourseService()->getCourse($question['targetId']);
+            if(empty($course)){
+                throw $this->createServiceException("课程(#{$courseId})不存在，创建测验题目失败！");
+            }
+        }esle if($field['targetType'] == 'lesson'){
+            $lesson = $this->getCourseService()->getCourseLesson($courseId, $question['targetId']);
+            if (empty($lesson)) {
+                throw $this->createServiceException("课时(#{$question['targetId']})不存在，创建测验题目失败！");
+            }
+        }
+
+
+
+
+        return $fields;
+    }
+
+
+
     private function getCourseService()
     {
         return $this->createService('Course.CourseService');
@@ -76,31 +150,31 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 }
 
 
-class QuizSerialize
+class QuestionSerialize
 {
-    public static function serialize(array $item)
+    public static function serialize(array $question)
     {
-        if (isset($item['answers'])) {
-            $item['answers'] = implode('|', $item['answers']);
+        if (isset($question['answers'])) {
+            $question['answers'] = implode('|', $question['answers']);
         }
 
-        return $item;
+        return $question;
     }
 
-    public static function unserialize(array $item = null)
+    public static function unserialize(array $question = null)
     {
-        if (empty($item)) {
+        if (empty($question)) {
             return null;
         }
 
-        $item['answers'] = explode('|', $item['answers']);
-        return $item;
+        $question['answers'] = explode('|', $question['answers']);
+        return $question;
     }
 
-    public static function unserializes(array $items)
+    public static function unserializes(array $questions)
     {
-        return array_map(function($item) {
-            return ItemSerialize::unserialize($item);
-        }, $items);
+        return array_map(function($question) {
+            return ItemSerialize::unserialize($question);
+        }, $questions);
     }
 }
