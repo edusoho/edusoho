@@ -166,7 +166,7 @@
                           学生 <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
                            {{ studyLog.createdTime|smart_time }} 开始在学习:
                         </p>
-                        <p class="text-color-666 text-size-14">
+                        <p class="text-color-666 text-size-12">
                           <a href="{{ path('course_show', {id:studyLog.data.courseId}) }}" target="_blank">{{ studyLog.message }}</a>
                         </p>
                       </div>
@@ -205,7 +205,7 @@
                           <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ qu.nickname }}</a>
                           在:
                         </p>
-                        <p class="text-color-666 text-size-14">
+                        <p class="text-color-666 text-size-12">
                           <a href="{{ path('course_show', {id:answerLog.data.courseId}) }}" target="_blank">{{ answerLog.message }}</a>
                         </p>
                       </div>
@@ -242,7 +242,7 @@
                           {{ review.createdTime|smart_time }} 发表了评论
                           
                         </p>
-                        <p class="text-color-666 text-size-14">
+                        <p class="text-color-666 text-size-12">
                          {{ review.content }}
                         </p>
                         <p　>
