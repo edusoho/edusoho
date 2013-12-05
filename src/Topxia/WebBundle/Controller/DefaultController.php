@@ -37,14 +37,14 @@ class DefaultController extends BaseController
         
         
        
-        //公开课报名用户
+        //新加入学员
         $feild['roles']='ROLE_USER';
-        $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,35);
+        $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,29);
         //
         $conditions = array('status' => 'published');
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 8);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 2);
 
-        //问题讨论
+        //公开课问题讨论
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
         $activityIds=ArrayToolkit::column($activityThreads,'activityId');
         $activitys=$this->getActivityService()->findActivitysByIds($activityIds);
@@ -52,21 +52,36 @@ class DefaultController extends BaseController
         $threadUserIds=ArrayToolkit::column($activityThreads,'userId');
         $threadUsers=$this->getUserService()->findUsersByIds($threadUserIds);
       
-               
+        //学习动态
+        $studyLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'course_learning'),'created',0,4);
+        $studyLogUserIds=ArrayToolkit::column($studyLogs,'userId');
+        $studyLogUsers=$this->getUserService()->findUsersByIds($studyLogUserIds); 
+
+        //答疑动态
+        $answerLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,4);
+        $answerLogUserIds=ArrayToolkit::column($answerLogs,'userId');
+        $answerLogUsers=$this->getUserService()->findUsersByIds($answerLogUserIds); 
+       
+        $courseThreads=array();
+        foreach ($answerLogs as $key => $value) {
+            $courseThreads[]= $value['data'];
+        }
+
+        $questionUserIds=ArrayToolkit::column($courseThreads,'userId');
+        $questionUsers=$this->getUserService()->findUsersByIds($questionUserIds); 
+
+
 
         //最新点评
         $reviews=$this->getReviewService()->searchReviews(array(),'latest',0,4);
         $reviewUserIds=ArrayToolkit::column($reviews,'userId');
         $reviewUsers=$this->getUserService()->findUsersByIds($reviewUserIds);
-       
-
         $reviewCourseIds=ArrayToolkit::column($reviews,'courseId');
-        $reviewCourse=$this->getCourseService()->findCoursesByIds($reviewCourseIds);
+        $reviewCourses=$this->getCourseService()->findCoursesByIds($reviewCourseIds);
 
 
-        //新加入学员
-        $feild['roles']='ROLE_USER';
-        $students=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,2);
         //开源教练组
         $feild['roles']='ROLE_TEACHER';
         $teachers=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,5);
@@ -75,7 +90,7 @@ class DefaultController extends BaseController
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
-        setcookie("cccccccccccccjjjjjjjjjjjjjjjjjjjjj");
+       
         return $this->render('TopxiaWebBundle:Default:index-osf.html.twig',array(
             "recommendedActivitys"=>$recommendedActivitys,
             "lastActivitys"=>$lastActivitys,
@@ -83,13 +98,22 @@ class DefaultController extends BaseController
             "users"=>$users,
         
             "courses"=>$courses,
+
             "activityThreads"=>$activityThreads,
             "activitys"=>$activitys,
             "threadUsers"=>$threadUsers,
+
             "reviews"=>$reviews,
             "reviewUsers"=>$reviewUsers,
-            "reviewCourse"=>$reviewCourse,
-            "students"=>$students,
+            "reviewCourses"=>$reviewCourses,
+
+            "studyLogs"=>$studyLogs,
+            "studyLogUsers"=>$studyLogUsers,
+
+            "answerLogs"=>$answerLogs,
+            "answerLogUsers"=>$answerLogUsers,
+            "questionUsers"=>$questionUsers,
+
             "teachers"=>$teachers,
             "teacherinfos"=>$teacherinfos,
               'blocks' => $blocks
@@ -202,6 +226,12 @@ class DefaultController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
 
     protected function getReviewService()
     {

@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
 
 
-		 $(".course-grids .course-grid").mouseenter(function(){
+		 $(".page-grids .card").mouseenter(function(){
 
 		   $(this).find(".desc").css({display:"block"});
 	  
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
 			
 		 });
 
-		 $(".course-grids .course-grid").mouseleave(function(){
+		 $(".page-grids .card").mouseleave(function(){
 			
 			$(this).find(".desc").css("opacity", "0");
 			$(this).find(".desc").css("filter", "alpha(opacity=0)");

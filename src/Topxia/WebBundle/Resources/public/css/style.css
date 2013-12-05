@@ -31,6 +31,14 @@ ul li,ol li{list-style-type: none;}
 	height: 50px !important;
 }
 
+.user-logo-small-size-s {
+	width: 30px;
+	height: 30px;
+	float: left;
+	font-size: 12px;
+	margin-right: 8px;
+}
+
 .user-logo-avatar {
 	border-radius: 50%;
 }
@@ -46,6 +54,7 @@ ul li,ol li{list-style-type: none;}
 	line-height: 38px;
 	color: #666px;
 }
+
 
 
 /*widget*/
@@ -127,11 +136,16 @@ ul li,ol li{list-style-type: none;}
 .bor-r{border-right: 1px solid #f6eded;}
 .bor-maroon{border: 3px solid #800000 !important;}
 
+.bor-t-gray{
+	border-top: 1px solid #eee;
+	
+}
+
 
 /*首页快来加入*/
 
 .info .info-content{padding: 10px 10px 10px 0;}
-.info .photo-wall{width: 690px;*width: 742px;position:relative;}
+.info .photo-wall{width: 580px;*width: 742px;position:relative;}
 .info-ad {margin-left: 1em;color:#33aa65;width: 155px;height: 155px;background-color: #33aa65}
 .info-ad .info-btn{padding: 25px 20px;}
 .info-ad p {text-align: center;color: #fff;}

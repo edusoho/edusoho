@@ -36,10 +36,10 @@
 		    	<a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{item.id}}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
 		    		{{ item.title }}
 		    		{% if item.quizNum > 0 %}
-				      <span class="glyphicon  glyphicon-ok-circle" title="测验"></span>
+				      <span class="plll glyphicon  glyphicon-ok-circle" title="测验">测验</span>
 				    {% endif %}
 				    {% if item.materialNum > 0 %}
-				      <span class="glyphicon  glyphicon-download" title="资料"></span>
+				      <span class="plll glyphicon  glyphicon-download" title="资料">资料</span>
 				    {% endif %}
 		    	</a>
 		    	<button class="btn btn-success btn-mini action">开始学习</button>

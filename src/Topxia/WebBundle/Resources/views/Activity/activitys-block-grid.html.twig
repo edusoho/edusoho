@@ -1,43 +1,50 @@
 {% set mode = mode|default('default') %}
-<ul class="page-grids course-grids">
+<ul class="page-grids pz">
   {% for activity in activitys %}
-    <li class="card course-grid ps-re">
-      <a  href="{{ path('activity_show',{id:activity.id})}}" class="grid-body">
-        <div class="grid-img ps-re">
-          <img class="img-responsive thumb" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
-          <div class="desc">
-           <span class="label label-danger text-large text">{{ activity.subtitle }}</span> 
-          </div>          
-        </div>
+    <li class="col-md-6 plz prz mz">
+      <div class="card  ps-re" >
+          <a  href="{{ path('activity_show',{id:activity.id})}}" class="card-body" >
+            <div class="grid-img ps-re">
+              <img class="img-responsive thumb" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
+              <div class="desc">
+               <span class="label label-danger text-large text">{{ activity.subtitle }}</span> 
+              </div>          
+            </div>
 
-        <div class="title pvm mvz">{{ activity.title }}</div>
-         <div class="phm ptz pbs mvz ps-re">
-          <span  >时间：</span>{{ activity.startTime }}
-          <div class="ps-ab ps-bt ps-rt">
-            <img  src="{{ asset('assets/img/default/live.png')}}">  
-            <!--span class="label label-info text-large">有直播</span--> 
-          </div>
-        </div>
+            <div class="phm">           
+                <div class="pvm phs mvz text-size-14 text-weight">{{ activity.title }}</div>
+                <div class=" pvs phs mvz ps-re bor-t-gray text-normal text-color-gray">
+                  <span >时间：</span>{{ activity.startTime }}
+                  <div class="ps-ab ps-tps ps-rt">
+                    <img  src="{{ asset('assets/img/default/live.png')}}">  
+                    <!--span class="label label-info text-large">有直播</span--> 
+                  </div>
+                </div>
 
-        {% if mode in ['default'] %}
-         {% set user= activity['userProfiles']|first  %}
-      
-            {% if user %}
-              <span class="teacher clearfix">
-                <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
-                <span class="nickname ellipsis">{{ user.nickname }}</span>
-                <span class="user-title ellipsis">{{ user.title }}</span>
-              </span>
-            {% endif %}
-        
-        {% endif  %}
+                {% if mode in ['default'] %}
+                 {% set user= activity['userProfiles']|first  %}
+              
+                    {% if user %}
+                      <div class="clearfix  pvm  bor-t-gray">
+                        <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="user-logo-small-size-s">
+                        <p class="text-normal mz pz">{{ user.nickname }}</p>
+                        <p class="text-normal text-color-gray mz pz">{{ user.title }}</p>
+                      </div>
+                    {% endif %}
+                
+                {% endif  %}
+
+            </div>
+          </a>
+
+          <div class="ps-ab ps-bt ps-rtl">
+              <span class="text-color-gray  text-normal">
+                {{activity.studentNum}}人已报名</span>
+                <a  class="btn btn-success btn-xs  text-normal"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
+          </div>    
 
 
-      
-
-
-      </a>
-
+      </div>
     </li>
   {% endfor %}
 </ul>

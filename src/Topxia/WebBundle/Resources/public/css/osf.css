@@ -270,6 +270,24 @@
 
 
 /*首页公开课列表区块*/
+
+.page-grids .card{
+	display: inline-block;
+	vertical-align: top;
+	margin: 15px 15px 15px 0;
+	border: 1px solid #e1e1e1;
+	border-radius: 4px;
+}
+
+.page-grids .card .card-body {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	text-decoration: none;
+	border-radius: 4px;
+	color: #353535;
+}
+
 .page-grids .card .grid-img .desc {
 	position: absolute;
 	top: 0;

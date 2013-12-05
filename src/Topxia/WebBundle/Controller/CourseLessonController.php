@@ -56,6 +56,8 @@ class CourseLessonController extends BaseController
             $json['mediaUri'] = $lesson['mediaUri'];
         }
 
+        $this->getLogService()->info('course', 'course_learning', "课程《{$course['title']}》的课时《{$lesson['title']}》",$lesson);
+
     	return $this->createJsonResponse($json);
     }
 

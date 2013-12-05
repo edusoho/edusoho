@@ -209,6 +209,7 @@ class CourseThreadController extends BaseController
 
     public function postAction(Request $request, $courseId, $id)
     {
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         $form = $this->createPostForm(array(
@@ -221,6 +222,12 @@ class CourseThreadController extends BaseController
             if ($form->isValid()) {
                 $post = $this->getThreadService()->createPost($form->getData());
 
+                if (in_array('ROLE_TEACHER', $user['roles'])) {
+
+                     $this->getLogService()->info('course', 'teacher_post', "课程《{$course['title']}》中的问题《{$thread['title']}》",$thread);
+                 }
+               
+
                 return $this->render('TopxiaWebBundle:CourseThread:post-list-item.html.twig', array(
                     'course' => $course,
                     'thread' => $thread,
@@ -232,6 +239,8 @@ class CourseThreadController extends BaseController
                 return $this->createJsonResponse(false);
             }
         }
+
+
 
         return $this->render('TopxiaWebBundle:CourseThread:post.html.twig', array(
             'course' => $course,

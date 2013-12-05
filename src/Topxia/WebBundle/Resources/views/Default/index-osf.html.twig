@@ -56,128 +56,209 @@
       </div>
   </div>
 
+
+
+
+
   <div class="container  pz">
-     <!-- 公开课 -->
-      <div class="row mtl">
-        <div class="col-md-12 "> 
-          <div class="es-row-wrap container-gap">
-            <div class="kytitle clearfix es-box-heading mtm">
-              <h3 >近期公开课</h3>
-              <span class="mll">每周二线上线下同时开课，开放免费，无大牛，不学习!</span>
-              <a href="{{ path('activity_home') }}" target="_blank" class="pull-right">更多>></a>
-            </div>
-             
-            <div class="es-box-body plll">
-              {{ render(controller('TopxiaWebBundle:Activity:activityBlockGrid', {activitys:lastActivitys, view: 'grid'})) }}
-            </div> 
-          </div>
-        </div>
-
-        <!--div class="col-md-3 pz prd"> 
-          <div class="ptz pbl mz ps-re widget clearfix">
           
-            {% for activity in recommendedActivitys %}
-         
-               <div class="index-blackboard-image phl pts ">
-                  <h5 class=" text-weight text-color-white mbl">本期公开课</h5>
-                
-                 
-                   
-                  <h4 class=" text-weight text-center mbl"> <a href="{{ path('activity_show',{id:activity.id})}}"  class="text-color-white" >{{ activity.title}}</a> </h4> 
-
-                     <br>
-                  <p class="text-color-white  ptll"> {{activity.address}} </p>
-                  <p class="teacher-color  ">时间： {{activity.startTime}} </p>
-                
-               </div>
-
-
-
-                <div class=" mtll mbl mrm pull-right">
-                              <p class="text-color-555 ">
-                                {{activity.studentNum}}人已报名，还不快来参与！
-                                 
-                                  <a  class="btn btn-success btn-sm text-weight "   href="{{ path('activity_show',{id:activity.id}) }}" >立即报名</a>
-                              
-                              
-                              </p>
-                </div>      
-
-            {% endfor %}
-
-          </div>
-        </div-->
-      </div>
-
-      <!-- 专业课 -->
-      
       <div class="row mtl">
-        <div class="col-md-12"> 
-          <div class="es-row-wrap container-gap">   
-            <div class="kytitle clearfix es-box-heading mtm">
-              <h3>在线课程</h3>
-              <span class="mll">视频+在线辅导</span>
-              <a href="{{ path('course_explore') }}" target="_blank" class="pull-right">更多>></a>
-            </div>
-             
-            <div class="es-box-body plll container">
-              {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
-            </div>    
-          </div>
-        </div>
-      </div>
 
-      <!-- 讨论，学员，牛人，谁在学，最新点评-->
-      <div class="row">
-        <aside class="col-md-9 ">          
-          <!-- 新加入学员 -->
-          <div class="trainee">
-            <div class="kytitle">
-              <h3>新学员</h3> <div class="fix-right font18">64231人已在学习</div>             
-            </div>            
-            <div class="mod-content pz">
-              <div class="pull-left info">
-              
-              <div class="info-content clearfix">
-                <div id="photo" class="photo-wall pull-left">
-                  <span id="wait-you" class=" list-waiting pull-right">
-                     <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
-                  </span>
-                  {% for user in users%}
-                  <span class="list-item-user  pull-right" >
-                    <a href="{{ path('user_show',{id:user.id}) }}">
-                      <img  class="tip user-logo-small-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
-                    </a>
-                    <div class="todos-thumb-span">
-                      <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
-                     
-                    </div>
-                  </span>
-                  {% endfor %}
-                
-                  <span class="justify_fix"></span>
+          <div class="col-md-8 ">
+
+            <!-- 专业课 -->
+            <div >
+              <div class="es-row-wrap container-gap">
+                <div class="kytitle clearfix es-box-heading mtm">
+                  <h3>推荐课程</h3>
+                  <span class="mll">视频学习+24小时内在线答复+每周多次直播答疑</span>
+                  <a href="{{ path('course_explore') }}" target="_blank" class="pull-right">更多>></a>
                 </div>
-                <div class="info-ad pull-left">
-                  <div class="info-btn">
-                  <p>还等什么呢就差你了</p>
-                 
-                  <a class="btn center-block" href="{{ path('register') }}">我要学习</a>
-               
-                  </div>
+
+                <div class="es-box-body plll clearfix">
+                  {{ render(controller('TopxiaWebBundle:Course:osfCoursesBlock', {courses:courses, view: 'grid'})) }}
                 </div>
               </div>
             </div>
-             
+
+            <!-- 公开课 -->
+            <div > 
+                <div class="es-row-wrap container-gap">
+                  <div class="kytitle clearfix es-box-heading mtm">
+                    <h3 >近期公开课</h3>
+                    <span class="mll">每周二线上线下同时开课，开放免费，无大牛，不学习!</span>
+                    <a href="{{ path('activity_home') }}" target="_blank" class="pull-right">更多>></a>
+                  </div>
+                   
+                  <div class="es-box-body plll clearfix">
+                    {{ render(controller('TopxiaWebBundle:Activity:activityBlockGrid', {activitys:lastActivitys, view: 'grid'})) }}
+                  </div> 
+                </div>
+            </div>
+
+            <!--讨论，学员，牛人，谁在学，最新点评-->    
+            <div >          
+              <!-- 新加入学员 -->
+              <div class="trainee">
+                <div class="kytitle">
+                  <h3>新学员</h3> <div class="fix-right font18">64231人已在学习</div>             
+                </div>            
+                <div class="mod-content pz">
+                  <div class="pull-left info">
+                  
+                  <div class="info-content clearfix">
+                    <div id="photo" class="photo-wall pull-left">
+                      <span id="wait-you" class=" list-waiting pull-right">
+                         <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
+                      </span>
+                      {% for user in users%}
+                      <span class="list-item-user  pull-right" >
+                        <a href="{{ path('user_show',{id:user.id}) }}">
+                          <img  class="tip user-logo-small-size" src="{{ file_path(user.smallAvatar,'user-default-'~user.id%40~'.jpg')  }}" alt="user icon">
+                        </a>
+                        <div class="todos-thumb-span">
+                          <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
+                         
+                        </div>
+                      </span>
+                      {% endfor %}
+                    
+                      <span class="justify_fix"></span>
+                    </div>
+                    <div class="info-ad pull-left">
+                      <div class="info-btn">
+                      <p>还等什么呢就差你了</p>
+                     
+                      <a class="btn center-block" href="{{ path('register') }}">我要学习</a>
+                   
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                 
+                </div>
+              </div>
+
+            </div>
+          </div>
+       
+          <div class="col-md-4 ">
+            
+            <!-- 学习动态 -->
+            <div>
+              <div class="es-row-wrap container-gap">
+                <div class="kytitle clearfix es-box-heading mtm">
+                  <h3 >学习动态</h3>
+
+                </div>
+
+                <div class="es-box-body pll prm">
+
+                  <ul class="media-list">
+                    {% for studyLog in studyLogs  %}
+                    {% set userProfile = studyLogUsers[studyLog.userId] %}
+                    <li class="media">
+                      <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
+                        <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                      <div class="media-body">
+
+                        <p class="text-color-gray text-normal">
+                          学生 <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
+                           {{ studyLog.createdTime|smart_time }} 开始在学习:
+                        </p>
+                        <p class="text-color-666 text-size-14">
+                          <a href="{{ path('course_show', {id:studyLog.data.courseId}) }}" target="_blank">{{ studyLog.message }}</a>
+                        </p>
+                      </div>
+                      <div class="pts" ></div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- 答疑动态 -->
+            <div >
+              <div class="es-row-wrap container-gap">
+                <div class="kytitle clearfix es-box-heading mtm">
+                  <h3 >答疑动态</h3>
+
+                </div>
+
+                <div class="es-box-body pll prm">
+
+                  <ul class="media-list">
+                    {% for answerLog in answerLogs  %}
+                          {% set userProfile = answerLogUsers[answerLog.userId] %}
+                          {% set qu = questionUsers[answerLog.userId] %}
+                    <li class="media">
+                      <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
+                        <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                      <div class="media-body">
+
+                        <p class="text-color-gray text-normal">
+                          老师
+                          <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
+                          {{ answerLog.createdTime|smart_time }} 回答了学生
+                          <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ qu.nickname }}</a>
+                          在:
+                        </p>
+                        <p class="text-color-666 text-size-14">
+                          <a href="{{ path('course_show', {id:answerLog.data.courseId}) }}" target="_blank">{{ answerLog.message }}</a>
+                        </p>
+                      </div>
+                      <div class="pts" ></div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- 最新评论 -->
+            <div >
+              <div class="es-row-wrap container-gap">
+                <div class="kytitle clearfix es-box-heading mtm">
+                  <h3 >最新评论</h3>
+                </div>
+
+                <div class="es-box-body pll prm">
+
+                  <ul class="media-list">
+                    {% for review in reviews  %}
+                          {% set userProfile = reviewUsers[review.userId] %}
+                          {% set reviewCourse = reviewCourses[review.courseId] %}
+                    <li class="media">
+                      <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
+                        <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                      <div class="media-body">
+
+                        <p class="text-color-gray text-normal">
+                          
+                          <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
+                          {{ review.createdTime|smart_time }} 发表了评论
+                          
+                        </p>
+                        <p class="text-color-666 text-size-14">
+                         {{ review.content }}
+                        </p>
+                        <p　>
+                        <a class="text-size-12" href="{{  path('course_show', {id:reviewCourse.id})  }}">课程《{{ reviewCourse.title }}》</a>
+                        </p>
+                      </div>
+                      <div class="pts" ></div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+
+                </div>
+              </div>
             </div>
           </div>
 
-        </aside>
-
-        <!-- 侧栏 -->
-        <aside class="col-md-3">
-          <!-- 最新点评 -->
-        
-        </aside>
       </div>
   </div>  
 

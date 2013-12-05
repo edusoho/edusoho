@@ -1,0 +1,68 @@
+{% set mode = mode|default('default') %}
+<ul class="page-grids pz">
+  {% for course in courses %}
+    <li class=" col-md-6 plz prz mz">
+      <div class="card  ps-re">
+        
+        <a href="{{ path('course_show', {id:course.id}) }}" class="card-body">
+          <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb ">
+          
+          <div class="phm">         
+              <div class="text-size-14 pvm phs mvz  text-weight">{{ course.title }}</div>
+
+              {% if mode in ['default', 'teach'] %}
+                <div class="pvs phs mvz bor-t-gray text-size-12 text-color-999 clearfix">
+                  <div class="pull-left mrl">
+                    <p class="">价格</p>
+                    {% if course.price > 0 %}
+                      <p class="text-size-15  text-color-red-e5 text-weight ">{{ course.price }}元</p>
+                    {% else %}
+                      <p class="text-size-15  text-color-red-e5 text-weight ">免费</p>
+                    {% endif %}
+                  </div>                  
+
+                  <div class="pull-left mll">
+                    {% if course.ratingNum > 0 %}
+                      <p class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</p>
+                      <p class="review-rating">
+                        <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
+                      </p>
+                    {% else %}
+                      <p class="meta-label">无评价</p>
+                      <p class="review-rating">
+                        <span class="stars-0">&nbsp;</span>
+                      </p>
+                    {% endif %}
+                  </div>
+
+                  <div class="pull-right ">
+                    <p class="meta-label">学生</p>
+                    <p class="student-num">{{ course.studentNum }}人</p>
+                  </div>
+
+
+                </div>
+              {% endif %}
+
+              {% if mode in ['default'] %}
+                {% set user = users[course.teacherIds|first]|default(null) %}
+                {% if user %}
+                  <div class="pvs  mvz bor-t-gray  bor-t-gray clearfix">
+                    <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb user-logo-small-size-s">
+                    <p class="text-normal mz pz">{{ user.nickname }}</p>
+                    <p class="text-normal text-color-gray mz pz">{{ user.title }}</p>
+                  </div>
+                {% endif %}
+              {% endif  %}
+           </div>
+        </a>
+
+         <div class="ps-ab ps-bt ps-rtl">
+             
+                <a  class="btn btn-success btn-xs  text-normal"  href="{{ path('course_show', {id:course.id}) }}" >加入学习</a>
+          </div>   
+
+      </div>
+    </li>
+  {% endfor %}
+</ul>
