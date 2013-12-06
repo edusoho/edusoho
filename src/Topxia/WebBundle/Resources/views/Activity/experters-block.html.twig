@@ -1,7 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 <div class="widget shadow">
-  <div class="kytitle clearfix bor-l-green">
+  <div class="kytitle clearfix ">
     <h3 class="panel-title">讲师</h3>
   </div>
   <div class="panel-body pbz ptz">
@@ -9,7 +9,7 @@
      <ul class="media-list">
             {% for userProfile in activity['userProfiles']  %}
               <li class="media">
-                <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}"><img width="150px" class="img-responsive media-object " src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}"><img width="100px" class="img-responsive media-object " src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                 <div class="media-body">
                    <h4 class="media-heading"> <a href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a></h4>
                    <p class="text-color-gray text-normal">{{ userProfile.title }}</p>                  

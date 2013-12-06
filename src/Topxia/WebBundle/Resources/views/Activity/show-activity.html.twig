@@ -20,14 +20,18 @@
           <p>结束时间： {{activity.endTime}}</p>
           <p>形式：  {{ activity.form }}</p>
           <p>现场地址： {{ activity.address }}</p>
-          {% if activity.onlineAddress %}<p>直播地址： {% if activity.join %}<a target="_blank" href="{{ activity.onlineAddress }}"> {{ activity.onlineAddress }}</a> {% else %} <span class='text-danger'> 报名后即可参加直播 </span>{% endif %}</p>{% endif %}
-                   
+          {% if activity.onlineAddress %}
           <p>
-            {% if  activity.onlinePrice>0 %} 线上：<span class='text-danger'>{{ activity.onlinePrice}}元</span>{% else %} 线上：<span class='text-danger'>免费 </span>{% endif %}
+            直播地址： {% if activity.join %}
+            <a target="_blank" href="{{ activity.onlineAddress }}">{{ activity.onlineAddress }}</a>
+            {% else %}
+            <span class='text-danger'>报名后即可参加直播</span>
+            {% endif %}
           </p>
-          <p>
-            {% if  activity.price>0  %}  线下：<span class='text-danger'> {{ activity.price}}元</span>{% else %} 线下：<span class='text-danger'>免费</span> {% endif %}
-          </p> 
+          {% endif %}
+                   
+          <p>价格：<span  class='text-danger'>线上{% if activity.onlinePrice>0 %}{{activity.onlinePrice}}元{% else %}免费{% endif %}  线下{% if  activity.price>0  %}{{activity.price}}元{% else %}免费{% endif %}
+          </span></p> 
     </div> 
     <div class="ps-ab ps-bt ps-rtl">
             <p>
@@ -48,7 +52,7 @@
   <div class="col-md-8 plz">
     <!-- 课程大纲 -->
     <div class="widget k_postlist shadow">
-      <div class="kytitle clearfix bor-l-green">
+      <div class="kytitle clearfix ">
         <h3>课程内容</h3>
       </div>
       <div class="phl pbl">
@@ -63,7 +67,7 @@
     {{ render(controller('TopxiaWebBundle:Activity:expertersBlock',{activity:activity}))}}
     <!-- 已报名 -->
     <div class="widget k_postlist shadow">
-      <div class="kytitle clearfix bor-l-green">
+      <div class="kytitle clearfix">
         <h3>已报名的小伙伴</h3>             
       </div>
       <div class="content model-over-h">
@@ -81,7 +85,7 @@
 <div class="row mhz">
   <div class="col-md-12 plz prz">
       <div class="widget k_postlist shadow">
-        <div class="kytitle clearfix bor-l-green">
+        <div class="kytitle clearfix ">
           <h3>提问与交流</h3> ------- <span class="text-right">如果在公开课前进行提问，我们会挑选关注度最高的几个问题让老师进行回答</span>
         </div>
         <div class="content comment">
