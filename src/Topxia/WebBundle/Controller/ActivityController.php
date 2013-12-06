@@ -45,7 +45,7 @@ class ActivityController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getActivityService()->searchActivityCount($conditions)
-            , 4
+            , 8
         ); 
         $expiredActivitys = $this->getActivityService()->searchActivitys(
             $conditions, 'latest',
