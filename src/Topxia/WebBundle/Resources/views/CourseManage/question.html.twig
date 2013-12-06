@@ -30,11 +30,11 @@
         {{ select_options(dict('courseStatus'), app.request.query.get('status'), '按课时') }}
       </select>
     </div>
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right mls" target="_blank"><span class="glyphicon glyphicon-plus"></span>材料题</a>
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right mls" target="_blank"><span class="glyphicon glyphicon-plus"></span>问答题</a>
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right mls" target="_blank"><span class="glyphicon glyphicon-plus"></span>判断题</a>
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right mls" target="_blank"><span class="glyphicon glyphicon-plus"></span>填空题</a>
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right mls" target="_blank"><span class="glyphicon glyphicon-plus"></span>选择题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=material" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>材料题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=essay" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>问答题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=determine" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>判断题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=fill" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>填空题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=choice" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>选择题</a>
     
     
    

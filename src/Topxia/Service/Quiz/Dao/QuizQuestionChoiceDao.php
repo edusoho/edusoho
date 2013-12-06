@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Quiz\Dao;
 
-interface QuizQuestionChoice
+interface QuizQuestionChoiceDao
 {
     public function addQuestionChoice($choice);
     

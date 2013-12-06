@@ -56,10 +56,15 @@ class QuizQuestionController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
 		$type = $request->query->get('type');
+		if(empty($type)){
+			$type = $request->request->get('type');
+		}
+		
 		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
 			$type = 'choice';
 		}
 
+		$difficulty = array('1'=>'入门', '3'=> '初级', '5'=> '高级');
 		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
 
 	    if ($request->getMethod() == 'POST') {
@@ -69,18 +74,28 @@ class QuizQuestionController extends BaseController
 	        } else {
 	            $question = $this->getQuestionService()->updateQuestion($question['id'], $question);
 	        }
-			exit('跳转');
-            return $this->render('TopxiaAdminBundle:QuizQuestion:create.html.twig',array(
-                'course' => $course,
-				'type' => $type,
-				'targets' => $targets,
-            ));
+			$submission = $request->request->get('submission');
+
+	        if($submission == 'continue'){
+	        	$targets['default'] = $question['targetType'].'-'.$question['targetId'];
+	            return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig',array(
+	                'course' => $course,
+					'type' => $type,
+					'targets' => $targets,
+					'difficulty' => $difficulty,
+					'question' => $question,
+	            ));
+	        }else if($submission == 'submit'){
+	        	return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId)));
+	        }
+			
         }
 
 		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'course' => $course,
 			'type' => $type,
 			'targets' => $targets,
+			'difficulty' => $difficulty
 		));
 	}
 
@@ -92,7 +107,7 @@ class QuizQuestionController extends BaseController
 
    	private function getQuestionService()
    	{
-   		return $this -> getServiceKernel() -> createService('Quiz.QuestionService');
+   		return $this -> getServiceKernel()->createService('Quiz.QuestionService');
    	}
 
 }

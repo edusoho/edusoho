@@ -13,20 +13,21 @@
   <div class="panel-body">
 
     <div id="question-creator-widget">
-      <form id="question-create-form" class="form-horizontal" method="post" action="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}">
+      <form id="question-create-form" class="form-horizontal quiz-question" method="post" action="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}">
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label>从属</label></div>
           <div class="col-md-8 controls">
-            <select name="target"></select>
+            <select class="form-control width-input width-input-large" name="target" data-role="target"></select>
+            <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label>难度</label></div>
-          <div class="col-md-8 controls">
-            {{ radios('difficulty', {'low':'入门', 'medium': '初级', 'high': '高级'}, question.difficulty|default('medium')) }}
+          <div class="col-md-8 controls radios">
+            {{ radios('difficulty', difficulty, question.difficulty | default('3')) }}
           </div>
         </div>
 
@@ -38,58 +39,68 @@
         </div>
 
         {% if type == 'choice' %}
-        <div data-role="choices"></div>
-         <div class="form-group">
+          <div data-role="choices"></div>
+          <div class="form-group">
             <div class="col-md-2 control-label"></div>
             <div class="col-md-8 controls">
-               <button class="btn btn-default pull-right" data-role="add-choice" type="button">新增选项</button>
+               <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">新增选项</button>
             </div>
           </div>
 
-        {% elseif type == 'essay' %}
+          <script type="text/x-handlebars-template" data-role="choice-template">
+            {% verbatim %}
+              <div class="form-group" data-role="choice">
+                <div class="col-md-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
+                <div class="col-md-10 controls checkboxs">
+                  <div class=" input-group">
+                    <input class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
+                    <span class="input-group-addon choice-answer">
+                      <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
+                      <a class="delete-choice" data-role="delete-choice" href="javascript:void(null)"><i  class="glyphicon glyphicon-trash"></i></a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            {% endverbatim %}
+          </script>
 
+        {% elseif type == 'fill' %}
           <div class="form-group">
             <div class="col-md-2 control-label"><label>参考答案</label></div>
             <div class="col-md-8 controls">
             </div>
           </div>
 
-        {% elseif type == 'determine' %}
+        {% elseif type == 'essay' %}
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="question-answer-field">答案</label></div>
+          <div class="col-md-8 controls">
+            <textarea class="form-control" id="question-answer-field" name="answers[]"></textarea>
+          </div>
+        </div>
 
+        {% elseif type == 'determine' %}
           <div class="form-group">
             <div class="col-md-2 control-label"><label></label></div>
-            <div class="col-md-8 controls">
+            <div class="col-md-8 controls radios">
+                {{ radios('answers[]', {'0':'错误','1':'正确'}, question.difficulty | default('0')) }}
             </div>
           </div>
         {% endif %}
 
-          <div class="form-group">
-            <div class="col-md-8 col-md-offset-2 controls">
-              <button type="submit" data-role="continue-submit" class="btn btn-default">保存并继续</button>
-              <button type="submit" class="btn btn-default">保存返回</button>
-              <button type="submit" class="btn btn-default">返回</button>
-            </div>
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls">
+            <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}" type="submit" class="btn btn-link">返回</a>
+            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
+            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
           </div>
-          <input type="hidden" name="answers">
-          <input type="hidden" name="type" value="{{ type }}">
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
-          <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
-
-          <script type="text/x-handlebars-template" data-role="choice-template">
-            {% verbatim %}
-              <div class="form-group" data-role="choice">
-              <div class="col-md-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
-                <div class="col-md-8 controls">
-                  <input class="form-control item-input" id="item-input-{{ id }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
-                  <label class="choice-answer-label"><input type="checkbox"class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
-                  <button type="button" data-role="delete-choice" class="btn btn-link btn-sm choice-delete-btn" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>
-                </div>
-              </div>
-            {% endverbatim %}
-          </script>
+        </div>
 
 
+        {% if type=="choice" %}<input type="hidden" name="answers">{% endif %}
+        <input type="hidden" name="submission">
+        <input type="hidden" name="type" value="{{ type }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
     </div>

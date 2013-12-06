@@ -26,6 +26,12 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getQuestion($this->getConnection()->lastInsertId());
     }
 
+    public function updateQuestion($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getQuestion($id);
+    }
+
     public function deleteQuestion($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
