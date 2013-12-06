@@ -1,7 +1,7 @@
 {% set mode = mode|default('default') %}
 <ul class="page-grids pz">
   {% for activity in activitys %}
-    <li class="col-md-6 plz prz mz">
+    <li class="col-md-4 plz prz mz">
       <div class="card  ps-re" >
           <a  href="{{ path('activity_show',{id:activity.id})}}" class="card-body" >
             <div class="grid-img ps-re">
@@ -21,10 +21,9 @@
                   </div>
                 </div>
 
-                  <div class=" pvs phs mvz ps-re bor-t-gray text-normal text-color-gray">
+                <div class=" pvs phs mvz ps-re bor-t-gray text-normal text-color-gray">
                   <span >地点：</span>{{ activity.address }}
-                  <div class="ps-ab ps-tps ps-rt">
-                  </div>
+                 
                 </div>
 
 
@@ -41,14 +40,16 @@
                 
                 {% endif  %}
 
+                 <div class="clearfix  phm pvm  bor-t-gray ">
+                <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
+                 <span class="text-color-gray  text-normal pull-right prm">
+                {{activity.studentNum}}人已报名</span>
+                </div>   
+
             </div>
           </a>
 
-          <div class="ps-ab ps-bt ps-rtl">
-              <span class="text-color-gray  text-normal">
-                {{activity.studentNum}}人已报名</span>
-                <a  class="btn btn-success btn-xs  text-normal"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
-          </div>    
+          
 
 
       </div>
