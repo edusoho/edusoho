@@ -43,7 +43,7 @@ class DefaultController extends BaseController
         $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,29);
         //
         $conditions = array('status' => 'published','recommended'=>1);
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 2);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 3);
 
         //公开课问题讨论
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
