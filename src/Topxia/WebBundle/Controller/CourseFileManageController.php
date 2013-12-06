@@ -55,6 +55,7 @@ class CourseFileManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
+
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
