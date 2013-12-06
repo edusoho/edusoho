@@ -78,13 +78,13 @@ class ActivityController extends BaseController
 
         $activity= $this->getActivityService()->mixActivity($activity,$currentuser['id']);
 
-        if($activity['expired']==1)
-        {
-            return $this->redirect($this->generateUrl("activity_expired",array(
-                    "id"=>$id))
-            );
+        // if($activity['expired']==1)
+        // {
+        //     return $this->redirect($this->generateUrl("activity_expired",array(
+        //             "id"=>$id))
+        //     );
 
-        }
+        // }
        
         //报名的学生
         $students=$this->getActivityService()->findActivityStudents($id,0,20);
@@ -111,17 +111,29 @@ class ActivityController extends BaseController
         $qustionUserIds=ArrayToolkit::column($threadPosts,'userId');
 
         $qustionUsers = $this->getUserService()->findUsersByIds($qustionUserIds);
-       
-        $qustionUsers[0]=array(
-            "id" =>  0,
-          "nickname" =>"游客");
-
       
         
         $postUsers = $this->getUserService()->findUsersByIds($postUserIds);
-        $postUsers[0]=array(
-            "id" =>  0,
-          "nickname" =>"游客");
+       
+
+        //附件下载
+        $appendix=array();
+        if(!empty($activity['id'])){
+            $appendix=$this->getMaterialService()->findActivityMaterials($activity['id'],0,10);
+        }
+
+        $pics=array();
+        if(!empty($activity['photoId'])){
+            $pics=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoId'][0]),'latest',0,100);
+        }
+
+        $courses=array();
+        if(!empty($activity['courseId'])){
+            $courses=$this->getCourseService()->findCoursesByIds($activity['courseId']);
+
+        }
+
+
 
         return $this->render("TopxiaWebBundle:Activity:show-activity.html.twig",array(
             "activity"=>$activity,
@@ -130,7 +142,11 @@ class ActivityController extends BaseController
             "activitys"=>$activitys,
             "current_user"=> $currentuser,
             "qustion_users"=>$qustionUsers,
-            "post_users"=>$postUsers));
+            "post_users"=>$postUsers,
+            "appendixs"=>$appendix,
+            "pics"=>$pics,
+            "courses"=>$courses)
+        );
     }
   
    //显示公开课已结束的页面
@@ -152,7 +168,7 @@ class ActivityController extends BaseController
         
         $files=array();
         if(!empty($activity['photoId'])){
-            $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoId'][0]),'    latest',0,100);
+            $files=$this->getPhotoService()->searchFiles(array('groupId'=>$activity['photoId'][0]),'latest',0,100);
         }
 
         $lession=array();
@@ -199,11 +215,7 @@ class ActivityController extends BaseController
             "id" =>  0,
           "nickname" =>"游客");
 
-        //附件下载
-        $appendix=array();
-        if(!empty($activity['id'])){
-            $appendix=$this->getMaterialService()->findActivityMaterials($activity['id'],0,2);
-        }
+        
 
         return $this->render("TopxiaWebBundle:Activity:show-expired-activity.html.twig",array(
             "activity"=>$activity,

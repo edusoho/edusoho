@@ -57,11 +57,13 @@
 .ps-rts{right:5px !important;}
 .ps-rt{right:10px !important;}
 .ps-rtl{right:15px !important;}
+.ps-rtll{right:30px !important;}
 
 .ps-ltz{left:0px !important;}
 .ps-lts{left:5px !important;}
 .ps-lt{left:10px !important;}
 .ps-ltl{left:15px !important;}
+.ps-ltll{left:35px !important;}
 .ps-ltpd{left:50% !important;}
 
 .ps-btz{bottom:0px !important;}
@@ -277,6 +279,26 @@
 
 .text-weight {
 	font-weight: bold !important;
+}
+
+.text-weight-400{
+	font-weight: 400 !important;
+}
+
+.text-weight-500{
+	font-weight: 500 !important;
+}
+
+.text-weight-600{
+	font-weight: 600 !important;
+}
+
+.text-weight-700{
+	font-weight: 700 !important;
+}
+
+.text-weight-800{
+	font-weight: 800 !important;
 }
 
 

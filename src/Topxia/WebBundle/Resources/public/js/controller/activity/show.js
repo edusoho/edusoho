@@ -1,15 +1,12 @@
 define(function(require, exports, module) {
 
-    var Widget = require('widget'),
-        Backbone = require('backbone'),
-        VideoJS = require('video-js'),
-        swfobject = require('swfobject'),
-        Scrollbar = require('jquery.perfect-scrollbar');
+   
 
     var $=require('jquery');
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
     require('common/validator-rules').inject(Validator);
+    require('wookmark');
 
     var createReplyObject=function(templeteHtml){
         return $(templeteHtml);
@@ -77,6 +74,13 @@ define(function(require, exports, module) {
 
             });
         });
+
+
+        $("#photoId-list li").wookmark({ 
+            container:$("#photoId-list"), 
+            offset:0
+              
+        }); 
 
 
        
