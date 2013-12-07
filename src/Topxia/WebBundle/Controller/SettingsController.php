@@ -287,12 +287,55 @@ class SettingsController extends BaseController
     public function bindAction(Request $request, $type)
     {
         $this->checkBindsName($type);
-        $callback = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+        $callback = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
         $settings = $this->setting('login_bind');
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
         $client = OAuthClientFactory::create($type, $config);
 
         return $this->redirect($client->getAuthorizeUrl($callback));
+    }
+
+    public function bindCallbackAction (Request $request, $type)
+    {
+        $this->checkBindsName($type);
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($type, $user->id);
+        if (! empty($bind)) {
+            $this->setFlashMessage('danger', '您已经绑定了该第三方网站的帐号，不能重复绑定!');
+            goto response;
+        }
+
+        $code = $request->query->get('code');
+        if (empty($code)) {
+            $this->setFlashMessage('danger', '您取消了授权/授权失败，请重试绑定!');
+            goto response;
+        }
+
+
+        $callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
+        try {
+            $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+        } catch (\Exception $e) {
+            $this->setFlashMessage('danger', '授权失败，请重试绑定!');
+            goto response;
+        }
+
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        if (!empty($bind)) {
+            $this->setFlashMessage('danger', '该第三方帐号已经被其他好知网帐号绑定，不能重复绑定!');
+            goto response;
+        }
+
+        $this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
+        $this->setFlashMessage('success', '帐号绑定成功!');
+
+        response:
+        return $this->redirect($this->generateUrl('settings_binds'));
+
     }
 
     public function setupAction(Request $request)
@@ -360,6 +403,28 @@ class SettingsController extends BaseController
         curl_close($curl);
 
         return $response;
+    }
+
+    private function createOAuthClient($type)
+    {
+        $settings = $this->setting('login_bind');        
+
+        if (empty($settings)) {
+            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings) or !isset($settings[$type.'_enabled']) or empty($settings[$type.'_key']) or empty($settings[$type.'_secret'])) {
+            throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
+        }
+
+        if (!$settings[$type.'_enabled']) {
+            throw new \RuntimeException("第三方登录({$type})未开启");
+        }
+
+        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $client = OAuthClientFactory::create($type, $config);
+
+        return $client;
     }
 
     private function getAuthService()
