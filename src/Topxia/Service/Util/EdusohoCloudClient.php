@@ -4,6 +4,7 @@ namespace Topxia\Service\Util;
 
 use \RuntimeException;
 
+
 class EdusohoCloudClient implements CloudClient
 {
 	protected $accessKey;
@@ -139,6 +140,20 @@ class EdusohoCloudClient implements CloudClient
         
     }
 
+    public function getBills($bucket)
+    {
+
+        $params = array('bucket' => $bucket);
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->getBillUrl(), array('token' => $token));
+
+        return json_decode($content, true);
+    }
+
     private function generateViewToken($bucket, $key)
     {
         $params = array('bucket' => $bucket, 'key' => $key);
@@ -165,6 +180,11 @@ class EdusohoCloudClient implements CloudClient
     private function getDownloadUrl()
     {
     	return $this->apiServer . '/download.php';
+    }
+
+    private function getBillUrl()
+    {
+        return $this->apiServer . '/bill.php';
     }
 
     private function getRequest($url, $params = array(), $cookie = array())

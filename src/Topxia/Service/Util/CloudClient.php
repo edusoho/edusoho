@@ -22,4 +22,6 @@ interface CloudClient
 
     public function getFileUrl($key,$targetId,$targetType);
 
+    public function getBills($bucket);
+
 }

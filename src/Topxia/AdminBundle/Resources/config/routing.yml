@@ -413,6 +413,10 @@ admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 
+admin_cloud_bill:
+    pattern:  /cloud/bill
+    defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
