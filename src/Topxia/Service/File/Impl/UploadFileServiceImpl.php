@@ -128,6 +128,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFile($id);
     }
 
+    public function setFileConverting($id, $convertHash)
+    {
+        $fields = array(
+            'convertStatus' => 'waiting',
+            'convertHash' => $convertHash,
+        );
+
+        $this->getUploadFileDao()->updateFile($id, $fields);
+
+        return $this->getFile($id);
+    }
+
     private function getFileImplementorByFile($file)
     {
         return $this->getFieImplementor($file['storage']);

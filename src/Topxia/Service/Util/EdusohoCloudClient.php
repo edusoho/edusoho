@@ -154,6 +154,19 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
+    public function convertVideo($bucket, $key, $commands, $notifyUrl)
+    {
+        $params = array('bucket' => $bucket, 'key' => $key, 'commands' => $commands, 'notifyUrl' => $notifyUrl);
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->getConvertUrl(), array('token' => $token));
+
+        return json_decode($content, true);
+    }
+
     private function generateViewToken($bucket, $key)
     {
         $params = array('bucket' => $bucket, 'key' => $key);
@@ -185,6 +198,11 @@ class EdusohoCloudClient implements CloudClient
     private function getBillUrl()
     {
         return $this->apiServer . '/bill.php';
+    }
+
+    private function getConvertUrl()
+    {
+        return $this->apiServer . '/convert.php';
     }
 
     private function getRequest($url, $params = array(), $cookie = array())

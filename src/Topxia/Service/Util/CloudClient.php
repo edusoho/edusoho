@@ -24,4 +24,6 @@ interface CloudClient
 
     public function getBills($bucket);
 
+    public function convertVideo($bucket, $key, $commands, $notifyUrl);
+
 }
