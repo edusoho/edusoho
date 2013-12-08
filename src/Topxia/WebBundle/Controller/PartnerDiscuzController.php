@@ -110,6 +110,9 @@ class PartnerDiscuzController extends BaseController
 
         $this->authenticateUser($user);
 
+        $sessionId = $request->getSession()->getId();
+        $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
+
         return API_RETURN_SUCCEED;
     }
 
