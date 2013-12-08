@@ -572,6 +572,12 @@ settings_binds_bind:
     pattern: /settings/bind/{type}
     defaults: { _controller: TopxiaWebBundle:Settings:bind }
 
+settings_binds_bind_callback:
+    pattern: /settings/bind/{type}/callback
+    defaults: { _controller: TopxiaWebBundle:Settings:bindCallback }
+
+
+
 settings_setup:
     pattern: /settings/setup
     defaults: { _controller: TopxiaWebBundle:Settings:setup }
