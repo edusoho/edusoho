@@ -21,6 +21,11 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new JsonResponse($content, 200);
         }
 
+        $userId = $token->getUser()->id;
+        $sessionId = $request->getSession()->getId();
+
+        $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
+
         if ($this->getAuthService()->hasPartnerAuth()) {
             $url = $this->httpUtils->generateUri($request, 'partner_login');
             $queries = array('goto' => $this->determineTargetUrl($request));

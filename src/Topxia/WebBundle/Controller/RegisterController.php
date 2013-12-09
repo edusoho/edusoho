@@ -18,10 +18,8 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
 
                 $user = $this->getAuthService()->register($registration);
-
                 $this->authenticateUser($user);
-
-                $this->getNotificationService()->notify($user['id'], "default", $this->getWelcomeBody($user));
+                $this->sendRegisterMessage($user);
 
                 $goto = $this->generateUrl('register_submited', array(
                     'id' => $user['id'], 'hash' => $this->makeHash($user)
@@ -176,16 +174,34 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    private function  sendRegisterMessage($user)
+    {
+        $senderUser = array();
+        $auth = $this->getSettingService()->get('auth', array());
+        
+        if(!empty($auth['welcome_sender'])){
+            $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
+            if(!empty($senderUser)){
+                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
+                $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
+                $this->getMessageService()->deleteConversation($conversation['id']);
+            }
+        }
+
+        return true;
+    }
+
     private function getWelcomeBody($user)
     {
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
-        $welcomeBody = $this->setting('auth.welcome_body', '注册欢迎内容');
+        $welcomeBody = $this->setting('auth.welcome_body', '注册欢迎的内容');
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
         return $welcomeBody;
     }
+
     private function sendVerifyEmail($token, $user)
     {
         $auth = $this->getSettingService()->get('auth', array());

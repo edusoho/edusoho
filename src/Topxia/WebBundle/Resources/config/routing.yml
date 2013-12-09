@@ -391,6 +391,11 @@ course_manage_file_show:
     pattern:  /course/{id}/manage/file/{fileId}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:show }
 
+course_manage_file_convert:
+    pattern:  /course/{id}/manage/file/{fileId}/convert
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:convert }
+    methods: [POST]
+
 course_manage_upload_course_delete_files:
     pattern:  /course/{id}/delete/files/{type}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
@@ -474,6 +479,14 @@ course_manage_quiz_item_delete:
     pattern: /course/{courseId}/manage/quiz/{itemId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseQuizManage:deleteItem }
     methods: [POST]
+
+course_manage_quiz_question:
+    pattern: /course/{courseId}/manage/question
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:index }
+
+course_manage_quiz_question_create:
+    pattern: /course/{courseId}/manage/question/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
@@ -863,6 +876,9 @@ systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
 
+setting_approval_submit:
+    pattern: /settings/approval/submit
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
 
 test:
     pattern:  /test/

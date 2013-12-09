@@ -8,7 +8,7 @@ class ArrayToolkit
 		if (empty($array)) {
 			return array();
 		}
-
+		
 		$column = array();
 		foreach ($array as $item) {
             if (isset($item[$columnName])) {

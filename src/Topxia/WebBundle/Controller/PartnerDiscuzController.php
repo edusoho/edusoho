@@ -63,6 +63,7 @@ class PartnerDiscuzController extends BaseController
         if (UC_CHARSET == 'gbk') {
             $get['newusername'] = iconv('gb2312','UTF-8',$get['newusername']);
         }
+
         $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
         $user = $this->getUserService()->getUser($bindUser['toId']);
         $this->getUserService()->changeNickname($user['id'], $get['newusername']);
@@ -108,6 +109,9 @@ class PartnerDiscuzController extends BaseController
         }
 
         $this->authenticateUser($user);
+
+        $sessionId = $request->getSession()->getId();
+        $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
 
         return API_RETURN_SUCCEED;
     }

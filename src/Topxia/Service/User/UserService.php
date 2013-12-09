@@ -51,6 +51,9 @@ interface UserService
     public function sortUserlevels(array $id);
 
     public function isUserlevelNameAvailable($name, $exclude=null);
+
+    public function rememberLoginSessionId($id, $sessionId);
+
     /**
      * 变更密码
      * 
@@ -168,5 +171,19 @@ interface UserService
      * @return array 用户关注中的用户ID列表。
      */
     public function filterFollowingIds($userId, array $followingIds);
+
+    public function getLastestApprovalByUserIdAndStatus($userId, $status);
+    
+    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
+
+    public function getUsersByApprovalStatus($approvalStatus, $start, $limit);
+
+    public function getUserCountByApprovalStatus($approvalStatus);
+
+    public function findUserApprovalsByUserIds($userIds);
+
+    public function passApproval($userId, $note = null);
+
+    public function rejectApproval($userId, $note = null);
 
 }

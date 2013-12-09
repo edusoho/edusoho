@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: osf_v1.3.9
+        assets_version: osf_v1.4.0
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -137,3 +137,12 @@ services:
         class: Topxia\WebBundle\Twig\Extension\DataExtension
         tags:
             - { name: twig.extension }
+
+
+
+
+    kernel.listener.user_login_token_listener:
+        class: Topxia\WebBundle\Listener\UserLoginTokenListener
+        arguments:    [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
