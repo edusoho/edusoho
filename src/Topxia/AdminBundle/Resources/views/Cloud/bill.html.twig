@@ -1,0 +1,38 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}云存储账单 - {{ parent() }}{% endblock %}
+
+{% set menu = 'bill' %}
+
+{% block main %}
+
+<div class="page-header"><h1>云存储账单</h1></div>
+
+  <div class="well well-sm">
+    账户余额：<strong class="text-success">{{ money }}元</strong>
+  </div>
+
+  <table class="table table-hover" id="bill-table">
+    <tr>
+      <th>账单月份</th>
+      <th>空间使用量</th>
+      <th>流量</th>
+      <th>空间费用</th>
+      <th>流量费用</th>
+      <th>费用合计</th>
+    </tr>
+    {% for bill in bills %}
+    <tr>
+      <td>{{ bill.date }}</td>
+      <td>{{ bill.space }}G</td>
+      <td>{{ bill.transfer }}G</td>
+      <td>{{ bill.spaceFee }}元</td>
+      <td>{{ bill.transferFee }}元</td>
+      <td><strong class="text-success">{{ bill.totalFee }}元</strong></td>
+    </tr>
+    {% else %}
+      <tr><td colspan="6"><div class="empty">暂无账单记录</div></td></tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

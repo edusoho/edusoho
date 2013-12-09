@@ -367,6 +367,11 @@ course_manage_file_show:
     pattern:  /course/{id}/manage/file/{fileId}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:show }
 
+course_manage_file_convert:
+    pattern:  /course/{id}/manage/file/{fileId}/convert
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:convert }
+    methods: [POST]
+
 course_manage_upload_course_delete_files:
     pattern:  /course/{id}/delete/files/{type}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
@@ -566,6 +571,12 @@ settings_binds_unbind:
 settings_binds_bind:
     pattern: /settings/bind/{type}
     defaults: { _controller: TopxiaWebBundle:Settings:bind }
+
+settings_binds_bind_callback:
+    pattern: /settings/bind/{type}/callback
+    defaults: { _controller: TopxiaWebBundle:Settings:bindCallback }
+
+
 
 settings_setup:
     pattern: /settings/setup

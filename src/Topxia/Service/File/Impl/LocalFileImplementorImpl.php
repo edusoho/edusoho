@@ -41,7 +41,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
         $uploadFile['convertStatus'] = 'none';
 
-        $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($originalFile->getMimeType());
+        $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
 
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
 

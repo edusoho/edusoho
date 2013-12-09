@@ -11,23 +11,18 @@ class CloudClientFactory
 	{
         $parameter = $this->getKernenl()->getParameter('cloud_client');
 
-        $name = empty($parameter['name']) ? 'default' : $parameter['name'];
         $arguments = empty($parameter['arguments']) ? array() : $parameter['arguments'];
 
-        if ($name == 'default') {
-            $setting = $this->getKernenl()->createService('System.SettingService')->get('storage', array());
+        $setting = $this->getKernenl()->createService('System.SettingService')->get('storage', array());
 
-            $class = __NAMESPACE__ . '\\EdusohoCloudClient';
+        $class = __NAMESPACE__ . '\\EdusohoCloudClient';
 
-            $arguments = array_merge($arguments, array(
-                'apiServer' => $setting['cloud_api_server'],
-                'accessKey' => $setting['cloud_access_key'],
-                'secretKey' => $setting['cloud_secret_key'],
-                'bucket' => $setting['cloud_bucket'],
-            ));
-        } else {
-            $class = $parameter['class'];
-        }
+        $arguments = array_merge($arguments, array(
+            'apiServer' => $setting['cloud_api_server'],
+            'accessKey' => $setting['cloud_access_key'],
+            'secretKey' => $setting['cloud_secret_key'],
+            'bucket' => $setting['cloud_bucket'],
+        ));
 
         $client = new $class($arguments);
 

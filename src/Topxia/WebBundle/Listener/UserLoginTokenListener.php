@@ -21,8 +21,7 @@ class UserLoginTokenListener
     public function onGetUserLoginListener (GetResponseEvent $event)
     {
     	$request = $event->getRequest();
-
-    	$userLoginToken = $request->getSession()->getId();
+        $userLoginToken = $request->getSession()->getId();
         $user = $this->getUserService()->getCurrentUser();
 
         if (!$user->islogin()) {
@@ -31,6 +30,10 @@ class UserLoginTokenListener
 
         $loginBind = $this->getSettingService()->get('login_bind');
         if (empty($loginBind['login_limit'])) {
+            return;
+        }
+
+        if (empty($user['loginSessionId'])) {
             return;
         }
 
