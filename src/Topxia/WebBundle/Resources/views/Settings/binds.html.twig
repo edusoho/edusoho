@@ -10,6 +10,7 @@
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     {% block heading %}第三方登录{% endblock %}
     {% block body %}
+      {{ web_macro.flash_messages() }}
        <ul class="media-list">
           {% for type, bind in binds %} 
           {% if settings[type ~ '_enabled']|default(false) %}

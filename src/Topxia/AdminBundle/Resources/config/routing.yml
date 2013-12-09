@@ -413,6 +413,10 @@ admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 
+admin_cloud_bill:
+    pattern:  /cloud/bill
+    defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
@@ -580,3 +584,25 @@ admin_money_card_batch_export_csv:
 admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
+
+
+admin_approval_approving:
+    pattern:  approvals/approving
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approving }
+
+admin_approval_approved:
+    pattern:  approvals/approved
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approved }
+
+admin_approval_approve:
+    pattern:  approvals/{id}/approve
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
+
+admin_approval_cancel:
+    pattern:  approvals/{id}/cancel
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
+    methods:  [POST]
+
+show_idcard:
+    pattern:   approvals/idcard/show/{userId}/{type}
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }

@@ -65,11 +65,7 @@
           </script>
 
         {% elseif type == 'fill' %}
-          <div class="form-group">
-            <div class="col-md-2 control-label"><label>参考答案</label></div>
-            <div class="col-md-8 controls">
-            </div>
-          </div>
+          
 
         {% elseif type == 'essay' %}
         <div class="form-group">
@@ -92,7 +88,9 @@
           <div class="col-md-8 col-md-offset-2 controls">
             <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}" type="submit" class="btn btn-link">返回</a>
             <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
-            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
+            {% if type != 'material' %}
+              <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
+            {% endif %}
           </div>
         </div>
 
@@ -100,6 +98,7 @@
         {% if type=="choice" %}<input type="hidden" name="answers">{% endif %}
         <input type="hidden" name="submission">
         <input type="hidden" name="type" value="{{ type }}">
+        <input type="hidden" name="parentId" value="{{ parentId | default(null) }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 

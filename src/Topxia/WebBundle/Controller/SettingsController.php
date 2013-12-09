@@ -2,10 +2,12 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
 use Topxia\WebBundle\Form\UserProfileType;
 use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -38,6 +40,26 @@ class SettingsController extends BaseController
             'form' => $form->createView()
         ));
 	}
+
+    public function approvalSubmitAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if ($request->getMethod() == 'POST') {
+            $faceImg = $request->files->get('faceImg');
+            $backImg = $request->files->get('backImg');
+            
+            if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg) ) {
+                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+            }
+
+            $directory = $this->container->getParameter('topxia.upload.private_directory') . '/approval';
+            $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
+            $this->setFlashMessage('success', '实名认证提交成功！');
+            return $this->redirect($this->generateUrl('settings'));
+        }
+        return $this->render('TopxiaWebBundle:Settings:approval.html.twig',array(
+        ));
+    }
 
 	public function avatarAction(Request $request)
 	{
@@ -276,7 +298,8 @@ class SettingsController extends BaseController
 		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array('binds'=>$binds));
 	}
 
-    public function unBindAction(Request $request, $type){
+    public function unBindAction(Request $request, $type)
+    {
         $user = $this->getCurrentUser();
         $this->checkBindsName($type);
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
@@ -286,12 +309,55 @@ class SettingsController extends BaseController
     public function bindAction(Request $request, $type)
     {
         $this->checkBindsName($type);
-        $callback = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+        $callback = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
         $settings = $this->setting('login_bind');
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
         $client = OAuthClientFactory::create($type, $config);
 
         return $this->redirect($client->getAuthorizeUrl($callback));
+    }
+
+    public function bindCallbackAction (Request $request, $type)
+    {
+        $this->checkBindsName($type);
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($type, $user->id);
+        if (! empty($bind)) {
+            $this->setFlashMessage('danger', '您已经绑定了该第三方网站的帐号，不能重复绑定!');
+            goto response;
+        }
+
+        $code = $request->query->get('code');
+        if (empty($code)) {
+            $this->setFlashMessage('danger', '您取消了授权/授权失败，请重试绑定!');
+            goto response;
+        }
+
+
+        $callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
+        try {
+            $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+        } catch (\Exception $e) {
+            $this->setFlashMessage('danger', '授权失败，请重试绑定!');
+            goto response;
+        }
+
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        if (!empty($bind)) {
+            $this->setFlashMessage('danger', '该第三方帐号已经被其他好知网帐号绑定，不能重复绑定!');
+            goto response;
+        }
+
+        $this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
+        $this->setFlashMessage('success', '帐号绑定成功!');
+
+        response:
+        return $this->redirect($this->generateUrl('settings_binds'));
+
     }
 
     public function setupAction(Request $request)
@@ -331,11 +397,17 @@ class SettingsController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function checkBindsName($type) {
+    private function checkBindsName($type) 
+    {
         $types = array('weibo', 'qq', 'renren');
         if (!in_array($type, $types)) {
             throw new NotFoundHttpException();
         }
+    }
+
+    private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     public function fetchAvatar($url)
@@ -361,9 +433,30 @@ class SettingsController extends BaseController
         return $response;
     }
 
+    private function createOAuthClient($type)
+    {
+        $settings = $this->setting('login_bind');        
+
+        if (empty($settings)) {
+            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings) or !isset($settings[$type.'_enabled']) or empty($settings[$type.'_key']) or empty($settings[$type.'_secret'])) {
+            throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
+        }
+
+        if (!$settings[$type.'_enabled']) {
+            throw new \RuntimeException("第三方登录({$type})未开启");
+        }
+
+        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $client = OAuthClientFactory::create($type, $config);
+
+        return $client;
+    }
+
     private function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }
