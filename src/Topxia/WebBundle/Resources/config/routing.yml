@@ -848,6 +848,9 @@ systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
 
+setting_approval_submit:
+    pattern: /settings/approval/submit
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
 
 test:
     pattern:  /test/
