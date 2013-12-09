@@ -54,7 +54,7 @@ class PartnerPhpwindController extends BaseController
             $filteredArgs[$key] = $request->get($key);
         }
 
-        $result = $this->$method($filteredArgs);
+        $result = $this->$method($request, $filteredArgs);
         if ($result == true) {
             return $this->createWindidResponse('success');
         }
@@ -62,17 +62,17 @@ class PartnerPhpwindController extends BaseController
         return $this->createWindidResponse('fail');
     }
 
-    private function doTest($args)
+    private function doTest($request, $args)
     {
         return empty($args['testdata']) ? false : true;
     }
 
-    private function doAddUser($args)
+    private function doAddUser($request, $args)
     {
         return true;
     }
 
-    private function doSynLogin($args)
+    private function doSynLogin($request, $args)
     {
         $api = \WindidApi::api('user');
         $partnerUser = $api->getUser($args['uid']);
@@ -101,11 +101,14 @@ class PartnerPhpwindController extends BaseController
         }
 
         $this->authenticateUser($user);
+        
+        $sessionId = $request->getSession()->getId();
+        $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
 
         return true;
     }
 
-    private function doSynLogout($args)
+    private function doSynLogout($request, $args)
     {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
@@ -116,7 +119,7 @@ class PartnerPhpwindController extends BaseController
      * 需要修改的字段有：email
      * @todo  如果修改密码，则置user_bind表的syncPassword
      */
-    private function doEditUser($args)
+    private function doEditUser($request, $args)
     {
         // file_put_contents('/tmp/phpwind', json_encode($args). "\n\n", FILE_APPEND);
 
@@ -137,37 +140,37 @@ class PartnerPhpwindController extends BaseController
         return true;
     }
 
-    private function doEditUserInfo($args)
+    private function doEditUserInfo($request, $args)
     {
         return true;
     }
 
-    private function doUploadAvatar($args)
+    private function doUploadAvatar($request, $args)
     {
         return true;
     }
 
-    private function doEditCredit($args)
+    private function doEditCredit($request, $args)
     {
         return true;
     }
 
-    private function doEditMessageNum($args)
+    private function doEditMessageNum($request, $args)
     {
         return true;
     }
 
-    private function doDeleteUser($args)
+    private function doDeleteUser($request, $args)
     {
         return true;
     }
 
-    private function doSetCredits($args)
+    private function doSetCredits($request, $args)
     {
         return true;
     }
 
-    private function doAlterAvatarUrl($args)
+    private function doAlterAvatarUrl($request, $args)
     {
         return true;
     }

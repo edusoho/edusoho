@@ -75,6 +75,42 @@ class CourseFileManageController extends BaseController
         throw $this->createNotFoundException();
     }
 
+    public function convertAction(Request $request, $id, $fileId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['convertStatus'] != 'error') {
+            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有转换失败的文件，才能重新转换！'));
+        }
+
+        if ($file['type'] != 'video') {
+            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有视频文件，才能转换！'));
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        $commands = array_keys($client->getVideoConvertCommands());
+        $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+        $result = $client->convertVideo($client->getBucket(), $file['hashId'], implode(';', $commands), $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true));
+
+        if (empty($result['persistentId'])) {
+            return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
+        }
+
+        $convertHash = "{$result['persistentId']}:{$convertKey}";
+
+        $this->getUploadFileService()->setFileConverting($file['id'], $convertHash);
+
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
+
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
         $course = $this->getCourseService()->tryManageCourse($id);

@@ -15,6 +15,13 @@
     {% endif %}
   </td>
 
+    <td>
+    {% if package.level == 1 %} <strong class="text-info"> 一般 </strong>
+    {% elseif package.level == 2 %} <strong class="text-warning"> 重要 </strong>
+    {% elseif package.level == 3 %}  <strong class="text-danger"> 紧急 </strong>
+    {% endif %}
+   </td>
+
   <td>
   	{% if package.author is defined %} 
       <a href="{{package.authorUrl}}" target="_blank">{{package.author}}</a>
@@ -24,17 +31,10 @@
   </td>
 
   <td>
-  	{% if package.level == 1 %} <strong class="text-info"> 一般 </strong>
-  	{% elseif package.level == 2 %} <strong class="text-warning"> 重要 </strong>
-  	{% elseif package.level == 3 %}  <strong class="text-danger"> 紧急 </strong>
-  	{% endif %}
-  </td>
-
-  <td>
-  	{{package.comments | plain_text(10) }}
+  	{{package.comments | plain_text(200) }}
   	<br>
     <div>
-        <a href="#" class="btn btn-sm btn-info" rel="popover" data-content="{{package.comments}}" >详情</a>
+        <a href="#" class="btn btn-sm btn-success" rel="popover" data-content="{{package.comments}}" >详情</a>
     </div>
 
   </td>

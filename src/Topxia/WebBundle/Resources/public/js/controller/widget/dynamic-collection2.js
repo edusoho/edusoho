@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Handlebars = require('handlebars');
 
-
     var DynamicCollection = Widget.extend({
         attrs: {
             onlyAddItemWithModel: false

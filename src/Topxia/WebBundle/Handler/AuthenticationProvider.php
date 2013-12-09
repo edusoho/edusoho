@@ -87,11 +87,15 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
                 } catch (UsernameNotFoundException $notFound) {
 
-                    $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
+                    if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+                        $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
+                    } else {
+                        $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($username, $token->getCredentials());
+                    }
+
                     if (empty($partnerUser)) {
                         throw $notFound;
                     }
-
                     $bind = $this->getUserService()->getUserBindByTypeAndFromId($this->getAuthService()->getPartnerName(), $partnerUser['id']);
                     if ($bind) {
 

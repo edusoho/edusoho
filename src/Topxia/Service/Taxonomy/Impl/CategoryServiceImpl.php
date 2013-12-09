@@ -232,10 +232,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                     break;
                 case 'code':
                     if (empty($category['code'])) {
-                        $category['code'] = '';
+                        throw $this->createServiceException("编码不能为空，保存分类失败");
                     } else {
-                        if (!ctype_alnum($category['code'])) {
+                        if (!preg_match("/^[a-zA-Z0-9_]+$/i", $category['code'])) {
                             throw $this->createServiceException("编码({$category['code']})含有非法字符，保存分类失败");
+                        }
+                        if (ctype_digit($category['code'])) {
+                            throw $this->createServiceException("编码({$category['code']})不能全为数字，保存分类失败");
                         }
                         $exclude = empty($releatedCategory['code']) ? null : $releatedCategory['code'];
                         if (!$this->isCategoryCodeAvaliable($category['code'], $exclude)) {
