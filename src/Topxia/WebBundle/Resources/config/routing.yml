@@ -618,6 +618,10 @@ tag_match:
     pattern: /tag/match.jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
 
+following_match_bynickname:
+    pattern: /following/bynickname/match.jsonp
+    defaults: { _controller: TopxiaWebBundle:Message:match }
+
 comment_widget_init:
     pattern:  /comment-widget/init
     defaults: { _controller: TopxiaWebBundle:CommentWidget:init }

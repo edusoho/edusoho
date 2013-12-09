@@ -308,8 +308,8 @@ ul.sortable-list li.placeholder, ol.sortable-list li.placeholder {
 .controls .select2-container {
 	margin-left: 0;
 	margin-right: 0;
-	padding-left: 0;
-	padding-right: 0;
+	border: 0;
+	padding: 0;
 	float: none;
 
 }

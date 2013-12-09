@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\MessageType;
@@ -176,6 +177,28 @@ class MessageController extends BaseController
         }else {
            return $this->redirect($this->generateUrl('message'));
         }
+    }
+
+    public function matchAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $data = array();
+        $queryString = $request->query->get('q');
+        $callback = $request->query->get('callback');
+        $findedUsersByNickname = $this->getUserService()->searchUsers(
+            array('nickname'=>$queryString),
+            array('createdTime', 'DESC'),
+            0,
+            10);
+        $findedFollowingIds = $this->getUserService()->filterFollowingIds($currentUser['id'], 
+            ArrayToolkit::column($findedUsersByNickname, 'id'));
+
+        $filterFollowingUsers = $this->getUserService()->findUsersByIds($findedFollowingIds);
+
+        foreach ($filterFollowingUsers as $filterFollowingUser) {
+            $data[] = array('id' => $filterFollowingUser['id'],  'name' => $filterFollowingUser['nickname'] );
+        }
+        return new JsonResponse($data);
     }
 
     protected function getUserService(){
