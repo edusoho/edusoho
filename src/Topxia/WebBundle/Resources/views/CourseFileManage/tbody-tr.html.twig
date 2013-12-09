@@ -11,7 +11,7 @@
     {% if uploadFile.convertStatus == 'waiting' %}
       {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
     {% elseif uploadFile.convertStatus == 'error' %}
-      {{uploadFile.filename}}<br><span class="text-danger text-sm">文件格式转换失败</span>
+      {{uploadFile.filename}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
     {% else %}
       {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
         <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename }}</a>

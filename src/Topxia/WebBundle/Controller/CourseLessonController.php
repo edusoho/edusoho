@@ -113,7 +113,7 @@ class CourseLessonController extends BaseController
 
         }
 
-        return $this->createLocalMediaResponse($file, $isDownload);
+        return $this->createLocalMediaResponse($request, $file, $isDownload);
     }
 
     public function learnStatusAction(Request $request, $courseId, $lessonId)
@@ -141,16 +141,17 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function createLocalMediaResponse($file, $isDownload = false)
+    private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
-        $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $file['filename'],
-            iconv('UTF-8', 'ASCII//TRANSLIT', $file['filename'])
-        );
+        $file['filename'] = urlencode($file['filename']);
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
 
         return $response;
     }

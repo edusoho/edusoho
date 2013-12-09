@@ -18,7 +18,7 @@ class Version20131203095441 extends AbstractMigration
 			  `id` bigint(20) NOT NULL AUTO_INCREMENT,
 			  `stem` text NOT NULL COMMENT '题干',
 			  `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分数',
-			  `questionType` enum('choice','single_choice','fill','material','essay',' determine') NOT NULL COMMENT '题目类型',
+			  `questionType` enum('choice','single_choice','fill','material','essay','determine') NOT NULL COMMENT '题目类型',
 			  `answer` text NOT NULL COMMENT '参考答案',
 			  `analysis` text COMMENT '解析',
 			  `categoryId` int(11) NOT NULL DEFAULT '0' COMMENT '类别',

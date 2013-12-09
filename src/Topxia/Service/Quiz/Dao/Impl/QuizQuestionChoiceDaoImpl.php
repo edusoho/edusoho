@@ -3,11 +3,11 @@
 namespace Topxia\Service\Quiz\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\QuestionChoiceDao;
+use Topxia\Service\Quiz\Dao\QuizQuestionChoiceDao;
 use Doctrine\DBAL\Query\QueryBuilder,
     Doctrine\DBAL\Connection;
 
-class QuestionChoiceDaoImpl extends BaseDao implements QuestionChoiceDao
+class QuizQuestionChoiceDaoImpl extends BaseDao implements QuizQuestionChoiceDao
 {
     protected $table = 'quiz_question_choice';
 
@@ -30,6 +30,12 @@ class QuestionChoiceDaoImpl extends BaseDao implements QuestionChoiceDao
             throw $this->createDaoException('Insert choice error.');
         }
         return $this->getQuestionChoice($this->getConnection()->lastInsertId());
+    }
+
+    public function updateQuestionChoice($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getQuestionChoice($id);
     }
 
     public function deleteQuestionChoice($id)

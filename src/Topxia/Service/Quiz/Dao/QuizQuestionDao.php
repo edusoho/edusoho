@@ -6,6 +6,8 @@ interface QuizQuestionDao
 {
     public function addQuestion($questions);
 
+    public function updateQuestion($id, $fields);
+
     public function deleteQuestion($id);
 
     public function getQuestion($id);

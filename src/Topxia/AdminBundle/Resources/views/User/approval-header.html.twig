@@ -1,0 +1,10 @@
+<div class="page-header"><h1>实名认证</h1>
+</div>
+<ul class="nav nav-tabs">
+  <li {% if submenu == 'approving' %} class="active" {% endif %} >
+    <a  href="{{ path('admin_approval_approving') }}">审核中</a>
+  </li>
+  <li {% if submenu == 'approved' %} class="active" {% endif %} >
+    <a  href="{{ path('admin_approval_approved') }}">审核成功</a>
+  </li>
+</ul>

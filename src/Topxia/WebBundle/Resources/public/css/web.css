@@ -1921,6 +1921,20 @@ body {
 	margin-bottom: 20px;
 }
 
+.quiz-question .choice-answer label{
+	margin-bottom: 0px;
+	padding: 0px;
+}
+
+.quiz-question .choice-answer .answer-checkbox{
+	vertical-align: middle;
+}
+
+.quiz-question .choice-answer .delete-choice{
+	color:#666;
+	font-size: 12px;
+}
+
 /**
  * MISC
  */

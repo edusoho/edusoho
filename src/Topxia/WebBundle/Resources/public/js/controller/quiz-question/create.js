@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 
         var creator = new QuestionCreator({
             element: '#question-creator-widget',
-            type: 'choice'
         });
 
 

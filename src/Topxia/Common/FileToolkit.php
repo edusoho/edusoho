@@ -76,12 +76,12 @@ class FileToolkit
 
     public static function getSecureFileExtensions()
     {
-        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma zip rar gz tar 7z';
+        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma zip rar gz tar 7z swf';
     }
 
     public static function getImageExtensions()
     {
-        return 'jpg jpeg gif png';
+        return 'bmp jpg jpeg gif png';
     }
 
     public static function getFileTypeByMimeType($mimeType)
@@ -99,6 +99,21 @@ class FileToolkit
         }
 
         return 'other';
+    }
+
+    public static function getFileTypeByExtension($extension)
+    {
+        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv'))) {
+            return 'video';
+        } elseif (in_array($extension, array('mp3', 'wma'))) {
+            return 'audio';
+        } elseif (in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))) {
+            return 'image';
+        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx'))) {
+            return 'document';
+        } else {
+            return 'other';
+        }
     }
 
     public static function formatFileSize($size)
