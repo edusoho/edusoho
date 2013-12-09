@@ -38,7 +38,7 @@
                 </p>
               {% elseif  app.user.approvalStatus == 'unapprove' %}
                 <p class="text-warning" > 
-                  您尚未实名认证，<strong><a href="{{ path('setting_approval_submit') }}">点此认证</a>，我们将尽快答复。
+                  您尚未实名认证，<strong><a href="{{ path('setting_approval_submit') }}">点此认证</a>。
                   </strong>
                 </p>
               {% elseif app.user.approvalStatus == 'approve_fail' %}
