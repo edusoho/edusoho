@@ -219,9 +219,9 @@ class UserController extends BaseController
 
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
 
-            $messageToUser = '超级管理员:'.$currentUser['nickname'].'已经成功修改了您的密码,新密码为：'.$formData['newPassword'];
+            $messageToUser = '网站管理员'.$currentUser['nickname'].'已经成功修改了您的密码,请和管理员联系。';
             $this->getNotificationService()->notify($user['id'], 'default', $messageToUser);
-            $messageToSuperAadmin = '您已经修改了用户:'.$user['nickname'].'的密码，新密码为：'.$formData['newPassword'];
+            $messageToSuperAadmin = '您已经修改了用户'.$user['nickname'].'的密码。';
             $this->getNotificationService()->notify($currentUser['id'], 'default', $messageToSuperAadmin);
 
             return $this->redirect($this->generateUrl('admin_user'));
