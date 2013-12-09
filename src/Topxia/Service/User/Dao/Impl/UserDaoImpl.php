@@ -79,6 +79,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('roles LIKE :roles')
             ->andWhere('nickname LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
+            ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email');
     }
 
