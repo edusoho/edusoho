@@ -81,7 +81,7 @@ class FileToolkit
 
     public static function getImageExtensions()
     {
-        return 'jpg jpeg gif png';
+        return 'bmp jpg jpeg gif png';
     }
 
     public static function getFileTypeByMimeType($mimeType)

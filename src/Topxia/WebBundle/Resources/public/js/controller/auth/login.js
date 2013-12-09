@@ -8,8 +8,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="_username"]',
-            required: true,
-            rule: 'email'
+            required: true
         });
 
         validator.addItem({
