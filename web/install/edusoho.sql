@@ -630,16 +630,16 @@ DROP TABLE IF EXISTS `user_approval`;
 CREATE TABLE `user_approval` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `userId` int(10) NOT NULL COMMENT '用户ID',
-  `idcard` varchar(24) NOT NULL COMMENT '身份证号',
-  `faceImg` varchar(500) NOT NULL,
-  `backImg` varchar(500) NOT NULL,
+  `idcard` varchar(24) NOT NULL DEFAULT '' COMMENT '身份证号',
+  `faceImg` varchar(500) NOT NULL DEFAULT '',
+  `backImg` varchar(500) NOT NULL DEFAULT '',
   `truename` varchar(255) DEFAULT NULL COMMENT '名称',
   `note` text COMMENT '认证信息',
   `status` enum('unapprove','approving','approved','approve_fail') NOT NULL COMMENT '是否通过：1是 0否',
   `operatorId` int(10) unsigned DEFAULT NULL COMMENT '审核人',
-  `createdTime` int(10) NOT NULL COMMENT '申请时间',
+  `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '申请时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户认证表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户认证表';
 
 DROP TABLE IF EXISTS `user_bind`;
 CREATE TABLE `user_bind` (
