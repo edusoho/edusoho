@@ -161,7 +161,7 @@ CREATE TABLE `course_favorite` (
   `userId` int(10) unsigned NOT NULL COMMENT '收藏人的Id',
   `createdTime` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
 
 DROP TABLE IF EXISTS `course_lesson`;
 CREATE TABLE `course_lesson` (
@@ -390,7 +390,7 @@ CREATE TABLE `course_thread_post` (
   `content` text NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
@@ -421,7 +421,7 @@ CREATE TABLE `friend` (
   `toId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `installed_packages`;
 CREATE TABLE `installed_packages` (
@@ -616,6 +616,9 @@ CREATE TABLE `user` (
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `loginTime` int(11) NOT NULL DEFAULT '0',
   `loginIp` varchar(64) NOT NULL DEFAULT '',
+  `loginSessionId` varchar(255) NOT NULL DEFAULT '',
+  `approvalTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `approvalStatus` enum('unapprove','approving','approved','approve_fail') NOT NULL DEFAULT 'unapprove',
   `newMessageNum` int(10) unsigned NOT NULL DEFAULT '0',
   `newNotificationNum` int(10) unsigned NOT NULL DEFAULT '0',
   `createdIp` varchar(64) NOT NULL DEFAULT '',
@@ -623,13 +626,28 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `user_approval`;
+CREATE TABLE `user_approval` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `userId` int(10) NOT NULL COMMENT '用户ID',
+  `idcard` varchar(24) NOT NULL COMMENT '身份证号',
+  `faceImg` varchar(500) NOT NULL,
+  `backImg` varchar(500) NOT NULL,
+  `truename` varchar(255) DEFAULT NULL COMMENT '名称',
+  `note` text COMMENT '认证信息',
+  `status` enum('unapprove','approving','approved','approve_fail') NOT NULL COMMENT '是否通过：1是 0否',
+  `operatorId` int(10) unsigned DEFAULT NULL COMMENT '审核人',
+  `createdTime` int(10) NOT NULL COMMENT '申请时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户认证表';
+
 DROP TABLE IF EXISTS `user_bind`;
 CREATE TABLE `user_bind` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(64) NOT NULL,
   `fromId` varchar(32) NOT NULL,
   `toId` int(10) unsigned NOT NULL COMMENT '绑定的用户ID',
-  `token` varchar(64) NOT NULL DEFAULT '',
+  `token` varchar(255) NOT NULL DEFAULT '',
   `refreshToken` varchar(255) NOT NULL DEFAULT '',
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'token过期时间',
   `createdTime` int(10) unsigned NOT NULL,
@@ -677,6 +695,7 @@ DROP TABLE IF EXISTS `user_profile`;
 CREATE TABLE `user_profile` (
   `id` int(10) unsigned NOT NULL,
   `truename` varchar(255) NOT NULL DEFAULT '',
+  `idcard` varchar(24) NOT NULL DEFAULT '0' COMMENT '身份证号码',
   `gender` enum('male','female','secret') NOT NULL DEFAULT 'secret',
   `birthday` date DEFAULT NULL,
   `city` varchar(64) NOT NULL DEFAULT '',
