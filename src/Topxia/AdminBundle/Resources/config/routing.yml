@@ -506,6 +506,15 @@ admin_message_delete_messages:
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
     methods: [POST]
 
+admin_login_record:
+    pattern: /login_record
+    defaults: { _controller: TopxiaAdminBundle:LoginRecord:index }
+
+admin_login_record_details:
+    pattern: /login_record/{id}/details
+    defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
+
+
 admin_thread:
     pattern:  /thread
     defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
