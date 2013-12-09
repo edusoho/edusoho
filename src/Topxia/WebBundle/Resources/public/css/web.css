@@ -658,7 +658,7 @@ body {
 	word-wrap: break-word;
 }
 
-.thread-body img {
+.thread-body img,.thread-post-content img{
 	max-width: 100%;
 }
 

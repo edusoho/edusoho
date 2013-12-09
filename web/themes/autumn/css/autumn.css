@@ -212,6 +212,7 @@ a:hover {
 }
 
 .panel-autumn-primary .panel-heading-important .panel-title {
+    padding: 12px 10px 10px 10px;
     background: #7CB132;
     color: #fff;
 }
