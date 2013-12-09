@@ -32,6 +32,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $questionField = $this->checkCommonFields($courseId, $question);
 
         if ($question['type'] == 'choice'){
+
+            if(trim($question['parentId']) != ''){
+                $questionField['parentId'] = (int) trim($question['parentId']);
+            }
             if (!ArrayToolkit::requireds($question, array('choices'))) {
                 throw $this->createServiceException('缺少必要字段，创建课程失败！');
             }
@@ -42,23 +46,51 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             );
             
             $choices = array();
-            $choice['quesitonId'] = $questionResult['id'];
             foreach ($choiceField['choices'] as $key => $content) {
+                $choice['quesitonId'] = $questionResult['id'];
                 $choice['content'] = $content;
                 $choiceResult = $this->getQuizQuestionChoiceDao()->addQuestionChoice($choice);
+
                 if (in_array($key, $choiceField['answers'])){
                     $choices[] = $choiceResult;
                 }
             }
+            
             $questionField = array();
             $questionField['answer'] =  ArrayToolkit::column($choices,'id');
             $questionResult =  QuestionSerialize::unserialize(
                 $this->getQuizQuestionDao()->updateQuestion($questionResult['id'], QuestionSerialize::serialize($questionField))
             );
+        } else if ($question['type'] == 'essay' || $question['type'] == 'determine'){
 
-        }else if ($question['type'] == 'essay' || $question['type'] == 'determine'){
-
+            if(trim($question['parentId']) != ''){
+                $questionField['parentId'] = (int) trim($question['parentId']);
+            }
+            if(empty($question['answers'])){
+                throw $this->createServiceException('缺少必要字段，创建课程失败！');
+            }
             $questionField['answer'] = $question['answers'];
+            $questionResult =  QuestionSerialize::unserialize(
+                $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($questionField))
+            );
+        } else if ($question['type'] == 'fill'){
+
+            if(trim($question['parentId']) != ''){
+                $questionField['parentId'] = (int) trim($question['parentId']);
+            }
+            preg_match_all('/\[\[(.*?)\]\]/', $questionField['stem'], $answer);//全部取出
+            $questionField['stem']  = preg_replace('/\[\[([a-zA-Z0-9\x7f-\xff]+)\]\]/', '(____)', $questionField['stem']);//替换
+            if(count($answer['1']) == 0){
+                throw $this->createServiceException('该问题没有答案或答案格式不正确！');
+            }
+            //$aa    =    preg_replace('/\(\_\_\_\_\)/', '---------', $aaaaa);
+            $questionField['answer'] = $answer;
+            
+            $questionResult =  QuestionSerialize::unserialize(
+                $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($questionField))
+            );
+        } else if ($question['type'] == 'material'){
+
             $questionResult =  QuestionSerialize::unserialize(
                 $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($questionField))
             );
@@ -82,7 +114,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $question['type'] = 'choice';
         }
 
-        if (!ArrayToolkit::requireds($question, array('target', 'difficulty', 'stem', 'answers', 'type'))) {
+        if (!ArrayToolkit::requireds($question, array('target', 'difficulty', 'stem', 'type'))) {
                 throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
 
@@ -114,6 +146,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             }
         }
 
+
         $field['stem'] = $this->purifyHtml($question['stem']);
         $field['difficulty'] = (int) $question['difficulty'];
 
@@ -127,7 +160,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $field['choices'] = $question['choices'];
         $field['answers'] = explode('|', $question['answers']);
-
+        
         if (!is_array($field['choices']) || count($field['choices']) < 2) {
             throw $this->createServiceException("choices参数不正确");
         }
