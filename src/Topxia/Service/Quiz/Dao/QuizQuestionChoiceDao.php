@@ -4,19 +4,16 @@ namespace Topxia\Service\Quiz\Dao;
 
 interface QuizQuestionChoiceDao
 {
-    public function addQuestionChoice($choice);
+    public function addChoice($choice);
     
-    public function updateQuestionChoice($id, $fields);
+    public function updateChoice($id, $fields);
 
-    public function deleteQuestionChoice($id);
+    public function deleteChoice($id);
 
-    public function getQuestionChoice($id);
+    public function getChoice($id);
 
-    public function getQuestionChoicesByQuesitonId($quesitonId);
+    public function findChoicesByQuestionIds(array $ids);
 
-    public function findQuestionChoicesByIds(array $ids);
-
-    public function deleteQuestionChoicesByIds(array $ids);
-
+    public function deleteChoicesByQuestionIds(array $ids);
 
 }

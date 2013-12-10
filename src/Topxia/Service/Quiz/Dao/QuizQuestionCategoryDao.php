@@ -4,17 +4,19 @@ namespace Topxia\Service\Quiz\Dao;
 
 interface QuizQuestionCategoryDao
 {
-    public function addQuestionCategory($category);
+    public function addCategory($category);
 
-    public function deleteQuestionCategory($id);
+    public function deleteCategory($id);
 
-    public function getQuestionCategory($id);
+    public function getCategory($id);
 
-    public function findQuestionCategorysByIds(array $ids);
+    public function updateCategory($id, $fields);
 
-    public function deleteQuestionCategorysByIds(array $ids);
+    public function findCategorysByIds(array $ids);
 
-    public function searchQuestionCategorysCount($conditions);
+    public function deleteCategorysByIds(array $ids);
 
-    public function searchQuestionCategorys($conditions, $orderBy, $start, $limit);
+    public function searchCategoryCount($conditions);
+
+    public function searchCategory($conditions, $orderBy, $start, $limit);
 }

@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     var Handlebars = require('handlebars');
     var Validator = require('bootstrap.validator');
 
-
     var QuestionCreator = Widget.extend({
         attrs: {
             targets: [],
@@ -29,8 +28,10 @@ define(function(require, exports, module) {
             this._setupFormHtml();
             
             if(this.get('type') == 'choice'){
+
                 this._setupForTypeChoice();
             }else if(this.get('type') == 'essay'){
+
                 this._setupForTypeEssay();
             }
         },
@@ -41,7 +42,10 @@ define(function(require, exports, module) {
                 Notify.danger("选项最多二十六个!");
                 return false;
             }
-            this.addChoice();
+            var choiceCount = this.$('[data-role=choice]').length;
+            var code = String.fromCharCode(choiceCount + 65);
+            var model = {code: code,id:choiceCount}
+            this.addChoice(model);
         },
 
         onDeleteChoice: function(event) {
@@ -53,15 +57,13 @@ define(function(require, exports, module) {
             this.deleteChoice(event);
         },
 
-        addChoice: function(){
+        addChoice: function(model){
             var template = this.get('choiceTemplate');
-            var choiceCount = this.$('[data-role=choice]').length;
-            var code = String.fromCharCode(choiceCount + 65);
-            var choice = {code: code,id:choiceCount}
-            var $html = $(template(choice));
+            var $html = $($.trim(template(model)));
+
             $html.appendTo(this.$('[data-role=choices]'));
             this.get("validator").addItem({
-                element: '#item-input-'+choice.id,
+                element: '#item-input-'+model.id,
                 required: true
             });
         },
@@ -77,18 +79,20 @@ define(function(require, exports, module) {
         },
 
         prepareFormData: function(){
-            var answers = [],
-            $form = this.get('form');
-            $form.find(".answer-checkbox").each(function(index){
-                if($(this).prop('checked')) {
-                    answers.push(index);
+            if(this.get('type') =='choice'){
+                var answers = [],
+                $form = this.get('form');
+                $form.find(".answer-checkbox").each(function(index){
+                    if($(this).prop('checked')) {
+                        answers.push(index);
+                    }
+                });
+                if (0 == answers.length){
+                    Notify.danger("请选择正确答案!");
+                    return false;
                 }
-            });
-            if (0 == answers.length){
-                Notify.danger("请选择正确答案!");
-                return false;
+                $form.find('[name=answers]').val(answers.join('|'));
             }
-            $form.find('[name=answers]').val(answers.join('|'));
             return true;
         },
 
@@ -115,7 +119,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                if(self.get('type') =='choice' && !self.prepareFormData()){
+                if(!self.prepareFormData()){
                     return false;
                 }
                 self.get('validator').set('autoSubmit',true);
@@ -132,10 +136,27 @@ define(function(require, exports, module) {
         _setupForTypeChoice: function() {
             var choiceTemplate = Handlebars.compile(this.$('[data-role=choice-template]').html());
             this.set('choiceTemplate', choiceTemplate);
-
-            for (var i = 0; i < 4; i++) {
-                this.addChoice();
+            
+            if(typeof this.$('[data-role=choice-data]').html() != 'undefined'){
+                var self = this;
+                var choice = $.parseJSON(this.$('[data-role=choice-data]').html());
+                var isNaswer = choice.isAnswer;
+                delete choice['isAnswer'];
+                $.each(choice, function() {
+                    var choiceCount = self.$('[data-role=choice]').length;
+                    var code = String.fromCharCode(choiceCount + 65);
+                    var choiceModel = {code:code, id:this.id, content:this.content, isAnswer: (","+isNaswer+",").indexOf(this.id)>=0};
+                    self.addChoice(choiceModel);
+                 });
+            }else{
+                for (var i = 0; i < 4; i++) {
+                    var choiceCount = this.$('[data-role=choice]').length;
+                    var code = String.fromCharCode(choiceCount + 65);
+                    var model = {code: code,id:choiceCount}
+                    this.addChoice(model);
+                }
             }
+
         },
 
         _setupForTypeEssay: function() {
