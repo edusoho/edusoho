@@ -88,11 +88,11 @@
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
-          {#% if questionId %}
-            <a href="{{ path('course_manage_quiz_question_material',{courseId:course.id,questionId:questionId}) }}" class="btn btn-link">返回</a>
+          {% if question.parentId %}
+            <a href="{{ path('course_manage_quiz_question_material',{courseId:course.id,questionId:question.parentId}) }}" class="btn btn-link">返回</a>
           {% else %}
             <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}" class="btn btn-link">返回</a>
-          {% endif %#}
+          {% endif %}
 
             <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
           </div>

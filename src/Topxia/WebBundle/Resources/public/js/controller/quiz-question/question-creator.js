@@ -8,7 +8,6 @@ define(function(require, exports, module) {
     var QuestionCreator = Widget.extend({
         attrs: {
             targets: [],
-            targetDefault: '0',
             type: 'choice',
             form : null,
             validator : null,
@@ -28,10 +27,8 @@ define(function(require, exports, module) {
             this._setupFormHtml();
             
             if(this.get('type') == 'choice'){
-
                 this._setupForTypeChoice();
             }else if(this.get('type') == 'essay'){
-
                 this._setupForTypeEssay();
             }
         },

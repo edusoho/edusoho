@@ -37,8 +37,6 @@
 {% block footer %}
 	{% if category.id %}
 		<button type="button" class="btn btn-default pull-left delete-category" data-url="{{ path('admin_category_delete', {id:category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-	{% else %}
-
 	{% endif %}
   	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
 	<button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">保存</button>
