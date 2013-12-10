@@ -510,6 +510,15 @@ admin_message_delete_messages:
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
     methods: [POST]
 
+admin_login_record:
+    pattern: /login_record
+    defaults: { _controller: TopxiaAdminBundle:LoginRecord:index }
+
+admin_login_record_details:
+    pattern: /login_record/{id}/details
+    defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
+
+
 admin_thread:
     pattern:  /thread
     defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
@@ -575,3 +584,25 @@ admin_money_card_batch_export_csv:
 admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
+
+
+admin_approval_approving:
+    pattern:  approvals/approving
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approving }
+
+admin_approval_approved:
+    pattern:  approvals/approved
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approved }
+
+admin_approval_approve:
+    pattern:  approvals/{id}/approve
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
+
+admin_approval_cancel:
+    pattern:  approvals/{id}/cancel
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
+    methods:  [POST]
+
+show_idcard:
+    pattern:   approvals/idcard/show/{userId}/{type}
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }

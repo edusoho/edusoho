@@ -654,6 +654,10 @@ tag_match:
     pattern: /tag/match.jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
 
+following_match_bynickname:
+    pattern: /following/bynickname/match.jsonp
+    defaults: { _controller: TopxiaWebBundle:Message:match }
+
 comment_widget_init:
     pattern:  /comment-widget/init
     defaults: { _controller: TopxiaWebBundle:CommentWidget:init }
@@ -884,6 +888,9 @@ systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
 
+setting_approval_submit:
+    pattern: /settings/approval/submit
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
 
 test:
     pattern:  /test/
