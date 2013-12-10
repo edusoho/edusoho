@@ -37,6 +37,7 @@ class Version20131209222929 extends AbstractMigration
 				CREATE TABLE `quiz_question_category` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT,
 				  `name` varchar(255) NOT NULL COMMENT '类别名称',
+				  `seq` int(11) UNSIGNED NOT NULL,
 				  `targetId` int(11) NOT NULL COMMENT '从属课程、科目id',
 				  `targetType` enum('course','subject','lesson') NOT NULL COMMENT '从属课程、科目',
 				  `userId` int(11) NOT NULL COMMENT '操作用户',
