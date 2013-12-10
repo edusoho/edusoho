@@ -112,7 +112,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             }
         }
         if(empty($conditions['parentId'])){
-                $builder->andStaticWhere(" `parentId` is null ");
+                $builder->andStaticWhere(" `parentId` = 0 ");
         }
 
         return $builder;
