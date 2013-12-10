@@ -52,7 +52,7 @@
       {% for question in questions %}
         {% include 'TopxiaWebBundle:CourseManage:question-tr.html.twig' with {item:question} %}
       {% else %}
-        <tr><td colspan="6"><div class="empty">无题目记录</div></td></tr>
+        <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
       {% endfor %}
     </tbody>
   </table>

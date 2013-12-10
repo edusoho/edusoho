@@ -20,9 +20,13 @@
     </tr>
   </thead>
   <tbody>
-    {% for user in users %}
-      {% include 'TopxiaAdminBundle:Teacher:tr.html.twig' with {user:user} %}
-    {% endfor %}
+    {% if users %}
+      {% for user in users %}
+        {% include 'TopxiaAdminBundle:Teacher:tr.html.twig' with {user:user} %}
+      {% endfor %}
+    {% else %}
+       <tr><td colspan="20"><div class="empty">暂无教师记录</div></td></tr>
+    {% endif %}
   </tbody>
 </table>
  {{ web_macro.paginator(paginator) }} 

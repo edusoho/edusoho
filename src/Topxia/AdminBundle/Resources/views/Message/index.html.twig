@@ -45,22 +45,27 @@
       </tr>
     </thead>
     <tbody>
-      {% for message in messages %}
-        <tr class="message-tr" id="message-table-tr-{{message.id}}">
-          <td><input value="{{message.id}}" type="checkbox" data-role="batch-item" >
-           {{ admin_macro.user_link(users[message.fromId]) }}
-          </td>
+      {% if messages %}
+        {% for message in messages %}
+          <tr class="message-tr" id="message-table-tr-{{message.id}}">
+            <td><input value="{{message.id}}" type="checkbox" data-role="batch-item" >
+             {{ admin_macro.user_link(users[message.fromId]) }}
+            </td>
 
-          <td>{{ admin_macro.user_link(users[message.toId]) }} </td>
-          <td>
-              <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ message.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
-                <div class="long-text">{{ message.content|raw }} <span class="trigger">(收起)</span></div>
-              </div>
-          </td>
-          <td>{{ message.createdTime|date('Y-n-d H:i')}}</td>
-        </tr>
-      {% endfor %}
+            <td>{{ admin_macro.user_link(users[message.toId]) }} </td>
+            <td>
+                <div class="short-long-text">
+                  <div class="short-text text-sm text-muted">{{ message.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
+                  <div class="long-text">{{ message.content|raw }} <span class="trigger">(收起)</span></div>
+                </div>
+            </td>
+            <td>{{ message.createdTime|date('Y-n-d H:i')}}</td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">暂无私信记录</div></td></tr>
+      {% endif %}
+      
     </tbody>
   </table>
   <div>

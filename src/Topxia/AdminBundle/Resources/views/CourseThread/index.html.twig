@@ -19,11 +19,7 @@
         {{ select_options(dict('threadType'), app.request.get('type'), '帖子类型') }}
       </select>
     </div>
-
-    <div class="form-group">
-      <input class="form-control" type="text" placeholder="作者昵称" name="author" value="{{ app.request.get('author') }}">
-    </div>
-
+    
     <span class="divider"></span>
 
     <div class="form-group">
@@ -34,6 +30,10 @@
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="关键词" name="keyword" value="{{ app.request.get('keyword') }}">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="作者昵称" name="author" value="{{ app.request.get('author') }}">
     </div>
 
     <button class="btn btn-primary" type="submit">搜索</button>
@@ -87,7 +87,7 @@
             <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="帖子" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}">删除</button></td>
           </tr>
         {% else %}
-          <tr><td colspan="5"><div class="empty">无帖子记录</div></td></tr>
+          <tr><td colspan="20"><div class="empty">暂无帖子记录</div></td></tr>
         {% endfor %}
       </body>
     </table>

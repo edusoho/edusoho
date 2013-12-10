@@ -24,7 +24,7 @@
     {% for userlevel in userlevels %}
       {% include 'TopxiaAdminBundle:Userlevel:tr.html.twig' with {userlevel:userlevel} %}
     {% else %}
-      <tr><td colspan="6"><div class="empty">无会员等级记录</div></td></tr>
+      <tr><td colspan="20"><div class="empty">无会员等级记录</div></td></tr>
     {% endfor %}
   </tbody>
 </table>

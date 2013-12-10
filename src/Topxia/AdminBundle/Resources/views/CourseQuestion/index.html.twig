@@ -19,12 +19,6 @@
     <form class="form-inline">
 
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="作者昵称" name="author" value="{{ app.request.get('author') }}">
-      </div>
-
-      <span class="divider"></span>
-
-      <div class="form-group">
         <select class="form-control" name="keywordType">
           {{ select_options({title:'标题', content: '内容', courseId:'课程编号'}, app.request.get('keywordType')) }}
         </select>
@@ -33,6 +27,13 @@
       <div class="form-group">
         <input class="form-control" type="text" placeholder="关键词" name="keyword" value="{{ app.request.get('keyword') }}">
       </div>
+      
+      <span class="divider"></span>
+
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="作者昵称" name="author" value="{{ app.request.get('author') }}">
+      </div>
+
 
       <button class="btn btn-primary" type="submit">搜索</button>
     </form>
@@ -100,7 +101,7 @@
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="5"><div class="empty">无问答记录</div></td></tr>
+          <tr><td colspan="20"><div class="empty">暂无问答记录</div></td></tr>
         {% endfor %}
       </tbody>
     </table>

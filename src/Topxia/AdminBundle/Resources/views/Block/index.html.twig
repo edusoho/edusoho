@@ -19,9 +19,13 @@
     </tr>
   </thead>
   <tbody>
-  {% for block in blocks %}
-    {% include 'TopxiaAdminBundle:Block:list-tr.html.twig' %}
-  {% endfor %}
+    {% if blocks %}
+      {% for block in blocks %}
+        {% include 'TopxiaAdminBundle:Block:list-tr.html.twig' %}
+      {% endfor %}
+  {% else %}
+        <tr><td colspan="20"><div class="empty">暂无编辑区记录</div></td></tr>
+  {% endif %}
    </tbody>
 </table>
 

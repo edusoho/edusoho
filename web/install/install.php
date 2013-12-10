@@ -53,7 +53,6 @@ function install_step1()
 	$env['mbstringOk'] = extension_loaded('mbstring');
 	$env['gdOk'] = extension_loaded('gd');
 	$env['curlOk'] = extension_loaded('curl');
-	$env['fileinfoOk'] = extension_loaded('fileinfo');
 	
 	if (!$env['phpVersionOk'] or 
 		!$env['pdoMysqlOk'] or 
@@ -62,8 +61,7 @@ function install_step1()
 		!$env['maxExecutionTimeOk'] or
 		!$env['mbstringOk'] or
 		!$env['curlOk'] or
-		!$env['gdOk'] or
-		!$env['fileinfoOk']) {
+		!$env['gdOk']) {
 		$pass = false;
 	}
 
