@@ -12,18 +12,19 @@
   </div>
 
   <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+
+    <div class="form-group">
+      <select class="form-control" name="rating">
+        {{ select_options({1:'1星', 2:'2星', 3:'3星', 4:'4星', 5:'5星'}, app.request.get('rating'), '评分') }}
+      </select>
+    </div>
+
     <div class="form-group">
       <input class="form-control" type="text" placeholder="课程编号" name="courseId" value="{{ app.request.get('courseId') }}">
     </div>
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="作者" name="author" value="{{ app.request.get('author') }}">
-    </div>
-
-    <div class="form-group">
-      <select class="form-control" name="rating">
-        {{ select_options({1:'1星', 2:'2星', 3:'3星', 4:'4星', 5:'5星'}, app.request.get('rating'), '评分') }}
-      </select>
     </div>
 
     <div class="form-group">
@@ -75,7 +76,7 @@
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="5"><div class="empty">无评价记录</div></td></tr>
+          <tr><td colspan="20"><div class="empty">暂无评价记录</div></td></tr>
         {% endfor %}
       </tbody>
     </table>

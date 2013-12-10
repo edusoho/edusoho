@@ -31,7 +31,7 @@
   {% for package in packages %}
     {% include 'TopxiaAdminBundle:Upgrade:list-tr.html.twig' with {package: package} %}
   {% else %}
-    <tr><td colspan="6"><div class="empty">尚未安装任何软件包</div></td></tr>
+    <tr><td colspan="20"><div class="empty">尚未安装任何软件包</div></td></tr>
   {% endfor %}
 
   </tbody>

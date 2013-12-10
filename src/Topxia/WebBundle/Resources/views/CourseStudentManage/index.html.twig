@@ -30,7 +30,7 @@
           {% set isFollowing = user.id in followingIds %}
           {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
         {% else %}
-          <tr class="empty"><td colspan="3">无学员记录</td></tr>
+          <tr class="empty"><td colspan="20">无学员记录</td></tr>
         {% endfor %}
       </tbody>
     </table>

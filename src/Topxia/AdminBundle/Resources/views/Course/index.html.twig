@@ -50,7 +50,7 @@
         {% set category = categories[course.categoryId]|default(null) %}
         {% include 'TopxiaAdminBundle:Course:tr.html.twig' %}
       {% else %}
-        <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
+        <tr><td colspan="20"><div class="empty">暂无课程记录</div></td></tr>
       {% endfor %}
     </tbody>
   </table>
