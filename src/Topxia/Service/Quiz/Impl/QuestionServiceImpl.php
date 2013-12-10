@@ -7,6 +7,12 @@ use Topxia\Common\ArrayToolkit;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
+    public function addQuestion222($question)
+    {
+        $implementor = $this->getQuestionImplementor($question['type']);
+        $implementor->addQuestion($question);
+    }
+
     public function addQuestion($courseId, $question)
     {
         $questionField = $this->checkCommonFields($courseId, $question);
@@ -360,6 +366,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function getQuizQuestionCategoryDao()
     {
         return $this->createDao('Quiz.QuizQuestionCategoryDao');
+    }
+
+    private function getQuestionImplementor($type)
+    {
+        $type = ucfirst(strtolower($type));
+        return $this->createService("Quiz.{$type}QuestionImplementorImpl");
     }
 }
 

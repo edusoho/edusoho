@@ -10,22 +10,26 @@ class QuizQuestionController extends BaseController
 	public function indexAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+
 		$LessonIds = ArrayToolkit::column($this->getCourseService()->getCourseLessons($courseId),'id');
 		$conditions['target']['course'] = $courseId;
 		if (isset($LessonIds)){
 			$conditions['target']['lesson'] = $LessonIds;
 		}
+
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getQuestionService()->searchQuestionCount($conditions),
 			10
 		);
+
 		$questions = $this->getQuestionService()->searchQuestion(
 			$conditions,
 			array('createdTime' ,'DESC'),
 			$paginator->getOffsetCount(),
             $paginator->getPerPageCount()
 		);
+
 		$lessons = array();
 		foreach ($questions as $question) {
 			if ($question['targetType'] == 'lesson'){
@@ -33,7 +37,9 @@ class QuizQuestionController extends BaseController
 			}
 		}
 		$lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
+
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
+        
 		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,
 			'questions' => $questions,
