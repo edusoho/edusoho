@@ -143,14 +143,13 @@ class QuizQuestionController extends BaseController
 		}
 		$lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
-		return $this->render('TopxiaWebBundle:QuizQuestion:material.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestion:index-material.html.twig', array(
 			'course' => $course,
 			'questions' => $questions,
 			'users' => $users,
 			'lessons' => $lessons,
 			'paginator' => $paginator,
             'questionId' => $questionId,
-
 		));
 	}
 
@@ -170,23 +169,23 @@ class QuizQuestionController extends BaseController
 	        if ($submission == 'continue'){
 	        	$targets['default'] = $question['targetType'].'-'.$question['targetId'];
 	            return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig',array(
+					'difficulty' => $difficulty,
+					'questionId' => $questionId,
+					'question' => $question,
 	                'course' => $course,
 					'type' => $type,
 					'targets' => $targets,
-					'difficulty' => $difficulty,
-					'question' => $question,
-					'questionId' => $questionId
 	            ));
 	        } else if ($submission == 'submit'){
 	            return $this->redirect($this->generateUrl('course_manage_quiz_question_material',array('courseId'=>$courseId,'questionId'=>$questionId)));
 	        }
         }
         return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
+			'difficulty' => $difficulty,
+			'questionId' => $questionId,
+			'targets' => $targets,
 			'course' => $course,
 			'type' => $type,
-			'targets' => $targets,
-			'difficulty' => $difficulty,
-			'questionId' => $questionId
 		));
 	}
 
@@ -226,29 +225,16 @@ class QuizQuestionController extends BaseController
 	public function categoryAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$conditions['target']['course'] = $courseId;
-		$paginator = new Paginator(
-			$this->get('request'),
-			$this->getQuestionService()->searchCategoryCount($conditions),
-			10
-		);
-		$category = $this->getQuestionService()->searchCategory(
-			$conditions,
-			array('createdTime' ,'DESC'),
-			$paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-		);
-        return $this->render('TopxiaWebBundle:QuizQuestion:category.html.twig', array(
-			'course' => $course,
-			'paginator' => $paginator,
+		$category =	$this->getQuestionService()->findCategoryByCourseIds(array($courseId));
+        return $this->render('TopxiaWebBundle:QuizQuestion:index-category.html.twig', array(
 			'categorys' => $category,
+			'course' => $course,
         ));
     }
 
     public function createCategoryAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		// $targets = $this->getQuestionService()->getQuestionTarget($courseId);
 		if ($request->getMethod() == 'POST') {
             $category = $this->getQuestionService()->createCategory($courseId, $request->request->all());
             return $this->render('TopxiaWebBundle:QuizQuestion:tr.html.twig', array(
@@ -257,17 +243,15 @@ class QuizQuestionController extends BaseController
 	        ));
         }
         $category = array('id' => 0, 'name' => '');
-        return $this->render('TopxiaWebBundle:QuizQuestion:category-create.html.twig', array(
+        return $this->render('TopxiaWebBundle:QuizQuestion:category-modal.html.twig', array(
+            'category' => $category,
             'course' => $course,
-            // 'targets' => $targets,
-            'category' => $category
         ));
     }
 
     public function editCategoryAction(Request $request, $courseId, $categoryId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		// $targets = $this->getQuestionService()->getQuestionTarget($courseId);
 		$category = $this->getQuestionService()->getCategory($categoryId);
 		if ($request->getMethod() == 'POST') {
 			$field = $request->request->all();
@@ -275,16 +259,21 @@ class QuizQuestionController extends BaseController
             $category = $this->getQuestionService()->editCategory($courseId, $field);
             return $this->render('TopxiaWebBundle:QuizQuestion:tr.html.twig', array(
 				'category' => $category,
-				'course' => $course
+				'course' => $course,
 	        ));
         }
-        // $targets['default'] = $category['targetType'].'-'.$category['targetId'];
-        return $this->render('TopxiaWebBundle:QuizQuestion:category-create.html.twig', array(
+        return $this->render('TopxiaWebBundle:QuizQuestion:category-modal.html.twig', array(
+            'category' => $category,
             'course' => $course,
-            // 'targets' => $targets,
-            'category' => $category
         ));
     }
+
+    public function sortAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->tryManageCourse($id);
+		$this->getCourseService()->sortCourseItems($course['id'], $request->request->get('ids'));
+		return $this->createJsonResponse(true);
+	}
 
 	public function deleteAction(Request $request, $courseId, $id)
     {
@@ -294,6 +283,17 @@ class QuizQuestionController extends BaseController
             throw $this->createNotFoundException('question not found');
         }
         $this->getQuestionService()->deleteQuestion($id);
+        return $this->createJsonResponse(true);
+    }
+
+    public function deleteCategoryAction(Request $request, $courseId, $categoryId)
+    {
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+        $category = $this->getQuestionService()->getCategory($categoryId);
+        if (empty($category)) {
+            throw $this->createNotFoundException();
+        }
+        $this->getQuestionService()->deleteCategory($categoryId);
         return $this->createJsonResponse(true);
     }
 
@@ -308,6 +308,8 @@ class QuizQuestionController extends BaseController
         }
         return $this->createJsonResponse(true);
     }
+
+
 
 	private function getCourseService()
     {

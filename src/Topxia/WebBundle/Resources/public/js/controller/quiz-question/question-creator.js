@@ -144,7 +144,7 @@ define(function(require, exports, module) {
                     var code = String.fromCharCode(choiceCount + 65);
                     var choiceModel = {code:code, id:this.id, content:this.content, isAnswer: (","+isNaswer+",").indexOf(this.id)>=0};
                     self.addChoice(choiceModel);
-                 });
+                });
             }else{
                 for (var i = 0; i < 4; i++) {
                     var choiceCount = this.$('[data-role=choice]').length;

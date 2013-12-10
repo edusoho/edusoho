@@ -57,13 +57,13 @@ class QuizQuestionCategoryDaoImpl extends BaseDao implements QuizQuestionCategor
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function findCategorysByIds(array $ids)
+    public function findCategoryByCourseIds(array $ids)
     {
         if(empty($ids)){ 
         	return array(); 
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE targetType='course' and targetId IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 

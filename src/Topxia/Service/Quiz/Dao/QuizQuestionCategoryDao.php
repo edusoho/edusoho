@@ -12,7 +12,7 @@ interface QuizQuestionCategoryDao
 
     public function updateCategory($id, $fields);
 
-    public function findCategorysByIds(array $ids);
+    public function findCategoryByCourseIds(array $ids);
 
     public function deleteCategorysByIds(array $ids);
 
