@@ -32,11 +32,13 @@
     </tr>
   </thead>
   <tbody>
+
   	 {% for package in packages %}
         {% include 'TopxiaAdminBundle:Upgrade:check-result-list-tr.html.twig' %}
       {% else %}
-        <tr><td colspan="6"><div class="empty">暂无可安装与升级的软件包</div></td></tr>
+      <tr><td colspan="10"><div class="empty">暂无可安装与升级的软件包</div></td></tr>
       {% endfor %}
+      
   </tbody>
 
 </table>
