@@ -70,7 +70,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 $questionResult =  QuestionSerialize::unserialize(
                     $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($questionField))
                 );
-                break
+                break;
         }
             
         return $questionResult;   
