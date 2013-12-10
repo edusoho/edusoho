@@ -181,14 +181,12 @@ class RegisterController extends BaseController
         
         if(!empty($auth['welcome_sender'])){
             $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-        } 
-
-        // 找不到用户就以id=1的用户来发送私信
-        if(empty($senderUser)){
-            $senderUser = $this->getUserService()->getUser(1);
+            if(!empty($senderUser)){
+                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
+                $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
+                $this->getMessageService()->deleteConversation($conversation['id']);
+            }
         }
-
-        $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
 
         return true;
     }

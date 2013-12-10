@@ -19,7 +19,7 @@ class CourseOrderController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $data = array('courseId' => $course['id'], 'payment' => 'alipaydouble');
+        $data = array('courseId' => $course['id'], 'payment' => 'alipay');
         $form = $this->createNamedFormBuilder('course_order', $data)
             ->add('courseId', 'hidden')
             ->add('payment', 'hidden')
