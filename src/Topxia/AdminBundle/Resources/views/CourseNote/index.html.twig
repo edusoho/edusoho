@@ -13,11 +13,6 @@
 
 <div class="well well-sm">
   <form class="form-inline">
-    <div class="form-group">
-      <input class="form-control" type="text" name="author" value="{{ app.request.get('author') }}" placeholder="作者昵称">
-    </div>
-
-    <span class="divider"></span>
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
@@ -28,6 +23,13 @@
     <div class="form-group">
       <input class="form-control" type="text" name="keyword" value="{{ app.request.get('keyword') }}" placeholder="关键词">
     </div>
+
+    <span class="divider"></span>
+
+    <div class="form-group">
+      <input class="form-control" type="text" name="author" value="{{ app.request.get('author') }}" placeholder="作者昵称">
+    </div>
+
     <button class="btn btn-primary" type="submit">搜索</button>
   </form>
 </div>
@@ -79,7 +81,7 @@
           </td>
         </tr>
       {% else %}
-        <tr><td colspan="4"><div class="empty">无笔记记录</div></td></tr>
+        <tr><td colspan="20"><div class="empty">暂无笔记记录</div></td></tr>
       {% endfor %}
     </tbody>
   </table>
