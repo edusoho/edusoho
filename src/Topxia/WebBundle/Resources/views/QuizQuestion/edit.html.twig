@@ -3,7 +3,6 @@
 
 {% block title %}添加题目 - {{ parent() }}{% endblock %}
 
-{% set questionId =questionId |default(null)%}
 {% set side_nav = 'base' %}
 {% set script_controller = 'quiz-question/create' %}
 
@@ -14,13 +13,7 @@
   <div class="panel-body">
 
     <div id="question-creator-widget">
-      <form id="question-create-form" class="form-horizontal quiz-question" method="post" action="
-      {% if questionId %}
-        {{ path('course_manage_quiz_question_material_create',{courseId:course.id, type:type, questionId:questionId}) }}
-      {% else %}
-       {{ path('course_manage_quiz_question_create',{courseId:course.id,type:type}) }}
-      {% endif %}
-      ">
+      <form id="question-create-form" class="form-horizontal quiz-question" method="post">
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">
@@ -41,7 +34,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="question-stem-field">题干</label></div>
           <div class="col-md-8 controls">
-            <textarea class="form-control" id="question-stem-field" name="stem"></textarea>
+            <textarea class="form-control" id="question-stem-field" name="stem">{{question.stem}}</textarea>
           </div>
         </div>
 
@@ -54,14 +47,14 @@
             </div>
           </div>
           <input type="hidden" name="answers" />
-
+          <script type="text/plain" data-role="choice-data">{{ choice|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="choice-template">
             {% verbatim %}
               <div class="form-group" data-role="choice">
                 <div class="col-md-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
                 <div class="col-md-10 controls checkboxs">
                   <div class=" input-group">
-                    <input class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" type="text" value="{{ name }}" data-display="选项内容">
+                    <input class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" type="text" value="{{ content }}" data-display="选项内容">
                     <span class="input-group-addon choice-answer">
                       <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
                       <a class="delete-choice" data-role="delete-choice" href="javascript:void(null)"><i  class="glyphicon glyphicon-trash"></i></a>
@@ -73,13 +66,14 @@
           </script>
 
         {% elseif type == 'fill' %}
-          
+
+
 
         {% elseif type == 'essay' %}
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-answer-field">答案</label></div>
             <div class="col-md-8 controls">
-              <textarea class="form-control" id="question-answer-field" name="answers[]"></textarea>
+              <textarea class="form-control" id="question-answer-field" name="answers[]">{{question.answer | join}}</textarea>
             </div>
           </div>
 
@@ -87,21 +81,20 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label></label></div>
             <div class="col-md-8 controls radios">
-                {{ radios('answers[]', {'0':'错误','1':'正确'}, '0') }}
+                {{ radios('answers[]', {'0':'错误','1':'正确'}, question.answer | join ) }}
             </div>
           </div>
         {% endif %}
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
-          {% if questionId %}
-            <a href="{{ path('course_manage_quiz_question_material',{courseId:course.id,questionId:questionId}) }}" class="btn btn-link">返回</a>
+          {% if question.parentId %}
+            <a href="{{ path('course_manage_quiz_question_material',{courseId:course.id,questionId:question.parentId}) }}" class="btn btn-link">返回</a>
           {% else %}
             <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}" class="btn btn-link">返回</a>
           {% endif %}
 
             <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
-            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
           </div>
         </div>
 

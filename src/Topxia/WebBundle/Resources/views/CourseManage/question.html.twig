@@ -30,14 +30,11 @@
         {{ select_options(dict('courseStatus'), app.request.query.get('status'), '按课时') }}
       </select>
     </div>
-    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=material" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>材料题</a>
-    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=essay" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>问答题</a>
-    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=determine" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>判断题</a>
-    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=fill" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>填空题</a>
-    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id}) }}?type=choice" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>选择题</a>
-    
-    
-   
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'material'}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>材料题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'essay'}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>问答题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'determine'}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>判断题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'fill'}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>填空题</a>
+    <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'choice'}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>选择题</a>
   </form>
 
   <table class="table table-striped table-hover" id="quiz-table">
@@ -61,7 +58,7 @@
   </table>
   <div>
     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('admin_message_delete_messages') }}">删除</button>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_quiz_question_deletes') }}">删除</button>
   </div>
 
   {{ web_macro.paginator(paginator) }}

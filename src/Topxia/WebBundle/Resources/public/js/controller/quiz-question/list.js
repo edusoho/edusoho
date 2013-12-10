@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     require("$");
     exports.run = function() {
-        var $container = $('#quiz-table-container');
+        var $container = $('#quiz-table');
         // var $table = $("#quiz-table");
         // require('../../util/short-long-text')($table);
         require('../../util/batch-select')($container);

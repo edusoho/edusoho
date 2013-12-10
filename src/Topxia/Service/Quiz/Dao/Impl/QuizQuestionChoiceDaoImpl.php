@@ -11,55 +11,55 @@ class QuizQuestionChoiceDaoImpl extends BaseDao implements QuizQuestionChoiceDao
 {
     protected $table = 'quiz_question_choice';
 
-    public function getQuestionChoice($id)
+    public function getChoice($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getQuestionChoicesByQuesitonId($quesitonId)
+    public function getChoicesByQuesitonId($questionId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE quesitonId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($quesitonId));
+        $sql = "SELECT * FROM {$this->table} WHERE questionId = ? ";
+        return $this->getConnection()->fetchAll($sql, array($questionId));
     }
 
-    public function addQuestionChoice($choice)
+    public function addChoice($choice)
     {
         $choice = $this->getConnection()->insert($this->table, $choice);
         if ($choice <= 0) {
             throw $this->createDaoException('Insert choice error.');
         }
-        return $this->getQuestionChoice($this->getConnection()->lastInsertId());
+        return $this->getChoice($this->getConnection()->lastInsertId());
     }
 
-    public function updateQuestionChoice($id, $fields)
+    public function updateChoice($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getQuestionChoice($id);
+        return $this->getChoice($id);
     }
 
-    public function deleteQuestionChoice($id)
+    public function deleteChoice($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     } 
 
-    public function findQuestionChoicesByIds(array $ids)
+    public function findChoicesByQuestionIds(array $ids)
     {
         if(empty($ids)){ 
             return array(); 
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE questionId IN ({$marks})";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function deleteQuestionChoicesByIds(array $ids)
+    public function deleteChoicesByQuestionIds(array $ids)
     {
         if(empty($ids)){ 
             return array(); 
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
+        $sql ="DELETE FROM {$this->table} WHERE questionId IN ({$marks});";
         return $this->getConnection()->executeUpdate($sql, $ids);
     }
 

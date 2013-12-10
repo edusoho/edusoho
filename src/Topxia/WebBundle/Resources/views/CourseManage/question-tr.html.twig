@@ -1,4 +1,4 @@
-<tr>
+<tr data-role='item'>
   <td><input value="{{item.id}}" type="checkbox" data-role="batch-item" ></td>
   <td>
     {{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}
@@ -18,13 +18,20 @@
   </td>
   <td>
     <div class="btn-group">
-      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:item.id}) }}" data-url="" class="btn btn-default btn-sm">编辑</a>
+      {% if item['parentId'] == null %}
+        <a href="{{ path('course_manage_quiz_question_edit', {courseId:course.id,id:item.id}) }}" class="btn btn-default btn-sm">编辑</a>
+      {% else%}
+        <a href="{{ path('course_manage_quiz_question_material_edit', {courseId:course.id,questionId:item.id}) }}" class="btn btn-default btn-sm">编辑</a>
+      {% endif%}
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu pull-right">
-        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">预览</a></li>
-        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">删除</a></li>
+        {% if item['questionType'] == 'material'%}
+          <li><a href="{{ path('course_manage_quiz_question_material',{courseId:course.id, questionId:item.id}) }}" class="btn btn-link">管理</a></li>
+        {% endif %}
+        <li><a class="btn btn-link" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">预览</a></li>
+        <li><a class="btn btn-link" href="javascript:" data-name='题目(子题目也会删除)' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}">删除</a></li>
       </ul>
     </div>
   </td>
