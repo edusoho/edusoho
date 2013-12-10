@@ -17,13 +17,16 @@ class DataExtension extends \Twig_Extension
         );
     }
 
-    public function getData($name, $conditions)
+    public function getData($name, $arguments)
     {
-        $method = 'get' . ucfirst($name) . 'Data';
-        if (!method_exists($this, $method)) {
-            throw new \RuntimeException("尚未定义获取'{$name}'数据");
+        $class = '\\Topxia\\DataTag\\' . $name . 'DataTag';
+
+        if (!class_exists($class)) {
+            throw new \RuntimeException("尚未定义'{$name}'数据标签");
         }
-        return $this->{$method}($conditions);
+
+        $obj = new $class();
+        return $obj->getData($arguments);
     }
 
     public function getDatas($name, $conditions, $sort = null, $start = null, $limit = null)
