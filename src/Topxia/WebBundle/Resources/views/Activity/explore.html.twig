@@ -89,26 +89,44 @@
 <section class="activity-last">
   <div class="container pz">
   
-    <div class="col-md-8 pz">
+    <div class="col-md-8 plz prz">
       
     
         <div class="phz mtl ">
-           <div class="kytitle activity-last-title clearfix mbz">
-              <h3 >近期公开课活动</h3>             
+           <div class=" clearfix mbz plm">
+              <h4 >所有公开课活动</h4>             
            </div>
         </div>
-        <ul id="last-list" class="phz mvl clearfix ps-re">
+        <ul id="last-list" class="phz mvz clearfix ps-re">
               {% for activity in lastActivitys %}
               <li class="col-md-4 pvs phs mbl display-no ">
                 
                 <div class="activity-last-bgcolor-white pvm phm  ps-re  clearfix ">
-                    <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >
-                      <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
-                    <h5>{{ activity.subtitle}}</h5>
-                    <h4> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >{{ activity.title}}</a></h4>                       
+                  <div class="grid-img ps-re">
+                    <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" ><img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"> 
+                      <div class="card-desc">
+                 
+                         {% if activity.expired==1 %}
+
+                         <div class="ps-ab ps-bts ps-rts text-vertial" >
+
+                           <img   class="pz mz" style="display:inline" src="{{ asset('assets/img/default/play_icon_normal.png') }}" />
+
+                           <span class="btn btn-info btn-xs text-normal" style="display:inline"  >回看详情</span>
+
+                         </div>
+
+                          {% endif %}
+                      </div>
+                      </a> 
+                  </div>      
+
+
+                    <p class="text-color-gray  text-normal">{{ activity.subtitle}}</p>
+                    <p> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card text-font-14 text-weight-700" >{{ activity.title}}</a></p>                       
                     <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
-                    <p class="text-color-gray  text-normal"> {{activity.address}} </p>
-                    <p class="text-color-gray  text-normal"> 主讲： 
+                    <p class="text-color-gray  text-normal">地点：{{activity.address}} </p>
+                    <p class="text-color-gray  text-normal">主讲： 
                           {% for userProfile in activity['userProfiles'] %} 
                            <span class="prm"> {{userProfile.nickname}}</span>
                           {% endfor %}
@@ -142,28 +160,23 @@
               {% endfor %}
         </ul> 
 
+         {{ web_macro.paginator(paginator) }} 
+
     </div>
 
-    <div class="col-md-4 prz">
- 
+    <div class="col-md-4 prz pll">
 
+
+              
           <!-- 答疑动态 -->
-            <div class="mtl">
-              <div class="es-row-wrap container-gap">
-                <div class="kytitle clearfix es-box-heading mtm">
-                  <h3 >我要讲课</h3>
-
-                </div>
-
-                <div class="es-box-body pll prm">
-
-                
- <button type="button" class="btn btn-primary btn-lg btn-block"> 申请成为公开课讲师  <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
-
-开源力量广泛征集公开课讲师，我
-                </div>
-              </div>
+            <div class="pll  mtl">
+              <button type="button" class="btn btn-primary btn-lg btn-block"> 申请成为公开课讲师  <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
             </div>
+            
+
+               
+             
+           
      
     </div>
   

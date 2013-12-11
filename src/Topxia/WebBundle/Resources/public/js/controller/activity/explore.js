@@ -21,6 +21,27 @@ define(function(require, exports, module) {
 
 
 
+         $(".grid-img").mouseenter(function(){
+
+           $(this).find(".card-desc").css({display:"block"});
+      
+            $(this).find(".card-desc").css("opacity", "1");
+            $(this).find(".card-desc").css("filter", "alpha(opacity=50)");
+        
+
+            
+         });
+
+         $(".grid-img").mouseleave(function(){
+            
+            $(this).find(".card-desc").css("opacity", "0");
+            $(this).find(".card-desc").css("filter", "alpha(opacity=0)");
+            $(this).find(".card-desc").css({display:"none"});
+            
+        });
+
+
+
 
     }
 
