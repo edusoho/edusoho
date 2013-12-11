@@ -4,5 +4,5 @@ namespace Topxia\DataTag;
 
 interface DataTag
 {
-    public function getData($arguments);
+    public function getData(array $arguments);
 }
