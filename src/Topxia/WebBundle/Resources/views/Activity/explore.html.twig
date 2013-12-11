@@ -97,85 +97,105 @@
               <h4 >所有公开课活动</h4>             
            </div>
         </div>
-        <ul id="last-list" class="phz mvz clearfix ps-re">
-              {% for activity in lastActivitys %}
-              <li class="col-md-4 pvs phs mbl display-no ">
-                
-                <div class="activity-last-bgcolor-white pvm phm  ps-re  clearfix ">
-                  <div class="grid-img ps-re">
-                    <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" ><img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"> 
-                      <div class="card-desc">
-                 
-                         {% if activity.expired==1 %}
+        
+        <div class="plz prm bor-r" >
+       
+          <ul id="last-list" class="phz mvz clearfix ps-re">
+                {% for activity in lastActivitys %}
+                <li class="col-md-4 pvs phs mbl display-no ">
+                  
+                  <div class="activity-last-bgcolor-white pvm phm  ps-re  clearfix ">
+                    <div class="grid-img ps-re">
+                      <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" ><img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"> 
+                        <div class="card-desc">
+                   
+                           {% if activity.expired==1 %}
 
-                         <div class="ps-ab ps-bts ps-rts text-vertial" >
+                           <div class="ps-ab ps-bts ps-rts text-vertial" >
 
-                           <img   class="pz mz" style="display:inline" src="{{ asset('assets/img/default/play_icon_normal.png') }}" />
+                             <img   class="pz mz" style="display:inline" src="{{ asset('assets/img/default/play_icon_normal.png') }}" />
 
-                           <span class="btn btn-info btn-xs text-normal" style="display:inline"  >回看详情</span>
+                             <span class="btn btn-info btn-xs text-normal" style="display:inline"  >回看详情</span>
 
-                         </div>
+                           </div>
 
-                          {% endif %}
+                            {% endif %}
+                        </div>
+                        </a> 
+                    </div>      
+
+
+                      <p class="text-color-gray  text-normal">{{ activity.subtitle}}</p>
+                      <p> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card text-font-14 text-weight-700" >{{ activity.title}}</a></p>                       
+                      <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
+                      <p class="text-color-gray  text-normal">地点：{{activity.address}} </p>
+                      <p class="text-color-gray  text-normal">主讲： 
+                            {% for userProfile in activity['userProfiles'] %} 
+                             <span class="prm"> {{userProfile.nickname}}</span>
+                            {% endfor %}
+                           </p>
+                      <p class="text-danger  text-normal">
+                        {% if  activity.onlinePrice>0 %} 线上{{ activity.onlinePrice}}元{% else %} 线上免费 {% endif %};
+                        {% if  activity.price>0  %}  线下 {{ activity.price}}元{% else %} 线下免费 {% endif %}
+                      </p> 
+
+                      {% if activity.expired==1 %}
+                      <div class=" phm pvm   ">
+                        <p class="text-color-gray  text-normal pull-right">
+                          共{{ activity.studentNum }}人参加
+                          <span class='label label-default text-size-12'>已结束</span>
+                        </p>
                       </div>
-                      </a> 
-                  </div>      
+                      {% else %}
+                      <div class=" phm pvm  ">
+                        <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
+                        <span class="text-color-gray  text-normal pull-right prm">{{activity.studentNum}}人已报名</span>
+                      </div>
+                      {% endif %}
 
 
-                    <p class="text-color-gray  text-normal">{{ activity.subtitle}}</p>
-                    <p> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card text-font-14 text-weight-700" >{{ activity.title}}</a></p>                       
-                    <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
-                    <p class="text-color-gray  text-normal">地点：{{activity.address}} </p>
-                    <p class="text-color-gray  text-normal">主讲： 
-                          {% for userProfile in activity['userProfiles'] %} 
-                           <span class="prm"> {{userProfile.nickname}}</span>
-                          {% endfor %}
-                         </p>
-                    <p class="text-danger  text-normal">
-                      {% if  activity.onlinePrice>0 %} 线上{{ activity.onlinePrice}}元{% else %} 线上免费 {% endif %};
-                      {% if  activity.price>0  %}  线下 {{ activity.price}}元{% else %} 线下免费 {% endif %}
-                    </p> 
-
-                    {% if activity.expired==1 %}
-                    <div class=" phm pvm   ">
-                      <p class="text-color-gray  text-normal pull-right">
-                        共{{ activity.studentNum }}人参加
-                        <span class='label label-default text-size-12'>已结束</span>
-                      </p>
-                    </div>
-                    {% else %}
-                    <div class=" phm pvm  ">
-                      <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
-                      <span class="text-color-gray  text-normal pull-right prm">{{activity.studentNum}}人已报名</span>
-                    </div>
-                    {% endif %}
-
-
-                </div>
-               
-              </li>
+                  </div>
+                 
+                </li>
 
 
 
-              {% endfor %}
-        </ul> 
+                {% endfor %}
+          </ul> 
 
-         {{ web_macro.paginator(paginator) }} 
-
+          {{ web_macro.paginator(paginator) }} 
+        </div>
     </div>
 
-    <div class="col-md-4 prz pll">
+    <div class="col-md-4 plz prz ">
 
 
               
           <!-- 答疑动态 -->
             <div class="pll  mtl">
-              <button type="button" class="btn btn-primary btn-lg btn-block"> 申请成为公开课讲师  <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+                <div class="pls text-size-18 mbm">开源有你更精彩。。</div>    
+                <button type="button" class="btn btn-success btn-lg btn-block pvl" > 加入开源公开课讲师  <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+            </div>
+
+             <div class="pll mtl ">
+          
+              <div class="plm prm  text-size-12 text-color-333">每年，开源（开放源代码）领域都会有很多期活动举行。纵观所有活动，多为短时间技术市场演讲，并且还安排混合了多个技术领域。但是80%的听众参加活动的目的都是为了深入学习技术，并期望将其用在自己的实际工作中。那些活动形式无法满足爱好者深入的学习需求。因此我们组织了“开源力量公开课”。</div>             
+          
             </div>
             
 
                
-             
+        <div class="pll mtl ">
+           <div >
+              <div class="mlm bor-b-green-2 text-size-16 ">公开课讲师</div>             
+           </div>
+        </div>
+
+        <div class="pll mtl ">
+           <div >
+              <div class="mlm bor-b-green-2 text-size-16 ">联系我们</div>             
+           </div>
+        </div>
            
      
     </div>

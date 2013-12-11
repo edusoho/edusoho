@@ -31,14 +31,7 @@ class ActivityController extends BaseController
         $recommendedActivitys =  $this->getActivityService()->extActivitys($recommendedActivitys);
         $recommendedActivitys= $this->getActivityService()->mixActivitys($recommendedActivitys,$userId);
 
-
-        //近期活动
-        $lastActivitys = $this->getActivityService()->findLastActivitys();
-        $lastActivitys =  $this->getActivityService()->extActivitys($lastActivitys);
-        $lastActivitys= $this->getActivityService()->mixActivitys($lastActivitys,$userId);
-
-
-        //往期活动
+        //所有活动
         $conditions['status']='published';
         $conditions['actType']='公开课';
        
