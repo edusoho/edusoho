@@ -3,6 +3,7 @@
 namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
+use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseDataTag
 {
