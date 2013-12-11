@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
+use Topxia\Common\Paginator;
 
 class DefaultController extends BaseController
 {
@@ -17,25 +18,28 @@ class DefaultController extends BaseController
         $currentuser=$this->getCurrentUser();
         $userId=$currentuser['id'];
 
+       //所有活动
+        $conditions['status']='published';
+        $conditions['actType']='公开课';
+       
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getActivityService()->searchActivityCount($conditions)
+            , 3
+        ); 
+        
+        $lastActivitys = $this->getActivityService()->searchActivitys(
+            $conditions, 'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
       
-        $feild['status']='published';
-        $feild['actType']='公开课';
-        $feild['expired']='0';//0表示开放报名。
-
-
-      
-        //近期活动
-        $lastActivitys = $this->getActivityService()->findLastActivitys();
         $lastActivitys =  $this->getActivityService()->extActivitys($lastActivitys);
         $lastActivitys= $this->getActivityService()->mixActivitys($lastActivitys,$userId);
 
-        $feild['recommended']=1;//1表示置顶。
 
-        //本期活动
-        $recommendedActivitys = $this->getActivityService()->findRecommendedActivity();
-        $recommendedActivitys =  $this->getActivityService()->extActivitys($recommendedActivitys);
-        $recommendedActivitys= $this->getActivityService()->mixActivitys($recommendedActivitys,$userId);
-        
+
+ 
         
        
         //新加入学员
@@ -93,7 +97,7 @@ class DefaultController extends BaseController
 
        
         return $this->render('TopxiaWebBundle:Default:index-osf.html.twig',array(
-            "recommendedActivitys"=>$recommendedActivitys,
+          
             "lastActivitys"=>$lastActivitys,
           
             "users"=>$users,

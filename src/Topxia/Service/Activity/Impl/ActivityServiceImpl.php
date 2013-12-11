@@ -50,8 +50,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 		if ($sort == 'popular') {
 			$orderBy =  array('viewNum', 'DESC');
-		} else if ($sort == 'recommendedTime-DESC'){
-			$orderBy = array('recommendedTime', 'DESC');
+		} else if ($sort == 'latest'){
+			$orderBy = array('startTime', 'DESC');
 		} else  {
 			$orderBy = array('createdTime', 'DESC');
 		}

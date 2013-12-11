@@ -7,7 +7,20 @@
             <div class="grid-img ps-re">
               <img class="img-responsive thumb" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}">
               <div class="desc">
-               <span class="label label-danger text-large text">{{ activity.subtitle }}</span> 
+               
+               <span class="label label-danger text-large text">{{ activity.subtitle }}</span>
+                 
+                 {% if activity.expired==1 %}
+
+                 <div class="ps-ab ps-bts ps-rts text-vertial" >
+
+                   <img   class="pz mz" style="display:inline" src="{{ asset('assets/img/default/play_icon_normal.png') }}" />
+
+                   <span class="btn btn-info btn-xs text-normal" style="display:inline"  >回看详情</span>
+
+                 </div>
+
+                  {% endif %}
               </div>          
             </div>
 
@@ -40,18 +53,28 @@
                 
                 {% endif  %}
 
+                {% if activity.expired==1 %}
+
+                 <div class="clearfix ps-re phm pvm  bor-t-gray ">    
+                 
+                        <p class="text-color-gray  text-normal pull-right">
+                          共{{ activity.studentNum }}人参加   <span class='label label-default text-size-12'>已结束</span>
+                        </p>
+                     
+                  </div>     
+                {% else %}
+
                  <div class="clearfix  phm pvm  bor-t-gray ">
-                <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
-                 <span class="text-color-gray  text-normal pull-right prm">
-                {{activity.studentNum}}人已报名</span>
-                </div>   
+                    <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
+                     <span class="text-color-gray  text-normal pull-right prm">
+                    {{activity.studentNum}}人已报名</span>
+                 </div> 
+
+                 {% endif %}
+
 
             </div>
           </a>
-
-          
-
-
       </div>
     </li>
   {% endfor %}

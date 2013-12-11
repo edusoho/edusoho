@@ -41,7 +41,7 @@ class ActivityController extends BaseController
         //往期活动
         $conditions['status']='published';
         $conditions['actType']='公开课';
-        $conditions['expired']='1';//1表示往期。
+       
         $paginator = new Paginator(
             $this->get('request'),
             $this->getActivityService()->searchActivityCount($conditions)
@@ -54,6 +54,8 @@ class ActivityController extends BaseController
         );
         $expiredActivitys =  $this->getActivityService()->extActivitys($expiredActivitys);      
         $expiredActivitys= $this->getActivityService()->mixActivitys($expiredActivitys,$userId);
+
+        $lastActivitys= $expiredActivitys;
 
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
