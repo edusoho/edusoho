@@ -1154,7 +1154,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
 		}
 
-		$deadline = $course['expiryDay']*24*60*60 + time();
+		if ($course['expiryDay'] > 0) {
+			$deadline = $course['expiryDay']*24*60*60 + time();
+		} else {
+			$deadline = 0;
+		}
 
 		$fields = array(
 			'courseId' => $courseId,
@@ -1384,7 +1388,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return false;
 		}
 
-		if ($member['deadline'] > time()) {
+		if ($member['deadline'] < time() && $member['deadline'] != 0) {
 			return false;
 		}
 
