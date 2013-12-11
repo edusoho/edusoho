@@ -6,9 +6,21 @@ use Topxia\DataTag\DataTag;
 
 class CourseDataTag extends BaseDataTag implements DataTag  
 {
-    public function getData($arguments)
+    /**
+     * 获取一个课程
+     *
+     * 可传入的参数：
+     *   courseId 必需 课程ID
+     * 
+     * @param  array $arguments 参数
+     * @return array 课程
+     */
+    public function getData(array $arguments)
     {
-    	return $this->getCoursService()->getCourse($arguments);
+        if (empty($arguments['courseId'])) {
+            throw new \InvalidArgumentException("courseId参数缺失");
+        }
+    	return $this->getCoursService()->getCourse($arguments['courseId']);
     }
 
     protected function getCoursService()
