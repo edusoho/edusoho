@@ -64,7 +64,11 @@
 }
 
 .teacher-color{
-	color: #fde6be !important;
+	color: #666600 !important;
+}
+
+.activity-title-color{
+	color: #006699 !important;
 }
 
 .activity-last{	
