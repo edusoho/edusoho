@@ -23,6 +23,11 @@
         <button class="btn btn-default btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
         <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
     {% endif %}
+
+    {% if app.user.isAdmin() or app.user.isTeacher() %}
+      <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_timing', {courseId:course.id, userId:user.id})}}">增加有效期</button>
+    {% endif %}
+
     {% if app.user.isAdmin() %}
       <button class="btn btn-danger btn-sm student-remove" data-url="{{path('course_manage_student_remove', {courseId:course.id, userId:user.id})}}">移除</button>
     {% endif %}

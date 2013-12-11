@@ -32,6 +32,7 @@ class CourseLessonController extends BaseController
     public function showAction(Request $request, $courseId, $lessonId)
     {
     	$course = $this->getCourseService()->tryTakeCourse($courseId);
+
     	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         $json = array();

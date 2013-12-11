@@ -23,7 +23,7 @@ class ConvertIpToolkit
 		$ips[0] = (int)$ips[0];
 		$ips[1] = (int)$ips[1];
 
-		if($fp = @fopen("/var/www/tinyipdata.dat", 'rb')) {
+		if($fp = @fopen("./tinyipdata.dat", 'rb')) {
 			$offset = @unpack('Nlen', @fread($fp, 4));
 			$index  = @fread($fp, $offset['len'] - 4);
 		} else {

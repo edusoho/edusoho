@@ -286,6 +286,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'title' => '',
 			'subtitle' => '',
 			'about' => '',
+			'expiryDay' => 0,
 			'categoryId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
@@ -980,6 +981,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return ($chapterMaxSeq > $lessonMaxSeq ? $chapterMaxSeq : $lessonMaxSeq) + 1;
 	}
 
+	public function setTiming($courseId, $userId, $fields)
+	{
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+		$timing = $fields['timing']*24*60*60+$member['deadline'];
+
+		return $this->getMemberDao()->updateMember($member['id'], array(
+			'deadline' => $timing
+		));
+	}
+
 	/**
 	 * Member API
 	 */
@@ -1142,10 +1154,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
 		}
 
+		$deadline = $course['expiryDay']*24*60*60 + time();
+
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+			'deadline' => $deadline,
 			'role' => 'student',
 			'remark' => empty($info['remark']) ? '' : $info['remark'],
 			'createdTime' => time()
@@ -1346,6 +1361,34 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		return $course;
+	}
+
+	public function isInTiming ($courseId)
+	{
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			return false;
+		}
+
+		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
+			return false;			
+		}
+
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+			return true;
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
+			return false;
+		}
+
+		if ($member['deadline'] > time()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public function canTakeCourse($course)

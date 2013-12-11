@@ -32,7 +32,7 @@ class CourseStudentManageController extends BaseController
         foreach ($students as $student) {
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
         }
-        
+      
         return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
             'course' => $course,
             'students' => $students,

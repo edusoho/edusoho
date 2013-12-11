@@ -324,6 +324,9 @@ class CourseController extends BaseController
     {
         try{
             $course = $this->getCourseService()->tryTakeCourse($id);
+            if (!$this->getCourseService()->isInTiming($id)) {
+                return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+            }
         }catch(Exception $e){
             throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
         }
@@ -331,6 +334,25 @@ class CourseController extends BaseController
             'course' => $course,
         ));
     }
+
+    public function setTimingAction(Request $request, $courseId, $userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            $this->getCourseService()->setTiming($courseId, $userId, $fields);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:set-timing-modal.html.twig', array(
+            'course' => $course,
+            'user' => $user
+        ));
+    }
+
 
     /**
      * Block Actions
