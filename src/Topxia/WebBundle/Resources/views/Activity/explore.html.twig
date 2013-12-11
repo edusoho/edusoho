@@ -64,9 +64,16 @@
          
         <h4 class=" text-weight "> <a href="{{ path('activity_show',{id:activity.id})}}"  class="activity-title-color" >{{ activity.title}}</a> </h4> 
 
-          
-        <p class="text-color-333  text-large"> {{activity.address}} </p>
-        <p class="teacher-333  text-large">时间： {{activity.startTime}} </p>
+        <p class="teacher-333  text-large">时间： {{activity.startTime}} </p> 
+        <p class="text-color-333  text-large">线下地址： {{activity.address}} </p>
+        
+        <p class="text-color-333  text-large">
+            直播地址： {% if activity.join %}
+            <a target="_blank" href="{{ activity.onlineAddress }}">{{ activity.onlineAddress }}</a>
+            {% else %}
+            <span class='text-danger'>报名后显示直播地址</span>
+            {% endif %}
+        </p>
         
       </div>
 
