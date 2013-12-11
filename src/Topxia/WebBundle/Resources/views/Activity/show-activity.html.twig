@@ -20,7 +20,7 @@
           <p>结束时间： {{activity.endTime}}</p>
           <p>形式：  {{ activity.form }}</p>
           <p>现场地址： {{ activity.address }}</p>
-          {% if activity.onlineAddress %}
+          {% if activity.onlineAddress and activity.expired != '1'%}
           <p>
             直播地址： {% if activity.join %}
             <a target="_blank" href="{{ activity.onlineAddress }}">{{ activity.onlineAddress }}</a>
@@ -121,17 +121,19 @@
       <div class="kytitle">
         <h3>直播回放</h3>
       </div>
-      <div class="content pbm ps-re">
+      <div class="content pbm ">
         {% for course in courses %}
           <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-              <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive">
-              
+            <div class="grid-img ps-re">
+              <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive">          
+              <div class="card-desc">
+                <div class="ps-ab ps-bt ps-rtll text-vertial " >
+                  <img   class="pz mz" style="display:inline" src="{{ asset('assets/img/default/play_icon_normal.png') }}" />
+                  <span class="btn btn-success btn-xs text-normal" style="display:inline"  >  现在就去看</span>
+                </div>
+              </div>
+            </div>
           </a>
-           <div class="ps-ab ps-btl ps-rtll">
-             
-                <a  class="btn btn-success btn-xs  text-normal"  href="{{ path('course_show', {id:course.id}) }}" >现在就去看</a>
-          </div>   
-
         {% endfor %}
       </div>
     </div>
