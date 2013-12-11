@@ -8,9 +8,7 @@
   {% if lesson.status == 'published' %}
     {% if lesson.type == 'video' %}
       {% if lesson.mediaSource == 'self' %}
-  	    <video id="lesson-preview-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360">
-  	       <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" />
-  	    </video>
+        <div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
       {% else %}
         <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
       {% endif %}
