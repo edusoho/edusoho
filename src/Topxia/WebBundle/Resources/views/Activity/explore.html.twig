@@ -8,7 +8,7 @@
 
 {% block content %} 
 
-<section class="activity-banner  ">
+<section class="mtl ">
   <div class="container pz">
     <div class="row mlz mrz  activity-banner-image ps-re">           
       {% for activity in recommendedActivitys %}
@@ -86,58 +86,86 @@
   </div>
 </section>
 
-<section class="activity-last ">
-  <div class="container  pz">
+<section class="activity-last">
+  <div class="container pz">
   
-      <div class="col-md-12 phz mtl mbm">
-         <div class="kytitle activity-last-title clearfix mbz">
-            <h3 >近期公开课活动</h3>             
-         </div>
-      </div>
+    <div class="col-md-8 pz">
+      
+    
+        <div class="phz mtl ">
+           <div class="kytitle activity-last-title clearfix mbz">
+              <h3 >近期公开课活动</h3>             
+           </div>
+        </div>
         <ul id="last-list" class="phz mvl clearfix ps-re">
-            {% for activity in lastActivitys %}
-            <li class="col-md-4 pvs phs mbl display-no">
-              
-              <div class="activity-last-bgcolor-white pvm phm  ps-re  clearfix">
-                  <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >
-                    <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
-                  <h5>{{ activity.subtitle}}</h5>
-                  <h4> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >{{ activity.title}}</a></h4>                       
-                  <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
-                  <p class="text-color-gray  text-normal"> {{activity.address}} </p>
-                  <p class="text-color-gray  text-normal"> 主讲： 
-                        {% for userProfile in activity['userProfiles'] %} 
-                         <span class="prm"> {{userProfile.nickname}}</span>
-                        {% endfor %}
-                       </p>
-                  <p class="text-danger  text-normal">
-                    {% if  activity.onlinePrice>0 %} 线上{{ activity.onlinePrice}}元{% else %} 线上免费 {% endif %};
-                    {% if  activity.price>0  %}  线下 {{ activity.price}}元{% else %} 线下免费 {% endif %}
-                  </p> 
+              {% for activity in lastActivitys %}
+              <li class="col-md-4 pvs phs mbl display-no ">
+                
+                <div class="activity-last-bgcolor-white pvm phm  ps-re  clearfix ">
+                    <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >
+                      <img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"></a>               
+                    <h5>{{ activity.subtitle}}</h5>
+                    <h4> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" >{{ activity.title}}</a></h4>                       
+                    <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
+                    <p class="text-color-gray  text-normal"> {{activity.address}} </p>
+                    <p class="text-color-gray  text-normal"> 主讲： 
+                          {% for userProfile in activity['userProfiles'] %} 
+                           <span class="prm"> {{userProfile.nickname}}</span>
+                          {% endfor %}
+                         </p>
+                    <p class="text-danger  text-normal">
+                      {% if  activity.onlinePrice>0 %} 线上{{ activity.onlinePrice}}元{% else %} 线上免费 {% endif %};
+                      {% if  activity.price>0  %}  线下 {{ activity.price}}元{% else %} 线下免费 {% endif %}
+                    </p> 
 
-                  {% if activity.expired==1 %}
-                  <div class=" phm pvm   ">
-                    <p class="text-color-gray  text-normal pull-right">
-                      共{{ activity.studentNum }}人参加
-                      <span class='label label-default text-size-12'>已结束</span>
-                    </p>
-                  </div>
-                  {% else %}
-                  <div class=" phm pvm  ">
-                    <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
-                    <span class="text-color-gray  text-normal pull-right prm">{{activity.studentNum}}人已报名</span>
-                  </div>
-                  {% endif %}
-
-
-              </div>
-             
-            </li>
+                    {% if activity.expired==1 %}
+                    <div class=" phm pvm   ">
+                      <p class="text-color-gray  text-normal pull-right">
+                        共{{ activity.studentNum }}人参加
+                        <span class='label label-default text-size-12'>已结束</span>
+                      </p>
+                    </div>
+                    {% else %}
+                    <div class=" phm pvm  ">
+                      <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
+                      <span class="text-color-gray  text-normal pull-right prm">{{activity.studentNum}}人已报名</span>
+                    </div>
+                    {% endif %}
 
 
+                </div>
+               
+              </li>
 
-            {% endfor %}
+
+
+              {% endfor %}
         </ul> 
+
+    </div>
+
+    <div class="col-md-4 prz">
+ 
+
+          <!-- 答疑动态 -->
+            <div class="mtl">
+              <div class="es-row-wrap container-gap">
+                <div class="kytitle clearfix es-box-heading mtm">
+                  <h3 >我要讲课</h3>
+
+                </div>
+
+                <div class="es-box-body pll prm">
+
+                
+ <button type="button" class="btn btn-primary btn-lg btn-block"> 申请成为公开课讲师  <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+
+开源力量广泛征集公开课讲师，我
+                </div>
+              </div>
+            </div>
+     
+    </div>
   
   </div>
 </section>

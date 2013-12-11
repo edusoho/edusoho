@@ -67,8 +67,7 @@
 	color: #fde6be !important;
 }
 
-.activity-last{
-	background-color: #dddddd;
+.activity-last{	
 	width: 100% !important;
 }
 
@@ -272,7 +271,7 @@
 /*首页公开课列表区块*/
 
 .page-grids .card{
-	display: inline-block;
+	
 	vertical-align: top;
 	margin: 15px 15px 15px 0;
 	border: 1px solid #e1e1e1;

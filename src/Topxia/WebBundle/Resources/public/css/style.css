@@ -141,6 +141,16 @@ ul li,ol li{list-style-type: none;}
 	
 }
 
+.bor-r-gray{
+	border-right: 1px solid #eee;
+	
+}
+
+.bor-gray{
+	border: 1px solid #eee !important;
+	
+}
+
 
 /*首页快来加入*/
 
