@@ -8,24 +8,25 @@ define(function(require, exports, module) {
         require('./header').run();
 
         var $list = $("#course-item-list").sortable({
-            onDrop: function (item, container, _super) {
-                _super(item, container);
-                var data = $list.sortable("serialize").get();
-                $.post($list.data('sortUrl'), {ids:data}, function(response){
+            distance: 20,
+            // onDrop: function (item, container, _super) {
+            //     _super(item, container);
+            //     var data = $list.sortable("serialize").get();
+            //     $.post($list.data('sortUrl'), {ids:data}, function(response){
 
-                    $list.find('.item-lesson').each(function(index){
-                        $(this).find('.number').text(index+1);
-                    });
+            //         $list.find('.item-lesson').each(function(index){
+            //             $(this).find('.number').text(index+1);
+            //         });
 
-                    $list.find('.item-chapter').each(function(index){
-                        $(this).find('.number').text(index+1);
-                    });
+            //         $list.find('.item-chapter').each(function(index){
+            //             $(this).find('.number').text(index+1);
+            //         });
                     
-                });
-            },
-            serialize: function(parent, children, isContainer) {
-                return isContainer ? children : parent.attr('id');
-            }
+            //     });
+            // },
+            // serialize: function(parent, children, isContainer) {
+            //     return isContainer ? children : parent.attr('id');
+            // }
         });
 
         $("#course-item-list").on('click', '.delete-lesson-btn', function(e) {
