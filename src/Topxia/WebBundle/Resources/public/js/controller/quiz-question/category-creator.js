@@ -1,11 +1,10 @@
 define(function(require, exports, module) {
-
+  
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
 
     exports.run = function() {
         var $form = $('#category-form');
-        var $modal = $form.parents('.modal');
 
         var validator = new Validator({
             element: $form,
@@ -34,17 +33,7 @@ define(function(require, exports, module) {
             rule: 'maxlength{max:100}'
         });
 
-        $('body').find('.delete-category').on('click', function() {
-            if (!confirm('真的要删除该分类及其子分类吗？')) {
-                return ;
-            }
-            var that = $(this);
-            $.post($(this).data('url'), function(html) {
-                $modal.modal('hide');
-                $('#category-tr-'+that.data('id')).remove();
-            });
-
-        });
+        
     };
 
 });

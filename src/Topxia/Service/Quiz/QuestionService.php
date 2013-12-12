@@ -34,4 +34,6 @@ interface QuestionService
 
     public function findCategoryByCourseIds(array $id);
 
+    public function sortCategory($courseId, array $categoryIds);
+
 }

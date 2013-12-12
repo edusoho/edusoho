@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set category = category | default(null)%}
-{% block title %}{% if category %}编辑分类{% else %}添加分类{% endif %}{% endblock %}
+{% block title %}{% if category.id | default(null) %}编辑分类{% else %}添加分类{% endif %}{% endblock %}
 
 {% block body %}
 	<form id="category-form" class="form-horizontal" action="
@@ -14,7 +14,6 @@
 			</div>
 		</div>
 
-
 		<input type="hidden" name="courseId" value="{{ course.id }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
@@ -27,9 +26,7 @@
 {% endblock %}
 
 {% block footer %}
-	{% if category.id %}
-		<button type="button" data-id="{{category.id}}" class="btn btn-default pull-left delete-category" data-url="{{ path('course_manage_quiz_question_category_delete', {courseId:course.id,categoryId :category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-	{% endif %}
+
   	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
 	<button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">保存</button>
 {% endblock %}

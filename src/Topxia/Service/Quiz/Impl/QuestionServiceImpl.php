@@ -80,44 +80,27 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionCategoryDao() -> findCategoryByCourseIds($id);
     }
 
-    public function sortCourseItems($ss, array $itemIds)
+    public function sortCategory($courseId, array $categoryIds)
     {
-        $items = $this->getCourseItems($ss);
-        $existedItemIds = array_keys($items);
+        $categorys = $this->findCategoryByCourseIds(array($courseId));
 
-        if (count($itemIds) != count($existedItemIds)) {
-            throw $this->createServiceException('itemdIds参数不正确');
+        if (count($categoryIds) != count($categorys)) {
+            throw $this->createServiceException('categoryIds参数不正确');
         }
 
-        $diffItemIds = array_diff($itemIds, array_keys($items));
-        if (!empty($diffItemIds)) {
-            throw $this->createServiceException('itemdIds参数不正确');
+        $diffCategoryIds = array_diff(array_keys($categoryIds), array_keys($categorys));
+        if (!empty($diffCategoryIds)) {
+            throw $this->createServiceException('categoryIds参数不正确');
         }
 
-        $lessonId = $chapterId = $seq = 0;
-        $currentChapter = array('id' => 0);
-
-        foreach ($itemIds as $itemId) {
+        $categorys = ArrayToolkit::index($categorys,'id');
+        $seq = 1;
+        foreach ($categoryIds as $categoryId) {
+            list(, $id) = explode('-', $categoryId);
+            $item   = $categorys[$id];
+            $fields = array('seq' => $seq);
+            $this->getQuizQuestionCategoryDao()->updateCategory($item['id'], $fields);
             $seq ++;
-            list($type, ) = explode('-', $itemId);
-            switch ($type) {
-                case 'lesson':
-                    $lessonId ++;
-                    $item = $items[$itemId];
-                    $fields = array('number' => $lessonId, 'seq' => $seq, 'chapterId' => $currentChapter['id']);
-                    if ($fields['number'] != $item['number'] or $fields['seq'] != $item['seq'] or $fields['chapterId'] != $item['chapterId']) {
-                        $this->getLessonDao()->updateLesson($item['id'], $fields);
-                    }
-                    break;
-                case 'chapter':
-                    $chapterId ++;
-                    $item = $currentChapter = $items[$itemId];
-                    $fields = array('number' => $chapterId, 'seq' => $seq);
-                    if ($fields['number'] != $item['number'] or $fields['seq'] != $item['seq']) {
-                        $this->getChapterDao()->updateChapter($item['id'], $fields);
-                    }
-                    break;
-            }
         }
     }
 

@@ -177,10 +177,10 @@ class QuizQuestionController extends BaseController
         ));
     }
 
-    public function sortAction(Request $request, $id)
+    public function sortAction(Request $request, $courseId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($id);
-		$this->getCourseService()->sortCourseItems($course['id'], $request->request->get('ids'));
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$this->getQuestionService()->sortCategory($course['id'], $request->request->get('ids'));
 		return $this->createJsonResponse(true);
 	}
 
