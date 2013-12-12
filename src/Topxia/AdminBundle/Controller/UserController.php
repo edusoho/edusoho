@@ -71,7 +71,7 @@ class UserController extends BaseController
             $userData['nickname'] = $formData['nickname'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();
-            $this->getAuthService()->register($userData);
+            $user = $this->getAuthService()->register($userData);
             $this->get('session')->set('registed_email', $user['email']);
 
             if(isset($formData['roles'])){
