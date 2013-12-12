@@ -16,6 +16,7 @@ class QuizQuestionController extends BaseController
 		if (!empty($parentId)){
 			$conditions['parentId'] = $parentId;	
 		}
+
 		$conditions['target']['course'] = $courseId;
 		if (!empty($lessons)){
 			$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
@@ -36,6 +37,7 @@ class QuizQuestionController extends BaseController
 
 		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
+
 
 		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,

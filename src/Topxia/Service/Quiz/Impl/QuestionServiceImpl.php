@@ -7,7 +7,17 @@ use Topxia\Common\ArrayToolkit;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
+<<<<<<< HEAD
     public function getQuestion($id)
+=======
+    public function addQuestion222($question)
+    {
+        $implementor = $this->getQuestionImplementor($question['type']);
+        $implementor->addQuestion($question);
+    }
+
+    public function addQuestion($courseId, $question)
+>>>>>>> fb366d7f106090a8c6f09eb22425673ae182b417
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
         return $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
@@ -190,6 +200,27 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         return $this->createDao('Quiz.QuizQuestionCategoryDao');
     }
+<<<<<<< HEAD
+=======
+
+    private function getQuestionImplementor($type)
+    {
+        $type = ucfirst(strtolower($type));
+        return $this->createService("Quiz.{$type}QuestionImplementorImpl");
+    }
+}
+
+
+class QuestionSerialize
+{
+    public static function serialize(array $question)
+    {
+        if (isset($question['answer'])) {
+            $question['answer'] = json_encode($question['answer']);
+        }
+        return $question;
+    }
+>>>>>>> fb366d7f106090a8c6f09eb22425673ae182b417
 
     private function getQuestionImplementor($name)
     {
