@@ -5,7 +5,7 @@ class TudouVideoItemParser extends AbstractItemParser
 {
 	private $patterns = array(
 		'p1' => '/^http:\/\/www\.tudou\.com\/programs\/view\/.*/s',
-        'p2' => '/^http:\/\/www\.tudou\.com\/listplay\/(.*?)\/(.*?)\.html$/s',
+        'p2' => '/^http:\/\/www\.tudou\.com\/listplay\/(.*?)\/(.*?)\.html/s',
 	);
 
 	public function parse($url)
