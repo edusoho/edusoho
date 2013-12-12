@@ -4,11 +4,11 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class LatestCoursesDataTag extends BaseDataTag implements DataTag  
+class FreeCoursesDataTag extends BaseDataTag implements DataTag  
 {
 
     /**
-     * 获取最新课程列表
+     * 获取免费课程课程列表
      *
      * 可传入的参数：
      *   categoryId 可选 分类ID
@@ -26,10 +26,10 @@ class LatestCoursesDataTag extends BaseDataTag implements DataTag
         if ($arguments['count'] > 100) {
             throw new \InvalidArgumentException("count参数超出最大取值范围");
         }
-        if (empty($arguments['categoryId'])){
-            $conditions = array('status' => 'published');
+        if (empty($arguments['categoryId'])) {
+            $conditions = array('status' => 'published','price' => '0.00');
         } else {
-            $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
+            $conditions = array('status' => 'published', 'price' =>'0.00' ,'categoryId' => $arguments['categoryId']);
         }
     	return $this->getCoursService()->searchCourses($conditions,'latest', 0, $arguments['count']);
     }
