@@ -1388,6 +1388,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return false;
 		}
 
+		if ($member['role'] == 'teacher') {
+			return true;
+		}
+
 		if ($member['deadline'] < time() && $member['deadline'] != 0) {
 			return false;
 		}

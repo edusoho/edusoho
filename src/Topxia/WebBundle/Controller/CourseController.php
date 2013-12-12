@@ -161,7 +161,7 @@ class CourseController extends BaseController
                 'course' => $course,
                 'member' => $member,
                 'items' => $items,
-                'learnStatuses' => $learnStatuses,
+                'learnStatuses' => $learnStatuses
             ));
         }
 
@@ -364,12 +364,15 @@ class CourseController extends BaseController
 
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
+        $isInTiming = $this->getCourseService()->isInTiming($course['id']);
+
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
             'member' => $this->getCourseService()->getCourseMember($course['id'], $user['id']),
             'users' => $users,
             'manage' => $manage,
+            'isInTiming' => $isInTiming
         ));
     }
 

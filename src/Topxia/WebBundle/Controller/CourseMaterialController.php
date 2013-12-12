@@ -42,6 +42,11 @@ class CourseMaterialController extends BaseController
     public function downloadAction(Request $request, $courseId, $materialId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
+
+        if (!$this->getCourseService()->isInTiming($courseId)) {
+            return $this->redirect($this->generateUrl('course_materials',array('id' => $courseId)));
+        }
+
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
         if (empty($material)) {
             throw $this->createNotFoundException();

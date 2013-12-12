@@ -100,5 +100,11 @@
         </div>
       </div>
     </div>
+    {% if not isInTiming %}
+      <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>警告!</strong> 您购买的课程已过期，请联系老师延长时间，您现在依然可以浏览讨论区与资料目录。
+      </div>
+    {% endif %}
   </div>
 </div>

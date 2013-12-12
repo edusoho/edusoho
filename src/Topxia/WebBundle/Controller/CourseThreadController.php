@@ -98,6 +98,10 @@ class CourseThreadController extends BaseController
     {
         $course = $this->getCourseService()->tryTakeCourse($id);
 
+        if (!$this->getCourseService()->isInTiming($id)) {
+            return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
+        }
+
         $type = $request->query->get('type') ? : 'discussion';
         $form = $this->createThreadForm(array(
         	'type' => $type,
