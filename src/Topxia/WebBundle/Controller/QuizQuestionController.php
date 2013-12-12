@@ -10,73 +10,85 @@ class QuizQuestionController extends BaseController
 	public function indexAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$LessonIds = ArrayToolkit::column($this->getCourseService()->getCourseLessons($courseId),'id');
-		$conditions['target']['course'] = $courseId;
-		if (isset($LessonIds)){
-			$conditions['target']['lesson'] = $LessonIds;
+		$lessons = $this->getCourseService()->getCourseLessons($courseId);
+		$parentId = $request->query->get('parentId');
+
+		if (!empty($parentId)){
+			$conditions['parentId'] = $parentId;	
 		}
+		$conditions['target']['course'] = $courseId;
+		if (!empty($lessons)){
+			$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
+		}
+
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getQuestionService()->searchQuestionCount($conditions),
 			10
 		);
+
 		$questions = $this->getQuestionService()->searchQuestion(
 			$conditions,
 			array('createdTime' ,'DESC'),
 			$paginator->getOffsetCount(),
             $paginator->getPerPageCount()
 		);
-		$lessons = array();
-		foreach ($questions as $question) {
-			if ($question['targetType'] == 'lesson'){
-				$lessons[] = $question;
-			}
-		}
-		$lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
+
+		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
+
 		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,
 			'questions' => $questions,
 			'users' => $users,
 			'lessons' => $lessons,
 			'paginator' => $paginator,
+			'parentId' => $parentId,
 		));
 	}
 
 	public function createAction(Request $request, $courseId, $type)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
+		if (!in_array($type, array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
 			$type = 'choice';
 		}
-		$difficulty = array('1'=>'入门', '3'=> '初级', '5'=> '高级');
-		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
+		$parentId = $request->query->get('parentId');
+		$targets = $this->getQuestionTarget($courseId);
+
 	    if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
-	        $question = $this->getQuestionService()->addQuestion($courseId, $question);
+            if(!empty($parentId)){
+            	$question['parentId'] = $parentId;
+            }
+	        $question = $this->getQuestionService()->createQuestion($question);
+
 			$submission = $request->request->get('submission');
-	        if ($type == 'material' && $submission == 'submit'){
-	            return $this->redirect($this->generateUrl('course_manage_quiz_question_material',array('courseId'=>$courseId,'questionId'=>$question['id'])));
-	        } else if ($submission == 'continue'){
+	        if ($submission == 'continue'){
 	        	$targets['default'] = $question['targetType'].'-'.$question['targetId'];
 	            return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig',array(
 	                'course' => $course,
 					'type' => $type,
 					'targets' => $targets,
-					'difficulty' => $difficulty,
 					'question' => $question,
+					'parentId' => $parentId,
 	            ));
 	        } else if ($submission == 'submit'){
-	        	return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId)));
+		        if ($type == 'material'){
+					$parentId = $question['id'];
+				}
+	        	return $this->redirect($this->generateUrl('course_manage_quiz_question',array("courseId" => $courseId,"parentId" => $parentId)));
 	        }
         }
+
 		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'course' => $course,
 			'type' => $type,
 			'targets' => $targets,
-			'difficulty' => $difficulty
+			'parentId' => $parentId,
 		));
 	}
+
 
 	public function editAction(Request $request, $courseId, $id)
 	{
@@ -85,140 +97,33 @@ class QuizQuestionController extends BaseController
 		if (empty($question)){
 			throw $this->createNotFoundException("该项目问题问题不存在");
 		}
-		$difficulty = array('1'=>'入门', '3'=> '初级', '5'=> '高级');
-		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
+		$targets = $this->getQuestionTarget($courseId);
+
 	    if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
             $question['id'] = $id;
-	        $question = $this->getQuestionService()->updateQuestion($courseId, $question);
-	        return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId)));
-        }
-        $choice = array();
-        if ($question['questionType'] == "fill"){
-        	$a = array_fill(0,count($question['answer']['0']),"/\(____\)/");
-        	$question['stem'] = preg_replace($a, $question['answer']['0'], $question['stem'], 1);
-        } else if ($question['questionType'] =="choice"){
-			$choice = $this->getQuestionService()->findChoicesByQuestionIds(array($id));
-			$choice['isAnswer'] = implode(',',$question['answer']);
-        }
-        return $this->render('TopxiaWebBundle:QuizQuestion:edit.html.twig', array(
-			'difficulty' => $difficulty,
-			'question' => $question,
-			'targets' => $targets,
-			'course' => $course,
-			'choice' => $choice,
-			'type' => $question['questionType'],
-		));
-	}
-
-
-	public function materialAction(Request $request, $courseId, $questionId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$question = $this->getQuestionService()->getQuestion($questionId);
-		if (empty($question)){
-			throw $this->createNotFoundException("该项目问题问题不存在");
-		}
-		$LessonIds = ArrayToolkit::column($this->getCourseService()->getCourseLessons($courseId),'id');
-		$conditions['target']['course'] = $courseId;
-		if (isset($LessonIds)){
-			$conditions['target']['lesson'] = $LessonIds;
-		}
-		$conditions['parentId'] = $questionId;
-		$paginator = new Paginator(
-			$this->get('request'),
-			$this->getQuestionService()->searchQuestionCount($conditions),
-			10
-		);
-		$questions = $this->getQuestionService()->searchQuestion(
-			$conditions,
-			array('createdTime' ,'DESC'),
-			$paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-		);
-		$lessons = array();
-		foreach ($questions as $question) {
-			if ($question['targetType'] == 'lesson')
-				$lessons[] = $question;
-		}
-		$lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($lessons,'targetId'));
-		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
-		return $this->render('TopxiaWebBundle:QuizQuestion:index-material.html.twig', array(
-			'course' => $course,
-			'questions' => $questions,
-			'users' => $users,
-			'lessons' => $lessons,
-			'paginator' => $paginator,
-            'questionId' => $questionId,
-		));
-	}
-
-	public function createMaterialAction(Request $request, $courseId, $type, $questionId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		if (!in_array($type, array('choice', 'fill', 'material', 'essay', 'determine'))) {
-			$type = 'choice';
-		}
-		$difficulty = array('1'=>'入门', '3'=> '初级', '5'=> '高级');
-		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
-	    if ($request->getMethod() == 'POST') {
-            $question = $request->request->all();
-            $question['parentId'] = $questionId;
-	        $question = $this->getQuestionService()->addQuestion($courseId, $question);
-			$submission = $request->request->get('submission');
-	        if ($submission == 'continue'){
-	        	$targets['default'] = $question['targetType'].'-'.$question['targetId'];
-	            return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig',array(
-					'difficulty' => $difficulty,
-					'questionId' => $questionId,
-					'question' => $question,
-	                'course' => $course,
-					'type' => $type,
-					'targets' => $targets,
-	            ));
-	        } else if ($submission == 'submit'){
-	            return $this->redirect($this->generateUrl('course_manage_quiz_question_material',array('courseId'=>$courseId,'questionId'=>$questionId)));
+	        $question = $this->getQuestionService()->updateQuestion($question);
+	        if($question['parentId'] == '0'){
+		        return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId)));
+	        }else{
+		        return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId,'parentId' => $question['parentId'])));
 	        }
         }
-        return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
-			'difficulty' => $difficulty,
-			'questionId' => $questionId,
-			'targets' => $targets,
-			'course' => $course,
-			'type' => $type,
-		));
-	}
+		$choice = array();
+        if ($question['questionType'] =="choice" || $question['questionType'] =="single_choice"){
+        	$choice = $question['choice'];
+        	unset($question['choice']);
+        }
 
-	public function editMaterialAction(Request $request, $courseId, $questionId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$question = $this->getQuestionService()->getQuestion($questionId);
-		if (empty($question)){
-			throw $this->createNotFoundException("该项目问题问题不存在");
-		}
-		$difficulty = array('1'=>'入门', '3'=> '初级', '5'=> '高级');
-		$targets = $this->getQuestionService()->getQuestionTarget($courseId);
-	    if ($request->getMethod() == 'POST') {
-            $question = $request->request->all();
-            $question['id'] = $questionId;
-	        $question = $this->getQuestionService()->updateQuestion($courseId, $question);
-	        return $this->redirect($this->generateUrl('course_manage_quiz_question_material',array('courseId'=>$courseId,'questionId'=>$question['parentId'])));
-        }
-        $choice = array();
-        if ($question['questionType'] == "fill"){
-        	$a = array_fill(0,count($question['answer']['0']),"/\(____\)/");
-        	$question['stem'] = preg_replace($a, $question['answer']['0'], $question['stem'], 1);
-        } else if ($question['questionType'] =="choice"){
-			$choice = $this->getQuestionService()->findChoicesByQuestionIds(array($questionId));
-			$choice['isAnswer'] = implode(',',$question['answer']);
-        }
-        return $this->render('TopxiaWebBundle:QuizQuestion:edit.html.twig', array(
-			'difficulty' => $difficulty,
+        $targets['default'] = $question['targetType'].'-'.$question['targetId'];
+
+        return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'question' => $question,
 			'targets' => $targets,
 			'course' => $course,
 			'choice' => $choice,
 			'type' => $question['questionType'],
+			'isEdit' => '1',
 		));
 	}
 
@@ -236,7 +141,9 @@ class QuizQuestionController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		if ($request->getMethod() == 'POST') {
-            $category = $this->getQuestionService()->createCategory($courseId, $request->request->all());
+			$field =$request->request->all();
+			$field['courseId'] = $courseId;
+            $category = $this->getQuestionService()->createCategory($field);
             return $this->render('TopxiaWebBundle:QuizQuestion:tr.html.twig', array(
 				'category' => $category,
 				'course' => $course
@@ -256,7 +163,7 @@ class QuizQuestionController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$field = $request->request->all();
 			$field['id'] = $category['id'];
-            $category = $this->getQuestionService()->editCategory($courseId, $field);
+            $category = $this->getQuestionService()->editCategory($field);
             return $this->render('TopxiaWebBundle:QuizQuestion:tr.html.twig', array(
 				'category' => $category,
 				'course' => $course,
@@ -275,17 +182,6 @@ class QuizQuestionController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-	public function deleteAction(Request $request, $courseId, $id)
-    {
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$question = $this->getQuestionService()->getQuestion($id);
-        if (empty($question)) {
-            throw $this->createNotFoundException('question not found');
-        }
-        $this->getQuestionService()->deleteQuestion($id);
-        return $this->createJsonResponse(true);
-    }
-
     public function deleteCategoryAction(Request $request, $courseId, $categoryId)
     {
 		$course = $this->getCourseService()->tryManageCourse($courseId);
@@ -294,6 +190,17 @@ class QuizQuestionController extends BaseController
             throw $this->createNotFoundException();
         }
         $this->getQuestionService()->deleteCategory($categoryId);
+        return $this->createJsonResponse(true);
+    }
+
+	public function deleteAction(Request $request, $courseId, $id)
+    {
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$question = $this->getQuestionService()->getQuestion($id);
+        if (empty($question)) {
+            throw $this->createNotFoundException('question not found');
+        }
+        $this->getQuestionService()->deleteQuestion($id);
         return $this->createJsonResponse(true);
     }
 
@@ -310,6 +217,21 @@ class QuizQuestionController extends BaseController
     }
 
 
+    private function getQuestionTarget($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course))
+            return null;
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+        $targets = array();
+        $targets[] = array('type' => 'course','id' => $course['id'],'name' => '课程');
+        foreach ($lessons as  $lesson) {
+            $targets[] = array('type' => 'lesson','id' => $lesson['id'],'name' => '课时'.$lesson['number']);
+        }
+
+        return $targets;
+    }
 
 	private function getCourseService()
     {

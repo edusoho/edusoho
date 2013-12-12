@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Handlebars = require('handlebars');
     var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
 
     var QuestionCreator = Widget.extend({
         attrs: {
@@ -11,7 +12,7 @@ define(function(require, exports, module) {
             type: 'choice',
             form : null,
             validator : null,
-        },
+        },    
 
         events: {
             'click [data-role=add-choice]': 'onAddChoice',
@@ -25,18 +26,21 @@ define(function(require, exports, module) {
             this.set('form',$form);
             this.set('validator', this._createValidator($form));
             this._setupFormHtml();
-            
-            if(this.get('type') == 'choice'){
+            if(this.get('type') == 'choice' || this.get('type') == 'single_choice' ){
                 this._setupForTypeChoice();
             }else if(this.get('type') == 'essay'){
                 this._setupForTypeEssay();
+            }else if(this.get('type') == 'determine'){
+                this._setupForTypeDetermine();
+            }else if(this.get('type') == 'fill'){
+                this._setupForTypeFill();
             }
         },
 
         onAddChoice: function(event) {
             var choiceCount = this.$('[data-role=choice]').length;
-            if (choiceCount >= 26) {
-                Notify.danger("选项最多二十六个!");
+            if (choiceCount >= 10) {
+                Notify.danger("选项最多十个!");
                 return false;
             }
             var choiceCount = this.$('[data-role=choice]').length;
@@ -47,8 +51,8 @@ define(function(require, exports, module) {
 
         onDeleteChoice: function(event) {
             var choiceCount = this.$('[data-role=choice]').length;
-            if (choiceCount <= 2 ) {
-                Notify.danger("选项至少要两个!");
+            if (choiceCount <= 1 ) {
+                Notify.danger("选项至少一个!");
                 return false;
             }
             this.deleteChoice(event);
@@ -76,7 +80,7 @@ define(function(require, exports, module) {
         },
 
         prepareFormData: function(){
-            if(this.get('type') =='choice'){
+            if(this.get('type') =='choice' || this.get('type') =='single_choice'){
                 var answers = [],
                 $form = this.get('form');
                 $form.find(".answer-checkbox").each(function(index){
@@ -99,35 +103,11 @@ define(function(require, exports, module) {
             $form.find('[name=submission]').val(submission);
         },
 
-        _createValidator: function($form){
-            var self = this;
-
-            validator = new Validator({
-                element: $form,
-                autoSubmit: false
-            });
-
-            validator.addItem({
-                element: '#question-stem-field',
-                required: true
-            });
-
-            validator.on('formValidated', function(error, msg, $form) {
-                if (error) {
-                    return false;
-                }
-                if(!self.prepareFormData()){
-                    return false;
-                }
-                self.get('validator').set('autoSubmit',true);
-            });
-
-            return validator;
-        },
-
         _setupFormHtml: function() {
-            var targets = $.parseJSON(this.$('[data-role=targets-data]').html());
-            this.set('targets', targets);
+            if(typeof $('[data-role=targets-data]').html() != 'undefined'){
+                var targets = $.parseJSON(this.$('[data-role=targets-data]').html());
+                this.set('targets', targets);
+            }
         },
 
         _setupForTypeChoice: function() {
@@ -156,6 +136,33 @@ define(function(require, exports, module) {
 
         },
 
+        _createValidator: function($form){
+            var self = this;
+
+            validator = new Validator({
+                element: $form,
+                autoSubmit: false
+            });
+
+            validator.addItem({
+                element: '#question-stem-field',
+                required: true
+            });
+
+            validator.on('formValidated', function(error, msg, $form) {
+                if (error) {
+                    return false;
+                }
+                if(!self.prepareFormData()){
+                    return false;
+                }
+                self.get('validator').set('autoSubmit',true);
+            });
+
+            return validator;
+        },
+
+
         _setupForTypeEssay: function() {
             this.get("validator").addItem({
                 element: '#question-answer-field',
@@ -163,6 +170,22 @@ define(function(require, exports, module) {
             });
         },
 
+        _setupForTypeDetermine: function() {
+            this.get("validator").addItem({
+                element: '[name^=answers]',
+                required: true,
+                errormessage:"请选择您的答案。",
+            });
+        },
+
+        _setupForTypeFill: function() {
+            validator.removeItem('#question-stem-field');
+            this.get("validator").addItem({
+                element: '#question-stem-field',
+                required: true,
+                rule:'fillCheck',
+            });
+        },
 
         _onChangeTargets: function(targets) {
             var options = '';
