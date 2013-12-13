@@ -7,11 +7,9 @@ interface QuestionService
      *  quiz_question
      */
 
-    public function getQuestionTarget($courseId);
-
     public function getQuestion($lessonQuizItemId);
 
-    public function addQuestion($type,$question);
+    public function createQuestion($question);
 
     public function searchQuestion(array $conditions, array $orderBy, $start, $limit);
 
@@ -30,14 +28,12 @@ interface QuestionService
     
     public function getCategory($id);
 
-    public function createCategory($courseId, $category);
+    public function createCategory($category);
 
-	public function editCategory($courseId, $category);		
+	public function editCategory($category);		
 
     public function findCategoryByCourseIds(array $id);
 
-    public function searchCategory(array $conditions, array $orderBy, $start, $limit);
-
-    public function searchCategoryCount(array $conditions);
+    public function sortCategory($courseId, array $categoryIds);
 
 }

@@ -6,12 +6,12 @@ use Topxia\Service\Quiz\QuestionImplementor;
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 use Topxia\Common\ArrayToolkit;
 
-class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImplementor
+class SingleChoiceQuestionImplementorImpl extends BaseService implements QuestionImplementor
 {
 	public function getQuestion($question)
     {
         $question = QuestionSerialize::unserialize($question);
-        $question['choice'] = $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds(array($question['id']));
+    	$question['choice'] = $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds(array($question['id']));
         $question['choice']['isAnswer'] = implode(',',$question['answer']);
         return $question;
     }
@@ -37,13 +37,12 @@ class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImple
         }
         $field = array();
         $field['answer'] =  ArrayToolkit::column($choices,'id');
-        return QuestionSerialize::unserialize(
+        $result =  QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->updateQuestion($result['id'], QuestionSerialize::serialize($field))
         );
-
 	}
 
-	public function updateQuestion($question, $field){
+    public function updateQuestion($question, $field){
         $choiceField = $this->filterChoiceFields($question);
         $field['questionType'] = $choiceField['type'];
         unset($choiceField['type']);
@@ -85,7 +84,6 @@ class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImple
         return $field;
     }
 
-
     private function getQuizQuestionDao()
     {
         return $this->createDao('Quiz.QuizQuestionDao');
@@ -95,6 +93,5 @@ class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImple
     {
         return $this->createDao('Quiz.QuizQuestionChoiceDao');
     }
-  
 }
 
