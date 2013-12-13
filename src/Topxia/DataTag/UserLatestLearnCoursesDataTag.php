@@ -29,12 +29,14 @@ class UserLatestLearnCoursesDataTag extends BaseDataTag implements DataTag
         if (empty($arguments['userId'])) {
             throw new \InvalidArgumentException("userId参数缺失");
         }
-        var_dump($arguments);
-    	return $this->getCoursService()->findUserLeaningCourses($arguments['userId'], 0, $arguments['count']);
+    	return $this->getCourseService()->findUserLeaningCourses($arguments['userId'], 0, $arguments['count']);
     }
 
-    protected function getCoursService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
+
+
+?>

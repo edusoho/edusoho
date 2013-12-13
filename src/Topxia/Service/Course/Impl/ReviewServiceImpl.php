@@ -38,7 +38,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
 	public function searchReviews($conditions, $sort= 'latest', $start, $limit)
 	{	
-		$orderBy = array('createdTime', 'DESC');
+		if($sort=='latest'){
+			$orderBy = array('createdTime', 'DESC');
+		} else {
+			$orderBy = array('rating','DESC');
+		} 
 		$conditions = $this->prepareReviewSearchConditions($conditions);
 		return $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
 	}
