@@ -11,7 +11,7 @@ class CategoriesDataTag extends BaseDataTag implements DataTag
      * 
      * 可传入的参数：
      *
-     *   categoriesId 分类组Id
+     *   group 分类组CODE
      * 
      * @param  array $arguments 参数
      * @return array 分类
@@ -20,12 +20,15 @@ class CategoriesDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         if (empty($arguments['group'])) {
-            throw new \InvalidArgumentException("categoriesId参数缺失");
+            throw new \InvalidArgumentException("group参数缺失");
         }
-        if ($arguments['group'] == "course") {
-            $categoriesId = "1";
+
+        $group = $this->getCategoryService()->getGroupByCode($arguments['group']);
+        if (empty($group)) {
+            throw new \InvalidArgumentException("group:{$arguments['group']}不存在");
         }
-    	return $this->getCategoryService()->findCategories($categoriesId);
+
+    	return $this->getCategoryService()->findCategories($group['id']);
     }
 
     protected function getCategoryService()
