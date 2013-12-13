@@ -17,7 +17,9 @@ define(function(require, exports, module) {
             element: '#course-audiences-form-group',
         });
 
-        $(".sortable-list").sortable();
+        $(".sortable-list").sortable({
+            'distance':20
+        });
 
     };
 
