@@ -31,11 +31,14 @@ class LatestCoursesDataTag extends BaseDataTag implements DataTag
         } else {
             $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         }
-    	return $this->getCoursService()->searchCourses($conditions,'latest', 0, $arguments['count']);
+    	return $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
     }
 
-    protected function getCoursService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
+
+
+?>
