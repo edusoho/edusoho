@@ -26,15 +26,15 @@
 
             <div class="phm">           
                 <div class="pvm phs mvz text-size-14 text-weight">{{ activity.title }}</div>
-                <div class=" pvs phs mvz ps-re bor-t-gray text-normal text-color-gray">
-                  <span >时间：</span>{{ activity.startTime }}
+                <div class=" pvs phs mvz ps-re bor-t text-normal  text-color-gray ">
+                  <span >时间：{{ activity.startTime }} </span>   {% if activity.expired==0 %}  <span class="pull-right text-danger">（有直播）</span> {% endif %}
                   <div class="ps-ab ps-tps ps-rt">
-                    <img  src="{{ asset('assets/img/default/live.png')}}">  
+                    <!--img  src="{{ asset('assets/img/default/live.png')}}"-->  
                     <!--span class="label label-info text-large">有直播</span--> 
                   </div>
                 </div>
 
-                <div class=" pvs phs mvz ps-re bor-t-gray text-normal text-color-gray">
+                <div class=" pvs phs mvz ps-re bor-t text-normal text-color-gray">
                   <span >地点：</span>{{ activity.address }}
                  
                 </div>
@@ -44,7 +44,7 @@
                  {% set user= activity['userProfiles']|first  %}
               
                     {% if user %}
-                      <div class="clearfix  pvm  bor-t-gray">
+                      <div class="clearfix  pvs  bor-t">
                         <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="user-logo-small-size-s">
                         <p class="text-normal mz pz">{{ user.nickname }}</p>
                         <p class="text-normal text-color-gray mz pz">{{ user.title }}</p>
@@ -55,16 +55,16 @@
 
                 {% if activity.expired==1 %}
 
-                 <div class="clearfix ps-re phm pvm  bor-t-gray ">    
+                 <div class="clearfix ps-re phm pvs  bor-t ">    
                  
                         <p class="text-color-gray  text-normal pull-right">
-                          共{{ activity.studentNum }}人参加   <span class='label label-default text-size-12'>已结束</span>
+                          共{{ activity.studentNum }}人参加   <span class='label  label-default text-size-12'>已结束</span>
                         </p>
                      
                   </div>     
                 {% else %}
 
-                 <div class="clearfix  phm pvm  bor-t-gray ">
+                 <div class="clearfix  phm pvs  bor-t ">
                     <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
                      <span class="text-color-gray  text-normal pull-right prm">
                     {{activity.studentNum}}人已报名</span>

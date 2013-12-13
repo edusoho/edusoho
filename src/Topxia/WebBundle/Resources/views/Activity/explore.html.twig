@@ -67,6 +67,7 @@
         <p class="teacher-333  text-large">时间： {{activity.startTime}} </p> 
         <p class="text-color-333  text-large">线下地址： {{activity.address}} </p>
         
+        {% if activity.onlineAddress  is not null %}
         <p class="text-color-333  text-large">
             直播地址： {% if activity.join %}
             <a target="_blank" href="{{ activity.onlineAddress }}">{{ activity.onlineAddress }}</a>
@@ -74,6 +75,7 @@
             <span class='text-danger'>报名后显示直播地址</span>
             {% endif %}
         </p>
+        {% endif %}
         
       </div>
 
@@ -147,14 +149,14 @@
                       </p> 
 
                       {% if activity.expired==1 %}
-                      <div class=" phm pvm   ">
+                      <div class=" phm pvs   ">
                         <p class="text-color-gray  text-normal pull-right">
                           共{{ activity.studentNum }}人参加
                           <span class='label label-default text-size-12'>已结束</span>
                         </p>
                       </div>
                       {% else %}
-                      <div class=" phm pvm  ">
+                      <div class=" phm pvs  ">
                         <a  class="btn btn-success btn-xs  text-normal pull-right"  href="{{ path('activity_show',{id:activity.id}) }}" >报名参与</a>
                         <span class="text-color-gray  text-normal pull-right prm">{{activity.studentNum}}人已报名</span>
                       </div>

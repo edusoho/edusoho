@@ -138,10 +138,10 @@ ul li,ol li{list-style-type: none;}
 .bor-b-green-2{border-bottom: 2px solid #32a764;}
 .bor-b-gray-2{border-bottom: 2px solid #a7a7a7;}
 
-.bor-l{border-left: 1px solid #ddd;}
-.bor-r{border-right: 1px solid #ddd;}
-.bor-t{border-top: 1px solid #ddd;}
-.bor-b{border-bottom: 1px solid #ddd;}
+.bor-l{border-left: 1px solid #eee;}
+.bor-r{border-right: 1px solid #eee;}
+.bor-t{border-top: 1px solid #eee;}
+.bor-b{border-bottom: 1px solid #eee;}
 
 
 
