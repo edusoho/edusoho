@@ -116,6 +116,44 @@
           
         {% endif %}
 
+
+
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-1 controls">
+              <button type="button" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="btn btn-link">显示/隐藏高级选项</button>
+          </div>
+        </div>
+
+        collapse
+
+        <div id="advanced-collapse" class="advanced-collapse ">
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-analysis-field">解析</label></div>
+            <div class="col-md-8 controls">
+                <textarea class="form-control" id="question-analysis-field" name="analysis"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
+            <div class="col-md-8 controls">
+                <input class="form-control" type="text" id="question-score-field" name="score" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
+            <div class="col-md-8 controls">
+                <select class="form-control" name="categoryId">
+                    {{ select_options({'111':'类别1', '222':'类别222', '333':'类别333'}, '111', '请选择分类') }}
+                </select>
+            </div>
+          </div>
+
+        </div>
+
+
+
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
             {% if isEdit %}
@@ -133,6 +171,10 @@
         <input type="hidden" name="submission">
         <input type="hidden" name="type" value="{{ type }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+
+
+
       </form>
 
     </div>

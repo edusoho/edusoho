@@ -25,6 +25,11 @@ define(function(require, exports, module) {
         onSubmit: function(e){
             var submitType = $(e.currentTarget).data('submission')
             $(this.get('form')).find('[name=submission]').val(submitType);
+            if($(e.currentTarget).hasClass('collapsed')){
+                $(this.get('form')).find('[name=analysis]').val('');
+                $(this.get('form')).find('[name=score]').val('');
+                $(this.get('form')).find('[name=categoryId]').get(0).selectedIndex=0; 
+            }
         },
 
         _initForm: function(){
@@ -45,6 +50,12 @@ define(function(require, exports, module) {
                 element: '#question-stem-field',
                 required: true
             });
+
+            validator.addItem({
+                    element: '#question-score-field',
+                    required: false,
+                    rule:'number',
+                });
 
             validator.on('formValidated', function(error, msg, $form) {
                 if (error) {

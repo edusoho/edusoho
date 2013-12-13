@@ -114,15 +114,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         if (!in_array($question['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
             $question['type'] = 'choice';
         }
-        if (!ArrayToolkit::requireds($question, array('difficulty', 'stem'))) {
-                throw $this->createServiceException('缺少必要字段difficulty, stem, 创建课程失败！');
+        if (!ArrayToolkit::requireds($question, array('difficulty'))) {
+                throw $this->createServiceException('缺少必要字段difficulty, 创建课程失败！');
         }
 
         $field = array();
         $field['questionType'] = $question['type'];
-        $field['stem'] = $this->purifyHtml($question['stem']);
-        $field['difficulty'] = empty($question['difficulty']) ?  ' ': $question['difficulty'];
-        $field['userId'] = $this->getCurrentUser()->id;
+        $field['stem']         = empty($question['stem'])?'':$question['stem'];
+        $field['stem']         = $this->purifyHtml($question['stem']);
+        $field['difficulty']   = empty($question['difficulty']) ? ' ': $question['difficulty'];
+        $field['userId']       = $this->getCurrentUser()->id;
+
+        $field['analysis']   = empty($question['analysis'])?'':$question['analysis'];
+        $field['score']      = empty($question['score'])?'':$question['score'];
+        $field['categoryId'] = (int) $question['categoryId'];
 
         if(!empty($question['target'])){
             $target = explode('-', $question['target']);

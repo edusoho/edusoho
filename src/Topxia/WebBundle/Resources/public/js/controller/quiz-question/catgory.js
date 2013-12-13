@@ -37,5 +37,7 @@ define(function(require, exports, module) {
             });
 
         });
+
+        $('.category-collapse').collapse();
 	}
 });
