@@ -50,14 +50,36 @@ class ActivityController extends BaseController
 
         $lastActivitys= $expiredActivitys;
 
+         //报名的学生
+        $students=$this->getActivityService()->searchMember(array('approvalStatus'=>'pass'),0,20);
+
+        $studentIds=ArrayToolkit::column($students,'userId');
+
+        $student_users = $this->getUserService()->findUsersByIds($studentIds);
+        $student_profiles = $this->getUserService()->findUserProfilesByIds($studentIds);
+
+
+        $threads = $this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
+        $threadUserIds=ArrayToolkit::column($threads,'userId');
+        $thread_users = $this->getUserService()->findUsersByIds($threadUserIds);
+        $thread_profiles = $this->getUserService()->findUserProfilesByIds($threadUserIds);
+
+        $threadActivityIds=ArrayToolkit::column($threads,'activityId');
+        $thread_activitys = $this->getActivityService()->findActivitysByIds($threadActivityIds);
 
         return $this->render('TopxiaWebBundle:Activity:explore.html.twig', array(
             'recommendedActivitys' =>$recommendedActivitys,
             'lastActivitys' =>$lastActivitys,
             'expiredActivitys' => $expiredActivitys,          
-            'paginator' => $paginator,         
-            "current_user"=> $currentuser,
-          
+            'paginator' => $paginator,
+            'students'=>$students,
+            'student_users'=>$student_users,
+            'student_profiles'=>$student_profiles,
+            'threads'=>$threads,
+            'thread_users'=>$thread_users,
+            'thread_profiles'=>$thread_profiles,
+            'thread_activitys'=>$thread_activitys,
+            "current_user"=> $currentuser          
         ));
     }
 

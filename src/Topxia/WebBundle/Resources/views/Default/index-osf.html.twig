@@ -237,16 +237,13 @@
                       <div class="media-body">
 
                         <p class="text-color-gray text-normal">
-                          
+
                           <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
                           {{ review.createdTime|smart_time }} 发表了评论
-                          
                         </p>
-                        <p class="text-color-666 text-size-12">
-                         {{ review.content }}
-                        </p>
-                        <p　>
-                        <a class="text-size-12" href="{{  path('course_show', {id:reviewCourse.id})  }}">课程《{{ reviewCourse.title }}》</a>
+                        <p class="text-color-666 text-size-12">{{ review.content }}</p>
+                        <p>
+                          <a class="text-size-12" href="{{  path('course_show', {id:reviewCourse.id})  }}">课程《{{ reviewCourse.title }}》</a>
                         </p>
                       </div>
                       <div class="pts" ></div>

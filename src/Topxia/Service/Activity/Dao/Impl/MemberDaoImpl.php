@@ -20,6 +20,7 @@ class MemberDaoImpl extends BaseDao implements MemberDao
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
+            ->orderBy("createdTime", "DESC")
             ->setFirstResult($start)
             ->setMaxResults($limit);
         
@@ -40,7 +41,8 @@ class MemberDaoImpl extends BaseDao implements MemberDao
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'activity_member')
             ->andWhere('userId = :userId')
-            ->andWhere('activityId = :activityId');
+            ->andWhere('activityId = :activityId')
+            ->andWhere('approvalStatus = :approvalStatus');
     }
 
     public function getMemberCountByUserId($userId)

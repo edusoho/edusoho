@@ -178,9 +178,6 @@
 
     <div class="col-md-4 plz prz ">
 
-
-              
-          <!-- 答疑动态 -->
             <div class="pll  mtl">
                 <div class="pls text-size-18 mbm">开源有你更精彩。。</div>    
                 <button type="button" class="btn btn-success btn-lg btn-block pvl" > 加入开源公开课讲师  <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
@@ -194,15 +191,53 @@
             
 
                
-        <div class="pll mtl ">
-           <div >
-              <div class="mlm bor-b-green-2 text-size-16 ">最新加入讲师</div>             
-           </div>
+        <div class="pll mtl">
+          <div>
+            <div class="mlm bor-b-green-2 text-size-16 ">最新报名</div>
+          </div>
+          <div class="content model-over-h">
+            {% for student in students %}
+              {% set user = student_users[student.userId] %}
+              {% set profile = student_profiles[student.userId] %}
+            <a href="{{ path('user_show',{id:user.id}) }}" class="user-link user-avatar-link activity-user-link" >
+              <img src="{{ file_path(user.smallAvatar,'avatar.png') }}">        
+              <p>{{ user.nickname}}</p>
+            </a>
+            {% endfor %}
+            <span class="justify_fix"></span>
+          </div>
         </div>
 
         <div class="pll mtl ">
            <div >
-              <div class="mlm bor-b-green-2 text-size-16 ">联系我们</div>             
+             <div class="mlm bor-b-green-2 text-size-16 ">最新提问</div>
+           </div>
+
+           <div class="plm prm ptm">
+
+             <ul class="media-list">
+               {% for thread in threads  %}
+                          {% set user = thread_users[thread.userId] %}
+                          {% set profile = thread_users[thread.userId] %}
+                          {% set thread_activity = thread_activitys[thread.activityId] %}
+               <li class="media  pbz">
+                 <a class="pull-left" href="{{ path('user_show',{id:user.id}) }}">
+                   <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(user.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                 <div class="media-body">
+
+                   <p class="text-color-gray text-normal">
+
+                     <a class="text-color-gray" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+                     {{ thread.createdTime|smart_time }} 参加公开课 <a class="text-size-12" href="{{  path('activity_show', {id:thread_activity.id})  }}">《{{ thread_activity.title }}》</a>提问：
+                   </p>
+                   <p class="text-color-666 text-size-12">{{ thread.content }}</p>
+                  
+                 </div>
+                 <div class="pts" ></div>
+               </li>
+               {% endfor %}
+             </ul>
+
            </div>
         </div>
            
