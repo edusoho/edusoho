@@ -51,7 +51,7 @@ class ActivityController extends BaseController
         $lastActivitys= $expiredActivitys;
 
          //报名的学生
-        $students=$this->getActivityService()->searchMember(array('approvalStatus'=>'pass'),0,20);
+        $students=$this->getActivityService()->searchMember(array('approvalStatus'=>'pass'),0,24);
 
         $studentIds=ArrayToolkit::column($students,'userId');
 
