@@ -58,7 +58,7 @@
           {% endif %}
       </div>
       
-      <nav class="nav navbar-nav navbar-right">
+      <div class="nav navbar-nav navbar-right navbar-collapse collapse">
           {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
@@ -93,8 +93,8 @@
                 <li><a href="{{ path('login') }}">登录</a></li>
                 <li><a href="{{ path('register') }}">注册</a></li>
             {% endif %}
-        </ul>           
-      </nav>    
+          </ul>           
+      </div>    
     </div>     
 </header> 
 
