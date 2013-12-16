@@ -274,7 +274,7 @@
                         <p class="text-color-gray text-normal">
 
                           <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
-                          {{ note.createdTime|smart_time }} 在课程<a class="text-size-12" href="{{  path('course_show', {id:noteCourse.id})  }}">《{{ noteCourse.title }}》</a>中写下了笔记：
+                          {{ note.updatedTime|smart_time }} 在课程<a class="text-size-12" href="{{  path('course_show', {id:noteCourse.id})  }}">《{{ noteCourse.title }}》</a>中写下了笔记：
                         </p>
                         <p class="text-color-666 text-size-12">{{ note.content|plain_text(50) }}</p>
                         <p>
