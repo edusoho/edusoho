@@ -310,6 +310,7 @@ class SettingController extends BaseController
 
         $default = array(
             'mode' => 'default',
+            'nickname_enabled' => 0,
         );
         
         $setting = array_merge($default, $setting);
