@@ -21,7 +21,16 @@ class CourseDataTag extends BaseDataTag implements DataTag
         if (empty($arguments['courseId'])) {
             throw new \InvalidArgumentException("courseId参数缺失");
         }
-    	return $this->getCourseService()->getCourse($arguments['courseId']);
+    	$course = $this->getCourseService()->getCourse($arguments['courseId']);
+
+        $course['teachers'] = $this->getTeachers($course);
+
+        return $course;
+    }
+
+    protected function getTeachers($course)
+    {
+        return $this->getUserService()->findUsersByIds($course['teachers']);
     }
 
     protected function getCourseService()
@@ -30,5 +39,3 @@ class CourseDataTag extends BaseDataTag implements DataTag
     }
 }
 
-
-?>

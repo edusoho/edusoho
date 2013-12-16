@@ -29,7 +29,7 @@ class TopRatingCourseReviewsDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException("count参数超出最大取值范围");
         }
         $conditions = array( 'courseId' => $arguments['courseId']);
-    	return $this->getReviewService()->searchReviews($conditions, $sort = 'Rating', 0, $arguments['count']);
+    	return $this->getReviewService()->searchReviews($conditions, $sort = 'rating', 0, $arguments['count']);
     }
 
     protected function getReviewService()

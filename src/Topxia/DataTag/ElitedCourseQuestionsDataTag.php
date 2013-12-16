@@ -29,7 +29,7 @@ class ElitedCourseQuestionsDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException("count参数超出最大取值范围");
         }
         $conditions = array( 'courseId' => $arguments['courseId'],'type' => 'question','isElite' => '1');
-    	return $this->getThreadService()->searchThreads($conditions, "created", 0, $arguments['count']);
+    	return $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
     }
 
     protected function getThreadService()
