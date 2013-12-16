@@ -8,6 +8,11 @@ use Topxia\Service\Common\BaseTestCase;
 class LogServiceTest extends BaseTestCase
 {   
 
+    public function testLogXXX()
+    {
+       $this->assertNull(null);
+    }
+
     private function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');

@@ -12,6 +12,13 @@ use Topxia\Common\ArrayToolkit;
 class LoginRecordServiceTest extends BaseTestCase
 {
 
+
+    public function testLoginRecordXXX()
+    {
+       $this->assertNull(null);
+    }
+
+
     private function getLoginRecordService()
     {
         return $this->getServiceKernel()->createService('User.LoginRecordService');

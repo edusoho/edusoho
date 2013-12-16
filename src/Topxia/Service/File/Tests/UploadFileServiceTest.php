@@ -9,6 +9,11 @@ use Topxia\Service\Common\ServiceException;
 class UploadFileServiceTest extends BaseTestCase
 {
 
+    public function testUploadFileXXX()
+    {
+       $this->assertNull(null);
+    }
+
 	private function getUploadFileService()
 	{
 		return $this->getServiceKernel()->createService('File.UploadFileService');
