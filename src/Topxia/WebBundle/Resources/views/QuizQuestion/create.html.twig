@@ -12,21 +12,19 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading clearfix">
-    <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}">题目管理</a>
-    {% if parentId %}
-      <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId: parentId}) }}">材料题</a>
-    {% endif %}
-    
-    <span class="" href="javascript:void(0)" >
-        {% if isEdit %}
-          修改题目
-        {%else%}
-          添加{{questionType[1][type]}}
-        {% endif %}
-    </span>
-    
+    题目管理
   </div>
   <div class="panel-body">
+
+  <ol class="breadcrumb">
+      <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}">题目管理</a></li>
+      {% if parentId %}
+        <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId: parentId}) }}">材料题</a></li>
+      {% endif %}
+      <li class="active">
+        {% if isEdit %} 修改{{questionType[1][type]}}  {% else %}  添加{{questionType[1][type]}}  {% endif %}
+      </li>
+    </ol>
 
     <div id="question-creator-widget">
       <form id="question-create-form" class="form-horizontal quiz-question" method="post" action="
