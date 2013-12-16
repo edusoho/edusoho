@@ -157,11 +157,11 @@
                            <img width="100px" class="img-responsive media-object " src="{{ file_path(teacher.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                          <div class="media-body">
                            <h4 class="media-heading">
-                             <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacherinfo.truename |default(teacher.nickname)}}</a> <span class="text-color-gray text-small">{{ teacher.title|plain_text(30) }}</span>
+                             <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacherinfo.truename |default(teacher.nickname)}}</a> <span class="text-color-gray text-small">{{ teacher.title|plain_text(25) }}</span>
                            </h4>
                           
                          </div>
-                         <div class="text-color-green-096 text-normal">{{ teacherinfo.about | plain_text(36) }}</div>
+                         <div class="text-color-green-096 text-normal">{{ teacherinfo.about | plain_text(30) }}</div>
                        </div>
                      </li>
                      {% endfor %}
@@ -316,7 +316,7 @@
                           <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
                           {{ review.createdTime|smart_time }}  在课程  <a class="text-size-12" href="{{  path('course_show', {id:reviewCourse.id})  }}">《{{ reviewCourse.title }}》</a>中发表了评论：
                         </p>
-                        <p class="text-color-666 text-size-12">{{ review.content }}</p>
+                        <p class="text-color-666 text-size-12">{{ review.content|plain_text(50) }}</p>
                         
                       </div>
                       <div class="pts" ></div>

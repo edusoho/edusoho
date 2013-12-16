@@ -97,7 +97,7 @@ class DefaultController extends BaseController
 
         //开源教练组
         $feild['roles']='ROLE_TEACHER';
-        $teachers=$this->getUserService()->searchUsers($feild,array('promotedTime','DESC'),0,3);
+        $teachers=$this->getUserService()->searchUsers($feild,array('promotedTime','DESC'),0,9);
         $teacherIds=ArrayToolkit::column($teachers,'id');
         $teacherinfos=$this->getUserService()->findUserProfilesByIds($teacherIds);
 
