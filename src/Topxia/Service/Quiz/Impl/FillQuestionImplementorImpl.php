@@ -6,9 +6,9 @@ use Topxia\Service\Quiz\QuestionImplementor;
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 use Topxia\Common\ArrayToolkit;
 
-define("PATTERN", "/\[\[(.*?)\]\]/");
-define("SUBJECT1", "(____)");
-define("SUBJECT2", "/\(____\)/");
+const PATTERN = "/\[\[(.*?)\]\]/";
+const SUBJECT1 = "(____)";
+const SUBJECT2 = "/\(____\)/";
     
 class FillQuestionImplementorImpl extends BaseService implements QuestionImplementor
 {
