@@ -46,6 +46,7 @@ define(function(require, exports, module) {
             var self = this;
 
             Validator.addRule('fillCheck',/(\[\[(.*?)\]\])/i, '请输入正确的答案,如今天是[[晴|阴|雨]]天.');
+            Validator.addRule('score',/^(\d){1,10}$/i, '请输入正确的分值');
 
             validator = new Validator({
                 element: $form,
@@ -60,7 +61,7 @@ define(function(require, exports, module) {
             validator.addItem({
                     element: '#question-score-field',
                     required: false,
-                    rule:'number',
+                    rule:'score',
                 });
 
             validator.on('formValidated', function(error, msg, $form) {
