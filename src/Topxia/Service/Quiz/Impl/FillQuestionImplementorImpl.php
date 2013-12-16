@@ -6,12 +6,18 @@ use Topxia\Service\Quiz\QuestionImplementor;
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 use Topxia\Common\ArrayToolkit;
 
+const PATTERN = "/\[\[(.*?)\]\]/";
+const SUBJECT1 = "(____)";
+const SUBJECT2 = "/\(____\)/";
+    
 class FillQuestionImplementorImpl extends BaseService implements QuestionImplementor
 {
+    
+
 	public function getQuestion($question)
     {
         $question = QuestionSerialize::unserialize($question);
-    	$a = array_fill(0,count($question['answer']['0']),"/\(____\)/");
+    	$a = array_fill(0,count($question['answer']['0']), SUBJECT2);
         $question['stem'] = preg_replace($a, $question['answer']['0'], $question['stem'], 1);
         return $question;
     }
@@ -20,8 +26,8 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
 		if (!empty($question['parentId'])){
             $field['parentId'] = (int) trim($question['parentId']);
         }
-        preg_match_all('/\[\[(.*?)\]\]/', $field['stem'], $answer);
-        $field['stem']  = preg_replace('/\[\[(.*?)\]\]/', '(____)', $field['stem']);
+        preg_match_all(PATTERN, $field['stem'], $answer);
+        $field['stem']  = preg_replace(PATTERN, SUBJECT1, $field['stem']);
         if (count($answer['1']) == 0){
             throw $this->createServiceException('该问题没有答案或答案格式不正确！');
         }
@@ -33,8 +39,8 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
 	}
 
     public function updateQuestion($id, $question, $field){
-    	preg_match_all('/\[\[(.*?)\]\]/', $field['stem'], $answer);
-        $field['stem']  = preg_replace('/\[\[(.*?)\]\]/', '(____)', $field['stem']);
+    	preg_match_all(PATTERN, $field['stem'], $answer);
+        $field['stem']  = preg_replace(PATTERN, SUBJECT1, $field['stem']);
         if(count($answer['1']) == 0){
             throw $this->createServiceException('该问题没有答案或答案格式不正确！');
         }

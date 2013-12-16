@@ -1,0 +1,34 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+
+{% block title %}课程设置 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'course_setting' %}
+{% block maincontent %}
+<div class="page-header"><h1>课程设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >加入课程私信通知</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('in_course_mail', {1:'开启', 0:'关闭'}, courseSetting.in_course_mail) }}
+      <p class="help-block">开启后学员加入课程会收到教师私信通知</p>
+      </div>
+    </div>
+  </fieldset>
+  <br>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

@@ -67,7 +67,7 @@ class QuizQuestionController extends BaseController
             }
 	        $question = $this->getQuestionService()->createQuestion($question);
 
-	        $this->setFlashMessage('success', '题目添加完成！');
+	        $this->setFlashMessage('success', '题目添加成功！');
 
 			$submission = $request->request->get('submission');
 	        if ($submission == 'continue'){
@@ -122,7 +122,7 @@ class QuizQuestionController extends BaseController
 
 	        $question = $this->getQuestionService()->updateQuestion($id, $question);
 
-	        $this->setFlashMessage('success', '题目修改完成！');
+	        $this->setFlashMessage('success', '题目修改成功！');
 
 			return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId,'parentId' => $question['parentId'])));
         }

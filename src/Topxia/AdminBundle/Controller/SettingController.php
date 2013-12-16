@@ -364,6 +364,28 @@ class SettingController extends BaseController
         ));
     }
 
+    public function courseSettingAction(Request $request)
+    {
+        $courseSetting = $this->getSettingService()->get('course_setting', array());
+
+        $default = array(
+            'in_course_mail' => '1',
+        );
+
+        $courseSetting = array_merge($default, $courseSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $courseSetting = $request->request->all();
+            $this->getSettingService()->set('course_setting', $courseSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
+            $this->setFlashMessage('success','课程设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
+            'courseSetting' => $courseSetting
+        ));
+    }
+
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();

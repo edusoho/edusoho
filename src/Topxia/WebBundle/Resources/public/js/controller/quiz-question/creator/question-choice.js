@@ -30,8 +30,8 @@ define(function(require, exports, module) {
 
         onDeleteChoice: function(event) {
             var choiceCount = this.$('[data-role=choice]').length;
-            if (choiceCount <= 1 ) {
-                Notify.danger("选项至少一个!");
+            if (choiceCount <= 2 ) {
+                Notify.danger("选项至少二个!");
                 return false;
             }
             this.deleteChoice(event);

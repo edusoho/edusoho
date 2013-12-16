@@ -2011,16 +2011,17 @@ body {
 	width: 23%;
 	margin: 8px 1%;
 	font-size: 12px;
+	vertical-align:top;
 }
 
 .user-grids li p {
-    height:24px;
     margin-bottom: 0;
+    word-wrap: break-word;
+	word-break: normal;
 }
 
 .user-grids .user-avatar-link {
 	margin-bottom: 5px;
-
 }
 
 .user-grids .user-link {
