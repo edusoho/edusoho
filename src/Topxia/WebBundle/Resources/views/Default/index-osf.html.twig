@@ -97,9 +97,9 @@
             </div>
 
             <!--讨论，学员，牛人，谁在学，最新点评-->    
-            <div >          
+            <div >
               <!-- 新加入学员 -->
-              <div class="trainee">
+              <div>
                 <div class="kytitle">
                   <h3>新学员</h3> <div class="fix-right font18">64231人已在学习</div>             
                 </div>            
@@ -118,7 +118,6 @@
                         </a>
                         <div class="todos-thumb-span">
                           <a href="{{ path('user_show',{id:user.id}) }}">{{user.nickname}}</a>
-                         
                         </div>
                       </span>
                       {% endfor %}
@@ -138,8 +137,43 @@
                  
                 </div>
               </div>
-
             </div>
+
+
+            <div>
+              <!-- 讲师团 -->
+              <div>
+                <div class="kytitle">
+                  <h3>讲师团</h3> <div class="fix-right"> <a class="text-size-18 text-color-333" href="{{ path('teacher') }}">36位开源大牛坐镇</a></div>             
+                </div>            
+                <div class="pz mz">
+
+                   <ul class="pz">
+                     {% for teacher in teachers  %}
+                     {% set teacherinfo =teacherinfos[teacher.id] %}
+                     <li class="col-md-4 pz mz">
+                       <div class="white-grid media " >
+                         <a class="pull-left" href="{{ path('user_show',{id:teacher.id}) }}">
+                           <img width="100px" class="img-responsive media-object " src="{{ file_path(teacher.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                         <div class="media-body">
+                           <h4 class="media-heading">
+                             <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacherinfo.truename |default(teacher.nickname)}}</a> <span class="text-color-gray text-small">{{ teacher.title|plain_text(30) }}</span>
+                           </h4>
+                          
+                         </div>
+                         <div class="text-color-green-096 text-normal">{{ teacherinfo.about | plain_text(36) }}</div>
+                       </div>
+                     </li>
+                     {% endfor %}
+                   </ul>
+              
+              </div>
+            </div>
+          </div>
+
+
+
+
           </div>
        
           <div class="col-md-4 ">
@@ -218,6 +252,47 @@
               </div>
             </div>
 
+            
+            <!-- 笔记动态 -->
+            <div >
+              <div class="es-row-wrap container-gap">
+                <div class="kytitle clearfix es-box-heading mtm">
+                  <h3 >笔记动态</h3>
+                </div>
+
+                <div class="es-box-body pll prm">
+
+                  <ul class="media-list">
+                    {% for note in notes  %}
+                          {% set userProfile = noteUsers[note.userId] %}
+                          {% set noteCourse = noteCourses[note.courseId] %}
+                    <li class="media  pbz">
+                      <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
+                        <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
+                      <div class="media-body">
+
+                        <p class="text-color-gray text-normal">
+
+                          <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
+                          {{ note.createdTime|smart_time }} 在课程<a class="text-size-12" href="{{  path('course_show', {id:noteCourse.id})  }}">《{{ noteCourse.title }}》</a>中写下了笔记：
+                        </p>
+                        <p class="text-color-666 text-size-12">{{ note.content|plain_text(50) }}</p>
+                        <p>
+                         
+                        </p>
+                      </div>
+                      <div class="pts" ></div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+         
+
+
+
             <!-- 最新评论 -->
             <div >
               <div class="es-row-wrap container-gap">
@@ -239,12 +314,10 @@
                         <p class="text-color-gray text-normal">
 
                           <a class="text-color-gray" href="{{ path('user_show', {id:userProfile.id}) }}">{{ userProfile.nickname }}</a>
-                          {{ review.createdTime|smart_time }} 发表了评论
+                          {{ review.createdTime|smart_time }}  在课程  <a class="text-size-12" href="{{  path('course_show', {id:reviewCourse.id})  }}">《{{ reviewCourse.title }}》</a>中发表了评论：
                         </p>
                         <p class="text-color-666 text-size-12">{{ review.content }}</p>
-                        <p>
-                          <a class="text-size-12" href="{{  path('course_show', {id:reviewCourse.id})  }}">课程《{{ reviewCourse.title }}》</a>
-                        </p>
+                        
                       </div>
                       <div class="pts" ></div>
                     </li>
@@ -254,6 +327,8 @@
                 </div>
               </div>
             </div>
+
+
           </div>
 
       </div>

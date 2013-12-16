@@ -79,7 +79,7 @@ class DefaultController extends BaseController
 
 
 
-        //最新点评
+        //点评动态
         $reviews=$this->getReviewService()->searchReviews(array(),'latest',0,4);
         $reviewUserIds=ArrayToolkit::column($reviews,'userId');
         $reviewUsers=$this->getUserService()->findUsersByIds($reviewUserIds);
@@ -87,9 +87,17 @@ class DefaultController extends BaseController
         $reviewCourses=$this->getCourseService()->findCoursesByIds($reviewCourseIds);
 
 
+        //笔记动态
+        $notes=$this->getNoteService()->searchNotes(array(),'updated',0,4);
+        $noteUserIds=ArrayToolkit::column($notes,'userId');
+        $noteUsers=$this->getUserService()->findUsersByIds($noteUserIds);
+        $noteCourseIds=ArrayToolkit::column($notes,'courseId');
+        $noteCourses=$this->getCourseService()->findCoursesByIds($noteCourseIds);
+
+
         //开源教练组
         $feild['roles']='ROLE_TEACHER';
-        $teachers=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,5);
+        $teachers=$this->getUserService()->searchUsers($feild,array('promotedTime','DESC'),0,3);
         $teacherIds=ArrayToolkit::column($teachers,'id');
         $teacherinfos=$this->getUserService()->findUserProfilesByIds($teacherIds);
 
@@ -112,6 +120,11 @@ class DefaultController extends BaseController
             "reviewUsers"=>$reviewUsers,
             "reviewCourses"=>$reviewCourses,
 
+
+            "notes"=>$notes,
+            "noteUsers"=>$noteUsers,
+            "noteCourses"=>$noteCourses,
+
             "studyLogs"=>$studyLogs,
             "studyLogUsers"=>$studyLogUsers,
 
@@ -121,7 +134,7 @@ class DefaultController extends BaseController
 
             "teachers"=>$teachers,
             "teacherinfos"=>$teacherinfos,
-              'blocks' => $blocks
+            "blocks" => $blocks
             ));
     }
 
@@ -250,6 +263,11 @@ class DefaultController extends BaseController
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+     protected function getNoteService()
+    {
+        return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
     protected function getActivityService()

@@ -231,3 +231,25 @@ body:empty .todos-thumb-span{margin-left: -52px;}
     text-align: center;
 }
 
+
+
+.autumn-grids {
+list-style: none;
+margin: 0;
+padding: 0;
+margin-right: -25px;
+letter-spacing: -4px;
+zoom: 1;
+}
+
+.white-grid {
+
+vertical-align: top;
+letter-spacing: 0;
+
+margin: 0px 10px 17px 0;
+background: #fff;
+border: 1px solid #e2e2e2;
+padding: 5px;
+}
+
