@@ -311,7 +311,7 @@ class SettingController extends BaseController
         $default = array(
             'mode' => 'default',
         );
-
+        
         $setting = array_merge($default, $setting);
 
         $configDirectory = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/';
@@ -320,7 +320,9 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $setting = array('mode' => $data['mode']);
+            $setting = array('mode' => $data['mode'],
+                            'nickname_enabled' => $data['nickname_enabled'],
+            );
             $this->getSettingService()->set('user_partner', $setting);
 
             $discuzConfig = $data['discuz_config'];

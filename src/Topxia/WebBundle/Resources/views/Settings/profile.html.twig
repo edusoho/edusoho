@@ -12,7 +12,15 @@
     {% block body %}
       <form id="user-profile-form" class="form-horizontal" method="post">
         {{ web_macro.flash_messages() }}
-        
+
+          <div class="form-group">
+          <label class="col-md-2 control-label" >昵称</label>
+            <div class="col-md-7 controls">
+            <div class="control-text">
+                {{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">修改</a> {% endif %}</div>
+            </div>
+          </div>
+
           <div class="form-group">
             {{ form_label(form.truename, '姓名', {label_attr:{class:'col-md-2 control-label'}}) }}
             <div class="col-md-7 controls">
