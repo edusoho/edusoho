@@ -376,6 +376,10 @@ admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
 
+admin_setting_course_setting:
+    pattern:  /setting/course-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
