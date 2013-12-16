@@ -16,30 +16,12 @@ class InitCommand extends BaseCommand
 	protected function configure()
 	{
 		$this->setName ( 'topxia:init' );
-		require_once __DIR__.'/../../../../app/AppKernel.php';
-		$kernel = new \AppKernel('prod', false);
-		$kernel->loadClassCache();
-		Request::enableHttpMethodParameterOverride();
-		$request = Request::createFromGlobals();
-
-		$kernel->boot();
-
-		$serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
-		$serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-		$serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
-		$currentUser = new CurrentUser();
-		$currentUser->fromArray(array(
-		    'id' => 0,
-		    'nickname' => '游客',
-		    'currentIp' =>  '127.0.0.1',
-		    'roles' => array(),
-		));
-		$serviceKernel->setCurrentUser($currentUser);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$output->writeln('<info>开始初始化系统</info>');
+		$this->initServiceKernel();
 
 		$user = $this->initAdminUser($output);
 
@@ -47,11 +29,12 @@ class InitCommand extends BaseCommand
 		$this->initRegisterSetting($user, $output);
 		$this->initMailerSetting($output);
 		$this->initPaymentSetting($output);
-		$this->initCloudSetting($output);
+		$this->initStorageSetting($output);
 
 		$this->initCategory($output);
 		$this->initTag($output);
 		$this->initRefundSetting($output);
+		$this->initThemes($output);
 		$this->initFile($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
@@ -101,8 +84,7 @@ class InitCommand extends BaseCommand
 		$fields = array(
 			'email' => 'test@edusoho.com',
 			'nickname' => '测试管理员',
-			'password' => 'testtest',
-
+			'password' => 'kaifazhe',
 			'roles' => array(),
 			'createdIp' => '127.0.0.1',
 		);
@@ -187,28 +169,29 @@ EOD;
 		$output->write('  初始化支付设置');
 
         $default = array(
-            'enabled'=>1,
-            'bank_gateway'=>'none',
-            'alipay_enabled'=>1,
-            'alipay_key'=>'2088801030402123',
-            'alipay_secret' => '',
+	        'enabled'=>0,
+	        'bank_gateway'=>'none',
+	        'alipay_enabled'=>0,
+	        'alipay_key'=>'',
+	        'alipay_secret' => '',
         );
         $payment = $this->getSettingService()->set('payment', $default);
 
 		$output->writeln(' ...<info>成功</info>');
 	}
 
-	private function initCloudSetting($output)
+	private function initStorageSetting($output)
 	{
 		$output->write('  初始化云服务器设置');
 
         $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'upload_mode'=>'cloud',
-            'cloud_access_key'=>'mY2qzVfN1YR45jdDlk6zyu7EGk3OtiUJdtNX_O0f',
-            'cloud_bucket'=>'edusoho-dev',
-            'cloud_secret_key'=>'o9kPc_isTvHPBG5vtvwkWVAwG-HbUFKQ0nz3yJyQ'
+            'upload_mode'=>'local',
+            'cloud_api_server' => 'http://api.edusoho.com',
+            'cloud_access_key'=>'',
+            'cloud_bucket'=>'',
+            'cloud_secret_key'=>''
         );
 
         $storageSetting = $this->getSettingService()->set('storage', $default);
@@ -314,6 +297,29 @@ EOD;
         chmod($directory, 0777);
 
 		$output->writeln(' ...<info>成功</info>');
+	}
+
+    public function initThemes($output)
+    {
+    	$output->write('  初始化主题');
+    	
+        $this->getSettingService()->set('theme', array('uri' => 'default'));
+
+        $output->writeln(' ...<info>成功</info>');
+    }
+
+	private function initServiceKernel()
+	{
+		$serviceKernel = ServiceKernel::create('dev', false);
+		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+		$currentUser = new CurrentUser();
+		$currentUser->fromArray(array(
+		    'id' => 0,
+		    'nickname' => '游客',
+		    'currentIp' =>  '127.0.0.1',
+		    'roles' => array(),
+		));
+		$serviceKernel->setCurrentUser($currentUser);
 	}
 
 	protected function getSettingService()
