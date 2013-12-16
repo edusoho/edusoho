@@ -31,11 +31,14 @@ class TeacherCoursesDataTag extends BaseDataTag implements DataTag
      
         $conditions = array('status' => 'published', 'userId' => $arguments['userId']);
 
-    	return $this->getCoursService()->searchCourses($conditions,'latest', 0, $arguments['count']);
+    	return $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
     }
 
-    protected function getCoursService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
+
+
+?>

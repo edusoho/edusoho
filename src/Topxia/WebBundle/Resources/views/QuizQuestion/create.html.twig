@@ -11,12 +11,20 @@
 {% block main %}
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">
-  {% if isEdit %}
-    修改题目
-  {%else%}
-    添加题目
-  {% endif %}
+  <div class="panel-heading clearfix">
+    <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}">题目管理</a>
+    {% if parentId %}
+      <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId: parentId}) }}">材料题</a>
+    {% endif %}
+    
+    <span class="" href="javascript:void(0)" >
+        {% if isEdit %}
+          修改题目
+        {%else%}
+          添加{{questionType[1][type]}}
+        {% endif %}
+    </span>
+    
   </div>
   <div class="panel-body">
 
@@ -113,15 +121,50 @@
           </div>
 
         {% elseif type == 'fill' %}
-          
+        
         {% endif %}
+
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-1 controls ">
+              <button type="button" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="btn btn-link collapsed">显示/隐藏高级选项</button>
+          </div>
+        </div>
+        
+        <div id="advanced-collapse" class="advanced-collapse collapse">
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-analysis-field">解析</label></div>
+            <div class="col-md-8 controls">
+                <textarea class="form-control" id="question-analysis-field" name="analysis">{% if isEdit %}{{question.analysis}} {% endif %} </textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
+            <div class="col-md-8 controls">
+            
+            <input class="form-control" {% if isEdit %}value="{{question.score}}" {% endif %}type="text" id="question-score-field" name="score" />
+            
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
+            <div class="col-md-8 controls">
+                <select class="form-control width-input width-input-large" name="categoryId" data-role="category"></select>
+                <script type="text/plain" data-role="category-data">{{ category|json_encode|raw }}</script>
+            </div>
+          </div>
+
+        </div>
+
+
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
             {% if isEdit %}
               <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:question.parentId}) }}" class="btn btn-link">返回</a>
             {%else%}
-              <a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}" class="btn btn-link">返回</a>
+              <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:parentId}) }}" class="btn btn-link">返回</a>
             {% endif %}
             <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
             {% if not isEdit %}
@@ -133,6 +176,7 @@
         <input type="hidden" name="submission">
         <input type="hidden" name="type" value="{{ type }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
       </form>
 
     </div>

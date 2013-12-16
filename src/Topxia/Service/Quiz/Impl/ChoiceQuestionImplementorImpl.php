@@ -43,14 +43,14 @@ class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImple
 
 	}
 
-	public function updateQuestion($question, $field){
+	public function updateQuestion($id, $question, $field){
         $choiceField = $this->filterChoiceFields($question);
         $field['questionType'] = $choiceField['type'];
         unset($choiceField['type']);
         $result =  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($question['id'], QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($field))
         );
-        $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($question['id']));
+        $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
         $choices = array();
         foreach ($choiceField['choices'] as $key => $content) {
             $choice['questionId'] = $result['id'];

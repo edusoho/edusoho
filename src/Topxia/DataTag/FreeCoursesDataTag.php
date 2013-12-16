@@ -31,11 +31,15 @@ class FreeCoursesDataTag extends BaseDataTag implements DataTag
         } else {
             $conditions = array('status' => 'published', 'price' =>'0.00' ,'categoryId' => $arguments['categoryId']);
         }
-    	return $this->getCoursService()->searchCourses($conditions,'latest', 0, $arguments['count']);
+    	return $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
     }
 
-    protected function getCoursService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
+
+
+
+?>

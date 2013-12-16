@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         },
 
         _initValidator: function(){
-            validator.removeItem('#question-stem-field');
+            this.get("validator").removeItem('#question-stem-field');
             this.get("validator").addItem({
                 element: '#question-stem-field',
                 required: true,

@@ -58,11 +58,6 @@ define(function(require, exports, module) {
             '{{display}}的长度必须小于等于{{max}}，一个中文字算2个字符'
         ],
         [
-            'fillCheck',
-            /(\[\[(.*?)\]\])/i,
-            '请输入正确的答案,如今天是[[晴|阴|雨]]天,'
-        ],
-        [
         'idcard',
         function(options){
         var idcard = options.element.val();

@@ -28,11 +28,15 @@ class CourseRankByHitDataTag extends BaseDataTag implements DataTag
      
         $conditions = array('status' => 'published');
 
-    	return $this->getCoursService()->searchCourses($conditions,'hitNum', 0, $arguments['count']);
+    	return $this->getCourseService()->searchCourses($conditions,'hitNum', 0, $arguments['count']);
     }
 
-    protected function getCoursService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
+
+
+
+?>

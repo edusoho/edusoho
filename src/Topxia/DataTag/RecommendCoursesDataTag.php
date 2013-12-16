@@ -31,11 +31,14 @@ class RecommendCoursesDataTag extends BaseDataTag implements DataTag
         } else {
             $conditions = array('status' => 'published', 'recommended' => 1 ,'categoryId' => $arguments['categoryId']);
         }
-    	return $this->getCoursService()->searchCourses($conditions,'recommended', 0, $arguments['count']);
+    	return $this->getCourseService()->searchCourses($conditions,'recommended', 0, $arguments['count']);
     }
 
-    protected function getCoursService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
+
+
+?>

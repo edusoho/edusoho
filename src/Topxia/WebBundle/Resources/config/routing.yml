@@ -469,7 +469,7 @@ course_manage_quiz_question_delete:
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:delete }
 
 course_manage_quiz_question_deletes:
-    pattern: /course/manage/question/deletes
+    pattern: /course/{courseId}/manage/question/deletes
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deletes }
 
 course_manage_quiz_question_category:
@@ -482,15 +482,15 @@ course_manage_quiz_question_category_create:
 
 course_manage_quiz_question_category_edit:
     pattern: /course/{courseId}/manage/question/category/{categoryId}/edit
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:editCategory }
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:updateCategory }
 
 course_manage_quiz_question_category_delete:
     pattern: /course/{courseId}/manage/question/category/{categoryId}/delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deleteCategory }
 
 course_manage_quiz_question_category_sort:
-    pattern: /course/{courseId}/manage/question/category/sort
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:sort }
+    pattern: /course/{courseId}/manage/question/categorys/sort
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:sortCategories }
     methods: [POST]
 
 course_manage_chapter_create:

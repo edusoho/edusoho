@@ -30,12 +30,13 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            var $item = $('#category-'+$(this).data('id'));
-
+            var $item = $('#'+$(this).data('id'));
             $.post($(this).data('url'), function(html) {
                 $item.remove();
             });
 
         });
+
+        $('.category-collapse').collapse();
 	}
 });

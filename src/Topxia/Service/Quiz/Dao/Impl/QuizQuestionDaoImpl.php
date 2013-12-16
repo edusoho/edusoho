@@ -37,7 +37,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     } 
 
-    public function deleteQuestionByParentId($id)
+    public function deleteQuestionsByParentId($id)
     {
         $sql = "DELETE FROM {$this->table} WHERE parentId = ?";
         return $this->getConnection()->executeUpdate($sql, array($id));
