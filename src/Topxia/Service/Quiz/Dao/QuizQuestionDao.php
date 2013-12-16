@@ -10,7 +10,7 @@ interface QuizQuestionDao
 
     public function deleteQuestion($id);
 
-    public function deleteQuestionByParentId($id);
+    public function deleteQuestionsByParentId($id);
 
     public function getQuestion($id);
 

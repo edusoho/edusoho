@@ -24,16 +24,15 @@ class DetermineQuestionImplementorImpl extends BaseService implements QuestionIm
         return QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($field))
         );
-
 	}
 
-    public function updateQuestion($question, $field){
+    public function updateQuestion($id, $question, $field){
     	if(empty($question['answers'])){
             throw $this->createServiceException('缺少必要字段,answers，创建课程失败！');
         }
         $field['answer'] = $question['answers'];
         return QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($question['id'], QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($field))
         );
     }
 

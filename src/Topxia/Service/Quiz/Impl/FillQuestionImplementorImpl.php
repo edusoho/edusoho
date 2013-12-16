@@ -32,7 +32,7 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
 
 	}
 
-    public function updateQuestion($question, $field){
+    public function updateQuestion($id, $question, $field){
     	preg_match_all('/\[\[(.*?)\]\]/', $field['stem'], $answer);
         $field['stem']  = preg_replace('/\[\[(.*?)\]\]/', '(____)', $field['stem']);
         if(count($answer['1']) == 0){
@@ -40,7 +40,7 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
         }
         $field['answer'] = $answer;
         return  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($question['id'], QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($field))
         );
     }
 

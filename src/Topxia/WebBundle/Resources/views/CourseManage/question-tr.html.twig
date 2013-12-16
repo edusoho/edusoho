@@ -3,7 +3,7 @@
   <td>
     {{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}
   </td>
-  <td>{{item.questionType}}</td>
+  <td>{{questionType[0][item.questionType]}}</td>
   {% if item.parentId == 0 %}
   <td>
     {% if item.targetType == 'lesson'%}

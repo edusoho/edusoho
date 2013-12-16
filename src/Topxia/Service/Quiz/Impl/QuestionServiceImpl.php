@@ -21,11 +21,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionImplementor($question['type'])->createQuestion($question, $field);
     }
 
-    public function updateQuestion($question)
+    public function updateQuestion($id, $question)
     {
         $field = $this->filterCommonFields($question);
         $field['updatedTime'] = time();
-        return $this->getQuestionImplementor($question['type'])->updateQuestion($question, $field);  
+        return $this->getQuestionImplementor($question['type'])->updateQuestion($id, $question, $field);  
     }
 
     public function deleteQuestion($id)
@@ -35,7 +35,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             throw $this->createNotFoundException();
         }
         $this->getQuizQuestionDao()->deleteQuestion($id);
-        $this->getQuizQuestionDao()->deleteQuestionByParentId($id);
+
+        $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
     }
 
@@ -57,13 +58,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $field['createdTime'] = time();
         $field['targetId'] = empty($category['courseId'])?'':$category['courseId'];
         $field['targetType'] = "course";
+        $field['seq'] = $this->getQuizQuestionCategoryDao() -> getCategorysCountByCourseId($field['targetId'])+1;
+
         return $this->getQuizQuestionCategoryDao() -> addCategory($field);
     }
 
-    public function editCategory($category){
+    public function updateCategory($categoryId, $category){
         $field['name'] = empty($category['name'])?'':$category['name'];
         $field['updatedTime'] = time();
-        return $this->getQuizQuestionCategoryDao()->updateCategory($category['id'], $field);
+        return $this->getQuizQuestionCategoryDao()->updateCategory($categoryId, $field);
     }
 
     public function deleteCategory($id)
@@ -73,16 +76,23 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             throw $this->createNotFoundException();
         }
         $this->getQuizQuestionCategoryDao()->deleteCategory($id);
+
+        $categorys = $this->findCategorysByCourseIds(array($category['targetId']));
+        $seq = 1;
+        foreach ($categorys as $category) {
+            $fields = array('seq' => $seq);
+            $this->getQuizQuestionCategoryDao()->updateCategory($category['id'], $fields);
+            $seq ++;
+        }
     }
 
-
-    public function findCategoryByCourseIds(array $id){
-        return $this->getQuizQuestionCategoryDao() -> findCategoryByCourseIds($id);
+    public function findCategorysByCourseIds(array $id){
+        return $this->getQuizQuestionCategoryDao() -> findCategorysByCourseIds($id);
     }
 
-    public function sortCategory($courseId, array $categoryIds)
+    public function sortCategories($courseId, array $categoryIds)
     {
-        $categorys = $this->findCategoryByCourseIds(array($courseId));
+        $categorys = $this->findCategorysByCourseIds(array($courseId));
 
         if (count($categoryIds) != count($categorys)) {
             throw $this->createServiceException('categoryIds参数不正确');
@@ -96,10 +106,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $categorys = ArrayToolkit::index($categorys,'id');
         $seq = 1;
         foreach ($categoryIds as $categoryId) {
-            list(, $id) = explode('-', $categoryId);
-            $item   = $categorys[$id];
             $fields = array('seq' => $seq);
-            $this->getQuizQuestionCategoryDao()->updateCategory($item['id'], $fields);
+            $this->getQuizQuestionCategoryDao()->updateCategory($categoryId, $fields);
             $seq ++;
         }
     }

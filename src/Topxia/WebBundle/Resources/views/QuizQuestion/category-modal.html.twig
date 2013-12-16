@@ -1,16 +1,18 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set category = category | default(null)%}
-{% block title %}{% if category.id | default(null) %}编辑分类{% else %}添加分类{% endif %}{% endblock %}
+{% block title %}{% if category %}编辑分类{% else %}添加分类{% endif %}{% endblock %}
 
 {% block body %}
 	<form id="category-form" class="form-horizontal" action="
-	{% if category.id == 0 %}{{ path('course_manage_quiz_question_category_create', {courseId:course.id}) }}
-	{% else %}{{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
+	{% if category %}
+	  {{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
+	{% else %}
+	  {{ path('course_manage_quiz_question_category_create', {courseId:course.id}) }}
 	{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-name-field">名称</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name }}" tabindex="1">
+				<input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name|default('') }}" tabindex="1">
 			</div>
 		</div>
 

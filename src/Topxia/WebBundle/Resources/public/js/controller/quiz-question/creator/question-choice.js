@@ -2,7 +2,8 @@ define(function(require, exports, module) {
 
     var BaseQuestion = require('./question-base');
     var Handlebars = require('handlebars');
-    
+    var Notify = require('common/bootstrap-notify');
+
     var ChoiceQuestion = BaseQuestion.extend({
         events: {
             'click [data-role=add-choice]': 'onAddChoice',
@@ -57,18 +58,6 @@ define(function(require, exports, module) {
             });
         },
 
-        _initValidator: function(){
-            var self = this;
-            this.get('validator').on('formValidated', function(error, msg, $form) {
-                if (error) {
-                    return false;
-                }
-                if(!self._prepareFormData()){
-                    return false;
-                }
-                self.get('validator').set('autoSubmit',true);
-            });
-        },
 
         _prepareFormData: function(){
             var answers = [],
@@ -84,6 +73,21 @@ define(function(require, exports, module) {
             }
             $form.find('[name=answers]').val(answers.join('|'));
             return true;
+        },
+
+        _initValidator: function(){
+            var self = this;
+            this.get('validator').off('formValidated');
+            this.get('validator').on('formValidated', function(error, msg, $form) {
+                if (error) {
+                    return false;
+                }
+                if(!self._prepareFormData()){
+                    return false;
+                }
+
+                self.get('validator').set('autoSubmit',true);
+            });
         },
 
         _setupForChoice: function() {

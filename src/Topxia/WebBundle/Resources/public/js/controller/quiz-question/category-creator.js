@@ -17,7 +17,7 @@ define(function(require, exports, module) {
                       $item.replaceWith(html);
                       Notify.success('保存成功');
                   } else {
-                      $(".tbady-category").prepend(html);
+                      $(".tbady-category").append(html);
                       $(".tbady-category").find('.empty').hide();
                       Notify.success('添加成功');
                   }
