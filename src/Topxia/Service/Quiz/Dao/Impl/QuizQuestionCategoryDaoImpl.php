@@ -57,7 +57,7 @@ class QuizQuestionCategoryDaoImpl extends BaseDao implements QuizQuestionCategor
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function findCategoryByCourseIds(array $ids)
+    public function findCategorysByCourseIds(array $ids)
     {
         if(empty($ids)){ 
         	return array(); 
@@ -65,6 +65,12 @@ class QuizQuestionCategoryDaoImpl extends BaseDao implements QuizQuestionCategor
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE targetType='course' and targetId IN ({$marks})order by seq asc;";
         return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function getCategorysCountByCourseId($courseId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE targetType='course' and targetId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     public function deleteCategorysByIds(array $ids)

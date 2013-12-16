@@ -1,28 +1,31 @@
 define(function(require, exports, module) {
-    
+	
+    var Choice =  require('./creator/question-choice');
+    var Determine =  require('./creator/question-determine');
+    var Essay =  require('./creator/question-essay');
+    var Materialhoice =  require('./creator/question-material');
+    var Fill =  require('./creator/question-fill');
+
     exports.run = function() {
     	var type = $('#question-creator-widget').find('[name=type]').val().replace(/\_/g,"-");
 	    switch(type){
 		  case 'single-choice':
 		  case 'choice':
-			var QuestionCreator = require('./creator/question-choice');break;
+			var QuestionCreator = Choice;break;
 		  case 'determine':
-			var QuestionCreator = require('./creator/question-determine');break;
+			var QuestionCreator = Determine;break;
 		  case 'essay':
-			var QuestionCreator = require('./creator/question-essay');break;
+			var QuestionCreator = Essay;break;
 		  case 'material':
-			var QuestionCreator = require('./creator/question-material');break;
+			var QuestionCreator = Materialhoice;break;
 		  case 'fill':
-			var QuestionCreator = require('./creator/question-fill');break;
+			var QuestionCreator = Fill;break;
 		}
 		
         var creator = new QuestionCreator({
             element: '#question-creator-widget',
             form: '#question-create-form',
         });
-
-        
-
     };
 
 });

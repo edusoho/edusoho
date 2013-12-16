@@ -11,7 +11,7 @@ class CourseThreadDataTag extends BaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   courseId 必需 课程ID
-     *   ThreadId 必需 课程话题ID
+     *   threadId 必需 课程话题ID
      * 
      * @param  array $arguments 参数
      * @return array 课程话题
@@ -23,11 +23,11 @@ class CourseThreadDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException("courseId参数缺失");
         }
 
-        if (empty($arguments['ThreadId'])) {
-            throw new \InvalidArgumentException("ThreadId参数缺失");
+        if (empty($arguments['threadId'])) {
+            throw new \InvalidArgumentException("threadId参数缺失");
         }
 
-    	return $this->getThreadService()->getThread($arguments['courseId'], $arguments['ThreadId']);
+    	return $this->getThreadService()->getThread($arguments['courseId'], $arguments['threadId']);
     }
 
     protected function getCourseService()

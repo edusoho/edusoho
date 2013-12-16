@@ -19,9 +19,9 @@ class MaterialQuestionImplementorImpl extends BaseService implements QuestionImp
         );
 	}
 
-    public function updateQuestion($question, $field){
+    public function updateQuestion($id, $question, $field){
     	return  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($question['id'], QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id,  QuestionSerialize::serialize($field))
         );
     }
 

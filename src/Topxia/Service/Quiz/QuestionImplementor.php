@@ -7,6 +7,6 @@ interface QuestionImplementor
 
 	public function createQuestion($question, $questionField);
 
-    public function updateQuestion($question, $questionField);
+    public function updateQuestion($id, $question, $questionField);
 
 }
