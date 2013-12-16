@@ -8,6 +8,11 @@ use Topxia\Service\Common\BaseTestCase;
 class QuestionServiceTest extends BaseTestCase
 {   
 
+    public function testQuestionXXX()
+    {
+       $this->assertNull(null);
+    }
+
     private function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Quiz.QuestionService');

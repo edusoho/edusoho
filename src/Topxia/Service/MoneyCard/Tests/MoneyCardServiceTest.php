@@ -8,6 +8,11 @@ use Topxia\Service\Common\BaseTestCase;
 class MoneyCardServiceTest extends BaseTestCase
 {   
 
+    public function testMonetCardXXX()
+    {
+       $this->assertNull(null);
+    }
+
     private function getMoneyCardService()
     {
         return $this->getServiceKernel()->createService('MoneyCard.MoneyCardService');

@@ -11,6 +11,12 @@ use Topxia\Common\ArrayToolkit;
 
 class AuthServiceTest extends BaseTestCase
 {
+
+    public function testAuthXXX()
+    {
+       $this->assertNull(null);
+    }
+
     private function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');

@@ -11,6 +11,12 @@ use Topxia\Common\ArrayToolkit;
 
 class DiskServiceTest extends BaseTestCase
 {
+
+    public function testDiskXXX()
+    {
+       $this->assertNull(null);
+    }
+
     private function getDiskService()
     {
         return $this->getServiceKernel()->createService('User.DiskService');
