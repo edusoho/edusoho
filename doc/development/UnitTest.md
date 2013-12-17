@@ -26,6 +26,9 @@ phpunit --stop-on-error   --stop-on-fail -c app/
   phpunit -c app/ src/Topxia/Service/User/Tests/
 
 * 运行某个测试，例如
+phpunit -c app/ src/Topxia/Service/MoneyCard/Tests/MoneyCardServiceTest.php
+
+
 phpunit -c app/ src/Topxia/Service/Course/Tests/CourseServiceTest.php
 phpunit -c app/ src/Topxia/Service/Course/Tests/AnnouncementServiceTest.php
 phpunit -c app/ src/Topxia/Service/User/Tests/UserServiceTest.php

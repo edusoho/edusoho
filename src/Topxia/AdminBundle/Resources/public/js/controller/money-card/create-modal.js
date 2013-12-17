@@ -43,7 +43,7 @@ define(function(require, exports, module) {
             rule: 'integer'
         })
         .addItem({
-            element: '[name="passwordMedian"]',
+            element: '[name="passwordLength"]',
             required: true,
             rule: 'integer'
         })
