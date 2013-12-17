@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class RecommendTeachersDataTag extends BaseDataTag implements DataTag  
+class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag  
 {
 
     /**
@@ -19,24 +19,14 @@ class RecommendTeachersDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {	
 
-        if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
-        }
-        if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
-        }
+        $this->checkCount($arguments);
         $conditions = array(
             'roles'=>'ROLE_TEACHER',
             'promoted'=>'1',
         );
-    	return $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
+    	$teachers = $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
+
+        return $this->foreachUsers($teachers); 
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
 }
-
-
-?>

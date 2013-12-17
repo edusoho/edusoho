@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CategoriesDataTag extends BaseDataTag implements DataTag  
+class CategoriesDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取所有分类
@@ -19,9 +19,7 @@ class CategoriesDataTag extends BaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
-        if (empty($arguments['group'])) {
-            throw new \InvalidArgumentException("group参数缺失");
-        }
+        $this->checkGroupId($arguments);
 
         $group = $this->getCategoryService()->getGroupByCode($arguments['group']);
         if (empty($group)) {
@@ -31,12 +29,4 @@ class CategoriesDataTag extends BaseDataTag implements DataTag
     	return $this->getCategoryService()->findCategories($group['id']);
     }
 
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
 }
-
-
-
-?>

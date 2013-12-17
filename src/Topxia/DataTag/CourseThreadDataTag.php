@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CourseThreadDataTag extends BaseDataTag implements DataTag  
+class CourseThreadDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取一个课程话题
@@ -19,28 +19,16 @@ class CourseThreadDataTag extends BaseDataTag implements DataTag
 
     public function getData(array $arguments)
     {
-        if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
-        }
+        $this->checkCourseId($arguments);
+        $this->checkThreadId($arguments);
 
-        if (empty($arguments['threadId'])) {
-            throw new \InvalidArgumentException("threadId参数缺失");
-        }
+    	$thread = $this->getThreadService()->getThread($arguments['courseId'], $arguments['threadId']);
+        $thread['course'] = $this->getCourseService()->getCourse($arguments['courseId']);
+        $thread['course']['teachers'] = $this->getTeachers($thread['course']['teacherIds']);
 
-    	return $this->getThreadService()->getThread($arguments['courseId'], $arguments['threadId']);
+        return $thread;
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
+    
 
 }
-
-
-?>

@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class UserDataTag extends BaseDataTag implements DataTag  
+class UserDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取一个用户
@@ -18,17 +18,13 @@ class UserDataTag extends BaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
-        if (empty($arguments['userId'])) {
-            throw new \InvalidArgumentException("userId参数缺失");
-        }
-    	return $this->getUserService()->getUser($arguments['userId']);
+        $this->checkUserId($arguments);
+
+    	$user = $this->getUserService()->getUser($arguments['userId']);
+        $user['password'] = NULL;
+        $user['salt'] = NULL;
+        
+        return $user;
     }
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
 }
-
-
-?>

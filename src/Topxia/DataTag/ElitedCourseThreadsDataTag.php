@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class ElitedCourseThreadsDataTag extends BaseDataTag implements DataTag  
+class ElitedCourseThreadsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取精选课程话题列表
@@ -19,24 +19,17 @@ class ElitedCourseThreadsDataTag extends BaseDataTag implements DataTag
 
     public function getData(array $arguments)
     {
-        if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
-        }
+        $this->checkCourseId($arguments);
+        $this->checkCount($arguments);
 
-        if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
-        }
         $conditions = array( 'courseId' => $arguments['courseId'],'isElite' => '1');
-    	return $this->getThreadService()->searchThreads($conditions, "created", 0, $arguments['count']);
+    	$threads = $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
+        $threads['courses'] = $this->getCourseService()->getCourse($arguments['courseId']);
+        $threads['teachers'] = $this->getTeachers($threads['course']['teacherIds']);
+
+        return $threads;
     }
 
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
+
 
 }
-
-
-
-?>
