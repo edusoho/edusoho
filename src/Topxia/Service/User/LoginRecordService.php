@@ -8,7 +8,7 @@ interface LoginRecordService
 
 	public function searchLoginRecord(array $conditions, array $orderBy, $start, $limit);
 
-	public function findLoginRecordCountById ($id);
+	public function findLoginRecordCountByUserId ($userId);
 
-	public function findLoginRecordById ($id, $start, $limit);
+	public function findLoginRecordByUserId ($userId, $start, $limit);
 }

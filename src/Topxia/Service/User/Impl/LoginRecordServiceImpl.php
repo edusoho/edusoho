@@ -22,14 +22,19 @@ class LoginRecordServiceImpl extends BaseService implements LoginRecordService
 		return ConvertIpToolkit::ConvertIps($logRecords);
 	}
 
-	public function findLoginRecordCountById ($id)
+	public function findLoginRecordCountByUserId ($userId)
 	{
-		return $this->getLogDao()->findLoginRecordCountById($id);
+		$user = $this->getUserDao()->getUser($userId);
+		if(empty($user)){
+			throw $this->createServiceException("ERROR! The User Not Exist!");
+		}
+
+		return $this->getLogDao()->findLoginRecordCountByUserId($userId);
 	}
 
-	public function findLoginRecordById ($id, $start, $limit)
+	public function findLoginRecordByUserId ($userId, $start, $limit)
 	{
-		$logRecords = $this->getLogDao()->findLoginRecordById($id, $start, $limit);
+		$logRecords = $this->getLogDao()->findLoginRecordByUserId($userId, $start, $limit);
 		return ConvertIpToolkit::ConvertIps($logRecords);
 	}
 

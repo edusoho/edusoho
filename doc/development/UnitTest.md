@@ -30,6 +30,8 @@ phpunit -c app/ src/Topxia/Service/MoneyCard/Tests/MoneyCardServiceTest.php
 
 
 phpunit -c app/ src/Topxia/Service/Course/Tests/CourseServiceTest.php
+phpunit -c app/ src/Topxia/Service/User/Tests/LoginRecordServiceTest.php
+
 phpunit -c app/ src/Topxia/Service/Course/Tests/AnnouncementServiceTest.php
 phpunit -c app/ src/Topxia/Service/User/Tests/UserServiceTest.php
 phpunit -c app/ src/Topxia/Service/Content/Tests/CommentServiceTest.php
