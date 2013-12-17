@@ -23,7 +23,10 @@ class TeacherCoursesDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
         $this->checkUserId($arguments);
         
-        $conditions = array('status' => 'published', 'userId' => $arguments['userId']);
+        $conditions = array(
+            'status' => 'published', 
+            'userId' => $arguments['userId']
+        );
         $courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
 
     	return $this->foreachCourses($courses);

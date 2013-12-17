@@ -29,6 +29,4 @@ class CourseThreadDataTag extends CourseBaseDataTag implements DataTag
         return $thread;
     }
 
-    
-
 }

@@ -111,6 +111,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $courseValues['password'] = null;
             $courseValues['salt'] = null;
 	        $courseValues['teachers'] = $this->getTeachers($courseValues['teacherIds']);
+            
 	        if ($courseValues['categoryId'] != '0') {
 	            $courseValues['category'] = $this->getCategoryService()->getCategory($courseValues['categoryId']);
 	        }

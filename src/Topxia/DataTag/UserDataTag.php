@@ -6,6 +6,7 @@ use Topxia\DataTag\DataTag;
 
 class UserDataTag extends CourseBaseDataTag implements DataTag  
 {
+    
     /**
      * 获取一个用户
      *
