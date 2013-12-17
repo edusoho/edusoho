@@ -22,7 +22,7 @@
         <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId: parentId}) }}">材料题</a></li>
       {% endif %}
       <li class="active">
-        {% if isEdit %} 修改{{questionType[1][type]}}  {% else %}  添加{{questionType[1][type]}}  {% endif %}
+        {% if isEdit %} 修改{{dict('unquestionType')[type]}}  {% else %}  添加{{dict('unquestionType')[type]}}  {% endif %}
       </li>
     </ol>
 
@@ -148,7 +148,9 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
             <div class="col-md-8 controls">
-                <select class="form-control width-input width-input-large" name="categoryId" data-role="category"></select>
+                <select class="form-control width-input width-input-large" name="categoryId" data-role="category">
+                  <option value=''> 请选择类别 </option>
+                </select>
                 <script type="text/plain" data-role="category-data">{{ category|json_encode|raw }}</script>
             </div>
           </div>

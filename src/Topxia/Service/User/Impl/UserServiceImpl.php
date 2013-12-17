@@ -166,7 +166,6 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，设置帐号失败！');
         }
-
         if (!SimpleValidator::nickname($nickname)) {
             throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
         }

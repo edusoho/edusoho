@@ -4,11 +4,11 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class LatestLoginUsersDataTag extends CourseBaseDataTag implements DataTag  
+class LatestUsersDataTag extends CourseBaseDataTag implements DataTag  
 {
 
     /**
-     * 获取最近登录用户列表
+     * 获取最新用户列表
      *
      * 可传入的参数：
      *   count    必需 用户数量，取值不能超过100
@@ -21,7 +21,7 @@ class LatestLoginUsersDataTag extends CourseBaseDataTag implements DataTag
 
         $this->checkCount($arguments);
 
-    	$users = $this->getUserService()->searchUsers(array(), array('loginTime', 'DESC'), 0, $arguments['count']);
+    	$users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, $arguments['count']);
 
         return $this->foreachUsers($users);
     }

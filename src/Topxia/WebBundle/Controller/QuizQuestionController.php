@@ -37,7 +37,6 @@ class QuizQuestionController extends BaseController
 
 		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
-		$questionType = $this->getQuestionType();
 
 		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
 			'course' => $course,
@@ -46,7 +45,6 @@ class QuizQuestionController extends BaseController
 			'lessons' => $lessons,
 			'paginator' => $paginator,
 			'parentId' => $parentId,
-			'questionType' => $questionType,
 		));
 	}
 
@@ -90,7 +88,6 @@ class QuizQuestionController extends BaseController
 
 		$targets['default'] = $request->query->get('targetsDefault');
 		$question['difficulty'] = $request->query->get('questionDifficulty');
-		$questionType = $this->getQuestionType();
         
 
 		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
@@ -100,7 +97,6 @@ class QuizQuestionController extends BaseController
 			'parentId' => $parentId,
 			'question' => $question,
 			'category' => $category,
-			'questionType' => $questionType,
 		));
 	}
 
@@ -135,7 +131,6 @@ class QuizQuestionController extends BaseController
 
         $targets['default'] = $question['targetType'].'-'.$question['targetId'];
         $category['default'] = $question['categoryId'];
-        $questionType = $this->getQuestionType();
         
         return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
 			'question' => $question,
@@ -145,7 +140,6 @@ class QuizQuestionController extends BaseController
 			'type' => $question['questionType'],
 			'isEdit' => '1',
 			'category' => $category,
-			'questionType' => $questionType,
 		));
 	}
 
@@ -254,27 +248,6 @@ class QuizQuestionController extends BaseController
         }
 
         return $targets;
-    }
-
-    private function getQuestionType()
-    {
-        $questionType[] = array(
-	    	'choice' => '单选题',
-	    	'single_choice' => '多选题',
-	    	'fill' => '填空题',
-	    	'determine' => '判断题',
-	    	'material' => '材料题',
-	    	'essay' => '问答题',
-        );
-        $questionType[] = array(
-	    	'choice' => '选择题',
-	    	'single_choice' => '选择题',
-	    	'fill' => '填空题',
-	    	'determine' => '判断题',
-	    	'material' => '材料题',
-	    	'essay' => '问答题',
-        );
-        return $questionType;
     }
 
 	private function getCourseService()

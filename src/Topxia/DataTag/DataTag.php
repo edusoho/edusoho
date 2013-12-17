@@ -6,6 +6,3 @@ interface DataTag
 {
     public function getData(array $arguments);
 }
-
-
-?>

@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CourseReviewDataTag extends BaseDataTag implements DataTag  
+class CourseReviewDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取一个课程评论
@@ -18,17 +18,17 @@ class CourseReviewDataTag extends BaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
-        if (empty($arguments['reviewId'])) {
-            throw new \InvalidArgumentException("reviewId参数缺失");
-        }
-    	return $this->getReviewService()->getReview($arguments['reviewId']);
+        $this->checkReviewId($arguments);
+
+    	$courseReview = $this->getReviewService()->getReview($arguments['reviewId']);
+        $courseReview['reviewer'] = $this->getUserService()->getUser($courseReview['userId']);
+        $courseReview['reviewer']['password'] = NULL;
+        $courseReview['reviewer']['salt'] = NULL;
+        $courseReview['course'] = $this->getCourseService()->getCourse($courseReview['courseId']);
+
+        return $courseReview;
+
     }
 
-    protected function getReviewService()
-    {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
-    }
+    
 }
-
-
-?>

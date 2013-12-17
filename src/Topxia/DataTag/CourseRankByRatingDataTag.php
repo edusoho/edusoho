@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CourseRankByRatingDataTag extends BaseDataTag implements DataTag  
+class CourseRankByRatingDataTag extends CourseBaseDataTag implements DataTag  
 {
 
     /**
@@ -19,23 +19,13 @@ class CourseRankByRatingDataTag extends BaseDataTag implements DataTag
 
     public function getData(array $arguments)
     {	
-        if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
-        }
-        if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
-        }
+        $this->checkCount($arguments);
      
         $conditions = array('status' => 'published');
+        
+        $courses = $this->getCourseService()->searchCourses($conditions,'Rating', 0, $arguments['count']);
 
-    	return $this->getCourseService()->searchCourses($conditions,'Rating', 0, $arguments['count']);
+    	return $this->foreachCourses($courses);
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
 }
-
-
-?>

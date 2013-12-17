@@ -4,8 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class TopRatingCourseReviewsDataTag extends BaseDataTag implements DataTag  
+class TopRatingCourseReviewsDataTag extends CourseBaseDataTag implements DataTag  
 {
+    
     /**
      * 获取按照评分排行的课程评论
      *
@@ -18,26 +19,15 @@ class TopRatingCourseReviewsDataTag extends BaseDataTag implements DataTag
      */
 
     public function getData(array $arguments)
-    {
-        if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
-        }
-        if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
-        }
-        if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
-        }
-        $conditions = array( 'courseId' => $arguments['courseId']);
-    	return $this->getReviewService()->searchReviews($conditions, $sort = 'rating', 0, $arguments['count']);
+    { 
+        $this->checkCourseId($arguments);
+        $this->checkCount($arguments);
+
+        $conditions = array( 'courseId' => $arguments['courseId'] );
+    	$courseReviews = $this->getReviewService()->searchReviews($conditions, $sort = 'rating', 0, $arguments['count']);
+
+        return $this->foreachReviews($courseReviews);
     }
 
-    protected function getReviewService()
-    {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
-    }
 
 }
-
-
-?>

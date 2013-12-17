@@ -13,11 +13,4 @@ abstract class BaseDataTag
         return ServiceKernel::instance();
     }
 
-    protected function checkCount()
-    {
-        
-    }
-
 }
-
-?>
