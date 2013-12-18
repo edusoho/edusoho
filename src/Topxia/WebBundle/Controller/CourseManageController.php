@@ -230,7 +230,7 @@ class CourseManageController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
-                'isVisible' => 1,
+                'isVisible' => 1
             );
         }
 
