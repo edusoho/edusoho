@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CategoryDataTag extends BaseDataTag implements DataTag  
+class CategoryDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取一个分类
@@ -22,14 +22,9 @@ class CategoryDataTag extends BaseDataTag implements DataTag
         if (empty($arguments['categoryId'])) {
             throw new \InvalidArgumentException("categoryId参数缺失");
         }
+
     	return $this->getCategoryService()->getCategory($arguments['categoryId']);
     }
 
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
+
 }
-
-
-?>

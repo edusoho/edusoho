@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CourseDataTag extends BaseDataTag implements DataTag  
+class CourseDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取一个课程
@@ -17,25 +17,20 @@ class CourseDataTag extends BaseDataTag implements DataTag
      */
     
     public function getData(array $arguments)
-    {
-        if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
-        }
+    {   
+        $this->checkCourseId($arguments);
+
     	$course = $this->getCourseService()->getCourse($arguments['courseId']);
 
-        $course['teachers'] = $this->getTeachers($course);
+        $course['teachers'] = $this->getTeachers($course['teacherIds']);
+
+        if ($course['categoryId'] != '0') {
+            $course['category'] = $this->getCategoryService()->getCategory($course['categoryId']);
+        }
 
         return $course;
     }
 
-    protected function getTeachers($course)
-    {
-        return $this->getUserService()->findUsersByIds($course['teachers']);
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
+    
 }
 

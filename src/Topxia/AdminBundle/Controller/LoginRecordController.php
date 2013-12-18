@@ -43,12 +43,12 @@ class LoginRecordController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getLoginRecordService()->findLoginRecordCountById($id),
+            $this->getLoginRecordService()->findLoginRecordCountByUserId($user['id']),
             8
         );
 
-        $loginRecords = $this->getLoginRecordService()->findLoginRecordById(
-            $id,
+        $loginRecords = $this->getLoginRecordService()->findLoginRecordByUserId(
+            $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

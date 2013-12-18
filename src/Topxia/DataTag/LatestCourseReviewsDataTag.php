@@ -4,13 +4,14 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class LatestCourseReviewsDataTag extends BaseDataTag implements DataTag  
+class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag  
 {
+
     /**
      * 获取最新发表的课程评论列表
      *
      * 可传入的参数：
-     *   courseId 必需 课程ID
+     *   courseId 可选 课程ID
      *   count 必需 课程话题数量，取值不能超过100
      * 
      * @param  array $arguments 参数
@@ -19,25 +20,13 @@ class LatestCourseReviewsDataTag extends BaseDataTag implements DataTag
 
     public function getData(array $arguments)
     {
-        if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
-        }
-        if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
-        }
-        if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
-        }
-        $conditions = array( 'courseId' => $arguments['courseId']);
-    	return $this->getReviewService()->searchReviews($conditions, $sort = 'latest', 0, $arguments['count']);
-    }
+        
+        $this->checkCount($arguments);
+        $conditions = $this->checkCourseArguments($arguments);
+    	$courseReviews = $this->getReviewService()->searchReviews($conditions, $sort = 'latest', 0, $arguments['count']);
 
-    protected function getReviewService()
-    {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->foreachReviews($courseReviews);
     }
 
 }
 
-
-?>

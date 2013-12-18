@@ -37,18 +37,18 @@ class LogDaoImpl extends BaseDao implements LogDao
 		return $builder->execute()->fetchColumn(0);
 	}
 
-	public function findLoginRecordCountById ($id)
+	public function findLoginRecordCountByUserId ($userId)
 	{
 		$sql = "SELECT COUNT(id) FROM {$this->table} WHERE userId = ?";
-    	$loginRecordCount = $this->getConnection()->fetchAll($sql, array($id));
+    	$loginRecordCount = $this->getConnection()->fetchAll($sql, array($userId));
     	return $loginRecordCount[0]['COUNT(id)'];
 	}
 
-	public function findLoginRecordById($id, $start, $limit)
+	public function findLoginRecordByUserId($userId, $start, $limit)
     {
     	$this->filterStartLimit($start, $limit);
     	$sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($id));
+        return $this->getConnection()->fetchAll($sql, array($userId));
     }
 
 	protected function createLogQueryBuilder($conditions)

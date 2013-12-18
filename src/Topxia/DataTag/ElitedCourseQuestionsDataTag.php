@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class ElitedCourseQuestionsDataTag extends BaseDataTag implements DataTag  
+class ElitedCourseQuestionsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取精选课程问答列表
@@ -19,26 +19,16 @@ class ElitedCourseQuestionsDataTag extends BaseDataTag implements DataTag
 
     public function getData(array $arguments)
     {
-        if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
-        }
-        if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
-        }
-        if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
-        }
-        $conditions = array( 'courseId' => $arguments['courseId'],'type' => 'question','isElite' => '1');
-    	return $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
-    }
+        $this->checkCourseId($arguments);
+        $this->checkCount($arguments);
 
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        $conditions = array( 'courseId' => $arguments['courseId'],'type' => 'question','isElite' => '1');
+    	$questions = $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
+        $questions['courses'] = $this->getCourseService()->getCourse($arguments['courseId']);
+        $questions['teachers'] = $this->getTeachers($questions['course']['teacherIds']);
+
+        return $questions;
+
     }
 
 }
-
-
-
-?>
