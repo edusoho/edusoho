@@ -1592,7 +1592,6 @@ body {
 	background: #fff;
 	line-height: 40px;
 	margin-bottom: 15px;
-	position: relative;
 }
 
 .lesson-list .item-chapter {
@@ -1625,12 +1624,12 @@ body {
 
 .lesson-list .item-actions {
 	visibility: hidden;
-	position: absolute;
 	top: 0;
 	right: 0;
 	background: #f3f3f3;
 	border-left: 1px solid #ddd;
 	margin-left: 10px;
+	float: right;
 }
 
 .lesson-list .item-chapter:hover .item-actions, .lesson-list .item-lesson:hover .item-actions  {
@@ -3270,8 +3269,4 @@ body {
 
 .customer-service-online .btn-ctn {
 	background-position: -35px 0;
-}
-
-.select2-no-results {
-    display: none !important;
 }

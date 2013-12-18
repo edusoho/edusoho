@@ -196,9 +196,18 @@ class MessageController extends BaseController
         $filterFollowingUsers = $this->getUserService()->findUsersByIds($findedFollowingIds);
 
         foreach ($filterFollowingUsers as $filterFollowingUser) {
-            $data[] = array('id' => $filterFollowingUser['id'],  'name' => $filterFollowingUser['nickname'] );
+            $data[] = array(
+                'id' => $filterFollowingUser['id'], 
+                'nickname' => $filterFollowingUser['nickname']
+            );
         }
+
         return new JsonResponse($data);
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
     protected function getUserService(){

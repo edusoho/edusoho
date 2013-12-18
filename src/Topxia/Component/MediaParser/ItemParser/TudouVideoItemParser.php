@@ -5,18 +5,22 @@ class TudouVideoItemParser extends AbstractItemParser
 {
 	private $patterns = array(
 		'p1' => '/^http:\/\/www\.tudou\.com\/programs\/view\/.*/s',
+        'p2' => '/^http:\/\/www\.tudou\.com\/listplay\/(.*?)\/(.*?)\.html/s',
 	);
 
 	public function parse($url)
 	{
 		$item = array();
 
+        if (preg_match($this->patterns['p2'], $url, $matches)) {
+            $url = "http://www.tudou.com/programs/view/{$matches[2]}/";
+        }
+
 		$response = $this->fetchUrl($url);
 		if ($response['code'] != 200) {
             throw $this->createParseException("获取土豆视频({$url})页面内容失败！");
         }
 
-        // $matched = preg_match('/itemData\s*=\s*\{\s*iid:\s*(\d+).*?icode:\s*\'(.*?)\'.*?pic:\s*\'(.*?)\'.*?kw:\s*\'(.*?)\'/s', $response['content'], $matches);
         $matched = preg_match('/,iid:\s*(\d+).*?,icode:\s*\'(.*?)\'.*?,pic:\s*\'(.*?)\'.*?,kw:\s*\'(.*?)\'/s', $response['content'], $matches);
         if (!$matched) {
             throw $this->createParseException("解析土豆视频信息失败");
@@ -46,6 +50,14 @@ class TudouVideoItemParser extends AbstractItemParser
 
     public function detect($url)
     {
-        return !! preg_match($this->patterns['p1'], $url);
+        $matched = preg_match($this->patterns['p1'], $url);
+        if ($matched) {
+            return true;
+        }
+        $matched = preg_match($this->patterns['p2'], $url);
+        if ($matched) {
+            return true;
+        }
+
     }
 }

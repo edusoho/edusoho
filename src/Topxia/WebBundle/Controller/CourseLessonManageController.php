@@ -187,10 +187,10 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-    		$videoUploadToken = $audioUploadToken = array(
-	    		'token' => $this->getUserService()->makeToken('diskLocalUpload', $user['id'], strtotime('+ 2 hours')),
-	    		'url' => $this->generateUrl('disk_upload'),
-			);
+            $videoUploadToken = $audioUploadToken = array(
+                'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+                'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+            );
     	} else {
 
     		try {

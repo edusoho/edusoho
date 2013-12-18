@@ -6,6 +6,7 @@
 {% block body %}
 
 {% set content = content|default(null) %}
+
 <form class="two-col-form" id="content-form" method="post" enctype="multipart/form-data"
 	{% if content %}
 		action="{{ path('admin_content_edit', {id:content.id}) }}"
@@ -24,13 +25,45 @@
 				</div>
 			{% endif %}
 
+			<div class="form-group">
+				<label for="editor-field" class="control-label">编辑器类型</label>
+				<div class="controls radios">
+	              	<label><input type="radio" name="editor" value="kindeditor" 
+	              		{% if content is empty %}
+	              		 checked="checked" 
+	              		{% elseif content.editor == 'kindeditor'%}
+	              		 checked="checked"
+	              		{% endif %}>
+	              		可视化编辑器</label>
+	             	<label><input type="radio" name="editor" value="none"
+	             		{% if content and content.editor == 'none' %} checked="checked" {% endif %}
+	             		>HTML编辑器</label>
+	            </div>
+	        </div>
+
 			{% if 'body' in type.basicFields %}
-				<div class="form-group">
-					<label for="content-body-field" class="control-label">正文</label>
+				<label for="content-body-field" class="control-label">正文</label>
+
+				<div class="form-group" 
+				{% if content and content.editor == 'none' %}
+					style="display:none"
+				{% endif %}
+				>
 					<div class="controls">
-						<textarea class="form-control" id="content-body-field" rows="16" name="body" data-role="editor-field">{{ field_value(content, 'body') }}</textarea>
+						<textarea class="form-control" id="kindeditor-body-field" rows="16" name="kindeditor-body">{{ field_value(content, 'body') }}</textarea>
 					</div>
 				</div>
+
+				<div class="form-group" 
+				{% if content is empty %}
+          		 style="display:none" 
+          		{% elseif content.editor == 'kindeditor'%}
+          		 style="display:none"
+          		{% endif %}>
+					<div class="controls">
+						<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(content, 'body') }}</textarea>
+					</div>
+				</div> 
 			{% endif %}
 
 			{% if type.extendedFields %}

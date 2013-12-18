@@ -29,7 +29,7 @@
     <div id="question-creator-widget">
       <form id="question-create-form" class="form-horizontal quiz-question" method="post" action="
       {% if isEdit %}
-        {{ path('course_manage_quiz_question_edit',{courseId:course.id, id:question.id}) }}
+        {{ path('course_manage_quiz_question_update',{courseId:course.id, id:question.id}) }}
       {% else %}
         {{ path('course_manage_quiz_question_create',{courseId:course.id, type:type, parentId:parentId}) }}
       {% endif %}
