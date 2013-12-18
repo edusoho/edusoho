@@ -19,7 +19,9 @@ class CategoryDataTag extends CourseBaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
-        $this->checkCategory($arguments);
+        if (empty($arguments['categoryId'])) {
+            throw new \InvalidArgumentException("categoryId参数缺失");
+        }
 
     	return $this->getCategoryService()->getCategory($arguments['categoryId']);
     }

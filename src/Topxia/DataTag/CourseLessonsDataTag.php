@@ -7,26 +7,27 @@ use Topxia\DataTag\DataTag;
 class CourseLessonsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
-     * 获取一个课程的课时
+     * 获取一个课程的课时列表
      *
      * 可传入的参数：
      * 
      *   courseId 必需 课程ID
+     *   count    必需 课程数量，取值不能超过100
      * 
      * @param  array $arguments 参数
-     * @return array 课时
+     * @return array 课时列表
      */
 
     public function getData(array $arguments)
     {
         $this->checkCourseId($arguments);
+        $this->checkCount($arguments);
+    	$lessons = $this->getCourseService()->getCourseLessons($arguments['courseId']);
+        $lessons['teachers'] = $this->getUserService()->getUser($lessons['0']['userId']);
+        $lessons['teachers']['password'] = NULL;
+        $lessons['teachers']['salt'] = NULL;
 
-    	$lesson = $this->getCourseService()->getCourseLessons($arguments['courseId']);
-        $lesson['teachers'] = $this->getUserService()->getUser($lesson['0']['userId']);
-        $lesson['teachers']['password'] = NULL;
-        $lesson['teachers']['salt'] = NULL;
-
-        return $lesson;
+        return $lessons;
     }
 
 }

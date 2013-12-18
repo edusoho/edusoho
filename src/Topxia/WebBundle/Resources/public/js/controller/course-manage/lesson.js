@@ -8,6 +8,7 @@ define(function(require, exports, module) {
         require('./header').run();
 
         var $list = $("#course-item-list").sortable({
+            distance: 20,
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 var data = $list.sortable("serialize").get();

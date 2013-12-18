@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 		var $list = $("#userlevel-list").sortable({
+			distance: 10,
 			handle: 'span.glyphicon-move',
 			containerSelector: "tbody",
 			itemSelector: "tr",

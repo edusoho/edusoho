@@ -20,10 +20,8 @@ class TopRatingCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
 
     public function getData(array $arguments)
     { 
-        $this->checkCourseId($arguments);
         $this->checkCount($arguments);
-
-        $conditions = array( 'courseId' => $arguments['courseId'] );
+        $conditions = $this->checkCourseArguments($arguments);
     	$courseReviews = $this->getReviewService()->searchReviews($conditions, $sort = 'rating', 0, $arguments['count']);
 
         return $this->foreachReviews($courseReviews);

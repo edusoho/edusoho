@@ -71,11 +71,17 @@ class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImple
     {
         $field['choices'] = $question['choices'];
         $field['answers'] = explode('|', $question['answers']);
-        if (!is_array($field['choices']) || count($field['choices']) < 1) {
+        if (!is_array($field['choices']) || count($field['choices']) < 2) {
             throw $this->createServiceException("choices参数不正确");
         }
         if (!is_array($field['answers']) || empty($field['answers'])) {
             throw $this->createServiceException("answers参数不正确");
+        }
+
+        foreach ($field['answers'] as $ans) {
+            if($ans >= count($field['choices'])){
+                throw $this->createServiceException("answers参数不正确");
+            }
         }
         if(count($field['answers']) == 1){
             $field['type'] = 'choice';
