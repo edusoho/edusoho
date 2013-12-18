@@ -3,7 +3,7 @@
 namespace Topxia\Service\Quiz\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\TestItemResultDaoImpl;
+use Topxia\Service\Quiz\Dao\TestItemDao;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Connection;
 
@@ -17,13 +17,24 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addItem($questions)
+    public function addItem($item)
     {
-        $questions = $this->getConnection()->insert($this->table, $questions);
-        if ($questions <= 0) {
-            throw $this->createDaoException('Insert questions error.');
+        $item = $this->getConnection()->insert($this->table, $item);
+        if ($item <= 0) {
+            throw $this->createDaoException('Insert item error.');
         }
         return $this->getItem($this->getConnection()->lastInsertId());
+    }
+
+    //`testId`,`seq`,`questionId`,`questionType`,`score`
+    public function addItems(array $items)
+    {
+        if(empty($items)){ 
+            return array(); 
+        }
+        $items = implode(',',$items);
+        $sql ="INSERT INTO {$this->table} (`testId`,`seq`,`questionId`,`questionType`,`score`) VALUES  {$items} ";
+        return $this->getConnection()->executeUpdate($sql);
     }
 
     public function updateItem($id, $fields)
@@ -83,10 +94,16 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->executeUpdate($sql, $ids);
     }
 
+    public function getItemsCountByTestId($testId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE testId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($testId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions')
+            ->from($this->table, 'item')
             ->andWhere('questionType = :questionType')
             ->andWhere('parentId = :parentId')
             ->andWhere('targetId = :targetId')
@@ -115,9 +132,6 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
                 $builder->andStaticWhere(" ($target) ");
             }
         }
-
-
-
       
         return $builder;
     }

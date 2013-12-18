@@ -3275,3 +3275,7 @@ body {
 .select2-no-results {
     display: none !important;
 }
+
+.test-creator .form-group{
+	margin-bottom: 10px;
+}

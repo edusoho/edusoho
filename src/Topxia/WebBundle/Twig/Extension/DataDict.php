@@ -122,16 +122,16 @@ class DataDict
 	    	'single_choice' => '多选题',
 	    	'fill' => '填空题',
 	    	'determine' => '判断题',
-	    	'material' => '材料题',
 	    	'essay' => '问答题',
+	    	'material' => '材料题',
         ),
         'unquestionType' => array(
 	    	'choice' => '选择题',
 	    	'single_choice' => '选择题',
 	    	'fill' => '填空题',
 	    	'determine' => '判断题',
-	    	'material' => '材料题',
 	    	'essay' => '问答题',
+	    	'material' => '材料题',
         ),
 
 	);

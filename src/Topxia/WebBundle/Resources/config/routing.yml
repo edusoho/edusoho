@@ -493,21 +493,21 @@ course_manage_quiz_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:sortCategories }
     methods: [POST]
 
-course_manage_quiz_question_generate:
-    pattern: /course/{courseId}/manage/question/generate
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:index }
+course_manage_quiz_question_test:
+    pattern: /course/{courseId}/manage/question/test
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:index }
 
-course_manage_quiz_question_generate_create:
-    pattern: /course/{courseId}/manage/question/generate/create
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:create }
+course_manage_quiz_question_test_create:
+    pattern: /course/{courseId}/manage/question/test/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
 
-course_manage_quiz_question_generate_update:
-    pattern: /course/{courseId}/manage/question/generate/update
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:update }
+course_manage_quiz_question_test_update:
+    pattern: /course/{courseId}/manage/question/test/update
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:update }
 
-course_manage_quiz_question_generate_delete:
-    pattern: /course/{courseId}/manage/question/generate/delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:delete }
+course_manage_quiz_question_test_delete:
+    pattern: /course/{courseId}/manage/question/test/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:delete }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

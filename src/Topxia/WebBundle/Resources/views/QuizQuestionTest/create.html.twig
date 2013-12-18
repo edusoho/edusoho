@@ -1,0 +1,111 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}添加题目 - {{ parent() }}{% endblock %}
+
+{% set parentId = parentId |default(null)%}
+{% set isEdit = isEdit |default(null)%}
+{% set side_nav = 'base' %}
+{#% set script_controller = 'quiz-test/create' %#}
+{% set target = target | default(null)%}
+
+{% block main %}
+
+<div class="panel panel-default panel-col test-creator">
+  <div class="panel-heading clearfix">
+    创建试卷
+  </div>
+  <div class="panel-body">
+
+    <div id="test-creator-widget">
+      <form id="test-create-form" class="form-horizontal quiz-test" method="post" action="
+      {% if isEdit %}
+        {{ path('course_manage_quiz_question_test_update',{courseId:1  }) }}
+      {% else %}
+        {{ path('course_manage_quiz_question_test_create',{courseId:1, target:target  }) }}
+      {% endif %}
+      ">
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="test-name-field">试卷名称</label></div>
+          <div class="col-md-8 controls">
+              <input class="form-control" name="name" value=""  id="test-name-field" {% if isEdit %}{#{test.stem | default(null)}#}{% endif %} />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="test-description-field">试卷说明</label></div>
+          <div class="col-md-8 controls">
+            {% if isEdit %}
+              <textarea class="form-control" id="test-description-field" name="description">{{test.stem | default(null)}}</textarea>
+            {% else %}
+              <textarea class="form-control" id="test-description-field" name="description"></textarea>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="test-limitedTime-field">时间限制</label></div>
+          <div class="col-md-2 controls">
+              <input class="form-control" name="limitedTime" value=""  id="test-limitedTime-field" {% if isEdit %}{#{test.stem | default(null)}#}{% endif %} />
+          </div>
+          <div class="col-md-4 controls pls">
+            <p class="form-control-static pull-left ">分钟 (0表示不限)</p>
+          </div>
+        </div>
+
+        <br />
+        {% for key,type in dict('questionType') %}
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="test-stem-field"></label></div>
+          <div class="form-inline">
+              <div class="col-md-8 controls plm">
+                  <div class="form-control-static pull-left prm">
+                      {{type}} 
+                  </div>
+                  <div class="form-control-static pull-left pll">题目数量:</div>
+                  <div class="col-md-2">
+                      <input type="text" class="form-control input-sm" name="itemCount[{{key}}]" placeholder="" value="5" />
+                  </div>
+                  <div class="form-control-static pull-left pll">题目分值:</div>
+                  <div class="col-md-2">
+                      <input type="text" class="form-control input-sm" name="itemScore[{{key}}]" placeholder="" value="0" />
+                  </div>
+              </div>
+              <div class="col-md-2 controls score_number">
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+
+ 
+    
+        
+
+        <br />
+        
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls">
+            <a href="{{ path('course_manage_quiz_question',{courseId:1}) }}" class="btn btn-link">返回</a>
+            <button type="submit" class="btn btn-primary" >保存</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+
+
+    </div>
+    
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+ 

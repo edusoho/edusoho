@@ -40,11 +40,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     }
 
     public function searchQuestion(array $conditions, array $orderBy, $start, $limit){
-        return $this->getQuizQuestionDao() -> searchQuestion($conditions, $orderBy, $start, $limit);
+        return $this->getQuizQuestionDao()->searchQuestion($conditions, $orderBy, $start, $limit);
     }
 
     public function searchQuestionCount(array $conditions){
-        return $this->getQuizQuestionDao() -> searchQuestionCount($conditions);
+        return $this->getQuizQuestionDao()->searchQuestionCount($conditions);
     }
 
     public function getCategory($id){
@@ -57,9 +57,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $field['createdTime'] = time();
         $field['targetId'] = empty($category['courseId'])?'':$category['courseId'];
         $field['targetType'] = "course";
-        $field['seq'] = $this->getQuizQuestionCategoryDao() -> getCategorysCountByCourseId($field['targetId'])+1;
+        $field['seq'] = $this->getQuizQuestionCategoryDao()->getCategorysCountByCourseId($field['targetId'])+1;
 
-        return $this->getQuizQuestionCategoryDao() -> addCategory($field);
+        return $this->getQuizQuestionCategoryDao()->addCategory($field);
     }
 
     public function updateCategory($categoryId, $category){
@@ -86,7 +86,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     }
 
     public function findCategorysByCourseIds(array $id){
-        return $this->getQuizQuestionCategoryDao() -> findCategorysByCourseIds($id);
+        return $this->getQuizQuestionCategoryDao()->findCategorysByCourseIds($id);
     }
 
     public function sortCategories($courseId, array $categoryIds)

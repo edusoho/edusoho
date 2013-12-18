@@ -4,8 +4,10 @@ namespace Topxia\Service\Quiz\Dao;
 
 interface TestItemDao
 {
-    public function addItem($questions);
+    public function addItem($item);
 
+    public function addItems(array $items);     //`testId`,`seq`,`questionId`,`questionType`,`score`
+    
     public function updateItem($id, $fields);
 
     public function deleteItem($id);
@@ -21,4 +23,6 @@ interface TestItemDao
     public function searchItemCount($conditions);
 
     public function searchItem($conditions, $orderBy, $start, $limit);
+
+    public function getItemsCountByTestId($testId);
 }

@@ -97,20 +97,27 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             
         }   
 
-        if (isset($conditions['target']) && empty($conditions['parentId']) ) {
+        /*$conditions['target']['course'] = $courseId; //string
+          $conditions['target']['lesson'] = '1,2,3,4'; //string*/
+        if (isset($conditions['target']) && empty($conditions['parentId']) ) 
+        {
             $target = array();
-            foreach ($conditions['target'] as $targetType => $targetIds) {
-                if (is_array($targetIds)) {
-                    foreach ($targetIds as $key => $targetId) {
+            foreach ($conditions['target'] as $targetType => $targetIds) 
+            {
+                if (is_array($targetIds)) 
+                {
+                    foreach ($targetIds as $key => $targetId) 
+                    {
                         $targetIds[$key] = (int) $targetId;
                     }
                     $targetIds = join(' , ', $targetIds);
                 } else {
                     $targetIds = (int) $targetIds;
                 }
-                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")"  ;
+                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")";
             }
-            if (!empty($target)) {
+            if (!empty($target)) 
+            {
                 $target = join(' or ', $target);
                 $builder->andStaticWhere(" ($target) ");
             }

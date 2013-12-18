@@ -3,7 +3,7 @@
 namespace Topxia\Service\Quiz\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\TestItemResultDaoImpl;
+use Topxia\Service\Quiz\Dao\TestPaperDao;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Connection;
 
@@ -17,11 +17,11 @@ class TestPaperDaoImpl extends BaseDao implements TestPaperDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addPaper($questions)
+    public function addPaper($paper)
     {
-        $questions = $this->getConnection()->insert($this->table, $questions);
-        if ($questions <= 0) {
-            throw $this->createDaoException('Insert questions error.');
+        $paper = $this->getConnection()->insert($this->table, $paper);
+        if ($paper <= 0) {
+            throw $this->createDaoException('Insert paper error.');
         }
         return $this->getPaper($this->getConnection()->lastInsertId());
     }
@@ -86,7 +86,7 @@ class TestPaperDaoImpl extends BaseDao implements TestPaperDao
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions')
+            ->from($this->table, 'paper')
             ->andWhere('questionType = :questionType')
             ->andWhere('parentId = :parentId')
             ->andWhere('targetId = :targetId')

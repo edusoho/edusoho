@@ -7,9 +7,9 @@ use Topxia\Service\Quiz\Dao\TestItemResultDaoImpl;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Connection;
 
-class TestResultDaoImpl extends BaseDao implements TestResultDao
+class TestPaperResultDaoImpl extends BaseDao implements TestPaperResultDao
 {
-    protected $table = 'test_result';
+    protected $table = 'test_paper_result';
 
     public function getResult($id)
     {
