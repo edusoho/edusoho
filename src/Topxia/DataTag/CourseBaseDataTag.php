@@ -77,6 +77,15 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
     }
 
+    protected function checkCourseArguments(array $arguments)
+    {
+        if (empty($arguments['courseId'])){
+            $conditions = array();
+        } else {
+            $conditions = array('courseId' => $arguments['courseId']);
+        }
+    }
+
     protected function checkThreadId(array $arguments)
     {
         if (empty($arguments['threadId'])) {

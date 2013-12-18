@@ -6,6 +6,7 @@ use Topxia\DataTag\DataTag;
 
 class LatestCourseThreadsDataTag extends CourseBaseDataTag implements DataTag  
 {
+    
     /**
      * 获取最新发表的课程话题列表
      *
