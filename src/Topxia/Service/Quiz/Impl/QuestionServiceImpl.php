@@ -8,7 +8,6 @@ use Topxia\Common\ArrayToolkit;
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
     public function getQuestion($id)
-
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
         return $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
@@ -120,7 +119,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function filterCommonFields($question)
     {
         if (!in_array($question['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
-            $question['type'] = 'choice';
+                throw $this->createServiceException('type error！');
         }
         if (!ArrayToolkit::requireds($question, array('difficulty'))) {
                 throw $this->createServiceException('缺少必要字段difficulty, 创建课程失败！');
