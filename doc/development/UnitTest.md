@@ -30,6 +30,9 @@ phpunit -c app/ src/Topxia/Service/MoneyCard/Tests/MoneyCardServiceTest.php
 
 
 phpunit -c app/ src/Topxia/Service/Course/Tests/CourseServiceTest.php
+
+phpunit --stop-on-error --stop-on-fail -c app/ src/Topxia/Service/Quiz/Tests/QuestionServiceTest.php
+
 phpunit -c app/ src/Topxia/Service/User/Tests/LoginRecordServiceTest.php
 
 phpunit -c app/ src/Topxia/Service/Course/Tests/AnnouncementServiceTest.php
