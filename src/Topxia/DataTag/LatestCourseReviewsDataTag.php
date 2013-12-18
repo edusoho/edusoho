@@ -6,7 +6,7 @@ use Topxia\DataTag\DataTag;
 
 class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag  
 {
-    
+
     /**
      * 获取最新发表的课程评论列表
      *
@@ -22,12 +22,7 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
     {
         
         $this->checkCount($arguments);
-
-        if (empty($arguments['courseId'])){
-            $conditions = array();
-        } else {
-            $conditions = array('courseId' => $arguments['courseId']);
-        }
+        $conditions = $this->checkCourseArguments($arguments);
     	$courseReviews = $this->getReviewService()->searchReviews($conditions, $sort = 'latest', 0, $arguments['count']);
 
         return $this->foreachReviews($courseReviews);

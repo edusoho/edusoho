@@ -68,15 +68,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
     }
 
-    protected function checkCategory(array $arguments)
-    {
-        if (empty($arguments['categoryId'])){
-            $conditions = array('status' => 'published');
-        } else {
-            $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
-        }
-    }
-
     protected function checkCourseArguments(array $arguments)
     {
         if (empty($arguments['courseId'])){
@@ -84,6 +75,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         } else {
             $conditions = array('courseId' => $arguments['courseId']);
         }
+        return $conditions;
     }
 
     protected function checkThreadId(array $arguments)
