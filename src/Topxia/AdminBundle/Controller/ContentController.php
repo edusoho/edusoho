@@ -84,6 +84,7 @@ class ContentController extends BaseController
             if(isset($record['uri'])){
                 $content['picture'] = $record['uri'];
             }
+
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
             return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
