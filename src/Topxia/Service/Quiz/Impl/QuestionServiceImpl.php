@@ -8,7 +8,6 @@ use Topxia\Common\ArrayToolkit;
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
     public function getQuestion($id)
-
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
         return $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
