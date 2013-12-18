@@ -1,10 +1,6 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block topbanner %}
-{% for CourseReviews in data('TopRatingCourseReviews',{'courseId':"1", 'count':"99"}) %}
-  {{dump(CourseReviews)}}
-{% endfor %} 
-
   {% set content_blocks = service('Content.BlockService', 'getContentsByCodes', [['autumn:home_top_banner']]) %}
 
   {% if content_blocks['autumn:home_top_banner'] %}
