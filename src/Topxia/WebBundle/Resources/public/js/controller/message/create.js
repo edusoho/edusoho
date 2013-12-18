@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
 
+    var AutoComplete = require('autocomplete');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
@@ -28,6 +29,17 @@ define(function(require, exports, module) {
             var $self = $(this);
             $self.addClass('disabled');
         });
+
+        var autocomplete = new AutoComplete({
+            trigger: '#message_receiver',
+            dataSource: $("#message_receiver").data('auto-url'),
+            filter: {
+                name: 'stringMatch',
+                options: {
+                    key: 'nickname'
+                }
+            }
+        }).render();
 
 
     };

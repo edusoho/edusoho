@@ -1159,8 +1159,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->addMember($fields);
 
-		$setting = $this->getSettingService()->get('course_setting', array());
-		if ($setting['in_course_mail']) {
+		$setting = $this->getSettingService()->get('course', array());
+		if ($setting['send_welcome_message'] && !empty($course['teacherIds'])) {
 			$message = "亲爱的同学，欢迎你参加《".$course['title']."》课程的学习，在学习过程中，遇到任何问题，请在讨论区和问答里提问。老师将及时为你解答。";
 
 	        $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
