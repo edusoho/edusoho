@@ -23,11 +23,7 @@ class CourseLessonsDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCourseId($arguments);
         $this->checkCount($arguments);
     	$lessons = $this->getCourseService()->getCourseLessons($arguments['courseId']);
-        $lessons['teachers'] = $this->getUserService()->getUser($lessons['0']['userId']);
-        $lessons['teachers']['password'] = NULL;
-        $lessons['teachers']['salt'] = NULL;
 
-        return $lessons;
+        return $this->getCoursesAndUsers($lessons);
     }
-
 }

@@ -19,9 +19,7 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {	
-
         $this->checkCount($arguments);
-
         if (empty($arguments['categoryId'])){
             $conditions = array('status' => 'published', 'recommended' => 1 );
         } else {
@@ -29,7 +27,6 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
         }
         $courses = $this->getCourseService()->searchCourses($conditions,'recommended', 0, $arguments['count']);
         
-        return $this->foreachCourses($courses);
+        return $this->getCourseTeachersAndCategories($courses);
     }
-
 }
