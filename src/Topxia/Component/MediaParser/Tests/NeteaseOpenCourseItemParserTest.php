@@ -10,7 +10,7 @@ class NeteaseOpenCourseItemParserTest extends \PHPUnit_Framework_TestCase
         $video = $this->createParser()->parse('http://v.163.com/movie/2013/7/N/S/M941471K5_M9414FGNS.html');
 
         $this->assertEquals('video', $video['type']);
-        $this->assertEquals('neteaseopencourse', $video['source']);
+        $this->assertEquals('NeteaseOpenCourse', $video['source']);
         $this->assertArrayHasKey('uuid', $video);
         $this->assertArrayHasKey('name', $video);
         $this->assertArrayHasKey('page', $video);
