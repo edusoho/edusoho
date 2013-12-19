@@ -1180,7 +1180,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$setting = $this->getSettingService()->get('course', array());
 		if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
-			$message = "亲爱的同学，欢迎你参加《".$course['title']."》课程的学习。在学习过程中遇到任何问题，请在讨论区和问答里提问，老师将及时为你您解答。";
+			// $message = "亲爱的同学，欢迎你参加《".$course['title']."》课程的学习。在学习过程中遇到任何问题，请在讨论区和问答里提问，老师将及时为你您解答。";
+			$message = $this->getWelcomeBody($user, $course);
 	        $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
 	    }
 
@@ -1190,6 +1191,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $member;
 
 	}
+
+	private function getWelcomeBody($user, $course)
+    {
+        $setting = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace = array('{{nickname}}', '{{course}}');
+        $valuesToReplace = array($user['nickname'], $course['title']);
+        // $welcomeBody = $this->setting('auth.welcome_body', '注册欢迎的内容');
+        $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_body']);
+        return $welcomeBody;
+    }
 
 	public function removeStudent($courseId, $userId)
 	{
