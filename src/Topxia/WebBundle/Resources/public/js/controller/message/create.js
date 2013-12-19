@@ -38,6 +38,7 @@ define(function(require, exports, module) {
         var autocomplete = new AutoComplete({
             trigger: '#message_receiver',
             dataSource: $("#message_receiver").data('auto-url'),
+            submitOnEnter: false,
             filter: {
                 name: 'stringMatch',
                 options: {
