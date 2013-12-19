@@ -82,15 +82,12 @@ class CourseOrderController extends BaseController
 
     public function refundAction(Request $request , $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user = $this->getCurrentUser();
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
         if (empty($member) or empty($member['orderId'])) {
             throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能退学。');
         }
-
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
         if (empty($order)) {

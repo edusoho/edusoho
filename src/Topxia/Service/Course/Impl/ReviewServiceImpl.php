@@ -71,7 +71,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 			throw $this->createServiceException('参数不正确，评价失败！');
 		}
 
-		$course = $this->getCourseService()->tryTakeCourse($fields['courseId']);
+		list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
 
 		$userId = $this->getCurrentUser()->id;
 

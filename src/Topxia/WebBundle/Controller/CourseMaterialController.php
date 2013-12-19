@@ -14,7 +14,7 @@ class CourseMaterialController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $paginator = new Paginator(
             $request,
@@ -41,9 +41,9 @@ class CourseMaterialController extends BaseController
 
     public function downloadAction(Request $request, $courseId, $materialId)
     {
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-        if (!$this->getCourseService()->isInTiming($courseId)) {
+        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('course_materials',array('id' => $courseId)));
         }
 

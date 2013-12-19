@@ -96,7 +96,7 @@ class CourseController extends BaseController
 
     public function membersAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $paginator = new Paginator(
             $request,
@@ -303,10 +303,8 @@ class CourseController extends BaseController
 
     public function exitAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user = $this->getCurrentUser();
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
@@ -323,8 +321,8 @@ class CourseController extends BaseController
     public function learnAction(Request $request, $id)
     {
         try{
-            $course = $this->getCourseService()->tryTakeCourse($id);
-            if (!$this->getCourseService()->isInTiming($id)) {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+            if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
                 return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
             }
         }catch(Exception $e){
@@ -362,17 +360,19 @@ class CourseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        $isInTiming = $this->getCourseService()->isInTiming($course['id']);
+        $isNonExpired = $member ? $this->getCourseService()->isMemberNonExpired($course, $member) : false;
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
-            'member' => $this->getCourseService()->getCourseMember($course['id'], $user['id']),
+            'member' => $member,
             'users' => $users,
             'manage' => $manage,
-            'isInTiming' => $isInTiming
+            'isNonExpired' => $isNonExpired
         ));
     }
 

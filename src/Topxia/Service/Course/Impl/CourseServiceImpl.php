@@ -733,7 +733,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function startLearnLesson($courseId, $lessonId)
 	{
-		$course = $this->tryTakeCourse($courseId);
+		list($course, $member) = $this->tryTakeCourse($courseId);
 		$user = $this->getCurrentUser();
 
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
@@ -1369,7 +1369,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-			return $course;
+			return array($course, null);
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
@@ -1377,39 +1377,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
 		}
 
-		return $course;
+		return array($course, $member);
 	}
 
-	public function isInTiming ($courseId)
+	public function isMemberNonExpired($course, $member)
 	{
-		$course = $this->getCourse($courseId);
-		if (empty($course)) {
-			return false;
+		if (empty($course) or empty($member)) {
+			throw $this->createServiceException("course, member参数不能为空");
 		}
 
-		$user = $this->getCurrentUser();
-		if (!$user->isLogin()) {
-			return false;			
-		}
-
-		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+		if ($member['deadline'] == 0) {
 			return true;
 		}
 
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
-			return false;
-		}
-
-		if ($member['role'] == 'teacher') {
+		if ($member['deadline'] < time()) {
 			return true;
 		}
 
-		if ($member['deadline'] < time() && $member['deadline'] != 0) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	public function canTakeCourse($course)
