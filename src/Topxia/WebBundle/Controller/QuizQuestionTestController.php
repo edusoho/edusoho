@@ -122,14 +122,22 @@ class QuizQuestionTestController extends BaseController
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
 		$items     = $this->getTestService()->getItemsByTestPaperId($testPaperId);
+
+		foreach ($items as $key => $item) {
+			if($item['parentId'] != 0){
+				$material[$item['parentId']] = "材料题";
+			}
+		}
 		$questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id'); 
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:item-list.html.twig', array(
-			'course'      => $course,
+			'course' => $course,
 			'testPaperId' => $testPaperId,
-			'items'       => $items,
-			'questions'   => $questions,
-			'testPaper'   => $testPaper,
-			'lessons'   => $lessons,
+			'items' => $items,
+			'questions' => $questions,
+			'testPaper' => $testPaper,
+			'lessons' => $lessons,
+			'material' => $material
 		));
 	}
 
@@ -160,8 +168,6 @@ class QuizQuestionTestController extends BaseController
 			'isEdit' => false,
 		));
 	}
-
-
 
 	private function getCourseService()
     {

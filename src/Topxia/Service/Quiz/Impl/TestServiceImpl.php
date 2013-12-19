@@ -65,39 +65,53 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         //查询各类型设置的数量的题目,
+        $items = array();
+        $field = array();
         $questions = array();
+
         foreach ($itemCount as $key => $count) {
             if($count == 0){
                 continue;
             }
             $conditions['questionType'] = $key;
             $conditions['parentId'] = 0;
-            $results = $this->getQuestionService()->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
-            $questions = array_merge($questions, $results);
+            $questions = $this->getQuestionService()->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
+
+            //循环题目(question),取出对应的item数据
+            $seq = 1;
+            foreach ($questions as $question) {
+                $field['testId'] = $testId;
+                $field['seq'] = $seq;
+                $field['questionId'] = $question['id'];
+                $field['questionType'] = '\''.$question['questionType'].'\'';
+                $field['parentId'] = $question['parentId'];
+                $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$question['questionType'];
+                $items[] = '('.implode(' , ', $field).')';
+                $seq ++;
+            }
+
             //如果是材料题取出子题
             if ($key == 'material'){
-                foreach ($results as $key => $result) {
+                foreach ($questions as $key => $result) {
                     $con['parentIds'][] = $result['id'];
                 }
                 if(!empty($con)){
-                    $results = $this->getQuestionService()->searchQuestion($con, array('createdTime' ,'DESC'), 0, 999);
-                    $questions = array_merge($questions, $results); 
+                    $questions = $this->getQuestionService()->searchQuestion($con, array('createdTime' ,'DESC'), 0, 999);
+                }
+
+                //循环题目(question),取出对应的item数据
+                $seq = 1;
+                foreach ($questions as $question) {
+                    $field['testId'] = $testId;
+                    $field['seq'] = $seq;
+                    $field['questionId'] = $question['id'];
+                    $field['questionType'] = '\''.$question['questionType'].'\'';
+                    $field['parentId'] = $question['parentId'];
+                    $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$question['questionType'];
+                    $items[] = '('.implode(' , ', $field).')';
+                    $seq ++;
                 }
             }
-        }
-
-        //循环题目(question),取出对应的item数据.顺序固定
-        $items = $field = array();
-        $seq = 1;
-        foreach ($questions as $question) {
-            $field['testId'] = $testId;
-            $field['seq'] = $seq;
-            $field['questionId'] = $question['id'];
-            $field['questionType'] = '\''.$question['questionType'].'\'';
-            $field['parentId'] = $question['parentId'];
-            $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$question['questionType'];
-            $items[] = '('.implode(' , ', $field).')';
-            $seq ++;
         }
 
         return empty($items) ? array() : $this->getTestItemDao()->addItems($items);
@@ -114,6 +128,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['seq'] = $item['seq'];
         $field['questionId'] = $question['id'];
         $field['questionType'] = $question['questionType'];
+        $field['parentId'] = $question['parentId'];
         $field['score'] = $question['score'];
         return $this->getTestItemDao()->updateItem($field);  
     }

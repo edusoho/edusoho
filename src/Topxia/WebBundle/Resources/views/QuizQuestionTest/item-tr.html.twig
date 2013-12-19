@@ -1,4 +1,4 @@
- <tr data-role='test-item' data-type='{{item.questionType}}' data-parentId='{{questions[item.questionId].parentId}}'>
+ <tr data-role='test-item' data-type='{% if item.parentId != 0 %}{{item.parentId}}{% else %}{{item.questionType}}{% endif %}' >
     <td><input value="" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
     <td>{{item.seq}}</td>
     <td>{{questions[item.questionId]['stem']}}</td>

@@ -21,7 +21,7 @@
     <a href="{{ path('course_manage_quiz_question_create',{courseId:1,type:'choice',parentId:''}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>新增试题</a>
        <ul class="nav nav-tabs" id="myTab">
           {% for key,type in dict('questionType') %}
-              <li{% if loop.first %} class="active" {% endif %}><a href="#{{key}}" data-toggle="tab">{{type}}</a></li>
+              <li><a href="#{{key}}" data-toggle="tab">{{type}}</a></li>
           {% endfor %}
       </ul>
 
@@ -56,8 +56,8 @@
   </div>
 </div>
 
-
-<script type="text/plain" data-role="questionType-data">{{ dict('questionType')|json_encode|raw}}</script>
+<script type="text/plain" data-role="questionType-data">{{ dict('questionType')| json_encode | raw}}</script>
+<script type="text/plain" data-role="material-data">{{ material | json_encode | raw}}</script>
 
 {% endblock %}
 

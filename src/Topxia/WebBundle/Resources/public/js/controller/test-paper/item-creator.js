@@ -5,7 +5,8 @@ define(function(require, exports, module) {
 
 	var ItemCreator = Widget.extend({
 		attrs:{
-			questionType: null
+			questionType: null,
+			material: null
 		},
 
 		events: {
@@ -15,10 +16,7 @@ define(function(require, exports, module) {
 		},
 
 		setup:function(){
-			var questionType = $('[data-role=questionType-data]').html();
-			if(typeof questionType != 'undefined'){
-                this.set('questionType', $.parseJSON(questionType));
-            }
+			this._initTab();
 		},
 
 		tabShow:function(){
@@ -31,21 +29,44 @@ define(function(require, exports, module) {
 		},
 
 		batchSelect:function(e){
-			if( $(e.currentTarget).is(":checked") == true){
+			if ($(e.currentTarget).is(":checked") == true){
                 this.$('[data-role=batch-select]:visible, [data-role=batch-item]:visible').prop('checked', true);
             } else {
                 this.$('[data-role=batch-select]:visible, [data-role=batch-item]:visible').prop('checked', false);
             }
 		},
 
+		_initTab: function (){
+			var questionType = $('[data-role=questionType-data]').html();
+			if(typeof questionType != 'undefined'){
+                this.set('questionType', $.parseJSON(questionType));
+            }
+
+            var material = $('[data-role=material-data]').html();
+			if(typeof material != 'undefined'){
+                this.set('material', $.parseJSON(material));
+            }
+		},
+
 		_onChangeQuestionType: function	(questionType){
 			var self = this;
-			$.each(questionType, function(index, type){
-				var html = "<tbody id="+index+" class='tab-pane test-item-tbody'></tbody>";
+			$.each(questionType, function(type, name){
+				var html = "<tbody id="+type+" class='tab-pane test-item-tbody'></tbody>";
             	self.$('[data-role=item-body]').after(html);
-                $('#'+index).append(self.$('[data-type=' + index + ']'));
+                $('#'+type).append(self.$('[data-type=' + type + ']'));
             });
+            self.$('#myTab li:first a').trigger('click');
+		}
 
+		,
+
+		_onChangeMaterial: function	(material){
+			var self = this;
+			$.each(material, function(type, name){
+				var html = "<tbody id="+type+" class='tab-pane test-item-tbody'></tbody>";
+            	self.$('[data-role=item-body]').after(html);
+                $('#'+type).append(self.$('[data-type=' + type + ']'));
+            });
 		}
 
 
