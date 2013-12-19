@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
 
     require('jquery.select2-css');
     require('jquery.select2');
@@ -76,6 +77,11 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="course[subtitle]"]',
             rule: 'maxlength{max:70}'
+        });
+
+        validator.addItem({
+            element: '[name="course[expiryDay]"]',
+            rule: 'integer'
         });
     };
 

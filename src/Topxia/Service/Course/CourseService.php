@@ -138,6 +138,8 @@ interface CourseService
 
 	public function updateCourseMember($id, $fields);
 
+	public function isMemberNonExpired($course, $member);
+
 	public function findCourseStudents($courseId, $start, $limit);
 
 	public function getCourseStudentCount($courseId);

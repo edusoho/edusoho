@@ -96,7 +96,7 @@ class CourseController extends BaseController
 
     public function membersAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $paginator = new Paginator(
             $request,
@@ -161,7 +161,7 @@ class CourseController extends BaseController
                 'course' => $course,
                 'member' => $member,
                 'items' => $items,
-                'learnStatuses' => $learnStatuses,
+                'learnStatuses' => $learnStatuses
             ));
         }
 
@@ -303,10 +303,8 @@ class CourseController extends BaseController
 
     public function exitAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user = $this->getCurrentUser();
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
@@ -323,7 +321,10 @@ class CourseController extends BaseController
     public function learnAction(Request $request, $id)
     {
         try{
-            $course = $this->getCourseService()->tryTakeCourse($id);
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+            if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+                return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+            }
         }catch(Exception $e){
             throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
         }
@@ -331,6 +332,25 @@ class CourseController extends BaseController
             'course' => $course,
         ));
     }
+
+    public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            $this->getCourseService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:set-expiryday-modal.html.twig', array(
+            'course' => $course,
+            'user' => $user
+        ));
+    }
+
 
     /**
      * Block Actions
@@ -340,14 +360,19 @@ class CourseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+        $isNonExpired = $member ? $this->getCourseService()->isMemberNonExpired($course, $member) : false;
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
-            'member' => $this->getCourseService()->getCourseMember($course['id'], $user['id']),
+            'member' => $member,
             'users' => $users,
             'manage' => $manage,
+            'isNonExpired' => $isNonExpired
         ));
     }
 

@@ -292,6 +292,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'title' => '',
 			'subtitle' => '',
 			'about' => '',
+			'expiryDay' => 0,
 			'categoryId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
@@ -732,7 +733,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function startLearnLesson($courseId, $lessonId)
 	{
-		$course = $this->tryTakeCourse($courseId);
+		list($course, $member) = $this->tryTakeCourse($courseId);
 		$user = $this->getCurrentUser();
 
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
@@ -986,6 +987,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return ($chapterMaxSeq > $lessonMaxSeq ? $chapterMaxSeq : $lessonMaxSeq) + 1;
 	}
 
+	public function addMemberExpiryDays($courseId, $userId, $day)
+	{
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+		$deadline = $day*24*60*60+$member['deadline'];
+
+		return $this->getMemberDao()->updateMember($member['id'], array(
+			'deadline' => $deadline
+		));
+	}
+
 	/**
 	 * Member API
 	 */
@@ -1148,10 +1160,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
 		}
 
+		if ($course['expiryDay'] > 0) {
+			$deadline = $course['expiryDay']*24*60*60 + time();
+		} else {
+			$deadline = 0;
+		}
+
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+			'deadline' => $deadline,
 			'role' => 'student',
 			'remark' => empty($info['remark']) ? '' : $info['remark'],
 			'createdTime' => time()
@@ -1349,7 +1368,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-			return $course;
+			return array($course, null);
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
@@ -1357,7 +1376,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
 		}
 
-		return $course;
+		return array($course, $member);
+	}
+
+	public function isMemberNonExpired($course, $member)
+	{
+		if (empty($course) or empty($member)) {
+			throw $this->createServiceException("course, member参数不能为空");
+		}
+
+		if ($member['deadline'] == 0) {
+			return true;
+		}
+
+		if ($member['deadline'] > time()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public function canTakeCourse($course)

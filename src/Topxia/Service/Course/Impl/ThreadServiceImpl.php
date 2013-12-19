@@ -137,7 +137,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
 		}
 
-		$course = $this->getCourseService()->tryTakeCourse($thread['courseId']);
+		list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
 		$thread['userId'] = $this->getCurrentUser()->id;
 		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
@@ -308,7 +308,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('课程(ID: %s)话题(ID: %s)不存在。', $post['courseId'], $post['threadId']));
 		}
 
-		$course = $this->getCourseService()->tryTakeCourse($post['courseId']);
+		list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
 
 		$post['userId'] = $this->getCurrentUser()->id;
 		$post['isElite'] = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;

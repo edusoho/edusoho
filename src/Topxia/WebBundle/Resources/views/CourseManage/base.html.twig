@@ -34,6 +34,13 @@
 			  <div class="col-md-2 control-label">{{ form_label(form.tags, '标签') }}</div>
 			  <div class="col-md-8 controls"> {{ form_widget(form.tags, {attr:{class:'width-full'}}) }}</div>
 			</div>
+			
+			<div class="form-group">
+			  <div class="col-md-2 control-label">{{ form_label(form.expiryDay, '有效期') }}</div>
+			  <div class="col-md-8 controls">
+			    {{ form_widget(form.expiryDay, {attr:{class:'form-control width-input width-input-large'}}) }}
+			  </div>
+			</div>
 
 			<div class="form-group">
 			  <div class="col-md-2 control-label">{{ form_label(form.categoryId, '分类') }}</div>
