@@ -333,7 +333,7 @@ class CourseController extends BaseController
         ));
     }
 
-    public function setTimingAction(Request $request, $courseId, $userId)
+    public function addMemberDeadlineDayAction(Request $request, $courseId, $userId)
     {
         $user = $this->getUserService()->getUser($userId);
         $course = $this->getCourseService()->getCourse($courseId);
@@ -341,11 +341,11 @@ class CourseController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            $this->getCourseService()->setTiming($courseId, $userId, $fields);
+            $this->getCourseService()->addMemberDeadlineDay($courseId, $userId, $fields['expiryDay']);
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('TopxiaWebBundle:CourseStudentManage:set-timing-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseStudentManage:set-expiryday-modal.html.twig', array(
             'course' => $course,
             'user' => $user
         ));

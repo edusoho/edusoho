@@ -987,14 +987,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return ($chapterMaxSeq > $lessonMaxSeq ? $chapterMaxSeq : $lessonMaxSeq) + 1;
 	}
 
-	public function setTiming($courseId, $userId, $fields)
+	public function addMemberDeadlineDay($courseId, $userId, $day)
 	{
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
-		$timing = $fields['timing']*24*60*60+$member['deadline'];
+		$deadline = $day*24*60*60+$member['deadline'];
 
 		return $this->getMemberDao()->updateMember($member['id'], array(
-			'deadline' => $timing
+			'deadline' => $deadline
 		));
 	}
 

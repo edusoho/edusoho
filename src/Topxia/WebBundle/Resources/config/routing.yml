@@ -144,9 +144,9 @@ course_order_cancel_refund:
     defaults: { _controller: TopxiaWebBundle:CourseOrder:cancelRefund }
     methods: [POST]
 
-course_set_timing:
-    pattern:  /course/{courseId}/set_timing/{userId}
-    defaults: { _controller: TopxiaWebBundle:Course:setTiming }
+course_set_expiryday:
+    pattern:  /course/{courseId}/set_expiryday/{userId}
+    defaults: { _controller: TopxiaWebBundle:Course:addMemberDeadlineDay }
 
 course_learn:
     pattern:  /course/{id}/learn

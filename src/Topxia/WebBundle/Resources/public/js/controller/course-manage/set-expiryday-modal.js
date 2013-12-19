@@ -5,11 +5,11 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $modal = $('#timing-set-form').parents('.modal');
+        var $modal = $('#expiryday-set-form').parents('.modal');
         var $table = $('#course-student-list');
 
         var validator = new Validator({
-            element: '#timing-set-form',
+            element: '#expiryday-set-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '#set-more-timing',
+            element: '#set-more-expiryday',
             rule: 'integer'
         });
 

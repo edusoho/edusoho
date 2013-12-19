@@ -3,7 +3,7 @@
 {% block title %}增加学员课程有效期{% endblock %}
 {% block body %}
 
-<form id="timing-set-form" class="form-horizontal" method="post" action="{{ path('course_set_timing', { courseId:course.id, userId:user.id }) }}">
+<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_expiryday', { courseId:course.id, userId:user.id }) }}">
   {% if course.status == 'published' %}
     <div class="row form-group">
       <div class="col-md-2 control-label">
@@ -29,10 +29,10 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="set-more-timing">增加天数</label>
+        <label for="set-more-expiryday">增加天数</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="set-more-timing" name="timing" value="0" class="form-control width-input">
+        <input type="text" id="set-more-expiryday" name="expiryDay" value="0" class="form-control width-input">
       </div>
     </div>
   {% else %}
@@ -47,8 +47,8 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#timing-set-form">保存</button>
+    <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form">保存</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('course-manage/set-timing-modal')</script>
+  <script>app.load('course-manage/set-expiryday-modal')</script>
 {% endblock %}
