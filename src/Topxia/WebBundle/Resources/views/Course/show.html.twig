@@ -62,6 +62,13 @@
           <span class="member-num">{{ course.studentNum }}</span>
           <span class="member-text">人</span>
         </p>
+        {% if not course.expiryDay == 0 %}
+        <p>
+          有效期：
+          <span class="member-num">{{ course.expiryDay }}</span>
+          <span class="member-text">天</span>
+        </p>
+        {% endif %}
         <p>
           {% if course.status=='closed' %}  
             状　态： <span class="label label-danger ">已关闭</span>
