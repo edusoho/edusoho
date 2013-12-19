@@ -37,19 +37,19 @@ define(function(require, exports, module) {
                
                var editorType = $(this).val();
                var valueInHtml = $('#noneeditor-body-field').val();
-               var valueInKindEditor = $editor.html();
+               var valueInrichEditor = $editor.html();
                
 
-               if(editorType == 'kindeditor'){
+               if(editorType == 'richeditor'){
                 $editor.html(valueInHtml);
-                $('#kindeditor-body-field').parents('.form-group').show();
+                $('#richeditor-body-field').parents('.form-group').show();
                 $('#noneeditor-body-field').parents('.form-group').hide();
 
                } else if(editorType == 'none'){
 
-                $('#noneeditor-body-field').val(valueInKindEditor);
+                $('#noneeditor-body-field').val(valueInrichEditor);
                 $('#noneeditor-body-field').parents('.form-group').show();
-                $('#kindeditor-body-field').parents('.form-group').hide();
+                $('#richeditor-body-field').parents('.form-group').hide();
 
                }
             }
@@ -102,7 +102,7 @@ define(function(require, exports, module) {
     function _initEditorFields($form, validator)
     {
         
-        var editor = EditorFactory.create('#kindeditor-body-field', 'full', {extraFileUploadParams:{group:'default'}});
+        var editor = EditorFactory.create('#richeditor-body-field', 'full', {extraFileUploadParams:{group:'default'}});
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
         });

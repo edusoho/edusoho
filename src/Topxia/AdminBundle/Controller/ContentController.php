@@ -147,13 +147,13 @@ class ContentController extends BaseController
 
     private function filterEditorField($content)
     {
-        if($content['editor'] == 'kindeditor'){
-            $content['body'] = $content['kindeditor-body'];
+        if($content['editor'] == 'richeditor'){
+            $content['body'] = $content['richeditor-body'];
         } elseif ($content['editor'] == 'none') {
             $content['body'] = $content['noneeditor-body'];
         }
 
-        unset($content['kindeditor-body']);
+        unset($content['richeditor-body']);
         unset($content['noneeditor-body']);
         return $content;
     }
