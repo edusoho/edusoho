@@ -1390,7 +1390,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return true;
 		}
 
-		if ($member['deadline'] < time()) {
+		if ($member['deadline'] > time()) {
 			return true;
 		}
 
