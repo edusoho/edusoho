@@ -47,7 +47,9 @@ define(function(require, exports, module) {
 	    	}
 		});
 
-		$(".teacher-list-group").sortable();
+		$(".teacher-list-group").sortable({
+			'distance':20
+		});
 
 
     };

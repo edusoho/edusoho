@@ -461,32 +461,20 @@ course_manage_quiz_question:
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:index }
 
 course_manage_quiz_question_create:
-    pattern: /course/{courseId}/{type}/manage/question/create
+    pattern: /course/{courseId}/manage/question/create/{type}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
 
-course_manage_quiz_question_edit:
-    pattern: /course/{courseId}/{id}/manage/question/edit
+course_manage_quiz_question_update:
+    pattern: /course/{courseId}/manage/question/edit/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:edit }
 
 course_manage_quiz_question_delete:
-    pattern: /course/{courseId}/{id}/manage/question/delete
+    pattern: /course/{courseId}/manage/question/delete/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:delete }
 
 course_manage_quiz_question_deletes:
-    pattern: /course/manage/question/deletes
+    pattern: /course/{courseId}/manage/question/deletes
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deletes }
-
-course_manage_quiz_question_material:
-    pattern: /course/{courseId}/manage/question/{questionId}/material
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:material }
-
-course_manage_quiz_question_material_create:
-    pattern: /course/{courseId}/{type}/manage/question/{questionId}/material/create
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:createMaterial }
-
-course_manage_quiz_question_material_edit:
-    pattern: /course/{courseId}/manage/question/{questionId}/material/edit
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:editMaterial }
 
 course_manage_quiz_question_category:
     pattern: /course/{courseId}/manage/question/category
@@ -498,16 +486,32 @@ course_manage_quiz_question_category_create:
 
 course_manage_quiz_question_category_edit:
     pattern: /course/{courseId}/manage/question/category/{categoryId}/edit
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:editCategory }
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:updateCategory }
 
 course_manage_quiz_question_category_delete:
     pattern: /course/{courseId}/manage/question/category/{categoryId}/delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deleteCategory }
 
 course_manage_quiz_question_category_sort:
-    pattern: /course/{courseId}/manage/question/category/sort
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:sort }
+    pattern: /course/{courseId}/manage/question/categorys/sort
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:sortCategories }
     methods: [POST]
+
+course_manage_quiz_question_generate:
+    pattern: /course/{courseId}/manage/question/generate
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:index }
+
+course_manage_quiz_question_generate_create:
+    pattern: /course/{courseId}/manage/question/generate/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:create }
+
+course_manage_quiz_question_generate_update:
+    pattern: /course/{courseId}/manage/question/generate/update
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:update }
+
+course_manage_quiz_question_generate_delete:
+    pattern: /course/{courseId}/manage/question/generate/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:delete }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
@@ -595,6 +599,13 @@ settings_avatar_fetch_partner:
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
 
+setting_nickname:
+    pattern: /settings/nickname
+    defaults: { _controller: TopxiaWebBundle:Settings:nickname }
+
+update_nickname_check:
+    pattern:  /settings/nickname/check
+    defaults: { _controller: TopxiaWebBundle:Settings:nicknameCheck }
 
 settings_password:
     pattern:  /settings/password

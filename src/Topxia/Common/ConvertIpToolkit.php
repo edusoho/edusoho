@@ -23,11 +23,12 @@ class ConvertIpToolkit
 		$ips[0] = (int)$ips[0];
 		$ips[1] = (int)$ips[1];
 
-		if($fp = @fopen("./tinyipdata.dat", 'rb')) {
+		$tinyipdataPath = __DIR__.'/tinyipdata.dat';
+		if($fp = @fopen($tinyipdataPath, 'rb')) {
 			$offset = @unpack('Nlen', @fread($fp, 4));
 			$index  = @fread($fp, $offset['len'] - 4);
 		} else {
-			throw new Exception("无法打开ipdata文件", 1);
+			throw new \Exception("无法打开tinyipdata文件", 1);
 		}
 
 		$length = $offset['len'] - 1028;

@@ -23,10 +23,38 @@ define(function(require, exports, module) {
         $form.data('uploading', false);
 
         var validator = _initValidator($form, $modal);
-        _initEditorFields($form, validator);
+        var $editor = _initEditorFields($form, validator);
         _initTagsField();
         _initDatetimeFields($form);
+        _changeEditor($editor);
+
 	};
+
+    function _changeEditor($editor)
+    {
+        $('input[name="editor"]:radio').change(
+            function(){
+               
+               var editorType = $(this).val();
+               var valueInHtml = $('#noneeditor-body-field').val();
+               var valueInrichEditor = $editor.html();
+               
+
+               if(editorType == 'richeditor'){
+                $editor.html(valueInHtml);
+                $('#richeditor-body-field').parents('.form-group').show();
+                $('#noneeditor-body-field').parents('.form-group').hide();
+
+               } else if(editorType == 'none'){
+
+                $('#noneeditor-body-field').val(valueInrichEditor);
+                $('#noneeditor-body-field').parents('.form-group').show();
+                $('#richeditor-body-field').parents('.form-group').hide();
+
+               }
+            }
+        ); 
+    }
 
     function _initValidator($form, $modal)
     {
@@ -73,16 +101,13 @@ define(function(require, exports, module) {
 
     function _initEditorFields($form, validator)
     {
-        $form.find('[data-role=editor-field]').each(function(){
-            var id = $(this).attr('id');
-
-            var editor = EditorFactory.create('#' + id, 'full', {extraFileUploadParams:{group:'default'}});
-
-            validator.on('formValidate', function(elemetn, event) {
-                editor.sync();
-            });
-
+        
+        var editor = EditorFactory.create('#richeditor-body-field', 'full', {extraFileUploadParams:{group:'default'}});
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
         });
+
+        return editor;
     }
 
     function _initTagsField()

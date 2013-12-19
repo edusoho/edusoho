@@ -8,12 +8,11 @@ use Topxia\Common\ArrayToolkit;
 
 class LocationServiceTest extends BaseTestCase
 {   
-
-    public function testGetLocation()
+    public function testLocationXXX()
     {
-        
+       $this->assertNull(null);
     }
-    
+
     private function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

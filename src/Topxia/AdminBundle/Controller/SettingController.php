@@ -310,8 +310,9 @@ class SettingController extends BaseController
 
         $default = array(
             'mode' => 'default',
+            'nickname_enabled' => 0,
         );
-
+        
         $setting = array_merge($default, $setting);
 
         $configDirectory = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/';
@@ -320,7 +321,9 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $setting = array('mode' => $data['mode']);
+            $setting = array('mode' => $data['mode'],
+                            'nickname_enabled' => $data['nickname_enabled'],
+            );
             $this->getSettingService()->set('user_partner', $setting);
 
             $discuzConfig = $data['discuz_config'];
@@ -361,6 +364,28 @@ class SettingController extends BaseController
             'setting' => $setting,
             'discuzConfig' => $discuzConfig,
             'phpwindConfig' => $phpwindConfig,
+        ));
+    }
+
+    public function courseSettingAction(Request $request)
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $default = array(
+            'send_welcome_message' => '1',
+        );
+
+        $courseSetting = array_merge($default, $courseSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $courseSetting = $request->request->all();
+            $this->getSettingService()->set('course', $courseSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
+            $this->setFlashMessage('success','课程设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
+            'courseSetting' => $courseSetting
         ));
     }
 

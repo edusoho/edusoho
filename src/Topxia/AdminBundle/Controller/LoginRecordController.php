@@ -3,6 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\Paginator;
 
 class LoginRecordController extends BaseController
@@ -15,16 +16,18 @@ class LoginRecordController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getLoginRecordService()->searchLoginRecordCount($conditions),
+            $this->getLogService()->searchLogCount($conditions),
             20
         );
 
-        $logRecords = $this->getLoginRecordService()->searchLoginRecord(
+        $logRecords = $this->getLogService()->searchLogs(
             $conditions,
-            array('createdTime', 'DESC'),
+            'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
 
         $userIds = ArrayToolkit::column($logRecords, 'userId');
 
@@ -43,15 +46,18 @@ class LoginRecordController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getLoginRecordService()->findLoginRecordCountById($id),
+            $this->getLogService()->searchLogCount(array('userId' => $user['id'])),
             8
         );
 
-        $loginRecords = $this->getLoginRecordService()->findLoginRecordById(
-            $id,
+        $loginRecords = $this->getLogService()->searchLogs(
+            array('userId' => $user['id']),
+            'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $loginRecords = ConvertIpToolkit::ConvertIps($loginRecords);
 
         return $this->render('TopxiaAdminBundle:LoginRecord:login-record-details.html.twig',array(
             'user' => $user,
@@ -60,8 +66,8 @@ class LoginRecordController extends BaseController
         ));
     }
 
-    private function getLoginRecordService()
+    protected function getLogService()
     {
-    	return $this->getServiceKernel()->createService('User.LoginRecordService');
+    	return $this->getServiceKernel()->createService('System.LogService');
     }
 }

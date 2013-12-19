@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Course\Tests;
+namespace Topxia\Service\System\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 

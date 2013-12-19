@@ -119,6 +119,7 @@
       <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
       ©2013 
       <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+      {{ setting('site.analytics')|raw }}
     </p>
   </div>
 
@@ -130,6 +131,6 @@
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 
-{{ setting('site.analytics')|raw }}
+
 </body>
 </html>

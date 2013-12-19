@@ -4,16 +4,17 @@
 
 {% block body %}
 	<form id="category-form" class="form-horizontal" action="
-	{% if category.id == 0 %}{{ path('course_manage_quiz_question_category_create', {courseId:course.id}) }}
-	{% else %}{{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
+	{% if category %}
+	  {{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
+	{% else %}
+	  {{ path('course_manage_quiz_question_category_create', {courseId:course.id}) }}
 	{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-name-field">名称</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name }}" tabindex="1">
+				<input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name|default('') }}" tabindex="1">
 			</div>
 		</div>
-
 
 		<input type="hidden" name="courseId" value="{{ course.id }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -27,9 +28,7 @@
 {% endblock %}
 
 {% block footer %}
-	{% if category.id %}
-		<button type="button" data-id="{{category.id}}" class="btn btn-default pull-left delete-category" data-url="{{ path('course_manage_quiz_question_category_delete', {courseId:course.id,categoryId :category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-	{% endif %}
+
   	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
 	<button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">保存</button>
 {% endblock %}

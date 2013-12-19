@@ -9,11 +9,13 @@ define(function(require, exports, module) {
     exports.run = function() {
 
 		if ($("#lesson-preview-video-player").length > 0) {
+			$("#lesson-preview-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360"></video>');
 
-			var videoPlayer = VideoJS("lesson-preview-video-player", {
+			var videoPlayer = VideoJS("lesson-video-player", {
             	techOrder: ['flash','html5']
             });
             videoPlayer.width('100%');
+            videoPlayer.src($("#lesson-preview-video-player").data('url'));
 	    	videoPlayer.play();
 
 	    	$('#modal').one('hidden.bs.modal', function () {
