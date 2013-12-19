@@ -51,7 +51,10 @@ class CourseThreadController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-            return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
+            // return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
+            $isMemberNonExpired = false;
+        } else {
+            $isMemberNonExpired = true;
         }
         
         $thread = $this->getThreadService()->getThread($course['id'], $id);
@@ -95,6 +98,7 @@ class CourseThreadController extends BaseController
             'elitePosts' => $elitePosts,
             'users' => $users,
             'isManager' => $isManager,
+            'isMemberNonExpired' => $isMemberNonExpired,
             'paginator' => $paginator,
         ));
     }
