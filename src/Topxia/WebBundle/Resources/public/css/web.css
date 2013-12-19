@@ -3279,3 +3279,7 @@ body {
 .test-creator .form-group{
 	margin-bottom: 10px;
 }
+
+.tab-content > .active {
+	style:'' !important;
+}

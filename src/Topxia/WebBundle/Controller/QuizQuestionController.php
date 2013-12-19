@@ -11,15 +11,21 @@ class QuizQuestionController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons = $this->getCourseService()->getCourseLessons($courseId);
+
 		$parentId = $request->query->get('parentId');
 
-		if (!empty($parentId)){
-			$conditions['parentId'] = $parentId;	
-		}
-
-		$conditions['target']['course'] = $courseId;
-		if (!empty($lessons)){
-			$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
+		if (empty($parentId)){
+			$conditions['parentId'] = $parentId = 0;
+			$conditions['target']['course'] = $courseId;
+			if (!empty($lessons)){
+				$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
+			}
+		} else {
+			$question = $this->getQuestionService()->getQuestion($parentId);
+			if (empty($question)){
+				return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId)));
+			}
+			$conditions['parentId'] = $parentId;
 		}
 
 		$paginator = new Paginator(
@@ -27,7 +33,6 @@ class QuizQuestionController extends BaseController
 			$this->getQuestionService()->searchQuestionCount($conditions),
 			10
 		);
-
 		$questions = $this->getQuestionService()->searchQuestion(
 			$conditions,
 			array('createdTime' ,'DESC'),
@@ -52,30 +57,42 @@ class QuizQuestionController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		if (!in_array($type, array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
-			$type = 'choice';
+			throw $this->createNotFoundException('该项目问题类型不存在');
 		}
 		$parentId = $request->query->get('parentId');
+
+		if (empty($parentId)){
+			$parentId = 0;
+		} else {
+			$question = $this->getQuestionService()->getQuestion($parentId);
+			if (empty($question)){
+				return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId)));
+			}
+		}
+
+		
+
 		$targets = $this->getQuestionTargets($courseId);
 		$category = $this->getQuestionService()->findCategorysByCourseIds(array($courseId));
 
 	    if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
-            if(!empty($parentId)){
-            	$question['parentId'] = $parentId;
-            }
+            $question['parentId'] = $parentId;
 	        $question = $this->getQuestionService()->createQuestion($question);
 
 	        $this->setFlashMessage('success', '题目添加成功！');
 
 			$submission = $request->request->get('submission');
 	        if ($submission == 'continue'){
-
+	        	
 	        	$default = array(
 	        		'courseId' => $courseId,
 	        		'targetsDefault' => $question['targetType'].'-'.$question['targetId'],
 	        		'questionDifficulty' => $question['difficulty'],
 	        		'type' => $type,
+	        		'parentId' => $parentId,
 	        	);
+
 	            return $this->redirect($this->generateUrl('course_manage_quiz_question_create',$default));
 	        } else if ($submission == 'submit'){
 

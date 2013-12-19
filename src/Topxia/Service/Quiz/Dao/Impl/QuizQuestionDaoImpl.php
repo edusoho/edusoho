@@ -63,7 +63,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function findQuestionByIds(array $ids)
+    public function findQuestionsByIds(array $ids)
     {
         if(empty($ids)){ 
             return array(); 
@@ -92,14 +92,13 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             ->andWhere('targetId = :targetId')
             ->andWhere('targetType = :targetType');
 
-        if(empty($conditions['parentId'])){
-            $builder->andStaticWhere(" `parentId` = '0' ");
-            
-        }   
+        if(!empty($conditions['parentIds'])){
+            $builder->andStaticWhere(" parentId in (".implode($conditions['parentIds'], ',').") ");
+        }
 
-        /*$conditions['target']['course'] = $courseId; //string
-          $conditions['target']['lesson'] = '1,2,3,4'; //string*/
-        if (isset($conditions['target']) && empty($conditions['parentId']) ) 
+        /*$conditions['target']['course'] = '1,2,3'; //string
+          $conditions['target']['lesson'] = '1,2,3'; //string*/
+        if (!empty($conditions['target'])) 
         {
             $target = array();
             foreach ($conditions['target'] as $targetType => $targetIds) 
@@ -122,10 +121,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
                 $builder->andStaticWhere(" ($target) ");
             }
         }
-
-
-
-      
+        
         return $builder;
     }
 

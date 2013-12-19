@@ -4,21 +4,17 @@ namespace Topxia\Service\Quiz\Dao;
 
 interface TestPaperDao
 {
-    public function getPaper($id);
+    public function getTestPaper($id);
     
-    public function addPaper($questions);
+    public function addTestPaper($testPaper);
 
-    public function updatePaper($id, $fields);
+    public function updateTestPaper($id, $fields);
 
-    public function deletePaper($id);
+    public function deleteTestPaper($id);
 
-    public function deletePapersByParentId($id);
+    public function deleteTestPapersByParentId($id);
 
-    public function findPaperByIds(array $ids);
+    public function findTestPaperByIds(array $ids);
 
-    public function deletePaperByIds(array $ids);
-
-    public function searchPaperCount($conditions);
-
-    public function searchPaper($conditions, $orderBy, $start, $limit);
+    public function deleteTestPaperByIds(array $ids);
 }

@@ -7,32 +7,31 @@ use Topxia\Common\ArrayToolkit;
 
 class TestServiceImpl extends BaseService implements TestService
 {
-	public function getPaper($id)
+	public function getTestPaper($id)
     {
-        $paper = $this->getTestPaperDao()->getPaper($id);
-        return $this->getPaperImplementor($paper['paperType'])->getPaper($paper);
+        return $this->getTestPaperDao()->getTestPaper($id);
     }
 
-    public function createPaper($paper)
+    public function createTestPaper($testPaper)
     {
-        $field = $this->filterPaperFields($paper);
-        return $this->getTestPaperDao()->addPaper($field);
+        $field = $this->filterTestPaperFields($testPaper);
+        return $this->getTestPaperDao()->addTestPaper($field);
     }
 
-    public function updatePaper($id, $paper)
+    public function updateTestPaper($id, $testPaper)
     {
-        $field = $this->filterPaperFields($paper);
+        $field = $this->filterTestPaperFields($testPaper);
         $field['updatedTime'] = time();
-        return $this->getPaperImplementor($paper['type'])->updatePaper($id, $paper, $field);  
+        return $this->getPaperImplementor($testPaper['type'])->updateTestPaper($id, $testPaper, $field);  
     }
 
-    public function deletePaper($id)
+    public function deleteTestPaper($id)
     {
-        $paper = $this->getTestPaperDao()->getPaper($id);
-        if (empty($paper)) {
+        $testPaper = $this->getTestPaperDao()->getTestPaper($id);
+        if (empty($testPaper)) {
             throw $this->createNotFoundException();
         }
-        $this->getTestPaperDao()->deletePaper($id);
+        $this->getTestPaperDao()->deleteTestPaper($id);
 
         $this->getTestPaperDao()->deletePapersByParentId($id);
         $this->getQuizPaperChoiceDao()->deleteChoicesByPaperIds(array($id));
@@ -54,7 +53,7 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->addItem($field);
     }
 
-    public function createItemsByPaper($field, $testId, $courseId)
+    public function createItemsByTestPaper($field, $testId, $courseId)
     {
         $itemCount = $field['itemCount'];
         $itemScore = $field['itemScore'];
@@ -72,7 +71,19 @@ class TestServiceImpl extends BaseService implements TestService
                 continue;
             }
             $conditions['questionType'] = $key;
-            $questions = array_merge($questions,$this->getQuestionService()->searchQuestion($conditions,array('createdTime' ,'DESC'),0,$count));
+            $conditions['parentId'] = 0;
+            $results = $this->getQuestionService()->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
+            $questions = array_merge($questions, $results);
+            //如果是材料题取出子题
+            if ($key == 'material'){
+                foreach ($results as $key => $result) {
+                    $con['parentIds'][] = $result['id'];
+                }
+                if(!empty($con)){
+                    $results = $this->getQuestionService()->searchQuestion($con, array('createdTime' ,'DESC'), 0, 999);
+                    $questions = array_merge($questions, $results); 
+                }
+            }
         }
 
         //循环题目(question),取出对应的item数据.顺序固定
@@ -83,6 +94,7 @@ class TestServiceImpl extends BaseService implements TestService
             $field['seq'] = $seq;
             $field['questionId'] = $question['id'];
             $field['questionType'] = '\''.$question['questionType'].'\'';
+            $field['parentId'] = $question['parentId'];
             $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$question['questionType'];
             $items[] = '('.implode(' , ', $field).')';
             $seq ++;
@@ -115,22 +127,26 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getTestItemDao()->deleteItem($id);
     }
 
-    public function findPapersByCourseIds(array $id){
+    public function findTestPapersByCourseIds(array $id){
         return $this->getQuizPaperCategoryDao() -> findCategorysByCourseIds($id);
     }
 
-    private function filterPaperFields($paper)
+    public function getItemsByTestPaperId($testPaperId){
+        return $this->getTestItemDao()->getItemsByTestPaperId($testPaperId);
+    }
+
+    private function filterTestPaperFields($testPaper)
     {
-        if(!ArrayToolkit::requireds($paper, array('name', 'itemCount', 'itemScore', 'target'))){
+        if(!ArrayToolkit::requireds($testPaper, array('name', 'itemCount', 'itemScore', 'target'))){
         	throw $this->createServiceException('缺少必要字段！');
         }
 
-        $diff = array_diff(array_keys($paper['itemCount']), array_keys($paper['itemScore']));
+        $diff = array_diff(array_keys($testPaper['itemCount']), array_keys($testPaper['itemScore']));
         if (!empty($diff)) {
             throw $this->createServiceException('itemCount itemScore参数不正确');
         }
 
-        list($targetType, $targetId) = explode('-', $paper['target']);
+        list($targetType, $targetId) = explode('-', $testPaper['target']);
 
 		if(empty($targetId)){
 			throw $this->createNotFoundException('target 参数不正确');
@@ -141,11 +157,11 @@ class TestServiceImpl extends BaseService implements TestService
 
         $field = array();
 
-        $field['name'] = $paper['name'];
+        $field['name'] = $testPaper['name'];
         $field['targetId'] = $targetId;
         $field['targetType'] = $targetType;
-		$field['description']   = empty($paper['description'])? '' :$paper['description'];
-		$field['limitedTime']   = empty($paper['limitedTime'])? 0 :$paper['limitedTime'];;
+		$field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
+		$field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];;
 		$field['createdUserId'] = $this->getCurrentUser()->id;
 		$field['createdTime']   = time();
 

@@ -26,14 +26,14 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getItem($this->getConnection()->lastInsertId());
     }
 
-    //`testId`,`seq`,`questionId`,`questionType`,`score`
+    //`testId`,`seq`,`questionId`,`questionType`,`parentId`,`score`
     public function addItems(array $items)
     {
         if(empty($items)){ 
             return array(); 
         }
         $items = implode(',',$items);
-        $sql ="INSERT INTO {$this->table} (`testId`,`seq`,`questionId`,`questionType`,`score`) VALUES  {$items} ";
+        $sql ="INSERT INTO {$this->table} (`testId`,`seq`,`questionId`,`questionType`,`parentId`,`score`) VALUES  {$items} ";
         return $this->getConnection()->executeUpdate($sql);
     }
 
@@ -54,26 +54,6 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function searchItemCount($conditions)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-             ->select('COUNT(id)');
-
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    public function searchItem($conditions, $orderBy, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
-
-        return $builder->execute()->fetchAll() ? : array();
-    }
-
     public function findItemByIds(array $ids)
     {
         if(empty($ids)){ 
@@ -82,6 +62,12 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function getItemsByTestPaperId($testPaperId)
+    {
+        $sql ="SELECT * FROM {$this->table} WHERE testId = ? order by `seq` asc;";
+        return $this->getConnection()->fetchAll($sql, array($testPaperId));
     }
 
     public function deleteItemByIds(array $ids)
@@ -98,42 +84,6 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE testId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($testId));
-    }
-
-    private function _createSearchQueryBuilder($conditions)
-    {
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'item')
-            ->andWhere('questionType = :questionType')
-            ->andWhere('parentId = :parentId')
-            ->andWhere('targetId = :targetId')
-            ->andWhere('targetType = :targetType');
-
-        if(empty($conditions['parentId'])){
-            $builder->andStaticWhere(" `parentId` = '0' ");
-            
-        }   
-
-        if (isset($conditions['target']) && empty($conditions['parentId']) ) {
-            $target = array();
-            foreach ($conditions['target'] as $targetType => $targetIds) {
-                if (is_array($targetIds)) {
-                    foreach ($targetIds as $key => $targetId) {
-                        $targetIds[$key] = (int) $targetId;
-                    }
-                    $targetIds = join(' , ', $targetIds);
-                } else {
-                    $targetIds = (int) $targetIds;
-                }
-                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")"  ;
-            }
-            if (!empty($target)) {
-                $target = join(' or ', $target);
-                $builder->andStaticWhere(" ($target) ");
-            }
-        }
-      
-        return $builder;
     }
 
 }

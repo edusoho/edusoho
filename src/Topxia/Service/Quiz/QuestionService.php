@@ -17,6 +17,8 @@ interface QuestionService
 
     public function searchQuestionCount(array $conditions);
 
+    public function findQuestionsByIds(array $ids);
+
     /*
      *  quiz_question_choice
      */

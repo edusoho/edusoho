@@ -6,7 +6,7 @@ interface TestItemDao
 {
     public function addItem($item);
 
-    public function addItems(array $items);     //`testId`,`seq`,`questionId`,`questionType`,`score`
+    public function addItems(array $items);     //`testId`,`seq`,`questionId`,`questionType`,`parentId`,`score`
     
     public function updateItem($id, $fields);
 
@@ -20,9 +20,7 @@ interface TestItemDao
 
     public function deleteItemByIds(array $ids);
 
-    public function searchItemCount($conditions);
-
-    public function searchItem($conditions, $orderBy, $start, $limit);
+    public function getItemsByTestPaperId($testPaperId);
 
     public function getItemsCountByTestId($testId);
 }

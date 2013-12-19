@@ -20,9 +20,9 @@
     <div id="test-creator-widget">
       <form id="test-create-form" class="form-horizontal quiz-test" method="post" action="
       {% if isEdit %}
-        {{ path('course_manage_quiz_question_test_update',{courseId:1  }) }}
+        {{ path('course_manage_test_paper_update',{courseId:course.id  }) }}
       {% else %}
-        {{ path('course_manage_quiz_question_test_create',{courseId:1, target:target  }) }}
+        {{ path('course_manage_test_paper_create',{courseId:course.id, target:target  }) }}
       {% endif %}
       ">
         {{ web_macro.flash_messages() }}

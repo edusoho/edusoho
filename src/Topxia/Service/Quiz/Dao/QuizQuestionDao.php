@@ -14,7 +14,7 @@ interface QuizQuestionDao
 
     public function getQuestion($id);
 
-    public function findQuestionByIds(array $ids);
+    public function findQuestionsByIds(array $ids);
 
     public function deleteQuestionByIds(array $ids);
 

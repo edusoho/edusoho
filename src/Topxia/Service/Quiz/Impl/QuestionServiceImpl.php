@@ -10,13 +10,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function getQuestion($id)
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
-        return $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
+        return empty($question) ? array() : $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
     }
 
     public function createQuestion($question)
     {
         $field = $this->filterCommonFields($question);
         $field['createdTime'] = time();
+        $field['updatedTime'] = time();
         return $this->getQuestionImplementor($question['type'])->createQuestion($question, $field);
     }
 
@@ -45,6 +46,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function searchQuestionCount(array $conditions){
         return $this->getQuizQuestionDao()->searchQuestionCount($conditions);
+    }
+
+    public function findQuestionsByIds(array $ids){
+        return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
     public function getCategory($id){

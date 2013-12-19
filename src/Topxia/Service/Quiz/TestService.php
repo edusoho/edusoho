@@ -9,15 +9,15 @@ interface TestService
      * 
      */
 
-    public function getPaper($id);
+    public function getTestPaper($id);
 
-    public function createPaper($paper);
+    public function createTestPaper($testPaper);
 
-    public function updatePaper($id, $paper);
+    public function updateTestPaper($id, $testPaper);
 
-    public function deletePaper($id);
+    public function deleteTestPaper($id);
     
-    public function findPapersByCourseIds(array $id);
+    public function findTestPapersByCourseIds(array $id);
 
     /**
      * 
@@ -27,11 +27,12 @@ interface TestService
 
     public function createItem($testId, $questionId);
 
-    public function createItemsByPaper($field, $testId, $courseId);
+    public function createItemsByTestPaper($field, $testId, $courseId);
 
     public function updateItem($id, $fields);
 
     public function deleteItem($id);
-
+    
+    public function getItemsByTestPaperId($testPaperId);
 
 }
