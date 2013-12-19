@@ -27,7 +27,12 @@ define(function(require, exports, module) {
 
         $('#message-create-btn').on('click','',function(){
             var $self = $(this);
+            
             $self.addClass('disabled');
+            setTimeout(function() {
+                $self.removeClass('disabled');
+            }, 1000);
+            
         });
 
         var autocomplete = new AutoComplete({
