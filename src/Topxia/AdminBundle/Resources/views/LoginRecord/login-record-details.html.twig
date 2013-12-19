@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set modal_size = 'large' %}
-{% block title %}{{ user.nickname }}登陆记录{% endblock %}
+{% block title %}{{ user.nickname }}登录日志{% endblock %}
 {% block body %}
 
 <div id="login-record-details">
@@ -9,9 +9,9 @@
   <table class="table table-bordered" id="">
     <thead>
       <tr>
-        <th>登陆时间</th>
-        <th>登陆IP</th>
-        <th>登陆地点</th>
+        <th>登录时间</th>
+        <th>登录IP</th>
+        <th>登录地点</th>
       </tr>
     </thead>
     <tbody>

@@ -98,7 +98,7 @@ class DataDict
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
 			'email' => '邮件地址',
-			'loginIp' => '登陆IP'
+			'loginIp' => '登录IP'
 		),
 		'logLevel' => array(
 			'info' => '提示',
