@@ -373,7 +373,7 @@ class SettingController extends BaseController
 
         $default = array(
             'welcome_message_enabled' => '0',
-            'welcome_body' => '{{nickname}},欢迎加入课程{{course}}'
+            'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}'
         );
 
         $courseSetting = array_merge($default, $courseSetting);
