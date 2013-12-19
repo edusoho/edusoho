@@ -5,12 +5,6 @@
       <div class="progress-bar" style="width: {{ progress.percent }};"></div>
     </div>
     <div class="clearfix">
-      <span class="text-muted">已学: <strong class="text-success">{{ progress.number }}</strong> / <strong>{{ progress.total }}</strong></span>
-      {% if not member.deadline == 0 %}
-        <br>
-        <span class="text-muted">时间: <strong>{{ member.deadline|date("Y-m-d") }}</strong></span> <span class="glyphicon glyphicon-question-sign" id="question-sign" title="课程有效期限"></span>
-      {% endif %}
-
       {% if progress.percent == '100%' %}
         <button class="btn btn-default btn-sm disabled pull-right">您已完成全部课时的学习</button>
       {% else %}
@@ -18,6 +12,13 @@
           <a class="btn btn-primary btn-sm pull-right" id="next-learn-btn" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="继续学习：{{ nextLearnLesson.title }}">继续学习</a>
         {% endif %}
       {% endif %}
+
+      <span class="text-muted">已学: <strong class="text-success">{{ progress.number }}</strong> / <strong>{{ progress.total }}</strong></span>
+      {% if not member.deadline == 0 %}
+        <br>
+        <span class="text-muted">有效期： <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
+      {% endif %}
+
     </div>
   </div>
 </div>

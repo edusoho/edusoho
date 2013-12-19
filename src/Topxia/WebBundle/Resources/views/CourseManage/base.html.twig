@@ -36,9 +36,10 @@
 			</div>
 			
 			<div class="form-group">
-			  <div class="col-md-2 control-label">{{ form_label(form.expiryDay, '有效期') }}</div>
+			  <div class="col-md-2 control-label">{{ form_label(form.expiryDay, '学员有效期') }}</div>
 			  <div class="col-md-8 controls">
-			    {{ form_widget(form.expiryDay, {attr:{class:'form-control width-input width-input-large'}}) }}
+			    {{ form_widget(form.expiryDay, {attr:{class:'form-control width-input width-input-large'}}) }} 天
+			    <div class="help-block">设置该值后，学员只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学员只能浏览课时目录及讨论区。该值为0，则不做此限制。</div>
 			  </div>
 			</div>
 
