@@ -146,7 +146,7 @@ course_order_cancel_refund:
 
 course_set_expiryday:
     pattern:  /course/{courseId}/set_expiryday/{userId}
-    defaults: { _controller: TopxiaWebBundle:Course:addMemberDeadlineDay }
+    defaults: { _controller: TopxiaWebBundle:Course:addMemberExpiryDays }
 
 course_learn:
     pattern:  /course/{id}/learn

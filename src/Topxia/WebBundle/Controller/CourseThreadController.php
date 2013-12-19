@@ -49,6 +49,11 @@ class CourseThreadController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
+        }
+        
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         if (empty($thread)) {
             throw $this->createNotFoundException();
@@ -96,10 +101,10 @@ class CourseThreadController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-            return $this->redirect($this->generateUrl('course_materials',array('id' => $courseId)));
+            return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
         }
 
         $type = $request->query->get('type') ? : 'discussion';
