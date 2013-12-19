@@ -372,7 +372,7 @@ class SettingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $default = array(
-            'send_welcome_message' => '1',
+            'welcome_message_enabled' => '0',
         );
 
         $courseSetting = array_merge($default, $courseSetting);
