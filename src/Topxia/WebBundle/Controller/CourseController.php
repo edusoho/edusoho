@@ -136,6 +136,25 @@ class CourseController extends BaseController
     public function showAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
+        if (isset($_COOKIE["octooken".$id])){
+
+                $octooken=$_COOKIE['octooken'.$id];
+
+
+        }else{
+          
+            $octooken = $request->query->get('octooken'.$id, '0');
+
+            if(empty($octooken)){
+
+                setcookie("octooken".$id,  $octooken, time()-1);
+            }else{
+
+                   setcookie("octooken".$id,  $octooken, time()+3600*24*3);
+            }
+          
+        }
+        
         if (empty($course)) {
             throw $this->createNotFoundException();
         }
