@@ -6,7 +6,10 @@
     {% if student.remark %}
       <div class="text-muted text-sm">备注：{{ student.remark }}</div>
     {% endif %}
-    <div class="text-muted text-sm">{{ student.createdTime|date('Y-n-d H:i') }}加入</div>
+    <div class="text-muted text-sm">加入时间：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+    {% if student.deadline > 0 %}
+      <div class="text-muted text-sm">有效期至：{{ student.deadline|date('Y-n-d H:i') }} ({{ student.deadline|remain_time }})</div>
+    {% endif %}
   </td>
 
   <td>
