@@ -9,7 +9,7 @@ CREATE TABLE `block` (
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_history`;
 CREATE TABLE `block_history` (
@@ -19,7 +19,7 @@ CREATE TABLE `block_history` (
   `userId` int(11) NOT NULL COMMENT 'userId',
   `createdTime` int(11) unsigned NOT NULL COMMENT 'createdTime',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='历史表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='历史表';
 
 DROP TABLE IF EXISTS `cache`;
 CREATE TABLE `cache` (
@@ -72,6 +72,7 @@ DROP TABLE IF EXISTS `content`;
 CREATE TABLE `content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
+  `editor` enum('richeditor','none') NOT NULL DEFAULT 'richeditor' COMMENT '编辑器选择类型字段',
   `type` varchar(255) NOT NULL,
   `alias` varchar(255) NOT NULL DEFAULT '',
   `summary` text,
@@ -108,6 +109,7 @@ CREATE TABLE `course` (
   `subtitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '副标题',
   `status` enum('draft','published','closed') NOT NULL DEFAULT 'draft' COMMENT '课程状态',
   `price` float(10,2) NOT NULL DEFAULT '0.00',
+  `expiryDay` int(10) unsigned NOT NULL DEFAULT '0',
   `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程销售总收入',
   `lessonNum` int(10) unsigned NOT NULL DEFAULT '0',
   `rating` float unsigned NOT NULL DEFAULT '0' COMMENT '排行数值',
@@ -141,7 +143,7 @@ CREATE TABLE `course_announcement` (
   `createdTime` int(10) NOT NULL,
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_chapter`;
 CREATE TABLE `course_chapter` (
@@ -152,7 +154,7 @@ CREATE TABLE `course_chapter` (
   `title` varchar(255) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_favorite`;
 CREATE TABLE `course_favorite` (
@@ -161,7 +163,7 @@ CREATE TABLE `course_favorite` (
   `userId` int(10) unsigned NOT NULL COMMENT '收藏人的Id',
   `createdTime` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
 
 DROP TABLE IF EXISTS `course_lesson`;
 CREATE TABLE `course_lesson` (
@@ -219,7 +221,7 @@ CREATE TABLE `course_material` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_member`;
 CREATE TABLE `course_member` (
@@ -227,6 +229,7 @@ CREATE TABLE `course_member` (
   `courseId` int(10) unsigned NOT NULL,
   `userId` int(10) unsigned NOT NULL,
   `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员购买课程时的订单ID',
+  `deadline` int(10) unsigned NOT NULL DEFAULT '0',
   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0',
   `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数目',
   `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新的笔记更新时间',
@@ -253,7 +256,7 @@ CREATE TABLE `course_note` (
   `createdTime` int(10) NOT NULL COMMENT '笔记创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_order`;
 CREATE TABLE `course_order` (
@@ -317,7 +320,7 @@ CREATE TABLE `course_quiz` (
   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成';
 
 DROP TABLE IF EXISTS `course_quiz_item`;
 CREATE TABLE `course_quiz_item` (
@@ -332,7 +335,7 @@ CREATE TABLE `course_quiz_item` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '课时测验创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表';
 
 DROP TABLE IF EXISTS `course_quiz_item_answer`;
 CREATE TABLE `course_quiz_item_answer` (
@@ -344,7 +347,7 @@ CREATE TABLE `course_quiz_item_answer` (
   `isCorrect` tinyint(1) NOT NULL COMMENT '测验正确与否结果',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容';
 
 DROP TABLE IF EXISTS `course_review`;
 CREATE TABLE `course_review` (
@@ -403,7 +406,7 @@ CREATE TABLE `file` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `file_group`;
 CREATE TABLE `file_group` (
@@ -510,7 +513,7 @@ CREATE TABLE `navigation` (
   `isOpen` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认1，为开启',
   `isNewWin` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认为1,另开窗口',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='导航数据表';
 
 DROP TABLE IF EXISTS `notification`;
 CREATE TABLE `notification` (
@@ -654,7 +657,7 @@ CREATE TABLE `user_bind` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`fromId`),
   UNIQUE KEY `type_2` (`type`,`toId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_disk_file`;
 CREATE TABLE `user_disk_file` (
@@ -677,7 +680,7 @@ CREATE TABLE `user_disk_file` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `convertHash` (`convertHash`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_fortune_log`;
 CREATE TABLE `user_fortune_log` (
