@@ -333,7 +333,7 @@ class CourseController extends BaseController
         ));
     }
 
-    public function addMemberDeadlineDayAction(Request $request, $courseId, $userId)
+    public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
     {
         $user = $this->getUserService()->getUser($userId);
         $course = $this->getCourseService()->getCourse($courseId);
@@ -341,7 +341,7 @@ class CourseController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            $this->getCourseService()->addMemberDeadlineDay($courseId, $userId, $fields['expiryDay']);
+            $this->getCourseService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
             return $this->createJsonResponse(true);
         }
 
