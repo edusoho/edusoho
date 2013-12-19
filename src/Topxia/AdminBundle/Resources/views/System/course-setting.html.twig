@@ -20,6 +20,25 @@
       <p class="help-block">开启后，新学员加入课程后，会收到教师的欢迎私信</p>
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_body">欢迎私信内容</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{ courseSetting.welcome_body }}</textarea>
+        <div class="help-block">
+          {% verbatim %}
+          <div>变量说明：</div>
+          <ul>
+            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{course}} 为网站名称</li>
+          </ul>
+          {% endverbatim %}
+        </div>
+      </div>
+    </div>
+
   </fieldset>
   <br>
 
