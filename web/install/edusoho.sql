@@ -659,29 +659,6 @@ CREATE TABLE `user_bind` (
   UNIQUE KEY `type_2` (`type`,`toId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `user_disk_file`;
-CREATE TABLE `user_disk_file` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int(11) NOT NULL,
-  `filepath` varchar(2048) NOT NULL DEFAULT '',
-  `filename` varchar(1024) NOT NULL DEFAULT '',
-  `uri` varchar(1024) NOT NULL DEFAULT '',
-  `isDirectory` tinyint(1) NOT NULL DEFAULT '0',
-  `size` int(11) NOT NULL DEFAULT '0',
-  `mimeType` varchar(255) NOT NULL DEFAULT '',
-  `etag` varchar(128) NOT NULL DEFAULT '',
-  `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件格式转换的HashID',
-  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
-  `formats` text,
-  `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other',
-  `storage` enum('local','cloud') NOT NULL,
-  `bucket` varchar(255) NOT NULL DEFAULT '',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `createdTime` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `convertHash` (`convertHash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `user_fortune_log`;
 CREATE TABLE `user_fortune_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
