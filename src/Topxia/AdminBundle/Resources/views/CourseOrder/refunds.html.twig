@@ -46,33 +46,37 @@
       </tr>
     </thead>
     <tbody>
-      {% for refund in refunds %}
-        {% set order = orders[refund.orderId] %}
-        {% set user = users[refund.userId] %}
-        <tr>
-          <td>
-            <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank">{{ order.title }}</a>
-            <div class="text-muted text-sm">订单号：{{ order.sn }} | 成交时间：{{ order.createdTime|date('Y-n-d H:i') }}</div>
-            <div class="text-muted text-sm">退款理由：{{ refund.reasonNote }} | 退款时间：{{ refund.createdTime|date('Y-n-d H:i') }}</div>
-          </td>
-          <td>{{ order.price }}元</td>
-          <td>
-            {{ admin_macro.user_link(user) }}
-          </td>
-          <td>
-            {{ dict_text('refundStatus:html', refund.status) }}
-            {% if refund.status == 'success' %}
-              <div class="text-sm text-muted">实退{{ refund.actualAmount }}元</div>
-            {% endif %}
-          </td>
-          <td>
-            {% if refund.status == 'created' %}
-              <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {id:order.id}) }}">审核</button>
-              <button class="btn btn-sm btn-default cancel-refund" type="button" data-url="{{ path('admin_order_cancel_refund', {id:order.id}) }}">取消</button>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
+      {% if refunds %}
+        {% for refund in refunds %}
+          {% set order = orders[refund.orderId] %}
+          {% set user = users[refund.userId] %}
+          <tr>
+            <td>
+              <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank">{{ order.title }}</a>
+              <div class="text-muted text-sm">订单号：{{ order.sn }} | 成交时间：{{ order.createdTime|date('Y-n-d H:i') }}</div>
+              <div class="text-muted text-sm">退款理由：{{ refund.reasonNote }} | 退款时间：{{ refund.createdTime|date('Y-n-d H:i') }}</div>
+            </td>
+            <td>{{ order.price }}元</td>
+            <td>
+              {{ admin_macro.user_link(user) }}
+            </td>
+            <td>
+              {{ dict_text('refundStatus:html', refund.status) }}
+              {% if refund.status == 'success' %}
+                <div class="text-sm text-muted">实退{{ refund.actualAmount }}元</div>
+              {% endif %}
+            </td>
+            <td>
+              {% if refund.status == 'created' %}
+                <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {id:order.id}) }}">审核</button>
+                <button class="btn btn-sm btn-default cancel-refund" type="button" data-url="{{ path('admin_order_cancel_refund', {id:order.id}) }}">取消</button>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">暂无退款记录</div></td></tr>
+      {% endif %}
     </tbody>
   </table>
 

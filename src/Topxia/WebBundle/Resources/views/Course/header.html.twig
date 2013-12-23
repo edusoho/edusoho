@@ -100,5 +100,11 @@
         </div>
       </div>
     </div>
+    {% if not isNonExpired %}
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
+      </div>
+    {% endif %}
   </div>
 </div>

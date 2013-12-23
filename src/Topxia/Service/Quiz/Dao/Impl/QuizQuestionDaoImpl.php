@@ -37,6 +37,12 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     } 
 
+    public function deleteQuestionsByParentId($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE parentId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($id));
+    }
+
     public function searchQuestionCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -82,10 +88,16 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'questions')
             ->andWhere('questionType = :questionType')
+            ->andWhere('parentId = :parentId')
             ->andWhere('targetId = :targetId')
             ->andWhere('targetType = :targetType');
 
-        if (isset($conditions['target'])) {
+        if(empty($conditions['parentId'])){
+            $builder->andStaticWhere(" `parentId` = '0' ");
+            
+        }   
+
+        if (isset($conditions['target']) && empty($conditions['parentId']) ) {
             $target = array();
             foreach ($conditions['target'] as $targetType => $targetIds) {
                 if (is_array($targetIds)) {
@@ -104,6 +116,9 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             }
         }
 
+
+
+      
         return $builder;
     }
 

@@ -2,7 +2,41 @@
 
 {% block title %}写私信 - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/create' %}
+{% 
+  set script_arguments = {
+    followingMatchByNickname: path('following_match_bynickname')
+  } 
+%}
+
 {% block content %}
+<style>
+
+.ui-autocomplete {
+    border:1px solid #ccc;
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 3px #EEEEEE;
+}
+.ui-autocomplete-ctn{
+    margin:0;
+    padding:0;
+}
+.ui-autocomplete-item {
+    width: 180px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 30px;
+    padding:0 10px 0 10px;
+    cursor: default;
+}
+.ui-autocomplete-item-hover {
+    background:#f2f2f2;
+}
+.ui-autocomplete-item-hl {
+    background:#F6FF94;
+}
+
+</style>
 <div class="row row-8">
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
@@ -15,7 +49,7 @@
 
         <div class="form-group">
           <div class="col-md-12 controls">
-            {{ form_widget(form.receiver, {attr:{class:'form-control', placeholder:'收信人昵称', 'data-url':path('message_check_receiver'), 'data-display':'收信人昵称'}})  }}
+            {{ form_widget(form.receiver, {attr:{class:'form-control', placeholder:'收信人昵称', 'data-auto-url':script_arguments.followingMatchByNickname, 'data-url':path('message_check_receiver'), 'data-display':'收信人昵称'}})  }}
           </div>
         </div>
 
@@ -34,8 +68,6 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-
-
 
 
     </div><!-- /panel -->

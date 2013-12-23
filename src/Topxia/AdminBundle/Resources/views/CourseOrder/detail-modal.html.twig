@@ -63,7 +63,7 @@
            </td> 
       </tr>
       <tr> <th width="25%">创建时间</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
-      <tr> <th width="25%">付款时间</th> <td width="75%">{{ order.paidTime | date('Y-n-d H:i:s') }}</td> </tr>
+      <tr> <th width="25%">付款时间</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
     </table>
   </div>
 

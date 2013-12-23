@@ -9,7 +9,7 @@ class CourseThreadController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
@@ -48,7 +48,15 @@ class CourseThreadController extends BaseController
 
     public function showAction(Request $request, $courseId, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            // return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
+            $isMemberNonExpired = false;
+        } else {
+            $isMemberNonExpired = true;
+        }
+        
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         if (empty($thread)) {
             throw $this->createNotFoundException();
@@ -90,13 +98,18 @@ class CourseThreadController extends BaseController
             'elitePosts' => $elitePosts,
             'users' => $users,
             'isManager' => $isManager,
+            'isMemberNonExpired' => $isMemberNonExpired,
             'paginator' => $paginator,
         ));
     }
 
     public function createAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+
+        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
+        }
 
         $type = $request->query->get('type') ? : 'discussion';
         $form = $this->createThreadForm(array(
@@ -209,8 +222,9 @@ class CourseThreadController extends BaseController
 
     public function postAction(Request $request, $courseId, $id)
     {
-        $user = $this->getCurrentUser();
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
+
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         $form = $this->createPostForm(array(
             'courseId' => $thread['courseId'],

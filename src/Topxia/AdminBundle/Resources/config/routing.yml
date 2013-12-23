@@ -376,6 +376,10 @@ admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
 
+admin_setting_course_setting:
+    pattern:  /setting/course-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
@@ -509,6 +513,15 @@ admin_message_delete_messages:
     pattern: /delete/choosed/messages
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
     methods: [POST]
+
+admin_login_record:
+    pattern: /login_record
+    defaults: { _controller: TopxiaAdminBundle:LoginRecord:index }
+
+admin_login_record_details:
+    pattern: /login_record/{id}/details
+    defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
+
 
 admin_thread:
     pattern:  /thread

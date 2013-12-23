@@ -20,8 +20,8 @@
       <thead>
         <tr>
           <th width="40%">学员</th>
-          <th width="24%">学习进度</th>
-          <th width="36%">操作</th>
+          <th width="30%">学习进度</th>
+          <th width="30%">操作</th>
         </tr>
       </thead>
       <tbody>
@@ -31,7 +31,7 @@
           {% set isFollowing = user.id in followingIds %}
           {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
         {% else %}
-          <tr class="empty"><td colspan="3">无学员记录</td></tr>
+          <tr class="empty"><td colspan="20">无学员记录</td></tr>
         {% endfor %}
       </tbody>
     </table>

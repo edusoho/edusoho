@@ -114,7 +114,7 @@ class DataDict
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
 			'email' => '邮件地址',
-			'loginIp' => '登陆IP'
+			'loginIp' => '登录IP'
 		),
 		'logLevel' => array(
 			'info' => '提示',
@@ -133,6 +133,23 @@ class DataDict
 			'qq' => 'QQ登录',
 			'douban' => '豆瓣连接'
 		),
+		'questionType' => array(
+	    	'choice' => '单选题',
+	    	'single_choice' => '多选题',
+	    	'fill' => '填空题',
+	    	'determine' => '判断题',
+	    	'material' => '材料题',
+	    	'essay' => '问答题',
+        ),
+        'unquestionType' => array(
+	    	'choice' => '选择题',
+	    	'single_choice' => '选择题',
+	    	'fill' => '填空题',
+	    	'determine' => '判断题',
+	    	'material' => '材料题',
+	    	'essay' => '问答题',
+        ),
+
 	);
 
 	public static function dict($type)

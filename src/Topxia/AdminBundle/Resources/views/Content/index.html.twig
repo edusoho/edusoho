@@ -41,11 +41,15 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for content in contents %}
-		  {% set user = users[content.userId] %}
-		  {% set category = categories[content.categoryId]|default(null) %}
-		  {% include 'TopxiaAdminBundle:Content:content-tr.html.twig' %}
-		{% endfor %}
+		{% if contents %}
+			{% for content in contents %}
+			  {% set user = users[content.userId] %}
+			  {% set category = categories[content.categoryId]|default(null) %}
+			  {% include 'TopxiaAdminBundle:Content:content-tr.html.twig' %}
+			{% endfor %}
+		{% else %}
+			<tr><td colspan="20"><div class="empty">暂无页面记录</div></td></tr>
+		{% endif %}
 	</tbody>
 </table>
 

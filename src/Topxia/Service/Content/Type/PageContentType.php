@@ -5,7 +5,7 @@ class PageContentType extends ContentType
 {
 	public function getBasicFields()
 	{
-		return array('title', 'body', 'picture', 'alias', 'template');
+		return array('title', 'body', 'picture', 'alias', 'template','editor');
 	}
 
 	public function getAlias()

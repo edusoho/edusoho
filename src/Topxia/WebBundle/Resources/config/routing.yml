@@ -168,6 +168,10 @@ course_order_cancel_refund:
     defaults: { _controller: TopxiaWebBundle:CourseOrder:cancelRefund }
     methods: [POST]
 
+course_set_expiryday:
+    pattern:  /course/{courseId}/set_expiryday/{userId}
+    defaults: { _controller: TopxiaWebBundle:Course:addMemberExpiryDays }
+
 course_learn:
     pattern:  /course/{id}/learn
     defaults: { _controller: TopxiaWebBundle:Course:learn }
@@ -485,8 +489,57 @@ course_manage_quiz_question:
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:index }
 
 course_manage_quiz_question_create:
-    pattern: /course/{courseId}/manage/question/create
+    pattern: /course/{courseId}/manage/question/create/{type}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
+
+course_manage_quiz_question_update:
+    pattern: /course/{courseId}/manage/question/edit/{id}
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:edit }
+
+course_manage_quiz_question_delete:
+    pattern: /course/{courseId}/manage/question/delete/{id}
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:delete }
+
+course_manage_quiz_question_deletes:
+    pattern: /course/{courseId}/manage/question/deletes
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:deletes }
+
+course_manage_quiz_question_category:
+    pattern: /course/{courseId}/manage/question/category
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:category }
+
+course_manage_quiz_question_category_create:
+    pattern: /course/{courseId}/manage/question/category/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:createCategory }
+
+course_manage_quiz_question_category_edit:
+    pattern: /course/{courseId}/manage/question/category/{categoryId}/edit
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:updateCategory }
+
+course_manage_quiz_question_category_delete:
+    pattern: /course/{courseId}/manage/question/category/{categoryId}/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:deleteCategory }
+
+course_manage_quiz_question_category_sort:
+    pattern: /course/{courseId}/manage/question/categorys/sort
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:sortCategories }
+    methods: [POST]
+
+course_manage_quiz_question_generate:
+    pattern: /course/{courseId}/manage/question/generate
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:index }
+
+course_manage_quiz_question_generate_create:
+    pattern: /course/{courseId}/manage/question/generate/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:create }
+
+course_manage_quiz_question_generate_update:
+    pattern: /course/{courseId}/manage/question/generate/update
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:update }
+
+course_manage_quiz_question_generate_delete:
+    pattern: /course/{courseId}/manage/question/generate/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:delete }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
@@ -574,6 +627,13 @@ settings_avatar_fetch_partner:
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
 
+setting_nickname:
+    pattern: /settings/nickname
+    defaults: { _controller: TopxiaWebBundle:Settings:nickname }
+
+update_nickname_check:
+    pattern:  /settings/nickname/check
+    defaults: { _controller: TopxiaWebBundle:Settings:nicknameCheck }
 
 settings_password:
     pattern:  /settings/password
@@ -645,6 +705,10 @@ tag_all:
 tag_match:
     pattern: /tag/match.jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
+
+following_match_bynickname:
+    pattern: /following/bynickname/match.jsonp
+    defaults: { _controller: TopxiaWebBundle:Message:match }
 
 comment_widget_init:
     pattern:  /comment-widget/init
@@ -796,33 +860,6 @@ message_delete:
     pattern: /message/conversation/{conversationId}/message/{messageId}/delete
     defaults: {_controller: TopxiaWebBundle:Message:deleteConversationMessage }
     methods: [POST]
-
-disk_upload:
-    pattern: /disk/upload
-    defaults: {_controller: TopxiaWebBundle:Disk:upload }
-    methods: [POST]
-
-disk_upload_callback:
-    pattern: /disk/upload/callback
-    defaults: {_controller: TopxiaWebBundle:Disk:uploadCallback }
-
-disk_browse:
-    pattern: /disk/browse
-    defaults: {_controller: TopxiaWebBundle:Disk:browse }
-
-disk_convert_callback:
-    pattern: /disk/convert/callback
-    defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
-    methods: [POST]
-
-disk_convert_status:
-    pattern: /disk/convert/status
-    defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
-
-disk_file_info:
-    pattern: /disk/file/{type}/info
-    defaults: {_controller: TopxiaWebBundle:Disk:fileInfo }
-
 
 content_article_show:
     pattern: /article/{alias}

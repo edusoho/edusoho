@@ -15,6 +15,11 @@ define(function(require, exports, module) {
 
     var rules = [
         [
+            'integer',
+            /[0-9]*/,
+            '{{display}}必须是数字'
+        ],
+        [
             'chinese',
             /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i,
             '{{display}}必须是中文字'

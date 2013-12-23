@@ -53,20 +53,20 @@ class MoneyCardServiceImpl extends BaseService
         $batch['number'] = (int)$batch['number'];
 
         if ($batch['money'] <= 0) {
-            throw $this->createServiceException('money error!');
+            throw $this->createServiceException('ERROR! Money Value Less Than Zero!');
         }
         if ($batch['cardLength'] <= 0) {
-            throw $this->createServiceException('cardLength error!');
+            throw $this->createServiceException('ERROR! CardLength Less Than Zero!');
         }
         if ($batch['number'] <= 0) {
-            throw $this->createServiceException('cardsNumber error!');
+            throw $this->createServiceException('ERROR! Card Number Less Than Zero!');
         }
 
         $batch['rechargedNumber'] = 0;
         $batch['userId'] = $this->getCurrentUser()->id;
         $batch['createdTime'] = time();
 
-        $moneyCardIds = $this->makeRands($batch['cardLength'], $batch['number'], $batch['cardPrefix'], $moneyCardData['passwordMedian']);
+        $moneyCardIds = $this->makeRands($batch['cardLength'], $batch['number'], $batch['cardPrefix'], $moneyCardData['passwordLength']);
 
         if (!$this->getMoneyCardDao()->isCardIdAvaliable($moneyCardIds)) {
             throw $this->createServiceException('卡号有重复，生成失败，请重新生成！');
@@ -86,10 +86,7 @@ class MoneyCardServiceImpl extends BaseService
         }
 
         $this->getMoneyCardDao()->addMoneyCard($moneyCards);
-
         $this->getLogService()->info('money_card_batch', 'create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
-
-
         return $batch;
     }
 
@@ -183,7 +180,7 @@ class MoneyCardServiceImpl extends BaseService
         $this->getLogService()->info('money_card_batch', 'delete', "删除了批次为{$id}的充值卡");
     }
 
-    private function makeRands ($median, $number, $cardPrefix, $passwordMedian)
+    private function makeRands ($median, $number, $cardPrefix, $passwordLength)
     {
         $cardIds = array();
         $i = 0;
@@ -194,7 +191,7 @@ class MoneyCardServiceImpl extends BaseService
             }
 
             if (!isset($cardIds[$cardPrefix.$id])) {
-                $cardIds[$cardPrefix.$id] = $this->makePassword($passwordMedian);
+                $cardIds[$cardPrefix.$id] = $this->makePassword($passwordLength);
                 $i++;
             }
             if ($i >= $number) {

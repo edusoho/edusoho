@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 	require('common/validator-rules').inject(Validator);
     
 	exports.run = function() {
-		var $form = $('#category-form');
+        var $form = $('#category-form');
 		var $modal = $form.parents('.modal');
         var $table = $('#category-table');
 

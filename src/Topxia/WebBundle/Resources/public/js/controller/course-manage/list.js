@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         // require('../../util/short-long-text')($table);
         require('../../util/batch-select')($container);
         require('../../util/batch-delete')($container);
-        // require('../../util/item-delete')($container);
+        require('../../util/item-delete')($container);
         // $("#startDate, #endDate").datetimepicker();      
 
     };

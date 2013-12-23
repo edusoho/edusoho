@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'large' %}
+{% block title %}{{ user.nickname }}登录日志{% endblock %}
+{% block body %}
+
+<div id="login-record-details">
+
+  <table class="table table-bordered" id="">
+    <thead>
+      <tr>
+        <th>登录时间</th>
+        <th>登录IP</th>
+        <th>登录地点</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for loginRecord in loginRecords %}
+        <tr>
+          <td>{{ loginRecord.createdTime|date('Y-n-d H:i:s') }}</td>
+          <td>{{ loginRecord.ip }}</td>
+          <td>{{ loginRecord.location }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(loginRecordPaginator) }}
+</div>
+
+{% endblock %}
+
+
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}

@@ -20,6 +20,7 @@ class WebExtension extends \Twig_Extension
         return array(
             'smart_time' => new \Twig_Filter_Method($this, 'smarttimeFilter') ,
             'time_range' => new \Twig_Filter_Method($this, 'timeRangeFilter'),
+            'remain_time' => new \Twig_Filter_Method($this, 'remainTimeFilter'),
             'location_text' => new \Twig_Filter_Method($this, 'locationTextFilter'),
             'tags_html' => new \Twig_Filter_Method($this, 'tagsHtmlFilter', array('is_safe' => array('html'))),
             'file_size'  => new \Twig_Filter_Method($this, 'fileSizeFilter'),
@@ -76,6 +77,25 @@ class WebExtension extends \Twig_Extension
         }
 
         return date('Y-m-d', $time);
+    }
+
+    public function remainTimeFilter($value)
+    {
+        $remain = $value - time();
+
+        if ($remain <= 0) {
+            return '0分钟';
+        }
+
+        if ($remain <= 3600) {
+            return round($remain / 60) . '分钟';
+        }
+
+        if ($remain < 86400) {
+            return round($remain / 3600) . '小时';
+        }
+
+        return round($remain / 86400) . '天';
     }
 
     public function durationFilter($value)

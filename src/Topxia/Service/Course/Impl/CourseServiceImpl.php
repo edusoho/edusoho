@@ -45,6 +45,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$orderBy =  array('hitNum', 'DESC');
 		} else if ($sort == 'recommended') {
 			$orderBy = array('recommendedTime', 'DESC');
+		} else if ($sort == 'Rating') {
+			$orderBy = array('Rating' , 'DESC');
+		} else if ($sort == 'hitNum') {
+			$orderBy = array('hitNum' , 'DESC');
+		} else if ($sort == 'studentNum') {
+			$orderBy = array('studentNum' , 'DESC');
 		} else {
 			$orderBy = array('createdTime', 'DESC');
 		}
@@ -286,6 +292,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'title' => '',
 			'subtitle' => '',
 			'about' => '',
+			'expiryDay' => 0,
 			'categoryId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
@@ -726,7 +733,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function startLearnLesson($courseId, $lessonId)
 	{
-		$course = $this->tryTakeCourse($courseId);
+		list($course, $member) = $this->tryTakeCourse($courseId);
 		$user = $this->getCurrentUser();
 
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
@@ -980,6 +987,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return ($chapterMaxSeq > $lessonMaxSeq ? $chapterMaxSeq : $lessonMaxSeq) + 1;
 	}
 
+	public function addMemberExpiryDays($courseId, $userId, $day)
+	{
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+		$deadline = $day*24*60*60+$member['deadline'];
+
+		return $this->getMemberDao()->updateMember($member['id'], array(
+			'deadline' => $deadline
+		));
+	}
+
 	/**
 	 * Member API
 	 */
@@ -1142,10 +1160,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
 		}
 
+		if ($course['expiryDay'] > 0) {
+			$deadline = $course['expiryDay']*24*60*60 + time();
+		} else {
+			$deadline = 0;
+		}
+
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+			'deadline' => $deadline,
 			'role' => 'student',
 			'remark' => empty($info['remark']) ? '' : $info['remark'],
 			'createdTime' => time()
@@ -1153,12 +1178,27 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->addMember($fields);
 
+		$setting = $this->getSettingService()->get('course', array());
+		if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
+			$message = $this->getWelcomeMessageBody($user, $course);
+	        $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
+	    }
+
 		$fields = array('studentNum'=> $this->getCourseStudentCount($courseId));
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 
 		return $member;
 
 	}
+
+	private function getWelcomeMessageBody($user, $course)
+    {
+        $setting = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace = array('{{nickname}}', '{{course}}');
+        $valuesToReplace = array($user['nickname'], $course['title']);
+        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+        return $welcomeMessageBody;
+    }
 
 	public function removeStudent($courseId, $userId)
 	{
@@ -1337,7 +1377,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-			return $course;
+			return array($course, null);
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
@@ -1345,7 +1385,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
 		}
 
-		return $course;
+		return array($course, $member);
+	}
+
+	public function isMemberNonExpired($course, $member)
+	{
+		if (empty($course) or empty($member)) {
+			throw $this->createServiceException("course, member参数不能为空");
+		}
+
+		if ($member['deadline'] == 0) {
+			return true;
+		}
+
+		if ($member['deadline'] > time()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public function canTakeCourse($course)
@@ -1558,6 +1615,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
+    }
+
+    private function getMessageService(){
+        return $this->createService('User.MessageService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
 }

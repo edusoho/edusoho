@@ -62,6 +62,46 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function nicknameAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        
+        $is_nickname = $this->getSettingService()->get('user_partner');
+
+        if($is_nickname['nickname_enabled'] == 0){
+            return $this->redirect($this->generateUrl('settings'));
+        }
+
+        if ($request->getMethod() == 'POST') {
+
+            $nickname = $request->request->get('nickname');
+            $this->getAuthService()->changeNickname($user['id'], $nickname);
+            $this->setFlashMessage('success', '昵称修改成功！');
+            return $this->redirect($this->generateUrl('settings'));
+        }
+        return $this->render('TopxiaWebBundle:Settings:nickname.html.twig',array(
+        ));
+    }
+
+    public function nicknameCheckAction(Request $request)
+    {
+        $nickname = $request->query->get('value');
+        $currenUser = $this->getUserService()->getCurrentUser();
+
+        if ($currenUser['nickname'] == $nickname){
+            return $this->createJsonResponse(array('success' => true, 'message' => ''));
+        }
+
+        list ($result, $message) = $this->getAuthService()->checkUsername($nickname);
+        if ($result == 'success'){
+            $response = array('success' => true, 'message' => '');
+        } else {
+            $response = array('success' => false, 'message' => '昵称已存在');
+        }
+    
+        return $this->createJsonResponse($response);
+    }
+
 	public function avatarAction(Request $request)
 	{
         $user = $this->getCurrentUser();
@@ -459,5 +499,10 @@ class SettingsController extends BaseController
     private function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
