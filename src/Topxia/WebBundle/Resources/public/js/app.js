@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
 	exports.load = function(name) {
 		if (name.substr(0, 7) == 'custom/') {
-			name = name + '.js?';
+			name = '../../../bundles/customweb/js/controller/' + name.substr(7) + '.js?';
 		} else {
 			name = './controller/' + name + '.js?';
 		}

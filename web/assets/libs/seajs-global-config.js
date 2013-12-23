@@ -42,8 +42,7 @@ seajs.config({
 
 	// 路径配置
 	paths: {
-		'common': 'common/',
-		'custom': '../../../bundles/customweb/js/controller'
+		'common': 'common/'
 	},
 
 	// 变量配置
