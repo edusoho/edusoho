@@ -59,13 +59,13 @@ class DefaultController extends BaseController
       
         //学习动态
         $studyLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
-            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'course_learning'),'created',0,4);
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'course_learning'),'created',0,5);
         $studyLogUserIds=ArrayToolkit::column($studyLogs,'userId');
         $studyLogUsers=$this->getUserService()->findUsersByIds($studyLogUserIds); 
 
         //答疑动态
         $answerLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
-            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,4);
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,5);
         $answerLogUserIds=ArrayToolkit::column($answerLogs,'userId');
         $answerLogUsers=$this->getUserService()->findUsersByIds($answerLogUserIds); 
        
