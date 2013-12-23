@@ -38,8 +38,7 @@ seajs.config({
 	},
 
 	// 预加载项
-	preload: [
-	this.JSON ? '' : 'json'],
+	preload: [this.JSON ? '' : 'json'],
 
 	// 路径配置
 	paths: {
