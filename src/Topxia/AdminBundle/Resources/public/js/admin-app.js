@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 			name = './controller/' + name + '.js?';
 		}
 
-		require.async('./controller/' + name + '.js?' + window.app.version, function(controller){
+		require.async(name + '.js?' + window.app.version, function(controller){
 			if ($.isFunction(controller.run)) {
 				controller.run();
 			}
