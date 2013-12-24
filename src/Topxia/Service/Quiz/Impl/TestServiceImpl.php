@@ -48,12 +48,18 @@ class TestServiceImpl extends BaseService implements TestService
     	if(empty($question)){
     		return array();
     	}
+
     	$field = array();
         $field['testId'] = $testId;
-        $field['seq'] = $this->getTestItemDao()->getItemsCountByTestId($testId)+1;
         $field['questionId'] = $question['id'];
         $field['questionType'] = $question['questionType'];
         $field['score'] = $question['score'];
+
+        if($question['parentId'] == '0'){
+            $field['seq'] = $this->getTestItemDao()->getItemsCountByTestIdAndQuestionType($testId, $question['questionType'])+1;
+        } else {
+            $field['seq'] = $this->getTestItemDao()->getItemsCountByTestIdAndParentId($testId, $question['parentId'])+1;
+        }
 
         return $this->getTestItemDao()->addItem($field);
     }
@@ -128,14 +134,12 @@ class TestServiceImpl extends BaseService implements TestService
         $question = $this->getQuestionService()->getQuestion($questionId);
     	if(empty($item) || empty($question)){
     		return array();
-    	}
-        $field['testId'] = $item['testId'];
-        $field['seq'] = $item['seq'];
-        $field['questionId'] = $question['id'];
+        }
+        $field['questionId']   = $question['id'];
         $field['questionType'] = $question['questionType'];
-        $field['parentId'] = $question['parentId'];
-        $field['score'] = $question['score'];
-        return $this->getTestItemDao()->updateItem($field);  
+        $field['parentId']     = $question['parentId'];
+        
+        return $this->getTestItemDao()->updateItem($id, $field);  
     }
 
     public function deleteItem($id)
@@ -144,8 +148,8 @@ class TestServiceImpl extends BaseService implements TestService
         if(empty($item)){
             return false;
         }
-        
-        if($item['questionType'] == 'material'){
+
+        if($item['parentId'] != 0){
             $this->getTestItemDao()->deleteItemsByParentId($item['parentId']);
         }
 

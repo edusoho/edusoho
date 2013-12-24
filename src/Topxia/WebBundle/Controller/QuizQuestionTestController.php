@@ -193,7 +193,7 @@ class QuizQuestionTestController extends BaseController
 	public function createItemAction(Request $request, $courseId,  $testPaperId)
 	{
 		$questionId = $request->query->get('questionId');
-		$replaceId = $request->query->get('replaceId');
+		$replaceId  = $request->query->get('replaceId');
 
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 
@@ -204,13 +204,13 @@ class QuizQuestionTestController extends BaseController
 		$questions[$question['id']] = $question; 
 
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-		if(!empty($replaceId)){
-			$this->getTestService()->deleteItem($replaceId);
+		if (!empty($replaceId)){
+			$item = $this->getTestService()->updateItem($replaceId, $questionId);
+			echo "<pre>";var_dump($item);header('Content-type:text/html;charset=utf-8');echo "</pre>"; exit();
+		} else {
+			$item = $this->getTestService()->createItem($testPaperId, $questionId);
 		}
-
-        $item = $this->getTestService()->createItem($testPaperId, $questionId);
-
-
+        
 		return $this->render('TopxiaWebBundle:QuizQuestionItem:tr.html.twig', array(
 			'course' => $course,
 			'testPaperId' => $testPaperId,

@@ -77,11 +77,23 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         $sql ="SELECT * FROM {$this->table} WHERE `testId` = ? and `{$field[0]}` = '{$field[1]}'";
         return $this->getConnection()->fetchAll($sql, array($testPaperId));
     }
-    
+
     public function getItemsCountByTestId($testId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE testId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($testId));
+    }
+
+    public function getItemsCountByTestIdAndParentId($testId, $parentId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `parentId` = ?";
+        return $this->getConnection()->fetchColumn($sql, array($testId, $parentId));
+    }
+
+    public function getItemsCountByTestIdAndQuestionType($testId, $questionType)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `questionType` = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($testId, $questionType));
     }
 
     public function deleteItemByIds(array $ids)
