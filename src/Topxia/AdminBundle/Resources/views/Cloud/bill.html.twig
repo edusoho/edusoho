@@ -24,10 +24,22 @@
     {% for bill in bills %}
     <tr>
       <td>{{ bill.date }}</td>
-      <td>{{ bill.space }}G</td>
-      <td>{{ bill.transfer }}G</td>
-      <td>{{ bill.spaceFee }}元</td>
-      <td>{{ bill.transferFee }}元</td>
+      <td>
+        {{ bill.space }}G
+        <br><small class="text-muted">免费额度：{{ bill.spaceGift }}G</small>
+      </td>
+      <td>
+        {{ bill.transfer }}G
+        <br><small class="text-muted">免费额度：{{ bill.transferGift }}G/月</small>
+      </td>
+      <td>
+        {{ bill.spaceFee }}元
+        <br><small class="text-muted">(单价：{{ bill.spacePrice }}元/G)</small>
+      </td>
+      <td>
+        {{ bill.transferFee }}元
+        <br><small class="text-muted">(单价：{{ bill.transferPrice }}元/G)</small>
+      </td>
       <td><strong class="text-success">{{ bill.totalFee }}元</strong></td>
     </tr>
     {% else %}

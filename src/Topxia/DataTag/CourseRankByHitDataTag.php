@@ -25,7 +25,7 @@ class CourseRankByHitDataTag extends CourseBaseDataTag implements DataTag
 
     	$courses = $this->getCourseService()->searchCourses($conditions,'hitNum', 0, $arguments['count']);
 
-        return $this->foreachCourses($courses);
+        return $this->getCourseTeachersAndCategories($courses);
     }
 
 }

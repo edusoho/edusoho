@@ -264,7 +264,7 @@ class QuizServiceImpl extends BaseService implements QuizService
     {
         $user = $this->getCurrentUser();
         if($user['id'] != $userId){
-            throw $this->createServiceException("用户已经尚未登陆，操作失败!");
+            throw $this->createServiceException("用户已经尚未登录，操作失败!");
         }
         $quiz = $this->getQuizDao()->getQuiz($quizId);
         if(empty($quiz)){

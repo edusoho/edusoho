@@ -369,17 +369,18 @@ class SettingController extends BaseController
 
     public function courseSettingAction(Request $request)
     {
-        $courseSetting = $this->getSettingService()->get('course_setting', array());
+        $courseSetting = $this->getSettingService()->get('course', array());
 
         $default = array(
-            'in_course_mail' => '1',
+            'welcome_message_enabled' => '0',
+            'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}'
         );
 
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
-            $this->getSettingService()->set('course_setting', $courseSetting);
+            $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
         }

@@ -25,7 +25,7 @@ class CourseRankByStudentDataTag extends CourseBaseDataTag implements DataTag
 
     	$courses = $this->getCourseService()->searchCourses($conditions,'studentNum', 0, $arguments['count']);
         
-        return $this->foreachCourses($courses);        
+        return $this->getCourseTeachersAndCategories($courses);    
     }
 
 }

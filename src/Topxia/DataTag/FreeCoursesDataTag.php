@@ -30,7 +30,7 @@ class FreeCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
 
-        return $this->foreachCourses($courses);
+        return $this->getCourseTeachersAndCategories($courses);
     }
 
 }

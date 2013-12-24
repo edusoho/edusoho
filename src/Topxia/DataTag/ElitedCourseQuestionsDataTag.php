@@ -25,7 +25,6 @@ class ElitedCourseQuestionsDataTag extends CourseBaseDataTag implements DataTag
         $conditions = array( 'courseId' => $arguments['courseId'],'type' => 'question','isElite' => '1');
     	$questions = $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
         $questions['courses'] = $this->getCourseService()->getCourse($arguments['courseId']);
-        $questions['teachers'] = $this->getTeachers($questions['course']['teacherIds']);
 
         return $questions;
 

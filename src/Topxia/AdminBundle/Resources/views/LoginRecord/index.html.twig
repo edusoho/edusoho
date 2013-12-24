@@ -1,13 +1,13 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% block title %}登陆记录 - {{ parent() }}{% endblock %}
+{% block title %}登录日志 - {{ parent() }}{% endblock %}
 
 {% set menu = 'login_record' %}
 {% set script_controller = 'login-record/list' %}
 
 {% block main %}
 <div class="page-header">
-  <h1>登陆记录</h1>
+  <h1>登录日志</h1>
 </div>
 
 <div class="well well-sm">
@@ -40,8 +40,8 @@
     <tr>
       <th>用户名</th>
       <th>用户邮箱</th>
-      <th>登陆时间IP</th>
-      <th>登陆地点</th>
+      <th>登录时间IP</th>
+      <th>登录地点</th>
       <th width="8%">查看记录</th>
     </tr>
   </thead>

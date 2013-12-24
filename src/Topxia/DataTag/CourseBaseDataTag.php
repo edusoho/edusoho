@@ -8,17 +8,6 @@ use Topxia\Service\Common\ServiceKernel;
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag  
 {
 
-	protected function getTeachers(array $ids)
-    {   
-        $teachers = $this->getUserService()->findUsersByIds($ids);
-        foreach ($teachers as $key => &$teacherValues) {
-          $teacherValues['password']= null;
-          $teacherValues['salt']= null;
-        }
-        
-        return $teachers;
-    }
-
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -105,39 +94,70 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException("group参数缺失");
         }
     }
- 	protected function foreachCourses($courses)
+    
+ 	protected function getCourseTeachersAndCategories($courses)
     {
+        $userIds = array();
+        $categoryIds = array();
+	    foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+            $categoryIds[] = $course['categoryId'];
+        }
 
-	    foreach ($courses as $key => &$courseValues) {
-            $courseValues['password'] = null;
-            $courseValues['salt'] = null;
-	        $courseValues['teachers'] = $this->getTeachers($courseValues['teacherIds']);
-            
-	        if ($courseValues['categoryId'] != '0') {
-	            $courseValues['category'] = $this->getCategoryService()->getCategory($courseValues['categoryId']);
-	        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-	    }
+        foreach ($courses as &$course) {
+            $teachers = array();
+            foreach ($course['teacherIds'] as $teacherId) {
+                $user = $users[$teacherId];
+                unset($user['password']);
+                unset($user['salt']);
+                $teachers[] = $user;
+            }
+            $course['teachers'] = $teachers;
+
+            $categoryId = $course['categoryId'];
+            if($categoryId!=0) {
+                $course['category'] = $categories[$categoryId];
+            }
+        }
+        
 		return $courses;
 	}
 
-    protected function foreachReviews($courseReviews)
+    protected function getCoursesAndUsers($courseRelations)
     {
-        foreach ($courseReviews as $key => &$ReviewValues) {
-            $ReviewValues['reviewer'] = $this->getUserService()->getUser($ReviewValues['userId']);
-            $ReviewValues['reviewer']['password'] = NULL;
-            $ReviewValues['reviewer']['salt'] = NULL;
-            $ReviewValues['course'] = $this->getCourseService()->getCourse($ReviewValues['courseId']);
-
+        $userIds = array();
+        $courseIds = array();
+        foreach ($courseRelations as &$courseRelation) {
+            $userIds[] = $courseRelation['userId'];
+            $courseIds[] = $courseRelation['courseId'];
         }
-        return $courseReviews;
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        foreach ($courseRelations as &$courseRelation) {
+            $userId = $courseRelation['userId'];
+            $user = $users[$userId];
+            unset($user['password']);
+            unset($user['salt']);
+            $courseRelation['User'] = $user;
+
+            $courseId = $courseRelation['courseId'];
+            $course = $courses[$courseId];
+            $courseRelation['course'] = $course;
+        }
+
+        return $courseRelations;
     }
 
-    protected function foreachUsers($users)
+    protected function unsetUserPasswords($users)
     {
-        foreach ($users as $key => &$uservalues) {
-            $uservalues['password'] = NULL;
-            $uservalues['salt'] = NULL;
+        foreach ($users as &$user) {
+            unset($user['password']);
+            unset($user['salt']);
         }
         return $users;
     }

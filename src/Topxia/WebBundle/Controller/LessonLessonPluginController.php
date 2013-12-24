@@ -9,7 +9,7 @@ class LessonLessonPluginController extends BaseController
     public function listAction (Request $request)
     {
         $user = $this->getCurrentUser();
-        $course = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);

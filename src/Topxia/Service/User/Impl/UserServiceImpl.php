@@ -499,7 +499,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
         if(!$result) {
-            throw $this->createServiceException('获取第三方登陆信息失败,当前只支持weibo,qq,renren');
+            throw $this->createServiceException('获取第三方登录信息失败,当前只支持weibo,qq,renren');
         }
 
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);

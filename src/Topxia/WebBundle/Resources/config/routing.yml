@@ -144,6 +144,10 @@ course_order_cancel_refund:
     defaults: { _controller: TopxiaWebBundle:CourseOrder:cancelRefund }
     methods: [POST]
 
+course_set_expiryday:
+    pattern:  /course/{courseId}/set_expiryday/{userId}
+    defaults: { _controller: TopxiaWebBundle:Course:addMemberExpiryDays }
+
 course_learn:
     pattern:  /course/{id}/learn
     defaults: { _controller: TopxiaWebBundle:Course:learn }
@@ -852,33 +856,6 @@ message_delete:
     pattern: /message/conversation/{conversationId}/message/{messageId}/delete
     defaults: {_controller: TopxiaWebBundle:Message:deleteConversationMessage }
     methods: [POST]
-
-disk_upload:
-    pattern: /disk/upload
-    defaults: {_controller: TopxiaWebBundle:Disk:upload }
-    methods: [POST]
-
-disk_upload_callback:
-    pattern: /disk/upload/callback
-    defaults: {_controller: TopxiaWebBundle:Disk:uploadCallback }
-
-disk_browse:
-    pattern: /disk/browse
-    defaults: {_controller: TopxiaWebBundle:Disk:browse }
-
-disk_convert_callback:
-    pattern: /disk/convert/callback
-    defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
-    methods: [POST]
-
-disk_convert_status:
-    pattern: /disk/convert/status
-    defaults: {_controller: TopxiaWebBundle:Disk:convertCallback }
-
-disk_file_info:
-    pattern: /disk/file/{type}/info
-    defaults: {_controller: TopxiaWebBundle:Disk:fileInfo }
-
 
 content_article_show:
     pattern: /article/{alias}

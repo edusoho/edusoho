@@ -22,6 +22,7 @@ class ConvertIpToolkit
 
 		$ips[0] = (int)$ips[0];
 		$ips[1] = (int)$ips[1];
+
 		$tinyipdataPath = __DIR__.'/tinyipdata.dat';
 		if($fp = @fopen($tinyipdataPath, 'rb')) {
 			$offset = @unpack('Nlen', @fread($fp, 4));
