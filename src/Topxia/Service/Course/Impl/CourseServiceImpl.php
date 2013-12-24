@@ -991,7 +991,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
-		$deadline = $day*24*60*60+$member['deadline'];
+		if ($member['deadline'] > 0){
+			$deadline = $day*24*60*60+$member['deadline'];
+		} else {
+			$deadline = $day*24*60*60+time();
+		}
 
 		return $this->getMemberDao()->updateMember($member['id'], array(
 			'deadline' => $deadline
