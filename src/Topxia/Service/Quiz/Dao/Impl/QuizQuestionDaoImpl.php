@@ -96,31 +96,25 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             $builder->andStaticWhere(" parentId in (".implode($conditions['parentIds'], ',').") ");
         }
 
-        /*$conditions['target']['course'] = '1,2,3'; //string
-          $conditions['target']['lesson'] = '1,2,3'; //string*/
-        if (!empty($conditions['target'])) 
-        {
+        if(!empty($conditions['notId'])){
+            $builder->andStaticWhere(" id not in (".implode($conditions['notId'], ',').") ");
+        }
+
+        if (!empty($conditions['target'])) {
             $target = array();
-            foreach ($conditions['target'] as $targetType => $targetIds) 
-            {
-                if (is_array($targetIds)) 
-                {
-                    foreach ($targetIds as $key => $targetId) 
-                    {
-                        $targetIds[$key] = (int) $targetId;
-                    }
-                    $targetIds = join(' , ', $targetIds);
-                } else {
-                    $targetIds = (int) $targetIds;
+            foreach ($conditions['target'] as $targetType => $targetIds) {
+                foreach ($targetIds as $key => $targetId) {
+                    $targetIds[] = (int) $targetId;
                 }
-                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")";
+                
+                $target[] = " targetType ='".$targetType."' and targetId in (".join(' , ', $targetIds).")";
             }
-            if (!empty($target)) 
-            {
+            if (!empty($target)) {
                 $target = join(' or ', $target);
                 $builder->andStaticWhere(" ($target) ");
             }
         }
+
         
         return $builder;
     }

@@ -140,7 +140,7 @@
             <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
             <div class="col-md-8 controls">
             
-            <input class="form-control" {% if isEdit %}value="{{question.score}}" {% endif %}type="text" id="question-score-field" name="score" />
+            <input class="form-control" {% if isEdit %}value="{{question.score}}"{% else %} value="5" {% endif %}type="text" id="question-score-field" name="score" />
             
             </div>
           </div>

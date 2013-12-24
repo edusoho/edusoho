@@ -1,12 +1,36 @@
-<tr id="{{ category.id }}" class="catgory-tr">
+<tr data-role='item'>
+  <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-  <span class="number">{{category.seq}}</span>
+    {{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}
+  </td>
+  <td>{{ dict('questionType')[item.questionType] }}</td>
+  {% if item.parentId == 0 %}
+  <td>
+    {% if item.targetType == 'lesson'%}
+      课时{{lessons[item.targetId]['number']}}
+    {% elseif item.targetType == 'course' %}
+      课程
+    {% endif %}
+  </td>
+  {% endif %}
+  <td>
+    {{ macro.user_link(users[item.userId]) }}
+    <br />
+    <span class="text-muted text-sm">{{item.updatedTime | date('Y-n-d H:i:s')}}</span>
   </td>
   <td>
-    {{ category.name }}
-  </td>
-  <td>
-	<button type="button" data-id="{{category.id}}" class="btn btn-default btn-sm delete-category" data-url="{{ path('course_manage_quiz_question_category_delete', {courseId:course.id,categoryId :category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-    <button class="btn btn-default btn-sm "  data-url="{{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    <div class="btn-group">
+      <a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id}) }}" class="btn btn-default btn-sm">编辑</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        {% if item['questionType'] == 'material'%}
+          <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}" class="btn btn-link">管理</a></li>
+        {% endif %}
+        <li><a class="btn btn-link" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">预览</a></li>
+        <li><a class="btn btn-link" href="javascript:" data-name='题目(子题目也会删除)' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}">删除</a></li>
+      </ul>
+    </div>
   </td>
 </tr>

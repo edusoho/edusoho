@@ -9,7 +9,7 @@ class QuizQuestionTestController extends BaseController
 {
 	public function indexAction(Request $request, $courseId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		/*$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons = $this->getCourseService()->getCourseLessons($courseId);
 		$parentId = $request->query->get('parentId');
 
@@ -17,7 +17,7 @@ class QuizQuestionTestController extends BaseController
 			$conditions['parentId'] = $parentId;	
 		}
 
-		$conditions['target']['course'] = $courseId;
+		$conditions['target']['course'] = array($courseId);
 		if (!empty($lessons)){
 			$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
 		}
@@ -45,7 +45,7 @@ class QuizQuestionTestController extends BaseController
 			'lessons' => $lessons,
 			'paginator' => $paginator,
 			'parentId' => $parentId,
-		));
+		));*/
 	}
 
 	public function createAction(Request $request, $courseId)
@@ -79,7 +79,7 @@ class QuizQuestionTestController extends BaseController
 
 	public function editAction(Request $request, $courseId, $id)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		/*$course = $this->getCourseService()->tryManageCourse($courseId);
 
 		$testPaper = $this->getQuestionService()->getQuestion($id);
 		if (empty($testPaper)){
@@ -113,7 +113,7 @@ class QuizQuestionTestController extends BaseController
 			'type' => $testPaper['testPaperType'],
 			'isEdit' => '1',
 			'category' => $category,
-		));
+		));*/
 	}
 
 	public function indexItemAction(Request $request, $courseId, $testPaperId)
@@ -121,53 +121,129 @@ class QuizQuestionTestController extends BaseController
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-		$items     = $this->getTestService()->getItemsByTestPaperId($testPaperId);
+		$items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
 
-		foreach ($items as $key => $item) {
-			if($item['parentId'] != 0){
-				$material[$item['parentId']] = "材料题";
-			}
-		}
-		$questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id'); 
+		$questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:item-list.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionItem:index.html.twig', array(
 			'course' => $course,
 			'testPaperId' => $testPaperId,
 			'items' => $items,
 			'questions' => $questions,
 			'testPaper' => $testPaper,
 			'lessons' => $lessons,
-			'material' => $material
+		));
+	}
+
+	public function itemListAction(Request $request, $courseId,  $testPaperId)
+	{
+		$type = $request->query->get('type');
+		$replaceId = $request->query->get('testItemId');
+
+		$type = explode('-', $type);
+
+        if(count($type) != 2){
+            throw $this->createNotFoundException('type 参数不对');
+        }
+
+		$course    = $this->getCourseService()->tryManageCourse($courseId);
+		$lessons   = $this->getCourseService()->getCourseLessons($courseId);
+
+		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
+		$itemIds   = ArrayToolkit::column($this->getTestService()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type), 'questionId');
+
+        $conditions['target']['course'] = array($courseId);
+        if (!empty($lessons)){
+            $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
+        }
+
+        $conditions['parentId'] = 0;
+        $conditions[$type['0']] = $type['1'];
+        $conditions['notId']    = $itemIds;
+
+        $paginator = new Paginator(
+			$this->get('request'),
+			$this->getQuestionService()->searchQuestionCount($conditions),
+			5
+		);
+
+        $questions = $this->getQuestionService()->searchQuestion(
+        		$conditions, 
+        		array('createdTime' ,'DESC'), 
+        		$paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+        );
+
+		$lessons = ArrayToolkit::index($lessons,'id');
+
+		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
+
+		return $this->render('TopxiaWebBundle:QuizQuestionItem:create-list.html.twig', array(
+			'course' => $course,
+			'lessons' => $lessons,
+			'questions' => $questions,
+			'testPaper' => $testPaper,
+			'parentId' => false,
+			'users' => $users,
+			'paginator' => $paginator,
+			'replaceId' => $replaceId
 		));
 	}
 
 	public function createItemAction(Request $request, $courseId,  $testPaperId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$questionId = $request->query->get('questionId');
+		$replaceId = $request->query->get('replaceId');
 
-		$target = $request->query->get('target');
-		echo "<pre>";var_dump($testPaperId);header('Content-type:text/html;charset=utf-8');echo "</pre>"; exit();
-	    if ($request->getMethod() == 'POST') {
+		$course    = $this->getCourseService()->tryManageCourse($courseId);
 
-            $testPaper = $request->request->all();
-			$testPaper['target']   = $target;
+		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
 
-	        $testPaper = $this->getTestService()->createTestPaper($testPaper);
+		$question = $this->getQuestionService()->getQuestion($questionId);
 
-	        $field['itemCount'] = $testPaper['itemCount'];
-	        $field['itemScore'] = $testPaper['itemScore'];
-	        $item = $this->getTestService()->createItemsByPaper($field, $testPaper['id'], $courseId);
-	        
-            return $this->redirect($this->generateUrl('course_manage_quiz_testPaper_create',$default));
-        }
+		$questions[$question['id']] = $question; 
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:create.html.twig', array(
+		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
+		if(!empty($replaceId)){
+			$this->getTestService()->deleteItem($replaceId);
+		}
+
+        $item = $this->getTestService()->createItem($testPaperId, $questionId);
+
+
+		return $this->render('TopxiaWebBundle:QuizQuestionItem:tr.html.twig', array(
 			'course' => $course,
-			'generate' => '',
-			'target' => $target,
-			'isEdit' => false,
+			'testPaperId' => $testPaperId,
+			'item' => $item,
+			'questions' => $questions,
+			'testPaper' => $testPaper,
+			'lessons' => $lessons,
 		));
 	}
+
+	public function deleteItemAction(Request $request, $courseId, $testItemId)
+    {
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+        $item = $this->getTestService()->getTestItem($testItemId);
+        if (empty($item)) {
+            throw $this->createNotFoundException();
+        }
+        $this->getTestService()->deleteItem($testItemId);
+        return $this->createJsonResponse(true);
+    }
+
+    public function deleteItemsAction(Request $request, $courseId)
+    {   
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+        $ids = $request->request->get('ids');
+        if(empty($ids)){
+        	throw $this->createNotFoundException();
+        }
+        foreach ($ids as $id) {
+        	$this->getTestService()->deleteItem($id);
+        }
+        return $this->createJsonResponse(true);
+    }
 
 	private function getCourseService()
     {

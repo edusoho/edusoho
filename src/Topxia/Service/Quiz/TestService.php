@@ -25,6 +25,8 @@ interface TestService
      * 
      */
 
+    public function getTestItem($id);
+
     public function createItem($testId, $questionId);
 
     public function createItemsByTestPaper($field, $testId, $courseId);
@@ -33,6 +35,8 @@ interface TestService
 
     public function deleteItem($id);
     
-    public function getItemsByTestPaperId($testPaperId);
+    public function findItemsByTestPaperId($testPaperId);
+
+    public function findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
 
 }

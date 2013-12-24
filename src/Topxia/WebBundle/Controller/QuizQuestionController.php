@@ -16,7 +16,7 @@ class QuizQuestionController extends BaseController
 
 		if (empty($parentId)){
 			$conditions['parentId'] = $parentId = 0;
-			$conditions['target']['course'] = $courseId;
+			$conditions['target']['course'] = array($courseId);
 			if (!empty($lessons)){
 				$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
 			}
@@ -43,7 +43,7 @@ class QuizQuestionController extends BaseController
 		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
-		return $this->render('TopxiaWebBundle:CourseManage:question.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestion:index.html.twig', array(
 			'course' => $course,
 			'questions' => $questions,
 			'users' => $users,
@@ -107,7 +107,7 @@ class QuizQuestionController extends BaseController
 		$question['difficulty'] = $request->query->get('questionDifficulty');
         
 
-		return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'course' => $course,
 			'type' => $type,
 			'targets' => $targets,
@@ -149,7 +149,7 @@ class QuizQuestionController extends BaseController
         $targets['default'] = $question['targetType'].'-'.$question['targetId'];
         $category['default'] = $question['categoryId'];
         
-        return $this->render('TopxiaWebBundle:QuizQuestion:create.html.twig', array(
+        return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'question' => $question,
 			'targets' => $targets,
 			'course' => $course,
@@ -164,7 +164,7 @@ class QuizQuestionController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$category =	$this->getQuestionService()->findCategorysByCourseIds(array($courseId));
-        return $this->render('TopxiaWebBundle:QuizQuestion:index-category.html.twig', array(
+        return $this->render('TopxiaWebBundle:QuizQuestionCategory:index.html.twig', array(
 			'categorys' => $category,
 			'course' => $course,
         ));
@@ -179,12 +179,12 @@ class QuizQuestionController extends BaseController
 			$field['courseId'] = $courseId;
             $category = $this->getQuestionService()->createCategory($field);
 
-            return $this->render('TopxiaWebBundle:QuizQuestion:tr.html.twig', array(
+            return $this->render('TopxiaWebBundle:QuizQuestionCategory:tr.html.twig', array(
 				'category' => $category,
 				'course' => $course
 	        ));
         }
-        return $this->render('TopxiaWebBundle:QuizQuestion:category-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:QuizQuestionCategory:modal.html.twig', array(
             'course' => $course,
         ));
     }
@@ -197,12 +197,12 @@ class QuizQuestionController extends BaseController
 			$field = $request->request->all();
 
             $category = $this->getQuestionService()->updateCategory($categoryId, $field);
-            return $this->render('TopxiaWebBundle:QuizQuestion:tr.html.twig', array(
+            return $this->render('TopxiaWebBundle:QuizQuestionCategory:tr.html.twig', array(
 				'category' => $category,
 				'course' => $course,
 	        ));
         }
-        return $this->render('TopxiaWebBundle:QuizQuestion:category-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:QuizQuestionCategory:modal.html.twig', array(
             'category' => $category,
             'course' => $course,
         ));

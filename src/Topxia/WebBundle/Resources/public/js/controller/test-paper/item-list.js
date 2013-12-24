@@ -1,18 +1,26 @@
 define(function(require, exports, module) {
 
-    var Notify = require('common/bootstrap-notify');
-    var ItemCreator = require('./item-creator');
-
     exports.run = function() {
-        var $container = $('#test-item-container');
+         $('.item-add-btn').on('click',function(){
+            $(this).button('loading');
+            var $item = $(this).parents('[data-role=item]');
+            $.post($(this).data('url'), function(html) {
+                $item.remove();
+                var type = $(html).attr('data-type');
+                $('#questionType-'+type).append(html).find('.empty').remove();
+                $item.parents('.modal').modal('hide');
+            });
+         });
 
-        var creator = new ItemCreator({
-            element: $container,
-        });
-
-        
-        require('../../util/batch-delete')($container);
-        require('../../util/item-delete')($container);
+         $('.item-replace-btn').on('click',function(){
+            var $btn = $(this);
+            var $item = $('#'+$btn.data('replaceid'));
+            $btn.button('loading');
+            $.post($btn.data('url'), function(html) {
+                $btn.parents('.modal').modal('hide');
+                $item.replaceWith(html);
+            });
+     });
     };
 
 });

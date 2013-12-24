@@ -3280,6 +3280,6 @@ body {
 	margin-bottom: 10px;
 }
 
-.tab-content > .active {
-	style:'' !important;
+#test-item-modal .modal-dialog{
+	width: 800px;
 }

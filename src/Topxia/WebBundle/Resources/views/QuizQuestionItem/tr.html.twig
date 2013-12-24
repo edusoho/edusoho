@@ -1,0 +1,23 @@
+ <tr id="{{item.id}}"  data-role='item' data-type='{% if item.parentId != 0 %}{{item.parentId}}{% else %}{{item.questionType}}{% endif %}' >
+    <td><input type="checkbox" value="{{item.id}}" autocomplete="off" data-role="batch-item" ></td>
+    <td>{{item.seq}}</td>
+    <td>{{questions[item.questionId]['stem'] | length > 40 ? questions[item.questionId]['stem']|slice(0, 40) ~ '...' : questions[item.questionId]['stem'] }}</td>
+    <td>
+        {% if questions[item.questionId].parentId != '0'%}
+            材料题
+        {% elseif questions[item.questionId].targetType == 'lesson' %}
+            课时{{lessons[questions[item.questionId]['targetId']]['number']}}
+        {% else %}
+            课程
+        {% endif %}
+    </td>
+    <td>{{item.score}}</td>
+    <td>
+        <div class="btn-group">
+            <a href="javascript:" data-role="item-modal-btn"  data-target="#test-item-modal" class="btn btn-default btn-sm" data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,testItemId:item.id}) }}" >替换</a>
+            <a href="javascript:" data-name='题目' data-role='item-delete' data-url="{{ path('course_manage_test_item_delete', {courseId:course.id, testItemId:item.id}) }}" class="btn btn-default btn-sm">删除</a>
+            <a href="javascript:" class="btn btn-default btn-sm">预览</a>
+            
+        </div>
+    </td>
+</tr>

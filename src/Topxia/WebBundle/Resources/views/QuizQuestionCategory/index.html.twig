@@ -24,7 +24,7 @@
     </thead>
     <tbody data-sort-url="{{ path('course_manage_quiz_question_category_sort',{courseId:course.id})}}" class="tbady-category table-bordered table-condensed">
       {% for id,category in categorys %}
-        {% include 'TopxiaWebBundle:QuizQuestion:tr.html.twig' %}
+        {% include 'TopxiaWebBundle:QuizQuestionCategory:tr.html.twig' %}
       {% else %}
         <tr><td colspan="4"><div class="empty">暂无分类，请添加</div></td></tr>
       {% endfor %}

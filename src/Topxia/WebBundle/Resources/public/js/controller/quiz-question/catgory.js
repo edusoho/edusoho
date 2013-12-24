@@ -13,7 +13,6 @@ define(function(require, exports, module) {
                 var data = $list.sortable("serialize").get();
 
                 $.post($list.data('sortUrl'), {ids:data}, function(response){
-
                     $list.find('.catgory-tr').each(function(index){
                         $(this).find('.number').text(index+1);
                     });
@@ -25,7 +24,7 @@ define(function(require, exports, module) {
             }
 		})
 
-		$('.tbady-category').find('.delete-category').on('click', function() {
+		$('.tbady-category .delete-category').on('click', function() {
             if (!confirm('真的要删除该分类吗？')) {
                 return ;
             }

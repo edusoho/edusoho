@@ -26,7 +26,6 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getItem($this->getConnection()->lastInsertId());
     }
 
-    //`testId`,`seq`,`questionId`,`questionType`,`parentId`,`score`
     public function addItems(array $items)
     {
         if(empty($items)){ 
@@ -64,10 +63,25 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function getItemsByTestPaperId($testPaperId)
+    public function findItemsByTestPaperId($testPaperId)
     {
         $sql ="SELECT * FROM {$this->table} WHERE testId = ? order by `seq` asc;";
         return $this->getConnection()->fetchAll($sql, array($testPaperId));
+    }
+
+    public function findItemsByTestPaperIdAndQuestionType($testPaperId, $field)
+    {
+        if(empty($testPaperId) || empty($field)){ 
+            return array(); 
+        }
+        $sql ="SELECT * FROM {$this->table} WHERE `testId` = ? and `{$field[0]}` = '{$field[1]}'";
+        return $this->getConnection()->fetchAll($sql, array($testPaperId));
+    }
+    
+    public function getItemsCountByTestId($testId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE testId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($testId));
     }
 
     public function deleteItemByIds(array $ids)
@@ -80,10 +94,5 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->executeUpdate($sql, $ids);
     }
 
-    public function getItemsCountByTestId($testId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE testId = ? ";
-        return $this->getConnection()->fetchColumn($sql, array($testId));
-    }
 
 }

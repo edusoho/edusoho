@@ -513,6 +513,10 @@ course_manage_test_item:
     pattern: /course/{courseId}/manage/test/{testPaperId}/item
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:indexItem }
 
+course_manage_test_item_list:
+    pattern: /course/{courseId}/manage/test/{testPaperId}/item/list
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:itemList }
+
 course_manage_test_item_create:
     pattern: /course/{courseId}/manage/test/{testPaperId}/item/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createItem }
@@ -522,8 +526,12 @@ course_manage_test_item_update:
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateItem }
 
 course_manage_test_item_delete:
-    pattern: /course/{courseId}/manage/test/{testPaperId}/item/delete
+    pattern: /course/{courseId}/manage/test/{testItemId}/item/delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItem }
+
+course_manage_test_item_deletes:
+    pattern: /course/{courseId}/manage/test/item/deletes
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItems }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

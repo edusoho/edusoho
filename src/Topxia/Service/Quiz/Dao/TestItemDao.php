@@ -20,7 +20,9 @@ interface TestItemDao
 
     public function deleteItemByIds(array $ids);
 
-    public function getItemsByTestPaperId($testPaperId);
+    public function findItemsByTestPaperId($testPaperId);
+
+    public function findItemsByTestPaperIdAndQuestionType($testPaperId, $field);
 
     public function getItemsCountByTestId($testId);
 }

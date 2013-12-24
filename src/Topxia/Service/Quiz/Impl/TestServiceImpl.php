@@ -37,6 +37,11 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getQuizPaperChoiceDao()->deleteChoicesByPaperIds(array($id));
     }
 
+    public function getTestItem($id)
+    {
+        return $this->getTestItemDao()->getItem($id);
+    }
+
     public function createItem($testId, $questionId)
     {
     	$question = $this->getQuestionService()->getQuestion($questionId);
@@ -59,7 +64,7 @@ class TestServiceImpl extends BaseService implements TestService
         $itemScore = $field['itemScore'];
 
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
-        $conditions['target']['course'] = $courseId;
+        $conditions['target']['course'] = array($courseId);
         if (!empty($lessons)){
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
         }
@@ -85,7 +90,7 @@ class TestServiceImpl extends BaseService implements TestService
                 $field['questionId'] = $question['id'];
                 $field['questionType'] = '\''.$question['questionType'].'\'';
                 $field['parentId'] = $question['parentId'];
-                $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$question['questionType'];
+                $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$itemScore[$question['questionType']];
                 $items[] = '('.implode(' , ', $field).')';
                 $seq ++;
             }
@@ -107,7 +112,7 @@ class TestServiceImpl extends BaseService implements TestService
                     $field['questionId'] = $question['id'];
                     $field['questionType'] = '\''.$question['questionType'].'\'';
                     $field['parentId'] = $question['parentId'];
-                    $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$question['questionType'];
+                    $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$itemScore[$question['questionType']];
                     $items[] = '('.implode(' , ', $field).')';
                     $seq ++;
                 }
@@ -136,9 +141,14 @@ class TestServiceImpl extends BaseService implements TestService
     public function deleteItem($id)
     {
         $item = $this->getTestItemDao()->getItem($id);
-        if (empty($item)) {
-            throw $this->createNotFoundException();
+        if(empty($item)){
+            return false;
         }
+        
+        if($item['questionType'] == 'material'){
+            $this->getTestItemDao()->deleteItemsByParentId($item['parentId']);
+        }
+
         $this->getTestItemDao()->deleteItem($id);
     }
 
@@ -146,8 +156,15 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getQuizPaperCategoryDao() -> findCategorysByCourseIds($id);
     }
 
-    public function getItemsByTestPaperId($testPaperId){
-        return $this->getTestItemDao()->getItemsByTestPaperId($testPaperId);
+    public function findItemsByTestPaperId($testPaperId){
+        return $this->getTestItemDao()->findItemsByTestPaperId($testPaperId);
+    }
+
+    public function findItemsByTestPaperIdAndQuestionType($testPaperId, $type){
+        if(count($type) != 2){
+            throw $this->createServiceException('type参数不正确');
+        }
+        return $this->getTestItemDao()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
     }
 
     private function filterTestPaperFields($testPaper)

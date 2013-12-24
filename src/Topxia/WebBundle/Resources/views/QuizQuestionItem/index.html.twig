@@ -1,0 +1,69 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}试卷题目管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = '' %}
+{% set parentId = parentId | default(null)%}
+{% set script_controller = 'test-paper/item' %}
+
+
+{% block main %}
+
+<div class="panel panel-default panel-col" id="test-item-container">
+  <div class="panel-heading">
+    {{testPaper.name}}
+  </div>
+
+  <div class="panel-body clearfix">
+
+    <div class="well well-sm clearfix">
+    <button  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,1:1}) }}" data-role="item-modal-btn" data-target="#test-item-modal" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>新增试题</button>
+       <ul class="nav nav-tabs" id="myTab">
+          {% for key,type in dict('questionType') %}
+              <li><a href="#questionType-{{key}}" data-toggle="tab">{{type}}</a></li>
+          {% endfor %}
+      </ul>
+
+    </div>
+
+  <table class="table table-striped table-hover tab-content" id="test-item-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+        <th>顺序号</th>
+        <th width="50%">题干</th>
+        <th>从属</th>
+        <th>分值</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody class='hidden' data-role='item-body'>
+      {% for key,item in items %}
+          {% include 'TopxiaWebBundle:QuizQuestionItem:tr.html.twig'%}
+      {% else %}
+          <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div>
+    <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_test_item_deletes',{courseId:course.id}) }}">删除</button>
+  </div>
+
+  </div>
+</div>
+
+<div id="test-item-modal" class="modal fade bs-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<script type="text/plain" data-role="questionType-data">{{ dict('questionType')| json_encode | raw}}</script>
+{#<script type="text/plain" data-role="material-data">{{ material | json_encode | raw}}</script>
+#}
+{% endblock %}
+
+
+
