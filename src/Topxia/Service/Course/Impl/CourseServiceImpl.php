@@ -1398,6 +1398,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("course, member参数不能为空");
 		}
 
+		if ($course['expiryDay'] == 0) {
+			return true;
+		}
+
 		if ($member['deadline'] == 0) {
 			return true;
 		}

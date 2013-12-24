@@ -7,7 +7,7 @@
       <div class="text-muted text-sm">备注：{{ student.remark }}</div>
     {% endif %}
     <div class="text-muted text-sm">加入时间：{{ student.createdTime|date('Y-n-d H:i') }}</div>
-    {% if student.deadline > 0 %}
+    {% if course.expiryDay > 0 and student.deadline > 0 %}
       <div class="text-muted text-sm">有效期至：{{ student.deadline|date('Y-n-d H:i') }} ({{ student.deadline|remain_time }})</div>
     {% endif %}
   </td>
@@ -34,7 +34,7 @@
       <ul class="dropdown-menu pull-right">
         <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_student_remark', {courseId:course.id, userId:user.id})}}">备注</a></li>
         
-        {% if app.user.isAdmin() or app.user.isTeacher() %}
+        {% if app.user.isAdmin() or app.user.isTeacher() and course.expiryDay > 0 %}
           <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_expiryday', {courseId:course.id, userId:user.id})}}">增加有效期</a></li>
         {% endif %}
 
