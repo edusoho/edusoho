@@ -251,6 +251,22 @@ class QuizQuestionController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function uploadFileAction (Request $request, $courseId, $type)
+    {
+    	$course = $this->getCourseService()->getCourse($courseId);
+
+    	if ($request->getMethod() == 'POST') {
+	    	$originalFile = $this->get('request')->files->get('uploadFile');
+	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array(), 'local', $originalFile);
+	    	return $this->createJsonResponse($file);
+	    }
+
+    	return $this->render('TopxiaWebBundle:QuizQuestion:upload-modal.html.twig', array(
+    		'course' => $course,
+    		'type' => $type
+    	));
+    }
+
     private function getQuestionTargets($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -276,5 +292,10 @@ class QuizQuestionController extends BaseController
    	{
    		return $this -> getServiceKernel()->createService('Quiz.QuestionService');
    	}
+
+   	private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
 
 }

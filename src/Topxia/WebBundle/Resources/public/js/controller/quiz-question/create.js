@@ -26,6 +26,7 @@ define(function(require, exports, module) {
             element: '#question-creator-widget',
             form: '#question-create-form',
         });
+
     };
 
 });

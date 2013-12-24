@@ -464,6 +464,10 @@ course_manage_quiz_question_create:
     pattern: /course/{courseId}/manage/question/create/{type}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
 
+course_manage_quiz_question_upload:
+    pattern: /course/{courseId}/manage/question/uploadfile/{type}
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:uploadFile }
+
 course_manage_quiz_question_update:
     pattern: /course/{courseId}/manage/question/edit/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:edit }

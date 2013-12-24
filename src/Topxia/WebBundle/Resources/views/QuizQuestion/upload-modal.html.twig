@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'small' %}
+
+{% block title %}上传{% endblock %}
+{% block body %}
+
+<form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-2  controls">
+      <label for="uploadInput">上传图片</label>
+      <input type="file" id="uploadInput" name="uploadFile">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-2 controls">
+      <button class="btn btn-primary" id="uploadBtn" data-dismiss="modal">添加</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<script>app.load('quiz-question/upload-file')</script>
+
+{% endblock %}
+
+{% set hide_footer = true %}
