@@ -31,7 +31,7 @@ class LoginListener extends BaseService implements AuthenticationSuccessHandlerI
 		// 	$user = $event->getAuthenticationToken()->getUser();
 		// 	$loginInfo = array('loginedIp'=>$request->getClientIp(),'loginedTime'=> time());
 		// 	$this->getUserService()->updateLoginInfo($user['id'],$loginInfo);
-		// 	$this->getLogService()->info('登陆模块','用户登陆',"用户登陆成功！");
+		// 	$this->getLogService()->info('登录模块','用户登录',"用户登录成功！");
 		// }
 	}
 
@@ -40,7 +40,7 @@ class LoginListener extends BaseService implements AuthenticationSuccessHandlerI
 			$user = $token->getUser();
 		$loginInfo = array('loginIp'=>$request->getClientIp(),'loginTime'=> time());
 		// $this->getUserService()->updateLoginInfo($user['id'],$loginInfo);
-		// $this->getLogService()->info('登陆模块','用户登陆',"用户登陆成功！");
+		// $this->getLogService()->info('登录模块','用户登录',"用户登录成功！");
    		if ($request->isXmlHttpRequest()) {
         	$result = array('success' => true);
         	return new Response(json_encode($result));

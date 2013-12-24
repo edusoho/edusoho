@@ -8,7 +8,7 @@ class LessonMaterialPluginController extends BaseController
 
     public function initAction (Request $request)
     {
-        $course = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
         $lessonMaterials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
         return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig',array(

@@ -25,7 +25,6 @@ class LatestCourseQuestionsDataTag extends CourseBaseDataTag implements DataTag
         $conditions = array( 'courseId' => $arguments['courseId'],'type' => 'question');
         $questions = $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
         $questions['course'] = $this->getCourseService()->getCourse($arguments['courseId']);
-        $questions['teachers'] = $this->getTeachers($questions['course']['teacherIds']);
 
         return $questions;
     }

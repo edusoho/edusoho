@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 1.5.0
+        assets_version: 1.6.0
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -28,6 +28,7 @@ twig:
     strict_variables: %kernel.debug%
     paths:
         "%kernel.root_dir%/../web/customize": customize
+        "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
     globals:
         disabled_features: %disabled_features%
 

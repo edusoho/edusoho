@@ -20,10 +20,9 @@ class LatestUsersDataTag extends CourseBaseDataTag implements DataTag
     {	
 
         $this->checkCount($arguments);
-
     	$users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, $arguments['count']);
 
-        return $this->foreachUsers($users);
+        return $this->unsetUserPasswords($users);
     }
 
 }

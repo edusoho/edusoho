@@ -72,6 +72,7 @@ class ContentServiceImpl extends BaseService implements ContentService
   //           $content['body'] = $this->purifyHtml($content['body']);
   //       }
 
+
 		$id = $this->getContentDao()->addContent(ContentSerialize::serialize($content));
 
 		$content = $this->getContent($id);

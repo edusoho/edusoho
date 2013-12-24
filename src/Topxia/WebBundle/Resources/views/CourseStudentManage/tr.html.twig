@@ -6,7 +6,10 @@
     {% if student.remark %}
       <div class="text-muted text-sm">备注：{{ student.remark }}</div>
     {% endif %}
-    <div class="text-muted text-sm">{{ student.createdTime|date('Y-n-d H:i') }}加入</div>
+    <div class="text-muted text-sm">加入时间：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+    {% if student.deadline > 0 %}
+      <div class="text-muted text-sm">有效期至：{{ student.deadline|date('Y-n-d H:i') }} ({{ student.deadline|remain_time }})</div>
+    {% endif %}
   </td>
 
   <td>
@@ -17,14 +20,28 @@
   </td>
 
   <td>
-    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_student_remark', {courseId:course.id, userId:user.id})}}">备注</button>
-    {% if app.user.id != user.id %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
-        <button class="btn btn-default btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
-        <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-    {% endif %}
-    {% if app.user.isAdmin() %}
-      <button class="btn btn-danger btn-sm student-remove" data-url="{{path('course_manage_student_remove', {courseId:course.id, userId:user.id})}}">移除</button>
-    {% endif %}
+
+
+    <div class="btn-group">
+      {% if app.user.id != user.id %}
+          <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+          <button class="btn btn-default btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
+            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
+        {% endif %}
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">管理
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_student_remark', {courseId:course.id, userId:user.id})}}">备注</a></li>
+        
+        {% if app.user.isAdmin() or app.user.isTeacher() %}
+          <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_expiryday', {courseId:course.id, userId:user.id})}}">增加有效期</a></li>
+        {% endif %}
+
+        {% if app.user.isAdmin() %}
+          <li><a class="student-remove" href="" data-url="{{path('course_manage_student_remove', {courseId:course.id, userId:user.id})}}">移除</a></li>
+        {% endif %}
+      </ul>
+    </div>
   </td>
 </tr>

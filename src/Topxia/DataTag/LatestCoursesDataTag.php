@@ -20,16 +20,13 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {	
         $this->checkCount($arguments);
-        
         if (empty($arguments['categoryId'])){
             $conditions = array('status' => 'published');
         } else {
             $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         }
-
     	$courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
 
-        return $this->foreachCourses($courses);
+        return $this->getCourseTeachersAndCategories($courses);
     }
-
 }

@@ -24,9 +24,9 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
             'roles'=>'ROLE_TEACHER',
             'promoted'=>'1',
         );
-    	$teachers = $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
+    	$users = $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
 
-        return $this->foreachUsers($teachers); 
+        return $this->unsetUserPasswords($users);
     }
 
 }

@@ -230,7 +230,7 @@ class CourseManageController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
-                'isVisible' => 1,
+                'isVisible' => 1
             );
         }
 
@@ -243,10 +243,10 @@ class CourseManageController extends BaseController
 			->add('title', 'text')
 			->add('subtitle', 'textarea')
 			->add('tags', 'tags')
+            ->add('expiryDay', 'text')
 			->add('categoryId', 'default_category', array(
 				'empty_value' => '请选择分类'
-			)
-        );
+			));
 
 	    return $builder->getForm();
 	}

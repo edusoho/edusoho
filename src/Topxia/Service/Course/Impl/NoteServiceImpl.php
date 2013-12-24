@@ -81,7 +81,7 @@ class NoteServiceImpl extends BaseService implements NoteService
             throw $this->createServiceException('缺少必要的字段，保存笔记失败');
         }
 
-        $course = $this->getCourseService()->tryTakeCourse($note['courseId']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($note['courseId']);
         $user = $this->getCurrentUser();
 
         if(!$this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId'])) {

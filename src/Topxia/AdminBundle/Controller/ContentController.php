@@ -57,6 +57,8 @@ class ContentController extends BaseController
                 $content['picture'] = $record['uri'];
             }
 
+            $content = $this->filterEditorField($content);
+
             $content = $this->getContentService()->createContent($this->convertContent($content));
             return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
                 'content' => $content,
@@ -84,6 +86,9 @@ class ContentController extends BaseController
             if(isset($record['uri'])){
                 $content['picture'] = $record['uri'];
             }
+
+            $content = $this->filterEditorField($content);
+
             $content = $this->getContentService()->updateContent($id, $this->convertContent($content));
 
             return $this->render('TopxiaAdminBundle:Content:content-tr.html.twig',array(
@@ -138,6 +143,19 @@ class ContentController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
+    }
+
+    private function filterEditorField($content)
+    {
+        if($content['editor'] == 'richeditor'){
+            $content['body'] = $content['richeditor-body'];
+        } elseif ($content['editor'] == 'none') {
+            $content['body'] = $content['noneeditor-body'];
+        }
+
+        unset($content['richeditor-body']);
+        unset($content['noneeditor-body']);
+        return $content;
     }
 
     private function convertContent($content)

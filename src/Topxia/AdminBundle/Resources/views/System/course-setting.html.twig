@@ -13,13 +13,32 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >加入课程私信通知</label>
+        <label >给新学员发送欢迎私信</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('in_course_mail', {1:'开启', 0:'关闭'}, courseSetting.in_course_mail) }}
-      <p class="help-block">开启后学员加入课程会收到教师私信通知</p>
+        {{ radios('welcome_message_enabled', {1:'开启', 0:'关闭'}, courseSetting.welcome_message_enabled) }}
+      <p class="help-block">开启后，新学员加入课程后，会收到教师的欢迎私信</p>
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_message_body">欢迎私信内容</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="welcome_message_body" name="welcome_message_body" class="form-control" rows="5">{{ courseSetting.welcome_message_body }}</textarea>
+        <div class="help-block">
+          {% verbatim %}
+          <div>变量说明：</div>
+          <ul>
+            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{course}} 为课程名称</li>
+          </ul>
+          {% endverbatim %}
+        </div>
+      </div>
+    </div>
+
   </fieldset>
   <br>
 

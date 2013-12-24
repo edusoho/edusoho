@@ -22,8 +22,8 @@ class UserDataTag extends CourseBaseDataTag implements DataTag
         $this->checkUserId($arguments);
 
     	$user = $this->getUserService()->getUser($arguments['userId']);
-        $user['password'] = NULL;
-        $user['salt'] = NULL;
+        unset($user['password']);
+        unset($user['salt']);
         
         return $user;
     }
