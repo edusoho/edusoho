@@ -224,6 +224,7 @@ class CourseThreadController extends BaseController
     {
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $user = $this->getCurrentUser();
 
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         $form = $this->createPostForm(array(
