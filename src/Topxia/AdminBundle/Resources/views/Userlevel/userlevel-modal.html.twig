@@ -13,11 +13,40 @@
       <label for="levelName">名称</label>
     </div>
     <div class="col-md-7 controls">
-      <input type="text" id="levelName" data-url="{% if userlevel %}{{ path('admin_user_level_checkname', {exclude:userlevel.Name}) }}{% else %}{{path('admin_user_level_checkname')}}{% endif %}" name="Name" class="form-control" value="{% if userlevel %}{{ userlevel.Name }}{% else %}{% endif %}">
+      <input type="text" id="levelName" data-url="{% if userlevel %}{{ path('admin_user_level_checkname', {exclude:userlevel.name}) }}{% else %}{{path('admin_user_level_checkname')}}{% endif %}" name="Name" class="form-control" value="{% if userlevel %}{{ userlevel.name }}{% endif %}">
     </div>
   </div>
 
-<input type="hidden" id="levelIcon" name="Icon" class="form-control" value="{% if userlevel %}{{ userlevel.Icon }}{% else %}{% endif %}">
+  <input type="hidden" id="levelIcon" name="Icon" class="form-control" value="{% if userlevel %}{{ userlevel.icon }}{% endif %}">
+ 
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="monthPrice">会员月费</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="monthPrice" name="monthPrice" class="form-control" value="{% if userlevel %}{{ userlevel.monthPrice }}{% else %}0.00{% endif %}">   
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="yearPrice">会员年费</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="yearPrice" name="yearPrice" class="form-control" value="{% if userlevel %}{{ userlevel.yearPrice }}{% else %}0.00{% endif %}">   
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="userlevel-content-field">描述信息</label>
+    </div>
+    <div class="col-md-7 controls">
+      <textarea class="form-control" id="userlevel-content-field" name="description">{% if userlevel %}{{ userlevel.description }}{% endif %}</textarea>
+    </div>
+  </div>
+
   <div class="row form-group">
     <div class="col-md-2 control-label">
       <label for="enabled">状态</label>
@@ -53,7 +82,7 @@
       <label for="levelIcon">图标</label>
     </div>
     <div class="col-md-9 controls">
-        <div id="icon-container">{% if userlevel %}<img src="{{ userlevel.Icon }}">{% else %}{% endif %}</div>
+        <div id="icon-container">{% if userlevel %}<img src="{{ userlevel.icon }}">{% else %}{% endif %}</div>
         {% if userlevel %}
           <div id="icon_uploadform_area" style="display:none;">
             <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;">
@@ -78,11 +107,8 @@
 {% block footer %}
 {% if userlevel %}
   <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_user_level_delete', {id:userlevel.id}) }}" data-target="{{ userlevel.id }}" data-userlevel-id="{{ userlevel.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#userlevel-form">编辑</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-{% else %}
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#userlevel-form">添加</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 {% endif %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#userlevel-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 {% endblock %}
   

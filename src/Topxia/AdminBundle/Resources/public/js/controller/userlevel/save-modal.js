@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
+    var EditorFactory = require('common/kindeditor-factory');
 	require('common/validator-rules').inject(Validator);
     require('jquery.form');
 
@@ -89,9 +90,11 @@ define(function(require, exports, module) {
 
         });
 
+    var editor = EditorFactory.create('#userlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '300px'});
+        
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        });
 	};
-
-
-
 
 });
