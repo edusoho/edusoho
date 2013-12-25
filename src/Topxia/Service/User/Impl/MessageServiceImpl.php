@@ -28,6 +28,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         if(mb_strlen($content) > 500){
             throw $this->createServiceException("抱歉，请指定私信内容的大小在500字以内！");
         }
+        $content = $this->purifyHtml($content);
         $message = $this->addMessage($fromId, $toId, $content);
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId);
