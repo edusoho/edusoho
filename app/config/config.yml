@@ -28,6 +28,7 @@ twig:
     strict_variables: %kernel.debug%
     paths:
         "%kernel.root_dir%/../web/customize": customize
+        "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
     globals:
         disabled_features: %disabled_features%
 
