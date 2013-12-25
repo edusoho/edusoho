@@ -39,11 +39,14 @@
         </div>
 
      
-      <div class="form-group">
-                <label class="col-lg-3 control-label" for="course_promoCode">优惠码</label>
-                <div class="col-lg-7">
-                  <input id="course_promoCode" class="form-control" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"  data-fid="course-buy-form"/>
-                    <p class="help-block" id="promoCode_info">如有，请输入优惠码</p>
+      <div class="form-group">               
+                <div class="col-md-3 control-label">
+                  <input type="checkbox" id="haveoffsale"> 我有优惠码</div>
+                <div class="col-md-6">
+                                       
+                      <input id="course_promoCode" class="form-control input-sm" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"  data-fid="course-buy-form"   disabled/>
+                   
+                    <p class="help-block" id="promoCode_info">如无优惠码，请直接去支付！</p>
                 </div>
       </div>
 

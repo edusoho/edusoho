@@ -5,6 +5,21 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
+
+        $("#haveoffsale").on('click',function(){
+           
+            if( $(this).is(":checked") == true){
+                $("#course_promoCode").attr('disabled',false);
+            }else{
+                 $("#course_promoCode").val('');
+                 $("#course_promoCode").attr('disabled',true);
+            }
+
+            
+            
+        
+        });
+
         var validator = new Validator({
             element: '#course-buy-form'           
         });
