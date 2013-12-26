@@ -63,6 +63,11 @@
           </div>
 
           <div class="form-group">
+            <div class="col-md-2 control-label">{{ form_label(form.company, '公司') }}</div>
+            <div class="col-md-7 controls">{{ form_widget(form.company, {attr:{class:'form-control'}}) }}</div>
+          </div>
+
+          <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.job, '职业') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.job, {attr:{class:'form-control'}}) }} </div>
           </div>
@@ -70,6 +75,11 @@
           <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.title, {attr:{class:'form-control'}}) }} </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"> {{ form_label(form.mobile, '电话') }} </div>
+            <div class="col-md-7 controls"> {{ form_widget(form.mobile, {attr:{class:'form-control'}}) }} </div>
           </div>
 
           <div class="form-group">
