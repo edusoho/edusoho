@@ -61,10 +61,10 @@
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-{% if courseSetting.buy_fill_userinfo %}
+{% if courseSetting.buy_fill_userinfo|default(false) %}
     <br><br>
     <div class="nav nav-tabs">
-    <div class="help-block">温情提示：如果您的资料有变更，请在此修改，以便管理员联系您！</div>
+    <div class="help-block">温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！</div>
     </div><br>
 
 
