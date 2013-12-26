@@ -1,15 +1,15 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block topbanner %}
-  {% set Blocks = data('Blocks',{'codes':['autumn:home_top_banner'] }) %}
-  {% if Blocks['autumn:home_top_banner'] %}
+  {% set blocks = data('Blocks',{'codes':['autumn:home_top_banner'] }) %}
+  {% if blocks['autumn:home_top_banner'] %}
     <div id="autumn-carousel" class="carousel slide hidden-xs" data-ride="carousel">
       <ol class="carousel-indicators">
           <li data-target="#autumn-carousel" data-slide-to="0" class="active"></li>
           <li data-target="#autumn-carousel" data-slide-to="1" class=""></li>
           <li data-target="#autumn-carousel" data-slide-to="2" class=""></li>
       </ol>
-      <div class="carousel-inner">{{ Blocks['autumn:home_top_banner']|raw }}</div>
+      <div class="carousel-inner">{{ blocks['autumn:home_top_banner']|raw }}</div>
       <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
