@@ -757,6 +757,14 @@ my_refunds:
     pattern: /my/refunds
     defaults: { _controller: TopxiaWebBundle:MyOrder:refunds }
 
+income_records:
+    pattern: /my/income_records
+    defaults: { _controller: TopxiaWebBundle:MoneyRecord:index }
+
+payout_records:
+    pattern: /my/payout_records
+    defaults: { _controller: TopxiaWebBundle:MoneyRecord:payout }
+
 user_show: 
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }

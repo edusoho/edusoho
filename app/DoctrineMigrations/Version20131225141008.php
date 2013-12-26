@@ -16,6 +16,7 @@ class Version20131225141008 extends AbstractMigration
     	$this->addSql("
 			CREATE TABLE `money_record` (
 			  `id` int(10) unsigned NOT NULL,
+			  `title` VARCHAR( 64 ) NOT NULL ,
 			  `userId` int(10) unsigned NOT NULL,
 			  `type` enum('income','payout') NOT NULL COMMENT '记录类型',
 			  `transactionNo` varchar(128) NOT NULL COMMENT '交易号',

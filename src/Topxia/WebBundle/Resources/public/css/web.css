@@ -3270,3 +3270,19 @@ body {
 .customer-service-online .btn-ctn {
 	background-position: -35px 0;
 }
+.record {
+	margin-bottom: 20px;
+}
+.record a {
+	float: right;
+}
+.record .record_num {
+	color: red;
+	font-size: 20px;
+}
+.record .glyphicon-question-sign {
+	float: right;
+}
+.record button {
+	margin-left: 15px;
+}
