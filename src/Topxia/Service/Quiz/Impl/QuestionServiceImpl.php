@@ -52,7 +52,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
-    public function findQuestionsAndNumberForType($field, $courseId)
+    public function findQuestionsForTestPaper($field, $courseId)
     {
         $itemCounts = $field['itemCounts'];
         $itemScores = $field['itemScores'];
@@ -65,7 +65,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         
         $questions = ArrayToolkit::index($this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999),'id');
 
-        $data = $parentIds = array();
+        $parentIds = array();
         foreach ($questions as $key => $question) {
 
             $questions[$key]['score'] = $itemScores[$question['questionType']]==0 ? $question['score'] : $itemScores[$question['questionType']];
@@ -73,16 +73,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 continue;
             }
 
-            if (empty($data[$question['questionType']][$question['difficulty']])) {
-                $data[$question['questionType']][$question['difficulty']] = 1;
-            }
-
-            $data[$question['questionType']][$question['difficulty']]++;
-
             if ($question['questionType'] == 'material') {
                 $parentIds[] = $question['id'];
             }
         }
+
         if (!empty($parentIds)) {
             $con['parentIds'] = $parentIds;
 
@@ -96,6 +91,35 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         
         $questions['data'] = $data;
         return $questions;
+    }
+
+    public function getQuestionsNumberByCourseId($courseId)
+    {
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+        $conditions['target']['course'] = array($courseId);
+        
+        if (!empty($lessons)){
+            $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+        }
+        
+        $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999);
+
+        $data = $parentIds = array();
+        foreach ($questions as $question) {
+
+            if ($question['parentId'] != 0) {
+                continue;
+            }
+
+            if (empty($data[$question['questionType']][$question['difficulty']])) {
+                $data[$question['questionType']][$question['difficulty']] = 1;
+            }
+
+            $data[$question['questionType']][$question['difficulty']]++;
+        }
+       
+        return $data;
     }
 
     public function getCategory($id){

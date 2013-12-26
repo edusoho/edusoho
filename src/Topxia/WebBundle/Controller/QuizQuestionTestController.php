@@ -36,6 +36,7 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
@@ -49,12 +50,12 @@ class QuizQuestionTestController extends BaseController
         	$field['itemCounts']  = $parentTestPaper['itemCounts'];
 			$field['itemScores']  = $parentTestPaper['itemScores'];
         }
-        $typeNumer = $this->getQuestionService()->findQuestionsAndNumberForType($field, $courseId);
+        $typeNumer = $this->getQuestionService()->findQuestionsForTestPaper($field, $courseId);
         header('Content-type:text/html;charset=utf-8');
         echo "<pre>";var_dump($typeNumer);echo "</pre>"; exit();
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
-		
+
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
 		$items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
 		$questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
@@ -150,7 +151,94 @@ class QuizQuestionTestController extends BaseController
 		));
 	}
 
-	public function deleteItemAction(Request $request, $courseId, $testItemId)
+	public function quesitonNumberCheckAction(Request $request, $courseId)
+    {
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        //$itemScores = $request->request->get('itemScores');
+        //$perventage = $request->request->get('perventage');
+        $isDiffculty = $request->request->get('isDiffculty');
+        $itemCounts = ArrayToolkit::index($request->request->get('itemCounts'), '0');
+		
+		$perventage['simple']     = 10;
+		$perventage['ordinary']   = 40;
+		$perventage['difficulty'] = 50;
+
+        $questionNumbers = $this->getQuestionService()->getQuestionsNumberByCourseId($courseId);
+        echo "<pre>";var_dump($questionNumbers);header('Content-type:text/html;charset=utf-8');echo "</pre>";
+        if(($perventage['simple'] + $perventage['ordinary'] +$perventage['difficulty']) != 100){
+        	throw $this->createNotFoundException('参数错误');
+        }
+
+        $dictQuestionType = $this->getWebExtension()->getDict('questionType');
+		$dictDifficulty   = $this->getWebExtension()->getDict('difficulty');
+
+        $message = array();
+
+        foreach ($itemCounts as $key => $item) {
+        	$num = (int) $item['1'];
+
+        	if ($num == 0){
+        		continue;
+        	}
+
+        	if ($isDiffculty == 1 ){
+        		$thisNums = array();
+				$thisNums['simple']     = (int) ($num * $perventage['simple'] /100); 
+				$thisNums['ordinary']   = (int) ($num * $perventage['ordinary'] /100); 
+				$thisNums['difficulty'] = (int) ($num * $perventage['difficulty'] /100); 
+
+	        	$otherNum = $num - ($thisNums['simple'] + $thisNums['ordinary'] + $thisNums['difficulty']);
+
+	        	if ($otherNum != 0){
+	        		$randNum = array_rand($thisNums, 1);
+	        		$thisNums[$randNum] = $thisNums[$randNum] + $otherNum;
+	        	}
+
+	        	foreach ($thisNums as $k => $thisNum) {
+	        		if(empty($questionNumbers[$key][$k])) {
+
+	        			if($thisNum != 0)
+	        				$message[] = "{$dictQuestionType[$key]}中{$dictDifficulty[$k]}缺少{$thisNum}题 <br>";
+	        		}
+	        		else if(($thisNum - $questionNumbers[$key][$k]) < 0) {
+
+	        			$thisNum = abs($thisNum - $questionNumbers[$key][$k]);
+	        			$message[] = "{$dictQuestionType[$key]}中{$dictDifficulty[$k]}缺少{$thisNum}题 <br>";
+	        		}
+	        	}
+        	} else {
+        		$typeNumber = 0;
+        		if(empty($questionNumbers[$key])){
+
+        			$message[] = "{$dictQuestionType[$key]}缺少{$num}题 <br>";
+
+        		}else{
+
+        			foreach ($questionNumbers[$key] as $questionNumber) {
+
+	        			$typeNumber = $questionNumber + $typeNumber;
+	        		}
+	        		if( ($typeNumber - $num) < 0) {
+	        			$thisNum = abs($typeNumber - $num);
+	        			$message[] = "{$dictQuestionType[$key]}缺少{$thisNum}题 <br>";
+	        		}
+        		}
+
+        	}
+
+        	if(empty($message)){
+        		$message = false;
+        	}
+        }
+
+        return $this->createJsonResponse($message);
+    }
+    public function deleteItemAction(Request $request, $courseId, $testItemId)
     {
 		$course = $this->getCourseService()->tryManageCourse($courseId);
         $item = $this->getTestService()->getTestItem($testItemId);
@@ -188,5 +276,10 @@ class QuizQuestionTestController extends BaseController
    	{
    		return $this -> getServiceKernel()->createService('Quiz.TestService');
    	}
+
+   	private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
+    }
 
 }

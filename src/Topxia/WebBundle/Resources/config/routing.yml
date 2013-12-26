@@ -509,6 +509,10 @@ course_manage_test_paper_create:
     pattern: /course/{courseId}/manage/test/paper/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
 
+course_manage_test_paper_create_check:
+    pattern: /course/{courseId}/manage/test/paper/create/check
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:quesitonNumberCheck }
+
 course_manage_test_paper_update:
     pattern: /course/{courseId}/manage/test/paper/update
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:update }
