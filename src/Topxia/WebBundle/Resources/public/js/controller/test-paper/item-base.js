@@ -15,8 +15,8 @@ define(function(require, exports, module) {
 		events: {
             'show.bs.tab a[data-toggle="tab"]' : 'tabShow',
             'shown.bs.tab a[data-toggle="tab"]': 'tabShown',
-            'click [data-role=batch-select]': 'batchSelect',
-            'click [data-role=item-modal-btn]': 'itemModal',
+            'click [data-role=batch-select]'   : 'batchSelect',
+            'click [data-role=item-modal-btn]' : 'itemModal',
 		},
 
 		setup:function(){
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                 });
             })
 		},
-		
+
 		batchSelect:function(e){
 			if ($(e.currentTarget).is(":checked") == true){
                 this.$('[data-role=batch-select]:visible, [data-role=batch-item]:visible').prop('checked', true);
@@ -89,7 +89,7 @@ define(function(require, exports, module) {
         		self.$('[data-role=item-body]').after(html);
                
                 if (self.$('[data-type=' + key + ']').length == 0) {
-                	var empty = "<tr><td colspan='20'><div class='empty'>无题目记录</div></td></tr>";
+                	var empty = "<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>";
                 	$('#'+id).append(empty);
                 } else {
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));

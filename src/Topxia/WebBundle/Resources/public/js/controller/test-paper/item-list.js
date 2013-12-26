@@ -1,10 +1,12 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
+
          $('.item-add-btn').on('click',function(){
-            $(this).button('loading');
-            var $item = $(this).parents('[data-role=item]');
-            $.post($(this).data('url'), function(html) {
+            var $btn = $(this);
+            var $item = $btn.parents('[data-role=item]');
+            $btn.button('loading');
+            $.post($btn.data('url'), function(html) {
                 $item.remove();
                 var type = $(html).attr('data-type');
                 $('#questionType-'+type).append(html).find('.empty').remove();

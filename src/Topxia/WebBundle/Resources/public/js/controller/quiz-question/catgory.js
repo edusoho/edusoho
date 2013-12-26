@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 		var $list = $('.tbady-category').sortable({
 		    containerSelector: 'table',
 		    itemPath: '> tbody',
-		    itemSelector: 'tr',
+		    itemSelector: '.catgory-tr',
 		    placeholder: '<tr class="placeholder"/>',
 		    onDrop: function (item, container, _super) {
                 _super(item, container);
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
             }
 		})
 
-		$('.tbady-category .delete-category').on('click', function() {
+		$('body').on('click','.delete-category', function() {
             if (!confirm('真的要删除该分类吗？')) {
                 return ;
             }

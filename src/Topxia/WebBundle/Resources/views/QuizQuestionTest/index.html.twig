@@ -40,7 +40,7 @@
     </thead>
     <tbody class='hidden' data-role='item-body'>
       {% for key,item in items %}
-          {% include 'TopxiaWebBundle:QuizQuestionItem:tr.html.twig'%}
+          {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig'%}
       {% else %}
           <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
       {% endfor %}
@@ -50,6 +50,11 @@
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
     <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_test_item_deletes',{courseId:course.id}) }}">删除</button>
   </div>
+      <button type="submit" class="btn btn-primary btn-sm pull-right mlm" >保存</button>
+      <button type="button" class="btn btn-primary btn-sm pull-right mlm" >验证</button>
+      {% if parentTestPaper.name | default(null)%}
+        <a href="{{ path('course_manage_test_paper_create',{testPaperId:testPaper.id,courseId:course.id, percentage:parentTestPaper.percentage, itemCounts:parentTestPaper.itemCounts, itemScores:parentTestPaper.itemScores, target:parentTestPaper.target,}) }}" class="btn btn-link  pull-right">上一步</a>
+      {% endif %}
 
   </div>
 </div>

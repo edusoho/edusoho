@@ -11,7 +11,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
         return empty($question) ? array() : $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
-    }
+    }  
 
     public function createQuestion($question)
     {
@@ -50,6 +50,32 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function findQuestionsByIds(array $ids){
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
+    }
+
+    public function getQuestionNumberForType($field, $courseId)
+    {
+        $itemCounts = $field['itemCounts'];
+        $itemScores = $field['itemScores'];
+
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $conditions['target']['course'] = array($courseId);
+        if (!empty($lessons)){
+            $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+        }
+        
+        $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
+
+        $data = array();
+        foreach ($questions as $key => $question) {
+            if(empty($data[$question['questionType']][$question['difficulty']])){
+                $data[$question['questionType']][$question['difficulty']] = 1;
+            }
+            $data[$question['questionType']][$question['difficulty']]++;
+            $data[$question['questionType']]
+            $questions[$key]['score'] = $itemScores[$question['questionType']]==0 ? $question['score'] : $itemScores[$question['questionType']];
+        }
+        $questions['data'] = $data;
+        return $questions;
     }
 
     public function getCategory($id){

@@ -15,14 +15,15 @@ class TestServiceImpl extends BaseService implements TestService
     public function createTestPaper($testPaper)
     {
         $field = $this->filterTestPaperFields($testPaper);
+        $field['createdUserId'] = $this->getCurrentUser()->id;
+        $field['createdTime']   = time();
         return $this->getTestPaperDao()->addTestPaper($field);
     }
 
     public function updateTestPaper($id, $testPaper)
     {
         $field = $this->filterTestPaperFields($testPaper);
-        $field['updatedTime'] = time();
-        return $this->getPaperImplementor($testPaper['type'])->updateTestPaper($id, $testPaper, $field);  
+        return $this->getTestPaperDao()->updateTestPaper($id, $field);  
     }
 
     public function deleteTestPaper($id)
@@ -32,7 +33,6 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createNotFoundException();
         }
         $this->getTestPaperDao()->deleteTestPaper($id);
-
         $this->getTestPaperDao()->deletePapersByParentId($id);
         $this->getQuizPaperChoiceDao()->deleteChoicesByPaperIds(array($id));
     }
@@ -66,29 +66,23 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function createItemsByTestPaper($field, $testId, $courseId)
     {
-        $itemCount = $field['itemCount'];
-        $itemScore = $field['itemScore'];
+        $itemCounts = $field['itemCounts'];
+        $itemScores = $field['itemScores'];
 
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
         $conditions['target']['course'] = array($courseId);
         if (!empty($lessons)){
-            $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
+            $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
         }
 
-        //查询各类型设置的数量的题目,
-        $items = array();
-        $field = array();
-        $questions = array();
+        $questions = $this->getQuestionService()->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
 
-        foreach ($itemCount as $key => $count) {
+        foreach ($itemCounts as $key => $count) {
             if($count == 0){
                 continue;
             }
             $conditions['questionType'] = $key;
-            $conditions['parentId'] = 0;
-            $questions = $this->getQuestionService()->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
 
-            //循环题目(question),取出对应的item数据
             $seq = 1;
             foreach ($questions as $question) {
                 $field['testId'] = $testId;
@@ -96,7 +90,7 @@ class TestServiceImpl extends BaseService implements TestService
                 $field['questionId'] = $question['id'];
                 $field['questionType'] = '\''.$question['questionType'].'\'';
                 $field['parentId'] = $question['parentId'];
-                $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$itemScore[$question['questionType']];
+                $field['score'] = $itemScores[$question['questionType']]==0?$question['score']:$itemScores[$question['questionType']];
                 $items[] = '('.implode(' , ', $field).')';
                 $seq ++;
             }
@@ -118,13 +112,12 @@ class TestServiceImpl extends BaseService implements TestService
                     $field['questionId'] = $question['id'];
                     $field['questionType'] = '\''.$question['questionType'].'\'';
                     $field['parentId'] = $question['parentId'];
-                    $field['score'] = $itemScore[$question['questionType']]==0?$question['score']:$itemScore[$question['questionType']];
+                    $field['score'] = $itemScores[$question['questionType']]==0?$question['score']:$itemScores[$question['questionType']];
                     $items[] = '('.implode(' , ', $field).')';
                     $seq ++;
                 }
             }
         }
-
         return empty($items) ? array() : $this->getTestItemDao()->addItems($items);
     }
 
@@ -138,7 +131,6 @@ class TestServiceImpl extends BaseService implements TestService
         $field['questionId']   = $question['id'];
         $field['questionType'] = $question['questionType'];
         $field['parentId']     = $question['parentId'];
-        
         return $this->getTestItemDao()->updateItem($id, $field);  
     }
 
@@ -148,11 +140,9 @@ class TestServiceImpl extends BaseService implements TestService
         if(empty($item)){
             return false;
         }
-
         if($item['parentId'] != 0){
             $this->getTestItemDao()->deleteItemsByParentId($item['parentId']);
         }
-
         $this->getTestItemDao()->deleteItem($id);
     }
 
@@ -173,33 +163,34 @@ class TestServiceImpl extends BaseService implements TestService
 
     private function filterTestPaperFields($testPaper)
     {
-        if(!ArrayToolkit::requireds($testPaper, array('name', 'itemCount', 'itemScore', 'target'))){
+        if(!ArrayToolkit::requireds($testPaper, array('name', 'itemCounts', 'itemScores', 'target'))){
+
         	throw $this->createServiceException('缺少必要字段！');
         }
 
-        $diff = array_diff(array_keys($testPaper['itemCount']), array_keys($testPaper['itemScore']));
+        $diff = array_diff(array_keys($testPaper['itemCounts']), array_keys($testPaper['itemScores']));
         if (!empty($diff)) {
-            throw $this->createServiceException('itemCount itemScore参数不正确');
+            throw $this->createServiceException('itemCounts itemScores参数不正确');
         }
 
-        list($targetType, $targetId) = explode('-', $testPaper['target']);
+        $target = explode('-', $testPaper['target']);
 
-		if(empty($targetId)){
+		if(empty($target['1'])){
 			throw $this->createNotFoundException('target 参数不正确');
 		}
-		if (!in_array($targetType, array('course','subject','unit','lesson'))) {
+		if (!in_array($target['0'], array('course','subject','unit','lesson'))) {
             throw $this->createServiceException("target 参数不正确");
         }
 
         $field = array();
 
         $field['name'] = $testPaper['name'];
-        $field['targetId'] = $targetId;
-        $field['targetType'] = $targetType;
+        $field['targetId'] = $target['1'];
+        $field['targetType'] = $target['0'];
 		$field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
-		$field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];;
-		$field['createdUserId'] = $this->getCurrentUser()->id;
-		$field['createdTime']   = time();
+		$field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
+        $field['updatedUserId'] = $this->getCurrentUser()->id;
+        $field['updatedTime'] = time();
 
         return $field;
     }

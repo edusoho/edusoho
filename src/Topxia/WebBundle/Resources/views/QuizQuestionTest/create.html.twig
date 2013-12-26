@@ -4,54 +4,65 @@
 {% block title %}添加题目 - {{ parent() }}{% endblock %}
 
 {% set parentId = parentId |default(null)%}
-{% set isEdit = isEdit |default(null)%}
 {% set side_nav = 'base' %}
-{#% set script_controller = 'quiz-test/create' %#}
-{% set target = target | default(null)%}
+{% set script_controller = 'test-paper/create' %}
+
+{% set testPaperId = testPaper.id | default(null)%}
 
 {% block main %}
 
 <div class="panel panel-default panel-col test-creator">
   <div class="panel-heading clearfix">
-    创建试卷
+    {% if testPaperId %}
+        修改试卷      
+    {% else %}
+        创建试卷      
+    {% endif %}
   </div>
   <div class="panel-body">
 
     <div id="test-creator-widget">
       <form id="test-create-form" class="form-horizontal quiz-test" method="post" action="
-      {% if isEdit %}
+      {#% if testPaperId %}
         {{ path('course_manage_test_paper_update',{courseId:course.id  }) }}
-      {% else %}
-        {{ path('course_manage_test_paper_create',{courseId:course.id, target:target  }) }}
-      {% endif %}
+      {% else %#}
+        {{ path('course_manage_test_paper_create',{courseId:course.id, target:testPaper.target  }) }}
+      {#% endif %#}
       ">
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="test-name-field">试卷名称</label></div>
           <div class="col-md-8 controls">
-              <input class="form-control" name="name" value=""  id="test-name-field" {% if isEdit %}{#{test.stem | default(null)}#}{% endif %} />
+              <input class="form-control"  value="{% if testPaper.name | default(null)%}{{testPaper.name }}{% endif %}" name="name"   id="test-name-field"/>
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="test-description-field">试卷说明</label></div>
           <div class="col-md-8 controls">
-            {% if isEdit %}
-              <textarea class="form-control" id="test-description-field" name="description">{{test.stem | default(null)}}</textarea>
-            {% else %}
-              <textarea class="form-control" id="test-description-field" name="description"></textarea>
-            {% endif %}
+            <textarea class="form-control" id="test-description-field" name="description">{% if testPaper.description | default(null)%}{{testPaper.description }}{% endif %}</textarea>
+            
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="test-limitedTime-field">时间限制</label></div>
-          <div class="col-md-2 controls">
-              <input class="form-control" name="limitedTime" value=""  id="test-limitedTime-field" {% if isEdit %}{#{test.stem | default(null)}#}{% endif %} />
+          <div class="col-md-3 controls">
+              <input class="form-control" name="limitedTime" id="test-limitedTime-field" value="{% if testPaper.limitedTime | default(null)%}{{testPaper.limitedTime }}{%else%}0{% endif %}" />
           </div>
-          <div class="col-md-4 controls pls">
-            <p class="form-control-static pull-left ">分钟 (0表示不限)</p>
+          <div class="col-md-4  pls">
+              <p class="form-control-static pull-left ">分钟 (0表示不限)</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="test-percentage-field">试卷难度</label></div>
+          <div class="col-md-3 controls">
+              <input class="form-control" id="test-percentage-field" name="percentage" value="{% if testPaper.percentage | default(null)%}{{testPaper.percentage }}{% else %}80{% endif %}" />
+          </div>
+          <div class="col-md-6 controls checkbox">
+              <label class="pull-left">勾选按难易程度生成试卷(默认随机)<input type="checkbox" {% if testPaper.isDiffculty | default(null)%}checked=chedked{% endif %} value="1"  name="isDiffculty"></label>
           </div>
         </div>
 
@@ -66,11 +77,11 @@
                   </div>
                   <div class="form-control-static pull-left pll">题目数量:</div>
                   <div class="col-md-2">
-                      <input type="text" class="form-control input-sm" name="itemCount[{{key}}]" placeholder="" value="5" />
+                      <input type="text" class="form-control item-number input-sm" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}5{% endif %}" />
                   </div>
                   <div class="form-control-static pull-left pll">题目分值:</div>
                   <div class="col-md-2">
-                      <input type="text" class="form-control input-sm" name="itemScore[{{key}}]" placeholder="" value="0" />
+                      <input type="text" class="form-control item-number input-sm" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null)%}{{testPaper.itemScores[key]}}{%else%}0{% endif %}" />
                   </div>
               </div>
               <div class="col-md-2 controls score_number">
@@ -83,11 +94,15 @@
         
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
-            <a href="{{ path('course_manage_quiz_question',{courseId:1}) }}" class="btn btn-link">返回</a>
-            <button type="submit" class="btn btn-primary" >保存</button>
+            <button type="submit" class="btn btn-primary  pull-right" >下一步</button>
+            <a href="{{ path('course_manage_quiz_question',{courseId:1}) }}" class="btn btn-link  pull-right">返回</a>
           </div>
         </div>
 
+        <input type="hidden" name="target" value="{{ testPaper.target }}">
+        {% if testPaperId %}
+          <input type="hidden" name="testPaperId" value="{{ testPaperId }}">
+        {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
       </form>
