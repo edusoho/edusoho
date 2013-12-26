@@ -63,11 +63,12 @@ class QuizQuestionTestController extends BaseController
         	$field['itemCounts']  = $parentTestPaper['itemCounts'];
 			$field['itemScores']  = $parentTestPaper['itemScores'];
         }
-        $typeNumer = $this->getQuestionService()->getQuestionNumberForType($field, $courseId);
-        echo "<pre>";var_dump($var);header('Content-type:text/html;charset=utf-8');echo "</pre>"; exit();
+        $typeNumer = $this->getQuestionService()->findQuestionsAndNumberForType($field, $courseId);
+        header('Content-type:text/html;charset=utf-8');
+        echo "<pre>";var_dump($typeNumer);echo "</pre>"; exit();
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
-
+		
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
 		$items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
 		$questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
