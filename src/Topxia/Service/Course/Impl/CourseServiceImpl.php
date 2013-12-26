@@ -564,9 +564,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 
 		//课程内容的过滤 @todo
-		if(isset($lesson['content'])){
-			$lesson['content'] = $this->purifyHtml($lesson['content']);
-		}
+		// if(isset($lesson['content'])){
+		// 	$lesson['content'] = $this->purifyHtml($lesson['content']);
+		// }
 		if (isset($fields['title'])) {
 			$fields['title'] = $this->purifyHtml($fields['title']);
 		}
@@ -657,9 +657,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'length' => 0,
 		));
 
-		if (isset($fields['content'])) {
-			$fields['content'] = $this->purifyHtml($fields['content']);
-		}
+		// if (isset($fields['content'])) {
+		// 	$fields['content'] = $this->purifyHtml($fields['content']);
+		// }
+
 		if (isset($fields['title'])) {
 			$fields['title'] = $this->purifyHtml($fields['title']);
 		}
