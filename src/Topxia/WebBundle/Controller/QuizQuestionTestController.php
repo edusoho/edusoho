@@ -7,6 +7,20 @@ use Topxia\Common\Paginator;
 
 class QuizQuestionTestController extends BaseController
 {
+	public function doTestAction (Request $request, $testId)
+	{
+		//权限！待补充
+		$items = $this->getTestService()->findItemsByTestPaperId($testId);
+
+		$questionIds = ArrayToolkit::column($items, 'questionid');
+		$questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+		
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
+			'items' => $items,
+			'questions' => $questions
+		));
+	}
+
 	public function createAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
