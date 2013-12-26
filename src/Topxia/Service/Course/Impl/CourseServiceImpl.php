@@ -567,6 +567,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// if(isset($lesson['content'])){
 		// 	$lesson['content'] = $this->purifyHtml($lesson['content']);
 		// }
+		if (isset($fields['title'])) {
+			$fields['title'] = $this->purifyHtml($fields['title']);
+		}
 
 		// 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
 		$lesson['status'] = $course['status'] == 'published' ? 'unpublished' : 'published';
@@ -654,9 +657,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'length' => 0,
 		));
 
-		// if (isset($fields['content'])) { @todo
+		// if (isset($fields['content'])) {
 		// 	$fields['content'] = $this->purifyHtml($fields['content']);
 		// }
+
+		if (isset($fields['title'])) {
+			$fields['title'] = $this->purifyHtml($fields['title']);
+		}
 
 		$fields['type'] = $lesson['type'];
 		$this->fillLessonMediaFields($fields);
@@ -991,7 +998,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
-		$deadline = $day*24*60*60+$member['deadline'];
+		if ($member['deadline'] > 0){
+			$deadline = $day*24*60*60+$member['deadline'];
+		} else {
+			$deadline = $day*24*60*60+time();
+		}
 
 		return $this->getMemberDao()->updateMember($member['id'], array(
 			'deadline' => $deadline
@@ -1370,12 +1381,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
-
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
 		}
-
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return array($course, null);
 		}
@@ -1392,6 +1401,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		if (empty($course) or empty($member)) {
 			throw $this->createServiceException("course, member参数不能为空");
+		}
+
+		if ($course['expiryDay'] == 0) {
+			return true;
 		}
 
 		if ($member['deadline'] == 0) {
