@@ -5,11 +5,17 @@
 	<div class="panel-body">
 		<ul>
 			{% for choice in choices %}
-
 				<li>{{ choice.content }}</li>
-
 			{% endfor %}
 		</ul>
+	</div>
+	<div class="panel-footer">
+		{% for choice in choices %}
+			<label class="checkbox-inline">
+	  			<input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+			</label>
+			
+		{% endfor %}
 	</div>
 </div>
 

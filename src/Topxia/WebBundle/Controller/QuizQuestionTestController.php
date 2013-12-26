@@ -18,6 +18,7 @@ class QuizQuestionTestController extends BaseController
 		$answers = $this->getQuestionService()->findChoicesByQuestionIds($questionIds);
 		$answers = $this->formatAnswers($answers, $questionIds);
 		$questions = $this->formatQuestions($questions);
+
 		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
 			'questions' => $questions,
@@ -97,8 +98,7 @@ class QuizQuestionTestController extends BaseController
 			$field['itemScores']  = $parentTestPaper['itemScores'];
         }
         $typeNumer = $this->getQuestionService()->findQuestionsAndNumberForType($field, $courseId);
-        header('Content-type:text/html;charset=utf-8');
-        echo "<pre>";var_dump($typeNumer);echo "</pre>"; exit();
+
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 		
