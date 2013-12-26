@@ -2,9 +2,8 @@
 
 {% block main %}
 
-{% for item in items %}
-	{% set question = questions[item.questionId] %}
-	{% set choices = answers[item.questionId] %}
+{% for key,question in questions %}
+	{% set choices = answers.key %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 

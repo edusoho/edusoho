@@ -17,13 +17,32 @@ class QuizQuestionTestController extends BaseController
 		$questions = ArrayToolkit::index($questions, 'id');
 		$answers = $this->getQuestionService()->findChoicesByQuestionIds($questionIds);
 		$answers = $this->formatAnswers($answers, $questionIds);
-		var_dump($answers);exit();
+		$questions = $this->formatQuestions($questions);
 		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
-			'items' => $items,
 			'questions' => $questions,
 			'answers' => $answers
 		));
+	}
+
+	private function formatQuestions ($questions)
+	{
+		$formatQuestions = array();
+		foreach ($questions as $key => $value) {
+			if ($value['questionType'] == 'single_choice') {
+				$formatQuestions['single_choice'][$key] = $value;
+			}
+			if ($value['questionType'] == 'choice') {
+				$formatQuestions['choice'][$key] = $value;
+			}
+			if ($value['questionType'] == 'fill') {
+				$formatQuestions['fill'][$key] = $value;
+			}
+			if ($value['questionType'] == 'material') {
+				$formatQuestions['material'][$key] = $value;
+			}
+		}
+		return $formatQuestions;
 	}
 
 	private function formatAnswers ($answers, $questionIds)
