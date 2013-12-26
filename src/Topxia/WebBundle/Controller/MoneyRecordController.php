@@ -20,10 +20,10 @@ class MoneyRecordController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMoneyService()->searchIncomeCount($conditions),
+            $this->getMoneyService()->searchMoneyRecordsCount($conditions),
             15
         );
-        $incomeRecords = $this->getMoneyService()->searchIncomes(
+        $incomeRecords = $this->getMoneyService()->searchMoneyRecords(
         	$conditions,
         	'latest',
         	$paginator->getOffsetCount(),
@@ -48,11 +48,11 @@ class MoneyRecordController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMoneyService()->searchIncomeCount($conditions),
+            $this->getMoneyService()->searchMoneyRecordsCount($conditions),
             15
         );
 
-        $payoutRecords = $this->getMoneyService()->searchIncomes(
+        $payoutRecords = $this->getMoneyService()->searchMoneyRecords(
             $conditions,
             'latest',
             $paginator->getOffsetCount(),

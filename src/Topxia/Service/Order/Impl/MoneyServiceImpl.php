@@ -8,13 +8,13 @@ use Topxia\Common\ArrayToolkit;
 class MoneyServiceImpl extends BaseService implements MoneyService
 {
 
-	public function searchIncomeCount($conditions)
+	public function searchMoneyRecordsCount($conditions)
     {	
     	$conditions = array_filter($conditions);
-        return $this->getMoneyDao()->searchIncomeCount($conditions);
+        return $this->getMoneyDao()->searchMoneyRecordsCount($conditions);
     }
 
-    public function searchIncomes($conditions, $sort = 'latest', $start, $limit)
+    public function searchMoneyRecords($conditions, $sort = 'latest', $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -24,7 +24,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
         }
 
         $conditions = array_filter($conditions);
-        $incomes = $this->getMoneyDao()->searchIncomes($conditions, $orderBy, $start, $limit);
+        $incomes = $this->getMoneyDao()->searchMoneyRecords($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($incomes, 'id');
     }

@@ -10,7 +10,7 @@ class MoneyDaoImpl extends BaseDao implements MoneyDao
 {
     protected $table = 'money_record';
 
-    public function searchIncomeCount($conditions)
+    public function searchMoneyRecordsCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -19,7 +19,7 @@ class MoneyDaoImpl extends BaseDao implements MoneyDao
 
  
 
-    public function searchIncomes($conditions, $orderBy, $start, $limit)
+    public function searchMoneyRecords($conditions, $orderBy, $start, $limit)
     {
     	$this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)

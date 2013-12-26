@@ -5,8 +5,8 @@ namespace Topxia\Service\Order\Dao;
 interface MoneyDao
 {
 
-    public function searchIncomeCount($conditions);
+    public function searchMoneyRecordsCount($conditions);
 
-    public function searchIncomes($conditions, $orderBy, $start, $limit);
+    public function searchMoneyRecords($conditions, $orderBy, $start, $limit);
 
 }

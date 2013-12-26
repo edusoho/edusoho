@@ -4,8 +4,8 @@ namespace Topxia\Service\Order;
 
 interface MoneyService {
 
-	public function searchIncomeCount($conditions);
+	public function searchMoneyRecordsCount($conditions);
 
-	public function searchIncomes($conditions, $sort = 'latest', $start, $limit);
+	public function searchMoneyRecords($conditions, $sort = 'latest', $start, $limit);
 
 }
