@@ -62,6 +62,7 @@
               <textarea class="form-control" id="question-stem-field" name="stem"></textarea>
             {% endif %}
           </div>
+          <button class="btn btn-sm btn-default pull-right mrl" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}">上传</button>
         </div>
 
         {% if type == 'choice' or type == 'single_choice' %}
