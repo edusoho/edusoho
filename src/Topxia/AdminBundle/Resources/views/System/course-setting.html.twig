@@ -39,6 +39,16 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >购买课程时填写个人资料</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo) }}
+      <p class="help-block">开启后，学员购买课程时，会出现填写个人资料表单</p>
+      </div>
+    </div>
+
   </fieldset>
   <br>
 
