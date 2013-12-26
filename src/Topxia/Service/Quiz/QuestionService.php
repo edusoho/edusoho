@@ -19,6 +19,8 @@ interface QuestionService
 
     public function findQuestionsByIds(array $ids);
 
+    public function findQuestionsAndNumberForType($field, $courseId);
+
     /*
      *  quiz_question_choice
      */

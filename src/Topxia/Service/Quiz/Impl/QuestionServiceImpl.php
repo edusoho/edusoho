@@ -52,7 +52,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
-    public function getQuestionNumberForType($field, $courseId)
+    public function findQuestionsAndNumberForType($field, $courseId)
     {
         $itemCounts = $field['itemCounts'];
         $itemScores = $field['itemScores'];
@@ -63,17 +63,37 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
         }
         
-        $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
+        $questions = ArrayToolkit::index($this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999),'id');
 
-        $data = array();
+        $data = $parentIds = array();
         foreach ($questions as $key => $question) {
-            if(empty($data[$question['questionType']][$question['difficulty']])){
+
+            $questions[$key]['score'] = $itemScores[$question['questionType']]==0 ? $question['score'] : $itemScores[$question['questionType']];
+            if ($question['parentId'] != 0) {
+                continue;
+            }
+
+            if (empty($data[$question['questionType']][$question['difficulty']])) {
                 $data[$question['questionType']][$question['difficulty']] = 1;
             }
+
             $data[$question['questionType']][$question['difficulty']]++;
-            $data[$question['questionType']]
-            $questions[$key]['score'] = $itemScores[$question['questionType']]==0 ? $question['score'] : $itemScores[$question['questionType']];
+
+            if ($question['questionType'] == 'material') {
+                $parentIds[] = $question['id'];
+            }
         }
+        if (!empty($parentIds)) {
+            $con['parentIds'] = $parentIds;
+
+            $materialQuestions = ArrayToolkit::index($this->searchQuestion($con, array('createdTime' ,'DESC'), 0, 99999),'id');
+
+            foreach ($materialQuestions as $key => $question) {
+                $materialQuestions[$key]['score'] = $itemScores['material']==0 ? $question['score'] : $itemScores['material'];
+            }
+            $questions = array_merge($questions, $materialQuestions);
+        }
+        
         $questions['data'] = $data;
         return $questions;
     }

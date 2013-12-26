@@ -48,6 +48,22 @@ define(function(require, exports, module) {
             }
         });
 
+        $('.item-add-btn').on('click',function(){
+            var $btn = $(this);
+            var $item = $btn.parents('[data-role=item]');
+            $btn.button('loading');
+            $.post($btn.data('url'), function(html) {
+                $item.remove();
+                var type = $(html).attr('data-type');
+                $('#questionType-'+type).append(html).find('.empty').remove();
+                $item.parents('.modal').modal('hide');
+            });
+         });
+
+
+
+
+
     };
 
 });
