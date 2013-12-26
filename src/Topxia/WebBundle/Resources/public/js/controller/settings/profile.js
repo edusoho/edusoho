@@ -40,6 +40,11 @@ define(function(require, exports, module) {
             errormessageUrl: '网站地址不正确，须以http://开头。'
         });
 
+        validator.addItem({
+            element: '[name="profile[mobile]"]',
+            rule: 'phone'
+        });
+
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
         });
