@@ -147,6 +147,17 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function showAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+        $profile = $this->getUserService()->getUserProfile($id);
+        $profile['title'] = $user['title'];
+        return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
+            'user' => $user,
+            'profile' => $profile,
+        ));
+    }
+
     private function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {

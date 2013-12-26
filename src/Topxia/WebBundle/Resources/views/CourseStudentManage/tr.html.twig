@@ -35,6 +35,7 @@
         <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_student_remark', {courseId:course.id, userId:user.id})}}">备注</a></li>
         
         {% if app.user.isAdmin() or app.user.isTeacher() and course.expiryDay > 0 %}
+          <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', { id:user.id})}}">查看资料</a></li>
           <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_expiryday', {courseId:course.id, userId:user.id})}}">增加有效期</a></li>
         {% endif %}
 

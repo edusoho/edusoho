@@ -1381,12 +1381,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
-
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
 		}
-
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return array($course, null);
 		}
