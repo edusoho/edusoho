@@ -78,11 +78,6 @@
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.mobile, '电话') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.mobile, {attr:{class:'form-control'}}) }} </div>
-          </div>
-
-          <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.signature, '个人签名') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.signature, {attr:{class:'form-control'}}) }} </div>
           </div>          
@@ -110,7 +105,12 @@
           <div class="form-group">
             <div class="col-md-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.qq, {attr:{class:'form-control'}}) }} </div>
-          </div>                         
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"> {{ form_label(form.mobile, '手机') }} </div>
+            <div class="col-md-7 controls"> {{ form_widget(form.mobile, {attr:{class:'form-control'}}) }} </div>
+          </div>
 
           <div class="row">
             <div class="col-md-7 col-md-offset-2">
