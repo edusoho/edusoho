@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Example page header</h1>
+  <p>asgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasg</p>
+  <small>fasgsadgsadgasgsag</small>
+</div>
+
+<style type="text/css">
+	.affix {
+		top: 0;
+		left: 0;
+	}
+</style>
+
+<div class="row">
+	<div  class="col-md-9">
+		<div data-spy="affix" data-offset-top="200" id="typeBar">
+			<ul class="nav nav-pills nav-justified">
+				<li><a href="#">选择</a></li>
+				<li><a href="#">填空</a></li>
+				<li class="active"><a href="#">二次元</a></li>
+			</ul>
+		</div>
+
+		{% block main%}
+		{% endblock %}
+
+	</div>
+
+	<div class="col-md-3">
+		{{ questions }}
+	</div>
+</div>
+{% endblock %}

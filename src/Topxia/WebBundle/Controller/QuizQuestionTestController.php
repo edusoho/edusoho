@@ -12,13 +12,27 @@ class QuizQuestionTestController extends BaseController
 		//权限！待补充
 		$items = $this->getTestService()->findItemsByTestPaperId($testId);
 
-		$questionIds = ArrayToolkit::column($items, 'questionid');
+		$questionIds = ArrayToolkit::column($items, 'questionId');
 		$questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+		$questions = ArrayToolkit::index($questions, 'id');
+		$answers = $this->getQuestionService()->findChoicesByQuestionIds($questionIds);
+		$answers = $this->formatAnswers($answers, $questionIds);
+		var_dump($answers);exit();
 		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
 			'items' => $items,
-			'questions' => $questions
+			'questions' => $questions,
+			'answers' => $answers
 		));
+	}
+
+	private function formatAnswers ($answers, $questionIds)
+	{
+		$formatAnswers = array();
+		foreach ($answers as $value) {
+			$formatAnswers[$value['questionId']][] = $value;
+		}
+		return $formatAnswers;
 	}
 
 	public function createAction(Request $request, $courseId)

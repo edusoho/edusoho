@@ -1,11 +1,14 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig' %}
 
-{% block content %}
+{% block main %}
 
-{% for question in questions %}
+{% for item in items %}
+	{% set question = questions[item.questionId] %}
+	{% set choices = answers[item.questionId] %}
 
-	{{ question.id }}
+	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
 {% endfor %}
+
 
 {% endblock %}
