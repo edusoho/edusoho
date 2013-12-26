@@ -49,6 +49,7 @@ class CourseOrderController extends BaseController
         $userInfo = ArrayToolkit::parts($formData, array(
             'truename',
             'mobile',
+            'qq',
             'company',
             'job'
         ));
