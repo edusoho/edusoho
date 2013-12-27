@@ -1,0 +1,17 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'order' %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ url('admin_order') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">订单管理</a>
+        <a href="{{ url('admin_money_records') }}" class="list-group-item {% if menu == 'money_records' %}active{% endif %}">账户明细</a>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

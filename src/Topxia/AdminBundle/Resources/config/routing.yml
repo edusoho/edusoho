@@ -308,6 +308,14 @@ admin_course_order_detail:
     pattern: /course/order/{id}/detail
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
 
+admin_order:
+    pattern: /order
+    defaults: { _controller: TopxiaAdminBundle:Order:index }
+
+admin_money_records:
+    pattern: /money/records
+    defaults: { _controller: TopxiaAdminBundle:Money:records }
+
 admin_order_refunds:
     pattern: /order/refunds
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:refunds }
