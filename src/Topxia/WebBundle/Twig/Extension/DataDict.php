@@ -118,8 +118,8 @@ class DataDict
 			'douban' => '豆瓣连接'
 		),
 		'questionType' => array(
-	    	'choice' => '单选题',
-	    	'single_choice' => '多选题',
+	    	'single_choice' => '单选题',
+	    	'choice' => '多选题',
 	    	'fill' => '填空题',
 	    	'determine' => '判断题',
 	    	'essay' => '问答题',
@@ -132,6 +132,11 @@ class DataDict
 	    	'determine' => '判断题',
 	    	'essay' => '问答题',
 	    	'material' => '材料题',
+        ),
+        'difficulty' => array(
+	    	'simple' => '简单',
+	    	'ordinary' => '一般',
+	    	'difficulty' => '困难',
         ),
 
 	);

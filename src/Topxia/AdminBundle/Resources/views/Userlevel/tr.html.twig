@@ -3,10 +3,16 @@
     <span class="glyphicon glyphicon-move" style="cursor:move"></span>
   </td>
   <td>
-    {{ userlevel.Name}}
+    {{ userlevel.name}}
   </td>
   <td>
-    <img src="{{ userlevel.Icon}}">
+    <img src="{{ userlevel.icon}}">
+  </td>
+  <td>
+    {{ userlevel.monthPrice}}
+  </td>
+  <td>
+    {{ userlevel.yearPrice}}
   </td>
   <td>
     {% if userlevel.enabled %}

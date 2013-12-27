@@ -184,13 +184,14 @@ class TestServiceImpl extends BaseService implements TestService
 
         $field = array();
 
-        $field['name'] = $testPaper['name'];
-        $field['targetId'] = $target['1'];
-        $field['targetType'] = $target['0'];
-		$field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
-		$field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
+        $field['name']          = $testPaper['name'];
+        $field['targetId']      = $target['1'];
+        $field['targetType']    = $target['0'];
+        $field['seq']           = implode(',',array_keys($testPaper['itemScores']));
+        $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
+        $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
         $field['updatedUserId'] = $this->getCurrentUser()->id;
-        $field['updatedTime'] = time();
+        $field['updatedTime']   = time();
 
         return $field;
     }

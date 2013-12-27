@@ -43,25 +43,48 @@ define(function(require, exports, module) {
           	  	    return false;
           	    }
             });
-            if(flag == 0){
-                validator.set('autoSubmit',true);
+
+            if(validator.get('autoSubmit') == false){
+
+                if ($('[name=isDiffculty]').is(':checked')){
+                    var isDiffculty = 1;
+                }else{
+                    var isDiffculty = 0;
+                }
+                var perventage = $('#test-percentage-field').val();
+
+                var itemCounts = new Array();
+                $('.item-number[name^=itemCounts]').each(function(index){
+                    
+                    var item = new Array($(this).data('key'),$(this).val());
+                    itemCounts.push(item);
+                });
+
+                var itemScores = new Array();
+                $('.item-number[name^=itemScores]').each(function(index){
+
+                    var item = new Array($(this).data('key'),$(this).val());
+                    itemScores.push(item);
+                });
+
+                $.post($('#test-percentage-field').data('url'), {isDiffculty: isDiffculty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
+                    if (data) {
+
+                        Notify.warning(data);
+                        return false;
+                    } else {
+
+                        if(flag == 0){
+                            validator.set('autoSubmit',true);
+                            $('button[type=submit]').trigger('click');
+                        }
+                    }
+                });
             }
+
+
+           
         });
-
-        $('.item-add-btn').on('click',function(){
-            var $btn = $(this);
-            var $item = $btn.parents('[data-role=item]');
-            $btn.button('loading');
-            $.post($btn.data('url'), function(html) {
-                $item.remove();
-                var type = $(html).attr('data-type');
-                $('#questionType-'+type).append(html).find('.empty').remove();
-                $item.parents('.modal').modal('hide');
-            });
-         });
-
-
-
 
 
     };
