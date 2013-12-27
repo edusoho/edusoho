@@ -139,6 +139,7 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/AdminBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Resources/public");
+		$this->filesystem->remove("{$this->distDirectory}/src/Custom/AdminBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
 
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Command");
@@ -228,10 +229,13 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mkdir("{$this->distDirectory}/web");
 		$this->filesystem->mkdir("{$this->distDirectory}/web/files");
 		$this->filesystem->mkdir("{$this->distDirectory}/web/bundles");
+		$this->filesystem->mkdir("{$this->distDirectory}/web/themes");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/assets", "{$this->distDirectory}/web/assets");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/customize", "{$this->distDirectory}/web/customize");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/install", "{$this->distDirectory}/web/install");
-		$this->filesystem->mirror("{$this->rootDirectory}/web/themes", "{$this->distDirectory}/web/themes");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/autumn", "{$this->distDirectory}/web/themes/autumn");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
 		$this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");

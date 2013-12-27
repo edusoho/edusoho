@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="user_bind_new[email]"]',
             required: true,
-            rule: 'email remote'
+            rule: 'email email_remote'
         });
 
         validator.addItem({
