@@ -32,31 +32,32 @@
           <div class="col-md-3 control-label">选择支付方式</div>
           <div class="col-md-9 controls">
             {% for payment, options in payments %}
-            	<input type="radio" checked="checked" />
-            	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
+            <input type="radio" checked="checked" />        
+            <img src="{{ asset('assets/img/order/alipay.gif') }}" />        
             {% endfor %}
           </div>
         </div>
 
-     
-      <div class="form-group">               
-                <div class="col-md-3 control-label">
-                  <input type="checkbox" id="haveoffsale"> 我有优惠码</div>
-                <div class="col-md-6">
-                                       
-                      <input id="course_promoCode" class="form-control input-sm" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"  data-fid="course-buy-form"   disabled/>
-                   
-                    <p class="help-block" id="promoCode_info">如无优惠码，请直接去支付！</p>
-                </div>
-      </div>
+        <div class="form-group">
+          <div class="col-md-3 control-label">
+            <input type="checkbox" id="haveoffsale">我有优惠码</div>
+          <div class="col-md-6">
+            <input id="course_promoCode" class="form-control input-sm" type="text" name="promoCode"  data-url="{{ path('offsale_code_check') }}"  data-fid="course-buy-form"   disabled/>        
 
+            <p class="help-block" id="promoCode_info">如无优惠码，请直接去支付！</p>
+          </div>
+        </div>
 
         {% if payments.alipay.type|default(null) == 'dualfun' %}
         <div class="row">
           <div class="col-md-12">
             <div class="alert alert-info">
-            <h4>付款提示</h4>
-            支付宝支持“担保交易”和“立即到帐交易”两种交易方式。<br>推荐使用<strong>“立即到帐交易”</strong>。“担保交易”需要人工确认发货、付款后才能完成购买课程，会产生较大延迟。</div>
+              <h4>付款提示</h4>
+              支付宝支持“担保交易”和“立即到帐交易”两种交易方式。
+              <br>        
+              推荐使用 <strong>“立即到帐交易”</strong>
+              。“担保交易”需要人工确认发货、付款后才能完成购买课程，会产生较大延迟。
+            </div>
           </div>
         </div>
         {% endif %}
@@ -66,13 +67,65 @@
     {% else %}
       <div class="row">
         <div class="col-md-12">
-          <div class="alert">此课程为免费课程，无需购买，可直接加入学习。</div>
+          <div class="alert alert-info">此课程为免费课程，无需购买，可直接加入学习。</div>
         </div>
       </div>
     {% endif %}
     <input type="hidden" name="courseId" value="{{ course.id }}" />
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+{% if courseSetting.buy_fill_userinfo|default(false) %}
+   
+    <div class="nav nav-tabs">
+      <div class="help-block">温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！</div>
+    </div>
+    <br>    
+
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="truename">真实姓名</label>
+      <div class="col-md-6 controls">
+        {% if user.approvalStatus == 'approved' %}
+          <span class="control-text"><strong>{{ user.truename }}</strong></span>
+        {% elseif user.approvalStatus == 'approving' %}
+          <span class="control-text"><strong>{{ user.truename }} </strong><small class="text-info"> 实名认证正在审核中</small></span>
+        {% else %}
+          <input class="form-control" id="truename" type="text" name="truename" value="{{ user.truename }}">
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="mobile">手机</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="mobile" type="text" name="mobile" value="{{ user.mobile }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="qq">QQ</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="qq" type="text" name="qq" value="{{ user.qq }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">所在公司</div>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="company" type="text" name="company" value="{{ user.company }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">职位</div>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="job" type="text" name="job" value="{{ user.job }}">
+      </div>
+    </div>
+{% endif %}
+
+
   </form>
   
 {% endblock %}
@@ -85,5 +138,10 @@
   {% else %}
     <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
   {% endif %}
-  <script type="text/javascript">app.load('course/offsale')</script>
+
+ 
+  <script type="text/javascript">
+    app.load('course/buy-modal');
+  </script>
+
 {% endblock %}

@@ -368,6 +368,10 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
 
+        if (empty($fields)) {
+            return $this->getProfileDao()->getProfile($id);
+        }
+
         if (isset($fields['title'])) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
         }

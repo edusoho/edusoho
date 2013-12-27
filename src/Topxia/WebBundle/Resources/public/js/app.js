@@ -4,12 +4,19 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack');
 
 	exports.load = function(name) {
-		require.async('./controller/' + name + '.js?' + window.app.version, function(controller){
+		if (name.substr(0, 7) == 'custom/') {
+			name = '../../../bundles/customweb/js/controller/' + name.substr(7) + '.js?';
+		} else {
+			name = './controller/' + name + '.js?';
+		}
+
+		require.async(name + window.app.version, function(controller){
 			if ($.isFunction(controller.run)) {
 				controller.run();
 			}
 		});
 	};
+
 	window.app.load = exports.load;
 
 	if (app.controller) {

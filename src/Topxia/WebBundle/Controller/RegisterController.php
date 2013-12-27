@@ -115,6 +115,7 @@ class RegisterController extends BaseController
     public function emailCheckAction(Request $request)
     {
         $email = $request->query->get('value');
+        $email = str_replace('!', '.', $email);
 
         list($result, $message) = $this->getAuthService()->checkEmail($email);
 
