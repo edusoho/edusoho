@@ -175,7 +175,7 @@ define(function(require, exports, module) {
             			$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
 
 			            var player = VideoJS("lesson-video-player", {
-			            	techOrder: ['flash','html5']
+			            	techOrder: ['html5','flash']
 			            });
 
 			            player.dimensions('100%', '100%');

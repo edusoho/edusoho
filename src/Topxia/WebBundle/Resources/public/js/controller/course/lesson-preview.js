@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 			$("#lesson-preview-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360"></video>');
 
 			var videoPlayer = VideoJS("lesson-video-player", {
-            	techOrder: ['flash','html5']
+            	techOrder: ['html5','flash']
             });
             videoPlayer.width('100%');
             videoPlayer.src($("#lesson-preview-video-player").data('url'));
