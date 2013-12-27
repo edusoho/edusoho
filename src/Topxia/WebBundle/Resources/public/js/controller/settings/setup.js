@@ -28,7 +28,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#setup-email-field',
             required: true,
-            rule: 'email remote'
+            rule: 'email email_remote'
         });
 
         validator.addItem({

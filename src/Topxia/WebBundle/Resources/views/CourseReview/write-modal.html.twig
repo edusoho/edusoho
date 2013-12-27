@@ -21,12 +21,12 @@
     {{ form_rest(form) }}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  <script>
-      app.load('course/review-modal');
-  </script>
 {% endblock %}
 
 {% block footer %}
     <button class="btn btn-link" data-dismiss="modal">取消</button>
     <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form">保存</button>
+  <script>
+      app.load('course/review-modal');
+  </script>
 {% endblock %}
