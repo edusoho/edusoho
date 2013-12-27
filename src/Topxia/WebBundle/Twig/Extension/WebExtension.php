@@ -28,6 +28,7 @@ class WebExtension extends \Twig_Extension
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
+            'chr' => new \Twig_Filter_Method($this, 'chrFilter')
         );
     }
 
@@ -275,6 +276,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function chrFilter($index)
+    {
+        return chr($index);
     }
 
     public function getSetting($name, $default = null)
