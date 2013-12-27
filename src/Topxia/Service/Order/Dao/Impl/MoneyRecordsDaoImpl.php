@@ -3,10 +3,10 @@
 namespace Topxia\Service\Order\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Order\Dao\MoneyDao;
+use Topxia\Service\Order\Dao\MoneyRecordsDao;
 use PDO;
 
-class MoneyDaoImpl extends BaseDao implements MoneyDao
+class MoneyRecordsDaoImpl extends BaseDao implements MoneyRecordsDao
 {
     protected $table = 'money_record';
 
@@ -30,16 +30,14 @@ class MoneyDaoImpl extends BaseDao implements MoneyDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-
-
-
     private function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'money_record')
             ->andWhere('userId = :userId')
             ->andWhere('type = :type')
-            ->andWhere('status = :status');
+            ->andWhere('status = :status')
+            ->andWhere('transactionNo = :transactionNo');
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Order\Dao;
 
-interface MoneyDao
+interface MoneyRecordsDao
 {
 
     public function searchMoneyRecordsCount($conditions);

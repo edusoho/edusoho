@@ -11,7 +11,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
 	public function searchMoneyRecordsCount($conditions)
     {	
     	$conditions = array_filter($conditions);
-        return $this->getMoneyDao()->searchMoneyRecordsCount($conditions);
+        return $this->getMoneyRecordsDao()->searchMoneyRecordsCount($conditions);
     }
 
     public function searchMoneyRecords($conditions, $sort = 'latest', $start, $limit)
@@ -24,19 +24,13 @@ class MoneyServiceImpl extends BaseService implements MoneyService
         }
 
         $conditions = array_filter($conditions);
-        $incomes = $this->getMoneyDao()->searchMoneyRecords($conditions, $orderBy, $start, $limit);
+        $moneyRecords = $this->getMoneyRecordsDao()->searchMoneyRecords($conditions, $orderBy, $start, $limit);
 
-        return ArrayToolkit::index($incomes, 'id');
+        return ArrayToolkit::index($moneyRecords, 'id');
     }
 
-
-    private function getLogService()
+    private function getMoneyRecordsDao()
     {
-        return $this->createService('System.LogService');
-    }
-
-    private function getMoneyDao()
-    {
-        return $this->createDao('Order.MoneyDao');
+        return $this->createDao('Order.MoneyRecordsDao');
     }
 }
