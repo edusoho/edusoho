@@ -56,7 +56,7 @@
             <td>
                 <div class="short-long-text">
                   <div class="short-text text-sm text-muted">{{ message.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
-                  <div class="long-text">{{ message.content|raw }} <span class="trigger">(收起)</span></div>
+                  <div class="long-text">{{ message.content }} <span class="trigger">(收起)</span></div>
                 </div>
             </td>
             <td>{{ message.createdTime|date('Y-n-d H:i')}}</td>

@@ -13,9 +13,15 @@ class CourseOrderController extends BaseController
     public function buyAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $course = $this->getCourseService()->getCourse($id);
 
@@ -28,13 +34,29 @@ class CourseOrderController extends BaseController
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
+            'user' => $userInfo,
+            'courseSetting' => $courseSetting,
             'form' => $form->createView()
         ));
     }
 
     public function payAction(Request $request)
     {
-        $order = $this->getOrderService()->createOrder($request->request->all());
+        $formData = $request->request->all();
+
+        $user = $this->getCurrentUser();
+
+        $userInfo = ArrayToolkit::parts($formData, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'job'
+        ));
+
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        $order = $this->getOrderService()->createOrder($formData);
 
         if (intval($order['price']*100) > 0) {
             $paymentRequest = $this->createPaymentRequest($order);
@@ -93,7 +115,6 @@ class CourseOrderController extends BaseController
         if (empty($order)) {
             throw $this->createNotFoundException();
         }
-
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
@@ -212,6 +233,11 @@ class CourseOrderController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getNotificationService()
