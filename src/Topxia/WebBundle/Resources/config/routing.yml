@@ -1145,3 +1145,10 @@ offsale_create:
     pattern: /sale/offsale/create
     defaults: {_controller:TopxiaWebBundle:Sale:codeCheck}
 
+mysale:
+    pattern: /mysale
+    defaults: {_controller:TopxiaWebBundle:MySale:overview}
+
+mysale_course_list:
+    pattern: /mysale/course/list
+    defaults: {_controller:TopxiaWebBundle:MySale:courseList}

@@ -136,21 +136,18 @@ class CourseController extends BaseController
     public function showAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
-        if (isset($_COOKIE["octooken".$id])){
 
-                $octooken=$_COOKIE['octooken'.$id];
-
-
-        }else{
+        if (empty($_COOKIE["mtookeen_c_".$id])){
           
-            $octooken = $request->query->get('octooken'.$id, '0');
+            $mtookeen = $request->query->get('mtookeen_c_'.$id, '0');
 
-            if(empty($octooken)){
+            if(empty($mtookeen)){
 
-                setcookie("octooken".$id,  $octooken, time()-1);
+                setcookie("mtookeen_c_".$id,  $mtookeen, time()-1);
+
             }else{
 
-                   setcookie("octooken".$id,  $octooken, time()+3600*24*3);
+                setcookie("mtookeen_c_".$id,  $mtookeen, time()+3600*24*3);
             }
           
         }

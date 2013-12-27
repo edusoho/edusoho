@@ -1,0 +1,111 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}佣金推广 - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+    {% set side_nav = side_nav|default(null) %}
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          <div class="list-group-block">
+            <div class="list-group-panel">
+              <div class="list-group-heading">佣金收入</div>
+              <ul class="list-group">
+               
+                <a class="list-group-item {% if side_nav == 'overview' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-briefcase"></i>
+                 收入概览
+                </a>
+
+                 <a class="list-group-item {% if side_nav == 'income-list' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-briefcase"></i>
+                 收入明细
+                </a>
+                
+
+              </ul>
+            </div>
+          </div>
+          <!-- /list-group-block -->          
+
+          <div class="list-group-block">
+            <div class="list-group-panel">
+              <div class="list-group-heading">营销推广</div>
+              <ul class="list-group">
+              
+                <a class="list-group-item {% if side_nav == 'course-list' %}active{% endif %}" href="{{ path('mysale_course_list') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  单品课程推广
+                </a>
+
+                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  会员注册推广
+                </a>
+
+                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  用户流量导入
+                </a>
+
+                 <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  公开课活动推广
+                </a>
+
+              
+
+              </ul>
+            </div>
+          </div>
+          <!-- /list-group-block -->   
+
+          <div class="list-group-block">
+            <div class="list-group-panel">
+              <div class="list-group-heading">优惠码</div>
+              <ul class="list-group">
+              
+                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                  优惠码申请
+                </a>
+
+                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                  优惠码使用情况
+                </a>
+
+              
+
+              </ul>
+            </div>
+          </div>
+          <!-- /list-group-block -->  
+
+
+
+          <div class="list-group-block">
+            <div class="list-group-panel">
+              <div class="list-group-heading">流量日志</div>
+              <ul class="list-group">
+              
+                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}">
+                  <i class="glyphicon glyphicon-stats"></i>
+                  最近一天
+                </a>
+
+              </ul>
+            </div>
+          </div>
+          <!-- /list-group-block -->          
+
+
+
+
+
+        </div>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

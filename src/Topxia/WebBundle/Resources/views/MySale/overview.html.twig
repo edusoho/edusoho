@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle:MySale:layout.html.twig' %}
+
+{% block title %}推广概览 - {{ parent() }}{% endblock %}
+
+
+{% set side_nav = 'overview' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    账户总览
+  </div>
+  <div class="panel-body">
+
+<div class="jumbotron">
+  
+  <p>昨日收入(预估)
+0 .00元 </p>
+ <p>
+本月收入(预估)
+0 .00元 </p> 
+ <p>
+上月收入(预估)
+0 .00元 </p> 
+ <p>
+账户余额 
+0 .00元</p>
+
+ 
+</div>
+
+    </div>
+  </div>
+
+
+{% endblock %}
