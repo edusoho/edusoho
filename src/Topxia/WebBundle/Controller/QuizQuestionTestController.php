@@ -45,27 +45,51 @@ class QuizQuestionTestController extends BaseController
 
 	public function indexItemAction(Request $request, $courseId, $testPaperId)
 	{
-        $parentTestPaper = $request->query->all();
-        if(!empty($parentTestPaper)){
-        	$field['itemCounts']  = $parentTestPaper['itemCounts'];
-			$field['itemScores']  = $parentTestPaper['itemScores'];
-        }
-        $typeNumer = $this->getQuestionService()->findQuestionsForTestPaper($field, $courseId);
-        header('Content-type:text/html;charset=utf-8');
-        echo "<pre>";var_dump($typeNumer);echo "</pre>"; exit();
-		$course    = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		
+		$counts = $request->query->get('itemCounts');
+		$scores = $request->query->get('itemScores');
+
+        $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByCourseId($courseId), 'id');
 
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-		$items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
-		$questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
+
+        $newQuestions = array();
+        foreach ($questions as $key => $question) {
+
+        	if($question['parentId'] != 0) {
+        		$question['score'] = $scores['material'] == 0 ? $question['score'] : $scores['material'];
+        		$sonQuestions[$question['parentId']][] = $question;
+        	}else{
+        		$question['score'] = $scores[$question['questionType']] == 0 ? $question['score'] : $scores[$question['questionType']];
+        		$newQuestions[$question['questionType']][] = $question;
+        	}
+        }
+
+        $seq = explode(',', $testPaper['seq']);
+        $randQuestions = array();
+        foreach ($seq as  $type) {
+
+        	for($i = 0;$i<$counts[$type];$i++){
+        		$rand = array_rand($newQuestions[$type]);
+        		$randQuestions[] = $newQuestions[$type][$rand];
+        		unset($newQuestions[$type][$rand]);
+        	}	
+        }
+
+		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
+
+
+		// $items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
+
+		// $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:index.html.twig', array(
 			'course' => $course,
-			'items' => $items,
-			'questions' => $questions,
+			// 'items' => $items,
+			'questions' => $randQuestions,
+			'sonQuestions' => $sonQuestions,
 			'testPaper' => $testPaper,
 			'lessons' => $lessons,
-			'parentTestPaper' => $parentTestPaper
 		));
 	}
 
@@ -88,9 +112,10 @@ class QuizQuestionTestController extends BaseController
         if (!empty($lessons)){
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
         }
+
         $conditions['parentId'] = 0;
-        $conditions[$type['0']] = $type['1'];
         $conditions['notId']    = $itemIds;
+        $conditions[$type['0']] = $type['1'];
 
         $paginator = new Paginator(
 			$this->get('request'),
@@ -153,87 +178,91 @@ class QuizQuestionTestController extends BaseController
 
 	public function quesitonNumberCheckAction(Request $request, $courseId)
     {
+
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
-        if (empty($course)) {
-            throw $this->createNotFoundException();
+        $dictQuestionType = $this->getWebExtension()->getDict('questionType');
+
+		$dictDifficulty   = $this->getWebExtension()->getDict('difficulty');
+
+		$isDiffculty = $request->request->get('isDiffculty');
+
+		$itemCounts  = $request->request->get('itemCounts');
+
+		$diff = array_diff($itemCounts, $dictQuestionType);
+
+		if(empty($diff)){
+        	throw $this->createNotFoundException('参数错误');
         }
-
-        //$itemScores = $request->request->get('itemScores');
-        //$perventage = $request->request->get('perventage');
-        $isDiffculty = $request->request->get('isDiffculty');
-        $itemCounts = ArrayToolkit::index($request->request->get('itemCounts'), '0');
 		
-		$perventage['simple']     = 10;
-		$perventage['ordinary']   = 40;
-		$perventage['difficulty'] = 50;
+		$perventage['0'] = 10;
+		$perventage['1'] = 40;
+		$perventage['2'] = 50;
 
-        $questionNumbers = $this->getQuestionService()->getQuestionsNumberByCourseId($courseId);
-        echo "<pre>";var_dump($questionNumbers);header('Content-type:text/html;charset=utf-8');echo "</pre>";
-        if(($perventage['simple'] + $perventage['ordinary'] +$perventage['difficulty']) != 100){
+        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
         	throw $this->createNotFoundException('参数错误');
         }
 
-        $dictQuestionType = $this->getWebExtension()->getDict('questionType');
-		$dictDifficulty   = $this->getWebExtension()->getDict('difficulty');
+        $questionNumbers = $this->getQuestionService()->findQuestionsTypeNumberByCourseId($courseId);
 
         $message = array();
 
-        foreach ($itemCounts as $key => $item) {
-        	$num = (int) $item['1'];
+        foreach ($itemCounts as $item) {
 
-        	if ($num == 0){
+        	list($type, $num) = $item;
+
+        	if ($num == 0)
         		continue;
-        	}
 
         	if ($isDiffculty == 1 ){
-        		$thisNums = array();
-				$thisNums['simple']     = (int) ($num * $perventage['simple'] /100); 
-				$thisNums['ordinary']   = (int) ($num * $perventage['ordinary'] /100); 
-				$thisNums['difficulty'] = (int) ($num * $perventage['difficulty'] /100); 
+        		$needNums = array();
+				$needNums['simple']     = (int) ($num * $perventage['0'] /100); 
+				$needNums['ordinary']   = (int) ($num * $perventage['1'] /100); 
+				$needNums['difficulty'] = (int) ($num * $perventage['2'] /100); 
 
-	        	$otherNum = $num - ($thisNums['simple'] + $thisNums['ordinary'] + $thisNums['difficulty']);
+	        	$otherNum = $num - ($needNums['simple'] + $needNums['ordinary'] + $needNums['difficulty']);
 
 	        	if ($otherNum != 0){
-	        		$randNum = array_rand($thisNums, 1);
-	        		$thisNums[$randNum] = $thisNums[$randNum] + $otherNum;
+	        		$randNum = array_rand($needNums, 1);
+	        		$needNums[$randNum] = $needNums[$randNum] + $otherNum;
 	        	}
 
-	        	foreach ($thisNums as $k => $thisNum) {
-	        		if(empty($questionNumbers[$key][$k])) {
+	        	foreach ($needNums as $difficulty => $needNum) {
+	        		if(empty($questionNumbers[$type][$difficulty])) {
 
-	        			if($thisNum != 0)
-	        				$message[] = "{$dictQuestionType[$key]}中{$dictDifficulty[$k]}缺少{$thisNum}题 <br>";
+	        			if($needNum != 0)
+	        				$message[] = "{$dictQuestionType[$type]}中{$dictDifficulty[$difficulty]}缺少{$needNum}题 <br>";
 	        		}
-	        		else if(($thisNum - $questionNumbers[$key][$k]) < 0) {
+	        		else if(($needNum - $questionNumbers[$type][$difficulty]) < 0) {
 
-	        			$thisNum = abs($thisNum - $questionNumbers[$key][$k]);
-	        			$message[] = "{$dictQuestionType[$key]}中{$dictDifficulty[$k]}缺少{$thisNum}题 <br>";
+	        			$needNum = abs($needNum - $questionNumbers[$type][$difficulty]);
+	        			$message[] = "{$dictQuestionType[$type]}中{$dictDifficulty[$difficulty]}缺少{$needNum}题 <br>";
 	        		}
 	        	}
         	} else {
-        		$typeNumber = 0;
-        		if(empty($questionNumbers[$key])){
+        		if(empty($questionNumbers[$type])){
 
-        			$message[] = "{$dictQuestionType[$key]}缺少{$num}题 <br>";
+        			$message[] = "{$dictQuestionType[$type]}缺少{$num}题 <br>";
 
         		}else{
 
-        			foreach ($questionNumbers[$key] as $questionNumber) {
+        			$typeSum = 0;
+        			foreach ($questionNumbers[$type] as $questionNumber) {
 
-	        			$typeNumber = $questionNumber + $typeNumber;
+	        			$typeSum = $questionNumber + $typeSum;
 	        		}
-	        		if( ($typeNumber - $num) < 0) {
-	        			$thisNum = abs($typeNumber - $num);
-	        			$message[] = "{$dictQuestionType[$key]}缺少{$thisNum}题 <br>";
+	        		if( ($typeSum - $num) < 0) {
+
+	        			$needNum = abs($typeSum - $num);
+	        			$message[] = "{$dictQuestionType[$type]}缺少{$needNum}题 <br>";
 	        		}
         		}
-
         	}
 
-        	if(empty($message)){
-        		$message = false;
-        	}
+        }
+
+        if(empty($message)){
+        	$message = false;
         }
 
         return $this->createJsonResponse($message);
@@ -261,6 +290,8 @@ class QuizQuestionTestController extends BaseController
         }
         return $this->createJsonResponse(true);
     }
+
+
 
 	private function getCourseService()
     {

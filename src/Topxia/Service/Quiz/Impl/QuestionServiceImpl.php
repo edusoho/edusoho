@@ -52,12 +52,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
-    public function findQuestionsForTestPaper($field, $courseId)
+    public function findQuestionsByCourseId($courseId)
     {
-        $itemCounts = $field['itemCounts'];
-        $itemScores = $field['itemScores'];
-
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        
         $conditions['target']['course'] = array($courseId);
         if (!empty($lessons)){
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
@@ -68,59 +66,49 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $parentIds = array();
         foreach ($questions as $key => $question) {
 
-            $questions[$key]['score'] = $itemScores[$question['questionType']]==0 ? $question['score'] : $itemScores[$question['questionType']];
-            if ($question['parentId'] != 0) {
-                continue;
-            }
-
             if ($question['questionType'] == 'material') {
                 $parentIds[] = $question['id'];
             }
         }
 
         if (!empty($parentIds)) {
-            $con['parentIds'] = $parentIds;
 
+            $con['parentIds'] = $parentIds;
             $materialQuestions = ArrayToolkit::index($this->searchQuestion($con, array('createdTime' ,'DESC'), 0, 99999),'id');
 
-            foreach ($materialQuestions as $key => $question) {
-                $materialQuestions[$key]['score'] = $itemScores['material']==0 ? $question['score'] : $itemScores['material'];
-            }
             $questions = array_merge($questions, $materialQuestions);
         }
         
-        $questions['data'] = $data;
         return $questions;
     }
 
-    public function getQuestionsNumberByCourseId($courseId)
+    public function findQuestionsTypeNumberByCourseId($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
 
         $conditions['target']['course'] = array($courseId);
         
+        $conditions['parentId'] = 0;
+
         if (!empty($lessons)){
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
         }
         
         $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999);
 
-        $data = $parentIds = array();
-        foreach ($questions as $question) {
+        $nums  = array();
+        foreach ($questions as $ques) {
 
-            if ($question['parentId'] != 0) {
-                continue;
+            if (empty($nums[$ques['questionType']][$ques['difficulty']])) {
+                $nums[$ques['questionType']][$ques['difficulty']] = 0;
             }
 
-            if (empty($data[$question['questionType']][$question['difficulty']])) {
-                $data[$question['questionType']][$question['difficulty']] = 1;
-            }
-
-            $data[$question['questionType']][$question['difficulty']]++;
+            $nums[$ques['questionType']][$ques['difficulty']]++;
         }
        
-        return $data;
+        return $nums;
     }
+
 
     public function getCategory($id){
         return $this->getQuizQuestionCategoryDao()->getCategory($id);

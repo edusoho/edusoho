@@ -87,12 +87,18 @@ define(function(require, exports, module) {
 				var id = 'questionType-'+key;
 				var html = "<tbody id="+id+" class='tab-pane test-item-tbody'></tbody>";
         		self.$('[data-role=item-body]').after(html);
-               
+                
                 if (self.$('[data-type=' + key + ']').length == 0) {
                 	var empty = "<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>";
                 	$('#'+id).append(empty);
                 } else {
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));
+                }
+
+                if(key == 'material'){
+                	self.$('[data-type=' + key + ']').each(function(index){
+                		$(this).after(self.$('[data-type=' + $(this).attr('id') + ']'));
+                	});
                 }
             });
 

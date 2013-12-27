@@ -8,38 +8,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-    	var chechDifficulty = function (){
-	    	if ($('[name=isDiffculty]').is(':checked')){
-	    		var isDiffculty = 1;
-	    	}else{
-	    		var isDiffculty = 0;
-	    	}
-
-			var perventage = $('#test-percentage-field').val();
-
-			var itemCounts = new Array();
-	    	$('.item-number[name^=itemCounts]').each(function(index){
-	    		var item = new Array($(this).data('key'),$(this).val())
-	      	    itemCounts.push(item);
-	        });
-
-			var itemScores = new Array();
-	        $('.item-number[name^=itemScores]').each(function(index){
-	      	    var item = new Array($(this).data('key'),$(this).val())
-	      	    itemScores.push(item);
-	        });
-	        console.log(isDiffculty);
-	        $.post($('#test-percentage-field').data('url'), {isDiffculty: isDiffculty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
-	            if (data) {
-	            	Notify.warning(data,5);
-	            	return false;
-	            } else {
-	            	return true;
-	            }
-	        });
-
-	    }
-
         var validator = new Validator({
             element: '#test-create-form',
             autoSubmit: false,
@@ -63,7 +31,7 @@ define(function(require, exports, module) {
         });
 
         validator.on('formValidated', function(error, msg, $form) {
-            if (!error) {
+            if (error) {
                 return ;
             }
             var flag = 0;
@@ -75,12 +43,47 @@ define(function(require, exports, module) {
           	  	    return false;
           	    }
             });
-            if(!chechDifficulty()){
-            	flag = 1;
+
+            if(validator.get('autoSubmit') == false){
+
+                if ($('[name=isDiffculty]').is(':checked')){
+                    var isDiffculty = 1;
+                }else{
+                    var isDiffculty = 0;
+                }
+                var perventage = $('#test-percentage-field').val();
+
+                var itemCounts = new Array();
+                $('.item-number[name^=itemCounts]').each(function(index){
+                    
+                    var item = new Array($(this).data('key'),$(this).val());
+                    itemCounts.push(item);
+                });
+
+                var itemScores = new Array();
+                $('.item-number[name^=itemScores]').each(function(index){
+
+                    var item = new Array($(this).data('key'),$(this).val());
+                    itemScores.push(item);
+                });
+
+                $.post($('#test-percentage-field').data('url'), {isDiffculty: isDiffculty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
+                    if (data) {
+
+                        Notify.warning(data);
+                        return false;
+                    } else {
+
+                        if(flag == 0){
+                            validator.set('autoSubmit',true);
+                            $('button[type=submit]').trigger('click');
+                        }
+                    }
+                });
             }
-            // if(flag == 0){
-            //     validator.set('autoSubmit',true);
-            // }
+
+
+           
         });
 
 

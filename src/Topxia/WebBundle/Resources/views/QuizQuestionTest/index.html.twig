@@ -33,14 +33,22 @@
         <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
         <th>顺序号</th>
         <th width="50%">题干</th>
+        <th>类型</th>
         <th>从属</th>
         <th>分值</th>
         <th>操作</th>
       </tr>
     </thead>
     <tbody class='hidden' data-role='item-body'>
-      {% for key,item in items %}
+      {% for key,question in questions %}
           {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig'%}
+          {% if question.questionType == 'material' %}
+              {% if sonQuestions[question.id] | default(null) %}
+                  {% for key,sonQuestion in sonQuestions[question.id] %}
+                      {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {question: sonQuestion} %}
+                  {% endfor %}
+              {% endif %}
+          {% endif %}
       {% else %}
           <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
       {% endfor %}
