@@ -24,6 +24,13 @@ define(function(require, exports, module) {
             });
         }
 
+        if ($('#course-buy-form').find('input[name="qq"]')){
+            validator.addItem({
+                element: '[name="qq"]',
+                rule: 'qq'
+            });
+        }
+
     };
 
 });
