@@ -102,9 +102,11 @@ class CourseManageController extends BaseController
             $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
             $file = $file->move($directory, $filename);
 
+            $fileName = str_replace('.', '!', $file->getFilename());
+
             return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
                 'id' => $course['id'],
-                'file' => $file->getFilename())
+                'file' => $fileName)
             ));
         }
 
@@ -119,6 +121,7 @@ class CourseManageController extends BaseController
 
         //@todo 文件名的过滤
         $filename = $request->query->get('file');
+        $filename = str_replace('!', '.', $filename);
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
 
         $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
