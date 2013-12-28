@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% set script_controller = 'quiz-question/do-test' %}
+
 {% block content %}
 <div class="well">
   <h1>Example page header</h1>
@@ -43,7 +45,7 @@
     			Panel content
   			</div>
   			<div class="panel-footer">
-  				<button class="btn btn-success" style="width:100%">我要交卷</button>
+  				<button class="btn btn-success" style="width:100%" id="postPaper">我要交卷</button>
   			</div>
 		</div>
 

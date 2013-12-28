@@ -8,9 +8,6 @@ define(function(require, exports, module) {
         	element: '#test-item-container'
 	    });
 
-
-
-
 	    var $list = $('#test-item-table').sortable({
 		    containerSelector: '[class=test-item-tbody]',
 		    itemPath: '[class!=tab-pane]',
@@ -35,7 +32,28 @@ define(function(require, exports, module) {
                 return isContainer ? children : parent.attr('id');
             },
 
-     
+            // set item relative to cursor position
+			onDragStart: function ($item, container, _super) {
+				// console.log(item);
+				// console.log(container);
+				// console.log(_super);
+			    // var offset = $item.offset(),
+			    // pointer = container.rootGroup.pointer
+
+			    // adjustment = {
+			    //   left: pointer.left - offset.left,
+			    //   top: pointer.top - offset.top
+			    // }
+
+			    // _super($item, container)
+			},
+
+			onDrag: function ($item, position) {
+			    // $item.css({
+			    //   left: position.left - adjustment.left,
+			    //   top: position.top - adjustment.top
+			    // })
+			}
 
 
 		})

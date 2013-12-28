@@ -2,14 +2,14 @@
 
 {% block main %}
 <form>
-{% for question in questions.choice %}
+{% for question in questions.single_choice %}
 	{% set choices = answers[question.id] %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
 {% endfor %}
 
-{% for question in questions.single_choice %}
+{% for question in questions.choice %}
 	{% set choices = answers[question.id] %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
