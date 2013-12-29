@@ -161,6 +161,45 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
     }
 
+
+    public function submitTest ($answers, $testId)
+    {
+        if (!empty($answers)) {
+            return array();
+        }
+        //过滤待补充
+        $user = $this->getCurrentUser();
+
+        //已经有记录的
+        $itemResults = $this->filterTestAnswers($answers, $testId, $user['id']);
+        $itemIdsOld = ArrayToolkit::index($itemResults, 'itemId');
+
+        $answersOld = ArrayToolkit::parts($answers, array_keys($itemIdsOld));
+
+        if (!empty($answersOld)) {
+            $this->getDoTestDao()->updateItemResults($answersOld, $testId, $user['id']);
+        }
+        //还没记录的
+        $itemIdsNew = array_diff(array_keys($answers), array_keys($itemIdsOld));
+
+        $answersNew = ArrayToolkit::parts($answers, $itemIdsNew);
+
+        if (!empty($answersNew)) {
+            $this->getDoTestDao()->addItemResults($answersNew, $testId, $user['id']);
+        }
+
+        //测试数据
+        return $this->filterTestAnswers($answers, $testId, $user['id']);
+
+    }
+
+    private function filterTestAnswers ($answers, $testId, $userId)
+    {
+        return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testId, $userId);
+    }
+
+
+
     private function filterTestPaperFields($testPaper)
     {
         if(!ArrayToolkit::requireds($testPaper, array('name', 'itemCounts', 'itemScores', 'target'))){
@@ -214,6 +253,11 @@ class TestServiceImpl extends BaseService implements TestService
     private function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+
+    private function getDoTestDao()
+    {
+        return $this->createDao('Quiz.DoTestDao');
     }
 
 

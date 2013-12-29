@@ -22,13 +22,20 @@ class DoTestController extends BaseController
 		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
 			'questions' => $questions,
-			'answers' => $answers
+			'answers' => $answers,
+			'testId' => $testId
 		));
 	}
 
-	public function submitTestAction ()
+	public function submitTestAction (Request $request, $testId)
 	{
-		
+		if ($request->getMethod() == 'POST') {
+			$answers = $request->request->all();
+			$answers = $answers['data'];
+
+			$results = $this->getTestService()->submitTest($answers, $testId);
+			var_dump($results);exit();
+		}
 	}
 
 	private function formatQuestions ($questions)
