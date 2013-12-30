@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{{ question.stem }}</h3>
+	</div>
+	<div class="panel-body">
+		{% set input_index = 1 %}
+		{% for answer in question.answer %}
+			<input class="form-control input-sm mbs" type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个空请填在这里" />
+			{% set input_index = input_index + 1 %}
+		{% endfor %}
+	</div>
+</div>

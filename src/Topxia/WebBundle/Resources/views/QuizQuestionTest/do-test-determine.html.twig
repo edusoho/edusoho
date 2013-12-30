@@ -1,0 +1,19 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{{ question.stem }}</h3>
+	</div>
+	<div class="panel-body">
+		<div class="radio">
+  			<label>
+    			<input type="radio" data-type="determine" name="{{ question.id }}" value="1">
+    			正确
+  			</label>
+		</div>
+		<div class="radio">
+ 			<label>
+    			<input type="radio" data-type="determine" name="{{ question.id }}" value="0">
+    			错误
+  			</label>
+		</div>
+	</div>
+</div>

@@ -73,6 +73,16 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getConnection()->fetchAll($sql, $ids) ? : array();
     }
 
+    public function findQuestionsByParentIds(array $ids)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE parentId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
     public function findQuestionsSmallByParentId($id)
     {
         $sql = "SELECT id,questionType,score,difficulty,targetId,targetType FROM {$this->table} WHERE targetType in (?) and targetId in (?) ";

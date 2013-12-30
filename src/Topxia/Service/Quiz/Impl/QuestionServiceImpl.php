@@ -52,6 +52,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
+    public function findQuestionsByParentIds(array $ids){
+        return $this->getQuizQuestionDao()->findQuestionsByParentIds($ids);
+    }
+
     public function findQuestionsByCourseId($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
