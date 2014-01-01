@@ -187,6 +187,8 @@ class CourseController extends BaseController
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
+        $this->getCourseService()->hitCourse($id);
+
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,
             'member' => $member,

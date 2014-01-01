@@ -104,6 +104,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $builder;
     }
 
+    public function waveCourse($id, $field, $diff)
+    {
+        $fields = array('hitNum');
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减。。", $field, implode(',', $fields)));
+        }
+        $sql = "UPDATE  {$this->getTablename()}  SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+    }
+
     private function getTablename()
     {
         return self::TABLENAME;

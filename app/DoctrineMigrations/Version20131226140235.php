@@ -19,8 +19,7 @@ class Version20131226140235 extends AbstractMigration
 			  `prodType` varchar(128) CHARACTER SET utf8 NOT NULL COMMENT '商品类型',
 			  `prodId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品Id',
 			  `commission` float(11,2) NOT NULL DEFAULT '0.00' COMMENT '佣金',
-			  `mTookeen` varchar(128) CHARACTER SET utf8 NOT NULL COMMENT 'mTookeen',
-			  `oUrl` text NOT NULL COMMENT '原始链接地址',
+			  `mTookeen` varchar(128) CHARACTER SET utf8 NOT NULL COMMENT 'mtookeen',
 			  `tUrl` text NOT NULL COMMENT '推广链接地址',
 			  `validTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '有效时间',
 			  `userId` int(11) NOT NULL COMMENT '用户id',
@@ -38,7 +37,8 @@ class Version20131226140235 extends AbstractMigration
 			  `orderId` int(11) NOT NULL COMMENT '订单Id',
 			  `orderSn` varchar(255)  CHARACTER SET utf8  NOT NULL COMMENT '订单sn',
 			  `commission` float(11,2) NOT NULL DEFAULT '0.00' COMMENT '本笔订单佣金收入',
-			  `updatedTime` int(11) NOT NULL COMMENT '更新时间',
+			  `status` varchar(255)  CHARACTER SET utf8  NOT NULL COMMENT '成交记录状态',
+			  `paidTime` int(11) NOT NULL COMMENT '更新时间',
 			  `createdTime` int(11) NOT NULL COMMENT '创建时间',
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='推广成交记录表'  AUTO_INCREMENT=1;
@@ -53,7 +53,7 @@ class Version20131226140235 extends AbstractMigration
 			  `userIp` varchar(255) CHARACTER SET utf8  NOT NULL COMMENT '访客Ip',
 			  `createdTime` int(11) NOT NULL COMMENT '创建时间',
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='推广成交记录表'  AUTO_INCREMENT=1;
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='推广记录流量日志表'  AUTO_INCREMENT=1;
 
 
 		

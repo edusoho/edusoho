@@ -29,20 +29,28 @@ class MySaleController extends BaseController
     public function courseListAction(Request $request)
     {
         $user = $this->getCurrentUser();
- 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
-            12
-        );
-        
-        $courses = $this->getCourseService()->findUserTeachCourses(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount(),
-            false
+
+        $sort  = 'recommended';
+
+        $conditions = array(
+            'status' => 'published',
+            'recommended' => ($sort == 'recommended') ? null : null
         );
 
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions)
+            ,12
+        );
+
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions, $sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+ 
+       
         return $this->render('TopxiaWebBundle:MySale:course-list.html.twig', array(
             'courses'=>$courses,
             'paginator' => $paginator

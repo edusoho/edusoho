@@ -368,6 +368,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']})");
 	}
 
+	public function hitCourse($id)
+	{
+		$this->getCourseDao()->waveCourse($id, 'hitNum', +1);
+	}
+
 	public function cancelRecommendCourse($id)
 	{
 		$course = $this->tryAdminCourse($id);

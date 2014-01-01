@@ -26,13 +26,11 @@
         <tr>
           <td>
 
-    <a class="pull-left" href="{{ path('course_show', {id:course.id}) }}">
-      <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
-    </a>
+          <a class="pull-left" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+            <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
+          </a>
 
-
-
-          <a href="{{ path('course_show', {id:course.id}) }}" class="mlm">{{ course.title }}</a>
+          <a href="{{ path('course_show', {id:course.id}) }}" class="mlm" target="_blank">{{ course.title }}</a>
 
           </td>
           <td>{{ course.studentNum }}/{{ course.hitNum }}</td>
@@ -41,15 +39,7 @@
            <td>340元</td>
           <td>
             <div class="btn-group">
-              <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">管理</a>
-
-              <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu pull-right">
-                <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">生成推广链接</a></li>
-               
-              </ul>
+              <a class="btn btn-default btn-sm" href="{{ path('mysale_course_link', {id:course.id}) }}">生成推广链接</a>
             </div>
 
           </td>
