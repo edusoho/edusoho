@@ -38,7 +38,6 @@ define(function(require, exports, module) {
                 }
                 //essay
                 if ($(this).data('type') == 'essay') {
-                    console.log($(this).val());
                     values.push($(this).val());     
 
                 }
@@ -61,8 +60,9 @@ define(function(require, exports, module) {
 
 
         $('.choice').on('click', 'ul li', function(){
-            isChecked = $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input').prop("checked");
-            $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input').prop("checked", !isChecked);
+            $input = $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input');
+            isChecked = $input.prop("checked");
+            $input.prop("checked", !isChecked).change();
             
         });
     };

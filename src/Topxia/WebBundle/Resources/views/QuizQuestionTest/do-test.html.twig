@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig' %}
 
 {% block main %}
+{% set questionIndex = 1 %}
 <div id="choice"></div>
 {% for question in questions.single_choice %}
 

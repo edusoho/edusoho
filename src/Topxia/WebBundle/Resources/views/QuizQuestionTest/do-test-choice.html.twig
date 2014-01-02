@@ -1,6 +1,6 @@
 <div class="panel panel-default choice" id="question{{ question.id }}">
 	<div class="panel-heading">
-		<h3 class="panel-title">{{ question.stem }}</h3>
+		<h3 class="panel-title">{{ questionIndex }}{{ question.stem }}</h3>
 	</div>
 	<div class="panel-body">
 		<ul class="list-unstyled">
@@ -22,3 +22,4 @@
 	</div>
 </div>
 
+{% set questionIndex = 2 %}
