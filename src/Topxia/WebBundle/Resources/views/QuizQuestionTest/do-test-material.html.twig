@@ -1,17 +1,5 @@
 <div class="well well-lg">{{ question.stem }}</div>
 
-<!--
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title">{{ question.stem }}</h3>
-	</div>
-	<div class="panel-body">
-
-		<textarea class="form-control" data-type="essay" name="{{ question.id }}" rows="3"></textarea>
-
-	</div>
-</div>
--->
 {% for question in question.questions %}
 
 	{% if question.questionType == 'single_choice' or question.questionType == 'choice' %}

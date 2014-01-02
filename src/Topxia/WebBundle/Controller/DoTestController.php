@@ -62,12 +62,12 @@ class DoTestController extends BaseController
 
    	private function getQuestionService()
    	{
-   		return $this -> getServiceKernel()->createService('Quiz.QuestionService');
+   		return $this->getServiceKernel()->createService('Quiz.QuestionService');
    	}
 
    	private function getTestService()
    	{
-   		return $this -> getServiceKernel()->createService('Quiz.TestService');
+   		return $this->getServiceKernel()->createService('Quiz.TestService');
    	}
 
 }
