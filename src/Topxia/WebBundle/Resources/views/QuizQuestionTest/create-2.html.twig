@@ -39,27 +39,31 @@
         <th>操作</th>
       </tr>
     </thead>
+    <thead>
+      <tr>
+          <td colspan="20" class="score-text-alert"></td>
+      </tr>
+    </thead>
     {% set seq = 1 %}
     <tbody class='hidden' data-role='item-body'>
       {% for key,question in questions %}
 
-          {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig'%}
+          {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig'%}
           {% if question.questionType == 'material' %}
               {% if sonQuestions[question.id] | default(null) %}
 
                   {% for key,sonQuestion in sonQuestions[question.id] %}
-                      {% set seq = (seq + 1) %}
                   
-                      {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {question: sonQuestion} %}
+                      {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig' with {question: sonQuestion} %}
+                      
+                      {% set seq = (seq + 1) %}
 
                   {% endfor %}
 
               {% endif %}
           {% endif %}
 
-          {% if question.questionType != 'material' %}
-              {% set seq = (seq + 1) %}
-          {% endif %}
+          {% if question.questionType != 'material' %} {% set seq = (seq + 1) %} {% endif %}
 
       {% else %}
           <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>

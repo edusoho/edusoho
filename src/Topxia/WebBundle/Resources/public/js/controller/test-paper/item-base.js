@@ -31,6 +31,28 @@ define(function(require, exports, module) {
 		tabShown: function(){
 			this.$('.test-item-tbody.active').removeClass('active tab-pane');
 			this.$('[data-role=batch-select], [data-role=batch-item]').prop('checked', false);
+
+			var total = 0;
+			var questionTotal = 0;
+			var questionType = $('#myTab .active a').text();
+			var questionConut = $('[name^=scores]:visible').length;
+
+			$('[name^=scores][type=text]').each(function(){
+			    total = Number($(this).val()) + Number(total);
+			});
+
+			$('[name^=scores]:visible').each(function(){
+			    questionTotal = Number($(this).val()) + Number(questionTotal);
+			});
+
+			if(isNaN(total) || isNaN(questionTotal)){
+				total = 0;
+				questionTotal = 0;
+			}
+			
+			var html = "试卷总分" + total + "分 " + questionType + questionConut + "题/ "+ questionTotal + "分";
+
+			this.$('.score-text-alert').html(html);
 		},
 
 		onSubmit: function(e){
@@ -40,8 +62,16 @@ define(function(require, exports, module) {
 		},
 
 		itemModal: function(e){
+			var ids = new Array();
+
+			this.$('[data-role=batch-item]:visible').each(function(){
+				ids.push(this.value);
+			});
+
 			var href = $('#myTab .active a').attr('href').split("#");
-			var url  = $(e.currentTarget).data('url')+'&type='+href[1];
+
+			var url  = $(e.currentTarget).data('url')+'&type='+href[1]+"&ids="+ids;
+
             $.get(url, '', function(data){
                 $($(e.currentTarget).data('target')).html(data).modal({
                     backdrop:true,
@@ -67,8 +97,8 @@ define(function(require, exports, module) {
 		},
 
 		_initItemList: function(){
-            require('../../util/batch-delete')($(this.element));
-            require('../../util/item-delete')($(this.element));
+            require('./batch-delete')($(this.element));
+            require('./item-delete')($(this.element));
         },
 
 		_onChangeQuestionType: function	(questionType){
@@ -85,7 +115,7 @@ define(function(require, exports, module) {
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));
                 }
 
-                if(key == 'material'){
+                if('material' == key){
                 	self.$('[data-type=' + key + ']').each(function(index){
                 		$(this).after(self.$('[data-type=' + $(this).attr('id') + ']'));
                 	});

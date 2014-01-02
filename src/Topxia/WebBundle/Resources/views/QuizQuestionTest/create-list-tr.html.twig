@@ -1,9 +1,8 @@
 <tr  data-role='item' id="{{item.id}}">
-  
-  <td>
-    {{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}
-  </td>
+  <td>{{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}</td>
+
   <td>{{ dict('questionType')[item.questionType] }}</td>
+
   {% if item.parentId == 0 %}
   <td>
     {% if item.targetType == 'lesson'%}
@@ -13,22 +12,17 @@
     {% endif %}
   </td>
   {% endif %}
-  <td>
-    {{ macro.user_link(users[item.userId]) }}
-  </td>
-  <td>
-    {{item.score }}
-  </td>
-  <td>
-    
-    </button>
-    {% if replaceId %}
-      <button type="button" data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id,replaceId:replaceId}) }}" class="btn btn-default btn-sm item-replace-btn" data-replaceId='{{replaceId}}' data-loading-text="替换" >替换</button>
-    {% else %}
-      <button type="button" data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id}) }}" class="btn btn-default btn-sm item-add-btn" data-loading-text="添加" >添加</button>
-    {% endif %}
 
+  <td>{{ macro.user_link(users[item.userId]) }}</td>
 
+  <td>{{item.score }}</td>
+  
+  <td>
+      {% if replaceId %}
+        <button type="button" data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id,replaceId:replaceId}) }}" class="btn btn-default btn-sm item-replace-btn" data-replaceId='{{replaceId}}' data-loading-text="替换" >替换</button>
+      {% else %}
+        <button type="button" data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id}) }}" class="btn btn-default btn-sm item-add-btn" data-loading-text="添加" >添加</button>
+      {% endif %}
   </td>
  
 </tr>

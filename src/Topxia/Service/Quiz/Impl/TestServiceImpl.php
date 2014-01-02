@@ -37,6 +37,14 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getQuizPaperChoiceDao()->deleteChoicesByPaperIds(array($id));
     }
 
+    public function searchTestPaper(array $conditions, array $orderBy, $start, $limit){
+        return $this->getTestPaperDao()->searchTestPaper($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchTestPaperCount(array $conditions){
+        return $this->getTestPaperDao()->searchTestPaperCount($conditions);
+    }
+
     public function getTestItem($id)
     {
         return $this->getTestItemDao()->getItem($id);
@@ -53,6 +61,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['testId'] = $testId;
         $field['questionId'] = $question['id'];
         $field['questionType'] = $question['questionType'];
+        $field['parentId'] = $question['parentId'];
         $field['score'] = $question['score'];
 
         $item = $this->getTestItemDao()->addItem($field);
@@ -80,12 +89,17 @@ class TestServiceImpl extends BaseService implements TestService
             $field['testId'] = $testId;
             $field['questionId'] = $question['id'];
             $field['questionType'] = $question['questionType'];
+            $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
             $item = $this->getTestItemDao()->addItem($field);
         }
+
         $this->sortTestItemsByTestId($testId);
 
+        echo 11;
+
+        exit();
     }
 
     public function updateItem($id, $questionId)
@@ -95,9 +109,11 @@ class TestServiceImpl extends BaseService implements TestService
     	if(empty($item) || empty($question)){
     		return array();
         }
+
         $field['questionId']   = $question['id'];
         $field['questionType'] = $question['questionType'];
         $field['parentId']     = $question['parentId'];
+
         return $this->getTestItemDao()->updateItem($id, $field);  
     }
 
@@ -107,9 +123,11 @@ class TestServiceImpl extends BaseService implements TestService
         if(empty($item)){
             return false;
         }
+
         if($item['parentId'] != 0){
             $this->getTestItemDao()->deleteItemsByParentId($item['parentId']);
         }
+
         $this->getTestItemDao()->deleteItem($id);
     }
 
@@ -145,16 +163,42 @@ class TestServiceImpl extends BaseService implements TestService
 
         $groupItems = array();
         foreach ($items as $item) {
-            $groupItems = array_merge_recursive($groupItems, $item);
+            if($item['parentId'] == 0){
+                $groupItems[$item['questionType']][] = $item;
+            } else {
+                $groupItems[$item['parentId']][] = $item;
+            }
         }
 
         $seqType =  explode(',', $testPaper['seq']);
         $seqNum = 1;
-        foreach ($seqType as  $type) {
-            foreach ($groupItems[$type] as  $item) {
+        foreach ($seqType as $type) {
+
+            if (empty($groupItems[$type])){
+                continue;
+            }
+
+            foreach ($groupItems[$type] as $item) {
+
                 $fields = array('seq' => $seqNum);
-                $this->getTestItemDao()->updateItem($itemId, $fields);
+                $this->getTestItemDao()->updateItem($item['id'], $fields);
+
+                if($item['questionType'] == 'material'){
+
+                    if (empty($groupItems[$item['questionId']])){
+                        continue;
+                    }
+
+                    foreach ($groupItems[$item['questionId']] as $item) {
+                        
+                        $fields = array('seq' => $seqNum);
+                        $this->getTestItemDao()->updateItem($item['id'], $fields);
+                        $seqNum ++;
+                    }
+                }
+
                 $seqNum ++;
+
             }
         }
     }

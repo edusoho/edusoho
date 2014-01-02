@@ -19,6 +19,10 @@ interface TestService
     
     public function findTestPapersByCourseIds(array $id);
 
+    public function searchTestPaper(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchTestPaperCount(array $conditions);
+    
     /**
      * 
      *  test_item

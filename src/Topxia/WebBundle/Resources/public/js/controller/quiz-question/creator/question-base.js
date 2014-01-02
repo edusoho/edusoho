@@ -52,10 +52,10 @@ define(function(require, exports, module) {
             });
 
             validator.addItem({
-                    element: '#question-score-field',
-                    required: false,
-                    rule:'score',
-                });
+                element: '#question-score-field',
+                required: false,
+                rule:'score',
+            });
 
             validator.on('formValidated', function(error, msg, $form) {
                 if (error) {
@@ -82,11 +82,13 @@ define(function(require, exports, module) {
         },
 
         _onChangeCategory: function(targets) {
+
             var options = "<option value=''> 请选择类别 </option>";
             if(typeof (targets.default)  != 'undefined'){
                 var selected = targets.default;
                 delete targets.default;
             }
+
             $.each(targets, function(index, category){
                 if(category.id == selected){
                     options += '<option selected=selected value=' + category.id + '>' + category.name + '</option>';
@@ -94,15 +96,18 @@ define(function(require, exports, module) {
                     options += '<option value=' + category.id + '>' + category.name + '</option>';
                 }
             });
+
             this.$('[data-role=category]').html(options);
         },
 
         _onChangeTargets: function(categorys) {
+
             var options = '';
             if(typeof (categorys.default)  != 'undefined'){
                 var selected = categorys.default;
                 delete categorys.default;
             }
+
             $.each(categorys, function(index, target){
                 var value = target.type+'-'+target.id;
                 if(value == selected){
@@ -111,6 +116,7 @@ define(function(require, exports, module) {
                     options += '<option value=' + value + '>' + target.name + '</option>';
                 }
             });
+            
             this.$('[data-role=target]').html(options);
         },
 

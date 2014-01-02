@@ -81,7 +81,7 @@
                   </div>
                   <div class="form-control-static pull-left pll">题目分值:</div>
                   <div class="col-md-2">
-                      <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null)%}{{testPaper.itemScores[key]}}{%else%}0{% endif %}" />
+                      <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}0{% endif %}" />
                   </div>
               </div>
               <div class="col-md-2 controls score_number">
