@@ -28,6 +28,7 @@ class DoTestDaoImpl extends BaseDao
 		return $this->getConnection()->executeUpdate($sql, $answersForSQL);
 	}
 
+    //要不要给这三个字段加上索引呢
 	public function updateItemResults ($answers, $testId, $userId)
 	{
 		if(empty($answers)){ 

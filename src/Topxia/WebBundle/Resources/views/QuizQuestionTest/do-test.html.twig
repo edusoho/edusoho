@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig' %}
 
 {% block main %}
-
+<div id="choice"></div>
 {% for question in questions.single_choice %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
@@ -13,30 +13,29 @@
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
 {% endfor %}
-
+<div id="determine"></div>
 {% for question in questions.determine %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-determine.html.twig' %}
 
 {% endfor %}
-
+<div id="fill"></div>
 {% for question in questions.fill %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-fill.html.twig' %}
 
 {% endfor %}
-
+<div id="essay"></div>
 {% for question in questions.essay %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-essay.html.twig' %}
 
 {% endfor %}
-
+<div id="material"></div>
 {% for question in questions.material %}
 
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-material.html.twig' %}
 
 {% endfor %}
-
 
 {% endblock %}

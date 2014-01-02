@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
         var changeAnswers = {};
 
-        $('*[data-type]').each(function(){
+        $('*[data-type]').each(function(index){
 
             $(this).on('change', function(){
                 var name = $(this).attr('name');
