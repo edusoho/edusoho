@@ -31,7 +31,7 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
         if (count($answer['1']) == 0){
             throw $this->createServiceException('该问题没有答案或答案格式不正确！');
         }
-        $field['answer'] = $answer;
+        $field['answer'] = $answer[1];
         return QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($field))
         );

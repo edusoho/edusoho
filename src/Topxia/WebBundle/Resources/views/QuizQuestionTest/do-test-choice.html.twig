@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{{ question.stem }}</h3>
+	</div>
+	<div class="panel-body">
+		<ul class="list-unstyled">
+			{% set label_index = 65 %}
+			{% for choice in question.choices %}
+				<li>{{ label_index|chr }}. {{ choice.content }}</li>
+				{% set label_index = label_index + 1 %}
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="panel-footer">
+		{% set label_index = 65 %}
+		{% for choice in question.choices %}
+			<label class="checkbox-inline">
+				{{ label_index|chr }}<input type="checkbox" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}">
+			</label> 
+			{% set label_index = label_index + 1 %}
+		{% endfor %}
+	</div>
+</div>
+

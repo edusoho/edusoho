@@ -52,6 +52,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
+    public function findQuestionsByParentIds(array $ids){
+        return $this->getQuizQuestionDao()->findQuestionsByParentIds($ids);
+    }
+
     public function findQuestionsByCourseId($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
@@ -174,9 +178,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
     }
 
-    public function findChoicesByQuestionIds(array $id)
+    public function findChoicesByQuestionIds(array $ids)
     {
-        return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($id);
+        return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($ids);
     }
 
     private function filterCommonFields($question)

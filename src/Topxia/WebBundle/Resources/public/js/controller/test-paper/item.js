@@ -32,8 +32,6 @@ define(function(require, exports, module) {
                 return isContainer ? children : parent.attr('id');
             },
 
-
-
 		});
 
 

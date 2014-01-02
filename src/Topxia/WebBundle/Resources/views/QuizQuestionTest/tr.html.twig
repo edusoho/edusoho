@@ -12,7 +12,9 @@
             课程
         {% endif %}
     </td>
+    
     <td ><input class="notMoveHandle form-control input-sm" type="text" value="{{question.score}}" /></input></td>
+
     <td>
         <div class="btn-group">
             <a href="javascript:" data-role="item-modal-btn"  data-target="#test-item-modal" class="notMoveHandle btn btn-default btn-sm" data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,testItemId:question.id}) }}" >替换</a>
