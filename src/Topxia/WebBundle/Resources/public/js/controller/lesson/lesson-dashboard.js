@@ -170,6 +170,36 @@ define(function(require, exports, module) {
             		return;
             	}
 
+            	if (lesson.type == 'video' || lesson.type == 'audio') {
+
+		            var flashvars = {
+		                src: "http://test-yun.edusoho.net/courselesson/3/k6b8da97nls4-vsd.m3u8",
+		                //src: "http://localhost:8082/playlists/test_001/stream.m3u8",
+		                plugin_hls: "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf"
+		            };
+
+			        var params = {
+			            allowFullScreen: true
+			            , allowScriptAccess: "always"
+			            , bgcolor: "#000000"
+			        };
+			        var attrs = {
+			            name: "player"
+			        };
+
+			        $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
+			        $("#lesson-video-content").show();
+
+			        swfobject.embedSWF(
+			        	"http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf", 
+			        	"lesson-video-player", 
+			        	"100%", "100%", "10.2", null, flashvars, params, attrs
+		        	);
+
+            	}
+
+            	return;
+
             	if (lesson.type == 'video') {
             		if (lesson.mediaSource == 'self') {
             			$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
