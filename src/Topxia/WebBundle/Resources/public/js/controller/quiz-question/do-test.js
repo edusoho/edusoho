@@ -55,7 +55,16 @@ define(function(require, exports, module) {
                 changeAnswers = {};
             });
 
-        })
+        });
+
+
+
+
+        $('.choice').on('click', 'ul li', function(){
+            isChecked = $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input').prop("checked");
+            $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input').prop("checked", !isChecked);
+            
+        });
     };
 
 });
