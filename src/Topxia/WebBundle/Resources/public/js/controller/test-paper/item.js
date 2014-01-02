@@ -8,15 +8,12 @@ define(function(require, exports, module) {
         	element: '#test-item-container'
 	    });
 
-
-
-
 	    var $list = $('#test-item-table').sortable({
-		    containerSelector: '[class=test-item-tbody]',
-		    itemPath: '[class!=tab-pane]',
-		    itemSelector: '[data-role=item]',
-		    containerPath: '> .test-item-tbody',
-		    placeholder: '<tr class="placeholder"/>',
+		    containerSelector: 'table',
+			itemPath: '> tbody',
+			itemSelector: '[data-role="item"]',
+			exclude: '.notMoveHandle',
+			placeholder: '<tr class="placeholder"/>',
 		    onDrop: function (item, container, _super) {
                 _super(item, container);
                 var data = $list.sortable("serialize").get();
@@ -35,10 +32,9 @@ define(function(require, exports, module) {
                 return isContainer ? children : parent.attr('id');
             },
 
-     
 
 
-		})
+		});
 
 
 
