@@ -9,7 +9,6 @@ define(function(require, exports, module) {
 			Handlebars: Handlebars,
 			Notify: Notify,
 			questionType: [],
-			material: [],
 		},
 
 		events: {
@@ -17,6 +16,7 @@ define(function(require, exports, module) {
             'shown.bs.tab a[data-toggle="tab"]': 'tabShown',
             'click [data-role=batch-select]'   : 'batchSelect',
             'click [data-role=item-modal-btn]' : 'itemModal',
+            'click .btn-submit-index' : 'onSubmit',
 		},
 
 		setup:function(){
@@ -31,6 +31,12 @@ define(function(require, exports, module) {
 		tabShown: function(){
 			this.$('.test-item-tbody.active').removeClass('active tab-pane');
 			this.$('[data-role=batch-select], [data-role=batch-item]').prop('checked', false);
+		},
+
+		onSubmit: function(e){
+			$.get($(e.currentTarget).data('url'), '', function(data){
+                console.log(data);
+            })
 		},
 
 		itemModal: function(e){
@@ -54,11 +60,6 @@ define(function(require, exports, module) {
 		},
 
 		_initTab: function (){
-            var material = $('[data-role=material-data]').html();
-			if(typeof material != 'undefined'){
-                this.set('material', $.parseJSON(material));
-            }
-
 			var questionType = $('[data-role=questionType-data]').html();
 			if(typeof questionType != 'undefined'){
                 this.set('questionType', $.parseJSON(questionType));
@@ -69,17 +70,6 @@ define(function(require, exports, module) {
             require('../../util/batch-delete')($(this.element));
             require('../../util/item-delete')($(this.element));
         },
-
-		_onChangeMaterial: function	(material){
-			var self = this;
-			$.each(material, function(key, value){
-				var id = 'parentId-'+key;
-				var html = "<tbody id="+id+" class='tab-pane test-item-tbody'></tbody>";
-            	self.$('[data-role=item-body]').after(html);
-                $('#'+id).append(self.$('[data-type=' + key + ']'));
-            });
-
-		},
 
 		_onChangeQuestionType: function	(questionType){
 			var self = this;

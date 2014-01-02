@@ -36,7 +36,6 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
-
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
@@ -46,13 +45,24 @@ class QuizQuestionTestController extends BaseController
 	public function indexItemAction(Request $request, $courseId, $testPaperId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+		if ($request->getMethod() == 'POST') {
+	    	$ids = $request->request->get('ids');
+	    	$scores = $request->request->get('scores');
+        	$this->getTestService()->createItems($testPaperId, $ids, $scores);
+        	exit();
+        }
 		
 		$counts = $request->query->get('itemCounts');
 		$scores = $request->query->get('itemScores');
 
+		$parentTestPaper = $request->query->all();
+
         $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByCourseId($courseId), 'id');
 
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
+
+		$parentTestPaper = array_merge($parentTestPaper, $testPaper);
 
         $newQuestions = array();
         foreach ($questions as $key => $question) {
@@ -79,7 +89,6 @@ class QuizQuestionTestController extends BaseController
 
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 
-
 		// $items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
 
 		// $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
@@ -89,6 +98,7 @@ class QuizQuestionTestController extends BaseController
 			'questions' => $randQuestions,
 			'sonQuestions' => $sonQuestions,
 			'testPaper' => $testPaper,
+			'parentTestPaper' => $parentTestPaper,
 			'lessons' => $lessons,
 		));
 	}

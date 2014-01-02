@@ -6,8 +6,6 @@ interface TestItemDao
 {
     public function addItem($item);
 
-    public function addItems(array $items);     //`testId`,`seq`,`questionId`,`questionType`,`parentId`,`score`
-    
     public function updateItem($id, $fields);
 
     public function deleteItem($id);

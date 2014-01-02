@@ -1,19 +1,32 @@
  <tr id="{{question.id}}"  data-role='item' data-type='{% if question.parentId != 0 %}{{question.parentId}}{% else %}{{question.questionType}}{% endif %}' >
-    <td><input type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" ></td>
-    <td>{{ loop.index }}</td>
-    <td>{{question['stem'] | length > 40 ? question['stem']|slice(0, 40) ~ '...' : question['stem'] }}</td>
-    <td>{{ dict('questionType')[question.questionType] }}</td>
+    <td>
+        <input type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
+    </td>
+
+    <td>{% if question.questionType != 'material' %} {{ seq }} {% endif %}</td>
+
+    <td>
+        {{question['stem'] | length > 40 ? question['stem']|slice(0, 40) ~ '...' : question['stem'] }}
+    </td>
+
+    <td>
+        {{ dict('questionType')[question.questionType] }}
+    </td>
+
     <td>
         {% if question['parentId'] != '0'%}
             材料题
         {% elseif question['targetType'] == 'lesson' %}
-            课时{{lessons[question['targetId']]['number']}}
+            课时{{ lessons[question['targetId']]['number'] }}
         {% else %}
             课程
         {% endif %}
     </td>
     
-    <td ><input class="notMoveHandle form-control input-sm" type="text" value="{{question.score}}" /></input></td>
+    <td >
+        <input name="ids[]" type="hidden" value="{{question.id}}" /></input>
+        <input name="scores[]" class="notMoveHandle form-control input-sm" type="text" value="{{question.score}}" /></input>
+    </td>
 
     <td>
         <div class="btn-group">
@@ -24,3 +37,4 @@
         </div>
     </td>
 </tr>
+

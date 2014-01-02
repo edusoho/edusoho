@@ -26,7 +26,7 @@
       </ul>
 
     </div>
-
+<form action ="{{ path('course_manage_test_item',{courseId:course.id,testPaperId:testPaper.id}) }}" method="post" class="form-horizontal">
   <table class="table table-striped table-hover tab-content" id="test-item-table">
     <thead>
       <tr>
@@ -39,16 +39,28 @@
         <th>操作</th>
       </tr>
     </thead>
+    {% set seq = 1 %}
     <tbody class='hidden' data-role='item-body'>
       {% for key,question in questions %}
+
           {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig'%}
           {% if question.questionType == 'material' %}
               {% if sonQuestions[question.id] | default(null) %}
+
                   {% for key,sonQuestion in sonQuestions[question.id] %}
+                      {% set seq = (seq + 1) %}
+                  
                       {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {question: sonQuestion} %}
+
                   {% endfor %}
+
               {% endif %}
           {% endif %}
+
+          {% if question.questionType != 'material' %}
+              {% set seq = (seq + 1) %}
+          {% endif %}
+
       {% else %}
           <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
       {% endfor %}
@@ -58,12 +70,13 @@
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
     <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_test_item_deletes',{courseId:course.id}) }}">删除</button>
   </div>
-      <button type="submit" class="btn btn-primary btn-sm pull-right mlm" >保存</button>
+      <button type="submit" class="btn btn-primary btn-sm pull-right mlm btn-submit-index" >保存</button>
       <button type="button" class="btn btn-primary btn-sm pull-right mlm" >验证</button>
       {% if parentTestPaper.name | default(null)%}
         <a href="{{ path('course_manage_test_paper_create',{testPaperId:testPaper.id,courseId:course.id, percentage:parentTestPaper.percentage, itemCounts:parentTestPaper.itemCounts, itemScores:parentTestPaper.itemScores, target:parentTestPaper.target,}) }}" class="btn btn-link  pull-right">上一步</a>
       {% endif %}
-
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
   </div>
 </div>
 
@@ -74,8 +87,7 @@
 </div>
 
 <script type="text/plain" data-role="questionType-data">{{ dict('questionType')| json_encode | raw}}</script>
-{#<script type="text/plain" data-role="material-data">{{ material | json_encode | raw}}</script>
-#}
+
 {% endblock %}
 
 

@@ -26,16 +26,6 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getItem($this->getConnection()->lastInsertId());
     }
 
-    public function addItems(array $items)
-    {
-        if(empty($items)){ 
-            return array(); 
-        }
-        $items = implode(',',$items);
-        $sql ="INSERT INTO {$this->table} (`testId`,`seq`,`questionId`,`questionType`,`parentId`,`score`) VALUES  {$items} ";
-        return $this->getConnection()->executeUpdate($sql);
-    }
-
     public function updateItem($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));

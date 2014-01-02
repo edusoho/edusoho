@@ -55,70 +55,37 @@ class TestServiceImpl extends BaseService implements TestService
         $field['questionType'] = $question['questionType'];
         $field['score'] = $question['score'];
 
-        if($question['parentId'] == '0'){
-            $field['seq'] = $this->getTestItemDao()->getItemsCountByTestIdAndQuestionType($testId, $question['questionType'])+1;
-        } else {
-            $field['seq'] = $this->getTestItemDao()->getItemsCountByTestIdAndParentId($testId, $question['parentId'])+1;
-        }
+        $item = $this->getTestItemDao()->addItem($field);
 
-        return $this->getTestItemDao()->addItem($field);
+        $this->sortTestItemsByTestId($testId);
+        
+        return $this->getTestItem($item['id']);
     }
 
-    public function createItemsByTestPaper($field, $testId, $courseId)
+    public function createItems($testId, $ids, $scores)
     {
-        $itemCounts = $field['itemCounts'];
-        $itemScores = $field['itemScores'];
+        $diff = array_diff($ids, $scores);
 
-        $lessons = $this->getCourseService()->getCourseLessons($courseId);
-        $conditions['target']['course'] = array($courseId);
-        if (!empty($lessons)){
-            $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+        if(empty($diff)){
+            throw $this->createServiceException('参数不正确');
         }
 
-        $questions = $this->getQuestionService()->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, $count);
-
-        foreach ($itemCounts as $key => $count) {
-            if($count == 0){
-                continue;
-            }
-            $conditions['questionType'] = $key;
-
-            $seq = 1;
-            foreach ($questions as $question) {
-                $field['testId'] = $testId;
-                $field['seq'] = $seq;
-                $field['questionId'] = $question['id'];
-                $field['questionType'] = '\''.$question['questionType'].'\'';
-                $field['parentId'] = $question['parentId'];
-                $field['score'] = $itemScores[$question['questionType']]==0?$question['score']:$itemScores[$question['questionType']];
-                $items[] = '('.implode(' , ', $field).')';
-                $seq ++;
+        foreach ($ids as $k => $id) {
+            $question = $this->getQuestionService()->getQuestion($id);
+            if(empty($question)){
+                throw $this->createServiceException();
             }
 
-            //如果是材料题取出子题
-            if ($key == 'material'){
-                foreach ($questions as $key => $result) {
-                    $con['parentIds'][] = $result['id'];
-                }
-                if(!empty($con)){
-                    $questions = $this->getQuestionService()->searchQuestion($con, array('createdTime' ,'DESC'), 0, 999);
-                }
+            $field = array();
+            $field['testId'] = $testId;
+            $field['questionId'] = $question['id'];
+            $field['questionType'] = $question['questionType'];
+            $field['score'] = (int) $scores[$k];
 
-                //循环题目(question),取出对应的item数据
-                $seq = 1;
-                foreach ($questions as $question) {
-                    $field['testId'] = $testId;
-                    $field['seq'] = $seq;
-                    $field['questionId'] = $question['id'];
-                    $field['questionType'] = '\''.$question['questionType'].'\'';
-                    $field['parentId'] = $question['parentId'];
-                    $field['score'] = $itemScores[$question['questionType']]==0?$question['score']:$itemScores[$question['questionType']];
-                    $items[] = '('.implode(' , ', $field).')';
-                    $seq ++;
-                }
-            }
+            $item = $this->getTestItemDao()->addItem($field);
         }
-        return empty($items) ? array() : $this->getTestItemDao()->addItems($items);
+        $this->sortTestItemsByTestId($testId);
+
     }
 
     public function updateItem($id, $questionId)
@@ -146,6 +113,52 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getTestItemDao()->deleteItem($id);
     }
 
+    public function sortTestItems($testId, array $itemIds)
+    {
+        $items = $this->findItemsByTestPaperId($testId);
+        $testPaper = $this->getTestPaper($testId);
+
+        $existedItemIds = array_keys($items);
+
+        if (count($itemIds) != count($existedItemIds)) {
+            throw $this->createServiceException('itemdIds参数不正确');
+        }
+
+        $diffItemIds = array_diff($itemIds, array_keys($items));
+        if (!empty($diffItemIds)) {
+            throw $this->createServiceException('itemdIds参数不正确');
+        }
+
+        $items = ArrayToolkit::index($items,'id');
+        $seq = 1;
+        foreach ($itemIds as $itemId) {
+            $fields = array('seq' => $seq);
+            $this->getTestItemDao()->updateItem($itemId, $fields);
+            $seq ++;
+        }
+    }
+
+    private function sortTestItemsByTestId($testId)
+    {
+        $items = $this->findItemsByTestPaperId($testId);
+        $testPaper = $this->getTestPaper($testId);
+
+        $groupItems = array();
+        foreach ($items as $item) {
+            $groupItems = array_merge_recursive($groupItems, $item);
+        }
+
+        $seqType =  explode(',', $testPaper['seq']);
+        $seqNum = 1;
+        foreach ($seqType as  $type) {
+            foreach ($groupItems[$type] as  $item) {
+                $fields = array('seq' => $seqNum);
+                $this->getTestItemDao()->updateItem($itemId, $fields);
+                $seqNum ++;
+            }
+        }
+    }
+
     public function findTestPapersByCourseIds(array $id)
     {
         return $this->getQuizPaperCategoryDao() -> findCategorysByCourseIds($id);
@@ -163,9 +176,6 @@ class TestServiceImpl extends BaseService implements TestService
         }
         return $this->getTestItemDao()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
     }
-
-
-
 
     public function showTest ($testId)
     {

@@ -29,7 +29,7 @@ interface TestService
 
     public function createItem($testId, $questionId);
 
-    public function createItemsByTestPaper($field, $testId, $courseId);
+    public function createItems($testId, $ids, $scores);
 
     public function updateItem($id, $fields);
 

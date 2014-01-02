@@ -27,13 +27,6 @@ define(function(require, exports, module) {
             var submitType = $(e.currentTarget).data('submission')
             var $form = this.get('form');
             $form.find('[name=submission]').val(submitType);
-            
-
-            // if($('[data-role=advanced-collapse]').hasClass('collapsed')){
-            //     $form.find('[name=analysis]').val('');
-            //     $form.find('[name=score]').val('');
-            //     $form.find('[name=categoryId]').get(0).selectedIndex=0; 
-            // }
         },
 
         _initForm: function(){
