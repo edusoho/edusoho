@@ -14,6 +14,26 @@
 		top: 0;
 		width: inherit;
 		padding-right: 30px;
+		z-index: 1000;
+	}
+	.affix.answerCard {
+		top: 50px;
+		width: inherit;
+		padding-right: 30px;
+		z-index: 1000;
+	}
+	.affix.answerCard .panel {
+		width: 20%;
+		float: right;
+	}
+
+	.questionBar {
+		margin-bottom: 15px; 
+	}
+
+	.answerCard {
+		width: 20%;
+		float: right;
 	}
 
 	.answerCard .panel-body a.btn {
@@ -21,12 +41,6 @@
 		margin: 1px;
 	}
 
-	.answerCard {
-		width:10%;
-		position: fixed;
-		right: 0;
-		top: 0;
-	}
 	.choice .panel-body {
 		padding: 0 0px;
 	}
@@ -44,7 +58,6 @@
 
 
 </style>
-
 <div class="questionBar" data-spy="affix" data-offset-top="200">
 	<ul class="nav nav-pills nav-justified">
 		<li><a href="#choice">选择</a></li>
@@ -54,14 +67,63 @@
 		<li><a href="#material">材料</a></li>
 	</ul>
 </div>
-<br>
+<div class="answerCard" data-spy="affix" data-offset-top="200">
+	<div class="panel panel-default">
+			<div class="panel-heading">
+
+			</div>
+			<div class="panel-body">
+				{% set index = 1 %}
+				{% for question in questions.single_choice %}
+				<a href="#question{{ question.id }}" class="btn btn-default btn-sm">{{ index }}</a>
+				{% set index = index + 1 %}
+			{% endfor %}
+
+			{% for question in questions.choice %}
+				<a href="#question{{ question.id }}" class="btn btn-default btn-sm">{{ index }}</a>
+				{% set index = index + 1 %}
+			{% endfor %}
+
+			{% for question in questions.determine %}
+				<a href="#question{{ question.id }}" class="btn btn-default btn-sm">{{ index }}</a>
+				{% set index = index + 1 %}
+			{% endfor %}
+
+			{% for question in questions.fill %}
+				<a href="#question{{ question.id }}" class="btn btn-default btn-sm">{{ index }}</a>
+				{% set index = index + 1 %}
+			{% endfor %}
+
+			{% for question in questions.essay %}
+				<a href="#question{{ question.id }}" class="btn btn-default btn-sm">{{ index }}</a>
+				{% set index = index + 1 %}
+			{% endfor %}
+
+			{% for question in questions.material %}
+				{% for question in question.questions %}
+					<a href="#question{{ question.id }}" class="btn btn-default btn-sm">{{ index }}</a>
+					{% set index = index + 1 %}
+				{% endfor %}
+			{% endfor %}
+
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-success" style="width:100%" id="postPaper" data-url="{{ path('course_manage_submit_test', { testId: testId }) }}">我要交卷</button>
+			</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-9">
 <div data-spy="scroll" data-target=".questionBar">
 	{% block main%}
 	{% endblock %}
 </div>
 
+</div>
+<div class="col-md-3">
 
-<div class="panel panel-default answerCard">
+{# <div class="panel panel-default answerCard" data-spy="affix" data-offset-top="200">
 		<div class="panel-heading">
 
 		</div>
@@ -103,8 +165,11 @@
 		<div class="panel-footer">
 			<button class="btn btn-success" style="width:100%" id="postPaper" data-url="{{ path('course_manage_submit_test', { testId: testId }) }}">我要交卷</button>
 		</div>
+</div> #}
+
 </div>
 
+</div>
 	
 
 {% endblock %}
