@@ -240,12 +240,16 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function submitTest ($answers, $testId)
     {
-        if (!empty($answers)) {
+        if (empty($answers)) {
             return array();
         }
+
+        $answers = array_map(function($answer){
+            return json_encode($answer);
+        }, $answers);
+
         //过滤待补充
         $user = $this->getCurrentUser();
-
         //已经有记录的
         $itemResults = $this->filterTestAnswers($answers, $testId, $user['id']);
         $itemIdsOld = ArrayToolkit::index($itemResults, 'itemId');
@@ -274,6 +278,19 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testId, $userId);
     }
 
+    public function testResult($testId, $userId = null)
+    {
+        if ($userId == null) {
+            $userId = $this->getCurrentUser()->id;
+        }
+        $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
+        $answers = QuestionSerialize::unserializes($answers);
+
+        $items = $this->findItemsByTestPaperId($testId);
+        // $results = $this->getQuestionService()->
+
+        var_dump($items);exit();
+    }
 
 
     private function filterTestPaperFields($testPaper)

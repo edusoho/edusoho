@@ -46,7 +46,8 @@ define(function(require, exports, module) {
                     }     
 
                 }
-                changeAnswers[name] = values.join(',');
+                // changeAnswers[name] = values.join(',');
+                changeAnswers[name] = values;
 
 
                 if (values.length > 0) {

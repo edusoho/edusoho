@@ -29,9 +29,16 @@ class DoTestController extends BaseController
 			$answers = $request->request->all();
 			$answers = $answers['data'];
 
-			var_dump($answers);exit();
-			$results = $this->getTestService()->submitTest($answers, $testId);
+			$result = $this->getTestService()->submitTest($answers, $testId);
+
+			return $this->createJsonResponse(true);
 		}
+	}
+
+	public function testResultAction (Request $request, $testId)
+	{
+
+		$result = $this->getTestService()->testResult($testId);
 	}
 
 	private function formatQuestions ($questions)

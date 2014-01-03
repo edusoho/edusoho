@@ -58,4 +58,10 @@ class DoTestDaoImpl extends BaseDao
         $sql ="SELECT * FROM {$this->table} WHERE itemId IN ({$marks}) AND testId = ? AND userId = ?";
         return $this->getConnection()->fetchAll($sql, $itemIds) ? : array();
 	}
+
+    public function findTestResultsByTestIdAndUserId ($testId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($testId, $userId));
+    }
 }
