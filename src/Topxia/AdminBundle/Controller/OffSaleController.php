@@ -5,18 +5,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
-class SaleController extends BaseController
+class OffSaleController extends BaseController
 {
 
 	public function indexAction(Request $request){
 
 		$conditions = $request->query->all();
 
-        $count = $this->getOffsaleService()->searchOffsaleCount($conditions);
+        $count = $this->getOffSaleService()->searchOffSaleCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $offsales = $this->getOffsaleService()->searchOffsales($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $offsales = $this->getOffSaleService()->searchOffSales($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
         $codes = ArrayToolkit::column($offsales,"promoCode");
 
@@ -46,7 +46,7 @@ class SaleController extends BaseController
         if('POST' == $request->getMethod()){
             $offsetting = $request->request->all();
 
-            $this->getOffsaleService()->createOffsales($offsetting);
+            $this->getOffSaleService()->createOffSales($offsetting);
             
             return $this->redirect($this->generateUrl('admin_sale')); 
         }
@@ -70,7 +70,7 @@ class SaleController extends BaseController
     {
         $offsetting =  $request->request->all();
 
-        $result = $this->getOffsaleService()->checkProd($offsetting);
+        $result = $this->getOffSaleService()->checkProd($offsetting);
 
         if ("true"==$result['hasProd']) {
             $response = array('success' => true, 'message' => $result['prodName']);
@@ -84,14 +84,14 @@ class SaleController extends BaseController
     public function batchDeleteAction(Request $request)
     {
         $ids = $request->request->get('ids', array());
-        $this->getOffsaleService()->deleteOffsales($ids);
+        $this->getOffSaleService()->deleteOffSales($ids);
 
         return $this->createJsonResponse(true);
     }
 
-    private function getOffsaleService()
+    private function getOffSaleService()
     {
-        return $this->getServiceKernel()->createService('Sale.OffsaleService');
+        return $this->getServiceKernel()->createService('Sale.OffSaleService');
     }
 
     private function getOrderService()

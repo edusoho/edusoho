@@ -7,7 +7,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Response;
 
-class SaleController extends BaseController
+class OffSaleController extends BaseController
 {
 
       
@@ -19,9 +19,9 @@ class SaleController extends BaseController
 
         $courseId = $order['courseId'];
         
-        $offsale = $this->getOffsaleService()->getOffsaleByCode($code);
+        $offsale = $this->getOffSaleService()->getOffSaleByCode($code);
 
-        $result = $this->getOffsaleService()->isValiable($offsale,$courseId);
+        $result = $this->getOffSaleService()->isValiable($offsale,$courseId);
 
         if ("success" == $result) {
             $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.$offsale['reducePrice'].'元！');
@@ -33,9 +33,9 @@ class SaleController extends BaseController
     }
 
 
-    private function getOffsaleService()
+    private function getOffSaleService()
     {
-        return $this->getServiceKernel()->createService('Sale.OffsaleService');
+        return $this->getServiceKernel()->createService('Sale.OffSaleService');
     }
 
     private function getOrderService()

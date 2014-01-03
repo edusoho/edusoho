@@ -57,11 +57,7 @@ class MySaleController extends BaseController
         ));
        
        
-    }
-
-   
-
-
+    }  
   
 
     private function getFileService()

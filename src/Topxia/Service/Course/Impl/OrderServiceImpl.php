@@ -92,9 +92,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         if(!empty($order['promoCode']))
         {
 
-            $offsale = $this->getOffsaleService()->getOffsaleByCode($order['promoCode']);
+            $offsale = $this->getOffSaleService()->getOffSaleByCode($order['promoCode']);
 
-            $result = $this->getOffsaleService()->isValiable($offsale,$course['id']);
+            $result = $this->getOffSaleService()->isValiable($offsale,$course['id']);
 
             if("success" == $result){               
                  $order['price']=  $order['price']-$offsale['reducePrice'];
@@ -493,9 +493,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createDao('Course.OrderRefundDao');
     }
 
-    private function getOffsaleService()
+    private function getOffSaleService()
     {
-        return $this->createService('Sale.OffsaleService');
+        return $this->createService('Sale.OffSaleService');
     }
 
     private function getCourseService()

@@ -2,36 +2,36 @@
 namespace Topxia\Service\Sale\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Sale\OffsaleService;
+use Topxia\Service\Sale\OffSaleService;
 use Topxia\Common\ArrayToolkit;
 
-class OffsaleServiceImpl extends BaseService implements OffsaleService
+class OffSaleServiceImpl extends BaseService implements OffSaleService
 {
 
-    public function findOffsalesByIds(array $ids)
+    public function findOffSalesByIds(array $ids)
     {
-        $offsales =  OffsaleSerialize::unserializes(
-             $this->getOffsaleDao()->findOffsalesByIds($ids)
+        $offsales =  OffSaleSerialize::unserializes(
+             $this->getOffSaleDao()->findOffSalesByIds($ids)
         );
 
         return ArrayToolkit::index($offsales, 'id');
     }
 
-    public function getOffsale($id)
+    public function getOffSale($id)
     {
-        return OffsaleSerialize::unserialize($this->getOffsaleDao()->getOffsale($id));
+        return OffSaleSerialize::unserialize($this->getOffSaleDao()->getOffSale($id));
     }
 
 
-    public function getOffsaleByCode($code)
+    public function getOffSaleByCode($code)
     {
-        return OffsaleSerialize::unserialize($this->getOffsaleDao()->getOffsaleByCode($code));
+        return OffSaleSerialize::unserialize($this->getOffSaleDao()->getOffSaleByCode($code));
     }
 
 
-    public function searchOffsales($conditions, $sort = 'latest', $start, $limit)
+    public function searchOffSales($conditions, $sort = 'latest', $start, $limit)
     {
-        $conditions = $this->_prepareOffsaleConditions($conditions);
+        $conditions = $this->_prepareOffSaleConditions($conditions);
         if ($sort == 'popular') {
             $orderBy =  array('hitNum', 'DESC');
         } else if ($sort == 'recommended') {
@@ -40,17 +40,17 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
             $orderBy = array('createdTime', 'DESC');
         }
         
-        return OffsaleSerialize::unserializes($this->getOffsaleDao()->searchOffsales($conditions, $orderBy, $start, $limit));
+        return OffSaleSerialize::unserializes($this->getOffSaleDao()->searchOffSales($conditions, $orderBy, $start, $limit));
     }
 
 
-    public function searchOffsaleCount($conditions)
+    public function searchOffSaleCount($conditions)
     {
-        $conditions = $this->_prepareOffsaleConditions($conditions);
-        return $this->getOffsaleDao()->searchOffsaleCount($conditions);
+        $conditions = $this->_prepareOffSaleConditions($conditions);
+        return $this->getOffSaleDao()->searchOffSaleCount($conditions);
     }
 
-    private function _prepareOffsaleConditions($conditions)
+    private function _prepareOffSaleConditions($conditions)
     {
         $conditions = array_filter($conditions);
         if (isset($conditions['date'])) {
@@ -100,19 +100,19 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
     }
 
 
-    public function createOffsale($offsale){
+    public function createOffSale($offsale){
 
         $offsale = ArrayToolkit::parts($offsale, array('promoName', 'promoCode','reducePrice','prodType', 'prodName', 'prodId', 'reuse', 'valid', 'strvalidTime','validTime', 'createdTime', 'id'));
 
         $offsale['createdTime']=time();
 
-        $offsale = $this->getOffsaleDao()->addOffsale(OffsaleSerialize::serialize($offsale));
+        $offsale = $this->getOffSaleDao()->addOffSale(OffSaleSerialize::serialize($offsale));
 
-        return $this->getOffsale($offsale['id']);
+        return $this->getOffSale($offsale['id']);
 
     }
 
-    public function createOffsales($offsetting){
+    public function createOffSales($offsetting){
 
         if(empty($offsetting)){
             return 0;
@@ -137,22 +137,22 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
             $offsale['prodName'] = $offsetting['prodName'];
             $offsale['prodId']  = $offsetting['prodId'];
             $offsale['promoName'] = $offsetting['promoName'];
-            $offsale['promoCode']= $this->generateOffsaleCode($offsetting['promoPrefix']);
+            $offsale['promoCode']= $this->generateOffSaleCode($offsetting['promoPrefix']);
             $offsale['reducePrice'] = $offsetting['reducePrice'];
             $offsale['reuse']= $offsetting['reuse'];
             $offsale['valid']= '有效';
             $offsale['strvalidTime']= $offsetting['strvalidTime'];
            
-            $this->createOffsale($offsale);        
+            $this->createOffSale($offsale);        
         }
 
         
     }
 
-    public function deleteOffsales(array $ids)
+    public function deleteOffSales(array $ids)
     {
         foreach ($ids as $id) {
-            $this->getOffsaleDao()->deleteOffsale($id);
+            $this->getOffSaleDao()->deleteOffSale($id);
         }
     }
 
@@ -227,7 +227,7 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
     }
 
 
-    private function generateOffsaleCode($promoPrefix)
+    private function generateOffSaleCode($promoPrefix)
     {
         return  $promoPrefix.$this->generateChars(8);
     }
@@ -248,9 +248,9 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
     }
 
 
-    private function getOffsaleDao()
+    private function getOffSaleDao()
     {
-        return $this->createDao('Sale.OffsaleDao');
+        return $this->createDao('Sale.OffSaleDao');
     }
 
     private function getActivityService()
@@ -287,7 +287,7 @@ class OffsaleServiceImpl extends BaseService implements OffsaleService
 }
 
 
-class OffsaleSerialize
+class OffSaleSerialize
 {
 
      //将php对象变成数据库字段。。。数组变为以|连接的字符串,时间字符串变成时间戳数字。。。。
@@ -327,7 +327,7 @@ class OffsaleSerialize
     public static function unserializes(array $offsales)
     {
         return array_map(function($offsale) {
-            return OffsaleSerialize::unserialize($offsale);
+            return OffSaleSerialize::unserialize($offsale);
         }, $offsales);
     }
 }

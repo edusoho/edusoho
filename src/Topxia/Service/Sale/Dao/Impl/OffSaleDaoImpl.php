@@ -3,20 +3,20 @@ namespace Topxia\Service\Sale\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 
-use Topxia\Service\Sale\Dao\OffsaleDao;
+use Topxia\Service\Sale\Dao\OffSaleDao;
 
-class OffsaleDaoImpl extends BaseDao implements OffsaleDao
+class OffSaleDaoImpl extends BaseDao implements OffSaleDao
 {
 
     protected $table = 'offsale';
 
-    public function getOffsale($id)
+    public function getOffSale($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findOffsalesByIds(array $ids)
+    public function findOffSalesByIds(array $ids)
     {
         if(empty($ids)){
             return array();
@@ -26,7 +26,7 @@ class OffsaleDaoImpl extends BaseDao implements OffsaleDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function searchOffsales($conditions, $orderBy, $start, $limit)
+    public function searchOffSales($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -37,35 +37,35 @@ class OffsaleDaoImpl extends BaseDao implements OffsaleDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function searchOffsaleCount($conditions)
+    public function searchOffSaleCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addOffsale($offsale)
+    public function addOffSale($offsale)
     {
         $affected = $this->getConnection()->insert($this->table, $offsale);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert  offsale error.');
         }
-        return $this->getOffsale($this->getConnection()->lastInsertId());
+        return $this->getOffSale($this->getConnection()->lastInsertId());
     }
 
-    public function updateOffsale($id, $offsale)
+    public function updateOffSale($id, $offsale)
     {
         $this->getConnection()->update($this->table, $offsale, array('id' => $id));
-        return $this->getOffsale($id);
+        return $this->getOffSale($id);
     }
 
-    public function deleteOffsale($id)
+    public function deleteOffSale($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
 
-    public function getOffsaleByCode($code)
+    public function getOffSaleByCode($code)
     {
         $sql = "SELECT * FROM {$this->table} WHERE promocode = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($code)) ? : null;
