@@ -146,7 +146,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $message = array(
             'fromId' => $fromId,
             'toId' => $toId,
-            'content' => $content,
+            'content' => $this->purifyHtml($content),
             'createdTime' => time(),
         );
         return $this->getMessageDao()->addMessage($message);

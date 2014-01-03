@@ -34,8 +34,8 @@ abstract class AbstractOAuthClient
     {
     	$curl = curl_init();
 
+    	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
     	curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
-
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
 		curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -48,6 +48,8 @@ abstract class AbstractOAuthClient
 
 		$response = curl_exec($curl);
 
+		curl_close($curl);
+
 		return $response;
     }
 
@@ -56,8 +58,8 @@ abstract class AbstractOAuthClient
 
     	$curl = curl_init();
 
+    	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
     	curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
-
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
 		curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -67,6 +69,8 @@ abstract class AbstractOAuthClient
 		curl_setopt($curl, CURLOPT_URL, $url );
 
 		$response = curl_exec($curl);
+
+		curl_close($curl);
 
 		return $response;
     }
