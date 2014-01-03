@@ -156,7 +156,7 @@ define(function(require, exports, module) {
             this.element.find('[data-role=lesson-content]').hide();
 
 			var that = this;
-            $.get(this.get('courseUri') + '/lesson/' + id, function(lesson){
+            $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
             	that.element.find('[data-role=lesson-title]').html(lesson.title);
             	that.element.find('[data-role=lesson-number]').html(lesson.number);
             	if (parseInt(lesson.chapterNumber) > 0) {
@@ -172,9 +172,10 @@ define(function(require, exports, module) {
 
             	if (lesson.type == 'video' || lesson.type == 'audio') {
 
+            		swfobject.removeSWF('lesson-video-player');
+
 		            var flashvars = {
-		                src: "http://test-yun.edusoho.net/courselesson/3/k6b8da97nls4-vsd.m3u8",
-		                //src: "http://localhost:8082/playlists/test_001/stream.m3u8",
+		                src: encodeURIComponent(lesson.mediaUri),
 		                plugin_hls: "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf"
 		            };
 
