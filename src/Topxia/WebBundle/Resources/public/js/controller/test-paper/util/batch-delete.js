@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
+    Test = require('./menu-score');
 
     module.exports = function($element) {
 
@@ -23,10 +24,16 @@ define(function(require, exports, module) {
             }
 
             $element.find('[data-role=batch-item]:checked').each(function(){
+                var $item = $(this).parents('.questionType');
+                if($item.data('type') == 'material'){
+                    $('#test-item-table').find('[data-type='+$item.attr('id')+']').remove();
+                }
                 $(this).parents('[data-role=item]').remove();
             });
 
             Notify.success('删除' + name + '成功');
+
+            Test.MenuTotal();
 
         });
 

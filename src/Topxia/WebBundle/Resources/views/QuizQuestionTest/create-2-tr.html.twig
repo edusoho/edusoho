@@ -1,9 +1,9 @@
  <tr {% if question.parentId == 0 %} class="questionType" {% endif %} id="{{question.id}}"  data-role='item' data-type='{% if question.parentId != 0 %}{{question.parentId}}{% else %}{{question.questionType}}{% endif %}' >
-    <td>
+    <td class="notMoveHandle">
         <input type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
     </td>
 
-    <td>{% if question.questionType != 'material' %} {{ seq}} {% else %} -- {% endif %}</td>
+    <td class="seq"> </td>
 
     <td>
         {{question['stem'] | length > 40 ? question['stem']|slice(0, 40) ~ '...' : question['stem'] }}
@@ -25,15 +25,16 @@
     
     <td >
         <input name="ids[]" type="hidden" value="{{question.id}}" /></input>
-        <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.questionType != 'material' %}type="text"{% else %} type="hidden" {% endif %}value="{{question.score}}" /></input>
-        
+        <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.questionType != 'material' %}type="text"{% else %} type="hidden" {% endif %} value="{{question.score}}" /></input>
     </td>
 
     <td>
         <div class="btn-group">
-            <a href="javascript:" data-role="item-modal-btn"  data-target="#test-item-modal" class="notMoveHandle btn btn-default btn-sm" data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,testItemId:question.id}) }}" >替换</a>
-            <a href="javascript:" data-name='题目' data-role='item-delete' data-url="{{ path('course_manage_test_item_delete', {courseId:course.id, testItemId:question.id}) }}" class="notMoveHandle btn btn-default btn-sm">删除</a>
-            <a href="javascript:" class="notMoveHandle btn btn-default btn-sm">预览</a>
+            {% if question.parentId == 0 %}
+                <a href="javascript:" class="notMoveHandle btn btn-default btn-sm">预览</a>
+                <a href="javascript:" data-name='题目' data-role='item-delete' {# data-url="{{ path('course_manage_test_item_delete', {courseId:course.id, testItemId:question.id}) }}" #} class="notMoveHandle btn btn-default btn-sm">删除</a>
+                <a href="javascript:" data-role="item-modal-btn"  data-target="#test-item-modal" class="notMoveHandle btn btn-default btn-sm"  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,testItemId:question.id}) }}" >替换</a>
+            {% endif %}
             
         </div>
     </td>

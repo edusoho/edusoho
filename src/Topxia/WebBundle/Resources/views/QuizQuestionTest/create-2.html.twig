@@ -20,14 +20,21 @@
     <div class="well well-sm clearfix">
     <button  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,1:1}) }}" data-role="item-modal-btn" data-target="#test-item-modal" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>新增试题</button>
        <ul class="nav nav-tabs" id="myTab">
-          {% for key,type in dict('questionType') %}
-              <li><a href="#questionType-{{key}}" data-toggle="tab">{{type}}</a></li>
+          {% for key,type in testPaper.seq | split(',') %}
+              <li><a href="#questionType-{{type}}" data-toggle="tab">{{dict('questionType')[type]}}</a></li>
           {% endfor %}
       </ul>
 
     </div>
-<form action ="{{ path('course_manage_test_item',{courseId:course.id,testPaperId:testPaper.id}) }}" method="post" class="form-horizontal">
+
+<form action ="{{ path('course_manage_test_paper_create_two',{courseId:course.id,testPaperId:testPaper.id}) }}" method="post" class="form-horizontal">
   <table class="table table-striped table-hover tab-content" id="test-item-table">
+    <thead>
+      <tr>
+          <td colspan="20" class="score-text-alert"></td>
+      </tr>
+    </thead>
+
     <thead>
       <tr>
         <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
@@ -39,40 +46,17 @@
         <th>操作</th>
       </tr>
     </thead>
-    <thead>
-      <tr>
-          <td colspan="20" class="score-text-alert"></td>
-      </tr>
-    </thead>
+
     {% set seq = 1 %}
+
     <tbody class='hidden' data-role='item-body'>
-      {% for key,question in questions %}
-
-          {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig'%}
-          {% if question.questionType == 'material' %}
-              {% if sonQuestions[question.id] | default(null) %}
-
-                  {% for key,sonQuestion in sonQuestions[question.id] %}
-                  
-                      {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig' with {question: sonQuestion} %}
-                      
-                      {% set seq = (seq + 1) %}
-
-                  {% endfor %}
-
-              {% endif %}
-          {% endif %}
-
-          {% if question.questionType != 'material' %} {% set seq = (seq + 1) %} {% endif %}
-
-      {% else %}
-          <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
-      {% endfor %}
+      {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tbody.html.twig'%}
     </tbody>
+
   </table>
   <div>
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_test_item_deletes',{courseId:course.id}) }}">删除</button>
+    <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" {# data-url="{{ path('course_manage_test_item_deletes',{courseId:course.id}) }}" #}>删除</button>
   </div>
       <button type="submit" class="btn btn-primary btn-sm pull-right mlm btn-submit-index" >保存</button>
       <button type="button" class="btn btn-primary btn-sm pull-right mlm" >验证</button>

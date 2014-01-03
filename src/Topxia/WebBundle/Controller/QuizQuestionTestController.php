@@ -64,7 +64,7 @@ class QuizQuestionTestController extends BaseController
 
 	        $testPaper['courseId'] = $courseId;
 	        $testPaper['testPaperId'] = $result['id'];
-			return $this->redirect($this->generateUrl('course_manage_test_item',$testPaper));
+			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
         }
 
         if(empty($testPaper['target'])){
@@ -82,7 +82,7 @@ class QuizQuestionTestController extends BaseController
 		));
 	}
 
-	public function indexItemAction(Request $request, $courseId, $testPaperId)
+	public function createTwoAction(Request $request, $courseId, $testPaperId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
@@ -105,7 +105,7 @@ class QuizQuestionTestController extends BaseController
 		$parentTestPaper = array_merge($parentTestPaper, $testPaper);
 
         $newQuestions = array();
-        foreach ($questions as $key => $question) {
+        foreach ($questions as $question) {
 
         	if($question['parentId'] != 0) {
         		$question['score'] = $scores['material'] == 0 ? $question['score'] : $scores['material'];
@@ -118,7 +118,7 @@ class QuizQuestionTestController extends BaseController
 
         $seq = explode(',', $testPaper['seq']);
         $randQuestions = array();
-        foreach ($seq as  $type) {
+        foreach ($seq as $type) {
 
         	for($i = 0;$i<$counts[$type];$i++){
         		$rand = array_rand($newQuestions[$type]);
@@ -128,6 +128,8 @@ class QuizQuestionTestController extends BaseController
         }
 
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
+
+		$dictQuestionType = $this->getWebExtension()->getDict('questionType');
 
 		// $items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
 
@@ -153,6 +155,7 @@ class QuizQuestionTestController extends BaseController
         if(empty($type)){
             throw $this->createNotFoundException('type 参数不对');
         }
+
 		$type = explode('-', $type);
 
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
@@ -234,20 +237,34 @@ class QuizQuestionTestController extends BaseController
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
 
-		$question  = ArrayToolkit::index($this->getQuestionService()->getQuestion($questionId), 'id');
+		$question  = $this->getQuestionService()->getQuestion($questionId);
 		
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-		$question  = $this->getQuestionService()->getQuestion($questionId);
+
+		$questions = $this->getQuestionService()->findQuestionsByParentIds(array($questionId));
+
+		$questions[] = $question;
+
+		$newQuestions = array();
+        foreach ($questions as $question) {
+
+        	if($question['parentId'] != 0) {
+        		$sonQuestions[$question['parentId']][] = $question;
+        	}else{
+        		$newQuestions[$question['questionType']][] = $question;
+        	}
+        }
+
 		// if (!empty($replaceId)){
 		// 	$item = $this->getTestService()->updateItem($replaceId, $questionId);
 		// } else {
 		// 	$item = $this->getTestService()->createItem($testPaperId, $questionId);
 		// }
         
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2-tbody.html.twig', array(
 			'course' => $course,
 			'testPaper' => $testPaper,
-			'question' => $question,
+			'questions' => $questions,
 			'lessons' => $lessons,
 			'seq' => 0,
 		));

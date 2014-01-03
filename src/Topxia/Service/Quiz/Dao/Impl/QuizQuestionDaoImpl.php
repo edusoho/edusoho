@@ -109,11 +109,13 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             ->andWhere('targetType = :targetType');
 
         if(!empty($conditions['parentIds'])){
-            $builder->andStaticWhere(" parentId in (".implode($conditions['parentIds'], ',').") ");
+            if(trim(implode($conditions['parentIds'], ',')) != "")
+                $builder->andStaticWhere(" parentId in (".implode($conditions['parentIds'], ',').") ");
         }
 
         if(!empty($conditions['notId'])){
-            $builder->andStaticWhere(" id not in (".implode($conditions['notId'], ',').") ");
+            if(trim(implode($conditions['notId'], ',')) != "")
+                $builder->andStaticWhere(" id not in (".implode($conditions['notId'], ',').") ");
         }
 
         if (!empty($conditions['target'])) {

@@ -96,10 +96,6 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         $this->sortTestItemsByTestId($testId);
-
-        echo 11;
-
-        exit();
     }
 
     public function updateItem($id, $questionId)
@@ -172,32 +168,29 @@ class TestServiceImpl extends BaseService implements TestService
 
         $seqType =  explode(',', $testPaper['seq']);
         $seqNum = 1;
+
         foreach ($seqType as $type) {
 
-            if (empty($groupItems[$type])){
-                continue;
-            }
+            if (!empty($groupItems[$type])){
+            
+                foreach ($groupItems[$type] as $item) {
 
-            foreach ($groupItems[$type] as $item) {
+                    $fields = array('seq' => $seqNum);
+                    $this->getTestItemDao()->updateItem($item['id'], $fields);
 
-                $fields = array('seq' => $seqNum);
-                $this->getTestItemDao()->updateItem($item['id'], $fields);
-
-                if($item['questionType'] == 'material'){
-
-                    if (empty($groupItems[$item['questionId']])){
-                        continue;
-                    }
-
-                    foreach ($groupItems[$item['questionId']] as $item) {
-                        
-                        $fields = array('seq' => $seqNum);
-                        $this->getTestItemDao()->updateItem($item['id'], $fields);
+                    if($item['questionType'] == 'material' && !empty($groupItems[$item['questionId']])){
+                        foreach ($groupItems[$item['questionId']] as $item) {
+                            $fields = array('seq' => $seqNum);
+                            $this->getTestItemDao()->updateItem($item['id'], $fields);
+                            $seqNum ++;
+                        }
+                    }else{
                         $seqNum ++;
                     }
+
+                    
                 }
 
-                $seqNum ++;
 
             }
         }
@@ -318,8 +311,6 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testId, $userId);
     }
 
-
-
     private function filterTestPaperFields($testPaper)
     {
         if(!ArrayToolkit::requireds($testPaper, array('name', 'itemCounts', 'itemScores', 'target'))){
@@ -330,6 +321,11 @@ class TestServiceImpl extends BaseService implements TestService
         $diff = array_diff(array_keys($testPaper['itemCounts']), array_keys($testPaper['itemScores']));
         if (!empty($diff)) {
             throw $this->createServiceException('itemCounts itemScores参数不正确');
+        }
+
+        foreach ($testPaper['itemCounts'] as $key => $score) {
+            if($score == 0)
+                unset($testPaper['itemCounts'][$key]);
         }
 
         $target = explode('-', $testPaper['target']);
@@ -346,7 +342,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['name']          = $testPaper['name'];
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
-        $field['seq']           = implode(',',array_keys($testPaper['itemScores']));
+        $field['seq']           = implode(',',array_keys($testPaper['itemCounts']));
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
         $field['updatedUserId'] = $this->getCurrentUser()->id;
@@ -354,8 +350,6 @@ class TestServiceImpl extends BaseService implements TestService
 
         return $field;
     }
-
-
 
     private function getTestPaperDao(){
     	return $this->createDao('Quiz.TestPaperDao');
@@ -379,7 +373,5 @@ class TestServiceImpl extends BaseService implements TestService
     {
         return $this->createDao('Quiz.DoTestDao');
     }
-
-
 
 }

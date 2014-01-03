@@ -3,12 +3,14 @@ define(function(require, exports, module) {
 	var Widget = require('widget');
 	var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
+    Test = require('./util/menu-score');
 
 	var ItemBase = Widget.extend({
 		attrs:{
 			Handlebars: Handlebars,
 			Notify: Notify,
 			questionType: [],
+			score:null,
 		},
 
 		events: {
@@ -31,28 +33,7 @@ define(function(require, exports, module) {
 		tabShown: function(){
 			this.$('.test-item-tbody.active').removeClass('active tab-pane');
 			this.$('[data-role=batch-select], [data-role=batch-item]').prop('checked', false);
-
-			var total = 0;
-			var questionTotal = 0;
-			var questionType = $('#myTab .active a').text();
-			var questionConut = $('[name^=scores]:visible').length;
-
-			$('[name^=scores][type=text]').each(function(){
-			    total = Number($(this).val()) + Number(total);
-			});
-
-			$('[name^=scores]:visible').each(function(){
-			    questionTotal = Number($(this).val()) + Number(questionTotal);
-			});
-
-			if(isNaN(total) || isNaN(questionTotal)){
-				total = 0;
-				questionTotal = 0;
-			}
-			
-			var html = "试卷总分" + total + "分 " + questionType + questionConut + "题/ "+ questionTotal + "分";
-
-			this.$('.score-text-alert').html(html);
+			Test.MenuTotal();
 		},
 
 		onSubmit: function(e){
@@ -97,8 +78,8 @@ define(function(require, exports, module) {
 		},
 
 		_initItemList: function(){
-            require('./batch-delete')($(this.element));
-            require('./item-delete')($(this.element));
+            require('./util/batch-delete')($(this.element));
+            require('./util/item-delete')($(this.element));
         },
 
 		_onChangeQuestionType: function	(questionType){
@@ -109,8 +90,7 @@ define(function(require, exports, module) {
         		self.$('[data-role=item-body]').after(html);
                 
                 if (self.$('[data-type=' + key + ']').length == 0) {
-                	var empty = "<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>";
-                	$('#'+id).append(empty);
+                	$('#'+id).append("<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>");
                 } else {
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));
                 }
@@ -124,8 +104,6 @@ define(function(require, exports, module) {
 
             self.$('#myTab li:first a').trigger('click');
 		},
-
-
 
 	});
 
