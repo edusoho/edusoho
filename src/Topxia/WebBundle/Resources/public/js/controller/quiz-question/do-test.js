@@ -50,9 +50,9 @@ define(function(require, exports, module) {
 
 
                 if (values.length > 0) {
-                    $('a[href="#question' + name + '"]').css('background-color', '#f5f5f5');
+                    $('a[href="#question' + name + '"]').addClass('done');
                 } else {
-                    $('a[href="#question' + name + '"]').css('background-color', 'inherit');
+                    $('a[href="#question' + name + '"]').removeClass('done');
                 }
 
 
@@ -64,9 +64,9 @@ define(function(require, exports, module) {
             id = $(this).parents('.panel').attr('id');
             btn = $('.answerCard .panel-body [href="#'+id+'"]');
             if (btn.css('border-left-width') == '1px') {
-                btn.css('border', '2px solid #428bca');
+                btn.addClass('have-pro');
             } else {
-                btn.css('border', '1px solid #CCCCCC');
+                btn.removeClass('have-pro');
             }
         });
 
