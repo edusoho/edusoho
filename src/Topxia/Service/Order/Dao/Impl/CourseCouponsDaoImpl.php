@@ -3,21 +3,21 @@
 namespace Topxia\Service\Order\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Order\Dao\MoneyRecordsDao;
+use Topxia\Service\Order\Dao\CourseCouponsDao;
 use PDO;
 
-class MoneyRecordsDaoImpl extends BaseDao implements MoneyRecordsDao
+class CourseCouponsDaoImpl extends BaseDao implements CourseCouponsDao
 {
-    protected $table = 'money_record';
+    protected $table = 'course_coupon';
 
-    public function searchMoneyRecordsCount($conditions)
+    public function searchCourseCouponsCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMoneyRecords($conditions, $orderBy, $start, $limit)
+    public function searchCourseCoupons($conditions, $orderBy, $start, $limit)
     {
     	$this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -43,14 +43,19 @@ class MoneyRecordsDaoImpl extends BaseDao implements MoneyRecordsDao
         return $this->getCoupon($this->getConnection()->lastInsertId());
     }
 
+    public function deleteCoupon($couponId)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $couponId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'money_record')
-            ->andWhere('userId = :userId')
+            ->from($this->table, 'course_coupon')
+            ->andWhere('orderUserId = :orderUserId')
             ->andWhere('type = :type')
-            ->andWhere('status = :status')
-            ->andWhere('transactionNo = :transactionNo');
+            ->andWhere('code = :code')
+            ->andWhere('status = :status');
     }
 
 }
