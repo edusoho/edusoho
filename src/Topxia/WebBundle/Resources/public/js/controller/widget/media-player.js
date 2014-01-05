@@ -57,6 +57,7 @@ define(function(require, exports, module) {
             }
 
             var params = {
+                wmode:'opaque',
                 allowFullScreen: true
                 , allowScriptAccess: "always"
                 , bgcolor: "#000000"
