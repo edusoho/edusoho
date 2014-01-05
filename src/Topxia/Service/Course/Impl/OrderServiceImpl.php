@@ -60,7 +60,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('courseId', 'payment', 'price','promoCode'));
+        $order = ArrayToolkit::parts($order, array('courseId', 'payment', 'price','note','promoCode'));
 
        
 

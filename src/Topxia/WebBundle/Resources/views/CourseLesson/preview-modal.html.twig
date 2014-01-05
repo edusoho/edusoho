@@ -8,7 +8,7 @@
   {% if lesson.status == 'published' %}
     {% if lesson.type == 'video' %}
       {% if lesson.mediaSource == 'self' %}
-        <div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
+        <div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"></div>
       {% else %}
         <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
       {% endif %}

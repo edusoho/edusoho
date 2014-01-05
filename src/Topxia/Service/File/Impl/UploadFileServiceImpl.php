@@ -122,7 +122,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $this->getUploadFileDao()->updateFile($id, array(
             'convertStatus' => $file['convertStatus'],
-            'metas' => $file['metas']
+            'metas2' => $file['metas2']
         ));
 
         return $this->getFile($id);

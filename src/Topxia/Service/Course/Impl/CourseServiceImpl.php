@@ -1182,13 +1182,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$deadline = 0;
 		}
 
+		$order = $this->getOrderDao()->getOrder($info['orderId']);
+
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
 			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
 			'deadline' => $deadline,
 			'role' => 'student',
-			'remark' => empty($info['remark']) ? '' : $info['remark'],
+			'remark' => $order['note'],
 			'createdTime' => time()
 		);
 
@@ -1568,6 +1570,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getCourseDao ()
     {
         return $this->createDao('Course.CourseDao');
+    }
+
+    private function getOrderDao ()
+    {
+        return $this->createDao('Course.OrderDao');
     }
 
     private function getFavoriteDao ()
