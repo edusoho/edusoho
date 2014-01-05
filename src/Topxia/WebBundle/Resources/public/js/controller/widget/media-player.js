@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var MediaPlayer = Widget.extend({
         attrs: {
             src: '',
+            srcType: '',
         },
 
         events: {},
@@ -14,8 +15,9 @@ define(function(require, exports, module) {
             window.GrindPlayerEventProcesser = this._evetProcesser;
         },
 
-        setSrc: function(src) {
+        setSrc: function(src, type) {
             this.set('src', src);
+            this.set('srcType', type);
         },
 
         play: function() {
@@ -44,9 +46,12 @@ define(function(require, exports, module) {
         _initGrindPlayer: function() {
             var flashvars = {
                 src: encodeURIComponent(this.get('src')),
-                javascriptCallbackFunction: "GrindPlayerEventProcesser",
-                plugin_hls: "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf"
+                javascriptCallbackFunction: "GrindPlayerEventProcesser"
             };
+
+            if (this.get('src').indexOf('.m3u8') > 0) {
+                flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf"
+            }
 
             var params = {
                 allowFullScreen: true

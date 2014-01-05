@@ -57,8 +57,20 @@ class CourseLessonController extends BaseController
             if (!empty($file) and !empty($file['metas2'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
-                $hls = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
-                $json['mediaUri'] = $hls['url'];
+
+                if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                    $url = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
+                    $json['mediaHLSUri'] = $url['url'];
+                } else {
+                    if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                        $key = $file['metas']['hd']['key'];
+                    } else {
+                        $key = $file['hashId'];
+                    }
+
+                    $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                    $json['mediaUri'] = $url['url'];
+                }
             } else {
                 $json['mediaUri'] = '';
             }
