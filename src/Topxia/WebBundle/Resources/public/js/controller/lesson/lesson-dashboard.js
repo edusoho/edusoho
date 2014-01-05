@@ -11,6 +11,8 @@ define(function(require, exports, module) {
 
 	var Toolbar = require('./lesson-toolbar');
 
+	var MediaPlayer = require('../widget/media-player');
+
 	var Dashboard = Widget.extend({
 
 		_router: null,
@@ -156,7 +158,7 @@ define(function(require, exports, module) {
             this.element.find('[data-role=lesson-content]').hide();
 
 			var that = this;
-            $.get(this.get('courseUri') + '/lesson/' + id, function(lesson){
+            $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
             	that.element.find('[data-role=lesson-title]').html(lesson.title);
             	that.element.find('[data-role=lesson-number]').html(lesson.number);
             	if (parseInt(lesson.chapterNumber) > 0) {
@@ -170,75 +172,91 @@ define(function(require, exports, module) {
             		return;
             	}
 
-            	if (lesson.type == 'video') {
-            		if (lesson.mediaSource == 'self') {
-            			$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
+            	if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
-			            var player = VideoJS("lesson-video-player", {
-			            	techOrder: ['flash','html5']
-			            });
+			        $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
+			        $("#lesson-video-content").show();
+			        
+            		var mediaPlayer = new MediaPlayer({
+            			element: '#lesson-video-content',
+            			playerId: 'lesson-video-player'
+            		});
 
-			            player.dimensions('100%', '100%');
-			            player.src(lesson.mediaUri);
-			            player.on('ended', function(){
-			            	that._onFinishLearnLesson();
-			            	player.currentTime(0);
-			            	player.pause();
-			            });
-			       
-			            player.on('error', function(error){
-			            	var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
-			            	Notify.danger(message, 60);
-			            });
-			            $("#lesson-video-content").show();
-			            player.play();
-			            player.on('fullscreenchange', function(e) {
-			            	if ($(e.target).hasClass('vjs-fullscreen')) {
-			            		$("#site-navbar").hide();
-			            	} else {
-			            		$("#site-navbar").show();
-			            	}
-			            });
+            		mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
+            		mediaPlayer.play();
 
-			            that.set('videoPlayer', player);
+            	} else {
+	            	if (lesson.type == 'video') {
+	            		if (lesson.mediaSource == 'self') {
+	            			$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
 
-            		} else {
-            			$("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-            			swfobject.embedSWF(lesson.mediaUri, 
-            				'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-            				{wmode:'opaque',allowFullScreen:'true'});
-            			$("#lesson-swf-content").show();
-            		}
-            	} else if (lesson.type == 'audio') {
-            		var html = '<audio id="lesson-audio-player" width="500" height="50">';
-            		html += '<source src="' + lesson.mediaUri + '" type="audio/mp3" />';
-            		html += '</audio>';
+				            var player = VideoJS("lesson-video-player", {
+				            	techOrder: ['flash','html5']
+				            });
 
-            		$("#lesson-audio-content").html(html);
+				            player.dimensions('100%', '100%');
+				            player.src(lesson.mediaUri);
+				            player.on('ended', function(){
+				            	that._onFinishLearnLesson();
+				            	player.currentTime(0);
+				            	player.pause();
+				            });
+				       
+				            player.on('error', function(error){
+				            	var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
+				            	Notify.danger(message, 60);
+				            });
+				            $("#lesson-video-content").show();
+				            player.play();
+				            player.on('fullscreenchange', function(e) {
+				            	if ($(e.target).hasClass('vjs-fullscreen')) {
+				            		$("#site-navbar").hide();
+				            	} else {
+				            		$("#site-navbar").show();
+				            	}
+				            });
 
-					var audioPlayer = new MediaElementPlayer('#lesson-audio-player', {
-						mode:'auto_plugin',
-						enablePluginDebug: false,
-						enableAutosize:true,
-						success: function(media) {
-							media.addEventListener("ended", function() {
-								that._onFinishLearnLesson();
-							});
-							media.play();
-						}
-					});
-					that.set('audioPlayer', audioPlayer);
-            		$("#lesson-audio-content").show();
+				            that.set('videoPlayer', player);
 
-            	} else if (lesson.type == 'text') {
-            		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
-            		$("#lesson-text-content").show();
-            		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
-					$("#lesson-text-content").scrollTop(0);
-					$("#lesson-text-content").perfectScrollbar('update');
+	            		} else {
+	            			$("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+	            			swfobject.embedSWF(lesson.mediaUri, 
+	            				'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+	            				{wmode:'opaque',allowFullScreen:'true'});
+	            			$("#lesson-swf-content").show();
+	            		}
+	            	} else if (lesson.type == 'audio') {
+	            		var html = '<audio id="lesson-audio-player" width="500" height="50">';
+	            		html += '<source src="' + lesson.mediaUri + '" type="audio/mp3" />';
+	            		html += '</audio>';
+
+	            		$("#lesson-audio-content").html(html);
+
+						var audioPlayer = new MediaElementPlayer('#lesson-audio-player', {
+							mode:'auto_plugin',
+							enablePluginDebug: false,
+							enableAutosize:true,
+							success: function(media) {
+								media.addEventListener("ended", function() {
+									that._onFinishLearnLesson();
+								});
+								media.play();
+							}
+						});
+						that.set('audioPlayer', audioPlayer);
+	            		$("#lesson-audio-content").show();
+
+	            	} else if (lesson.type == 'text') {
+	            		$("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
+	            		$("#lesson-text-content").show();
+	            		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+						$("#lesson-text-content").scrollTop(0);
+						$("#lesson-text-content").perfectScrollbar('update');
+	            	}
             	}
             	that._toolbar.set('lesson', lesson);
             	that._startLesson();
+
             }, 'json');
 
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {

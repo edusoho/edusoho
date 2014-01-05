@@ -23,9 +23,19 @@ class CourseLessonController extends BaseController
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }
 
+        if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+                $hls = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'course' => $course,
-            'lesson' => $lesson
+            'lesson' => $lesson,
+            'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
     }
 
@@ -52,7 +62,28 @@ class CourseLessonController extends BaseController
         $json['mediaSource'] = $lesson['mediaSource'];
 
         if ($json['mediaSource'] == 'self') {
-            $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$lesson['courseId'], 'lessonId'=> $lesson['id']));
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+            if (!empty($file) and !empty($file['metas2'])) {
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+
+                if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                    $url = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
+                    $json['mediaHLSUri'] = $url['url'];
+                } else {
+                    if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                        $key = $file['metas']['hd']['key'];
+                    } else {
+                        $key = $file['hashId'];
+                    }
+
+                    $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                    $json['mediaUri'] = $url['url'];
+                }
+            } else {
+                $json['mediaUri'] = '';
+            }
         } else {
             $json['mediaUri'] = $lesson['mediaUri'];
         }
@@ -84,23 +115,7 @@ class CourseLessonController extends BaseController
         }
 
         if ($file['storage'] == 'cloud') {
-
-            $key = null;
-            if ($file['type'] == 'video') {
-                if (empty($file['metas']) || !is_array($file['metas'])) {
-                    throw $this->createNotFoundException();
-                }
-                $metas = $file['metas'];
-                foreach (array('hd', 'shd', 'sd') as $type) {
-                    if (!empty($metas[$type])) {
-                        $key = $metas[$type]['key'];
-                        break;
-                    }
-                }
-            } else {
-                $key = $file['hashId'];
-            }
-
+            $key = $file['hashId'];
             if (empty($key)){
                 throw $this->createNotFoundException();
             }
@@ -113,7 +128,6 @@ class CourseLessonController extends BaseController
             } else {
                 $client->download($client->getBucket(), $key);
             }
-
         }
 
         return $this->createLocalMediaResponse($request, $file, $isDownload);
