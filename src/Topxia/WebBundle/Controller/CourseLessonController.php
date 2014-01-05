@@ -23,9 +23,19 @@ class CourseLessonController extends BaseController
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }
 
+        if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+                $hls = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'course' => $course,
-            'lesson' => $lesson
+            'lesson' => $lesson,
+            'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
     }
 

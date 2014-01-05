@@ -220,7 +220,7 @@ class EdusohoCloudClient implements CloudClient
 
     private function getDownloadUrl()
     {
-    	return $this->apiServer . '/download.php';
+    	return $this->apiServer . '/private_download.php';
     }
 
     private function getBillUrl()
