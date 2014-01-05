@@ -20,7 +20,8 @@ define(function(require, exports, module) {
 			        
         		var mediaPlayer = new MediaPlayer({
         			element: '#lesson-preview-video-player',
-        			playerId: 'lesson-video-player'
+        			playerId: 'lesson-video-player',
+        			height: '360px',
         		});
 
         		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');

@@ -7,6 +7,8 @@ define(function(require, exports, module) {
         attrs: {
             src: '',
             srcType: '',
+            width: '100%',
+            height: '100%',
         },
 
         events: {},
@@ -33,8 +35,9 @@ define(function(require, exports, module) {
         },
 
         _initHtml5Player: function() {
+            var style= "width:" + this.get('width') + ';height:' + this.get('height');
             var html = '<video id="' + this.get('playerId') + '" src="';
-            html += this.get('src') + '" autoplay controls style="width:100%;height:100%">';
+            html += this.get('src') + '" autoplay controls style="' + style + '">';
             html += '</video>';
             this.element.html(html);
         },
@@ -66,7 +69,7 @@ define(function(require, exports, module) {
             swfobject.embedSWF(
                 "http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf",
                 this.get('playerId'),
-                "100%", "100%", "10.2", null, flashvars, params, attrs
+                this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
         },
 
