@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: osf_v1.6.5
+        assets_version: osf_v1.7.0
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
