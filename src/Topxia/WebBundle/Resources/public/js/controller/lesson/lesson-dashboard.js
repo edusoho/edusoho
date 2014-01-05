@@ -11,6 +11,8 @@ define(function(require, exports, module) {
 
 	var Toolbar = require('./lesson-toolbar');
 
+	var MediaPlayer = require('../widget/media-player');
+
 	var Dashboard = Widget.extend({
 
 		_router: null,
@@ -172,30 +174,16 @@ define(function(require, exports, module) {
 
             	if (lesson.type == 'video' || lesson.type == 'audio') {
 
-            		swfobject.removeSWF('lesson-video-player');
-
-		            var flashvars = {
-		                src: encodeURIComponent(lesson.mediaUri),
-		                plugin_hls: "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf"
-		            };
-
-			        var params = {
-			            allowFullScreen: true
-			            , allowScriptAccess: "always"
-			            , bgcolor: "#000000"
-			        };
-			        var attrs = {
-			            name: "player"
-			        };
-
 			        $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
 			        $("#lesson-video-content").show();
+			        
+            		var mediaPlayer = new MediaPlayer({
+            			element: '#lesson-video-content',
+            			playerId: 'lesson-video-player'
+            		});
 
-			        swfobject.embedSWF(
-			        	"http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf", 
-			        	"lesson-video-player", 
-			        	"100%", "100%", "10.2", null, flashvars, params, attrs
-		        	);
+            		mediaPlayer.setSrc(lesson.mediaUri);
+            		mediaPlayer.play();
 
             	}
 
