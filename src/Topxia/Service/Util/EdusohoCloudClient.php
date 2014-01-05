@@ -90,6 +90,34 @@ class EdusohoCloudClient implements CloudClient
 		exit();
 	}
 
+    public function generateHLSUrl($bucket, $key, $duration = 3600)
+    {
+        $params = array('bucket' => $bucket, 'key' => $key, 'duration' => $duration);
+
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->apiServer . '/hls.php', array('token' => $token));
+
+        return json_decode($content, true);
+    }
+
+    public function generateFileUrl($bucket, $key, $duration)
+    {
+        $params = array('bucket' => $bucket, 'key' => $key, 'duration' => $duration);
+
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->apiServer . '/file_url.php', array('token' => $token));
+
+        return json_decode($content, true);
+    }
+
     public function getBucket()
     {
         if (empty($this->bucket)) {
@@ -192,7 +220,7 @@ class EdusohoCloudClient implements CloudClient
 
     private function getDownloadUrl()
     {
-    	return $this->apiServer . '/download.php';
+    	return $this->apiServer . '/private_download.php';
     }
 
     private function getBillUrl()
