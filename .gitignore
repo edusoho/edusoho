@@ -30,4 +30,5 @@ app/data/install.lock
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
+.sw*
 
