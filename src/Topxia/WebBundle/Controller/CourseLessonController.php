@@ -64,7 +64,7 @@ class CourseLessonController extends BaseController
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (!empty($file) and !empty($file['metas2'])) {
+            if (!empty($file)) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
 
