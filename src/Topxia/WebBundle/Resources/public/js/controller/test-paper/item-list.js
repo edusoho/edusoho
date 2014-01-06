@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    Test = require('./util/menu-score');
+    Test = require('./util/util');
 
     exports.run = function() {
 

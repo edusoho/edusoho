@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
-    Test = require('./menu-score');
+    Test = require('./util');
 
     module.exports = function($element) {
 
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
             Notify.success('删除' + name + '成功');
 
-            Test.MenuTotal();
+            Test.utli();
 
         });
 

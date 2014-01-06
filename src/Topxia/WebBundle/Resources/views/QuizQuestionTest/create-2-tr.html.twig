@@ -1,6 +1,6 @@
  <tr {% if question.parentId == 0 %} class="questionType" {% endif %} id="{{question.id}}"  data-role='item' data-type='{% if question.parentId != 0 %}{{question.parentId}}{% else %}{{question.questionType}}{% endif %}' >
-    <td class="notMoveHandle">
-        <input type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
+    <td >
+        <input class="notMoveHandle" type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
     </td>
 
     <td class="seq"> </td>

@@ -1,0 +1,88 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}添加题目 - {{ parent() }}{% endblock %}
+
+{% set parentId = parentId |default(null)%}
+{% set side_nav = 'base' %}
+{% set script_controller = 'test-paper/create-1' %}
+
+{% set testPaperId = testPaper.id | default(null)%}
+
+{% block main %}
+
+<div class="panel panel-default panel-col test-creator">
+  <div class="panel-heading clearfix">
+        重置试卷      
+  </div>
+  <div class="panel-body">
+
+    <div id="test-creator-widget">
+      <form id="test-reset-form" class="form-horizontal quiz-test" method="post" >
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="test-percentage-field">试卷难度</label></div>
+          <div class="col-md-3 controls">
+              <input class="form-control" data-url="{{ path('course_manage_test_paper_create_check',{courseId:course.id})}}" id="test-percentage-field" name="percentage" value="{% if testPaper.percentage | default(null)%}{{testPaper.percentage }}{% else %}80{% endif %}" />
+          </div>
+          <div class="col-md-6 controls checkbox">
+              <label class="pull-left">勾选按难易程度生成试卷(默认随机)<input type="checkbox" {% if testPaper.isDiffculty | default(null)%}checked=chedked{% endif %} value="1"  name="isDiffculty"></label>
+          </div>
+        </div>
+
+        <br />
+        <div class="test-sort-body">
+        {% for key,type in dict('questionType') %}
+        <div class="form-group type-item">
+          <div class="col-md-2 control-label"><label for="test-stem-field"></label></div>
+          <div class="form-inline">
+              <div class="col-md-8 controls plm">
+                  <div class="form-control-static pull-left prm">
+                      {{type}} 
+                  </div>
+                  <div class="form-control-static pull-left pll">题目数量:</div>
+                  <div class="col-md-2">
+                      <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}5{% endif %}" />
+                  </div>
+                  <div class="form-control-static pull-left pll">题目分值:</div>
+                  <div class="col-md-2">
+                      <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}0{% endif %}" />
+                  </div>
+                  <div class="col-md-2 controls ">
+                      <button type="button" class="btn btn-link test-sort-handle"><span class="glyphicon glyphicon-move hidden-lt-ie8"></span></button>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+        <br />
+        
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls">
+            <button type="submit" class="btn btn-primary  pull-right" >下一步</button>
+            <a href="{{ path('course_manage_quiz_question',{courseId:1}) }}" class="btn btn-link  pull-right">返回</a>
+          </div>
+        </div>
+
+        <input type="hidden" name="target"      value="{{ testPaper.target }}">
+        <input type="hidden" name="testPaperId" value="{{ testPaper.id }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+
+
+    </div>
+    
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+ 

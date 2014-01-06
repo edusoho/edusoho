@@ -13,6 +13,8 @@ interface TestService
 
     public function createTestPaper($testPaper);
 
+    public function createUpdateTestPaper($id, $testPaper);
+
     public function updateTestPaper($id, $testPaper);
 
     public function deleteTestPaper($id);

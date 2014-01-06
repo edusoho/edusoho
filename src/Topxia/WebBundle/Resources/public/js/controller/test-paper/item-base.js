@@ -1,24 +1,24 @@
 define(function(require, exports, module) {
 
-	var Widget = require('widget');
+	var Widget     = require('widget');
 	var Handlebars = require('handlebars');
-    var Notify = require('common/bootstrap-notify');
-    Test = require('./util/menu-score');
+	var Notify     = require('common/bootstrap-notify');
+	var Test       = require('./util/util');
+    require('jquery.sortable');
 
 	var ItemBase = Widget.extend({
+
 		attrs:{
 			Handlebars: Handlebars,
 			Notify: Notify,
 			questionType: [],
-			score:null,
 		},
 
 		events: {
             'show.bs.tab a[data-toggle="tab"]' : 'tabShow',
             'shown.bs.tab a[data-toggle="tab"]': 'tabShown',
-            'click [data-role=batch-select]'   : 'batchSelect',
             'click [data-role=item-modal-btn]' : 'itemModal',
-            'click .btn-submit-index' : 'onSubmit',
+            'click .btn-submit-index'          : 'onSubmit',
 		},
 
 		setup:function(){
@@ -33,11 +33,12 @@ define(function(require, exports, module) {
 		tabShown: function(){
 			this.$('.test-item-tbody.active').removeClass('active tab-pane');
 			this.$('[data-role=batch-select], [data-role=batch-item]').prop('checked', false);
-			Test.MenuTotal();
+			
+			Test.utli();
 		},
 
 		onSubmit: function(e){
-			$.get($(e.currentTarget).data('url'), '', function(data){
+			$.post($(e.currentTarget).data('url'), '', function(data){
                 console.log(data);
             })
 		},
@@ -50,7 +51,6 @@ define(function(require, exports, module) {
 			});
 
 			var href = $('#myTab .active a').attr('href').split("#");
-
 			var url  = $(e.currentTarget).data('url')+'&type='+href[1]+"&ids="+ids;
 
             $.get(url, '', function(data){
@@ -62,12 +62,25 @@ define(function(require, exports, module) {
             })
 		},
 
-		batchSelect:function(e){
-			if ($(e.currentTarget).is(":checked") == true){
-                this.$('[data-role=batch-select]:visible, [data-role=batch-item]:visible').prop('checked', true);
-            } else {
-                this.$('[data-role=batch-select]:visible, [data-role=batch-item]:visible').prop('checked', false);
-            }
+		sortable: function(id){
+			$('#'+id).sortable({
+	            itemSelector: '[data-role=item]',
+	            exclude: '.notMoveHandle',
+	            onDrop: function (item, container, _super) {
+	                _super(item, container);
+
+	                // $.each(this.get('questionType'), function(key, value){
+
+	                // };
+
+                    // $list.find('.item-lesson').each(function(index){
+                    //     $(this).find('.seq').text(index+1);
+                    // });
+	            },
+	            serialize: function(parent, children, isContainer) {
+	                return isContainer ? children : parent.attr('id');
+	            }
+	        });
 		},
 
 		_initTab: function (){
@@ -80,6 +93,7 @@ define(function(require, exports, module) {
 		_initItemList: function(){
             require('./util/batch-delete')($(this.element));
             require('./util/item-delete')($(this.element));
+            require('./util/batch-select')($(this.element));
         },
 
 		_onChangeQuestionType: function	(questionType){
@@ -100,6 +114,9 @@ define(function(require, exports, module) {
                 		$(this).after(self.$('[data-type=' + $(this).attr('id') + ']'));
                 	});
                 }
+
+                self.sortable(id);
+
             });
 
             self.$('#myTab li:first a').trigger('click');

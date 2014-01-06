@@ -1,0 +1,28 @@
+<tr data-role='item'>
+    <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
+    <td>
+        {{ item.name|length > 40 ? item.name|slice(0, 40) ~ '...' : item.name }}
+    </td>
+    <td>{{ item.limitedTime}}</td>
+    <td>
+        {{ macro.user_link(users[item.updatedUserId]) }}
+        <br />
+        <span class="text-muted text-sm">{{item.updatedTime | date('Y-n-d H:i:s')}}</span>
+    </td>
+    <td>
+        <div class="btn-group">
+
+          <a href="{{ path('course_manage_test_paper_update', {courseId:course.id,testPaperId:item.id}) }}" class="btn btn-default btn-sm">编辑</a>
+
+          <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+          </a>
+
+          <ul class="dropdown-menu pull-right">
+              <li><a class="btn btn-link" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">管理题目</a></li>
+              <li><a class="btn btn-link" href="{{ path('course_manage_test_paper_update_reset', {courseId:course.id,testPaperId:item.id}) }}">重置题目</a></li>
+              <li><a class="btn btn-link" href="javascript:" data-name='题目(子题目也会删除)' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}">删除</a></li>
+          </ul>
+        </div>
+    </td>
+</tr>

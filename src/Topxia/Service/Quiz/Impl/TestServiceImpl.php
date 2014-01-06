@@ -20,9 +20,19 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperDao()->addTestPaper($field);
     }
 
-    public function updateTestPaper($id, $testPaper)
+    public function createUpdateTestPaper($id, $testPaper)
     {
         $field = $this->filterTestPaperFields($testPaper);
+        return $this->getTestPaperDao()->updateTestPaper($id, $field);  
+    } 
+
+    public function updateTestPaper($id, $testPaper)
+    {
+        $field['updatedUserId'] = $this->getCurrentUser()->id;
+        $field['updatedTime'] = time();
+        $field['name']   = empty($testPaper['name'])?"":$testPaper['name'];
+        $field['description'] = empty($testPaper['description'])?"":$testPaper['description'];
+        $field['limitedTime'] = (int) $testPaper['limitedTime'];
         return $this->getTestPaperDao()->updateTestPaper($id, $field);  
     }
 

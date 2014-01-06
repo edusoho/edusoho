@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
-    Test = require('./menu-score');
+    Test = require('./util');
 
     module.exports = function($element, onSuccess) {
         $element.on('click', '[data-role=item-delete]', function() {
@@ -25,7 +25,7 @@ define(function(require, exports, module) {
             $btn.parents('[data-role=item]').remove();
             Notify.success('删除' + name + '成功');
             
-            Test.MenuTotal();
+            Test.utli();
         });
 
 
