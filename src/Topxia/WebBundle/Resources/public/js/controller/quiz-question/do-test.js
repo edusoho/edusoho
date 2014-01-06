@@ -69,7 +69,7 @@ define(function(require, exports, module) {
             }
         });
 
-        $('body').on('click', '#postPaper', function(){
+        $('body').on('click', '#postPaper, #finishPaper', function(){
 
             $.post($(this).data('url'), {data:changeAnswers}, function(){
                 changeAnswers = {};

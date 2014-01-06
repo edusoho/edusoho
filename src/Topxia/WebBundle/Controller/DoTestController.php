@@ -35,7 +35,7 @@ class DoTestController extends BaseController
 		}
 	}
 
-	public function submitFinishAction (Request $request, $testId)
+	public function finishTestAction (Request $request, $testId)
 	{
 		if ($request->getMethod() == 'POST') {
 			$answers = $request->request->all();
@@ -43,9 +43,9 @@ class DoTestController extends BaseController
 
 			$result = $this->getTestService()->submitTest($answers, $testId);
 
-			
-
 			$this->getTestService()->makeFinishTestResults($testId);
+
+			exit();
 		}
 	}
 

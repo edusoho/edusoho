@@ -248,37 +248,37 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->makeTest($questions, $answers);
     }
 
-    public function testResults($testId, $userId = null)
-    {
-        if ($userId == null) {
-            $userId = $this->getCurrentUser()->id;
-        }
-        $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
+    // public function testResults($testId, $userId = null)
+    // {
+    //     if ($userId == null) {
+    //         $userId = $this->getCurrentUser()->id;
+    //     }
+    //     $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
 
-        $answers = QuestionSerialize::unserializes($answers);
+    //     $answers = QuestionSerialize::unserializes($answers);
 
-        $answers = ArrayToolkit::index($answers, 'itemId');
+    //     $answers = ArrayToolkit::index($answers, 'itemId');
 
-        $items = $this->findItemsByTestPaperId($testId);
+    //     $items = $this->findItemsByTestPaperId($testId);
 
-        $materialIds = $this->findMaterial($items);
-        $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
+    //     $materialIds = $this->findMaterial($items);
+    //     $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
 
-        $questionIds = ArrayToolkit::column($items, 'questionId');
+    //     $questionIds = ArrayToolkit::column($items, 'questionId');
 
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+    //     $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        $questions = array_merge($questions, $materialQuestions);
+    //     $questions = array_merge($questions, $materialQuestions);
 
-        $questions = QuestionSerialize::unserializes($questions);
+    //     $questions = QuestionSerialize::unserializes($questions);
 
-        $questions = ArrayToolkit::index($questions, 'id');
+    //     $questions = ArrayToolkit::index($questions, 'id');
 
 
-        $results = $this->makeTestResults($answers, $questions);
+    //     $results = $this->makeTestResults($answers, $questions);
 
-        return $results;
-    }
+    //     return $results;
+    // }
 
     public function makeFinishTestResults ($testId)
     {
@@ -290,20 +290,62 @@ class TestServiceImpl extends BaseService implements TestService
         $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
         $answers = QuestionSerialize::unserializes($answers);
         $answers = ArrayToolkit::index($answers, 'questionId');
-
+        
         $items = $this->findItemsByTestPaperId($testId);
+        //材料题子题目
+        $materialIds = $this->findMaterial($items);
+        $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
+        //非材料题子题目的题目id
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        //题目
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = array_merge($questions, $materialQuestions);
+
+        $questions = QuestionSerialize::unserializes($questions);
+
+        foreach ($items as $key => $value) {
+            $questions[$value['questionId']]['score'] = $value['score'];
+        }
+
+
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $results = $this->makeTestResults($answers, $questions);
+
+        $results['oldAnswers'] = array_map(function($result){
+            $result['answer'] = json_encode($result['answer']);
+            return $result;
+        }, $results['oldAnswers']);
+        $results['newAnswers'] = array_map(function($result){
+            $result['answer'] = json_encode($result['answer']);
+            return $result;
+        }, $results['newAnswers']);
+
+        $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testId, $userId);
+        $this->getDoTestDao()->addItemResults($results['newAnswers'], $testId, $userId);
     }
 
     private function makeTestResults ($answers, $questions)
     {
-        $materials = $this->findMaterial($questions);
-        $results = array();
-        foreach ($questions as $key => $question) {
-            if (empty($answers[$key])) {
-                $question['result'] = 'noAnswer';
-                $question['userAnswer'] = "";
 
-                $results[$key] = $question;
+        $materials = $this->findMaterial($questions);
+        // $results = array();
+        $newAnswers = array();
+        $oldAnswers = array();
+        foreach ($questions as $key => $question) {
+            if ($question['questionType'] == 'material'){
+                continue;
+            }
+
+            if (empty($answers[$key])) {
+                $newAnswers[] = array(
+                    'questionId' => $key,
+                    'status' => 'noAnswer',
+                    'score' => 0,
+                    'answer' => ''
+                );
+
+                // $results[$key] = $question;
                 continue;
             }
 
@@ -316,9 +358,15 @@ class TestServiceImpl extends BaseService implements TestService
                 $diff = array_diff($question['answer'], $answers[$key]['answer']);
 
                 if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
-                    $question['result'] = 'right';
+                    $answers[$key]['status'] = 'right';
+                    $answers[$key]['score'] = $question['score'];
+
+                    // $question['result'] = 'right';
                 } else {
-                    $question['result'] = 'wrong';
+                    $answers[$key]['status'] = 'wrong';
+                    $answers[$key]['score'] = 0;
+
+                    // $question['result'] = 'wrong';
                 }
             }
 
@@ -326,9 +374,13 @@ class TestServiceImpl extends BaseService implements TestService
                 $diff = array_diff($question['answer'], $answers[$key]['answer']);
 
                 if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
-                    $question['result'] = 'right';
+                    $answers[$key]['status'] = 'right';
+                    $answers[$key]['score'] = $question['score'];
+                    // $question['result'] = 'right';
                 } else {
-                    $question['result'] = 'wrong';
+                    $answers[$key]['status'] = 'wrong';
+                    $answers[$key]['score'] = 0;
+                    // $question['result'] = 'wrong';
                 }
             }
 
@@ -348,20 +400,36 @@ class TestServiceImpl extends BaseService implements TestService
                         }
                     }
                 }
-                $question['result'] = $right;
-            }
-            $question['userAnswer'] = $answers[$key]['answer'];
 
-            if ($question['targetId'] == 0) {
-                $results[$question['parentId']]['questions'][$key] = $question;
+                if ($right == count($question['answer'])) {
+                    $answers[$key]['status'] = 'right';
+                } else {
+                    $answer[$key]['status'] = 'wrong';
+                }
+                $answers[$key]['score'] = round($question['score'] * $right / count($question['answer']), 1);
+
+                // $question['result'] = $right;
+            }
+            // $question['userAnswer'] = $answers[$key]['answer'];
+
+            // if ($question['targetId'] == 0) {
+            //     $results[$question['parentId']]['questions'][$key] = $question;
                 
-            } else {
-                $results[$key] = $question;
-            }
+            // } else {
+            //     $results[$key] = $question;
+            // }
 
+            $oldAnswers[$key] = $answers[$key];
         }
 
-        return $results;
+        $oldAnswers = array_map(function($oldAnswer){
+            return ArrayToolkit::parts($oldAnswer, array('questionId', 'status', 'score', 'answer'));
+        }, $oldAnswers);
+
+        return array(
+            'oldAnswers' => $oldAnswers,
+            'newAnswers' => $newAnswers
+        );
     }
 
     
@@ -417,12 +485,12 @@ class TestServiceImpl extends BaseService implements TestService
         $user = $this->getCurrentUser();
         //已经有记录的
         $itemResults = $this->filterTestAnswers($answers, $testId, $user['id']);
-        $itemIdsOld = ArrayToolkit::index($itemResults, 'itemId');
+        $itemIdsOld = ArrayToolkit::index($itemResults, 'questionId');
 
         $answersOld = ArrayToolkit::parts($answers, array_keys($itemIdsOld));
 
         if (!empty($answersOld)) {
-            $this->getDoTestDao()->updateItemResults($answersOld, $testId, $user['id']);
+            $this->getDoTestDao()->updateItemAnswers($answersOld, $testId, $user['id']);
         }
         //还没记录的
         $itemIdsNew = array_diff(array_keys($answers), array_keys($itemIdsOld));
@@ -430,7 +498,7 @@ class TestServiceImpl extends BaseService implements TestService
         $answersNew = ArrayToolkit::parts($answers, $itemIdsNew);
 
         if (!empty($answersNew)) {
-            $this->getDoTestDao()->addItemResults($answersNew, $testId, $user['id']);
+            $this->getDoTestDao()->addItemAnswers($answersNew, $testId, $user['id']);
         }
 
         //测试数据
