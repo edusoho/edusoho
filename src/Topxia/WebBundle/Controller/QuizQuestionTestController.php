@@ -66,7 +66,7 @@ class QuizQuestionTestController extends BaseController
         }
 
         if(empty($testPaper['target'])){
-			throw $this->createNotFoundException('target 参数不对');
+			$testPaper['target']  = 'course-'.$courseId;
 		}
 
         if(!empty($testPaper['testPaperId'])){
