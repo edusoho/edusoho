@@ -63,4 +63,49 @@ class TestPaperDaoImpl extends BaseDao implements TestPaperDao
         return $this->getConnection()->executeUpdate($sql, $ids);
     }
 
+    public function searchTestPaperCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+             ->select('COUNT(id)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchTestPaper($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy($orderBy[0], $orderBy[1]);
+
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'questions')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetType = :targetType');
+
+        if (!empty($conditions['target'])) {
+            $target = array();
+            foreach ($conditions['target'] as $targetType => $targetIds) {
+                foreach ($targetIds as $key => $targetId) {
+                    $targetIds[] = (int) $targetId;
+                }
+                
+                $target[] = " targetType ='".$targetType."' and targetId in (".join(' , ', $targetIds).")";
+            }
+            if (!empty($target)) {
+                $target = join(' or ', $target);
+                $builder->andStaticWhere(" ($target) ");
+            }
+        }
+
+        return $builder;
+    }
+
 }

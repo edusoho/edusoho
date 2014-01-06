@@ -37,6 +37,14 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getQuizPaperChoiceDao()->deleteChoicesByPaperIds(array($id));
     }
 
+    public function searchTestPaper(array $conditions, array $orderBy, $start, $limit){
+        return $this->getTestPaperDao()->searchTestPaper($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchTestPaperCount(array $conditions){
+        return $this->getTestPaperDao()->searchTestPaperCount($conditions);
+    }
+
     public function getTestItem($id)
     {
         return $this->getTestItemDao()->getItem($id);
@@ -53,6 +61,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['testId'] = $testId;
         $field['questionId'] = $question['id'];
         $field['questionType'] = $question['questionType'];
+        $field['parentId'] = $question['parentId'];
         $field['score'] = $question['score'];
 
         $item = $this->getTestItemDao()->addItem($field);
@@ -80,12 +89,13 @@ class TestServiceImpl extends BaseService implements TestService
             $field['testId'] = $testId;
             $field['questionId'] = $question['id'];
             $field['questionType'] = $question['questionType'];
+            $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
             $item = $this->getTestItemDao()->addItem($field);
         }
-        $this->sortTestItemsByTestId($testId);
 
+        $this->sortTestItemsByTestId($testId);
     }
 
     public function updateItem($id, $questionId)
@@ -95,9 +105,11 @@ class TestServiceImpl extends BaseService implements TestService
     	if(empty($item) || empty($question)){
     		return array();
         }
+
         $field['questionId']   = $question['id'];
         $field['questionType'] = $question['questionType'];
         $field['parentId']     = $question['parentId'];
+
         return $this->getTestItemDao()->updateItem($id, $field);  
     }
 
@@ -107,9 +119,11 @@ class TestServiceImpl extends BaseService implements TestService
         if(empty($item)){
             return false;
         }
+
         if($item['parentId'] != 0){
             $this->getTestItemDao()->deleteItemsByParentId($item['parentId']);
         }
+
         $this->getTestItemDao()->deleteItem($id);
     }
 
@@ -145,16 +159,39 @@ class TestServiceImpl extends BaseService implements TestService
 
         $groupItems = array();
         foreach ($items as $item) {
-            $groupItems = array_merge_recursive($groupItems, $item);
+            if($item['parentId'] == 0){
+                $groupItems[$item['questionType']][] = $item;
+            } else {
+                $groupItems[$item['parentId']][] = $item;
+            }
         }
 
         $seqType =  explode(',', $testPaper['seq']);
         $seqNum = 1;
-        foreach ($seqType as  $type) {
-            foreach ($groupItems[$type] as  $item) {
-                $fields = array('seq' => $seqNum);
-                $this->getTestItemDao()->updateItem($itemId, $fields);
-                $seqNum ++;
+
+        foreach ($seqType as $type) {
+
+            if (!empty($groupItems[$type])){
+            
+                foreach ($groupItems[$type] as $item) {
+
+                    $fields = array('seq' => $seqNum);
+                    $this->getTestItemDao()->updateItem($item['id'], $fields);
+
+                    if($item['questionType'] == 'material' && !empty($groupItems[$item['questionId']])){
+                        foreach ($groupItems[$item['questionId']] as $item) {
+                            $fields = array('seq' => $seqNum);
+                            $this->getTestItemDao()->updateItem($item['id'], $fields);
+                            $seqNum ++;
+                        }
+                    }else{
+                        $seqNum ++;
+                    }
+
+                    
+                }
+
+
             }
         }
     }
@@ -394,6 +431,11 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createServiceException('itemCounts itemScores参数不正确');
         }
 
+        foreach ($testPaper['itemCounts'] as $key => $score) {
+            if($score == 0)
+                unset($testPaper['itemCounts'][$key]);
+        }
+
         $target = explode('-', $testPaper['target']);
 
 		if(empty($target['1'])){
@@ -408,7 +450,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['name']          = $testPaper['name'];
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
-        $field['seq']           = implode(',',array_keys($testPaper['itemScores']));
+        $field['seq']           = implode(',',array_keys($testPaper['itemCounts']));
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
         $field['updatedUserId'] = $this->getCurrentUser()->id;
@@ -416,8 +458,6 @@ class TestServiceImpl extends BaseService implements TestService
 
         return $field;
     }
-
-
 
     private function getTestPaperDao(){
     	return $this->createDao('Quiz.TestPaperDao');
@@ -441,7 +481,5 @@ class TestServiceImpl extends BaseService implements TestService
     {
         return $this->createDao('Quiz.DoTestDao');
     }
-
-
 
 }

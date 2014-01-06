@@ -3,12 +3,14 @@ define(function(require, exports, module) {
 	var Widget = require('widget');
 	var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
+    Test = require('./util/menu-score');
 
 	var ItemBase = Widget.extend({
 		attrs:{
 			Handlebars: Handlebars,
 			Notify: Notify,
 			questionType: [],
+			score:null,
 		},
 
 		events: {
@@ -31,6 +33,7 @@ define(function(require, exports, module) {
 		tabShown: function(){
 			this.$('.test-item-tbody.active').removeClass('active tab-pane');
 			this.$('[data-role=batch-select], [data-role=batch-item]').prop('checked', false);
+			Test.MenuTotal();
 		},
 
 		onSubmit: function(e){
@@ -40,8 +43,16 @@ define(function(require, exports, module) {
 		},
 
 		itemModal: function(e){
+			var ids = new Array();
+
+			this.$('[data-role=batch-item]:visible').each(function(){
+				ids.push(this.value);
+			});
+
 			var href = $('#myTab .active a').attr('href').split("#");
-			var url  = $(e.currentTarget).data('url')+'&type='+href[1];
+
+			var url  = $(e.currentTarget).data('url')+'&type='+href[1]+"&ids="+ids;
+
             $.get(url, '', function(data){
                 $($(e.currentTarget).data('target')).html(data).modal({
                     backdrop:true,
@@ -67,8 +78,8 @@ define(function(require, exports, module) {
 		},
 
 		_initItemList: function(){
-            require('../../util/batch-delete')($(this.element));
-            require('../../util/item-delete')($(this.element));
+            require('./util/batch-delete')($(this.element));
+            require('./util/item-delete')($(this.element));
         },
 
 		_onChangeQuestionType: function	(questionType){
@@ -79,13 +90,12 @@ define(function(require, exports, module) {
         		self.$('[data-role=item-body]').after(html);
                 
                 if (self.$('[data-type=' + key + ']').length == 0) {
-                	var empty = "<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>";
-                	$('#'+id).append(empty);
+                	$('#'+id).append("<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>");
                 } else {
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));
                 }
 
-                if(key == 'material'){
+                if('material' == key){
                 	self.$('[data-type=' + key + ']').each(function(index){
                 		$(this).after(self.$('[data-type=' + $(this).attr('id') + ']'));
                 	});
@@ -94,8 +104,6 @@ define(function(require, exports, module) {
 
             self.$('#myTab li:first a').trigger('click');
 		},
-
-
 
 	});
 

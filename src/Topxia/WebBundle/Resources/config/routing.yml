@@ -525,6 +525,10 @@ course_manage_test_paper_create:
     pattern: /course/{courseId}/manage/test/paper/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
 
+course_manage_test_paper_create_two:
+    pattern: /course/{courseId}/manage/test/{testPaperId}/create/two
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createTwo }
+
 course_manage_test_paper_create_check:
     pattern: /course/{courseId}/manage/test/paper/create/check
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:quesitonNumberCheck }
@@ -536,10 +540,6 @@ course_manage_test_paper_update:
 course_manage_test_paper_delete:
     pattern: /course/{courseId}/manage/test/paper/delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:delete }
-
-course_manage_test_item:
-    pattern: /course/{courseId}/manage/test/{testPaperId}/item
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:indexItem }
 
 course_manage_test_item_list:
     pattern: /course/{courseId}/manage/test/{testPaperId}/item/list

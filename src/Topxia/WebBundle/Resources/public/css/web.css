@@ -3275,10 +3275,25 @@ body {
     display: none !important;
 }
 
+/**
+ * quiz test 
+ *
+ */	
+
 .test-creator .form-group{
 	margin-bottom: 10px;
 }
 
 #test-item-modal .modal-dialog{
 	width: 800px;
+}
+
+.quiz-test .test-sort-handle{
+	color:#333;
+}
+
+.quiz-test .test-sort-handle:hover,
+.quiz-test .test-sort-handle:focus,
+{
+	color:#333;
 }
