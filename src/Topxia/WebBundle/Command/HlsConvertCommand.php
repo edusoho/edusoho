@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\CloudClientFactory;
@@ -31,14 +32,23 @@ class HlsConvertCommand extends BaseCommand
 		$courseId = $input->getArgument('courseId');
 		$siteUrl = $input->getArgument('siteUrl');
 
-		$this->convertCourse($courseId, $siteUrl, $output);
+		if (strtolower($courseId) == 'all') {
+			$courses = $this->getCourseService()->searchCourses(array(), 'latest', 0, 10000);
+			$courseIds = ArrayToolkit::column($courses, 'id');
+		} else {
+			$courseIds = array($courseId);
+		}
+
+		foreach ($courseIds as $courseId) {
+			$this->convertCourse($courseId, $siteUrl, $output);
+		}
 
 		$output->writeln('<info>转码结束</info>');
 	}
 
 	protected function convertCourse($courseId, $siteUrl, $output)
 	{
-		$output->writeln("正在转码课程: {$courseId}");
+		$output->writeln("* 正在转码课程 #{$courseId}");
 		$lessons = $this->getCourseService()->getCourseLessons($courseId);
 
 		foreach ($lessons as $lesson) {
@@ -65,16 +75,15 @@ class HlsConvertCommand extends BaseCommand
 	        $commands = array_keys($client->getVideoConvertCommands());
 	        $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 
-	        $callbackUrl = $this->getContainer()->get('router')->generate('uploadfile_cloud_convert_callback', array('key' => $convertKey));
+	        $callbackUrl = $siteUrl . $this->getContainer()->get('router')->generate('uploadfile_cloud_convert_callback', array('key' => $convertKey));
 
 	        $result = $client->convertVideo($client->getBucket(), $file['hashId'], implode(';', $commands), $callbackUrl);
-
 	        if (empty($result['persistentId'])) {
-	        	$output->writeln("[失败] 转码请求失败。(课时：{$lesson['title']} #{$lesson['id']}) ". json_encode($result));
+	        	$output->writeln("\t[ERROR] 转码请求失败。(课时：{$lesson['title']} #{$lesson['id']}) ". json_encode($result));
 	        } else {
 		        $convertHash = "{$result['persistentId']}:{$convertKey}";
 		        $this->getUploadFileService()->setFileConverting($file['id'], $convertHash);
-		        $output->writeln("[OK] 转码请求成功。(课时：{$lesson['title']} #{$lesson['id']}) ");
+		        $output->writeln("\t[OK] 转码请求成功。(课时：{$lesson['title']} #{$lesson['id']}) ");
 	        }
 
 		}
