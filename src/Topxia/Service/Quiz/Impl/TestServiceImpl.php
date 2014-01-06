@@ -280,6 +280,20 @@ class TestServiceImpl extends BaseService implements TestService
         return $results;
     }
 
+    public function makeFinishTestResults ($testId)
+    {
+        $userId = $this->getCurrentUser()->id;
+        if (empty($userId)){
+            throw $this->createServiceException("当前用户不存在!");        
+        }
+        //得到当前用户答案
+        $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
+        $answers = QuestionSerialize::unserializes($answers);
+        $answers = ArrayToolkit::index($answers, 'questionId');
+
+        $items = $this->findItemsByTestPaperId($testId);
+    }
+
     private function makeTestResults ($answers, $questions)
     {
         $materials = $this->findMaterial($questions);

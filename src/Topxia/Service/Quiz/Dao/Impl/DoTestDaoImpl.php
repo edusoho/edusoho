@@ -20,10 +20,10 @@ class DoTestDaoImpl extends BaseDao
         $marks = str_repeat($mark.',', count($answers) - 1).$mark;
         $answersForSQL = array();
         foreach ($answers as $key => $value) {
-        	array_push($answersForSQL, (int)$key, (int)$testId, (int)$userId, $value);
+        	array_push($answersForSQL, (int)$testId, (int)$userId, (int)$key, $value);
         }
 
-		$sql = "INSERT INTO {$this->table} (`itemId`, `testId`, `userId`, `answer`) VALUES {$marks};";
+		$sql = "INSERT INTO {$this->table} (`testId`, `userId`, `questionId`, `answer`) VALUES {$marks};";
 
 		return $this->getConnection()->executeUpdate($sql, $answersForSQL);
 	}
@@ -38,7 +38,7 @@ class DoTestDaoImpl extends BaseDao
         $sql ='';
         $answersForSQL = array();
         foreach ($answers as $key => $value) {
-        	$sql .= "UPDATE {$this->table} set `answer` = ? WHERE `itemId` = ? AND `testId` = ? AND `userId` = ?;";
+        	$sql .= "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `testId` = ? AND `userId` = ?;";
         	array_push($answersForSQL, $value, (int)$key, (int)$testId, (int)$userId); 
         }
 
