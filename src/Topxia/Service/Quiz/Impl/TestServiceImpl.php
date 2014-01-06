@@ -248,6 +248,110 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->makeTest($questions, $answers);
     }
 
+    public function testResults($testId, $userId = null)
+    {
+        if ($userId == null) {
+            $userId = $this->getCurrentUser()->id;
+        }
+        $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
+
+        $answers = QuestionSerialize::unserializes($answers);
+
+        $answers = ArrayToolkit::index($answers, 'itemId');
+
+        $items = $this->findItemsByTestPaperId($testId);
+
+        $materialIds = $this->findMaterial($items);
+        $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $questions = array_merge($questions, $materialQuestions);
+
+        $questions = QuestionSerialize::unserializes($questions);
+
+        $questions = ArrayToolkit::index($questions, 'id');
+
+
+        $results = $this->makeTestResults($answers, $questions);
+
+        return $results;
+    }
+
+    private function makeTestResults ($answers, $questions)
+    {
+        $materials = $this->findMaterial($questions);
+        $results = array();
+        foreach ($questions as $key => $question) {
+            if (empty($answers[$key])) {
+                $question['result'] = 'noAnswer';
+                $question['userAnswer'] = "";
+
+                $results[$key] = $question;
+                continue;
+            }
+
+            if (!in_array($question['questionType'], array('single_choice', 'choice', 'determine', 'fill', 'material'))){
+                continue;
+            }
+
+            if ($question['questionType'] == 'single_choice' or $question['questionType'] == 'choice') {
+
+                $diff = array_diff($question['answer'], $answers[$key]['answer']);
+
+                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
+                    $question['result'] = 'right';
+                } else {
+                    $question['result'] = 'wrong';
+                }
+            }
+
+            if ($question['questionType'] == 'determine') {
+                $diff = array_diff($question['answer'], $answers[$key]['answer']);
+
+                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
+                    $question['result'] = 'right';
+                } else {
+                    $question['result'] = 'wrong';
+                }
+            }
+
+            if ($question['questionType'] == 'fill') {
+                $right = 0;
+                foreach ($question['answer'] as $k => $value) {
+                    $value = explode('|', $value);
+                    if (count($value) == 1) {
+                        if ($value[0] == $answers[$key]['answer'][$k]) {
+                            $right++;
+                        }
+                    } else {
+                        foreach ($value as $v) {
+                            if ($v == $answers[$key]['answer'][$k]) {
+                                $right++;
+                            }
+                        }
+                    }
+                }
+                $question['result'] = $right;
+            }
+            $question['userAnswer'] = $answers[$key]['answer'];
+
+            if ($question['targetId'] == 0) {
+                $results[$question['parentId']]['questions'][$key] = $question;
+                
+            } else {
+                $results[$key] = $question;
+            }
+
+        }
+
+        return $results;
+    }
+
+    
+
     private function makeTest ($questions, $answers)
     {
         foreach ($answers as $key => $value) {
@@ -287,12 +391,16 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function submitTest ($answers, $testId)
     {
-        if (!empty($answers)) {
+        if (empty($answers)) {
             return array();
         }
+
+        $answers = array_map(function($answer){
+            return json_encode($answer);
+        }, $answers);
+
         //过滤待补充
         $user = $this->getCurrentUser();
-
         //已经有记录的
         $itemResults = $this->filterTestAnswers($answers, $testId, $user['id']);
         $itemIdsOld = ArrayToolkit::index($itemResults, 'itemId');

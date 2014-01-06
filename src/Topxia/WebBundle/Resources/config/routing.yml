@@ -517,6 +517,10 @@ course_manage_submit_test:
     pattern: /submit/test/{testId}
     defaults: { _controller: TopxiaWebBundle:DoTest:submitTest }
 
+course_manage_test_results:
+    pattern: /test/results/{testId}
+    defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
+
 course_manage_test_paper_create:
     pattern: /course/{courseId}/manage/test/paper/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
@@ -719,15 +723,15 @@ location_all:
     defaults: { _controller: TopxiaWebBundle:Location:all }
 
 tag_all:
-    pattern: /tag/all.jsonm
+    pattern: /tag/all_jsonm
     defaults: { _controller: TopxiaWebBundle:Tag:all }
 
 tag_match:
-    pattern: /tag/match.jsonp
+    pattern: /tag/match_jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
 
 following_match_bynickname:
-    pattern: /following/bynickname/match.jsonp
+    pattern: /following/bynickname/match_jsonp
     defaults: { _controller: TopxiaWebBundle:Message:match }
 
 comment_widget_init:

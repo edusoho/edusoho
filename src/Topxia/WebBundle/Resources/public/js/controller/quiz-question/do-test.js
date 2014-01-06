@@ -7,9 +7,10 @@ define(function(require, exports, module) {
         var changeAnswers = {};
 
         $('*[data-type]').each(function(index){
+            var name = $(this).attr('name');
 
             $(this).on('change', function(){
-                var name = $(this).attr('name');
+                // var name = $(this).attr('name');
 
                 var values = [];
                 //choice
@@ -38,15 +39,34 @@ define(function(require, exports, module) {
                 }
                 //essay
                 if ($(this).data('type') == 'essay') {
-                    console.log($(this).val());
-                    values.push($(this).val());     
+                    if ($(this).val() != "") {
+                        values.push($(this).val());
+                    }     
 
                 }
-                changeAnswers[name] = values.join(',');
 
-                console.log(changeAnswers);
-            })
+                changeAnswers[name] = values;
 
+
+                if (values.length > 0) {
+                    $('a[href="#question' + name + '"]').addClass('done');
+                } else {
+                    $('a[href="#question' + name + '"]').removeClass('done');
+                }
+
+
+            });
+
+        });
+
+        $('.panel-heading').on('click', 'a.btn', function(){
+            id = $(this).parents('.panel').attr('id');
+            btn = $('.answerCard .panel-body [href="#'+id+'"]');
+            if (btn.css('border-left-width') == '1px') {
+                btn.addClass('have-pro');
+            } else {
+                btn.removeClass('have-pro');
+            }
         });
 
         $('body').on('click', '#postPaper', function(){
@@ -55,7 +75,17 @@ define(function(require, exports, module) {
                 changeAnswers = {};
             });
 
-        })
+        });
+
+
+
+
+        $('.choice').on('click', 'ul li', function(){
+            $input = $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input');
+            isChecked = $input.prop("checked");
+            $input.prop("checked", !isChecked).change();
+            
+        });
     };
 
 });

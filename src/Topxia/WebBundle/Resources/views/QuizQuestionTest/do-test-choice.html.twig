@@ -1,6 +1,7 @@
-<div class="panel panel-default" id="question{{ question.id }}">
+<div class="panel panel-default choice" id="question{{ question.id }}">
 	<div class="panel-heading">
-		<h3 class="panel-title">{{ question.stem }}</h3>
+		<h3 class="panel-title">{{ questionIndex }}. {{ question.stem }}</h3>
+		<a class="btn btn-sm" style="float:right;"><span class="glyphicon glyphicon-bookmark">标记</span></a>
 	</div>
 	<div class="panel-body">
 		<ul class="list-unstyled">
@@ -21,4 +22,3 @@
 		{% endfor %}
 	</div>
 </div>
-

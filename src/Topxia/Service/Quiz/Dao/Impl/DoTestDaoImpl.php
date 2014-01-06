@@ -31,6 +31,7 @@ class DoTestDaoImpl extends BaseDao
     //要不要给这三个字段加上索引呢
 	public function updateItemResults ($answers, $testId, $userId)
 	{
+        //事务
 		if(empty($answers)){ 
             return array(); 
         }
@@ -57,4 +58,10 @@ class DoTestDaoImpl extends BaseDao
         $sql ="SELECT * FROM {$this->table} WHERE itemId IN ({$marks}) AND testId = ? AND userId = ?";
         return $this->getConnection()->fetchAll($sql, $itemIds) ? : array();
 	}
+
+    public function findTestResultsByTestIdAndUserId ($testId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($testId, $userId));
+    }
 }
