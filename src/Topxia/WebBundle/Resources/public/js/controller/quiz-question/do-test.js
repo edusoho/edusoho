@@ -33,9 +33,7 @@ define(function(require, exports, module) {
                 if ($(this).data('type') == 'fill') {
 
                     $('input[name='+name+']').each(function(){
-                        if ($(this).val() != "") {
-                            values.push($(this).val());
-                        }
+                        values.push($(this).val());
                     });
 
                 }
@@ -46,7 +44,7 @@ define(function(require, exports, module) {
                     }     
 
                 }
-                // changeAnswers[name] = values.join(',');
+
                 changeAnswers[name] = values;
 
 

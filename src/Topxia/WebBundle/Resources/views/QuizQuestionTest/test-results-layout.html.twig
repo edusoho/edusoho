@@ -1,0 +1,71 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set script_controller = 'quiz-question/do-test' %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Example page header <small>Subtext for header</small></h1>
+</div>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="media">
+			<div class="pull-left well" style="width:20%">
+				<h2>XX分</h2>
+				<small>Subtext for header</small>
+			</div>
+			<div class="media-body">
+				<table class="table table-hover table-condensed">
+					<thead>
+						<th></th>
+						<th>选择题 ({{ accuracy.single_choice.all + accuracy.choice.all }})</th>
+						<th>判断题 ({{ accuracy.determine.all }})</th>
+						<th>填空题 ({{ accuracy.fill.all }})</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>答对</td>
+							<td>{{ accuracy.single_choice.right + accuracy.choice.right }}</td>
+							<td>{{ accuracy.determine.right }}</td>
+							<td>{{ accuracy.fill.right }}</td>
+						</tr>
+						<tr>
+							<td>答错</td>
+							<td>{{ accuracy.single_choice.wrong + accuracy.choice.wrong }}</td>
+							<td>{{ accuracy.determine.wrong }}</td>
+							<td>{{ accuracy.fill.all - accuracy.fill.right }}</td>
+						</tr>
+						<tr>
+							<td>未答</td>
+							<td>{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }}</td>
+							<td>{{ accuracy.determine.noAnswer }}</td>
+							<td>N/A</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="media">
+			<div class="pull-left well" style="width:20%">
+				<h2>?</h2>
+				<small>Subtext for header</small>
+			</div>
+			<div class="media-body">
+				<div class="empty">老师正在批阅试卷</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% for key, result in results %}
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title" style="display:inline-block; width:80%;">{{ result.stem }}</h3>
+			<a class="btn btn-sm" style="float:right;"><span class="glyphicon glyphicon-bookmark">收藏</span></a>
+		</div>
+	</div>
+
+
+{% endfor %}
+
+{% endblock %}
