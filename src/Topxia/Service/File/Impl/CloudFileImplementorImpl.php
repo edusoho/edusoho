@@ -16,6 +16,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 	public function getFile($file)
 	{
        $file['metas'] = $this->decodeMetas($file['metas']);
+       $file['metas2'] = $this->decodeMetas($file['metas2']);
 	   // $file['path'] = $this->getCloudClient()->getFileUrl($file['hashId'],$file['targetId'],$file['targetType']);
        return $file;
 	}
@@ -35,6 +36,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['size'] = (int) $fileInfo['size'];
 
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
+        $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
 
         if (empty($fileInfo['convertId']) or empty($fileInfo['convertKey'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
@@ -61,7 +63,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         } else {
             $cmds = $this->getCloudClient()->getVideoConvertCommands();
 
-            $file['metas'] = array();
+            $file['metas2'] = array();
             foreach ($result as $item) {
                 $type = empty($cmds[$item['cmd']]) ? null : $cmds[$item['cmd']];
                 if (empty($type)) {
@@ -76,17 +78,17 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     continue;
                 }
 
-                $file['metas'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
+                $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
             }
 
-            if (empty($file['metas'])) {
+            if (empty($file['metas2'])) {
                 $file['convertStatus'] = 'error';
             } else {
                 $file['convertStatus'] = 'success';
             }
         }
 
-        $file['metas'] = $this->encodeMetas(empty($file['metas']) ? array() : $file['metas']);
+        $file['metas2'] = $this->encodeMetas(empty($file['metas2']) ? array() : $file['metas2']);
 
         return $file;
     }
@@ -94,17 +96,17 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function deleteSubFile($file,$subFileHashId)
     {
         $file = $this->getFile($file);
-        if(empty($file['metas'])){
+        if(empty($file['metas2'])){
             return;
         } 
-        foreach ($file['metas'] as $key => $value) {
+        foreach ($file['metas2'] as $key => $value) {
             if($subFileHashId==$value['key']){
                $this->getCloudClient()->removeFile($subFileHashId);
-               unset($file['metas'][$key]);
+               unset($file['metas2'][$key]);
                break;
             }
         } 
-        $file['metas'] = $this->encodeMetas($file['metas']);
+        $file['metas2'] = $this->encodeMetas($file['metas2']);
         return $file;             
     }
 
@@ -112,10 +114,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         return ;
     	$file = $this->getFile($file);
-        if(empty($file['metas'])){
+        if(empty($file['metas2'])){
             return;
         }
-        foreach ($file['metas'] as $key => $value) {
+        foreach ($file['metas2'] as $key => $value) {
             $this->getCloudClient()->removeFile($value['key']);
         }
         $this->getCloudClient()->removeFile($file['hashId']);
