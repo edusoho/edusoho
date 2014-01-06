@@ -115,7 +115,7 @@ class UserServiceImpl extends BaseService implements UserService
         @$userlevel['seq'] = $this->searchUserlevelsCount()+1;
         $userlevel = $this->getUserlevelDao()->createUserlevel($userlevel);
 
-        $this->getLogService()->info('userlevel', 'create', "添加用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        $this->getLogService()->info('userlevel', 'create', "添加会员等级{$userlevel['name']}(#{$userlevel['id']})");
 
         return $userlevel;
     }
@@ -130,19 +130,19 @@ class UserServiceImpl extends BaseService implements UserService
     public function updateUserlevel($id,$fields)
     {
         $userlevel = $this->getUserlevelDao()->updateUserlevel($id,$fields);
-        $this->getLogService()->info('userlevel', 'update', "编辑用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        $this->getLogService()->info('userlevel', 'update', "编辑会员等级{$userlevel['name']}(#{$userlevel['id']})");
         return $userlevel;
     }
 
     public function sortUserlevels(array $ids)
-    {
+    {   
         $levelId  = 0;
         foreach ($ids as $itemId) {
             list(, $type) = explode("-",$itemId);
                 $levelId ++;
                 $item = $this->getUserlevel($type);
-                $fields = array('number' => $levelId);
-                if ($fields['number'] != $item['number']) {
+                $fields = array('seq' => $levelId);
+                if ($fields['seq'] != $item['seq']) {
                     $this->updateUserlevel($item['id'], $fields);
             }
         }
@@ -151,7 +151,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserlevel($id)
     {
         $userlevel = $this->getUserlevel($id);
-        $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['name']}(#{$userlevel['id']})");
         return $this->getUserlevelDao()->deleteUserlevel($id);
     }
 

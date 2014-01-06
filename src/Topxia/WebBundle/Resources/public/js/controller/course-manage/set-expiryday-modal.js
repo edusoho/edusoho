@@ -15,7 +15,6 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                console.log('f');
                 $.post($form.attr('action'), $form.serialize(), function() {
                     Notify.success('增加学员有效期操作成功!');
                     $modal.modal('hide');

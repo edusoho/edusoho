@@ -12,8 +12,6 @@ define(function(require, exports, module) {
 
 		if ($("#lesson-preview-video-player").length > 0) {
 
-			console.log($("#lesson-preview-video-player").data('hlsUrl'));
-
 			if ($("#lesson-preview-video-player").data('hlsUrl')) {
 
 		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
