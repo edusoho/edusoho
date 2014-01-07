@@ -17,7 +17,7 @@ class DoTestController extends BaseController
 
 		$questions = $this->formatQuestions($questions);
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
 			'testId' => $testId
 		));
@@ -52,13 +52,14 @@ class DoTestController extends BaseController
 	public function testResultsAction (Request $request, $testId)
 	{
 
-		$results = $this->getTestService()->testResults($testId);
+		$questions = $this->getTestService()->testResults($testId);
 
-		$accuracy = $this->makeAccuracy($results);
-// var_dump($results);exit();
+		$accuracy = $this->makeAccuracy($questions);
 
+		$questions = $this->formatQuestions($questions);
+// var_dump($questions['essay']);exit();
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-results-layout.html.twig', array(
-			'results' => $results,
+			'questions' => $questions,
 			'accuracy' => $accuracy,
 			'testId' => $testId
 		));
@@ -90,20 +91,18 @@ class DoTestController extends BaseController
 
 		foreach ($results as $value) {
 
-			if ($value['questionType'] == 'fill') {
-				$accuracy[$value['questionType']]['right'] += $value['result'];
-				$accuracy[$value['questionType']]['all'] += count($value['answer']);
+			if (!in_array($value['questionType'], array('single_choice', 'choice', 'determine', 'fill'))) {
 				continue;
 			}
 
 			$accuracy[$value['questionType']]['all']++;
-			if ($value['result'] == 'right'){
+			if ($value['testResult']['status'] == 'right'){
 				$accuracy[$value['questionType']]['right']++;
 			}
-			if ($value['result'] == 'wrong'){
+			if ($value['testResult']['status'] == 'wrong'){
 				$accuracy[$value['questionType']]['wrong']++;
 			}
-			if ($value['result'] == 'noAnswer'){
+			if ($value['testResult']['status'] == 'noAnswer'){
 				$accuracy[$value['questionType']]['noAnswer']++;
 			}
 		}
@@ -115,25 +114,27 @@ class DoTestController extends BaseController
 	{
 		$formatQuestions = array();
 		foreach ($questions as $key => $value) {
-			if ($value['questionType'] == 'single_choice') {
-				$formatQuestions['single_choice'][$key] = $value;
+
+			if(in_array($value['questionType'], array('single_choice', 'choice'))) {
+				$i = 65;
+				foreach ($value['choices'] as $key => $v) {
+					$v['choiceIndex'] = chr($i);
+					$value['choices'][$key] = $v;
+					$i++;
+				}
 			}
-			if ($value['questionType'] == 'choice') {
-				$formatQuestions['choice'][$key] = $value;
-			}
-			if ($value['questionType'] == 'determine') {
-				$formatQuestions['determine'][$key] = $value;
-			}
-			if ($value['questionType'] == 'fill') {
-				$formatQuestions['fill'][$key] = $value;
-			}
-			if ($value['questionType'] == 'essay') {
-				$formatQuestions['essay'][$key] = $value;
-			}
+
 			if ($value['questionType'] == 'material') {
-				$formatQuestions['material'][$key] = $value;
+				$value['questions'] = $this->formatQuestions($value['questions']);
+			}
+
+			if ($value['targetId'] != 0) {
+				$formatQuestions[$value['questionType']][$key] = $value;
+			} else {
+				$formatQuestions[$key] = $value;
 			}
 		}
+
 		return $formatQuestions;
 	}
 

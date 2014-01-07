@@ -248,37 +248,51 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->makeTest($questions, $answers);
     }
 
-    // public function testResults($testId, $userId = null)
-    // {
-    //     if ($userId == null) {
-    //         $userId = $this->getCurrentUser()->id;
-    //     }
-    //     $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
+    public function testResults($testId, $userId = null)
+    {
+        if ($userId == null) {
+            $userId = $this->getCurrentUser()->id;
+        }
+        $answers = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
 
-    //     $answers = QuestionSerialize::unserializes($answers);
+        $answers = QuestionSerialize::unserializes($answers);
 
-    //     $answers = ArrayToolkit::index($answers, 'itemId');
+        $answers = ArrayToolkit::index($answers, 'questionId');
 
-    //     $items = $this->findItemsByTestPaperId($testId);
+        $items = $this->findItemsByTestPaperId($testId);
 
-    //     $materialIds = $this->findMaterial($items);
-    //     $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
+        $materialIds = $this->findMaterial($items);
+        $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
 
-    //     $questionIds = ArrayToolkit::column($items, 'questionId');
+        $questionIds = ArrayToolkit::column($items, 'questionId');
 
-    //     $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-    //     $questions = array_merge($questions, $materialQuestions);
+        $questions = array_merge($questions, $materialQuestions);
 
-    //     $questions = QuestionSerialize::unserializes($questions);
+        $questions = QuestionSerialize::unserializes($questions);
 
-    //     $questions = ArrayToolkit::index($questions, 'id');
+        $questions = ArrayToolkit::index($questions, 'id');
 
+        foreach ($answers as $key => $answer) {
+            //可能会查不到题目的问题，例如题目被删除，需要提示
+            $questions[$key]['testResult'] = $answer;
 
-    //     $results = $this->makeTestResults($answers, $questions);
+            if ($questions[$key]['questionType'] == 'fill') {
+                $questions[$key]['answer'] = array_map(function($answer){
+                    return str_replace('|', '或者', $answer);
+                }, $questions[$key]['answer']);
+            }
+        }
 
-    //     return $results;
-    // }
+        $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
+
+        $questions = $this->makeTest($questions, $choices);
+
+        // $questions = $this->makeMaterial($questions);
+
+        return $questions;
+    }
 
     public function makeFinishTestResults ($testId)
     {
@@ -404,8 +418,9 @@ class TestServiceImpl extends BaseService implements TestService
                 if ($right == count($question['answer'])) {
                     $answers[$key]['status'] = 'right';
                 } else {
-                    $answer[$key]['status'] = 'wrong';
+                    $answers[$key]['status'] = 'wrong';
                 }
+
                 $answers[$key]['score'] = round($question['score'] * $right / count($question['answer']), 1);
 
                 // $question['result'] = $right;
@@ -440,7 +455,8 @@ class TestServiceImpl extends BaseService implements TestService
             if (!array_key_exists('choices', $questions[$value['questionId']])) {
                 $questions[$value['questionId']]['choices'] = array();
             }
-            array_push($questions[$value['questionId']]['choices'], $value);
+            // array_push($questions[$value['questionId']]['choices'], $value);
+            $questions[$value['questionId']]['choices'][$value['id']] = $value;
         }
 
         return $this->makeMaterial($questions);

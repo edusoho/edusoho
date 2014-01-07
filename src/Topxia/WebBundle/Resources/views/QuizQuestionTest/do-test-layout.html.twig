@@ -3,12 +3,6 @@
 {% set script_controller = 'quiz-question/do-test' %}
 
 {% block content %}
-<div class="well">
-  <h1>Example page header</h1>
-  <p>asgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasg</p>
-  <small>fasgsadgsadgasgsag</small>
-</div>
-
 <style type="text/css">
 	.affix.questionBar {
 		top: 0;
@@ -75,7 +69,10 @@
 		display:inline-block;
 		width:80%;
 	}
-	.panel-heading a.btn {
+	.panel-footer {
+		min-height: 50px;
+	}
+	.panel-footer a.btn {
 		box-shadow: 0 0 0;
 	}
 
@@ -87,6 +84,14 @@
 	}
 
 </style>
+
+<div class="well">
+  <h1>Example page header</h1>
+  <p>asgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasg</p>
+  <small>fasgsadgsadgasgsag</small>
+</div>
+
+
 <div class="questionBar" data-spy="affix" data-offset-top="200">
 	<ul class="nav nav-pills nav-justified">
 		<li><a href="#choice">选择</a></li>
@@ -146,8 +151,9 @@
 <div class="row">
 	<div class="col-md-9">
 <div data-spy="scroll" data-target=".questionBar">
-	{% block main%}
-	{% endblock %}
+	{# {% block main%}
+	{% endblock %} #}
+	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
 </div>
 
 </div>

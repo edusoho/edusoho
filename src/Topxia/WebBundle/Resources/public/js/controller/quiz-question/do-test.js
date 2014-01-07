@@ -59,7 +59,7 @@ define(function(require, exports, module) {
 
         });
 
-        $('.panel-heading').on('click', 'a.btn', function(){
+        $('.panel-footer').on('click', 'a.btn', function(){
             id = $(this).parents('.panel').attr('id');
             btn = $('.answerCard .panel-body [href="#'+id+'"]');
             if (btn.css('border-left-width') == '1px') {
