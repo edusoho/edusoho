@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}会员专区 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>会员专区</h1></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      {% if app.user %}
+        <div style="padding:20px;font-size:18px;margin-bottom:20px;background:#ccc;">我的会员等级:<span style="color:#CC0033;margin-left:5px;margin-right:15px;">白银会员</span>会员期限：<span style="color:#CC0033;margin-left:5px;">255天(xxx年X月X日到期)</span></div>
+      {% else %}
+        <div style="padding:20px;font-size:18px;margin-bottom:20px;background:#ccc;">请先登录后购买</div>
+      {% endif %}
+
+      <ul class="nav nav-pills nav-stacked list-inline">
+        <li {% if main_nav == 'buyMember' %} class="active"{% endif %} style="position: relative;display: inline-block;"><a href="{{ path('member_show') }}">购买会员</a></li>
+        <li {% if main_nav == 'memberCourses' %} class="active"{% endif %} style="position: relative;display: inline-block;"><a href="{{ path('member_course_show',{ id:1|default(null) }) }}">会员课程</a></li>
+      </ul>
+    {% block main_body %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

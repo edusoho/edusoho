@@ -24,6 +24,23 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByHaveUserLevelIds($start, $limit)
+    {   
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM  {$this->getTablename()} WHERE userLevelIds !='' ORDER BY createdTime DESC LIMIT {$start} , {$limit}";
+
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function findCoursesByUserLevelId($id)
+    {   
+        if(empty($id)){ return array(); };
+        $ids = '|' . $id . '|';
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE userLevelIds LIKE '%{$ids}%'";
+
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

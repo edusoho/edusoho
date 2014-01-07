@@ -20,6 +20,10 @@ interface CourseService
 
 	public function findCoursesByIds(array $ids);
 
+	public function findCoursesByUserLevelId($id);
+
+	public function findCoursesByHaveUserLevelIds($start, $limit);
+
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
 	public function searchCourseCount($conditions);

@@ -1,0 +1,28 @@
+{% extends 'TopxiaWebBundle:Member:layout.html.twig' %}
+
+{% set main_nav = 'memberCourses' %}
+
+{% block main_body %}
+<div class="userlevel" style="margin-top:20px;">
+	<ul class="nav nav-tabs course-dashboard-tabs clearfix" id="course-tabs">
+    {% if userlevels %}
+        {% for userlevel in userlevels %}
+    	   <li {% if id == userlevel.id %} class="active"{% endif %} ><a class="js-nav" href="{{ path('member_course_show', {id:userlevel.id}) }}">{{ userlevel.name }}</a></li>
+        {% endfor %}
+    {% else %}
+        <div class="empty">用户等级为空</div>
+    {% endif %}
+	</ul>
+</div>
+<div class="es-box-body">
+  {% if courses %}
+    {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+    {% if courses|length >= 12 %}
+      <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
+    {% endif %}
+  {% else %}
+    <div class="empty">还没有课程</div>
+  {% endif %}
+</div>
+
+{% endblock %}

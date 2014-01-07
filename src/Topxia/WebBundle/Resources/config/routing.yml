@@ -102,6 +102,14 @@ kindeditor_upload:
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
     methods: [POST]
 
+member_show:
+    pattern: /member
+    defaults: { _controller: TopxiaWebBundle:Member:index }
+
+member_course_show:
+    pattern: /member/course/{id}
+    defaults: { _controller: TopxiaWebBundle:Member:course }
+
 course_explore:
     pattern:  /course/explore/{category}
     defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
@@ -881,6 +889,7 @@ content_page_show:
 content_page_list:
     pattern: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
+
 
 teacher:
     pattern: /teacher
