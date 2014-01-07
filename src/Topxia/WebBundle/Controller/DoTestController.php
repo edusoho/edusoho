@@ -138,6 +138,11 @@ class DoTestController extends BaseController
 		return $formatQuestions;
 	}
 
+	public function testPauseAction(Request $request)
+	{
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig'); 
+	}
+
    	private function getQuestionService()
    	{
    		return $this->getServiceKernel()->createService('Quiz.QuestionService');

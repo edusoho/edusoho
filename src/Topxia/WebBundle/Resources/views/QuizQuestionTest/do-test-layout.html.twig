@@ -16,7 +16,7 @@
 		padding-right: 30px;
 	}
 	.affix.answerCard .panel {
-		width: 20%;
+		width: 24%;
 		float: right;
 	}
 
@@ -29,8 +29,17 @@
 	}
 
 	.answerCard {
-		width: 20%;
+		width: 24%;
 		float: right;
+	}
+
+	.answerCard .panel-heading {
+		line-height: 30px;
+		height:50px;
+	}
+
+	.answerCard .panel-heading button {
+		margin-left: 5px;
 	}
 
 	.answerCard .panel-body a.btn {
@@ -67,7 +76,6 @@
 		word-wrap: break-word; 
 		word-break: normal; 
 		display:inline-block;
-		width:80%;
 	}
 	.panel-footer {
 		min-height: 50px;
@@ -104,7 +112,9 @@
 <div class="answerCard" data-spy="affix" data-offset-top="200">
 	<div class="panel panel-default">
 			<div class="panel-heading">
-
+				剩余:<span id="time_show" data-time="13600"></span>
+				<button class="btn btn-sm btn-default pull-right">下次再做</button>
+				<button id="pause" class="btn btn-sm btn-default pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
 			</div>
 			<div class="panel-body">
 				{% set index = 1 %}
@@ -150,15 +160,15 @@
 
 <div class="row">
 	<div class="col-md-9">
-<div data-spy="scroll" data-target=".questionBar">
+		<div data-spy="scroll" data-target=".questionBar">
 	{# {% block main%}
 	{% endblock %} #}
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
-</div>
+			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
+		</div>
 
-</div>
-<div class="col-md-3">
-</div>
+	</div>
+	<div class="col-md-3">
+	</div>
 
 </div>
 	
