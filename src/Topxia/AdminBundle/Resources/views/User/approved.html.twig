@@ -29,12 +29,13 @@
     <tr id="user-table-tr-{{ user.id }}">
         <td>{{user.id }}</td>
         <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
-        <td>{{userProfiles[user.id].truename}}</td>
+        <td><strong>{{ admin_macro.user_real(userProfiles[user.id]) }}</strong></td>    
         <td>{{userProfiles[user.id].idcard}}</td>
         <td>{{user.email}}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
          <a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class="btn btn-default btn-sm cancel-approval">撤销</a>
+         
         </td>
     </tr>
   {% endfor %}

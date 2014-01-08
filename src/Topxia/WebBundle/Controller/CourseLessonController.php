@@ -65,21 +65,30 @@ class CourseLessonController extends BaseController
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
             if (!empty($file)) {
-                $factory = new CloudClientFactory();
-                $client = $factory->createClient();
+                if ($file['storage'] == 'cloud') {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient();
 
-                if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
-                    $url = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
-                    $json['mediaHLSUri'] = $url['url'];
-                } else {
-                    if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                        $key = $file['metas']['hd']['key'];
+                    if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                        $url = $client->generateHLSUrl($client->getBucket(), $file['metas2']['hd']['key'], 3600);
+                        $json['mediaHLSUri'] = $url['url'];
                     } else {
-                        $key = $file['hashId'];
-                    }
+                        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                            $key = $file['metas']['hd']['key'];
+                        } else {
+                            $key = null;
+                        }
 
-                    $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                    $json['mediaUri'] = $url['url'];
+                        if ($key) {
+                            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $json['mediaUri'] = $url['url'];
+                        } else {
+                            $json['mediaUri'] = '';
+                        }
+
+                    }
+                } else {
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
                 }
             } else {
                 $json['mediaUri'] = '';

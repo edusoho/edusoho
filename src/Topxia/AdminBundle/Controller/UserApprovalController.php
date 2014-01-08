@@ -62,11 +62,12 @@ class UserApprovalController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         if ($request->getMethod() == 'POST') {
             
             $data = $request->request->all();
+            
             if($data['form_status'] == 'success'){
                 $this->getUserService()->passApproval($id, $data['note']);
             } else if ($data['form_status'] == 'fail') {
@@ -84,6 +85,22 @@ class UserApprovalController extends BaseController
         );
     }
 
+     public function showUserRealInfoAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        return $this->render("TopxiaAdminBundle:User:show-real-user-info-modal.html.twig",
+            array(
+                'user' => $user,
+                'userApprovalInfo' => $userApprovalInfo
+            )
+        );
+    }
+
+
+
     public function showIdcardAction($userId, $type)
     {
         $user = $this->getUserService()->getUser($userId);
@@ -93,9 +110,29 @@ class UserApprovalController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+        $imgConverToData = new ImgConverToData;
+        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> img2Data();
+        $imgData = $imgConverToData -> data2Img();
+        echo $imgData;
+        exit;
+    }
+
+    public function showHeadAction($userId, $type)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $currentUser = $this->getCurrentUser();
+
+        if (empty($currentUser)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        $idcardPath = $type === 'head' ? $userApprovalInfo['headImg'] : $userApprovalInfo['headImg'];
         $imgConverToData = new ImgConverToData;
         $imgConverToData -> getImgDir($idcardPath);
         $imgConverToData -> img2Data();
