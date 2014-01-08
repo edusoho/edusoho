@@ -697,3 +697,9 @@ show_idcard:
 show_head:
     pattern:   approvals/head/show/{userId}/{type}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showHead }
+
+
+admin_approval_show:
+    pattern:  approvals/{id}/show
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:showUserRealInfo }
+

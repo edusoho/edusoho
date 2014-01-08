@@ -1,0 +1,66 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}个人实名信息{% endblock %}
+{% block body %}
+
+<table class="table table-striped table-condenseda table-bordered">
+  <tr>
+    <th width="15%">用户名</th>
+    <td width="35%">{{ user.nickname }}</td>
+    <th width="15%">真实姓名</th>
+    <td width="35%">{{ userApprovalInfo.truename }}</td>
+  </tr>
+
+  <tr>
+    <th width="15%">身份证</th>
+    <td width="35%">{{ userApprovalInfo.idcard }}</td>
+    <th width="15%">常用邮箱</th>
+    <td width="35%">{{ userApprovalInfo.email2 }}</td>
+  </tr>
+
+  <tr>
+    <th width="15%">联系电话</th>
+    <td width="35%">{{ userApprovalInfo.mobile }}</td>
+    <th width="15%">邮寄地址</th>
+    <td width="35%">{{ userApprovalInfo.postAddr }}</td>
+  </tr>
+
+  <tr>
+    <th width="15%">公司</th>
+    <td width="35%">{{ userApprovalInfo.company }}</td>
+    <th width="15%">职位</th>
+    <td width="35%">{{ userApprovalInfo.job }}</td>
+  </tr>
+</table>
+<table class="table table-striped table-condenseda table-bordered">
+  <tr>
+    <th width="10%">身份证照</th>
+    <td width="20%" >
+      <a href="{{ url('show_idcard', {userId: user.id, type:'face'})}}" target="_blank">
+        <img src="{{url('show_idcard', {userId: user.id, type:'face'})}}" width="200" />
+      </a>
+    </td>
+    <td width="20%" >
+      <a href="{{url('show_idcard', {userId: user.id, type: 'back'})}}" target="_blank">
+        <img src="{{url('show_idcard', {userId: user.id, type: 'back'})}}" width="200" />
+      </a>
+    </td>
+    <th width="10%">正面免冠人头照</th>
+    <td width="20%" >
+      <a href="{{url('show_head', {userId: user.id, type: 'head'})}}" target="_blank">
+        <img src="{{url('show_head', {userId: user.id, type: 'head'})}}" width="200" />
+      </a>
+    </td>
+  </tr>
+</table>
+
+   
+   
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}

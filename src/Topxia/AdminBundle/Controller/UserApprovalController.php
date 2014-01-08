@@ -62,13 +62,12 @@ class UserApprovalController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         if ($request->getMethod() == 'POST') {
             
             $data = $request->request->all();
-            var_dump($data);
-            exit;
+            
             if($data['form_status'] == 'success'){
                 $this->getUserService()->passApproval($id, $data['note']);
             } else if ($data['form_status'] == 'fail') {
@@ -85,6 +84,22 @@ class UserApprovalController extends BaseController
             )
         );
     }
+
+     public function showUserRealInfoAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        return $this->render("TopxiaAdminBundle:User:show-real-user-info-modal.html.twig",
+            array(
+                'user' => $user,
+                'userApprovalInfo' => $userApprovalInfo
+            )
+        );
+    }
+
+
 
     public function showIdcardAction($userId, $type)
     {
