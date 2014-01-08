@@ -35,43 +35,24 @@ class DoTestController extends BaseController
 		}
 	}
 
+	public function finishTestAction (Request $request, $testId)
+	{
+		if ($request->getMethod() == 'POST') {
+			$answers = $request->request->all();
+			$answers = $answers['data'];
+
+			$result = $this->getTestService()->submitTest($answers, $testId);
+
+			$this->getTestService()->makeFinishTestResults($testId);
+
+			exit();
+		}
+	}
+
 	public function testResultsAction (Request $request, $testId)
 	{
 
 		$results = $this->getTestService()->testResults($testId);
-
-		// $accuracyResult = array(
-		// 	'right' => 0,
-		// 	'wrong' => 0,
-		// 	'noAnswer' => 0,
-		// 	'all' => 0
-		// );
-		// $accuracy = array(
-		// 	'single_choice' => $accuracyResult,
-		// 	'choice' => $accuracyResult,
-		// 	'determine' => $accuracyResult,
-		// 	'fill' => $accuracyResult
-		// );
-
-		// foreach ($results as $value) {
-
-		// 	if ($value['questionType'] == 'fill') {
-		// 		$accuracy[$value['questionType']]['right'] += $value['result'];
-		// 		$accuracy[$value['questionType']]['all'] += count($value['rightAnswer']);
-		// 		continue;
-		// 	}
-
-		// 	$accuracy[$value['questionType']]['all']++;
-		// 	if ($value['result'] == 'right'){
-		// 		$accuracy[$value['questionType']]['right']++;
-		// 	}
-		// 	if ($value['result'] == 'wrong'){
-		// 		$accuracy[$value['questionType']]['wrong']++;
-		// 	}
-		// 	if ($value['result'] == 'noAnswer'){
-		// 		$accuracy[$value['questionType']]['noAnswer']++;
-		// 	}
-		// }
 
 		$accuracy = $this->makeAccuracy($results);
 // var_dump($results);exit();

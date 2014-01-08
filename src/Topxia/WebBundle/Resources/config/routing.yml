@@ -517,6 +517,10 @@ course_manage_submit_test:
     pattern: /submit/test/{testId}
     defaults: { _controller: TopxiaWebBundle:DoTest:submitTest }
 
+course_manage_finish_test:
+    pattern: /finish/test/{testId}
+    defaults: { _controller: TopxiaWebBundle:DoTest:finishTest }
+
 course_manage_test_results:
     pattern: /test/results/{testId}
     defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
