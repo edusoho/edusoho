@@ -4,9 +4,9 @@ namespace Topxia\Service\Order;
 
 interface OrderService
 {
-	public function searchCourseCouponsCount($conditions);
+	public function searchCouponsCount($conditions);
 
-	public function searchCourseCoupons($conditions, $sort = 'latest', $start, $limit);
+	public function searchCoupons($conditions, $sort = 'latest', $start, $limit);
 
 	public function deleteCoupon($couponId);
 

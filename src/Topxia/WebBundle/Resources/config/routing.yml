@@ -420,15 +420,15 @@ course_manage_student_check_nickname:
 
 course_manage_coupons:
     pattern:  /course/{id}/manage/coupons
-    defaults: { _controller: TopxiaWebBundle:CourseCouponManage:index }
+    defaults: { _controller: TopxiaWebBundle:CouponManage:index }
 
 course_manage_coupon_create:
     pattern: /course/{id}/manage/coupon/create
-    defaults: { _controller: TopxiaWebBundle:CourseCouponManage:create }
+    defaults: { _controller: TopxiaWebBundle:CouponManage:create }
 
 course_manage_coupon_delete:
     pattern: /course/{id}/manage/coupon/{couponId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseCouponManage:delete }
+    defaults: { _controller: TopxiaWebBundle:CouponManage:delete }
     methods: [POST]
 
 course_manage_teachers_match:

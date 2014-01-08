@@ -2,12 +2,12 @@
 
 namespace Topxia\Service\Order\Dao;
 
-interface CourseCouponsDao
+interface CouponsDao
 {
 
-    public function searchCourseCouponsCount($conditions);
+    public function searchCouponsCount($conditions);
 
-    public function searchCourseCoupons($conditions, $orderBy, $start, $limit);
+    public function searchCoupons($conditions, $orderBy, $start, $limit);
 
     public function deleteCoupon($couponId);
 

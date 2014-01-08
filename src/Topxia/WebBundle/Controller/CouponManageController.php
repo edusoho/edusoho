@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class CourseCouponManageController extends BaseController
+class CouponManageController extends BaseController
 {
 
     public function indexAction(Request $request, $id)
@@ -16,20 +16,20 @@ class CourseCouponManageController extends BaseController
 
     	$paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchCourseCouponsCount($conditions),
+            $this->getOrderService()->searchCouponsCount($conditions),
             20
         );
 
-    	$courseCoupons = $this->getOrderService()->searchCourseCoupons(
+    	$coupons = $this->getOrderService()->searchCoupons(
     		$conditions, 
     		'latest', 
     		$paginator->getOffsetCount(),
         	$paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaWebBundle:CourseCouponManage:index.html.twig', array(
+        return $this->render('TopxiaWebBundle:CouponManage:index.html.twig', array(
             'course' => $course,
-            'courseCoupons' => $courseCoupons,
+            'coupons' => $coupons,
             'paginator' =>$paginator
         ));
     }
@@ -57,7 +57,7 @@ class CourseCouponManageController extends BaseController
                 $this->getOrderService()->generateCoupon($couponData);
             }
         }
-        return $this->render('TopxiaWebBundle:CourseCouponManage:create-modal.html.twig',array(
+        return $this->render('TopxiaWebBundle:CouponManage:create-modal.html.twig',array(
             'course'=>$course
         ));
 

@@ -3,21 +3,21 @@
 namespace Topxia\Service\Order\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Order\Dao\CourseCouponsDao;
+use Topxia\Service\Order\Dao\CouponsDao;
 use PDO;
 
-class CourseCouponsDaoImpl extends BaseDao implements CourseCouponsDao
+class CouponsDaoImpl extends BaseDao implements CouponsDao
 {
-    protected $table = 'course_coupon';
+    protected $table = 'coupon';
 
-    public function searchCourseCouponsCount($conditions)
+    public function searchCouponsCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchCourseCoupons($conditions, $orderBy, $start, $limit)
+    public function searchCoupons($conditions, $orderBy, $start, $limit)
     {
     	$this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -51,7 +51,7 @@ class CourseCouponsDaoImpl extends BaseDao implements CourseCouponsDao
     private function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course_coupon')
+            ->from($this->table, 'coupon')
             ->andWhere('orderUserId = :orderUserId')
             ->andWhere('type = :type')
             ->andWhere('code = :code')

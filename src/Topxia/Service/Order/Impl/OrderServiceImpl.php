@@ -8,13 +8,13 @@ use Topxia\Common\ArrayToolkit;
 class OrderServiceImpl extends BaseService implements OrderService
 {
 
-	public function searchCourseCouponsCount($conditions)
+	public function searchCouponsCount($conditions)
     {	
     	$conditions = array_filter($conditions);
-        return $this->getCourseCouponsDao()->searchCourseCouponsCount($conditions);
+        return $this->getCouponsDao()->searchCouponsCount($conditions);
     }
 
-    public function searchCourseCoupons($conditions, $sort = 'latest', $start, $limit)
+    public function searchCoupons($conditions, $sort = 'latest', $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -22,7 +22,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         } 
 
         $conditions = array_filter($conditions);
-        $courseCoupons = $this->getCourseCouponsDao()->searchCourseCoupons($conditions, $orderBy, $start, $limit);
+        $courseCoupons = $this->getCouponsDao()->searchCoupons($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($courseCoupons, 'id');
     }
@@ -32,7 +32,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (empty($couponId)) {
             throw $this->createServiceException(sprintf('优惠码不存在或已被删除'));
         }
-        $this->getCourseCouponsDao()->deleteCoupon($couponId);
+        $this->getCouponsDao()->deleteCoupon($couponId);
 
         $this->getLogService()->info('coupon', 'delete', "删除优惠码 {$couponId})");
     }
@@ -50,12 +50,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         $time = date("Y-m-d H:i",$coupon['createdTime']);
         $coupon['deadline'] = strtotime("$time +".$deadline." days");
 
-        return $this->getCourseCouponsDao()->generateCoupon($coupon);
+        return $this->getCouponsDao()->generateCoupon($coupon);
     }
 
-    private function getCourseCouponsDao()
+    private function getCouponsDao()
     {
-        return $this->createDao('Order.CourseCouponsDao');
+        return $this->createDao('Order.CouponsDao');
     }
 
     private function getLogService()
