@@ -696,15 +696,15 @@ location_all:
     defaults: { _controller: TopxiaWebBundle:Location:all }
 
 tag_all:
-    pattern: /tag/all.jsonm
+    pattern: /tag/all_jsonm
     defaults: { _controller: TopxiaWebBundle:Tag:all }
 
 tag_match:
-    pattern: /tag/match.jsonp
+    pattern: /tag/match_jsonp
     defaults: { _controller: TopxiaWebBundle:Tag:match }
 
 following_match_bynickname:
-    pattern: /following/bynickname/match.jsonp
+    pattern: /following/bynickname/match_jsonp
     defaults: { _controller: TopxiaWebBundle:Message:match }
 
 comment_widget_init:

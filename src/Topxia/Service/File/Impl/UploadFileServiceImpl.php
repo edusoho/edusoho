@@ -122,7 +122,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $this->getUploadFileDao()->updateFile($id, array(
             'convertStatus' => $file['convertStatus'],
-            'metas' => $file['metas']
+            'metas2' => $file['metas2']
         ));
 
         return $this->getFile($id);
@@ -130,8 +130,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function setFileConverting($id, $convertHash)
     {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
+
         $fields = array(
-            'convertStatus' => 'waiting',
+            'convertStatus' => $status,
             'convertHash' => $convertHash,
         );
 

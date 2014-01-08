@@ -185,7 +185,7 @@ class UploadFileController extends BaseController
             'filename' => $file['filename'],
         ));
 
-        return $this->createJsonResponse($file['metas']);
+        return $this->createJsonResponse($file['metas2']);
     }
 
     private function getUploadFileService()

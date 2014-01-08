@@ -273,6 +273,7 @@ CREATE TABLE `course_order` (
   `payment` enum('none','alipay','tenpay') NOT NULL DEFAULT 'none',
   `bank` varchar(32) NOT NULL DEFAULT '' COMMENT '银行编号',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `note` varchar(255) NOT NULL DEFAULT '',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
@@ -584,6 +585,7 @@ CREATE TABLE `upload_files` (
   `convertHash` varchar(256) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
   `metas` text,
+  `metas2` text,
   `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other',
   `storage` enum('local','cloud') NOT NULL,
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
