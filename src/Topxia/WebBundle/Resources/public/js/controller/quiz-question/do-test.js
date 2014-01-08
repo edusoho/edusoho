@@ -6,6 +6,30 @@ define(function(require, exports, module) {
 
         var changeAnswers = {};
 
+        var deadline = $('#time_show').data('time');
+
+//计时器...
+        var timer = timerShow(function(){
+            deadline--;
+            $('#time_show').text(formatTime(deadline));
+
+            if (deadline == 0) {
+                $.post($('#finishPaper').data('url'), {data:changeAnswers}, function(){
+                    changeAnswers = {};
+                });
+            }
+        }, 1000, true);
+
+        $('#pause').on('click', function(){
+            timer.pause();
+        });
+
+        $('div#modal').on('hidden.bs.modal',function(){
+            timer.play();
+        });
+//...
+
+
         $('*[data-type]').each(function(index){
             var name = $(this).attr('name');
 
@@ -70,10 +94,12 @@ define(function(require, exports, module) {
         });
 
         $('body').on('click', '#postPaper, #finishPaper', function(){
+console.log(changeAnswers);
+            
 
-            $.post($(this).data('url'), {data:changeAnswers}, function(){
-                changeAnswers = {};
-            });
+            // $.post($(this).data('url'), {data:changeAnswers}, function(){
+            //     changeAnswers = {};
+            // });
 
         });
 
@@ -86,27 +112,9 @@ define(function(require, exports, module) {
 
 
 
-        var deadline = $('#time_show').data('time');
+        
 
-        var timer = timerShow(function(){
-                deadline--;
-                $('#time_show').text(formatTime(deadline));
 
-                if (deadline == 0) {
-                    $.post($('#finishPaper').data('url'), {data:changeAnswers}, function(){
-                        changeAnswers = {};
-                    });
-                }
-
-            }, 1000, true);
-
-        $('#pause').on('click', function(){
-            timer.pause();
-        });
-
-        $('div#modal').on('hidden.bs.modal',function(){
-            timer.play();
-        });
 
     };
 
