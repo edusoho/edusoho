@@ -12,6 +12,11 @@ class TestServiceImpl extends BaseService implements TestService
         return TestPaperSerialize::unserialize($this->getTestPaperDao()->getTestPaper($id));
     }
 
+    public function getTestPaperResult($id)
+    {
+        return $this->getTestPaperResultDao()->getResult($id);
+    }
+
     public function createTestPaper($testPaper)
     {
         $field = $this->filterTestPaperFields($testPaper);
@@ -599,7 +604,7 @@ class TestServiceImpl extends BaseService implements TestService
         $answersNew = ArrayToolkit::parts($answers, $itemIdsNew);
 
         if (!empty($answersNew)) {
-            $this->getDoTestDao()->addItemAnswers($answersNew, $testResult['id']);
+            $this->getDoTestDao()->addItemAnswers($answersNew, $testResult['id'], $user['id']);
         }
 
         //测试数据
@@ -642,7 +647,8 @@ class TestServiceImpl extends BaseService implements TestService
 
     private function isExistsEssay ($testResults)
     {
-        foreach ($testResults as $value) {
+        $questions = $this->getQuestionService()->findChoicesByQuestionIds(ArrayToolkit::column($testResults, 'questionId'));
+        foreach ($questions as $value) {
             if ($value['questionType'] == 'essay') {
                 return true;
             }

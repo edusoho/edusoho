@@ -19,14 +19,17 @@ class DoTestController extends BaseController
 
 		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
 
-		$this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 	}
 
 	public function showTestAction (Request $request, $id)
 	{
 		//权限！待补充
 
-
+		$testResult = $this->getTestService()->getTestPaperResult($id);
+		if (!$testResult) {
+			throw $this->createNotFoundException('试卷不存在!');
+		}
 		//字符串要过滤js and so on
 		$questions = $this->getTestService()->showTest($id);
 
@@ -34,7 +37,7 @@ class DoTestController extends BaseController
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
-			'limitTime' => $testPaper['limitedTime'] * 60,
+			'limitTime' => $testResult['limitedTime'] * 60,
 			'id' => $id
 		));
 	}
@@ -80,7 +83,7 @@ class DoTestController extends BaseController
 		$accuracy = $this->makeAccuracy($questions);
 
 		$questions = $this->formatQuestions($questions);
-// var_dump($questions['essay']);exit();
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-results-layout.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
