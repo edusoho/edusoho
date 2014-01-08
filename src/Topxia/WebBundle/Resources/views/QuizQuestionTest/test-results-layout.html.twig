@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set script_controller = 'quiz-question/do-test' %}
+{% set script_controller = 'quiz-question/test-result' %}
 
 {% block content %}
 <style type="text/css">
@@ -42,6 +42,18 @@
 		text-align: center;
 		line-height: 27px;
 		color: #999;
+	}
+
+	.answerCard .panel-body a.btn.right {
+		background-color: #47a447;
+	}
+
+	.answerCard .panel-body a.btn.wrong {
+		background-color: #d2322d;
+	}
+
+	.answerCard .panel-body a.btn.noAnswer {
+		background-color: #f5f5f5;
 	}
 
 	.choice .panel-body {
@@ -139,47 +151,47 @@
 
 <div class="answerCard" data-spy="affix" data-offset-top="530">
 	<div class="panel panel-default">
-			<div class="panel-heading">
-
-			</div>
 			<div class="panel-body">
 				{% set index = 1 %}
 				{% for question in questions.single_choice %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+					<a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
 					{% set index = index + 1 %}
 				{% endfor %}
 
 				{% for question in questions.choice %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+					<a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
 					{% set index = index + 1 %}
 				{% endfor %}
 
 				{% for question in questions.determine %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+					<a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
 					{% set index = index + 1 %}
 				{% endfor %}
 
 				{% for question in questions.fill %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+					<a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
 					{% set index = index + 1 %}
 				{% endfor %}
 
 				{% for question in questions.essay %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+					<a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
 					{% set index = index + 1 %}
 				{% endfor %}
 
 				{% for question in questions.material %}
 					{% for question in question.questions %}
-						<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+						<a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
 						{% set index = index + 1 %}
 					{% endfor %}
 				{% endfor %}
 
 			</div>
 			<div class="panel-footer">
-				<button class="btn btn-success" style="width:100%" id="postPaper" data-url="{{ path('course_manage_submit_test', { id: id }) }}">我要交卷</button>
-				<button class="btn btn-success" style="width:100%" id="finishPaper" data-url="{{ path('course_manage_finish_test', { id: id }) }}">我真的要交卷</button>
+				<div class="btn-group btn-group-justified btn-group-sm">
+					<a class="btn btn-default" id="showWrong">只看错题</a>
+					<a class="btn btn-default" id="showNotRight">不看对题</a>
+					<a class="btn btn-default" id="showAll">查看全部</a>
+				</div>
 			</div>
 	</div>
 </div>

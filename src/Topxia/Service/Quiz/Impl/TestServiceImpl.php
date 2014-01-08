@@ -647,7 +647,7 @@ class TestServiceImpl extends BaseService implements TestService
 
     private function isExistsEssay ($testResults)
     {
-        $questions = $this->getQuestionService()->findChoicesByQuestionIds(ArrayToolkit::column($testResults, 'questionId'));
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($testResults, 'questionId'));
         foreach ($questions as $value) {
             if ($value['questionType'] == 'essay') {
                 return true;

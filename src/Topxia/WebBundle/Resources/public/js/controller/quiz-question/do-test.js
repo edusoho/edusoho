@@ -2,11 +2,13 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        // setInterval("", 50);
+        var interval = 180;
 
         var changeAnswers = {};
 
         var deadline = $('#time_show').data('time');
+
+        var timeLastPost = deadline - interval;
 
 //计时器...
         var timer = timerShow(function(){
@@ -14,7 +16,13 @@ define(function(require, exports, module) {
             $('#time_show').text(formatTime(deadline));
 
             if (deadline == 0) {
-                $.post($('#finishPaper').data('url'), {data:changeAnswers}, function(){
+                $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
+                    changeAnswers = {};
+                });
+            }
+            if (deadline == timeLastPost) {
+                timeLastPost = timeLastPost - interval;
+                $.post($('#postPaper').data('url'), { data:changeAnswers }, function(){
                     changeAnswers = {};
                 });
             }
