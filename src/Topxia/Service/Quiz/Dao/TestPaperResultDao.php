@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Quiz\Dao;
 
-interface ItemResultDao
+interface TestPaperResultDao
 {
     public function getResult($id);
     

@@ -112,7 +112,7 @@
 <div class="answerCard" data-spy="affix" data-offset-top="200">
 	<div class="panel panel-default">
 			<div class="panel-heading">
-				剩余:<span id="time_show" data-time="13600"></span>
+				剩余:<span id="time_show" data-time="{{ limitTime }}"></span>
 				<button class="btn btn-sm btn-default pull-right">下次再做</button>
 				<button id="pause" class="btn btn-sm btn-default pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
 			</div>

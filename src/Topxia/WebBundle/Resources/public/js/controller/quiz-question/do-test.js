@@ -94,12 +94,10 @@ define(function(require, exports, module) {
         });
 
         $('body').on('click', '#postPaper, #finishPaper', function(){
-console.log(changeAnswers);
-            
 
-            // $.post($(this).data('url'), {data:changeAnswers}, function(){
-            //     changeAnswers = {};
-            // });
+            $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
+                changeAnswers = {};
+            });
 
         });
 

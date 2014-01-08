@@ -12,6 +12,13 @@ class DoTestController extends BaseController
 	public function indexAction (Request $request, $testId)
 	{
 		//权限！待补充
+
+		$userId = $this->getCurrentUser()->id;
+
+		$testPaper = $this->getTestService()->getTestPaper($testId);
+
+		$this->getTestService()->startTest($testId, $userId, $testPaper);
+
 		//字符串要过滤js and so on
 		$questions = $this->getTestService()->showTest($testId);
 
@@ -19,6 +26,7 @@ class DoTestController extends BaseController
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
+			'limitTime' => $testPaper['limitedTime'] * 60,
 			'testId' => $testId
 		));
 	}
@@ -38,14 +46,18 @@ class DoTestController extends BaseController
 	public function finishTestAction (Request $request, $testId)
 	{
 		if ($request->getMethod() == 'POST') {
-			$answers = $request->request->all();
-			$answers = $answers['data'];
+			$data = $request->request->all();
+			$answers = $data['data'];
+			$remainTime = $data['remainTime'];
+			$userId = $this->getCurrentUser()->id;
 
 			$result = $this->getTestService()->submitTest($answers, $testId);
 
 			$this->getTestService()->makeFinishTestResults($testId);
 
-			exit();
+			$this->getTestService()->finishTest($testId, $userId, $remainTime);
+
+			return $this->createJsonResponse(true);
 		}
 	}
 

@@ -3,7 +3,7 @@
 namespace Topxia\Service\Quiz\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\TestItemResultDaoImpl;
+use Topxia\Service\Quiz\Dao\TestPaperResultDao;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Connection;
 
@@ -81,6 +81,18 @@ class TestPaperResultDaoImpl extends BaseDao implements TestPaperResultDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->executeUpdate($sql, $ids);
+    }
+
+    public function getResultByTestIdAndUserId ($testId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($testId, $userId)) ? : null;
+    }
+
+    public function updateResultByTestIdAndUserId ($testId, $userId, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('testId' => $testId, 'userId' => $userId));
+        return $this->getResultByTestIdAndUserId($testId, $userId);
     }
 
     private function _createSearchQueryBuilder($conditions)

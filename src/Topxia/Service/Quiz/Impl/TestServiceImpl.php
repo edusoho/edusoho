@@ -527,6 +527,31 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testId, $userId);
     }
 
+    public function startTest ($testId, $userId, $testPaper)
+    {
+        $testPaperResult = array(
+            'testId' => $testId,
+            'userId' => $userId,
+            'limitedTime' => $testPaper['limitedTime'],
+            'beginTime' => time(),
+            'status' => 'ongoing'
+        );
+
+        return $this->getTestPaperResultDao()->addResult($testPaperResult);
+    }
+
+    public function finishTest ($testId, $userId, $remainTime)
+    {
+        $fields['remainTime'] = $remainTime;
+        $fields['status'] = 'done';
+        $fields['endTime'] = time();
+
+        return $this->getTestPaperResultDao()->updateResultByTestIdAndUserId($testId, $userId, $fields);
+    }
+
+
+
+
     private function filterTestPaperFields($testPaper)
     {
         if(!ArrayToolkit::requireds($testPaper, array('name', 'itemCounts', 'itemScores', 'target'))){
@@ -588,6 +613,11 @@ class TestServiceImpl extends BaseService implements TestService
     private function getDoTestDao()
     {
         return $this->createDao('Quiz.DoTestDao');
+    }
+
+    private function getTestPaperResultDao()
+    {
+        return $this->createDao('Quiz.TestPaperResultDao');
     }
 
 }
