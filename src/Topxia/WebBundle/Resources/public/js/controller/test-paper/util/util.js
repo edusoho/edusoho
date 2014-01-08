@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Test = {
 
-    	utli: function(){
+    	util: function(){
 
     		var objs = ['sortable','menuTotal'];
 
@@ -14,9 +14,9 @@ define(function(require, exports, module) {
     	},
 
     	menuTotal : function(){
-			var total = 0;
+			var total         = 0;
 			var questionTotal = 0;
-			var questionType = $('#myTab .active a').text();
+			var questionType  = $('#myTab .active a').text();
 			var questionConut = $('[name^=scores]:visible').length;
 
 			$('[name^=scores][type=text]').each(function(){
@@ -37,6 +37,47 @@ define(function(require, exports, module) {
 			$('.score-text-alert').html(html);
     	},
 
+        getMenuAllTotal : function(){
+            var allTotal = new Array();
+
+            $('#myTab li a').each(function (){
+
+                var score  = 0;
+
+                $($(this).attr('href')).find('[name^=scores][type=text]').each(function (index){
+                    score = Number($(this).val()) + Number(score);
+                });
+
+                if (isNaN(score)) {
+                    score = 0;
+                }
+
+                var count = $($(this).attr('href')).find('[name^=scores][type=text]').length;
+
+                var total = {"name":$(this).text(), "score":score, "count":count};
+
+                allTotal.push(total);
+            });
+
+            var allScore = 0;
+
+            $('[name^=scores][type=text]').each(function(){
+                allScore = Number($(this).val()) + Number(allScore);
+            });
+
+            if (isNaN(allScore)) {
+                allScore = 0;
+            }
+
+            var count = $('[name^=scores][type=text]').length;
+
+            var total = {"name":"总计", "score":allScore, "count":count};
+
+            allTotal.push(total);
+            
+            return allTotal;
+        },
+
     	sortable: function(){
     		var seq = 1;
     		$('#myTab li a').each(function(){
@@ -47,7 +88,6 @@ define(function(require, exports, module) {
     					$(this).find('.seq').text(seq);
     					seq ++;
     				}
-    				
     			});
 
     		});

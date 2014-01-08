@@ -101,11 +101,16 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 
     private function _createSearchQueryBuilder($conditions)
     {
+        if (isset($conditions['stem'])) {
+            $conditions['stem'] = "%{$conditions['stem']}%";
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'questions')
             ->andWhere('questionType = :questionType')
             ->andWhere('parentId = :parentId')
             ->andWhere('targetId = :targetId')
+            ->andWhere('stem LIKE :stem')
             ->andWhere('targetType = :targetType');
 
         if(!empty($conditions['parentIds'])){
@@ -121,7 +126,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         if (!empty($conditions['target'])) {
             $target = array();
             foreach ($conditions['target'] as $targetType => $targetIds) {
-                foreach ($targetIds as $key => $targetId) {
+                foreach ($targetIds as  $targetId) {
                     $targetIds[] = (int) $targetId;
                 }
                 

@@ -27,7 +27,7 @@ define(function(require, exports, module) {
                     $('#test-item-table').find('[data-type='+$item.attr('id')+']').remove();
                 }
 
-                Test.MenuTotal();
+                Test.util();
             });
          });
 
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
 
                 $btn.parents('.modal').modal('hide');
 
-                Test.MenuTotal();
+                Test.util();
             });
         });
 

@@ -9,7 +9,7 @@ class TestServiceImpl extends BaseService implements TestService
 {
 	public function getTestPaper($id)
     {
-        return $this->getTestPaperDao()->getTestPaper($id);
+        return TestPaperSerialize::unserialize($this->getTestPaperDao()->getTestPaper($id));
     }
 
     public function createTestPaper($testPaper)
@@ -17,13 +17,13 @@ class TestServiceImpl extends BaseService implements TestService
         $field = $this->filterTestPaperFields($testPaper);
         $field['createdUserId'] = $this->getCurrentUser()->id;
         $field['createdTime']   = time();
-        return $this->getTestPaperDao()->addTestPaper($field);
+        return TestPaperSerialize::unserialize($this->getTestPaperDao()->addTestPaper(TestPaperSerialize::serialize($field)));
     }
 
     public function createUpdateTestPaper($id, $testPaper)
     {
         $field = $this->filterTestPaperFields($testPaper);
-        return $this->getTestPaperDao()->updateTestPaper($id, $field);  
+        return TestPaperSerialize::unserialize($this->getTestPaperDao()->updateTestPaper($id, TestPaperSerialize::serialize($field)));  
     } 
 
     public function updateTestPaper($id, $testPaper)
@@ -48,7 +48,7 @@ class TestServiceImpl extends BaseService implements TestService
     }
 
     public function searchTestPaper(array $conditions, array $orderBy, $start, $limit){
-        return $this->getTestPaperDao()->searchTestPaper($conditions, $orderBy, $start, $limit);
+        return TestPaperSerialize::unserializes($this->getTestPaperDao()->searchTestPaper($conditions, $orderBy, $start, $limit));
     }
 
     public function searchTestPaperCount(array $conditions){
@@ -68,11 +68,11 @@ class TestServiceImpl extends BaseService implements TestService
     	}
 
     	$field = array();
-        $field['testId'] = $testId;
-        $field['questionId'] = $question['id'];
+        $field['testId']       = $testId;
+        $field['questionId']   = $question['id'];
         $field['questionType'] = $question['questionType'];
-        $field['parentId'] = $question['parentId'];
-        $field['score'] = $question['score'];
+        $field['parentId']     = $question['parentId'];
+        $field['score']        = $question['score'];
 
         $item = $this->getTestItemDao()->addItem($field);
 
@@ -81,8 +81,15 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItem($item['id']);
     }
 
-    public function createItems($testId, $ids, $scores)
+    public function createItems($testId, $field)
     {
+        if(empty($field['ids']) || empty($field['scores'])){
+            throw $this->createServiceException('参数不正确');
+        }
+
+        $ids    = $field['ids'];
+        $scores = $field['scores'];
+        
         $diff = array_diff($ids, $scores);
 
         if(empty($diff)){
@@ -103,6 +110,53 @@ class TestServiceImpl extends BaseService implements TestService
             $field['score'] = (int) $scores[$k];
 
             $item = $this->getTestItemDao()->addItem($field);
+        }
+
+        $this->sortTestItemsByTestId($testId);
+    }
+
+    public function updateItems($testId, $field)
+    {
+        if(empty($field['ids']) || empty($field['scores'])){
+            throw $this->createServiceException('参数不正确');
+        }
+
+        $ids    = $field['ids'];
+        $scores = $field['scores'];
+
+        $ids = array_flip($ids);
+        if(count($ids) != count($scores)){
+            throw $this->createServiceException('参数不正确');
+        }
+
+        $items = ArrayToolkit::index($this->findItemsByTestPaperId($testId),'questionId');
+
+
+        $deleteItems = array_diff_key($items, $ids);
+        foreach ($deleteItems as $item) {
+            $this->deleteItem($item['id']);
+        }
+
+        $addIds = array_flip(array_diff_key($ids, $items));
+        foreach ($ids as $k => $id) {
+            $question = $this->getQuestionService()->getQuestion($k);
+
+            if(empty($question)){
+                throw $this->createServiceException();
+            }
+
+            $field = array();
+            $field['testId'] = $testId;
+            $field['questionId'] = $question['id'];
+            $field['questionType'] = $question['questionType'];
+            $field['parentId'] = $question['parentId'];
+            $field['score'] = (int) $scores[$id];
+
+            if(in_array($k, $addIds)){
+                $item = $this->getTestItemDao()->addItem($field);
+            }else{
+                $item = $this->getTestItemDao()->updateItem($items[$k]['id'], $field);
+            }
         }
 
         $this->sortTestItemsByTestId($testId);
@@ -135,6 +189,11 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         $this->getTestItemDao()->deleteItem($id);
+    }
+
+    public function deleteItemsByTestPaperId($id)
+    {
+        $this->getTestItemDao()->deleteItemsByTestPaperId($id);
     }
 
     public function sortTestItems($testId, array $itemIds)
@@ -176,7 +235,7 @@ class TestServiceImpl extends BaseService implements TestService
             }
         }
 
-        $seqType =  explode(',', $testPaper['seq']);
+        $seqType =  explode(',', $testPaper['metas']['question_type_seq']);
         $seqNum = 1;
 
         foreach ($seqType as $type) {
@@ -455,12 +514,16 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createServiceException("target 参数不正确");
         }
 
+        $metas = array( 'question_type_seq' => 
+                implode(',', array_keys($testPaper['itemCounts'])));
+
         $field = array();
 
         $field['name']          = $testPaper['name'];
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
-        $field['seq']           = implode(',',array_keys($testPaper['itemCounts']));
+        $field['pattern']       = 'QuestionType';
+        $field['metas']         = $metas;
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
         $field['updatedUserId'] = $this->getCurrentUser()->id;
@@ -492,4 +555,34 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->createDao('Quiz.DoTestDao');
     }
 
+}
+
+
+class TestPaperSerialize
+{
+    public static function serialize(array $item)
+    {
+        if (isset($item['metas'])) {
+            $item['metas'] = json_encode($item['metas']);
+        }
+
+        return $item;
+    }
+
+    public static function unserialize(array $item = null)
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $item['metas'] = json_decode($item['metas'], true);
+        return $item;
+    }
+
+    public static function unserializes(array $items)
+    {
+        return array_map(function($item) {
+            return TestPaperSerialize::unserialize($item);
+        }, $items);
+    }
 }

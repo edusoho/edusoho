@@ -43,6 +43,12 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
+    public function deleteItemsByTestPaperId($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE testId = ? ";
+        return $this->getConnection()->executeUpdate($sql, array($id));
+    }
+
     public function findItemByIds(array $ids)
     {
         if(empty($ids)){ 
@@ -55,7 +61,7 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
 
     public function findItemsByTestPaperId($testPaperId)
     {
-        $sql ="SELECT * FROM {$this->table} WHERE testId = ? order by `seq` asc;";
+        $sql ="SELECT * FROM {$this->table} WHERE testId = ? order by `seq` asc ";
         return $this->getConnection()->fetchAll($sql, array($testPaperId));
     }
 

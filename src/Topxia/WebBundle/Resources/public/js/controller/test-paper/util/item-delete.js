@@ -25,7 +25,7 @@ define(function(require, exports, module) {
             $btn.parents('[data-role=item]').remove();
             Notify.success('删除' + name + '成功');
             
-            Test.utli();
+            Test.util();
         });
 
 

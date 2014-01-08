@@ -5,7 +5,7 @@
 
 {% set parentId = parentId |default(null)%}
 {% set isEdit = isEdit |default(null)%}
-{% set side_nav = 'base' %}
+{% set side_nav = 'quizQuestion' %}
 {% set script_controller = 'quiz-question/create' %}
 
 {% block main %}
@@ -16,7 +16,7 @@
   </div>
   <div class="panel-body">
 
-  <ol class="breadcrumb">
+    <ol class="breadcrumb">
       <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}">题目管理</a></li>
       {% if parentId %}
         <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId: parentId}) }}">材料题</a></li>
@@ -162,15 +162,19 @@
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
-            {% if isEdit %}
-              <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:question.parentId}) }}" class="btn btn-link">返回</a>
-            {%else%}
-              <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:parentId}) }}" class="btn btn-link">返回</a>
-            {% endif %}
+            
             <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
-            {% if not isEdit %}
-            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
+
+            {% if not isEdit and type != 'material' %}
+                <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
             {% endif %}
+
+            {% if isEdit %}
+                <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:question.parentId}) }}" class="btn btn-link">返回</a>
+            {%else%}
+                <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:parentId}) }}" class="btn btn-link">返回</a>
+            {% endif %}
+
           </div>
         </div>
 

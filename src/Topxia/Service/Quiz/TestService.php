@@ -35,10 +35,12 @@ interface TestService
 
     public function createItem($testId, $questionId);
 
-    public function createItems($testId, $ids, $scores);
+    public function createItems($testId, $field);
 
     public function updateItem($id, $fields);
 
+    public function updateItems($testId, $field);
+    
     public function deleteItem($id);
     
     public function findItemsByTestPaperId($testPaperId);
