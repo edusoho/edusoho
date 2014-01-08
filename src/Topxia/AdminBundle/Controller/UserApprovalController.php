@@ -67,6 +67,8 @@ class UserApprovalController extends BaseController
         if ($request->getMethod() == 'POST') {
             
             $data = $request->request->all();
+            var_dump($data);
+            exit;
             if($data['form_status'] == 'success'){
                 $this->getUserService()->passApproval($id, $data['note']);
             } else if ($data['form_status'] == 'fail') {
@@ -93,9 +95,29 @@ class UserApprovalController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+        $imgConverToData = new ImgConverToData;
+        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> img2Data();
+        $imgData = $imgConverToData -> data2Img();
+        echo $imgData;
+        exit;
+    }
+
+    public function showHeadAction($userId, $type)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $currentUser = $this->getCurrentUser();
+
+        if (empty($currentUser)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        $idcardPath = $type === 'head' ? $userApprovalInfo['headImg'] : $userApprovalInfo['headImg'];
         $imgConverToData = new ImgConverToData;
         $imgConverToData -> getImgDir($idcardPath);
         $imgConverToData -> img2Data();

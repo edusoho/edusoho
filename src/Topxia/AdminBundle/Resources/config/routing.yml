@@ -693,3 +693,7 @@ admin_approval_cancel:
 show_idcard:
     pattern:   approvals/idcard/show/{userId}/{type}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }
+
+show_head:
+    pattern:   approvals/head/show/{userId}/{type}
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:showHead }

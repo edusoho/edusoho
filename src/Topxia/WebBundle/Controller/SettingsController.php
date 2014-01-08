@@ -48,13 +48,14 @@ class SettingsController extends BaseController
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
+            $headImg = $request->files->get('headImg');
             
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg) ) {
                 return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory') . '/approval';
-            $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
+            $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg,$headImg, $directory);
             $this->setFlashMessage('success', '实名认证提交成功！');
             return $this->redirect($this->generateUrl('settings'));
         }

@@ -713,12 +713,17 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($userId, $status);
     }
 
+    public function getLastestApprovalByUserId($userId)
+    {
+        return $this->getUserApprovalDao()->getLastestApprovalByUserId($userId);
+    }
+
     public function findUserApprovalsByUserIds($userIds)
     {
         return $this->getUserApprovalDao()->findApprovalsByUserIds($userIds);
     }
 
-    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory)
+    public function applyUserApproval($userId, $approval, $faceImg, $backImg,$headImg,$directory)
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
@@ -727,12 +732,15 @@ class UserServiceImpl extends BaseService implements UserService
 
         $faceImgPath = 'userFaceImg'.$userId.time().'.'. $faceImg->getClientOriginalExtension();
         $backImgPath = 'userbackImg'.$userId.time().'.'. $backImg->getClientOriginalExtension();
+        $headImgPath = 'userHeadImg'.$userId.time().'.'. $headImg->getClientOriginalExtension();
         $faceImg = $faceImg->move($directory, $faceImgPath);
         $backImg = $backImg->move($directory, $backImgPath);
+        $headImg = $headImg->move($directory, $headImgPath);
         
         $approval['userId'] = $user['id'];
         $approval['faceImg'] = $faceImg->getPathname();
         $approval['backImg'] = $backImg->getPathname();
+        $approval['headImg'] = $headImg->getPathname();
         $approval['status'] = 'approving';
         $approval['createdTime'] = time();
 
@@ -763,8 +771,11 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getProfileDao()->updateProfile($userId, array(
             'truename'=>$lastestApproval['truename'],
-            'idcard'=> $lastestApproval['idcard'])
-        );
+            'idcard'=> $lastestApproval['idcard'],
+            'combile'=> $lastestApproval['combile'],
+            'company'=> $lastestApproval['company'],
+            'job'=> $lastestApproval['job']
+        ));
         
         $currentUser = $this->getCurrentUser();
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );

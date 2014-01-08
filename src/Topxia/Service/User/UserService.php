@@ -174,7 +174,7 @@ interface UserService
 
     public function getLastestApprovalByUserIdAndStatus($userId, $status);
     
-    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
+    public function applyUserApproval($userId, $approval, $faceImg, $backImg,$headImg, $directory);
 
     public function getUsersByApprovalStatus($approvalStatus, $start, $limit);
 
