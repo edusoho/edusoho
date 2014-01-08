@@ -17,10 +17,18 @@ class DoTestController extends BaseController
 
 		$testPaper = $this->getTestService()->getTestPaper($testId);
 
-		$this->getTestService()->startTest($testId, $userId, $testPaper);
+		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
+
+		$this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+	}
+
+	public function showTestAction (Request $request, $id)
+	{
+		//权限！待补充
+
 
 		//字符串要过滤js and so on
-		$questions = $this->getTestService()->showTest($testId);
+		$questions = $this->getTestService()->showTest($id);
 
 		$questions = $this->formatQuestions($questions);
 
@@ -31,13 +39,13 @@ class DoTestController extends BaseController
 		));
 	}
 
-	public function submitTestAction (Request $request, $testId)
+	public function submitTestAction (Request $request, $id)
 	{
 		if ($request->getMethod() == 'POST') {
 			$answers = $request->request->all();
 			$answers = $answers['data'];
 
-			$result = $this->getTestService()->submitTest($answers, $testId);
+			$result = $this->getTestService()->submitTest($answers, $id);
 
 			return $this->createJsonResponse(true);
 		}
@@ -53,7 +61,9 @@ class DoTestController extends BaseController
 
 			$result = $this->getTestService()->submitTest($answers, $testId);
 
-			$this->getTestService()->makeFinishTestResults($testId);
+			$testResults = $this->getTestService()->makeFinishTestResults($testId);
+
+
 
 			$this->getTestService()->finishTest($testId, $userId, $remainTime);
 

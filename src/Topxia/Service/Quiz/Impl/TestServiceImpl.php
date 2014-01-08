@@ -283,9 +283,20 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
     }
 
-    public function showTest ($testId)
+    public function showTest ($id)
     {
-        $items = $this->findItemsByTestPaperId($testId);
+        $userId = $this->getCurrentUser()->id;
+
+        $testResult = $this->getTestPaperResultDao()->getResult($id);
+        //如果试卷属于暂停状态，则改成doing继续做
+        if ($testResult['status'] == 'paused') {
+            $testResult = $this->getTestPaperResultDao()->updateResult($id, array('status' => 'doing'));
+        }
+        if (in_array($testResult['status'], array('reviewing', 'finished'))) {
+            throw $this->createServiceException('已交卷的试卷无法继续做题!');
+        }
+
+        $items = $this->findItemsByTestPaperId($testResult['testId']);
         //材料题的id
         $materialIds = $this->findMaterial($items);
         $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
@@ -396,6 +407,8 @@ class TestServiceImpl extends BaseService implements TestService
 
         $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testId, $userId);
         $this->getDoTestDao()->addItemResults($results['newAnswers'], $testId, $userId);
+
+        return $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
     }
 
     private function makeTestResults ($answers, $questions)
@@ -546,18 +559,26 @@ class TestServiceImpl extends BaseService implements TestService
         return ArrayToolkit::column($items, 'questionId');
     }
 
-    public function submitTest ($answers, $testId)
+    public function submitTest ($answers, $id)
     {
         if (empty($answers)) {
             return array();
         }
+//是否需要校验test_paper_result表中的userId跟当前用户id是否一致
+        $user = $this->getCurrentUser();
+
+        $testResult = $this->getTestPaperResultDao()->getResult($id);
+        if (in_array($testResult['status'], array('reviewing', 'finished'))) {
+            throw $this->createServiceException("已经交卷的试卷不能更改答案!");
+        }
+
 
         $answers = array_map(function($answer){
             return json_encode($answer);
         }, $answers);
 
         //过滤待补充
-        $user = $this->getCurrentUser();
+        
         //已经有记录的
         $itemResults = $this->filterTestAnswers($answers, $testId, $user['id']);
         $itemIdsOld = ArrayToolkit::index($itemResults, 'questionId');
@@ -588,12 +609,13 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function startTest ($testId, $userId, $testPaper)
     {
+
         $testPaperResult = array(
             'testId' => $testId,
             'userId' => $userId,
             'limitedTime' => $testPaper['limitedTime'],
             'beginTime' => time(),
-            'status' => 'ongoing'
+            'status' => 'doing'
         );
 
         return $this->getTestPaperResultDao()->addResult($testPaperResult);
@@ -601,14 +623,36 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function finishTest ($testId, $userId, $remainTime)
     {
+        $testResults = $this->getDoTestDao()->findTestResultsByTestIdAndUserId($testId, $userId);
+
+        $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
+
+        $fields['score'] = $this->sumScore($testResults);
+
         $fields['remainTime'] = $remainTime;
-        $fields['status'] = 'done';
         $fields['endTime'] = time();
 
         return $this->getTestPaperResultDao()->updateResultByTestIdAndUserId($testId, $userId, $fields);
     }
 
+    private function isExistsEssay ($testResults)
+    {
+        foreach ($testResults as $value) {
+            if ($value['questionType'] == 'essay') {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private function sumScore ($testResults)
+    {
+        $score = 0;
+        foreach ($testResults as $value) {
+            $score += $value['score'];
+        }
+        return $score;
+    }
 
 
     private function filterTestPaperFields($testPaper)

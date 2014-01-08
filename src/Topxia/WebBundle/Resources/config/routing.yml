@@ -513,6 +513,10 @@ course_manage_do_test:
     pattern: /do/test/{testId}
     defaults: { _controller: TopxiaWebBundle:DoTest:index }
 
+course_manage_show_test:
+    pattern: /show/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:showTest }
+
 course_manage_do_test_pause:
     pattern: /pause/test
     defaults: { _controller: TopxiaWebBundle:DoTest:testPause }
