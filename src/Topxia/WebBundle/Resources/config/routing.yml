@@ -522,15 +522,15 @@ course_manage_do_test_pause:
     defaults: { _controller: TopxiaWebBundle:DoTest:testPause }
 
 course_manage_submit_test:
-    pattern: /submit/test/{testId}
+    pattern: /submit/test/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:submitTest }
 
 course_manage_finish_test:
-    pattern: /finish/test/{testId}
+    pattern: /finish/test/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:finishTest }
 
 course_manage_test_results:
-    pattern: /test/results/{testId}
+    pattern: /test/results/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
 
 course_manage_test_paper_create:

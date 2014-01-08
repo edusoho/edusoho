@@ -35,7 +35,7 @@ class DoTestController extends BaseController
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
 			'limitTime' => $testPaper['limitedTime'] * 60,
-			'testId' => $testId
+			'id' => $id
 		));
 	}
 
@@ -51,7 +51,7 @@ class DoTestController extends BaseController
 		}
 	}
 
-	public function finishTestAction (Request $request, $testId)
+	public function finishTestAction (Request $request, $id)
 	{
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
@@ -59,22 +59,23 @@ class DoTestController extends BaseController
 			$remainTime = $data['remainTime'];
 			$userId = $this->getCurrentUser()->id;
 
-			$result = $this->getTestService()->submitTest($answers, $testId);
+			//提交变化的答案
+			$results = $this->getTestService()->submitTest($answers, $id);
 
-			$testResults = $this->getTestService()->makeFinishTestResults($testId);
+			//完成试卷，计算得分
+			$testResults = $this->getTestService()->makeFinishTestResults($id);
 
-
-
-			$this->getTestService()->finishTest($testId, $userId, $remainTime);
+			//试卷信息记录
+			$this->getTestService()->finishTest($id, $userId, $remainTime);
 
 			return $this->createJsonResponse(true);
 		}
 	}
 
-	public function testResultsAction (Request $request, $testId)
+	public function testResultsAction (Request $request, $id)
 	{
 
-		$questions = $this->getTestService()->testResults($testId);
+		$questions = $this->getTestService()->testResults($id);
 
 		$accuracy = $this->makeAccuracy($questions);
 
@@ -83,7 +84,7 @@ class DoTestController extends BaseController
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-results-layout.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
-			'testId' => $testId
+			'id' => $id
 		));
 	}
 
