@@ -7,7 +7,6 @@ use Topxia\Common\Paginator;
 
 class QuizQuestionTestController extends BaseController
 {
-
 	public function indexAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
@@ -35,13 +34,14 @@ class QuizQuestionTestController extends BaseController
 
 		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testPapers, 'updatedUserId')); 
-
+		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:index.html.twig', array(
 			'course' => $course,
 			'testPapers' => $testPapers,
 			'users' => $users,
 			'lessons' => $lessons,
 			'paginator' => $paginator,
+
 		));
 	}
 
@@ -90,6 +90,9 @@ class QuizQuestionTestController extends BaseController
 
 	    	$testPaper = $request->request->all();
 	        $result = $this->getTestService()->updateTestPaper($testPaper['testPaperId'], $testPaper);
+
+	        $this->setFlashMessage('success', '试卷修改成功！');
+
 			return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
         }
 
@@ -111,14 +114,23 @@ class QuizQuestionTestController extends BaseController
 	public function updateResetAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-
 		$testPaper = $request->query->all();
+
+		if(empty($testPaper['testPaperId'])){
+			throw $this->createNotFoundException('缺少参数');
+		}
+
+		$this->getTestService()->deleteItemsByTestPaperId($testPaper['testPaperId']);
 
 	    if ($request->getMethod() == 'POST') {
 
 	    	$testPaper = $request->request->all();
-	        $result = $this->getTestService()->updateTestPaper($testPaper['testPaperId'], $testPaper);
-			return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
+
+			$testPaper['courseId']    = $courseId;
+			$testPaper['testPaperId'] = $testPaper['testPaperId'];
+			$testPaper['flag']        = 'reset';
+
+			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
         }
 
         if(empty($testPaper['target'])){
@@ -130,7 +142,7 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:update-reset-1.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:update-reset.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
 		));
@@ -140,63 +152,55 @@ class QuizQuestionTestController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
+		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
+		if(empty($testPaper)){
+			throw $this->createNotFoundException('试卷不存在');
+		}
+
+		$flag = $request->query->get('flag');
+		$flag   = empty($flag) ? null : $flag;
+
 		if ($request->getMethod() == 'POST') {
 
-	    	$ids = $request->request->get('ids');
-	    	$scores = $request->request->get('scores');
+	    	$field    = $request->request->all();
 
-        	$this->getTestService()->createItems($testPaperId, $ids, $scores);
+	    	if ($flag = 'update'){
+
+        		$this->getTestService()->updateItems($testPaperId, $field);
+	    	} else {
+
+        		$this->getTestService()->createItems($testPaperId, $field);
+	    	}
+
+	    	$this->setFlashMessage('success', '试卷题目保存成功！');
 
         	return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
         }
-		
-		$counts = $request->query->get('itemCounts');
-		$scores = $request->query->get('itemScores');
 
-		$parentTestPaper = $request->query->all();
+		$parentTestPaper  = array_merge($request->query->all(), $testPaper);
 
-		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-
-		$parentTestPaper = array_merge($parentTestPaper, $testPaper);
-
-        $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByCourseId($courseId), 'id');
-
-        $newQuestions = array();
-        foreach ($questions as $question) {
-
-        	if($question['parentId'] != 0) {
-        		$question['score'] = $scores['material'] == 0 ? $question['score'] : $scores['material'];
-        		$sonQuestions[$question['parentId']][] = $question;
-        	}else{
-        		$question['score'] = $scores[$question['questionType']] == 0 ? $question['score'] : $scores[$question['questionType']];
-        		$newQuestions[$question['questionType']][] = $question;
-        	}
-        }
-
-        $seq = explode(',', $testPaper['seq']);
-        $randQuestions = array();
-        foreach ($seq as $type) {
-
-        	for($i = 0;$i<$counts[$type];$i++){
-        		$rand = array_rand($newQuestions[$type]);
-        		$randQuestions[] = $newQuestions[$type][$rand];
-        		unset($newQuestions[$type][$rand]);
-        	}	
-        }
-
-		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 		$dictQuestionType = $this->getWebExtension()->getDict('questionType');
 
-		// $items     = $this->getTestService()->findItemsByTestPaperId($testPaperId);
-		// $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
+		$lessons          = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
+
+		$items = array();
+		if($flag == 'update'){
+
+			$items     = ArrayToolkit::index($this->getTestService()->findItemsByTestPaperId($testPaperId), 'questionId');
+		    $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
+		} else {
+
+			$questions = $this->getQuestionService()->findRandQuestions($courseId, $testPaperId, $parentTestPaper);
+		}
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2.html.twig', array(
 			'course' => $course,
-			// 'items' => $items,
-			'questions' => $randQuestions,
-			'sonQuestions' => $sonQuestions,
+			'items' => $items,
+			'questions' => $questions,
 			'testPaper' => $testPaper,
 			'parentTestPaper' => $parentTestPaper,
 			'lessons' => $lessons,
+			'flag' => $flag,
 		));
 	}
 
@@ -225,7 +229,6 @@ class QuizQuestionTestController extends BaseController
 
         $conditions['parentId'] = 0;
         $conditions['notId']    = explode(',', $ids);
-        // $conditions['notId']    = $itemIds;
         $conditions[$type['0']] = $type['1'];
 
         $paginator = new Paginator(
@@ -291,37 +294,18 @@ class QuizQuestionTestController extends BaseController
 
 		$course    = $this->getCourseService()->tryManageCourse($courseId);
 		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
-
-		$question  = $this->getQuestionService()->getQuestion($questionId);
-		
+	
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
 
 		$questions = $this->getQuestionService()->findQuestionsByParentIds(array($questionId));
 
-		$questions[] = $question;
+		$questions[] = $this->getQuestionService()->getQuestion($questionId);
 
-		$newQuestions = array();
-        foreach ($questions as $question) {
-
-        	if($question['parentId'] != 0) {
-        		$sonQuestions[$question['parentId']][] = $question;
-        	}else{
-        		$newQuestions[$question['questionType']][] = $question;
-        	}
-        }
-
-		// if (!empty($replaceId)){
-		// 	$item = $this->getTestService()->updateItem($replaceId, $questionId);
-		// } else {
-		// 	$item = $this->getTestService()->createItem($testPaperId, $questionId);
-		// }
-        
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2-tbody.html.twig', array(
 			'course' => $course,
 			'testPaper' => $testPaper,
 			'questions' => $questions,
 			'lessons' => $lessons,
-			'seq' => 0,
 		));
 	}
 
@@ -329,112 +313,48 @@ class QuizQuestionTestController extends BaseController
     {
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $dictQuestionType = $this->getWebExtension()->getDict('questionType');
-		$dictDifficulty   = $this->getWebExtension()->getDict('difficulty');
+		$field = $request->request->all();
 
-		$isDiffculty = $request->request->get('isDiffculty');
-		$itemCounts  = $request->request->get('itemCounts');
+        $field['questionType'] = $this->getWebExtension()->getDict('questionType');
 
-		$diff = array_diff($itemCounts, $dictQuestionType);
+        $field['difficulty']   = $this->getWebExtension()->getDict('difficulty');
 
-		if(empty($diff)){
-        	throw $this->createNotFoundException('参数错误');
-        }
-		
-		$perventage['0'] = 10;
-		$perventage['1'] = 40;
-		$perventage['2'] = 50;
-
-        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
-        	throw $this->createNotFoundException('参数错误');
-        }
-
-        $questionNumbers = $this->getQuestionService()->findQuestionsTypeNumberByCourseId($courseId);
-
-        $message = array();
-        foreach ($itemCounts as $item) {
-
-        	list($type, $num) = $item;
-
-        	if ($num == 0)
-        		continue;
-
-        	if ($isDiffculty == 1 ){
-        		$needNums = array();
-				$needNums['simple']     = (int) ($num * $perventage['0'] /100); 
-				$needNums['ordinary']   = (int) ($num * $perventage['1'] /100); 
-				$needNums['difficulty'] = (int) ($num * $perventage['2'] /100); 
-
-	        	$otherNum = $num - ($needNums['simple'] + $needNums['ordinary'] + $needNums['difficulty']);
-
-	        	if ($otherNum != 0){
-	        		$randNum = array_rand($needNums, 1);
-	        		$needNums[$randNum] = $needNums[$randNum] + $otherNum;
-	        	}
-
-	        	foreach ($needNums as $difficulty => $needNum) {
-	        		if(empty($questionNumbers[$type][$difficulty])) {
-
-	        			if($needNum != 0)
-	        				$message[] = "{$dictQuestionType[$type]}中{$dictDifficulty[$difficulty]}缺少{$needNum}题 <br>";
-	        		}
-	        		else if(($needNum - $questionNumbers[$type][$difficulty]) < 0) {
-
-	        			$needNum = abs($needNum - $questionNumbers[$type][$difficulty]);
-	        			$message[] = "{$dictQuestionType[$type]}中{$dictDifficulty[$difficulty]}缺少{$needNum}题 <br>";
-	        		}
-	        	}
-        	} else {
-        		if(empty($questionNumbers[$type])){
-
-        			$message[] = "{$dictQuestionType[$type]}缺少{$num}题 <br>";
-
-        		}else{
-
-        			$typeSum = 0;
-        			foreach ($questionNumbers[$type] as $questionNumber) {
-
-	        			$typeSum = $questionNumber + $typeSum;
-	        		}
-	        		if( ($typeSum - $num) < 0) {
-
-	        			$needNum = abs($typeSum - $num);
-	        			$message[] = "{$dictQuestionType[$type]}缺少{$needNum}题 <br>";
-	        		}
-        		}
-        	}
-
-        }
-
-        if(empty($message)){
-        	$message = false;
-        }
-
-        return $this->createJsonResponse($message);
+        return $this->createJsonResponse($this->getQuestionService()->checkQuesitonNumber($field, $courseId));
     }
+
     public function deleteItemAction(Request $request, $courseId, $testItemId)
     {
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+
         $item = $this->getTestService()->getTestItem($testItemId);
+
         if (empty($item)) {
             throw $this->createNotFoundException();
         }
+
         $this->getTestService()->deleteItem($testItemId);
+
         return $this->createJsonResponse(true);
     }
 
     public function deleteItemsAction(Request $request, $courseId)
     {   
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+
         $ids = $request->request->get('ids');
+
         if(empty($ids)){
         	throw $this->createNotFoundException();
         }
+
         foreach ($ids as $id) {
         	$this->getTestService()->deleteItem($id);
         }
+
         return $this->createJsonResponse(true);
     }
+
+
 
 	private function getCourseService()
     {

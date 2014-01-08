@@ -3,7 +3,7 @@ namespace Topxia\Service\Quiz;
 
 interface QuestionService
 {
-    /*
+    /**
      *  quiz_question
      */
 
@@ -22,14 +22,18 @@ interface QuestionService
     public function findQuestionsByCourseId($courseId);
 
     public function findQuestionsTypeNumberByCourseId($courseId);
-    
-    /*
+
+    public function checkQuesitonNumber($field, $courseId);
+
+    public function findRandQuestions($courseId, $testPaperId, $field);
+
+    /**
      *  quiz_question_choice
      */
 
     public function findChoicesByQuestionIds(array $id);
 
-    /*
+    /**
      *  quiz_question_category
      */
     
@@ -42,5 +46,13 @@ interface QuestionService
     public function findCategorysByCourseIds(array $id);
 
     public function sortCategories($courseId, array $categoryIds);
+
+
+    /**
+     *  
+     */
+
+    public function findQuestionTargets($courseId);
+
 
 }

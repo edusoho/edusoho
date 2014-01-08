@@ -6,7 +6,6 @@ define(function(require, exports, module) {
     	var item = new ItemBase({
         	element: '#test-item-container'
 	    });
-
     }
 
 });

@@ -109,11 +109,10 @@ define(function(require, exports, module) {
             }
 
             $.each(categorys, function(index, target){
-                var value = target.type+'-'+target.id;
-                if(value == selected){
-                    options += '<option selected=selected value=' + value + '>' + target.name + '</option>';
+                if(index == selected){
+                    options += '<option selected=selected value=' + index + '>' + target + '</option>';
                 }else{
-                    options += '<option value=' + value + '>' + target.name + '</option>';
+                    options += '<option value=' + index + '>' + target + '</option>';
                 }
             });
             

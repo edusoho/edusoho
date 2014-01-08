@@ -1,6 +1,6 @@
  <tr {% if question.parentId == 0 %} class="questionType" {% endif %} id="{{question.id}}"  data-role='item' data-type='{% if question.parentId != 0 %}{{question.parentId}}{% else %}{{question.questionType}}{% endif %}' >
     <td >
-        <input class="notMoveHandle" type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
+        <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
     </td>
 
     <td class="seq"> </td>
@@ -25,7 +25,8 @@
     
     <td >
         <input name="ids[]" type="hidden" value="{{question.id}}" /></input>
-        <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.questionType != 'material' %}type="text"{% else %} type="hidden" {% endif %} value="{{question.score}}" /></input>
+        <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.questionType != 'material' %} type="text" {% else %} type="hidden" 
+            {% endif %} value="{% if flag | default(null) and items[question.id]['score'] | default(null) %}{{ items[question.id]['score']}}{% else %}{{question.score}}{% endif %}" /></input>
     </td>
 
     <td>

@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
             Notify.success('删除' + name + '成功');
 
-            Test.utli();
+            Test.util();
 
         });
 

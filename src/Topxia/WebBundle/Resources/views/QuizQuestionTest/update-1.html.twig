@@ -17,6 +17,11 @@
 
   <div class="panel-body">
 
+  <ol class="breadcrumb">
+      <li><a href="{{ path('course_manage_test_paper',{courseId:course.id}) }}">试卷管理</a></li>
+      <li class="active">修改试卷</li>
+  </ol>
+
     <div id="test-creator-widget">
       <form id="test-update-form" class="form-horizontal quiz-test" method="post" >
         {{ web_macro.flash_messages() }}
@@ -49,8 +54,8 @@
   
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
-            <button type="submit" class="btn btn-primary  pull-right" >保存</button>
-            <a href="{{ path('course_manage_test_paper',{courseId:course.id}) }}" class="btn btn-link  pull-right">返回</a>
+            <button type="submit" class="btn btn-primary  " >保存</button>
+            <a href="{{ path('course_manage_test_paper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>
           </div>
         </div>
 
