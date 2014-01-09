@@ -27,7 +27,9 @@
 				正确答案：{{ keys|join(',') }} . 您选择了: {{ keys_answer|join(',') }}
 			{% endif %}
 
-			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% if  question.analysis == null %}
+				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% endif %}
 		</div>
 	{% else %}
 		<div class="panel-footer">

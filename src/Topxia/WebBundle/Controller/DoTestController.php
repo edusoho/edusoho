@@ -78,6 +78,10 @@ class DoTestController extends BaseController
 	public function testResultsAction (Request $request, $id)
 	{
 
+		$paperResult = $this->getTestService()->getTestPaperResult($id);
+
+		$paper = $this->getTestService()->getTestPaper($paperResult['testId']);
+
 		$questions = $this->getTestService()->testResults($id);
 
 		$accuracy = $this->makeAccuracy($questions);
@@ -87,6 +91,8 @@ class DoTestController extends BaseController
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-results-layout.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
+			'paper' => $paper,
+			'paperResult' => $paperResult,
 			'id' => $id
 		));
 	}
@@ -95,6 +101,7 @@ class DoTestController extends BaseController
     {
     	$results = array();
         foreach ($questions as $key => $question) {
+
             if ($question['questionType'] == 'material') {
                 $results = array_merge($results, $question['questions']);
             } else {
@@ -106,20 +113,25 @@ class DoTestController extends BaseController
 			'right' => 0,
 			'wrong' => 0,
 			'noAnswer' => 0,
-			'all' => 0
+			'all' => 0,
+			'score' => 0,
+			'totalScore' => 0
 		);
 		$accuracy = array(
 			'single_choice' => $accuracyResult,
 			'choice' => $accuracyResult,
 			'determine' => $accuracyResult,
-			'fill' => $accuracyResult
+			'fill' => $accuracyResult,
+			'essay' => $accuracyResult
 		);
 
 		foreach ($results as $value) {
 
-			if (!in_array($value['questionType'], array('single_choice', 'choice', 'determine', 'fill'))) {
-				continue;
-			}
+			// if (!in_array($value['questionType'], array('single_choice', 'choice', 'determine', 'fill'))) {
+			// 	continue;
+			// }
+			$accuracy[$value['questionType']]['score'] += $value['testResult']['score'];
+			$accuracy[$value['questionType']]['totalScore'] += $value['itemScore'];
 
 			$accuracy[$value['questionType']]['all']++;
 			if ($value['testResult']['status'] == 'right'){
