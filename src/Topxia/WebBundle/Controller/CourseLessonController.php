@@ -76,7 +76,11 @@ class CourseLessonController extends BaseController
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
                         } else {
-                            $key = null;
+                            if ($file['type'] == 'video') {
+                                $key = null;
+                            } else {
+                                $key = $file['hashId'];
+                            }
                         }
 
                         if ($key) {
