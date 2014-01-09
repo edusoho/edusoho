@@ -45,4 +45,6 @@ interface TestService
     
     public function findItemsByTestPaperId($testPaperId);
 
+    public function buildTestPaper($testPaperId,$options,$builder);
+
 }
