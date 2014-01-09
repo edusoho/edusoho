@@ -1,24 +1,44 @@
 <div class="panel panel-default choice" id="question{{ question.id }}">
 	<div class="panel-heading">
 		<h3 class="panel-title">{{ questionIndex }}. {{ question.stem }}</h3>
-		<a class="btn btn-sm" style="float:right;"><span class="glyphicon glyphicon-bookmark">标记</span></a>
 	</div>
+	{% set keys = [] %}
+	{% set keys_answer = [] %}
 	<div class="panel-body">
 		<ul class="list-unstyled">
-			{% set label_index = 65 %}
-			{% for choice in question.choices %}
-				<li>{{ label_index|chr }}. {{ choice.content }}</li>
-				{% set label_index = label_index + 1 %}
+			{% for key, choice in question.choices %}
+				<li>{{ choice.choiceIndex }}. {{ choice.content }}</li>
+
+				{% if key in question.answer %}
+					{% set keys = keys|merge([choice.choiceIndex]) %}
+				{% endif  %}
+				{% if key in question.testResult.answer|default([]) %}
+					{% set keys_answer = keys_answer|merge([choice.choiceIndex]) %}
+				{% endif %}
+
 			{% endfor %}
 		</ul>
 	</div>
-	<div class="panel-footer">
-		{% set label_index = 65 %}
-		{% for choice in question.choices %}
-			<label class="checkbox-inline">
-				{{ label_index|chr }}<input type="checkbox" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}">
-			</label> 
-			{% set label_index = label_index + 1 %}
-		{% endfor %}
-	</div>
+	{% if question.testResult|default(null) %}
+		<div class="panel-footer">
+			{% if question.testResult.status == 'right' %}
+				正确答案：{{ keys|join(',') }} . 您做对了！
+			{% elseif question.testResult.status == 'wrong' %}
+				正确答案：{{ keys|join(',') }} . 您选择了: {{ keys_answer|join(',') }}
+			{% endif %}
+
+			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+		</div>
+	{% else %}
+		<div class="panel-footer">
+			{% set label_index = 65 %}
+			{% for choice in question.choices %}
+				<label class="checkbox-inline">
+					{{ label_index|chr }}<input type="checkbox" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}">
+				</label> 
+				{% set label_index = label_index + 1 %}
+			{% endfor %}
+			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+		</div>
+	{% endif %}
 </div>

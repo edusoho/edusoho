@@ -12,55 +12,82 @@ class DoTestController extends BaseController
 	public function indexAction (Request $request, $testId)
 	{
 		//权限！待补充
+
+		$userId = $this->getCurrentUser()->id;
+
+		$testPaper = $this->getTestService()->getTestPaper($testId);
+
+		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
+
+		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+	}
+
+	public function showTestAction (Request $request, $id)
+	{
+		//权限！待补充
+
+		$testResult = $this->getTestService()->getTestPaperResult($id);
+		if (!$testResult) {
+			throw $this->createNotFoundException('试卷不存在!');
+		}
 		//字符串要过滤js and so on
-		$questions = $this->getTestService()->showTest($testId);
+		$questions = $this->getTestService()->showTest($id);
 
 		$questions = $this->formatQuestions($questions);
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
-			'testId' => $testId
+			'limitTime' => $testResult['limitedTime'] * 60,
+			'id' => $id
 		));
 	}
 
-	public function submitTestAction (Request $request, $testId)
+	public function submitTestAction (Request $request, $id)
 	{
 		if ($request->getMethod() == 'POST') {
 			$answers = $request->request->all();
 			$answers = $answers['data'];
 
-			$result = $this->getTestService()->submitTest($answers, $testId);
+			$result = $this->getTestService()->submitTest($answers, $id);
 
 			return $this->createJsonResponse(true);
 		}
 	}
 
-	public function finishTestAction (Request $request, $testId)
+	public function finishTestAction (Request $request, $id)
 	{
 		if ($request->getMethod() == 'POST') {
-			$answers = $request->request->all();
-			$answers = $answers['data'];
+			$data = $request->request->all();
+			$answers = $data['data'];
+			$remainTime = $data['remainTime'];
+			$userId = $this->getCurrentUser()->id;
 
-			$result = $this->getTestService()->submitTest($answers, $testId);
+			//提交变化的答案
+			$results = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->makeFinishTestResults($testId);
+			//完成试卷，计算得分
+			$testResults = $this->getTestService()->makeFinishTestResults($id);
 
-			exit();
+			//试卷信息记录
+			$this->getTestService()->finishTest($id, $userId, $remainTime);
+
+			return $this->createJsonResponse(true);
 		}
 	}
 
-	public function testResultsAction (Request $request, $testId)
+	public function testResultsAction (Request $request, $id)
 	{
 
-		$results = $this->getTestService()->testResults($testId);
+		$questions = $this->getTestService()->testResults($id);
 
-		$accuracy = $this->makeAccuracy($results);
-// var_dump($results);exit();
+		$accuracy = $this->makeAccuracy($questions);
+
+		$questions = $this->formatQuestions($questions);
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-results-layout.html.twig', array(
-			'results' => $results,
+			'questions' => $questions,
 			'accuracy' => $accuracy,
-			'testId' => $testId
+			'id' => $id
 		));
 	}
 
@@ -90,20 +117,18 @@ class DoTestController extends BaseController
 
 		foreach ($results as $value) {
 
-			if ($value['questionType'] == 'fill') {
-				$accuracy[$value['questionType']]['right'] += $value['result'];
-				$accuracy[$value['questionType']]['all'] += count($value['answer']);
+			if (!in_array($value['questionType'], array('single_choice', 'choice', 'determine', 'fill'))) {
 				continue;
 			}
 
 			$accuracy[$value['questionType']]['all']++;
-			if ($value['result'] == 'right'){
+			if ($value['testResult']['status'] == 'right'){
 				$accuracy[$value['questionType']]['right']++;
 			}
-			if ($value['result'] == 'wrong'){
+			if ($value['testResult']['status'] == 'wrong'){
 				$accuracy[$value['questionType']]['wrong']++;
 			}
-			if ($value['result'] == 'noAnswer'){
+			if ($value['testResult']['status'] == 'noAnswer'){
 				$accuracy[$value['questionType']]['noAnswer']++;
 			}
 		}
@@ -115,26 +140,33 @@ class DoTestController extends BaseController
 	{
 		$formatQuestions = array();
 		foreach ($questions as $key => $value) {
-			if ($value['questionType'] == 'single_choice') {
-				$formatQuestions['single_choice'][$key] = $value;
+
+			if(in_array($value['questionType'], array('single_choice', 'choice'))) {
+				$i = 65;
+				foreach ($value['choices'] as $key => $v) {
+					$v['choiceIndex'] = chr($i);
+					$value['choices'][$key] = $v;
+					$i++;
+				}
 			}
-			if ($value['questionType'] == 'choice') {
-				$formatQuestions['choice'][$key] = $value;
-			}
-			if ($value['questionType'] == 'determine') {
-				$formatQuestions['determine'][$key] = $value;
-			}
-			if ($value['questionType'] == 'fill') {
-				$formatQuestions['fill'][$key] = $value;
-			}
-			if ($value['questionType'] == 'essay') {
-				$formatQuestions['essay'][$key] = $value;
-			}
+
 			if ($value['questionType'] == 'material') {
-				$formatQuestions['material'][$key] = $value;
+				$value['questions'] = $this->formatQuestions($value['questions']);
+			}
+
+			if ($value['targetId'] != 0) {
+				$formatQuestions[$value['questionType']][$key] = $value;
+			} else {
+				$formatQuestions[$key] = $value;
 			}
 		}
+
 		return $formatQuestions;
+	}
+
+	public function testPauseAction(Request $request)
+	{
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig'); 
 	}
 
    	private function getQuestionService()

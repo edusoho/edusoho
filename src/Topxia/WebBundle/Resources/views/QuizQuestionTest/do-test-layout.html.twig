@@ -3,12 +3,6 @@
 {% set script_controller = 'quiz-question/do-test' %}
 
 {% block content %}
-<div class="well">
-  <h1>Example page header</h1>
-  <p>asgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasg</p>
-  <small>fasgsadgsadgasgsag</small>
-</div>
-
 <style type="text/css">
 	.affix.questionBar {
 		top: 0;
@@ -22,7 +16,7 @@
 		padding-right: 30px;
 	}
 	.affix.answerCard .panel {
-		width: 20%;
+		width: 24%;
 		float: right;
 	}
 
@@ -35,8 +29,17 @@
 	}
 
 	.answerCard {
-		width: 20%;
+		width: 24%;
 		float: right;
+	}
+
+	.answerCard .panel-heading {
+		line-height: 30px;
+		height:50px;
+	}
+
+	.answerCard .panel-heading button {
+		margin-left: 5px;
 	}
 
 	.answerCard .panel-body a.btn {
@@ -73,9 +76,11 @@
 		word-wrap: break-word; 
 		word-break: normal; 
 		display:inline-block;
-		width:80%;
 	}
-	.panel-heading a.btn {
+	.panel-footer {
+		min-height: 50px;
+	}
+	.panel-footer a.btn {
 		box-shadow: 0 0 0;
 	}
 
@@ -87,6 +92,14 @@
 	}
 
 </style>
+
+<div class="well">
+  <h1>Example page header</h1>
+  <p>asgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasgasgadsgsagasg</p>
+  <small>fasgsadgsadgasgsag</small>
+</div>
+
+
 <div class="questionBar" data-spy="affix" data-offset-top="200">
 	<ul class="nav nav-pills nav-justified">
 		<li><a href="#choice">选择</a></li>
@@ -99,7 +112,9 @@
 <div class="answerCard" data-spy="affix" data-offset-top="200">
 	<div class="panel panel-default">
 			<div class="panel-heading">
-
+				剩余:<span id="time_show" data-time="{{ limitTime }}"></span>
+				<button class="btn btn-sm btn-default pull-right">下次再做</button>
+				<button id="pause" class="btn btn-sm btn-default pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
 			</div>
 			<div class="panel-body">
 				{% set index = 1 %}
@@ -137,22 +152,23 @@
 
 			</div>
 			<div class="panel-footer">
-				<button class="btn btn-success" style="width:100%" id="postPaper" data-url="{{ path('course_manage_submit_test', { testId: testId }) }}">我要交卷</button>
-				<button class="btn btn-success" style="width:100%" id="finishPaper" data-url="{{ path('course_manage_finish_test', { testId: testId }) }}">我真的要交卷</button>
+				<button class="btn btn-success btn-block" id="postPaper" data-url="{{ path('course_manage_submit_test', { id: id }) }}">其实我是ajax来的间谍哦~</button>
+				<button class="btn btn-success btn-block" id="finishPaper" data-url="{{ path('course_manage_finish_test', { id: id }) }}">我真的要交卷</button>
 			</div>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-md-9">
-<div data-spy="scroll" data-target=".questionBar">
-	{% block main%}
-	{% endblock %}
-</div>
+		<div data-spy="scroll" data-target=".questionBar">
+	{# {% block main%}
+	{% endblock %} #}
+			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
+		</div>
 
-</div>
-<div class="col-md-3">
-</div>
+	</div>
+	<div class="col-md-3">
+	</div>
 
 </div>
 	
