@@ -20,8 +20,6 @@
               <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}">课程图片</a>
               <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a>
               <a class="list-group-item {% if side_nav == 'files' %}active{% endif %}" href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a>
-              <a class="list-group-item {% if side_nav == 'quizQuestion' %}active{% endif %}" href="{{ path('course_manage_quiz_question', {courseId:course.id}) }}">题目管理</a>
-              <a class="list-group-item {% if side_nav == 'testPaper' %}active{% endif %}" href="{{ path('course_manage_test_paper', {courseId:course.id}) }}">试卷管理</a>
             </div>
           </div><!-- /list-group-block -->
 
@@ -33,6 +31,15 @@
               <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a>
             </div>
           </div>
+
+          <div class="list-group-panel">
+            <div class="list-group-heading">题库</div>
+            <div class="list-group">
+              <a class="list-group-item {% if side_nav == 'quizQuestion' %}active{% endif %}" href="{{ path('course_manage_quiz_question', {courseId:course.id}) }}">题目管理</a>
+              <a class="list-group-item {% if side_nav == 'testPaper' %}active{% endif %}" href="{{ path('course_manage_test_paper', {courseId:course.id}) }}">试卷管理</a>
+            </div>
+          </div>
+
         </div>
 
       </div>

@@ -13,6 +13,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 	public function getFile($file)
 	{
 		$file['fullpath'] = $this->getFileFullPath($file);
+        $file['webpath'] = $this->getFileWebPath($file);
 		return $file;
 	}
     public function addFile($targetType, $targetId, array $fileInfo=array(), UploadedFile $originalFile=null)
@@ -73,7 +74,22 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     private function getFileFullPath($file)
     {
-        return $this->getKernel()->getParameter('topxia.disk.local_directory') . DIRECTORY_SEPARATOR . $file['hashId'];
+        if (empty($file['isPublic'])) {
+            $baseDirectory =  $this->getKernel()->getParameter('topxia.disk.local_directory');
+        } else {
+            $baseDirectory = $this->getKernel()->getParameter('topxia.upload.public_directory');
+        }
+
+        return $baseDirectory . DIRECTORY_SEPARATOR . $file['hashId'];
+    }
+
+    private function getFileWebPath($file)
+    {
+        if (empty($file['isPublic'])) {
+            return '';
+        }
+
+        return $this->getKernel()->getParameter('topxia.upload.public_url_path') . '/' . $file['hashId'];
     }
 
     private function getFilePath($targetType, $targetId)
