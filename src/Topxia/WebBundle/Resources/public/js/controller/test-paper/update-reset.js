@@ -39,10 +39,10 @@ define(function(require, exports, module) {
 
             var perventage = $('#test-percentage-field').val();
 
-            if ($('[name=isDiffculty]').is(':checked')){
-                var isDiffculty = 1;
+            if ($('[name=isDifficulty]').is(':checked')){
+                var isDifficulty = 1;
             }else{
-                var isDiffculty = 0;
+                var isDifficulty = 0;
             }
 
             $('.item-number[name^=itemCounts]').each(function(index){
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                 async : false
             });
 
-            $.post($('#test-percentage-field').data('url'), {isDiffculty: isDiffculty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(arr) {
+            $.post($('#test-percentage-field').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(arr) {
                 if (arr) {
                     Notify.warning(arr);
                     flag = 1;

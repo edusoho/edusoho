@@ -143,13 +143,14 @@ define(function(require, exports, module) {
 
             });
 
+            Test.sortable();
+
             self.$('#myTab li:first a').trigger('click');
 		},
 
 	});
 
 	module.exports = ItemBase;
-
 
 
 });

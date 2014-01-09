@@ -32,7 +32,7 @@
               <input class="form-control" data-url="{{ path('course_manage_test_paper_create_check',{courseId:course.id})}}" id="test-percentage-field" name="percentage" value="{% if testPaper.percentage | default(null)%}{{testPaper.percentage }}{% else %}80{% endif %}" />
           </div>
           <div class="col-md-6 controls checkbox">
-              <label class="pull-left">勾选按难易程度生成试卷(默认随机)<input type="checkbox" {% if testPaper.isDiffculty | default(null)%}checked=chedked{% endif %} value="1"  name="isDiffculty"></label>
+              <label class="pull-left">勾选按难易程度生成试卷(默认随机)<input type="checkbox" {% if testPaper.isDifficulty | default(null)%}checked=chedked{% endif %} value="1"  name="isDifficulty"></label>
           </div>
         </div>
 

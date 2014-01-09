@@ -2,6 +2,7 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
 
 {% set replaceId = replaceId | default(null)%}
+{% set parentId = parentId | default(null)%}
 
 {% block title %}{% if isEdit | default(null)  %}编辑{% else %}添加{% endif %}试题{% endblock %}
 
