@@ -327,18 +327,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
                     }
 
-
-                   
-
                 }
-
-
-
-
 
             }
 
-              
         }
 
         return array_merge(ArrayToolkit::index($randoms, 'id'), ArrayToolkit::index($quSons, 'id'));

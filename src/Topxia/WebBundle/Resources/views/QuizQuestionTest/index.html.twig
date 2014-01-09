@@ -17,13 +17,6 @@
 
   <div class="panel-body " id="quiz-table-container">
 
-  {% if parentId %}
-    <ol class="breadcrumb">
-      <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id}) }}">试卷管理</a></li>
-      <li class="active">材料题</li>
-    </ol>
-  {% endif %}
-
   <table class="table table-striped table-hover" id="quiz-table">
   {{ web_macro.flash_messages() }}
     <thead>
@@ -45,7 +38,7 @@
   </table>
   <div>
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="试卷" data-url="{{ path('course_manage_quiz_question_deletes',{courseId:course.id}) }}">删除</button>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="试卷" data-url="{{ path('course_manage_test_paper_deletes',{courseId:course.id}) }}">删除</button>
   </div>
 
   {{ web_macro.paginator(paginator) }}
