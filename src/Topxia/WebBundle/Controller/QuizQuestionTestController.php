@@ -264,34 +264,6 @@ class QuizQuestionTestController extends BaseController
 		));
 	}
 
-	public function createItemActiosssssssssnss(Request $request, $courseId,  $testPaperId)
-	{
-		$questionId = $request->query->get('questionId');
-		$replaceId  = $request->query->get('replaceId');
-
-		$course    = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
-
-		$question = ArrayToolkit::index($this->getQuestionService()->getQuestion($questionId), 'id');
-		
-		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-
-		if (!empty($replaceId)){
-			$item = $this->getTestService()->updateItem($replaceId, $questionId);
-		} else {
-			$item = $this->getTestService()->createItem($testPaperId, $questionId);
-		}
-        
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig', array(
-			'course' => $course,
-			'testPaperId' => $testPaperId,
-			'item' => $item,
-			'questions' => $questions,
-			'testPaper' => $testPaper,
-			'lessons' => $lessons,
-		));
-	}
-
 	public function createItemAction(Request $request, $courseId,  $testPaperId)
 	{
 		$questionId = $request->query->get('questionId');
@@ -359,6 +331,37 @@ class QuizQuestionTestController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function deleteTestPaperAction(Request $request, $courseId, $testPaperId)
+    {
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testPaper = $this->getTestService()->getTestPaper($testPaperId);
+
+        if (empty($testPaper)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getTestService()->deleteTetsPaper($testPaperId);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function deleteTestPapersAction(Request $request, $courseId)
+    {   
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $ids = $request->request->get('ids');
+
+        if(empty($ids)){
+        	throw $this->createNotFoundException();
+        }
+
+        foreach ($ids as $id) {
+        	$this->getTestService()->deleteTetsPaper($id);
+        }
+
+        return $this->createJsonResponse(true);
+    }
 
 
 	private function getCourseService()
