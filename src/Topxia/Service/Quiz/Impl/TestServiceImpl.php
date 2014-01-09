@@ -47,9 +47,10 @@ class TestServiceImpl extends BaseService implements TestService
         if (empty($testPaper)) {
             throw $this->createNotFoundException();
         }
+
+        $this->getTestItemDao()->deleteItemsByTestPaperId($id);
+
         $this->getTestPaperDao()->deleteTestPaper($id);
-        $this->getTestPaperDao()->deletePapersByParentId($id);
-        $this->getQuizPaperChoiceDao()->deleteChoicesByPaperIds(array($id));
     }
 
     public function searchTestPaper(array $conditions, array $orderBy, $start, $limit){
@@ -201,31 +202,6 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getTestItemDao()->deleteItemsByTestPaperId($id);
     }
 
-    public function sortTestItems($testId, array $itemIds)
-    {
-        $items = $this->findItemsByTestPaperId($testId);
-        $testPaper = $this->getTestPaper($testId);
-
-        $existedItemIds = array_keys($items);
-
-        if (count($itemIds) != count($existedItemIds)) {
-            throw $this->createServiceException('itemdIds参数不正确');
-        }
-
-        $diffItemIds = array_diff($itemIds, array_keys($items));
-        if (!empty($diffItemIds)) {
-            throw $this->createServiceException('itemdIds参数不正确');
-        }
-
-        $items = ArrayToolkit::index($items,'id');
-        $seq = 1;
-        foreach ($itemIds as $itemId) {
-            $fields = array('seq' => $seq);
-            $this->getTestItemDao()->updateItem($itemId, $fields);
-            $seq ++;
-        }
-    }
-
     private function sortTestItemsByTestId($testId)
     {
         $items = $this->findItemsByTestPaperId($testId);
@@ -261,11 +237,7 @@ class TestServiceImpl extends BaseService implements TestService
                     }else{
                         $seqNum ++;
                     }
-
-                    
                 }
-
-
             }
         }
     }
@@ -278,14 +250,6 @@ class TestServiceImpl extends BaseService implements TestService
     public function findItemsByTestPaperId($testPaperId)
     {
         return $this->getTestItemDao()->findItemsByTestPaperId($testPaperId);
-    }
-
-    public function findItemsByTestPaperIdAndQuestionType($testPaperId, $type)
-    {
-        if(count($type) != 2){
-            throw $this->createServiceException('type参数不正确');
-        }
-        return $this->getTestItemDao()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
     }
 
     public function showTest ($id)

@@ -3,7 +3,7 @@
 
 {% block title %}试卷题目管理 - {{ parent() }}{% endblock %}
 
-{% set side_nav = '' %}
+{% set side_nav = 'testPaper' %}
 {% set parentId = parentId | default(null)%}
 {% set flag = flag | default(null)%}
 {% set script_controller = 'test-paper/item' %}

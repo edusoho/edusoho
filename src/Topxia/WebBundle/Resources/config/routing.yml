@@ -554,8 +554,12 @@ course_manage_test_paper_create_check:
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:quesitonNumberCheck }
 
 course_manage_test_paper_delete:
-    pattern: /course/{courseId}/manage/test/paper/delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:delete }
+    pattern: /course/{courseId}/manage/test/paper/{testPaperId}/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPaper }
+
+course_manage_test_paper_deletes:
+    pattern: /course/{courseId}/manage/test/paper/deletes
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPapers }
 
 course_manage_test_item_list:
     pattern: /course/{courseId}/manage/test/{testPaperId}/item/list

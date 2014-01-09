@@ -341,7 +341,7 @@ class QuizQuestionTestController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $this->getTestService()->deleteTetsPaper($testPaperId);
+        $this->getTestService()->deleteTestPaper($testPaperId);
 
         return $this->createJsonResponse(true);
     }
@@ -357,7 +357,7 @@ class QuizQuestionTestController extends BaseController
         }
 
         foreach ($ids as $id) {
-        	$this->getTestService()->deleteTetsPaper($id);
+        	$this->getTestService()->deleteTestPaper($id);
         }
 
         return $this->createJsonResponse(true);

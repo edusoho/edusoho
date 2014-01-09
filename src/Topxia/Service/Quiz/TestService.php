@@ -45,6 +45,4 @@ interface TestService
     
     public function findItemsByTestPaperId($testPaperId);
 
-    public function findItemsByTestPaperIdAndQuestionType($testPaperId, $type);
-
 }
