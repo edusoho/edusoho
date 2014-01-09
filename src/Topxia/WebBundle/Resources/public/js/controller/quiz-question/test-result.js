@@ -53,6 +53,12 @@ define(function(require, exports, module) {
             $(this).parent().find('.btn').removeClass('btn-info');
             $(this).addClass('btn-info');
         });
+
+        $.each(alls, function(index, val){
+            $(val).on('click', '.panel-footer a.btn', function(){
+                $(this).parent().find('div.well').toggle();
+            })
+        });
     };
 
 

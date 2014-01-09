@@ -15,7 +15,11 @@
 	{% endif %}
 	<div class="panel-footer">
 		{% if question.testResult|default(null) %}
-			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% if not question.analysis == '' %}
+				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% endif %}
+
+			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
 		{% else %}
 			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">标记</span></a>
 		{% endif %}

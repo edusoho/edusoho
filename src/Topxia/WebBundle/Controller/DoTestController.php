@@ -11,7 +11,6 @@ class DoTestController extends BaseController
 {
 	public function indexAction (Request $request, $testId)
 	{
-		//权限！待补充
 
 		$userId = $this->getCurrentUser()->id;
 
@@ -24,13 +23,19 @@ class DoTestController extends BaseController
 
 	public function showTestAction (Request $request, $id)
 	{
-		//权限！待补充
 
 		$testResult = $this->getTestService()->getTestPaperResult($id);
 		if (!$testResult) {
 			throw $this->createNotFoundException('试卷不存在!');
 		}
-		//字符串要过滤js and so on
+		//权限！
+		if ($testResult['userId'] != $this->getCurrentUser()->id) {
+			throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+		}
+
+		$paper = $this->getTestService()->getTestPaper($testResult['testId']);
+
+		//字符串要过滤js and so on?
 		$questions = $this->getTestService()->showTest($id);
 
 		$questions = $this->formatQuestions($questions);
@@ -38,6 +43,8 @@ class DoTestController extends BaseController
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
 			'limitTime' => $testResult['limitedTime'] * 60,
+			'paper' => $paper,
+			'paperResult' => $testResult,
 			'id' => $id
 		));
 	}
@@ -127,9 +134,6 @@ class DoTestController extends BaseController
 
 		foreach ($results as $value) {
 
-			// if (!in_array($value['questionType'], array('single_choice', 'choice', 'determine', 'fill'))) {
-			// 	continue;
-			// }
 			$accuracy[$value['questionType']]['score'] += $value['testResult']['score'];
 			$accuracy[$value['questionType']]['totalScore'] += $value['itemScore'];
 
@@ -151,6 +155,7 @@ class DoTestController extends BaseController
 	private function formatQuestions ($questions)
 	{
 		$formatQuestions = array();
+		$number = 0;
 		foreach ($questions as $key => $value) {
 
 			if(in_array($value['questionType'], array('single_choice', 'choice'))) {
@@ -164,6 +169,10 @@ class DoTestController extends BaseController
 
 			if ($value['questionType'] == 'material') {
 				$value['questions'] = $this->formatQuestions($value['questions']);
+				$number += $value['questions']['number'];
+				unset($value['questions']['number']);
+			} else {
+				$number++;
 			}
 
 			if ($value['targetId'] != 0) {
@@ -172,6 +181,8 @@ class DoTestController extends BaseController
 				$formatQuestions[$key] = $value;
 			}
 		}
+
+		$formatQuestions['number'] = $number;
 
 		return $formatQuestions;
 	}
