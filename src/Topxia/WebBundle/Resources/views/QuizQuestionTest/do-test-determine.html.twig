@@ -24,7 +24,11 @@
 				正确答案：{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}. 您选择了: {% if question.testResult.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}
 			{% endif %}
 
-			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% if not question.analysis == '' %}
+				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% endif %}
+
+			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
 		</div>
 	{% else %}
 		<div class="panel-footer">

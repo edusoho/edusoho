@@ -324,8 +324,13 @@ class TestServiceImpl extends BaseService implements TestService
 
         $questions = ArrayToolkit::index($questions, 'id');
 
+
+        $items = ArrayToolkit::index($items, 'questionId');
+
         foreach ($answers as $key => $answer) {
             //可能会查不到题目的问题，例如题目被删除，需要提示
+            $questions[$key]['itemScore'] = $items[$key]['score'];
+
             $questions[$key]['testResult'] = $answer;
 
             if ($questions[$key]['questionType'] == 'fill') {
@@ -472,7 +477,9 @@ class TestServiceImpl extends BaseService implements TestService
                     }
                 }
 
-                if ($right == count($question['answer'])) {
+                if ($right == 0) {
+                    $answers[$key]['status'] = 'noAnswer';
+                } elseif ($right == count($question['answer'])) {
                     $answers[$key]['status'] = 'right';
                 } else {
                     $answers[$key]['status'] = 'wrong';
@@ -482,14 +489,6 @@ class TestServiceImpl extends BaseService implements TestService
 
                 // $question['result'] = $right;
             }
-            // $question['userAnswer'] = $answers[$key]['answer'];
-
-            // if ($question['targetId'] == 0) {
-            //     $results[$question['parentId']]['questions'][$key] = $question;
-                
-            // } else {
-            //     $results[$key] = $question;
-            // }
 
             $oldAnswers[$key] = $answers[$key];
         }

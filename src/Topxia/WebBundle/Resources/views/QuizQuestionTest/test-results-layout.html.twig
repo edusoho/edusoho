@@ -97,14 +97,14 @@
 </style>
 
 <div class="page-header">
-  <h1>Example page header <small>Subtext for header</small></h1>
+  <h1>{{ paper.name }}<small>{{ paper.description }}</small></h1>
 </div>
 <div class="panel panel-default">
 	<div class="panel-body">
 		<div class="media">
 			<div class="pull-left well" style="width:20%">
-				<h2>XX分</h2>
-				<small>Subtext for header</small>
+				<h2>{{ paperResult.score - accuracy.essay.score }} 分</h2>
+				<small>客观题总分：{{ paper.score - accuracy.essay.totalScore }}</small>
 			</div>
 			<div class="media-body">
 				<table class="table table-hover table-condensed">
@@ -131,7 +131,7 @@
 							<td>未答</td>
 							<td>{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }}</td>
 							<td>{{ accuracy.determine.noAnswer }}</td>
-							<td>N/A</td>
+							<td>{{ accuracy.fill.noAnswer }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -140,7 +140,7 @@
 		<div class="media">
 			<div class="pull-left well" style="width:20%">
 				<h2>?</h2>
-				<small>Subtext for header</small>
+				<small>主观题总分：{{ accuracy.essay.totalScore }}</small>
 			</div>
 			<div class="media-body">
 				<div class="empty">老师正在批阅试卷</div>
@@ -190,7 +190,7 @@
 				<div class="btn-group btn-group-justified btn-group-sm">
 					<a class="btn btn-default" id="showWrong">只看错题</a>
 					<a class="btn btn-default" id="showNotRight">不看对题</a>
-					<a class="btn btn-default" id="showAll">查看全部</a>
+					<a class="btn btn-default btn-info" id="showAll">查看全部</a>
 				</div>
 			</div>
 	</div>

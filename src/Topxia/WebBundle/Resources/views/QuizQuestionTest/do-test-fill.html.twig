@@ -17,7 +17,11 @@
 				正确答案：{{ question.answer|join(', ') }}. 您填写了: {{ question.testResult.answer|join(', ') }}
 			{% endif %}
 
-			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% if not question.analysis == '' %}
+				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% endif %}
+
+			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
 		</div>
 	{% else %}
 		<div class="panel-footer">

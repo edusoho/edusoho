@@ -89,12 +89,6 @@ class TestPaperResultDaoImpl extends BaseDao implements TestPaperResultDao
         return $this->getConnection()->fetchAssoc($sql, array($testId, $userId)) ? : null;
     }
 
-    // public function updateResultByTestIdAndUserId ($testId, $userId, $fields)
-    // {
-    //     $this->getConnection()->update($this->table, $fields, array('testId' => $testId, 'userId' => $userId));
-    //     return $this->getResultByTestIdAndUserId($testId, $userId);
-    // }
-
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
