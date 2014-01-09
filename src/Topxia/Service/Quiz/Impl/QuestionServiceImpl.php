@@ -17,14 +17,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $field = $this->filterCommonFields($question);
         $field['createdTime'] = time();
-        $field['updatedTime'] = time();
         return $this->getQuestionImplementor($question['type'])->createQuestion($question, $field);
     }
 
     public function updateQuestion($id, $question)
     {
         $field = $this->filterCommonFields($question);
-        $field['updatedTime'] = time();
         return $this->getQuestionImplementor($question['type'])->updateQuestion($id, $question, $field);  
     }
 
@@ -37,22 +35,27 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->getQuizQuestionDao()->deleteQuestion($id);
 
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
+
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
     }
 
-    public function searchQuestion(array $conditions, array $orderBy, $start, $limit){
+    public function searchQuestion(array $conditions, array $orderBy, $start, $limit)
+    {
         return $this->getQuizQuestionDao()->searchQuestion($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchQuestionCount(array $conditions){
+    public function searchQuestionCount(array $conditions)
+    {
         return $this->getQuizQuestionDao()->searchQuestionCount($conditions);
     }
 
-    public function findQuestionsByIds(array $ids){
+    public function findQuestionsByIds(array $ids)
+    {
         return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
-    public function findQuestionsByParentIds(array $ids){
+    public function findQuestionsByParentIds(array $ids)
+    {
         return $this->getQuizQuestionDao()->findQuestionsByParentIds($ids);
     }
 
@@ -65,21 +68,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
         }
         
-        $questions = ArrayToolkit::index($this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999),'id');
+        $questions = ArrayToolkit::index($this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 999999),'id');
 
         $parentIds = array();
-        foreach ($questions as $key => $question) {
+        foreach ($questions as $question) {
 
             if ($question['questionType'] == 'material') {
+
                 $parentIds[] = $question['id'];
             }
         }
 
         if (!empty($parentIds)) {
 
-            $con['parentIds'] = $parentIds;
-            $materialQuestions = ArrayToolkit::index($this->searchQuestion($con, array('createdTime' ,'DESC'), 0, 99999),'id');
-
+            $materialQuestions = ArrayToolkit::index($this->searchQuestion(array('parentIds'=> $parentIds), array('createdTime' ,'DESC'), 0, 999999),'id');
             $questions = array_merge($questions, $materialQuestions);
         }
         
@@ -89,10 +91,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findQuestionsTypeNumberByCourseId($courseId)
     {
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
-
-        $conditions['target']['course'] = array($courseId);
         
         $conditions['parentId'] = 0;
+
+        $conditions['target']['course'] = array($courseId);
 
         if (!empty($lessons)){
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
@@ -100,125 +102,150 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         
         $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999);
 
-        $nums  = array();
-        foreach ($questions as $ques) {
+        $typeNums  = array();
+        foreach ($questions as $question) {
 
-            if (empty($nums[$ques['questionType']][$ques['difficulty']])) {
-                $nums[$ques['questionType']][$ques['difficulty']] = 0;
+            $type = $question['questionType'];
+
+            $difficulty = $question['difficulty'];
+
+            if (empty($typeNums[$type][$difficulty])) {
+
+                $typeNums[$type][$difficulty] = 0;
             }
 
-            $nums[$ques['questionType']][$ques['difficulty']]++;
+            $typeNums[$type][$difficulty]++;
         }
-       
-        return $nums;
-    }
+
+        $sum = array();
+        foreach ($typeNums as $type => $difficultyNums) {
+
+            $sum[$type] = 0;
+            foreach ($difficultyNums as $num) {
+
+                $sum[$type] = $sum[$type] + $num;
+            }
+        }
+
+        $typeNums['sum'] = $sum;
+
+        return $typeNums;
+    } 
 
     public function checkQuesitonNumber($field, $courseId)
     {
-        if(empty($field['isDiffculty']) || empty($field['isDiffculty']) || empty($field['questionType']) || empty($field['difficulty'])){
-            $this->createNotFoundException();
+        if (!ArrayToolkit::requireds($field, array('questionType','difficulty','isDifficulty', 'itemCounts', 'perventage'))) {
+            throw $this->createServiceException('参数缺失，创建试卷失败！');
         }
 
         $dictQuestionType = $field['questionType'];
         $dictDifficulty   = $field['difficulty'];
-        $isDiffculty      = $field['isDiffculty'];
+
+        $isDifficulty      = $field['isDifficulty'];
         $itemCounts       = $field['itemCounts'];
 
         $diff = array_diff($itemCounts, $dictQuestionType);
 
-        if(empty($diff)){
-            throw $this->createNotFoundException('参数错误');
+        if (empty($diff)) {
+            throw $this->createNotFoundException('itemCounts 参数错误');
         }
 
-        $perventage['0'] = 10;
-        $perventage['1'] = 40;
-        $perventage['2'] = 50;
-
-        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
-            throw $this->createNotFoundException('参数错误');
-        }
-
-        $questionNumbers = $this->getQuestionService()->findQuestionsTypeNumberByCourseId($courseId);
+        $typeNums = $this->findQuestionsTypeNumberByCourseId($courseId);
 
         $message = array();
         foreach ($itemCounts as $item) {
 
-            list($type, $num) = $item;
+            list($itemType, $itemNum) = $item;
 
-            if ($num == 0)
+            if ($itemNum == 0)
                 continue;
 
-            if ($isDiffculty == 1 ){
-                $needNums = array();
-                $needNums['simple']     = (int) ($num * $perventage['0'] /100); 
-                $needNums['ordinary']   = (int) ($num * $perventage['1'] /100); 
-                $needNums['difficulty'] = (int) ($num * $perventage['2'] /100); 
+            if ($isDifficulty == 1 ){
 
-                $otherNum = $num - ($needNums['simple'] + $needNums['ordinary'] + $needNums['difficulty']);
-
-                if ($otherNum != 0){
-                    $randNum = array_rand($needNums, 1);
-                    $needNums[$randNum] = $needNums[$randNum] + $otherNum;
-                }
+                $needNums = $this->getItemDifficultyNeedNums($itemNum, $field['perventage']);
 
                 foreach ($needNums as $difficulty => $needNum) {
-                    if(empty($questionNumbers[$type][$difficulty])) {
 
-                        if($needNum != 0)
-                            $message[] = "{$dictQuestionType[$type]}中{$dictDifficulty[$difficulty]}缺少{$needNum}题 ";
-                    }
-                    else if(($needNum - $questionNumbers[$type][$difficulty]) < 0) {
+                    if ($difficulty == 'otherNum') {
 
-                        $needNum = abs($needNum - $questionNumbers[$type][$difficulty]);
-                        $message[] = "{$dictQuestionType[$type]}中{$dictDifficulty[$difficulty]}缺少{$needNum}题 ";
+                        if ($typeNums['sum'][$itemType] < $needNum ) {
+
+                            $needNum = $typeNums['sum'][$itemType] - $needNum;
+
+                            $message[] = $dictQuestionType[$type]."缺少".$needNum."题 ";
+                        }
+
+                        continue;
                     }
+
+                    if (empty($typeNums[$itemType][$difficulty])) {
+
+                        $typeNums[$itemType][$difficulty] = 0;
+                    }
+
+                    if ($typeNums[$itemType][$difficulty] < $needNum) {
+
+                        $needNum = abs($typeNums[$itemType][$difficulty] - $needNum);
+
+                        $message[] = $dictQuestionType[$itemType].$dictDifficulty[$difficulty]." 缺少".$needNum."题 ";
+                    }
+
                 }
+
             } else {
-                if(empty($questionNumbers[$type])){
 
-                    $message[] = "{$dictQuestionType[$type]}缺少{$num}题 ";
+                if (empty($typeNums['sum'][$itemType])) {
 
-                }else{
-
-                    $typeSum = 0;
-                    foreach ($questionNumbers[$type] as $questionNumber) {
-
-                        $typeSum = $questionNumber + $typeSum;
-                    }
-                    if( ($typeSum - $num) < 0) {
-
-                        $needNum = abs($typeSum - $num);
-                        $message[] = "{$dictQuestionType[$type]}缺少{$needNum}题 ";
-                    }
+                    $typeNums['sum'][$itemType] = 0;
                 }
+
+                if ($typeNums['sum'][$itemType] < $itemNum) {
+
+                    $needNum = abs($typeNums['sum'][$itemType] - $itemNum);
+
+                    $message[] = $dictQuestionType[$itemType]."缺少".$needNum."题 ";
+                }
+
             }
         }
 
-        if(empty($message)){
+        if (empty($message)) {
 
             $message = false;
-        }else{
+
+        } else {
 
             $message = array_merge(array('课程题库题目不足,无法生成试卷') , $message);
+
             $message = implode(',', $message);
         }
 
         return $message;
     }
 
+ /* public function buildTestPaper($params, $buildMode = 'QuestionType')
+    {
+        $builder = new $buildMode . "BuilderImpl";
+        return $builder->build();
+    } */
+
 
     public function findRandQuestions($courseId, $testPaperId, $field){
+
         $testPaper = $this->getTestService()->getTestPaper($testPaperId);
         
         if(empty($field['itemCounts']) || empty($field['itemScores']) || empty($testPaper)){
             $this->createNotFoundException();
         }
 
-
         $scores = $field['itemScores'];
         $counts = $field['itemCounts'];
 
-        $questions    = ArrayToolkit::index($this->getQuestionService()->findQuestionsByCourseId($courseId), 'id');
+        if(empty($field['isDifficulty'])){
+            $field['isDifficulty'] = 0;
+        }
+
+        $questions = ArrayToolkit::index($this->findQuestionsByCourseId($courseId), 'id');
 
         $quNews = array();
         $quSons = array();
@@ -229,7 +256,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
                 $question['score'] = $scores[$question['questionType']] == 0 ? $question['score'] : 
                     (empty($scores[$question['questionType']])?$question['score']:$scores[$question['questionType']]);
-                $quNews[$question['questionType']][] = $question;
+                $quNews[$question['questionType']][$question['difficulty']][] = $question;
             }else{
 
                 $question['score'] = $scores['material'] == 0 ? $question['score'] : 
@@ -238,20 +265,83 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             }
         }
 
-        $seq = explode(',', $testPaper['metas']['question_type_seq']);
+        $question_type_seq = explode(',', $testPaper['metas']['question_type_seq']);
 
-        $quRandoms = array();
+        $randoms = array();
+        foreach ($question_type_seq as $type) {
 
-        foreach ($seq as $type) {
+            if($field['isDifficulty'] == 0){
 
-            for($i = 0;$i<$counts[$type];$i++){
-                $rand = array_rand($quNews[$type]);
-                $quRandoms[] = $quNews[$type][$rand];
-                unset($quNews[$type][$rand]);
-            }   
+                for($i = 0;$i<$counts[$type];$i++){
+
+                    $randDifficulty = array_rand($quNews[$type]);
+
+                    $randId = array_rand($quNews[$type][$randDifficulty]);
+
+                    $randoms[] = $quNews[$type][$randDifficulty][$randId];
+
+                    unset($quNews[$type][$randDifficulty][$randId]);
+
+                    if(count($quNews[$type][$randDifficulty]) ==0){
+
+                        unset($quNews[$type][$randDifficulty]);
+                    }
+                } 
+            }else{
+
+                $needNums = $this->getItemDifficultyNeedNums($counts[$type], $field['perventage']);
+
+                foreach ($needNums as $difficulty => $needNum) {
+
+                    if ($difficulty == 'otherNum') {
+
+                        for($i = 0;$i<$needNum;$i++){
+
+                            $randDifficulty = array_rand($quNews[$type]);
+
+                            $randId = array_rand($quNews[$type][$randDifficulty]);
+
+                            $randoms[] = $quNews[$type][$randDifficulty][$randId];
+
+                            unset($quNews[$type][$randDifficulty][$randId]);
+
+                            if(count($quNews[$type][$randDifficulty]) ==0){
+
+                                unset($quNews[$type][$randDifficulty]);
+                            }
+                        } 
+
+                        continue;
+                    }
+
+                    for($i = 0; $i<$needNum; $i++){
+
+                        $randId = array_rand($quNews[$type][$difficulty]);
+                        $randoms[] = $quNews[$type][$difficulty][$randId];
+                        unset($quNews[$type][$difficulty][$randId]);
+
+                        if(count($quNews[$type][$difficulty]) ==0){
+
+                            unset($quNews[$type][$difficulty]);
+                        }
+
+                    }
+
+
+                   
+
+                }
+
+
+
+
+
+            }
+
+              
         }
 
-        return array_merge(ArrayToolkit::index($quRandoms, 'id'), ArrayToolkit::index($quSons, 'id'));
+        return array_merge(ArrayToolkit::index($randoms, 'id'), ArrayToolkit::index($quSons, 'id'));
     }
 
 
@@ -346,7 +436,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function filterCommonFields($question)
     {
         if (!in_array($question['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
-                throw $this->createServiceException('type error！');
+                throw $this->createServiceException('question type error！');
         }
         if (!ArrayToolkit::requireds($question, array('difficulty'))) {
                 throw $this->createServiceException('缺少必要字段difficulty, 创建课程失败！');
@@ -358,18 +448,23 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $field['stem']         = $this->purifyHtml($question['stem']);
         $field['difficulty']   = empty($question['difficulty']) ? ' ': $question['difficulty'];
         $field['userId']       = $this->getCurrentUser()->id;
-
-        $field['analysis']   = empty($question['analysis'])?'':$question['analysis'];
-        $field['score']      = empty($question['score'])?'':$question['score'];
-        $field['categoryId'] = (int) $question['categoryId'];
+        $field['analysis']     = empty($question['analysis'])?'':$question['analysis'];
+        $field['score']        = empty($question['score'])?'':$question['score'];
+        $field['categoryId']   = (int) $question['categoryId'];
+        $field['updatedTime']  = time();
 
         if(!empty($question['target'])){
+
             $target = explode('-', $question['target']);
+
             if (count($target) != 2){
                 throw $this->createServiceException("target参数不正确");
             }
+
             $field['targetType'] = $target['0'];
-            $field['targetId'] = $target['1'];
+
+            $field['targetId'] = (int) $target['1'];
+
             if (!in_array($field['targetType'], array('course','lesson'))){
                 throw $this->createServiceException("targetType参数不正确");
             }
@@ -381,17 +476,49 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function checkCategoryFields($category)
     {
         $target = explode('-', $category['target']);
+
         if (count($target) != 2){
             throw $this->createServiceException("target参数不正确");
         }
+
         $field['targetType'] = $target['0'];
-        $field['targetId'] = $target['1'];
+
+        $field['targetId'] = (int) $target['1'];
+
         if (!in_array($field['targetType'], array('course','lesson'))){
             throw $this->createServiceException("targetType参数不正确");
         }
         
         $field['name'] = empty($category['name'])?' ':$category['name'];
+
         return $field;
+    }
+
+    private function getItemDifficultyNeedNums($num, $perventage)
+    {
+        $perventage['2'] = 100 - $perventage['1'];
+        $perventage['1'] = $perventage['1'] - $perventage['0'];
+        $perventage['0'] = $perventage['0'];
+
+        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
+            throw $this->createNotFoundException('perventage 参数错误');
+        }
+
+        $needs = array();
+        $needs['simple']     = (int) ($num * $perventage['0'] /100); 
+        $needs['ordinary']   = (int) ($num * $perventage['1'] /100); 
+        $needs['difficulty'] = (int) ($num * $perventage['2'] /100); 
+
+        $needs['otherNum'] = $num - ($needs['simple'] + $needs['ordinary'] + $needs['difficulty']);
+
+        /*if ($otherNum > 0){
+            for ($i=0; $i < $otherNum; $i++) { 
+                $randNum = array_rand($needs, 1);
+                $needs[$randNum] = $needs[$randNum] + 1;
+            }
+        }*/
+
+        return $needs;
     }
 
     private function getCourseService()
@@ -402,11 +529,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function getTestService()
     {
         return $this->createService('Quiz.TestService');
-    }
-
-    private function getQuestionService()
-    {
-        return $this->createService('Quiz.QuestionService');
     }
 
     private function getQuizQuestionDao()
@@ -426,7 +548,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     private function getQuestionImplementor($name)
     {
-        
         return $this->createService('Quiz.'.preg_replace('/(?:^|_)([a-z])/e', "strtoupper('\\1')", $name).'QuestionImplementor');
     }
 }

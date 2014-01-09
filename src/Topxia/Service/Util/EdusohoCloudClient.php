@@ -138,10 +138,16 @@ class EdusohoCloudClient implements CloudClient
 
     public function getVideoInfo($bucket, $key)
     {
-        $token = $this->generateViewToken($bucket, $key);
+        $params = array('bucket' => $bucket, 'key' => $key, 'duration' => 3600);
 
-        $content = $this->getRequest($token['url'] . '?avinfo' , array(), $token['cookie']);
-        $result = json_decode($content, true);
+        $encodedParams = base64_encode(json_encode($params));
+
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
+
+        $content = $this->getRequest($this->apiServer . '/media_info.php', array('token' => $token));
+
+        $result =  json_decode($content, true);
 
         if (empty($result)) {
             return null;

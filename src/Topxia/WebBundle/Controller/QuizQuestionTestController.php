@@ -10,7 +10,7 @@ class QuizQuestionTestController extends BaseController
 	public function indexAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons = $this->getCourseService()->getCourseLessons($courseId);
+		$lessons = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 
 		$parentId = $request->query->get('parentId');
 
@@ -32,7 +32,6 @@ class QuizQuestionTestController extends BaseController
             $paginator->getPerPageCount()
 		);
 
-		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testPapers, 'updatedUserId')); 
 		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:index.html.twig', array(
@@ -52,11 +51,14 @@ class QuizQuestionTestController extends BaseController
 		$testPaper = $request->query->all();
 
 	    if ($request->getMethod() == 'POST') {
+
 	    	$testPaper = $request->request->all();
 
         	if(empty($testPaper['testPaperId'])){
+
 	        	$result = $this->getTestService()->createTestPaper($testPaper);
         	}else{
+
 	        	$result = $this->getTestService()->createUpdateTestPaper($testPaper['testPaperId'], $testPaper);
         	}
 
@@ -66,11 +68,14 @@ class QuizQuestionTestController extends BaseController
         }
 
         if(empty($testPaper['target'])){
+
 			$testPaper['target']  = 'course-'.$courseId;
 		}
 
         if(!empty($testPaper['testPaperId'])){
+
 			$paper = $this->getTestService()->getTestPaper($testPaper['testPaperId']);
+
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
@@ -158,7 +163,6 @@ class QuizQuestionTestController extends BaseController
 		}
 
 		$flag = $request->query->get('flag');
-		$flag   = empty($flag) ? null : $flag;
 
 		if ($request->getMethod() == 'POST') {
 
@@ -177,11 +181,11 @@ class QuizQuestionTestController extends BaseController
         	return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
         }
 
-		$parentTestPaper  = array_merge($request->query->all(), $testPaper);
+		$parentTestPaper = array_merge($request->query->all(), $testPaper);
 
 		$dictQuestionType = $this->getWebExtension()->getDict('questionType');
 
-		$lessons          = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
+		$lessons = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
 
 		$items = array();
 		if($flag == 'update'){
@@ -206,30 +210,33 @@ class QuizQuestionTestController extends BaseController
 
 	public function itemListAction(Request $request, $courseId,  $testPaperId)
 	{
-		$replaceId = $request->query->get('testItemId');
+		$course = $this->getCourseService()->tryManageCourse($courseId);
 
 		$type = $request->query->get('type');
 		$ids = $request->query->get('ids');
+		$replaceId = $request->query->get('replaceId');
 
-        if(empty($type)){
-            throw $this->createNotFoundException('type 参数不对');
-        }
+		if(empty($type)){
+            throw $this->createNotFoundException();
+		}
 
 		$type = explode('-', $type);
 
-		$course    = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons   = $this->getCourseService()->getCourseLessons($courseId);
+		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
+
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-		$itemIds   = ArrayToolkit::column($this->getTestService()->findItemsByTestPaperIdAndQuestionType($testPaperId, $type), 'questionId');
+
+        $conditions = array(
+        	'parentId' => 0,
+        	'notId' => explode(',', $ids),
+        	$type['0'] => $type['1'],
+        );
 
         $conditions['target']['course'] = array($courseId);
+
         if (!empty($lessons)){
             $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
         }
-
-        $conditions['parentId'] = 0;
-        $conditions['notId']    = explode(',', $ids);
-        $conditions[$type['0']] = $type['1'];
 
         $paginator = new Paginator(
 			$this->get('request'),
@@ -244,7 +251,6 @@ class QuizQuestionTestController extends BaseController
                 $paginator->getPerPageCount()
         );
 
-		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-list.html.twig', array(
@@ -252,38 +258,9 @@ class QuizQuestionTestController extends BaseController
 			'lessons' => $lessons,
 			'questions' => $questions,
 			'testPaper' => $testPaper,
-			'parentId' => false,
 			'users' => $users,
+			'replaceId' => $replaceId,
 			'paginator' => $paginator,
-			'replaceId' => $replaceId
-		));
-	}
-
-	public function createItemActionss(Request $request, $courseId,  $testPaperId)
-	{
-		$questionId = $request->query->get('questionId');
-		$replaceId  = $request->query->get('replaceId');
-
-		$course    = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons   = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId), 'id');
-
-		$question = ArrayToolkit::index($this->getQuestionService()->getQuestion($questionId), 'id');
-		
-		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
-
-		if (!empty($replaceId)){
-			$item = $this->getTestService()->updateItem($replaceId, $questionId);
-		} else {
-			$item = $this->getTestService()->createItem($testPaperId, $questionId);
-		}
-        
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig', array(
-			'course' => $course,
-			'testPaperId' => $testPaperId,
-			'item' => $item,
-			'questions' => $questions,
-			'testPaper' => $testPaper,
-			'lessons' => $lessons,
 		));
 	}
 
@@ -354,6 +331,37 @@ class QuizQuestionTestController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function deleteTestPaperAction(Request $request, $courseId, $testPaperId)
+    {
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testPaper = $this->getTestService()->getTestPaper($testPaperId);
+
+        if (empty($testPaper)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getTestService()->deleteTetsPaper($testPaperId);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function deleteTestPapersAction(Request $request, $courseId)
+    {   
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $ids = $request->request->get('ids');
+
+        if(empty($ids)){
+        	throw $this->createNotFoundException();
+        }
+
+        foreach ($ids as $id) {
+        	$this->getTestService()->deleteTetsPaper($id);
+        }
+
+        return $this->createJsonResponse(true);
+    }
 
 
 	private function getCourseService()
