@@ -193,7 +193,6 @@ class QuizQuestionTestController extends BaseController
 			$items     = ArrayToolkit::index($this->getTestService()->findItemsByTestPaperId($testPaperId), 'questionId');
 		    $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
 		} else {
-
 			$questions = $this->getQuestionService()->findRandQuestions($courseId, $testPaperId, $parentTestPaper);
 		}
 
