@@ -69,6 +69,10 @@ class HlsConvertCommand extends BaseCommand
 				continue;
 			}
 
+			if (!empty($file['metas2'])) {
+				continue;
+			}
+
 	        $factory = new CloudClientFactory();
 	        $client = $factory->createClient();
 
