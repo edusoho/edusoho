@@ -3,9 +3,43 @@
 		<h3 class="panel-title">{{ questionIndex }}. {{ question.stem }}</h3>
 	</div>
 	{% if question.testResult|default(null) %}
-		<div class="panel-body">
-			{{ question.testResult.answer[0] }}
-		</div>
+
+		{% if role|default(null) == 'teacher' %}
+
+			<div class="panel-body">
+
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#studentAnswer{{ question.id }}" data-toggle="tab">学员回答</a></li>
+					<li><a href="#teacherAnswer{{ question.id }}" data-toggle="tab">参考答案</a></li>
+				</ul>
+				<br>
+				<div class="tab-content">
+					<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0] }}</div>
+					<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0] }}</div>
+				</div>
+				<br>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">得分</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" placeholder="得分" name="score_{{ question.id }}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword" class="col-sm-2 control-label">评语</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" rows="3" name="teacherSay_{{ question.id }}"></textarea>
+					</div>
+				</div>
+
+			</div>
+
+		{% else %}
+			<div class="panel-body">
+				{{ question.testResult.answer[0] }}
+			</div>
+		{% endif %}
+
+
 	{% else %}
 		<div class="panel-body">
 
@@ -18,7 +52,7 @@
 			{% if not question.analysis == '' %}
 				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
 			{% endif %}
-
+			<div class="clearfix"></div>
 			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
 		{% else %}
 			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">标记</span></a>

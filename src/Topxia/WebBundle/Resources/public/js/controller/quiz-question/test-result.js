@@ -59,6 +59,15 @@ define(function(require, exports, module) {
                 $(this).parent().find('div.well').toggle();
             })
         });
+
+
+        $('.answerCard').on('click', '#postPaper', function(){
+
+            $.post($(this).data('url'), $('#essayForm').serialize(), function(){
+
+            });
+
+        });
     };
 
 

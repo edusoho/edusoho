@@ -533,6 +533,10 @@ course_manage_test_results:
     pattern: /test/results/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
 
+course_manage_test_teacher_check:
+    pattern: /test/teacher/check/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheck }
+
 course_manage_test_paper_create:
     pattern: /course/{courseId}/manage/test/paper/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
