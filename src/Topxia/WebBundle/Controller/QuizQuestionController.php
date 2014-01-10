@@ -287,15 +287,10 @@ class QuizQuestionController extends BaseController
     	$course = $this->getCourseService()->getCourse($courseId);
 
     	if ($request->getMethod() == 'POST') {
-	    	$originalFile = $this->get('request')->files->get('uploadFile');
-	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array(), 'local', $originalFile);
+	    	$originalFile = $this->get('request')->files->get('file');
+	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
 	    	return $this->createJsonResponse($file);
 	    }
-
-    	return $this->render('TopxiaWebBundle:QuizQuestion:upload-modal.html.twig', array(
-    		'course' => $course,
-    		'type' => $type
-    	));
     }
 
 	private function getCourseService()

@@ -44,12 +44,13 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
 
+        $uploadFile['isPublic'] = empty($fileInfo['isPublic']) ? 0 : 1;
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
 
         $uploadFile['updatedUserId'] = $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
         $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
 
-        $targetPath = $this->getFilePath($targetType, $targetId);
+        $targetPath = $this->getFilePath($targetType, $targetId, $uploadFile['isPublic']);
 
         $originalFile->move($targetPath, $filename);
 
@@ -92,10 +93,13 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getKernel()->getParameter('topxia.upload.public_url_path') . '/' . $file['hashId'];
     }
 
-    private function getFilePath($targetType, $targetId)
+    private function getFilePath($targetType, $targetId, $isPublic)
     {
-        return $this->getKernel()->getParameter('topxia.disk.local_directory') 
-            . DIRECTORY_SEPARATOR. $targetType 
-            . DIRECTORY_SEPARATOR . $targetId;
+        if ($isPublic) {
+            $baseDirectory = $this->getKernel()->getParameter('topxia.upload.public_directory');
+        } else {
+            $baseDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
+        }
+        return $baseDirectory . DIRECTORY_SEPARATOR. $targetType . DIRECTORY_SEPARATOR . $targetId;
     }
 }

@@ -3,6 +3,9 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Handlebars = require('handlebars');
     var Validator = require('bootstrap.validator');
+    var Uploader = require('upload');
+    var Notify = require('common/bootstrap-notify');
+    var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
 
     var QuestionCreator = Widget.extend({
@@ -10,27 +13,74 @@ define(function(require, exports, module) {
             validator : null,
             form : null,
             targets: [],
-            category: [],
-        },    
+            categories: [],
+        },
 
         events: {
             'click [data-role=submit]': 'onSubmit',
         },
 
         setup: function() {
-            this._initTarget();
-            this._initCategory();
+            this.set('targets', $.parseJSON($('[data-role=targets-data]').html()));
+            this.set('categories', $.parseJSON($('[data-role=category-data]').html()));
             this._initForm();
+            this._initStemField();
+            this._initAnalysisField();
         },
 
         onSubmit: function(e){
-            var submitType = $(e.currentTarget).data('submission')
-            var $form = this.get('form');
-            $form.find('[name=submission]').val(submitType);
+            var submitType = $(e.currentTarget).data('submission');
+            this.get('form').find('[name=submission]').val(submitType);
         },
 
-        _initForm: function(){
-            var $form = $(this.get('form'));
+        _initAnalysisField: function() {
+            var editor = EditorFactory.create('#question-analysis-field', 'simple_noimage');
+            this.get('validator').on('formValidate', function(elemetn, event) {
+                editor.sync();
+            });
+
+            var $trigger = this.$('[data-role=analysis-uploader]');
+            var uploader = new Uploader({
+                trigger: $trigger,
+                name: 'file',
+                action: this.element.data('uploadUrl'),
+                accept: 'image/*',
+                error: function(file) {
+                    Notify.danger('上传失败，请重试！')
+                },
+                success: function(response) {
+                    var result = '[image]' + response.hashId + '[/image]'
+                    editor.insertHtml(result);
+                }
+            });
+            
+        },
+
+        _initStemField: function() {
+            var editor = EditorFactory.create('#question-stem-field', 'simple_noimage');
+            this.get('validator').on('formValidate', function(elemetn, event) {
+                editor.sync();
+            });
+
+            var $trigger = this.$('[data-role=stem-uploader]');
+
+            var uploader = new Uploader({
+                trigger: $trigger,
+                name: 'file',
+                action: this.element.data('uploadUrl'),
+                accept: 'image/*',
+                error: function(file) {
+                    Notify.danger('上传失败，请重试！')
+                },
+                success: function(response) {
+                    var result = '[image]' + response.hashId + '[/image]'
+                    editor.insertHtml(result);
+                }
+            });
+        },
+
+        _initForm: function() {
+            var $form = this.$('[data-role=question-form]');
             this.set('form', $form);
             this.set('validator', this._createValidator($form));
         },
@@ -67,29 +117,14 @@ define(function(require, exports, module) {
             return validator;
         },
 
-        _initTarget: function(){
-            var taget = $('[data-role=targets-data]').html();
-            if(typeof taget != 'undefined'){
-                this.set('targets', $.parseJSON(taget));
-            }
-        },
+        _onChangeCategories: function(categories) {
+            var options = "<option value=''>请选择类别</option>";
+            var selected = categories.default ? categories.default : '';
 
-        _initCategory: function(){
-            var category = $('[data-role=category-data]').html();
-            if(typeof category != 'undefined'){
-                this.set('category', $.parseJSON(category));
-            }
-        },
-
-        _onChangeCategory: function(targets) {
-
-            var options = "<option value=''> 请选择类别 </option>";
-            if(typeof (targets.default)  != 'undefined'){
-                var selected = targets.default;
-                delete targets.default;
-            }
-
-            $.each(targets, function(index, category){
+            $.each(categories, function(index, category){
+                if (index == 'default') {
+                    return ;
+                }
                 if(category.id == selected){
                     options += '<option selected=selected value=' + category.id + '>' + category.name + '</option>';
                 }else{
@@ -100,15 +135,14 @@ define(function(require, exports, module) {
             this.$('[data-role=category]').html(options);
         },
 
-        _onChangeTargets: function(categorys) {
-
+        _onChangeTargets: function(targets) {
             var options = '';
-            if(typeof (categorys.default)  != 'undefined'){
-                var selected = categorys.default;
-                delete categorys.default;
-            }
+            var selected = targets.default ? targets.default : '';
 
-            $.each(categorys, function(index, target){
+            $.each(targets, function(index, target){
+                if (index == 'default') {
+                    return ;
+                }
                 if(index == selected){
                     options += '<option selected=selected value=' + index + '>' + target + '</option>';
                 }else{

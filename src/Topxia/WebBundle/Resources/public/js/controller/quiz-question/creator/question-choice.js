@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var BaseQuestion = require('./question-base');
     var Handlebars = require('handlebars');
+    var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
 
     var ChoiceQuestion = BaseQuestion.extend({
@@ -46,6 +47,24 @@ define(function(require, exports, module) {
                 element: '#item-input-'+model.id,
                 required: true
             });
+
+            var $trigger = $('#item-upload-' + model.id);
+            var uploader = new Uploader({
+                trigger: $trigger,
+                name: 'file',
+                action: this.element.data('uploadUrl'),
+                accept: 'image/*',
+                error: function(file) {
+                    Notify.danger('上传失败，请重试！')
+                },
+                success: function(response) {
+                    var result = '[image]' + response.hashId + '[/image]'
+                    $($trigger.data('target')).val(result);
+                }
+            });
+
+
+
         },
 
         deleteChoice: function(e){

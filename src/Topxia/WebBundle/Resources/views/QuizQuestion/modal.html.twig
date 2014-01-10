@@ -26,8 +26,8 @@
       </li>
     </ol>
 
-    <div id="question-creator-widget">
-      <form id="question-create-form" class="form-horizontal quiz-question" method="post" action="
+    <div id="question-creator-widget" data-upload-url="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}">
+      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="
       {% if isEdit %}
         {{ path('course_manage_quiz_question_update',{courseId:course.id, id:question.id}) }}
       {% else %}
@@ -39,30 +39,27 @@
         {% if not parentId %}
         <div class="form-group">
           <div class="col-md-2 control-label"><label>从属</label></div>
-          <div class="col-md-8 controls">
+          <div class="col-md-4 controls">
             <select class="form-control width-input width-input-large" name="target" data-role="target"></select>
             <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
+          </div>
+          <div class="col-md-1 control-label"><label>难度</label></div>
+          <div class="col-md-4 controls radios">
+            {{ radios('difficulty', {'simple':'简单', 'ordinary':'一般', 'difficulty':'困难'}, question.difficulty | default('ordinary')) }}
           </div>
         </div>
         {% endif %}
 
-        <div class="form-group">
-          <div class="col-md-2 control-label"><label>难度</label></div>
-          <div class="col-md-8 controls radios">
-            {{ radios('difficulty', {'simple':'简单', 'ordinary':'一般', 'difficulty':'困难'}, question.difficulty | default('ordinary')) }}
-          </div>
-        </div>
+
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="question-stem-field">题干</label></div>
           <div class="col-md-8 controls">
-            {% if isEdit %}
-              <textarea class="form-control" id="question-stem-field" name="stem">{{question.stem | default(null)}}</textarea>
-            {%else%}
-              <textarea class="form-control" id="question-stem-field" name="stem"></textarea>
-            {% endif %}
+            <textarea class="form-control" id="question-stem-field" name="stem">{{question.stem | default('')}}</textarea>
           </div>
-          <button class="btn btn-sm btn-default pull-right mrl" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}">上传</button>
+          <div class="col-md-2" style="padding-left:0;">
+            <button class="btn btn-sm btn-default" data-role="stem-uploader" data-target="#question-stem-field"><i class="glyphicon glyphicon-picture"></i></button>
+          </div>
         </div>
 
         {% if type == 'choice' or type == 'single_choice' %}
@@ -80,15 +77,19 @@
           <script type="text/x-handlebars-template" data-role="choice-template">
             {% verbatim %}
               <div class="form-group" data-role="choice">
-                <div class="col-md-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
-                <div class="col-md-10 controls checkboxs">
+                <div class="col-sm-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
+                <div class="col-sm-8 controls">
                   <div class=" input-group">
                     <input class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" type="text" value="{{ content }}" data-display="选项内容">
                     <span class="input-group-addon choice-answer">
                       <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
-                      <a class="delete-choice" data-role="delete-choice" href="javascript:void(null)"><i  class="glyphicon glyphicon-trash"></i></a>
                     </span>
                   </div>
+                </div>
+                <div class="col-sm-2" style="padding-left:0;">
+                  <button id="item-upload-{{ id }}" class="btn btn-default btn-sm" data-target="#item-input-{{ id }}"><i class="glyphicon glyphicon-picture"></i></button>
+
+                  <a class="btn btn-default btn-sm delete-choice mlm" data-role="delete-choice" href="javascript:void(null)"><i class="glyphicon glyphicon-trash"></i></a>
                 </div>
               </div>
             {% endverbatim %}
@@ -111,11 +112,7 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label>答案</label></div>
             <div class="col-md-8 controls radios ">
-                {% if isEdit %}
-                  {{ radios('answers[]', {'0':'错误','1':'正确'}, question.answer  | join | default('3') ) }}
-                {% else %}
-                  {{ radios('answers[]', {'0':'错误','1':'正确'}, '3')}}
-                {% endif %}
+              {{ radios('answers[]', {'0':'错误','1':'正确'}, question.answer|default(['-1'])|join) }}
             </div>
           </div>
 
@@ -124,8 +121,8 @@
         {% endif %}
 
         <div class="form-group">
-          <div class="col-md-8 col-md-offset-1 controls ">
-              <button type="button" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="btn btn-link collapsed">显示/隐藏高级选项</button>
+          <div class="col-md-8 col-md-offset-2 controls ">
+              <a data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; 显示/隐藏 高级选项 ...</a>
           </div>
         </div>
         
@@ -135,14 +132,16 @@
             <div class="col-md-8 controls">
                 <textarea class="form-control" id="question-analysis-field" name="analysis">{% if isEdit %}{{question.analysis}}{% endif %}</textarea>
             </div>
+            <div class="col-md-2" style="padding-left:0;">
+              <button class="btn btn-sm btn-default" data-role="analysis-uploader"><i class="glyphicon glyphicon-picture"></i></button>
+            </div>
+
           </div>
 
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
-            <div class="col-md-8 controls">
-            
-            <input class="form-control" {% if isEdit %}value="{{question.score}}"{% else %} value="5" {% endif %}type="text" id="question-score-field" name="score" />
-            
+            <div class="col-md-4 controls">
+              <input class="form-control" value="{{question.score|default(5)}}" type="text" id="question-score-field" name="score" />
             </div>
           </div>
 
