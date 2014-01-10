@@ -316,7 +316,7 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->makeTest($questions, $answers);
     }
 
-    public function testResults($id, $userId = null)
+    public function testResults($id)
     {
         // if ($userId == null) {
         //     $userId = $this->getCurrentUser()->id;
@@ -566,7 +566,7 @@ class TestServiceImpl extends BaseService implements TestService
         if (empty($answers)) {
             return array();
         }
-//是否需要校验test_paper_result表中的userId跟当前用户id是否一致
+        //是否需要校验test_paper_result表中的userId跟当前用户id是否一致
         $user = $this->getCurrentUser();
 
         $testResult = $this->getTestPaperResultDao()->getResult($id);
@@ -602,6 +602,29 @@ class TestServiceImpl extends BaseService implements TestService
         //测试数据
         return $this->filterTestAnswers($answers, $testResult['id']);
 
+    }
+
+    public function makeTeacherFinishTest ($id, $field)
+    {
+        $testResults = array();
+        
+        foreach ($field as $key => $value) {
+            $keys = explode('_', $key);
+
+            if (!is_numeric($keys[1])) {
+                throw $this->createServiceException('得分必须为数字！');
+            }
+
+            $testResults[$keys[1]][$keys[0]] = $value;
+        }
+
+        $this->getDoTestDao()->updateItemEssays($testResults, $id);
+
+        $paperResult = $this->getTestPaperResultDao()->getResult($id);
+
+        $totalScore = array_sum(ArrayToolkit::column($testResults, 'score')) + $paperResult['score'];
+
+        return $this->getTestPaperResultDao()->updateResult($id, array('score' => $totalScore));
     }
 
     private function filterTestAnswers ($answers, $testPaperResultId)
@@ -656,6 +679,26 @@ class TestServiceImpl extends BaseService implements TestService
         }
         return $score;
     }
+
+    public function canTeacherCheck($id)
+    {
+        $paper = $this->getTestPaperDao()->getTestPaper($id);
+        if (!$paper) {
+            throw $this->createServiceException('试卷不存在');
+        }
+
+        $userId = $this->getCurrentUser()->id;
+
+        if ($paper['targetType'] == 'course') {
+            $course = $this->getCourseService()->getCourse($paper['targetId']);
+
+            if (in_array($userId, $course['teacherIds'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     private function filterTestPaperFields($testPaper)
