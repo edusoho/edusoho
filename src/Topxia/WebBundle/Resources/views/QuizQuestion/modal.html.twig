@@ -100,12 +100,10 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-answer-field">答案</label></div>
             <div class="col-md-8 controls">
-                {% if isEdit %}
-                  <textarea class="form-control" id="question-answer-field" name="answers[]">{{question.answer | join| default(null)}}</textarea>
-                {%else%}
-                  <textarea class="form-control" id="question-answer-field" name="answers[]"></textarea>
-                {% endif %}
-              
+              <textarea class="form-control" id="question-answer-field" name="answers[]">{{question.answer|default('')|join}}</textarea>
+            </div>
+            <div class="col-md-2" style="padding-left:0;">
+              <button class="btn btn-sm btn-default" data-role="answer-uploader" data-target="#question-answer-field"><i class="glyphicon glyphicon-picture"></i></button>
             </div>
           </div>
 
