@@ -76,7 +76,11 @@ class CourseLessonController extends BaseController
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
                         } else {
-                            $key = null;
+                            if ($file['type'] == 'video') {
+                                $key = null;
+                            } else {
+                                $key = $file['hashId'];
+                            }
                         }
 
                         if ($key) {
@@ -124,7 +128,15 @@ class CourseLessonController extends BaseController
         }
 
         if ($file['storage'] == 'cloud') {
-            $key = $file['hashId'];
+            if ($isDownload) {
+                $key = $file['hashId'];
+            } else {
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+            }
             if (empty($key)){
                 throw $this->createNotFoundException();
             }
