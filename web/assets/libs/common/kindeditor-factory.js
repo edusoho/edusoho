@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     require('kindeditor');
 
+    var simpleNoImageItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', '|', 'removeformat', 'source'];
+
     var simpleItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source'];
 
     var standardItems = [
@@ -42,6 +44,7 @@ define(function(require, exports, module) {
     };
 
     var configs = {};
+    configs.simple_noimage = $.extend({}, defaultConfig, {items:simpleNoImageItems});
     configs.simple = $.extend({}, defaultConfig, {items:simpleItems});
     configs.standard = $.extend({}, defaultConfig, {items:standardItems});
     configs.full = $.extend({}, defaultConfig, {items:fullItems});

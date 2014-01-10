@@ -60,9 +60,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     }
 
     public function findQuestionsByTypeAndTypeIds($type,$ids)
-    {
+    {               
         return $this->getQuizQuestionDao()->findQuestionsByTypeAndTypeIds($type,$ids);
     }
+
 
     public function findQuestionCountByTypeAndTypeIds($type,$ids)
     {
@@ -149,93 +150,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function checkQuesitonNumber($field, $courseId)
     {
-        if (!ArrayToolkit::requireds($field, array('questionType','difficulty','isDifficulty', 'itemCounts', 'perventage'))) {
-            throw $this->createServiceException('参数缺失，创建试卷失败！');
-        }
 
-        $dictQuestionType = $field['questionType'];
-        $dictDifficulty   = $field['difficulty'];
+    }
 
-        $isDifficulty      = $field['isDifficulty'];
-        $itemCounts       = $field['itemCounts'];
-        // var_dump($itemCounts);var_dump($dictQuestionType);exit();
-        // $diff = array_diff($itemCounts, $dictQuestionType);
-
-        // if (empty($diff)) {
-        //     throw $this->createNotFoundException('itemCounts 参数错误');
-        // }
-
-        $typeNums = $this->findQuestionsTypeNumberByCourseId($courseId);
-
-        $message = array();
-        foreach ($itemCounts as $item) {
-
-            list($itemType, $itemNum) = $item;
-
-            if ($itemNum == 0)
-                continue;
-
-            if ($isDifficulty == 1 ){
-
-                $needNums = $this->getItemDifficultyNeedNums($itemNum, $field['perventage']);
-
-                foreach ($needNums as $difficulty => $needNum) {
-
-                    if ($difficulty == 'otherNum') {
-
-                        if ($typeNums['sum'][$itemType] < $needNum ) {
-
-                            $needNum = $typeNums['sum'][$itemType] - $needNum;
-
-                            $message[] = $dictQuestionType[$type]."缺少".$needNum."题 ";
-                        }
-
-                        continue;
-                    }
-
-                    if (empty($typeNums[$itemType][$difficulty])) {
-
-                        $typeNums[$itemType][$difficulty] = 0;
-                    }
-
-                    if ($typeNums[$itemType][$difficulty] < $needNum) {
-
-                        $needNum = abs($typeNums[$itemType][$difficulty] - $needNum);
-
-                        $message[] = $dictQuestionType[$itemType].$dictDifficulty[$difficulty]." 缺少".$needNum."题 ";
-                    }
-
-                }
-
-            } else {
-
-                if (empty($typeNums['sum'][$itemType])) {
-
-                    $typeNums['sum'][$itemType] = 0;
-                }
-
-                if ($typeNums['sum'][$itemType] < $itemNum) {
-
-                    $needNum = abs($typeNums['sum'][$itemType] - $itemNum);
-
-                    $message[] = $dictQuestionType[$itemType]."缺少".$needNum."题 ";
-                }
-
-            }
-        }
-
-        if (empty($message)) {
-
-            $message = false;
-
-        } else {
-
-            $message = array_merge(array('课程题库题目不足,无法生成试卷') , $message);
-
-            $message = implode(',', $message);
-        }
-
-        return $message;
+    public function findQuestionsCountByTypeAndTypeIds($type, $ids)
+    {
+        return $this->getQuizQuestionDao()->findQuestionsCountByTypeAndTypeIds($type, $ids);
     }
 
     public function findRandQuestions($courseId, $testPaperId, $field) 
@@ -418,28 +338,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($ids);
     }
-
-
-    // //TODO 
-    // public function findQuestionTargets($courseId)
-    // {
-    //     $course = $this->getCourseService()->getCourse($courseId);
-    //     if (empty($course))
-    //         return null;
-    //     $lessons = $this->getCourseService()->getCourseLessons($courseId);
-
-    //     $targets = array();
-
-    //     $targets['course'.'-'.$course['id']] = '课程';
-
-    //     foreach ($lessons as  $lesson) {
-    //         $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'-'.$lesson['title'];
-    //     }
-
-    //     return $targets;
-    // }
-
-    
+  
     private function filterCommonFields($question)
     {
         if (!in_array($question['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
@@ -500,34 +399,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         return $field;
     }
-
-    private function getItemDifficultyNeedNums($num, $perventage)
-    {
-        $perventage['2'] = 100 - $perventage['1'];
-        $perventage['1'] = $perventage['1'] - $perventage['0'];
-        $perventage['0'] = $perventage['0'];
-
-        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
-            throw $this->createNotFoundException('perventage 参数错误');
-        }
-
-        $needs = array();
-        $needs['simple']     = (int) ($num * $perventage['0'] /100); 
-        $needs['ordinary']   = (int) ($num * $perventage['1'] /100); 
-        $needs['difficulty'] = (int) ($num * $perventage['2'] /100); 
-
-        $needs['otherNum'] = $num - ($needs['simple'] + $needs['ordinary'] + $needs['difficulty']);
-
-        /*if ($otherNum > 0){
-            for ($i=0; $i < $otherNum; $i++) { 
-                $randNum = array_rand($needs, 1);
-                $needs[$randNum] = $needs[$randNum] + 1;
-            }
-        }*/
-
-        return $needs;
-    }
-
 
     private function getQuizQuestionDao()
     {

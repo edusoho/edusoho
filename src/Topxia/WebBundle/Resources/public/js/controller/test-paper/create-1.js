@@ -6,6 +6,8 @@ define(function(require, exports, module) {
     var noUiSlider = require('jquery.nouislider');
     require('jquery.nouislider-css');
     require('jquery.sortable');
+    var Uploader = require('upload');
+    var EditorFactory = require('common/kindeditor-factory');
 
     var Notify = require('common/bootstrap-notify');
 
@@ -67,7 +69,7 @@ define(function(require, exports, module) {
             $('.item-number:input').each(function(){
                 if(isNaN($(this).val())){
                     $(this).focus();
-                    Notify.warning('请填写数字');
+                    Notify.danger('请填写数字');
                     flag = 1;
                     return false;
                 }
@@ -82,23 +84,21 @@ define(function(require, exports, module) {
                 }
 
                 var perventage = $noUiSlider.val();
-                var itemCounts = new Array();
-                var itemScores = new Array();
+                var itemCounts = new Object;
+                var itemScores = new Object;
 
                 $('.item-number[name^=itemCounts]').each(function(index){
-                    var item = new Array($(this).data('key'),$(this).val());
-                    itemCounts.push(item);
+                    itemCounts[$(this).data('key')] = $(this).val();
                 });
 
                 $('.item-number[name^=itemScores]').each(function(index){
-                    var item = new Array($(this).data('key'),$(this).val());
-                    itemScores.push(item);
+                    itemScores[$(this).data('key')] = $(this).val() ;
                 });
 
                 $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
                     if (data) {
 
-                        Notify.warning(data);
+                        Notify.danger(data);
                         return false;
                     } else {
 
@@ -109,9 +109,12 @@ define(function(require, exports, module) {
                     }
                 });
             }
+        });
 
 
-           
+        var editor = EditorFactory.create('#test-description-field', 'simple_noimage');
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
         });
 
 

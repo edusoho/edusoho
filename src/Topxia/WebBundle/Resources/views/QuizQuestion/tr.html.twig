@@ -1,7 +1,7 @@
 <tr data-role='item'>
   <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-    {{ item.stem|length > 40 ? item.stem|slice(0, 40) ~ '...' : item.stem }}
+    {{ item.stem | plain_text(40) }}
   </td>
   <td>{{ dict('questionType')[item.questionType] }}</td>
   {% if item.parentId == 0 %}

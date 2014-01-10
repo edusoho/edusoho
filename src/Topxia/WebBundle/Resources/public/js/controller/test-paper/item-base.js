@@ -4,29 +4,28 @@ define(function(require, exports, module) {
     var Handlebars = require('handlebars');
 	var Notify     = require('common/bootstrap-notify');
 	var Test       = require('./util/util');
-    require('jquery.sortable');
 
 	var ItemBase = Widget.extend({
 
 		attrs:{
 			Notify: Notify,
 			questionType: [],
+			itemScores: [],
 			confirmTrTemplate: null,
 		},
 
 		events: {
             'show.bs.tab  a[data-toggle="tab"]' : 'menuTabShow',
             'shown.bs.tab a[data-toggle="tab"]' : 'menuTabShown',
-            'click [data-role=item-modal-btn]'  : 'itemListModal',
+            'click [data-role=item-modal-btn]'  : 'createListModal',
             'show.bs.modal [id=confirm-modal]'  : 'addConfirmTr',
             'click [id=confirm-modal] .confirm-submit'  : 'submit',
             'keyup [name^=scores][type=text]'   : function(){ Test.menuTotal() },
 		},
 
 		setup:function(){
-			this._initTab();
-			this._initItemList();
-			this._initConfirmModal();
+			this._initList();
+			this._initHandlebars();
 		},
 
 		menuTabShow: function(){
@@ -41,7 +40,7 @@ define(function(require, exports, module) {
 			Test.menuTotal();
 		},
 
-		itemListModal: function(e){
+		createListModal: function(e){
 
 			var ids = new Array();
 
@@ -61,17 +60,6 @@ define(function(require, exports, module) {
             })
 		},
 
-		sortable: function(id){
-
-			$('#'+id).sortable({
-	            itemSelector: '[data-role=item]',
-	            exclude: '.notMoveHandle',
-	            onDrop: function (item, container, _super) {
-	                _super(item, container);
-	                Test.sortable();
-	            },
-	        });
-		},
 
 		addConfirmTr: function(allTotal){
 			var template = this.get('confirmTrTemplate');
@@ -90,23 +78,23 @@ define(function(require, exports, module) {
 			this.$('#test-create2-form').submit();
 		},
 
-		_initTab: function (){
-
-			var questionType = $('[data-role=questionType-data]').html();
-
-			if(typeof questionType != 'undefined'){
-                this.set('questionType', $.parseJSON(questionType));
-            }
-		},
-
-		_initItemList: function(){
+		_initList: function(){
 
             require('./util/batch-delete')($(this.element));
             require('./util/item-delete')($(this.element));
             require('./util/batch-select')($(this.element));
         },
 
-        _initConfirmModal: function(e){
+        _initHandlebars: function(){
+        	var itemScores = $('[data-role=item-scores]').html();
+			if(typeof itemScores != 'undefined'){
+                this.set('itemScores', $.parseJSON(itemScores));
+            }
+
+        	var questionType = $('[data-role=questionType-data]').html();
+			if(typeof questionType != 'undefined'){
+                this.set('questionType', $.parseJSON(questionType));
+            }
 
         	var confirmTrTemplate = Handlebars.compile($('[data-role=confirm-tr-template]').html());
         	this.set('confirmTrTemplate', confirmTrTemplate);
@@ -124,10 +112,16 @@ define(function(require, exports, module) {
 
         		self.$('[data-role=item-body]').after(html);
                 
-                if (self.$('[data-type=' + key + ']').length == 0) 
-                {
+                if (self.$('[data-type=' + key + ']').length == 0) {
+
                 	$('#'+id).append("<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>");
+                	
                 } else {
+
+                	if(self.get('itemScores')[key] != 0){
+
+                		self.$('[data-type=' + key + ']').find('input[type=text]').val(self.get('itemScores')[key]);
+                	}
 
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));
                 }
@@ -135,11 +129,17 @@ define(function(require, exports, module) {
                 if('material' == key){
 
                 	self.$('[data-type=' + key + ']').each(function(index){
+
+                		if(self.get('itemScores')[key] != 0){
+
+                			self.$('[data-type=' + $(this).attr('id') + ']').find('input[type=text]').val(self.get('itemScores')[key]);
+                		}
+
                 		$(this).after(self.$('[data-type=' + $(this).attr('id') + ']'));
                 	});
                 }
 
-                self.sortable(id);
+                Test.initSortable(id);
 
             });
 

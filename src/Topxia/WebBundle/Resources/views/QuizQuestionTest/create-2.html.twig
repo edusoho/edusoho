@@ -23,9 +23,9 @@
             <li class="active">{% if flag == 'update'%}修改{%else%}添加{%endif%}试卷题目</li>
         </ol>
 
-        <div class="well well-sm clearfix">
+        <div class="clearfix mbm">
             <button  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,1:1}) }}" data-role="item-modal-btn" data-target="#test-item-modal" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>新增试题</button>
-            <ul class="nav nav-tabs" id="myTab">
+            <ul class="nav nav-pills nav-mini" id="myTab">
                 {% for key,type in testPaper['metas']['question_type_seq'] | split(',') %}
                     <li><a href="#questionType-{{type}}" data-toggle="tab">{{dict('questionType')[type]}}</a></li>
                 {% endfor %}
@@ -120,6 +120,8 @@
     </script>
 
     <script type="text/plain" data-role="questionType-data">{{ dict('questionType')| json_encode | raw}}</script>
+
+    <script type="text/plain" data-role="item-scores">{{ parentTestPaper.itemScores | default(null) | json_encode | raw }}</script>
 
 
 </div>

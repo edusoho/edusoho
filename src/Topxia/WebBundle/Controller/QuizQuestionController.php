@@ -67,7 +67,7 @@ class QuizQuestionController extends BaseController
 
 		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
-		$targets = $this->getQuestionService()->findQuestionTargets($courseId);
+		$targets = $this->findQuestionTargets($courseId);
 		
 		return $this->render('TopxiaWebBundle:QuizQuestion:index.html.twig', array(
 			'course' => $course,
@@ -92,13 +92,13 @@ class QuizQuestionController extends BaseController
 		if (empty($parentId)){
 			$parentId = 0;
 		} else {
-			$question = $this->getQuestionService()->getQuestion($parentId);
-			if (empty($question)){
+			$parentQuestion = $this->getQuestionService()->getQuestion($parentId);
+			if (empty($parentQuestion)){
 				return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId)));
 			}
 		}
 
-		$targets = $this->getQuestionService()->findQuestionTargets($courseId);
+		$targets = $this->findQuestionTargets($courseId);
 
 		$category = $this->getQuestionService()->findCategorysByCourseIds(array($courseId));
 
@@ -136,14 +136,14 @@ class QuizQuestionController extends BaseController
 
 		$targets['default'] = $request->query->get('targetsDefault');
 
-		$question['difficulty'] = $request->query->get('questionDifficulty');
+		$parentQuestion['difficulty'] = $request->query->get('questionDifficulty');
 
 		return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'course' => $course,
 			'type' => $type,
 			'targets' => $targets,
 			'parentId' => $parentId,
-			'question' => $question,
+			'parentQuestion' => $parentQuestion,
 			'category' => $category,
 		));
 	}
@@ -156,7 +156,7 @@ class QuizQuestionController extends BaseController
 		if (empty($question)){
 			throw $this->createNotFoundException('该项目问题问题不存在');
 		}
-		$targets = $this->getQuestionService()->findQuestionTargets($courseId);
+		$targets = $this->findQuestionTargets($courseId);
 
 		$category = $this->getQuestionService()->findCategorysByCourseIds(array($courseId));
 
@@ -287,16 +287,30 @@ class QuizQuestionController extends BaseController
     	$course = $this->getCourseService()->getCourse($courseId);
 
     	if ($request->getMethod() == 'POST') {
-	    	$originalFile = $this->get('request')->files->get('uploadFile');
-	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array(), 'local', $originalFile);
+	    	$originalFile = $this->get('request')->files->get('file');
+	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
 	    	return $this->createJsonResponse($file);
 	    }
-
-    	return $this->render('TopxiaWebBundle:QuizQuestion:upload-modal.html.twig', array(
-    		'course' => $course,
-    		'type' => $type
-    	));
     }
+
+    private function findQuestionTargets($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course))
+            return null;
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+        $targets = array();
+
+        $targets['course'.'-'.$course['id']] = '课程';
+
+        foreach ($lessons as  $lesson) {
+            $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'-'.$lesson['title'];
+        }
+
+        return $targets;
+    }
+
 
 	private function getCourseService()
     {
