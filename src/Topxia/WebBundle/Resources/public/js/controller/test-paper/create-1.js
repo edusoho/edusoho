@@ -82,17 +82,15 @@ define(function(require, exports, module) {
                 }
 
                 var perventage = $noUiSlider.val();
-                var itemCounts = new Array();
-                var itemScores = new Array();
+                var itemCounts = new Object;
+                var itemScores = new Object;
 
                 $('.item-number[name^=itemCounts]').each(function(index){
-                    var item = new Array($(this).data('key'),$(this).val());
-                    itemCounts.push(item);
+                    itemCounts[$(this).data('key')] = $(this).val();
                 });
 
                 $('.item-number[name^=itemScores]').each(function(index){
-                    var item = new Array($(this).data('key'),$(this).val());
-                    itemScores.push(item);
+                    itemScores[$(this).data('key')] = $(this).val() ;
                 });
 
                 $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {

@@ -2,77 +2,250 @@
 namespace Topxia\Service\Quiz\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Quiz\QuestionService;
+use Topxia\Service\Quiz\TestPaperBuilder;
+use Topxia\Common\ArrayToolkit;
 
 class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilder
 {
 	private $options;
 	private $testPaper;
+	private $message = array();
 	private $questions = array();
+	private $questionsGroup = array();
 
-	public function prepareBuild($testPaper,$options)
+	public function prepare($testPaper,$options)
 	{
+		if(empty($options['isDifficulty'])){
+			$options['isDifficulty'] = 0;
+		}
+
 		$this->testPaper = $testPaper;
+
 		$this->options = $options;
+
+		$lessons = $this->getCourseService()->getCourseLessons($options['courseId']);
+
+		$questionsCourse = $this->getQuestionService()->findQuestionsByTypeAndTypeIds('course', array($options['courseId']));
+
+		$questionsLesson = $this->getQuestionService()->findQuestionsByTypeAndTypeIds('lesson', ArrayToolkit::column($lessons, 'id'));
+
+		$questions = array_merge($questionsCourse, $questionsLesson);
+		
+		$questionsGroup = array();
+
+		if ($options['isDifficulty'] == 0) {
+
+			foreach ($questions as $question) {
+
+                $questionsGroup[$question['questionType']][] = $question;
+            }
+		} else {
+
+			foreach ($questions as $question) {
+
+                $questionsGroup[$question['questionType']][$question['difficulty']][] = $question;
+            }
+		}
+
+		$this->questionsGroup = $questionsGroup;
+ 	}
+
+	public function validate()
+	{
+		$name = $this->options['isDifficulty'] == 0 ? 'validateMessage' : 'validateDifficultyMessage';
+
+		foreach ($this->options['itemCounts'] as $type => $count) {
+			
+            $this->$name($type, $count);
+		}
+
 	}
 
 	public function build()
 	{
-		$this->buildSingleChoiceQuestions();
-		$this->buildMultiChoiceQuestions();
-		$this->buildMultiChoiceQuestions();
-		$this->buildMultiChoiceQuestions();
-		$this->buildMultiChoiceQuestions();
-		$this->buildMultiChoiceQuestions();
-	}
+		$seqType = explode(',', $this->testPaper['metas']['question_type_seq']);
 
+		$name = $this->options['isDifficulty'] == 0 ? 'buildQuestions' : 'buildDifficultyQuestions';
 
-	public function buildSingleChoiceQuestions()
-	{
-		$questions = $this->getCourseAndLessonSigleChoiceOptions($this->options['courseId']);
-		if($options['随机']){
-     		$this->questions = array_merge($this->questions ,$this->generateRandomQuestions($questions,$options['Signle_count']));
-  
+		foreach ($seqType as  $type) {
+			
+            $this->$name($type, $this->options['itemCounts'][$type]);
 		}
-     	else if($options['按难度']){
-
-     	}
 
 	}
 
-    private function generateQuestionByDifficuty($questions，$total)
-    {
-
-    }
-
-	private function generateRandomQuestions($questions,$total)
+	public function buildQuestions($type, $count)
 	{
-		if(count($questions) <= $total) return $questions;
-        return array_slice(shuffle($questions),0,5);
+		if(count($this->questionsGroup[$type]) < $count) {
+
+			$this->createNotFoundException();
+		}
+
+		shuffle($this->questionsGroup[$type]);
+
+        $questions = array_slice($this->questionsGroup[$type], 0, $count);
+
+ 		$this->questions = array_merge($this->questions, $questions);
 	}
 
-	private function getCourseAndLessonSigleChoiceOptions($courseId)
+	public function buildDifficultyQuestions($type, $count)
 	{
+        $needCountGroup = $this->getDifficultyCounts($count);
 
+        $groupSum = 0;
+
+		$parentQuestions = array();
+
+		foreach ($needCountGroup as $difficulty => $needCount) {
+
+			$questions = array();
+
+
+            if ($difficulty == 'otherCount') {
+
+                for($i = 0; $i<$needCount; $i++){
+                    $randDifficulty = array_rand($this->questionsGroup[$type]);
+                    $randId = array_rand($this->questionsGroup[$type][$randDifficulty]);
+                    $questions[] = $this->questionsGroup[$type][$randDifficulty][$randId];
+                    unset($this->questionsGroup[$type][$randDifficulty][$randId]);
+                    if(count($this->questionsGroup[$type][$randDifficulty]) ==0){
+                        unset($this->questionsGroup[$type][$randDifficulty]);
+                    }
+                } 
+
+                $this->questions = array_merge($this->questions, $questions);
+
+                $parentQuestions = array_merge($parentQuestions, $questions);
+
+                continue;
+            }
+
+            if(count($this->questionsGroup[$type][$difficulty]) < $needCount) {
+
+				$this->createNotFoundException();
+			}
+
+			shuffle($this->questionsGroup[$type][$difficulty]);
+
+        	$questions = array_slice($this->questionsGroup[$type][$difficulty], 0, $needCount);
+
+			$this->questions = array_merge($this->questions, $questions);
+
+			$parentQuestions = array_merge($parentQuestions, $questions);
+
+        }
+
+        if($type=="material"){
+        	$questions = $this->getQuestionService()->findQuestionsByParentIds(ArrayToolkit::column($parentQuestions, 'id'));
+        	
+        	$this->questions = array_merge_recursive($this->questions, $questions);
+        }
+		
 	}
 
-	private function getSigleChoiceOptions()
+	private function validateMessage($type, $count)
 	{
-		//return $this->options[]
+		$message = array();
+
+		if (empty($this->questionsGroup[$type])) {
+
+            $this->questionsGroup[$type] = array();
+        }
+
+		if (count($this->questionsGroup[$type]) < $count) {
+
+            $needCount = abs(count($this->questionsGroup[$type]) - $count);
+
+            $message[] = $this->options['questionType'][$type]."缺少".$needCount."题 ";
+        }
+  
+     	$this->message = array_merge($this->message , $message);
 	}
 
-	public function validate()
+	private function validateDifficultyMessage($type, $count)
 	{
+		$message = array();
 
+        $needCountGroup = $this->getDifficultyCounts($count);
+
+        $groupSum = 0;
+
+		foreach ($needCountGroup as $difficulty => $needCount) {
+
+            if ($difficulty == 'otherCount') {
+
+                if ($groupSum < $needCount ) {
+
+                    $needCount = $groupSum - $needCount;
+
+                    $message[] = $this->options['questionType'][$type]."缺少".$needCount."题 ";
+                }
+
+                continue;
+            }
+
+            if (empty($this->questionsGroup[$type][$difficulty])) {
+
+                $this->questionsGroup[$type][$difficulty] = array();
+            }
+
+            if (count($this->questionsGroup[$type][$difficulty]) < $needCount) {
+
+                $needCount = abs(count($this->questionsGroup[$type][$difficulty]) - $needCount);
+
+                $message[] = $this->options['questionType'][$type].$this->options['difficulty'][$difficulty]." 缺少".$needCount."题 ";
+            }
+
+            $groupSum = $groupSum + count($this->questionsGroup[$type][$difficulty]);
+
+        }
+
+     	$this->message = array_merge($this->message , $message);
 	}
+
 	public function getQuestions()
-	{
-
-	}
-	public function getValidations()
 	{
 		return $this->questions;
 	}
+
+
+	public function getMessage()
+	{
+		if (empty($this->message)) {
+
+            $this->message = false;
+
+        } else {
+
+            $this->message = array_merge(array('课程题库题目不足,无法生成试卷') , $this->message);
+
+            $this->message = implode(',', $this->message);
+        }
+
+		return $this->message;
+	}
+
+
+	private function getDifficultyCounts($num)
+    {
+    	$perventage = array();
+        $perventage['2'] = 100 - $this->options['perventage']['1'];
+        $perventage['1'] = $this->options['perventage']['1'] - $this->options['perventage']['0'];
+        $perventage['0'] = $this->options['perventage']['0'];
+
+        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
+            throw $this->createNotFoundException('perventage 参数错误');
+        }
+
+        $counts = array();
+        $counts['simple']     = (int) ($num * $perventage['0'] /100); 
+        $counts['ordinary']   = (int) ($num * $perventage['1'] /100); 
+        $counts['difficulty'] = (int) ($num * $perventage['2'] /100); 
+        
+        $counts['otherCount'] = $num - ($counts['simple'] + $counts['ordinary'] + $counts['difficulty']);
+
+        return $counts;
+    }
 
     private function getQuestionService()
     {
@@ -81,7 +254,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
     private function getCourseService()
     {
-        return $this->createService('........');
-    }  
+        return $this->createService('Course.CourseService');
+    }
 
 }

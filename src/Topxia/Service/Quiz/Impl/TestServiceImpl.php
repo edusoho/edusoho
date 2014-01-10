@@ -66,14 +66,32 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->getItem($id);
     }
 
-   public function buildTestPaper($testPaperId,$options,$builder)
+    public function buildTestPaper($builder, $options, $testPaperId)
     {
-        if(empty($builder)) 
+        if(empty($builder)) {
             throw $this->createServiceException('No builder Exists!');
+        }
+
         $testPaper = $this->getTestPaper($testPaperId);
-        $builder->prepare($testPaper,$options);
-        $builder->build();
-        return  $builder->getQuestions();
+
+        $builder->prepare($testPaper,$options);   
+
+        $builder->build();       
+
+        return $builder->getQuestions();
+   }
+
+    public function buildCheckTestPaper($builder, $options)
+    {
+        if(empty($builder)) {
+            throw $this->createServiceException('No builder Exists!');
+        }
+
+        $builder->prepare(array(), $options);
+
+        $builder->validate();
+
+        return  $builder->getMessage();
    }
 
 
