@@ -25,7 +25,7 @@
         {% if isEdit %} 修改{{dict('unquestionType')[type]}}  {% else %}  添加{{dict('unquestionType')[type]}}  {% endif %}
       </li>
     </ol>
-
+    
     <div id="question-creator-widget" data-upload-url="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}">
       <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="
       {% if isEdit %}
@@ -161,11 +161,11 @@
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
             
-            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
-
             {% if not isEdit and type != 'material' %}
                 <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
             {% endif %}
+
+            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
 
             {% if isEdit %}
                 <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:question.parentId}) }}" class="btn btn-link">返回</a>
