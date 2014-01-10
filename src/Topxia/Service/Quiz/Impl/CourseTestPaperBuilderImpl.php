@@ -11,11 +11,13 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 	private $testPaper;
 	private $message = array();
 	private $questions = array();
+	private $typeQuestions = array();
 	private $questionsGroup = array();
 
 	public function prepare($testPaper,$options)
 	{
 		if(empty($options['isDifficulty'])){
+
 			$options['isDifficulty'] = 0;
 		}
 
@@ -50,6 +52,19 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 		$this->questionsGroup = $questionsGroup;
  	}
 
+	public function build()
+	{
+		$seqTypes = explode(',', $this->testPaper['metas']['question_type_seq']);
+
+		$name = $this->options['isDifficulty'] == 0 ? 'buildQuestions' : 'buildDifficultyQuestions';
+
+		foreach ($seqTypes as $type) {
+			
+            $this->$name($type, $this->options['itemCounts'][$type]);
+		}
+
+	}
+
 	public function validate()
 	{
 		$name = $this->options['isDifficulty'] == 0 ? 'validateMessage' : 'validateDifficultyMessage';
@@ -61,86 +76,67 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 	}
 
-	public function build()
+	public function getQuestions()
 	{
-		$seqType = explode(',', $this->testPaper['metas']['question_type_seq']);
-
-		$name = $this->options['isDifficulty'] == 0 ? 'buildQuestions' : 'buildDifficultyQuestions';
-
-		foreach ($seqType as  $type) {
-			
-            $this->$name($type, $this->options['itemCounts'][$type]);
-		}
-
+		return $this->questions;
 	}
 
-	public function buildQuestions($type, $count)
+
+	public function getMessage()
 	{
-		if(count($this->questionsGroup[$type]) < $count) {
+		if (empty($this->message)) {
 
-			$this->createNotFoundException();
-		}
+            $this->message = false;
 
-		shuffle($this->questionsGroup[$type]);
+        } else {
 
-        $questions = array_slice($this->questionsGroup[$type], 0, $count);
+            $this->message = array_merge(array('课程题库题目不足,无法生成试卷') , $this->message);
 
- 		$this->questions = array_merge($this->questions, $questions);
+            $this->message = implode(',', $this->message);
+        }
+
+		return $this->message;
 	}
 
-	public function buildDifficultyQuestions($type, $count)
+	private function buildQuestions($type, $count)
 	{
+		$this->typeQuestions = array();
+		
+		$this->generateRandomQuestions($type, $count);
+
+		$this->buildMaterialQuestions($type);
+	}
+
+	private function buildDifficultyQuestions($type, $count)
+	{
+		$this->typeQuestions = array();
+
         $needCountGroup = $this->getDifficultyCounts($count);
-
-        $groupSum = 0;
-
-		$parentQuestions = array();
 
 		foreach ($needCountGroup as $difficulty => $needCount) {
 
-			$questions = array();
-
-
             if ($difficulty == 'otherCount') {
 
-                for($i = 0; $i<$needCount; $i++){
-                    $randDifficulty = array_rand($this->questionsGroup[$type]);
-                    $randId = array_rand($this->questionsGroup[$type][$randDifficulty]);
-                    $questions[] = $this->questionsGroup[$type][$randDifficulty][$randId];
-                    unset($this->questionsGroup[$type][$randDifficulty][$randId]);
-                    if(count($this->questionsGroup[$type][$randDifficulty]) ==0){
-                        unset($this->questionsGroup[$type][$randDifficulty]);
-                    }
-                } 
+            	$questions = $this->generateAllDifficultyRandomQuestions($type, $difficulty, $needCount);
 
-                $this->questions = array_merge($this->questions, $questions);
+            } else {
 
-                $parentQuestions = array_merge($parentQuestions, $questions);
-
-                continue;
+            	$questions = $this->generateDifficultyRandomQuestions($type, $difficulty, $needCount);
             }
-
-            if(count($this->questionsGroup[$type][$difficulty]) < $needCount) {
-
-				$this->createNotFoundException();
-			}
-
-			shuffle($this->questionsGroup[$type][$difficulty]);
-
-        	$questions = array_slice($this->questionsGroup[$type][$difficulty], 0, $needCount);
-
-			$this->questions = array_merge($this->questions, $questions);
-
-			$parentQuestions = array_merge($parentQuestions, $questions);
-
+            
         }
 
-        if($type=="material"){
-        	$questions = $this->getQuestionService()->findQuestionsByParentIds(ArrayToolkit::column($parentQuestions, 'id'));
+		$this->buildMaterialQuestions($type);
+	}
+
+	private function buildMaterialQuestions($type)
+	{
+		if($type=="material"){
+
+        	$questions = $this->getQuestionService()->findQuestionsByParentIds(ArrayToolkit::column($this->typeQuestions, 'id'));
         	
-        	$this->questions = array_merge_recursive($this->questions, $questions);
+        	$this->questions = array_merge($this->questions, $questions);
         }
-		
 	}
 
 	private function validateMessage($type, $count)
@@ -203,45 +199,84 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
      	$this->message = array_merge($this->message , $message);
 	}
 
-	public function getQuestions()
+	private function generateRandomQuestions($type, $count)
 	{
-		return $this->questions;
+		if(count($this->questionsGroup[$type]) < $count) {
+
+			$this->createNotFoundException();
+		}
+
+		shuffle($this->questionsGroup[$type]);
+
+        $questions = array_slice($this->questionsGroup[$type], 0, $count);
+
+ 		$this->questions = array_merge($this->questions, $questions);
+
+ 		$this->typeQuestions = array_merge($this->typeQuestions, $questions);
 	}
 
-
-	public function getMessage()
+	private function generateDifficultyRandomQuestions($type, $difficulty, $needCount)
 	{
-		if (empty($this->message)) {
+		if (count($this->questionsGroup[$type][$difficulty]) < $needCount) {
 
-            $this->message = false;
+			$this->createNotFoundException();
+		}
 
-        } else {
+		shuffle($this->questionsGroup[$type][$difficulty]);
 
-            $this->message = array_merge(array('课程题库题目不足,无法生成试卷') , $this->message);
+    	$questions = array_slice($this->questionsGroup[$type][$difficulty], 0, $needCount);
 
-            $this->message = implode(',', $this->message);
-        }
+		$this->questions = array_merge($this->questions, $questions);
 
-		return $this->message;
+		$this->typeQuestions = array_merge($this->typeQuestions, $questions);
 	}
 
+	private function generateAllDifficultyRandomQuestions($type, $difficulty, $needCount)
+	{
+		$questions = array();
+
+		for ($i = 0; $i < $needCount; $i++) {
+
+			$randDifficulty = array_rand($this->questionsGroup[$type]);
+
+			$randId         = array_rand($this->questionsGroup[$type][$randDifficulty]);
+
+			$questions[]    = $this->questionsGroup[$type][$randDifficulty][$randId];
+
+            unset($this->questionsGroup[$type][$randDifficulty][$randId]);
+
+            if(count($this->questionsGroup[$type][$randDifficulty]) ==0){
+
+                unset($this->questionsGroup[$type][$randDifficulty]);
+            }
+        } 
+
+        $this->questions = array_merge($this->questions, $questions);
+
+        $this->typeQuestions = array_merge($this->typeQuestions, $questions);
+	}
 
 	private function getDifficultyCounts($num)
     {
     	$perventage = array();
+
         $perventage['2'] = 100 - $this->options['perventage']['1'];
+
         $perventage['1'] = $this->options['perventage']['1'] - $this->options['perventage']['0'];
+
         $perventage['0'] = $this->options['perventage']['0'];
 
-        if(($perventage['0'] + $perventage['1'] +$perventage['2']) != 100){
+        if (($perventage['0'] + $perventage['1'] +$perventage['2']) != 100) {
+
             throw $this->createNotFoundException('perventage 参数错误');
         }
 
         $counts = array();
+
         $counts['simple']     = (int) ($num * $perventage['0'] /100); 
         $counts['ordinary']   = (int) ($num * $perventage['1'] /100); 
         $counts['difficulty'] = (int) ($num * $perventage['2'] /100); 
-        
+
         $counts['otherCount'] = $num - ($counts['simple'] + $counts['ordinary'] + $counts['difficulty']);
 
         return $counts;

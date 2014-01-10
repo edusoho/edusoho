@@ -79,7 +79,7 @@ class TestServiceImpl extends BaseService implements TestService
         $builder->build();       
 
         return $builder->getQuestions();
-   }
+    }
 
     public function buildCheckTestPaper($builder, $options)
     {
@@ -92,8 +92,7 @@ class TestServiceImpl extends BaseService implements TestService
         $builder->validate();
 
         return  $builder->getMessage();
-   }
-
+    }
 
     public function createItem($testId, $questionId)
     {
@@ -132,7 +131,9 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         foreach ($ids as $k => $id) {
+
             $question = $this->getQuestionService()->getQuestion($id);
+            
             if(empty($question)){
                 throw $this->createServiceException();
             }

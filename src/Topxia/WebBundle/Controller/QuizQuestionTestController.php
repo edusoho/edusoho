@@ -193,10 +193,11 @@ class QuizQuestionTestController extends BaseController
 			$items     = ArrayToolkit::index($this->getTestService()->findItemsByTestPaperId($testPaperId), 'questionId');
 		    $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
 		} else {
+
 			$parentTestPaper['courseId'] = $courseId;
 			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
 		}
-
+		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2.html.twig', array(
 			'course' => $course,
 			'items' => $items,

@@ -121,6 +121,8 @@
 
     <script type="text/plain" data-role="questionType-data">{{ dict('questionType')| json_encode | raw}}</script>
 
+    <script type="text/plain" data-role="item-scores">{{ parentTestPaper.itemScores | default(null) | json_encode | raw }}</script>
+
 
 </div>
 

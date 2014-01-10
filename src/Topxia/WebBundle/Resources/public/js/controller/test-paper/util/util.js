@@ -1,4 +1,6 @@
 define(function(require, exports, module) {
+    
+    require('jquery.sortable');
 
     var Test = {
 
@@ -92,6 +94,18 @@ define(function(require, exports, module) {
 
     		});
     	},
+
+        initSortable: function(id){
+
+            $('#'+id).sortable({
+                itemSelector: '[data-role=item]',
+                exclude: '.notMoveHandle',
+                onDrop: function (item, container, _super) {
+                    _super(item, container);
+                    Test.sortable();
+                },
+            });
+        },
     	
 
     };
