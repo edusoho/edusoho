@@ -39,18 +39,19 @@
         {% if not parentId %}
         <div class="form-group">
           <div class="col-md-2 control-label"><label>从属</label></div>
-          <div class="col-md-4 controls">
+          <div class="col-md-8 controls">
             <select class="form-control width-input width-input-large" name="target" data-role="target"></select>
             <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
-          </div>
-          <div class="col-md-1 control-label"><label>难度</label></div>
-          <div class="col-md-4 controls radios">
-            {{ radios('difficulty', {'simple':'简单', 'ordinary':'一般', 'difficulty':'困难'}, question.difficulty | default('ordinary')) }}
           </div>
         </div>
         {% endif %}
 
-
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>难度</label></div>
+          <div class="col-md-8 controls radios">
+            {{ radios('difficulty', {'simple':'简单', 'ordinary':'一般', 'difficulty':'困难'}, question.difficulty | default('ordinary')) }}
+          </div>
+        </div>
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="question-stem-field">题干</label></div>
