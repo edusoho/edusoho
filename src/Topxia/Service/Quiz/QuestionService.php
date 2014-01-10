@@ -19,13 +19,6 @@ interface QuestionService
 
     public function findQuestionsByIds(array $ids);
 
-    public function findQuestionsByCourseId($courseId);
-
-    public function findQuestionsTypeNumberByCourseId($courseId);
-
-    public function checkQuesitonNumber($field, $courseId);
-
-    public function findRandQuestions($courseId, $testPaperId, $field);
 
     /**
      *  quiz_question_choice
@@ -47,12 +40,13 @@ interface QuestionService
 
     public function sortCategories($courseId, array $categoryIds);
 
-
     /**
-     *  
-     */
+    *  
+    **/
+    public function findQuestionsByTypeAndTypeIds($type, $ids);
 
-    public function findQuestionTargets($courseId);
+    public function findQuestionsCountByTypeAndTypeIds($type, $ids);
+
 
 
 }

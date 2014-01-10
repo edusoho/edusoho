@@ -18,6 +18,8 @@ interface QuizQuestionDao
 
     public function deleteQuestionByIds(array $ids);
 
+    public function findQuestionsByTypeAndTypeIds($type,$ids);
+
     public function searchQuestionCount($conditions);
 
     public function searchQuestion($conditions, $orderBy, $start, $limit);

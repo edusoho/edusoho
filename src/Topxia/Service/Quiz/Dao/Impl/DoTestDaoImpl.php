@@ -79,6 +79,22 @@ class DoTestDaoImpl extends BaseDao
         return $this->getConnection()->executeQuery($sql, $answersForSQL);
     }
 
+    public function updateItemEssays ($answers, $testPaperResultId)
+    {
+        //事务
+        if(empty($answers)){
+            return array(); 
+        }
+        $sql ='';
+        $answersForSQL = array();
+        foreach ($answers as $key => $value) {
+            $sql .= "UPDATE {$this->table} set `score` = ?, `teacherSay` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+            array_push($answersForSQL, $value['score'], $value['teacherSay'], (int)$key, (int)$testPaperResultId); 
+        }
+
+        return $this->getConnection()->executeQuery($sql, $answersForSQL);
+    }
+
 	public function findTestResultsByItemIdAndTestId ($questionIds, $testPaperResultId)
 	{
 		if(empty($questionIds)){ 

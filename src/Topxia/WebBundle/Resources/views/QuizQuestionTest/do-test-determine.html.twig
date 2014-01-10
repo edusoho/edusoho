@@ -1,3 +1,6 @@
+{% if not role|default(null) == 'teacher' %}
+
+
 <div class="panel panel-default" id="question{{ question.id }}">
 	<div class="panel-heading">
 		<h3 class="panel-title">{{ questionIndex }}. {{ question.stem }}</h3>
@@ -36,3 +39,5 @@
 		</div>
 	{% endif %}
 </div>
+
+{% endif %}

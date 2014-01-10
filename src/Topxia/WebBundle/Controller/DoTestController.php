@@ -104,6 +104,48 @@ class DoTestController extends BaseController
 		));
 	}
 
+	public function testPauseAction(Request $request)
+	{
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig'); 
+	}
+
+	public function teacherCheckAction (Request $request, $id)
+	{
+		//身份校验?
+
+		$paperResult = $this->getTestService()->getTestPaperResult($id);
+
+		$paper = $this->getTestService()->getTestPaper($paperResult['testId']);
+
+
+		if (!$this->getTestService()->canTeacherCheck($paper['id'])){
+			throw createAccessDeniedException('无权批阅试卷！');
+		}
+
+
+		if ($request->getMethod() == 'POST') {
+			$form = $request->request->all();
+			$this->getTestService()->makeTeacherFinishTest($id, $form);
+			
+			return $this->createJsonResponse(true);
+		}
+
+
+		$questions = $this->getTestService()->testResults($id);
+
+		$accuracy = $this->makeAccuracy($questions);
+
+		$questions = $this->formatQuestions($questions);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-teacher-check.html.twig', array(
+			'questions' => $questions,
+			'accuracy' => $accuracy,
+			'paper' => $paper,
+			'paperResult' => $paperResult,
+			'id' => $id
+		));
+	}
+
 	private function makeAccuracy ($questions)
     {
     	$results = array();
@@ -185,11 +227,6 @@ class DoTestController extends BaseController
 		$formatQuestions['number'] = $number;
 
 		return $formatQuestions;
-	}
-
-	public function testPauseAction(Request $request)
-	{
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig'); 
 	}
 
    	private function getQuestionService()

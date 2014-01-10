@@ -194,9 +194,10 @@ class QuizQuestionTestController extends BaseController
 		    $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
 		} else {
 
-			$questions = $this->getQuestionService()->findRandQuestions($courseId, $testPaperId, $parentTestPaper);
+			$parentTestPaper['courseId'] = $courseId;
+			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
 		}
-
+		
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2.html.twig', array(
 			'course' => $course,
 			'items' => $items,
@@ -290,13 +291,17 @@ class QuizQuestionTestController extends BaseController
     {
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
-		$field = $request->request->all();
+		$options = $request->request->all();
 
-        $field['questionType'] = $this->getWebExtension()->getDict('questionType');
+        $options['courseId'] = $courseId;
 
-        $field['difficulty']   = $this->getWebExtension()->getDict('difficulty');
+        $options['questionType'] = $this->getWebExtension()->getDict('questionType');
 
-        return $this->createJsonResponse($this->getQuestionService()->checkQuesitonNumber($field, $courseId));
+        $options['difficulty'] = $this->getWebExtension()->getDict('difficulty');
+
+        $message = $this->getTestService()->buildCheckTestPaper($this->getTestPaperBuilder(), $options);
+
+        return $this->createJsonResponse($message);
     }
 
     public function deleteItemAction(Request $request, $courseId, $testItemId)
@@ -363,6 +368,10 @@ class QuizQuestionTestController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    private function getTestPaperBuilder()
+    {
+        return $this->getServiceKernel()->createService('Quiz.CourseTestPaperBuilder');
+    }
 
 	private function getCourseService()
     {

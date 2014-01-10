@@ -67,7 +67,7 @@ class QuizQuestionController extends BaseController
 
 		$lessons = ArrayToolkit::index($lessons,'id');
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId')); 
-		$targets = $this->getQuestionService()->findQuestionTargets($courseId);
+		$targets = $this->findQuestionTargets($courseId);
 		
 		return $this->render('TopxiaWebBundle:QuizQuestion:index.html.twig', array(
 			'course' => $course,
@@ -98,7 +98,7 @@ class QuizQuestionController extends BaseController
 			}
 		}
 
-		$targets = $this->getQuestionService()->findQuestionTargets($courseId);
+		$targets = $this->findQuestionTargets($courseId);
 
 		$category = $this->getQuestionService()->findCategorysByCourseIds(array($courseId));
 
@@ -156,7 +156,7 @@ class QuizQuestionController extends BaseController
 		if (empty($question)){
 			throw $this->createNotFoundException('该项目问题问题不存在');
 		}
-		$targets = $this->getQuestionService()->findQuestionTargets($courseId);
+		$targets = $this->findQuestionTargets($courseId);
 
 		$category = $this->getQuestionService()->findCategorysByCourseIds(array($courseId));
 
@@ -292,6 +292,25 @@ class QuizQuestionController extends BaseController
 	    	return $this->createJsonResponse($file);
 	    }
     }
+
+    private function findQuestionTargets($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course))
+            return null;
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+        $targets = array();
+
+        $targets['course'.'-'.$course['id']] = '课程';
+
+        foreach ($lessons as  $lesson) {
+            $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'-'.$lesson['title'];
+        }
+
+        return $targets;
+    }
+
 
 	private function getCourseService()
     {
