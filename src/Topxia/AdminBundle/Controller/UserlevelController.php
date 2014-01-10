@@ -6,24 +6,24 @@
 	use Topxia\Common\ArrayToolkit;
 	use Topxia\Common\Paginator;
 
-	class UserlevelController extends BaseController {
+	class UserlevelController extends BaseController 
+	{
 
 		public function indexAction (Request $request)
 		{	
 			$conditions = array_filter($request->query->all());
-
 			$paginator = new Paginator(
 	            $this->get('request'),
-	            $this->getUserService()->searchUserlevelsCount($conditions),
+	            $this->getLevelService()->searchLevelsCount($conditions),
 	            20
 	        );
-				$userlevels = $this->getUserService()->searchUserlevels(
+				$userlevels = $this->getLevelService()->searchLevels(
 	            $conditions,
 	            $paginator->getOffsetCount(),
 	            $paginator->getPerPageCount()
 	        );
 				return $this->render('TopxiaAdminBundle:Userlevel:index.html.twig', array(
-	            'userlevels' => $userlevels ,
+	            'userlevels' => $userlevels,
 	            'paginator' => $paginator
 	        ));
 		}
@@ -31,7 +31,7 @@
 		public function createAction (Request $request)
    		{   
 	        if ('POST' == $request->getMethod()) {
-			$userlevel = $this->getUserService()->createUserlevel($request->request->all());
+			$userlevel = $this->getLevelService()->createLevel($request->request->all());
 			return $this->render('TopxiaAdminBundle:Userlevel:tr.html.twig', array('userlevel' => $userlevel));
 			}
 
@@ -40,24 +40,23 @@
 
     	public function updateAction (Request $request,$id)
    		{   
-   			$userlevel = $this->getUserService()->getUserlevel($id);
+   			$userlevel = $this->getLevelService()->getLevel($id);
 			if (empty($userlevel)) {
 				throw $this->createNotFoundException();
 			}
 
 	        if ('POST' == $request->getMethod()) {
-			$userlevel = $this->getUserService()->updateUserlevel($id, $request->request->all());
+			$userlevel = $this->getLevelService()->updateLevel($id, $request->request->all());
 			return $this->render('TopxiaAdminBundle:Userlevel:tr.html.twig', array('userlevel' => $userlevel));
 			}
 
 	        return $this->render('TopxiaAdminBundle:Userlevel:userlevel-modal.html.twig', array(
-			'userlevel' => $userlevel
-			));
+			'userlevel' => $userlevel));
 	    }
 
     	public function deleteAction(Request $request,$id)
 		{
-			$this->getUserService()->deleteUserlevel($id);
+			$this->getLevelService()->deleteLevel($id);
 			return $this->createJsonResponse(true);
 		}
 
@@ -65,7 +64,7 @@
 	    {
 	        $name = $request->query->get('value');
 	        $exclude = $request->query->get('exclude');
-	        $avaliable = $this->getUserService()->isUserlevelNameAvailable($name, $exclude);
+	        $avaliable = $this->getLevelService()->isLevelNameAvailable($name, $exclude);
 		       if ($avaliable) {
 	            $response = array('success' => true, 'message' => '');
 	        } else {
@@ -77,17 +76,21 @@
 
 	    public function sortAction(Request $request)
 	    {
-	    	$this->getUserService()->sortUserlevels($request->request->get('ids'));
+	    	$this->getLevelService()->sortLevels($request->request->get('ids'));
 			return $this->createJsonResponse(true);
 	    }
 
-		private function getUserlevel($id)
+		private function getLevel($id)
 		{
-			$userlevel = $this->getUserService()->getUserlevel($id);
-			if (empty($userlevel)) {
+			$level = $this->getLevelService()->getLevel($id);
+			if (empty($level)) {
 				throw $this->createNotFoundException('会员等级不存在!');
 			}
-			return $userlevel;
+			return $level;
 		}
+
+		protected function getLevelService()
+    	{
+        return $this->getServiceKernel()->createService('User.LevelService');
+    	}
 }
-?>

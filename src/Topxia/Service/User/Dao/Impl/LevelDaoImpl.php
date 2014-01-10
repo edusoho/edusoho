@@ -3,30 +3,30 @@
 namespace Topxia\Service\User\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\User\Dao\UserlevelDao;
+use Topxia\Service\User\Dao\LevelDao;
 use Topxia\Common\DaoException;
 use PDO;
 
-class UserlevelDaoImpl extends BaseDao implements UserlevelDao
+class LevelDaoImpl extends BaseDao implements LevelDao
 {
 	protected $table = 'user_level';
 
-    public function getUserlevel($id)
+    public function getLevel($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getUserlevelByName($name)
+    public function getLevelByName($name)
     {
         $sql = "SELECT * FROM {$this->table} WHERE Name = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($name)) ? : null;
     }
 
-	public function searchUserlevels($conditions, $start, $limit)
+	public function searchLevels($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $builder = $this->createUserlevelSearchQueryBuilder($conditions)
+        $builder = $this->createLevelSearchQueryBuilder($conditions)
         ->select('*')
         ->setFirstResult($start)
         ->setMaxResults($limit)
@@ -34,41 +34,42 @@ class UserlevelDaoImpl extends BaseDao implements UserlevelDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function searchUserlevelsCount($conditions)
+    public function searchLevelsCount($conditions)
     {
-        $builder = $this->createUserlevelSearchQueryBuilder($conditions)
+        $builder = $this->createLevelSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function createUserlevel($userlevel)
+    public function createLevel($level)
     {
-        $affected = $this->getConnection()->insert($this->table, $userlevel);
+        $affected = $this->getConnection()->insert($this->table, $level);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert userlevel post error.');
+            throw $this->createDaoException('Insert level post error.');
         }
-        return $this->getUserlevel($this->getConnection()->lastInsertId());
+        return $this->getLevel($this->getConnection()->lastInsertId());
     }
 
-    public function updateUserlevel($id,$fields)
+    public function updateLevel($id,$fields)
      {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getUserlevel($id);
+        return $this->getLevel($id);
     }
 
-    public function deleteUserlevel($id)
+    public function deleteLevel($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    private function createUserlevelSearchQueryBuilder($conditions)
+    private function createLevelSearchQueryBuilder($conditions)
     {
         
         $builder = $this->createDynamicQueryBuilder($conditions)
         ->from($this->table, 'user_level')
         ->andWhere('id = :id')
         ->andWhere('levelName LIKE :Name')
-        ->andWhere('levelIcon = :Icon');
+        ->andWhere('levelIcon = :Icon')
+        ->andWhere('seq < :seq');
 
         return $builder;
     }

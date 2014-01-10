@@ -10,7 +10,7 @@ class MemberController extends BaseController
     public function indexAction()
     {	
     	$conditions = array();
-    	$userlevels = $this->getUserService()->searchUserlevels($conditions,0,100);
+    	$userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
     	$courses = $this->getCourseService()->findCoursesByHaveUserLevelIds(0, 100);
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
         	'userlevels' => $userlevels,
@@ -21,18 +21,32 @@ class MemberController extends BaseController
     public function courseAction(Request $request,$id)
     {   
         $conditions = array();
-        $courses = $this->getCourseService()->findCoursesByUserLevelId($id);
-        $userlevels = $this->getUserService()->searchUserlevels($conditions,0,100);
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->findCoursesByUserLevelIdCount($id),
+            15
+        );
+
+        $courses = $this->getCourseService()->findCoursesByUserLevelId(
+            $id,                
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        
+        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
         return $this->render('TopxiaWebBundle:Member:course.html.twig',array(
             'courses' => $courses,
-            'userlevels' =>$userlevels,
-            'id' =>$id,
+            'userlevels' => $userlevels,
+            'id' => $id,
+            'paginator' => $paginator
         ));
     }
 
-    protected function getUserService()
+    protected function getLevelService()
     {
-    	return $this->getServiceKernel()->createService('User.UserService');
+    	return $this->getServiceKernel()->createService('User.LevelService');
     }
 
     protected function getCourseService()

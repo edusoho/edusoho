@@ -34,24 +34,6 @@ interface UserService
 
     public function hasAdminRoles($userId);
 
-    public function getUserlevel($id);
-
-    public function createUserlevel($userlevel);
-
-    public function searchUserlevelsCount($conditions);
-
-    public function searchUserlevels($conditions,$start,$limit);
-
-    public function deleteUserlevel($id);
-
-    public function updateUserlevel($id,$fields);
-
-    public function getUserlevelByName($name);
-
-    public function sortUserlevels(array $id);
-
-    public function isUserlevelNameAvailable($name, $exclude=null);
-
     public function rememberLoginSessionId($id, $sessionId);
 
     /**

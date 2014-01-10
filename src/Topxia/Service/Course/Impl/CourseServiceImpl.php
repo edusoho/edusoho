@@ -26,12 +26,35 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
-	public function findCoursesByUserLevelId($id)
+	public function findCoursesByUserLevelId($id,$start,$limit)
     {	
-    	$courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByUserLevelId($id)
+    	$conditions = array(
+            'seq'=>"$id"
         );
+        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
+        foreach ($userlevels as $userlevel) {
+        	$userlevelId[] = $userlevel['id'];
+        }
+        $userlevelId[] = $id;
+    	$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findCoursesByUserLevelId($userlevelId,$start,$limit)
+        );
+
         return ArrayToolkit::index($courses, 'id');
+    }
+
+    public function findCoursesByUserLevelIdCount($id) 
+    {	
+    	$conditions = array(
+            'seq'=>"$id"
+        );
+        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
+        foreach ($userlevels as $userlevel) {
+        	$userlevelId[] = $userlevel['id'];
+        }
+        $userlevelId[] = $id;
+
+        return $this->getCourseDao()->findCoursesByUserLevelIdCount($userlevelId);
     }
 
     public function findCoursesByHaveUserLevelIds($start, $limit)
@@ -1660,6 +1683,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    private function getLevelService()
+    {
+    	return $this->createService('User.LevelService');
     }
 
 }
