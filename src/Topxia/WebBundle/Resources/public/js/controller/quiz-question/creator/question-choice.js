@@ -6,6 +6,10 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     var ChoiceQuestion = BaseQuestion.extend({
+        attrs: {
+            index : 1,
+        },
+
         events: {
             'click [data-role=add-choice]': 'onAddChoice',
             'click [data-role=delete-choice]': 'onDeleteChoice',
@@ -25,7 +29,7 @@ define(function(require, exports, module) {
             }
             var choiceCount = this.$('[data-role=choice]').length;
             var code = String.fromCharCode(choiceCount + 65);
-            var model = {code: code,id:choiceCount}
+            var model = {code: code,id:this.get('index')}
             this.addChoice(model);
         },
 
@@ -47,6 +51,8 @@ define(function(require, exports, module) {
                 element: '#item-input-'+model.id,
                 required: true
             });
+
+            this.set('index', this.get('index')+1);
 
             var $trigger = $('#item-upload-' + model.id);
             var uploader = new Uploader({
@@ -128,7 +134,7 @@ define(function(require, exports, module) {
                 for (var i = 0; i < 4; i++) {
                     var choiceCount = this.$('[data-role=choice]').length;
                     var code = String.fromCharCode(choiceCount + 65);
-                    var model = {code: code,id:choiceCount}
+                    var model = {code: code,id:this.get('index')}
                     this.addChoice(model);
                 }
             }
