@@ -41,7 +41,7 @@ class Version20131226140235 extends AbstractMigration
 			  `paidTime` int(11) NOT NULL COMMENT '更新时间',
 			  `createdTime` int(11) NOT NULL COMMENT '创建时间',
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='推广成交记录表'  AUTO_INCREMENT=1;
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='推广成交订单记录表'  AUTO_INCREMENT=1;
 
 
 			CREATE TABLE IF NOT EXISTS `mysale_log` (

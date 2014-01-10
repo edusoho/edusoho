@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}用户认证审核{% endblock %}
+{% block body %}
+
+<form id="approve-form"  method="post" action="{{ path('admin_approval_approve', {id:user.id}) }}">
+
+
+
+
+   
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="note">推广链接</label>
+      </div>
+      <div class="col-md-8">
+        <textarea id="tUrl" name="tUrl" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input id="form_status" type="hidden" name="form_status" >
+</form>
+{% endblock %}
+
+{% block footer %}
+<div class="pull-right">
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-danger" data-toggle="form-submit" data-status='fail' data-target="#approve-form">审核失败</button>
+  <button type="submit" class="btn btn-success" data-toggle="form-submit" data-status='success' data-target="#approve-form">审核成功</button>
+
+
+  <script></script>
+    
+</div>
+{% endblock %}

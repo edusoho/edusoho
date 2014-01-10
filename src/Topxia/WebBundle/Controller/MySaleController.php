@@ -57,7 +57,41 @@ class MySaleController extends BaseController
         ));
        
        
-    }  
+    }
+
+     public function courseLinkAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $sort  = 'recommended';
+
+        $conditions = array(
+            'status' => 'published',
+            'recommended' => ($sort == 'recommended') ? null : null
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions)
+            ,12
+        );
+
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions, $sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+ 
+       
+        return $this->render('TopxiaWebBundle:MySale:course-list.html.twig', array(
+            'courses'=>$courses,
+            'paginator' => $paginator
+        ));
+       
+       
+    } 
+     
   
 
     private function getFileService()

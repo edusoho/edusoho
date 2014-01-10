@@ -38,10 +38,9 @@
           <td></td>
            <td>340元</td>
           <td>
-            <div class="btn-group">
-              <a class="btn btn-default btn-sm" href="{{ path('mysale_course_link', {id:course.id}) }}">生成推广链接</a>
-            </div>
-
+                    
+          <a href="javascript:;" class="btn btn-default btn-sm"   data-toggle="modal" data-target="#modal" data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 生成推广链接 </a>
+        
           </td>
         </tr>
       {% else %}
