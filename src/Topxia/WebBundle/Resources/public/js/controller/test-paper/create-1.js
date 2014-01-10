@@ -6,6 +6,8 @@ define(function(require, exports, module) {
     var noUiSlider = require('jquery.nouislider');
     require('jquery.nouislider-css');
     require('jquery.sortable');
+    var Uploader = require('upload');
+    var EditorFactory = require('common/kindeditor-factory');
 
     var Notify = require('common/bootstrap-notify');
 
@@ -107,9 +109,12 @@ define(function(require, exports, module) {
                     }
                 });
             }
+        });
 
 
-           
+        var editor = EditorFactory.create('#test-description-field', 'simple_noimage');
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
         });
 
 
