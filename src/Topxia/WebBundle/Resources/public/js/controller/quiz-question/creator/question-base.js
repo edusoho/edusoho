@@ -21,8 +21,14 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            this.set('targets', $.parseJSON($('[data-role=targets-data]').html()));
-            this.set('categories', $.parseJSON($('[data-role=category-data]').html()));
+            if ($('[data-role=targets-data]').length > 0) {
+                this.set('targets', $.parseJSON($('[data-role=targets-data]').html()));
+            }
+
+            if ($('[data-role=category-data]').length > 0) {
+                this.set('categories', $.parseJSON($('[data-role=category-data]').html()));
+            }
+
             this._initForm();
             this._initStemField();
             this._initAnalysisField();
