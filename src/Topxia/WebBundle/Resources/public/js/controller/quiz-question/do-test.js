@@ -91,7 +91,7 @@ define(function(require, exports, module) {
 
         });
 
-        $('.panel-footer').on('click', 'a.btn', function(){
+        $('.panel-footer').on('click', 'a.btn.marking', function(){
             id = $(this).parents('.panel').attr('id');
             btn = $('.answerCard .panel-body [href="#'+id+'"]');
             if (btn.css('border-left-width') == '1px') {
@@ -116,7 +116,21 @@ define(function(require, exports, module) {
             
         });
 
+        $('body').on('click', '.favorite-btn', function(){
+            $btn = $(this);
+            $.post($(this).data('url'),function(){
+                $btn.hide();
+                $btn.parent().find('.unfavorite-btn').show();
+            });
+        });
 
+        $('body').on('click', '.unfavorite-btn', function(){
+            $btn = $(this);
+            $.post($(this).data('url'),function(){
+                $btn.hide();
+                $btn.parent().find('.favorite-btn').show();
+            });
+        });
 
         
 

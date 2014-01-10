@@ -578,7 +578,7 @@ class TestServiceImpl extends BaseService implements TestService
         $answersNew = ArrayToolkit::parts($answers, $itemIdsNew);
 
         if (!empty($answersNew)) {
-            $this->getDoTestDao()->addItemAnswers($answersNew, $testResult['id'], $user['id']);
+            $this->getDoTestDao()->addItemAnswers($answersNew, $testResult['testId'], $testResult['id'], $user['id']);
         }
 
         //测试数据
@@ -604,9 +604,15 @@ class TestServiceImpl extends BaseService implements TestService
 
         $paperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $totalScore = array_sum(ArrayToolkit::column($testResults, 'score')) + $paperResult['score'];
+        $subjectiveScore = array_sum(ArrayToolkit::column($testResults, 'score'));
 
-        return $this->getTestPaperResultDao()->updateResult($id, array('score' => $totalScore));
+        $totalScore = $subjectiveScore + $paperResult['score'];
+
+        return $this->getTestPaperResultDao()->updateResult($id, array(
+            'score' => $totalScore,
+            'subjectiveScore' => $subjectiveScore,
+            'status' => 'finished'
+        ));
     }
 
     private function filterTestAnswers ($answers, $testPaperResultId)
@@ -635,6 +641,8 @@ class TestServiceImpl extends BaseService implements TestService
         $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
 
         $fields['score'] = $this->sumScore($testResults);
+
+        $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
         $fields['remainTime'] = $remainTime;
         $fields['endTime'] = time();

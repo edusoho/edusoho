@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+
+{% block content %}
+<div class="panel panel-default">
+
+	<div class="panel-heading">
+		<h2>我的批阅</h2>
+	</div>
+	<div class="panel-body">
+		<ul class="nav nav-tabs">
+			<li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test', {status:'reviewing'}) }}">未批阅</a></li>
+			<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test', {status:'finished'}) }}">已批阅</a></li>
+		</ul>
+		<br>
+		{% block main %}{% endblock %}
+		
+	</div>
+</div>
+{% endblock %}

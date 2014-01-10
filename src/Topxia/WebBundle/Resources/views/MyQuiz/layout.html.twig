@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+
+{% block content %}
+<div class="panel panel-default">
+
+	<div class="panel-heading">
+		<h2>我的题库</h2>
+	</div>
+	<div class="panel-body">
+		<ul class="nav nav-tabs">
+			<li class="{{ myQuizActive|default('') }}"><a href="{{ path('course_manage_my_quiz') }}">做题历史记录</a></li>
+			<li class="{{ myWrongQuestionActive|default('') }}"><a href="{{ path('course_manage_my_wrong_question') }}">答错的题</a></li>
+			<li class="{{ favoriteActive|default('') }}"><a href="{{ path('course_manage_show_favorite_question') }}">收藏的题目</a></li>
+		</ul>
+		<br>
+		{% block main %}{% endblock %}
+		
+	</div>
+</div>
+{% endblock %}

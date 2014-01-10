@@ -64,6 +64,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByTypeAndTypeIds($type,$ids);
     }
 
+    public function findQuestionCountByTypeAndTypeIds($type,$ids)
+    {
+
+    }
+
 
 
     // //TODO 
@@ -233,7 +238,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $message;
     }
 
+    public function findRandQuestions($courseId, $testPaperId, $field) 
+    {
 
+    }
 
     // public function findRandQuestions($courseId, $testPaperId, $field){
 
