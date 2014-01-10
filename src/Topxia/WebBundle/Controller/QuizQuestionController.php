@@ -92,8 +92,8 @@ class QuizQuestionController extends BaseController
 		if (empty($parentId)){
 			$parentId = 0;
 		} else {
-			$question = $this->getQuestionService()->getQuestion($parentId);
-			if (empty($question)){
+			$parentQuestion = $this->getQuestionService()->getQuestion($parentId);
+			if (empty($parentQuestion)){
 				return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId)));
 			}
 		}
@@ -136,14 +136,14 @@ class QuizQuestionController extends BaseController
 
 		$targets['default'] = $request->query->get('targetsDefault');
 
-		$question['difficulty'] = $request->query->get('questionDifficulty');
+		$parentQuestion['difficulty'] = $request->query->get('questionDifficulty');
 
 		return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'course' => $course,
 			'type' => $type,
 			'targets' => $targets,
 			'parentId' => $parentId,
-			'question' => $question,
+			'parentQuestion' => $parentQuestion,
 			'category' => $category,
 		));
 	}
