@@ -67,7 +67,7 @@ define(function(require, exports, module) {
             $('.item-number:input').each(function(){
                 if(isNaN($(this).val())){
                     $(this).focus();
-                    Notify.warning('请填写数字');
+                    Notify.danger('请填写数字');
                     flag = 1;
                     return false;
                 }
@@ -96,7 +96,7 @@ define(function(require, exports, module) {
                 $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
                     if (data) {
 
-                        Notify.warning(data);
+                        Notify.danger(data);
                         return false;
                     } else {
 
