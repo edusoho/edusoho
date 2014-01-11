@@ -26,6 +26,13 @@ class MySaleDaoImpl extends BaseDao implements MySaleDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function getMySaleByProdAndUser($prodType,$prodId,$userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE prodType = ? and prodId=? and userId=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($prodType,$prodId,$userId)) ? : null;
+    }
+
+
     public function searchMySales($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

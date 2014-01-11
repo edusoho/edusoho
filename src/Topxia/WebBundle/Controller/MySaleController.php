@@ -59,47 +59,73 @@ class MySaleController extends BaseController
        
     }
 
-     public function courseLinkAction(Request $request)
+     public function courseLinkAction(Request $request,$id)
     {
         $user = $this->getCurrentUser();
 
-        $sort  = 'recommended';
 
-        $conditions = array(
-            'status' => 'published',
-            'recommended' => ($sort == 'recommended') ? null : null
-        );
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
-            ,12
-        );
+        $course = $this->getCourseService()->getCourse($id);
 
 
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions, $sort,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
- 
+        $mysale=$this->getMySaleService()->getMySaleByProdAndUser('course',$course['id'],$user['id']);
+
+
+        if(empty($mysale)){
+
+            $mysale=array();
+
+            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+
+            if($course['commissionType']=='固定'){
+
+                $mysale['commission']= $course['commission'];
+
+            }else if($course['commissionType']=='立减'){
+
+                $mysale['commission'] = ($course['price']*$course['commission'])/10;
+
+            }
+
+            $mysale['prodType']='course';
+            $mysale['prodId']=$course['id'];
+            $mysale['prodName']=$course['title'];
+
+            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
+
+
+            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+
+            $mysale['validTime']=$course['saleValidTime'];
+
+            $mysale['userId']=$user['id'];
+          
+
+            $this->getMySaleService()->createMySale($mysale);
+
+        }
+
+
        
-        return $this->render('TopxiaWebBundle:MySale:course-list.html.twig', array(
-            'courses'=>$courses,
-            'paginator' => $paginator
+        return $this->render('TopxiaWebBundle:MySale:course-mysale-modal.html.twig', array(
+            'mysale'=>$mysale,
+            'user'=>$user            
         ));
        
        
     } 
      
+    protected function getMySaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.MySaleService');
+    }
   
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
  
-    private function getAuthService()
+    protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }

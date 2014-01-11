@@ -137,17 +137,17 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
-        if (empty($_COOKIE["mtookeen_c_".$id])){
+        if (empty($_COOKIE["mc".$id])){
           
-            $mtookeen = $request->query->get('mtookeen_c_'.$id, '0');
+            $mtookeen = $request->query->get('mc'.$id, '0');
 
             if(empty($mtookeen)){
 
-                setcookie("mtookeen_c_".$id,  $mtookeen, time()-1);
+                setcookie("mc".$id,  $mtookeen, time()-1);
 
             }else{
 
-                setcookie("mtookeen_c_".$id,  $mtookeen, time()+3600*24*3);
+                setcookie("mc".$id,  $mtookeen, time()+3600*24*3);
             }
           
         }

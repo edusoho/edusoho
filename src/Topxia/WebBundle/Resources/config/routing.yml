@@ -1153,5 +1153,5 @@ mysale_course_list:
     defaults: {_controller:TopxiaWebBundle:MySale:courseList}
 
 mysale_course_link:
-    pattern: /mysale/course/link
+    pattern: /mysale/course/{id}/link
     defaults: {_controller:TopxiaWebBundle:MySale:courseLink}

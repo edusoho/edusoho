@@ -23,9 +23,16 @@ class MySaleServiceImpl extends BaseService implements MySaleService
     }
 
 
+    public function getMySaleByProdAndUser($prodType,$prodId,$userId){
+
+        return MySaleSerialize::unserialize($this->getMySaleDao()->getMySaleByProdAndUser($prodType,$prodId,$userId));
+
+    }
+
+
     public function getMySaleBymTookeen($mTookeen)
     {
-        return MySaleSerialize::unserialize($this->getMySaleDao()->getMySaleByCode($code));
+        return MySaleSerialize::unserialize($this->getMySaleDao()->getMySaleBymTookeen($mTookeen));
     }
 
 
@@ -102,7 +109,7 @@ class MySaleServiceImpl extends BaseService implements MySaleService
 
     public function createMySale($mysale){
 
-        $mysale = ArrayToolkit::parts($mysale, array('id', 'prodType','prodId','commission', 'mTookeen', 'tUrl', 'validTime', 'userId', 'updatedTime','createdTime', 'managerId'));
+        $mysale = ArrayToolkit::parts($mysale, array('id', 'prodType','prodId','prodName','commission', 'mTookeen', 'tUrl', 'validTime', 'userId', 'updatedTime','createdTime', 'managerId'));
 
         $mysale['createdTime']=time();
 
@@ -121,7 +128,7 @@ class MySaleServiceImpl extends BaseService implements MySaleService
     }
 
 
-    private function generateMySaleTookeen($tookeenPrefix)
+    public function generateMySaleTookeen($tookeenPrefix='')
     {
         return  $tookeenPrefix.$this->generateChars(24);
     }
