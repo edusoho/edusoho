@@ -118,14 +118,14 @@ class DoTestController extends BaseController
 		$paper = $this->getTestService()->getTestPaper($paperResult['testId']);
 
 
-		if (!$this->getTestService()->canTeacherCheck($paper['id'])){
+		if (!$teacherId = $this->getTestService()->canTeacherCheck($paper['id'])){
 			throw createAccessDeniedException('无权批阅试卷！');
 		}
 
 
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
-			$this->getTestService()->makeTeacherFinishTest($id, $form);
+			$this->getTestService()->makeTeacherFinishTest($id, $teacherId, $form);
 			
 			return $this->createJsonResponse(true);
 		}

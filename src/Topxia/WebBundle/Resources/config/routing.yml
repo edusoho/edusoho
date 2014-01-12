@@ -530,7 +530,7 @@ course_manage_finish_test:
     defaults: { _controller: TopxiaWebBundle:DoTest:finishTest }
 
 course_manage_test_results:
-    pattern: /test/results/{id}
+    pattern: /test/result/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
 
 course_manage_test_teacher_check:

@@ -116,20 +116,20 @@ class DoTestDaoImpl extends BaseDao
 
     public function findRightItemCountByTestPaperResultId ($testPaperResultId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE testPaperResultId = ? AND status = right ";
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE testPaperResultId = ? AND status = 'right' ";
         return $this->getConnection()->fetchColumn($sql, array($testPaperResultId));
     }
 
     public function findWrongResultByUserId($id, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong', 'noAnswer') LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong') LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
     }
 
     public function findWrongResultCountByUserId ($id)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong', 'noAnswer')";
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
         return $this->getConnection()->fetchColumn($sql, array($id));
     }
 }
