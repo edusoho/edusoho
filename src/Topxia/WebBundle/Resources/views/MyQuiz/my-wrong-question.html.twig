@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle:MyQuiz:layout.html.twig' %}
+
+{% block list %}
+<table class="table table-striped table-hover">
+	<tbody>
+		{% for myWrong in myWrongs %}
+			{% set question = questions[myWrong.questionId] %}
+			{% set testPaper = testPapers[myWrong.testId] %}
+			{% set testPaperResult = testPaperResults[myWrong.testPaperResultId] %}
+
+			{% include 'TopxiaWebBundle:MyQuiz:my-wrong-question-tr.html.twig' %}
+
+		{% endfor %}
+	</tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

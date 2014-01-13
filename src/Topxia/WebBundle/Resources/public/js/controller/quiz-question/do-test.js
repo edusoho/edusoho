@@ -18,11 +18,12 @@ define(function(require, exports, module) {
             if (deadline == 0) {
                 $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
                     changeAnswers = {};
+                    window.location.href = $('#finishPaper').data('goto');
                 });
             }
             if (deadline == timeLastPost) {
                 timeLastPost = timeLastPost - interval;
-                $.post($('#postPaper').data('url'), { data:changeAnswers }, function(){
+                $.post($('#finishPaper').data('ajax'), { data:changeAnswers }, function(){
                     changeAnswers = {};
                 });
             }
@@ -91,7 +92,7 @@ define(function(require, exports, module) {
 
         });
 
-        $('.panel-footer').on('click', 'a.btn', function(){
+        $('.panel-footer').on('click', 'a.btn.marking', function(){
             id = $(this).parents('.panel').attr('id');
             btn = $('.answerCard .panel-body [href="#'+id+'"]');
             if (btn.css('border-left-width') == '1px') {
@@ -101,10 +102,11 @@ define(function(require, exports, module) {
             }
         });
 
-        $('body').on('click', '#postPaper, #finishPaper', function(){
+        $('body').on('click', '#finishPaper', function(){
+            $finishBtn = $(this);
 
             $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
-                changeAnswers = {};
+                window.location.href = $finishBtn.data('goto');
             });
 
         });
@@ -116,7 +118,21 @@ define(function(require, exports, module) {
             
         });
 
+        $('body').on('click', '.favorite-btn', function(){
+            $btn = $(this);
+            $.post($(this).data('url'),function(){
+                $btn.hide();
+                $btn.parent().find('.unfavorite-btn').show();
+            });
+        });
 
+        $('body').on('click', '.unfavorite-btn', function(){
+            $btn = $(this);
+            $.post($(this).data('url'),function(){
+                $btn.hide();
+                $btn.parent().find('.favorite-btn').show();
+            });
+        });
 
         
 

@@ -89,6 +89,52 @@ class TestPaperResultDaoImpl extends BaseDao implements TestPaperResultDao
         return $this->getConnection()->fetchAssoc($sql, array($testId, $userId)) ? : null;
     }
 
+    public function findTestPaperResultsByUserId ($id, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? ORDER BY beginTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
+    }
+
+    public function findTestPaperResultsCountByUserId ($id)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ?";
+        return $this->getConnection()->fetchColumn($sql, array($id));
+    }
+
+    public function findWrongQuestionsByUserId ($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` IN ('wrong', 'noAnswer')";
+        return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
+    }
+
+    public function findTestPaperResultsByStatusAndTestIds ($ids, $status, $start, $limit)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+
+        array_push($ids, $status);
+
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE `testId` IN ({$marks}) AND `status` = ? ORDER BY endTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findTestPaperResultCountByStatusAndTestIds ($ids, $status)
+    {
+        if(empty($ids)){ 
+            return null; 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+
+        array_push($ids, $status);
+
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `testId` IN ({$marks}) AND `status` = ?";
+        return $this->getConnection()->fetchColumn($sql, $ids);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)

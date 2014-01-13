@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig' %}
+
+{% block list %}
+<table class="table table-striped table-hover">
+	<tbody>
+		{% for reviewingTest in reviewingTests %}
+			{% set testPaper = testPapers[reviewingTest.testId] %}
+			{% set student = users[reviewingTest.userId] %}
+			{% set course = courses[testPaper.targetId] %}
+				{% include 'TopxiaWebBundle:MyQuiz:list-teacher-test-tr.html.twig' %}
+
+		{% endfor %}
+	</tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

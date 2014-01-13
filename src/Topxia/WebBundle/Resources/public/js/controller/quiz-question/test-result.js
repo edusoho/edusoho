@@ -62,9 +62,10 @@ define(function(require, exports, module) {
 
 
         $('.answerCard').on('click', '#postPaper', function(){
+            $finishBtn = $(this);
 
             $.post($(this).data('url'), $('#essayForm').serialize(), function(){
-
+                window.location.href = $finishBtn.data('goto');
             });
 
         });

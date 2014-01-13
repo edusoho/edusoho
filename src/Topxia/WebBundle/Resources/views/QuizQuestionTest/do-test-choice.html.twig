@@ -23,7 +23,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-	{% if question.testResult|default(null) %}
+	{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
 		<div class="panel-footer">
 			{% if question.testResult.status == 'right' %}
 				正确答案：{{ keys|join(',') }} . 您做对了！
@@ -41,14 +41,18 @@
 		</div>
 	{% else %}
 		<div class="panel-footer">
-			{% set label_index = 65 %}
+
 			{% for choice in question.choices %}
 				<label class="checkbox-inline">
-					{{ label_index|chr }}<input type="checkbox" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}">
+					{{ choice.choiceIndex }}<input type="checkbox" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
 				</label> 
-				{% set label_index = label_index + 1 %}
+
 			{% endfor %}
-			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+			<a class="btn btn-sm pull-right marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+
+
+			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
+			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
 		</div>
 	{% endif %}
 </div>

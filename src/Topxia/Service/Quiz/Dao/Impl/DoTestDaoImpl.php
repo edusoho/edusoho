@@ -10,20 +10,20 @@ class DoTestDaoImpl extends BaseDao
 {
 	protected $table = "test_result";
 
-	public function addItemAnswers ($answers, $testPaperResultId, $userId)
+	public function addItemAnswers ($answers, $testPaperId, $testPaperResultId, $userId)
 	{
 		if(empty($answers)){ 
             return array(); 
         }
 
-        $mark = "(".str_repeat('?,', 3)."? )";
+        $mark = "(".str_repeat('?,', 4)."? )";
         $marks = str_repeat($mark.',', count($answers) - 1).$mark;
         $answersForSQL = array();
         foreach ($answers as $key => $value) {
-        	array_push($answersForSQL, (int)$testPaperResultId, (int)$userId, (int)$key, $value);
+        	array_push($answersForSQL, (int)$testPaperId, (int)$testPaperResultId, (int)$userId, (int)$key, $value);
         }
 
-		$sql = "INSERT INTO {$this->table} (`testPaperResultId`, `userId`, `questionId`, `answer`) VALUES {$marks};";
+		$sql = "INSERT INTO {$this->table} (`testId`, `testPaperResultId`, `userId`, `questionId`, `answer`) VALUES {$marks};";
 
 		return $this->getConnection()->executeUpdate($sql, $answersForSQL);
 	}
@@ -112,5 +112,24 @@ class DoTestDaoImpl extends BaseDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE testPaperResultId = ?";
         return $this->getConnection()->fetchAll($sql, array($testPaperResultId));
+    }
+
+    public function findRightItemCountByTestPaperResultId ($testPaperResultId)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE testPaperResultId = ? AND status = 'right' ";
+        return $this->getConnection()->fetchColumn($sql, array($testPaperResultId));
+    }
+
+    public function findWrongResultByUserId($id, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong') LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
+    }
+
+    public function findWrongResultCountByUserId ($id)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
+        return $this->getConnection()->fetchColumn($sql, array($id));
     }
 }

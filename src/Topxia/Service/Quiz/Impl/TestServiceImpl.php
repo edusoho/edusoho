@@ -394,6 +394,15 @@ class TestServiceImpl extends BaseService implements TestService
 
         $testResult = $this->getTestPaperResultDao()->getResult($id);
 
+        if ($testResult['userId'] != $userId) {
+            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+        }
+
+        if (in_array($testResult['status'], array('reviewing', 'finished'))) {
+            throw $this->createServiceException("已经交卷的试卷不能更改答案!");
+        }
+
+
         //得到当前用户答案
         $answers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
         $answers = QuestionSerialize::unserializes($answers);
@@ -498,14 +507,21 @@ class TestServiceImpl extends BaseService implements TestService
 
             if ($question['questionType'] == 'fill') {
                 $right = 0;
+                $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
                     $value = explode('|', $value);
                     if (count($value) == 1) {
+                        if ($answers[$key]['answer'][$k] == ''){
+                            $noAnswerCount++;
+                        }
                         if ($value[0] == $answers[$key]['answer'][$k]) {
                             $right++;
                         }
                     } else {
                         foreach ($value as $v) {
+                            if ($answers[$key]['answer'][$k] == ''){
+                                $noAnswerCount++;
+                            }
                             if ($v == $answers[$key]['answer'][$k]) {
                                 $right++;
                             }
@@ -513,7 +529,7 @@ class TestServiceImpl extends BaseService implements TestService
                     }
                 }
 
-                if ($right == 0) {
+                if ($noAnswerCount == count($question['answer'])) {
                     $answers[$key]['status'] = 'noAnswer';
                 } elseif ($right == count($question['answer'])) {
                     $answers[$key]['status'] = 'right';
@@ -588,6 +604,11 @@ class TestServiceImpl extends BaseService implements TestService
         $user = $this->getCurrentUser();
 
         $testResult = $this->getTestPaperResultDao()->getResult($id);
+
+        if ($testResult['userId'] != $user['id']) {
+            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+        }
+
         if (in_array($testResult['status'], array('reviewing', 'finished'))) {
             throw $this->createServiceException("已经交卷的试卷不能更改答案!");
         }
@@ -614,7 +635,7 @@ class TestServiceImpl extends BaseService implements TestService
         $answersNew = ArrayToolkit::parts($answers, $itemIdsNew);
 
         if (!empty($answersNew)) {
-            $this->getDoTestDao()->addItemAnswers($answersNew, $testResult['id'], $user['id']);
+            $this->getDoTestDao()->addItemAnswers($answersNew, $testResult['testId'], $testResult['id'], $user['id']);
         }
 
         //测试数据
@@ -622,7 +643,7 @@ class TestServiceImpl extends BaseService implements TestService
 
     }
 
-    public function makeTeacherFinishTest ($id, $field)
+    public function makeTeacherFinishTest ($id, $teacherId, $field)
     {
         $testResults = array();
         
@@ -635,14 +656,21 @@ class TestServiceImpl extends BaseService implements TestService
 
             $testResults[$keys[1]][$keys[0]] = $value;
         }
-
+        //是否要加入教师阅卷的锁
         $this->getDoTestDao()->updateItemEssays($testResults, $id);
 
         $paperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $totalScore = array_sum(ArrayToolkit::column($testResults, 'score')) + $paperResult['score'];
+        $subjectiveScore = array_sum(ArrayToolkit::column($testResults, 'score'));
 
-        return $this->getTestPaperResultDao()->updateResult($id, array('score' => $totalScore));
+        $totalScore = $subjectiveScore + $paperResult['score'];
+
+        return $this->getTestPaperResultDao()->updateResult($id, array(
+            'score' => $totalScore,
+            'subjectiveScore' => $subjectiveScore,
+            'status' => 'finished',
+            'checkTeacherId' => $teacherId
+        ));
     }
 
     private function filterTestAnswers ($answers, $testPaperResultId)
@@ -671,6 +699,8 @@ class TestServiceImpl extends BaseService implements TestService
         $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
 
         $fields['score'] = $this->sumScore($testResults);
+
+        $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
         $fields['remainTime'] = $remainTime;
         $fields['endTime'] = time();
@@ -711,7 +741,7 @@ class TestServiceImpl extends BaseService implements TestService
             $course = $this->getCourseService()->getCourse($paper['targetId']);
 
             if (in_array($userId, $course['teacherIds'])) {
-                return true;
+                return $userId;
             }
         }
         return false;

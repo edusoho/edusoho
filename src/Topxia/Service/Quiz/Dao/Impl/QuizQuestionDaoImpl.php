@@ -73,6 +73,22 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getConnection()->fetchAll($sql, $ids) ? : array();
     }
 
+
+    public function findQuestionsPaginatorByIds(array $ids, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE `id` IN ({$marks}) LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findQuestionsPaginatorCountByUserId (array $ids)
+    {
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `id` IN ({$marks})";
+        return $this->getConnection()->fetchColumn($sql, $ids);
+    }
+
     public function findQuestionsByTypeAndTypeIds($type, $ids)
     {
         if(empty($ids)||empty($type)){ 

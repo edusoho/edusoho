@@ -8,11 +8,11 @@
 	<div class="panel-body">
 		{% set input_index = 1 %}
 		{% for answer in question.answer %}
-			<input class="form-control input-sm mbs" type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个空请填在这里" />
+			<input class="form-control input-sm mbs" type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个空请填在这里" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
 			{% set input_index = input_index + 1 %}
 		{% endfor %}
 	</div>
-	{% if question.testResult|default(null) %}
+	{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
 		<div class="panel-footer">
 			{% if question.testResult.status == 'right' %}
 				正确答案：{{ question.answer|join(', ') }}. 您做对了！
@@ -28,7 +28,10 @@
 		</div>
 	{% else %}
 		<div class="panel-footer">
-			<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+			<a class="btn btn-sm pull-right marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+
+			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
+			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
 		</div>
 	{% endif %}
 </div>

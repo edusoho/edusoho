@@ -181,7 +181,7 @@
 
 		</div>
 		<div class="panel-footer">
-			<button class="btn btn-success btn-block" id="postPaper" data-url="{{ path('course_manage_test_teacher_check', { id: id }) }}">提交</button>
+			<button class="btn btn-success btn-block" id="postPaper" data-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" data-goto="{{ path('course_manage_list_teacher_test', {status:'reviewing'}) }}">提交</button>
 		</div>
 	</div>
 </div>

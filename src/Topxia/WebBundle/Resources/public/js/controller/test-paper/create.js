@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var CreateBase = require('./util/create-base');
+    var Uploader = require('upload');
+    var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
 
@@ -39,6 +41,11 @@ define(function(require, exports, module) {
                 }
             }
            
+        });
+
+        var editor = EditorFactory.create('#test-description-field', 'simple_noimage');
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
         });
 
 

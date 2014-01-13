@@ -64,10 +64,210 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionDao()->findQuestionsByTypeAndTypeIds($type,$ids);
     }
 
+
+    public function findQuestionCountByTypeAndTypeIds($type,$ids)
+    {
+
+    }
+
+
+
+    // //TODO 
+    // public function findQuestionsByCourseId($courseId)
+    // {
+    //     $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        
+    //     $conditions['target']['course'] = array($courseId);
+    //     if (!empty($lessons)){
+    //         $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+    //     }
+        
+    //     $questions = ArrayToolkit::index($this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 999999),'id');
+
+    //     $parentIds = array();
+    //     foreach ($questions as $question) {
+
+    //         if ($question['questionType'] == 'material') {
+
+    //             $parentIds[] = $question['id'];
+    //         }
+    //     }
+
+    //     if (!empty($parentIds)) {
+
+    //         $materialQuestions = ArrayToolkit::index($this->searchQuestion(array('parentIds'=> $parentIds), array('createdTime' ,'DESC'), 0, 999999),'id');
+    //         $questions = array_merge($questions, $materialQuestions);
+    //     }
+        
+    //     return $questions;
+    // }
+
+    // //TODO 
+
+    // public function findQuestionsTypeNumberByCourseId($courseId)
+    // {
+    //     $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        
+    //     $conditions['parentId'] = 0;
+
+    //     $conditions['target']['course'] = array($courseId);
+
+    //     if (!empty($lessons)){
+    //         $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+    //     }
+        
+    //     $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999);
+
+    //     $typeNums  = array();
+    //     foreach ($questions as $question) {
+
+    //         $type = $question['questionType'];
+
+    //         $difficulty = $question['difficulty'];
+
+    //         if (empty($typeNums[$type][$difficulty])) {
+
+    //             $typeNums[$type][$difficulty] = 0;
+    //         }
+
+    //         $typeNums[$type][$difficulty]++;
+    //     }
+
+    //     $sum = array();
+    //     foreach ($typeNums as $type => $difficultyNums) {
+
+    //         $sum[$type] = 0;
+    //         foreach ($difficultyNums as $num) {
+
+    //             $sum[$type] = $sum[$type] + $num;
+    //         }
+    //     }
+
+    //     $typeNums['sum'] = $sum;
+
+    //     return $typeNums;
+    // } 
+
+    public function checkQuesitonNumber($field, $courseId)
+    {
+
+    }
+
     public function findQuestionsCountByTypeAndTypeIds($type, $ids)
     {
         return $this->getQuizQuestionDao()->findQuestionsCountByTypeAndTypeIds($type, $ids);
     }
+
+    public function findRandQuestions($courseId, $testPaperId, $field) 
+    {
+
+    }
+
+    // public function findRandQuestions($courseId, $testPaperId, $field){
+
+    //     $testPaper = $this->getTestService()->getTestPaper($testPaperId);
+        
+    //     if(empty($field['itemCounts']) || empty($field['itemScores']) || empty($testPaper)){
+    //         $this->createNotFoundException();
+    //     }
+
+    //     $scores = $field['itemScores'];
+    //     $counts = $field['itemCounts'];
+
+    //     if(empty($field['isDifficulty'])){
+    //         $field['isDifficulty'] = 0;
+    //     }
+
+    //     $questions = ArrayToolkit::index($this->findQuestionsByCourseId($courseId), 'id');
+
+    //     $quNews = array();
+    //     $quSons = array();
+
+    //     foreach ($questions as $question) {
+
+    //         if($question['parentId'] == 0) {
+
+    //             $question['score'] = $scores[$question['questionType']] == 0 ? $question['score'] : 
+    //                 (empty($scores[$question['questionType']])?$question['score']:$scores[$question['questionType']]);
+    //             $quNews[$question['questionType']][$question['difficulty']][] = $question;
+    //         }else{
+
+    //             $question['score'] = $scores['material'] == 0 ? $question['score'] : 
+    //                 (empty($scores['material']) ? $question['score'] :$scores['material'] ) ;
+    //             $quSons[] = $question;
+    //         }
+    //     }
+
+    //     $question_type_seq = explode(',', $testPaper['metas']['question_type_seq']);
+
+    //     $randoms = array();
+    //     foreach ($question_type_seq as $type) {
+
+    //         if($field['isDifficulty'] == 0){
+
+    //             for($i = 0;$i<$counts[$type];$i++){
+
+    //                 $randDifficulty = array_rand($quNews[$type]);
+
+    //                 $randId = array_rand($quNews[$type][$randDifficulty]);
+
+    //                 $randoms[] = $quNews[$type][$randDifficulty][$randId];
+
+    //                 unset($quNews[$type][$randDifficulty][$randId]);
+
+    //                 if(count($quNews[$type][$randDifficulty]) ==0){
+
+    //                     unset($quNews[$type][$randDifficulty]);
+    //                 }
+    //             } 
+    //         }else{
+
+    //             $needNums = $this->getItemDifficultyNeedNums($counts[$type], $field['perventage']);
+
+    //             foreach ($needNums as $difficulty => $needNum) {
+
+    //                 if ($difficulty == 'otherNum') {
+
+    //                     for($i = 0;$i<$needNum;$i++){
+
+    //                         $randDifficulty = array_rand($quNews[$type]);
+
+    //                         $randId = array_rand($quNews[$type][$randDifficulty]);
+
+    //                         $randoms[] = $quNews[$type][$randDifficulty][$randId];
+
+    //                         unset($quNews[$type][$randDifficulty][$randId]);
+
+    //                         if(count($quNews[$type][$randDifficulty]) ==0){
+
+    //                             unset($quNews[$type][$randDifficulty]);
+    //                         }
+    //                     } 
+
+    //                     continue;
+    //                 }
+
+    //                 for($i = 0; $i<$needNum; $i++){
+
+    //                     $randId = array_rand($quNews[$type][$difficulty]);
+    //                     $randoms[] = $quNews[$type][$difficulty][$randId];
+    //                     unset($quNews[$type][$difficulty][$randId]);
+
+    //                     if(count($quNews[$type][$difficulty]) ==0){
+
+    //                         unset($quNews[$type][$difficulty]);
+    //                     }
+
+    //                 }
+
+    //             }
+
+    //         }
+
+    //     }
+
+    //     return array_merge(ArrayToolkit::index($randoms, 'id'), ArrayToolkit::index($quSons, 'id'));
+    // }
 
 
     public function getCategory($id){

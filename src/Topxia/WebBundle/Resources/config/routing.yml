@@ -530,12 +530,36 @@ course_manage_finish_test:
     defaults: { _controller: TopxiaWebBundle:DoTest:finishTest }
 
 course_manage_test_results:
-    pattern: /test/results/{id}
+    pattern: /test/result/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
 
 course_manage_test_teacher_check:
     pattern: /test/teacher/check/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheck }
+
+course_manage_my_quiz:
+    pattern: /my/quiz
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:index }
+
+course_manage_my_wrong_question:
+    pattern: /my/wrong/question
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:myWrongQuestions }
+
+course_manage_favorite_question:
+    pattern: /favorite/question/{questionId}/{testPaperResultId}
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
+
+course_manage_unfavorite_question:
+    pattern: /unfavorite/question/{questionId}/{testPaperResultId}
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
+
+course_manage_show_favorite_question:
+    pattern: /show/favorite/question
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
+
+course_manage_list_teacher_test:
+    pattern: /list/teacher/test/{status}
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:listReviewingTest }
 
 course_manage_test_paper_create:
     pattern: /course/{courseId}/manage/test/paper/create
