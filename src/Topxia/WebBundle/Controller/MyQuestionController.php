@@ -7,6 +7,7 @@ use Topxia\Common\Paginator;
 
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 
+
 class MyQuestionController extends BaseController
 {
 	public function indexAction (Request $request)
@@ -116,7 +117,9 @@ class MyQuestionController extends BaseController
 
         $questionIds = ArrayToolkit::column($favoriteQuestions, 'questionId');
 
-        $questions = $this->getMyQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getMyQuestionService()->findFavoriteQuestionsByIds($questionIds);
+
+        $questions = $this->formatQuestions($questions);
 
         $myTestPaperResultIds = ArrayToolkit::column($favoriteQuestions, 'testPaperResultId');
 
@@ -129,7 +132,7 @@ class MyQuestionController extends BaseController
         return $this->render('TopxiaWebBundle:MyQuiz:my-favorite-question.html.twig', array(
             'favoriteActive' => 'active',
             'user' => $user,
-            'favoriteQuestions' => $favoriteQuestions,
+            'favoriteQuestions' => ArrayToolkit::index($favoriteQuestions, 'id'),
             'testPaperResults' => ArrayToolkit::index($myTestPaperResults, 'id'),
             'testPapers' => ArrayToolkit::index($myTestPapers, 'id'),
             'questions' => ArrayToolkit::index($questions, 'id'),
@@ -178,6 +181,28 @@ class MyQuestionController extends BaseController
             'testPapers' => ArrayToolkit::index($testPapers, 'id'),
             'paginator' => $paginator
         ));
+    }
+
+    private function formatQuestions ($questions)
+    {
+        $formatQuestions = array();
+
+        foreach ($questions as $key => $value) {
+
+            if(in_array($value['questionType'], array('single_choice', 'choice'))) {
+                $i = 65;
+                foreach ($value['choices'] as $key => $v) {
+                    $v['choiceIndex'] = chr($i);
+                    $value['choices'][$key] = $v;
+                    $i++;
+                }
+            }
+
+            
+            $formatQuestions[$value['id']] = $value;
+        }
+
+        return $formatQuestions;
     }
 
 

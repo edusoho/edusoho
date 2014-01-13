@@ -21,6 +21,26 @@ class DoTestController extends BaseController
 		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 	}
 
+	public function testPreviewAction (Request $request, $testId)
+	{
+		$paper = $this->getTestService()->getTestPaper($testId);
+
+		if (!$teacherId = $this->getTestService()->canTeacherCheck($paper['id'])){
+			throw createAccessDeniedException('无权预览试卷！');
+		}
+
+		$questions = $this->getTestService()->findQuestionsByTestId($testId);
+		
+		$questions = $this->formatQuestions($questions);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
+			'questions' => $questions,
+			'limitTime' => $paper['limitedTime'] * 60,
+			'paper' => $paper,
+			'id' => 0
+		));
+	}
+
 	public function showTestAction (Request $request, $id)
 	{
 
@@ -33,6 +53,10 @@ class DoTestController extends BaseController
 			throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
 		}
 
+		if (in_array($testResult['status'], array('reviewing', 'finished'))) {
+			return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testResult['id'])));
+		}
+
 		$paper = $this->getTestService()->getTestPaper($testResult['testId']);
 
 		//字符串要过滤js and so on?
@@ -40,6 +64,8 @@ class DoTestController extends BaseController
 		$questions = $this->getTestService()->testResults($id);
 
 		$questions = $this->formatQuestions($questions);
+
+		$this->getTestService()->updatePaperResult($id, 'doing', $testResult['remainTime']);
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
@@ -55,8 +81,11 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$answers = $request->request->all();
 			$answers = $answers['data'];
+			$remainTime = $data['remainTime'];
 
 			$result = $this->getTestService()->submitTest($answers, $id);
+
+			$this->getTestService()->updatePaperResult($id, 'doing', $remainTime);
 
 			return $this->createJsonResponse(true);
 		}
@@ -111,6 +140,31 @@ class DoTestController extends BaseController
 			'paperResult' => $paperResult,
 			'id' => $id
 		));
+	}
+
+	public function testSuspendAction (Request $request, $id)
+	{
+		$paperResult = $this->getTestService()->getTestPaperResult($id);
+		if (!$paperResult) {
+			throw $this->createNotFoundException('试卷不存在!');
+		}
+		//权限！
+		if ($paperResult['userId'] != $this->getCurrentUser()->id) {
+			throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+		}
+
+		if ($request->getMethod() == 'POST') {
+			$data = $request->request->all();
+			$answers = $data['data'];
+			$remainTime = $data['remainTime'];
+
+			$results = $this->getTestService()->submitTest($answers, $id);
+
+			$this->getTestService()->updatePaperResult($id, 'paused', $remainTime);
+
+			return $this->createJsonResponse(true);
+		}
+
 	}
 
 	public function testPauseAction(Request $request)

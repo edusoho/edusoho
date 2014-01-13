@@ -132,4 +132,6 @@ class DoTestDaoImpl extends BaseDao
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
         return $this->getConnection()->fetchColumn($sql, array($id));
     }
+
+    
 }

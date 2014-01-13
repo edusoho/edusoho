@@ -62,7 +62,7 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
     public function findItemsByTestPaperId($testPaperId)
     {
         $sql ="SELECT * FROM {$this->table} WHERE testId = ? order by `seq` asc ";
-        return $this->getConnection()->fetchAll($sql, array($testPaperId));
+        return $this->getConnection()->fetchAll($sql, array($testPaperId)) ? : array();
     }
 
     public function getItemsCountByTestId($testId)

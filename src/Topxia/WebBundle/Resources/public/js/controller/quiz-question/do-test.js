@@ -23,7 +23,7 @@ define(function(require, exports, module) {
             }
             if (deadline == timeLastPost) {
                 timeLastPost = timeLastPost - interval;
-                $.post($('#finishPaper').data('ajax'), { data:changeAnswers }, function(){
+                $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
                     changeAnswers = {};
                 });
             }

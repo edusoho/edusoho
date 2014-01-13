@@ -317,6 +317,35 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->makeTest($questions, $answers);
     }
 
+    public function findQuestionsByTestId ($testId)
+    {
+        $items = $this->getTestItemDao()->findItemsByTestPaperId($testId);
+
+        $materialIds = $this->findMaterial($items);
+        $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
+
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $questions = array_merge($questions, $materialQuestions);
+
+        $questions = QuestionSerialize::unserializes($questions);
+
+        $questions = ArrayToolkit::index($questions, 'id');
+
+
+        $items = ArrayToolkit::index($items, 'questionId');
+
+        $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
+
+        $questions = $this->makeTest($questions, $choices);
+
+        // $questions = $this->makeMaterial($questions);
+
+        return $questions;
+    }
+
     public function testResults($id)
     {
         // if ($userId == null) {
@@ -540,7 +569,7 @@ class TestServiceImpl extends BaseService implements TestService
 
     
 
-    private function makeTest ($questions, $answers)
+    public function makeTest ($questions, $answers)
     {
         foreach ($answers as $key => $value) {
             if (!array_key_exists('choices', $questions[$value['questionId']])) {
@@ -691,6 +720,17 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
+    public function updatePaperResult ($id, $status, $remainTime)
+    {
+        $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
+
+        $fields['status'] = $status;
+
+        $fields['remainTime'] = $remainTime;
+
+        return $this->getTestPaperResultDao()->updateResult($id, $fields);
+    }
+
     private function isExistsEssay ($testResults)
     {
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($testResults, 'questionId'));
@@ -835,3 +875,5 @@ class TestPaperSerialize
         }, $items);
     }
 }
+
+

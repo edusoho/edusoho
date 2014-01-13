@@ -1,8 +1,8 @@
 <div class="panel panel-default" id="question{{ question.id }}">
 	<div class="panel-heading">
-		<h3 class="panel-title">{{ questionIndex }}. {{ question.stem }}</h3>
+		<h3 class="panel-title">{% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}. {{ question.stem }}</h3>
 	</div>
-	{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
+	{% if question.testResult|default(null) %}
 
 		{% if role|default(null) == 'teacher' %}
 
@@ -48,7 +48,12 @@
 		</div>
 	{% endif %}
 	<div class="panel-footer">
-		{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
+		{% if question.testResult|default(null) %}
+			{% if not role|default(null) == 'teacher' %}
+				<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
+				<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
+			{% endif %}
+
 			{% if not question.analysis == '' %}
 				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
 			{% endif %}

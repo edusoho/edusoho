@@ -60,15 +60,25 @@ define(function(require, exports, module) {
             })
         });
 
+        $('input').attr('disabled', true);
+        $('textarea').attr('disabled', true);
 
-        $('.answerCard').on('click', '#postPaper', function(){
-            $finishBtn = $(this);
-
-            $.post($(this).data('url'), $('#essayForm').serialize(), function(){
-                window.location.href = $finishBtn.data('goto');
+        $('body').on('click', '.favorite-btn', function(){
+            $btn = $(this);
+            $.post($(this).data('url'),function(){
+                $btn.hide();
+                $btn.parent().find('.unfavorite-btn').show();
             });
-
         });
+
+        $('body').on('click', '.unfavorite-btn', function(){
+            $btn = $(this);
+            $.post($(this).data('url'),function(){
+                $btn.hide();
+                $btn.parent().find('.favorite-btn').show();
+            });
+        });
+
     };
 
 

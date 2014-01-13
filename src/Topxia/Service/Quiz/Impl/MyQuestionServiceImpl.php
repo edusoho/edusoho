@@ -49,7 +49,7 @@ class MyQuestionServiceImpl extends BaseService
 
 	public function findQuestionsByIds ($ids)
 	{
-		return $this->getQuestionDao()->findQuestionsByIds($ids);
+		return QuestionSerialize::unserializes($this->getQuestionDao()->findQuestionsByIds($ids));
 	}
 
 	public function favoriteQuestion($questionId, $testPaperResultId, $userId)
@@ -108,6 +108,32 @@ class MyQuestionServiceImpl extends BaseService
 		return $this->getTestPaperResultDao()->findTestPaperResultCountByStatusAndTestIds($ids, $status);
 	}
 
+	public function findChoicesByQuestionIds($questionIds)
+	{
+		return $this->getQuestionChoiceDao()->findChoicesByQuestionIds($questionIds);
+	}
+
+	public function findFavoriteQuestionsByIds ($questionIds)
+	{
+		$questions = QuestionSerialize::unserializes($this->getQuestionDao()->findQuestionsByIds($questionIds));
+
+		$questionParents = QuestionSerialize::unserializes($this->getQuestionDao()->findQuestionsByIds(ArrayToolkit::column($questions, 'parentId')));
+
+		$questions = array_merge($questions, $questionParents);
+
+		foreach ($questions as $key => $value) {
+			if ($value['questionType'] == 'fill'){
+				foreach ($value['answer'] as $k => $v) {
+					$questions[$key]['answer'][$k] = str_replace('|', '或者', $v);
+				}
+			}
+		}
+
+		$choices = $this->getQuestionChoiceDao()->findChoicesByQuestionIds($questionIds);
+
+		return TestQuestion::makeTest(ArrayToolkit::index($questions, 'id'), $choices);
+	}
+
 	public function findUsersByIds ($ids)
 	{
 		return $this->getUserDao()->findUsersByIds($ids);
@@ -125,6 +151,10 @@ class MyQuestionServiceImpl extends BaseService
 
     private function getQuestionDao(){
 	    return $this->createDao('Quiz.QuizQuestionDao');
+	}
+
+	private function getQuestionChoiceDao(){
+	    return $this->createDao('Quiz.QuizQuestionChoiceDao');
 	}
 
 	private function getDoTestDao()
@@ -150,5 +180,36 @@ class MyQuestionServiceImpl extends BaseService
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+}
+
+class TestQuestion
+{
+    public static function makeTest ($questions, $answers)
+    {
+        foreach ($answers as $key => $value) {
+            if (!array_key_exists('choices', $questions[$value['questionId']])) {
+                $questions[$value['questionId']]['choices'] = array();
+            }
+            // array_push($questions[$value['questionId']]['choices'], $value);
+            $questions[$value['questionId']]['choices'][$value['id']] = $value;
+        }
+
+        return $questions;
+    }
+
+    public static function makeMaterial ($questions)
+    {
+        foreach ($questions as $key => $value) {
+            if ($value['targetId'] == 0) {
+                if (!array_key_exists('questions', $questions[$value['parentId']])) {
+                    $questions[$value['parentId']]['questions'] = array();
+                }
+                $questions[$value['parentId']]['questions'][$value['id']] = $value;
+                unset($questions[$value['id']]);
+            }
+        }
+
+        return $questions;
     }
 }

@@ -6,8 +6,8 @@
 		{% endif %}
 		<br>
 		<small>来自课程《{{ course.title }}》，{{ myTestPaperResult.beginTime|date("Y-m-d H:i:s") }}，得分{{ myTestPaperResult.score }}分，共{{ myTestPaper.itemCount }}题，做对{{ myTestPaperResult.rightItemCount }}题。</small>
-	</td>
-	<td width="20%">
+	{# </td>
+	<td width="20%"> #}
 		<div class="btn-group pull-right">
 			<a href="{{ path('course_manage_test_results', {id:myTestPaperResult.id}) }}" class="btn btn-default">查看解析</a>
 			{% if myTestPaperResult.status == 'paused' %}
