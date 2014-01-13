@@ -20,7 +20,7 @@
 
           <ul class="dropdown-menu pull-right">
               <li><a class="btn btn-link" href="{{ path('course_manage_test_paper_create_two', {courseId:course.id,testPaperId:item.id,flag:'update'}) }}">管理题目</a></li>
-              <li><a class="btn btn-link test-paper-reset" href="{{ path('course_manage_test_paper_update_reset', {courseId:course.id,testPaperId:item.id}) }}">重新生成题目</a></li>
+              <li><a href="javascript:;" class="btn btn-link test-paper-reset" data-url="{{ path('course_manage_test_paper_update_reset', {courseId:course.id,testPaperId:item.id}) }}">重新生成题目</a></li>
               <li><a class="btn btn-link" href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('course_manage_test_paper_delete', {courseId:course.id, testPaperId:item.id}) }}">删除</a></li>
           </ul>
         </div>

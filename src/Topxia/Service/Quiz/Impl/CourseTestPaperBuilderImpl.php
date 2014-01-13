@@ -39,11 +39,17 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 			foreach ($questions as $question) {
 
+				if($question['parentId'] != 0)
+					continue;
+
                 $questionsGroup[$question['questionType']][] = $question;
             }
 		} else {
 
 			foreach ($questions as $question) {
+				
+				if($question['parentId'] != 0)
+					continue;
 
                 $questionsGroup[$question['questionType']][$question['difficulty']][] = $question;
             }
@@ -201,6 +207,11 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 	private function generateRandomQuestions($type, $count)
 	{
+		if(empty($this->questionsGroup[$type])){
+
+			$this->questionsGroup[$type] = array();
+		}
+
 		if(count($this->questionsGroup[$type]) < $count) {
 
 			$this->createNotFoundException();
@@ -217,6 +228,11 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 	private function generateDifficultyRandomQuestions($type, $difficulty, $needCount)
 	{
+		if(empty($this->questionsGroup[$type][$difficulty])){
+
+			$this->questionsGroup[$type][$difficulty] = array();
+		}
+
 		if (count($this->questionsGroup[$type][$difficulty]) < $needCount) {
 
 			$this->createNotFoundException();
@@ -224,7 +240,12 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 		shuffle($this->questionsGroup[$type][$difficulty]);
 
-    	$questions = array_slice($this->questionsGroup[$type][$difficulty], 0, $needCount);
+		$questions = array();
+
+		for ($i=0; $i < $needCount; $i++) { 
+
+			$questions[] = array_merge($questions, array_shift($this->questionsGroup[$type][$difficulty]));
+		}
 
 		$this->questions = array_merge($this->questions, $questions);
 
@@ -239,9 +260,15 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 			$randDifficulty = array_rand($this->questionsGroup[$type]);
 
-			$randId         = array_rand($this->questionsGroup[$type][$randDifficulty]);
+			$randId = array_rand($this->questionsGroup[$type][$randDifficulty]);
 
-			$questions[]    = $this->questionsGroup[$type][$randDifficulty][$randId];
+			if(!empty($this->questionsGroup[$type][$randDifficulty][$randId])){
+
+				$questions[] = $this->questionsGroup[$type][$randDifficulty][$randId];
+			}else{
+
+				$i --;
+			}
 
             unset($this->questionsGroup[$type][$randDifficulty][$randId]);
 

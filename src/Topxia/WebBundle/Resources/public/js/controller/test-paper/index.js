@@ -13,6 +13,7 @@ define(function(require, exports, module) {
         	if (!confirm('重置会清空原先的题目,确定要继续吗？')) {
         	    return ;
         	}
+            window.location.href=$(this).data('url');
         });
 
     };

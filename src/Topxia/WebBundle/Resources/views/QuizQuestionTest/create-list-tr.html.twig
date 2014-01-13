@@ -22,7 +22,7 @@
       {% if replaceId %}
           <button type="button"  data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id,replaceId:replaceId}) }}" data-replaceId="{{replaceId}}" class="btn btn-default btn-sm item-replace-btn" data-loading-text="选择" >选择</button>
       {% else %}
-          <button type="button" data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id}) }}" class="btn btn-default btn-sm item-add-btn" data-loading-text="添加" >添加</button>
+          <button type="button" data-url="{{ path('course_manage_test_item_create', {courseId:course.id,testPaperId:testPaper.id,questionId:item.id}) }}" class="btn btn-default btn-sm item-add-btn" data-loading-text="选择" >选择</button>
       {% endif %}
   </td>
  

@@ -110,7 +110,7 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:update-1.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:update.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
 		));
@@ -177,7 +177,6 @@ class QuizQuestionTestController extends BaseController
 	    	}
 
 	    	$this->setFlashMessage('success', '试卷题目保存成功！');
-
         	return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
         }
 
@@ -242,7 +241,7 @@ class QuizQuestionTestController extends BaseController
         $paginator = new Paginator(
 			$this->get('request'),
 			$this->getQuestionService()->searchQuestionCount($conditions),
-			5
+			7
 		);
 
         $questions = $this->getQuestionService()->searchQuestion(

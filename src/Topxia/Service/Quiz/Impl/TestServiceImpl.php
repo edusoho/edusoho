@@ -117,8 +117,8 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function createItems($testId, $field)
     {
-        if(empty($field['ids']) || empty($field['scores'])){
-            throw $this->createServiceException('参数不正确');
+        if(!ArrayToolkit::requireds($field, array('ids', 'scores'))){
+            throw $this->createServiceException('缺少必要字段！ids score');
         }
 
         $ids    = $field['ids'];
@@ -127,8 +127,10 @@ class TestServiceImpl extends BaseService implements TestService
         $diff = array_diff($ids, $scores);
 
         if(empty($diff)){
-            throw $this->createServiceException('参数不正确');
+            throw $this->createServiceException('ids, scores diff 参数不正确');
         }
+
+        $count = 0 ;
 
         foreach ($ids as $k => $id) {
 
@@ -146,27 +148,33 @@ class TestServiceImpl extends BaseService implements TestService
             $field['score'] = (int) $scores[$k];
 
             $item = $this->getTestItemDao()->addItem($field);
+
+            if($question['questionType'] != 'material'){
+                $count ++;
+            }
         }
+
+        $this->getTestPaperDao()->updateTestPaper($testId, array('itemCount'=>$count)); 
 
         $this->sortTestItemsByTestId($testId);
     }
 
     public function updateItems($testId, $field)
     {
-        if(empty($field['ids']) || empty($field['scores'])){
-            throw $this->createServiceException('参数不正确');
+        if(!ArrayToolkit::requireds($field, array('ids', 'scores'))){
+            throw $this->createServiceException('缺少必要字段！ids score');
         }
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
 
         $ids = array_flip($ids);
+
         if(count($ids) != count($scores)){
-            throw $this->createServiceException('参数不正确');
+            throw $this->createServiceException('ids scores count参数不正确');
         }
 
         $items = ArrayToolkit::index($this->findItemsByTestPaperId($testId),'questionId');
-
 
         $deleteItems = array_diff_key($items, $ids);
         foreach ($deleteItems as $item) {
@@ -174,6 +182,8 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         $addIds = array_flip(array_diff_key($ids, $items));
+
+        $count = 0;
         foreach ($ids as $k => $id) {
             $question = $this->getQuestionService()->getQuestion($k);
 
@@ -193,7 +203,14 @@ class TestServiceImpl extends BaseService implements TestService
             }else{
                 $item = $this->getTestItemDao()->updateItem($items[$k]['id'], $field);
             }
+
+            if($question['questionType'] != 'material'){
+                $count ++;
+            }
+
         }
+
+        $this->getTestPaperDao()->updateTestPaper($testId, array('itemCount'=>$count));
 
         $this->sortTestItemsByTestId($testId);
     }

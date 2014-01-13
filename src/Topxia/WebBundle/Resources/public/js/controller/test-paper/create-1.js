@@ -11,6 +11,10 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
 
+//此文件,合并冲突出现,应删除
+//此文件,合并冲突出现,应删除
+//此文件,合并冲突出现,应删除
+
     exports.run = function() {
 
         var $noUiSlider = $('.noUiSlider').noUiSlider({
