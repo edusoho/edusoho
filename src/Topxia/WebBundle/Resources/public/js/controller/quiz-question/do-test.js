@@ -18,12 +18,12 @@ define(function(require, exports, module) {
             if (deadline == 0) {
                 $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
                     changeAnswers = {};
-                    window.location.href = $(this).data('goto');
+                    window.location.href = $('#finishPaper').data('goto');
                 });
             }
             if (deadline == timeLastPost) {
                 timeLastPost = timeLastPost - interval;
-                $.post($('#postPaper').data('url'), { data:changeAnswers }, function(){
+                $.post($('#finishPaper').data('ajax'), { data:changeAnswers }, function(){
                     changeAnswers = {};
                 });
             }
@@ -103,9 +103,10 @@ define(function(require, exports, module) {
         });
 
         $('body').on('click', '#finishPaper', function(){
+            $finishBtn = $(this);
 
             $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
-                window.location.href = $(this).data('goto');
+                window.location.href = $finishBtn.data('goto');
             });
 
         });

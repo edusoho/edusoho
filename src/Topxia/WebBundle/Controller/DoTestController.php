@@ -88,11 +88,11 @@ class DoTestController extends BaseController
 	{
 
 		$paperResult = $this->getTestService()->getTestPaperResult($id);
-		if (!$testResult) {
+		if (!$paperResult) {
 			throw $this->createNotFoundException('试卷不存在!');
 		}
 		//权限！
-		if ($testResult['userId'] != $this->getCurrentUser()->id) {
+		if ($paperResult['userId'] != $this->getCurrentUser()->id) {
 			throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
 		}
 

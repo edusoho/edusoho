@@ -1,11 +1,13 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
+{% block title %}我的题库 - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-quiz' %}
 
-{% block content %}
-<div class="panel panel-default">
+{% block main %}
+<div class="panel panel-default panel-col">
 
 	<div class="panel-heading">
-		<h2>我的题库</h2>
+		我的题库
 	</div>
 	<div class="panel-body">
 		<ul class="nav nav-tabs">
@@ -14,7 +16,7 @@
 			<li class="{{ favoriteActive|default('') }}"><a href="{{ path('course_manage_show_favorite_question') }}">收藏的题目</a></li>
 		</ul>
 		<br>
-		{% block main %}{% endblock %}
+		{% block list %}{% endblock %}
 		
 	</div>
 </div>
