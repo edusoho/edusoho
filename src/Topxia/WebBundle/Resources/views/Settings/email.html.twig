@@ -10,6 +10,7 @@
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     {% block heading %}邮箱设置{% endblock %}
     {% block body %}
+    {% if mailer.enabled == 1 %}
       <form id="setting-email-form" class="form-horizontal" method="post" >
         {{ web_macro.flash_messages() }}
 
@@ -55,7 +56,9 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-
+    {% else %}
+      <div class="empty">未设置或未开启邮件服务器，不能更改邮箱地址</div>
+    {% endif %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
