@@ -51,18 +51,18 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addCommission($mysale)
+    public function addCommission($commission)
     {
-        $affected = $this->getConnection()->insert($this->table, $mysale);
+        $affected = $this->getConnection()->insert($this->table, $commission);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert  mysale error.');
         }
         return $this->getCommission($this->getConnection()->lastInsertId());
     }
 
-    public function updateCommission($id, $mysale)
+    public function updateCommission($id, $commission)
     {
-        $this->getConnection()->update($this->table, $mysale, array('id' => $id));
+        $this->getConnection()->update($this->table, $commission, array('id' => $id));
         return $this->getCommission($id);
     }
 
@@ -93,15 +93,15 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from(self::TABLENAME, 'mysale')
-            ->andWhere('prodType = :prodType')
-            ->andWhere('prodId = :prodId')
-            ->andWhere('prodName LIKE :prodNameLike')
+            ->from(self::TABLENAME, 'mysale_commission')
+            ->andWhere('mysaleId = :mysaleId')
+            ->andWhere('buyerId = :buyerId')
+            ->andWhere('orderSnLike LIKE :orderSnLike')
             ->andWhere('mTookeen LIKE :mTookeenLike')
             ->andWhere('userId = :userId')
-            ->andWhere('managerId = :managerId')
-            ->andWhere('validTime >= :startTimeGreaterThan')
-            ->andWhere('validTime < :startTimeLessThan');
+            ->andWhere('status = :status')
+            ->andWhere('paidTime >= :startTimeGreaterThan')
+            ->andWhere('paidTime < :startTimeLessThan');
 
         
 
