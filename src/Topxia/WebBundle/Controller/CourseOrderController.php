@@ -45,6 +45,8 @@ class CourseOrderController extends BaseController
 
         $formData = $request->request->all();
 
+        $courseId = $formData['courseId'];
+
         $user = $this->getCurrentUser();
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -55,11 +57,20 @@ class CourseOrderController extends BaseController
             'job'
         ));
 
-        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        if (!empty($_COOKIE["mc".$courseId])){
+          
+             $formData['mTookeen'] = $_COOKIE["mc".$courseId];
+
+        }
+
+        var_dump($formData);
+        
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);     
 
         $order = $this->getOrderService()->createOrder($formData);
 
-        
+        exit;
+
         if (intval($order['price']*100) > 0) {
             $paymentRequest = $this->createPaymentRequest($order);
 

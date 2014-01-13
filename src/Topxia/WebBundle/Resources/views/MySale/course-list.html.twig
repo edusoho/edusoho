@@ -13,9 +13,10 @@
   <table class="table table-striped table-hover" id="course-table">
     <thead>
     <tr>
-      <th width="40%">名称</th>
-      <th>销量/浏览量</th>
-      <th>价格(元)</th>      
+      <th width="40%">课程名称</th>
+      <th>销量/热度</th>
+      <th>价格(元)</th>
+
       <th>佣金(元)</th>
       <th>有效期</th>
       <th>操作</th>
@@ -40,11 +41,10 @@
             {% if(course.commissionType=='固定') %}
                固定销售提成: {{course.commission}}
             {% elseif (course.commissionType=="比例") %}
-               实际销售价比例: {{ course.commission*course.price/100 }}
+               实际售价比例: {{ course.commission*course.price/100 }}
             {% else %}
-               实际销售价比例: 30%
+               实际售价比例: 30%
             {% endif %}
-
           </td>
 
           <td>{{course.saleValidTime|date('Y-n-d H:i') }} 前</td>
