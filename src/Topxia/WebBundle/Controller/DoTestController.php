@@ -36,7 +36,8 @@ class DoTestController extends BaseController
 		$paper = $this->getTestService()->getTestPaper($testResult['testId']);
 
 		//字符串要过滤js and so on?
-		$questions = $this->getTestService()->showTest($id);
+		// $questions = $this->getTestService()->showTest($id);
+		$questions = $this->getTestService()->testResults($id);
 
 		$questions = $this->formatQuestions($questions);
 
@@ -79,6 +80,7 @@ class DoTestController extends BaseController
 			$this->getTestService()->finishTest($id, $userId, $remainTime);
 
 			return $this->createJsonResponse(true);
+			// return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $id)));
 		}
 	}
 
@@ -86,6 +88,13 @@ class DoTestController extends BaseController
 	{
 
 		$paperResult = $this->getTestService()->getTestPaperResult($id);
+		if (!$testResult) {
+			throw $this->createNotFoundException('试卷不存在!');
+		}
+		//权限！
+		if ($testResult['userId'] != $this->getCurrentUser()->id) {
+			throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+		}
 
 		$paper = $this->getTestService()->getTestPaper($paperResult['testId']);
 

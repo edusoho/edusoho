@@ -8,11 +8,11 @@
 	<div class="panel-body">
 		{% set input_index = 1 %}
 		{% for answer in question.answer %}
-			<input class="form-control input-sm mbs" type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个空请填在这里" />
+			<input class="form-control input-sm mbs" type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个空请填在这里" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
 			{% set input_index = input_index + 1 %}
 		{% endfor %}
 	</div>
-	{% if question.testResult|default(null) %}
+	{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
 		<div class="panel-footer">
 			{% if question.testResult.status == 'right' %}
 				正确答案：{{ question.answer|join(', ') }}. 您做对了！

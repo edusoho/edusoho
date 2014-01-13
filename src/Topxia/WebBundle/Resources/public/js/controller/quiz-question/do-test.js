@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             if (deadline == 0) {
                 $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
                     changeAnswers = {};
+                    window.location.href = $(this).data('goto');
                 });
             }
             if (deadline == timeLastPost) {
@@ -101,10 +102,10 @@ define(function(require, exports, module) {
             }
         });
 
-        $('body').on('click', '#postPaper, #finishPaper', function(){
+        $('body').on('click', '#finishPaper', function(){
 
             $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
-                changeAnswers = {};
+                window.location.href = $(this).data('goto');
             });
 
         });

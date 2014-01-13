@@ -91,9 +91,11 @@ class MyQuestionServiceImpl extends BaseService
 		return $this->getQuestionFavoriteDao()->findFavoriteQuestionsCountByUserId($id);
 	}
 
-	public function findTeacherTestsByTeacherId ($teacherId)
+	public function findTeacherTestPapersByTeacherId ($teacherId)
 	{
-		return $this->getTeacherTestDao()->findTeacherTestsByTeacherId($teacherId);
+		$members = $this->getMemberDao()->findAllMemberByUserIdAndRole($teacherId, 'teacher');
+
+		return $this->getTestPaperDao()->findTestPaperByTargetIdsAndTargetType(ArrayToolkit::column($members, 'courseId'), 'course');
 	}
 
 	public function findTestPaperResultsByStatusAndTestIds ($ids, $status, $start, $limit)
@@ -135,13 +137,18 @@ class MyQuestionServiceImpl extends BaseService
         return $this->createDao('Quiz.QuestionFavoriteDao');
     }
 
-    private function getTeacherTestDao()
-    {
-        return $this->createDao('Quiz.TeacherTestDao');
-    }
-
     private function getUserDao()
     {
         return $this->createDao('User.UserDao');
+    }
+
+    private function getMemberDao ()
+    {
+        return $this->createDao('Course.CourseMemberDao');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 }

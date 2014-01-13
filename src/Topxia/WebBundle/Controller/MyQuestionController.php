@@ -141,9 +141,9 @@ class MyQuestionController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $teacherTests = $this->getMyQuestionService()->findTeacherTestsByTeacherId($user['id']);
+        $teacherTests = $this->getMyQuestionService()->findTeacherTestPapersByTeacherId($user['id']);
 
-        $testPaperIds = ArrayToolkit::column($teacherTests, 'testPaperId');
+        $testPaperIds = ArrayToolkit::column($teacherTests, 'id');
 
         $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
 

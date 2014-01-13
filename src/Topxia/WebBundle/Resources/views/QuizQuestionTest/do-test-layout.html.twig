@@ -156,8 +156,7 @@
 
 			</div>
 			<div class="panel-footer">
-				<button class="btn btn-success btn-block" id="postPaper" data-url="{{ path('course_manage_submit_test', { id: id }) }}">其实我是ajax来的间谍哦~</button>
-				<button class="btn btn-success btn-block" id="finishPaper" data-url="{{ path('course_manage_finish_test', { id: id }) }}">我真的要交卷</button>
+				<button class="btn btn-success btn-block" id="finishPaper" data-url="{{ path('course_manage_finish_test', { id: id }) }}" data-goto="{{ path('course_manage_test_results', { id: id }) }}">我真的要交卷</button>
 			</div>
 	</div>
 </div>

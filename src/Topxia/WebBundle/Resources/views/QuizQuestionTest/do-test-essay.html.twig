@@ -2,7 +2,7 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">{{ questionIndex }}. {{ question.stem }}</h3>
 	</div>
-	{% if question.testResult|default(null) %}
+	{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
 
 		{% if role|default(null) == 'teacher' %}
 
@@ -43,12 +43,12 @@
 	{% else %}
 		<div class="panel-body">
 
-			<textarea class="form-control" data-type="essay" name="{{ question.id }}" rows="3"></textarea>
+			<textarea class="form-control" data-type="essay" name="{{ question.id }}" rows="3">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0] }}{% endif %}</textarea>
 
 		</div>
 	{% endif %}
 	<div class="panel-footer">
-		{% if question.testResult|default(null) %}
+		{% if question.testResult|default(null) in ['reviewing', 'finished'] %}
 			{% if not question.analysis == '' %}
 				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
 			{% endif %}
