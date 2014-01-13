@@ -69,8 +69,6 @@ define(function(require, exports, module) {
                 }
             });
 
-
-
         },
 
         deleteChoice: function(e){

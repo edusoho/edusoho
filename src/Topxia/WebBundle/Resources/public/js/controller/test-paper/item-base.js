@@ -49,6 +49,7 @@ define(function(require, exports, module) {
 			});
 
 			var href = $('#myTab .active a').attr('href').split("#");
+
 			var url  = $(e.currentTarget).data('url')+'&type='+href[1]+"&ids="+ids;
 
             $.get(url, '', function(data){
@@ -75,6 +76,7 @@ define(function(require, exports, module) {
 
 		submit: function(e){
 			$(e.currentTarget).text("努力保存中...");
+			$('[data-role=item-body]').empty();
 			this.$('#test-create2-form').submit();
 		},
 
@@ -90,7 +92,7 @@ define(function(require, exports, module) {
 			if(typeof itemScores != 'undefined'){
                 this.set('itemScores', $.parseJSON(itemScores));
             }
-
+        	
         	var questionType = $('[data-role=questionType-data]').html();
 			if(typeof questionType != 'undefined'){
                 this.set('questionType', $.parseJSON(questionType));
@@ -111,29 +113,35 @@ define(function(require, exports, module) {
 				var html = "<tbody id="+id+" class='tab-pane test-item-tbody'></tbody>";
 
         		self.$('[data-role=item-body]').after(html);
-                
+
+
                 if (self.$('[data-type=' + key + ']').length == 0) {
 
                 	$('#'+id).append("<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>");
                 	
                 } else {
 
-                	if(self.get('itemScores')[key] != 0){
+                	if(self.get('itemScores')){
+                		if(self.get('itemScores')[key] != 0){
 
-                		self.$('[data-type=' + key + ']').find('input[type=text]').val(self.get('itemScores')[key]);
+	                		self.$('[data-type=' + key + ']').find('input[type=text]').val(self.get('itemScores')[key]);
+	                	}
                 	}
 
                 	$('#'+id).append(self.$('[data-type=' + key + ']'));
+
                 }
 
                 if('material' == key){
 
                 	self.$('[data-type=' + key + ']').each(function(index){
 
-                		if(self.get('itemScores')[key] != 0){
+                		if(self.get('itemScores')){
+	                		if(self.get('itemScores')[key] != 0){
 
-                			self.$('[data-type=' + $(this).attr('id') + ']').find('input[type=text]').val(self.get('itemScores')[key]);
-                		}
+	                			self.$('[data-type=' + $(this).attr('id') + ']').find('input[type=text]').val(self.get('itemScores')[key]);
+	                		}
+	                	}
 
                 		$(this).after(self.$('[data-type=' + $(this).attr('id') + ']'));
                 	});
