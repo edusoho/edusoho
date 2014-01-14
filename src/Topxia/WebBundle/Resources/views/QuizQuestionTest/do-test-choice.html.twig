@@ -47,8 +47,8 @@
 		<div class="panel-footer">
 
 			{% for choice in question.choices %}
-				<label class="checkbox-inline">
-					{{ choice.choiceIndex }}<input type="checkbox" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
+				<label class="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline">
+					{{ choice.choiceIndex }}<input type="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
 				</label> 
 
 			{% endfor %}
