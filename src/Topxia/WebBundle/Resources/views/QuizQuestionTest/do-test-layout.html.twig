@@ -113,7 +113,7 @@
 	<div class="panel panel-default">
 			<div class="panel-heading">
 				{% if limitTime != 0 %}
-					剩余:<span id="time_show" data-time="{% if paperResult.remainTime == 0 %}{{ limitTime }}{% else %}{{ paperResult.remainTime }}{% endif %}"></span>
+					剩余:<span id="time_show" data-time="{% if paperResult.remainTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ paperResult.remainTime }}{% endif %}"></span>
 					<button class="btn btn-sm btn-default pull-right">下次再做</button>
 					<button id="pause" class="btn btn-sm btn-default pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
 				{% else %}

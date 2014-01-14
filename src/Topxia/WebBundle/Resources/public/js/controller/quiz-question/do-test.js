@@ -11,24 +11,25 @@ define(function(require, exports, module) {
         var timeLastPost = deadline - interval;
 
 //计时器...
-        var timer = timerShow(function(){
-            deadline--;
-            $('#time_show').text(formatTime(deadline));
+        if(deadline != undefined) {
+            var timer = timerShow(function(){
+                deadline--;
+                $('#time_show').text(formatTime(deadline));
 
-            if (deadline == 0) {
-                $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
-                    changeAnswers = {};
-                    window.location.href = $('#finishPaper').data('goto');
-                });
-            }
-            if (deadline == timeLastPost) {
-                timeLastPost = timeLastPost - interval;
-                $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
-                    changeAnswers = {};
-                });
-            }
-        }, 1000, true);
-
+                if (deadline == 0) {
+                    $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
+                        changeAnswers = {};
+                        window.location.href = $('#finishPaper').data('goto');
+                    });
+                }
+                if (deadline == timeLastPost) {
+                    timeLastPost = timeLastPost - interval;
+                    $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
+                        changeAnswers = {};
+                    });
+                }
+            }, 1000, true);
+        }
         $('#pause').on('click', function(){
             timer.pause();
         });
