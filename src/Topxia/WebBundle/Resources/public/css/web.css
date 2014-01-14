@@ -3367,6 +3367,7 @@ body {
 
 .testpaper-question-choices li:hover {
 	background: #eee;
+	cursor: pointer;
 }
 
 .testpaper-question-choice-index {
