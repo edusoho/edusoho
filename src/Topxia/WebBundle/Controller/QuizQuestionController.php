@@ -138,6 +138,8 @@ class QuizQuestionController extends BaseController
 
 		$parentQuestion['difficulty'] = $request->query->get('questionDifficulty');
 
+		$question['difficulty'] = $request->query->get('questionDifficulty');
+
 		return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'course' => $course,
 			'type' => $type,
@@ -145,6 +147,7 @@ class QuizQuestionController extends BaseController
 			'parentId' => $parentId,
 			'parentQuestion' => $parentQuestion,
 			'category' => $category,
+			'question' => $question
 		));
 	}
 
