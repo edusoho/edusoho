@@ -86,7 +86,7 @@
           {% for question in questions %}
               {% include 'TopxiaWebBundle:QuizQuestion:tr.html.twig' with {item:question} %}
           {% else %}
-              <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
+              <tr><td colspan="20"><div class="empty">一道题都没有，请点击右上角按钮，按不同的题型录入题目</div></td></tr>
           {% endfor %}
       </tbody>
   </table>
