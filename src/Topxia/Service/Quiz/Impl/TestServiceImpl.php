@@ -53,6 +53,13 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getTestPaperDao()->deleteTestPaper($id);
     }
 
+    public function findTestPapersByTarget($targetType, $targetId, $start, $limit)
+    {
+        return TestPaperSerialize::unserializes(
+            $this->getTestPaperDao()->findTestPapersByTarget($targetType, $targetId, $start, $limit)
+        );
+    }
+
     public function searchTestPaper(array $conditions, array $orderBy, $start, $limit){
         return TestPaperSerialize::unserializes($this->getTestPaperDao()->searchTestPaper($conditions, $orderBy, $start, $limit));
     }
@@ -287,11 +294,6 @@ class TestServiceImpl extends BaseService implements TestService
                 }
             }
         }
-    }
-
-    public function findTestPapersByCourseIds(array $id)
-    {
-        return $this->getQuizPaperCategoryDao() -> findCategorysByCourseIds($id);
     }
 
     public function findItemsByTestPaperId($testPaperId)

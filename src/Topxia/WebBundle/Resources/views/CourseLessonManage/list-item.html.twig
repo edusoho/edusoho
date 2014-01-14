@@ -14,7 +14,9 @@
 			<span class="glyphicon glyphicon-facetime-video text-success"></span>
 		  {% endif %}
 		{% elseif lesson.type == 'audio' %}
-			<span class="glyphicon glyphicon-volume-up text-success"></span>
+		  <span class="glyphicon glyphicon-volume-up text-success"></span>
+		{% elseif lesson.type == 'testpaper' %}
+		  <span class="glyphicon glyphicon-check text-success"></span>
 		{% else %}
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
@@ -41,14 +43,13 @@
 	</div>
 
 	<div class="item-actions">
-
-
+	  {% if lesson.type != 'testpaper' %}
 		<button class="btn btn-link" title="添加测验" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz', {courseId:course.id, lessonId:lesson.id}) }}">
 			<span class="glyphicon glyphicon-list-alt"></span>
 		</button>
-
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
 		</button>
+	  {% endif %}
 
 		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 
@@ -58,7 +59,13 @@
 	  	<button class="btn btn-link unpublish-lesson-btn" title="取消发布" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span></button>
 	  {% endif %}
 
-		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
+		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal"
+		  {% if lesson.type == 'testpaper' %}
+			  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
+			{% else %}
+			  data-url="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
+			{% endif %}
+		  ><i class="glyphicon glyphicon-edit"></i></button>
 
 	  <button class="btn btn-link delete-lesson-btn" title="删除" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash"></span></button>
 

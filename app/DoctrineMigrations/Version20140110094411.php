@@ -26,7 +26,7 @@ class Version20140110094411 extends AbstractMigration
 
         $this->addSql("ALTER TABLE  `test_paper_result` ADD  `checkTeacherId` INT NOT NULL AFTER  `status`");
 
-        $this->addSql("ALTER TABLE  `test_paper_result` CHANGE  `endTIme`  `endTime` INT( 11 ) NOT NULL COMMENT  '结束时间'`");
+        $this->addSql("ALTER TABLE  `test_paper_result` CHANGE  `endTIme`  `endTime` INT( 11 ) NOT NULL COMMENT  '结束时间'");
         
         $this->addSql("ALTER TABLE  `test_paper_result` ADD  `subjectiveScore` INT NOT NULL AFTER  `score`");
     }

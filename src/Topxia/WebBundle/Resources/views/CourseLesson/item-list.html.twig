@@ -27,6 +27,8 @@
 				      </span>
 				    {% elseif item.type == 'text' %}
 				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
+				    {% elseif item.type == 'testpaper' %}
+				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
 			    	{% endif %}
 			    {% else %}
 			      <span class="status">未发布</span>
