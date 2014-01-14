@@ -23,15 +23,10 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     }
 
 
-
-
-
-    public function getCommissionBymTookeen($mTookeen)
+    public function getCommissionByOrder($order)
     {
-        return CommissionSerialize::unserialize($this->getCommissionDao()->getCommissionBymTookeen($mTookeen));
+        return MySaleSerialize::unserialize($this->getCommissionDao()->getCommissionByOrder($order));
     }
-
-
 
 
 
@@ -108,7 +103,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     public function createCommission($commission){
 
-        $commission = ArrayToolkit::parts($commission, array('id', 'mysaleId','mTookeen','buyerId','userId', 'orderId', 'orderSn', 'commission', 'status', 'paidTime','createdTime'));
+        $commission = ArrayToolkit::parts($commission, array('id', 'mysaleId','mTookeen','buyerId','userId', 'orderId', 'orderSn', 'commission', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
 
         $commission['createdTime']=time();
 
@@ -116,6 +111,12 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
         return $this->getCommission($commission['id']);
 
+    }
+
+    public function updateCommission($id, $commission)
+    {
+
+       return $this->getCommissionDao()->updateCommission($id, $commission);
     }
 
 
@@ -127,9 +128,122 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     }
 
 
-    public function computeCommission($order,$userId,$commission)
+    public function computeCommission($order,$mysale)
     {
-        return  100;
+
+         if($mysale['prodType']=='course'){
+
+            $commission['mysaleId']= $mysale['id'];
+            $commission['mTookeen'] = $mysale['mTookeen'];
+            $commission['buyerId'] = $order['userId'];
+            $commission['salerId'] = $mysale['userId'];
+            $commission['orderId'] = $order['id'];
+            $commission['orderSn'] = $order['sn'];
+            $commission['orderPrice'] = $order['price'];
+
+            if($order['userId']==$mysale['userId']){
+
+                 $commission['commission']=0;
+                 $commission['note']='本人购买的课程不能享受佣金收入';
+
+
+            }else{
+
+                if($mysale['adCommissionType']=='ratio'){
+
+                    $commission['commission']= $mysale['adCommission']*$order['price']/100;   //30%
+
+                }else if ($mysale['adCommissionType']=='quota'){
+
+                     $commission['commission']= $mysale['adCommission'];
+
+                }else
+                {
+                    $commission['commission']=0;
+                }
+            }
+
+            $commission['status']='created';
+
+            return $this->createCommission($commission);
+           
+        }  
+       
+    }
+
+
+    public function confirmCommission($order)
+    {
+
+        $commission = $this->getCommissionByOrder($order);
+
+         $this->updateCommission($commission['id'], array(
+                    'status' => 'paid',
+                    'paidTime' => $order['paidTime'],
+                ));
+    }
+
+    public function frozenCommissionWithOrder($order)
+    {
+
+        $commission = $this->getCommissionByOrder($order);
+
+        $this->frozenCommission($commission);
+
+    }
+
+    public function unFrozenCommissionWithOrder($order)
+    {
+
+        $commission = $this->getCommissionByOrder($order);
+
+        $this->frozenCommission($commission);
+
+    }
+
+    public function applyDrawCommission($commission)
+    {
+        
+    }
+
+    public function agreeDrawCommission($commission)
+    {
+        
+    }
+
+    public function refuseDrawCommission($commission)
+    {
+        
+    }
+
+    public function cancelledApplyCommission($commission)
+    {
+        
+    }
+
+    public function drawCommission($commission)
+    {
+        
+    }
+
+    public function frozenCommission($commission)
+    {
+
+        return  $this->updateCommission($commission['id'], array(
+                    'status' => 'frozen',
+                    'updatedTime' => time(),
+                ));
+        
+    }
+
+    public function unfrozenCommission($commission)
+    {
+
+        return  $this->updateCommission($commission['id'], array(
+                    'status' => 'paid',
+                    'updatedTime' => time(),
+                ));
+        
     }
   
 

@@ -105,6 +105,20 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         }
 
+        if(!empty($order['mTookeen']))
+        {
+
+            $mysale = $this->getMySaleService()->getMySaleBymTookeen($order['mTookeen']);
+
+            if(!empty($mysale)){
+
+                  $this->getMySaleService()->computeCommission($order,$mysale);
+            }
+        }
+
+
+
+
         $order = $this->getOrderDao()->addOrder($order);
 
         $this->_createLog($order['id'], 'created', '创建订单');
@@ -128,7 +142,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             }
 
             if ($this->canOrderPay($order)) {
-                $this->getOrderDao()->updateOrder($order['id'], array(
+                $order = $this->getOrderDao()->updateOrder($order['id'], array(
                     'status' => 'paid',
                     'paidTime' => $payData['paidTime'],
                 ));
@@ -140,6 +154,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 );
                 $this->getCourseService()->becomeStudent($order['courseId'], $order['userId'], $info);
 
+                $this->getCommissionService()->confirmCommission($order);
 
 
             } else {

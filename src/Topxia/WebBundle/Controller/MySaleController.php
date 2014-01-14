@@ -75,16 +75,12 @@ class MySaleController extends BaseController
             $mysale=array();
 
             $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+           
 
-            if($course['commissionType']=='固定'){
+            $mysale['adCommissionType']= $course['adCommissionType'];
 
-                $mysale['commission']= $course['commission'];
-
-            }else if($course['commissionType']=='立减'){
-
-                $mysale['commission'] = ($course['price']*$course['commission'])/10;
-
-            }
+            $mysale['adCommission']= $course['adCommission'];
+           
 
             $mysale['prodType']='course';
             $mysale['prodId']=$course['id'];

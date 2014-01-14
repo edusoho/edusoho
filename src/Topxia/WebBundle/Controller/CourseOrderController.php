@@ -63,13 +63,11 @@ class CourseOrderController extends BaseController
 
         }
 
-        var_dump($formData);
         
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);     
 
         $order = $this->getOrderService()->createOrder($formData);
 
-        exit;
 
         if (intval($order['price']*100) > 0) {
             $paymentRequest = $this->createPaymentRequest($order);

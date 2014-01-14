@@ -38,10 +38,10 @@
           <td>{{ course.price }}</td>
           
           <td>
-            {% if(course.commissionType=='固定') %}
-               固定销售提成: {{course.commission}}
-            {% elseif (course.commissionType=="比例") %}
-               实际售价比例: {{ course.commission*course.price/100 }}
+            {% if(course.adCommissionType=='quota') %}
+               固定销售提成: {{course.adCommission}}
+            {% elseif (course.adCommissionType=="ratio") %}
+               实际售价比例: {{ course.adCommission*course.price/100 }}
             {% else %}
                实际售价比例: 30%
             {% endif %}

@@ -109,7 +109,7 @@ class MySaleServiceImpl extends BaseService implements MySaleService
 
     public function createMySale($mysale){
 
-        $mysale = ArrayToolkit::parts($mysale, array('id', 'prodType','prodId','prodName','commission', 'mTookeen', 'tUrl', 'validTime', 'userId', 'updatedTime','createdTime', 'managerId'));
+        $mysale = ArrayToolkit::parts($mysale, array('id', 'prodType','prodId','prodName','adCommissionType','adCommission', 'mTookeen', 'tUrl', 'validTime', 'userId', 'updatedTime','createdTime', 'managerId'));
 
         $mysale['createdTime']=time();
 
@@ -130,7 +130,7 @@ class MySaleServiceImpl extends BaseService implements MySaleService
 
     public function generateMySaleTookeen($tookeenPrefix='')
     {
-        return  $tookeenPrefix.$this->generateChars(24);
+        return  $tookeenPrefix. date('YmdHis', time()).$this->generateChars(24);
     }
 
 

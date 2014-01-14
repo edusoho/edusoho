@@ -38,7 +38,7 @@ class Version20131226140235 extends AbstractMigration
 			  `orderSn` varchar(255)  CHARACTER SET utf8  NOT NULL COMMENT '订单sn',
 			  `commission` float(11,2) NOT NULL DEFAULT '0.00' COMMENT '本笔订单佣金收入',
 			  `status` varchar(255)  CHARACTER SET utf8  NOT NULL COMMENT '成交记录状态',
-			  `paidTime` int(11) NOT NULL COMMENT '更新时间',
+			
 			  `createdTime` int(11) NOT NULL COMMENT '创建时间',
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='推广成交订单记录表'  AUTO_INCREMENT=1;

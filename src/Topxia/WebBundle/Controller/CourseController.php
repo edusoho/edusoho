@@ -147,7 +147,11 @@ class CourseController extends BaseController
 
             }else{
 
-                setcookie("mc".$id,  $mtookeen, time()+3600*24*3);
+                if(empty($course['adCommissionDay'])){
+                    $course['adCommissionDay'] = 7;
+                }
+
+                setcookie("mc".$id,  $mtookeen, time()+3600*24*$course['adCommissionDay']);
             }
           
         }

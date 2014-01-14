@@ -26,12 +26,6 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function getCommissionByProdAndBuyerId($prodType,$prodId,$userId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE prodType = ? and prodId=? and userId=? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($prodType,$prodId,$userId)) ? : null;
-    }
-
 
     public function searchCommissions($conditions, $orderBy, $start, $limit)
     {
@@ -71,11 +65,10 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-
-    public function getCommissionBymTookeen($mTookeen)
+    public function getCommissionByOrder($order)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE mTookeen = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($mTookeen)) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE orderId = ? and orderSn LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($order['id'],$order['sn'])) ? : null;
     }
 
 
