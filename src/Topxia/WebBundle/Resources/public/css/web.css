@@ -3382,13 +3382,24 @@ body {
 .testpaper-question-choice-inputs  label {
 	padding: 8px 20px 8px 30px;
 	display: inline-block;
-
 }
 
 .testpaper-question-choice-inputs  label:hover,
 .testpaper-question-choice-inputs  label.active {
 	background: #eee;
 }
+
+.testpaper-question-fill-inputs {
+	margin-left: 50px;
+
+}
+
+.testpaper-question-fill-inputs  input {
+	margin-bottom: 10px;
+
+}
+
+
 
 .testpaper-card .btn-index {
 	font-size: 12px;
