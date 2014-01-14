@@ -38,7 +38,20 @@
 				正确答案：{{ question.answer|join(', ') }}. 您填写了: {{ question.testResult.answer|join(', ') }}
 			{% endif %}
 
+			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
+			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
 
+			{% if not question.analysis == '' %}
+				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+			{% endif %}
+
+			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
+		</div>
+	{% else %}
+		<div class="panel-footer">
+			<a class="btn btn-sm pull-right marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+			<a class="btn btn-sm btn-link unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消标记</span></a>
+			
 		</div>
 	{% endif %}
 </div>

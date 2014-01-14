@@ -60,6 +60,11 @@
 
 			<div class="testpaper-question-actions pull-right">
 				<a class="btn btn-sm btn-link marking"><span class="glyphicon glyphicon-bookmark"> 标记</span></a>
+				<a class="btn btn-sm btn-link unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消标记</span></a>
+
+
+
+
 				<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm favorite-btn"><span class="glyphicon glyphicon-bookmark"> 收藏</span></button>
 				<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消收藏</span></button>
 			</div>
