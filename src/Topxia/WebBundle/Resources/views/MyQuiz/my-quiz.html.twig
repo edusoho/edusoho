@@ -6,9 +6,9 @@
 		{% for myTestPaperResult in myTestPaperResults %}
 			{% set myTestPaper = myTestPapers[myTestPaperResult.testId] %}
 			{% set course = courses[myTestPaper.targetId] %}
-			{% if myTestPaperResult.status in ['reviewing', 'finished'] %}
+
 				{% include 'TopxiaWebBundle:MyQuiz:my-quiz-tr.html.twig' %}
-			{% endif %}
+
 		{% endfor %}
 	</tbody>
 </table>

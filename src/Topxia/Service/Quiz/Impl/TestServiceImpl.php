@@ -715,7 +715,8 @@ class TestServiceImpl extends BaseService implements TestService
             'userId' => $userId,
             'limitedTime' => $testPaper['limitedTime'],
             'beginTime' => time(),
-            'status' => 'doing'
+            'status' => 'doing',
+            'remainTime' => $testPaper['limitedTime'] * 60
         );
 
         return $this->getTestPaperResultDao()->addResult($testPaperResult);

@@ -525,6 +525,10 @@ course_manage_do_test_pause:
     pattern: /pause/test
     defaults: { _controller: TopxiaWebBundle:DoTest:testPause }
 
+course_manage_do_test_suspend:
+    pattern: /suspend/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:testSuspend }
+
 course_manage_submit_test:
     pattern: /submit/test/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:submitTest }

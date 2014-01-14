@@ -37,7 +37,8 @@ class DoTestController extends BaseController
 			'questions' => $questions,
 			'limitTime' => $paper['limitedTime'] * 60,
 			'paper' => $paper,
-			'id' => 0
+			'id' => 0,
+			'isPreview' => 'preview'
 		));
 	}
 
@@ -79,8 +80,8 @@ class DoTestController extends BaseController
 	public function submitTestAction (Request $request, $id)
 	{
 		if ($request->getMethod() == 'POST') {
-			$answers = $request->request->all();
-			$answers = $answers['data'];
+			$data = $request->request->all();
+			$answers = array_key_exists('data', $data) ? $data['data'] : array();
 			$remainTime = $data['remainTime'];
 
 			$result = $this->getTestService()->submitTest($answers, $id);
@@ -95,7 +96,7 @@ class DoTestController extends BaseController
 	{
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
-			$answers = $data['data'];
+			$answers = array_key_exists('data', $data) ? $data['data'] : array();
 			$remainTime = $data['remainTime'];
 			$userId = $this->getCurrentUser()->id;
 
@@ -155,7 +156,7 @@ class DoTestController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
-			$answers = $data['data'];
+			$answers = array_key_exists('data', $data) ? $data['data'] : array();
 			$remainTime = $data['remainTime'];
 
 			$results = $this->getTestService()->submitTest($answers, $id);
