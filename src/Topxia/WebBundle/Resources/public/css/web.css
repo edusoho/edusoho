@@ -3395,6 +3395,11 @@ body {
 	margin: 0 5px 5px 0;
 }
 
+.testpaper-card-timer {
+	color: #3a87ad;
+	font-size: 20px;
+}
+
 @media (min-width: 992px) {
   /* Widen the fixed sidebar */
   .testpaper-card.affix,
