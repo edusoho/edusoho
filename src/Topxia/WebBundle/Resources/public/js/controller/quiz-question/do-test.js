@@ -11,12 +11,18 @@ define(function(require, exports, module) {
         var timeLastPost = deadline - interval;
 
 //计时器...
+
+        if ($('#time_show').hasClass('preview')) {
+            $('#time_show').text(formatTime(deadline));
+            deadline = undefined;
+        }
+
         if(deadline != undefined) {
             var timer = timerShow(function(){
                 deadline--;
                 $('#time_show').text(formatTime(deadline));
 
-                if (deadline == 0) {
+                if (deadline <= 0) {
                     $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
                         changeAnswers = {};
                         window.location.href = $('#finishPaper').data('goto');
@@ -108,6 +114,15 @@ define(function(require, exports, module) {
 
             $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
                 window.location.href = $finishBtn.data('goto');
+            });
+
+        });
+
+        $('body').on('click', '#suspend', function(){
+            $suspendBtn = $(this);
+
+            $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
+                window.location.href = $suspendBtn.data('goto');
             });
 
         });
