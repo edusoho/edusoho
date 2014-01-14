@@ -1,5 +1,5 @@
+<div class="material">
 <div class="well well-lg">{{ question.stem }}</div>
-
 {% for question in question.questions %}
 
 	{% if question.questionType == 'single_choice' or question.questionType == 'choice' %}
@@ -31,3 +31,4 @@
 	{% endif %}
 
 {% endfor %}
+</div>
