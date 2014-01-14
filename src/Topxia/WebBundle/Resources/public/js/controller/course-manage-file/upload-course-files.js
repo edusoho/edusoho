@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
-				extensions = 'mp3,mp4,avi,flv,wmv';
+				extensions = 'mp3,mp4,avi,flv,wmv,mov';
 			} else {
 				extensions = 'mp3,mp4';
 			}

@@ -76,7 +76,7 @@ class FileToolkit
 
     public static function getSecureFileExtensions()
     {
-        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma zip rar gz tar 7z swf';
+        return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma mov zip rar gz tar 7z swf';
     }
 
     public static function getImageExtensions()
@@ -103,7 +103,7 @@ class FileToolkit
 
     public static function getFileTypeByExtension($extension)
     {
-        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv'))) {
+        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';
