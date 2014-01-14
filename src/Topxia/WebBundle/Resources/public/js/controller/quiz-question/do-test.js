@@ -99,14 +99,27 @@ define(function(require, exports, module) {
 
         });
 
-        $('.panel-footer').on('click', 'a.btn.marking', function(){
-            id = $(this).parents('.panel').attr('id');
-            btn = $('.answerCard .panel-body [href="#'+id+'"]');
-            if (btn.css('border-left-width') == '1px') {
-                btn.addClass('have-pro');
-            } else {
-                btn.removeClass('have-pro');
-            }
+        $('.testpaper-question-actions').on('click', 'a.marking', function(){
+
+            id = $(this).parents('.testpaper-question').attr('id');
+            btn = $('.testpaper-card .panel-body [href="#'+id+'"]');
+
+            btn.addClass('have-pro');
+
+            $(this).hide();
+            $(this).parent().find('a.btn.unMarking').show();
+            
+        });
+
+        $('.testpaper-question-actions').on('click', 'a.unMarking', function(){
+            id = $(this).parents('.testpaper-question').attr('id');
+            btn = $('.testpaper-card .panel-body [href="#'+id+'"]');
+
+            btn.removeClass('have-pro');
+
+            $(this).hide();
+            $(this).parent().find('a.btn.marking').show();
+
         });
 
         $('body').on('click', '#finishPaper', function(){

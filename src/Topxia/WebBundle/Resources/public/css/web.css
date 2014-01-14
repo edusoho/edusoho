@@ -3400,6 +3400,10 @@ body {
 	font-size: 20px;
 }
 
+.testpaper-card .panel-body .have-pro {
+	border: 2px solid #428bca;
+}
+
 @media (min-width: 992px) {
   /* Widen the fixed sidebar */
   .testpaper-card.affix,
