@@ -3362,7 +3362,11 @@ body {
 }
 
 .testpaper-question-choices li {
-	padding: 6px 0;
+	padding: 6px 0 6px 6px;
+}
+
+.testpaper-question-choices li:hover {
+	background: #eee;
 }
 
 .testpaper-question-choice-index {
@@ -3381,7 +3385,8 @@ body {
 
 }
 
-.testpaper-question-choice-inputs  label:hover {
+.testpaper-question-choice-inputs  label:hover,
+.testpaper-question-choice-inputs  label.active {
 	background: #eee;
 }
 
