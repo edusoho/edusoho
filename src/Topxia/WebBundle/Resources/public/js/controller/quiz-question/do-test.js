@@ -140,8 +140,8 @@ define(function(require, exports, module) {
 
         });
 
-        $('.choice').on('click', 'ul li', function(){
-            $input = $(this).parents('div.choice').find('.panel-footer label').eq($(this).index()).find('input');
+        $('.testpaper-question-choice').on('click', 'ul.testpaper-question-choices li', function(){
+            $input = $(this).parents('div.testpaper-question-choice').find('.testpaper-question-choice-inputs label').eq($(this).index()).find('input');
             isChecked = $input.prop("checked");
             $input.prop("checked", !isChecked).change();
             
