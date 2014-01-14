@@ -249,10 +249,9 @@ define(function(require, exports, module) {
 
     function formatTime(time) {
         // time = time / 10;
-        var hour = parseInt(time / 3600),
-        min = parseInt(time / 60) - hour * 60,
-        sec = time - (min * 60) - hour * 3600;
-        return (hour > 0 ? pad(hour, 2) : "00") + ":" + (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2);
+        var min = parseInt(time / 60),
+        sec = time - (min * 60);
+        return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2);
     };
     function pad(number, length) {
         var str = '' + number;
