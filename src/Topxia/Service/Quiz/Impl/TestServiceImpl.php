@@ -582,7 +582,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         return array(
             'oldAnswers' => $oldAnswers,
-            'newAnswers' => $newAnswers
+            'newAnswers' => ArrayToolkit::index($newAnswers, 'questionId')
         );
     }
 

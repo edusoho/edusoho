@@ -35,7 +35,7 @@
 
 		{% else %}
 			<div class="panel-body">
-				{{ question.testResult.answer[0] }}
+				{{ question.testResult.answer[0]|default('') }}
 			</div>
 		{% endif %}
 
