@@ -3384,3 +3384,35 @@ body {
 .testpaper-question-choice-inputs  label:hover {
 	background: #eee;
 }
+
+.testpaper-card .btn-index {
+	font-size: 12px;
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	margin: 0 5px 5px 0;
+}
+
+@media (min-width: 992px) {
+  /* Widen the fixed sidebar */
+  .testpaper-card.affix,
+  .testpaper-card.affix-bottom {
+    width: 213px;
+  }
+  .testpaper-card.affix {
+    position: fixed; /* Undo the static from mobile first approach */
+    top: 40px;
+  }
+  .testpaper-card.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+}
+
+@media (min-width: 1200px) {
+	.testpaper-card.affix,
+	.testpaper-card.affix-bottom {
+		width: 263px;
+	}
+}
