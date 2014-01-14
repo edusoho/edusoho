@@ -6,7 +6,7 @@
     <td class="seq"> </td>
 
     <td>
-        {{question['stem'] | length > 40 ? question['stem']|slice(0, 40) ~ '...' : question['stem'] }}
+        {{question['stem']|plain_text(40) }}
     </td>
 
     <td>
