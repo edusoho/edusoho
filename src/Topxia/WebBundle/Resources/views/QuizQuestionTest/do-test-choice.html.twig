@@ -2,24 +2,27 @@
 {% if not role|default(null) == 'teacher' %}
 
 
-<div class="panel panel-default choice" id="question{{ question.id }}">
-	<div class="panel-heading">
-		<h3 class="panel-title">{% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}. {{ question.stem }}</h3>
-	</div>
+<div class="testpaper-question testpaper-question-choice" id="question{{ question.id }}">
+
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
-	<div class="panel-body">
-		<ul class="list-unstyled">
-			{% for key, choice in question.choices %}
-				<li>{{ choice.choiceIndex }}. {{ choice.content }}</li>
+	<div class="testpaper-question-body">
+	  <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-index">
+		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		  </div>
+		  <div class="testpaper-question-stem">{{ question.stem|raw }}</div>
+	  </div>
 
+		<ul class="testpaper-question-choices">
+			{% for key, choice in question.choices %}
+				<li><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content }}</li>
 				{% if key in question.answer %}
 					{% set keys = keys|merge([choice.choiceIndex]) %}
 				{% endif  %}
 				{% if key in question.testResult.answer|default([]) %}
 					{% set keys_answer = keys_answer|merge([choice.choiceIndex]) %}
 				{% endif %}
-
 			{% endfor %}
 		</ul>
 	</div>
@@ -44,7 +47,7 @@
 
 		</div>
 	{% else %}
-		<div class="panel-footer">
+		<div class="testpaper-question-footer">
 
 			{% for choice in question.choices %}
 				<label class="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline">
@@ -52,11 +55,11 @@
 				</label> 
 
 			{% endfor %}
-			<a class="btn btn-sm pull-right marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
+			<a class="btn btn-sm btn-link pull-right marking"><span class="glyphicon glyphicon-bookmark"> 标记</span></a>
 
 
-			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
+			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark"> 收藏</span></button>
+			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消收藏</span></button>
 		</div>
 	{% endif %}
 </div>

@@ -3297,3 +3297,69 @@ body {
 {
 	color:#333;
 }
+
+
+.testpaper-name {
+	font-size: 24px;
+	font-weight: bold;
+	color: #444;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+.testpaper-description {
+	color: #444;
+	font-size: 14px;
+}
+
+.testpaper-metas {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.testpaper-question {
+	margin-bottom: 50px;
+	font-size: 14px;
+}
+
+.testpaper-question-main {
+	float: left;
+	margin-left: 50px;
+}
+
+.testpaper-question-index {
+	float: left;
+	width: 40px;
+	margin-right: 10px;
+	text-align: center;
+	font-size: 20px;
+	color: #3a87ad;
+	display: inline-block;
+}
+
+.testpaper-question-stem {
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #ddd;
+	margin-bottom: 10px;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.testpaper-question-choices {
+	margin-left: 50px;
+	padding-left: 0;
+	list-style: none;
+	border-bottom: 1px dashed #ddd;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+
+.testpaper-question-choices li {
+	padding: 6px 0;
+}
+
+.testpaper-question-choice-index {
+	color: #999;
+	margin-right: 20px;
+}

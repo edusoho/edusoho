@@ -3,180 +3,101 @@
 {% set script_controller = 'quiz-question/do-test' %}
 
 {% block content %}
-<style type="text/css">
-	.affix.questionBar {
-		top: 0;
-		width: inherit;
-		padding-right: 30px;
-		z-index: 1000;
-	}
-	.affix.answerCard {
-		top: 50px;
-		width: inherit;
-		padding-right: 30px;
-	}
-	.affix.answerCard .panel {
-		width: 24%;
-		float: right;
-	}
 
-	.questionBar {
-		margin-bottom: 15px;
-	}
-	.questionBar ul {
-		background-color: #f5f5f5;
-		border:1px solid #e3e3e3;
-	}
+<div class="es-row-wrap testpaper-heading">
+	<div class="row">
+	  <div class="col-sm-12">
+		  <h1 class="testpaper-name">{{ paper.name }}</h1>
+		  <div class="testpaper-description">{{ paper.description|raw }}</div>
+		  <div class="testpaper-metas">
+		  	共 {{ questions.number }} 题，总分 {{ paper.score }} 分，请在 {{ paper.limitedTime }} 分钟内作答。
+		  </div>
+	  </div>
 
-	.answerCard {
-		width: 24%;
-		float: right;
-	}
+		<div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="500">
+			<ul class="nav nav-pills">
+				<li><a href="#choice">选择</a></li>
+				<li><a href="#determine">判断</a></li>
+				<li><a href="#fill">填空</a></li>
+				<li><a href="#essay">问答</a></li>
+				<li><a href="#material">材料</a></li>
+			</ul>
+		</div>
 
-	.answerCard .panel-heading {
-		line-height: 30px;
-		height:50px;
-	}
-
-	.answerCard .panel-heading button {
-		margin-left: 5px;
-	}
-
-	.answerCard .panel-body a.btn {
-		float: left;
-		margin: 1px;
-		width: 26px;
-		height: 26px;
-		padding: 0;
-		text-align: center;
-		line-height: 27px;
-		color: #999;
-	}
-
-	.choice .panel-body {
-		padding: 0 0px;
-	}
-	.choice .panel-body ul {
-		margin: 10px 0;
-	}
-	.choice li {
-		height: 30px;
-		line-height: 30px;
-		padding: 0 15px;
-	}
-	.choice li:hover {
-		background-color: #f5f5f5;
-		cursor: pointer;
-	}
-	.choice input[type="checkbox"] {
-		cursor: pointer;
-	}
-
-	.panel-title {
-		word-wrap: break-word; 
-		word-break: normal; 
-		display:inline-block;
-	}
-	.panel-footer {
-		min-height: 50px;
-	}
-	.panel-footer a.btn {
-		box-shadow: 0 0 0;
-	}
-
-	.done {
-		background-color: #f5f5f5;
-	}
-	.have-pro {
-		border: 2px solid #428bca;
-	}
-
-</style>
-
-<div class="well">
-  <h1>{{ paper.name }}</h1>
-  <p>{{ paper.description }}</p>
-  <small>共 {{ questions.number }} 题，总分 {{ paper.score }} 分，请在 {{ paper.limitedTime }} 分钟内作答。</small>
-</div>
-
-
-<div class="questionBar" data-spy="affix" data-offset-top="200">
-	<ul class="nav nav-pills nav-justified">
-		<li><a href="#choice">选择</a></li>
-		<li><a href="#determine">判断</a></li>
-		<li><a href="#fill">填空</a></li>
-		<li><a href="#essay">问答</a></li>
-		<li><a href="#material">材料</a></li>
-	</ul>
-</div>
-<div class="answerCard" data-spy="affix" data-offset-top="200">
-	<div class="panel panel-default">
-			<div class="panel-heading">
-				{% if limitTime != 0 %}
-					剩余:<span class="{{ isPreview|default('') }}" id="time_show" data-time="{% if paperResult.remainTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ paperResult.remainTime }}{% endif %}"></span>
-					<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('course_manage_my_quiz') }}"{% endif %}>下次再做</button>
-					<button id="pause" class="btn btn-sm btn-default pull-right"{% if id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>暂停</button>
-				{% else %}
-					<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('course_manage_my_quiz') }}"{% endif %}>下次再做</button>
-				{% endif %}
-			</div>
-			<div class="panel-body">
-				{% set index = 1 %}
-				{% for question in questions.single_choice %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
-					{% set index = index + 1 %}
-				{% endfor %}
-
-				{% for question in questions.choice %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
-					{% set index = index + 1 %}
-				{% endfor %}
-
-				{% for question in questions.determine %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
-					{% set index = index + 1 %}
-				{% endfor %}
-
-				{% for question in questions.fill %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
-					{% set index = index + 1 %}
-				{% endfor %}
-
-				{% for question in questions.essay %}
-					<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
-					{% set index = index + 1 %}
-				{% endfor %}
-
-				{% for question in questions.material %}
-					{% for question in question.questions %}
-						<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
-						{% set index = index + 1 %}
-					{% endfor %}
-				{% endfor %}
-
-			</div>
-			<div class="panel-footer">
-				{% if id > 0 %}
-				<button class="btn btn-success btn-block" id="finishPaper" data-ajax="{{ path('course_manage_submit_test', { id: id }) }}" data-url="{{ path('course_manage_finish_test', { id: id }) }}" data-goto="{{ path('course_manage_test_results', { id: id }) }}">我真的要交卷</button>
-				{% else %}
-				<button class="btn btn-success btn-block">我真的要交卷</button>
-				{% endif %}
-			</div>
 	</div>
 </div>
 
 <div class="row">
-	<div class="col-md-9">
-		<div data-spy="scroll" data-target=".questionBar">
-	{# {% block main%}
-	{% endblock %} #}
+	<div class="col-sm-9">
+
+		<div class="testpaper-body" data-spy="scroll" data-target="#testpaper-navbar">
 			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
 		</div>
 
 	</div>
-	<div class="col-md-3">
-	</div>
+	<div class="col-sm-3">
 
+		<div class="answerCard" data-spy="affix" data-offset-top="200">
+			<div class="panel panel-default">
+					<div class="panel-heading">
+						{% if limitTime != 0 %}
+							剩余:<span class="{{ isPreview|default('') }}" id="time_show" data-time="{% if paperResult.remainTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ paperResult.remainTime }}{% endif %}"></span>
+							<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('course_manage_my_quiz') }}"{% endif %}>下次再做</button>
+							<button id="pause" class="btn btn-sm btn-default pull-right"{% if id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>暂停</button>
+						{% else %}
+							<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('course_manage_my_quiz') }}"{% endif %}>下次再做</button>
+						{% endif %}
+					</div>
+					<div class="panel-body">
+						{% set index = 1 %}
+						{% for question in questions.single_choice %}
+							<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+							{% set index = index + 1 %}
+						{% endfor %}
+
+						{% for question in questions.choice %}
+							<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+							{% set index = index + 1 %}
+						{% endfor %}
+
+						{% for question in questions.determine %}
+							<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+							{% set index = index + 1 %}
+						{% endfor %}
+
+						{% for question in questions.fill %}
+							<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+							{% set index = index + 1 %}
+						{% endfor %}
+
+						{% for question in questions.essay %}
+							<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+							{% set index = index + 1 %}
+						{% endfor %}
+
+						{% for question in questions.material %}
+							{% for question in question.questions %}
+								<a href="#question{{ question.id }}" class="btn btn-default">{{ index }}</a>
+								{% set index = index + 1 %}
+							{% endfor %}
+						{% endfor %}
+
+					</div>
+					<div class="panel-footer">
+						{% if id > 0 %}
+						<button class="btn btn-success btn-block" id="finishPaper" data-ajax="{{ path('course_manage_submit_test', { id: id }) }}" data-url="{{ path('course_manage_finish_test', { id: id }) }}" data-goto="{{ path('course_manage_test_results', { id: id }) }}">我真的要交卷</button>
+						{% else %}
+						<button class="btn btn-success btn-block">我真的要交卷</button>
+						{% endif %}
+					</div>
+			</div>
+		</div>
+
+
+
+
+		
+	</div>
 </div>
 	
 

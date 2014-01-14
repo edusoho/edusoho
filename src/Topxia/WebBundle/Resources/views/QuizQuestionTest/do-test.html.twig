@@ -1,21 +1,27 @@
-{# {% extends 'TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig' %} #}
-
-{% block main %}
 {% set questionIndex = 1 %}
-<div id="choice"></div>
-{% for question in questions.single_choice %}
 
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-	{% set questionIndex = questionIndex + 1 %}
+<div class="panel panel-default" id="testpaper-questions-singlechoice">
+  <div class="panel-heading">单项选择题</div>
+  <div class="panel-body">
+		{% for question in questions.single_choice %}
+			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+			{% set questionIndex = questionIndex + 1 %}
+		{% endfor %}
+  </div>
+</div>
 
-{% endfor %}
+<div class="panel panel-default" id="testpaper-questions-singlechoice">
+  <div class="panel-heading">多项选择题</div>
+  <div class="panel-body">
+		{% for question in questions.choice %}
+			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+			{% set questionIndex = questionIndex + 1 %}
+		{% endfor %}
+  </div>
+</div>
+	
 
-{% for question in questions.choice %}
 
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-	{% set questionIndex = questionIndex + 1 %}
-
-{% endfor %}
 <div id="determine"></div>
 {% for question in questions.determine %}
 
@@ -43,5 +49,3 @@
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-material.html.twig' %}
 
 {% endfor %}
-
-{% endblock %}
