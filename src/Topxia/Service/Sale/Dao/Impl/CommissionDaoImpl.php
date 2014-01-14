@@ -26,7 +26,7 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function getCommissionByProdAndUser($prodType,$prodId,$userId)
+    public function getCommissionByProdAndBuyerId($prodType,$prodId,$userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE prodType = ? and prodId=? and userId=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($prodType,$prodId,$userId)) ? : null;

@@ -139,6 +139,9 @@ class OrderServiceImpl extends BaseService implements OrderService
                     'remark'  => empty($payData['memberRemark']) ? '' : $payData['memberRemark'],
                 );
                 $this->getCourseService()->becomeStudent($order['courseId'], $order['userId'], $info);
+
+
+
             } else {
                 $this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
             }
@@ -491,6 +494,16 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getOrderRefundDao()
     {
         return $this->createDao('Course.OrderRefundDao');
+    }
+
+    private function getCommissionService()
+    {
+        return $this->createService('Sale.CommissionService');
+    }
+
+    private function getMySaleService()
+    {
+        return $this->createService('Sale.MySaleService');
     }
 
     private function getOffSaleService()
