@@ -143,9 +143,24 @@ define(function(require, exports, module) {
         $('.testpaper-question-choice').on('click', 'ul.testpaper-question-choices li', function(){
             $input = $(this).parents('div.testpaper-question-choice').find('.testpaper-question-choice-inputs label').eq($(this).index()).find('input');
             isChecked = $input.prop("checked");
+
             $input.prop("checked", !isChecked).change();
+
+            $input.parents('.testpaper-question-choice-inputs').find('label').each(function(){
+ 
+                $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
+            });
             
         });
+
+        $('.testpaper-question-choice-inputs').on('click', 'input', function(){
+            $input = $(this);
+            $input.parents('.testpaper-question-choice-inputs').find('label').each(function(){
+                console.log($(this).find('input').prop("checked"));
+                $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
+            });
+        });
+
 
         $('body').on('click', '.favorite-btn', function(){
             $btn = $(this);
