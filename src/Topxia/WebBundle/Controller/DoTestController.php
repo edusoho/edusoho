@@ -67,7 +67,7 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$this->getTestService()->updatePaperResult($id, 'doing', $testResult['remainTime']);
-
+// var_dump($paper);exit();
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
 			'limitTime' => $testResult['limitedTime'] * 60,

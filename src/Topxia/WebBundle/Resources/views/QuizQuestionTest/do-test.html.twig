@@ -1,5 +1,61 @@
 {% set questionIndex = 1 %}
 
+{% for type in paper.metas.question_type_seq|split(',') %}
+
+<div class="panel panel-default" id="testpaper-questions-{{ type }}">
+  <div class="panel-heading">{{dict('questionBlockType')[type]}}</div>
+  <div class="panel-body">
+		{% for question in questions[type] %}
+
+			{% if type in ['single_choice', 'choice'] %}
+				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+				{% set questionIndex = questionIndex + 1 %}
+
+			{% else %}
+
+				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+				{% set questionIndex = questionIndex + 1 %}
+
+			{% endif %}
+
+
+		{% endfor %}
+  </div>
+</div>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{# 
+
 <div class="panel panel-default" id="testpaper-questions-singlechoice">
   <div class="panel-heading">单项选择题</div>
   <div class="panel-body">
@@ -49,3 +105,4 @@
 	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-material.html.twig' %}
 
 {% endfor %}
+ #}
