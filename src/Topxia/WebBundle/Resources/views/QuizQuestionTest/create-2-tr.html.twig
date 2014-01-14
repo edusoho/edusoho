@@ -7,6 +7,15 @@
 
     <td>
         {{question['stem']|plain_text(40) }}
+        <div class="text-muted text-sm">
+            {% if question['parentId'] != '0'%}
+            从属：材料题
+            {% elseif question['targetType'] == 'lesson' %}
+            从属：课时{{ lessons[question['targetId']]['number'] }}
+            {% else %}
+            从属：本课程
+            {% endif %}
+        </div>
     </td>
 
     <td>
@@ -14,13 +23,8 @@
     </td>
 
     <td>
-        {% if question['parentId'] != '0'%}
-            材料题
-        {% elseif question['targetType'] == 'lesson' %}
-            课时{{ lessons[question['targetId']]['number'] }}
-        {% else %}
-            课程
-        {% endif %}
+      {{ dict_text('difficulty', question.difficulty)}}
+
     </td>
     
     <td >
