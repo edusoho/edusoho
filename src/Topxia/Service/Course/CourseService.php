@@ -99,8 +99,6 @@ interface CourseService
 
 	public function getUserNextLearnLesson($userId, $courseId);
 
-	public function getLessonByMediaId($mediaId);
-
 	/**
 	 * Chapter API
 	 */
