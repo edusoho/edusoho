@@ -2,7 +2,7 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">{% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}. {{ question.stem }}</h3>
 	</div>
-	{% if question.testResult.status|default(null) in ['reviewing', 'finished'] %}
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 
 		{% if role|default(null) == 'teacher' %}
 
@@ -48,24 +48,25 @@
 		</div>
 	{% endif %}
 	<div class="panel-footer">
-		{% if question.testResult.status|default(null) in ['reviewing', 'finished'] %}
+		{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+			<div class="pull-right">
 			{% if not role|default(null) == 'teacher' %}
-				<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-				<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
+				{# <button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
+				<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button> #}
+
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
+
 			{% endif %}
 
 			{% if not question.analysis == '' %}
 				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
 			{% endif %}
+			</div>
+
 			<div class="clearfix"></div>
 			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
 		{% else %}
-			<a class="btn btn-sm pull-right marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
-			<a class="btn btn-sm btn-link unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消标记</span></a>
-			
-
-			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
+			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
 		{% endif %}
 	</div>
 </div>
