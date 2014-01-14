@@ -41,7 +41,7 @@
 
                 <div class="form-control-static pull-left pll">题目分值:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}0{% endif %}" />
+                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}2{% endif %}" />
                 </div>
 
             </div>
@@ -56,7 +56,7 @@
     <div class="col-md-2  controls">
     </div>
     
-    <button type="submit" class="btn btn-primary" >下一步</button>
+    <button type="submit" class="btn btn-primary" >保存，下一步</button>
     <a href="{{ path('course_manage_test_paper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>
     
 </div>
