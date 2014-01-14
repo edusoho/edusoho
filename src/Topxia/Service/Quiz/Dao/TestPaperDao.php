@@ -16,6 +16,10 @@ interface TestPaperDao
 
     public function findTestPaperByIds(array $ids);
 
+    public function findTestPapersByTarget($targetType, $targetId, $start, $limit);
+
+    public function findTestPaperByTargetIdsAndTargetType(array $targetIds, $targetType);
+
     public function deleteTestPaperByIds(array $ids);
 
     public function searchTestPaper($conditions, $orderBy, $start, $limit);

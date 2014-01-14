@@ -11,7 +11,15 @@
 	      		{% if item.free %}<span class="item-free"></span>{% endif %}
 		      	<span class="item-icon"></span>
 		      	{% if item.status == 'published' %}
-			      	<span class="item-length">{% if item.type == 'text' %}图文{% else %}{{ item.length|duration }}{% endif %}</span>
+			      	<span class="item-length">
+								{% if item.type == 'text' %}
+								  图文
+								{% elseif item.type == 'testpaper' %}
+								  试卷
+								{% else %}
+									{{ item.length|duration }}
+								{% endif %}
+			      	</span>
 			      {% else %}
 			        <span class="item-length">未发布</span>
 			      {% endif %}

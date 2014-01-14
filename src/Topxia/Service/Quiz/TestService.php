@@ -18,9 +18,9 @@ interface TestService
     public function updateTestPaper($id, $testPaper);
 
     public function deleteTestPaper($id);
-    
-    public function findTestPapersByCourseIds(array $id);
 
+    public function findTestPapersByTarget($targetType, $targetId, $start, $limit);
+    
     public function searchTestPaper(array $conditions, array $orderBy, $start, $limit);
 
     public function searchTestPaperCount(array $conditions);

@@ -53,6 +53,13 @@ class TestPaperDaoImpl extends BaseDao implements TestPaperDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findTestPapersByTarget($targetType, $targetId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId =? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ? : array();
+    }
+
     public function findTestPaperByTargetIdsAndTargetType(array $targetIds, $targetType)
     {
         if(empty($targetIds)){ 
