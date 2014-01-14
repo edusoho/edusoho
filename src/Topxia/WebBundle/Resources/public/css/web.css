@@ -3321,6 +3321,12 @@ body {
 .testpaper-question {
 	margin-bottom: 50px;
 	font-size: 14px;
+	border-top: 1px solid #ccc;
+	padding-top	: 20px;
+}
+
+.panel .testpaper-question:first-child {
+	border-top: none;
 }
 
 .testpaper-question-main {
@@ -3362,4 +3368,19 @@ body {
 .testpaper-question-choice-index {
 	color: #999;
 	margin-right: 20px;
+}
+
+.testpaper-question-choice-inputs {
+	margin-left: 50px;
+	float: left;
+}
+
+.testpaper-question-choice-inputs  label {
+	padding: 8px 20px 8px 30px;
+	display: inline-block;
+
+}
+
+.testpaper-question-choice-inputs  label:hover {
+	background: #eee;
 }
