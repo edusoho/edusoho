@@ -19,7 +19,7 @@
   			</label>
 		</div>
 	</div>
-	{% if question.testResult|default(null) %}
+	{% if question.testResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="panel-footer">
 			{% if question.testResult.status == 'right' %}
 				正确答案：{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}. 您做对了！

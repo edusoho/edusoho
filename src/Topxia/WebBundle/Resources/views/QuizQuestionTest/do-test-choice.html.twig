@@ -26,7 +26,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-	{% if question.testResult|default(null) %}
+	{% if question.testResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="panel-footer">
 			{% if question.testResult.status == 'right' %}
 				正确答案：{{ keys|join(',') }} . 您做对了！
