@@ -3318,6 +3318,38 @@ body {
     margin-bottom: 20px;
 }
 
+@media (min-width: 992px) {
+  /* Widen the fixed sidebar */
+  .testpaper-navbar.affix,
+  .testpaper-navbar.affix-bottom {
+    width: 213px;
+  }
+  .testpaper-navbar.affix {
+  	z-index: 10000;
+    position: fixed; /* Undo the static from mobile first approach */
+    top: 0px;
+    background: #fff;
+    margin-left: -10px;
+  }
+  .testpaper-navbar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+}
+
+@media (min-width: 1200px) {
+	.testpaper-navbar.affix,
+	.testpaper-navbar.affix-bottom {
+		width: 1140px;
+	}
+}
+
+
+
+
+
+
+
+
 .testpaper-question {
 	margin-bottom: 50px;
 	font-size: 14px;
