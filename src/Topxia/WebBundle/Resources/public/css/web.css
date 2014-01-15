@@ -3318,6 +3318,27 @@ body {
     margin-bottom: 20px;
 }
 
+.testpaper-result {
+
+}
+
+.testpaper-result-total {
+	width: 160px;
+	float: left;
+	margin-right: 20px;
+	text-align: center;
+	color: #f60;
+}
+
+.testpaper-result-total-score {
+	margin: 10px 0;
+	font-size: 32px;
+}
+
+.testpaper-result-total-score small {
+	font-size: 16px;
+}
+
 @media (min-width: 992px) {
   /* Widen the fixed sidebar */
   .testpaper-navbar.affix,
