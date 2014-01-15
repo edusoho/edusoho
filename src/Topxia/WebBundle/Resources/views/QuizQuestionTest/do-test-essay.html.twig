@@ -44,7 +44,7 @@
 			  <div class="testpaper-question-result">
 			    <div class="testpaper-question-result-suggested">
 				    <div class="testpaper-question-result-title">参考答案：</div>
-				    <div>这里显示参考答案</div>
+				    <div>{{ question.answer[0] }}</div>
 			    </div>
 			    <div class="testpaper-question-result-your">
 				    <div class="testpaper-question-result-title">你的回答：</div>
@@ -55,8 +55,8 @@
 				<div class="testpaper-question-actions pull-right">
 					{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
 					{% if not question.analysis == '' %}
-					<a class="btn btn-sm analysis-btn"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
-					<a class="btn btn-sm unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 收起解析</span></a>
+					<a class="btn btn-sm btn-link analysis-btn"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
+					<a class="btn btn-sm btn-link unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 收起解析</span></a>
 				{% endif %}
 				</div>
 			</div>
