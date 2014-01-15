@@ -10,49 +10,42 @@
 	  </div>
   </div>
 
-  <div class="testpaper-question-footer clearfix">
-
-	  <div class="testpaper-question-fill-inputs">
-			{% set input_index = 1 %}
-			{% for answer in question.answer %}
-				<input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个填空答案请填在这里" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
-				{% set input_index = input_index + 1 %}
-			{% endfor %}
-		</div>
-
-		<div class="testpaper-question-actions pull-right">
-			{# <a class="btn btn-sm marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
-
-			<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button> #}
-
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
-
-		</div>
-  </div>
-
-
-
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
-		<div class="panel-footer">
-			{% if question.testResult.status == 'right' %}
-				正确答案：{{ question.answer|join(', ') }}. 您做对了！
-			{% elseif question.testResult.status == 'wrong' %}
-				正确答案：{{ question.answer|join(', ') }}. 您填写了: {{ question.testResult.answer|join(', ') }}
-			{% endif %}
-
-			{# <button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button> #}
-			<div class="pull-right">
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
-
-			{% if not question.analysis == '' %}
-				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
-			{% endif %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">正确答案是 <strong class="text-success">{{ question.answer }}</strong>，
+				{% if question.testResult.status == 'right' %}
+				  你的答案是 {{ question.testResult.answer|join(', ') }}。回答正确
+				{% elseif question.testResult.status == 'wrong' %}
+					你的答案是 <strong class="text-danger">{{ question.testResult.answer|join(', ') }}</strong>。回答错误
+				{% elseif question.testResult.status == 'noAnswer' %}
+					你未答题
+				{% endif %}
 			</div>
 
-			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
+				{% if not question.analysis == '' %}
+					<a class="btn btn-sm"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+				{% endif %}
+
+			</div>
+
 		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+	{% else %}
+	  <div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-fill-inputs">
+				{% set input_index = 1 %}
+				{% for answer in question.answer %}
+					<input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个填空答案请填在这里" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
+					{% set input_index = input_index + 1 %}
+				{% endfor %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
+			</div>
+	  </div>
 	{% endif %}
 </div>
 
