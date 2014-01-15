@@ -39,42 +39,8 @@
 	<div class="col-sm-3">
 
 		<div class="testpaper-card" data-spy="affix" data-offset-top="200">
-			<div class="panel panel-default">
-					<div class="panel-heading">
-						{% if limitTime != 0 %}
-							<span class="{{ isPreview|default('') }} testpaper-card-timer" id="time_show" data-time="{% if paperResult.remainTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ paperResult.remainTime }}{% endif %}">00:00</span>
-							<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('course_manage_my_quiz') }}"{% endif %}>下次再做</button>
-							<button id="pause" class="btn btn-sm btn-default pull-right"{% if id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>暂停</button>
-						{% else %}
-							<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('course_manage_my_quiz') }}"{% endif %}>下次再做</button>
-						{% endif %}
-					</div>
-					<div class="panel-body">
 
-						{% set index = 1 %}
-
-						{% for type in paper.metas.question_type_seq|split(',') %}
-
-							{% for question in questions[type] %}
-									
-								<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
-			
-								{% set index = index + 1 %}
-							{% endfor %}
-
-							<div class="clearfix mtm mbm"></div>
-
-						{% endfor %}
-
-					</div>
-					<div class="panel-footer">
-						{% if id > 0 %}
-						<button class="btn btn-success btn-block" id="finishPaper" data-ajax="{{ path('course_manage_submit_test', { id: id }) }}" data-url="{{ path('course_manage_finish_test', { id: id }) }}" data-goto="{{ path('course_manage_test_results', { id: id }) }}">我要交卷</button>
-						{% else %}
-						<button class="btn btn-success btn-block">我要交卷</button>
-						{% endif %}
-					</div>
-			</div>
+			{% include 'TopxiaWebBundle:QuizQuestionTest:test-paper-card.html.twig' %}
 		</div>
 
 
