@@ -3322,14 +3322,16 @@ body {
   /* Widen the fixed sidebar */
   .testpaper-navbar.affix,
   .testpaper-navbar.affix-bottom {
-    width: 213px;
+    width: 940px;
   }
   .testpaper-navbar.affix {
   	z-index: 10000;
     position: fixed; /* Undo the static from mobile first approach */
     top: 0px;
     background: #fff;
-    margin-left: -10px;
+    margin-left: -11px;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 3px rgba(0,0,0,.1);
   }
   .testpaper-navbar.affix-bottom {
     position: absolute; /* Undo the static from mobile first approach */
@@ -3461,7 +3463,7 @@ body {
   }
   .testpaper-card.affix {
     position: fixed; /* Undo the static from mobile first approach */
-    top: 40px;
+    top: 60px;
   }
   .testpaper-card.affix-bottom {
     position: absolute; /* Undo the static from mobile first approach */

@@ -1,10 +1,15 @@
 {% if not role|default(null) == 'teacher' %}
 
+<div class="testpaper-question testpaper-question-fill" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-index">
+		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		  </div>
+		  <div class="testpaper-question-stem">{{ question.stem|raw }}</div>
+	  </div>
+  </div>
 
-<div class="panel panel-default" id="question{{ question.id }}">
-	<div class="panel-heading">
-		<h3 class="panel-title">{% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}. {{ question.stem }}</h3>
-	</div>
 	<div class="panel-body">
 		<div class="radio">
   			<label>
