@@ -79,9 +79,17 @@ define(function(require, exports, module) {
         // });
 
         $.each(alls, function(index, val){
-            $(val).on('click', '.panel-footer a.btn', function(){
-                $(this).parent().find('div.well').toggle();
-            })
+            $(val).on('click', '.testpaper-question-actions a.analysis-btn', function(){
+                $(this).parents('.testpaper-question').find('div.well').show();
+                $(this).parent().find('.unanalysis-btn').show();
+                $(this).hide()
+            });
+
+            $(val).on('click', '.testpaper-question-actions a.unanalysis-btn', function(){
+                $(this).parents('.testpaper-question').find('div.well').hide();
+                $(this).parent().find('.analysis-btn').show();
+                $(this).hide();
+            });
         });
 
         $('.row input').attr('disabled', true);
