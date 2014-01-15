@@ -33,7 +33,7 @@ class DoTestController extends BaseController
 		
 		$questions = $this->formatQuestions($questions);
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
 			'questions' => $questions,
 			'limitTime' => $paper['limitedTime'] * 60,
 			'paper' => $paper,
@@ -71,7 +71,7 @@ class DoTestController extends BaseController
 
 		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($testResult['userId']);
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
 			'questions' => $questions,
 			'limitTime' => $testResult['limitedTime'] * 60,
 			'paper' => $paper,

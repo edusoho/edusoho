@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
+
+{% block testpaper_heading_content %}
+  <div class="testpaper-description">{{ paper.description|raw }}</div>
+  <div class="testpaper-metas">
+    共 {{ questions.number }} 题，总分 {{ paper.score }} 分，请在 {{ paper.limitedTime }} 分钟内作答。
+  </div>
+{% endblock %}
+
+{% block testpaper_body_sidebar %}
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    {% include 'TopxiaWebBundle:QuizQuestionTest:test-paper-card.html.twig' %}
+  </div>
+{% endblock %}

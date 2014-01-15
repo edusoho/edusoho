@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set script_controller = 'quiz-question/do-test' %}
+
+{% block content %}
+
+<div class="es-row-wrap testpaper-heading">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1 class="testpaper-name">{{ paper.name }}</h1>
+      {% block testpaper_heading_content %}{% endblock %}
+    </div>
+    <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
+      <ul class="nav nav navbar-nav nav-pills">
+        <li><a href="#testpaper-questions-single_choice">单项选择题</a></li>
+        <li><a href="#testpaper-questions-choice">多项选择题</a></li>
+        <li><a href="#testpaper-questions-determine">判断题</a></li>
+        <li><a href="#testpaper-questions-fill">填空题</a></li>
+        <li><a href="#testpaper-questions-essay">问答题</a></li>
+        <li><a href="#testpaper-questions-material">材料题</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-9">
+    <div class="testpaper-body" data-spy="scroll" data-target="#testpaper-navbar" data-offset="0">
+      {% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
+    </div>
+  </div>
+  <div class="col-sm-3">
+    {% block testpaper_body_sidebar %}{% endblock %}
+  </div>
+</div>
+
+{% endblock %}
