@@ -1,12 +1,19 @@
 {% set favorites = favorites|default([]) %}
 
-{% if not noMarking|default(null) == true %}
+{% if mark|default(null) == true %}
 <a class="btn btn-sm btn-link marking text-muted"><span class="glyphicon glyphicon-bookmark text-muted"> 标记</span></a>
 <a class="btn btn-sm btn-link unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消标记</span></a>
 {% endif %}
 
 
-{% if not noFlag|default(null) == true %}
+{% if favorite|default(null) == true %}
 <button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm favorite-btn text-muted" {% if question.id in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-bookmark text-muted"> 收藏</span></button>
 <button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm unfavorite-btn" {% if question.id not in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-bookmark"> 取消收藏</span></button>
+{% endif %}
+
+{% if analysis|default(null) == true %}
+	{% if not question.analysis == '' %}
+		<a class="btn btn-sm btn-link analysis-btn"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
+		<a class="btn btn-sm btn-link unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 收起解析</span></a>
+	{% endif %}
 {% endif %}
