@@ -11,7 +11,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
         return empty($question) ? array() : $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
-    }  
+    }
 
     public function createQuestion($question)
     {
@@ -51,7 +51,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function findQuestionsByIds(array $ids)
     {
-        return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
+        return QuestionSerialize::unserializes($this->getQuizQuestionDao()->findQuestionsByIds($ids));
     }
 
     public function findQuestionsByParentIds(array $ids)
@@ -68,6 +68,38 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findQuestionCountByTypeAndTypeIds($type,$ids)
     {
 
+    }
+
+    public function findQuestions ($ids)
+    {
+        $questions = $this->findQuestionsByIds($ids);
+
+        if (empty($questions)){
+            throw $this->createNotFoundException('题目不存在！');
+        }
+
+        $choices = $this->findChoicesByQuestionIds($ids);
+
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        if (!empty($choices)){
+            foreach ($choices as $key => $value) {
+                if (!array_key_exists('choices', $questions[$value['questionId']])) {
+                    $questions[$value['questionId']]['choices'] = array();
+                }
+                // array_push($questions[$value['questionId']]['choices'], $value);
+                $questions[$value['questionId']]['choices'][$value['id']] = $value;
+            }
+
+            // $choiceIndex = 65;
+            // foreach ($choices as $key => $value) {
+            //  $choices[$key]['choiceIndex'] = chr($choiceIndex);
+            //  $choiceIndex++;
+            // }
+
+            // $question['choices'] = $choices;
+        }
+        return $questions;
     }
 
 

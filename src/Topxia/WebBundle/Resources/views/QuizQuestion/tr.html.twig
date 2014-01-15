@@ -28,7 +28,7 @@
         {% if item['questionType'] == 'material'%}
           <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}" class="btn btn-link">子题管理</a></li>
         {% endif %}
-        <li><a class="btn btn-link" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:item.id}) }}">预览</a></li>
+        <li><a class="btn btn-link" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">预览</a></li>
         <li><a class="btn btn-link" href="javascript:" data-name='题目(子题目也会删除)' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}">删除</a></li>
       </ul>
     </div>

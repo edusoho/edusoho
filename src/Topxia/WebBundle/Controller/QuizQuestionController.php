@@ -296,6 +296,64 @@ class QuizQuestionController extends BaseController
 	    }
     }
 
+    public function previewQuestionAction (Request $request, $id)
+    {
+    	$questions = $this->getQuestionService()->findQuestions(array($id));
+
+    	$question = $questions[$id];
+    	if (empty($question)){
+    		throw $this->createNotFoundException('题目不存在！');
+    	}
+
+    	if ($question['questionType'] == 'material'){
+    		$questions = $this->getQuestionService()->findQuestionsByParentIds(array($id));
+    		$questions = $this->getQuestionService()->findQuestions(ArrayToolkit::column($questions, 'id'));
+
+    		foreach ($questions as $key => $value) {
+    			if (!in_array($value['questionType'], array('single_choice', 'choice'))){
+    				continue;
+    			}
+    			$choiceIndex = 65;
+    			foreach ($value['choices'] as $k => $choice) {
+    				$choice['choiceIndex'] = chr($choiceIndex);
+		    		$choiceIndex++;
+		    		$questions[$key]['choices'][$k] = $choice;
+    			}
+    		}
+
+
+
+    		$question['questions'] = $questions;
+    	} else {
+    		if (in_array($question['questionType'], array('single_choice', 'choice'))){
+
+				$choiceIndex = 65;
+				foreach ($question['choices'] as $k => $choice) {
+					$choice['choiceIndex'] = chr($choiceIndex);
+		    		$choiceIndex++;
+		    		$question['choices'][$k] = $choice;
+				}
+			}
+    	}
+
+    	// $choiceIndex = 65;
+    	// foreach ($choices as $key => $value) {
+    		// $choices[$key]['choiceIndex'] = chr($choiceIndex);
+    		// $choiceIndex++;
+    	// }
+
+    	// $question['choices'] = $choices;
+
+    	$questionType = $question['questionType'] == 'single_choice'? 'choice' : $question['questionType'];
+
+
+    	return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
+            'question' => $question,
+            'questionType' => $questionType,
+        ));
+    }
+
+
     private function findQuestionTargets($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
