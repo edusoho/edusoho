@@ -10,19 +10,17 @@
 	  </div>
   </div>
 
-	<div class="panel-body">
-		<div class="radio">
-  			<label>
-    			<input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}>
-    			正确
-  			</label>
-		</div>
-		<div class="radio">
- 			<label>
-    			<input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>
-    			错误
-  			</label>
-		</div>
+	<div class="testpaper-question-footer clearfix">
+	  <div class="testpaper-question-determine-inputs">
+			<label class="radio-inline"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> 正确</label>
+	 		<label class="radio-inline"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>错误</label>
+ 		</div>
+
+ 		<div class="testpaper-question-actions pull-right">
+ 		  {% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
+ 		</div>
+
+
 	</div>
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="panel-footer">
@@ -44,10 +42,6 @@
 			</div>
 
 			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
-		</div>
-	{% else %}
-		<div class="panel-footer">
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
 		</div>
 	{% endif %}
 </div>

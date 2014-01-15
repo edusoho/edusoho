@@ -3431,7 +3431,16 @@ body {
 
 .testpaper-question-fill-inputs  input {
 	margin-bottom: 10px;
+}
 
+.testpaper-question-determine-inputs {
+	margin-left: 50px;
+	float: left;
+}
+
+.testpaper-question-determine-inputs  label {
+	padding: 8px 20px 8px 30px;
+	display: inline-block;
 }
 
 

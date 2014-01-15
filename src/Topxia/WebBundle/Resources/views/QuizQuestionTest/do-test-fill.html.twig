@@ -53,14 +53,6 @@
 
 			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
 		</div>
-	{% else %}
-		<div class="panel-footer">
-			{# <a class="btn btn-sm pull-right marking"><span class="glyphicon glyphicon-bookmark">标记</span></a>
-			<a class="btn btn-sm btn-link unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消标记</span></a> #}
-			
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noFlag:true } %}
-
-		</div>
 	{% endif %}
 </div>
 
