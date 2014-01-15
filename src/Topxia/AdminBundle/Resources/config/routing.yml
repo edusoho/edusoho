@@ -335,6 +335,16 @@ admin_setting_logo_remove:
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
     methods: [POST]
 
+admin_setting_shortcut_upload:
+    pattern: /setting/shortcut/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:shortcutUpload }
+    methods: [POST]
+
+admin_setting_shortcut_remove:
+    pattern: /setting/shortcut/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:shortcutRemove }
+    methods: [POST]
+
 admin_setting_auth:
     pattern:  /setting/auth
     defaults: { _controller: TopxiaAdminBundle:Setting:auth }

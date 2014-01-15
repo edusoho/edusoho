@@ -8,7 +8,7 @@
 {% block main %}
 
 <style>
-#site-logo-container img {max-width: 80%; margin-bottom: 10px;}
+#site-logo-container,#site-shortcut-container img {max-width: 80%; margin-bottom: 10px;}
 </style>
 
 <div class="page-header"><h1>站点设置</h1></div>
@@ -94,6 +94,19 @@
       </div>
       <div class="col-md-8 controls">
         <input type="text" id="icp" name="icp" class="form-control" value="{{site.icp}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="shortcut">shortcut图标</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="site-shortcut-container">{% if site.shortcut %}<img src="{{ asset(site.shortcut) }}">{% endif %}</div>
+        <button class="btn btn-default btn-sm" id="site-shortcut-upload" type="button" data-url="{{ path('admin_setting_shortcut_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="site-shortcut-remove" type="button" data-url="{{ path('admin_setting_shortcut_remove') }}" {% if not site.shortcut %}style="display:none;"{% endif %}>删除</button>
+        <p class="help-block">请上传ico格式的图标文件。</p>
+        <input type="hidden" name="shortcut" value="{{ site.shortcut }}">
       </div>
     </div>
 

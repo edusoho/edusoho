@@ -24,11 +24,41 @@ define(function(require, exports, module) {
         });
 
         $("#site-logo-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
-
             $.post($btn.data('url'), function(){
                 $("#site-logo-container").html('');
                 $form.find('[name=logo]').val('');
+                $btn.hide();
+                Notify.success('删除网站LOGO成功！');
+            }).error(function(){
+                Notify.danger('删除网站LOGO失败！');
+            });
+        });
+
+        var uploader1 = new Uploader({
+            trigger: '#site-shortcut-upload',
+            name: 'shortcut',
+            action: $('#site-shortcut-upload').data('url'),
+            accept: 'ico',
+            error: function(file) {
+                Notify.danger('上传网站shortcut图标失败，请重试！')
+            },
+            success: function(response) {
+                response = eval("(" + response + ")");
+                $("#site-shortcut-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                $form.find('[name=shortcut]').val(response.path);
+                $("#site-shortcut-remove").show();
+                Notify.success('上传网站shortcut图标成功！');
+            }
+        });
+
+        $("#site-shortcut-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
+            var $btn = $(this);
+            $.post($btn.data('url'), function(){
+                $("#site-shortcut-container").html('');
+                $form.find('[name=shortcut]').val('');
                 $btn.hide();
                 Notify.success('删除网站LOGO成功！');
             }).error(function(){

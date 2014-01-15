@@ -13,6 +13,9 @@
   <meta name="description" content="{% block description %}{% endblock %}" />
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   {{ setting('login_bind.verify_code', '')|raw }}
+  {% if setting('site.shortcut') %}
+  <link href="{{ asset(setting('site.shortcut')) }}" rel="shortcut icon" />
+  {% endif %}
   {% block stylesheets %}
     <link href="{{ asset('assets/libs/gallery2/bootstrap/3.0.1/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
