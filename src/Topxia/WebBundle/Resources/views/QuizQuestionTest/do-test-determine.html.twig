@@ -10,38 +10,37 @@
 	  </div>
   </div>
 
-	<div class="testpaper-question-footer clearfix">
-	  <div class="testpaper-question-determine-inputs">
-			<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> 正确</label>
-	 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>错误</label>
- 		</div>
-
- 		<div class="testpaper-question-actions pull-right">
- 		  {% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
- 		</div>
-
-
-	</div>
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
-		<div class="panel-footer">
-			{% if question.testResult.status == 'right' %}
-				正确答案：{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}. 您做对了！
-			{% elseif question.testResult.status == 'wrong' %}
-				正确答案：{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}. 您选择了: {% if question.testResult.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}
-			{% endif %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+				{% if question.testResult.status == 'right' %}
+					正确答案是 <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">，你答对了
+				{% elseif question.testResult.status == 'wrong' %}
+					正确答案是 <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>， 你<strong class="text-danger">答错</strong>了
+				{% elseif question.testResult.status == 'noAnswer' %}
+					正确答案： <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，你未答题
+				{% endif %}
+		  </div>
 
-			{# <button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button> #}
+		  <div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
+				{% if not question.analysis == '' %}
+					<a class="btn btn-sm"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+				{% endif %}
+		  </div>
 
-			<div class="pull-right">
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+	{% else %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-determine-inputs">
+				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> 正确</label>
+		 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>错误</label>
+	 		</div>
 
-			{% if not question.analysis == '' %}
-				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
-			{% endif %}
-			</div>
-
-			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
+	 		<div class="testpaper-question-actions pull-right">
+	 		  {% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
+	 		</div>
 		</div>
 	{% endif %}
 </div>
