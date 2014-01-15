@@ -47,49 +47,35 @@
 
 {% block testpaper_body_sidebar %}
 
-  <div class="answerCard" data-spy="affix" data-offset-top="530">
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
         <div class="panel-body">
+          
           {% set index = 1 %}
-          {% for question in questions.single_choice %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-            {% set index = index + 1 %}
-          {% endfor %}
 
-          {% for question in questions.choice %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-            {% set index = index + 1 %}
-          {% endfor %}
+          {% for type in paper.metas.question_type_seq|split(',') %}
 
-          {% for question in questions.determine %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-            {% set index = index + 1 %}
-          {% endfor %}
-
-          {% for question in questions.fill %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-            {% set index = index + 1 %}
-          {% endfor %}
-
-          {% for question in questions.essay %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-            {% set index = index + 1 %}
-          {% endfor %}
-
-          {% for question in questions.material %}
-            {% for question in question.questions %}
-              <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-              {% set index = index + 1 %}
+            {% for question in questions[type] %}
+              {% if question.questionType != 'material' %}
+                <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ index }}</a>
+                {% set index = index + 1 %}
+              {% else %}
+                {% for question in question.questions %}
+                  <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ index }}</a>
+                  {% set index = index + 1 %}
+                {% endfor %}
+              {% endif %}
+              
             {% endfor %}
+
+            <div class="clearfix mtm mbm"></div>
+
           {% endfor %}
 
         </div>
         <div class="panel-footer">
           <div class="btn-group btn-group-justified btn-group-sm">
             <input type="checkbox" id="showWrong" />只看错题
-            {# <a class="btn btn-default" id="showWrong">只看错题</a>
-            <a class="btn btn-default" id="showNotRight">不看对题</a>
-            <a class="btn btn-default btn-info" id="showAll">查看全部</a> #}
           </div>
         </div>
     </div>

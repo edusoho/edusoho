@@ -1,7 +1,15 @@
 define(function(require, exports, module) {
 
+    var wrongs = [],
+
+    rights = [],
+
+    alls = [];
+
     exports.run = function() {
 
+
+// 做试卷
         var interval = 180;
 
         var changeAnswers = {};
@@ -10,7 +18,7 @@ define(function(require, exports, module) {
 
         var timeLastPost = deadline - interval;
 
-//计时器...
+    //计时器...
 
         if ($('#time_show').hasClass('preview')) {
             $('#time_show').text(formatTime(deadline));
@@ -43,7 +51,7 @@ define(function(require, exports, module) {
         $('div#modal').on('hidden.bs.modal',function(){
             timer.play();
         });
-//...
+    //...
 
 
         $('*[data-type]').each(function(index){
@@ -179,6 +187,63 @@ define(function(require, exports, module) {
         });
 
         
+// 学生查看试卷结果
+
+        $('.testpaper-card .panel-body a.btn[href^="#question"]').each(function(){
+
+            if ($(this).hasClass('wrong')) {
+                wrongs.push($(this).attr('href'));
+                $(this).addClass('btn-danger');
+            }
+            if ($(this).hasClass('right')) {
+                rights.push($(this).attr('href'));
+                $(this).addClass('btn-success');
+            }
+            alls.push($(this).attr('href'));
+        });
+
+        $('.testpaper-card').on('click', '#showWrong', function(){
+            $.each(alls, function(index, val){
+                if ($.inArray(val, wrongs) < 0) {
+                    $(val).toggle();
+                }
+            });
+
+            $('.testpaper-question-block').each(function(){
+                var isHidden = true;
+                $(this).find('div.testpaper-question').each(function(){
+                    id = $(this).attr('id');   
+
+                    if ($.inArray('#'+id, wrongs) >= 0) {
+                        isHidden = false;
+                    }
+                });
+
+                if (isHidden){
+                    $(this).toggle();
+                }
+            });
+
+        });
+
+        $.each(alls, function(index, val){
+            $(val).on('click', '.testpaper-question-actions a.analysis-btn', function(){
+                $(this).parents('.testpaper-question').find('div.well').show();
+                $(this).parent().find('.unanalysis-btn').show();
+                $(this).hide()
+            });
+
+            $(val).on('click', '.testpaper-question-actions a.unanalysis-btn', function(){
+                $(this).parents('.testpaper-question').find('div.well').hide();
+                $(this).parent().find('.analysis-btn').show();
+                $(this).hide();
+            });
+        });
+
+
+
+
+
 
 
 
