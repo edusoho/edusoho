@@ -2,13 +2,15 @@
 
 {% block testpaper_heading_content %}
 
-  <div class="media">
-    <div class="pull-left well" style="width:20%">
-      <h2>{{ paperResult.score - accuracy.essay.score }} 分</h2>
-      <small>客观题总分：{{ paper.score - accuracy.essay.totalScore }}</small>
+  <div class="media testpaper-result">
+    <div class="testpaper-result-total">
+      <div class="well">
+        <div class="testpaper-result-total-score">{{ paperResult.score - accuracy.essay.score }} <small>分</small></div>
+        <small class="text-muted">客观题总分 {{ paper.score - accuracy.essay.totalScore }} 分</small>
+      </div>
     </div>
     <div class="media-body">
-      <table class="table table-hover table-condensed">
+      <table class="table table-bordered table-condensed">
         <thead>
           <th></th>
           <th>选择题 ({{ accuracy.single_choice.all + accuracy.choice.all }})</th>
@@ -38,15 +40,8 @@
       </table>
     </div>
   </div>
-  <div class="media">
-    <div class="pull-left well" style="width:20%">
-      <h2>?</h2>
-      <small>主观题总分：{{ accuracy.essay.totalScore }}</small>
-    </div>
-    <div class="media-body">
-      <div class="empty">老师正在批阅试卷</div>
-    </div>
-  </div>
+
+  <div class="alert alert-info">主观题总分 <strong>{{ accuracy.essay.totalScore }} 分</strong>，老师正在批阅试卷。</div>
 
 {% endblock %}
 
