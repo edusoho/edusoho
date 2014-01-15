@@ -6,7 +6,7 @@
 		  <div class="testpaper-question-index">
 		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
 		  </div>
-		  <div class="testpaper-question-stem">{{ question.stem|raw }}</div>
+		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
 	  </div>
   </div>
 

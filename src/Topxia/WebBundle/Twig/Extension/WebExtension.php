@@ -28,7 +28,8 @@ class WebExtension extends \Twig_Extension
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
-            'chr' => new \Twig_Filter_Method($this, 'chrFilter')
+            'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
+            'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter')
         );
     }
 
@@ -281,6 +282,25 @@ class WebExtension extends \Twig_Extension
     public function chrFilter($index)
     {
         return chr($index);
+    }
+
+    public function bbCode2HtmlFilter($bbCode)
+    {
+        $isFind = preg_match_all("#\[image\].*?\[\/image\]|\[video\].*?\[\/video\]#", $bbCode, $matches);
+
+        if($isFind){
+            foreach ($matches[0] as $value) {
+                $old = $value;
+                $src = "/files/" . str_replace(array('[image]', '[/image]'), '', $value);
+
+                $new = "<img src='" . $src . "' />";
+
+                $bbCode = str_replace($old, $new, $bbCode);
+            }
+
+        }
+
+        return $bbCode;
     }
 
     public function getSetting($name, $default = null)

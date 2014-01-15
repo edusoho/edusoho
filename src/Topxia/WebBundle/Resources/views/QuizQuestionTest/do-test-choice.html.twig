@@ -11,12 +11,12 @@
 		  <div class="testpaper-question-index">
 		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
 		  </div>
-		  <div class="testpaper-question-stem">{{ question.stem|raw }}</div>
+		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
 	  </div>
 
 		<ul class="testpaper-question-choices">
 			{% for key, choice in question.choices %}
-				<li><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content }}</li>
+				<li><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content|bbCode2Html|raw }}</li>
 				{% if key in question.answer %}
 					{% set keys = keys|merge([choice.choiceIndex]) %}
 				{% endif  %}
