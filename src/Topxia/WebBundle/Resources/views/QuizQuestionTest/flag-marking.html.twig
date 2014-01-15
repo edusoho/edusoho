@@ -1,3 +1,4 @@
+{% set favorites = favorites|default([]) %}
 
 {% if not noMarking|default(null) == true %}
 <a class="btn btn-sm btn-link marking text-muted"><span class="glyphicon glyphicon-bookmark text-muted"> 标记</span></a>
