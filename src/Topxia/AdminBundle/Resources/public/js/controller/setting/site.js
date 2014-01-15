@@ -60,9 +60,9 @@ define(function(require, exports, module) {
                 $("#site-shortcut-container").html('');
                 $form.find('[name=shortcut]').val('');
                 $btn.hide();
-                Notify.success('删除网站LOGO成功！');
+                Notify.success('删除网站shortcut图标成功！');
             }).error(function(){
-                Notify.danger('删除网站LOGO失败！');
+                Notify.danger('删除网站shortcut图标失败！');
             });
         });
 
