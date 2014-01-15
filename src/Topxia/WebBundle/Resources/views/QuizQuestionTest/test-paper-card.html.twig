@@ -15,10 +15,16 @@
 		{% for type in paper.metas.question_type_seq|split(',') %}
 
 			{% for question in questions[type] %}
-					
-				<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
-
-				{% set index = index + 1 %}
+				{% if question.questionType != 'material' %}
+					<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
+					{% set index = index + 1 %}
+				{% else %}
+					{% for question in question.questions %}
+						<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
+						{% set index = index + 1 %}
+					{% endfor %}
+				{% endif %}
+				
 			{% endfor %}
 
 			<div class="clearfix mtm mbm"></div>
