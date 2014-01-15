@@ -57,7 +57,7 @@
 
 							{% for question in questions[type] %}
 									
-								<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left">{{ index }}</a>
+								<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
 			
 								{% set index = index + 1 %}
 							{% endfor %}
