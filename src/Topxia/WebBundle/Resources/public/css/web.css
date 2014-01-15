@@ -3419,8 +3419,8 @@ body {
 	display: inline-block;
 }
 
-.testpaper-question-choice-inputs  label:hover,
-.testpaper-question-choice-inputs  label.active {
+.testpaper-question-choice-inputs  label:hover,.testpaper-question-determine-inputs  label:hover,
+.testpaper-question-choice-inputs  label.active,.testpaper-question-determine-inputs  label.active {
 	background: #eee;
 }
 

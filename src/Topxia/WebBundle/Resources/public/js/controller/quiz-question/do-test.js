@@ -153,10 +153,10 @@ define(function(require, exports, module) {
             
         });
 
-        $('.testpaper-question-choice-inputs').on('click', 'input', function(){
+        $('.testpaper-question-choice-inputs,.testpaper-question-determine-inputs').on('click', 'input', function(){
             $input = $(this);
-            $input.parents('.testpaper-question-choice-inputs').find('label').each(function(){
-                console.log($(this).find('input').prop("checked"));
+            $input.parents('.testpaper-question-choice-inputs,.testpaper-question-determine-inputs').find('label').each(function(){
+
                 $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
             });
         });
