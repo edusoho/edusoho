@@ -48,4 +48,10 @@ class QuestionFavoriteDaoImpl extends BaseDao
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ?";
         return $this->getConnection()->fetchColumn($sql, array($id));
     }
+
+    public function findAllFavoriteQuestionsByUserId ($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? ";
+        return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
+    }
 }
