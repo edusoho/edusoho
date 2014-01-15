@@ -27,11 +27,12 @@ define(function(require, exports, module) {
                 }
             });
 
-            $('.material').each(function(){
+            $('.testpaper-question-block').each(function(){
                 var isHidden = true;
-                $(this).find('div.panel').each(function(){
-                    id = $(this).attr('id');
-                    if (!$.inArray(id, wrongs)) {
+                $(this).find('div.testpaper-question').each(function(){
+                    id = $(this).attr('id');   
+
+                    if ($.inArray('#'+id, wrongs) >= 0) {
                         isHidden = false;
                     }
                 });
