@@ -23,12 +23,7 @@
 		  </div>
 
 		  <div class="testpaper-question-actions pull-right">
-				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
-
-				{% if not question.analysis == '' %}
-					<a class="btn btn-sm btn-link analysis-btn"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
-					<a class="btn btn-sm btn-link unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 收起解析</span></a>
-				{% endif %}
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { mark:true, analysis:true } %}
 		  </div>
 
 		</div>
@@ -41,7 +36,7 @@
 	 		</div>
 
 	 		<div class="testpaper-question-actions pull-right">
-	 		  {% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
+	 		  {% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' %}
 	 		</div>
 		</div>
 	{% endif %}
