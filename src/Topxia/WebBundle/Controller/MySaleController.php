@@ -108,7 +108,45 @@ class MySaleController extends BaseController
         ));
        
        
-    } 
+    }
+
+
+     public function commissionListAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $sort  = 'latest';
+
+        $conditions = array(
+           
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCommissionService()->searchCommissionCount($conditions)
+            ,12
+        );
+
+
+        $commissions = $this->getCommissionService()->searchCommissions(
+            $conditions, $sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+ 
+       
+        return $this->render('TopxiaWebBundle:MySale:commission-list.html.twig', array(
+            'commissions'=>$commissions,
+            'paginator' => $paginator
+        ));
+       
+       
+    }
+
+    protected function getCommissionService()
+    {
+        return $this->getServiceKernel()->createService('Sale.CommissionService');
+    }
      
     protected function getMySaleService()
     {

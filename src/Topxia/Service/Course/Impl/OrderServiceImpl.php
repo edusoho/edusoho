@@ -112,7 +112,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             if(!empty($mysale)){
 
-                  $this->getMySaleService()->computeCommission($order,$mysale);
+                  $this->getCommissionService()->computeCommission($order,$mysale);
             }
         }
 

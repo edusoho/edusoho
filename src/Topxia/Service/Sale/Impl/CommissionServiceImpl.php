@@ -25,7 +25,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     public function getCommissionByOrder($order)
     {
-        return MySaleSerialize::unserialize($this->getCommissionDao()->getCommissionByOrder($order));
+        return CommissionSerialize::unserialize($this->getCommissionDao()->getCommissionByOrder($order));
     }
 
 
@@ -33,13 +33,9 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     public function searchCommissions($conditions, $sort = 'latest', $start, $limit)
     {
         $conditions = $this->_prepareCommissionConditions($conditions);
-        if ($sort == 'popular') {
-            $orderBy =  array('hitNum', 'DESC');
-        } else if ($sort == 'recommended') {
-            $orderBy = array('recommendedTime', 'DESC');
-        } else {
-            $orderBy = array('createdTime', 'DESC');
-        }
+        
+        $orderBy = array('createdTime', 'DESC');
+        
         
         return CommissionSerialize::unserializes($this->getCommissionDao()->searchCommissions($conditions, $orderBy, $start, $limit));
     }
@@ -177,10 +173,15 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
         $commission = $this->getCommissionByOrder($order);
 
-         $this->updateCommission($commission['id'], array(
+        if(!empty($commission)){
+
+            $this->updateCommission($commission['id'], array(
                     'status' => 'paid',
                     'paidTime' => $order['paidTime'],
-                ));
+                ));   
+        }
+
+         
     }
 
     public function frozenCommissionWithOrder($order)

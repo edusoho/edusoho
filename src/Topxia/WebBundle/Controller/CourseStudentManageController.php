@@ -58,12 +58,20 @@ class CourseStudentManageController extends BaseController
                 throw $this->createNotFoundException("用户{$data['nickname']}不存在");
             }
 
-            $order = $this->getOrderService()->createOrder(array(
+            $formData = array(
                 'courseId' => $course['id'],
                 'userId' => $user['id'],
                 'price' => $data['price'],
                 'payment' => 'none',
-            ));
+            );
+
+            if (!empty($_COOKIE["mc".$course['id']])){
+          
+                $formData['mTookeen'] = $_COOKIE["mc".$course['id']];
+
+            }
+
+            $order = $this->getOrderService()->createOrder($formData);
 
             $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],

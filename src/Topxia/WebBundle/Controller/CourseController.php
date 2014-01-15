@@ -137,21 +137,27 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
-        if (empty($_COOKIE["mc".$id])){
-          
-            $mtookeen = $request->query->get('mc'.$id, '0');
+        $mtookeen = $request->query->get('mc'.$id);
+        $mTookeenCookie = isset($_COOKIE["mc".$id]) ?$_COOKIE["mc".$id] : null;
 
-            if(empty($mtookeen)){
+        if (empty($mTookeenCookie)){           
 
-                setcookie("mc".$id,  $mtookeen, time()-1);
+            if(!empty($mtookeen)){
 
-            }else{
+                $mysale = $this->getMySaleService()->getMySaleBymTookeen($mtookeen);
 
-                if(empty($course['adCommissionDay'])){
-                    $course['adCommissionDay'] = 7;
+                if(!empty( $mysale) and $mysale['validTime']>time()){
+
+                    if(empty($course['adCommissionDay'])){
+                            $course['adCommissionDay'] = 7;
+                    }
+
+                    setcookie("mc".$id,  $mtookeen, time()+3600*24*$course['adCommissionDay'],'/');
+
+
                 }
 
-                setcookie("mc".$id,  $mtookeen, time()+3600*24*$course['adCommissionDay']);
+               
             }
           
         }
@@ -472,6 +478,11 @@ class CourseController extends BaseController
         return $this->createNamedFormBuilder('course')
             ->add('title', 'text')
             ->getForm();
+    }
+
+    private function getMySaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.MySaleService');
     }
 
     private function getCourseService()

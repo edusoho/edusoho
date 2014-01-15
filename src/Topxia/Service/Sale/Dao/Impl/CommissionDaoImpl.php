@@ -67,7 +67,7 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
 
     public function getCommissionByOrder($order)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE orderId = ? and orderSn LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE orderId = ? and orderSn = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($order['id'],$order['sn'])) ? : null;
     }
 

@@ -6,8 +6,6 @@ interface CommissionService
 
 	public function getCommission($id);
 
-	public function getCommissionBymTookeen($mTookeen);
-
 	public function findCommissionsByIds(array $ids);
 
 	public function createCommission($commission);
