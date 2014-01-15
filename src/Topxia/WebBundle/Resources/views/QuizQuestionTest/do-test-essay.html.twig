@@ -1,7 +1,23 @@
-<div class="panel panel-default" id="question{{ question.id }}">
-	<div class="panel-heading">
-		<h3 class="panel-title">{% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}. {{ question.stem }}</h3>
-	</div>
+<div class="testpaper-question testpaper-question-fill" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-index">
+		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		  </div>
+		  <div class="testpaper-question-stem">{{ question.stem|raw }}</div>
+	  </div>
+  </div>
+
+	<div class="testpaper-question-footer clearfix">
+	  <div class="testpaper-question-essay-inputs">
+			<textarea class="form-control" data-type="essay" name="{{ question.id }}" rows="3">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0] }}{% endif %}</textarea>
+	  </div>
+	  <div class="testpaper-question-actions pull-right">
+	  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
+	  </div>
+  </div>
+
+
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 
 		{% if role|default(null) == 'teacher' %}
@@ -40,15 +56,9 @@
 		{% endif %}
 
 
-	{% else %}
-		<div class="panel-body">
-
-			<textarea class="form-control" data-type="essay" name="{{ question.id }}" rows="3">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0] }}{% endif %}</textarea>
-
-		</div>
 	{% endif %}
-	<div class="panel-footer">
 		{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+	<div class="panel-footer">
 			<div class="pull-right">
 			{% if not role|default(null) == 'teacher' %}
 				{# <button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
@@ -65,8 +75,6 @@
 
 			<div class="clearfix"></div>
 			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
-		{% else %}
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' %}
-		{% endif %}
 	</div>
+		{% endif %}
 </div>
