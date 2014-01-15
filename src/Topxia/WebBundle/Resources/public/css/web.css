@@ -3448,7 +3448,14 @@ body {
 	margin-bottom: 10px;
 }
 
+.testpaper-question-result {
+	margin-left: 50px;
+	float: left;
+}
 
+.testpaper-question-analysis {
+	margin-left: 50px;
+}
 
 .testpaper-card .btn-index {
 	font-size: 12px;

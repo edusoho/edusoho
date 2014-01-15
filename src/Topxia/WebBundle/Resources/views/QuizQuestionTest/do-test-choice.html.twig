@@ -27,27 +27,26 @@
 		</ul>
 	</div>
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
-		<div class="panel-footer">
-			{% if question.testResult.status == 'right' %}
-				正确答案：{{ keys|join(',') }} . 您做对了！
-			{% elseif question.testResult.status == 'wrong' %}
-				正确答案：{{ keys|join(',') }} . 您选择了: {{ keys_answer|join(',') }}
-			{% endif %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+				{% if question.testResult.status == 'right' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，回答正确
+				{% elseif question.testResult.status == 'wrong' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。回答错误
+				{% elseif question.testResult.status == 'noAnswer' %}
+				  正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你未答题
+				{% endif %}
+		  </div>
 
-			{# <button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right favorite-btn"><span class="glyphicon glyphicon-bookmark">收藏</span></button>
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-info btn-sm pull-right unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button> #}
-			<div class="pull-right">
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
-
-			{% if not question.analysis == '' %}
-				<a class="btn btn-sm"><span class="glyphicon glyphicon-bookmark">解析</span></a>
-			{% endif %}
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
+				{% if not question.analysis == '' %}
+					<a class="btn btn-sm"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
+				{% endif %}
 			</div>
 
-			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
-
-
 		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 
