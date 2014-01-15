@@ -67,12 +67,16 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$this->getTestService()->updatePaperResult($id, 'doing', $testResult['remainTime']);
-// var_dump($paper);exit();
+
+
+		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($testResult['userId']);
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-layout.html.twig', array(
 			'questions' => $questions,
 			'limitTime' => $testResult['limitedTime'] * 60,
 			'paper' => $paper,
 			'paperResult' => $testResult,
+			'favorites' => ArrayToolkit::column($favorites, 'questionId'),
 			'id' => $id
 		));
 	}
@@ -302,5 +306,10 @@ class DoTestController extends BaseController
    	{
    		return $this->getServiceKernel()->createService('Quiz.TestService');
    	}
+
+   	private function getMyQuestionService ()
+	{
+		return $this->getServiceKernel()->createService('Quiz.MyQuestionService');
+	}
 
 }

@@ -74,7 +74,6 @@ class MyQuestionServiceImpl extends BaseService
 	{
 		$favorite = array(
 			'questionId' => $questionId,
-			'testPaperResultId' => $testPaperResultId,
 			'userId' => $userId
 		);
 
@@ -89,6 +88,11 @@ class MyQuestionServiceImpl extends BaseService
 	public function findFavoriteQuestionsCountByUserId ($id)
 	{
 		return $this->getQuestionFavoriteDao()->findFavoriteQuestionsCountByUserId($id);
+	}
+
+	public function findAllFavoriteQuestionsByUserId ($id)
+	{
+		return $this->getQuestionFavoriteDao()->findAllFavoriteQuestionsByUserId($id);
 	}
 
 	public function findTeacherTestPapersByTeacherId ($teacherId)

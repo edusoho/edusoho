@@ -6,6 +6,6 @@
 
 
 {% if not noFlag|default(null) == true %}
-<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm favorite-btn text-muted"><span class="glyphicon glyphicon-bookmark text-muted"> 收藏</span></button>
-<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm unfavorite-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 取消收藏</span></button>
+<button data-url="{{ path('course_manage_favorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm favorite-btn text-muted" {% if question.id in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-bookmark text-muted"> 收藏</span></button>
+<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:id}) }}" class="btn btn-link btn-sm unfavorite-btn" {% if question.id not in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-bookmark"> 取消收藏</span></button>
 {% endif %}
