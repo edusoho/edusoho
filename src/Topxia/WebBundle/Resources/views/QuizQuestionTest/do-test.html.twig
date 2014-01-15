@@ -2,7 +2,7 @@
 
 {% for type in paper.metas.question_type_seq|split(',') %}
 
-<div class="panel panel-default" id="testpaper-questions-{{ type }}">
+<div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
   <div class="panel-heading">{{dict('questionBlockType')[type]}}</div>
   <div class="panel-body">
 		{% for question in questions[type] %}
