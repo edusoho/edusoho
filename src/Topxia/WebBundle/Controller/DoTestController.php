@@ -140,7 +140,7 @@ class DoTestController extends BaseController
 
 		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($paperResult['userId']);
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-results-layout.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
 			'paper' => $paper,
