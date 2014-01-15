@@ -12,7 +12,7 @@
 
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="testpaper-question-footer clearfix">
-		  <div class="testpaper-question-result">正确答案是 <strong class="text-success">{{ question.answer }}</strong>，
+		  <div class="testpaper-question-result">正确答案是 <strong class="text-success">{{ question.answer|join(', ') }}</strong>，
 				{% if question.testResult.status == 'right' %}
 				  你的答案是 {{ question.testResult.answer|join(', ') }}。回答正确
 				{% elseif question.testResult.status == 'wrong' %}
@@ -25,8 +25,8 @@
 			<div class="testpaper-question-actions pull-right">
 				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
 				{% if not question.analysis == '' %}
-					<a class="btn btn-sm analysis-btn"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
-					<a class="btn btn-sm unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 收起解析</span></a>
+					<a class="btn btn-sm btn-link analysis-btn"><span class="glyphicon glyphicon-bookmark"> 展开解析</span></a>
+					<a class="btn btn-sm btn-link unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-bookmark"> 收起解析</span></a>
 				{% endif %}
 
 			</div>
