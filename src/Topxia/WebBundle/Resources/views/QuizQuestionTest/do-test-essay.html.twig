@@ -1,4 +1,4 @@
-<div class="testpaper-question testpaper-question-fill" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-essay" id="question{{ question.id }}">
 	<div class="testpaper-question-body">
 	  <div class="testpaper-question-stem-wrap clearfix">
 		  <div class="testpaper-question-index">
@@ -41,8 +41,25 @@
 
 		{% else %}
 			<div class="testpaper-question-footer clearfix">
-				{{ question.testResult.answer[0]|default('') }}
+			  <div class="testpaper-question-result">
+			    <div class="testpaper-question-result-suggested">
+				    <div class="testpaper-question-result-title">参考答案：</div>
+				    <div>这里显示参考答案</div>
+			    </div>
+			    <div class="testpaper-question-result-your">
+				    <div class="testpaper-question-result-title">你的回答：</div>
+						<div>{{ question.testResult.answer[0]|default('未回答')|raw }}</div>
+			    </div>
+			  </div>
+
+				<div class="testpaper-question-actions pull-right">
+					{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
+					{% if question.analysis  %}
+						<a class="btn btn-sm"><span class="glyphicon glyphicon-bookmark">解析</span></a>
+					{% endif %}
+				</div>
 			</div>
+			<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
 		{% endif %}
 
 	{% else %}
@@ -56,22 +73,5 @@
 		  </div>
 	  </div>
 
-
 	{% endif %}
-		{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
-	<div class="panel-footer">
-			<div class="pull-right">
-			{% if not role|default(null) == 'teacher' %}
-				{% include 'TopxiaWebBundle:QuizQuestionTest:flag-marking.html.twig' with { noMarking:true } %}
-			{% endif %}
-
-			{% if not question.analysis == '' %}
-				<a class="btn btn-sm pull-right"><span class="glyphicon glyphicon-bookmark">解析</span></a>
-			{% endif %}
-			</div>
-
-			<div class="clearfix"></div>
-			<div class="well mtl" style="display:none;">{{ question.analysis }}</div>
-	</div>
-		{% endif %}
 </div>

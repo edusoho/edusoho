@@ -3448,9 +3448,25 @@ body {
 	margin-bottom: 10px;
 }
 
+.testpaper-question-essay .testpaper-question-result {
+	float: none;
+}
+
 .testpaper-question-result {
 	margin-left: 50px;
 	float: left;
+}
+
+
+
+.testpaper-question-result-title {
+	margin-bottom: 5px;
+	color: #666;
+
+}
+
+.testpaper-question-result-suggested {
+	margin-bottom: 20px;
 }
 
 .testpaper-question-analysis {
