@@ -1,35 +1,30 @@
 {% if myTestPaper %}
 <tr>
+  <td>
+  	{{ myTestPaper.name|plain_text(60) }}
+  	<div>
+  	  <small class="text-muted">来自课程《{{ course.title }}》</small>
+  	  <small class="text-muted mhs">•</small>
+  	  <small class="text-muted" title="开始考试时间">{{ myTestPaperResult.beginTime|date("Y年n月d日 H:i") }}</small>
+  	</div>
+  </td>
 	<td>
-	  <div class="pull-left">
-		<a href="">{{ myTestPaper.name|plain_text(60) }}</a> 
-		
-		<br>
-		<small class="text-muted">{{ myTestPaperResult.beginTime|date("Y年n月d日 H:i") }}</small>
-	  <small class="text-muted mhs">•</small>
-
 		{% if myTestPaperResult.status == 'reviewing' %}
-		  <small class="text-warning">正在批阅</small>
+		  <span class="text-warning">正在批阅</span>
 		{% elseif myTestPaperResult.status == 'finished' %}
-			<small class="text-muted">做对<strong class="text-success">{{ myTestPaperResult.rightItemCount }}</strong>题 / 共<strong>{{ myTestPaper.itemCount }}</strong>题</small>
-			<small class="text-muted mhs">•</small>
-			<small class="text-muted">得分<strong class="text-warning">{{ myTestPaperResult.score }}</strong>分</small>
+			<span class="text-muted">得分<strong class="text-warning">{{ myTestPaperResult.score }}</strong>分</span><br>
+			<small class="text-muted">做对<strong>{{ myTestPaperResult.rightItemCount }}</strong>题 / 共<strong>{{ myTestPaper.itemCount }}</strong>题</small>
 		{% else %}
-		  <small class="text-muted">未交卷</small>
+		  <span class="text-muted">未交卷</span>
 		{% endif %}
-
-		<br>
-<small class="text-muted">来自课程《{{ course.title }}》</small>
-</div>
-		<div class="btn-group pull-right">
-			
-			{% if myTestPaperResult.status in ['doing', 'paused'] %}
-				<a href="{{ path('course_manage_show_test', {id:myTestPaperResult.id}) }}" class="btn btn-default">继续考试</a>
-			{% else %}
-			<a href="{{ path('course_manage_test_results', {id:myTestPaperResult.id}) }}" class="btn btn-link">查看解析</a>
+	</td>
+	<td>
+		{% if myTestPaperResult.status in ['doing', 'paused'] %}
+			<a href="{{ path('course_manage_show_test', {id:myTestPaperResult.id}) }}" class="btn btn-default">继续考试</a>
+		{% else %}
 			<a href="{{ path('course_manage_do_test', {testId:myTestPaper.id}) }}" class="btn btn-default">再做一次</a>
-			{% endif %}
-		</div>
+			<a href="{{ path('course_manage_test_results', {id:myTestPaperResult.id}) }}" class="btn btn-link">查看解析</a>
+		{% endif %}
 	</td>
 </tr>
 {% else %}
