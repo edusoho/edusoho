@@ -28,7 +28,7 @@ class SettingController extends BaseController
             'status'=>'open',
             'closed_note'=>'',
             'favicon'=>'',
-            'company'=>''
+            'copyright'=>''
         );
 
         $site = array_merge($default, $site);
