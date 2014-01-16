@@ -2,24 +2,13 @@
 
 {% block title %}在教课程 - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/my-teaching-courses' %}
-
 {% set side_nav = 'my-teaching-courses' %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    <a id="create-course" href="javascript:" data-url="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right"><span class="glyphicon glyphicon-plus"></span> 创建课程</a>
+    <a id="create-course" href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right"><span class="glyphicon glyphicon-plus"></span> 创建课程</a>
     在教课程
-    <div class="text-center">
-      <span class="text-danger set-avatar" style="display:none;">请先设置头像后再创建课程<a href="{{ path('settings_avatar') }}">点击设置</a>&nbsp;</span>
-      <span class="text-danger set-title" style="display:none;">请先设置头衔后再创建课程<a href="{{ path('settings') }}">点击设置</a></span>
-    </div>
-
-    <div class="hidden">
-      <p class="avatar">{{ app.user.largeAvatar }}</p>
-      <p class="title">{{ app.user.title }}</p>
-    </div>
 
   </div>
   <div class="panel-body">

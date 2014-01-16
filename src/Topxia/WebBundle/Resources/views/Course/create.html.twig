@@ -7,6 +7,10 @@
 {% block content %}
 <div class="row">
   <div class="col-md-offset-2 col-md-8">
+    {% if not app.user.largeAvatar %}
+    <div class="alert alert-danger">请先设置头像后再创建课程<a href="{{ path('settings_avatar') }}">点击设置</a></div>
+    {% elseif not app.user.title %}<div class="alert alert-danger">请先设置头衔后再创建课程<a href="{{ path('settings') }}">点击设置</a></div>
+    {% else %}
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>创建课程</h2></div>
 
@@ -38,9 +42,8 @@
 
 
       </form>
-
-
     </div><!-- /panel -->
+    {% endif %}
 
   </div>
 
