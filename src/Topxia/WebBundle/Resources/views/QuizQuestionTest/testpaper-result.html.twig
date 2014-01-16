@@ -20,27 +20,27 @@
         <tbody>
           <tr>
             <th>答对</th>
-            <td><span class="text-success">{{ accuracy.single_choice.right + accuracy.choice.right }}</span></td>
-            <td><span class="text-success">{{ accuracy.determine.right }}</span></td>
-            <td><span class="text-success">{{ accuracy.fill.right }}</span></td>
+            <td><span class="text-success">{{ accuracy.single_choice.right + accuracy.choice.right }} <small>道</small></span></td>
+            <td><span class="text-success">{{ accuracy.determine.right }} <small>道</small></span></td>
+            <td><span class="text-success">{{ accuracy.fill.right }} <small>道</small></span></td>
           </tr>
           <tr>
             <th>答错</th>
-            <td><span class="text-danger">{{ accuracy.single_choice.wrong + accuracy.choice.wrong }}</span></td>
-            <td><span class="text-danger">{{ accuracy.determine.wrong }}</span></td>
-            <td><span class="text-danger">{{ accuracy.fill.all - accuracy.fill.right }}</span></td>
+            <td><span class="text-danger">{{ accuracy.single_choice.wrong + accuracy.choice.wrong }} <small>道</small></span></td>
+            <td><span class="text-danger">{{ accuracy.determine.wrong }} <small>道</small></span></td>
+            <td><span class="text-danger">{{ accuracy.fill.all - accuracy.fill.right }} <small>道</small></span></td>
           </tr>
           <tr>
             <th>未答</th>
-            <td><span class="text-muted">{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }}</span></td>
-            <td><span class="text-muted">{{ accuracy.determine.noAnswer }}</span></td>
-            <td><span class="text-muted">{{ accuracy.fill.noAnswer }}</span></td>
+            <td><span class="text-muted">{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }} <small>道</small></span></td>
+            <td><span class="text-muted">{{ accuracy.determine.noAnswer }} <small>道</small></span></td>
+            <td><span class="text-muted">{{ accuracy.fill.noAnswer }} <small>道</small></span></td>
           </tr>
           <tr>
             <th>得分</th>
-            <td><strong class="text-score">0</strong></td>
-            <td><strong class="text-score">0</strong></td>
-            <td><strong class="text-score">0</strong></td>
+            <td><span class="text-score">0 <small>分</small></span></td>
+            <td><span class="text-score">0 <small>分</small></span></td>
+            <td><span class="text-score">0 <small>分</small></span></td>
           </tr>
         </tbody>
       </table>
