@@ -281,7 +281,7 @@ class CourseController extends BaseController
 
 	public function createAction(Request $request)
 	{  
-        $user['id'] = $this->getUserService()->getCurrentUser()->id;
+        $user = $this->getUserService()->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
