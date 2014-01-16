@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="testpaper-question-actions pull-right">
-				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { mark:true, analysis:true } %}
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 			</div>
 
 		</div>
@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="testpaper-question-actions pull-right">
-				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' %}
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
 			</div>
 	  </div>
 	{% endif %}
