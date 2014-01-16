@@ -223,6 +223,7 @@ class DoTestController extends BaseController
 
 	private function makeAccuracy ($questions)
     {
+
     	$results = array();
         foreach ($questions as $key => $question) {
 

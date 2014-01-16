@@ -17,11 +17,11 @@
 
 			{% for question in questions[type] %}
 				{% if question.questionType != 'material' %}
-					<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
+					<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ index }}</a>
 					{% set index = index + 1 %}
 				{% else %}
 					{% for question in question.questions %}
-						<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}done{% endif %}">{{ index }}</a>
+						<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ index }}</a>
 						{% set index = index + 1 %}
 					{% endfor %}
 				{% endif %}

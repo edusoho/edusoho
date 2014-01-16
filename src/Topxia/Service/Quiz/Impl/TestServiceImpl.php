@@ -456,12 +456,11 @@ class TestServiceImpl extends BaseService implements TestService
 
         $questions = QuestionSerialize::unserializes($questions);
 
+        $questions = ArrayToolkit::index($questions, 'id');
+
         foreach ($items as $key => $value) {
             $questions[$value['questionId']]['score'] = $value['score'];
         }
-
-
-        $questions = ArrayToolkit::index($questions, 'id');
 
         $results = $this->makeTestResults($answers, $questions);
 

@@ -38,9 +38,9 @@
           </tr>
           <tr>
             <th>得分</th>
-            <td><span class="text-score">0 <small>分</small></span></td>
-            <td><span class="text-score">0 <small>分</small></span></td>
-            <td><span class="text-score">0 <small>分</small></span></td>
+            <td><span class="text-score">{{ accuracy.single_choice.score + accuracy.choice.score }} <small>分</small></span></td>
+            <td><span class="text-score">{{ accuracy.determine.score }} <small>分</small></span></td>
+            <td><span class="text-score">{{ accuracy.fill.score }} <small>分</small></span></td>
           </tr>
         </tbody>
       </table>
