@@ -43,43 +43,6 @@ class MyQuestionController extends BaseController
         ));
 	}
 
-    public function myWrongQuestionsAction (Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $paginator = new Paginator(
-            $request,
-            $this->getMyQuestionService()->findWrongResultCountByUserId($user['id']),
-            10
-        );
-
-        $myWrongs = $this->getMyQuestionService()->findWrongResultByUserId(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $questionIds = ArrayToolkit::column($myWrongs, 'questionId');
-        $testPaperIds = ArrayToolkit::column($myWrongs, 'testId');
-        $testPaperResultIds = ArrayToolkit::column($myWrongs, 'testPaperResultId');
-
-        $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
-
-        $testPaperResults = $this->getMyQuestionService()->findTestPaperResultsByIds($testPaperResultIds);
-
-        $questions = $this->getMyQuestionService()->findQuestionsByIds($questionIds);
-
-        return $this->render('TopxiaWebBundle:MyQuiz:my-wrong-question.html.twig', array(
-            'myWrongQuestionActive' => 'active',
-            'user' => $user,
-            'myWrongs' => $myWrongs,
-            'questions' => ArrayToolkit::index($questions, 'id'),
-            'testPapers' => ArrayToolkit::index($testPapers, 'id'),
-            'testPaperResults' => ArrayToolkit::index($testPaperResults, 'id'),
-            'paginator' => $paginator
-        ));
-    }
-
     public function favoriteQuestionAction(Request $request ,$questionId, $testPaperResultId)
     {
 
