@@ -11,18 +11,17 @@
     </td>
     <td>
         <div class="btn-group">
-
-          <a href="{{ path('course_manage_test_paper_update', {courseId:course.id,testPaperId:item.id}) }}" class="btn btn-default btn-sm">编辑</a>
+          <a href="{{ path('course_manage_preview_test', {testId:item.id}) }}" class="btn btn-default btn-sm" target="_blank">试卷预览</a>
 
           <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
               <span class="caret"></span>
           </a>
 
           <ul class="dropdown-menu pull-right">
-              <li><a class="btn btn-link" href="{{ path('course_manage_preview_test', {testId:item.id}) }}">试卷预览</a></li>
-              <li><a class="btn btn-link" href="{{ path('course_manage_test_paper_create_two', {courseId:course.id,testPaperId:item.id,flag:'update'}) }}">管理题目</a></li>
-              <li><a href="javascript:;" class="btn btn-link test-paper-reset" data-url="{{ path('course_manage_test_paper_update_reset', {courseId:course.id,testPaperId:item.id}) }}">重新生成题目</a></li>
-              <li><a class="btn btn-link" href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('course_manage_test_paper_delete', {courseId:course.id, testPaperId:item.id}) }}">删除</a></li>
+            <li><a href="{{ path('course_manage_test_paper_create_two', {courseId:course.id,testPaperId:item.id,flag:'update'}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
+            <li><a href="javascript:;" class="test-paper-reset" data-url="{{ path('course_manage_test_paper_update_reset', {courseId:course.id,testPaperId:item.id}) }}"><span class="glyphicon glyphicon-repeat"></span> 重新生成题目</a></li>
+            <li><a href="{{ path('course_manage_test_paper_update', {courseId:course.id,testPaperId:item.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑试卷信息</a></li>
+            <li><a href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('course_manage_test_paper_delete', {courseId:course.id, testPaperId:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除试卷</a></li>
           </ul>
         </div>
     </td>
