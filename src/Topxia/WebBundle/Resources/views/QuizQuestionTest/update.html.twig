@@ -42,16 +42,12 @@
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="test-limitedTime-field">时间限制</label></div>
-          <div class="col-md-3 controls">
-              <input class="form-control" name="limitedTime" id="test-limitedTime-field" value="{{testPaper.limitedTime }}" />
-          </div>
-          <div class="col-md-4  pls">
-              <p class="form-control-static pull-left ">分钟 (0表示不限)</p>
+          <div class="col-md-8 controls">
+              <input class="form-control width-input width-input-large" name="limitedTime" id="test-limitedTime-field" value="{{testPaper.limitedTime }}" /> 分钟
+              <div class="help-block">0分钟，表示无限制</div>
           </div>
         </div>
 
-        <br />
-  
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
             <button type="submit" class="btn btn-primary  " >保存</button>
