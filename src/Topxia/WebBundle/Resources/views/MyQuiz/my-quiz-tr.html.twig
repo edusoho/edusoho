@@ -1,3 +1,4 @@
+{% if myTestPaper %}
 <tr>
 	<td>
 		<a href="">{{ myTestPaper.name }}</a> 
@@ -19,3 +20,14 @@
 		</div>
 	</td>
 </tr>
+{% else %}
+
+<tr>
+	<td>
+		<a href="">{{ myTestPaperResult.paperName }}</a> 
+		<br>
+		<small>该试卷已删除</small>
+	</td>
+</tr>
+
+{% endif %}
