@@ -15,12 +15,9 @@
     </div>
     <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
       <ul class="nav nav navbar-nav nav-pills">
-        <li><a href="#testpaper-questions-single_choice">单项选择题</a></li>
-        <li><a href="#testpaper-questions-choice">多项选择题</a></li>
-        <li><a href="#testpaper-questions-determine">判断题</a></li>
-        <li><a href="#testpaper-questions-fill">填空题</a></li>
-        <li><a href="#testpaper-questions-essay">问答题</a></li>
-        <li><a href="#testpaper-questions-material">材料题</a></li>
+        {% for type in paper.metas.question_type_seq|split(',') %}
+          <li><a href="#testpaper-questions-{{ type }}">{{dict('questionBlockType')[type]}}</a></li>
+        {% endfor %}
       </ul>
     </div>
   </div>
