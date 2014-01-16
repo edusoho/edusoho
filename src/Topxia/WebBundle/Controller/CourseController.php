@@ -280,7 +280,10 @@ class CourseController extends BaseController
     }
 
 	public function createAction(Request $request)
-	{
+	{  
+        $user['id'] = $this->getUserService()->getCurrentUser()->id;
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
             throw $this->createAccessDeniedException();
         }
@@ -297,7 +300,8 @@ class CourseController extends BaseController
         }
 
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
-			'form' => $form->createView()
+			'form' => $form->createView(),
+            'userProfile'=>$userProfile
 		));
 	}
 
@@ -434,6 +438,11 @@ class CourseController extends BaseController
         return $this->createNamedFormBuilder('course')
             ->add('title', 'text')
             ->getForm();
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     private function getCourseService()

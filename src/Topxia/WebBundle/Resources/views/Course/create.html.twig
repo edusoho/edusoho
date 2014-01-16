@@ -10,7 +10,7 @@
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>创建课程</h2></div>
 
-      {% if not app.user.largeAvatar or not app.user.title %}
+      {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
         <div class="alert alert-info">
           <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
           <ol>
@@ -20,8 +20,8 @@
               {% else %}
                 <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings_avatar') }}" class="alert-link">去设置</a>
               {% endif %}
-            <li>设置头衔。
-              {% if app.user.title %}
+            <li>设置头衔 、自我介绍。
+              {% if app.user.title and userProfile.about %}
                 <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
               {% else %}
                 <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings') }}" class="alert-link">去设置</a>
