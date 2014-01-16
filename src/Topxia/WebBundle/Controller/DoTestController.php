@@ -16,6 +16,10 @@ class DoTestController extends BaseController
 
 		$testPaper = $this->getTestService()->getTestPaper($testId);
 
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+
 		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
 
 		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));

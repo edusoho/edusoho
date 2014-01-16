@@ -1,5 +1,8 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
+
+
 {% set script_controller = 'quiz-question/do-test' %}
 
 {% block content %}
