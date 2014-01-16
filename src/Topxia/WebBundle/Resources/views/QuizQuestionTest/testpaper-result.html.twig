@@ -5,8 +5,8 @@
   <div class="media testpaper-result">
     <div class="testpaper-result-total">
       <div class="well">
-        <div class="testpaper-result-total-score">{{ paperResult.score - accuracy.essay.score }} <small>分</small></div>
-        <small class="text-muted">客观题总分 {{ paper.score - accuracy.essay.totalScore }} 分</small>
+        <div class="testpaper-result-total-score">{{ paperResult.objectiveScore }} <small>分</small></div>
+        <small class="text-muted">客观题总分 {{ accuracy.single_choice.totalScore + accuracy.choice.totalScore + accuracy.determine.totalScore + accuracy.fill.totalScore + accuracy.material.totalScore }} 分</small>
       </div>
     </div>
     <div class="media-body">

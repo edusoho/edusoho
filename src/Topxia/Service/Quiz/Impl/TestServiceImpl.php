@@ -698,7 +698,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $subjectiveScore = array_sum(ArrayToolkit::column($testResults, 'score'));
 
-        $totalScore = $subjectiveScore + $paperResult['score'];
+        $totalScore = $subjectiveScore + $paperResult['objectiveScore'];
 
         return $this->getTestPaperResultDao()->updateResult($id, array(
             'score' => $totalScore,
@@ -735,7 +735,11 @@ class TestServiceImpl extends BaseService implements TestService
 
         $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
 
-        $fields['score'] = $this->sumScore($testResults);
+        $fields['objectiveScore'] = $this->sumScore($testResults);
+
+        if (!$this->isExistsEssay($testResults)){
+            $fields['score'] = $fields['objectiveScore'];
+        }
 
         $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
