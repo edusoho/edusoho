@@ -141,14 +141,14 @@
               {% else %}
               <span class="text-muted">还没有课程介绍...</span>
               {% endif %}
-            </div>
-       
               {% if tags %}
-                标签：{% for tag in tags %}
-                <a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a>
+                <div class="mtm">
+                <span class="text-muted">标签：</span>{% for tag in tags %}
+                <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
                 {% endfor %}
+                </div>
               {% endif %}
-            
+            </div>
             <div class="tab-pane" id="course-review-pane">正在载入课程评价数据...</div>
             {% if course.goals %}
             <div class="tab-pane" id="course-goal-pane">

@@ -15,11 +15,9 @@
     <div class="col-md-12" style="min-height:300px;">
 
       {% if tags  %}
-        <ul class="list-inline well">
-          {% for tag in tags %}
-            <li><a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a></li>
-          {% endfor %}
-        </ul>
+        {% for tag in tags %}
+          <a href="{{ path('tag_show', {name:tag.name}) }}" class="btn btn-default"><span class="text-muted glyphicon glyphicon-tag"></span> {{ tag.name }}</a>
+        {% endfor %}
       {% else %}
         <div class="empty">当前还没有标签!</div>
       {% endif %}
