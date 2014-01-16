@@ -35,8 +35,9 @@
     {% if question.stem | default(null) %}
         <div class="row">
             <div class="col-sm-12">
-                <div class="thumbnail">
-                    <p>{{question.stem}}</p>
+                <div class="thumbnail short-long-text">
+                    <p class="short-text">{{ question.stem|plain_text(60) }} <span class="trigger">(展开)</span></p>
+                    <p class="long-text">{{ question.stem|raw }} <span class="trigger">(收起)</span></p>
                 </div>
             </div>
         </div>
@@ -93,7 +94,7 @@
   <div>
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
     <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_quiz_question_deletes',{courseId:course.id}) }}">删除</button>
-    <span class="pull-right">题目总数：{{ questionCount }}</span>
+    <span class="pull-right">共：{{ questionCount }} 题</span>
   </div>
 
   {{ web_macro.paginator(paginator) }}
