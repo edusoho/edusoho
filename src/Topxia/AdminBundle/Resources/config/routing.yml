@@ -335,14 +335,14 @@ admin_setting_logo_remove:
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
     methods: [POST]
 
-admin_setting_shortcut_upload:
-    pattern: /setting/shortcut/upload
-    defaults: { _controller: TopxiaAdminBundle:Setting:shortcutUpload }
+admin_setting_favicon_upload:
+    pattern: /setting/favicon/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:faviconUpload }
     methods: [POST]
 
-admin_setting_shortcut_remove:
-    pattern: /setting/shortcut/remove
-    defaults: { _controller: TopxiaAdminBundle:Setting:shortcutRemove }
+admin_setting_favicon_remove:
+    pattern: /setting/favicon/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:faviconRemove }
     methods: [POST]
 
 admin_setting_auth:

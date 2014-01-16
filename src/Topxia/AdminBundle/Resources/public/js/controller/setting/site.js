@@ -37,32 +37,32 @@ define(function(require, exports, module) {
         });
 
         var uploader1 = new Uploader({
-            trigger: '#site-shortcut-upload',
-            name: 'shortcut',
-            action: $('#site-shortcut-upload').data('url'),
+            trigger: '#site-favicon-upload',
+            name: 'favicon',
+            action: $('#site-favicon-upload').data('url'),
             accept: 'ico',
             error: function(file) {
-                Notify.danger('上传网站shortcut图标失败，请重试！')
+                Notify.danger('上传网站浏览器图标失败，请重试！')
             },
             success: function(response) {
                 response = eval("(" + response + ")");
-                $("#site-shortcut-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
-                $form.find('[name=shortcut]').val(response.path);
-                $("#site-shortcut-remove").show();
-                Notify.success('上传网站shortcut图标成功！');
+                $("#site-favicon-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                $form.find('[name=favicon]').val(response.path);
+                $("#site-favicon-remove").show();
+                Notify.success('上传网站浏览器图标成功！');
             }
         });
 
-        $("#site-shortcut-remove").on('click', function(){
+        $("#site-favicon-remove").on('click', function(){
             if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
-                $("#site-shortcut-container").html('');
-                $form.find('[name=shortcut]').val('');
+                $("#site-favicon-container").html('');
+                $form.find('[name=favicon]').val('');
                 $btn.hide();
-                Notify.success('删除网站shortcut图标成功！');
+                Notify.success('删除网站浏览器图标成功！');
             }).error(function(){
-                Notify.danger('删除网站shortcut图标失败！');
+                Notify.danger('删除网站浏览器图标失败！');
             });
         });
 

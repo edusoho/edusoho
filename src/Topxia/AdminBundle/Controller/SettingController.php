@@ -27,7 +27,7 @@ class SettingController extends BaseController
             'analytics'=>'',
             'status'=>'open',
             'closed_note'=>'',
-            'shortcut'=>'',
+            'favicon'=>'',
             'company'=>''
         );
 
@@ -87,42 +87,42 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function shortcutUploadAction(Request $request)
+    public function faviconUploadAction(Request $request)
     {
-        $file = $request->files->get('shortcut');
+        $file = $request->files->get('favicon');
         if (!FileToolkit::isIcoFile($file)) {
             throw $this->createAccessDeniedException('图标格式不正确！');
         }
-        $filename = 'shortcut_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
         
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
         $site = $this->getSettingService()->get('site', array());
 
-        $site['shortcut'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
-        $site['shortcut'] = ltrim($site['shortcut'], '/');
+        $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['favicon'] = ltrim($site['favicon'], '/');
 
         $this->getSettingService()->set('site', $site);
 
-        $this->getLogService()->info('system', 'update_settings', "更新shortcut图标", array('shortcut' => $site['shortcut']));
+        $this->getLogService()->info('system', 'update_settings', "更新浏览器图标", array('favicon' => $site['favicon']));
 
         $response = array(
-            'path' => $site['shortcut'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['shortcut']),
+            'path' => $site['favicon'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
         );
 
         return new Response(json_encode($response));
     }
 
-    public function shortcutRemoveAction(Request $request)
+    public function faviconRemoveAction(Request $request)
     {
         $setting = $this->getSettingService()->get("site");
-        $setting['shortcut'] = '';
+        $setting['favicon'] = '';
 
         $this->getSettingService()->set('site', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', "移除站点shortcut图标");
+        $this->getLogService()->info('system', 'update_settings', "移除站点浏览器图标");
 
         return $this->createJsonResponse(true);
     }

@@ -63,8 +63,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             }
            
         }
-        $user = $this->getUserService()->getUser($userId);
-        $this->getLogService()->info('nickname', 'update', "修改用户名{$user['nickname']}为{$newName}成功");
+        
         $this->getUserService()->changeNickname($userId, $newName);
     }
 

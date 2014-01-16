@@ -173,7 +173,7 @@ class UserServiceImpl extends BaseService implements UserService
         if ($user && $user['id'] != $userId) {
             throw $this->createServiceException('昵称已存在！');
         }
-
+        $this->getLogService()->info('nickname', 'update', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 

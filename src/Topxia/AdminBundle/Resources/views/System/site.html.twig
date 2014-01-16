@@ -8,7 +8,7 @@
 {% block main %}
 
 <style>
-#site-logo-container,#site-shortcut-container img {max-width: 80%; margin-bottom: 10px;}
+#site-logo-container,#site-favicon-container img {max-width: 80%; margin-bottom: 10px;}
 </style>
 
 <div class="page-header"><h1>站点设置</h1></div>
@@ -63,14 +63,14 @@
 
     <div class="form-group">
       <div class="col-md-2 control-label">
-        <label for="shortcut">浏览器图标</label>
+        <label for="favicon">浏览器图标</label>
       </div>
       <div class="col-md-8 controls">
-        <div id="site-shortcut-container">{% if site.shortcut %}<img src="{{ asset(site.shortcut) }}">{% endif %}</div>
-        <button class="btn btn-default btn-sm" id="site-shortcut-upload" type="button" data-url="{{ path('admin_setting_shortcut_upload') }}">上传</button>
-        <button class="btn btn-default btn-sm" id="site-shortcut-remove" type="button" data-url="{{ path('admin_setting_shortcut_remove') }}" {% if not site.shortcut %}style="display:none;"{% endif %}>删除</button>
+        <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
+        <button class="btn btn-default btn-sm" id="site-favicon-upload" type="button" data-url="{{ path('admin_setting_favicon_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="site-favicon-remove" type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>删除</button>
         <p class="help-block">请上传ico格式的图标文件。</p>
-        <input type="hidden" name="shortcut" value="{{ site.shortcut }}">
+        <input type="hidden" name="favicon" value="{{ site.favicon }}">
       </div>
     </div>
 
