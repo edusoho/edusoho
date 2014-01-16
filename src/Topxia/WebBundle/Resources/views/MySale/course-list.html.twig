@@ -13,7 +13,7 @@
   <table class="table table-striped table-hover" id="course-table">
     <thead>
     <tr>
-      <th width="40%">课程名称</th>
+      <th width="30%">课程名称</th>
       <th>销量/热度</th>
       <th>价格(元)</th>
 
@@ -28,10 +28,10 @@
           <td>
 
           <a class="pull-left" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-            <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
+            <img class="course-picture mrm" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="70">
           </a>
 
-          <a href="{{ path('course_show', {id:course.id}) }}" class="mlm" target="_blank">{{ course.title }}</a>
+          <a href="{{ path('course_show', {id:course.id}) }}"  target="_blank">{{ course.title }}</a>
 
           </td>
           <td>{{ course.studentNum }}/{{ course.hitNum }}</td>
@@ -39,18 +39,20 @@
           
           <td>
             {% if(course.adCommissionType=='quota') %}
-               固定销售提成: {{course.adCommission}}
+                {{course.adCommission}}
             {% elseif (course.adCommissionType=="ratio") %}
-               实际售价比例: {{ course.adCommission*course.price/100 }}
+                {{ course.adCommission }}%
             {% else %}
-               实际售价比例: 30%
+               30%
             {% endif %}
           </td>
 
-          <td>{{course.saleValidTime|date('Y-n-d H:i') }} 前</td>
+          <td>{{course.saleValidTime|date('Y-n-d H:i') }}</td>
           <td>
                     
           <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 我的推广链接 </a>
+
+           <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 申请优惠码 </a>
         
           </td>
         </tr>

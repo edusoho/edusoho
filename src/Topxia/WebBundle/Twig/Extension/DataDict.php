@@ -150,6 +150,25 @@ class DataDict
 	    	'essay' => '问答题',
         ),
 
+        'commissionStatus' => array(
+        	'created' =>            '买家未付款',
+			'paid' =>               '买家已付款',
+			'applying' =>           '审核提款中',
+            'refused' =>            '拒绝提款',
+			'cancelled' =>          '已取消申请提款 ',
+			'moneydrawed ' =>       '已提款 ',
+			'frozen ' =>            '冻结状态 ',
+		),
+		'commissionStatus:html' => array(
+			'created' =>            '<span class="text-muted">买家未付款</span>',
+			'paid' =>               '<span class="text-success">买家已付款</span>',
+			'applying' =>           '<span class="text-muted">审核提款中</span>',
+            'refused' =>            '<span class="text-danger">拒绝申请提款</span>',
+			'cancelled' =>          '<span class="text-muted">已取消申请提款</span>',
+			'moneydrawed ' =>       '<span class="text-muted">已提款</span> ',
+			'frozen ' =>            '<span class="text-danger">冻结状态</span> ',
+		),
+
 	);
 
 	public static function dict($type)

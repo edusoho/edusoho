@@ -133,14 +133,34 @@ class MySaleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $orderIds=ArrayToolkit::column($commissions,'orderId');
+
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+
+        $mysaleIds=ArrayToolkit::column($commissions,'mysaleId');
+
+        $mysales = $this->getMySaleService()->findMySalesByIds($mysaleIds);
+
+        $buyerIds=ArrayToolkit::column($commissions,'buyerId');
+
+        $buyers = $this->getUserService()->findUsersByIds($buyerIds);
  
        
         return $this->render('TopxiaWebBundle:MySale:commission-list.html.twig', array(
             'commissions'=>$commissions,
+            'orders' => $orders,
+            'mysales' => $mysales,
+            'buyers' => $buyers,
             'paginator' => $paginator
         ));
        
        
+    }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.OrderService');
     }
 
     protected function getCommissionService()

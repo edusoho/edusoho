@@ -105,6 +105,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         }
 
+        $order = $this->getOrderDao()->addOrder($order);
+
         if(!empty($order['mTookeen']))
         {
 
@@ -116,10 +118,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             }
         }
 
-
-
-
-        $order = $this->getOrderDao()->addOrder($order);
+        
 
         $this->_createLog($order['id'], 'created', '创建订单');
 

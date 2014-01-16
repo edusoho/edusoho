@@ -146,7 +146,9 @@ class CourseController extends BaseController
 
                 $mysale = $this->getMySaleService()->getMySaleBymTookeen($mtookeen);
 
-                if(!empty( $mysale) and $mysale['validTime']>time()){
+              
+
+                if(!empty( $mysale) and $mysale['validTimeNum']>time()){
 
                     if(empty($course['adCommissionDay'])){
                             $course['adCommissionDay'] = 7;

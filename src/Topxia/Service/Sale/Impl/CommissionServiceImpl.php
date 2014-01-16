@@ -99,7 +99,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     public function createCommission($commission){
 
-        $commission = ArrayToolkit::parts($commission, array('id', 'mysaleId','mTookeen','buyerId','userId', 'orderId', 'orderSn', 'commission', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
+        $commission = ArrayToolkit::parts($commission, array('id', 'mysaleId','mTookeen','buyerId','salerId', 'orderId', 'orderSn', 'orderPrice','commission','note', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
 
         $commission['createdTime']=time();
 
@@ -126,6 +126,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     public function computeCommission($order,$mysale)
     {
+
 
          if($mysale['prodType']=='course'){
 
