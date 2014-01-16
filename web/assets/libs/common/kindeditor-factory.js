@@ -31,6 +31,7 @@ define(function(require, exports, module) {
     contentCss.push('body {font-size: 14px; line-height: 1.428571429;color: #333333;}');
     contentCss.push('a {color: #428bca;}');
     contentCss.push('p {margin: 0 0 10px;}');
+    contentCss.push('img {width: 100%;}');
 
     var defaultConfig = {
         width: '100%',

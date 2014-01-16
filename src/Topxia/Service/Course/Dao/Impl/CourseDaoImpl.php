@@ -84,7 +84,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
-            ->andWhere('tagId LIKE :tagsLike')
+            ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan');
 

@@ -27,6 +27,8 @@ class SettingController extends BaseController
             'analytics'=>'',
             'status'=>'open',
             'closed_note'=>'',
+            'shortcut'=>'',
+            'company'=>''
         );
 
         $site = array_merge($default, $site);
@@ -81,6 +83,46 @@ class SettingController extends BaseController
         $this->getSettingService()->set('site', $setting);
 
         $this->getLogService()->info('system', 'update_settings', "移除站点LOGO");
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function shortcutUploadAction(Request $request)
+    {
+        $file = $request->files->get('shortcut');
+        if (!FileToolkit::isIcoFile($file)) {
+            throw $this->createAccessDeniedException('图标格式不正确！');
+        }
+        $filename = 'shortcut_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $site = $this->getSettingService()->get('site', array());
+
+        $site['shortcut'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['shortcut'] = ltrim($site['shortcut'], '/');
+
+        $this->getSettingService()->set('site', $site);
+
+        $this->getLogService()->info('system', 'update_settings', "更新shortcut图标", array('shortcut' => $site['shortcut']));
+
+        $response = array(
+            'path' => $site['shortcut'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['shortcut']),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function shortcutRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("site");
+        $setting['shortcut'] = '';
+
+        $this->getSettingService()->set('site', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除站点shortcut图标");
 
         return $this->createJsonResponse(true);
     }

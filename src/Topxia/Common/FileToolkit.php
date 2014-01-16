@@ -63,6 +63,12 @@ class FileToolkit
         return in_array(strtolower($ext), explode(' ', self::getImageExtensions()));
     }
 
+    public static function isIcoFile(File $file)
+    {
+        $ext = strtolower(self::getFileExtension($file));
+        return $ext == 'ico' ? true : false;
+    }
+
     public static function generateFilename($ext = '')
     {
         $filename = date('Yndhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
