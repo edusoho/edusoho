@@ -20,7 +20,7 @@
 				</ul>
 				<br>
 				<div class="tab-content">
-					<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0] }}</div>
+					<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0]|default('') }}</div>
 					<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0] }}</div>
 				</div>
 				<br>
@@ -50,6 +50,21 @@
 				    <div class="testpaper-question-result-title">你的回答：</div>
 						<div>{{ question.testResult.answer[0]|default('未回答')|raw }}</div>
 			    </div>
+			  {% if paperResult.status == 'finished' %}
+			  	<div class="testpaper-question-score mtl">
+			  		<div class="testpaper-question-result-title">得分： {{ question.testResult.score }}</div>
+			  	</div>
+			  	{% if question.testResult.teacherSay != '' %}
+			  	<div class="testpaper-question-teacherSay mtl">
+					<div class="testpaper-question-result-title">评语：</div>
+					<div>{{ question.testResult.teacherSay|raw }}</div>
+				</div>
+				{% endif %}
+			  {% else %}
+			  	<div class="testpaper-question-score mtl">
+			  		<div class="testpaper-question-result-title">老师正在批阅！</div>
+			  	</div>
+			  {% endif %}		
 			  </div>
 
 				<div class="testpaper-question-actions pull-right">
