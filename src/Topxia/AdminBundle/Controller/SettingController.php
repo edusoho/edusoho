@@ -27,7 +27,8 @@ class SettingController extends BaseController
             'analytics'=>'',
             'status'=>'open',
             'closed_note'=>'',
-            'shortcut'=>''
+            'shortcut'=>'',
+            'company'=>''
         );
 
         $site = array_merge($default, $site);

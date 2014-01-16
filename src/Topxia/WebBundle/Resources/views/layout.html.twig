@@ -111,19 +111,19 @@
   </div><!-- /container -->
 
   <div class="site-footer container clearfix">
-    {% if setting('site.icp') %}
-      <div class="pull-right"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>
-    {% endif %}
+
     
     {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
 
-    <p class="text-gray" data-role="default-foot-bar">
+    <div class="text-gray" data-role="default-foot-bar">
       Powered by 
       <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
-      ©2013 
-      <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+      ©2013-2014 <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
       {{ setting('site.analytics')|raw }}
-    </p>
+
+      <div class="pull-right">{% if setting('site.company') %}课程内容版权均归<a href="/">{{ setting('site.company') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
+
+    </div>
   </div>
 
   {% block bottom %}{% endblock %}
