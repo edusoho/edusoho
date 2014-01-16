@@ -10,31 +10,37 @@
       </div>
     </div>
     <div class="media-body">
-      <table class="table table-bordered table-condensed">
+      <table class="table table-bordered table-condensed testpaper-result-table">
         <thead>
           <th></th>
-          <th>选择题 ({{ accuracy.single_choice.all + accuracy.choice.all }})</th>
-          <th>判断题 ({{ accuracy.determine.all }})</th>
-          <th>填空题 ({{ accuracy.fill.all }})</th>
+          <th>选择题 <small class="text-muted">({{ accuracy.single_choice.all + accuracy.choice.all }}道)</small></th>
+          <th>判断题 <small class="text-muted">({{ accuracy.determine.all }}道)</small></th>
+          <th>填空题 <small class="text-muted">({{ accuracy.fill.all }}道)</small></th>
         </thead>
         <tbody>
           <tr>
-            <td>答对</td>
-            <td>{{ accuracy.single_choice.right + accuracy.choice.right }}</td>
-            <td>{{ accuracy.determine.right }}</td>
-            <td>{{ accuracy.fill.right }}</td>
+            <th>答对</th>
+            <td><span class="text-success">{{ accuracy.single_choice.right + accuracy.choice.right }}</span></td>
+            <td><span class="text-success">{{ accuracy.determine.right }}</span></td>
+            <td><span class="text-success">{{ accuracy.fill.right }}</span></td>
           </tr>
           <tr>
-            <td>答错</td>
-            <td>{{ accuracy.single_choice.wrong + accuracy.choice.wrong }}</td>
-            <td>{{ accuracy.determine.wrong }}</td>
-            <td>{{ accuracy.fill.all - accuracy.fill.right }}</td>
+            <th>答错</th>
+            <td><span class="text-danger">{{ accuracy.single_choice.wrong + accuracy.choice.wrong }}</span></td>
+            <td><span class="text-danger">{{ accuracy.determine.wrong }}</span></td>
+            <td><span class="text-danger">{{ accuracy.fill.all - accuracy.fill.right }}</span></td>
           </tr>
           <tr>
-            <td>未答</td>
-            <td>{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }}</td>
-            <td>{{ accuracy.determine.noAnswer }}</td>
-            <td>{{ accuracy.fill.noAnswer }}</td>
+            <th>未答</th>
+            <td><span class="text-muted">{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }}</span></td>
+            <td><span class="text-muted">{{ accuracy.determine.noAnswer }}</span></td>
+            <td><span class="text-muted">{{ accuracy.fill.noAnswer }}</span></td>
+          </tr>
+          <tr>
+            <th>得分</th>
+            <td><strong class="text-score">0</strong></td>
+            <td><strong class="text-score">0</strong></td>
+            <td><strong class="text-score">0</strong></td>
           </tr>
         </tbody>
       </table>

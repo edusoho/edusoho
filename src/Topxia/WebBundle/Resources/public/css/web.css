@@ -3330,13 +3330,32 @@ body {
 	color: #f60;
 }
 
+.testpaper-result-total .well {
+	padding-top: 33px;
+	padding-bottom: 34px;
+}
+
 .testpaper-result-total-score {
-	margin: 10px 0;
-	font-size: 32px;
+	font-size: 40px;
+	margin-bottom: 10px;
 }
 
 .testpaper-result-total-score small {
 	font-size: 16px;
+}
+
+.testpaper-result-table th,
+.testpaper-result-table td {
+	text-align: center;
+	font-weight: normal;
+}
+
+.testpaper-result-table>thead>tr>th {
+	border-bottom: 1px;
+}
+
+.testpaper-result-table .text-score {
+	color: #f60;
 }
 
 @media (min-width: 992px) {
