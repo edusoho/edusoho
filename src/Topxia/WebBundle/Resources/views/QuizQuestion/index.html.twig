@@ -93,6 +93,7 @@
   <div>
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
     <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_quiz_question_deletes',{courseId:course.id}) }}">删除</button>
+    <span class="pull-right">题目总数：{{ questionCount }}</span>
   </div>
 
   {{ web_macro.paginator(paginator) }}

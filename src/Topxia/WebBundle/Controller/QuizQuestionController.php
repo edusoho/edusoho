@@ -52,9 +52,11 @@ class QuizQuestionController extends BaseController
 			$conditions['stem'] = $field['keyword'];
 		}
 
+		$questionCount = $this->getQuestionService()->searchQuestionCount($conditions);
+
 		$paginator = new Paginator(
 			$this->get('request'),
-			$this->getQuestionService()->searchQuestionCount($conditions),
+			$questionCount,
 			10
 		);
 
@@ -78,6 +80,7 @@ class QuizQuestionController extends BaseController
 			'question' => $question,
 			'paginator' => $paginator,
 			'field' => $field,
+			'questionCount' => $questionCount
 		));
 	}
 
