@@ -97,9 +97,9 @@ define(function(require, exports, module) {
 
 
                 if (values.length > 0) {
-                    $('a[href="#question' + name + '"]').addClass('done');
+                    $('a[href="#question' + name + '"]').addClass('active');
                 } else {
-                    $('a[href="#question' + name + '"]').removeClass('done');
+                    $('a[href="#question' + name + '"]').removeClass('active');
                 }
 
 
