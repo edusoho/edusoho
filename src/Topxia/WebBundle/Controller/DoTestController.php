@@ -223,17 +223,6 @@ class DoTestController extends BaseController
 
 	private function makeAccuracy ($questions)
     {
-
-    	$results = array();
-        foreach ($questions as $key => $question) {
-
-            if ($question['questionType'] == 'material') {
-                $results = array_merge($results, $question['questions']);
-            } else {
-            	$results[$key] = $question;
-            }
-        }
-
         $accuracyResult = array(
 			'right' => 0,
 			'wrong' => 0,
@@ -247,23 +236,44 @@ class DoTestController extends BaseController
 			'choice' => $accuracyResult,
 			'determine' => $accuracyResult,
 			'fill' => $accuracyResult,
-			'essay' => $accuracyResult
+			'essay' => $accuracyResult,
+			'material' => $accuracyResult
 		);
 
-		foreach ($results as $value) {
+		foreach ($questions as $value) {
 
-			$accuracy[$value['questionType']]['score'] += $value['testResult']['score'];
-			$accuracy[$value['questionType']]['totalScore'] += $value['itemScore'];
+			if ($value['questionType'] == 'material'){
+				foreach ($value['questions'] as $key => $v) {
+					$accuracy['material']['score'] += $v['testResult']['score'];
+					$accuracy['material']['totalScore'] += $v['itemScore'];
 
-			$accuracy[$value['questionType']]['all']++;
-			if ($value['testResult']['status'] == 'right'){
-				$accuracy[$value['questionType']]['right']++;
-			}
-			if ($value['testResult']['status'] == 'wrong'){
-				$accuracy[$value['questionType']]['wrong']++;
-			}
-			if ($value['testResult']['status'] == 'noAnswer'){
-				$accuracy[$value['questionType']]['noAnswer']++;
+					$accuracy['material']['all']++;
+					if ($v['testResult']['status'] == 'right'){
+						$accuracy['material']['right']++;
+					}
+					if ($v['testResult']['status'] == 'wrong'){
+						$accuracy['material']['wrong']++;
+					}
+					if ($v['testResult']['status'] == 'noAnswer'){
+						$accuracy['material']['noAnswer']++;
+					}
+				}
+			} else {
+
+				$accuracy[$value['questionType']]['score'] += $value['testResult']['score'];
+				$accuracy[$value['questionType']]['totalScore'] += $value['itemScore'];
+
+				$accuracy[$value['questionType']]['all']++;
+				if ($value['testResult']['status'] == 'right'){
+					$accuracy[$value['questionType']]['right']++;
+				}
+				if ($value['testResult']['status'] == 'wrong'){
+					$accuracy[$value['questionType']]['wrong']++;
+				}
+				if ($value['testResult']['status'] == 'noAnswer'){
+					$accuracy[$value['questionType']]['noAnswer']++;
+				}
+
 			}
 		}
 
