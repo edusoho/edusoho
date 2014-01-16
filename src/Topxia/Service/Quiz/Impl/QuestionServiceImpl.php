@@ -51,7 +51,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function findQuestionsByIds(array $ids)
     {
-        return QuestionSerialize::unserializes($this->getQuizQuestionDao()->findQuestionsByIds($ids));
+        return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
     }
 
     public function findQuestionsByParentIds(array $ids)
@@ -72,7 +72,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function findQuestions ($ids)
     {
-        $questions = $this->findQuestionsByIds($ids);
+        $questions = QuestionSerialize::unserializes($this->findQuestionsByIds($ids));
 
         if (empty($questions)){
             throw $this->createNotFoundException('题目不存在！');

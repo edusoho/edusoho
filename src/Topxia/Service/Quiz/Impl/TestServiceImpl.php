@@ -138,6 +138,7 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         $count = 0 ;
+        $score = 0 ;
 
         foreach ($ids as $k => $id) {
 
@@ -158,10 +159,12 @@ class TestServiceImpl extends BaseService implements TestService
 
             if($question['questionType'] != 'material'){
                 $count ++;
+                $score += $field['score'];
             }
         }
 
-        $this->getTestPaperDao()->updateTestPaper($testId, array('itemCount'=>$count)); 
+
+        $this->getTestPaperDao()->updateTestPaper($testId, array('itemCount'=>$count, 'score'=>$score)); 
 
         $this->sortTestItemsByTestId($testId);
     }
@@ -191,6 +194,7 @@ class TestServiceImpl extends BaseService implements TestService
         $addIds = array_flip(array_diff_key($ids, $items));
 
         $count = 0;
+        $score = 0;
         foreach ($ids as $k => $id) {
             $question = $this->getQuestionService()->getQuestion($k);
 
@@ -213,11 +217,12 @@ class TestServiceImpl extends BaseService implements TestService
 
             if($question['questionType'] != 'material'){
                 $count ++;
+                $score += $field['score'];
             }
 
         }
 
-        $this->getTestPaperDao()->updateTestPaper($testId, array('itemCount'=>$count));
+        $this->getTestPaperDao()->updateTestPaper($testId, array('itemCount'=>$count, 'score'=>$score));
 
         $this->sortTestItemsByTestId($testId);
     }

@@ -168,7 +168,7 @@ class QuizQuestionTestController extends BaseController
 
 	    	$field    = $request->request->all();
 
-	    	if ($flag = 'update'){
+	    	if ($flag == 'update'){
 
         		$this->getTestService()->updateItems($testPaperId, $field);
 	    	} else {
