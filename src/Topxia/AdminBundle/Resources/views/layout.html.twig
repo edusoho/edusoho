@@ -11,6 +11,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>{% block title %}EduSoho管理后台{% endblock %}</title>
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.0.1/css/bootstrap.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />

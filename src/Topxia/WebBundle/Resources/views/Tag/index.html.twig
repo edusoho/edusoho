@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block title %}标签 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>标签</h1></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" style="min-height:300px;">
+
+      {% if tags  %}
+        {% for tag in tags %}
+          <a href="{{ path('tag_show', {name:tag.name}) }}" class="btn btn-default"><span class="text-muted glyphicon glyphicon-tag"></span> {{ tag.name }}</a>
+        {% endfor %}
+      {% else %}
+        <div class="empty">当前还没有标签!</div>
+      {% endif %}
+      
+    </div>
+  </div>
+
+</div>
+{% endblock %}

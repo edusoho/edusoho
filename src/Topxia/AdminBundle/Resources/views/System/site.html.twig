@@ -8,7 +8,7 @@
 {% block main %}
 
 <style>
-#site-logo-container img {max-width: 80%; margin-bottom: 10px;}
+#site-logo-container,#site-favicon-container img {max-width: 80%; margin-bottom: 10px;}
 </style>
 
 <div class="page-header"><h1>站点设置</h1></div>
@@ -63,6 +63,19 @@
 
     <div class="form-group">
       <div class="col-md-2 control-label">
+        <label for="favicon">浏览器图标</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
+        <button class="btn btn-default btn-sm" id="site-favicon-upload" type="button" data-url="{{ path('admin_setting_favicon_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="site-favicon-remove" type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>删除</button>
+        <p class="help-block">请上传ico格式的图标文件。</p>
+        <input type="hidden" name="favicon" value="{{ site.favicon }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
         <label for="seo_keywords">SEO关键词</label>
       </div>
       <div class="col-md-8 controls">
@@ -85,6 +98,16 @@
       </div>
       <div class="col-md-8 controls">
         <input type="text" id="master_email" name="master_email" class="form-control" value="{{site.master_email}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="copyright">课程内容版权方</label>
+      </div>
+      <div class="col-md-8 controls">
+        <input type="text" id="copyright" name="copyright" class="form-control" value="{{site.copyright}}">
+        <div class="help-block">您可以填写网站名称或公司名称。</div>
       </div>
     </div>
 

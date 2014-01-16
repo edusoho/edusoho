@@ -169,11 +169,11 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::nickname($nickname)) {
             throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
         }
-        $user = $this->getUserDao()->findUserByNickname($nickname);
-        if ($user && $user['id'] != $userId) {
+        $existUser = $this->getUserDao()->findUserByNickname($nickname);
+        if ($existUser && $existUser['id'] != $userId) {
             throw $this->createServiceException('昵称已存在！');
         }
-
+        $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 
