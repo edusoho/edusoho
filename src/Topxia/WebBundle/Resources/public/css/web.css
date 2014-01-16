@@ -3426,6 +3426,10 @@ body {
 	zoom: 1;
 }
 
+.testpaper-question-stem img {
+	max-width: 100%;
+}
+
 .testpaper-question-choices {
 	margin-left: 50px;
 	padding-left: 0;
