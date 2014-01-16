@@ -7,43 +7,59 @@
 {% block content %}
 <div class="row">
   <div class="col-md-offset-2 col-md-8">
-    {% if not app.user.largeAvatar %}
-    <div class="alert alert-danger">请先设置头像后再创建课程<a href="{{ path('settings_avatar') }}">点击设置</a></div>
-    {% elseif not app.user.title %}<div class="alert alert-danger">请先设置头衔后再创建课程<a href="{{ path('settings') }}">点击设置</a></div>
-    {% else %}
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>创建课程</h2></div>
 
-      <form id="course-create-form" class="form-horizontal" method="post">
-
-        {{ web_macro.flash_messages() }}
-
-        {{ form_errors(form) }}
-
-        <div class="form-group">
-          <div class="col-md-2 control-label">{{ form_label(form.title, '标题') }}</div>
-          <div class="col-md-8 controls">{{ form_widget(form.title, {attr:{class:'form-control'}}) }}</div>
+      {% if not app.user.largeAvatar or not app.user.title %}
+        <div class="alert alert-info">
+          <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
+          <ol>
+            <li>设置头像。
+              {% if app.user.largeAvatar %}
+                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
+              {% else %}
+                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings_avatar') }}" class="alert-link">去设置</a>
+              {% endif %}
+            <li>设置头衔。
+              {% if app.user.title %}
+                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
+              {% else %}
+                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings') }}" class="alert-link">去设置</a>
+              {% endif %}
+            </li>
+          </ol>
         </div>
+      {% else %}
+        <form id="course-create-form" class="form-horizontal" method="post">
 
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-8 controls">
-            {{ form_rest(form) }}
-            <input id="course-create-btn" class="btn btn-fat btn-primary" type="submit" value="创建">
+          {{ web_macro.flash_messages() }}
+
+          {{ form_errors(form) }}
+
+          <div class="form-group">
+            <div class="col-md-2 control-label">{{ form_label(form.title, '标题') }}</div>
+            <div class="col-md-8 controls">{{ form_widget(form.title, {attr:{class:'form-control'}}) }}</div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-8 controls">
-            <p class="mtl"><a href="http://www.edusoho.com/guide/38" class="text-muted" target="_blank">如何创建课程？</a></p>
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-8 controls">
+              {{ form_rest(form) }}
+              <input id="course-create-btn" class="btn btn-fat btn-primary" type="submit" value="创建">
+            </div>
           </div>
-        </div>
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-8 controls">
+              <p class="mtl"><a href="http://www.edusoho.com/guide/38" class="text-muted" target="_blank">如何创建课程？</a></p>
+            </div>
+          </div>
 
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
 
-      </form>
+      {% endif %}
     </div><!-- /panel -->
-    {% endif %}
+
 
   </div>
 
