@@ -717,6 +717,7 @@ class TestServiceImpl extends BaseService implements TestService
     {
 
         $testPaperResult = array(
+            'paperName' => $testPaper['name'],
             'testId' => $testId,
             'userId' => $userId,
             'limitedTime' => $testPaper['limitedTime'],
