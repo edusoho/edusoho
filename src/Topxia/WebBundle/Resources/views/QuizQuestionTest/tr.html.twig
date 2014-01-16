@@ -1,7 +1,7 @@
 <tr data-role='item'>
     <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
     <td>
-        {{ item.name|plain_text(40) }}
+        <a href="{{ path('course_manage_preview_test', {testId:item.id}) }}" target="_blank">{{ item.name|plain_text(40) }}</a>
     </td>
     <td>{{ item.itemCount}}题 <span class="text-muted">/</span> {{item.score}}分</td>
     <td>
