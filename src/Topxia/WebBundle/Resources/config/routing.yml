@@ -561,10 +561,6 @@ course_manage_my_quiz:
     pattern: /my/quiz
     defaults: { _controller: TopxiaWebBundle:MyQuestion:index }
 
-course_manage_my_wrong_question:
-    pattern: /my/wrong/question
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:myWrongQuestions }
-
 course_manage_favorite_question:
     pattern: /favorite/question/{questionId}/{testPaperResultId}
     defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }

@@ -5,8 +5,8 @@
   <div class="media testpaper-result">
     <div class="testpaper-result-total">
       <div class="well">
-        <div class="testpaper-result-total-score">{{ paperResult.score - accuracy.essay.score }} <small>分</small></div>
-        <small class="text-muted">客观题总分 {{ paper.score - accuracy.essay.totalScore }} 分</small>
+        <div class="testpaper-result-total-score">{{ paperResult.objectiveScore }} <small>分</small></div>
+        <small class="text-muted">客观题总分 {{ accuracy.single_choice.totalScore + accuracy.choice.totalScore + accuracy.determine.totalScore + accuracy.fill.totalScore + accuracy.material.totalScore }} 分</small>
       </div>
     </div>
     <div class="media-body">
@@ -16,6 +16,7 @@
           <th>选择题 <small class="text-muted">({{ accuracy.single_choice.all + accuracy.choice.all }}道)</small></th>
           <th>判断题 <small class="text-muted">({{ accuracy.determine.all }}道)</small></th>
           <th>填空题 <small class="text-muted">({{ accuracy.fill.all }}道)</small></th>
+          <th>材料题 <small class="text-muted">({{ accuracy.material.all }}道子题)</small></th>
         </thead>
         <tbody>
           <tr>
@@ -23,24 +24,28 @@
             <td><span class="text-success">{{ accuracy.single_choice.right + accuracy.choice.right }} <small>道</small></span></td>
             <td><span class="text-success">{{ accuracy.determine.right }} <small>道</small></span></td>
             <td><span class="text-success">{{ accuracy.fill.right }} <small>道</small></span></td>
+            <td><span class="text-success">{{ accuracy.material.right }} <small>道</small></span></td>
           </tr>
           <tr>
             <th>答错</th>
             <td><span class="text-danger">{{ accuracy.single_choice.wrong + accuracy.choice.wrong }} <small>道</small></span></td>
             <td><span class="text-danger">{{ accuracy.determine.wrong }} <small>道</small></span></td>
             <td><span class="text-danger">{{ accuracy.fill.all - accuracy.fill.right }} <small>道</small></span></td>
+            <td><span class="text-danger">{{ accuracy.material.all - accuracy.material.right }} <small>道</small></span></td>
           </tr>
           <tr>
             <th>未答</th>
             <td><span class="text-muted">{{ accuracy.single_choice.noAnswer + accuracy.choice.noAnswer }} <small>道</small></span></td>
             <td><span class="text-muted">{{ accuracy.determine.noAnswer }} <small>道</small></span></td>
             <td><span class="text-muted">{{ accuracy.fill.noAnswer }} <small>道</small></span></td>
+            <td><span class="text-muted">{{ accuracy.material.noAnswer }} <small>道</small></span></td>
           </tr>
           <tr>
             <th>得分</th>
             <td><span class="text-score">{{ accuracy.single_choice.score + accuracy.choice.score }} <small>分</small></span></td>
             <td><span class="text-score">{{ accuracy.determine.score }} <small>分</small></span></td>
             <td><span class="text-score">{{ accuracy.fill.score }} <small>分</small></span></td>
+            <td><span class="text-score">{{ accuracy.material.score }} <small>分</small></span></td>
           </tr>
         </tbody>
       </table>
