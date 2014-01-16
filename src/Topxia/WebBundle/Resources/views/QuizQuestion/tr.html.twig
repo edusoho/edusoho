@@ -20,16 +20,14 @@
   </td>
   <td>
     <div class="btn-group">
-      <a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id}) }}" class="btn btn-default btn-sm">编辑</a>
-      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </a>
+      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">预览</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu pull-right">
         {% if item['questionType'] == 'material'%}
-          <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}" class="btn btn-link">子题管理</a></li>
+          <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
         {% endif %}
-        <li><a class="btn btn-link" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">预览</a></li>
-        <li><a class="btn btn-link" href="javascript:" data-name='题目(子题目也会删除)' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}">删除</a></li>
+        <li><a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑题目</a></li>
+        <li><a href="javascript:" data-name='题目(子题目也会删除)' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除题目</a></li>
       </ul>
     </div>
   </td>
