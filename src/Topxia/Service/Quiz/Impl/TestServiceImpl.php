@@ -316,7 +316,7 @@ class TestServiceImpl extends BaseService implements TestService
             $testResult = $this->getTestPaperResultDao()->updateResult($id, array('status' => 'doing'));
         }
         if (in_array($testResult['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException('已交卷的试卷无法继续做题!');
+            throw $this->createServiceException('已交卷，无法继续考试!');
         }
 
         $items = $this->findItemsByTestPaperId($testResult['testId']);

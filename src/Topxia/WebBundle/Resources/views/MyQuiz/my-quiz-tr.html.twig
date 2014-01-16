@@ -11,7 +11,7 @@
 		<div class="btn-group pull-right">
 			
 			{% if myTestPaperResult.status in ['doing', 'paused'] %}
-				<a href="{{ path('course_manage_show_test', {id:myTestPaperResult.id}) }}" class="btn btn-default">继续做题</a>
+				<a href="{{ path('course_manage_show_test', {id:myTestPaperResult.id}) }}" class="btn btn-default">继续考试</a>
 			{% else %}
 			<a href="{{ path('course_manage_test_results', {id:myTestPaperResult.id}) }}" class="btn btn-default">查看解析</a>
 			<a href="{{ path('course_manage_do_test', {testId:myTestPaper.id}) }}" class="btn btn-default">再做一次</a>
