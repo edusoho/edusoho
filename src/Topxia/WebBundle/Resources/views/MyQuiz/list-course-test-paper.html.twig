@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}试卷批阅 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'testCheck' %}
+{% set parentId = parentId | default(null)%}
+{% set script_controller = 'test-paper/index' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    试卷批阅
+  </div>
+
+  <div class="panel-body " id="test-table-container">
+
+  <table class="table table-striped table-hover" id="test-table">
+    <thead>
+    <tr>
+        <th>名称</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for reviewingTest in paperResults %}
+            {% set testPaper = testPapers[reviewingTest.testId] %}
+            {% set student = users[reviewingTest.userId] %}
+            {% include 'TopxiaWebBundle:MyQuiz:list-teacher-test-tr.html.twig' %}
+        {% else %}
+            <tr><td colspan="20"><div class="empty">无未批阅试卷</div></td></tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+  </div>
+</div>
+
+{% endblock %}

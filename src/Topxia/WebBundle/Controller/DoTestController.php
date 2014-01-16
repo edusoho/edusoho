@@ -221,6 +221,42 @@ class DoTestController extends BaseController
 		));
 	}
 
+	public function teacherCheckInCourseAction (Request $request, $id)
+	{
+		$user = $this->getCurrentUser();
+
+		$course = $this->getCourseService()->tryManageCourse($id);
+
+		$papers = $this->getTestService()->findAllTestPapersByTarget('course', $id);
+
+		$paperIds = ArrayToolkit::column($papers, 'id');
+
+		$paginator = new Paginator(
+            $request,
+            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTestIds($paperIds, 'reviewing'),
+            10
+        );
+
+		$paperResults = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTestIds(
+            $paperIds,
+            'reviewing',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
+
+
+        return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
+        	'status' => 'reviewing',
+			'testPapers' => ArrayToolkit::index($papers, 'id'),
+            'paperResults' => ArrayToolkit::index($paperResults, 'id'),
+            'course' => $course,
+            'users' => $users,
+            'paginator' => $paginator
+        ));
+	}
+
 	private function makeAccuracy ($questions)
     {
         $accuracyResult = array(
@@ -329,5 +365,15 @@ class DoTestController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Quiz.MyQuestionService');
 	}
+
+	private function getCourseService ()
+	{
+		return $this->getServiceKernel()->createService('Course.CourseService');
+	}
+
+	protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
 
 }

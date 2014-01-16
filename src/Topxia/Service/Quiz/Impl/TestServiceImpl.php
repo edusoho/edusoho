@@ -60,6 +60,13 @@ class TestServiceImpl extends BaseService implements TestService
         );
     }
 
+    public function findAllTestPapersByTarget ($targetType, $targetId)
+    {
+        return TestPaperSerialize::unserializes(
+            $this->getTestPaperDao()->findTestPaperByTargetIdsAndTargetType(array($targetId), $targetType)
+        );
+    }
+
     public function searchTestPaper(array $conditions, array $orderBy, $start, $limit){
         return TestPaperSerialize::unserializes($this->getTestPaperDao()->searchTestPaper($conditions, $orderBy, $start, $limit));
     }
