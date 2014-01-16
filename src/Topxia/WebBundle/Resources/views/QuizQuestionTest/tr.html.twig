@@ -1,9 +1,12 @@
 <tr data-role='item'>
     <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
     <td>
-        {{ item.name|length > 40 ? item.name|slice(0, 40) ~ '...' : item.name }}
+        {{ item.name|plain_text(40) }}
     </td>
-    <td>{{ item.limitedTime}}</td>
+    <td>{{ item.itemCount}}题 <span class="text-muted">/</span> {{item.score}}分</td>
+    <td>
+      {% if item.limitedTime > 0 %}{{ item.limitedTime}}分钟{% else %}无限制{% endif %}
+    </td>
     <td>
         {{ macro.user_link(users[item.updatedUserId]) }}
         <br />
