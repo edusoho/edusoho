@@ -1,6 +1,6 @@
 {% if myTestPaper %}
 <tr>
-  <td>
+  <td width="60%">
   	{{ myTestPaper.name|plain_text(60) }}
   	<div>
   	  <small class="text-muted">来自课程《{{ course.title }}》</small>
@@ -20,10 +20,10 @@
 	</td>
 	<td>
 		{% if myTestPaperResult.status in ['doing', 'paused'] %}
-			<a href="{{ path('course_manage_show_test', {id:myTestPaperResult.id}) }}" class="btn btn-default">继续考试</a>
+			<a href="{{ path('course_manage_show_test', {id:myTestPaperResult.id}) }}" class="btn btn-default btn-sm">继续考试</a>
 		{% else %}
-			<a href="{{ path('course_manage_do_test', {testId:myTestPaper.id}) }}" class="btn btn-default">再做一次</a>
-			<a href="{{ path('course_manage_test_results', {id:myTestPaperResult.id}) }}" class="btn btn-link">查看解析</a>
+			<a href="{{ path('course_manage_do_test', {testId:myTestPaper.id}) }}" class="btn btn-default btn-sm">再做一次</a>
+			<a href="{{ path('course_manage_test_results', {id:myTestPaperResult.id}) }}" class="btn btn-link btn-sm">查看解析</a>
 		{% endif %}
 	</td>
 </tr>
