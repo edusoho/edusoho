@@ -1,18 +1,26 @@
 <tr>
 	<td>
-		<a href="{{ path('course_manage_test_teacher_check', {id:reviewingTest.id}) }}">{{ testPaper.name }}</a> 
+		<a href="{{ path('course_manage_test_teacher_check', {id:reviewingTest.id}) }}">{{ testPaper.name|plain_text(60) }}</a> 
 		<br>
-		<small>来自课程《{{ course.title }}》，{{ student.nickname }} 于 {{ reviewingTest.endTime|date("Y-m-d H:i:s") }} 交卷 。</small>
-	{# </td>
-	<td width="25%"> #}
+		<small class="text-muted">来自课程《{{ course.title }}》</small>
+		<small class="text-muted mhs">•</small>
+		<small class="text-muted">共{{ testPaper.score }}分 / {{ testPaper.itemCount }}道题	</small>
+	</td>
+	<td>
+		{{ web_macro.user_link(student) }} <br>
+		<small class="text-muted">{{ reviewingTest.endTime|date("Y年n月d日 H:i") }} 交卷</small>
+	</td>
+	<td>
 		{% if status == 'reviewing' %}
-			<a href="{{ path('course_manage_test_teacher_check', {id:reviewingTest.id}) }}" class="btn btn-default pull-right">批阅</a>
+			<a href="{{ path('course_manage_test_teacher_check', {id:reviewingTest.id}) }}" class="btn btn-default btn-sm pull-right">批阅</a>
 		{% endif %}
 
 		{% if status == 'finished' %}
-			<span class="text-success">总分：{{ reviewingTest.score }} 分</span>
-			<br>
-			<small>客观题得分：{{ reviewingTest.score - reviewingTest.subjectiveScore }} 分，主观题得分：{{ reviewingTest.subjectiveScore }} 分</small>
+		  <div class="pull-right">
+		  	<div class="text-warning">总分 <strong>{{ reviewingTest.score }}</strong> 分</div>
+				<div class="text-muted"><small>客观题{{ reviewingTest.score - reviewingTest.subjectiveScore }}分 / 主观题{{ reviewingTest.subjectiveScore }}分</small></div>
+				<div class="text-success"><small>小青００８批于1970年1月01日 08:00</small></div>
+		  </div>
 		{% endif %}
 	</td>
 </tr>
