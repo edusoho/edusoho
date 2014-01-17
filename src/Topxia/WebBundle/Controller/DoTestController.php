@@ -148,6 +148,12 @@ class DoTestController extends BaseController
 
 		$questions = $this->formatQuestions($questions);
 
+		$total = array();
+		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
+			$total[$value]['number'] = count($questions[$value]);
+		}
+
 		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($paperResult['userId']);
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
@@ -156,7 +162,8 @@ class DoTestController extends BaseController
 			'paper' => $paper,
 			'paperResult' => $paperResult,
 			'favorites' => $favorites,
-			'id' => $id
+			'id' => $id,
+			'total' => $total
 		));
 	}
 
