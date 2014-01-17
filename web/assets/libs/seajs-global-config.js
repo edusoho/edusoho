@@ -20,7 +20,7 @@ seajs.config({
 		"jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
 		"jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
 		"mediaelementplayer": "jquery-plugin/mediaelement/2.13.1/mediaelement-and-player",
-		'bootstrap': 'gallery2/bootstrap/3.0.1/bootstrap',
+		'bootstrap': 'gallery2/bootstrap/3.0.3/bootstrap',
 		'kindeditor': 'gallery2/kindeditor/4.1.7/kindeditor',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.0.1/upload',

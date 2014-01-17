@@ -1,0 +1,43 @@
+{
+  "family": "gallery2",
+  "name": "bootstrap",
+  "version": "3.0.3",
+  "description": "Sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.",
+  "homepage": "http://getbootstrap.com",
+  "author": [
+    {
+      "name": "Mark Otto",
+      "email": "markdotto@gmail.com"
+    },
+    {
+      "name": "Jacob Thornton",
+      "email": "jacobthornton@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twbs/bootstrap.git"
+  },
+  "bugs": "https://github.com/twbs/bootstrap/issues",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "keywords": [ "bootstrap", "css" ],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [
+       "bootstrap.js",
+       "css/bootstrap.css",
+       "css/bootstrap-theme.css",
+       "fonts/glyphicons-halflings-regular.eot",
+       "fonts/glyphicons-halflings-regular.svg",
+       "fonts/glyphicons-halflings-regular.ttf",
+       "fonts/glyphicons-halflings-regular.woff"
+     ]
+  }
+}
