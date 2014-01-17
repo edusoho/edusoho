@@ -115,7 +115,7 @@ class UserServiceImpl extends BaseService implements UserService
         @$userlevel['seq'] = $this->searchUserlevelsCount()+1;
         $userlevel = $this->getUserlevelDao()->createUserlevel($userlevel);
 
-        $this->getLogService()->info('userlevel', 'create', "添加用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        $this->getLogService()->info('userlevel', 'create', "添加会员等级{$userlevel['name']}(#{$userlevel['id']})");
 
         return $userlevel;
     }
@@ -130,19 +130,19 @@ class UserServiceImpl extends BaseService implements UserService
     public function updateUserlevel($id,$fields)
     {
         $userlevel = $this->getUserlevelDao()->updateUserlevel($id,$fields);
-        $this->getLogService()->info('userlevel', 'update', "编辑用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        $this->getLogService()->info('userlevel', 'update', "编辑会员等级{$userlevel['name']}(#{$userlevel['id']})");
         return $userlevel;
     }
 
     public function sortUserlevels(array $ids)
-    {
+    {   
         $levelId  = 0;
         foreach ($ids as $itemId) {
             list(, $type) = explode("-",$itemId);
                 $levelId ++;
                 $item = $this->getUserlevel($type);
-                $fields = array('number' => $levelId);
-                if ($fields['number'] != $item['number']) {
+                $fields = array('seq' => $levelId);
+                if ($fields['seq'] != $item['seq']) {
                     $this->updateUserlevel($item['id'], $fields);
             }
         }
@@ -151,7 +151,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserlevel($id)
     {
         $userlevel = $this->getUserlevel($id);
-        $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['Name']}(#{$userlevel['id']})");
+        $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['name']}(#{$userlevel['id']})");
         return $this->getUserlevelDao()->deleteUserlevel($id);
     }
 
@@ -169,11 +169,11 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::nickname($nickname)) {
             throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
         }
-        $user = $this->getUserDao()->findUserByNickname($nickname);
-        if ($user && $user['id'] != $userId) {
+        $existUser = $this->getUserDao()->findUserByNickname($nickname);
+        if ($existUser && $existUser['id'] != $userId) {
             throw $this->createServiceException('昵称已存在！');
         }
-
+        $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 

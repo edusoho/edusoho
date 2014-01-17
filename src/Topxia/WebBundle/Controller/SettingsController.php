@@ -250,7 +250,7 @@ class SettingsController extends BaseController
 	public function emailAction(Request $request)
 	{
         $user = $this->getCurrentUser();
-
+        $mailer = $this->getSettingService()->get('mailer', array());
         if (empty($user['setup'])) {
             return $this->redirect($this->generateUrl('settings_setup'));
         }
@@ -301,7 +301,8 @@ class SettingsController extends BaseController
         }
 
         return $this->render("TopxiaWebBundle:Settings:email.html.twig", array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'mailer' =>$mailer
         ));
 	}
 

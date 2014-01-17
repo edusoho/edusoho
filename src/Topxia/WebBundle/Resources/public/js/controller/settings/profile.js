@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="profile[truename]"]',
-            rule: 'truename minlength{min:2} maxlength{max:12}'
+            rule: 'chinese minlength{min:2} maxlength{max:12}'
         });
 
         validator.addItem({

@@ -299,7 +299,8 @@ tbody.sortable-list tr.placeholder {
 }
 
 #icon-container img {
-  /*margin:10px 0;*/
+  max-width: 400px;
+  max-height: 300px;
 }
 
 #changeButton {
