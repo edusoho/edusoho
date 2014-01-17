@@ -147,6 +147,8 @@ class OrderServiceImpl extends BaseService implements OrderService
                 ));
                 $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
 
+                $this->getCourseService()->incomeCourse($order['courseId'],'income',$order['price']);
+
                 $info = array(
                     'orderId' => $order['id'],
                     'remark'  => empty($payData['memberRemark']) ? '' : $payData['memberRemark'],

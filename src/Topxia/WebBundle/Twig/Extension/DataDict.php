@@ -151,8 +151,8 @@ class DataDict
         ),
 
         'commissionStatus' => array(
-        	'created' =>            '买家未付款',
-			'paid' =>               '买家已付款',
+        	'created' =>            '不可提款',
+			'paid' =>               '可提款',
 			'applying' =>           '审核提款中',
             'refused' =>            '拒绝提款',
 			'cancelled' =>          '已取消申请提款 ',
@@ -160,8 +160,8 @@ class DataDict
 			'frozen ' =>            '冻结状态 ',
 		),
 		'commissionStatus:html' => array(
-			'created' =>            '<span class="text-muted">买家未付款</span>',
-			'paid' =>               '<span class="text-success">买家已付款</span>',
+			'created' =>            '<span class="text-muted">不可提款</span>',
+			'paid' =>               '<span class="text-success">可提款</span>',
 			'applying' =>           '<span class="text-muted">审核提款中</span>',
             'refused' =>            '<span class="text-danger">拒绝申请提款</span>',
 			'cancelled' =>          '<span class="text-muted">已取消申请提款</span>',

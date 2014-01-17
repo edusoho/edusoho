@@ -13,13 +13,12 @@
   <table class="table table-striped table-hover" id="commission-table">
     <thead>
     <tr>
-
+      <th>成交定单</th>
+      <th>成交价(元)</th>
       <th>日期</th>
-      <th>佣金(元)</th>
+      <th>本笔佣金(元)</th>
       <th>状态</th>
-      <th>备注</th>   
-      <th>实际成交价</th>
-      <th>所属推广</th>  
+      <th>备注</th>        
       <th>购买客户</th>
       
     </tr>
@@ -30,27 +29,13 @@
         {% set mysale = mysales[commission.mysaleId] %}
         {% set buyer = buyers[commission.buyerId] %}
         <tr>
-
+          <td class="text-muted text-sm">定单号：{{commission.orderSn }}<br>{{mysale.prodName }}</td>
+          <td class="text-muted text-sm">{{commission.orderPrice }}<br>{{dict_text('orderStatus:html', order.status) }}</td>
           <td>{{commission.paidTime|date('Y-n-d H:i') }}</td>
           <td>{{commission.commission }}</td>
           <td>{{ dict_text('commissionStatus:html', commission.status) }}</td>
-
           <td>{{commission.note }}</td>
-
-          <td class="text-muted text-sm">定单号：{{commission.orderSn }}
-
-          </td>
-
-          <td class="text-muted text-sm">{{mysale.prodName }}<br>定单号：{{commission.orderSn }}
-          
-          </td>
-
-           <td class="text-muted text-sm">{{buyer.nickname }}</td>
-
-         
-
-
-         
+          <td class="text-muted text-sm">{{buyer.nickname }}</td>
         </tr>
       {% else %}
         <tr><td colspan="7">无数据</td></tr>

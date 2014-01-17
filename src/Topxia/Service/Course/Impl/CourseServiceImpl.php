@@ -373,6 +373,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->waveCourse($id, 'hitNum', +1);
 	}
 
+	public function incomeCourse($id, $field, $diff){
+
+		$this->getCourseDao()->incomeCourse($id,$field,$diff);
+
+	}
+
 	public function cancelRecommendCourse($id)
 	{
 		$course = $this->tryAdminCourse($id);
