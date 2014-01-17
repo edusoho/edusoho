@@ -79,6 +79,14 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-essay-inputs">
 				<textarea class="form-control" data-type="essay" name="{{ question.id }}" rows="3">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0] }}{% endif %}</textarea>
+
+
+				<br>
+				<br>
+				<input class="form-control testpaper-question-essay-input-btn" type="text" />
+				<textarea class="form-control testpaper-question-essay-input" data-type="essay" name="{{ question.id }}" rows="3" style="display:none"></textarea>
+
+
 		  </div>
 		  <div class="testpaper-question-actions pull-right">
 		  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}

@@ -232,12 +232,19 @@ class DoTestController extends BaseController
 
 		$questions = $this->formatQuestions($questions);
 
+		$total = array();
+		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
+			$total[$value]['number'] = count($questions[$value]);
+		}
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-teacher-check.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
 			'paper' => $paper,
 			'paperResult' => $paperResult,
-			'id' => $id
+			'id' => $id,
+			'total' => $total
 		));
 	}
 

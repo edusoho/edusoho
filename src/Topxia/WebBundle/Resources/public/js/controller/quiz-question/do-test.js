@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+    var EditorFactory = require('common/kindeditor-factory');
+
     var wrongs = [],
 
     rights = [],
@@ -242,7 +244,25 @@ define(function(require, exports, module) {
 
 
 
+        //问答题富文本编辑器部分
 
+        $('input.testpaper-question-essay-input-btn').focus(function(){
+
+            $textarea = $(this).parent().find('.testpaper-question-essay-input');
+
+            $('.testpaper-question-essay-input-btn').parent().find('.ke-container').show();
+
+            var editor = EditorFactory.create($textarea, 'simple', {
+                afterBlur: function(){
+                    $('.testpaper-question-essay-input-btn').show();
+                    $('.testpaper-question-essay-input-btn').parent().find('.ke-container').hide();
+                }
+            });
+
+            $(this).hide();
+
+
+        });
 
 
 
