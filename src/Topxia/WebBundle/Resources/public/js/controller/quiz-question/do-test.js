@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
 
 // 做试卷
-        var interval = 180;
+        var interval = 10;
 
         var changeAnswers = {};
 
@@ -92,7 +92,6 @@ define(function(require, exports, module) {
                     if ($(this).val() != "") {
                         values.push($(this).val());
                     }     
-
                 }
 
                 changeAnswers[name] = values;
@@ -246,22 +245,27 @@ define(function(require, exports, module) {
 
         //问答题富文本编辑器部分
 
-        $('input.testpaper-question-essay-input-btn').focus(function(){
 
-            $textarea = $(this).parent().find('.testpaper-question-essay-input');
 
-            $('.testpaper-question-essay-input-btn').parent().find('.ke-container').show();
+        $('.testpaper-question-essay-input-btn').focus(function(){
 
-            var editor = EditorFactory.create($textarea, 'simple', {
+            var editor = EditorFactory.create($(this), 'simple', {
+
+                textarea: $(this),
+
                 afterBlur: function(){
-                    $('.testpaper-question-essay-input-btn').show();
-                    $('.testpaper-question-essay-input-btn').parent().find('.ke-container').hide();
+                    editor.sync();
+                    this.textarea.show();
+                    editor.remove();
+                },
+
+                afterChange: function(){
+                    this.sync();
+                    this.textarea.change();
                 }
             });
 
             $(this).hide();
-
-
         });
 
 
