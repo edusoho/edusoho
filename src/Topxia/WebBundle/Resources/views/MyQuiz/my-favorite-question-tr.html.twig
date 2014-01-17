@@ -1,38 +1,13 @@
-{% if testPaperResult.status in ['doing', 'paused'] %}
-
 <tr>
 	<td>
-		<a href="">{{ question.stem }}</a> 
-		<br>
-		<small> 试卷没做完不可以偷看解答哦~ </small>
-	{# </td>
-	<td width="20%"> #}
-		<div class="btn-group pull-right">
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:testPaperResult.id}) }}" class="btn btn-info btn-sm unfavorite-btn"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
-
-			<a href="" class="btn btn-info btn-sm disabled">查看题目</a>
+		<a href="">{{ question.stem|plain_text(40) }}</a>
+		<div class="text-muted">
+		  <small>来自试卷《xxxx》</small>
+		  <small class="mhs">•</small>
+		  <small>收藏于 2012年3月5日 12:22</small>
 		</div>
 	</td>
-</tr>
-
-{% else %}
-
-<tr>
 	<td>
-		<a href="{{ path('course_manage_test_results', {id:testPaperResult.id}) }}">{{ question.stem }}</a> 
-		{# <br>
-		<small>来自试卷《{{ testPaper.name }}》，{{ testPaperResult.beginTime|date("Y-m-d H:i:s") }}，得分{{ testPaperResult.score }}分，共{{ testPaper.itemCount }}题，做对{{ testPaperResult.rightItemCount }}题。</small> #}
-	{# </td>
-	<td width="20%"> #}
-		<div class="btn-group pull-right">
-			<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:testPaperResult.id}) }}" class="btn btn-info btn-sm unfavorite-btn"><span class="glyphicon glyphicon-bookmark">取消收藏</span></button>
-
-
-			<button class="btn btn-info btn-sm showQuestion">查看题目</button>
-		</div>
-		{% include 'TopxiaWebBundle:MyQuiz:my-favorite-detail.html.twig' %}
-
+		<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:testPaperResult.id}) }}" class="btn btn-default btn-sm pull-right unfavorite-btn"><span class="glyphicon glyphicon-star-empty"></span> 取消收藏</button>
 	</td>
 </tr>
-
-{% endif %}
