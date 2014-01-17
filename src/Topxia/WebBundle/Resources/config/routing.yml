@@ -1167,3 +1167,7 @@ mysale_course_link:
 mysale_commission_list:
     pattern: /mysale/commission/list
     defaults: {_controller:TopxiaWebBundle:MySale:commissionList}
+
+mysale_web_link:
+    pattern: /mysale/commission/list
+    defaults: {_controller:TopxiaWebBundle:MySale:webLink}

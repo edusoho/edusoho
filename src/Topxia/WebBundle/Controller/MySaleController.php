@@ -59,7 +59,7 @@ class MySaleController extends BaseController
        
     }
 
-     public function courseLinkAction(Request $request,$id)
+    public function courseLinkAction(Request $request,$id)
     {
         $user = $this->getCurrentUser();
 
@@ -110,8 +110,61 @@ class MySaleController extends BaseController
        
     }
 
+    public function webLinkAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
 
-     public function commissionListAction(Request $request)
+
+        $prodType='web';
+        $prodId=999999999;
+        $prodName='网站推广';
+
+
+        $mysale=$this->getMySaleService()->getMySaleByProdAndUser($prodType,$prodId,$user['id']);
+
+
+        if(empty($mysale)){
+
+            $mysale=array();
+
+            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+           
+
+            $mysale['adCommissionType']= 'ratio';
+
+            $mysale['adCommission']= 5;  //网站推广，获取
+           
+
+            $mysale['prodType']=$prodType;
+            $mysale['prodId']=$prodId;
+            $mysale['prodName']=$course['title'];
+
+            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
+
+
+            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+
+            $mysale['validTime']=$course['saleValidTime'];
+
+            $mysale['userId']=$user['id'];
+          
+
+            $this->getMySaleService()->createMySale($mysale);
+
+        }
+
+
+       
+        return $this->render('TopxiaWebBundle:MySale:overview.html.twig', array(
+            'mysale'=>$mysale,
+            'user'=>$user            
+        ));
+       
+       
+    }
+
+
+    public function commissionListAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -153,9 +206,7 @@ class MySaleController extends BaseController
             'mysales' => $mysales,
             'buyers' => $buyers,
             'paginator' => $paginator
-        ));
-       
-       
+        ));       
     }
 
     private function getOrderService()
