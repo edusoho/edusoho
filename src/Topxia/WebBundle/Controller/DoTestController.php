@@ -72,6 +72,11 @@ class DoTestController extends BaseController
 
 		$this->getTestService()->updatePaperResult($id, 'doing', $testResult['remainTime']);
 
+		$total = array();
+		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
+			$total[$value]['number'] = count($questions[$value]);
+		}
 
 		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($testResult['userId']);
 
@@ -81,7 +86,8 @@ class DoTestController extends BaseController
 			'paper' => $paper,
 			'paperResult' => $testResult,
 			'favorites' => ArrayToolkit::column($favorites, 'questionId'),
-			'id' => $id
+			'id' => $id,
+			'total' => $total
 		));
 	}
 
@@ -255,6 +261,15 @@ class DoTestController extends BaseController
             'users' => $users,
             'paginator' => $paginator
         ));
+	}
+
+	private function makeShowScoreByType ($questions, $paper)
+	{
+		$types = explode(',', $paper['metas']['question_type_seq']);
+		$totalScores = array();
+		foreach ($questions as $key => $value) {
+			// $totalScores[$value['questionType']] = 
+		}
 	}
 
 	private function makeAccuracy ($questions)
