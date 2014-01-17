@@ -61,8 +61,9 @@ class AuthServiceImpl extends BaseService implements AuthService
             if ($bind) {
                 $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
             }
+           
         }
-
+        
         $this->getUserService()->changeNickname($userId, $newName);
     }
 
@@ -204,6 +205,11 @@ class AuthServiceImpl extends BaseService implements AuthService
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }

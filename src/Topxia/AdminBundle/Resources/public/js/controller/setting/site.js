@@ -24,8 +24,8 @@ define(function(require, exports, module) {
         });
 
         $("#site-logo-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
-
             $.post($btn.data('url'), function(){
                 $("#site-logo-container").html('');
                 $form.find('[name=logo]').val('');
@@ -33,6 +33,36 @@ define(function(require, exports, module) {
                 Notify.success('删除网站LOGO成功！');
             }).error(function(){
                 Notify.danger('删除网站LOGO失败！');
+            });
+        });
+
+        var uploader1 = new Uploader({
+            trigger: '#site-favicon-upload',
+            name: 'favicon',
+            action: $('#site-favicon-upload').data('url'),
+            accept: 'ico',
+            error: function(file) {
+                Notify.danger('上传网站浏览器图标失败，请重试！')
+            },
+            success: function(response) {
+                response = eval("(" + response + ")");
+                $("#site-favicon-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                $form.find('[name=favicon]').val(response.path);
+                $("#site-favicon-remove").show();
+                Notify.success('上传网站浏览器图标成功！');
+            }
+        });
+
+        $("#site-favicon-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
+            var $btn = $(this);
+            $.post($btn.data('url'), function(){
+                $("#site-favicon-container").html('');
+                $form.find('[name=favicon]').val('');
+                $btn.hide();
+                Notify.success('删除网站浏览器图标成功！');
+            }).error(function(){
+                Notify.danger('删除网站浏览器图标失败！');
             });
         });
 
