@@ -251,6 +251,8 @@ define(function(require, exports, module) {
 
             var editor = EditorFactory.create($(this), 'simple', {
 
+                extraFileUploadParams:{group:'default'},
+
                 textarea: $(this),
 
                 afterBlur: function(){
