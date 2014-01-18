@@ -573,9 +573,13 @@ course_manage_show_favorite_question:
     pattern: /show/favorite/question
     defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
 
-course_manage_list_teacher_test:
-    pattern: /list/teacher/test/{status}
+course_manage_list_teacher_test_reviewing:
+    pattern: /list/teacher/test/reviewing
     defaults: { _controller: TopxiaWebBundle:MyQuestion:listReviewingTest }
+
+course_manage_list_teacher_test_finished:
+    pattern: /list/teacher/test/finished
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:listFinishedTest }
 
 course_manage_test_check:
     pattern: /list/course/check/{id}

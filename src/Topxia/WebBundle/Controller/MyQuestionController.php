@@ -103,7 +103,7 @@ class MyQuestionController extends BaseController
         ));
     }
 
-    public function listReviewingTestAction (Request $request, $status)
+    public function listReviewingTestAction (Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -115,13 +115,13 @@ class MyQuestionController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTestIds($testPaperIds, $status),
+            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTestIds($testPaperIds, 'reviewing'),
             10
         );
 
         $reviewingTests = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTestIds(
             $testPaperIds,
-            $status,
+            'reviewing',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -137,11 +137,51 @@ class MyQuestionController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($testPapers, 'targetId'));
 
         return $this->render('TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig', array(
-            'status' => $status,
+            'status' => 'reviewing',
             'users' => ArrayToolkit::index($users, 'id'),
             'reviewingTests' => $reviewingTests,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testPapers' => ArrayToolkit::index($testPapers, 'id'),
+            'teacher' => $user,
+            'paginator' => $paginator
+        ));
+    }
+
+    public function listFinishedTestAction (Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+
+        $paginator = new Paginator(
+            $request,
+            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTeacherIds(array($user['id']), 'finished'),
+            10
+        );
+
+        $reviewingTests = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTeacherIds(
+            array($user['id']),
+            'finished',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
+        $testPaperIds = ArrayToolkit::column($reviewingTests, 'testId');
+
+        $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
+
+        $userIds = ArrayToolkit::column($reviewingTests, 'userId');
+
+        $users = $this->getMyQuestionService()->findUsersByIds($userIds);
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($testPapers, 'targetId'));
+
+        return $this->render('TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig', array(
+            'status' => 'finished',
+            'users' => ArrayToolkit::index($users, 'id'),
+            'reviewingTests' => $reviewingTests,
+            'courses' => ArrayToolkit::index($courses, 'id'),
+            'testPapers' => ArrayToolkit::index($testPapers, 'id'),
+            'teacher' => $user,
             'paginator' => $paginator
         ));
     }

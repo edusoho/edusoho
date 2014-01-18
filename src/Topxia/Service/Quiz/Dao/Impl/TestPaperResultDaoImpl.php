@@ -135,6 +135,33 @@ class TestPaperResultDaoImpl extends BaseDao implements TestPaperResultDao
         return $this->getConnection()->fetchColumn($sql, $ids);
     }
 
+    public function findTestPaperResultsByStatusAndTeacherIds ($ids, $status, $start, $limit)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+
+        array_push($ids, $status);
+
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE `checkTeacherId` IN ({$marks}) AND `status` = ? ORDER BY endTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findTestPaperResultCountByStatusAndTeacherIds ($ids, $status)
+    {
+        if(empty($ids)){ 
+            return null; 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+
+        array_push($ids, $status);
+
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `checkTeacherId` IN ({$marks}) AND `status` = ?";
+        return $this->getConnection()->fetchColumn($sql, $ids);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)

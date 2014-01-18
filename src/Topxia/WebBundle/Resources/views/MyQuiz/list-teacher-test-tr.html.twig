@@ -1,6 +1,6 @@
 <tr>
 	<td>
-		<a href="{{ path('course_manage_test_teacher_check', {id:reviewingTest.id}) }}">{{ testPaper.name|plain_text(60) }}</a> 
+		<a href="{% if status == 'reviewing' %}{{ path('course_manage_test_teacher_check', {id:reviewingTest.id}) }}{% endif %}{% if status == 'finished' %}{{ path('course_manage_test_results', {id:reviewingTest.id}) }}{% endif %}">{{ testPaper.name|plain_text(60) }}</a> 
 		<br>
 		<small class="text-muted">来自课程《{{ course.title }}》</small>
 		<small class="text-muted mhs">•</small>
@@ -18,8 +18,8 @@
 		{% if status == 'finished' %}
 		  <div class="pull-right">
 		  	<div class="text-warning">总分 <strong>{{ reviewingTest.score }}</strong> 分</div>
-				<div class="text-muted"><small>客观题{{ reviewingTest.score - reviewingTest.subjectiveScore }}分 / 主观题{{ reviewingTest.subjectiveScore }}分</small></div>
-				<div class="text-success"><small>小青００８批于1970年1月01日 08:00</small></div>
+				<div class="text-muted"><small>客观题{{ reviewingTest.objectiveScore }}分 / 主观题{{ reviewingTest.subjectiveScore }}分</small></div>
+				<div class="text-success"><small>{{ teacher.nickname }}批于{{ reviewingTest.checkedTime|date("Y年n月d日 H:i") }}</small></div>
 		  </div>
 		{% endif %}
 	</td>

@@ -112,6 +112,16 @@ class MyQuestionServiceImpl extends BaseService
 		return $this->getTestPaperResultDao()->findTestPaperResultCountByStatusAndTestIds($ids, $status);
 	}
 
+	public function findTestPaperResultsByStatusAndTeacherIds ($ids, $status, $start, $limit)
+	{
+		return $this->getTestPaperResultDao()->findTestPaperResultsByStatusAndTeacherIds($ids, $status, $start, $limit);
+	}
+
+	public function findTestPaperResultCountByStatusAndTeacherIds ($ids, $status)
+	{
+		return $this->getTestPaperResultDao()->findTestPaperResultCountByStatusAndTeacherIds($ids, $status);
+	}
+
 	public function findChoicesByQuestionIds($questionIds)
 	{
 		return $this->getQuestionChoiceDao()->findChoicesByQuestionIds($questionIds);

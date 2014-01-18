@@ -719,7 +719,8 @@ class TestServiceImpl extends BaseService implements TestService
             'score' => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
-            'checkTeacherId' => $teacherId
+            'checkTeacherId' => $teacherId,
+            'checkedTime' => time()
         ));
     }
 
