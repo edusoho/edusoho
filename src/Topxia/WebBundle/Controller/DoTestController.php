@@ -248,7 +248,7 @@ class DoTestController extends BaseController
 		));
 	}
 
-	public function teacherCheckInCourseAction (Request $request, $id)
+	public function teacherCheckInCourseAction (Request $request, $id, $status)
 	{
 		$user = $this->getCurrentUser();
 
@@ -260,26 +260,31 @@ class DoTestController extends BaseController
 
 		$paginator = new Paginator(
             $request,
-            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTestIds($paperIds, 'reviewing'),
+            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTestIds($paperIds, $status),
             10
         );
 
 		$paperResults = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTestIds(
             $paperIds,
-            'reviewing',
+            $status,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
 
+        $teacherIds = ArrayToolkit::column($paperResults, 'checkTeacherId');
+
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+
 
         return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
-        	'status' => 'reviewing',
+        	'status' => $status,
 			'testPapers' => ArrayToolkit::index($papers, 'id'),
             'paperResults' => ArrayToolkit::index($paperResults, 'id'),
             'course' => $course,
             'users' => $users,
+            'teachers' => ArrayToolkit::index($teachers, 'id'),
             'paginator' => $paginator
         ));
 	}

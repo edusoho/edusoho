@@ -119,27 +119,27 @@ class MyQuestionController extends BaseController
             10
         );
 
-        $reviewingTests = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTestIds(
+        $paperResults = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTestIds(
             $testPaperIds,
             'reviewing',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         
-        $testPaperIds = ArrayToolkit::column($reviewingTests, 'testId');
+        $testPaperIds = ArrayToolkit::column($paperResults, 'testId');
 
         $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
 
-        $userIds = ArrayToolkit::column($reviewingTests, 'userId');
+        $userIds = ArrayToolkit::column($paperResults, 'userId');
 
         $users = $this->getMyQuestionService()->findUsersByIds($userIds);
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($testPapers, 'targetId'));
 
-        return $this->render('TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig', array(
+        return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
             'status' => 'reviewing',
             'users' => ArrayToolkit::index($users, 'id'),
-            'reviewingTests' => $reviewingTests,
+            'paperResults' => $paperResults,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testPapers' => ArrayToolkit::index($testPapers, 'id'),
             'teacher' => $user,
@@ -158,27 +158,27 @@ class MyQuestionController extends BaseController
             10
         );
 
-        $reviewingTests = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTeacherIds(
+        $paperResults = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTeacherIds(
             array($user['id']),
             'finished',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         
-        $testPaperIds = ArrayToolkit::column($reviewingTests, 'testId');
+        $testPaperIds = ArrayToolkit::column($paperResults, 'testId');
 
         $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
 
-        $userIds = ArrayToolkit::column($reviewingTests, 'userId');
+        $userIds = ArrayToolkit::column($paperResults, 'userId');
 
         $users = $this->getMyQuestionService()->findUsersByIds($userIds);
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($testPapers, 'targetId'));
 
-        return $this->render('TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig', array(
+        return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
             'status' => 'finished',
             'users' => ArrayToolkit::index($users, 'id'),
-            'reviewingTests' => $reviewingTests,
+            'paperResults' => $paperResults,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testPapers' => ArrayToolkit::index($testPapers, 'id'),
             'teacher' => $user,
