@@ -1,0 +1,52 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}试卷管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'testPaper' %}
+{% set parentId = parentId | default(null)%}
+{% set script_controller = 'test-paper/index' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    <a href="{{ path('course_manage_test_paper_create',{courseId:course.id}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>创建试卷</a>
+    试卷管理
+  </div>
+
+  <div class="panel-body " id="quiz-table-container">
+
+  <table class="table table-striped table-hover" id="quiz-table">
+  {{ web_macro.flash_messages() }}
+    <thead>
+    <tr>
+        <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+        <th width="38%">名称</th>
+        <th>题目统计</th>
+        <th>时间限制</th>
+        <th>更新人/时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for testPaper in testPapers %}
+            {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {item:testPaper} %}
+        {% else %}
+            <tr><td colspan="20"><div class="empty">无试卷记录</div></td></tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  <div>
+    <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="试卷" data-url="{{ path('course_manage_test_paper_deletes',{courseId:course.id}) }}">删除</button>
+  </div>
+
+  {{ web_macro.paginator(paginator) }}
+  </div>
+</div>
+
+{% endblock %}
+
+
+

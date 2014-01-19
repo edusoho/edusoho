@@ -1,0 +1,52 @@
+{% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
+
+{% block testpaper_heading_content %}
+
+  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
+
+  <div class="alert alert-info">主观题总分 <strong>{{ accuracy.essay.totalScore }} 分</strong>，老师正在批阅试卷。</div>
+
+{% endblock %}
+
+{% block testpaper_body_sidebar %}
+
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+        <div class="panel-body">
+          
+          {% set index = 1 %}
+
+          {% for type in paper.metas.question_type_seq|split(',') %}
+
+            {% for question in questions[type] %}
+              {% if question.questionType != 'material' %}
+                <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ index }}</a>
+                {% set index = index + 1 %}
+              {% else %}
+                {% for question in question.questions %}
+                  <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ index }}</a>
+                  {% set index = index + 1 %}
+                {% endfor %}
+              {% endif %}
+              
+            {% endfor %}
+
+            <div class="clearfix mtm mbm"></div>
+
+          {% endfor %}
+
+        </div>
+        <div class="panel-footer">
+          <div class="btn-group btn-group-justified btn-group-sm">
+            <label class="checkbox">
+              <span class="text-info">只看错题</span>
+              <input type="checkbox" id="showWrong" />
+            </label>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

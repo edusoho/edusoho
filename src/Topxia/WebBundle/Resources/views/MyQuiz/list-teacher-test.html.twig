@@ -1,0 +1,18 @@
+
+<table class="table table-striped table-hover">
+	<tbody>
+		{% for paperResult in paperResults %}
+			{% set testPaper = testPapers[paperResult.testId] %}
+			{% set student = users[paperResult.userId] %}
+			{% if courses|default(null) %}
+				{% set course = courses[testPaper.targetId] %}
+			{% endif %}
+			{% if teachers|default(null) %}
+				{% set teacher = teachers[paperResult.checkTeacherId] %}
+			{% endif %}
+				{% include 'TopxiaWebBundle:MyQuiz:list-teacher-test-tr.html.twig' %}
+
+		{% endfor %}
+	</tbody>
+</table>
+{{ web_macro.paginator(paginator) }}

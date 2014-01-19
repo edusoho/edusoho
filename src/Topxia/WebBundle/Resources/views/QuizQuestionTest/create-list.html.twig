@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% set replaceId = replaceId | default(null)%}
+{% set parentId = parentId | default(null)%}
+
+{% block title %}{% if replaceId %}替换{% else %}添加{% endif %}试题{% endblock %}
+
+{% block body %}
+<div id="test-item-list-table">
+
+  <table class="table table-condensed">
+    <thead>
+    <tr>
+        <th width="45%">题干</th>
+        <th>类型</th>
+        {% if parentId == 0 %}
+            <th>从属</th>
+        {% endif %}
+        <th>更新人/时间</th>
+        <th>分值</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody data-role='item-body'>
+        {% for question in questions %}
+            {% include 'TopxiaWebBundle:QuizQuestionTest:create-list-tr.html.twig' with {item:question} %}
+        {% else %}
+            <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  <div>
+  {{ web_macro.paginator(paginator) }}
+  </div>
+
+</div>
+
+<script>app.load('test-paper/item-list')</script>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-primary pull-right" data-dismiss="modal" data-toggle="form-submit" data-target="#block-form">关闭</button>
+{% endblock %}
+
+

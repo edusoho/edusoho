@@ -89,18 +89,14 @@ class QuizQuestionCategoryDaoImpl extends BaseDao implements QuizQuestionCategor
             ->from($this->table, 'questions')
             ->andWhere('userId = :userId');
 
-        if (isset($conditions['target'])) {
+         if (!empty($conditions['target'])) {
             $target = array();
             foreach ($conditions['target'] as $targetType => $targetIds) {
-                if (is_array($targetIds)) {
-                    foreach ($targetIds as $key => $targetId) {
-                        $targetIds[$key] = (int) $targetId;
-                    }
-                    $targetIds = join(' , ', $targetIds);
-                } else {
-                    $targetIds = (int) $targetIds;
+                foreach ($targetIds as $key => $targetId) {
+                    $targetIds[] = (int) $targetId;
                 }
-                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")"  ;
+                
+                $target[] = " targetType ='".$targetType."' and targetId in (".join(' , ', $targetIds).")";
             }
             if (!empty($target)) {
                 $target = join(' or ', $target);

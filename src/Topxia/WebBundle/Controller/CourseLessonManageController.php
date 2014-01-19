@@ -231,6 +231,68 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
+	public function createTestPaperAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->tryManageCourse($id);
+
+    	$papers = $this->getTestService()->findTestPapersByTarget('course', $id, 0, 1000);
+    	$paperOptions = array();
+    	foreach ($papers as $paper) {
+    		$paperOptions[$paper['id']] = $paper['name'];
+    	}
+
+	    if($request->getMethod() == 'POST') {
+
+            $lesson = $request->request->all();
+            $lesson['type'] = 'testpaper';
+            $lesson['courseId'] = $course['id'];
+            $lesson = $this->getCourseService()->createLesson($lesson);
+
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+				'course' => $course,
+				'lesson' => $lesson,
+			));
+
+    	}
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+			'course' => $course,
+			'paperOptions' => $paperOptions,
+		));
+	}
+
+	public function editTestPaperAction(Request $request, $courseId, $lessonId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+    	$papers = $this->getTestService()->findTestPapersByTarget('course', $courseId, 0, 1000);
+    	$paperOptions = array();
+    	foreach ($papers as $paper) {
+    		$paperOptions[$paper['id']] = $paper['name'];
+    	}
+
+        if($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'paperOptions' => $paperOptions,
+        ));
+
+	}
+
 	public function publishAction(Request $request, $courseId, $lessonId)
 	{
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
@@ -283,6 +345,11 @@ class CourseLessonManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getTestService()
+    {
+        return $this->getServiceKernel()->createService('Quiz.TestService');
     }
 
     private function getCourseMaterialService()

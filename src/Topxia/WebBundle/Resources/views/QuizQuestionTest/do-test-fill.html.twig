@@ -1,0 +1,48 @@
+{% if not role|default(null) == 'teacher' %}
+
+<div class="testpaper-question testpaper-question-fill" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-index">
+		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		  </div>
+		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
+	  </div>
+  </div>
+
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">正确答案是 <strong class="text-success">{{ question.answer|join(', ') }}</strong>，
+				{% if question.testResult.status == 'right' %}
+				  你的答案是 {{ question.testResult.answer|join(', ') }}。回答正确
+				{% elseif question.testResult.status == 'wrong' %}
+					你的答案是 <strong class="text-danger">{{ question.testResult.answer|join(', ') }}</strong>。回答错误
+				{% elseif question.testResult.status == 'noAnswer' %}
+					你未答题
+				{% endif %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+	{% else %}
+	  <div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-fill-inputs">
+				{% set input_index = 1 %}
+				{% for answer in question.answer %}
+					<input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="第{{ input_index }}个填空答案请填在这里" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
+					{% set input_index = input_index + 1 %}
+				{% endfor %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+			</div>
+	  </div>
+	{% endif %}
+</div>
+
+{% endif %}

@@ -10,7 +10,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function getQuestion($id)
     {
         $question = $this->getQuizQuestionDao()->getQuestion($id);
-        return $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
+        return empty($question) ? array() : $this->getQuestionImplementor($question['questionType'])->getQuestion($question);
     }
 
     public function createQuestion($question)
@@ -23,7 +23,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function updateQuestion($id, $question)
     {
         $field = $this->filterCommonFields($question);
-        $field['updatedTime'] = time();
         return $this->getQuestionImplementor($question['type'])->updateQuestion($id, $question, $field);  
     }
 
@@ -36,16 +35,272 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->getQuizQuestionDao()->deleteQuestion($id);
 
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
+
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
     }
 
-    public function searchQuestion(array $conditions, array $orderBy, $start, $limit){
-        return $this->getQuizQuestionDao() -> searchQuestion($conditions, $orderBy, $start, $limit);
+    public function searchQuestion(array $conditions, array $orderBy, $start, $limit)
+    {
+        return $this->getQuizQuestionDao()->searchQuestion($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchQuestionCount(array $conditions){
-        return $this->getQuizQuestionDao() -> searchQuestionCount($conditions);
+    public function searchQuestionCount(array $conditions)
+    {
+        return $this->getQuizQuestionDao()->searchQuestionCount($conditions);
     }
+
+    public function findQuestionsByIds(array $ids)
+    {
+        return $this->getQuizQuestionDao()->findQuestionsByIds($ids);
+    }
+
+    public function findQuestionsByParentIds(array $ids)
+    {
+        return $this->getQuizQuestionDao()->findQuestionsByParentIds($ids);
+    }
+
+    public function findQuestionsByTypeAndTypeIds($type,$ids)
+    {               
+        return $this->getQuizQuestionDao()->findQuestionsByTypeAndTypeIds($type,$ids);
+    }
+
+
+    public function findQuestionCountByTypeAndTypeIds($type,$ids)
+    {
+
+    }
+
+    public function findQuestions ($ids)
+    {
+        $questions = QuestionSerialize::unserializes($this->findQuestionsByIds($ids));
+
+        if (empty($questions)){
+            throw $this->createNotFoundException('题目不存在！');
+        }
+
+        $choices = $this->findChoicesByQuestionIds($ids);
+
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        if (!empty($choices)){
+            foreach ($choices as $key => $value) {
+                if (!array_key_exists('choices', $questions[$value['questionId']])) {
+                    $questions[$value['questionId']]['choices'] = array();
+                }
+                // array_push($questions[$value['questionId']]['choices'], $value);
+                $questions[$value['questionId']]['choices'][$value['id']] = $value;
+            }
+
+            // $choiceIndex = 65;
+            // foreach ($choices as $key => $value) {
+            //  $choices[$key]['choiceIndex'] = chr($choiceIndex);
+            //  $choiceIndex++;
+            // }
+
+            // $question['choices'] = $choices;
+        }
+        return $questions;
+    }
+
+
+
+    // //TODO 
+    // public function findQuestionsByCourseId($courseId)
+    // {
+    //     $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        
+    //     $conditions['target']['course'] = array($courseId);
+    //     if (!empty($lessons)){
+    //         $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+    //     }
+        
+    //     $questions = ArrayToolkit::index($this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 999999),'id');
+
+    //     $parentIds = array();
+    //     foreach ($questions as $question) {
+
+    //         if ($question['questionType'] == 'material') {
+
+    //             $parentIds[] = $question['id'];
+    //         }
+    //     }
+
+    //     if (!empty($parentIds)) {
+
+    //         $materialQuestions = ArrayToolkit::index($this->searchQuestion(array('parentIds'=> $parentIds), array('createdTime' ,'DESC'), 0, 999999),'id');
+    //         $questions = array_merge($questions, $materialQuestions);
+    //     }
+        
+    //     return $questions;
+    // }
+
+    // //TODO 
+
+    // public function findQuestionsTypeNumberByCourseId($courseId)
+    // {
+    //     $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        
+    //     $conditions['parentId'] = 0;
+
+    //     $conditions['target']['course'] = array($courseId);
+
+    //     if (!empty($lessons)){
+    //         $conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');
+    //     }
+        
+    //     $questions = $this->searchQuestion($conditions, array('createdTime' ,'DESC'), 0, 99999);
+
+    //     $typeNums  = array();
+    //     foreach ($questions as $question) {
+
+    //         $type = $question['questionType'];
+
+    //         $difficulty = $question['difficulty'];
+
+    //         if (empty($typeNums[$type][$difficulty])) {
+
+    //             $typeNums[$type][$difficulty] = 0;
+    //         }
+
+    //         $typeNums[$type][$difficulty]++;
+    //     }
+
+    //     $sum = array();
+    //     foreach ($typeNums as $type => $difficultyNums) {
+
+    //         $sum[$type] = 0;
+    //         foreach ($difficultyNums as $num) {
+
+    //             $sum[$type] = $sum[$type] + $num;
+    //         }
+    //     }
+
+    //     $typeNums['sum'] = $sum;
+
+    //     return $typeNums;
+    // } 
+
+    public function checkQuesitonNumber($field, $courseId)
+    {
+
+    }
+
+    public function findQuestionsCountByTypeAndTypeIds($type, $ids)
+    {
+        return $this->getQuizQuestionDao()->findQuestionsCountByTypeAndTypeIds($type, $ids);
+    }
+
+    public function findRandQuestions($courseId, $testPaperId, $field) 
+    {
+
+    }
+
+    // public function findRandQuestions($courseId, $testPaperId, $field){
+
+    //     $testPaper = $this->getTestService()->getTestPaper($testPaperId);
+        
+    //     if(empty($field['itemCounts']) || empty($field['itemScores']) || empty($testPaper)){
+    //         $this->createNotFoundException();
+    //     }
+
+    //     $scores = $field['itemScores'];
+    //     $counts = $field['itemCounts'];
+
+    //     if(empty($field['isDifficulty'])){
+    //         $field['isDifficulty'] = 0;
+    //     }
+
+    //     $questions = ArrayToolkit::index($this->findQuestionsByCourseId($courseId), 'id');
+
+    //     $quNews = array();
+    //     $quSons = array();
+
+    //     foreach ($questions as $question) {
+
+    //         if($question['parentId'] == 0) {
+
+    //             $question['score'] = $scores[$question['questionType']] == 0 ? $question['score'] : 
+    //                 (empty($scores[$question['questionType']])?$question['score']:$scores[$question['questionType']]);
+    //             $quNews[$question['questionType']][$question['difficulty']][] = $question;
+    //         }else{
+
+    //             $question['score'] = $scores['material'] == 0 ? $question['score'] : 
+    //                 (empty($scores['material']) ? $question['score'] :$scores['material'] ) ;
+    //             $quSons[] = $question;
+    //         }
+    //     }
+
+    //     $question_type_seq = explode(',', $testPaper['metas']['question_type_seq']);
+
+    //     $randoms = array();
+    //     foreach ($question_type_seq as $type) {
+
+    //         if($field['isDifficulty'] == 0){
+
+    //             for($i = 0;$i<$counts[$type];$i++){
+
+    //                 $randDifficulty = array_rand($quNews[$type]);
+
+    //                 $randId = array_rand($quNews[$type][$randDifficulty]);
+
+    //                 $randoms[] = $quNews[$type][$randDifficulty][$randId];
+
+    //                 unset($quNews[$type][$randDifficulty][$randId]);
+
+    //                 if(count($quNews[$type][$randDifficulty]) ==0){
+
+    //                     unset($quNews[$type][$randDifficulty]);
+    //                 }
+    //             } 
+    //         }else{
+
+    //             $needNums = $this->getItemDifficultyNeedNums($counts[$type], $field['perventage']);
+
+    //             foreach ($needNums as $difficulty => $needNum) {
+
+    //                 if ($difficulty == 'otherNum') {
+
+    //                     for($i = 0;$i<$needNum;$i++){
+
+    //                         $randDifficulty = array_rand($quNews[$type]);
+
+    //                         $randId = array_rand($quNews[$type][$randDifficulty]);
+
+    //                         $randoms[] = $quNews[$type][$randDifficulty][$randId];
+
+    //                         unset($quNews[$type][$randDifficulty][$randId]);
+
+    //                         if(count($quNews[$type][$randDifficulty]) ==0){
+
+    //                             unset($quNews[$type][$randDifficulty]);
+    //                         }
+    //                     } 
+
+    //                     continue;
+    //                 }
+
+    //                 for($i = 0; $i<$needNum; $i++){
+
+    //                     $randId = array_rand($quNews[$type][$difficulty]);
+    //                     $randoms[] = $quNews[$type][$difficulty][$randId];
+    //                     unset($quNews[$type][$difficulty][$randId]);
+
+    //                     if(count($quNews[$type][$difficulty]) ==0){
+
+    //                         unset($quNews[$type][$difficulty]);
+    //                     }
+
+    //                 }
+
+    //             }
+
+    //         }
+
+    //     }
+
+    //     return array_merge(ArrayToolkit::index($randoms, 'id'), ArrayToolkit::index($quSons, 'id'));
+    // }
+
 
     public function getCategory($id){
         return $this->getQuizQuestionCategoryDao()->getCategory($id);
@@ -57,9 +312,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $field['createdTime'] = time();
         $field['targetId'] = empty($category['courseId'])?'':$category['courseId'];
         $field['targetType'] = "course";
-        $field['seq'] = $this->getQuizQuestionCategoryDao() -> getCategorysCountByCourseId($field['targetId'])+1;
+        $field['seq'] = $this->getQuizQuestionCategoryDao()->getCategorysCountByCourseId($field['targetId'])+1;
 
-        return $this->getQuizQuestionCategoryDao() -> addCategory($field);
+        return $this->getQuizQuestionCategoryDao()->addCategory($field);
     }
 
     public function updateCategory($categoryId, $category){
@@ -86,7 +341,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     }
 
     public function findCategorysByCourseIds(array $id){
-        return $this->getQuizQuestionCategoryDao() -> findCategorysByCourseIds($id);
+        return $this->getQuizQuestionCategoryDao()->findCategorysByCourseIds($id);
     }
 
     public function sortCategories($courseId, array $categoryIds)
@@ -111,15 +366,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
     }
 
-    public function findChoicesByQuestionIds(array $id)
+    public function findChoicesByQuestionIds(array $ids)
     {
-        return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($id);
+        return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($ids);
     }
-
+  
     private function filterCommonFields($question)
     {
         if (!in_array($question['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
-                throw $this->createServiceException('type error！');
+                throw $this->createServiceException('question type error！');
         }
         if (!ArrayToolkit::requireds($question, array('difficulty'))) {
                 throw $this->createServiceException('缺少必要字段difficulty, 创建课程失败！');
@@ -131,18 +386,23 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $field['stem']         = $this->purifyHtml($question['stem']);
         $field['difficulty']   = empty($question['difficulty']) ? ' ': $question['difficulty'];
         $field['userId']       = $this->getCurrentUser()->id;
-
-        $field['analysis']   = empty($question['analysis'])?'':$question['analysis'];
-        $field['score']      = empty($question['score'])?'':$question['score'];
-        $field['categoryId'] = (int) $question['categoryId'];
+        $field['analysis']     = empty($question['analysis'])?'':$question['analysis'];
+        $field['score']        = empty($question['score'])?'':$question['score'];
+        $field['categoryId']   = (int) $question['categoryId'];
+        $field['updatedTime']  = time();
 
         if(!empty($question['target'])){
+
             $target = explode('-', $question['target']);
+
             if (count($target) != 2){
                 throw $this->createServiceException("target参数不正确");
             }
+
             $field['targetType'] = $target['0'];
-            $field['targetId'] = $target['1'];
+
+            $field['targetId'] = (int) $target['1'];
+
             if (!in_array($field['targetType'], array('course','lesson'))){
                 throw $this->createServiceException("targetType参数不正确");
             }
@@ -154,22 +414,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function checkCategoryFields($category)
     {
         $target = explode('-', $category['target']);
+
         if (count($target) != 2){
             throw $this->createServiceException("target参数不正确");
         }
+
         $field['targetType'] = $target['0'];
-        $field['targetId'] = $target['1'];
+
+        $field['targetId'] = (int) $target['1'];
+
         if (!in_array($field['targetType'], array('course','lesson'))){
             throw $this->createServiceException("targetType参数不正确");
         }
         
         $field['name'] = empty($category['name'])?' ':$category['name'];
-        return $field;
-    }
 
-    private function getCourseService()
-    {
-        return $this->createService('Course.CourseService');
+        return $field;
     }
 
     private function getQuizQuestionDao()
@@ -189,7 +449,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     private function getQuestionImplementor($name)
     {
-        
         return $this->createService('Quiz.'.preg_replace('/(?:^|_)([a-z])/e', "strtoupper('\\1')", $name).'QuestionImplementor');
     }
 }

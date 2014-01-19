@@ -1,0 +1,60 @@
+{% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
+
+{% set role = 'teacher' %}
+
+{% set showTestpaperNavbar = 'off' %}
+
+{% block testpaper_heading_content %}
+
+{% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
+
+<div class="text-info mbl">请完成以下题目的批阅：</div>
+
+{% endblock %}
+
+{% block testpaper_body_sidebar %}
+
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+        <div class="panel-body">
+                {% set index = 1 %}
+      {% for question in questions.single_choice %}
+        {% set index = index + 1 %}
+      {% endfor %}
+
+      {% for question in questions.choice %}
+        {% set index = index + 1 %}
+      {% endfor %}
+
+      {% for question in questions.determine %}
+        {% set index = index + 1 %}
+      {% endfor %}
+
+      {% for question in questions.fill %}
+        {% set index = index + 1 %}
+      {% endfor %}
+
+      {% for question in questions.essay %}
+        <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
+        {% set index = index + 1 %}
+      {% endfor %}
+
+      {% for question in questions.material %}
+        {% for question in question.questions %}
+          {% if question.questionType == 'essay' %}
+            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
+          {% endif %}
+          {% set index = index + 1 %}
+        {% endfor %}
+      {% endfor %}
+
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-success btn-block" id="postPaper" data-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}">完成批阅</button>
+        </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

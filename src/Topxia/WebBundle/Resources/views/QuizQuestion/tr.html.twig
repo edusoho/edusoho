@@ -1,12 +1,34 @@
-<tr id="{{ category.id }}" class="catgory-tr">
+<tr data-role='item'>
+  <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-  <span class="number">{{category.seq}}</span>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">{{ item.stem | plain_text(40) }}</a>
+  </td>
+  <td>{{ dict('questionType')[item.questionType] }}</td>
+  {% if item.parentId == 0 %}
+  <td>
+    {% if item.targetType == 'lesson'%}
+      课时{{lessons[item.targetId]['number']}}
+    {% elseif item.targetType == 'course' %}
+      课程
+    {% endif %}
+  </td>
+  {% endif %}
+  <td>
+    {{ macro.user_link(users[item.userId]) }}
+    <br />
+    <span class="text-muted text-sm">{{item.updatedTime | date('Y-n-d H:i:s')}}</span>
   </td>
   <td>
-    {{ category.name }}
-  </td>
-  <td>
-	<button type="button" data-id="{{category.id}}" class="btn btn-default btn-sm delete-category" data-url="{{ path('course_manage_quiz_question_category_delete', {courseId:course.id,categoryId :category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-    <button class="btn btn-default btn-sm "  data-url="{{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">预览</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+      <ul class="dropdown-menu pull-right">
+        {% if item.questionType == 'material'%}
+          <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
+        {% endif %}
+        <li><a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑题目</a></li>
+        <li><a href="javascript:" data-name='题目{% if item.questionType == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除题目</a></li>
+      </ul>
+    </div>
   </td>
 </tr>

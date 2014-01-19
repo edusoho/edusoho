@@ -1,0 +1,30 @@
+{
+  "family": "gallery2",
+  "name": "kindeditor",
+  "version": "4.1.10",
+  "description": "WYSIWYG HTML Editor for Internet.",
+  "homepage": "http://www.kindsoft.net/",
+  "author": [
+    {
+      "name": "Longhao Luo",
+      "email": "luolonghao@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kindsoft/kindeditor"
+  },
+  "bugs": "https://github.com/kindsoft/kindeditor/issues",
+  "licenses": [
+    {
+      "type": "GPL-2.1",
+      "url": "https://raw.github.com/kindsoft/kindeditor/master/license.txt"
+    }
+  ],
+  "keywords": [ "WYSIWYG", "kindeditor" ],
+  "spm": {
+    "output": [
+       "kindeditor.js"
+     ]
+  }
+}

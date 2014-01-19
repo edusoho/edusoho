@@ -1,0 +1,12 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}题目预览{% endblock %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ questionType ~ '.html.twig' %}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">关闭</button>
+{% endblock %}

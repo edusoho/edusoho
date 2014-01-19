@@ -1,0 +1,17 @@
+{% if items | default(null)%}
+
+	{% for key,item in items %}
+	    {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig' with { question: questions[item.questionId] } %}
+	{% else %}
+	    <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
+	{% endfor %}
+
+{% else %}
+
+	{% for key,question in questions %}
+	    {% include 'TopxiaWebBundle:QuizQuestionTest:create-2-tr.html.twig'%}
+	{% else %}
+	    <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
+	{% endfor %}
+
+{% endif %}
