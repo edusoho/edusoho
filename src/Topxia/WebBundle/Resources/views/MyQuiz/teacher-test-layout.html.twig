@@ -15,7 +15,8 @@
 			<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test_finished') }}">已批阅</a></li>
 		</ul>
 		<br>
-		{% block list %}{% endblock %}
+		{# {% block list %}{% endblock %} #}
+		{% include 'TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig' %}
 		
 	</div>
 </div>
