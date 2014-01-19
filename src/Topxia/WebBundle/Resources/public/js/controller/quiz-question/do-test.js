@@ -97,7 +97,7 @@ define(function(require, exports, module) {
                 changeAnswers[name] = values;
 
 
-                if (values.length > 0) {
+                if (values.length > 0 && !isEmpty(values)) {
                     $('a[href="#question' + name + '"]').addClass('active');
                 } else {
                     $('a[href="#question' + name + '"]').removeClass('active');
@@ -275,6 +275,15 @@ define(function(require, exports, module) {
 
     };
 
+
+    function isEmpty(values) {
+        for (key in values) {
+            if (values[key] != '') {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 
