@@ -64,8 +64,9 @@ define(function(require, exports, module) {
                     Notify.danger('上传失败，请重试！')
                 },
                 success: function(response) {
-                    var result = '[image]' + response.hashId + '[/image]'
-                    $($trigger.data('target')).val(result);
+                    var result = '[image]' + response.hashId + '[/image]';
+                    var $input = $($trigger.data('target'));
+                    $input.val($input.val() + result);
                 }
             });
 
