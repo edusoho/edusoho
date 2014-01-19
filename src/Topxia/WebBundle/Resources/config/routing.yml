@@ -450,6 +450,10 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
+course_manage_lesson_create_testpaper:
+    pattern:  /course/{id}/manage/lesson/create/testpaper
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestPaper }
+
 course_manage_lesson_sort:
     pattern:  /course/{id}/manage/lesson/sort
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
@@ -458,6 +462,10 @@ course_manage_lesson_sort:
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:edit }
+
+course_manage_lesson_edit_testpaper:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestPaper }
 
 course_manage_lesson_delete:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/delete
@@ -496,6 +504,10 @@ course_manage_quiz_question_create:
     pattern: /course/{courseId}/manage/question/create/{type}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
 
+course_manage_quiz_question_upload:
+    pattern: /course/{courseId}/manage/question/uploadfile/{type}
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:uploadFile }
+
 course_manage_quiz_question_update:
     pattern: /course/{courseId}/manage/question/edit/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:edit }
@@ -507,6 +519,10 @@ course_manage_quiz_question_delete:
 course_manage_quiz_question_deletes:
     pattern: /course/{courseId}/manage/question/deletes
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deletes }
+
+course_manage_quiz_question_preview:
+    pattern: /manage/question/preview/{id}
+    defaults: { _controller: TopxiaWebBundle:QuizQuestion:previewQuestion }
 
 course_manage_quiz_question_category:
     pattern: /course/{courseId}/manage/question/category
@@ -529,21 +545,121 @@ course_manage_quiz_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:sortCategories }
     methods: [POST]
 
-course_manage_quiz_question_generate:
-    pattern: /course/{courseId}/manage/question/generate
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:index }
+course_manage_test_paper:
+    pattern: /course/{courseId}/manage/test/paper
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:index }
 
-course_manage_quiz_question_generate_create:
-    pattern: /course/{courseId}/manage/question/generate/create
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:create }
+course_manage_do_test:
+    pattern: /do/test/{testId}
+    defaults: { _controller: TopxiaWebBundle:DoTest:index }
 
-course_manage_quiz_question_generate_update:
-    pattern: /course/{courseId}/manage/question/generate/update
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:update }
+course_manage_show_test:
+    pattern: /show/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:showTest }
 
-course_manage_quiz_question_generate_delete:
-    pattern: /course/{courseId}/manage/question/generate/delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionGenerate:delete }
+course_manage_preview_test:
+    pattern: /preview/test/{testId}
+    defaults: { _controller: TopxiaWebBundle:DoTest:testPreview }
+
+course_manage_do_test_pause:
+    pattern: /pause/test
+    defaults: { _controller: TopxiaWebBundle:DoTest:testPause }
+
+course_manage_do_test_suspend:
+    pattern: /suspend/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:testSuspend }
+
+course_manage_submit_test:
+    pattern: /submit/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:submitTest }
+
+course_manage_finish_test:
+    pattern: /finish/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:finishTest }
+
+course_manage_test_results:
+    pattern: /test/result/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
+
+course_manage_test_teacher_check:
+    pattern: /test/teacher/check/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheck }
+
+course_manage_my_quiz:
+    pattern: /my/quiz
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:index }
+
+course_manage_favorite_question:
+    pattern: /favorite/question/{questionId}/{testPaperResultId}
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
+
+course_manage_unfavorite_question:
+    pattern: /unfavorite/question/{questionId}/{testPaperResultId}
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
+
+course_manage_show_favorite_question:
+    pattern: /show/favorite/question
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
+
+course_manage_list_teacher_test_reviewing:
+    pattern: /list/teacher/test/reviewing
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:listReviewingTest }
+
+course_manage_list_teacher_test_finished:
+    pattern: /list/teacher/test/finished
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:listFinishedTest }
+
+course_manage_test_check:
+    pattern: /list/course/check/{id}/{status}
+    defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheckInCourse }
+
+course_manage_test_paper_create:
+    pattern: /course/{courseId}/manage/test/paper/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
+
+course_manage_test_paper_update:
+    pattern: /course/{courseId}/manage/test/paper/update
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:update }
+
+course_manage_test_paper_update_reset:
+    pattern: /course/{courseId}/manage/test/paper/update/reset
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateReset }
+
+course_manage_test_paper_create_two:
+    pattern: /course/{courseId}/manage/test/{testPaperId}/create/two
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createTwo }
+
+course_manage_test_paper_create_check:
+    pattern: /course/{courseId}/manage/test/paper/create/check
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:quesitonNumberCheck }
+
+course_manage_test_paper_delete:
+    pattern: /course/{courseId}/manage/test/paper/{testPaperId}/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPaper }
+
+course_manage_test_paper_deletes:
+    pattern: /course/{courseId}/manage/test/paper/deletes
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPapers }
+
+course_manage_test_item_list:
+    pattern: /course/{courseId}/manage/test/{testPaperId}/item/list
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:itemList }
+
+course_manage_test_item_create:
+    pattern: /course/{courseId}/manage/test/{testPaperId}/item/create
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createItem }
+
+course_manage_test_item_update:
+    pattern: /course/{courseId}/manage/test/{testPaperId}/item/update
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateItem }
+
+course_manage_test_item_delete:
+    pattern: /course/{courseId}/manage/test/{testItemId}/item/delete
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItem }
+
+course_manage_test_item_deletes:
+    pattern: /course/{courseId}/manage/test/item/deletes
+    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItems }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

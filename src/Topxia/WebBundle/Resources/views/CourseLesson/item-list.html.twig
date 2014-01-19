@@ -27,13 +27,21 @@
 				      </span>
 				    {% elseif item.type == 'text' %}
 				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
+				    {% elseif item.type == 'testpaper' %}
+				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
 			    	{% endif %}
 			    {% else %}
 			      <span class="status">未发布</span>
 			    {% endif %}
 		    	<span class="name">课时{{ item.number }}</span>
 		    	<span class="pie">&nbsp;</span>
-		    	<a class="title" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{item.id}}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
+
+		    	{% if item.type == 'testpaper' %}
+		    	  {% set lessonUrl = path('course_manage_do_test', {testId:item.mediaId}) %}
+		    	{% else %}
+		    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+		    	{% endif %}
+		    	<a class="title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" {% if item.type == 'testpaper' %}target="_blank"{% endif %}>
 		    		{{ item.title }}
 		    		{% if item.quizNum > 0 %}
 				      <span class="plll glyphicon  glyphicon-ok-circle" title="测验">测验</span>

@@ -550,6 +550,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'type' => 'text',
 			'content' => '',
 			'media' => array(),
+			'mediaId' => 0,
 			'length' => 0,
 		));
 
@@ -566,7 +567,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -635,6 +636,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$lesson['mediaSource'] = $media['source'];
 				$lesson['mediaUri'] = $media['uri'];
 			}
+		} elseif ($lesson['type'] == 'testpaper') {
+			$lesson['mediaId'] = $lesson['mediaId'];
 		} else {
 			$lesson['mediaId'] = 0;
 			$lesson['mediaName'] = '';
@@ -664,6 +667,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'summary' => '',
 			'content' => '',
 			'media' => array(),
+			'mediaId' => 0,
 			'free' => 0,
 			'length' => 0,
 		));
@@ -858,11 +862,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return null;
 		}
 		return $this->getLessonDao()->getLesson($nextLearnLessonId);
-	}
-
-	public function getLessonByMediaId($mediaId)
-	{
-		return $this->getLessonDao()->getLessonByMediaId($mediaId);
 	}
 
 	public function getChapter($courseId, $chapterId)

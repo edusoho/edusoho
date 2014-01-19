@@ -2,9 +2,14 @@ define(function(require, exports, module) {
 
     var BaseQuestion = require('./question-base');
     var Handlebars = require('handlebars');
+    var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
 
     var ChoiceQuestion = BaseQuestion.extend({
+        attrs: {
+            index : 1,
+        },
+
         events: {
             'click [data-role=add-choice]': 'onAddChoice',
             'click [data-role=delete-choice]': 'onDeleteChoice',
@@ -24,7 +29,7 @@ define(function(require, exports, module) {
             }
             var choiceCount = this.$('[data-role=choice]').length;
             var code = String.fromCharCode(choiceCount + 65);
-            var model = {code: code,id:choiceCount}
+            var model = {code: code,id:this.get('index')}
             this.addChoice(model);
         },
 
@@ -46,6 +51,25 @@ define(function(require, exports, module) {
                 element: '#item-input-'+model.id,
                 required: true
             });
+
+            this.set('index', this.get('index')+1);
+
+            var $trigger = $('#item-upload-' + model.id);
+            var uploader = new Uploader({
+                trigger: $trigger,
+                name: 'file',
+                action: this.element.data('uploadUrl'),
+                accept: 'image/*',
+                error: function(file) {
+                    Notify.danger('上传失败，请重试！')
+                },
+                success: function(response) {
+                    var result = '[image]' + response.hashId + '[/image]';
+                    var $input = $($trigger.data('target'));
+                    $input.val($input.val() + result);
+                }
+            });
+
         },
 
         deleteChoice: function(e){
@@ -109,7 +133,7 @@ define(function(require, exports, module) {
                 for (var i = 0; i < 4; i++) {
                     var choiceCount = this.$('[data-role=choice]').length;
                     var code = String.fromCharCode(choiceCount + 65);
-                    var model = {code: code,id:choiceCount}
+                    var model = {code: code,id:this.get('index')}
                     this.addChoice(model);
                 }
             }

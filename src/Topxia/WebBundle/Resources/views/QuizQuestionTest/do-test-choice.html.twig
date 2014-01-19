@@ -1,0 +1,65 @@
+
+{% if not role|default(null) == 'teacher' %}
+
+
+<div class="testpaper-question testpaper-question-choice" id="question{{ question.id }}">
+
+	{% set keys = [] %}
+	{% set keys_answer = [] %}
+	<div class="testpaper-question-body">
+	  <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-index">
+		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		  </div>
+		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
+	  </div>
+
+		<ul class="testpaper-question-choices">
+			{% for key, choice in question.choices %}
+				<li><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content|bbCode2Html|raw }}</li>
+				{% if key in question.answer %}
+					{% set keys = keys|merge([choice.choiceIndex]) %}
+				{% endif  %}
+				{% if key in question.testResult.answer|default([]) %}
+					{% set keys_answer = keys_answer|merge([choice.choiceIndex]) %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+				{% if question.testResult.status == 'right' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，回答正确
+				{% elseif question.testResult.status == 'wrong' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。回答错误
+				{% elseif question.testResult.status == 'noAnswer' %}
+				  正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你未答题
+				{% endif %}
+		  </div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+	{% else %}
+		<div class="testpaper-question-footer clearfix">
+
+		  <div class="testpaper-question-choice-inputs">
+				{% for choice in question.choices %}
+					<label class="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choice.choiceIndex in keys_answer %}active{% endif %}">
+						<input type="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
+						{{ choice.choiceIndex }}
+					</label> 
+				{% endfor %}
+		  </div>
+		  <div class="testpaper-question-actions pull-right">
+			{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+		  </div>
+		</div>
+	{% endif %}
+</div>
+
+{% endif %}

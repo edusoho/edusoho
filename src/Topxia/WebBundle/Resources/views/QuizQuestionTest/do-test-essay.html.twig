@@ -1,0 +1,96 @@
+<div class="testpaper-question testpaper-question-essay" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  <div class="testpaper-question-stem-wrap clearfix">
+		  <div class="testpaper-question-index">
+		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		  </div>
+		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
+	  </div>
+  </div>
+
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+
+		{% if role|default(null) == 'teacher' %}
+
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
+
+					<ul class="nav nav-pills nav-mini mbm">
+						<li class="active"><a href="#studentAnswer{{ question.id }}" data-toggle="tab">学员回答</a></li>
+						<li><a href="#teacherAnswer{{ question.id }}" data-toggle="tab">参考答案</a></li>
+					</ul>
+					<div class="tab-content mbl">
+						<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0]|default('<span class="text-muted>未回答</span>')|raw }}</div>
+						<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0]|raw }}</div>
+					</div>
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">得分</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" placeholder="得分" name="score_{{ question.id }}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword" class="col-sm-2 control-label">评语</label>
+							<div class="col-sm-9">
+								<textarea class="form-control" rows="3" name="teacherSay_{{ question.id }}"></textarea>
+							</div>
+						</div>
+
+					</div>
+
+
+
+				</div>
+
+			</div>
+
+		{% else %}
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
+			    <div class="testpaper-question-result-suggested">
+				    <div class="testpaper-question-result-title">参考答案：</div>
+				    <div>{{ question.answer[0]|raw }}</div>
+			    </div>
+			    <div class="testpaper-question-result-your">
+				    <div class="testpaper-question-result-title">你的回答：</div>
+						<div>{{ question.testResult.answer[0]|default('未回答')|raw }}</div>
+			    </div>
+			  {% if paperResult.status == 'finished' %}
+			  	<div class="testpaper-question-score mtl">
+			  		<div class="testpaper-question-result-title">得分： {{ question.testResult.score }}</div>
+			  	</div>
+			  	{% if question.testResult.teacherSay != '' %}
+			  	<div class="testpaper-question-teacherSay mtl">
+					<div class="testpaper-question-result-title">评语：</div>
+					<div>{{ question.testResult.teacherSay|raw }}</div>
+				</div>
+				{% endif %}
+			  {% else %}
+			  	<div class="testpaper-question-score mtl">
+			  		<div class="testpaper-question-result-title">老师正在批阅！</div>
+			  	</div>
+			  {% endif %}		
+			  </div>
+
+				<div class="testpaper-question-actions pull-right">
+					{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+				</div>
+			</div>
+			<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+		{% endif %}
+
+	{% else %}
+
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-essay-inputs">
+				<textarea class="form-control testpaper-question-essay-input-btn" data-type="essay" name="{{ question.id }}" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
+		  </div>
+		  <div class="testpaper-question-actions pull-right">
+		  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+		  </div>
+	  </div>
+
+	{% endif %}
+</div>

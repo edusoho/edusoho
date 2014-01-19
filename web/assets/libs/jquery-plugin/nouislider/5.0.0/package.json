@@ -1,0 +1,32 @@
+{
+  "family": "jquery-plugin",
+  "name": "nouislider",
+  "version": "5.0.0",
+  "description": "A lightweight, highly customizable range slider without bloat.",
+  "homepage": "http://refreshless.com/nouislider/",
+  "author": {
+    "name": "Léon Gersen",
+    "url": "https://twitter.com/LeonGersen"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leongersen/noUiSlider.git"
+  },
+  "bugs": "https://github.com/leongersen/noUiSlider/issues",
+  "licenses": [
+    {
+      "type": "WTFPL",
+      "url": "http://www.wtfpl.net/about/"
+    }
+  ],
+  "keywords": [ "jquery", "slider", "nouislider"],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [ 
+      "nouislider.js",
+      "nouislider.css"
+    ]
+  }
+}

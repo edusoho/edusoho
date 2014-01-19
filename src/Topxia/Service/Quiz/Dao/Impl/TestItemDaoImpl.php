@@ -3,7 +3,7 @@
 namespace Topxia\Service\Quiz\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Quiz\Dao\TestItemResultDaoImpl;
+use Topxia\Service\Quiz\Dao\TestItemDao;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Connection;
 
@@ -17,11 +17,11 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addItem($questions)
+    public function addItem($item)
     {
-        $questions = $this->getConnection()->insert($this->table, $questions);
-        if ($questions <= 0) {
-            throw $this->createDaoException('Insert questions error.');
+        $item = $this->getConnection()->insert($this->table, $item);
+        if ($item <= 0) {
+            throw $this->createDaoException('Insert item error.');
         }
         return $this->getItem($this->getConnection()->lastInsertId());
     }
@@ -43,24 +43,10 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function searchItemCount($conditions)
+    public function deleteItemsByTestPaperId($id)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-             ->select('COUNT(id)');
-
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    public function searchItem($conditions, $orderBy, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
-
-        return $builder->execute()->fetchAll() ? : array();
+        $sql = "DELETE FROM {$this->table} WHERE testId = ? ";
+        return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
     public function findItemByIds(array $ids)
@@ -73,6 +59,30 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findItemsByTestPaperId($testPaperId)
+    {
+        $sql ="SELECT * FROM {$this->table} WHERE testId = ? order by `seq` asc ";
+        return $this->getConnection()->fetchAll($sql, array($testPaperId)) ? : array();
+    }
+
+    public function getItemsCountByTestId($testId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE testId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($testId));
+    }
+
+    public function getItemsCountByTestIdAndParentId($testId, $parentId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `parentId` = ?";
+        return $this->getConnection()->fetchColumn($sql, array($testId, $parentId));
+    }
+
+    public function getItemsCountByTestIdAndQuestionType($testId, $questionType)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `questionType` = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($testId, $questionType));
+    }
+
     public function deleteItemByIds(array $ids)
     {
         if(empty($ids)){ 
@@ -83,43 +93,5 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         return $this->getConnection()->executeUpdate($sql, $ids);
     }
 
-    private function _createSearchQueryBuilder($conditions)
-    {
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions')
-            ->andWhere('questionType = :questionType')
-            ->andWhere('parentId = :parentId')
-            ->andWhere('targetId = :targetId')
-            ->andWhere('targetType = :targetType');
-
-        if(empty($conditions['parentId'])){
-            $builder->andStaticWhere(" `parentId` = '0' ");
-            
-        }   
-
-        if (isset($conditions['target']) && empty($conditions['parentId']) ) {
-            $target = array();
-            foreach ($conditions['target'] as $targetType => $targetIds) {
-                if (is_array($targetIds)) {
-                    foreach ($targetIds as $key => $targetId) {
-                        $targetIds[$key] = (int) $targetId;
-                    }
-                    $targetIds = join(' , ', $targetIds);
-                } else {
-                    $targetIds = (int) $targetIds;
-                }
-                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")"  ;
-            }
-            if (!empty($target)) {
-                $target = join(' or ', $target);
-                $builder->andStaticWhere(" ($target) ");
-            }
-        }
-
-
-
-      
-        return $builder;
-    }
 
 }

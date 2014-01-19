@@ -63,14 +63,61 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function findQuestionByIds(array $ids)
+    public function findQuestionsByIds(array $ids)
     {
         if(empty($ids)){ 
             return array(); 
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+
+    public function findQuestionsPaginatorByIds(array $ids, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE `id` IN ({$marks}) LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findQuestionsPaginatorCountByUserId (array $ids)
+    {
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `id` IN ({$marks})";
+        return $this->getConnection()->fetchColumn($sql, $ids);
+    }
+
+    public function findQuestionsByTypeAndTypeIds($type, $ids)
+    {
+        if(empty($ids)||empty($type)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE targetId IN ({$marks}) and targetType = ?;";
+        $ids[] = $type;
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findQuestionsCountByTypeAndTypeIds($type, $ids)
+    {
+        if(empty($ids)||empty($type)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT count(*) FROM {$this->table} WHERE targetType = ? and targetId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $type + $ids) ? : array();
+    }
+
+    public function findQuestionsByParentIds(array $ids)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE parentId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
     }
 
     public function deleteQuestionByIds(array $ids)
@@ -85,30 +132,36 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 
     private function _createSearchQueryBuilder($conditions)
     {
+        if (isset($conditions['stem'])) {
+            $conditions['stem'] = "%{$conditions['stem']}%";
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'questions')
             ->andWhere('questionType = :questionType')
             ->andWhere('parentId = :parentId')
             ->andWhere('targetId = :targetId')
+            ->andWhere('stem LIKE :stem')
             ->andWhere('targetType = :targetType');
 
-        if(empty($conditions['parentId'])){
-            $builder->andStaticWhere(" `parentId` = '0' ");
-            
-        }   
+        if(!empty($conditions['parentIds'])){
+            if(trim(implode($conditions['parentIds'], ',')) != "")
+                $builder->andStaticWhere(" parentId in (".implode($conditions['parentIds'], ',').") ");
+        }
 
-        if (isset($conditions['target']) && empty($conditions['parentId']) ) {
+        if(!empty($conditions['notId'])){
+            if(trim(implode($conditions['notId'], ',')) != "")
+                $builder->andStaticWhere(" id not in (".implode($conditions['notId'], ',').") ");
+        }
+
+        if (!empty($conditions['target'])) {
             $target = array();
             foreach ($conditions['target'] as $targetType => $targetIds) {
-                if (is_array($targetIds)) {
-                    foreach ($targetIds as $key => $targetId) {
-                        $targetIds[$key] = (int) $targetId;
-                    }
-                    $targetIds = join(' , ', $targetIds);
-                } else {
-                    $targetIds = (int) $targetIds;
+                foreach ($targetIds as  $targetId) {
+                    $targetIds[] = (int) $targetId;
                 }
-                $target[] = " targetType ='".$targetType."' and targetId in (".$targetIds.")"  ;
+                
+                $target[] = " targetType ='".$targetType."' and targetId in (".join(' , ', $targetIds).")";
             }
             if (!empty($target)) {
                 $target = join(' or ', $target);
@@ -116,9 +169,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
             }
         }
 
-
-
-      
+        
         return $builder;
     }
 

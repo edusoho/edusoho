@@ -1,0 +1,13 @@
+<tr>
+	<td>
+		<a href="">{{ question.stem|plain_text(40) }}</a>
+		<div class="text-muted">
+		  <small>来自试卷《xxxx》</small>
+		  <small class="mhs">•</small>
+		  <small>收藏于 2012年3月5日 12:22</small>
+		</div>
+	</td>
+	<td>
+		<button data-url="{{ path('course_manage_unfavorite_question', {questionId:question.id, testPaperResultId:testPaperResult.id}) }}" class="btn btn-default btn-sm pull-right unfavorite-btn"><span class="glyphicon glyphicon-star-empty"></span> 取消收藏</button>
+	</td>
+</tr>

@@ -84,9 +84,9 @@ class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImple
             }
         }
         if(count($field['answers']) == 1){
-            $field['type'] = 'choice';
-        }else{
             $field['type'] = 'single_choice';
+        }else{
+            $field['type'] = 'choice';
         }
         return $field;
     }

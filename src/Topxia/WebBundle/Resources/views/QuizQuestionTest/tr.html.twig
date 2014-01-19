@@ -1,0 +1,31 @@
+<tr data-role='item'>
+    <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
+    <td>
+        <a href="{{ path('course_manage_preview_test', {testId:item.id}) }}" target="_blank">{{ item.name|plain_text(40) }}</a>
+    </td>
+    <td>{{ item.itemCount}}题 <span class="text-muted">/</span> {{item.score}}分</td>
+    <td>
+      {% if item.limitedTime > 0 %}{{ item.limitedTime}}分钟{% else %}无限制{% endif %}
+    </td>
+    <td>
+        {{ macro.user_link(users[item.updatedUserId]) }}
+        <br />
+        <span class="text-muted text-sm">{{item.updatedTime | date('Y-n-d H:i:s')}}</span>
+    </td>
+    <td>
+        <div class="btn-group">
+          <a href="{{ path('course_manage_preview_test', {testId:item.id}) }}" class="btn btn-default btn-sm" target="_blank">预览</a>
+
+          <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+          </a>
+
+          <ul class="dropdown-menu pull-right">
+            <li><a href="{{ path('course_manage_test_paper_create_two', {courseId:course.id,testPaperId:item.id,flag:'update'}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
+            <li><a href="javascript:;" class="test-paper-reset" data-url="{{ path('course_manage_test_paper_update_reset', {courseId:course.id,testPaperId:item.id}) }}"><span class="glyphicon glyphicon-repeat"></span> 重新生成题目</a></li>
+            <li><a href="{{ path('course_manage_test_paper_update', {courseId:course.id,testPaperId:item.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑试卷信息</a></li>
+            <li><a href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('course_manage_test_paper_delete', {courseId:course.id, testPaperId:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除试卷</a></li>
+          </ul>
+        </div>
+    </td>
+</tr>
