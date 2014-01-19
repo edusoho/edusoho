@@ -1147,3 +1147,12 @@
 	text-align: center;
 }
 
+/**
+ * edusoho special.
+ */
+.ke-icon-insertblank {
+        background-image: url(icon-insertblank.png);
+        background-position: 0px 0px;
+        width: 16px;
+        height: 16px;
+}

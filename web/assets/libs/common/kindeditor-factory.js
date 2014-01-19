@@ -29,6 +29,8 @@ define(function(require, exports, module) {
         'about'
     ];
 
+    var questionItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'insertblank', '|', 'link', 'unlink', '|', 'removeformat', 'source'];
+
     var contentCss = [];
     contentCss.push('body {font-size: 14px; line-height: 1.428571429;color: #333333;}');
     contentCss.push('a {color: #428bca;}');
@@ -49,6 +51,7 @@ define(function(require, exports, module) {
     configs.simple = $.extend({}, defaultConfig, {items:simpleItems});
     configs.standard = $.extend({}, defaultConfig, {items:standardItems});
     configs.full = $.extend({}, defaultConfig, {items:fullItems});
+    configs.question = $.extend({}, defaultConfig, {items:questionItems});
 
     function getConfig(name, extendConfig) {
         if (!extendConfig) {
