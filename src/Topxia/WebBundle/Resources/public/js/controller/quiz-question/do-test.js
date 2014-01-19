@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
 
 // 做试卷
-        var interval = 10;
+        var interval = 180;
 
         var changeAnswers = {};
 
