@@ -238,7 +238,7 @@ class DoTestController extends BaseController
 			$total[$value]['number'] = count($questions[$value]);
 		}
 
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:test-teacher-check.html.twig', array(
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-review.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
 			'paper' => $paper,
