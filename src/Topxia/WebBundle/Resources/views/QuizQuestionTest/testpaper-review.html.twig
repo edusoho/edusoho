@@ -2,9 +2,13 @@
 
 {% set role = 'teacher' %}
 
+{% set showTestpaperNavbar = 'off' %}
+
 {% block testpaper_heading_content %}
 
 {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
+
+<div class="text-info mbl">请完成以下题目的批阅：</div>
 
 {% endblock %}
 

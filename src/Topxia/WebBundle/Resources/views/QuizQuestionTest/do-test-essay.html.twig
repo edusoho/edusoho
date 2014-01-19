@@ -12,29 +12,36 @@
 
 		{% if role|default(null) == 'teacher' %}
 
-			<div class="panel-body">
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
 
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#studentAnswer{{ question.id }}" data-toggle="tab">学员回答</a></li>
-					<li><a href="#teacherAnswer{{ question.id }}" data-toggle="tab">参考答案</a></li>
-				</ul>
-				<br>
-				<div class="tab-content">
-					<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0]|default('') }}</div>
-					<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0] }}</div>
-				</div>
-				<br>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">得分</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" placeholder="得分" name="score_{{ question.id }}">
+					<ul class="nav nav-pills nav-mini mbm">
+						<li class="active"><a href="#studentAnswer{{ question.id }}" data-toggle="tab">学员回答</a></li>
+						<li><a href="#teacherAnswer{{ question.id }}" data-toggle="tab">参考答案</a></li>
+					</ul>
+					<div class="tab-content mbl">
+						<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0]|default('<span class="text-muted>未回答</span>')|raw }}</div>
+						<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0]|raw }}</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="inputPassword" class="col-sm-2 control-label">评语</label>
-					<div class="col-sm-10">
-						<textarea class="form-control" rows="3" name="teacherSay_{{ question.id }}"></textarea>
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">得分</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" placeholder="得分" name="score_{{ question.id }}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword" class="col-sm-2 control-label">评语</label>
+							<div class="col-sm-9">
+								<textarea class="form-control" rows="3" name="teacherSay_{{ question.id }}"></textarea>
+							</div>
+						</div>
+
 					</div>
+
+
+
 				</div>
 
 			</div>
