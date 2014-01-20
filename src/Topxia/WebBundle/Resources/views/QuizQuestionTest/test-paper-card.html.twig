@@ -11,7 +11,7 @@
 	</div>
 	<div class="panel-body">
 
-		{% for type in paper.metas.question_type_seq|split(',') %}
+		{% for type in paper.metas.question_type_seq %}
 
 			{% for question in questions[type] %}
 				{% if question.questionType != 'material' %}

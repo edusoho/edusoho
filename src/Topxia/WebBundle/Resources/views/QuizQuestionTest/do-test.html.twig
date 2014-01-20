@@ -1,12 +1,12 @@
 {% if showTestpaperNavbar|default('on') == 'off' %}
-	{% set types = ['essay', 'material'] %}
 	<form id='teacherCheckForm'>
-{% else %}
-	{% set types = paper.metas.question_type_seq|split(',') %}
 {% endif %}
+{# {% if not types %}
+	{% set types = paper.metas.question_type_seq %}
+{% endif %} #}
 
 
-{% for type in types %}
+{% for type in types|default(paper.metas.question_type_seq) %}
 
 <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
   <div class="panel-heading">{{dict('questionBlockType')[type]}}

@@ -912,6 +912,9 @@ class TestPaperSerialize
         }
 
         $item['metas'] = json_decode($item['metas'], true);
+        foreach ($item['metas'] as $key => $value) {
+            $item['metas'][$key] = explode(',', $value);
+        }
         return $item;
     }
 
