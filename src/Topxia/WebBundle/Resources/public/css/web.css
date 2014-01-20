@@ -3451,6 +3451,11 @@ body {
 	margin-right: 20px;
 }
 
+.testpaper-question-choice-right, 
+.testpaper-question-choice-right .testpaper-question-choice-index {
+	color: #3c763d;
+}
+
 .testpaper-question-choice-inputs {
 	margin-left: 50px;
 	float: left;
