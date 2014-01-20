@@ -13,19 +13,15 @@
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
         <div class="panel-body">
-          
-          {% set index = 1 %}
 
-          {% for type in paper.metas.question_type_seq|split(',') %}
+          {% for type in paper.metas.question_type_seq %}
 
             {% for question in questions[type] %}
               {% if question.questionType != 'material' %}
-                <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ index }}</a>
-                {% set index = index + 1 %}
+                <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ question.seq }}</a>
               {% else %}
                 {% for question in question.questions %}
-                  <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ index }}</a>
-                  {% set index = index + 1 %}
+                  <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ question.seq }}</a>
                 {% endfor %}
               {% endif %}
               

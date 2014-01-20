@@ -3318,6 +3318,16 @@ body {
     margin-bottom: 20px;
 }
 
+.testpaper-preview-tip {
+	background-color: #f0ad4e;
+	color: #fff;
+	float: right;
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-weight: bold;
+	margin-top: 9px;
+}
+
 .testpaper-result {
 
 }
@@ -3385,13 +3395,6 @@ body {
 	}
 }
 
-
-
-
-
-
-
-
 .testpaper-question {
 	margin-bottom: 50px;
 	font-size: 14px;
@@ -3403,18 +3406,35 @@ body {
 	border-top: none;
 }
 
+.modal .testpaper-question {
+	border-top: none;
+	padding-top: 0;
+}
+
 .testpaper-question-main {
-	float: left;
+	float: left; 
 	margin-left: 50px;
 }
 
-.testpaper-question-index {
+.testpaper-question-seq-wrap {
 	float: left;
 	width: 40px;
 	margin-right: 10px;
 	text-align: center;
+}
+
+.testpaper-question-seq {
 	font-size: 20px;
 	color: #3a87ad;
+}
+
+.testpaper-question-score {
+	font-size:12px;
+	color:#aaa;
+	border:1px solid #ccc;
+	padding:0px 1px;
+	border-radius:5px;
+	background:#f6f6f6;
 	display: inline-block;
 }
 
@@ -3451,6 +3471,11 @@ body {
 .testpaper-question-choice-index {
 	color: #999;
 	margin-right: 20px;
+}
+
+.testpaper-question-choice-right, 
+.testpaper-question-choice-right .testpaper-question-choice-index {
+	color: #3c763d;
 }
 
 .testpaper-question-choice-inputs {
