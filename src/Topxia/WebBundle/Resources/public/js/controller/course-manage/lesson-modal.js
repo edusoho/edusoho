@@ -90,6 +90,8 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $form = $("#course-lesson-form");
 
+        var $content = $("#lesson-content-field");
+
         var choosedMedia = $form.find('[name="media"]').val();
         choosedMedia = choosedMedia ? $.parseJSON(choosedMedia) : {};
         
@@ -167,7 +169,14 @@ define(function(require, exports, module) {
         
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
+            var z = editor.html();
+            var x = editor.html().match(/<embed[\s\S]*?\/>/g);
+            for (var i = x.length - 1; i >= 0; i--) {
+               var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+               var z =  z.replace(x[i],y);
+            };
+            $content.val(z);
         });
-
+ 
     };
 });
