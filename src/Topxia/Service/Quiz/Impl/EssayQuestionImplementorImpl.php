@@ -14,12 +14,9 @@ class EssayQuestionImplementorImpl extends BaseQuestionImplementor implements Qu
 
 	public function createQuestion($question)
     {
-        if (empty($question['answers'])){
+        if (empty($question['answer'])){
             throw $this->createServiceException('缺少必要字段answers，创建题目失败！');
         }
-
-        $question['answer'] = $question['answers'];
-        unset($question['answers']);
 
         $question = $this->filterQuestionFields($question);
 
@@ -28,13 +25,15 @@ class EssayQuestionImplementorImpl extends BaseQuestionImplementor implements Qu
         );
 	}
 
-    public function updateQuestion($id, $question, $field){
-    	if(empty($question['answers'])){
+    public function updateQuestion($id, $question){
+    	if(empty($question['answer'])){
             throw $this->createServiceException('缺少必要字段,answers，创建课程失败！');
         }
-        $field['answer'] = $question['answers'];
+
+        $question = $this->filterQuestionFields($question);
+
         return QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($question))
         );
     }
 
