@@ -5,29 +5,24 @@
 	{% if question.questionType == 'single_choice' or question.questionType == 'choice' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-		{% if questionIndex|default(null) %}{% set questionIndex = questionIndex + 1 %}{% endif %}
-		
 
 	{% endif %}
 
 	{% if question.questionType == 'determine' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-determine.html.twig' %}
-		{% if questionIndex|default(null) %}{% set questionIndex = questionIndex + 1 %}{% endif %}
 
 	{% endif %}
 
 	{% if question.questionType == 'fill' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-fill.html.twig' %}
-		{% if questionIndex|default(null) %}{% set questionIndex = questionIndex + 1 %}{% endif %}
 
 	{% endif %}
 
 	{% if question.questionType == 'essay' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-essay.html.twig' %}
-		{% if questionIndex|default(null) %}{% set questionIndex = questionIndex + 1 %}{% endif %}
 
 	{% endif %}
 

@@ -241,6 +241,17 @@ define(function(require, exports, module) {
             });
         });
 
+        //老师批阅
+
+        $('.testpaper-card').on('click', '#postPaper', function(){
+            $finishBtn = $(this);
+
+            $.post($(this).data('url'), $('#teacherCheckForm').serialize(), function(){
+                window.location.href = $finishBtn.data('goto');
+            });
+
+        });
+
 
 
         //问答题富文本编辑器部分

@@ -1,13 +1,12 @@
-{% set questionIndex = 1 %}
-
 {% if showTestpaperNavbar|default('on') == 'off' %}
-	{% set types = ['essay', 'material'] %}
-{% else %}
-	{% set types = paper.metas.question_type_seq|split(',') %}
+	<form id='teacherCheckForm'>
 {% endif %}
+{# {% if not types %}
+	{% set types = paper.metas.question_type_seq %}
+{% endif %} #}
 
 
-{% for type in types %}
+{% for type in types|default(paper.metas.question_type_seq) %}
 
 <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
   <div class="panel-heading">{{dict('questionBlockType')[type]}}
@@ -18,12 +17,10 @@
 
 			{% if type in ['single_choice', 'choice'] %}
 				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-				{% set questionIndex = questionIndex + 1 %}
 
 			{% else %}
 
 				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
-				{% set questionIndex = questionIndex + 1 %}
 
 			{% endif %}
 
@@ -34,84 +31,6 @@
 
 {% endfor %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{# 
-
-<div class="panel panel-default" id="testpaper-questions-singlechoice">
-  <div class="panel-heading">单项选择题</div>
-  <div class="panel-body">
-		{% for question in questions.single_choice %}
-			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-			{% set questionIndex = questionIndex + 1 %}
-		{% endfor %}
-  </div>
-</div>
-
-<div class="panel panel-default" id="testpaper-questions-singlechoice">
-  <div class="panel-heading">多项选择题</div>
-  <div class="panel-body">
-		{% for question in questions.choice %}
-			{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-			{% set questionIndex = questionIndex + 1 %}
-		{% endfor %}
-  </div>
-</div>
-	
-
-
-<div id="determine"></div>
-{% for question in questions.determine %}
-
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-determine.html.twig' %}
-	{% set questionIndex = questionIndex + 1 %}
-
-{% endfor %}
-<div id="fill"></div>
-{% for question in questions.fill %}
-
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-fill.html.twig' %}
-	{% set questionIndex = questionIndex + 1 %}
-
-{% endfor %}
-<div id="essay"></div>
-{% for question in questions.essay %}
-
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-essay.html.twig' %}
-	{% set questionIndex = questionIndex + 1 %}
-
-{% endfor %}
-<div id="material"></div>
-{% for question in questions.material %}
-
-	{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-material.html.twig' %}
-
-{% endfor %}
- #}
+{% if showTestpaperNavbar|default('on') == 'off' %}
+</form>
+{% endif %}

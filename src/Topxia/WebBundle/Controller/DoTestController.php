@@ -38,7 +38,7 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
-		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+		foreach ($paper['metas']['question_type_seq'] as $value) {
 			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
 			$total[$value]['number'] = count($questions[$value]);
 		}
@@ -80,7 +80,7 @@ class DoTestController extends BaseController
 		$this->getTestService()->updatePaperResult($id, 'doing', $testResult['remainTime']);
 
 		$total = array();
-		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+		foreach ($paper['metas']['question_type_seq'] as $value) {
 			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
 			$total[$value]['number'] = count($questions[$value]);
 		}
@@ -156,7 +156,7 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
-		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+		foreach ($paper['metas']['question_type_seq'] as $value) {
 			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
 			$total[$value]['number'] = count($questions[$value]);
 		}
@@ -233,10 +233,27 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
-		foreach (explode(',', $paper['metas']['question_type_seq']) as $value) {
+		foreach ($paper['metas']['question_type_seq'] as $value) {
 			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
 			$total[$value]['number'] = count($questions[$value]);
 		}
+
+		$types =array();
+		if (in_array('essay', $paper['metas']['question_type_seq'])){
+			array_push($types, 'eassy');
+		}
+		if (in_array('material', $paper['metas']['question_type_seq'])){
+			
+			foreach ($questions['material'] as $key => $value) {
+
+				$questionTypes = ArrayToolkit::index($value['questions'], 'questionType');
+
+				if(array_key_exists('essay', $questionTypes)){
+					array_push($types, 'material');
+				}
+			}
+		}
+
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-review.html.twig', array(
 			'questions' => $questions,
@@ -244,7 +261,8 @@ class DoTestController extends BaseController
 			'paper' => $paper,
 			'paperResult' => $paperResult,
 			'id' => $id,
-			'total' => $total
+			'total' => $total,
+			'types' => $types
 		));
 	}
 
@@ -289,14 +307,14 @@ class DoTestController extends BaseController
         ));
 	}
 
-	private function makeShowScoreByType ($questions, $paper)
-	{
-		$types = explode(',', $paper['metas']['question_type_seq']);
-		$totalScores = array();
-		foreach ($questions as $key => $value) {
-			// $totalScores[$value['questionType']] = 
-		}
-	}
+	// private function makeShowScoreByType ($questions, $paper)
+	// {
+	// 	$types = explode(',', $paper['metas']['question_type_seq']);
+	// 	$totalScores = array();
+	// 	foreach ($questions as $key => $value) {
+	// 		// $totalScores[$value['questionType']] = 
+	// 	}
+	// }
 
 	private function makeAccuracy ($questions)
     {
@@ -361,6 +379,10 @@ class DoTestController extends BaseController
 	{
 		$formatQuestions = array();
 		$number = 0;
+
+		$questions = ArrayToolkit::index($questions, 'seq');
+		ksort($questions);
+
 		foreach ($questions as $key => $value) {
 
 			if(in_array($value['questionType'], array('single_choice', 'choice'))) {
