@@ -240,7 +240,7 @@ class DoTestController extends BaseController
 
 		$types =array();
 		if (in_array('essay', $paper['metas']['question_type_seq'])){
-			array_push($types, 'eassy');
+			array_push($types, 'essay');
 		}
 		if (in_array('material', $paper['metas']['question_type_seq'])){
 			
