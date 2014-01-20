@@ -18,7 +18,7 @@ define(function(require, exports, module) {
                       Notify.success('保存成功');
                   } else {
                       $(".tbady-category").append(html);
-                      $(".tbady-category").find('.empty').hide();
+                      $(".tbady-category").find('.empty').parents('tr').remove();
                       Notify.success('添加成功');
                   }
                   $form.parents('.modal').modal('hide');

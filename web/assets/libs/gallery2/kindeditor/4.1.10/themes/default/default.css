@@ -862,12 +862,13 @@
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
+	*height: 25px;
 }
 .ke-upload-area .ke-upload-file {
 	position: absolute;
+	font-size: 60px;
 	top: 0;
 	right: 0;
-	height: 25px;
 	padding: 0;
 	margin: 0;
 	z-index: 811212;
@@ -1146,3 +1147,12 @@
 	text-align: center;
 }
 
+/**
+ * edusoho special.
+ */
+.ke-icon-insertblank {
+        background-image: url(icon-insertblank.png);
+        background-position: 0px 0px;
+        width: 16px;
+        height: 16px;
+}

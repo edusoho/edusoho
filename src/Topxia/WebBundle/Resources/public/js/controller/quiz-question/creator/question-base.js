@@ -63,7 +63,7 @@ define(function(require, exports, module) {
         },
 
         _initStemField: function() {
-            var editor = EditorFactory.create('#question-stem-field', 'simple_noimage');
+            var editor = EditorFactory.create('#question-stem-field', 'question');
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.sync();
             });

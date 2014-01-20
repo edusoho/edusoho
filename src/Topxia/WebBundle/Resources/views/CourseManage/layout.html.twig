@@ -36,6 +36,7 @@
             <div class="list-group-heading">题库</div>
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'quizQuestion' %}active{% endif %}" href="{{ path('course_manage_quiz_question', {courseId:course.id}) }}">题目管理</a>
+              <a class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}" href="{{ path('course_manage_quiz_question_category', {courseId:course.id}) }}">题目类别管理</a>
               <a class="list-group-item {% if side_nav == 'testPaper' %}active{% endif %}" href="{{ path('course_manage_test_paper', {courseId:course.id}) }}">试卷管理</a>
               <a class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">试卷批阅</a>
             </div>

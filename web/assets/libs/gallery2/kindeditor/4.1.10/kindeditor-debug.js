@@ -1,4 +1,4 @@
-define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, exports, module) {
+define("gallery2/kindeditor/4.1.10/kindeditor-debug", [], function(require, exports, module) {
     /*******************************************************************************
 	* KindEditor - WYSIWYG HTML Editor for Internet
 	* Copyright (C) 2006-2013 kindsoft.net
@@ -6,7 +6,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
 	* @author Roddy <luolonghao@gmail.com>
 	* @website http://www.kindsoft.net/
 	* @licence http://www.kindsoft.net/license.php
-	* @version 4.1.7 (2013-04-21)
+	* @version 4.1.10 (2013-11-23)
 	*******************************************************************************/
     (function(window, undefined) {
         if (window.KindEditor) {
@@ -18,7 +18,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         if (!console.log) {
             console.log = function() {};
         }
-        var _VERSION = "4.1.7 (2013-04-21)", _ua = navigator.userAgent.toLowerCase(), _IE = _ua.indexOf("msie") > -1 && _ua.indexOf("opera") == -1, _GECKO = _ua.indexOf("gecko") > -1 && _ua.indexOf("khtml") == -1, _WEBKIT = _ua.indexOf("applewebkit") > -1, _OPERA = _ua.indexOf("opera") > -1, _MOBILE = _ua.indexOf("mobile") > -1, _IOS = /ipad|iphone|ipod/.test(_ua), _QUIRKS = document.compatMode != "CSS1Compat", _matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua), _V = _matches ? _matches[1] : "0", _TIME = new Date().getTime();
+        var _VERSION = "4.1.10 (2013-11-23)", _ua = navigator.userAgent.toLowerCase(), _IE = _ua.indexOf("msie") > -1 && _ua.indexOf("opera") == -1, _NEWIE = _ua.indexOf("msie") == -1 && _ua.indexOf("trident") > -1, _GECKO = _ua.indexOf("gecko") > -1 && _ua.indexOf("khtml") == -1, _WEBKIT = _ua.indexOf("applewebkit") > -1, _OPERA = _ua.indexOf("opera") > -1, _MOBILE = _ua.indexOf("mobile") > -1, _IOS = /ipad|iphone|ipod/.test(_ua), _QUIRKS = document.compatMode != "CSS1Compat", _IERANGE = !window.getSelection, _matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua), _V = _matches ? _matches[1] : "0", _TIME = new Date().getTime();
         function _isArray(val) {
             if (!val) {
                 return false;
@@ -343,15 +343,17 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 var ev = this.event;
                 if (ev.preventDefault) {
                     ev.preventDefault();
+                } else {
+                    ev.returnValue = false;
                 }
-                ev.returnValue = false;
             },
             stopPropagation: function() {
                 var ev = this.event;
                 if (ev.stopPropagation) {
                     ev.stopPropagation();
+                } else {
+                    ev.cancelBubble = true;
                 }
-                ev.cancelBubble = true;
             },
             stop: function() {
                 this.preventDefault();
@@ -490,12 +492,18 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 }
             });
         }
+        var _readyFinished = false;
         function _ready(fn) {
+            if (_readyFinished) {
+                fn(KindEditor);
+                return;
+            }
             var loaded = false;
             function readyFunc() {
                 if (!loaded) {
                     loaded = true;
                     fn(KindEditor);
+                    _readyFinished = true;
                 }
             }
             function ieReadyFunc() {
@@ -646,6 +654,9 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             return url;
         }
         function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
+            if (html == null) {
+                html = "";
+            }
             urlType = urlType || "";
             wellFormatted = _undef(wellFormatted, false);
             indentChar = _undef(indentChar, "	");
@@ -657,6 +668,10 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/gi, "$1<br />$2");
             html = html.replace(/\u200B/g, "");
             html = html.replace(/\u00A9/g, "&copy;");
+            html = html.replace(/\u00AE/g, "&reg;");
+            html = html.replace(/<[^>]+/g, function($0) {
+                return $0.replace(/\s+/g, " ");
+            });
             var htmlTagMap = {};
             if (htmlTags) {
                 _each(htmlTags, function(key, val) {
@@ -672,7 +687,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     html = html.replace(/(<(?:style|style\s[^>]*)>)([\s\S]*?)(<\/style>)/gi, "");
                 }
             }
-            var re = /([ \t\n\r]*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:"]+="[^"]*")|(?:\s+[\w\-:"]+='[^']*'))*)(\/)?>([ \t\n\r]*)/g;
+            var re = /(\s*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:"]+="[^"]*")|(?:\s+[\w\-:"]+='[^']*'))*)(\/)?>(\s*)/g;
             var tagStack = [];
             html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
                 var full = $0, startNewline = $1 || "", startSlash = $2 || "", tagName = $3.toLowerCase(), attr = $4 || "", endSlash = $5 ? " " + $5 : "", endNewline = $6 || "";
@@ -841,10 +856,14 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         }
         function _mediaImg(blankPath, attrs) {
             var width = attrs.width, height = attrs.height, type = attrs.type || _mediaType(attrs.src), srcTag = _mediaEmbed(attrs), style = "";
-            if (width > 0) {
+            if (/\D/.test(width)) {
+                style += "width:" + width + ";";
+            } else if (width > 0) {
                 style += "width:" + width + "px;";
             }
-            if (height > 0) {
+            if (/\D/.test(height)) {
+                style += "height:" + height + ";";
+            } else if (height > 0) {
                 style += "height:" + height + "px;";
             }
             var html = '<img class="' + _mediaClass(type) + '" src="' + blankPath + '" ';
@@ -977,7 +996,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 for (var i = 0, len = els.length; i < len; i++) {
                     el = els[i];
                     if (cmpTag(tag, el.nodeName) && _contains(root, el)) {
-                        if (el.getAttributeNode("name")) {
+                        if (el.getAttribute("name") !== null) {
                             arr.push(el);
                         }
                     }
@@ -1165,7 +1184,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         function _getScrollPos(doc) {
             doc = doc || document;
             var x, y;
-            if (_IE || _OPERA) {
+            if (_IE || _NEWIE || _OPERA) {
                 x = _docElement(doc).scrollLeft;
                 y = _docElement(doc).scrollTop;
             } else {
@@ -1957,7 +1976,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     start.offset = 0;
                 }
             }
-            if (_IE) {
+            if (_IERANGE) {
                 if (rng.item) {
                     doc = _getDoc(rng.item(0));
                     range = new KRange(doc);
@@ -2066,7 +2085,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             },
             compareBoundaryPoints: function(how, range) {
                 var rangeA = this.get(), rangeB = range.get();
-                if (_IE) {
+                if (_IERANGE) {
                     var arr = {};
                     arr[_START_TO_START] = "StartToStart";
                     arr[_START_TO_END] = "EndToStart";
@@ -2127,7 +2146,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 return new KRange(this.doc).setStart(this.startContainer, this.startOffset).setEnd(this.endContainer, this.endOffset);
             },
             toString: function() {
-                var rng = this.get(), str = _IE ? rng.text : rng.toString();
+                var rng = this.get(), str = _IERANGE ? rng.text : rng.toString();
                 return str.replace(/\r\n|\n|\r/g, "");
             },
             cloneContents: function() {
@@ -2201,7 +2220,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             },
             get: function(hasControlRange) {
                 var self = this, doc = self.doc, node, rng;
-                if (!_IE) {
+                if (!_IERANGE) {
                     rng = doc.createRange();
                     try {
                         rng.setStart(self.startContainer, self.startOffset);
@@ -2404,7 +2423,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         }
         function _getSel(doc) {
             var win = _getWin(doc);
-            return doc.selection || win.getSelection();
+            return _IERANGE ? doc.selection : win.getSelection();
         }
         function _getRng(doc) {
             var sel = _getSel(doc), rng;
@@ -2415,7 +2434,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     rng = sel.createRange();
                 }
             } catch (e) {}
-            if (_IE && (!rng || !rng.item && rng.parentElement().ownerDocument !== doc)) {
+            if (_IERANGE && (!rng || !rng.item && rng.parentElement().ownerDocument !== doc)) {
                 return null;
             }
             return rng;
@@ -2605,7 +2624,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 hasDummy = _undef(hasDummy, true);
                 var self = this, sel = self.sel, range = self.range.cloneRange().shrink(), sc = range.startContainer, so = range.startOffset, ec = range.endContainer, eo = range.endOffset, doc = _getDoc(sc), win = self.win, rng, hasU200b = false;
                 if (hasDummy && sc.nodeType == 1 && range.collapsed) {
-                    if (_IE) {
+                    if (_IERANGE) {
                         var dummy = K("<span>&nbsp;</span>", doc);
                         range.insertNode(dummy[0]);
                         rng = doc.body.createTextRange();
@@ -2626,7 +2645,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                         }
                     }
                 }
-                if (_IE) {
+                if (_IERANGE) {
                     try {
                         rng = range.get(true);
                         rng.select();
@@ -2988,30 +3007,19 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 });
             },
             forecolor: function(val) {
-                return this.toggle('<span style="color:' + val + ';"></span>', {
-                    span: ".color=" + val,
-                    font: "color"
-                });
+                return this.wrap('<span style="color:' + val + ';"></span>').select();
             },
             hilitecolor: function(val) {
-                return this.toggle('<span style="background-color:' + val + ';"></span>', {
-                    span: ".background-color=" + val
-                });
+                return this.wrap('<span style="background-color:' + val + ';"></span>').select();
             },
             fontsize: function(val) {
-                return this.toggle('<span style="font-size:' + val + ';"></span>', {
-                    span: ".font-size=" + val,
-                    font: "size"
-                });
+                return this.wrap('<span style="font-size:' + val + ';"></span>').select();
             },
             fontname: function(val) {
                 return this.fontfamily(val);
             },
             fontfamily: function(val) {
-                return this.toggle('<span style="font-family:' + val + ';"></span>', {
-                    span: ".font-family=" + val,
-                    font: "face"
-                });
+                return this.wrap('<span style="font-family:' + val + ';"></span>').select();
             },
             removeformat: function() {
                 var map = {
@@ -3053,7 +3061,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     range.collapse(false);
                     self.select(false);
                 }
-                if (_IE && quickMode) {
+                if (_IERANGE && quickMode) {
                     try {
                         pasteHtml(range, val);
                     } catch (e) {
@@ -3117,14 +3125,25 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     range.selectNode(node[0]);
                     return self.select();
                 }
+                function setAttr(node, url, type) {
+                    K(node).attr("href", url).attr("data-ke-src", url);
+                    if (type) {
+                        K(node).attr("target", type);
+                    } else {
+                        K(node).removeAttr("target");
+                    }
+                }
+                var sc = range.startContainer, so = range.startOffset, ec = range.endContainer, eo = range.endOffset;
+                if (sc.nodeType == 1 && sc === ec && so + 1 === eo) {
+                    var child = sc.childNodes[so];
+                    if (child.nodeName.toLowerCase() == "a") {
+                        setAttr(child, url, type);
+                        return self;
+                    }
+                }
                 _nativeCommand(doc, "createlink", "__kindeditor_temp_url__");
                 K('a[href="__kindeditor_temp_url__"]', doc).each(function() {
-                    K(this).attr("href", url).attr("data-ke-src", url);
-                    if (type) {
-                        K(this).attr("target", type);
-                    } else {
-                        K(this).removeAttr("target");
-                    }
+                    setAttr(this, url, type);
                 });
                 return self;
             },
@@ -3157,7 +3176,10 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 var self = this;
                 self.select();
                 _nativeCommand(self.doc, name, val);
-                if (!_IE || _inArray(name, "formatblock,selectall,insertorderedlist,insertunorderedlist".split(",")) >= 0) {
+                if (_IERANGE && _inArray(name, "justifyleft,justifycenter,justifyright,justifyfull".split(",")) >= 0) {
+                    self.selection();
+                }
+                if (!_IERANGE || _inArray(name, "formatblock,selectall,insertorderedlist,insertunorderedlist".split(",")) >= 0) {
                     self.selection();
                 }
                 return self;
@@ -3421,9 +3443,12 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 self.beforeGetHtml = options.beforeGetHtml;
                 self.beforeSetHtml = options.beforeSetHtml;
                 self.afterSetHtml = options.afterSetHtml;
-                var themesPath = _undef(options.themesPath, ""), bodyClass = options.bodyClass, cssPath = options.cssPath, cssData = options.cssData, isDocumentDomain = location.host.replace(/:\d+/, "") !== document.domain, srcScript = "document.open();" + (isDocumentDomain ? 'document.domain="' + document.domain + '";' : "") + "document.close();", iframeSrc = _IE ? ' src="javascript:void(function(){' + encodeURIComponent(srcScript) + '}())"' : "";
+                var themesPath = _undef(options.themesPath, ""), bodyClass = options.bodyClass, cssPath = options.cssPath, cssData = options.cssData, isDocumentDomain = location.protocol != "res:" && location.host.replace(/:\d+/, "") !== document.domain, srcScript = "document.open();" + (isDocumentDomain ? 'document.domain="' + document.domain + '";' : "") + "document.close();", iframeSrc = _IE ? ' src="javascript:void(function(){' + encodeURIComponent(srcScript) + '}())"' : "";
                 self.iframe = K('<iframe class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + "></iframe>").css("width", "100%");
                 self.textarea = K('<textarea class="ke-edit-textarea" hidefocus="true"></textarea>').css("width", "100%");
+                self.tabIndex = isNaN(parseInt(options.tabIndex, 10)) ? self.srcElement.attr("tabindex") : parseInt(options.tabIndex, 10);
+                self.iframe.attr("tabindex", self.tabIndex);
+                self.textarea.attr("tabindex", self.tabIndex);
                 if (self.width) {
                     self.setWidth(self.width);
                 }
@@ -3508,12 +3533,16 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 !isDocumentDomain && ready();
             },
             setWidth: function(val) {
-                this.div.css("width", _addUnit(val));
-                return this;
+                var self = this;
+                val = _addUnit(val);
+                self.width = val;
+                self.div.css("width", val);
+                return self;
             },
             setHeight: function(val) {
                 var self = this;
                 val = _addUnit(val);
+                self.height = val;
                 self.div.css("height", val);
                 self.iframe.css("height", val);
                 if (_IE && _V < 8 || _QUIRKS) {
@@ -3922,8 +3951,9 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 self.button = button;
                 self.iframe = options.target ? K('iframe[name="' + target + '"]') : K("iframe", div);
                 self.form = options.form ? K(options.form) : K("form", div);
+                self.fileBox = K(".ke-upload-file", div);
                 var width = options.width || K(".ke-button-common", div).width();
-                self.fileBox = K(".ke-upload-file", div).width(width);
+                K(".ke-upload-area", div).width(width);
                 self.options = options;
             },
             submit: function() {
@@ -4527,12 +4557,10 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             self.initContent = "";
             self.plugin = {};
             self.isCreated = false;
-            self.isLoading = false;
             self._handlers = {};
             self._contextmenus = [];
             self._undoStack = [];
             self._redoStack = [];
-            self._calledPlugins = {};
             self._firstAddBookmark = true;
             self.menu = self.contextmenu = null;
             self.dialogs = [];
@@ -4544,28 +4572,25 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             loadPlugin: function(name, fn) {
                 var self = this;
                 if (_plugins[name]) {
-                    if (self._calledPlugins[name]) {
-                        if (fn) {
-                            fn.call(self);
-                        }
+                    if (!_isFunction(_plugins[name])) {
+                        setTimeout(function() {
+                            self.loadPlugin(name, fn);
+                        }, 100);
                         return self;
                     }
                     _plugins[name].call(self, KindEditor);
                     if (fn) {
                         fn.call(self);
                     }
-                    self._calledPlugins[name] = true;
                     return self;
                 }
-                if (self.isLoading) {
-                    return self;
-                }
-                self.isLoading = true;
+                _plugins[name] = "loading";
                 _loadScript(self.pluginsPath + name + "/" + name + ".js?ver=" + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
-                    self.isLoading = false;
-                    if (_plugins[name]) {
-                        self.loadPlugin(name, fn);
-                    }
+                    setTimeout(function() {
+                        if (_plugins[name]) {
+                            self.loadPlugin(name, fn);
+                        }
+                    }, 0);
                 });
                 return self;
             },
@@ -4716,6 +4741,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     cssData: self.cssData,
                     beforeGetHtml: function(html) {
                         html = self.beforeGetHtml(html);
+                        html = _removeBookmarkTag(_removeTempTag(html));
                         return _formatHtml(html, self.filterMode ? self.htmlTags : null, self.urlType, self.wellFormatMode, self.indentChar);
                     },
                     beforeSetHtml: function(html) {
@@ -4762,6 +4788,14 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                         self.isCreated = true;
                         if (self.initContent === "") {
                             self.initContent = self.html();
+                        }
+                        if (self._undoStack.length > 0) {
+                            var prev = self._undoStack.pop();
+                            if (prev.start) {
+                                self.html(prev.html);
+                                edit.cmd.range.moveToBookmark(prev);
+                                self.select();
+                            }
                         }
                         self.afterCreate();
                         if (self.options.afterCreate) {
@@ -4907,13 +4941,15 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 return _trim(this.initContent.replace(/\r\n|\n|\r|t/g, "")) !== _trim(this.html().replace(/\r\n|\n|\r|t/g, ""));
             },
             selectedHtml: function() {
-                return this.isCreated ? this.cmd.range.html() : "";
+                var val = this.isCreated ? this.cmd.range.html() : "";
+                val = _removeBookmarkTag(_removeTempTag(val));
+                return val;
             },
             count: function(mode) {
                 var self = this;
                 mode = (mode || "html").toLowerCase();
                 if (mode === "html") {
-                    return _removeBookmarkTag(_removeTempTag(self.html())).length;
+                    return self.html().length;
                 }
                 if (mode === "text") {
                     return self.text().replace(/<(?:img|embed).*?>/gi, "K").replace(/\r\n|\n|\r/g, "").length;
@@ -4996,6 +5032,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             },
             fullscreen: function(bool) {
                 this.fullscreenMode = bool === undefined ? !this.fullscreenMode : bool;
+                this.addBookmark(false);
                 return this.remove().create();
             },
             readonly: function(isReadonly) {
@@ -5122,7 +5159,9 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             }
             function create(editor) {
                 _each(_plugins, function(name, fn) {
-                    fn.call(editor, KindEditor);
+                    if (_isFunction(fn)) {
+                        fn.call(editor, KindEditor);
+                    }
                 });
                 return editor.create();
             }
@@ -5151,7 +5190,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
             K(expr).each(function(i, el) {
                 K.each(_instances, function(j, editor) {
                     if (editor && editor.srcElement[0] == el) {
-                        fn.call(editor, j, editor);
+                        fn.call(editor, j);
                         return false;
                     }
                 });
@@ -5166,6 +5205,21 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         K.sync = function(expr) {
             _eachEditor(expr, function() {
                 this.sync();
+            });
+        };
+        K.html = function(expr, val) {
+            _eachEditor(expr, function() {
+                this.html(val);
+            });
+        };
+        K.insertHtml = function(expr, val) {
+            _eachEditor(expr, function() {
+                this.insertHtml(val);
+            });
+        };
+        K.appendHtml = function(expr, val) {
+            _eachEditor(expr, function() {
+                this.appendHtml(val);
             });
         };
         if (_IE && _V < 7) {
@@ -5230,7 +5284,13 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     self.toolbar.disableAll(false);
                     self.edit.design(true);
                     self.toolbar.unselect("source");
-                    self.cmd.selection();
+                    if (_GECKO) {
+                        setTimeout(function() {
+                            self.cmd.selection();
+                        }, 0);
+                    } else {
+                        self.cmd.selection();
+                    }
                 }
                 self.designMode = self.edit.designMode;
             });
@@ -5551,9 +5611,19 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/gi, function($0, $1, $2, $3) {
                     return $1 + _unescape($2).replace(/\s+/g, " ") + $3;
                 }).replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/gi, function(full) {
-                    var imgAttrs = _getAttrList(full), styles = _getCssList(imgAttrs.style || ""), attrs = _mediaAttrs(imgAttrs["data-ke-tag"]);
-                    attrs.width = _undef(imgAttrs.width, _removeUnit(_undef(styles.width, "")));
-                    attrs.height = _undef(imgAttrs.height, _removeUnit(_undef(styles.height, "")));
+                    var imgAttrs = _getAttrList(full);
+                    var styles = _getCssList(imgAttrs.style || "");
+                    var attrs = _mediaAttrs(imgAttrs["data-ke-tag"]);
+                    var width = _undef(styles.width, "");
+                    var height = _undef(styles.height, "");
+                    if (/px/i.test(width)) {
+                        width = _removeUnit(width);
+                    }
+                    if (/px/i.test(height)) {
+                        height = _removeUnit(height);
+                    }
+                    attrs.width = _undef(imgAttrs.width, width);
+                    attrs.height = _undef(imgAttrs.height, height);
                     return _mediaEmbed(attrs);
                 }).replace(/<img[^>]*class="?ke-anchor"?[^>]*>/gi, function(full) {
                     var imgAttrs = _getAttrList(full);
@@ -5894,6 +5964,51 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         };
         self.clickToolbar(name, self.plugin.anchor.edit);
     });
+    /*******************************************************************************
+	* KindEditor - WYSIWYG HTML Editor for Internet
+	* Copyright (C) 2006-2011 kindsoft.net
+	*
+	* @author Roddy <luolonghao@gmail.com>
+	* @site http://www.kindsoft.net/
+	* @licence http://www.kindsoft.net/license.php
+	*******************************************************************************/
+    KindEditor.plugin("autoheight", function(K) {
+        var self = this;
+        if (!self.autoHeightMode) {
+            return;
+        }
+        var minHeight;
+        function hideScroll() {
+            var edit = self.edit;
+            var body = edit.doc.body;
+            edit.iframe[0].scroll = "no";
+            body.style.overflowY = "hidden";
+        }
+        function resetHeight() {
+            var edit = self.edit;
+            var body = edit.doc.body;
+            edit.iframe.height(minHeight);
+            self.resize(null, Math.max((K.IE ? body.scrollHeight : body.offsetHeight) + 76, minHeight));
+        }
+        function init() {
+            minHeight = K.removeUnit(self.height);
+            self.edit.afterChange(resetHeight);
+            hideScroll();
+            resetHeight();
+        }
+        if (self.isCreated) {
+            init();
+        } else {
+            self.afterCreate(init);
+        }
+    });
+    /*
+	* 如何实现真正的自动高度？
+	* 修改编辑器高度之后，再次获取body内容高度时，最小值只会是当前iframe的设置高度，这样就导致高度只增不减。
+	* 所以每次获取body内容高度之前，先将iframe的高度重置为最小高度，这样就能获取body的实际高度。
+	* 由此就实现了真正的自动高度
+	* 测试：chrome、firefox、IE9、IE8
+	* */
     /*******************************************************************************
 	* KindEditor - WYSIWYG HTML Editor for Internet
 	* Copyright (C) 2006-2011 kindsoft.net
@@ -6631,7 +6746,17 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                     showLocal: allowImageUpload,
                     tabIndex: img ? 0 : imageTabIndex,
                     clickFn: function(url, title, width, height, border, align) {
-                        self.exec("insertimage", url, title, width, height, border, align);
+                        if (img) {
+                            img.attr("src", url);
+                            img.attr("data-ke-src", url);
+                            img.attr("width", width);
+                            img.attr("height", height);
+                            img.attr("title", title);
+                            img.attr("align", align);
+                            img.attr("alt", title);
+                        } else {
+                            self.exec("insertimage", url, title, width, height, border, align);
+                        }
                         // Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
                         setTimeout(function() {
                             self.hideDialog().focus();
@@ -7310,9 +7435,6 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
     /* Constructor & Init  */
     /* ******************* */
     (function() {
-        if (window.SWFUpload) {
-            return;
-        }
         window.SWFUpload = function(settings) {
             this.initSWFUpload(settings);
         };
@@ -7322,7 +7444,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 // A container where developers can place their own settings associated with this instance.
                 this.settings = settings;
                 this.eventQueue = [];
-                this.movieName = "SWFUpload_" + SWFUpload.movieCount++;
+                this.movieName = "KindEditor_SWFUpload_" + SWFUpload.movieCount++;
                 this.movieElement = null;
                 // Setup global control tracking
                 SWFUpload.instances[this.movieName] = this;
@@ -8151,9 +8273,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         self.clickToolbar(name, function() {
             var cmd = self.cmd, range = cmd.range;
             self.focus();
-            range.enlarge(true);
-            cmd.split(true);
-            var tail = self.newlineTag == "br" || K.WEBKIT ? "" : '<p id="__kindeditor_tail_tag__"></p>';
+            var tail = self.newlineTag == "br" || K.WEBKIT ? "" : '<span id="__kindeditor_tail_tag__"></span>';
             self.insertHtml(pagebreakHtml + tail);
             if (tail !== "") {
                 var p = K("#__kindeditor_tail_tag__", self.edit.doc);
@@ -8368,6 +8488,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 '<div class="ke-dialog-row">', '<label for="keAlign" style="width:90px;">' + lang.align + "</label>", '<select id="keAlign" name="align">', '<option value="">' + lang.alignDefault + "</option>", '<option value="left">' + lang.alignLeft + "</option>", '<option value="center">' + lang.alignCenter + "</option>", '<option value="right">' + lang.alignRight + "</option>", "</select>", "</div>", //border
                 '<div class="ke-dialog-row">', '<label for="keBorder" style="width:90px;">' + lang.border + "</label>", lang.borderWidth + ' <input type="text" id="keBorder" class="ke-input-text ke-input-number" name="border" value="" maxlength="4" /> &nbsp; ', lang.borderColor + ' <span class="ke-inline-block ke-input-color"></span>', "</div>", //background color
                 '<div class="ke-dialog-row">', '<label for="keBgColor" style="width:90px;">' + lang.backgroundColor + "</label>", '<span class="ke-inline-block ke-input-color"></span>', "</div>", "</div>" ].join("");
+                var bookmark = self.cmd.range.createBookmark();
                 var dialog = self.createDialog({
                     name: name,
                     width: 500,
@@ -8468,6 +8589,9 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                                     table.removeAttr("borderColor");
                                 }
                                 self.hideDialog().focus();
+                                self.cmd.range.moveToBookmark(bookmark);
+                                self.cmd.select();
+                                self.addBookmark();
                                 return;
                             }
                             //insert new table
@@ -8567,6 +8691,7 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                 '<div class="ke-dialog-row">', '<label for="keAlign" style="width:90px;">' + lang.align + "</label>", lang.textAlign + ' <select id="keAlign" name="textAlign">', '<option value="">' + lang.alignDefault + "</option>", '<option value="left">' + lang.alignLeft + "</option>", '<option value="center">' + lang.alignCenter + "</option>", '<option value="right">' + lang.alignRight + "</option>", "</select> ", lang.verticalAlign + ' <select name="verticalAlign">', '<option value="">' + lang.alignDefault + "</option>", '<option value="top">' + lang.alignTop + "</option>", '<option value="middle">' + lang.alignMiddle + "</option>", '<option value="bottom">' + lang.alignBottom + "</option>", '<option value="baseline">' + lang.alignBaseline + "</option>", "</select>", "</div>", //border
                 '<div class="ke-dialog-row">', '<label for="keBorder" style="width:90px;">' + lang.border + "</label>", lang.borderWidth + ' <input type="text" id="keBorder" class="ke-input-text ke-input-number" name="border" value="" maxlength="4" /> &nbsp; ', lang.borderColor + ' <span class="ke-inline-block ke-input-color"></span>', "</div>", //background color
                 '<div class="ke-dialog-row">', '<label for="keBgColor" style="width:90px;">' + lang.backgroundColor + "</label>", '<span class="ke-inline-block ke-input-color"></span>', "</div>", "</div>" ].join("");
+                var bookmark = self.cmd.range.createBookmark();
                 var dialog = self.createDialog({
                     name: name,
                     width: 500,
@@ -8605,6 +8730,8 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
                                 "border-color": borderColor
                             });
                             self.hideDialog().focus();
+                            self.cmd.range.moveToBookmark(bookmark);
+                            self.cmd.select();
                             self.addBookmark();
                         }
                     }
@@ -8924,4 +9051,5 @@ define("gallery2/kindeditor/4.1.7/kindeditor-debug", [], function(require, expor
         });
     });
     KindEditor.basePath = module.uri.match(/[^?#]*\//)[0];
+    return KindEditor;
 });
