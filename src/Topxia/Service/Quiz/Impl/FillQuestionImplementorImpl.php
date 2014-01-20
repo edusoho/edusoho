@@ -1,19 +1,16 @@
 <?php
 namespace Topxia\Service\Quiz\Impl;
 
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Quiz\QuestionImplementor;
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 use Topxia\Common\ArrayToolkit;
 
-const PATTERN = "/\[\[(.*?)\]\]/";
+const PATTERN = "/\[\[(.+?)\]\]/";
 const SUBJECT1 = "(____)";
 const SUBJECT2 = "/\(____\)/";
     
-class FillQuestionImplementorImpl extends BaseService implements QuestionImplementor
+class FillQuestionImplementorImpl extends BaseQuestionImplementor implements QuestionImplementor
 {
-    
-
 	public function getQuestion($question)
     {
         $question = QuestionSerialize::unserialize($question);
@@ -24,21 +21,23 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
         return $question;
     }
 
-	public function createQuestion($question){
-        var_dump($question);exit();
-        preg_match_all(PATTERN, $question['stem'], $answer);
-        $question['stem']  = preg_replace(PATTERN, SUBJECT1, $question['stem']);
-        if (count($answer['1']) == 0){
+	public function createQuestion($question) {
+        $question = $this->filterQuestionFields($question);
+
+        preg_match_all(PATTERN, $question['stem'], $answer, PREG_PATTERN_ORDER);
+        if (empty($answer[1])){
             throw $this->createServiceException('该问题没有答案或答案格式不正确！');
         }
 
-        foreach ($answer['1'] as $key => $value) {
-            $answer['1'][$key] = array_map(function($v){
-                return trim($v);
-            }, explode('|', $value));
+        $question['answer'] = array();
+        foreach ($answer[1] as $value) {
+            $value = explode('|', $value);
+            foreach ($value as $i => $v) {
+                $value[$i] = trim($v);
+            }
+            $question['answer'][] = $value;
         }
 
-        $question['answer'] = $answer['1'];
         return QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($question))
         );

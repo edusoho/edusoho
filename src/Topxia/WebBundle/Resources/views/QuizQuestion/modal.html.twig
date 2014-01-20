@@ -72,8 +72,8 @@
             </div>
           </div>
           <input type="hidden" name="answers" />
-          {% if choice | default(null) %}
-            <script type="text/plain" data-role="choice-data">{{ choice|json_encode|raw}}</script>
+          {% if question.choices|default(null) %}
+            <script type="text/plain" data-role="choices-data">{{ question.choices|json_encode|raw}}</script>
           {% endif %}
           <script type="text/x-handlebars-template" data-role="choice-template">
             {% verbatim %}

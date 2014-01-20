@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
     var ChoiceQuestion = BaseQuestion.extend({
         attrs: {
-            index : 1,
+            globalId: 1,
         },
 
         events: {
@@ -29,7 +29,7 @@ define(function(require, exports, module) {
             }
             var choiceCount = this.$('[data-role=choice]').length;
             var code = String.fromCharCode(choiceCount + 65);
-            var model = {code: code,id:this.get('index')}
+            var model = {code: code, id:this._generateNextGlobalId()}
             this.addChoice(model);
         },
 
@@ -51,8 +51,6 @@ define(function(require, exports, module) {
                 element: '#item-input-'+model.id,
                 required: true
             });
-
-            this.set('index', this.get('index')+1);
 
             var $trigger = $('#item-upload-' + model.id);
 
@@ -98,7 +96,11 @@ define(function(require, exports, module) {
                 Notify.danger("请选择正确答案!");
                 return false;
             }
-            $form.find('[name=answers]').val(answers.join('|'));
+
+            $.each(answers, function(i, answer) {
+                $form.append('<input type="hidden" name="answer[]" value="' + answer + '">');
+            });
+
             return true;
         },
 
@@ -118,29 +120,35 @@ define(function(require, exports, module) {
         },
 
         _setupForChoice: function() {
+            var self = this;
             var choiceTemplate = Handlebars.compile(this.$('[data-role=choice-template]').html());
             this.set('choiceTemplate', choiceTemplate);
-            
-            if(typeof this.$('[data-role=choice-data]').html() != 'undefined'){
-                var self = this;
-                var choice = $.parseJSON(this.$('[data-role=choice-data]').html());
-                var isNaswer = choice.isAnswer;
-                delete choice['isAnswer'];
-                $.each(choice, function() {
+
+            var choicesData = this.$('[data-role=choices-data]').html();
+
+            if ($.type(choicesData) != 'undefined') {
+                var choices = $.parseJSON(choicesData);
+                $.each(choices, function() {
                     var choiceCount = self.$('[data-role=choice]').length;
                     var code = String.fromCharCode(choiceCount + 65);
-                    var choiceModel = {code:code, id:this.id, content:this.content, isAnswer: (","+isNaswer+",").indexOf(this.id)>=0};
+                    var choiceModel = {code:code, id:self._generateNextGlobalId(), content:this.content, isAnswer: this.isAnswer};
                     self.addChoice(choiceModel);
                 });
-            }else{
+            } else {
                 for (var i = 0; i < 4; i++) {
                     var choiceCount = this.$('[data-role=choice]').length;
                     var code = String.fromCharCode(choiceCount + 65);
-                    var model = {code: code,id:this.get('index')}
+                    var model = {code: code, id: self._generateNextGlobalId() }
                     this.addChoice(model);
                 }
             }
         },
+
+        _generateNextGlobalId: function() {
+            var globalId = this.get('globalId');
+            this.set('globalId', globalId + 1);
+            return globalId;
+        }
 
 
     });

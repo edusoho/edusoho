@@ -178,10 +178,12 @@ class QuizQuestionController extends BaseController
 			return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId,'parentId' => $question['parentId'])));
         }
 
-		$choice = array();
-        if ($question['type'] =='choice' || $question['type'] =='single_choice'){
-        	$choice = $question['choice'];
-        	unset($question['choice']);
+        if (!empty($question['choices'])) {
+            foreach ($question['choices'] as $key => $choice) {
+                if (in_array($key, $question['answer'])) {
+                    $question['choices'][$key]['isAnswer'] = true;
+                }
+            }
         }
 
         $targets['default'] = $question['targetType'].'-'.$question['targetId'];
@@ -191,7 +193,6 @@ class QuizQuestionController extends BaseController
 			'question' => $question,
 			'targets' => $targets,
 			'course' => $course,
-			'choice' => $choice,
 			'type' => $question['type'],
 			'isEdit' => '1',
 			'category' => $category,
