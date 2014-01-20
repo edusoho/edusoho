@@ -84,14 +84,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 // array_push($questions[$value['questionId']]['choices'], $value);
                 $questions[$value['questionId']]['choices'][$value['id']] = $value;
             }
-
-            // $choiceIndex = 65;
-            // foreach ($choices as $key => $value) {
-            //  $choices[$key]['choiceIndex'] = chr($choiceIndex);
-            //  $choiceIndex++;
-            // }
-
-            // $question['choices'] = $choices;
         }
         return $questions;
     }
@@ -170,6 +162,37 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($ids);
     }
 
+    public function favoriteQuestion($questionId, $targetType, $targetId, $userId)
+    {
+        $favorite = array(
+            'questionId' => $questionId,
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+            'userId' => $userId,
+            'createdTime' => time()
+        );
+
+        $favoriteBack = $this->getQuestionFavoriteDao()->getFavoriteByQuestionIdAndTargetAndUserId($favorite);
+
+        if (!$favoriteBack) {
+            return $this->getQuestionFavoriteDao()->addFavorite($favorite);
+        }
+
+        return $favoriteBack;
+    }
+
+    public function unFavoriteQuestion ($questionId, $targetType, $targetId, $userId)
+    {
+        $favorite = array(
+            'questionId' => $questionId,
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+            'userId' => $userId
+        );
+
+        return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
+    }
+
     private function checkCategoryFields($category)
     {
         $target = explode('-', $category['target']);
@@ -211,6 +234,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function getQuizQuestionCategoryDao()
     {
         return $this->createDao('Quiz.QuizQuestionCategoryDao');
+    }
+
+    private function getQuestionFavoriteDao()
+    {
+        return $this->createDao('Quiz.QuestionFavoriteDao');
     }
 
     private function getQuestionImplementor($name)

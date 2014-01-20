@@ -566,11 +566,11 @@ course_manage_my_quiz:
     defaults: { _controller: TopxiaWebBundle:MyQuestion:index }
 
 course_manage_favorite_question:
-    pattern: /favorite/question/{questionId}/{testPaperResultId}
+    pattern: /question/{id}/favorite
     defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
 
 course_manage_unfavorite_question:
-    pattern: /unfavorite/question/{questionId}/{testPaperResultId}
+    pattern: /question/{id}/unfavorite
     defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
 
 course_manage_show_favorite_question:
