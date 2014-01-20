@@ -3,7 +3,7 @@
 
 {% block title %}添加题目 - {{ parent() }}{% endblock %}
 
-{% set parentId = parentId |default(null)%}
+{% set parentId = parentId |default(0)%}
 {% set isEdit = isEdit |default(null)%}
 {% set side_nav = 'quizQuestion' %}
 {% set script_controller = 'quiz-question/create' %}
@@ -178,6 +178,7 @@
 
         <input type="hidden" name="submission">
         <input type="hidden" name="type" value="{{ type }}">
+        <input type="hidden" name="parentId" value="{{ parentId }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
       </form>

@@ -35,9 +35,9 @@
     {% if question.stem | default(null) %}
         <div class="row">
             <div class="col-sm-12">
-                <div class="thumbnail short-long-text">
-                    <p class="short-text">{{ question.stem|plain_text(60) }} <span class="trigger">(展开)</span></p>
-                    <p class="long-text">{{ question.stem|raw }} <span class="trigger">(收起)</span></p>
+                <div class="well well-sm short-long-text">
+                    <div class="short-text">{{ question.stem|plain_text(100) }} <span class="trigger">(展开)</span></div>
+                    <div class="long-text">{{ question.stem|raw }} <span class="trigger">(收起)</span></div>
                 </div>
             </div>
         </div>

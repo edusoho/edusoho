@@ -192,6 +192,7 @@ class QuizQuestionController extends BaseController
         return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'question' => $question,
 			'targets' => $targets,
+            'parentId' => $question['parentId'],
 			'course' => $course,
 			'type' => $question['type'],
 			'isEdit' => '1',
