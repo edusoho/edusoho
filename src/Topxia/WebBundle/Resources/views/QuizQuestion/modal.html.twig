@@ -111,7 +111,7 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label>答案</label></div>
             <div class="col-md-8 controls radios ">
-              {{ radios('answers[]', {'0':'错误','1':'正确'}, question.answer|default(['-1'])|join) }}
+              {{ radios('answer[]', {'1':'正确', '0':'错误'}, question.answer|default(['-1'])|join) }}
             </div>
           </div>
 
