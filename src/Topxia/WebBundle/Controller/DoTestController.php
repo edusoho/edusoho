@@ -361,6 +361,10 @@ class DoTestController extends BaseController
 	{
 		$formatQuestions = array();
 		$number = 0;
+
+		$questions = ArrayToolkit::index($questions, 'seq');
+		ksort($questions);
+
 		foreach ($questions as $key => $value) {
 
 			if(in_array($value['questionType'], array('single_choice', 'choice'))) {

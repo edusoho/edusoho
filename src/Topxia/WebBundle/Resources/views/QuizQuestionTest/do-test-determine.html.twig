@@ -4,7 +4,7 @@
 	<div class="testpaper-question-body">
 	  <div class="testpaper-question-stem-wrap clearfix">
 		  <div class="testpaper-question-index">
-		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
+		    {% if question.seq|default(null) %}{{ question.seq }}{% endif %}
 		  </div>
 		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
 	  </div>
