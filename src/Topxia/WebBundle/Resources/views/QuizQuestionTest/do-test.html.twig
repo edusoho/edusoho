@@ -1,5 +1,6 @@
 {% if showTestpaperNavbar|default('on') == 'off' %}
 	{% set types = ['essay', 'material'] %}
+	<form id='teacherCheckForm'>
 {% else %}
 	{% set types = paper.metas.question_type_seq|split(',') %}
 {% endif %}
@@ -29,3 +30,7 @@
 </div>
 
 {% endfor %}
+
+{% if showTestpaperNavbar|default('on') == 'off' %}
+</form>
+{% endif %}
