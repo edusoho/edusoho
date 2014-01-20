@@ -2,21 +2,31 @@
 
 {% set modal_size = 'small' %}
 
-{% block title %}暂停{% endblock %}
+{% block title %}完成批阅{% endblock %}
 {% block body %}
 
-<select class="form-control">
+<div class="form-group">
+<div class="controls">
+<select class="form-control" id="testpaper-teacherSay-select">
   <option>喜欢</option>
   <option>很喜欢</option>
   <option>非常喜欢</option>
   <option>非常非常喜欢</option>
   <option>非常非常非常喜欢</option>
 </select>
+</div>
+</div>
+<div class="form-group">
+<div class="controls">
+<textarea class="form-control" id="testpaper-teacherSay-input"></textarea>
+</div>
+</div>
 
 
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-info" data-dismiss="modal">继续</button>
-
+  <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-info" data-toggle="form-submit" data-target="#teacherCheckForm" id="testpaper-teacherSay-btn">完成批阅</button>
+<script>app.load('quiz-question/test-teacher-check')</script>
 {% endblock %}

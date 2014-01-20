@@ -204,6 +204,11 @@ class DoTestController extends BaseController
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig'); 
 	}
 
+	public function testFinishCheckAction(Request $request)
+	{
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-finished-check-modal.html.twig'); 
+	}
+
 	public function teacherCheckAction (Request $request, $id)
 	{
 		//身份校验?
@@ -220,6 +225,7 @@ class DoTestController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
+
 			$this->getTestService()->makeTeacherFinishTest($id, $teacherId, $form);
 			
 			return $this->createJsonResponse(true);

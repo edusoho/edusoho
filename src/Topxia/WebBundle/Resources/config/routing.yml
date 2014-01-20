@@ -557,6 +557,10 @@ course_manage_test_teacher_check:
     pattern: /test/teacher/check/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheck }
 
+course_manage_test_teacher_finish_check:
+    pattern: /test/teacher/finish/check
+    defaults: { _controller: TopxiaWebBundle:DoTest:testFinishCheck }
+
 course_manage_my_quiz:
     pattern: /my/quiz
     defaults: { _controller: TopxiaWebBundle:MyQuestion:index }

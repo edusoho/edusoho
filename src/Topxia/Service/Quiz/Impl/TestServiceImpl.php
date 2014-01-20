@@ -700,6 +700,9 @@ class TestServiceImpl extends BaseService implements TestService
     {
         $testResults = array();
         
+        $teacherSay = $field['teacherSay'];
+        unset($field['teacherSay']);
+
         foreach ($field as $key => $value) {
             $keys = explode('_', $key);
 
@@ -723,7 +726,8 @@ class TestServiceImpl extends BaseService implements TestService
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
             'checkTeacherId' => $teacherId,
-            'checkedTime' => time()
+            'checkedTime' => time(),
+            'teacherSay' => $teacherSay
         ));
     }
 

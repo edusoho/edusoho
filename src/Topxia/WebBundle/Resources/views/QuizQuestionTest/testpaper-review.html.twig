@@ -37,25 +37,9 @@
 
           {% endfor %}
 
-
-{# 
-      {% for question in questions.essay %}
-        <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
-
-      {% endfor %}
-
-      {% for question in questions.material %}
-        {% for question in question.questions %}
-          {% if question.type == 'essay' %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
-          {% endif %}
-
-        {% endfor %}
-      {% endfor %} #}
-
         </div>
         <div class="panel-footer">
-          <button class="btn btn-success btn-block" id="postPaper" data-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}">完成批阅</button>
+          <button class="btn btn-success btn-block" id="finishCheck" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_test_teacher_finish_check') }}" data-post-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}">完成批阅</button>
         </div>
     </div>
   </div>
