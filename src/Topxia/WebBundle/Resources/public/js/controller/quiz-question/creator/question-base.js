@@ -14,6 +14,7 @@ define(function(require, exports, module) {
             form : null,
             targets: [],
             categories: [],
+            stemEditorName: 'simple_noimage'
         },
 
         events: {
@@ -63,7 +64,7 @@ define(function(require, exports, module) {
         },
 
         _initStemField: function() {
-            var editor = EditorFactory.create('#question-stem-field', 'question');
+            var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'));
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.sync();
             });
