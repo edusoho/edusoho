@@ -417,12 +417,12 @@ class TestServiceImpl extends BaseService implements TestService
 
             $questions[$key]['testResult'] = $answer;
 
-            if ($questions[$key]['questionType'] == 'fill') {
-                
-                $questions[$key]['answer'] = array_map(function($answer){
-                    return str_replace('|', '或者', $answer);
-                }, $questions[$key]['answer']);
-            }
+            // if ($questions[$key]['questionType'] == 'fill') {
+            //     var_dump($questions[$key]);exit();
+            //     $questions[$key]['answer'] = array_map(function($answer){
+            //         return str_replace('|', '或者', $answer);
+            //     }, $questions[$key]['answer']);
+            // }
         }
 
         foreach ($questions as $key => $question) {

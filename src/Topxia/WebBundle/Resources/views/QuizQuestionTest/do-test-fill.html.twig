@@ -15,8 +15,9 @@
 		  <div class="testpaper-question-result">
 		    <ul>
 		      {% for index, answer in question.answer %}
-			    	<li>({{index+1}})： 正确答案 <strong class="text-success">{{ answer }}</strong>，你的答案 {{ question.testResult.answer[index] }}。回答错误</li>
+			    	<li>({{index+1}})： 正确答案 <strong class="text-success">{{ answer }}</strong>，你的答案 。回答错误</li>
 		    	{% endfor %}
+		    	{# {{ question.testResult.answer[index] }} #}
 		    </ul>
 			</div>
 
