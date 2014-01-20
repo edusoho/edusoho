@@ -18,6 +18,7 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
     {
         $question = QuestionSerialize::unserialize($question);
         foreach ($question['answer'] as $key => $value) {
+            $value = implode('|', $value);
             $question['stem'] = preg_replace(SUBJECT2, "[[".$value."]]", $question['stem'], 1);
         }
         return $question;
@@ -34,10 +35,9 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
         }
 
         foreach ($answer['1'] as $key => $value) {
-            $value = array_map(function($v){
+            $answer['1'][$key] = array_map(function($v){
                 return trim($v);
             }, explode('|', $value));
-            $answer['1'][$key] = implode('|', $value);
         }
 
         $field['answer'] = $answer['1'];
@@ -53,6 +53,13 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
         if(count($answer['1']) == 0){
             throw $this->createServiceException('该问题没有答案或答案格式不正确！');
         }
+
+        foreach ($answer['1'] as $key => $value) {
+            $answer['1'][$key] = array_map(function($v){
+                return trim($v);
+            }, explode('|', $value));
+        }
+
         $field['answer'] = $answer[1];
         return  QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($field))
