@@ -20,10 +20,11 @@ class MaterialQuestionImplementorImpl extends BaseQuestionImplementor implements
         );
 	}
 
-    public function updateQuestion($id, $question, $field)
+    public function updateQuestion($id, $question)
     {
+        $question = $this->filterQuestionFields($question);
     	return  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($id,  QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id,  QuestionSerialize::serialize($question))
         );
     }
 
