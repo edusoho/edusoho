@@ -12,7 +12,7 @@
 	</td>
 	<td>
 		{% if status == 'reviewing' %}
-			<a href="{{ path('course_manage_test_teacher_check', {id:paperResult.id}) }}" class="btn btn-default btn-sm pull-right">批阅</a>
+			<a href="{{ path('course_manage_test_teacher_check', {id:paperResult.id}) }}" class="btn btn-default btn-sm pull-right" target="_blank">批阅</a>
 		{% endif %}
 
 		{% if status == 'finished' %}

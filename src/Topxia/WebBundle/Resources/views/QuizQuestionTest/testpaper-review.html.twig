@@ -17,36 +17,41 @@
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
         <div class="panel-body">
-                {% set index = 1 %}
-      {% for question in questions.single_choice %}
-        {% set index = index + 1 %}
-      {% endfor %}
 
-      {% for question in questions.choice %}
-        {% set index = index + 1 %}
-      {% endfor %}
+          {% for type in types|default(paper.metas.question_type_seq) %}
 
-      {% for question in questions.determine %}
-        {% set index = index + 1 %}
-      {% endfor %}
+            {% for question in questions[type] %}
+              {% if question.questionType != 'material' %}
+                <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
+              {% else %}
+                {% for question in question.questions %}
+                  {% if question.questionType == 'essay' %}
+                    <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              
+            {% endfor %}
 
-      {% for question in questions.fill %}
-        {% set index = index + 1 %}
-      {% endfor %}
+            <div class="clearfix mtm mbm"></div>
 
+          {% endfor %}
+
+
+{# 
       {% for question in questions.essay %}
-        <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
-        {% set index = index + 1 %}
+        <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
+
       {% endfor %}
 
       {% for question in questions.material %}
         {% for question in question.questions %}
           {% if question.questionType == 'essay' %}
-            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ index }}</a>
+            <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
           {% endif %}
-          {% set index = index + 1 %}
+
         {% endfor %}
-      {% endfor %}
+      {% endfor %} #}
 
         </div>
         <div class="panel-footer">

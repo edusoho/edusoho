@@ -3,6 +3,9 @@ define(function(require, exports, module) {
     var BaseQuestion = require('./question-base');
 
     var FillQuestion = BaseQuestion.extend({
+        attrs: {
+            stemEditorName: 'question'
+        },
         setup: function() {
             FillQuestion.superclass.setup.call(this);
             this._initValidator();

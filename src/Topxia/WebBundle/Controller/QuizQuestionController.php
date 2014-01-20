@@ -185,7 +185,7 @@ class QuizQuestionController extends BaseController
 
         $targets['default'] = $question['targetType'].'-'.$question['targetId'];
         $category['default'] = $question['categoryId'];
-        
+      
         return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'question' => $question,
 			'targets' => $targets,

@@ -7,16 +7,13 @@
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
 	<div class="testpaper-question-body">
-	  <div class="testpaper-question-stem-wrap clearfix">
-		  <div class="testpaper-question-index">
-		    {% if questionIndex|default(null) %}{{ questionIndex }}{% endif %}
-		  </div>
-		  <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
-	  </div>
+    {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
 
 		<ul class="testpaper-question-choices">
 			{% for key, choice in question.choices %}
-				<li><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content|bbCode2Html|raw }}</li>
+			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in question.answer)) ? 'testpaper-question-choice-right' : '' %}
+
+				<li class="{{ itemClass }}"><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content|bbCode2Html|raw }}</li>
 				{% if key in question.answer %}
 					{% set keys = keys|merge([choice.choiceIndex]) %}
 				{% endif  %}
