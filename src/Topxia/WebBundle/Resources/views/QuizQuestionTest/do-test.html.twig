@@ -1,6 +1,13 @@
 {% set questionIndex = 1 %}
 
-{% for type in paper.metas.question_type_seq|split(',') %}
+{% if showTestpaperNavbar|default('on') == 'off' %}
+	{% set types = ['essay', 'material'] %}
+{% else %}
+	{% set types = paper.metas.question_type_seq|split(',') %}
+{% endif %}
+
+
+{% for type in types %}
 
 <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
   <div class="panel-heading">{{dict('questionBlockType')[type]}}
