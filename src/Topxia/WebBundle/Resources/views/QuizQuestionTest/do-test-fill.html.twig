@@ -12,14 +12,12 @@
 
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="testpaper-question-footer clearfix">
-		  <div class="testpaper-question-result">正确答案是 <strong class="text-success">{{ question.answer|join(', ') }}</strong>，
-				{% if question.testResult.status == 'right' %}
-				  你的答案是 {{ question.testResult.answer|join(', ') }}。回答正确
-				{% elseif question.testResult.status == 'wrong' %}
-					你的答案是 <strong class="text-danger">{{ question.testResult.answer|join(', ') }}</strong>。回答错误
-				{% elseif question.testResult.status == 'noAnswer' %}
-					你未答题
-				{% endif %}
+		  <div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in question.answer %}
+			    	<li>({{index+1}})： 正确答案 <strong class="text-success">{{ answer }}</strong>，你的答案 {{ question.testResult.answer[index] }}。回答错误</li>
+		    	{% endfor %}
+		    </ul>
 			</div>
 
 			<div class="testpaper-question-actions pull-right">

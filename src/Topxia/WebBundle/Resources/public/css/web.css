@@ -3318,6 +3318,16 @@ body {
     margin-bottom: 20px;
 }
 
+.testpaper-preview-tip {
+	background-color: #f0ad4e;
+	color: #fff;
+	float: right;
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-weight: bold;
+	margin-top: 9px;
+}
+
 .testpaper-result {
 
 }
@@ -3449,6 +3459,11 @@ body {
 .testpaper-question-choice-index {
 	color: #999;
 	margin-right: 20px;
+}
+
+.testpaper-question-choice-right, 
+.testpaper-question-choice-right .testpaper-question-choice-index {
+	color: #3c763d;
 }
 
 .testpaper-question-choice-inputs {

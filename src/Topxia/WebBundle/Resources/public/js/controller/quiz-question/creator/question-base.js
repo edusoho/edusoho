@@ -51,16 +51,17 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
-                accept: 'image/*',
-                error: function(file) {
-                    Notify.danger('上传失败，请重试！')
-                },
-                success: function(response) {
-                    var result = '[image]' + response.hashId + '[/image]'
-                    editor.insertHtml(result);
-                }
+                accept: 'image/*'
+            }).error(function(file) {
+                Notify.danger('上传失败，请重试！');
+            }).success(function(response) {
+                var result = '[image]' + response.hashId + '[/image]'
+                editor.insertHtml(result);
+                Notify.success('上传成功！', 1);
+            }).change(function(files) {
+                Notify.info('正在上传，请稍等！', 0);
+                uploader.submit();
             });
-            
         },
 
         _initStemField: function() {
@@ -75,15 +76,18 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
-                accept: 'image/*',
-                error: function(file) {
-                    Notify.danger('上传失败，请重试！')
-                },
-                success: function(response) {
-                    var result = '[image]' + response.hashId + '[/image]'
-                    editor.insertHtml(result);
-                }
+                accept: 'image/*'
+            }).error(function(file) {
+                Notify.danger('上传失败，请重试！');
+            }).success(function(response) {
+                var result = '[image]' + response.hashId + '[/image]'
+                editor.insertHtml(result);
+                Notify.success('上传成功！', 1);
+            }).change(function(files) {
+                Notify.info('正在上传，请稍等！', 0);
+                uploader.submit();
             });
+
         },
 
         _initForm: function() {
