@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 
         var $html = $(html);
         $html.appendTo('body').slideDown(100, function(){
-            duration = duration ? duration : 3;
+            duration = $.type(duration) == 'undefined' ? 3 :  duration;
             if (duration > 0) {
                 setTimeout(function(){
                     $html.remove();
