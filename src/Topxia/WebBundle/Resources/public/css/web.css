@@ -3385,13 +3385,6 @@ body {
 	}
 }
 
-
-
-
-
-
-
-
 .testpaper-question {
 	margin-bottom: 50px;
 	font-size: 14px;
@@ -3403,8 +3396,13 @@ body {
 	border-top: none;
 }
 
+.modal .testpaper-question {
+	border-top: none;
+	padding-top: 0;
+}
+
 .testpaper-question-main {
-	float: left;
+	float: left; 
 	margin-left: 50px;
 }
 
