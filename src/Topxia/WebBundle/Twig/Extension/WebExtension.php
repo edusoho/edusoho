@@ -29,7 +29,9 @@ class WebExtension extends \Twig_Extension
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
             'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
-            'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter')
+            'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter'),
+            'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
+            'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
         );
     }
 
@@ -301,6 +303,21 @@ class WebExtension extends \Twig_Extension
         }
 
         return $bbCode;
+    }
+
+    public function fillQuestionStemTextFilter($stem)
+    {
+        return preg_replace('/\[\[.*?\]\]/', '____', $stem);
+    }
+
+    public function fillQuestionStemHtmlFilter($stem)
+    {
+        $index = 0;
+        $stem = preg_replace_callback('/\[\[.*?\]\]/', function($matches) use (&$index) {
+            $index ++;
+            return "<span class='question-stem-fill-blank'>{$index}</span>";
+        }, $stem);
+        return $stem;
     }
 
     public function getSetting($name, $default = null)
