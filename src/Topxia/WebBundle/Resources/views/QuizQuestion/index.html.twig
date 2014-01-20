@@ -48,8 +48,8 @@
     <form id="quiz-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
       <div class="form-group pull-left">
-          <select class="form-control" name="questionType">
-              {{ select_options(dict('questionType'), field.questionType | default([]), '--按题型--') }}
+          <select class="form-control" name="type">
+              {{ select_options(dict('questionType'), field.type | default([]), '--按题型--') }}
           </select>
       </div>
  

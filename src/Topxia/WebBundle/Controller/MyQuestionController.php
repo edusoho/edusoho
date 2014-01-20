@@ -192,7 +192,7 @@ class MyQuestionController extends BaseController
 
         foreach ($questions as $key => $value) {
 
-            if(in_array($value['questionType'], array('single_choice', 'choice'))) {
+            if(in_array($value['type'], array('single_choice', 'choice'))) {
                 $i = 65;
                 foreach ($value['choices'] as $key => $v) {
                     $v['choiceIndex'] = chr($i);

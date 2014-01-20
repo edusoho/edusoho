@@ -136,7 +136,7 @@ class MyQuestionServiceImpl extends BaseService
 		$questions = array_merge($questions, $questionParents);
 
 		foreach ($questions as $key => $value) {
-			if ($value['questionType'] == 'fill'){
+			if ($value['type'] == 'fill'){
 				foreach ($value['answer'] as $k => $v) {
 					$questions[$key]['answer'][$k] = str_replace('|', '或者', $v);
 				}

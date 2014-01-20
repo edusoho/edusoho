@@ -246,7 +246,7 @@ class DoTestController extends BaseController
 			
 			foreach ($questions['material'] as $key => $value) {
 
-				$questionTypes = ArrayToolkit::index($value['questions'], 'questionType');
+				$questionTypes = ArrayToolkit::index($value['questions'], 'type');
 
 				if(array_key_exists('essay', $questionTypes)){
 					array_push($types, 'material');
@@ -312,7 +312,7 @@ class DoTestController extends BaseController
 	// 	$types = explode(',', $paper['metas']['question_type_seq']);
 	// 	$totalScores = array();
 	// 	foreach ($questions as $key => $value) {
-	// 		// $totalScores[$value['questionType']] = 
+	// 		// $totalScores[$value['type']] = 
 	// 	}
 	// }
 
@@ -337,7 +337,7 @@ class DoTestController extends BaseController
 
 		foreach ($questions as $value) {
 
-			if ($value['questionType'] == 'material'){
+			if ($value['type'] == 'material'){
 				foreach ($value['questions'] as $key => $v) {
 					$accuracy['material']['score'] += $v['testResult']['score'];
 					$accuracy['material']['totalScore'] += $v['itemScore'];
@@ -355,18 +355,18 @@ class DoTestController extends BaseController
 				}
 			} else {
 
-				$accuracy[$value['questionType']]['score'] += $value['testResult']['score'];
-				$accuracy[$value['questionType']]['totalScore'] += $value['itemScore'];
+				$accuracy[$value['type']]['score'] += $value['testResult']['score'];
+				$accuracy[$value['type']]['totalScore'] += $value['itemScore'];
 
-				$accuracy[$value['questionType']]['all']++;
+				$accuracy[$value['type']]['all']++;
 				if ($value['testResult']['status'] == 'right'){
-					$accuracy[$value['questionType']]['right']++;
+					$accuracy[$value['type']]['right']++;
 				}
 				if ($value['testResult']['status'] == 'wrong'){
-					$accuracy[$value['questionType']]['wrong']++;
+					$accuracy[$value['type']]['wrong']++;
 				}
 				if ($value['testResult']['status'] == 'noAnswer'){
-					$accuracy[$value['questionType']]['noAnswer']++;
+					$accuracy[$value['type']]['noAnswer']++;
 				}
 
 			}
@@ -385,7 +385,7 @@ class DoTestController extends BaseController
 
 		foreach ($questions as $key => $value) {
 
-			if(in_array($value['questionType'], array('single_choice', 'choice'))) {
+			if(in_array($value['type'], array('single_choice', 'choice'))) {
 				$i = 65;
 				foreach ($value['choices'] as $key => $v) {
 					$v['choiceIndex'] = chr($i);
@@ -394,7 +394,7 @@ class DoTestController extends BaseController
 				}
 			}
 
-			if ($value['questionType'] == 'material') {
+			if ($value['type'] == 'material') {
 				$value['questions'] = $this->formatQuestions($value['questions']);
 				$number += $value['questions']['number'];
 				unset($value['questions']['number']);
@@ -403,7 +403,7 @@ class DoTestController extends BaseController
 			}
 
 			if ($value['targetId'] != 0) {
-				$formatQuestions[$value['questionType']][$key] = $value;
+				$formatQuestions[$value['type']][$key] = $value;
 			} else {
 				$formatQuestions[$key] = $value;
 			}

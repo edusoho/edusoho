@@ -15,9 +15,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function createQuestion($question)
     {
-        $field = $this->filterCommonFields($question);
-        $field['createdTime'] = time();
-        return $this->getQuestionImplementor($question['type'])->createQuestion($question, $field);
+        $question = $this->filterCommonFields($question);
+        $question['createdTime'] = time();
+        return $this->getQuestionImplementor($question['type'])->createQuestion($question);
     }
 
     public function updateQuestion($id, $question)
@@ -376,19 +376,16 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         if (!in_array($question['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
                 throw $this->createServiceException('question type error！');
         }
-        if (!ArrayToolkit::requireds($question, array('difficulty'))) {
-                throw $this->createServiceException('缺少必要字段difficulty, 创建课程失败！');
-        }
 
         $field = array();
         $field['questionType'] = $question['type'];
-        $field['stem']         = empty($question['stem'])?'':$question['stem'];
-        $field['stem']         = $this->purifyHtml($question['stem']);
-        $field['difficulty']   = empty($question['difficulty']) ? ' ': $question['difficulty'];
+        $field['stem']         = empty($question['stem']) ? '' : $this->purifyHtml($question['stem']);
+        $field['difficulty']   = empty($question['difficulty']) ? 'simple': $question['difficulty'];
         $field['userId']       = $this->getCurrentUser()->id;
-        $field['analysis']     = empty($question['analysis'])?'':$question['analysis'];
-        $field['score']        = empty($question['score'])?'':$question['score'];
-        $field['categoryId']   = (int) $question['categoryId'];
+        $field['analysis']     = empty($question['analysis']) ? '': $question['analysis'];
+        $field['score']        = empty($question['score'])? 0 : $question['score'];
+        $field['categoryId']   = empty($question['categoryId']) ? 0 : (int) $question['categoryId'];
+        $field['parentId'] = empty($question['parentId']) ? 0 : (int) trim($question['parentId']);
         $field['updatedTime']  = time();
 
         if(!empty($question['target'])){

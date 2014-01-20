@@ -46,8 +46,8 @@
 
 		  <div class="testpaper-question-choice-inputs">
 				{% for choice in question.choices %}
-					<label class="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choice.choiceIndex in keys_answer %}active{% endif %}">
-						<input type="{% if question.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
+					<label class="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choice.choiceIndex in keys_answer %}active{% endif %}">
+						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ choice.questionId }}" value="{{ choice.id }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
 						{{ choice.choiceIndex }}
 					</label> 
 				{% endfor %}

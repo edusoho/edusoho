@@ -118,7 +118,7 @@ class TestServiceImpl extends BaseService implements TestService
     	$field = array();
         $field['testId']       = $testId;
         $field['questionId']   = $question['id'];
-        $field['questionType'] = $question['questionType'];
+        $field['questionType'] = $question['type'];
         $field['parentId']     = $question['parentId'];
         $field['score']        = $question['score'];
 
@@ -158,13 +158,13 @@ class TestServiceImpl extends BaseService implements TestService
             $field = array();
             $field['testId'] = $testId;
             $field['questionId'] = $question['id'];
-            $field['questionType'] = $question['questionType'];
+            $field['questionType'] = $question['type'];
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
             $item = $this->getTestItemDao()->addItem($field);
 
-            if($question['questionType'] != 'material'){
+            if($question['type'] != 'material'){
                 $count ++;
                 $score += $field['score'];
             }
@@ -212,7 +212,7 @@ class TestServiceImpl extends BaseService implements TestService
             $field = array();
             $field['testId'] = $testId;
             $field['questionId'] = $question['id'];
-            $field['questionType'] = $question['questionType'];
+            $field['questionType'] = $question['type'];
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$id];
 
@@ -222,7 +222,7 @@ class TestServiceImpl extends BaseService implements TestService
                 $item = $this->getTestItemDao()->updateItem($items[$k]['id'], $field);
             }
 
-            if($question['questionType'] != 'material'){
+            if($question['type'] != 'material'){
                 $count ++;
                 $score += $field['score'];
             }
@@ -243,7 +243,7 @@ class TestServiceImpl extends BaseService implements TestService
         }
 
         $field['questionId']   = $question['id'];
-        $field['questionType'] = $question['questionType'];
+        $field['questionType'] = $question['type'];
         $field['parentId']     = $question['parentId'];
 
         return $this->getTestItemDao()->updateItem($id, $field);  
@@ -507,7 +507,7 @@ class TestServiceImpl extends BaseService implements TestService
         $newAnswers = array();
         $oldAnswers = array();
         foreach ($questions as $key => $question) {
-            if ($question['questionType'] == 'material'){
+            if ($question['type'] == 'material'){
                 continue;
             }
 
@@ -523,11 +523,11 @@ class TestServiceImpl extends BaseService implements TestService
                 continue;
             }
 
-            if (!in_array($question['questionType'], array('single_choice', 'choice', 'determine', 'fill', 'material'))){
+            if (!in_array($question['type'], array('single_choice', 'choice', 'determine', 'fill', 'material'))){
                 continue;
             }
 
-            if ($question['questionType'] == 'single_choice' or $question['questionType'] == 'choice') {
+            if ($question['type'] == 'single_choice' or $question['type'] == 'choice') {
 
                 $diff = array_diff($question['answer'], $answers[$key]['answer']);
 
@@ -544,7 +544,7 @@ class TestServiceImpl extends BaseService implements TestService
                 }
             }
 
-            if ($question['questionType'] == 'determine') {
+            if ($question['type'] == 'determine') {
                 $diff = array_diff($question['answer'], $answers[$key]['answer']);
 
                 if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
@@ -558,7 +558,7 @@ class TestServiceImpl extends BaseService implements TestService
                 }
             }
 
-            if ($question['questionType'] == 'fill') {
+            if ($question['type'] == 'fill') {
                 $right = 0;
                 $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
@@ -783,7 +783,7 @@ class TestServiceImpl extends BaseService implements TestService
     {
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($testResults, 'questionId'));
         foreach ($questions as $value) {
-            if ($value['questionType'] == 'essay') {
+            if ($value['type'] == 'essay') {
                 return true;
             }
         }

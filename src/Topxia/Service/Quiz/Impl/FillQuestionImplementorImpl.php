@@ -24,12 +24,10 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
         return $question;
     }
 
-	public function createQuestion($question, $field){
-		if (!empty($question['parentId'])){
-            $field['parentId'] = (int) trim($question['parentId']);
-        }
-        preg_match_all(PATTERN, $field['stem'], $answer);
-        $field['stem']  = preg_replace(PATTERN, SUBJECT1, $field['stem']);
+	public function createQuestion($question){
+        var_dump($question);exit();
+        preg_match_all(PATTERN, $question['stem'], $answer);
+        $question['stem']  = preg_replace(PATTERN, SUBJECT1, $question['stem']);
         if (count($answer['1']) == 0){
             throw $this->createServiceException('该问题没有答案或答案格式不正确！');
         }
@@ -40,9 +38,9 @@ class FillQuestionImplementorImpl extends BaseService implements QuestionImpleme
             }, explode('|', $value));
         }
 
-        $field['answer'] = $answer['1'];
+        $question['answer'] = $answer['1'];
         return QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($question))
         );
 
 	}

@@ -42,7 +42,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 				if($question['parentId'] != 0)
 					continue;
 
-                $questionsGroup[$question['questionType']][] = $question;
+                $questionsGroup[$question['type']][] = $question;
             }
 		} else {
 
@@ -51,7 +51,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 				if($question['parentId'] != 0)
 					continue;
 
-                $questionsGroup[$question['questionType']][$question['difficulty']][] = $question;
+                $questionsGroup[$question['type']][$question['difficulty']][] = $question;
             }
 		}
 
