@@ -29,11 +29,6 @@ define(function(require, exports, module) {
             errormessageRequired: '请打分'
         });
 
-        validator.addItem({
-            element: '[name="review[content]"]',
-            required: true
-        });
-
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
                 return;
