@@ -53,8 +53,8 @@
 						<div>{{ question.testResult.answer[0]|default('未回答')|raw }}</div>
 			    </div>
 			  {% if paperResult.status == 'finished' %}
-			  	<div class="testpaper-question-score mtl">
-			  		<div class="testpaper-question-result-title">得分： {{ question.testResult.score }}</div>
+			  	<div class="testpaper-question-result-score mtl">
+			  		<div class="testpaper-question-result-title">得分：<strong>{{ question.testResult.score }} 分</strong></div>
 			  	</div>
 			  	{% if question.testResult.teacherSay != '' %}
 			  	<div class="testpaper-question-teacherSay mtl">
