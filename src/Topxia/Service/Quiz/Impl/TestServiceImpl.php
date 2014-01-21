@@ -384,9 +384,6 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function testResults($id)
     {
-        // if ($userId == null) {
-        //     $userId = $this->getCurrentUser()->id;
-        // }
         $answers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
         $answers = QuestionSerialize::unserializes($answers);
         $answers = ArrayToolkit::index($answers, 'questionId');
@@ -417,12 +414,6 @@ class TestServiceImpl extends BaseService implements TestService
 
             $questions[$key]['testResult'] = $answer;
 
-            // if ($questions[$key]['questionType'] == 'fill') {
-            //     var_dump($questions[$key]);exit();
-            //     $questions[$key]['answer'] = array_map(function($answer){
-            //         return str_replace('|', '或者', $answer);
-            //     }, $questions[$key]['answer']);
-            // }
         }
 
         foreach ($questions as $key => $question) {
@@ -461,9 +452,10 @@ class TestServiceImpl extends BaseService implements TestService
         $answers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
         $answers = QuestionSerialize::unserializes($answers);
         $answers = ArrayToolkit::index($answers, 'questionId');
-        
+      
         $items = $this->findItemsByTestPaperId($testResult['testId']);
         //材料题子题目
+
         $materialIds = $this->findMaterial($items);
         $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
         //非材料题子题目的题目id
@@ -502,24 +494,29 @@ class TestServiceImpl extends BaseService implements TestService
     private function makeTestResults ($answers, $questions)
     {
 
-        $materials = $this->findMaterial($questions);
-        // $results = array();
+        // foreach ($questions as $key => $value) {
+        //     if ($value['type'] != 'material') {
+        //         unset($questions[$key]);
+        //     }
+        // }
+        // $materials = ArrayToolkit::column($questions, 'questionId');
+
         $newAnswers = array();
         $oldAnswers = array();
+
         foreach ($questions as $key => $question) {
+
             if ($question['type'] == 'material'){
                 continue;
             }
 
-            if (empty($answers[$key])) {
+            if (!array_key_exists($key, $answers)) {
                 $newAnswers[] = array(
                     'questionId' => $key,
                     'status' => 'noAnswer',
                     'score' => 0,
                     'answer' => ''
                 );
-
-                // $results[$key] = $question;
                 continue;
             }
 
@@ -616,8 +613,7 @@ class TestServiceImpl extends BaseService implements TestService
             if (!array_key_exists('choices', $questions[$value['questionId']])) {
                 $questions[$value['questionId']]['choices'] = array();
             }
-            // array_push($questions[$value['questionId']]['choices'], $value);
-            $questions[$value['questionId']]['choices'][$value['id']] = $value;
+            $questions[$value['questionId']]['choices'][$key] = $value;
         }
 
         return $this->makeMaterial($questions);
@@ -641,6 +637,7 @@ class TestServiceImpl extends BaseService implements TestService
     private function findMaterial ($items)
     {
         foreach ($items as $key => $value) {
+
             if ($value['questionType'] != 'material') {
                 unset($items[$key]);
             }

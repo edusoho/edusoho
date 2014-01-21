@@ -34,7 +34,7 @@ class DoTestController extends BaseController
 		}
 
 		$questions = $this->getTestService()->findQuestionsByTestId($testId);
-		
+var_dump($questions);exit();		
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
@@ -71,8 +71,6 @@ class DoTestController extends BaseController
 
 		$paper = $this->getTestService()->getTestPaper($testResult['testId']);
 
-		//字符串要过滤js and so on?
-		// $questions = $this->getTestService()->showTest($id);
 		$questions = $this->getTestService()->testResults($id);
 
 		$questions = $this->formatQuestions($questions);
@@ -313,15 +311,6 @@ class DoTestController extends BaseController
         ));
 	}
 
-	// private function makeShowScoreByType ($questions, $paper)
-	// {
-	// 	$types = explode(',', $paper['metas']['question_type_seq']);
-	// 	$totalScores = array();
-	// 	foreach ($questions as $key => $value) {
-	// 		// $totalScores[$value['type']] = 
-	// 	}
-	// }
-
 	private function makeAccuracy ($questions)
     {
         $accuracyResult = array(
@@ -392,11 +381,12 @@ class DoTestController extends BaseController
 		foreach ($questions as $key => $value) {
 
 			if(in_array($value['type'], array('single_choice', 'choice'))) {
-				$i = 65;
-				foreach ($value['choices'] as $key => $v) {
-					$v['choiceIndex'] = chr($i);
-					$value['choices'][$key] = $v;
-					$i++;
+
+				ksort($value['choices']);
+				$value['choices'] = array_values($value['choices']);
+				foreach ($value['choices'] as $k => $v) {
+					$v['choiceIndex'] = chr($k+65);
+					$value['choices'][$k] = $v;
 				}
 			}
 
