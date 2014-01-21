@@ -10,6 +10,23 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        var $body = $(document.body);
+
+        $body.scrollspy({
+            target: '#testpaper-navbar',
+            offset: 120
+        });
+
+        $(window).on('load', function () {
+            $body.scrollspy('refresh');
+        });
+
+
+
+
+
+
+
 
 // 做试卷
         var interval = 180;
