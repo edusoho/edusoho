@@ -313,6 +313,12 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->findItemsByTestPaperId($testPaperId);
     }
 
+
+    public function findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndDoingAndUserId($testId, $userId);
+    }
+
     public function showTest ($id)
     {
         $userId = $this->getCurrentUser()->id;
@@ -762,11 +768,9 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
-    public function updatePaperResult ($id, $status, $remainTime)
+    public function updatePaperResult ($id, $remainTime)
     {
         $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
-
-        $fields['status'] = $status;
 
         $fields['remainTime'] = $remainTime;
 
