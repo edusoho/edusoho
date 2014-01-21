@@ -175,7 +175,7 @@ class QuizQuestionController extends BaseController
 
 	        $this->setFlashMessage('success', '题目修改成功！');
 
-			return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId,'parentId' => $question['parentId'])));
+            return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $question['parentId']))));
         }
 
         if (!empty($question['choices'])) {
