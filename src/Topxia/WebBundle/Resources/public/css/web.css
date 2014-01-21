@@ -3509,6 +3509,12 @@ body {
 	margin-bottom: 10px;
 }
 
+.testpaper-question-fill .testpaper-question-result ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
 .testpaper-question-determine-inputs {
 	margin-left: 50px;
 	float: left;
