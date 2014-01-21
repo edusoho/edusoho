@@ -309,7 +309,6 @@ define(function(require, exports, module) {
                 }
                 
                 $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
-                    console.log('ddd');
                     window.location.href = $('#finishCheck').data('goto');
                 }).error(function(){
 

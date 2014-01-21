@@ -703,6 +703,9 @@ class TestServiceImpl extends BaseService implements TestService
         $items = $this->getTestItemDao()->findItemsByTestPaperId($paperId);
         $items = ArrayToolkit::index($items, 'questionId');
 
+        $userAnswers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
+        $userAnswers = ArrayToolkit::index($userAnswers, 'questionId');
+
         foreach ($field as $key => $value) {
             $keys = explode('_', $key);
 
@@ -711,10 +714,12 @@ class TestServiceImpl extends BaseService implements TestService
             }
 
             $testResults[$keys[1]][$keys[0]] = $value;
-
+            $userAnswer = json_decode($userAnswers[$keys[1]]['answer']);
             if ($keys[0] == 'score'){
                 if ($value == $items[$keys[1]]['score']){
                     $testResults[$keys[1]]['status'] = 'right';
+                } elseif ($userAnswer[0] == '') {
+                    $testResults[$keys[1]]['status'] = 'noAnswer';
                 } else {
                     $testResults[$keys[1]]['status'] = 'wrong';
                 }

@@ -23,7 +23,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">得分</label>
 							<div class="col-sm-3 controls">
-								<input type="text" class="form-control" placeholder="得分" name="score_{{ question.id }}" data-score="{{ question.itemScore }}">
+								<input type="text" class="form-control" placeholder="得分" name="score_{{ question.id }}" data-score="{{ question.itemScore }}" value="{% if question.testResult.answer[0]|default('') == '' %}0{% endif %}">
 							</div>
 						</div>
 						<div class="form-group">
