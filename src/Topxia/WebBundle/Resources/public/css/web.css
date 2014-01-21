@@ -3382,7 +3382,7 @@ body {
     width: 940px;
   }
   .testpaper-navbar.affix {
-  	z-index: 10000;
+  	z-index: 1030;
     position: fixed; /* Undo the static from mobile first approach */
     top: 0px;
     background: #fff;
