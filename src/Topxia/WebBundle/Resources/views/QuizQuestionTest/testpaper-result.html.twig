@@ -14,6 +14,10 @@
         客观题 <strong class="text-score">{{ paperResult.objectiveScore }}分</strong>
         +
         主观题 <strong class="text-score">{{ paperResult.subjectiveScore }}分</strong>
+        {% if paperResult.teacherSay %}
+          <div class="mtl"><strong>评语：</strong></div>
+          <div class="mtm">{{ paperResult.teacherSay|raw }}</div>
+        {% endif %}
       </div>
     {% endif %}
   {% endif %}
