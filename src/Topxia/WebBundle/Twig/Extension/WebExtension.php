@@ -315,7 +315,7 @@ class WebExtension extends \Twig_Extension
         $index = 0;
         $stem = preg_replace_callback('/\[\[.*?\]\]/', function($matches) use (&$index) {
             $index ++;
-            return "<span class='question-stem-fill-blank'>{$index}</span>";
+            return "<span class='question-stem-fill-blank'>({$index})</span>";
         }, $stem);
         return $stem;
     }
