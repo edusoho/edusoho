@@ -39,6 +39,15 @@ define(function(require, exports, module) {
 
         var deadline = $('#time_show').data('time');
 
+        var isLimit = true;
+
+        if (deadline == null) {
+            isLimit = false;
+            deadline = interval*3;
+        } else {
+            isLimit = true;
+        }
+
         var timeLastPost = deadline - interval;
 
     //计时器...
@@ -48,33 +57,39 @@ define(function(require, exports, module) {
             deadline = undefined;
         }
 
-        if(deadline != undefined) {
-            var timer = timerShow(function(){
-                deadline--;
-                $('#time_show').text(formatTime(deadline));
 
-                if (deadline <= 0) {
-                    $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
-                        changeAnswers = {};
-                        window.location.href = $('#finishPaper').data('goto');
-                    });
-                }
-                if (deadline == timeLastPost) {
-                    timeLastPost = timeLastPost - interval;
-                    $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
-                        changeAnswers = {};
-                    });
-                }
-            }, 1000, true);
-        
-            $('#pause').on('click', function(){
-                timer.pause();
-            });
+        var timer = timerShow(function(){
+            deadline--;
+            $('#time_show').text(formatTime(deadline));
 
-            $('div#modal').on('hidden.bs.modal',function(){
-                timer.play();
-            });
-        }
+            if (deadline <= 0) {
+                $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
+                    changeAnswers = {};
+                    $('#timeout-dialog').show();
+                    timer.stop();
+                });
+            }
+            if (deadline == timeLastPost) {
+                timeLastPost = timeLastPost - interval;
+                $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
+                    changeAnswers = {};
+                });
+
+                if (!isLimit){
+                    deadline = interval*3;
+                    timeLastPost = deadline - interval;
+                }
+            }
+        }, 1000, true);
+    
+        $('#pause').on('click', function(){
+            timer.pause();
+        });
+
+        $('div#modal').on('hidden.bs.modal',function(){
+            timer.play();
+        });
+
     //...
 
 
@@ -340,14 +355,6 @@ define(function(require, exports, module) {
                 display: '得分'
             });
         });
-
-
-        // validator.addItem({
-        //     element: '[name^="score_"]',
-        //     required: true,
-        //     rule: 'score',
-        //     display: '得分'
-        // });
 
 
 
