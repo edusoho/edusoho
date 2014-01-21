@@ -559,23 +559,11 @@ class TestServiceImpl extends BaseService implements TestService
                 $right = 0;
                 $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
-                    $value = explode('|', $value);
-                    if (count($value) == 1) {
-                        if (trim($answers[$key]['answer'][$k]) == ''){
-                            $noAnswerCount++;
-                        }
-                        if ($value[0] == trim($answers[$key]['answer'][$k])) {
-                            $right++;
-                        }
-                    } else {
-                        foreach ($value as $v) {
-                            if (trim($answers[$key]['answer'][$k]) == ''){
-                                $noAnswerCount++;
-                            }
-                            if ($v == trim($answers[$key]['answer'][$k])) {
-                                $right++;
-                            }
-                        }
+                    $userAnswer = trim($answers[$key]['answer'][$k]);
+                    if (empty($userAnswer)) {
+                        $noAnswerCount++;
+                    } elseif (in_array($userAnswer, $value)) {
+                        $right++;
                     }
                 }
 
