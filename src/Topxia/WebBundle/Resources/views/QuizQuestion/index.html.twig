@@ -8,16 +8,16 @@
 {% set script_controller = 'course-manage/list' %}
 
 {% block main %}
-  
+
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
     <div class="pull-right">
-      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'choice',parentId:parentId}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 选择题</a>
-      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'fill',parentId:parentId}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 填空题</a>
-      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'determine',parentId:parentId}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 判断题</a>
-      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'essay',parentId:parentId}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 问答题</a>
+      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 选择题</a>
+      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'fill',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 填空题</a>
+      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'determine',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 判断题</a>
+      <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'essay',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 问答题</a>
       {% if not parentId %}
-        <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'material'}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 材料题</a>
+        <a href="{{ path('course_manage_quiz_question_create',{courseId:course.id,type:'material', goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 材料题</a>
       {% endif %}
     </div>
     题目管理
