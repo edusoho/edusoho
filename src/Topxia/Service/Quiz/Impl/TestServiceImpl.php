@@ -374,7 +374,7 @@ class TestServiceImpl extends BaseService implements TestService
             $questions[$key]['itemScore'] = $items[$key]['score'];
             $questions[$key]['seq'] = $items[$key]['seq'];
         }
-        
+
         $questions = $this->makeTest($questions, $choices);
 
 
@@ -516,7 +516,7 @@ class TestServiceImpl extends BaseService implements TestService
                     'questionId' => $key,
                     'status' => 'noAnswer',
                     'score' => 0,
-                    'answer' => ''
+                    'answer' => '[""]'
                 );
                 continue;
             }
