@@ -88,8 +88,8 @@ class DoTestDaoImpl extends BaseDao
         $sql ='';
         $answersForSQL = array();
         foreach ($answers as $key => $value) {
-            $sql .= "UPDATE {$this->table} set `score` = ?, `teacherSay` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-            array_push($answersForSQL, $value['score'], $value['teacherSay'], (int)$key, (int)$testPaperResultId); 
+            $sql .= "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+            array_push($answersForSQL, $value['score'], $value['teacherSay'], $value['status'], (int)$key, (int)$testPaperResultId); 
         }
 
         return $this->getConnection()->executeQuery($sql, $answersForSQL);

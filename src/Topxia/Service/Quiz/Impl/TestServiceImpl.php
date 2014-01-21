@@ -692,12 +692,16 @@ class TestServiceImpl extends BaseService implements TestService
 
     }
 
-    public function makeTeacherFinishTest ($id, $teacherId, $field)
+    public function makeTeacherFinishTest ($id, $paperId, $teacherId, $field)
     {
         $testResults = array();
         
         $teacherSay = $field['teacherSay'];
         unset($field['teacherSay']);
+
+
+        $items = $this->getTestItemDao()->findItemsByTestPaperId($paperId);
+        $items = ArrayToolkit::index($items, 'questionId');
 
         foreach ($field as $key => $value) {
             $keys = explode('_', $key);
@@ -707,6 +711,14 @@ class TestServiceImpl extends BaseService implements TestService
             }
 
             $testResults[$keys[1]][$keys[0]] = $value;
+
+            if ($keys[0] == 'score'){
+                if ($value == $items[$keys[1]]['score']){
+                    $testResults[$keys[1]]['status'] = 'right';
+                } else {
+                    $testResults[$keys[1]]['status'] = 'wrong';
+                }
+            }
         }
         //是否要加入教师阅卷的锁
         $this->getDoTestDao()->updateItemEssays($testResults, $id);

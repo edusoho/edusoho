@@ -230,7 +230,7 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
 
-			$this->getTestService()->makeTeacherFinishTest($id, $teacherId, $form);
+			$this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
 			
 			return $this->createJsonResponse(true);
 		}
