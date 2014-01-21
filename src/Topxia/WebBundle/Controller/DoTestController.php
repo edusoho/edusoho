@@ -20,6 +20,12 @@ class DoTestController extends BaseController
 			throw $this->createNotFoundException();
 		}
 
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId);
+
+		if ($testResult) {
+			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+		}
+
 		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
 
 		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
@@ -75,7 +81,7 @@ class DoTestController extends BaseController
 
 		$questions = $this->formatQuestions($questions);
 
-		$this->getTestService()->updatePaperResult($id, 'doing', $testResult['remainTime']);
+		$this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -105,7 +111,7 @@ class DoTestController extends BaseController
 
 			$result = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, 'doing', $remainTime);
+			$this->getTestService()->updatePaperResult($id, $remainTime);
 
 			return $this->createJsonResponse(true);
 		}
@@ -190,7 +196,7 @@ class DoTestController extends BaseController
 
 			$results = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, 'paused', $remainTime);
+			$this->getTestService()->updatePaperResult($id, $remainTime);
 
 			return $this->createJsonResponse(true);
 		}
