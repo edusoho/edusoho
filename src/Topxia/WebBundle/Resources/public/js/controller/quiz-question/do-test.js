@@ -283,27 +283,34 @@ define(function(require, exports, module) {
 
 
 
-        $('.testpaper-question-essay-input-btn').focus(function(){
+        $('.testpaper-question-essay-input-short').click(function() {
 
-            var editor = EditorFactory.create($(this), 'simple', {
+            var $shortTextarea = $(this).hide();
+            var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
+
+            var editor = EditorFactory.create($longTextarea, 'simple', {
 
                 extraFileUploadParams:{group:'default'},
 
-                textarea: $(this),
-
-                afterBlur: function(){
+                afterBlur: function() {
                     editor.sync();
-                    this.textarea.show();
                     editor.remove();
+                    $shortTextarea.val(editor.text());
+                    $longTextarea.hide();
+                    $shortTextarea.show();
+                },
+
+                afterCreate: function() {
+                    this.focus();
                 },
 
                 afterChange: function(){
                     this.sync();
-                    this.textarea.change();
+                    $longTextarea.change();
                 }
             });
 
-            $(this).hide();
+            
         });
 
 

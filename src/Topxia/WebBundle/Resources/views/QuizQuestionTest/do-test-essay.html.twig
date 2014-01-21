@@ -80,7 +80,10 @@
 
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-essay-inputs">
-				<textarea class="form-control testpaper-question-essay-input-btn" data-type="essay" name="{{ question.id }}" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
+		  	<textarea class="form-control testpaper-question-essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
+
+			<textarea class="form-control testpaper-question-essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
+
 		  </div>
 		  <div class="testpaper-question-actions pull-right">
 		  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
