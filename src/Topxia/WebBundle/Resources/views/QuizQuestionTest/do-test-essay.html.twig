@@ -15,7 +15,7 @@
 						<li><a href="#teacherAnswer{{ question.id }}" data-toggle="tab">参考答案</a></li>
 					</ul>
 					<div class="tab-content mbl">
-						<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0]|default('<span class="text-muted>未回答</span>')|raw }}</div>
+						<div class="tab-pane active" id="studentAnswer{{ question.id }}">{{ question.testResult.answer[0]|default('<span class="text-muted">未回答</span>')|raw }}</div>
 						<div class="tab-pane" id="teacherAnswer{{ question.id }}">{{ question.answer[0]|raw }}</div>
 					</div>
 

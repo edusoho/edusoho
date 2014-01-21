@@ -52,34 +52,6 @@ class MyQuestionServiceImpl extends BaseService
 		return QuestionSerialize::unserializes($this->getQuestionDao()->findQuestionsByIds($ids));
 	}
 
-	public function favoriteQuestion($questionId, $testPaperResultId, $userId)
-	{
-		$favorite = array(
-			'questionId' => $questionId,
-			'testPaperResultId' => $testPaperResultId,
-			'userId' => $userId,
-			'createdTime' => time()
-		);
-
-		$favoriteBack = $this->getQuestionFavoriteDao()->getFavoriteByQuestionIdAndTestPaperResutlIdAndUserId($favorite);
-
-		if (!$favoriteBack) {
-			return $this->getQuestionFavoriteDao()->addFavorite($favorite);
-		}
-
-		return $favoriteBack;
-	}
-
-	public function unFavoriteQuestion ($questionId, $testPaperResultId, $userId)
-	{
-		$favorite = array(
-			'questionId' => $questionId,
-			'userId' => $userId
-		);
-
-		return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
-	}
-
 	public function findFavoriteQuestionsByUserId ($id, $start, $limit)
 	{
 		return $this->getQuestionFavoriteDao()->findFavoriteQuestionsByUserId($id, $start, $limit);
@@ -136,7 +108,7 @@ class MyQuestionServiceImpl extends BaseService
 		$questions = array_merge($questions, $questionParents);
 
 		foreach ($questions as $key => $value) {
-			if ($value['questionType'] == 'fill'){
+			if ($value['type'] == 'fill'){
 				foreach ($value['answer'] as $k => $v) {
 					$questions[$key]['answer'][$k] = str_replace('|', '或者', $v);
 				}

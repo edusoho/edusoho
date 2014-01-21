@@ -16,9 +16,11 @@ class QuestionSerialize
         if (empty($question)) {
             return null;
         }
+
         if(!empty($question['answer'])){
-            $question['answer'] = json_decode($question['answer'],true);
+            $question['answer'] = json_decode($question['answer'], true);
         }
+
         return $question;
     }
 

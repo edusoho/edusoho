@@ -1,96 +1,93 @@
 <?php
 namespace Topxia\Service\Quiz\Impl;
 
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Quiz\QuestionImplementor;
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 use Topxia\Common\ArrayToolkit;
 
-class ChoiceQuestionImplementorImpl extends BaseService implements QuestionImplementor
+class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements QuestionImplementor
 {
 	public function getQuestion($question)
     {
         $question = QuestionSerialize::unserialize($question);
-        $question['choice'] = $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds(array($question['id']));
-        $question['choice']['isAnswer'] = implode(',',$question['answer']);
+        $question['choices'] = $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds(array($question['id']));
         return $question;
     }
 
-	public function createQuestion($question, $field){
-		if (!empty($question['parentId'])){
-            $field['parentId'] = (int) trim($question['parentId']);
-        }
-        $choiceField = $this->filterChoiceFields($question);
-        $field['questionType'] = $choiceField['type'];
-        unset($choiceField['type']);
-        $result =  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($field))
-        );
-        $choices = array();
-        foreach ($choiceField['choices'] as $key => $content) {
-            $choice['questionId'] = $result['id'];
-            $choice['content'] = $content;
-            $choiceResult = $this->getQuizQuestionChoiceDao()->addChoice($choice);
-            if (in_array($key, $choiceField['answers'])){
-                $choices[] = $choiceResult;
-            }
-        }
-        $field = array();
-        $field['answer'] =  ArrayToolkit::column($choices,'id');
-        return QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($result['id'], QuestionSerialize::serialize($field))
+	public function createQuestion($fields) 
+    {
+        $choices = $this->splitQuestionChoices($fields);
+
+        $fields['answer'] = $this->splitQuestionAnswers($fields, $choices);
+        $fields['type'] = count($fields['answer']) > 1 ? 'choice' : 'single_choice';
+        $fields = $this->filterQuestionFields($fields);
+
+        $question =  QuestionSerialize::unserialize(
+            $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($fields))
         );
 
+        $choices = $this->addQuestionChoices($question, $choices);
+
+        return $question;
 	}
 
-	public function updateQuestion($id, $question, $field){
-        $choiceField = $this->filterChoiceFields($question);
-        $field['questionType'] = $choiceField['type'];
-        unset($choiceField['type']);
-        $result =  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($field))
+	public function updateQuestion($id, $fields)
+    {
+        $choices = $this->splitQuestionChoices($fields);
+
+        $fields['answer'] = $this->splitQuestionAnswers($fields, $choices);
+        $fields['type'] = count($fields['answer']) > 1 ? 'choice' : 'single_choice';
+        $fields = $this->filterQuestionFields($fields);
+
+        $question =  QuestionSerialize::unserialize(
+            $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($fields))
         );
+
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
-        $choices = array();
-        foreach ($choiceField['choices'] as $key => $content) {
-            $choice['questionId'] = $result['id'];
-            $choice['content'] = $content;
-            $choiceResult = $this->getQuizQuestionChoiceDao()->addChoice($choice);
-            if (in_array($key, $choiceField['answers'])){
-                $choices[] = $choiceResult;
-            }
-        }
-        $field = array();
-        $field['answer'] =  ArrayToolkit::column($choices,'id');
-        return QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($result['id'], QuestionSerialize::serialize($field))
-        );
+        $choices = $this->addQuestionChoices($question, $choices);
+
+        return $question;
     }
 
-    private function filterChoiceFields($question)
+    private function splitQuestionChoices($question)
     {
-        $field['choices'] = $question['choices'];
-        $field['answers'] = explode('|', $question['answers']);
-        if (!is_array($field['choices']) || count($field['choices']) < 2) {
+        if ( empty($question['choices']) or !is_array($question['choices']) or count($question['choices']) < 2) {
             throw $this->createServiceException("choices参数不正确");
         }
-        if (!is_array($field['answers']) || empty($field['answers'])) {
-            throw $this->createServiceException("answers参数不正确");
-        }
 
-        foreach ($field['answers'] as $ans) {
-            if($ans >= count($field['choices'])){
-                throw $this->createServiceException("answers参数不正确");
-            }
-        }
-        if(count($field['answers']) == 1){
-            $field['type'] = 'single_choice';
-        }else{
-            $field['type'] = 'choice';
-        }
-        return $field;
+        return $question['choices'];
     }
 
+    private function splitQuestionAnswers($question, $choices)
+    {
+        $answers = array_unique($question['answer']);
+
+        if (empty($answers)) {
+            throw $this->createServiceException("answer参数不正确");
+        }
+
+        foreach ($answers as $answer) {
+            if ($answer >= count($choices)) {
+                throw $this->createServiceException("answer参数不正确");
+            }
+        }
+
+        return $answers;
+    }
+
+    private function addQuestionChoices($question, $choices)
+    {
+        $savedChoices = array();
+
+        foreach ($choices as $content) {
+            $choice = array();
+            $choice['questionId'] = $question['id'];
+            $choice['content'] = $content;
+            $savedChoices[] = $this->getQuizQuestionChoiceDao()->addChoice($choice);
+        }
+
+        return $savedChoices;
+    }
 
     private function getQuizQuestionDao()
     {

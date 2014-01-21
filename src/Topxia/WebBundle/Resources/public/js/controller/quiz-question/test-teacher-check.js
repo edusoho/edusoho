@@ -1,23 +1,43 @@
 define(function(require, exports, module) {
 
+    var teacherSayIndex = [
+        '喜欢',
+        '很喜欢',
+        '非常喜欢',
+        '非常非常喜欢',
+        '非常非常非常喜欢'
+    ];
+
+    var teacherSays = [
+        '这是喜欢',
+        '这是很喜欢',
+        '这是非常喜欢',
+        '这是非常非常喜欢',
+        '这是非常非常非常喜欢'
+    ];
+
+
+
     exports.run = function() {
 
+        $('#testpaper-teacherSay-select').change(function(){
+            var index =0;
 
-        $('.answerCard').on('click', '#postPaper', function(){
-            $finishBtn = $(this);
+            for (var i = 0; i < teacherSayIndex.length; i++) {
+                if (teacherSayIndex[i] == $(this).val()){
+                    index = i;
+                }
+            };
 
-            $.post($(this).data('url'), $('#essayForm').serialize(), function(){
-                window.location.href = $finishBtn.data('goto');
-            });
+            $('#testpaper-teacherSay-input').val(teacherSays[index]);
 
         });
 
-        $('.answerCard .panel-body a.btn[href^="#question"]').each(function(){
-            var val = $(this).attr('href');
-            $(val).on('click', '.panel-footer a.btn', function(){
-                $(this).parent().find('div.well').toggle();
-            })
+        $('#testpaper-teacherSay-btn').on('click', function(){
+            val = $('#testpaper-teacherSay-input').val();
+            $('#teacherSay').val(val);
         });
+
     };
 
 

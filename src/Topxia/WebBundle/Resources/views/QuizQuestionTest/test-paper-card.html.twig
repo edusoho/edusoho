@@ -14,7 +14,7 @@
 		{% for type in paper.metas.question_type_seq %}
 
 			{% for question in questions[type] %}
-				{% if question.questionType != 'material' %}
+				{% if question.type != 'material' %}
 					<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
 				{% else %}
 					{% for question in question.questions %}

@@ -1,9 +1,9 @@
 <tr data-role='item'>
   <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">{{ item.stem | plain_text(40) }}</a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">{{ item.stem |fill_question_stem_text| plain_text(40) }}</a>
   </td>
-  <td>{{ dict('questionType')[item.questionType] }}</td>
+  <td>{{ dict('questionType')[item.type] }}</td>
   {% if item.parentId == 0 %}
   <td>
     {% if item.targetType == 'lesson'%}
@@ -23,11 +23,11 @@
       <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">预览</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu pull-right">
-        {% if item.questionType == 'material'%}
+        {% if item.type == 'material'%}
           <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
         {% endif %}
         <li><a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑题目</a></li>
-        <li><a href="javascript:" data-name='题目{% if item.questionType == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除题目</a></li>
+        <li><a href="javascript:" data-name='题目{% if item.type == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除题目</a></li>
       </ul>
     </div>
   </td>

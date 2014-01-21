@@ -44,8 +44,8 @@ class QuizQuestionController extends BaseController
 			
 		}
 
-		if(!empty($field['questionType'])){
-			$conditions['questionType'] = $field['questionType'];
+		if(!empty($field['type'])){
+			$conditions['type'] = $field['type'];
 		}
 
 		if(!empty($field['keyword'])){
@@ -108,6 +108,7 @@ class QuizQuestionController extends BaseController
 	    if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
             $question['parentId'] = $parentId;
+
 	        $question = $this->getQuestionService()->createQuestion($question);
 
 			$submission = $request->request->get('submission');
@@ -177,10 +178,12 @@ class QuizQuestionController extends BaseController
 			return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId'=>$courseId,'parentId' => $question['parentId'])));
         }
 
-		$choice = array();
-        if ($question['questionType'] =='choice' || $question['questionType'] =='single_choice'){
-        	$choice = $question['choice'];
-        	unset($question['choice']);
+        if (!empty($question['choices'])) {
+            foreach ($question['choices'] as $key => $choice) {
+                if (in_array($key, $question['answer'])) {
+                    $question['choices'][$key]['isAnswer'] = true;
+                }
+            }
         }
 
         $targets['default'] = $question['targetType'].'-'.$question['targetId'];
@@ -189,9 +192,9 @@ class QuizQuestionController extends BaseController
         return $this->render('TopxiaWebBundle:QuizQuestion:modal.html.twig', array(
 			'question' => $question,
 			'targets' => $targets,
+            'parentId' => $question['parentId'],
 			'course' => $course,
-			'choice' => $choice,
-			'type' => $question['questionType'],
+			'type' => $question['type'],
 			'isEdit' => '1',
 			'category' => $category,
 		));
@@ -308,12 +311,12 @@ class QuizQuestionController extends BaseController
     		throw $this->createNotFoundException('题目不存在！');
     	}
 
-    	if ($question['questionType'] == 'material'){
+    	if ($question['type'] == 'material'){
     		$questions = $this->getQuestionService()->findQuestionsByParentIds(array($id));
     		$questions = $this->getQuestionService()->findQuestions(ArrayToolkit::column($questions, 'id'));
 
     		foreach ($questions as $key => $value) {
-    			if (!in_array($value['questionType'], array('single_choice', 'choice'))){
+    			if (!in_array($value['type'], array('single_choice', 'choice'))){
     				continue;
     			}
     			$choiceIndex = 65;
@@ -328,7 +331,7 @@ class QuizQuestionController extends BaseController
 
     		$question['questions'] = $questions;
     	} else {
-    		if (in_array($question['questionType'], array('single_choice', 'choice'))){
+    		if (in_array($question['type'], array('single_choice', 'choice'))){
 
 				$choiceIndex = 65;
 				foreach ($question['choices'] as $k => $choice) {
@@ -347,12 +350,12 @@ class QuizQuestionController extends BaseController
 
     	// $question['choices'] = $choices;
 
-    	$questionType = $question['questionType'] == 'single_choice'? 'choice' : $question['questionType'];
+    	$type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
 
 
     	return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
             'question' => $question,
-            'questionType' => $questionType,
+            'type' => $type,
         ));
     }
 
