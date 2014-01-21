@@ -29,7 +29,7 @@
     
     <td >
         <input name="ids[]" type="hidden" value="{{question.id}}" /></input>
-        <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.typee != 'material' %} type="text" {% else %} type="hidden" 
+        <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.type != 'material' %} type="text" {% else %} type="hidden" 
             {% endif %} value="{% if flag | default(null) and items[question.id]['score'] | default(null) %}{{ items[question.id]['score']}}{% else %}{{question.score}}{% endif %}" /></input>
     </td>
 

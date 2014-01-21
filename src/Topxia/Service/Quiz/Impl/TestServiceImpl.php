@@ -282,7 +282,7 @@ class TestServiceImpl extends BaseService implements TestService
             }
         }
 
-        $seqType =  explode(',', $testPaper['metas']['question_type_seq']);
+        $seqType =  $testPaper['metas']['question_type_seq'];
         $seqNum = 1;
 
         foreach ($seqType as $type) {
