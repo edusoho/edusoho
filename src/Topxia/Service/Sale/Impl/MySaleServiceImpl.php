@@ -130,7 +130,7 @@ class MySaleServiceImpl extends BaseService implements MySaleService
 
     public function generateMySaleTookeen($tookeenPrefix='')
     {
-        return  $tookeenPrefix. date('YmdHis', time()).$this->generateChars(24);
+        return  date('YmdHis', time()).$tookeenPrefix.$this->generateChars(24);
     }
 
 

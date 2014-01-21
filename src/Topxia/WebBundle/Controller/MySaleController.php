@@ -116,7 +116,7 @@ class MySaleController extends BaseController
 
 
         $prodType='web';
-        $prodId=999999999;
+        $prodId=987654321;
         $prodName='网站推广';
 
 
@@ -132,17 +132,17 @@ class MySaleController extends BaseController
 
             $mysale['adCommissionType']= 'ratio';
 
-            $mysale['adCommission']= 5;  //网站推广，获取
+            $mysale['adCommission']= 5;  //网站推广，获取5%的佣金
            
 
             $mysale['prodType']=$prodType;
             $mysale['prodId']=$prodId;
-            $mysale['prodName']=$course['title'];
+            $mysale['prodName']=$prodName;
 
-            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
+            $webUrl = $this->generateUrl('/',true);
 
 
-            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+            $mysale['tUrl']=$webUrl.'?mu='.$mysale['mTookeen'];
 
             $mysale['validTime']=$course['saleValidTime'];
 

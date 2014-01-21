@@ -144,7 +144,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['note']='本人定单不能享受佣金收入';
 
 
-            }else if ($order['validTime']<time()){
+            }else if ($mysale['validTime']<time()){
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
