@@ -13,7 +13,9 @@
 		        {% set userAnswer = question.testResult.answer[index] %}
 			    	<li>
 			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
-			    	  {% if userAnswer in answer %}
+			    	  {% if userAnswer == '' %}
+			    	  。你未回答
+			    	  {% elseif userAnswer in answer %}
 			    	  。回答正确
 			    	  {% else %}
 			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。回答错误
