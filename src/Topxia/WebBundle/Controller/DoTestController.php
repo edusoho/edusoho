@@ -34,7 +34,7 @@ class DoTestController extends BaseController
 		}
 
 		$questions = $this->getTestService()->findQuestionsByTestId($testId);
-var_dump($questions);exit();		
+	
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
@@ -391,6 +391,7 @@ var_dump($questions);exit();
 			}
 
 			if ($value['type'] == 'material') {
+
 				$value['questions'] = $this->formatQuestions($value['questions']);
 				$number += $value['questions']['number'];
 				unset($value['questions']['number']);

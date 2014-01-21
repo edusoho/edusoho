@@ -370,12 +370,13 @@ class TestServiceImpl extends BaseService implements TestService
 
         $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
 
-        $questions = $this->makeTest($questions, $choices);
-
         foreach ($questions as $key => $question) {
             $questions[$key]['itemScore'] = $items[$key]['score'];
             $questions[$key]['seq'] = $items[$key]['seq'];
         }
+        
+        $questions = $this->makeTest($questions, $choices);
+
 
         // $questions = $this->makeMaterial($questions);
 
