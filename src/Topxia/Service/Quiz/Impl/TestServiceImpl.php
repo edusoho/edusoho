@@ -512,11 +512,15 @@ class TestServiceImpl extends BaseService implements TestService
             }
 
             if (!array_key_exists($key, $answers)) {
+
+                $noAnswer = array();
+                $noAnswer = array_pad($noAnswer, count($question['answer']), "");
+
                 $newAnswers[] = array(
                     'questionId' => $key,
                     'status' => 'noAnswer',
                     'score' => 0,
-                    'answer' => array('')
+                    'answer' => $noAnswer
                 );
                 continue;
             }
