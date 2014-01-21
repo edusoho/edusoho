@@ -585,16 +585,20 @@ course_manage_test_teacher_check:
     pattern: /test/teacher/check/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheck }
 
+course_manage_test_teacher_finish_check:
+    pattern: /test/teacher/finish/check
+    defaults: { _controller: TopxiaWebBundle:DoTest:testFinishCheck }
+
 course_manage_my_quiz:
     pattern: /my/quiz
     defaults: { _controller: TopxiaWebBundle:MyQuestion:index }
 
 course_manage_favorite_question:
-    pattern: /favorite/question/{questionId}/{testPaperResultId}
+    pattern: /question/{id}/favorite
     defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
 
 course_manage_unfavorite_question:
-    pattern: /unfavorite/question/{questionId}/{testPaperResultId}
+    pattern: /question/{id}/unfavorite
     defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
 
 course_manage_show_favorite_question:

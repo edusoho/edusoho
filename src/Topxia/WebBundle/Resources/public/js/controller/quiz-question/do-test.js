@@ -45,14 +45,15 @@ define(function(require, exports, module) {
                     });
                 }
             }, 1000, true);
-        }
-        $('#pause').on('click', function(){
-            timer.pause();
-        });
+        
+            $('#pause').on('click', function(){
+                timer.pause();
+            });
 
-        $('div#modal').on('hidden.bs.modal',function(){
-            timer.play();
-        });
+            $('div#modal').on('hidden.bs.modal',function(){
+                timer.play();
+            });
+        }
     //...
 
 
@@ -243,15 +244,22 @@ define(function(require, exports, module) {
 
         //老师批阅
 
-        $('.testpaper-card').on('click', '#postPaper', function(){
-            $finishBtn = $(this);
+        // $('.testpaper-card').on('click', '#postPaper', function(){
+        //     $finishBtn = $(this);
 
-            $.post($(this).data('url'), $('#teacherCheckForm').serialize(), function(){
-                window.location.href = $finishBtn.data('goto');
+        //     $.post($(this).data('url'), $('#teacherCheckForm').serialize(), function(){
+        //         window.location.href = $finishBtn.data('goto');
+        //     });
+
+        // });
+
+        $('#teacherCheckForm').submit(function(){
+
+            $.post($('#finishCheck').data('post-url'), $('#teacherCheckForm').serialize(), function(){
+                window.location.href = $('#finishCheck').data('goto');
             });
-
+            return false;
         });
-
 
 
         //问答题富文本编辑器部分

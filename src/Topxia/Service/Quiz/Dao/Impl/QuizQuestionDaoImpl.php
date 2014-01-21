@@ -138,7 +138,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'questions')
-            ->andWhere('questionType = :questionType')
+            ->andWhere('type = :type')
             ->andWhere('parentId = :parentId')
             ->andWhere('targetId = :targetId')
             ->andWhere('stem LIKE :stem')

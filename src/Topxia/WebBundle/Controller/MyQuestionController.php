@@ -43,21 +43,26 @@ class MyQuestionController extends BaseController
         ));
 	}
 
-    public function favoriteQuestionAction(Request $request ,$questionId, $testPaperResultId)
+    public function favoriteQuestionAction(Request $request ,$id)
     {
+        $targetType = $request->query->get('targetType');
+        $targetId = $request->query->get('targetId');
 
         $user = $this->getCurrentUser();
 
-        $favorite = $this->getMyQuestionService()->favoriteQuestion($questionId, $testPaperResultId, $user['id']);
+        $favorite = $this->getQuestionService()->favoriteQuestion($id, $targetType, $targetId, $user['id']);
     
         return $this->createJsonResponse(true);
     }
 
-    public function unFavoriteQuestionAction(Request $request ,$questionId, $testPaperResultId)
+    public function unFavoriteQuestionAction(Request $request ,$id)
     {
+        $targetType = $request->query->get('targetType');
+        $targetId = $request->query->get('targetId');
+
         $user = $this->getCurrentUser();
 
-        $this->getMyQuestionService()->unFavoriteQuestion($questionId, $testPaperResultId, $user['id']);
+        $this->getQuestionService()->unFavoriteQuestion($id, $targetType, $targetId, $user['id']);
 
         return $this->createJsonResponse(true);
     }
@@ -77,26 +82,26 @@ class MyQuestionController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+ 
         $questionIds = ArrayToolkit::column($favoriteQuestions, 'questionId');
 
         $questions = $this->getMyQuestionService()->findFavoriteQuestionsByIds($questionIds);
 
         $questions = $this->formatQuestions($questions);
 
-        $myTestPaperResultIds = ArrayToolkit::column($favoriteQuestions, 'testPaperResultId');
-
-        $myTestPaperResults = $this->getMyQuestionService()->findTestPaperResultsByIds($myTestPaperResultIds);
-
-        $myTestPaperIds = ArrayToolkit::column($myTestPaperResults, 'testId');
+        $myTestPaperIds = array();
+        foreach ($favoriteQuestions as $key => $value) {
+            if ($value['targetType'] == 'testpaper'){
+                array_push($myTestPaperIds, $value['targetId']);
+            }
+        }
 
         $myTestPapers = $this->getMyQuestionService()->findTestPapersByIds($myTestPaperIds);
-        
+ 
         return $this->render('TopxiaWebBundle:MyQuiz:my-favorite-question.html.twig', array(
             'favoriteActive' => 'active',
             'user' => $user,
             'favoriteQuestions' => ArrayToolkit::index($favoriteQuestions, 'id'),
-            'testPaperResults' => ArrayToolkit::index($myTestPaperResults, 'id'),
             'testPapers' => ArrayToolkit::index($myTestPapers, 'id'),
             'questions' => ArrayToolkit::index($questions, 'id'),
             'paginator' => $paginator
@@ -192,7 +197,7 @@ class MyQuestionController extends BaseController
 
         foreach ($questions as $key => $value) {
 
-            if(in_array($value['questionType'], array('single_choice', 'choice'))) {
+            if(in_array($value['type'], array('single_choice', 'choice'))) {
                 $i = 65;
                 foreach ($value['choices'] as $key => $v) {
                     $v['choiceIndex'] = chr($i);
@@ -213,6 +218,11 @@ class MyQuestionController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Quiz.MyQuestionService');
 	}
+
+    private function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Quiz.QuestionService');
+    }
 
 	private function getCourseService ()
 	{

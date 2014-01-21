@@ -42,7 +42,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 				if($question['parentId'] != 0)
 					continue;
 
-                $questionsGroup[$question['questionType']][] = $question;
+                $questionsGroup[$question['type']][] = $question;
             }
 		} else {
 
@@ -51,7 +51,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 				if($question['parentId'] != 0)
 					continue;
 
-                $questionsGroup[$question['questionType']][$question['difficulty']][] = $question;
+                $questionsGroup[$question['type']][$question['difficulty']][] = $question;
             }
 		}
 
@@ -60,11 +60,12 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 	public function build()
 	{
-		$seqTypes = explode(',', $this->testPaper['metas']['question_type_seq']);
+        
+		// $seqTypes = explode(',', $this->testPaper['metas']['question_type_seq']);
 
 		$name = $this->options['isDifficulty'] == 0 ? 'buildQuestions' : 'buildDifficultyQuestions';
 
-		foreach ($seqTypes as $type) {
+		foreach ($this->testPaper['metas']['question_type_seq'] as $type) {
 			
             $this->$name($type, $this->options['itemCounts'][$type]);
 		}

@@ -1,27 +1,30 @@
 <?php
 namespace Topxia\Service\Quiz\Impl;
 
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\Quiz\QuestionImplementor;
 use Topxia\Service\Quiz\Impl\QuestionSerialize;
 use Topxia\Common\ArrayToolkit;
 
-class MaterialQuestionImplementorImpl extends BaseService implements QuestionImplementor
+class MaterialQuestionImplementorImpl extends BaseQuestionImplementor implements QuestionImplementor
 {
 	public function getQuestion($question)
     {
         return QuestionSerialize::unserialize($question);
     }
 
-	public function createQuestion($question, $field){
-		return QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($field))
+	public function createQuestion($question)
+    {
+        $question = $this->filterQuestionFields($question);
+        return QuestionSerialize::unserialize(
+            $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($question))
         );
 	}
 
-    public function updateQuestion($id, $question, $field){
+    public function updateQuestion($id, $question)
+    {
+        $question = $this->filterQuestionFields($question);
     	return  QuestionSerialize::unserialize(
-            $this->getQuizQuestionDao()->updateQuestion($id,  QuestionSerialize::serialize($field))
+            $this->getQuizQuestionDao()->updateQuestion($id,  QuestionSerialize::serialize($question))
         );
     }
 

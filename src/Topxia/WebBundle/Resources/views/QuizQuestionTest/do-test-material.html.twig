@@ -2,25 +2,25 @@
 <div class="well">{{ question.stem|raw }}</div>
 {% for question in question.questions %}
 
-	{% if question.questionType == 'single_choice' or question.questionType == 'choice' %}
+	{% if question.type == 'single_choice' or question.type == 'choice' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
 	{% endif %}
 
-	{% if question.questionType == 'determine' %}
+	{% if question.type == 'determine' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-determine.html.twig' %}
 
 	{% endif %}
 
-	{% if question.questionType == 'fill' %}
+	{% if question.type == 'fill' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-fill.html.twig' %}
 
 	{% endif %}
 
-	{% if question.questionType == 'essay' %}
+	{% if question.type == 'essay' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-essay.html.twig' %}
 
