@@ -2,11 +2,13 @@
 
 {% block title %}题目预览{% endblock %}
 
+{% set modal_size = 'large' %}
+
 {% block body %}
 
   {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
 
 {% endblock %}
 {% block footer %}
-  <button type="button" class="btn btn-link" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 {% endblock %}
