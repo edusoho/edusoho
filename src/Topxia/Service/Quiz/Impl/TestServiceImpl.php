@@ -487,7 +487,7 @@ class TestServiceImpl extends BaseService implements TestService
         //记分
         $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testResult['id']);
         //未答题目记分
-        $this->getDoTestDao()->addItemResults($results['newAnswers'], $testResult['id'], $userId);
+        $this->getDoTestDao()->addItemResults($results['newAnswers'], $testResult['testId'], $testResult['id'], $userId);
 
         return $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
     }
@@ -516,7 +516,7 @@ class TestServiceImpl extends BaseService implements TestService
                     'questionId' => $key,
                     'status' => 'noAnswer',
                     'score' => 0,
-                    'answer' => '[""]'
+                    'answer' => array('')
                 );
                 continue;
             }

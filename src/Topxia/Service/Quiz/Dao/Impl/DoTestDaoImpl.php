@@ -28,20 +28,20 @@ class DoTestDaoImpl extends BaseDao
 		return $this->getConnection()->executeUpdate($sql, $answersForSQL);
 	}
 
-    public function addItemResults ($answers, $testPaperResultId, $userId)
+    public function addItemResults ($answers, $testId, $testPaperResultId, $userId)
     {
         if(empty($answers)){ 
             return array(); 
         }
 
-        $mark = "(".str_repeat('?,', 5)."? )";
+        $mark = "(".str_repeat('?,', 6)."? )";
         $marks = str_repeat($mark.',', count($answers) - 1).$mark;
         $answersForSQL = array();
         foreach ($answers as $key => $value) {
-            array_push($answersForSQL, (int)$testPaperResultId, (int)$userId, (int)$key, $value['status'], $value['score'], $value['answer']);
+            array_push($answersForSQL, (int)$testId, (int)$testPaperResultId, (int)$userId, (int)$key, $value['status'], $value['score'], $value['answer']);
         }
 
-        $sql = "INSERT INTO {$this->table} (`testPaperResultId`, `userId`, `questionId`, `status`, `score`, `answer`) VALUES {$marks};";
+        $sql = "INSERT INTO {$this->table} (`testId`, `testPaperResultId`, `userId`, `questionId`, `status`, `score`, `answer`) VALUES {$marks};";
 
         return $this->getConnection()->executeUpdate($sql, $answersForSQL);
     }
