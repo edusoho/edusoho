@@ -2,13 +2,16 @@
 
 {% block title %}登录设置 - {{ parent() }}{% endblock %}
 
+{% set script_controller = 'system/login_bind' %}
+
 {% set submenu = 'login_bind' %}
+
 {% block maincontent %}
 <div class="page-header"><h1>登录设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
-<form class="form-horizontal" method="post" novalidate>
+<form class="form-horizontal" method="post" id="login_bind-form" novalidate>
 
   <fieldset>
     <div class="form-group">
