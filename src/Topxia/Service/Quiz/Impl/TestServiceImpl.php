@@ -313,6 +313,12 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->findItemsByTestPaperId($testPaperId);
     }
 
+
+    public function findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndDoingAndUserId($testId, $userId);
+    }
+
     public function showTest ($id)
     {
         $userId = $this->getCurrentUser()->id;
@@ -370,12 +376,13 @@ class TestServiceImpl extends BaseService implements TestService
 
         $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
 
-        $questions = $this->makeTest($questions, $choices);
-
         foreach ($questions as $key => $question) {
             $questions[$key]['itemScore'] = $items[$key]['score'];
             $questions[$key]['seq'] = $items[$key]['seq'];
         }
+
+        $questions = $this->makeTest($questions, $choices);
+
 
         // $questions = $this->makeMaterial($questions);
 
@@ -486,7 +493,7 @@ class TestServiceImpl extends BaseService implements TestService
         //记分
         $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testResult['id']);
         //未答题目记分
-        $this->getDoTestDao()->addItemResults($results['newAnswers'], $testResult['id'], $userId);
+        $this->getDoTestDao()->addItemResults($results['newAnswers'], $testResult['testId'], $testResult['id'], $userId);
 
         return $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
     }
@@ -511,11 +518,15 @@ class TestServiceImpl extends BaseService implements TestService
             }
 
             if (!array_key_exists($key, $answers)) {
+
+                $noAnswer = array();
+                $noAnswer = array_pad($noAnswer, count($question['answer']), "");
+
                 $newAnswers[] = array(
                     'questionId' => $key,
                     'status' => 'noAnswer',
                     'score' => 0,
-                    'answer' => ''
+                    'answer' => $noAnswer
                 );
                 continue;
             }
@@ -559,23 +570,11 @@ class TestServiceImpl extends BaseService implements TestService
                 $right = 0;
                 $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
-                    $value = explode('|', $value);
-                    if (count($value) == 1) {
-                        if (trim($answers[$key]['answer'][$k]) == ''){
-                            $noAnswerCount++;
-                        }
-                        if ($value[0] == trim($answers[$key]['answer'][$k])) {
-                            $right++;
-                        }
-                    } else {
-                        foreach ($value as $v) {
-                            if (trim($answers[$key]['answer'][$k]) == ''){
-                                $noAnswerCount++;
-                            }
-                            if ($v == trim($answers[$key]['answer'][$k])) {
-                                $right++;
-                            }
-                        }
+                    $userAnswer = trim($answers[$key]['answer'][$k]);
+                    if (empty($userAnswer)) {
+                        $noAnswerCount++;
+                    } elseif (in_array($userAnswer, $value)) {
+                        $right++;
                     }
                 }
 
@@ -693,12 +692,19 @@ class TestServiceImpl extends BaseService implements TestService
 
     }
 
-    public function makeTeacherFinishTest ($id, $teacherId, $field)
+    public function makeTeacherFinishTest ($id, $paperId, $teacherId, $field)
     {
         $testResults = array();
         
         $teacherSay = $field['teacherSay'];
         unset($field['teacherSay']);
+
+
+        $items = $this->getTestItemDao()->findItemsByTestPaperId($paperId);
+        $items = ArrayToolkit::index($items, 'questionId');
+
+        $userAnswers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
+        $userAnswers = ArrayToolkit::index($userAnswers, 'questionId');
 
         foreach ($field as $key => $value) {
             $keys = explode('_', $key);
@@ -708,6 +714,16 @@ class TestServiceImpl extends BaseService implements TestService
             }
 
             $testResults[$keys[1]][$keys[0]] = $value;
+            $userAnswer = json_decode($userAnswers[$keys[1]]['answer']);
+            if ($keys[0] == 'score'){
+                if ($value == $items[$keys[1]]['score']){
+                    $testResults[$keys[1]]['status'] = 'right';
+                } elseif ($userAnswer[0] == '') {
+                    $testResults[$keys[1]]['status'] = 'noAnswer';
+                } else {
+                    $testResults[$keys[1]]['status'] = 'wrong';
+                }
+            }
         }
         //是否要加入教师阅卷的锁
         $this->getDoTestDao()->updateItemEssays($testResults, $id);
@@ -769,11 +785,9 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
-    public function updatePaperResult ($id, $status, $remainTime)
+    public function updatePaperResult ($id, $remainTime)
     {
         $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
-
-        $fields['status'] = $status;
 
         $fields['remainTime'] = $remainTime;
 

@@ -4,7 +4,23 @@
 
   {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
 
-  <div class="alert alert-info">主观题总分 <strong>{{ accuracy.essay.totalScore }} 分</strong>，老师正在批阅试卷。</div>
+  {% if accuracy.essay.totalScore > 0 %}
+    {% if paperResult.status == 'reviewing' %}
+      <div class="alert alert-info">主观题总分 <strong>{{ accuracy.essay.totalScore }} 分</strong>，老师正在批阅试卷。</div>
+    {% elseif paperResult.status == 'finished' %}
+      <div class="alert alert-success">
+        总分 <strong class="text-score">{{ paperResult.score }}分</strong>
+        =
+        客观题 <strong class="text-score">{{ paperResult.objectiveScore }}分</strong>
+        +
+        主观题 <strong class="text-score">{{ paperResult.subjectiveScore }}分</strong>
+        {% if paperResult.teacherSay %}
+          <div class="mtl"><strong>评语：</strong></div>
+          <div class="mtm">{{ paperResult.teacherSay|raw }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endif %}
 
 {% endblock %}
 

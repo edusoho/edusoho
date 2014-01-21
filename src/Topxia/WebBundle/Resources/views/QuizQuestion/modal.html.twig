@@ -29,9 +29,9 @@
     <div id="question-creator-widget" data-upload-url="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}">
       <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="
       {% if isEdit %}
-        {{ path('course_manage_quiz_question_update',{courseId:course.id, id:question.id}) }}
+        {{ path('course_manage_quiz_question_update',{courseId:course.id, id:question.id, goto:app.request.get('goto')}) }}
       {% else %}
-        {{ path('course_manage_quiz_question_create',{courseId:course.id, type:type, parentId:parentId}) }}
+        {{ path('course_manage_quiz_question_create',{courseId:course.id, type:type, parentId:parentId, goto:app.request.get('goto')}) }}
       {% endif %}
       ">
         {{ web_macro.flash_messages() }}
@@ -54,7 +54,7 @@
         </div>
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><label for="question-stem-field">题干</label></div>
+          <div class="col-md-2 control-label"><label for="question-stem-field">{% if type == 'material' %}材料{% else %}题干{% endif %}</label></div>
           <div class="col-md-8 controls">
             <textarea class="form-control" id="question-stem-field" name="stem">{{question.stem | default('')}}</textarea>
           </div>
@@ -165,7 +165,11 @@
                 <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue">保存并继续</button>
             {% endif %}
 
-            <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
+            {% if type == 'material' and not isEdit %}
+              <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存并添加子题</button>
+            {% else %}
+              <button type="submit" data-role="submit" class="btn btn-primary" data-submission="submit">保存</button>
+            {% endif %}
 
             {% if isEdit %}
                 <a href="{{ path('course_manage_quiz_question',{courseId:course.id,parentId:question.parentId}) }}" class="btn btn-link">返回</a>

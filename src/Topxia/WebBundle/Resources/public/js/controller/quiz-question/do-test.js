@@ -1,5 +1,9 @@
 define(function(require, exports, module) {
 
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
+    var Notify = require('common/bootstrap-notify');
+
     var EditorFactory = require('common/kindeditor-factory');
 
     var wrongs = [],
@@ -9,6 +13,23 @@ define(function(require, exports, module) {
     alls = [];
 
     exports.run = function() {
+
+        var $body = $(document.body);
+
+        $body.scrollspy({
+            target: '#testpaper-navbar',
+            offset: 120
+        });
+
+        $(window).on('load', function () {
+            $body.scrollspy('refresh');
+        });
+
+
+
+
+
+
 
 
 // 做试卷
@@ -242,53 +263,91 @@ define(function(require, exports, module) {
             });
         });
 
-        //老师批阅
-
-        // $('.testpaper-card').on('click', '#postPaper', function(){
-        //     $finishBtn = $(this);
-
-        //     $.post($(this).data('url'), $('#teacherCheckForm').serialize(), function(){
-        //         window.location.href = $finishBtn.data('goto');
-        //     });
-
-        // });
-
-        $('#teacherCheckForm').submit(function(){
-
-            $.post($('#finishCheck').data('post-url'), $('#teacherCheckForm').serialize(), function(){
-                window.location.href = $('#finishCheck').data('goto');
-            });
-            return false;
-        });
-
 
         //问答题富文本编辑器部分
 
 
 
-        $('.testpaper-question-essay-input-btn').focus(function(){
+        $('.testpaper-question-essay-input-short').click(function() {
 
-            var editor = EditorFactory.create($(this), 'simple', {
+            var $shortTextarea = $(this).hide();
+            var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
+
+            var editor = EditorFactory.create($longTextarea, 'simple', {
 
                 extraFileUploadParams:{group:'default'},
 
-                textarea: $(this),
-
-                afterBlur: function(){
+                afterBlur: function() {
                     editor.sync();
-                    this.textarea.show();
                     editor.remove();
+                    $shortTextarea.val(editor.text());
+                    $longTextarea.hide();
+                    $shortTextarea.show();
+                },
+
+                afterCreate: function() {
+                    this.focus();
                 },
 
                 afterChange: function(){
                     this.sync();
-                    this.textarea.change();
+                    $longTextarea.change();
                 }
             });
 
-            $(this).hide();
+            
         });
 
+        //老师阅卷校验
+
+        var validator = new Validator({
+            element: '#teacherCheckForm',
+            autoSubmit: false,
+            onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return false;
+                }
+                
+                $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
+                    window.location.href = $('#finishCheck').data('goto');
+                }).error(function(){
+
+                });
+            }
+
+        });
+
+        Validator.addRule('score', function(options) {
+            var element = options.element;
+            var isFloat = /^\d+(\.\d)?$/.test(element.val());
+            if (!isFloat){
+                return false;
+            }
+
+            if (parseInt(element.val()) <= parseInt(element.data('score'))) {
+                return true;
+            } else {
+                return false;
+            }
+        }, '{{display}}只能是小于题目分数的数字');
+
+        $('[name^="score_"]').each(function(){
+            name = $(this).attr('name');
+            validator.addItem({
+                element: '[name='+name+']',
+                required: true,
+                rule: 'score',
+                display: '得分'
+            });
+        });
+
+
+        // validator.addItem({
+        //     element: '[name^="score_"]',
+        //     required: true,
+        //     rule: 'score',
+        //     display: '得分'
+        // });
 
 
 

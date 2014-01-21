@@ -26,8 +26,8 @@
         {% if item.type == 'material'%}
           <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
         {% endif %}
-        <li><a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑题目</a></li>
-        <li><a href="javascript:" data-name='题目{% if item.type == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除题目</a></li>
+        <li><a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑</a></li>
+        <li><a href="javascript:" data-name='题目{% if item.type == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除</a></li>
       </ul>
     </div>
   </td>
