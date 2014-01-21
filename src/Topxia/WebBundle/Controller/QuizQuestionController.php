@@ -134,7 +134,9 @@ class QuizQuestionController extends BaseController
 					$parentId = $question['id'];
 				}
 
-	        	return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $parentId)));
+                $goto = $request->query->get('goto', $this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $parentId)));
+
+	        	return $this->redirect($goto);
 	        }
         }
 
