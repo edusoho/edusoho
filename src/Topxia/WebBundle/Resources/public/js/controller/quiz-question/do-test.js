@@ -308,9 +308,35 @@ define(function(require, exports, module) {
                     this.sync();
                     $longTextarea.change();
                 }
-            });
+            });        
+        });
 
-            
+        $('.testpaper-question-essay-teacherSay-short').click(function() {
+
+            var $shortTextarea = $(this).hide();
+            var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-long').show();
+
+            var editor = EditorFactory.create($longTextarea, 'simple', {
+
+                extraFileUploadParams:{group:'default'},
+
+                afterBlur: function() {
+                    editor.sync();
+                    editor.remove();
+                    $shortTextarea.val(editor.text());
+                    $longTextarea.hide();
+                    $shortTextarea.show();
+                },
+
+                afterCreate: function() {
+                    this.focus();
+                },
+
+                afterChange: function(){
+                    this.sync();
+                    $longTextarea.change();
+                }
+            });        
         });
 
         //老师阅卷校验
