@@ -137,7 +137,8 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        
+        $missScores = $field['missScores'];
+
         $diff = array_diff($ids, $scores);
 
         if(empty($diff)){
@@ -162,6 +163,13 @@ class TestServiceImpl extends BaseService implements TestService
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
+            $choiceNum = 0;
+            if ($question['type'] == 'choice'){
+                $field['missScore'] = (int)$missScores[$choiceNum];
+                $choiceNum++;
+            }
+
+
             $item = $this->getTestItemDao()->addItem($field);
 
             if($question['type'] != 'material'){
@@ -184,6 +192,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
+        $missScores = $field['missScores'];
 
         $ids = array_flip($ids);
 
@@ -194,6 +203,8 @@ class TestServiceImpl extends BaseService implements TestService
         $items = ArrayToolkit::index($this->findItemsByTestPaperId($testId),'questionId');
 
         $deleteItems = array_diff_key($items, $ids);
+
+        $choiceNum = 0;
         foreach ($deleteItems as $item) {
             $this->deleteItem($item['id']);
         }
@@ -215,6 +226,12 @@ class TestServiceImpl extends BaseService implements TestService
             $field['questionType'] = $question['type'];
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$id];
+
+            
+            if ($question['type'] == 'choice'){
+                $field['missScore'] = (int)$missScores[$choiceNum];
+                $choiceNum++;
+            }
 
             if(in_array($k, $addIds)){
                 $item = $this->getTestItemDao()->addItem($field);
@@ -490,6 +507,9 @@ class TestServiceImpl extends BaseService implements TestService
             return $result;
         }, $results['newAnswers']);
 
+        $this->getQuestionService()->statQuestionTimes($results['oldAnswers']);
+        $this->getQuestionService()->statQuestionTimes($results['newAnswers']);
+
         //记分
         $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testResult['id']);
         //未答题目记分
@@ -500,13 +520,6 @@ class TestServiceImpl extends BaseService implements TestService
 
     private function makeTestResults ($answers, $questions)
     {
-
-        // foreach ($questions as $key => $value) {
-        //     if ($value['type'] != 'material') {
-        //         unset($questions[$key]);
-        //     }
-        // }
-        // $materials = ArrayToolkit::column($questions, 'questionId');
 
         $newAnswers = array();
         $oldAnswers = array();
@@ -570,6 +583,7 @@ class TestServiceImpl extends BaseService implements TestService
                 $right = 0;
                 $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
+
                     $userAnswer = trim($answers[$key]['answer'][$k]);
                     if (empty($userAnswer)) {
                         $noAnswerCount++;
@@ -727,6 +741,8 @@ class TestServiceImpl extends BaseService implements TestService
         }
         //是否要加入教师阅卷的锁
         $this->getDoTestDao()->updateItemEssays($testResults, $id);
+
+        $this->getQuestionService()->statQuestionTimes($testResults);
 
         $paperResult = $this->getTestPaperResultDao()->getResult($id);
 

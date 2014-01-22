@@ -24,6 +24,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
             $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
+
+        return $question;
     }
 
     public function updateQuestion($id, $question)
@@ -43,6 +45,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
 
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
+
+        if ($question['parentId']) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+
     }
 
     public function searchQuestion(array $conditions, array $orderBy, $start, $limit)
@@ -198,6 +206,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
     }
+
+    public function statQuestionTimes ($answers)
+    {
+        // $answers = ArrayToolkit::index($answers, 'questionId');
+        // $ids = ArrayToolkit::column($answers, 'questionId');
+        $ids = array_keys($answers);
+        $rightIds = array();
+        foreach ($answers as $questionId => $answer) {
+            if ($answer['status'] == 'right'){
+                array_push($rightIds, $questionId);
+            }
+        }
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($ids, 'finishedTimes');
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($rightIds, 'passedTimes');
+    }
+
 
     private function checkCategoryFields($category)
     {

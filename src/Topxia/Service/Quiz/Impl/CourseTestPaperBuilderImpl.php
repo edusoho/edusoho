@@ -108,7 +108,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 	private function buildQuestions($type, $count)
 	{
 		$this->typeQuestions = array();
-		
+
 		$this->generateRandomQuestions($type, $count);
 
 		$this->buildMaterialQuestions($type);

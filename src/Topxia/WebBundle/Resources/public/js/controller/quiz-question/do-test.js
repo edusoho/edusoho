@@ -291,6 +291,7 @@ define(function(require, exports, module) {
 
             var $shortTextarea = $(this).hide();
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
+            var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
             var editor = EditorFactory.create($longTextarea, 'simple', {
 
@@ -298,14 +299,19 @@ define(function(require, exports, module) {
 
                 afterBlur: function() {
                     editor.sync();
-                    editor.remove();
-                    $shortTextarea.val(editor.text());
-                    $longTextarea.hide();
-                    $shortTextarea.show();
                 },
 
                 afterCreate: function() {
                     this.focus();
+
+                    $textareaBtn.click(function(){
+                        editor.remove();
+                        $shortTextarea.val(editor.text());
+                        $longTextarea.hide();
+                        $textareaBtn.hide();
+                        $shortTextarea.show();
+                    });
+
                 },
 
                 afterChange: function(){
@@ -324,7 +330,7 @@ define(function(require, exports, module) {
 
             var $shortTextarea = $(this).hide();
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-long').show();
-
+            var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-btn').show();
 
             var editor = EditorFactory.create($longTextarea, 'simple', {
 
@@ -333,14 +339,17 @@ define(function(require, exports, module) {
 
                 afterCreate: function() {
                     this.focus();
+                    $textareaBtn.click(function(){
+                        editor.remove();
+                        $shortTextarea.val(editor.text());
+                        $longTextarea.hide();
+                        $textareaBtn.hide();
+                        $shortTextarea.show();
+                    });
                 },
 
                 afterBlur: function() {
                     this.sync();
-                    this.remove();
-                    $shortTextarea.val(this.text());
-                    $longTextarea.hide();
-                    $shortTextarea.show();
                 },
 
 
