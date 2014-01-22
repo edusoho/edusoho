@@ -490,6 +490,9 @@ class TestServiceImpl extends BaseService implements TestService
             return $result;
         }, $results['newAnswers']);
 
+        $this->getQuestionService()->statQuestionTimes($results['oldAnswers']);
+        $this->getQuestionService()->statQuestionTimes($results['newAnswers']);
+
         //记分
         $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testResult['id']);
         //未答题目记分
@@ -500,13 +503,6 @@ class TestServiceImpl extends BaseService implements TestService
 
     private function makeTestResults ($answers, $questions)
     {
-
-        // foreach ($questions as $key => $value) {
-        //     if ($value['type'] != 'material') {
-        //         unset($questions[$key]);
-        //     }
-        // }
-        // $materials = ArrayToolkit::column($questions, 'questionId');
 
         $newAnswers = array();
         $oldAnswers = array();
@@ -570,6 +566,7 @@ class TestServiceImpl extends BaseService implements TestService
                 $right = 0;
                 $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
+
                     $userAnswer = trim($answers[$key]['answer'][$k]);
                     if (empty($userAnswer)) {
                         $noAnswerCount++;
@@ -727,6 +724,8 @@ class TestServiceImpl extends BaseService implements TestService
         }
         //是否要加入教师阅卷的锁
         $this->getDoTestDao()->updateItemEssays($testResults, $id);
+
+        $this->getQuestionService()->statQuestionTimes($testResults);
 
         $paperResult = $this->getTestPaperResultDao()->getResult($id);
 
