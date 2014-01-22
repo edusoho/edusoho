@@ -10,6 +10,10 @@ define(function(require, exports, module) {
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return false;
+                }
+
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                   var id = '#' + $(html).attr('id'),
                       $item = $(id);
