@@ -283,7 +283,11 @@ define(function(require, exports, module) {
 
 
 
-        $('.testpaper-question-essay-input-short').click(function() {
+        $('.testpaper-question-essay-input-short').focusin(function(e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).blur();
 
             var $shortTextarea = $(this).hide();
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
@@ -308,9 +312,44 @@ define(function(require, exports, module) {
                     this.sync();
                     $longTextarea.change();
                 }
+            });        
+        });
+
+
+        $('.testpaper-question-essay-teacherSay-short').focusin(function(e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).blur();
+
+            var $shortTextarea = $(this).hide();
+            var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-long').show();
+
+
+            var editor = EditorFactory.create($longTextarea, 'simple', {
+
+                extraFileUploadParams:{group:'default'},
+
+
+                afterCreate: function() {
+                    this.focus();
+                },
+
+                afterBlur: function() {
+                    this.sync();
+                    this.remove();
+                    $shortTextarea.val(this.text());
+                    $longTextarea.hide();
+                    $shortTextarea.show();
+                },
+
+
+                afterChange: function(){
+                    this.sync();
+                    $longTextarea.change();
+                }
             });
 
-            
         });
 
         //老师阅卷校验
