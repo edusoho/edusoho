@@ -57,31 +57,31 @@ define(function(require, exports, module) {
             deadline = undefined;
         }
 
+        if (deadline !== undefined){
+            var timer = timerShow(function(){
+                deadline--;
+                $('#time_show').text(formatTime(deadline));
 
-        var timer = timerShow(function(){
-            deadline--;
-            $('#time_show').text(formatTime(deadline));
-
-            if (deadline <= 0) {
-                $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
-                    changeAnswers = {};
-                    $('#timeout-dialog').show();
-                    timer.stop();
-                });
-            }
-            if (deadline == timeLastPost) {
-                timeLastPost = timeLastPost - interval;
-                $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
-                    changeAnswers = {};
-                });
-
-                if (!isLimit){
-                    deadline = interval*3;
-                    timeLastPost = deadline - interval;
+                if (deadline <= 0) {
+                    $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
+                        changeAnswers = {};
+                        $('#timeout-dialog').show();
+                        timer.stop();
+                    });
                 }
-            }
-        }, 1000, true);
-    
+                if (deadline == timeLastPost) {
+                    timeLastPost = timeLastPost - interval;
+                    $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
+                        changeAnswers = {};
+                    });
+
+                    if (!isLimit){
+                        deadline = interval*3;
+                        timeLastPost = deadline - interval;
+                    }
+                }
+            }, 1000, true);
+        }
         $('#pause').on('click', function(){
             timer.pause();
         });

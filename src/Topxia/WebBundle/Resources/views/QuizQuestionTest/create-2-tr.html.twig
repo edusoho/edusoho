@@ -34,7 +34,7 @@
 
     <td >
         {% if question.type == 'choice' %}
-            <input name="missScores[]" class="notMoveHandle form-control input-sm" {% if question.type != 'material' %} type="text" {% else %} type="hidden"{% endif %} value="{% if flag | default(null) and items[question.id]['missScore'] | default(null) %}{{ items[question.id]['missScore']}}{% else %}0{% endif %}" /></input>
+            <input name="missScores[]" class="notMoveHandle form-control input-sm" {% if question.type != 'material' %} type="text" {% else %} type="hidden"{% endif %} value="{{ missScore|default(0) }}" /></input>
         {% endif %}
     </td>
 
