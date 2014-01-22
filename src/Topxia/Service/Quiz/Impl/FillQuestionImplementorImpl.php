@@ -20,7 +20,7 @@ class FillQuestionImplementorImpl extends BaseQuestionImplementor implements Que
         );
 	}
 
-    public function updateQuestion($id, $question){
+    public function updateQuestion($id, $question) {
         $question = $this->filterQuestionFields($question);
 
         return  QuestionSerialize::unserialize(

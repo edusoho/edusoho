@@ -769,6 +769,8 @@ class TestServiceImpl extends BaseService implements TestService
     {
         $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
 
+        $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
+
         $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
 
         $fields['objectiveScore'] = $this->sumScore($testResults);
@@ -781,15 +783,25 @@ class TestServiceImpl extends BaseService implements TestService
 
         $fields['remainTime'] = $remainTime;
         $fields['endTime'] = time();
+        $fields['active'] = 1;
+
+        $this->getTestPaperResultDao()->updateResultActive($testPaperResult['testId'],$testPaperResult['userId']);
 
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
     public function updatePaperResult ($id, $remainTime)
     {
-        $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
+        $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
 
         $fields['remainTime'] = $remainTime;
+
+        $fields['updateTime'] = time();
+
+        $fields['endTime'] = time();
+        $fields['active'] = 1;
+
+        $this->getTestPaperResultDao()->updateResultActive($testPaperResult['testId'],$testPaperResult['userId']);
 
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }

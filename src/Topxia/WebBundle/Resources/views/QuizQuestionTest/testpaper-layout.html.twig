@@ -39,4 +39,30 @@
   </div>
 </div>
 
+{% block timeoutDialog %}
+
+  <div class="timeout-dialog-layout">
+    <div id="timeout-dialog" class="modal in" aria-hidden="false" style="display: none;"><div class="modal-dialog modal-dialog-small">
+      <div class="modal-content">
+        <div class="modal-header">
+          {# <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> #}
+          <h4 class="modal-title">考试结束</h4>
+        </div>
+        <div class="modal-body">
+    <div class="well well-lg">
+      <div class="empty">考试已结束，请点击下面的按钮查看结果~
+      </div>
+    </div>
+
+
+    </div>
+              <div class="modal-footer">  <a href="{{ path('course_manage_test_results', {id:id} ) }}" class="btn btn-info">查看结果</a>
+
+    </div>
+          </div>
+    </div></div>
+  </div>
+
+{% endblock %}
+
 {% endblock %}
