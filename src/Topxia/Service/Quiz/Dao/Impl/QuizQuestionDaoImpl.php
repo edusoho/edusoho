@@ -32,6 +32,16 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getQuestion($id);
     }
 
+    public function updateQuestionCountByIds($ids, $status)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "UPDATE {$this->table} SET {$status} = {$status}+1 WHERE id IN ({$marks})";
+        return $this->getConnection()->executeQuery($sql, $ids);
+    }
+
     public function deleteQuestion($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));

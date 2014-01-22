@@ -205,6 +205,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
     }
 
+    public function statQuestionTimes ($answers)
+    {
+        // $answers = ArrayToolkit::index($answers, 'questionId');
+        // $ids = ArrayToolkit::column($answers, 'questionId');
+        $ids = array_keys($answers);
+        $rightIds = array();
+        foreach ($answers as $questionId => $answer) {
+            if ($answer['status'] == 'right'){
+                array_push($rightIds, $questionId);
+            }
+        }
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($ids, 'finishedTimes');
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($rightIds, 'passedTimes');
+    }
+
+
     private function checkCategoryFields($category)
     {
         $target = explode('-', $category['target']);
