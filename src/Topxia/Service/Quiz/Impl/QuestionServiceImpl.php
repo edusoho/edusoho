@@ -43,6 +43,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
 
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
+
+        if ($question['parentId']) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+
     }
 
     public function searchQuestion(array $conditions, array $orderBy, $start, $limit)
