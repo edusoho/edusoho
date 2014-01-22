@@ -196,7 +196,7 @@ class QuizQuestionTestController extends BaseController
 			$parentTestPaper['courseId'] = $courseId;
 			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
 		}
-		
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2.html.twig', array(
 			'course' => $course,
 			'items' => $items,

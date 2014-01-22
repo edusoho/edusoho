@@ -137,7 +137,8 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        
+        $missScores = $field['missScores'];
+
         $diff = array_diff($ids, $scores);
 
         if(empty($diff)){
@@ -162,6 +163,13 @@ class TestServiceImpl extends BaseService implements TestService
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
+            $choiceNum = 0;
+            if ($question['type'] == 'choice'){
+                $field['missScore'] = (int)$missScores[$choiceNum];
+                $choiceNum++;
+            }
+
+
             $item = $this->getTestItemDao()->addItem($field);
 
             if($question['type'] != 'material'){
@@ -184,6 +192,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
+        $missScores = $field['missScores'];
 
         $ids = array_flip($ids);
 
@@ -194,6 +203,8 @@ class TestServiceImpl extends BaseService implements TestService
         $items = ArrayToolkit::index($this->findItemsByTestPaperId($testId),'questionId');
 
         $deleteItems = array_diff_key($items, $ids);
+
+        $choiceNum = 0;
         foreach ($deleteItems as $item) {
             $this->deleteItem($item['id']);
         }
@@ -215,6 +226,12 @@ class TestServiceImpl extends BaseService implements TestService
             $field['questionType'] = $question['type'];
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$id];
+
+            
+            if ($question['type'] == 'choice'){
+                $field['missScore'] = (int)$missScores[$choiceNum];
+                $choiceNum++;
+            }
 
             if(in_array($k, $addIds)){
                 $item = $this->getTestItemDao()->addItem($field);
