@@ -169,7 +169,9 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
             return $this->createCommission($commission);
            
-        }  
+        }else if($mysale['prodType']=='web'){
+            
+        }
        
     }
 
