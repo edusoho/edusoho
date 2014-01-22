@@ -54,10 +54,10 @@ define(function(require, exports, module) {
 
         if ($('#time_show').hasClass('preview')) {
             $('#time_show').text(formatTime(deadline));
-            deadline = undefined;
         }
 
-        if (deadline !== undefined){
+        if ($('#finishPaper').hasClass('do-test')){
+
             var timer = timerShow(function(){
                 deadline--;
                 $('#time_show').text(formatTime(deadline));
