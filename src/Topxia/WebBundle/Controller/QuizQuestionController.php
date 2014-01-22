@@ -305,15 +305,16 @@ class QuizQuestionController extends BaseController
     public function previewQuestionAction (Request $request, $id)
     {
     	$questions = $this->getQuestionService()->findQuestions(array($id));
-
-    	$question = $questions[$id];
-    	if (empty($question)){
+        $question = $questions[$id];
+        if (empty($question)) {
     		throw $this->createNotFoundException('题目不存在！');
     	}
 
     	if ($question['type'] == 'material'){
     		$questions = $this->getQuestionService()->findQuestionsByParentIds(array($id));
-    		$questions = $this->getQuestionService()->findQuestions(ArrayToolkit::column($questions, 'id'));
+            if (!empty($questions)) {
+        		$questions = $this->getQuestionService()->findQuestions(ArrayToolkit::column($questions, 'id'));
+            }
 
     		foreach ($questions as $key => $value) {
     			if (!in_array($value['type'], array('single_choice', 'choice'))){
@@ -327,8 +328,6 @@ class QuizQuestionController extends BaseController
     			}
     		}
 
-
-
     		$question['questions'] = $questions;
     	} else {
     		if (in_array($question['type'], array('single_choice', 'choice'))){
@@ -341,14 +340,6 @@ class QuizQuestionController extends BaseController
 				}
 			}
     	}
-
-    	// $choiceIndex = 65;
-    	// foreach ($choices as $key => $value) {
-    		// $choices[$key]['choiceIndex'] = chr($choiceIndex);
-    		// $choiceIndex++;
-    	// }
-
-    	// $question['choices'] = $choices;
 
     	$type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
 

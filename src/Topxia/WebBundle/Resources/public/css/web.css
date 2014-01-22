@@ -1206,6 +1206,15 @@ body {
 	background-position: -72px 0;
 }
 
+.course-item-list-multi .item-object-testpaper {
+	background-color: #009999;
+	border-color: #006699;
+}
+
+.course-item-list-multi .item-object-testpaper .item-icon {
+	background-position: -108px 0;
+}
+
 .course-item-list-multi .item-object .item-length {
 	position: absolute;
 	bottom: 0;

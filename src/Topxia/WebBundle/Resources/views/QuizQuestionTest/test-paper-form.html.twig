@@ -21,12 +21,12 @@
 {% for key,type in dict('questionType') %}
     <div class="form-group type-item">
 
-        <div class="col-md-2 control-label"><label for="test-stem-field"></label></div>
+        <div class="col-md-1 control-label"><label for="test-stem-field"></label></div>
 
         <div class="form-inline">
-            <div class="col-md-8 controls pls">
+            <div class="col-md-10 controls pls">
 
-                <div class="col-md-2 controls ">
+                <div class="col-md-1 controls ">
                     <button type="button" class="btn btn-link test-sort-handle"><span class="glyphicon glyphicon-move hidden-lt-ie8"></span></button>
                 </div>
 
@@ -34,15 +34,22 @@
                     {{type}} 
                 </div>
 
-                <div class="form-control-static pull-left pll">题目数量:</div>
+                <div class="form-control-static pull-left plm">题目数量:</div>
                 <div class="col-md-2">
                     <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}0{% endif %}" />
                 </div>
 
-                <div class="form-control-static pull-left pll">题目分值:</div>
+                <div class="form-control-static pull-left plm">题目分值:</div>
                 <div class="col-md-2">
                     <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}2{% endif %}" />
                 </div>
+
+                {% if type == '多选题' %}
+                  <div class="form-control-static pull-left plm">漏选分值:</div>
+                  <div class="col-md-2">
+                      <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemMissScores[{{key}}]"  value="0" />
+                  </div>
+                {% endif %}
 
             </div>
         </div>
