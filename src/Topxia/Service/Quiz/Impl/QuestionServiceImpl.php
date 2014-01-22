@@ -17,7 +17,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $this->checkQuestionType($question['type']);
         $question['createdTime'] = time();
-        return $this->getQuestionImplementor($question['type'])->createQuestion($question);
+
+        $question = $this->getQuestionImplementor($question['type'])->createQuestion($question);
+
+        if ($question['parentId'] > 0) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
     }
 
     public function updateQuestion($id, $question)

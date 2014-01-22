@@ -120,6 +120,12 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         return $this->getConnection()->fetchAll($sql, $ids) ? : array();
     }
 
+    public function findQuestionsCountByParentId($parentId)
+    {
+        $sql ="SELECT count(*) FROM {$this->table} WHERE parentId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($parentId));
+    }
+
     public function deleteQuestionByIds(array $ids)
     {
         if(empty($ids)){ 

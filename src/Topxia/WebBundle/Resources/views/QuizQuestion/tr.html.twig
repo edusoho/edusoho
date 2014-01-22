@@ -2,6 +2,7 @@
   <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
     <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">{{ item.stem |fill_question_stem_text| plain_text(40) }}</a>
+    {% if item.type == 'material'%}<small class="text-muted">({{ item.subCount }}子题)</small>{% endif %}
   </td>
   <td>{{ dict('questionType')[item.type] }}</td>
   {% if item.parentId == 0 %}

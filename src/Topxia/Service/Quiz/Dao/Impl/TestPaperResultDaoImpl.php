@@ -168,6 +168,12 @@ class TestPaperResultDaoImpl extends BaseDao implements TestPaperResultDao
         return $this->getConnection()->fetchColumn($sql, $ids);
     }
 
+    public function updateResultActive ($testId,$userId)
+    {
+        $sql = "UPDATE {$this->table} SET `active` = 0 WHERE `testId` = ? AND `userId` = ? AND `active` = 1";
+        return $this->getConnection()->executeQuery($sql, array($testId, $userId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
