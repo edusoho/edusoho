@@ -36,7 +36,7 @@
 
                 <div class="form-control-static pull-left pll">题目数量:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}5{% endif %}" />
+                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}0{% endif %}" />
                 </div>
 
                 <div class="form-control-static pull-left pll">题目分值:</div>

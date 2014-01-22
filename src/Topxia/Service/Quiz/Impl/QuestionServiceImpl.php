@@ -17,7 +17,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $this->checkQuestionType($question['type']);
         $question['createdTime'] = time();
-        return $this->getQuestionImplementor($question['type'])->createQuestion($question);
+
+        $question = $this->getQuestionImplementor($question['type'])->createQuestion($question);
+
+        if ($question['parentId'] > 0) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
     }
 
     public function updateQuestion($id, $question)
@@ -37,6 +43,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
 
         $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
+
+        if ($question['parentId']) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+
     }
 
     public function searchQuestion(array $conditions, array $orderBy, $start, $limit)
