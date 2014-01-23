@@ -14,6 +14,18 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        $('#testpaper-navbar').affix({
+            offset: {
+              top: 200
+            }
+        });
+        $('.testpaper-card').affix({
+            offset: {
+              top: 200
+            }
+        });
+        
+
         var $body = $(document.body);
 
         $body.scrollspy({
