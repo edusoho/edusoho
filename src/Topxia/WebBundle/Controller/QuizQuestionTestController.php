@@ -163,6 +163,7 @@ class QuizQuestionTestController extends BaseController
 		}
 
 		$flag = $request->query->get('flag');
+		$missScore = $request->query->get('itemMissScore');
 
 		if ($request->getMethod() == 'POST') {
 
@@ -205,6 +206,7 @@ class QuizQuestionTestController extends BaseController
 			'parentTestPaper' => $parentTestPaper,
 			'lessons' => $lessons,
 			'flag' => $flag,
+			'missScore' => $missScore
 		));
 	}
 

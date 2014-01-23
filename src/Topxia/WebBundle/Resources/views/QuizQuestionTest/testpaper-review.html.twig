@@ -24,7 +24,7 @@
               {% if question.type != 'material' %}
                 <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
               {% else %}
-                {% for question in question.questions %}
+                {% for question in question.questions|default([]) %}
                   {% if question.type == 'essay' %}
                     <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
                   {% endif %}

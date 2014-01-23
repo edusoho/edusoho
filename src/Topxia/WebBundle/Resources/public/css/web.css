@@ -3315,12 +3315,27 @@ body {
 	color: #aaa;
 }
 
-.testpaper-name {
+.testpaper-titlebar {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 20px;
+}
+
+.testpaper-title {
+	float: left;
 	font-size: 24px;
 	font-weight: bold;
 	color: #444;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #ddd;
+}
+
+.testpaper-status {
+	margin-top: 20px;
+	float: right;
+}
+
+.testpaper-status .label {
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-size: 100%;
 }
 
 .testpaper-description {
@@ -3332,16 +3347,6 @@ body {
     color: #666;
     font-size: 12px;
     margin-bottom: 20px;
-}
-
-.testpaper-preview-tip {
-	background-color: #f0ad4e;
-	color: #fff;
-	float: right;
-	padding: 5px 25px;
-	border-radius: 3px;
-	font-weight: bold;
-	margin-top: 9px;
 }
 
 .testpaper-result {
@@ -3570,6 +3575,17 @@ body {
 	line-height: 24px;
 	display: inline-block;
 	margin: 0 5px 5px 0;
+}
+
+.testpaper-card-explain .btn-index {
+	width: 12px;
+	height: 12px;
+	font-size: 12px;
+	margin: 0 3px 5px 0;
+}
+
+.testpaper-card-explain small {
+	margin-right: 8px;
 }
 
 .testpaper-card-timer {

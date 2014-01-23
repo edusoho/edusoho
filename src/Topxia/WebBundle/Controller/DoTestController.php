@@ -256,7 +256,7 @@ class DoTestController extends BaseController
 			
 			foreach ($questions['material'] as $key => $value) {
 
-				$questionTypes = ArrayToolkit::index($value['questions'], 'type');
+				$questionTypes = ArrayToolkit::index(empty($value['questions']) ? array() : $value['questions'], 'type');
 
 				if(array_key_exists('essay', $questionTypes)){
 					array_push($types, 'material');
@@ -339,7 +339,15 @@ class DoTestController extends BaseController
 		foreach ($questions as $value) {
 
 			if ($value['type'] == 'material'){
+				if (!array_key_exists('questions', $value)){
+					continue;
+				}
 				foreach ($value['questions'] as $key => $v) {
+
+					if ($v['type'] == 'essay'){
+						$accuracy['material']['hasEssay'] = true;
+					}
+
 					$accuracy['material']['score'] += $v['testResult']['score'];
 					$accuracy['material']['totalScore'] += $v['itemScore'];
 
@@ -397,10 +405,11 @@ class DoTestController extends BaseController
 			}
 
 			if ($value['type'] == 'material') {
-
-				$value['questions'] = $this->formatQuestions($value['questions']);
-				$number += $value['questions']['number'];
-				unset($value['questions']['number']);
+				if(array_key_exists('questions', $value)){
+					$value['questions'] = $this->formatQuestions($value['questions']);
+					$number += $value['questions']['number'];
+					unset($value['questions']['number']);
+				}
 			} else {
 				$number++;
 			}

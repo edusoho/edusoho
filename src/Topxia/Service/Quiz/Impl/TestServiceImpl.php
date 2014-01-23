@@ -137,7 +137,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        $missScores = $field['missScores'];
+        $missScores = array_key_exists('missScores', $field) ? $field['missScores'] : null;
 
         $diff = array_diff($ids, $scores);
 
@@ -192,7 +192,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        $missScores = $field['missScores'];
+        $missScores = array_key_exists('missScores', $field) ? $field['missScores'] : null;
 
         $ids = array_flip($ids);
 
