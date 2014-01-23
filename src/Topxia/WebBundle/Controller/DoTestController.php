@@ -256,7 +256,7 @@ class DoTestController extends BaseController
 			
 			foreach ($questions['material'] as $key => $value) {
 
-				$questionTypes = ArrayToolkit::index($value['questions'], 'type');
+				$questionTypes = ArrayToolkit::index(empty($value['questions']) ? array() : $value['questions'], 'type');
 
 				if(array_key_exists('essay', $questionTypes)){
 					array_push($types, 'material');
