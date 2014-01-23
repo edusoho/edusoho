@@ -343,6 +343,11 @@ class DoTestController extends BaseController
 					continue;
 				}
 				foreach ($value['questions'] as $key => $v) {
+
+					if ($v['type'] == 'essay'){
+						$accuracy['material']['hasEssay'] = true;
+					}
+
 					$accuracy['material']['score'] += $v['testResult']['score'];
 					$accuracy['material']['totalScore'] += $v['itemScore'];
 

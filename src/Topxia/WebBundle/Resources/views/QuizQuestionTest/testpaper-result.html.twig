@@ -12,7 +12,7 @@
 
   {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
 
-  {% if accuracy.essay.totalScore > 0 %}
+  {# {% if accuracy.essay.totalScore > 0 %}
     {% if paperResult.status == 'reviewing' %}
       <div class="alert alert-info">主观题总分 <strong>{{ accuracy.essay.totalScore }} 分</strong>，老师正在批阅试卷。</div>
     {% elseif paperResult.status == 'finished' %}
@@ -28,7 +28,7 @@
         {% endif %}
       </div>
     {% endif %}
-  {% endif %}
+  {% endif %} #}
 
 {% endblock %}
 
