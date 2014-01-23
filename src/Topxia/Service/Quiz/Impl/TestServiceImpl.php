@@ -496,6 +496,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         foreach ($items as $key => $value) {
             $questions[$value['questionId']]['score'] = $value['score'];
+            $questions[$value['questionId']]['missScore'] = $value['missScore'];
         }
 
         $results = $this->makeTestResults($answers, $questions);
@@ -552,19 +553,24 @@ class TestServiceImpl extends BaseService implements TestService
 
             if ($question['type'] == 'single_choice' or $question['type'] == 'choice') {
 
-                $diff = array_diff($question['answer'], $answers[$key]['answer']);
+                $diff1 = array_diff($question['answer'], $answers[$key]['answer']);
+                $diff2 = array_diff($answers[$key]['answer'], $question['answer']);
 
-                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
+                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff1)) {
                     $answers[$key]['status'] = 'right';
                     $answers[$key]['score'] = $question['score'];
 
                     // $question['result'] = 'right';
+                } elseif ($question['missScore'] != 0 && empty($diff2) && !empty($diff1)) {
+                    $answers[$key]['status'] = 'wrong';
+                    $answers[$key]['score'] = $question['missScore'];
                 } else {
                     $answers[$key]['status'] = 'wrong';
                     $answers[$key]['score'] = 0;
 
                     // $question['result'] = 'wrong';
                 }
+
             }
 
             if ($question['type'] == 'determine') {
