@@ -376,7 +376,10 @@ class QuizQuestionController extends BaseController
         $targets['course'.'-'.$course['id']] = '本课程';
 
         foreach ($lessons as  $lesson) {
-            $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'-'.$lesson['title'];
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'：'.$lesson['title'];
         }
 
         return $targets;
