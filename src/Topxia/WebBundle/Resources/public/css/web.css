@@ -3390,21 +3390,25 @@ body {
 }
 
 .testpaper-navbar.affix {
+    position: static;
+}
+
+@media (min-width: 768px) {
+  .testpaper-navbar.affix {
 	z-index: 1030;
-	background: #fff;
+    position: fixed;
     margin-left: -11px;
+    top: 0px;
+    width: 720px;
+	background: #fff;
     border: 1px solid #ddd;
     box-shadow: 0 3px 3px rgba(0,0,0,.1);
+  }
 }
 
 @media (min-width: 992px) {
-  /* Widen the fixed sidebar */
   .testpaper-navbar.affix {
     width: 940px;
-  }
-  .testpaper-navbar.affix {
-    position: fixed; /* Undo the static from mobile first approach */
-    top: 0px;
   }
 }
 
@@ -3595,6 +3599,10 @@ body {
 
 .testpaper-card .panel-body .have-pro {
 	border: 2px solid #428bca;
+}
+
+.testpaper-card.affix {
+	position: static;
 }
 
 @media (min-width: 992px) {
