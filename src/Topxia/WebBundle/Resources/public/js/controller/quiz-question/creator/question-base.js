@@ -18,7 +18,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            'click [data-role=submit]': 'onSubmit',
+            'click [data-role=submit]': 'onSubmit'
         },
 
         setup: function() {
@@ -115,7 +115,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '#question-score-field',
                 required: false,
-                rule:'score',
+                rule:'score'
             });
 
             validator.on('formValidated', function(error, msg, $form) {
@@ -130,7 +130,7 @@ define(function(require, exports, module) {
 
         _onChangeCategories: function(categories) {
             var options = "<option value=''>请选择类别</option>";
-            var selected = categories.default ? categories.default : '';
+            var selected = categories['default'] ? categories['default'] : '';
 
             $.each(categories, function(index, category){
                 if (index == 'default') {
@@ -148,7 +148,7 @@ define(function(require, exports, module) {
 
         _onChangeTargets: function(targets) {
             var options = '';
-            var selected = targets.default ? targets.default : '';
+            var selected = targets['default'] ? targets['default'] : '';
 
             $.each(targets, function(index, target){
                 if (index == 'default') {
@@ -162,7 +162,7 @@ define(function(require, exports, module) {
             });
             
             this.$('[data-role=target]').html(options);
-        },
+        }
 
     });
 

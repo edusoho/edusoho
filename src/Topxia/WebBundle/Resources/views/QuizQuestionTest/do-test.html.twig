@@ -1,9 +1,6 @@
 {% if showTestpaperNavbar|default('on') == 'off' %}
 	<form id='teacherCheckForm'>
 {% endif %}
-{# {% if not types %}
-	{% set types = paper.metas.question_type_seq %}
-{% endif %} #}
 
 
 {% for type in types|default(paper.metas.question_type_seq) %}

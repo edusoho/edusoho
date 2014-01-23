@@ -138,7 +138,7 @@ class QuizQuestionController extends BaseController
 	        }
         }
 
-		$targets['default'] = $request->query->get('targetsDefault');
+		$targets['default'] = $request->query->get('targetsDefault', '');
 
 		$parentQuestion['difficulty'] = $request->query->get('questionDifficulty');
 
@@ -320,33 +320,46 @@ class QuizQuestionController extends BaseController
     			if (!in_array($value['type'], array('single_choice', 'choice'))){
     				continue;
     			}
-    			$choiceIndex = 65;
-    			foreach ($value['choices'] as $k => $choice) {
-    				$choice['choiceIndex'] = chr($choiceIndex);
-		    		$choiceIndex++;
-		    		$questions[$key]['choices'][$k] = $choice;
-    			}
+    			// $choiceIndex = 65;
+    			// foreach ($value['choices'] as $k => $choice) {
+    			// 	$choice['choiceIndex'] = chr($choiceIndex);
+		    	// 	$choiceIndex++;
+		    	// 	$questions[$key]['choices'][$k] = $choice;
+    			// }
+    			ksort($value['choices']);
+				$value['choices'] = array_values($value['choices']);
+				foreach ($value['choices'] as $k => $v) {
+					$v['choiceIndex'] = chr($k+65);
+					$value['choices'][$k] = $v;
+				}
     		}
 
     		$question['questions'] = $questions;
     	} else {
     		if (in_array($question['type'], array('single_choice', 'choice'))){
 
-				$choiceIndex = 65;
-				foreach ($question['choices'] as $k => $choice) {
-					$choice['choiceIndex'] = chr($choiceIndex);
-		    		$choiceIndex++;
-		    		$question['choices'][$k] = $choice;
+				// $choiceIndex = 65;
+				// foreach ($question['choices'] as $k => $choice) {
+				// 	$choice['choiceIndex'] = chr($choiceIndex);
+		  //   		$choiceIndex++;
+		  //   		$question['choices'][$k] = $choice;
+				// }
+				ksort($question['choices']);
+				$question['choices'] = array_values($question['choices']);
+				foreach ($question['choices'] as $k => $v) {
+					$v['choiceIndex'] = chr($k+65);
+					$question['choices'][$k] = $v;
 				}
 			}
     	}
 
     	$type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
-
+    	$questionPreview = true;
 
     	return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
             'question' => $question,
             'type' => $type,
+            'questionPreview' => $questionPreview
         ));
     }
 
@@ -363,7 +376,10 @@ class QuizQuestionController extends BaseController
         $targets['course'.'-'.$course['id']] = '本课程';
 
         foreach ($lessons as  $lesson) {
-            $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'-'.$lesson['title'];
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $targets['lesson'.'-'.$lesson['id']] = '课时'.$lesson['number'].'：'.$lesson['title'];
         }
 
         return $targets;

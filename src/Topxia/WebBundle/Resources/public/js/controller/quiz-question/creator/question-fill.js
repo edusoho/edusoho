@@ -16,9 +16,9 @@ define(function(require, exports, module) {
             this.get("validator").addItem({
                 element: '#question-stem-field',
                 required: true,
-                rule:'fillCheck',
+                rule:'fillCheck'
             });
-        },
+        }
     });
 
     module.exports = FillQuestion;

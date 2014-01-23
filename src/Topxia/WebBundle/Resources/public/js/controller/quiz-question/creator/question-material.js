@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var MaterialQuestion = BaseQuestion.extend({
         setup: function() {
             MaterialQuestion.superclass.setup.call(this);
-        },
+        }
     });
     module.exports = MaterialQuestion;
 

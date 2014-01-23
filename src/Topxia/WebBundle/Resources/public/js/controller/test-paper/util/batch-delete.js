@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            if (!confirm('这的要删除选中的' + ids.length + '条' + name + '吗？')) {
+            if (!confirm('确定要删除选中的' + ids.length + '条' + name + '吗？')) {
                 return ;
             }
 
