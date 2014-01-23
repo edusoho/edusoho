@@ -163,6 +163,7 @@ class QuizQuestionTestController extends BaseController
 		}
 
 		$flag = $request->query->get('flag');
+		$missScore = $request->query->get('itemMissScore');
 
 		if ($request->getMethod() == 'POST') {
 
@@ -196,7 +197,7 @@ class QuizQuestionTestController extends BaseController
 			$parentTestPaper['courseId'] = $courseId;
 			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
 		}
-		
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2.html.twig', array(
 			'course' => $course,
 			'items' => $items,
@@ -205,6 +206,7 @@ class QuizQuestionTestController extends BaseController
 			'parentTestPaper' => $parentTestPaper,
 			'lessons' => $lessons,
 			'flag' => $flag,
+			'missScore' => $missScore
 		));
 	}
 
