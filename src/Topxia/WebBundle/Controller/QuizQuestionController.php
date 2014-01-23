@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -298,7 +299,7 @@ class QuizQuestionController extends BaseController
     	if ($request->getMethod() == 'POST') {
 	    	$originalFile = $this->get('request')->files->get('file');
 	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
-	    	return $this->createJsonResponse($file);
+            return new Response(json_encode($file));
 	    }
     }
 

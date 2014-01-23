@@ -51,10 +51,12 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
+                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: 'image/*'
             }).error(function(file) {
                 Notify.danger('上传失败，请重试！');
             }).success(function(response) {
+                response = $.parseJSON(response);
                 var result = '[image]' + response.hashId + '[/image]'
                 editor.insertHtml(result);
                 Notify.success('上传成功！', 1);
@@ -76,10 +78,12 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
+                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: 'image/*'
             }).error(function(file) {
                 Notify.danger('上传失败，请重试！');
             }).success(function(response) {
+                response = $.parseJSON(response);
                 var result = '[image]' + response.hashId + '[/image]'
                 editor.insertHtml(result);
                 Notify.success('上传成功！', 1);
