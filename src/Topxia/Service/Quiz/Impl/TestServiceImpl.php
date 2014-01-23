@@ -38,6 +38,10 @@ class TestServiceImpl extends BaseService implements TestService
         $field['name']   = empty($testPaper['name'])?"":$testPaper['name'];
         $field['description'] = empty($testPaper['description'])?"":$testPaper['description'];
         $field['limitedTime'] = (int) $testPaper['limitedTime'];
+        $field['choiceMissScore'] = (int)$testPaper['missScore'];
+
+        $this->getTestItemDao()->updateItemsMissScoreByPaperIds(array($id), $testPaper['missScore']);
+
         return $this->getTestPaperDao()->updateTestPaper($id, $field);  
     }
 
@@ -137,7 +141,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        $missScores = array_key_exists('missScores', $field) ? $field['missScores'] : null;
+        $missScore = array_key_exists('missScore', $field) ? $field['missScore'] : null;
 
         $diff = array_diff($ids, $scores);
 
@@ -163,10 +167,8 @@ class TestServiceImpl extends BaseService implements TestService
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
-            $choiceNum = 0;
             if ($question['type'] == 'choice'){
-                $field['missScore'] = (int)$missScores[$choiceNum];
-                $choiceNum++;
+                $field['missScore'] = (int)$missScore;
             }
 
 
@@ -494,6 +496,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         foreach ($items as $key => $value) {
             $questions[$value['questionId']]['score'] = $value['score'];
+            $questions[$value['questionId']]['missScore'] = $value['missScore'];
         }
 
         $results = $this->makeTestResults($answers, $questions);
@@ -550,19 +553,24 @@ class TestServiceImpl extends BaseService implements TestService
 
             if ($question['type'] == 'single_choice' or $question['type'] == 'choice') {
 
-                $diff = array_diff($question['answer'], $answers[$key]['answer']);
+                $diff1 = array_diff($question['answer'], $answers[$key]['answer']);
+                $diff2 = array_diff($answers[$key]['answer'], $question['answer']);
 
-                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
+                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff1)) {
                     $answers[$key]['status'] = 'right';
                     $answers[$key]['score'] = $question['score'];
 
                     // $question['result'] = 'right';
+                } elseif ($question['missScore'] != 0 && empty($diff2) && !empty($diff1)) {
+                    $answers[$key]['status'] = 'wrong';
+                    $answers[$key]['score'] = $question['missScore'];
                 } else {
                     $answers[$key]['status'] = 'wrong';
                     $answers[$key]['score'] = 0;
 
                     // $question['result'] = 'wrong';
                 }
+
             }
 
             if ($question['type'] == 'determine') {
@@ -898,6 +906,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
         $field['pattern']       = 'QuestionType';
+        $field['choiceMissScore'] = $testPaper['missScore'];
         $field['metas']         = $metas;
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
