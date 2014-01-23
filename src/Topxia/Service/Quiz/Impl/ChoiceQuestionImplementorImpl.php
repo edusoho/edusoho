@@ -10,7 +10,6 @@ class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements Q
 	public function getQuestion($question)
     {
         $question = QuestionSerialize::unserialize($question);
-        $question['choices'] = $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds(array($question['id']));
         return $question;
     }
 
@@ -18,23 +17,28 @@ class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements Q
     {
         $choices = $this->splitQuestionChoices($fields);
 
-        $fields['metas'] = array('choices' => $choices);
+        if (empty($fields['metas'])) {
+            $fields['metas'] = array();
+        }
+
+        $fields['metas']['choices'] = $choices;
         $fields['answer'] = $this->splitQuestionAnswers($fields, $choices);
         $fields['type'] = count($fields['answer']) > 1 ? 'choice' : 'single_choice';
         $fields = $this->filterQuestionFields($fields);
 
-        $question =  QuestionSerialize::unserialize(
+        return QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->addQuestion(QuestionSerialize::serialize($fields))
         );
-
-        $choices = $this->addQuestionChoices($question, $choices);
-
-        return $question;
 	}
 
 	public function updateQuestion($id, $fields)
     {
         $choices = $this->splitQuestionChoices($fields);
+
+        if (empty($fields['metas'])) {
+            $fields['metas'] = array();
+        }
+        $fields['metas']['choices'] = $choices;
 
         $fields['answer'] = $this->splitQuestionAnswers($fields, $choices);
         $fields['type'] = count($fields['answer']) > 1 ? 'choice' : 'single_choice';
@@ -43,9 +47,6 @@ class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements Q
         $question =  QuestionSerialize::unserialize(
             $this->getQuizQuestionDao()->updateQuestion($id, QuestionSerialize::serialize($fields))
         );
-
-        $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
-        $choices = $this->addQuestionChoices($question, $choices);
 
         return $question;
     }
@@ -76,28 +77,9 @@ class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements Q
         return $answers;
     }
 
-    private function addQuestionChoices($question, $choices)
-    {
-        $savedChoices = array();
-
-        foreach ($choices as $content) {
-            $choice = array();
-            $choice['questionId'] = $question['id'];
-            $choice['content'] = $content;
-            $savedChoices[] = $this->getQuizQuestionChoiceDao()->addChoice($choice);
-        }
-
-        return $savedChoices;
-    }
-
     private function getQuizQuestionDao()
     {
         return $this->createDao('Quiz.QuizQuestionDao');
-    }
-
-    private function getQuizQuestionChoiceDao()
-    {
-        return $this->createDao('Quiz.QuizQuestionChoiceDao');
     }
   
 }

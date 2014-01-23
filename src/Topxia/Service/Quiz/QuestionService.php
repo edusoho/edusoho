@@ -19,13 +19,6 @@ interface QuestionService
 
     public function findQuestionsByIds(array $ids);
 
-
-    /**
-     *  quiz_question_choice
-     */
-
-    public function findChoicesByQuestionIds(array $id);
-
     /**
      *  quiz_question_category
      */

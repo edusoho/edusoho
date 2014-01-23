@@ -179,11 +179,14 @@ class QuizQuestionController extends BaseController
             return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $question['parentId']))));
         }
 
-        if (!empty($question['choices'])) {
-            foreach ($question['choices'] as $key => $choice) {
+        $question['choices'] = array();
+        if (!empty($question['metas']['choices'])) {
+            foreach ($question['metas']['choices'] as $key => $choice) {
+                $choice = array('content' => $choice);
                 if (in_array($key, $question['answer'])) {
-                    $question['choices'][$key]['isAnswer'] = true;
+                    $choice['isAnswer'] = true;
                 }
+                $question['choices'][] = $choice;
             }
         }
 
