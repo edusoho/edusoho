@@ -469,8 +469,6 @@ class TestServiceImpl extends BaseService implements TestService
 
         }
 
-        $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
-
         $questions = $this->makeMaterial($questions);
 
         return $questions;
@@ -808,7 +806,26 @@ class TestServiceImpl extends BaseService implements TestService
 
         $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
+        $testPaper = $this->getTestPaperDao()->getTestPaper($testPaperResult['testId']);
+
+        if ($this->isExistsEssay($testResults)){
+            $fields['status'] = 'reviewing';
+
+            $user = $this->getCurrentUser();
+            $course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+            $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testPaperResult['id']), true);
+
+            foreach ($course['teacherIds'] as $receiverId) {
+                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+            }
+        } else {
+            $fields['status'] = 'finished';
+        }
+
+
+
 
         $fields['objectiveScore'] = $this->sumScore($testResults);
 
@@ -940,6 +957,11 @@ class TestServiceImpl extends BaseService implements TestService
     private function getQuestionService()
     {
         return $this->createService('Quiz.QuestionService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->createService('User.NotificationService');
     }
 
     private function getCourseService()

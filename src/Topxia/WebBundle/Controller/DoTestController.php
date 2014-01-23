@@ -230,7 +230,14 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
 
-			$this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
+			$paperResult = $this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
+
+			$user = $this->getCurrentUser();
+
+	        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+	        $testPaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$paperResult['id']), true);
+
+	        $result = $this->getNotificationService()->notify($paperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$paperResult['paperName']} ，<a href='{$testPaperResultUrl}' target='_blank'>请点击查看结果</a>");
 			
 			return $this->createJsonResponse(true);
 		}
