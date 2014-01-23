@@ -18,6 +18,7 @@ class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements Q
     {
         $choices = $this->splitQuestionChoices($fields);
 
+        $fields['metas'] = array('choices' => $choices);
         $fields['answer'] = $this->splitQuestionAnswers($fields, $choices);
         $fields['type'] = count($fields['answer']) > 1 ? 'choice' : 'single_choice';
         $fields = $this->filterQuestionFields($fields);
@@ -55,7 +56,7 @@ class ChoiceQuestionImplementorImpl extends BaseQuestionImplementor implements Q
             throw $this->createServiceException("choices参数不正确");
         }
 
-        return $question['choices'];
+        return array_values($question['choices']);
     }
 
     private function splitQuestionAnswers($question, $choices)
