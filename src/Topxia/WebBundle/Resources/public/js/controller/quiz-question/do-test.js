@@ -24,7 +24,7 @@ define(function(require, exports, module) {
               top: 200
             }
         });
-        
+
 
         var $body = $(document.body);
 
@@ -248,6 +248,10 @@ define(function(require, exports, module) {
             if ($(this).hasClass('right')) {
                 rights.push($(this).attr('href'));
                 $(this).addClass('btn-success');
+            }
+            if ($(this).hasClass('noAnswer')) {
+                
+                $(this).addClass('btn-warning');
             }
             alls.push($(this).attr('href'));
         });
