@@ -401,20 +401,23 @@ class TestServiceImpl extends BaseService implements TestService
 
         $questions = ArrayToolkit::index($questions, 'id');
 
-
         $items = ArrayToolkit::index($items, 'questionId');
 
-        $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
+        foreach ($questions as $key => &$question) {
+            $question['itemScore'] = $items[$key]['score'];
+            $question['seq'] = $items[$key]['seq'];
 
-        foreach ($questions as $key => $question) {
-            $questions[$key]['itemScore'] = $items[$key]['score'];
-            $questions[$key]['seq'] = $items[$key]['seq'];
+            if (in_array($question['type'], array('single_choice', 'choice'))){
+
+                foreach ($question['metas']['choices'] as $key => $choice) {
+                    $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
+                }
+            }
+            unset($question);
+
         }
 
-        $questions = $this->makeTest($questions, $choices);
-
-
-        // $questions = $this->makeMaterial($questions);
+        $questions = $this->makeMaterial($questions);
 
         return $questions;
     }
@@ -452,17 +455,23 @@ class TestServiceImpl extends BaseService implements TestService
             $questions[$key]['testResult'] = $answer;
 
         }
+        foreach ($questions as $key => &$question) {
+            $question['itemScore'] = $items[$key]['score'];
+            $question['seq'] = $items[$key]['seq'];
 
-        foreach ($questions as $key => $question) {
-            $questions[$key]['itemScore'] = $items[$key]['score'];
-            $questions[$key]['seq'] = $items[$key]['seq'];
+            if (in_array($question['type'], array('single_choice', 'choice'))){
+
+                foreach ($question['metas']['choices'] as $k => $choice) {
+                    $question['choices'][$k] = array( 'content' => $choice, 'questionId' => $key);
+                }
+            }
+            unset($question);
+
         }
 
         $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
 
-        $questions = $this->makeTest($questions, $choices);
-
-        // $questions = $this->makeMaterial($questions);
+        $questions = $this->makeMaterial($questions);
 
         return $questions;
     }
@@ -641,13 +650,6 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function makeTest ($questions, $answers)
     {
-        foreach ($answers as $key => $value) {
-            if (!array_key_exists('choices', $questions[$value['questionId']])) {
-                $questions[$value['questionId']]['choices'] = array();
-            }
-            $questions[$value['questionId']]['choices'][$key] = $value;
-        }
-
         return $this->makeMaterial($questions);
     }
 
