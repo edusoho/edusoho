@@ -45,6 +45,21 @@
 				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
 			</div>
 	  </div>
+
+	  {% if questionPreview|default(false) %}
+	  <div class="testpaper-preview-answer">
+	  	<div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in question.answer %}
+		    	<li>
+		    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    	</li>
+		      {% endfor %}
+		    </ul>
+		</div>
+	  </div>
+	  {% endif %}
+
 	{% endif %}
 </div>
 
