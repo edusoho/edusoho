@@ -33,16 +33,27 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function updateTestPaper($id, $testPaper)
     {
+
+        $paper = $this->getTestPaperDao()->getTestPaper($id);
+
+        if (empty($paper)){
+            throw $this->createNotFoundException('无此试卷');    
+        }
+
+        $paper = TestPaperSerialize::unserialize($paper);
+        $metas = $paper['metas'];
+        $metas['choice_miss_score'] = $testPaper['missScore'];
+
         $field['updatedUserId'] = $this->getCurrentUser()->id;
         $field['updatedTime'] = time();
         $field['name']   = empty($testPaper['name'])?"":$testPaper['name'];
         $field['description'] = empty($testPaper['description'])?"":$testPaper['description'];
         $field['limitedTime'] = (int) $testPaper['limitedTime'];
-        $field['choiceMissScore'] = (int)$testPaper['missScore'];
+        $field['metas'] = $metas;
 
         $this->getTestItemDao()->updateItemsMissScoreByPaperIds(array($id), $testPaper['missScore']);
 
-        return $this->getTestPaperDao()->updateTestPaper($id, $field);  
+        return $this->getTestPaperDao()->updateTestPaper($id, TestPaperSerialize::serialize($field));  
     }
 
     public function deleteTestPaper($id)
@@ -952,8 +963,15 @@ class TestPaperSerialize
     public static function serialize(array $item)
     {
         if (isset($item['metas'])) {
+            $item['metas'] = !is_array($item['metas']) ? array() : $item['metas'];
+
+            if (isset($item['metas']['question_type_seq'])) {
+                $item['metas']['question_type_seq'] = explode(',', $item['metas']['question_type_seq']);
+            }
+
             $item['metas'] = json_encode($item['metas']);
         }
+
 
         return $item;
     }
@@ -964,10 +982,8 @@ class TestPaperSerialize
             return null;
         }
 
-        $item['metas'] = json_decode($item['metas'], true);
-        foreach ($item['metas'] as $key => $value) {
-            $item['metas'][$key] = explode(',', $value);
-        }
+        $item['metas'] = !empty($item['metas']) ? json_decode($item['metas'], true) : array();
+
         return $item;
     }
 
