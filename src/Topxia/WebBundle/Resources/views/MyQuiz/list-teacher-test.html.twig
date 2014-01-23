@@ -10,7 +10,7 @@
 				{% set course = courses[testPaper.targetId] %}
 			{% endif %}
 			{% if teachers|default(null) %}
-				{% set teacher = teachers[paperResult.checkTeacherId] %}
+				{% set teacher = teachers[paperResult.checkTeacherId]|default(null) %}
 			{% endif %}
 				{% include 'TopxiaWebBundle:MyQuiz:list-teacher-test-tr.html.twig' %}
 

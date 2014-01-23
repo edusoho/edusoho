@@ -309,7 +309,16 @@ class QuizQuestionController extends BaseController
     public function previewQuestionAction (Request $request, $id)
     {
     	$questions = $this->getQuestionService()->findQuestions(array($id));
+
         $question = $questions[$id];
+
+
+        if (in_array($question['type'], array('single_choice', 'choice'))){
+            foreach ($question['metas']['choices'] as $key => $choice) {
+                $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
+            }
+        }
+
         if (empty($question)) {
     		throw $this->createNotFoundException('题目不存在！');
     	}
@@ -324,12 +333,7 @@ class QuizQuestionController extends BaseController
     			if (!in_array($value['type'], array('single_choice', 'choice'))){
     				continue;
     			}
-    			// $choiceIndex = 65;
-    			// foreach ($value['choices'] as $k => $choice) {
-    			// 	$choice['choiceIndex'] = chr($choiceIndex);
-		    	// 	$choiceIndex++;
-		    	// 	$questions[$key]['choices'][$k] = $choice;
-    			// }
+  
     			ksort($value['choices']);
 				$value['choices'] = array_values($value['choices']);
 				foreach ($value['choices'] as $k => $v) {
@@ -342,12 +346,6 @@ class QuizQuestionController extends BaseController
     	} else {
     		if (in_array($question['type'], array('single_choice', 'choice'))){
 
-				// $choiceIndex = 65;
-				// foreach ($question['choices'] as $k => $choice) {
-				// 	$choice['choiceIndex'] = chr($choiceIndex);
-		  //   		$choiceIndex++;
-		  //   		$question['choices'][$k] = $choice;
-				// }
 				ksort($question['choices']);
 				$question['choices'] = array_values($question['choices']);
 				foreach ($question['choices'] as $k => $v) {
