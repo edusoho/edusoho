@@ -94,11 +94,6 @@ class MyQuestionServiceImpl extends BaseService
 		return $this->getTestPaperResultDao()->findTestPaperResultCountByStatusAndTeacherIds($ids, $status);
 	}
 
-	public function findChoicesByQuestionIds($questionIds)
-	{
-		return $this->getQuestionChoiceDao()->findChoicesByQuestionIds($questionIds);
-	}
-
 	public function findFavoriteQuestionsByIds ($questionIds)
 	{
 		$questions = QuestionSerialize::unserializes($this->getQuestionDao()->findQuestionsByIds($questionIds));
@@ -115,9 +110,7 @@ class MyQuestionServiceImpl extends BaseService
 			}
 		}
 
-		$choices = $this->getQuestionChoiceDao()->findChoicesByQuestionIds($questionIds);
-
-		return TestQuestion::makeTest(ArrayToolkit::index($questions, 'id'), $choices);
+        return $questions;
 	}
 
 	public function findUsersByIds ($ids)
@@ -171,19 +164,6 @@ class MyQuestionServiceImpl extends BaseService
 
 class TestQuestion
 {
-    public static function makeTest ($questions, $answers)
-    {
-        foreach ($answers as $key => $value) {
-            if (!array_key_exists('choices', $questions[$value['questionId']])) {
-                $questions[$value['questionId']]['choices'] = array();
-            }
-            // array_push($questions[$value['questionId']]['choices'], $value);
-            $questions[$value['questionId']]['choices'][$value['id']] = $value;
-        }
-
-        return $questions;
-    }
-
     public static function makeMaterial ($questions)
     {
         foreach ($questions as $key => $value) {
