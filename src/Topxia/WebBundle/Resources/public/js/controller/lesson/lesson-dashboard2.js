@@ -252,6 +252,10 @@ define(function(require, exports, module) {
 	            		$("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
 						$("#lesson-text-content").scrollTop(0);
 						$("#lesson-text-content").perfectScrollbar('update');
+	            	} else if (lesson.type == 'testpaper') {
+	            		var url = '../../do/test/' + lesson.mediaId;
+	            		$("#lesson-testpaper-content").show();
+	            		window.open(url);
 	            	}
             	}
             	that._toolbar.set('lesson', lesson);
