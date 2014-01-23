@@ -339,6 +339,9 @@ class DoTestController extends BaseController
 		foreach ($questions as $value) {
 
 			if ($value['type'] == 'material'){
+				if (!array_key_exists('questions', $value)){
+					continue;
+				}
 				foreach ($value['questions'] as $key => $v) {
 					$accuracy['material']['score'] += $v['testResult']['score'];
 					$accuracy['material']['totalScore'] += $v['itemScore'];
@@ -397,10 +400,11 @@ class DoTestController extends BaseController
 			}
 
 			if ($value['type'] == 'material') {
-
-				$value['questions'] = $this->formatQuestions($value['questions']);
-				$number += $value['questions']['number'];
-				unset($value['questions']['number']);
+				if(array_key_exists('questions', $value)){
+					$value['questions'] = $this->formatQuestions($value['questions']);
+					$number += $value['questions']['number'];
+					unset($value['questions']['number']);
+				}
 			} else {
 				$number++;
 			}

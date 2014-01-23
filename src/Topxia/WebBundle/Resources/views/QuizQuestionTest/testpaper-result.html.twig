@@ -36,7 +36,7 @@
               {% if question.type != 'material' %}
                 <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ question.seq }}</a>
               {% else %}
-                {% for question in question.questions %}
+                {% for question in question.questions|default([]) %}
                   <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ question.seq }}</a>
                 {% endfor %}
               {% endif %}
