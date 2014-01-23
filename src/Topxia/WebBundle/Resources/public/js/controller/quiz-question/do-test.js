@@ -362,37 +362,43 @@ define(function(require, exports, module) {
         });
 
         //老师阅卷校验
+        
+        if ($('#teacherCheckForm').length > 0) {
+            var validator = new Validator({
+                element: '#teacherCheckForm',
+                autoSubmit: false,
+                onFormValidated: function(error, results, $form) {
+                    if (error) {
+                        return false;
+                    }
+                    
+                    $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
+                        window.location.href = $('#finishCheck').data('goto');
+                    }).error(function(){
 
-        var validator = new Validator({
-            element: '#teacherCheckForm',
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
+                    });
+                }
+
+            });
+
+            Validator.addRule('score', function(options) {
+                var element = options.element;
+                var isFloat = /^\d+(\.\d)?$/.test(element.val());
+                if (!isFloat){
                     return false;
                 }
-                
-                $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
-                    window.location.href = $('#finishCheck').data('goto');
-                }).error(function(){
 
-                });
-            }
+                if (parseInt(element.val()) <= parseInt(element.data('score'))) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }, '{{display}}只能是小于题目分数的数字');
 
-        });
 
-        Validator.addRule('score', function(options) {
-            var element = options.element;
-            var isFloat = /^\d+(\.\d)?$/.test(element.val());
-            if (!isFloat){
-                return false;
-            }
 
-            if (parseInt(element.val()) <= parseInt(element.data('score'))) {
-                return true;
-            } else {
-                return false;
-            }
-        }, '{{display}}只能是小于题目分数的数字');
+
+        }
 
         $('[name^="score_"]').each(function(){
             name = $(this).attr('name');
