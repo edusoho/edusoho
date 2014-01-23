@@ -29,7 +29,7 @@ define(function(require, exports, module) {
         'about'
     ];
 
-    var questionItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'insertblank', '|', 'link', 'unlink', '|', 'removeformat', 'source'];
+    var questionItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', '|', 'removeformat', 'source', '|', 'insertblank'];
 
     var contentCss = [];
     contentCss.push('body {font-size: 14px; line-height: 1.428571429;color: #333333;}');
