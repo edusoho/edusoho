@@ -8,7 +8,7 @@ use Doctrine\DBAL\Query\QueryBuilder,
 
 class DoTestDaoImpl extends BaseDao
 {
-	protected $table = "test_item_result";
+	protected $table = "testpaper_item_result";
 
 	public function addItemAnswers ($answers, $testPaperId, $testPaperResultId, $userId)
 	{
