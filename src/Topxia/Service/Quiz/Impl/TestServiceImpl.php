@@ -38,6 +38,10 @@ class TestServiceImpl extends BaseService implements TestService
         $field['name']   = empty($testPaper['name'])?"":$testPaper['name'];
         $field['description'] = empty($testPaper['description'])?"":$testPaper['description'];
         $field['limitedTime'] = (int) $testPaper['limitedTime'];
+        $field['choiceMissScore'] = (int)$testPaper['missScore'];
+
+        $this->getTestItemDao()->updateItemsMissScoreByPaperIds(array($id), $testPaper['missScore']);
+
         return $this->getTestPaperDao()->updateTestPaper($id, $field);  
     }
 
@@ -137,7 +141,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        $missScores = array_key_exists('missScores', $field) ? $field['missScores'] : null;
+        $missScore = array_key_exists('missScore', $field) ? $field['missScore'] : null;
 
         $diff = array_diff($ids, $scores);
 
@@ -163,10 +167,8 @@ class TestServiceImpl extends BaseService implements TestService
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
-            $choiceNum = 0;
             if ($question['type'] == 'choice'){
-                $field['missScore'] = (int)$missScores[$choiceNum];
-                $choiceNum++;
+                $field['missScore'] = (int)$missScore;
             }
 
 
@@ -898,6 +900,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
         $field['pattern']       = 'QuestionType';
+        $field['choiceMissScore'] = $testPaper['missScore'];
         $field['metas']         = $metas;
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
