@@ -38,6 +38,8 @@
     <div class="panel panel-default">
         <div class="panel-body">
 
+          <div class="clearfix mbl">
+
           {% for type in paper.metas.question_type_seq %}
 
             {% for question in questions[type] %}
@@ -50,6 +52,14 @@
               {% endif %}
               
             {% endfor %}
+            </div>
+
+            <div class="testpaper-card-explain clearfix">
+              <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">正确</small>
+              <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">错误</small>
+              <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">待批阅</small>
+              <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">未做</small>
+            </div>
 
             <div class="clearfix mtm mbm"></div>
 
