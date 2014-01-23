@@ -35,10 +35,7 @@ define(function(require, exports, module) {
                     editor.insertHtml(result);
                 }
             });
-
-
-
-        },
+        }
     });
 
     module.exports = EssayQuestion;

@@ -7,12 +7,12 @@ define(function(require, exports, module) {
 
     var ChoiceQuestion = BaseQuestion.extend({
         attrs: {
-            globalId: 1,
+            globalId: 1
         },
 
         events: {
             'click [data-role=add-choice]': 'onAddChoice',
-            'click [data-role=delete-choice]': 'onDeleteChoice',
+            'click [data-role=delete-choice]': 'onDeleteChoice'
         },
         
         setup: function() {

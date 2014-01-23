@@ -138,7 +138,7 @@ class QuizQuestionController extends BaseController
 	        }
         }
 
-		$targets['default'] = $request->query->get('targetsDefault');
+		$targets['default'] = $request->query->get('targetsDefault', '');
 
 		$parentQuestion['difficulty'] = $request->query->get('questionDifficulty');
 
