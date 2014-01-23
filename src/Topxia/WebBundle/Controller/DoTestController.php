@@ -44,9 +44,9 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
-		foreach ($paper['metas']['question_type_seq'] as $value) {
-			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
-			$total[$value]['number'] = count($questions[$value]);
+		foreach ($paper['metas']['question_type_seq'] as $type) {
+			$total[$type]['score'] = array_sum(ArrayToolkit::column($questions[$type], 'itemScore'));
+			$total[$type]['number'] = count($questions[$type]);
 		}
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
