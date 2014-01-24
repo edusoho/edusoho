@@ -255,7 +255,7 @@ class QuizQuestionTestController extends BaseController
         $conditions = array(
         	'parentId' => 0,
         	'notId' => explode(',', $ids),
-        	$type['0'] => $type['1'],
+            'type' => $type['1'],
         );
 
         $conditions['target']['course'] = array($courseId);
