@@ -29,6 +29,14 @@
        
         {% include 'TopxiaWebBundle:QuizQuestionTest:test-paper-form.html.twig'%}
 
+
+        <div class="form-group">
+            <div class="col-md-2  controls"></div>
+            <button type="submit" class="btn btn-primary" >保存，下一步</button>
+            <a href="{{ path('course_manage_test_paper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>
+        </div>
+
+
       </form>
 
 

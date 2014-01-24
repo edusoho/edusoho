@@ -553,6 +553,10 @@ course_manage_do_test:
     pattern: /do/test/{testId}
     defaults: { _controller: TopxiaWebBundle:DoTest:index }
 
+course_manage_redo_test:
+    pattern: /redo/test/{testId}
+    defaults: { _controller: TopxiaWebBundle:DoTest:reDo }
+
 course_manage_show_test:
     pattern: /show/test/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:showTest }
