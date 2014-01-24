@@ -784,7 +784,7 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testPaperResultId);
     }
 
-    public function startTest ($testId, $userId, $testPaper)
+    public function startTest ($testId, $userId, $testPaper, $target = array())
     {
 
         $testPaperResult = array(
@@ -794,7 +794,9 @@ class TestServiceImpl extends BaseService implements TestService
             'limitedTime' => $testPaper['limitedTime'],
             'beginTime' => time(),
             'status' => 'doing',
-            'remainTime' => $testPaper['limitedTime'] * 60
+            'remainTime' => $testPaper['limitedTime'] * 60,
+            'targetType' => empty($target['type']) ? '' : $target['type'],
+            'targetId' => empty($target['id']) ? 0 : intval($target['id']),
         );
 
         return $this->getTestPaperResultDao()->addResult($testPaperResult);

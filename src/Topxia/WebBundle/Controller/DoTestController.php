@@ -11,6 +11,8 @@ class DoTestController extends BaseController
 {
 	public function indexAction (Request $request, $testId)
 	{
+		$targetType = $request->query->get('targetType');
+		$targetId = $request->query->get('targetId');
 
 		$userId = $this->getCurrentUser()->id;
 
@@ -26,7 +28,7 @@ class DoTestController extends BaseController
 			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 		}
 
-		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
+		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
 
 		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 	}
@@ -147,6 +149,15 @@ class DoTestController extends BaseController
 	            foreach ($course['teacherIds'] as $receiverId) {
 	                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
 	            }
+			}
+
+			// @todo refactor.
+			if ($testPaperResult['targetType'] == 'lesson' and !empty($testPaperResult['targetId'])) {
+				$lessons = $this->getCourseService()->findLessonsByIds(array($testPaperResult['targetId']));
+				if (!empty($lessons[$testPaperResult['targetId']])) {
+					$lesson = $lessons[$testPaperResult['targetId']];
+					$this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+				}
 			}
 
 			return $this->createJsonResponse(true);
