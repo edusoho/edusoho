@@ -253,7 +253,6 @@ define(function(require, exports, module) {
 						$("#lesson-text-content").scrollTop(0);
 						$("#lesson-text-content").perfectScrollbar('update');
 	            	} else if (lesson.type == 'testpaper') {
-	            		console.log(lesson);
 	            		var url = '../../do/test/' + lesson.mediaId + '?targetType=lesson&targetId=' + id;
 	            		var html = '<span class="text-info">请在新开窗口中，完成考试。如未打开试卷，请点击此处， <a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">打开试卷</a>。</span>'
 
