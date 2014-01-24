@@ -325,6 +325,8 @@ class TestServiceImpl extends BaseService implements TestService
                     $this->getTestItemDao()->updateItem($item['id'], $fields);
 
                     if($item['questionType'] == 'material' && !empty($groupItems[$item['questionId']])){
+                        ksort($groupItems[$item['questionId']]);
+
                         foreach ($groupItems[$item['questionId']] as $item) {
                             $fields = array('seq' => $seqNum);
                             $this->getTestItemDao()->updateItem($item['id'], $fields);

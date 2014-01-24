@@ -509,7 +509,7 @@ class DoTestController extends BaseController
 
 			if ($value['type'] == 'material') {
 				if(array_key_exists('questions', $value)){
-					$value['questions'] = $this->formatQuestions($value['questions']);
+					$value['questions'] = $this->formatQuestions($value['questions'], $paper);
 					$number += $value['questions']['number'];
 					unset($value['questions']['number']);
 				}
@@ -519,15 +519,18 @@ class DoTestController extends BaseController
 
 			if ($value['targetId'] != 0) {
 				$formatQuestions[$value['type']][$key] = $value;
+
+
+				$diff = array_diff($paper['metas']['question_type_seq'], array_keys($formatQuestions));
+				foreach ($diff as $type) {
+					$formatQuestions[$type] = array();
+				}
+				
 			} else {
 				$formatQuestions[$key] = $value;
 			}
 		}
 
-		$diff = array_diff($paper['metas']['question_type_seq'], array_keys($formatQuestions));
-		foreach ($diff as $type) {
-			$formatQuestions[$type] = array();
-		}
 
 
 		$formatQuestions['number'] = $number;
