@@ -39,19 +39,38 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 			foreach ($questions as $question) {
 
-				if($question['parentId'] != 0)
+				if($question['parentId'] != 0) {
 					continue;
+                }
 
-                $questionsGroup[$question['type']][] = $question;
+                if (!empty($options['ranges'])) {
+                    $key = $question['targetType'] . "-" . $question['targetId'];
+                    if (in_array($key, $options['ranges'])) {
+                        $questionsGroup[$question['type']][] = $question;
+                    }
+                } else {
+                    $questionsGroup[$question['type']][] = $question;
+                }
+
+                
             }
 		} else {
 
 			foreach ($questions as $question) {
 				
-				if($question['parentId'] != 0)
+				if($question['parentId'] != 0) {
 					continue;
+                }
 
-                $questionsGroup[$question['type']][$question['difficulty']][] = $question;
+                if (!empty($options['ranges'])) {
+                    $key = $question['targetType'] . "-" . $question['targetId'];
+                    if (in_array($key, $options['ranges'])) {
+                        $questionsGroup[$question['type']][$question['difficulty']][] = $question;
+                    }
+                } else {
+                    $questionsGroup[$question['type']][$question['difficulty']][] = $question;
+                }
+                
             }
 		}
 

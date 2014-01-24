@@ -74,8 +74,8 @@ class DoTestController extends BaseController
 		}
 
 		$questions = $this->getTestService()->findQuestionsByTestId($testId);
-	
-		$questions = $this->formatQuestions($questions);
+
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $type) {
@@ -113,9 +113,9 @@ class DoTestController extends BaseController
 
 		$questions = $this->getTestService()->testResults($id);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
-		$this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
+		// $this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -141,11 +141,11 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 
 			$result = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, $remainTime);
+			$this->getTestService()->updatePaperResult($id, $usedTime);
 
 			return $this->createJsonResponse(true);
 		}
@@ -156,7 +156,7 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 			$user = $this->getCurrentUser();
 
 			//提交变化的答案
@@ -169,7 +169,7 @@ class DoTestController extends BaseController
 
 			$testPaper = $this->getTestService()->getTestPaper($testPaperResult['testId']);
 			//试卷信息记录
-			$this->getTestService()->finishTest($id, $user['id'], $remainTime);
+			$this->getTestService()->finishTest($id, $user['id'], $usedTime);
 
 			if ($this->getTestService()->isExistsEssay($testResults)) {
 				$user = $this->getCurrentUser();
@@ -215,7 +215,7 @@ class DoTestController extends BaseController
 
 		$accuracy = $this->makeAccuracy($questions);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -305,7 +305,7 @@ class DoTestController extends BaseController
 
 		$accuracy = $this->makeAccuracy($questions);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -382,6 +382,44 @@ class DoTestController extends BaseController
         ));
 	}
 
+	public function openTestPaperAction (Request $request, $id)
+	{
+		$testPaper = $this->getTestService()->getTestPaper($id);
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+		$testPaper = $this->getTestService()->publicTestPaper($id, 'open');
+
+		$user = $this->getUserService()->getUser($testPaper['updatedUserId']);
+
+		$course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
+            'item' => $testPaper,
+            'user' => $user,
+            'course' => $course
+        ));
+	}
+
+	public function closeTestPaperAction (Request $request, $id)
+	{
+		$testPaper = $this->getTestService()->getTestPaper($id);
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+		$testPaper = $this->getTestService()->publicTestPaper($id, 'closed');
+
+		$user = $this->getUserService()->getUser($testPaper['updatedUserId']);
+
+		$course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
+            'item' => $testPaper,
+            'user' => $user,
+            'course' => $course
+        ));
+	}
+
 	private function makeAccuracy ($questions)
     {
         $accuracyResult = array(
@@ -449,7 +487,7 @@ class DoTestController extends BaseController
         return $accuracy;
     }
 
-	private function formatQuestions ($questions)
+	private function formatQuestions ($questions, $paper)
 	{
 		$formatQuestions = array();
 		$number = 0;
@@ -471,7 +509,7 @@ class DoTestController extends BaseController
 
 			if ($value['type'] == 'material') {
 				if(array_key_exists('questions', $value)){
-					$value['questions'] = $this->formatQuestions($value['questions']);
+					$value['questions'] = $this->formatQuestions($value['questions'], $paper);
 					$number += $value['questions']['number'];
 					unset($value['questions']['number']);
 				}
@@ -481,10 +519,19 @@ class DoTestController extends BaseController
 
 			if ($value['targetId'] != 0) {
 				$formatQuestions[$value['type']][$key] = $value;
+
+
+				$diff = array_diff($paper['metas']['question_type_seq'], array_keys($formatQuestions));
+				foreach ($diff as $type) {
+					$formatQuestions[$type] = array();
+				}
+				
 			} else {
 				$formatQuestions[$key] = $value;
 			}
 		}
+
+
 
 		$formatQuestions['number'] = $number;
 

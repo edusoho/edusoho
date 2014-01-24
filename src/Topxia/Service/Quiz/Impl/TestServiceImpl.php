@@ -325,6 +325,8 @@ class TestServiceImpl extends BaseService implements TestService
                     $this->getTestItemDao()->updateItem($item['id'], $fields);
 
                     if($item['questionType'] == 'material' && !empty($groupItems[$item['questionId']])){
+                        ksort($groupItems[$item['questionId']]);
+
                         foreach ($groupItems[$item['questionId']] as $item) {
                             $fields = array('seq' => $seqNum);
                             $this->getTestItemDao()->updateItem($item['id'], $fields);
@@ -496,7 +498,7 @@ class TestServiceImpl extends BaseService implements TestService
         $answers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
         $answers = QuestionSerialize::unserializes($answers);
         $answers = ArrayToolkit::index($answers, 'questionId');
-      
+  
         $items = $this->findItemsByTestPaperId($testResult['testId']);
         //材料题子题目
 
@@ -633,6 +635,7 @@ class TestServiceImpl extends BaseService implements TestService
 
             $oldAnswers[$key] = $answers[$key];
         }
+
 
         $oldAnswers = array_map(function($oldAnswer){
             return ArrayToolkit::parts($oldAnswer, array('questionId', 'status', 'score', 'answer'));
@@ -794,7 +797,7 @@ class TestServiceImpl extends BaseService implements TestService
             'limitedTime' => $testPaper['limitedTime'],
             'beginTime' => time(),
             'status' => 'doing',
-            'remainTime' => $testPaper['limitedTime'] * 60,
+            'usedTime' => 0,
             'targetType' => empty($target['type']) ? '' : $target['type'],
             'targetId' => empty($target['id']) ? 0 : intval($target['id']),
         );
@@ -802,7 +805,7 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->addResult($testPaperResult);
     }
 
-    public function finishTest ($id, $userId, $remainTime)
+    public function finishTest ($id, $userId, $usedTime)
     {
         $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
 
@@ -820,7 +823,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
-        $fields['remainTime'] = $remainTime;
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
         $fields['active'] = 1;
 
@@ -829,11 +832,11 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
-    public function updatePaperResult ($id, $remainTime)
+    public function updatePaperResult ($id, $usedTime)
     {
         $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $fields['remainTime'] = $remainTime;
+        $fields['usedTime'] = $usedTime;
 
         $fields['updateTime'] = time();
 
@@ -843,6 +846,17 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getTestPaperResultDao()->updateResultActive($testPaperResult['testId'],$testPaperResult['userId']);
 
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
+    }
+
+    public function publicTestPaper($id, $status)
+    {
+        if (!in_array($status, array('open', 'closed'))){
+            throw $this->createAccessDeniedException('试卷状态不合法!');
+        }
+        $testPaper = array(
+            'status' => $status
+        );
+        return $this->getTestPaperDao()->updateTestPaper($id, $testPaper);
     }
 
     public function isExistsEssay ($testResults)
@@ -912,8 +926,9 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createServiceException("target 参数不正确");
         }
 
-        $metas = array( 'question_type_seq' => 
-                implode(',', array_keys($testPaper['itemCounts'])));
+        // $metas = array( 'question_type_seq' => implode(',', array_keys($testPaper['itemCounts'])));
+        $metas = array('question_type_seq' => array_keys($testPaper['itemCounts']));
+
 
         $field = array();
 

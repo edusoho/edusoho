@@ -17,6 +17,8 @@ define(function(require, exports, module) {
 
         CreateBase.isDifficulty();
 
+        CreateBase.initRangeField();
+
         CreateBase.sortable();
 
         CreateBase.initValidator(validator);
