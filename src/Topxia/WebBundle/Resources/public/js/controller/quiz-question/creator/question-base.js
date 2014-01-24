@@ -103,7 +103,7 @@ define(function(require, exports, module) {
         _createValidator: function($form){
             var self = this;
 
-            Validator.addRule('fillCheck',/(\[\[(.*?)\]\])/i, '请输入正确的答案,如今天是[[晴|阴|雨]]天.');
+            Validator.addRule('fillCheck',/(\[\[(.+?)\]\])/i, '请输入正确的答案,如今天是[[晴|阴|雨]]天.');
             Validator.addRule('score',/^(\d){1,10}$/i, '请输入正确的分值');
 
             validator = new Validator({
