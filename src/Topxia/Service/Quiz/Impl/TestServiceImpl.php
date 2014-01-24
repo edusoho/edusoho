@@ -969,9 +969,9 @@ class TestPaperSerialize
         if (isset($item['metas'])) {
             $item['metas'] = !is_array($item['metas']) ? array() : $item['metas'];
 
-            if (isset($item['metas']['question_type_seq'])) {
-                $item['metas']['question_type_seq'] = explode(',', $item['metas']['question_type_seq']);
-            }
+            // if (isset($item['metas']['question_type_seq'])) {
+            //     $item['metas']['question_type_seq'] = explode(',', $item['metas']['question_type_seq']);
+            // }
 
             $item['metas'] = json_encode($item['metas']);
         }
