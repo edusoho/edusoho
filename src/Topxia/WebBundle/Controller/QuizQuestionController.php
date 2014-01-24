@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -178,11 +179,14 @@ class QuizQuestionController extends BaseController
             return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $question['parentId']))));
         }
 
-        if (!empty($question['choices'])) {
-            foreach ($question['choices'] as $key => $choice) {
+        $question['choices'] = array();
+        if (!empty($question['metas']['choices'])) {
+            foreach ($question['metas']['choices'] as $key => $choice) {
+                $choice = array('content' => $choice);
                 if (in_array($key, $question['answer'])) {
-                    $question['choices'][$key]['isAnswer'] = true;
+                    $choice['isAnswer'] = true;
                 }
+                $question['choices'][] = $choice;
             }
         }
 
@@ -298,14 +302,23 @@ class QuizQuestionController extends BaseController
     	if ($request->getMethod() == 'POST') {
 	    	$originalFile = $this->get('request')->files->get('file');
 	    	$file = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
-	    	return $this->createJsonResponse($file);
+            return new Response(json_encode($file));
 	    }
     }
 
     public function previewQuestionAction (Request $request, $id)
     {
     	$questions = $this->getQuestionService()->findQuestions(array($id));
+
         $question = $questions[$id];
+
+
+        if (in_array($question['type'], array('single_choice', 'choice'))){
+            foreach ($question['metas']['choices'] as $key => $choice) {
+                $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
+            }
+        }
+
         if (empty($question)) {
     		throw $this->createNotFoundException('题目不存在！');
     	}
@@ -320,12 +333,7 @@ class QuizQuestionController extends BaseController
     			if (!in_array($value['type'], array('single_choice', 'choice'))){
     				continue;
     			}
-    			// $choiceIndex = 65;
-    			// foreach ($value['choices'] as $k => $choice) {
-    			// 	$choice['choiceIndex'] = chr($choiceIndex);
-		    	// 	$choiceIndex++;
-		    	// 	$questions[$key]['choices'][$k] = $choice;
-    			// }
+  
     			ksort($value['choices']);
 				$value['choices'] = array_values($value['choices']);
 				foreach ($value['choices'] as $k => $v) {
@@ -338,12 +346,6 @@ class QuizQuestionController extends BaseController
     	} else {
     		if (in_array($question['type'], array('single_choice', 'choice'))){
 
-				// $choiceIndex = 65;
-				// foreach ($question['choices'] as $k => $choice) {
-				// 	$choice['choiceIndex'] = chr($choiceIndex);
-		  //   		$choiceIndex++;
-		  //   		$question['choices'][$k] = $choice;
-				// }
 				ksort($question['choices']);
 				$question['choices'] = array_values($question['choices']);
 				foreach ($question['choices'] as $k => $v) {

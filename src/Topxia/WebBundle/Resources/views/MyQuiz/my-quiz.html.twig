@@ -1,17 +1,24 @@
 {% extends 'TopxiaWebBundle:MyQuiz:layout.html.twig' %}
 
-{% block list %}
-<table class="table table-striped table-hover">
-	<tbody>
-		{% for myTestPaperResult in myTestPaperResults %}
-			{% set myTestPaper = myTestPapers[myTestPaperResult.testId]|default(null) %}
-			{% if myTestPaper %}
-				{% set course = courses[myTestPaper.targetId] %}
-			{% endif %}
-				{% include 'TopxiaWebBundle:MyQuiz:my-quiz-tr.html.twig' %}
+{% block title %}我的考试记录 - {{ parent() }}{% endblock %}
 
-		{% endfor %}
-	</tbody>
-</table>
-{{ web_macro.paginator(paginator) }}
+{% block list %}
+
+  {% if myTestPaperResults %}
+    <table class="table table-striped table-hover">
+    	<tbody>
+    		{% for myTestPaperResult in myTestPaperResults %}
+    			{% set myTestPaper = myTestPapers[myTestPaperResult.testId]|default(null) %}
+    			{% if myTestPaper %}
+    				{% set course = courses[myTestPaper.targetId] %}
+    			{% endif %}
+    				{% include 'TopxiaWebBundle:MyQuiz:my-quiz-tr.html.twig' %}
+    		{% endfor %}
+    	</tbody>
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  {% else %}
+    <div class="empty">还没有参加过任何考试</div>
+  {% endif %}
+
 {% endblock %}

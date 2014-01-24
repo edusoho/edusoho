@@ -44,8 +44,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
 
-        $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
-
         if ($question['parentId']) {
             $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
             $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
@@ -86,19 +84,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             throw $this->createNotFoundException('题目不存在！');
         }
 
-        $choices = $this->findChoicesByQuestionIds($ids);
-
         $questions = ArrayToolkit::index($questions, 'id');
 
-        if (!empty($choices)){
-            foreach ($choices as $key => $value) {
-                if (!array_key_exists('choices', $questions[$value['questionId']])) {
-                    $questions[$value['questionId']]['choices'] = array();
-                }
-                // array_push($questions[$value['questionId']]['choices'], $value);
-                $questions[$value['questionId']]['choices'][$value['id']] = $value;
-            }
-        }
         return $questions;
     }
 
@@ -169,11 +156,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->getQuizQuestionCategoryDao()->updateCategory($categoryId, $fields);
             $seq ++;
         }
-    }
-
-    public function findChoicesByQuestionIds(array $ids)
-    {
-        return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($ids);
     }
 
     public function favoriteQuestion($questionId, $targetType, $targetId, $userId)
@@ -254,11 +236,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function getQuizQuestionDao()
     {
         return $this->createDao('Quiz.QuizQuestionDao');
-    }
-
-    private function getQuizQuestionChoiceDao()
-    {
-        return $this->createDao('Quiz.QuizQuestionChoiceDao');
     }
 
     private function getQuizQuestionCategoryDao()

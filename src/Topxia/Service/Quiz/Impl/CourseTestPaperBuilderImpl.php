@@ -302,10 +302,10 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
         $counts = array();
 
         $counts['simple']     = (int) ($num * $perventage['0'] /100); 
-        $counts['ordinary']   = (int) ($num * $perventage['1'] /100); 
+        $counts['normal']   = (int) ($num * $perventage['1'] /100); 
         $counts['difficulty'] = (int) ($num * $perventage['2'] /100); 
 
-        $counts['otherCount'] = $num - ($counts['simple'] + $counts['ordinary'] + $counts['difficulty']);
+        $counts['otherCount'] = $num - ($counts['simple'] + $counts['normal'] + $counts['difficulty']);
 
         return $counts;
     }

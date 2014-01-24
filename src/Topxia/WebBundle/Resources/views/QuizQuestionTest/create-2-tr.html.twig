@@ -32,12 +32,6 @@
         <input name="scores[]" class="notMoveHandle form-control input-sm" {% if question.type != 'material' %} type="text" {% else %} type="hidden"{% endif %} value="{% if flag | default(null) and items[question.id]['score'] | default(null) %}{{ items[question.id]['score']}}{% else %}{{question.score}}{% endif %}" /></input>
     </td>
 
-    <td >
-        {% if question.type == 'choice' %}
-            <input name="missScores[]" class="notMoveHandle form-control input-sm" {% if question.type != 'material' %} type="text" {% else %} type="hidden"{% endif %} value="{{ missScore|default(0) }}" /></input>
-        {% endif %}
-    </td>
-
     <td>
         <div class="btn-group">
             {% if question.parentId == 0 %}

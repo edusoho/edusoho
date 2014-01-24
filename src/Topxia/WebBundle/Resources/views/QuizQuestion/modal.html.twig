@@ -41,6 +41,7 @@
           <div class="col-md-2 control-label"><label>从属</label></div>
           <div class="col-md-8 controls">
             <select class="form-control width-input width-input-large" name="target" data-role="target"></select>
+            <div class="help-block">可以针对本课程或者某个课时出题</div>
             <script type="text/plain" data-role="targets-data">{{ targets|json_encode|raw }}</script>
           </div>
         </div>
@@ -49,7 +50,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label>难度</label></div>
           <div class="col-md-8 controls radios">
-            {{ radios('difficulty', {'simple':'简单', 'ordinary':'一般', 'difficulty':'困难'}, question.difficulty | default('ordinary')) }}
+            {{ radios('difficulty', {'simple':'简单', 'normal':'一般', 'difficulty':'困难'}, question.difficulty | default('normal')) }}
           </div>          
         </div>
 
@@ -57,6 +58,9 @@
           <div class="col-md-2 control-label"><label for="question-stem-field">{% if type == 'material' %}材料{% else %}题干{% endif %}</label></div>
           <div class="col-md-8 controls">
             <textarea class="form-control" id="question-stem-field" name="stem">{{question.stem | default('')}}</textarea>
+            {% if type == 'fill' %}
+              <div class="help-block">点击编辑器按钮【 】可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对</div>
+            {% endif %}
           </div>
           <div class="col-md-2" style="padding-left:0;">
             <button class="btn btn-sm btn-default" data-role="stem-uploader" data-target="#question-stem-field"><i class="glyphicon glyphicon-picture"></i></button>
@@ -140,7 +144,7 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
             <div class="col-md-4 controls">
-              <input class="form-control" value="{{question.score|default(5)}}" type="text" id="question-score-field" name="score" />
+              <input class="form-control" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
             </div>
           </div>
 

@@ -9,7 +9,7 @@ use Doctrine\DBAL\Query\QueryBuilder,
 
 class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 {
-    protected $table = 'quiz_question';
+    protected $table = 'question';
 
     public function getQuestion($id)
     {
