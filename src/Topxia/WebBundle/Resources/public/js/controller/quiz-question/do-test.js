@@ -39,19 +39,14 @@ define(function(require, exports, module) {
             $body.scrollspy('refresh');
         });
 
-
-
-
-
-
-
-
 // 做试卷
         var interval = 180;
 
         var changeAnswers = {};
 
         var deadline = $('#time_show').data('time');
+
+        var usedTime = 0 ;
 
         var isLimit = true;
 
@@ -74,10 +69,11 @@ define(function(require, exports, module) {
 
             var timer = timerShow(function(){
                 deadline--;
+                usedTime++;
                 $('#time_show').text(formatTime(deadline));
 
                 if (deadline <= 0) {
-                    $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
+                    $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                         changeAnswers = {};
                         $('#timeout-dialog').show();
                         timer.stop();
@@ -85,7 +81,7 @@ define(function(require, exports, module) {
                 }
                 if (deadline == timeLastPost) {
                     timeLastPost = timeLastPost - interval;
-                    $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
+                    $.post($('#finishPaper').data('ajax'), { data:changeAnswers, usedTime:usedTime }, function(){
                         changeAnswers = {};
                     });
 
@@ -185,7 +181,7 @@ define(function(require, exports, module) {
         $('body').on('click', '#finishPaper', function(){
             $finishBtn = $(this);
 
-            $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
+            $.post($(this).data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $finishBtn.data('goto');
             });
 
@@ -194,7 +190,7 @@ define(function(require, exports, module) {
         $('body').on('click', '#suspend', function(){
             $suspendBtn = $(this);
 
-            $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
+            $.post($(this).data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $suspendBtn.data('goto');
             });
 

@@ -115,7 +115,7 @@ class DoTestController extends BaseController
 
 		$questions = $this->formatQuestions($questions);
 
-		$this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
+		// $this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -141,11 +141,11 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 
 			$result = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, $remainTime);
+			$this->getTestService()->updatePaperResult($id, $usedTime);
 
 			return $this->createJsonResponse(true);
 		}
@@ -156,7 +156,7 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 			$user = $this->getCurrentUser();
 
 			//提交变化的答案
@@ -169,7 +169,7 @@ class DoTestController extends BaseController
 
 			$testPaper = $this->getTestService()->getTestPaper($testPaperResult['testId']);
 			//试卷信息记录
-			$this->getTestService()->finishTest($id, $user['id'], $remainTime);
+			$this->getTestService()->finishTest($id, $user['id'], $usedTime);
 
 			if ($this->getTestService()->isExistsEssay($testResults)) {
 				$user = $this->getCurrentUser();
