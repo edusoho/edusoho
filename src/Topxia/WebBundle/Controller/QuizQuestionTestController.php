@@ -79,9 +79,20 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $ranges = array();
+
+        foreach ($lessons as  $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $ranges["lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+        }
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-1.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
+            'ranges' => $ranges,
 		));
 	}
 
