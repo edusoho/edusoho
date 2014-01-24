@@ -344,9 +344,9 @@ class TestServiceImpl extends BaseService implements TestService
     }
 
 
-    public function findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId)
+    public function findTestPaperResultByTestIdAndUserId($testId, $userId)
     {
-        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndDoingAndUserId($testId, $userId);
+        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndUserId($testId, $userId);
     }
 
     public function showTest ($id)
@@ -784,7 +784,7 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testPaperResultId);
     }
 
-    public function startTest ($testId, $userId, $testPaper)
+    public function startTest ($testId, $userId, $testPaper, $target = array())
     {
 
         $testPaperResult = array(
@@ -794,7 +794,9 @@ class TestServiceImpl extends BaseService implements TestService
             'limitedTime' => $testPaper['limitedTime'],
             'beginTime' => time(),
             'status' => 'doing',
-            'remainTime' => $testPaper['limitedTime'] * 60
+            'remainTime' => $testPaper['limitedTime'] * 60,
+            'targetType' => empty($target['type']) ? '' : $target['type'],
+            'targetId' => empty($target['id']) ? 0 : intval($target['id']),
         );
 
         return $this->getTestPaperResultDao()->addResult($testPaperResult);
@@ -967,9 +969,9 @@ class TestPaperSerialize
         if (isset($item['metas'])) {
             $item['metas'] = !is_array($item['metas']) ? array() : $item['metas'];
 
-            if (isset($item['metas']['question_type_seq'])) {
-                $item['metas']['question_type_seq'] = explode(',', $item['metas']['question_type_seq']);
-            }
+            // if (isset($item['metas']['question_type_seq'])) {
+            //     $item['metas']['question_type_seq'] = explode(',', $item['metas']['question_type_seq']);
+            // }
 
             $item['metas'] = json_encode($item['metas']);
         }

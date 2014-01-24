@@ -11,22 +11,56 @@ class DoTestController extends BaseController
 {
 	public function indexAction (Request $request, $testId)
 	{
+		$targetType = $request->query->get('targetType');
+		$targetId = $request->query->get('targetId');
 
 		$userId = $this->getCurrentUser()->id;
 
 		$testPaper = $this->getTestService()->getTestPaper($testId);
 
-		if (empty($testPaper)){
+		if (empty($testPaper)) {
 			throw $this->createNotFoundException();
 		}
 
-		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId);
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
 
-		if ($testResult) {
+		if (empty($testResult)) {
+			$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
 			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 		}
 
-		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
+		if (in_array($testResult['status'], array('doing', 'paused'))) {
+			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+		} else {
+			return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testResult['id'])));
+		}
+	}
+
+	public function reDoAction (Request $request, $testId)
+	{
+		$targetType = $request->query->get('targetType');
+		$targetId = $request->query->get('targetId');
+
+		$userId = $this->getCurrentUser()->id;
+
+		$testPaper = $this->getTestService()->getTestPaper($testId);
+
+		if (empty($testPaper)) {
+			throw $this->createNotFoundException();
+		}
+
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
+
+		if ($testResult && in_array($testResult['status'], array('doing', 'paused'))) {
+			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+		}
+
+		if ($testResult){
+			$targetType = $testResult['targetType'];
+			$targetId = $testResult['targetId'];
+		}
+
+		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
 
 		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 	}
@@ -147,6 +181,15 @@ class DoTestController extends BaseController
 	            foreach ($course['teacherIds'] as $receiverId) {
 	                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
 	            }
+			}
+
+			// @todo refactor.
+			if ($testPaperResult['targetType'] == 'lesson' and !empty($testPaperResult['targetId'])) {
+				$lessons = $this->getCourseService()->findLessonsByIds(array($testPaperResult['targetId']));
+				if (!empty($lessons[$testPaperResult['targetId']])) {
+					$lesson = $lessons[$testPaperResult['targetId']];
+					$this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+				}
 			}
 
 			return $this->createJsonResponse(true);
