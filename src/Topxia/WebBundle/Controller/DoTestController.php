@@ -74,8 +74,8 @@ class DoTestController extends BaseController
 		}
 
 		$questions = $this->getTestService()->findQuestionsByTestId($testId);
-	
-		$questions = $this->formatQuestions($questions);
+
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $type) {
@@ -113,7 +113,7 @@ class DoTestController extends BaseController
 
 		$questions = $this->getTestService()->testResults($id);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		// $this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
 
@@ -215,7 +215,7 @@ class DoTestController extends BaseController
 
 		$accuracy = $this->makeAccuracy($questions);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -305,7 +305,7 @@ class DoTestController extends BaseController
 
 		$accuracy = $this->makeAccuracy($questions);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -487,7 +487,7 @@ class DoTestController extends BaseController
         return $accuracy;
     }
 
-	private function formatQuestions ($questions)
+	private function formatQuestions ($questions, $paper)
 	{
 		$formatQuestions = array();
 		$number = 0;
@@ -523,6 +523,12 @@ class DoTestController extends BaseController
 				$formatQuestions[$key] = $value;
 			}
 		}
+
+		$diff = array_diff($paper['metas']['question_type_seq'], array_keys($formatQuestions));
+		foreach ($diff as $type) {
+			$formatQuestions[$type] = array();
+		}
+
 
 		$formatQuestions['number'] = $number;
 
