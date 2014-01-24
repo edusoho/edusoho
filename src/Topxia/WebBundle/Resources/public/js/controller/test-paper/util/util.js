@@ -98,10 +98,14 @@ define(function(require, exports, module) {
         initSortable: function(id){
 
             $('#'+id).sortable({
-                itemSelector: '[data-role=item]',
-                exclude: '.notMoveHandle',
+                itemSelector: '.questionType',
                 onDrop: function (item, container, _super) {
                     _super(item, container);
+                    if (item.data('type') == 'material') {
+                        var id = item.data('id');
+                        var $subItems = $("#questionType-material").find("[data-type=" + id + "]");
+                        $subItems.detach().insertAfter(item);
+                    }
                     Test.sortable();
                 },
             });
