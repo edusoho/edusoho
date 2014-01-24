@@ -25,6 +25,14 @@ class DoTestController extends BaseController
 		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
 
 		if (empty($testResult)) {
+
+			if ($testPaper['status'] == 'draft') {
+				return $this->createMessageResponse('info', '该试卷未发布，如有疑问请联系老师！');
+			}
+			if ($testPaper['status'] == 'closed') {
+				return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
+			}
+
 			$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
 			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 		}
@@ -58,6 +66,13 @@ class DoTestController extends BaseController
 		if ($testResult){
 			$targetType = $testResult['targetType'];
 			$targetId = $testResult['targetId'];
+		}
+
+		if ($testPaper['status'] == 'draft') {
+			return $this->createMessageResponse('info', '该试卷未发布，如有疑问请联系老师！');
+		}
+		if ($testPaper['status'] == 'closed') {
+			return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
 		}
 
 		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
