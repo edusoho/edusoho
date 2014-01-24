@@ -40,6 +40,95 @@ define(function(require, exports, module) {
             });
         },
 
+        initRangeField: function() {
+            var self = this;
+            $('input[name=range]').on('click', function() {
+                if ($(this).val() == 'lesson') {
+                    $("#test-range-selects").show();
+                } else {
+                    $("#test-range-selects").hide();
+                }
+
+                self._refreshRangesValue();
+            });
+
+            $("#test-range-start").change(function() {
+                var startIndex = self._getRangeStartIndex();
+
+                self._resetRangeEndOptions(startIndex);
+
+                self._refreshRangesValue();
+            });
+
+            $("#test-range-end").change(function() {
+                self._refreshRangesValue();
+            });
+
+        },
+
+        _resetRangeEndOptions: function(startIndex) {
+            if (startIndex > 0) {
+                startIndex--;
+                var $options = $("#test-range-start option:gt(" + startIndex + ")");
+            } else {
+                var $options = $("#test-range-start option");
+            }
+
+            var selected = $("#test-range-end option:selected").val();
+
+            $("#test-range-end option").remove();
+            $("#test-range-end").html($options.clone());
+            $("#test-range-end option").each(function(){
+                if ($(this).val() == selected) {
+                    $("#test-range-end").val(selected);
+                }
+            });
+        },
+
+        _refreshRangesValue: function () {
+            var $ranges = $('input[name=ranges]');
+            if ($('input[name=range]:checked').val() != 'lesson') {
+                $ranges.val('');
+                return ;
+            }
+
+            var startIndex = this._getRangeStartIndex();
+            var endIndex = this._getRangeEndIndex();
+
+            if (startIndex < 0 || endIndex < 0) {
+                $ranges.val('');
+                return ;
+            }
+
+            var values = [];
+            for (var i=startIndex; i<=endIndex; i++) {
+                values.push( $("#test-range-start option:eq(" + i + ")").val());
+            }
+
+            $ranges.val(values.join(','));
+        },
+
+        _getRangeStartIndex: function() {
+            var $startOption = $("#test-range-start option:selected");
+            return parseInt($("#test-range-start option").index($startOption));
+        },
+
+        _getRangeEndIndex: function() {
+            var selected = $("#test-range-end option:selected").val();
+            if (selected == '') {
+                return -1;
+            }
+
+            var index = -1;
+            $("#test-range-start option").each(function(i, item) {
+                if ($(this).val() == selected) {
+                    index = i;
+                }
+            });
+
+            return index;
+        },
+
         sortable: function(){
             var $list = $('.test-sort-body').sortable({
             itemSelector: '.type-item',
@@ -51,6 +140,7 @@ define(function(require, exports, module) {
         },
 
         getCheckResult : function(){
+            console.log('check');
             var flag = 0;
 
             var isDifficulty = $('input[name="isDifficulty"]:checked').val();
@@ -68,11 +158,13 @@ define(function(require, exports, module) {
                 itemScores[$(this).data('key')] = $(this).val() ;
             });
 
+            var ranges = $('input[name="ranges"]').val();
+
             $.ajaxSetup({
                 async : false
             });    
 
-            $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
+            $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage, ranges:ranges}, function(data) {
                 if (data) {
                     Notify.danger(data);
                     flag = 1 ;
