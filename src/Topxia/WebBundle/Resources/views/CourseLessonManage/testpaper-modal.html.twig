@@ -22,6 +22,7 @@
           <select id="lesson-mediaId-field" class="form-control" name="mediaId">
             {{select_options(paperOptions, lesson.mediaId|default(0), '请选择试卷')}}
           </select>
+          <div class="help-block">如果找不到试卷，请先确定该试卷已经发布</div>
         </div>
       </div>
 
