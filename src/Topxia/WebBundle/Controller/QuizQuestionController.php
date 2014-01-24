@@ -312,7 +312,6 @@ class QuizQuestionController extends BaseController
 
         $question = $questions[$id];
 
-
         if (in_array($question['type'], array('single_choice', 'choice'))){
             foreach ($question['metas']['choices'] as $key => $choice) {
                 $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
@@ -333,13 +332,17 @@ class QuizQuestionController extends BaseController
     			if (!in_array($value['type'], array('single_choice', 'choice'))){
     				continue;
     			}
-  
+
+    			foreach ($value['metas']['choices'] as $choiceKey => $content) {
+    				$value['choices'][$choiceKey] = array('content' => $content, 'questionId' => $choiceKey);
+    			}
     			ksort($value['choices']);
 				$value['choices'] = array_values($value['choices']);
 				foreach ($value['choices'] as $k => $v) {
 					$v['choiceIndex'] = chr($k+65);
 					$value['choices'][$k] = $v;
 				}
+				$questions[$key] = $value;
     		}
 
     		$question['questions'] = $questions;

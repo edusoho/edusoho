@@ -16,6 +16,30 @@ define(function(require, exports, module) {
             window.location.href=$(this).data('url');
         });
 
+
+
+        var $table = $('#quiz-table');
+
+        $table.on('click', '.open-testpaper, .close-testpaper', function() {
+            var $trigger = $(this);
+            var $oldTr = $trigger.parents('tr');
+
+            if (!confirm('真的要' + $trigger.attr('title') + '吗？ 试卷发布后无论是否关闭都将无法修改或删除。')) {
+                return ;
+            }
+
+            $.post($(this).data('url'), function(html){
+                Notify.success($trigger.attr('title') + '成功！');
+
+                var $tr = $(html);
+                $oldTr.replaceWith($tr);
+            }).error(function(){
+                Notify.danger($trigger.attr('title') + '失败');
+            });
+        });
+
+
+
     };
 
 

@@ -8,6 +8,8 @@ define(function(require, exports, module) {
 
         CreateBase.isDifficulty();
 
+        CreateBase.initRangeField();
+
         CreateBase.sortable();
 
         $('#test-reset-form').submit( function () {

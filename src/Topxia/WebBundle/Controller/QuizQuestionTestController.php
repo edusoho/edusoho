@@ -79,9 +79,19 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $ranges = array();
+        foreach ($lessons as  $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $ranges["lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+        }
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-1.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
+            'ranges' => $ranges,
 		));
 	}
 
@@ -148,9 +158,20 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $ranges = array();
+        foreach ($lessons as  $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $ranges["lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+        }
+
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:update-reset.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
+            'ranges' => $ranges,
 		));
 	}
 
@@ -184,6 +205,7 @@ class QuizQuestionTestController extends BaseController
         }
 
 		$parentTestPaper = array_merge($request->query->all(), $testPaper);
+        $parentTestPaper['ranges'] = empty($parentTestPaper['ranges']) ? array() : explode(',', $parentTestPaper['ranges']);
 
 		$dictQuestionType = $this->getWebExtension()->getDict('questionType');
 
@@ -295,6 +317,8 @@ class QuizQuestionTestController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
 		$options = $request->request->all();
+
+        $options['ranges'] = empty($options['ranges']) ? array() : explode(',', $options['ranges']);
 
         $options['courseId'] = $courseId;
 
