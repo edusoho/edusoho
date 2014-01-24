@@ -846,6 +846,17 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
+    public function publicTestPaper($id, $status)
+    {
+        if (!in_array($status, array('open', 'closed'))){
+            throw $this->createAccessDeniedException('试卷状态不合法!');
+        }
+        $testPaper = array(
+            'status' => $status
+        );
+        return $this->getTestPaperDao()->updateTestPaper($id, $testPaper);
+    }
+
     public function isExistsEssay ($testResults)
     {
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($testResults, 'questionId'));

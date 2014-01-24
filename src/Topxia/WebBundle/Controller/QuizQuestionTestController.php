@@ -102,6 +102,12 @@ class QuizQuestionTestController extends BaseController
 
 		$testPaper = $request->query->all();
 
+		$paper = $this->getTestService()->getTestPaper($testPaper['testPaperId']);
+
+		if ($paper['status'] != 'draft'){
+			throw $this->createAccessDeniedException('只有草稿状态的试卷可以修改');
+		}
+
 	    if ($request->getMethod() == 'POST') {
 
 	    	$testPaper = $request->request->all();
@@ -135,6 +141,12 @@ class QuizQuestionTestController extends BaseController
 
 		if(empty($testPaper['testPaperId'])){
 			throw $this->createNotFoundException('缺少参数');
+		}
+
+		$paper = $this->getTestService()->getTestPaper($testPaper['testPaperId']);
+
+		if ($paper['status'] != 'draft'){
+			throw $this->createAccessDeniedException('只有草稿状态的试卷可以修改');
 		}
 
 		$this->getTestService()->deleteItemsByTestPaperId($testPaper['testPaperId']);
@@ -172,6 +184,10 @@ class QuizQuestionTestController extends BaseController
 		$testPaper = $this->getTestService()->getTestPaper($testPaperId);
 		if(empty($testPaper)){
 			throw $this->createNotFoundException('试卷不存在');
+		}
+
+		if ($testPaper['status'] != 'draft'){
+			throw $this->createAccessDeniedException('只有草稿状态的试卷可以修改');
 		}
 
 		$flag = $request->query->get('flag');
@@ -358,6 +374,10 @@ class QuizQuestionTestController extends BaseController
 
         if (empty($testPaper)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($testPaper['status'] != 'draft'){
+        	throw $this->createAccessDeniedException('只有草稿状态的试卷可以删除');
         }
 
         $this->getTestService()->deleteTestPaper($testPaperId);
