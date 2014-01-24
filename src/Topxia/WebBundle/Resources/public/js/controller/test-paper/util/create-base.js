@@ -140,7 +140,6 @@ define(function(require, exports, module) {
         },
 
         getCheckResult : function(){
-            console.log('check');
             var flag = 0;
 
             var isDifficulty = $('input[name="isDifficulty"]:checked').val();
@@ -150,9 +149,19 @@ define(function(require, exports, module) {
             var itemCounts = new Object;
             var itemScores = new Object;
 
+            var allCountZero = true;
             $('.item-number[name^=itemCounts]').each(function(index){
-                itemCounts[$(this).data('key')] = $(this).val();
+                var count = parseInt($(this).val());
+                if (count > 0) {
+                    allCountZero = false;
+                }
+                itemCounts[$(this).data('key')] = count;
             });
+
+            if (allCountZero) {
+                flag = 1;
+                Notify.danger('题目数量不能全为0');
+            }
 
             $('.item-number[name^=itemScores]').each(function(index){
                 itemScores[$(this).data('key')] = $(this).val() ;

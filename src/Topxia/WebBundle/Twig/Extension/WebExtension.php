@@ -307,13 +307,13 @@ class WebExtension extends \Twig_Extension
 
     public function fillQuestionStemTextFilter($stem)
     {
-        return preg_replace('/\[\[.*?\]\]/', '____', $stem);
+        return preg_replace('/\[\[.+?\]\]/', '____', $stem);
     }
 
     public function fillQuestionStemHtmlFilter($stem)
     {
         $index = 0;
-        $stem = preg_replace_callback('/\[\[.*?\]\]/', function($matches) use (&$index) {
+        $stem = preg_replace_callback('/\[\[.+?\]\]/', function($matches) use (&$index) {
             $index ++;
             return "<span class='question-stem-fill-blank'>({$index})</span>";
         }, $stem);
