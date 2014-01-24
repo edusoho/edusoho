@@ -24,7 +24,9 @@ abstract class BaseQuestionImplementor extends BaseService implements QuestionIm
         $filtered['categoryId'] = empty($fields['categoryId']) ? 0 : (int) $fields['categoryId'];
         $filtered['parentId'] = empty($fields['parentId']) ? 0 : (int) trim($fields['parentId']);
         $filtered['updatedTime'] = time();
-
+        if (!empty($fields['createdTime'])) {
+            $filtered['createdTime'] = $fields['createdTime'];
+        }
         if(!empty($fields['target'])){
             $target = explode('-', $fields['target']);
             if (count($target) != 2){
