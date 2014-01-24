@@ -382,6 +382,44 @@ class DoTestController extends BaseController
         ));
 	}
 
+	public function openTestPaperAction (Request $request, $id)
+	{
+		$testPaper = $this->getTestService()->getTestPaper($id);
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+		$testPaper = $this->getTestService()->publicTestPaper($id, 'open');
+
+		$user = $this->getUserService()->getUser($testPaper['updatedUserId']);
+
+		$course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
+            'item' => $testPaper,
+            'user' => $user,
+            'course' => $course
+        ));
+	}
+
+	public function closeTestPaperAction (Request $request, $id)
+	{
+		$testPaper = $this->getTestService()->getTestPaper($id);
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+		$testPaper = $this->getTestService()->publicTestPaper($id, 'closed');
+
+		$user = $this->getUserService()->getUser($testPaper['updatedUserId']);
+
+		$course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
+            'item' => $testPaper,
+            'user' => $user,
+            'course' => $course
+        ));
+	}
+
 	private function makeAccuracy ($questions)
     {
         $accuracyResult = array(

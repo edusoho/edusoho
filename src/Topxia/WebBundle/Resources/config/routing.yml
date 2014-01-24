@@ -521,6 +521,14 @@ course_manage_test_paper:
     pattern: /course/{courseId}/manage/test/paper
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:index }
 
+course_manage_open_test:
+    pattern: /open/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:openTestPaper }
+
+course_manage_close_test:
+    pattern: /close/test/{id}
+    defaults: { _controller: TopxiaWebBundle:DoTest:closeTestPaper }
+
 course_manage_do_test:
     pattern: /do/test/{testId}
     defaults: { _controller: TopxiaWebBundle:DoTest:index }
