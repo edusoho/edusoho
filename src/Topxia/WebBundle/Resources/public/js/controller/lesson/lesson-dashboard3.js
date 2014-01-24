@@ -106,7 +106,7 @@ define(function(require, exports, module) {
 		_initToolbar: function() {
 	        this._toolbar = new Toolbar({
 	            element: '#lesson-dashboard-toolbar',
-	            activePlugins: ['lesson', 'question', 'note', 'material', 'quiz'],
+	            activePlugins: ['lesson', 'question', 'note', 'material'],
 	            courseId: this.get('courseId')
 	        }).render();
 		},
