@@ -49,6 +49,14 @@
         </div>
 
         <div class="form-group">
+          <div class="col-md-2 control-label"><label for="missScore">漏选得分</label></div>
+          <div class="col-md-8 controls">
+            <input name="missScore" class="form-control width-input width-input-large" type="text" value="{{ missScore|default(0) }}" /></input>
+            <div class="help-block">设置多选题漏选但没错选时的得分</div>
+          </div>
+        </div>
+
+        <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls">
             <button type="submit" class="btn btn-primary  " >保存</button>
             <a href="{{ path('course_manage_test_paper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>

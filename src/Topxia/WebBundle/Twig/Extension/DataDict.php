@@ -159,7 +159,7 @@ class DataDict
         ),
         'difficulty' => array(
 	    	'simple' => '简单',
-	    	'ordinary' => '一般',
+	    	'normal' => '一般',
 	    	'difficulty' => '困难',
         ),
 

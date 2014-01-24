@@ -44,9 +44,9 @@ class DoTestController extends BaseController
 		$questions = $this->formatQuestions($questions);
 
 		$total = array();
-		foreach ($paper['metas']['question_type_seq'] as $value) {
-			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
-			$total[$value]['number'] = count($questions[$value]);
+		foreach ($paper['metas']['question_type_seq'] as $type) {
+			$total[$type]['score'] = array_sum(ArrayToolkit::column($questions[$type], 'itemScore'));
+			$total[$type]['number'] = count($questions[$type]);
 		}
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
@@ -123,7 +123,7 @@ class DoTestController extends BaseController
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
 			$remainTime = $data['remainTime'];
-			$userId = $this->getCurrentUser()->id;
+			$user = $this->getCurrentUser();
 
 			//提交变化的答案
 			$results = $this->getTestService()->submitTest($answers, $id);
@@ -131,8 +131,23 @@ class DoTestController extends BaseController
 			//完成试卷，计算得分
 			$testResults = $this->getTestService()->makeFinishTestResults($id);
 
+			$testPaperResult = $this->getTestService()->getTestPaperResult($id);
+
+			$testPaper = $this->getTestService()->getTestPaper($testPaperResult['testId']);
 			//试卷信息记录
-			$this->getTestService()->finishTest($id, $userId, $remainTime);
+			$this->getTestService()->finishTest($id, $user['id'], $remainTime);
+
+			if ($this->getTestService()->isExistsEssay($testResults)) {
+				$user = $this->getCurrentUser();
+	            $course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+	            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+	            $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testPaperResult['id']), true);
+
+	            foreach ($course['teacherIds'] as $receiverId) {
+	                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+	            }
+			}
 
 			return $this->createJsonResponse(true);
 			// return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $id)));
@@ -230,7 +245,14 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
 
-			$this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
+			$paperResult = $this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
+
+			$user = $this->getCurrentUser();
+
+	        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+	        $testPaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$paperResult['id']), true);
+
+	        $result = $this->getNotificationService()->notify($paperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$paperResult['paperName']} ，<a href='{$testPaperResultUrl}' target='_blank'>请点击查看结果</a>");
 			
 			return $this->createJsonResponse(true);
 		}
@@ -449,6 +471,11 @@ class DoTestController extends BaseController
 	protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
 }

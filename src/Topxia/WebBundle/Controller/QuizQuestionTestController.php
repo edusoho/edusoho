@@ -94,6 +94,7 @@ class QuizQuestionTestController extends BaseController
 	    if ($request->getMethod() == 'POST') {
 
 	    	$testPaper = $request->request->all();
+
 	        $result = $this->getTestService()->updateTestPaper($testPaper['testPaperId'], $testPaper);
 
 	        $this->setFlashMessage('success', '试卷修改成功！');
@@ -163,11 +164,12 @@ class QuizQuestionTestController extends BaseController
 		}
 
 		$flag = $request->query->get('flag');
-		$missScore = $request->query->get('itemMissScore');
+		$missScore = $request->query->get('missScore');
 
 		if ($request->getMethod() == 'POST') {
 
 	    	$field    = $request->request->all();
+	    	$field['missScore'] = $missScore;
 
 	    	if ($flag == 'update'){
 

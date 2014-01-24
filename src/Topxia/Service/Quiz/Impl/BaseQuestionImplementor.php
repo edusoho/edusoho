@@ -19,6 +19,7 @@ abstract class BaseQuestionImplementor extends BaseService implements QuestionIm
         $filtered['userId'] = $this->getCurrentUser()->id;
         $filtered['answer'] = empty($fields['answer']) ? array() : $fields['answer'];
         $filtered['analysis'] = empty($fields['analysis']) ? '': $fields['analysis'];
+        $filtered['metas'] = empty($fields['metas']) ? array() : $fields['metas'];
         $filtered['score'] = empty($fields['score'])? 0 : $fields['score'];
         $filtered['categoryId'] = empty($fields['categoryId']) ? 0 : (int) $fields['categoryId'];
         $filtered['parentId'] = empty($fields['parentId']) ? 0 : (int) trim($fields['parentId']);
