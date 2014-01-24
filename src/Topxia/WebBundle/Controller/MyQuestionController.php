@@ -87,7 +87,7 @@ class MyQuestionController extends BaseController
 
         $questions = $this->getMyQuestionService()->findFavoriteQuestionsByIds($questionIds);
 
-        $questions = $this->formatQuestions($questions);
+        // $questions = $this->formatQuestions($questions);
 
         $myTestPaperIds = array();
         foreach ($favoriteQuestions as $key => $value) {

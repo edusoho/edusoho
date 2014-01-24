@@ -39,19 +39,38 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 
 			foreach ($questions as $question) {
 
-				if($question['parentId'] != 0)
+				if($question['parentId'] != 0) {
 					continue;
+                }
 
-                $questionsGroup[$question['type']][] = $question;
+                if (!empty($options['ranges'])) {
+                    $key = $question['targetType'] . "-" . $question['targetId'];
+                    if (in_array($key, $options['ranges'])) {
+                        $questionsGroup[$question['type']][] = $question;
+                    }
+                } else {
+                    $questionsGroup[$question['type']][] = $question;
+                }
+
+                
             }
 		} else {
 
 			foreach ($questions as $question) {
 				
-				if($question['parentId'] != 0)
+				if($question['parentId'] != 0) {
 					continue;
+                }
 
-                $questionsGroup[$question['type']][$question['difficulty']][] = $question;
+                if (!empty($options['ranges'])) {
+                    $key = $question['targetType'] . "-" . $question['targetId'];
+                    if (in_array($key, $options['ranges'])) {
+                        $questionsGroup[$question['type']][$question['difficulty']][] = $question;
+                    }
+                } else {
+                    $questionsGroup[$question['type']][$question['difficulty']][] = $question;
+                }
+                
             }
 		}
 
@@ -108,7 +127,7 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
 	private function buildQuestions($type, $count)
 	{
 		$this->typeQuestions = array();
-		
+
 		$this->generateRandomQuestions($type, $count);
 
 		$this->buildMaterialQuestions($type);
@@ -302,10 +321,10 @@ class CourseTestPaperBuilderImpl extends BaseService  implements TestPaperBuilde
         $counts = array();
 
         $counts['simple']     = (int) ($num * $perventage['0'] /100); 
-        $counts['ordinary']   = (int) ($num * $perventage['1'] /100); 
+        $counts['normal']   = (int) ($num * $perventage['1'] /100); 
         $counts['difficulty'] = (int) ($num * $perventage['2'] /100); 
 
-        $counts['otherCount'] = $num - ($counts['simple'] + $counts['ordinary'] + $counts['difficulty']);
+        $counts['otherCount'] = $num - ($counts['simple'] + $counts['normal'] + $counts['difficulty']);
 
         return $counts;
     }

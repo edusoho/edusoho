@@ -1,23 +1,24 @@
 {% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
 
+{% block testpaper_heading_status %}
+  {% if paperResult.status == 'finished' %}
+    <div class="label label-success">批阅完成</div>
+  {% elseif paperResult.status == 'reviewing' %}
+    <div class="label label-info">批阅中</div>
+  {% endif %}
+{% endblock %}
+
 {% block testpaper_heading_content %}
 
   {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
 
-  {% if accuracy.essay.totalScore > 0 %}
-    {% if paperResult.status == 'reviewing' %}
-      <div class="alert alert-info">主观题总分 <strong>{{ accuracy.essay.totalScore }} 分</strong>，老师正在批阅试卷。</div>
-    {% elseif paperResult.status == 'finished' %}
+  {% if paperResult.status == 'reviewing' %}
+    <div class="alert alert-warning">老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。</div>
+  {% elseif paperResult.status == 'finished' %}
+    {% if paperResult.teacherSay %}
       <div class="alert alert-success">
-        总分 <strong class="text-score">{{ paperResult.score }}分</strong>
-        =
-        客观题 <strong class="text-score">{{ paperResult.objectiveScore }}分</strong>
-        +
-        主观题 <strong class="text-score">{{ paperResult.subjectiveScore }}分</strong>
-        {% if paperResult.teacherSay %}
-          <div class="mtl"><strong>评语：</strong></div>
-          <div class="mtm">{{ paperResult.teacherSay|raw }}</div>
-        {% endif %}
+        <div class=""><strong>评语：</strong></div>
+        <div class="mtm">{{ paperResult.teacherSay|raw }}</div>
       </div>
     {% endif %}
   {% endif %}
@@ -30,22 +31,34 @@
     <div class="panel panel-default">
         <div class="panel-body">
 
+          <div class="clearfix mbl">
+
           {% for type in paper.metas.question_type_seq %}
 
             {% for question in questions[type] %}
               {% if question.type != 'material' %}
                 <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ question.seq }}</a>
               {% else %}
-                {% for question in question.questions %}
+                {% for question in question.questions|default([]) %}
                   <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {{ question.testResult.status|default(null) }}">{{ question.seq }}</a>
                 {% endfor %}
               {% endif %}
               
             {% endfor %}
 
-            <div class="clearfix mtm mbm"></div>
+
+            
+
+          <div class="clearfix mtm mbm"></div>
 
           {% endfor %}
+
+          <div class="testpaper-card-explain clearfix">
+            <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">正确</small>
+            <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">错误</small>
+            <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">待批阅</small>
+            <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">未做</small>
+          </div>
 
         </div>
         <div class="panel-footer">

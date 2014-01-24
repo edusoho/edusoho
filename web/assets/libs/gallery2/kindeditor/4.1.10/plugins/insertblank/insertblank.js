@@ -55,6 +55,23 @@ KindEditor.plugin('insertblank', function(K) {
 
             dialogRoot.height(dialogRoot.height() + 26);
         });
+
+        K('.insertblank-inputs', dialogRoot).bind('keydown', function(event) {
+            if (event.keyCode == 13){
+                var blankInputHtml = [
+                        '<div class="ke-dialog-row">',
+                        '<input class="ke-input-text" type="text" value="" style="width:250px;" />',
+                        '</div>'].join(''),
+                    blankInputNode = K(blankInputHtml);
+                K('.insertblank-inputs', dialogRoot).append(blankInputNode);
+                K('.ke-input-text', blankInputNode).get(0).focus();
+
+                dialogRoot.height(dialogRoot.height() + 26);
+            }
+        });
+
+
+
     });
 
 });

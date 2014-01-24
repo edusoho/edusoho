@@ -27,9 +27,18 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputPassword" class="col-sm-2 control-label">评语</label>
+							<label class="col-sm-2 control-label">评语</label>
 							<div class="col-sm-9">
-								<textarea class="form-control" rows="3" name="teacherSay_{{ question.id }}"></textarea>
+
+								<div class="testpaper-result-essay-teacherSay">
+								  	<textarea class="form-control testpaper-question-essay-teacherSay-short" rows="1" style="overflow:hidden;line-height:20px;"></textarea>
+
+									<textarea class="form-control testpaper-question-essay-teacherSay-long" name="teacherSay_{{ question.id }}" style="display:none;"></textarea>
+
+									<a class="btn btn-link btn-muted btn-sm testpaper-question-essay-teacherSay-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a>
+
+								  </div>
+
 							</div>
 						</div>
 
@@ -83,6 +92,8 @@
 		  	<textarea class="form-control testpaper-question-essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
 
 			<textarea class="form-control testpaper-question-essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
+
+			<a class="btn btn-link btn-muted btn-sm testpaper-question-essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a>
 
 		  </div>
 		  <div class="testpaper-question-actions pull-right">

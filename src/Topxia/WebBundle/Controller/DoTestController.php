@@ -11,22 +11,56 @@ class DoTestController extends BaseController
 {
 	public function indexAction (Request $request, $testId)
 	{
+		$targetType = $request->query->get('targetType');
+		$targetId = $request->query->get('targetId');
 
 		$userId = $this->getCurrentUser()->id;
 
 		$testPaper = $this->getTestService()->getTestPaper($testId);
 
-		if (empty($testPaper)){
+		if (empty($testPaper)) {
 			throw $this->createNotFoundException();
 		}
 
-		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId);
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
 
-		if ($testResult) {
+		if (empty($testResult)) {
+			$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
 			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 		}
 
-		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper);
+		if (in_array($testResult['status'], array('doing', 'paused'))) {
+			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+		} else {
+			return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testResult['id'])));
+		}
+	}
+
+	public function reDoAction (Request $request, $testId)
+	{
+		$targetType = $request->query->get('targetType');
+		$targetId = $request->query->get('targetId');
+
+		$userId = $this->getCurrentUser()->id;
+
+		$testPaper = $this->getTestService()->getTestPaper($testId);
+
+		if (empty($testPaper)) {
+			throw $this->createNotFoundException();
+		}
+
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
+
+		if ($testResult && in_array($testResult['status'], array('doing', 'paused'))) {
+			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+		}
+
+		if ($testResult){
+			$targetType = $testResult['targetType'];
+			$targetId = $testResult['targetId'];
+		}
+
+		$testResult = $this->getTestService()->startTest($testId, $userId, $testPaper, array('type' => $targetType, 'id' => $targetId));
 
 		return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 	}
@@ -40,13 +74,13 @@ class DoTestController extends BaseController
 		}
 
 		$questions = $this->getTestService()->findQuestionsByTestId($testId);
-	
-		$questions = $this->formatQuestions($questions);
+
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
-		foreach ($paper['metas']['question_type_seq'] as $value) {
-			$total[$value]['score'] = array_sum(ArrayToolkit::column($questions[$value], 'itemScore'));
-			$total[$value]['number'] = count($questions[$value]);
+		foreach ($paper['metas']['question_type_seq'] as $type) {
+			$total[$type]['score'] = array_sum(ArrayToolkit::column($questions[$type], 'itemScore'));
+			$total[$type]['number'] = count($questions[$type]);
 		}
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
@@ -79,9 +113,9 @@ class DoTestController extends BaseController
 
 		$questions = $this->getTestService()->testResults($id);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
-		$this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
+		// $this->getTestService()->updatePaperResult($id, $testResult['remainTime']);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -107,11 +141,11 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 
 			$result = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, $remainTime);
+			$this->getTestService()->updatePaperResult($id, $usedTime);
 
 			return $this->createJsonResponse(true);
 		}
@@ -122,8 +156,8 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
-			$userId = $this->getCurrentUser()->id;
+			$usedTime = $data['usedTime'];
+			$user = $this->getCurrentUser();
 
 			//提交变化的答案
 			$results = $this->getTestService()->submitTest($answers, $id);
@@ -131,8 +165,32 @@ class DoTestController extends BaseController
 			//完成试卷，计算得分
 			$testResults = $this->getTestService()->makeFinishTestResults($id);
 
+			$testPaperResult = $this->getTestService()->getTestPaperResult($id);
+
+			$testPaper = $this->getTestService()->getTestPaper($testPaperResult['testId']);
 			//试卷信息记录
-			$this->getTestService()->finishTest($id, $userId, $remainTime);
+			$this->getTestService()->finishTest($id, $user['id'], $usedTime);
+
+			if ($this->getTestService()->isExistsEssay($testResults)) {
+				$user = $this->getCurrentUser();
+	            $course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+	            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+	            $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testPaperResult['id']), true);
+
+	            foreach ($course['teacherIds'] as $receiverId) {
+	                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+	            }
+			}
+
+			// @todo refactor.
+			if ($testPaperResult['targetType'] == 'lesson' and !empty($testPaperResult['targetId'])) {
+				$lessons = $this->getCourseService()->findLessonsByIds(array($testPaperResult['targetId']));
+				if (!empty($lessons[$testPaperResult['targetId']])) {
+					$lesson = $lessons[$testPaperResult['targetId']];
+					$this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+				}
+			}
 
 			return $this->createJsonResponse(true);
 			// return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $id)));
@@ -157,7 +215,7 @@ class DoTestController extends BaseController
 
 		$accuracy = $this->makeAccuracy($questions);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -230,7 +288,14 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
 
-			$this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
+			$paperResult = $this->getTestService()->makeTeacherFinishTest($id, $paper['id'], $teacherId, $form);
+
+			$user = $this->getCurrentUser();
+
+	        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+	        $testPaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$paperResult['id']), true);
+
+	        $result = $this->getNotificationService()->notify($paperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$paperResult['paperName']} ，<a href='{$testPaperResultUrl}' target='_blank'>请点击查看结果</a>");
 			
 			return $this->createJsonResponse(true);
 		}
@@ -240,7 +305,7 @@ class DoTestController extends BaseController
 
 		$accuracy = $this->makeAccuracy($questions);
 
-		$questions = $this->formatQuestions($questions);
+		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
 		foreach ($paper['metas']['question_type_seq'] as $value) {
@@ -256,7 +321,7 @@ class DoTestController extends BaseController
 			
 			foreach ($questions['material'] as $key => $value) {
 
-				$questionTypes = ArrayToolkit::index($value['questions'], 'type');
+				$questionTypes = ArrayToolkit::index(empty($value['questions']) ? array() : $value['questions'], 'type');
 
 				if(array_key_exists('essay', $questionTypes)){
 					array_push($types, 'material');
@@ -317,6 +382,44 @@ class DoTestController extends BaseController
         ));
 	}
 
+	public function openTestPaperAction (Request $request, $id)
+	{
+		$testPaper = $this->getTestService()->getTestPaper($id);
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+		$testPaper = $this->getTestService()->publicTestPaper($id, 'open');
+
+		$user = $this->getUserService()->getUser($testPaper['updatedUserId']);
+
+		$course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
+            'item' => $testPaper,
+            'user' => $user,
+            'course' => $course
+        ));
+	}
+
+	public function closeTestPaperAction (Request $request, $id)
+	{
+		$testPaper = $this->getTestService()->getTestPaper($id);
+		if (empty($testPaper)){
+			throw $this->createNotFoundException();
+		}
+		$testPaper = $this->getTestService()->publicTestPaper($id, 'closed');
+
+		$user = $this->getUserService()->getUser($testPaper['updatedUserId']);
+
+		$course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+		return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
+            'item' => $testPaper,
+            'user' => $user,
+            'course' => $course
+        ));
+	}
+
 	private function makeAccuracy ($questions)
     {
         $accuracyResult = array(
@@ -339,7 +442,15 @@ class DoTestController extends BaseController
 		foreach ($questions as $value) {
 
 			if ($value['type'] == 'material'){
+				if (!array_key_exists('questions', $value)){
+					continue;
+				}
 				foreach ($value['questions'] as $key => $v) {
+
+					if ($v['type'] == 'essay'){
+						$accuracy['material']['hasEssay'] = true;
+					}
+
 					$accuracy['material']['score'] += $v['testResult']['score'];
 					$accuracy['material']['totalScore'] += $v['itemScore'];
 
@@ -376,7 +487,7 @@ class DoTestController extends BaseController
         return $accuracy;
     }
 
-	private function formatQuestions ($questions)
+	private function formatQuestions ($questions, $paper)
 	{
 		$formatQuestions = array();
 		$number = 0;
@@ -397,10 +508,11 @@ class DoTestController extends BaseController
 			}
 
 			if ($value['type'] == 'material') {
-
-				$value['questions'] = $this->formatQuestions($value['questions']);
-				$number += $value['questions']['number'];
-				unset($value['questions']['number']);
+				if(array_key_exists('questions', $value)){
+					$value['questions'] = $this->formatQuestions($value['questions']);
+					$number += $value['questions']['number'];
+					unset($value['questions']['number']);
+				}
 			} else {
 				$number++;
 			}
@@ -411,6 +523,12 @@ class DoTestController extends BaseController
 				$formatQuestions[$key] = $value;
 			}
 		}
+
+		$diff = array_diff($paper['metas']['question_type_seq'], array_keys($formatQuestions));
+		foreach ($diff as $type) {
+			$formatQuestions[$type] = array();
+		}
+
 
 		$formatQuestions['number'] = $number;
 
@@ -440,6 +558,11 @@ class DoTestController extends BaseController
 	protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
 }

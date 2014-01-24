@@ -11,13 +11,15 @@
 <div class="es-row-wrap testpaper-heading">
   <div class="row">
     <div class="col-sm-12">
-      <h1 class="testpaper-name">{{ paper.name }}</h1>
+      <div class="testpaper-titlebar clearfix">
+        <h1 class="testpaper-title">{{ paper.name }}</h1>
+        <div class="testpaper-status">{% block testpaper_heading_status %}{% endblock %}</div>
+      </div>
       {% block testpaper_heading_content %}{% endblock %}
     </div>
 
     {% if showTestpaperNavbar|default('on') == 'on' %}
       <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
-        {% if isPreview|default(false) %}<div class="testpaper-preview-tip">试卷预览中</div>{% endif %}
         <ul class="nav nav navbar-nav nav-pills">
           {% for type in paper.metas.question_type_seq %}
             <li><a href="#testpaper-questions-{{ type }}">{{dict('questionBlockType')[type]}}</a></li>
@@ -29,12 +31,12 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-md-9">
     <div class="testpaper-body">
       {% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
     </div>
   </div>
-  <div class="col-sm-3">
+  <div class="col-md-3">
     {% block testpaper_body_sidebar %}{% endblock %}
   </div>
 </div>
@@ -45,7 +47,6 @@
     <div id="timeout-dialog" class="modal in" aria-hidden="false" style="display: none;"><div class="modal-dialog modal-dialog-small">
       <div class="modal-content">
         <div class="modal-header">
-          {# <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> #}
           <h4 class="modal-title">考试结束</h4>
         </div>
         <div class="modal-body">

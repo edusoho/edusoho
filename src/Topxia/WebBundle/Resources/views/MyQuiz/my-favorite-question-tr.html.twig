@@ -1,6 +1,6 @@
 <tr>
 	<td>
-		<a href="">{{ question.stem|plain_text(40) }}</a>
+		<a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_quiz_question_preview', {id:question.id}) }}">{{ question.stem|plain_text(40) }}</a>
 		<div class="text-muted">
 		  <small>来自试卷《{{ paper.name }}》</small>
 		  <small class="mhs">•</small>

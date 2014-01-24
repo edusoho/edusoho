@@ -7,12 +7,12 @@ define(function(require, exports, module) {
 
     var ChoiceQuestion = BaseQuestion.extend({
         attrs: {
-            globalId: 1,
+            globalId: 1
         },
 
         events: {
             'click [data-role=add-choice]': 'onAddChoice',
-            'click [data-role=delete-choice]': 'onDeleteChoice',
+            'click [data-role=delete-choice]': 'onDeleteChoice'
         },
         
         setup: function() {
@@ -58,10 +58,12 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
+                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: 'image/*'
             }).error(function(file) {
                 Notify.danger('上传失败，请重试！');
             }).success(function(response) {
+                response = $.parseJSON(response);
                 var result = '[image]' + response.hashId + '[/image]';
                 var $input = $($trigger.data('target'));
                 $input.val($input.val() + result);

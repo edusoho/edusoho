@@ -1206,6 +1206,15 @@ body {
 	background-position: -72px 0;
 }
 
+.course-item-list-multi .item-object-testpaper {
+	background-color: #009999;
+	border-color: #006699;
+}
+
+.course-item-list-multi .item-object-testpaper .item-icon {
+	background-position: -108px 0;
+}
+
 .course-item-list-multi .item-object .item-length {
 	position: absolute;
 	bottom: 0;
@@ -3306,12 +3315,27 @@ body {
 	color: #aaa;
 }
 
-.testpaper-name {
+.testpaper-titlebar {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 20px;
+}
+
+.testpaper-title {
+	float: left;
 	font-size: 24px;
 	font-weight: bold;
 	color: #444;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #ddd;
+}
+
+.testpaper-status {
+	margin-top: 20px;
+	float: right;
+}
+
+.testpaper-status .label {
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-size: 100%;
 }
 
 .testpaper-description {
@@ -3323,16 +3347,6 @@ body {
     color: #666;
     font-size: 12px;
     margin-bottom: 20px;
-}
-
-.testpaper-preview-tip {
-	background-color: #f0ad4e;
-	color: #fff;
-	float: right;
-	padding: 5px 25px;
-	border-radius: 3px;
-	font-weight: bold;
-	margin-top: 9px;
 }
 
 .testpaper-result {
@@ -3376,21 +3390,25 @@ body {
 }
 
 .testpaper-navbar.affix {
+    position: static;
+}
+
+@media (min-width: 768px) {
+  .testpaper-navbar.affix {
 	z-index: 1030;
-	background: #fff;
+    position: fixed;
     margin-left: -11px;
+    top: 0px;
+    width: 720px;
+	background: #fff;
     border: 1px solid #ddd;
     box-shadow: 0 3px 3px rgba(0,0,0,.1);
+  }
 }
 
 @media (min-width: 992px) {
-  /* Widen the fixed sidebar */
   .testpaper-navbar.affix {
     width: 940px;
-  }
-  .testpaper-navbar.affix {
-    position: fixed; /* Undo the static from mobile first approach */
-    top: 0px;
   }
 }
 
@@ -3563,6 +3581,17 @@ body {
 	margin: 0 5px 5px 0;
 }
 
+.testpaper-card-explain .btn-index {
+	width: 12px;
+	height: 12px;
+	font-size: 12px;
+	margin: 0 3px 5px 0;
+}
+
+.testpaper-card-explain small {
+	margin-right: 8px;
+}
+
 .testpaper-card-timer {
 	color: #3a87ad;
 	font-size: 20px;
@@ -3572,18 +3601,21 @@ body {
 	border: 2px solid #428bca;
 }
 
+.testpaper-card.affix {
+	position: static;
+}
+
 @media (min-width: 992px) {
-  /* Widen the fixed sidebar */
   .testpaper-card.affix,
   .testpaper-card.affix-bottom {
     width: 213px;
   }
   .testpaper-card.affix {
-    position: fixed; /* Undo the static from mobile first approach */
+    position: fixed;
     top: 60px;
   }
   .testpaper-card.affix-bottom {
-    position: absolute; /* Undo the static from mobile first approach */
+    position: absolute;
   }
 }
 

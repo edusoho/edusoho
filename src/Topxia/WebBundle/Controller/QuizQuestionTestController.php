@@ -79,9 +79,20 @@ class QuizQuestionTestController extends BaseController
 			$testPaper = array_merge($testPaper, $paper);
 		}
 
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        $ranges = array();
+
+        foreach ($lessons as  $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $ranges["lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+        }
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-1.html.twig', array(
 			'course'    => $course,
 			'testPaper' => $testPaper,
+            'ranges' => $ranges,
 		));
 	}
 
@@ -94,6 +105,7 @@ class QuizQuestionTestController extends BaseController
 	    if ($request->getMethod() == 'POST') {
 
 	    	$testPaper = $request->request->all();
+
 	        $result = $this->getTestService()->updateTestPaper($testPaper['testPaperId'], $testPaper);
 
 	        $this->setFlashMessage('success', '试卷修改成功！');
@@ -163,10 +175,12 @@ class QuizQuestionTestController extends BaseController
 		}
 
 		$flag = $request->query->get('flag');
+		$missScore = $request->query->get('missScore');
 
 		if ($request->getMethod() == 'POST') {
 
 	    	$field    = $request->request->all();
+	    	$field['missScore'] = $missScore;
 
 	    	if ($flag == 'update'){
 
@@ -181,6 +195,7 @@ class QuizQuestionTestController extends BaseController
         }
 
 		$parentTestPaper = array_merge($request->query->all(), $testPaper);
+        $parentTestPaper['ranges'] = empty($parentTestPaper['ranges']) ? array() : explode(',', $parentTestPaper['ranges']);
 
 		$dictQuestionType = $this->getWebExtension()->getDict('questionType');
 
@@ -196,7 +211,7 @@ class QuizQuestionTestController extends BaseController
 			$parentTestPaper['courseId'] = $courseId;
 			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
 		}
-		
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:create-2.html.twig', array(
 			'course' => $course,
 			'items' => $items,
@@ -205,6 +220,7 @@ class QuizQuestionTestController extends BaseController
 			'parentTestPaper' => $parentTestPaper,
 			'lessons' => $lessons,
 			'flag' => $flag,
+			'missScore' => $missScore
 		));
 	}
 
@@ -291,6 +307,8 @@ class QuizQuestionTestController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
 		$options = $request->request->all();
+
+        $options['ranges'] = empty($options['ranges']) ? array() : explode(',', $options['ranges']);
 
         $options['courseId'] = $courseId;
 

@@ -18,7 +18,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            'click [data-role=submit]': 'onSubmit',
+            'click [data-role=submit]': 'onSubmit'
         },
 
         setup: function() {
@@ -51,10 +51,12 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
+                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: 'image/*'
             }).error(function(file) {
                 Notify.danger('上传失败，请重试！');
             }).success(function(response) {
+                response = $.parseJSON(response);
                 var result = '[image]' + response.hashId + '[/image]'
                 editor.insertHtml(result);
                 Notify.success('上传成功！', 1);
@@ -76,10 +78,12 @@ define(function(require, exports, module) {
                 trigger: $trigger,
                 name: 'file',
                 action: this.element.data('uploadUrl'),
+                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: 'image/*'
             }).error(function(file) {
                 Notify.danger('上传失败，请重试！');
             }).success(function(response) {
+                response = $.parseJSON(response);
                 var result = '[image]' + response.hashId + '[/image]'
                 editor.insertHtml(result);
                 Notify.success('上传成功！', 1);
@@ -115,7 +119,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '#question-score-field',
                 required: false,
-                rule:'score',
+                rule:'score'
             });
 
             validator.on('formValidated', function(error, msg, $form) {
@@ -130,7 +134,7 @@ define(function(require, exports, module) {
 
         _onChangeCategories: function(categories) {
             var options = "<option value=''>请选择类别</option>";
-            var selected = categories.default ? categories.default : '';
+            var selected = categories['default'] ? categories['default'] : '';
 
             $.each(categories, function(index, category){
                 if (index == 'default') {
@@ -148,7 +152,7 @@ define(function(require, exports, module) {
 
         _onChangeTargets: function(targets) {
             var options = '';
-            var selected = targets.default ? targets.default : '';
+            var selected = targets['default'] ? targets['default'] : '';
 
             $.each(targets, function(index, target){
                 if (index == 'default') {
@@ -162,7 +166,7 @@ define(function(require, exports, module) {
             });
             
             this.$('[data-role=target]').html(options);
-        },
+        }
 
     });
 

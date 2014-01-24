@@ -17,7 +17,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $this->checkQuestionType($question['type']);
         $question['createdTime'] = time();
-        return $this->getQuestionImplementor($question['type'])->createQuestion($question);
+
+        $question = $this->getQuestionImplementor($question['type'])->createQuestion($question);
+
+        if ($question['parentId'] > 0) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+
+        return $question;
     }
 
     public function updateQuestion($id, $question)
@@ -36,7 +44,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $this->getQuizQuestionDao()->deleteQuestionsByParentId($id);
 
-        $this->getQuizQuestionChoiceDao()->deleteChoicesByQuestionIds(array($id));
+        if ($question['parentId']) {
+            $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+
     }
 
     public function searchQuestion(array $conditions, array $orderBy, $start, $limit)
@@ -72,19 +84,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             throw $this->createNotFoundException('题目不存在！');
         }
 
-        $choices = $this->findChoicesByQuestionIds($ids);
-
         $questions = ArrayToolkit::index($questions, 'id');
 
-        if (!empty($choices)){
-            foreach ($choices as $key => $value) {
-                if (!array_key_exists('choices', $questions[$value['questionId']])) {
-                    $questions[$value['questionId']]['choices'] = array();
-                }
-                // array_push($questions[$value['questionId']]['choices'], $value);
-                $questions[$value['questionId']]['choices'][$value['id']] = $value;
-            }
-        }
         return $questions;
     }
 
@@ -157,11 +158,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
     }
 
-    public function findChoicesByQuestionIds(array $ids)
-    {
-        return $this->getQuizQuestionChoiceDao()->findChoicesByQuestionIds($ids);
-    }
-
     public function favoriteQuestion($questionId, $targetType, $targetId, $userId)
     {
         $favorite = array(
@@ -192,6 +188,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
     }
+
+    public function statQuestionTimes ($answers)
+    {
+        // $answers = ArrayToolkit::index($answers, 'questionId');
+        // $ids = ArrayToolkit::column($answers, 'questionId');
+        $ids = array_keys($answers);
+        $rightIds = array();
+        foreach ($answers as $questionId => $answer) {
+            if ($answer['status'] == 'right'){
+                array_push($rightIds, $questionId);
+            }
+        }
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($ids, 'finishedTimes');
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($rightIds, 'passedTimes');
+    }
+
 
     private function checkCategoryFields($category)
     {
@@ -224,11 +236,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function getQuizQuestionDao()
     {
         return $this->createDao('Quiz.QuizQuestionDao');
-    }
-
-    private function getQuizQuestionChoiceDao()
-    {
-        return $this->createDao('Quiz.QuizQuestionChoiceDao');
     }
 
     private function getQuizQuestionCategoryDao()

@@ -56,6 +56,16 @@
 			{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
 		  </div>
 		</div>
+
+		{% if questionPreview|default(false) %}
+		  <div class="testpaper-preview-answer">
+		  	<div class="testpaper-question-result">
+				正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>
+		  	</div>
+		  </div>
+		{% endif %}
+
+
 	{% endif %}
 </div>
 

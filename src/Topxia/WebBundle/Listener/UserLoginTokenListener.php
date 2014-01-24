@@ -21,6 +21,11 @@ class UserLoginTokenListener
     public function onGetUserLoginListener (GetResponseEvent $event)
     {
     	$request = $event->getRequest();
+        $session = $request->getSession();
+        if (empty($session)) {
+            return;
+        }
+
         $userLoginToken = $request->getSession()->getId();
         $user = $this->getUserService()->getCurrentUser();
 

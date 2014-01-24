@@ -33,12 +33,27 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function updateTestPaper($id, $testPaper)
     {
+
+        $paper = $this->getTestPaperDao()->getTestPaper($id);
+
+        if (empty($paper)){
+            throw $this->createNotFoundException('无此试卷');    
+        }
+
+        $paper = TestPaperSerialize::unserialize($paper);
+        $metas = $paper['metas'];
+        $metas['choice_miss_score'] = $testPaper['missScore'];
+
         $field['updatedUserId'] = $this->getCurrentUser()->id;
         $field['updatedTime'] = time();
         $field['name']   = empty($testPaper['name'])?"":$testPaper['name'];
         $field['description'] = empty($testPaper['description'])?"":$testPaper['description'];
         $field['limitedTime'] = (int) $testPaper['limitedTime'];
-        return $this->getTestPaperDao()->updateTestPaper($id, $field);  
+        $field['metas'] = $metas;
+
+        $this->getTestItemDao()->updateItemsMissScoreByPaperIds(array($id), $testPaper['missScore']);
+
+        return $this->getTestPaperDao()->updateTestPaper($id, TestPaperSerialize::serialize($field));  
     }
 
     public function deleteTestPaper($id)
@@ -137,7 +152,8 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
-        
+        $missScore = array_key_exists('missScore', $field) ? $field['missScore'] : null;
+
         $diff = array_diff($ids, $scores);
 
         if(empty($diff)){
@@ -162,6 +178,11 @@ class TestServiceImpl extends BaseService implements TestService
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$k];
 
+            if ($question['type'] == 'choice'){
+                $field['missScore'] = (int)$missScore;
+            }
+
+
             $item = $this->getTestItemDao()->addItem($field);
 
             if($question['type'] != 'material'){
@@ -184,6 +205,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $ids    = $field['ids'];
         $scores = $field['scores'];
+        $missScores = array_key_exists('missScores', $field) ? $field['missScores'] : null;
 
         $ids = array_flip($ids);
 
@@ -194,6 +216,8 @@ class TestServiceImpl extends BaseService implements TestService
         $items = ArrayToolkit::index($this->findItemsByTestPaperId($testId),'questionId');
 
         $deleteItems = array_diff_key($items, $ids);
+
+        $choiceNum = 0;
         foreach ($deleteItems as $item) {
             $this->deleteItem($item['id']);
         }
@@ -215,6 +239,12 @@ class TestServiceImpl extends BaseService implements TestService
             $field['questionType'] = $question['type'];
             $field['parentId'] = $question['parentId'];
             $field['score'] = (int) $scores[$id];
+
+            
+            if ($question['type'] == 'choice'){
+                $field['missScore'] = (int)$missScores[$choiceNum];
+                $choiceNum++;
+            }
 
             if(in_array($k, $addIds)){
                 $item = $this->getTestItemDao()->addItem($field);
@@ -314,9 +344,9 @@ class TestServiceImpl extends BaseService implements TestService
     }
 
 
-    public function findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId)
+    public function findTestPaperResultByTestIdAndUserId($testId, $userId)
     {
-        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndDoingAndUserId($testId, $userId);
+        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndUserId($testId, $userId);
     }
 
     public function showTest ($id)
@@ -371,20 +401,23 @@ class TestServiceImpl extends BaseService implements TestService
 
         $questions = ArrayToolkit::index($questions, 'id');
 
-
         $items = ArrayToolkit::index($items, 'questionId');
 
-        $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
+        foreach ($questions as $key => &$question) {
+            $question['itemScore'] = $items[$key]['score'];
+            $question['seq'] = $items[$key]['seq'];
 
-        foreach ($questions as $key => $question) {
-            $questions[$key]['itemScore'] = $items[$key]['score'];
-            $questions[$key]['seq'] = $items[$key]['seq'];
+            if (in_array($question['type'], array('single_choice', 'choice'))){
+
+                foreach ($question['metas']['choices'] as $key => $choice) {
+                    $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
+                }
+            }
+            unset($question);
+
         }
 
-        $questions = $this->makeTest($questions, $choices);
-
-
-        // $questions = $this->makeMaterial($questions);
+        $questions = $this->makeMaterial($questions);
 
         return $questions;
     }
@@ -422,17 +455,21 @@ class TestServiceImpl extends BaseService implements TestService
             $questions[$key]['testResult'] = $answer;
 
         }
+        foreach ($questions as $key => &$question) {
+            $question['itemScore'] = $items[$key]['score'];
+            $question['seq'] = $items[$key]['seq'];
 
-        foreach ($questions as $key => $question) {
-            $questions[$key]['itemScore'] = $items[$key]['score'];
-            $questions[$key]['seq'] = $items[$key]['seq'];
+            if (in_array($question['type'], array('single_choice', 'choice'))){
+
+                foreach ($question['metas']['choices'] as $k => $choice) {
+                    $question['choices'][$k] = array( 'content' => $choice, 'questionId' => $key);
+                }
+            }
+            unset($question);
+
         }
 
-        $choices = $this->getQuestionService()->findChoicesByQuestionIds(array_keys($questions));
-
-        $questions = $this->makeTest($questions, $choices);
-
-        // $questions = $this->makeMaterial($questions);
+        $questions = $this->makeMaterial($questions);
 
         return $questions;
     }
@@ -459,7 +496,7 @@ class TestServiceImpl extends BaseService implements TestService
         $answers = $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
         $answers = QuestionSerialize::unserializes($answers);
         $answers = ArrayToolkit::index($answers, 'questionId');
-      
+  
         $items = $this->findItemsByTestPaperId($testResult['testId']);
         //材料题子题目
 
@@ -477,6 +514,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         foreach ($items as $key => $value) {
             $questions[$value['questionId']]['score'] = $value['score'];
+            $questions[$value['questionId']]['missScore'] = $value['missScore'];
         }
 
         $results = $this->makeTestResults($answers, $questions);
@@ -490,6 +528,9 @@ class TestServiceImpl extends BaseService implements TestService
             return $result;
         }, $results['newAnswers']);
 
+        $this->getQuestionService()->statQuestionTimes($results['oldAnswers']);
+        $this->getQuestionService()->statQuestionTimes($results['newAnswers']);
+
         //记分
         $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testResult['id']);
         //未答题目记分
@@ -500,13 +541,6 @@ class TestServiceImpl extends BaseService implements TestService
 
     private function makeTestResults ($answers, $questions)
     {
-
-        // foreach ($questions as $key => $value) {
-        //     if ($value['type'] != 'material') {
-        //         unset($questions[$key]);
-        //     }
-        // }
-        // $materials = ArrayToolkit::column($questions, 'questionId');
 
         $newAnswers = array();
         $oldAnswers = array();
@@ -537,19 +571,24 @@ class TestServiceImpl extends BaseService implements TestService
 
             if ($question['type'] == 'single_choice' or $question['type'] == 'choice') {
 
-                $diff = array_diff($question['answer'], $answers[$key]['answer']);
+                $diff1 = array_diff($question['answer'], $answers[$key]['answer']);
+                $diff2 = array_diff($answers[$key]['answer'], $question['answer']);
 
-                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff)) {
+                if (count($question['answer']) == count($answers[$key]['answer']) && empty($diff1)) {
                     $answers[$key]['status'] = 'right';
                     $answers[$key]['score'] = $question['score'];
 
                     // $question['result'] = 'right';
+                } elseif ($question['missScore'] != 0 && empty($diff2) && !empty($diff1)) {
+                    $answers[$key]['status'] = 'wrong';
+                    $answers[$key]['score'] = $question['missScore'];
                 } else {
                     $answers[$key]['status'] = 'wrong';
                     $answers[$key]['score'] = 0;
 
                     // $question['result'] = 'wrong';
                 }
+
             }
 
             if ($question['type'] == 'determine') {
@@ -570,6 +609,7 @@ class TestServiceImpl extends BaseService implements TestService
                 $right = 0;
                 $noAnswerCount = 0;
                 foreach ($question['answer'] as $k => $value) {
+
                     $userAnswer = trim($answers[$key]['answer'][$k]);
                     if (empty($userAnswer)) {
                         $noAnswerCount++;
@@ -594,6 +634,7 @@ class TestServiceImpl extends BaseService implements TestService
             $oldAnswers[$key] = $answers[$key];
         }
 
+
         $oldAnswers = array_map(function($oldAnswer){
             return ArrayToolkit::parts($oldAnswer, array('questionId', 'status', 'score', 'answer'));
         }, $oldAnswers);
@@ -608,13 +649,6 @@ class TestServiceImpl extends BaseService implements TestService
 
     public function makeTest ($questions, $answers)
     {
-        foreach ($answers as $key => $value) {
-            if (!array_key_exists('choices', $questions[$value['questionId']])) {
-                $questions[$value['questionId']]['choices'] = array();
-            }
-            $questions[$value['questionId']]['choices'][$key] = $value;
-        }
-
         return $this->makeMaterial($questions);
     }
 
@@ -728,6 +762,8 @@ class TestServiceImpl extends BaseService implements TestService
         //是否要加入教师阅卷的锁
         $this->getDoTestDao()->updateItemEssays($testResults, $id);
 
+        $this->getQuestionService()->statQuestionTimes($testResults);
+
         $paperResult = $this->getTestPaperResultDao()->getResult($id);
 
         $subjectiveScore = array_sum(ArrayToolkit::column($testResults, 'score'));
@@ -749,7 +785,7 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getDoTestDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testPaperResultId);
     }
 
-    public function startTest ($testId, $userId, $testPaper)
+    public function startTest ($testId, $userId, $testPaper, $target = array())
     {
 
         $testPaperResult = array(
@@ -759,17 +795,21 @@ class TestServiceImpl extends BaseService implements TestService
             'limitedTime' => $testPaper['limitedTime'],
             'beginTime' => time(),
             'status' => 'doing',
-            'remainTime' => $testPaper['limitedTime'] * 60
+            'usedTime' => 0,
+            'targetType' => empty($target['type']) ? '' : $target['type'],
+            'targetId' => empty($target['id']) ? 0 : intval($target['id']),
         );
 
         return $this->getTestPaperResultDao()->addResult($testPaperResult);
     }
 
-    public function finishTest ($id, $userId, $remainTime)
+    public function finishTest ($id, $userId, $usedTime)
     {
         $testResults = $this->getDoTestDao()->findTestResultsByTestPaperResultId($id);
 
         $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
+
+        $testPaper = $this->getTestPaperDao()->getTestPaper($testPaperResult['testId']);
 
         $fields['status'] = $this->isExistsEssay($testResults) ? 'reviewing' : 'finished';
 
@@ -781,7 +821,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
-        $fields['remainTime'] = $remainTime;
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
         $fields['active'] = 1;
 
@@ -790,11 +830,11 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
-    public function updatePaperResult ($id, $remainTime)
+    public function updatePaperResult ($id, $usedTime)
     {
         $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $fields['remainTime'] = $remainTime;
+        $fields['usedTime'] = $usedTime;
 
         $fields['updateTime'] = time();
 
@@ -806,7 +846,18 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestPaperResultDao()->updateResult($id, $fields);
     }
 
-    private function isExistsEssay ($testResults)
+    public function publicTestPaper($id, $status)
+    {
+        if (!in_array($status, array('open', 'closed'))){
+            throw $this->createAccessDeniedException('试卷状态不合法!');
+        }
+        $testPaper = array(
+            'status' => $status
+        );
+        return $this->getTestPaperDao()->updateTestPaper($id, $testPaper);
+    }
+
+    public function isExistsEssay ($testResults)
     {
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($testResults, 'questionId'));
         foreach ($questions as $value) {
@@ -873,8 +924,9 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createServiceException("target 参数不正确");
         }
 
-        $metas = array( 'question_type_seq' => 
-                implode(',', array_keys($testPaper['itemCounts'])));
+        // $metas = array( 'question_type_seq' => implode(',', array_keys($testPaper['itemCounts'])));
+        $metas = array('question_type_seq' => array_keys($testPaper['itemCounts']));
+
 
         $field = array();
 
@@ -882,6 +934,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
         $field['pattern']       = 'QuestionType';
+        $field['choiceMissScore'] = $testPaper['missScore'];
         $field['metas']         = $metas;
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
@@ -927,8 +980,15 @@ class TestPaperSerialize
     public static function serialize(array $item)
     {
         if (isset($item['metas'])) {
+            $item['metas'] = !is_array($item['metas']) ? array() : $item['metas'];
+
+            // if (isset($item['metas']['question_type_seq'])) {
+            //     $item['metas']['question_type_seq'] = explode(',', $item['metas']['question_type_seq']);
+            // }
+
             $item['metas'] = json_encode($item['metas']);
         }
+
 
         return $item;
     }
@@ -939,10 +999,8 @@ class TestPaperSerialize
             return null;
         }
 
-        $item['metas'] = json_decode($item['metas'], true);
-        foreach ($item['metas'] as $key => $value) {
-            $item['metas'][$key] = explode(',', $value);
-        }
+        $item['metas'] = !empty($item['metas']) ? json_decode($item['metas'], true) : array();
+
         return $item;
     }
 

@@ -36,12 +36,9 @@
 		    	<span class="name">课时{{ item.number }}</span>
 		    	<span class="pie">&nbsp;</span>
 
-		    	{% if item.type == 'testpaper' %}
-		    	  {% set lessonUrl = path('course_manage_do_test', {testId:item.mediaId}) %}
-		    	{% else %}
-		    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
-		    	{% endif %}
-		    	<a class="title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" {% if item.type == 'testpaper' %}target="_blank"{% endif %}>
+
+	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+		    	<a class="title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
 		    		{{ item.title }}
 		    		{% if item.quizNum > 0 %}
 				      <span class="glyphicon  glyphicon-ok-circle" title="测验"></span>

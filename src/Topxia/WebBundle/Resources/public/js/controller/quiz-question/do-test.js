@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+    require('placeholder');
+
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
@@ -14,6 +16,18 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        $('#testpaper-navbar').affix({
+            offset: {
+              top: 200
+            }
+        });
+        $('.testpaper-card').affix({
+            offset: {
+              top: 200
+            }
+        });
+
+
         var $body = $(document.body);
 
         $body.scrollspy({
@@ -25,19 +39,14 @@ define(function(require, exports, module) {
             $body.scrollspy('refresh');
         });
 
-
-
-
-
-
-
-
 // 做试卷
         var interval = 180;
 
         var changeAnswers = {};
 
         var deadline = $('#time_show').data('time');
+
+        var usedTime = 0 ;
 
         var isLimit = true;
 
@@ -54,34 +63,35 @@ define(function(require, exports, module) {
 
         if ($('#time_show').hasClass('preview')) {
             $('#time_show').text(formatTime(deadline));
-            deadline = undefined;
         }
 
+        if ($('#finishPaper').hasClass('do-test')){
 
-        var timer = timerShow(function(){
-            deadline--;
-            $('#time_show').text(formatTime(deadline));
+            var timer = timerShow(function(){
+                deadline--;
+                usedTime++;
+                $('#time_show').text(formatTime(deadline));
 
-            if (deadline <= 0) {
-                $.post($('#finishPaper').data('url'), {data:changeAnswers, remainTime:deadline }, function(){
-                    changeAnswers = {};
-                    $('#timeout-dialog').show();
-                    timer.stop();
-                });
-            }
-            if (deadline == timeLastPost) {
-                timeLastPost = timeLastPost - interval;
-                $.post($('#finishPaper').data('ajax'), { data:changeAnswers, remainTime:deadline }, function(){
-                    changeAnswers = {};
-                });
-
-                if (!isLimit){
-                    deadline = interval*3;
-                    timeLastPost = deadline - interval;
+                if (deadline <= 0) {
+                    $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
+                        changeAnswers = {};
+                        $('#timeout-dialog').show();
+                        timer.stop();
+                    });
                 }
-            }
-        }, 1000, true);
-    
+                if (deadline == timeLastPost) {
+                    timeLastPost = timeLastPost - interval;
+                    $.post($('#finishPaper').data('ajax'), { data:changeAnswers, usedTime:usedTime }, function(){
+                        changeAnswers = {};
+                    });
+
+                    if (!isLimit){
+                        deadline = interval*3;
+                        timeLastPost = deadline - interval;
+                    }
+                }
+            }, 1000, true);
+        }
         $('#pause').on('click', function(){
             timer.pause();
         });
@@ -171,7 +181,7 @@ define(function(require, exports, module) {
         $('body').on('click', '#finishPaper', function(){
             $finishBtn = $(this);
 
-            $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
+            $.post($(this).data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $finishBtn.data('goto');
             });
 
@@ -180,7 +190,7 @@ define(function(require, exports, module) {
         $('body').on('click', '#suspend', function(){
             $suspendBtn = $(this);
 
-            $.post($(this).data('url'), { data:changeAnswers, remainTime:deadline }, function(){
+            $.post($(this).data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $suspendBtn.data('goto');
             });
 
@@ -237,6 +247,10 @@ define(function(require, exports, module) {
                 rights.push($(this).attr('href'));
                 $(this).addClass('btn-success');
             }
+            if ($(this).hasClass('noAnswer')) {
+                
+                $(this).addClass('btn-warning');
+            }
             alls.push($(this).attr('href'));
         });
 
@@ -283,10 +297,15 @@ define(function(require, exports, module) {
 
 
 
-        $('.testpaper-question-essay-input-short').click(function() {
+        $('.testpaper-question-essay-input-short').focusin(function(e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).blur();
 
             var $shortTextarea = $(this).hide();
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
+            var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
             var editor = EditorFactory.create($longTextarea, 'simple', {
 
@@ -294,15 +313,59 @@ define(function(require, exports, module) {
 
                 afterBlur: function() {
                     editor.sync();
-                    editor.remove();
-                    $shortTextarea.val(editor.text());
-                    $longTextarea.hide();
-                    $shortTextarea.show();
                 },
 
                 afterCreate: function() {
                     this.focus();
+
+                    $textareaBtn.click(function(){
+                        editor.remove();
+                        $shortTextarea.val(editor.text());
+                        $longTextarea.hide();
+                        $textareaBtn.hide();
+                        $shortTextarea.show();
+                    });
+
                 },
+
+                afterChange: function(){
+                    this.sync();
+                    $longTextarea.change();
+                }
+            });        
+        });
+
+
+        $('.testpaper-question-essay-teacherSay-short').focusin(function(e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).blur();
+
+            var $shortTextarea = $(this).hide();
+            var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-long').show();
+            var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-btn').show();
+
+            var editor = EditorFactory.create($longTextarea, 'simple', {
+
+                extraFileUploadParams:{group:'default'},
+
+
+                afterCreate: function() {
+                    this.focus();
+                    $textareaBtn.click(function(){
+                        editor.remove();
+                        $shortTextarea.val(editor.text());
+                        $longTextarea.hide();
+                        $textareaBtn.hide();
+                        $shortTextarea.show();
+                    });
+                },
+
+                afterBlur: function() {
+                    this.sync();
+                },
+
 
                 afterChange: function(){
                     this.sync();
@@ -310,41 +373,46 @@ define(function(require, exports, module) {
                 }
             });
 
-            
         });
 
         //老师阅卷校验
+        
+        if ($('#teacherCheckForm').length > 0) {
+            var validator = new Validator({
+                element: '#teacherCheckForm',
+                autoSubmit: false,
+                onFormValidated: function(error, results, $form) {
+                    if (error) {
+                        return false;
+                    }
+                    
+                    $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
+                        window.location.href = $('#finishCheck').data('goto');
+                    }).error(function(){
 
-        var validator = new Validator({
-            element: '#teacherCheckForm',
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
+                    });
+                }
+
+            });
+
+            Validator.addRule('score', function(options) {
+                var element = options.element;
+                var isFloat = /^\d+(\.\d)?$/.test(element.val());
+                if (!isFloat){
                     return false;
                 }
-                
-                $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
-                    window.location.href = $('#finishCheck').data('goto');
-                }).error(function(){
 
-                });
-            }
+                if (parseInt(element.val()) <= parseInt(element.data('score'))) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }, '{{display}}只能是小于题目分数的数字');
 
-        });
 
-        Validator.addRule('score', function(options) {
-            var element = options.element;
-            var isFloat = /^\d+(\.\d)?$/.test(element.val());
-            if (!isFloat){
-                return false;
-            }
 
-            if (parseInt(element.val()) <= parseInt(element.data('score'))) {
-                return true;
-            } else {
-                return false;
-            }
-        }, '{{display}}只能是小于题目分数的数字');
+
+        }
 
         $('[name^="score_"]').each(function(){
             name = $(this).attr('name');

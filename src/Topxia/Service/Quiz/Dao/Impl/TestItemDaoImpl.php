@@ -9,7 +9,7 @@ use Doctrine\DBAL\Connection;
 
 class TestItemDaoImpl extends BaseDao implements TestItemDao
 {
-    protected $table = 'test_item';
+    protected $table = 'testpaper_item';
 
     public function getItem($id)
     {
@@ -91,6 +91,17 @@ class TestItemDaoImpl extends BaseDao implements TestItemDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->executeUpdate($sql, $ids);
+    }
+
+    public function updateItemsMissScoreByPaperIds(array $ids, $missScore)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $params = array_merge(array($missScore), $ids);
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks});";
+        return $this->getConnection()->executeUpdate($sql, $params);
     }
 
 

@@ -9,7 +9,7 @@ use Doctrine\DBAL\Query\QueryBuilder,
 
 class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 {
-    protected $table = 'quiz_question';
+    protected $table = 'question';
 
     public function getQuestion($id)
     {
@@ -30,6 +30,16 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getQuestion($id);
+    }
+
+    public function updateQuestionCountByIds($ids, $status)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "UPDATE {$this->table} SET {$status} = {$status}+1 WHERE id IN ({$marks})";
+        return $this->getConnection()->executeQuery($sql, $ids);
     }
 
     public function deleteQuestion($id)
@@ -118,6 +128,12 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE parentId IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
+    public function findQuestionsCountByParentId($parentId)
+    {
+        $sql ="SELECT count(*) FROM {$this->table} WHERE parentId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($parentId));
     }
 
     public function deleteQuestionByIds(array $ids)

@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                 required: true,
                 errormessage:"请选择您的答案"
             });
-        },
+        }
     });
 
     module.exports = DetermineQuestion;

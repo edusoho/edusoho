@@ -9,7 +9,7 @@ use Doctrine\DBAL\Connection;
 
 class TestItemResultDaoImpl extends BaseDao implements TestItemResultDaoImpl
 {
-    protected $table = 'test_item_result';
+    protected $table = 'testpaper_item_result';
 
     public function getResult($id)
     {
