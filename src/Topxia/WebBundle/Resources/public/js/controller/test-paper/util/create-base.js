@@ -140,6 +140,7 @@ define(function(require, exports, module) {
         },
 
         getCheckResult : function(){
+            console.log('check');
             var flag = 0;
 
             var isDifficulty = $('input[name="isDifficulty"]:checked').val();
@@ -157,11 +158,13 @@ define(function(require, exports, module) {
                 itemScores[$(this).data('key')] = $(this).val() ;
             });
 
+            var ranges = $('input[name="ranges"]').val();
+
             $.ajaxSetup({
                 async : false
             });    
 
-            $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage}, function(data) {
+            $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage, ranges:ranges}, function(data) {
                 if (data) {
                     Notify.danger(data);
                     flag = 1 ;
