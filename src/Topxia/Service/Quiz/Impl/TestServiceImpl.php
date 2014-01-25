@@ -886,13 +886,17 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createServiceException('试卷不存在');
         }
 
-        $userId = $this->getCurrentUser()->id;
+        $user = $this->getCurrentUser();
+        if ($user->isAdmin()) {
+            return $user['id'];
+        }
 
         if ($paper['targetType'] == 'course') {
             $course = $this->getCourseService()->getCourse($paper['targetId']);
 
-            if (in_array($userId, $course['teacherIds'])) {
-                return $userId;
+            // @todo: 这个是有问题的。
+            if (in_array($user['id'], $course['teacherIds'])) {
+                return $user['id'];
             }
         }
         return false;
