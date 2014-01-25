@@ -70,6 +70,7 @@ define(function(require, exports, module) {
             var timer = timerShow(function(){
                 deadline--;
                 usedTime++;
+
                 $('#time_show').text(formatTime(deadline));
 
                 if (deadline <= 0) {
