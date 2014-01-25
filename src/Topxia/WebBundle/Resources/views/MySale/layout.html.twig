@@ -20,7 +20,7 @@
                  收入概览
                 </a>
 
-                 <a class="list-group-item {% if side_nav == 'commission-list' %}active{% endif %}" href="{{ path('mysale_commission_list') }}"> <i class="glyphicon glyphicon-briefcase"></i>
+                <a class="list-group-item {% if side_nav == 'commission-list' %}active{% endif %}" href="{{ path('mysale_commission_list') }}"> <i class="glyphicon glyphicon-briefcase"></i>
                  收入明细
                 </a>
                 
@@ -39,7 +39,7 @@
                   课程推广
                 </a>
 
-                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale_web_link') }}"> <i class="glyphicon glyphicon-plus"></i>
+                <a class="list-group-item {% if side_nav == 'web-link' %}active{% endif %}" href="{{ path('mysale_web_link') }}"> <i class="glyphicon glyphicon-plus"></i>
                   网站推广
                 </a>             
 
@@ -54,8 +54,8 @@
               <ul class="list-group">
               
 
-                <a class="list-group-item {% if side_nav == '' %}active{% endif %}" href="{{ path('mysale') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
-                  优惠码使用情况
+                <a class="list-group-item {% if side_nav == 'offsale_apply' %}active{% endif %}" href="{{ path('mysale_offsale_apply') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                  优惠码申请
                 </a>
 
               

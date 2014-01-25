@@ -132,30 +132,26 @@ class MySaleController extends BaseController
 
             $mysale['adCommissionType']= 'ratio';
 
-            $mysale['adCommission']= 5;  //网站推广，获取5%的佣金
+            $mysale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
            
 
             $mysale['prodType']=$prodType;
             $mysale['prodId']=$prodId;
             $mysale['prodName']=$prodName;
 
-            $webUrl = $this->generateUrl('/',true);
-
+            $webUrl = $this->generateUrl('homepage',array(),true);
 
             $mysale['tUrl']=$webUrl.'?mu='.$mysale['mTookeen'];
 
-            $mysale['validTime']=$course['saleValidTime'];
+            $mysale['validTime']=0;
 
             $mysale['userId']=$user['id'];
           
-
-            $this->getMySaleService()->createMySale($mysale);
+            $mysale = $this->getMySaleService()->createMySale($mysale);
 
         }
-
-
        
-        return $this->render('TopxiaWebBundle:MySale:overview.html.twig', array(
+        return $this->render('TopxiaWebBundle:MySale:web-link.html.twig', array(
             'mysale'=>$mysale,
             'user'=>$user            
         ));

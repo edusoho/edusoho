@@ -50,10 +50,7 @@
           <td>{{course.saleValidTime|date('Y-n-d H:i') }}</td>
           <td>
                     
-          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 我的推广链接 </a>
-
-           <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 申请优惠码 </a>
-        
+          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 推广链接 </a>        
           </td>
         </tr>
       {% else %}

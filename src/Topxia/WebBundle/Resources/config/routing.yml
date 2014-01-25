@@ -1301,5 +1301,9 @@ mysale_commission_list:
     defaults: {_controller:TopxiaWebBundle:MySale:commissionList}
 
 mysale_web_link:
-    pattern: /mysale/commission/list
+    pattern: /mysale/web/link
     defaults: {_controller:TopxiaWebBundle:MySale:webLink}
+
+mysale_offsale_apply:
+    pattern: /mysale/offsale/apply
+    defaults: {_controller:TopxiaWebBundle:MySale:offsaleApply}
