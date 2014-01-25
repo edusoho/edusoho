@@ -19,6 +19,7 @@ class QuizQuestionDaoImpl extends BaseDao implements QuizQuestionDao
 
     public function addQuestion($questions)
     {
+
         $questions = $this->getConnection()->insert($this->table, $questions);
         if ($questions <= 0) {
             throw $this->createDaoException('Insert questions error.');
