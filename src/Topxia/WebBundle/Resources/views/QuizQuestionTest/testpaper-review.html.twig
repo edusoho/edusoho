@@ -5,7 +5,9 @@
 {% set showTestpaperNavbar = 'off' %}
 
 {% block testpaper_heading_status %}
-  {% if paperResult.status == 'reviewing' %}
+  {% if paperResult.status == 'finished' %}
+    <div class="label label-success">批阅完成</div>
+  {% elseif paperResult.status == 'reviewing' %}
     <div class="label label-info">批阅中</div>
   {% endif %}
 {% endblock %}

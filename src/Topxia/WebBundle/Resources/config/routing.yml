@@ -586,15 +586,15 @@ course_manage_unfavorite_question:
     defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
 
 course_manage_show_favorite_question:
-    pattern: /show/favorite/question
+    pattern: /my/show/favorite/question
     defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
 
 course_manage_list_teacher_test_reviewing:
-    pattern: /list/teacher/test/reviewing
+    pattern: /my/list/teacher/test/reviewing
     defaults: { _controller: TopxiaWebBundle:MyQuestion:listReviewingTest }
 
 course_manage_list_teacher_test_finished:
-    pattern: /list/teacher/test/finished
+    pattern: /my/list/teacher/test/finished
     defaults: { _controller: TopxiaWebBundle:MyQuestion:listFinishedTest }
 
 course_manage_test_check:
