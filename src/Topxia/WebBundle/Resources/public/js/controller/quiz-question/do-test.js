@@ -247,7 +247,7 @@ define(function(require, exports, module) {
                 rights.push($(this).attr('href'));
                 $(this).addClass('btn-success');
             }
-            if ($(this).hasClass('noAnswer')) {
+            if ($(this).hasClass('checking')) {
                 
                 $(this).addClass('btn-warning');
             }
