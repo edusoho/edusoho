@@ -92,14 +92,17 @@ define(function(require, exports, module) {
                     }
                 }
             }, 1000, true);
-        }
-        $('#pause').on('click', function(){
-            timer.pause();
-        });
 
-        $('div#modal').on('hidden.bs.modal',function(){
-            timer.play();
-        });
+            $('#pause').on('click', function(){
+                timer.pause();
+            });
+
+            $('div#modal').on('hidden.bs.modal',function(){
+                timer.play();
+            });
+
+        }
+
 
     //...
 
