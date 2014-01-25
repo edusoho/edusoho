@@ -19,7 +19,8 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
         }
 
-        $testResult = $this->getTestpaperService()->findTestPaperResultByTestIdAndUserId($id, $user['id']);
+        $testResult = $this->getTestpaperService()->findTestPaperResultByTestIdAndUserId( $id, $user);
+
         if (empty($testResult)) {
             return $this->createJsonResponse(array('status' => 'nodo'));
         }
