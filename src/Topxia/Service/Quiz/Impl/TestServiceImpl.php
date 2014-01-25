@@ -823,7 +823,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
-        $fields['usedTime'] = $usedTime;
+        $fields['usedTime'] = $usedTime + $testPaperResult['usedTime'];
         $fields['endTime'] = time();
         $fields['active'] = 1;
 
@@ -836,7 +836,7 @@ class TestServiceImpl extends BaseService implements TestService
     {
         $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $fields['usedTime'] = $usedTime;
+        $fields['usedTime'] = $usedTime + $testPaperResult['usedTime'];
 
         $fields['updateTime'] = time();
 
