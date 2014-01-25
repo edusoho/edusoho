@@ -302,6 +302,10 @@ class DoTestController extends BaseController
 			throw createAccessDeniedException('无权批阅试卷！');
 		}
 
+		if ($paperResult['status'] != 'reviewing') {
+			return $this->createMessageResponse('info', '只有待批阅状态的试卷，才能批阅！');
+		}
+
 
 		if ($request->getMethod() == 'POST') {
 			$form = $request->request->all();
