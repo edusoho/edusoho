@@ -58,11 +58,13 @@
 		</div>
 
 		{% if questionPreview|default(false) %}
-		  <div class="testpaper-preview-answer">
+		  <div class="testpaper-preview-answer clearfix mtl mbl">
 		  	<div class="testpaper-question-result">
 				正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>
 		  	</div>
 		  </div>
+
+		  <div class="testpaper-question-analysis well">{{ question.analysis|raw|default('无解析') }}</div>
 		{% endif %}
 
 
