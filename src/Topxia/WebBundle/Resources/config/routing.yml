@@ -710,6 +710,10 @@ course_announcement_delete:
     defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:delete }
     methods: [POST]
 
+testpaper_user_result_json:
+    pattern:  /testpaper/{id}/user_result/json
+    defaults: { _controller: TopxiaWebBundle:Testpaper:userResultJson }
+
 search:
     pattern:  /search
     defaults: { _controller: TopxiaWebBundle:Search:index }
