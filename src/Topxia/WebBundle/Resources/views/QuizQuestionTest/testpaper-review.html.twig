@@ -4,6 +4,12 @@
 
 {% set showTestpaperNavbar = 'off' %}
 
+{% block testpaper_heading_status %}
+  {% if paperResult.status == 'reviewing' %}
+    <div class="label label-info">批阅中</div>
+  {% endif %}
+{% endblock %}
+
 {% block testpaper_heading_content %}
 
 {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}

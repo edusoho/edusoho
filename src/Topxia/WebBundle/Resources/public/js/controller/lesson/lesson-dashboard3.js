@@ -254,10 +254,31 @@ define(function(require, exports, module) {
 						$("#lesson-text-content").perfectScrollbar('update');
 	            	} else if (lesson.type == 'testpaper') {
 	            		var url = '../../do/test/' + lesson.mediaId + '?targetType=lesson&targetId=' + id;
-	            		var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>'
-
+	            		var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
+                        var html = '<span class="text-info">正在载入，请稍等...</span>';
 	            		$("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
 	            		$("#lesson-testpaper-content").show();
+
+                        $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
+                            if (result.error) {
+                                html = '<span class="text-danger">' + result.error + '</span>';
+                            } else {
+                                if (result.status == 'nodo') {
+                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
+                                } else if (result.status == 'finished') {
+                                    html = '试卷已批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看结果</a>';
+                                } else if (result.status == 'doing' || result.status == 'paused') {
+                                    html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
+                                } else if (result.status == 'reviewing') {
+                                    html = '试卷正在批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看试卷</a>'
+                                }
+                            }
+
+                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+
+                        }, 'json');
+
+
 	            		// window.open(url);
 	            	}
             	}
