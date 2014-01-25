@@ -266,7 +266,9 @@ define(function(require, exports, module) {
                                 if (result.status == 'nodo') {
                                     html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
                                 } else if (result.status == 'finished') {
-                                    html = '试卷已批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看结果</a>';
+                                    var redoUrl = '../../redo/test/' + lesson.mediaId + '?targetType=lesson&targetId=' + id;
+                                    var resultUrl = '../../test/result/' + result.resultId + '?targetType=lesson&targetId=' + id;
+                                    html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
                                 } else if (result.status == 'doing' || result.status == 'paused') {
                                     html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
                                 } else if (result.status == 'reviewing') {

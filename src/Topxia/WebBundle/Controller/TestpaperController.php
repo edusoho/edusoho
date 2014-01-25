@@ -25,7 +25,7 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('status' => 'nodo'));
         }
 
-        return $this->createJsonResponse(array('status' => $testResult['status']));
+        return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
     }
 
     private function getTestpaperService()
