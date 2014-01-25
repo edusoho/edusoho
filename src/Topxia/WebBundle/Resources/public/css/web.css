@@ -3473,6 +3473,10 @@ body {
 	max-width: 100%;
 }
 
+.testpaper-question-stem-material img {
+	max-width: 100%;
+}
+
 .testpaper-question-choices {
 	margin-left: 50px;
 	padding-left: 0;
@@ -3480,6 +3484,10 @@ body {
 	border-bottom: 1px dashed #ddd;
 	margin-bottom: 10px;
 	padding-bottom: 10px;
+}
+
+.testpaper-question-choices img {
+	max-width: 100%;
 }
 
 .testpaper-question-choices li {

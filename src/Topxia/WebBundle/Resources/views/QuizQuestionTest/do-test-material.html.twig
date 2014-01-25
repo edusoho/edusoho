@@ -1,5 +1,5 @@
 <div class="material">
-<div class="well">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
+<div class="well testpaper-question-stem-material">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
 {% for question in question.questions|default([]) %}
 
 	{% if question.type == 'single_choice' or question.type == 'choice' %}
