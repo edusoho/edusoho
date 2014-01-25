@@ -57,9 +57,10 @@ class DoTestController extends BaseController
 			throw $this->createNotFoundException();
 		}
 
-		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
 		if ($testResult && in_array($testResult['status'], array('doing', 'paused'))) {
+
 			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 		}
 

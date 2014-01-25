@@ -345,6 +345,10 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->findItemsByTestPaperId($testPaperId);
     }
 
+    public function findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, array $status)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, $status);
+    }
 
     public function findTestPaperResultByTestIdAndUserId($testId, $userId)
     {
