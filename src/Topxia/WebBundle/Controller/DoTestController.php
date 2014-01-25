@@ -240,6 +240,8 @@ class DoTestController extends BaseController
 
 		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($paperResult['userId']);
 
+		$student = $this->getUserService()->getUser($paperResult['userId']);
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
@@ -247,7 +249,8 @@ class DoTestController extends BaseController
 			'paperResult' => $paperResult,
 			'favorites' => $favorites,
 			'id' => $id,
-			'total' => $total
+			'total' => $total,
+			'student' => $student
 		));
 	}
 
@@ -344,6 +347,7 @@ class DoTestController extends BaseController
 			}
 		}
 
+		$student = $this->getUserService()->getUser($paperResult['userId']);
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-review.html.twig', array(
 			'questions' => $questions,
@@ -352,7 +356,8 @@ class DoTestController extends BaseController
 			'paperResult' => $paperResult,
 			'id' => $id,
 			'total' => $total,
-			'types' => $types
+			'types' => $types,
+			'student' => $student
 		));
 	}
 
