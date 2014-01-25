@@ -238,6 +238,9 @@ class CourseLessonManageController extends BaseController
     	$papers = $this->getTestService()->findTestPapersByTarget('course', $id, 0, 1000);
     	$paperOptions = array();
     	foreach ($papers as $paper) {
+            if ($paper['status'] != 'open') {
+                continue;
+            } 
     		$paperOptions[$paper['id']] = $paper['name'];
     	}
 
