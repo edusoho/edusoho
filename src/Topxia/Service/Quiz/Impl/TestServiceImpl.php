@@ -936,7 +936,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
         $field['pattern']       = 'QuestionType';
-        $field['choiceMissScore'] = $testPaper['missScore'];
+        $field['choiceMissScore'] = array_key_exists('missScore', $testPaper) ? : $testPaper['choiceMissScore'];
         $field['metas']         = $metas;
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];
