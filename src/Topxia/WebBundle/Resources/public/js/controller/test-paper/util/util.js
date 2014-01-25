@@ -99,6 +99,7 @@ define(function(require, exports, module) {
 
             $('#'+id).sortable({
                 itemSelector: '.questionType',
+                exclude: '.notMoveHandle',
                 onDrop: function (item, container, _super) {
                     _super(item, container);
                     if (item.data('type') == 'material') {
