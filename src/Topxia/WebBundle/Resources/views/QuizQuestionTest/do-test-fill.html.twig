@@ -58,7 +58,7 @@
 		    </ul>
 		</div>
 	  </div>
-	  <div class="testpaper-question-analysis well">{{ question.analysis|raw|default('无解析') }}</div>
+	  <div class="testpaper-question-analysis well">{{ question.analysis|default('无解析')|raw }}</div>
 	  {% endif %}
 
 	{% endif %}
