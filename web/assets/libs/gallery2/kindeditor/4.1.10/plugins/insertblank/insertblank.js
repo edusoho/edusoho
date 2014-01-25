@@ -1,3 +1,4 @@
+
 KindEditor.plugin('insertblank', function(K) {
     var self = this, name = 'insertblank';
     self.clickToolbar(name, function() {
@@ -17,7 +18,7 @@ KindEditor.plugin('insertblank', function(K) {
             dialog = self.createDialog({
                 name : name,
                 width : 450,
-                title : '插入填空',
+                title : '插入填空项',
                 body : html,
                 yesBtn : {
                     name : self.lang('yes'),
