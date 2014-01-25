@@ -6,28 +6,28 @@
 {% block body %}
 
 <div class="form-group">
-<div class="controls">
-<select class="form-control" id="testpaper-teacherSay-select">
-  <option value="">---常用评语---</option>
-  <option value="1">继续努力，继续进步！</option>
-  <option value="2">不错，有进步，再努力些就会更棒！</option>
-  <option value="3">你真棒！我为你骄傲！</option>
-  <option value="4">有点松懈了吧？继续加油吧！</option>
-  <option value="5">用心、专注、坚持，你能做的更好的！</option>
-</select>
-</div>
+	<div class="controls">
+		<select class="form-control" id="testpaper-teacherSay-select">
+		  <option value="">---常用评语---</option>
+		  <option value="1">继续努力，继续进步！</option>
+		  <option value="2">不错，有进步，再努力些就会更棒！</option>
+		  <option value="3">你真棒！我为你骄傲！</option>
+		  <option value="4">有点松懈了吧？继续加油吧！</option>
+		  <option value="5">用心、专注、坚持，你能做的更好的！</option>
+		</select>
+	</div>
 </div>
 <div class="form-group">
-<div class="controls">
-<textarea class="form-control" id="testpaper-teacherSay-input" placeholder="请输入评语"></textarea>
-</div>
+	<div class="controls">
+		<textarea class="form-control" id="testpaper-teacherSay-input" placeholder="请输入评语"></textarea>
+	</div>
 </div>
 
 
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+  <a href="javascript:;" class="btn btn-default" data-dismiss="modal">取消</a>
   <button type="submit" class="btn btn-info" data-toggle="form-submit" data-target="#teacherCheckForm" id="testpaper-teacherSay-btn">完成批阅</button>
 <script>app.load('quiz-question/test-teacher-check')</script>
 {% endblock %}

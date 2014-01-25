@@ -57,9 +57,10 @@ class DoTestController extends BaseController
 			throw $this->createNotFoundException();
 		}
 
-		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndUserId($testId, $userId);
+		$testResult = $this->getTestService()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
 		if ($testResult && in_array($testResult['status'], array('doing', 'paused'))) {
+
 			return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
 		}
 
@@ -240,14 +241,17 @@ class DoTestController extends BaseController
 
 		$favorites = $this->getMyQuestionService()->findAllFavoriteQuestionsByUserId($paperResult['userId']);
 
+		$student = $this->getUserService()->getUser($paperResult['userId']);
+
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
 			'questions' => $questions,
 			'accuracy' => $accuracy,
 			'paper' => $paper,
 			'paperResult' => $paperResult,
-			'favorites' => $favorites,
+			'favorites' => ArrayToolkit::column($favorites, 'questionId'),
 			'id' => $id,
-			'total' => $total
+			'total' => $total,
+			'student' => $student
 		));
 	}
 
@@ -265,11 +269,11 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 
 			$results = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, $remainTime);
+			$this->getTestService()->updatePaperResult($id, $usedTime);
 
 			return $this->createJsonResponse(true);
 		}
@@ -297,6 +301,10 @@ class DoTestController extends BaseController
 
 		if (!$teacherId = $this->getTestService()->canTeacherCheck($paper['id'])){
 			throw createAccessDeniedException('无权批阅试卷！');
+		}
+
+		if ($paperResult['status'] != 'reviewing') {
+			return $this->createMessageResponse('info', '只有待批阅状态的试卷，才能批阅！');
 		}
 
 
@@ -344,6 +352,7 @@ class DoTestController extends BaseController
 			}
 		}
 
+		$student = $this->getUserService()->getUser($paperResult['userId']);
 
 		return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-review.html.twig', array(
 			'questions' => $questions,
@@ -352,7 +361,8 @@ class DoTestController extends BaseController
 			'paperResult' => $paperResult,
 			'id' => $id,
 			'total' => $total,
-			'types' => $types
+			'types' => $types,
+			'student' => $student
 		));
 	}
 

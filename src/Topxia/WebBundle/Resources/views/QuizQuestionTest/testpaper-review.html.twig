@@ -4,6 +4,14 @@
 
 {% set showTestpaperNavbar = 'off' %}
 
+{% block testpaper_heading_status %}
+  {% if paperResult.status == 'finished' %}
+    <div class="label label-success">批阅完成</div>
+  {% elseif paperResult.status == 'reviewing' %}
+    <div class="label label-info">批阅中</div>
+  {% endif %}
+{% endblock %}
+
 {% block testpaper_heading_content %}
 
 {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
@@ -22,11 +30,11 @@
 
             {% for question in questions[type] %}
               {% if question.type != 'material' %}
-                <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
+                <a href="#question{{ question.id }}" class="btn btn-default btn-index {{ question.testResult.status }}">{{ question.seq }}</a>
               {% else %}
                 {% for question in question.questions|default([]) %}
                   {% if question.type == 'essay' %}
-                    <a href="#question{{ question.id }}" class="btn btn-default {{ question.testResult.status }}">{{ question.seq }}</a>
+                    <a href="#question{{ question.id }}" class="btn btn-default btn-index {{ question.testResult.status }}">{{ question.seq }}</a>
                   {% endif %}
                 {% endfor %}
               {% endif %}
