@@ -247,7 +247,7 @@ class DoTestController extends BaseController
 			'accuracy' => $accuracy,
 			'paper' => $paper,
 			'paperResult' => $paperResult,
-			'favorites' => $favorites,
+			'favorites' => ArrayToolkit::column($favorites, 'questionId'),
 			'id' => $id,
 			'total' => $total,
 			'student' => $student
