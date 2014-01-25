@@ -265,11 +265,11 @@ class DoTestController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$data = $request->request->all();
 			$answers = array_key_exists('data', $data) ? $data['data'] : array();
-			$remainTime = $data['remainTime'];
+			$usedTime = $data['usedTime'];
 
 			$results = $this->getTestService()->submitTest($answers, $id);
 
-			$this->getTestService()->updatePaperResult($id, $remainTime);
+			$this->getTestService()->updatePaperResult($id, $usedTime);
 
 			return $this->createJsonResponse(true);
 		}
