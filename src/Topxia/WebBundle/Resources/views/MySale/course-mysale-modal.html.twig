@@ -5,14 +5,17 @@
 {% block title %}推广链接地址{% endblock %}
 {% block body %}
 
-  
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="note">推广链接</label>
-      </div>
-      <div class="col-md-8">
-        <textarea id="tUrl" name="tUrl" class="form-control" rows="3">{{ mysale.tUrl }}</textarea>
-      </div>
+
+      <div class="row form-group">
+
+    	<div class="col-md-9">
+    		<textarea id="content" name="tUrl" class="form-control" rows="3">{{ mysale.tUrl }}</textarea>
+    	</div>
+    	<div class="col-md-3">
+    		<button id="copy-button" value="abc">点击复制该链接</button>
+    		<div id="copy"></div>
+    	</div>
+
     </div>
 
 
@@ -20,11 +23,8 @@
 
 {% block footer %}
 <div class="pull-right">
-
- 
-
-
-  <script></script>
-    
+ <script type="text/javascript">
+    app.load('mysale/course-link');
+  </script> 
 </div>
 {% endblock %}

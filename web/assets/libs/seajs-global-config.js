@@ -39,6 +39,8 @@ seajs.config({
 		"handlebars": "gallery/handlebars/1.0.2/handlebars",
 		"backbone": "gallery/backbone/1.0.0/backbone",
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
+		"zeroclipboard": "gallery/zeroclipboard/1.2.2/zeroclipboard.js",
+		"zclip": "jquery-plugin/zclip/1.1.1/jquery.zclip.js",
 		'wookmark': 'wookmark/jquery.wookmark.js',
 		'carousel': 'arale/switchable/1.0.0/carousel',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
