@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
+    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     var VideoChooser = require('../widget/media-chooser/video-chooser');
     var AudioChooser = require('../widget/media-chooser/audio-chooser');
     var Notify = require('common/bootstrap-notify');
-    var EditorFactory = require('common/kindeditor-factory');
 
     function createValidator ($form) {
 

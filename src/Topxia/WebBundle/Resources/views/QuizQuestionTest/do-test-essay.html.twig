@@ -101,5 +101,20 @@
 		  </div>
 	  </div>
 
+
+	  {% if questionPreview|default(false) %}
+	  <div class="testpaper-preview-answer clearfix mtl mbl">
+	  	<div class="testpaper-question-result">
+		    <div class="testpaper-question-result-suggested">
+			    <div class="testpaper-question-result-title">参考答案：</div>
+			    <div>{{ question.answer[0]|raw }}</div>
+		    </div>
+		</div>
+	  </div>
+	  <div class="testpaper-question-analysis well">{{ question.analysis|default('无解析')|raw }}</div>
+	  {% endif %}
+
+	  
+
 	{% endif %}
 </div>

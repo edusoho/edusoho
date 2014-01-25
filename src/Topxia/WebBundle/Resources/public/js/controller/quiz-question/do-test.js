@@ -70,6 +70,7 @@ define(function(require, exports, module) {
             var timer = timerShow(function(){
                 deadline--;
                 usedTime++;
+
                 $('#time_show').text(formatTime(deadline));
 
                 if (deadline <= 0) {
@@ -91,14 +92,17 @@ define(function(require, exports, module) {
                     }
                 }
             }, 1000, true);
-        }
-        $('#pause').on('click', function(){
-            timer.pause();
-        });
 
-        $('div#modal').on('hidden.bs.modal',function(){
-            timer.play();
-        });
+            $('#pause').on('click', function(){
+                timer.pause();
+            });
+
+            $('div#modal').on('hidden.bs.modal',function(){
+                timer.play();
+            });
+
+        }
+
 
     //...
 
@@ -247,7 +251,7 @@ define(function(require, exports, module) {
                 rights.push($(this).attr('href'));
                 $(this).addClass('btn-success');
             }
-            if ($(this).hasClass('noAnswer')) {
+            if ($(this).hasClass('checking')) {
                 
                 $(this).addClass('btn-warning');
             }

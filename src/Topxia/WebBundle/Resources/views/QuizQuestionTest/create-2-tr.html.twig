@@ -1,4 +1,4 @@
- <tr {% if question.parentId == 0 %} class="questionType" {% endif %} id="{{question.id}}"  data-role='item' data-type='{% if question.parentId != 0 %}{{question.parentId}}{% else %}{{question.type}}{% endif %}' >
+ <tr {% if question.parentId == 0 %} class="questionType" {% endif %} id="{{question.id}}"  data-role='item' data-type='{% if question.parentId != 0 %}{{question.parentId}}{% else %}{{question.type}}{% endif %}' data-id="{{question.id}}" >
     <td >
         <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" autocomplete="off" data-role="batch-item" >
     </td>

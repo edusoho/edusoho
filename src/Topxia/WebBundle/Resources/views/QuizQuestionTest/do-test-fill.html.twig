@@ -47,7 +47,7 @@
 	  </div>
 
 	  {% if questionPreview|default(false) %}
-	  <div class="testpaper-preview-answer">
+	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <ul>
 		      {% for index, answer in question.answer %}
@@ -58,6 +58,7 @@
 		    </ul>
 		</div>
 	  </div>
+	  <div class="testpaper-question-analysis well">{{ question.analysis|default('无解析')|raw }}</div>
 	  {% endif %}
 
 	{% endif %}

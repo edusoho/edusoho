@@ -345,6 +345,10 @@ class TestServiceImpl extends BaseService implements TestService
         return $this->getTestItemDao()->findItemsByTestPaperId($testPaperId);
     }
 
+    public function findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, array $status)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, $status);
+    }
 
     public function findTestPaperResultByTestIdAndUserId($testId, $userId)
     {
@@ -823,7 +827,7 @@ class TestServiceImpl extends BaseService implements TestService
 
         $fields['rightItemCount'] = $this->getDoTestDao()->findRightItemCountByTestPaperResultId($id);
 
-        $fields['usedTime'] = $usedTime;
+        $fields['usedTime'] = $usedTime + $testPaperResult['usedTime'];
         $fields['endTime'] = time();
         $fields['active'] = 1;
 
@@ -836,7 +840,7 @@ class TestServiceImpl extends BaseService implements TestService
     {
         $testPaperResult = $this->getTestPaperResultDao()->getResult($id);
 
-        $fields['usedTime'] = $usedTime;
+        $fields['usedTime'] = $usedTime + $testPaperResult['usedTime'];
 
         $fields['updateTime'] = time();
 
@@ -886,13 +890,17 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createServiceException('试卷不存在');
         }
 
-        $userId = $this->getCurrentUser()->id;
+        $user = $this->getCurrentUser();
+        if ($user->isAdmin()) {
+            return $user['id'];
+        }
 
         if ($paper['targetType'] == 'course') {
             $course = $this->getCourseService()->getCourse($paper['targetId']);
 
-            if (in_array($userId, $course['teacherIds'])) {
-                return $userId;
+            // @todo: 这个是有问题的。
+            if (in_array($user['id'], $course['teacherIds'])) {
+                return $user['id'];
             }
         }
         return false;
@@ -936,7 +944,7 @@ class TestServiceImpl extends BaseService implements TestService
         $field['targetId']      = $target['1'];
         $field['targetType']    = $target['0'];
         $field['pattern']       = 'QuestionType';
-        $field['choiceMissScore'] = $testPaper['missScore'];
+        $field['choiceMissScore'] = array_key_exists('missScore', $testPaper) ? : $testPaper['choiceMissScore'];
         $field['metas']         = $metas;
         $field['description']   = empty($testPaper['description'])? '' :$testPaper['description'];
         $field['limitedTime']   = empty($testPaper['limitedTime'])? 0 :$testPaper['limitedTime'];

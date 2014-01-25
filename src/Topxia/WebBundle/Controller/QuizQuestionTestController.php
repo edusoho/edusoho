@@ -146,6 +146,11 @@ class QuizQuestionTestController extends BaseController
 			$testPaper['testPaperId'] = $testPaper['testPaperId'];
 			$testPaper['flag']        = 'reset';
 
+			$paper = $this->getTestService()->getTestPaper($testPaper['testPaperId']);
+			$testPaper = array_merge($paper, $testPaper);
+
+			$result = $this->getTestService()->createUpdateTestPaper($testPaper['testPaperId'], $testPaper);
+
 			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
         }
 
@@ -216,7 +221,12 @@ class QuizQuestionTestController extends BaseController
 
 			$items     = ArrayToolkit::index($this->getTestService()->findItemsByTestPaperId($testPaperId), 'questionId');
 		    $questions = ArrayToolkit::index($this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId')), 'id');
-		} else {
+		} elseif ($flag == 'reset') {
+
+			$parentTestPaper['courseId'] = $courseId;
+			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
+
+		}else {
 
 			$parentTestPaper['courseId'] = $courseId;
 			$questions = $this->getTestService()->buildTestPaper($this->getTestPaperBuilder(), $parentTestPaper, $testPaperId);
