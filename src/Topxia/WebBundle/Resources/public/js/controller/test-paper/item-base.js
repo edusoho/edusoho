@@ -26,6 +26,7 @@ define(function(require, exports, module) {
 		setup:function(){
 			this._initList();
 			this._initHandlebars();
+            this._initValidate();
 		},
 
 		menuTabShow: function(){
@@ -101,6 +102,18 @@ define(function(require, exports, module) {
         	var confirmTrTemplate = Handlebars.compile($('[data-role=confirm-tr-template]').html());
         	this.set('confirmTrTemplate', confirmTrTemplate);
 		},
+
+        _initValidate: function() {
+            $("#test-item-table").on('focusout', 'input[name="scores[]"]', function(){
+                var score = $(this).val();
+
+                if (!/^\d+$/.test(score)) {
+                    Notify.danger('分数输入不正确！');
+                }
+
+            });
+
+        },
 
 		_onChangeQuestionType: function	(questionType){
 
