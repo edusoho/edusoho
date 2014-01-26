@@ -830,6 +830,7 @@ class TestServiceImpl extends BaseService implements TestService
         $fields['usedTime'] = $usedTime + $testPaperResult['usedTime'];
         $fields['endTime'] = time();
         $fields['active'] = 1;
+        $fields['checkedTime'] = time();
 
         $this->getTestPaperResultDao()->updateResultActive($testPaperResult['testId'],$testPaperResult['userId']);
 
