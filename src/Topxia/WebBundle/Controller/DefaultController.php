@@ -1,6 +1,7 @@
 <?php
 
 namespace Topxia\WebBundle\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
@@ -9,11 +10,33 @@ use Topxia\Common\Paginator;
 class DefaultController extends BaseController
 {
 
-    public function indexAction ()
+    public function indexAction (Request $request)
     {
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
+
+        $mtookeen = $request->query->get('mu');
+        $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+
+        if (empty($mTookeenCookie)){           
+
+            if(!empty($mtookeen)){
+
+                $mysale = $this->getMySaleService()->getMySaleBymTookeen($mtookeen);
+
+                if(!empty( $mysale) and( $mysale['validTimeNum']>time() or empty( $mysale['validTimeNum']))){
+
+                    setcookie("mu",  $mtookeen, time()+3600*24*90,'/');
+
+                }
+
+               
+            }
+          
+        }
+
+
 
         $currentuser=$this->getCurrentUser();
         $userId=$currentuser['id'];
@@ -242,6 +265,11 @@ class DefaultController extends BaseController
     protected function getNavigationService()
     {
         return $this->getServiceKernel()->createService('Content.NavigationService');
+    }
+
+    protected function getMySaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.MySaleService');
     }
 
     protected function getBlockService()

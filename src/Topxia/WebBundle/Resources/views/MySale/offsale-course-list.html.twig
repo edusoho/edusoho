@@ -1,12 +1,12 @@
 {% extends 'TopxiaWebBundle:MySale:layout.html.twig' %}
 
 {% block title %}单品课程推广 - {{ parent() }}{% endblock %}
-{% set side_nav = 'course-list' %}
+{% set side_nav = 'offsale-course-list' %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-     可推广课程列表
+     可使用优惠码课程列表
   </div>
   <div class="panel-body">
 
@@ -50,9 +50,7 @@
           <td>{{course.saleValidTime|date('Y-n-d H:i') }}</td>
           <td>
                     
-          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 链接推广 </a>
-
-          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_offsale_apply', {id:course.id}) }}"> 优惠码推广 </a>        
+          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 申请优惠码 </a>        
           </td>
         </tr>
       {% else %}

@@ -1309,5 +1309,10 @@ mysale_web_link:
     defaults: {_controller:TopxiaWebBundle:MySale:webLink}
 
 mysale_offsale_apply:
-    pattern: /mysale/offsale/apply
+    pattern: /mysale/offsale/{id}/apply
     defaults: {_controller:TopxiaWebBundle:MySale:offsaleApply}
+
+
+mysale_offsale_list:
+    pattern: /mysale/offsale/list
+    defaults: {_controller:TopxiaWebBundle:MySale:offsaleList}

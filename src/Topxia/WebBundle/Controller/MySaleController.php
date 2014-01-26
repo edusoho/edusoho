@@ -143,7 +143,7 @@ class MySaleController extends BaseController
 
             $mysale['tUrl']=$webUrl.'?mu='.$mysale['mTookeen'];
 
-            $mysale['validTime']=0;
+            $mysale['validTime']=time()+time();
 
             $mysale['userId']=$user['id'];
           
@@ -203,6 +203,40 @@ class MySaleController extends BaseController
             'buyers' => $buyers,
             'paginator' => $paginator
         ));       
+    }
+
+
+     public function offsaleCourseListAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $sort  = 'recommended';
+
+        $conditions = array(
+            'status' => 'published',
+            'recommended' => ($sort == 'recommended') ? null : null
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions)
+            ,12
+        );
+
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions, $sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+ 
+       
+        return $this->render('TopxiaWebBundle:MySale:offsale-course-list.html.twig', array(
+            'courses'=>$courses,
+            'paginator' => $paginator
+        ));
+       
+       
     }
 
     private function getOrderService()

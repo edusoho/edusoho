@@ -57,7 +57,9 @@ class CourseOrderController extends BaseController
             'job'
         ));
 
-        $mTookeenCookie = isset($_COOKIE["mc".$courseId]) ?$_COOKIE["mc".$courseId] : null;
+        $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+
+        $mTookeenCookie = isset($_COOKIE["mc".$courseId]) ?$_COOKIE["mc".$courseId] : $mTookeenCookie;
 
         if (!empty($mTookeenCookie)){
           

@@ -127,8 +127,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     public function computeCommission($order,$mysale)
     {
 
-
-         if($mysale['prodType']=='course'){
+         if($mysale['prodType']=='course' or $mysale['prodType']=='web'){
 
             $commission['mysaleId']= $mysale['id'];
             $commission['mTookeen'] = $mysale['mTookeen'];
@@ -144,7 +143,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['note']='本人定单不能享受佣金收入';
 
 
-            }else if ($mysale['validTime']<time()){
+            }else if (!empty($mysale['validTime']) and $mysale['validTimeNum']<time()){
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
@@ -169,8 +168,6 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
             return $this->createCommission($commission);
            
-        }else if($mysale['prodType']=='web'){
-            
         }
        
     }

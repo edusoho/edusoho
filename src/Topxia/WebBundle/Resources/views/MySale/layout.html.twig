@@ -50,12 +50,16 @@
 
           <div class="list-group-block">
             <div class="list-group-panel">
-              <div class="list-group-heading">优惠码</div>
+              <div class="list-group-heading">推广访问流量</div>
               <ul class="list-group">
               
 
-                <a class="list-group-item {% if side_nav == 'offsale_apply' %}active{% endif %}" href="{{ path('mysale_offsale_apply') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
-                  优惠码申请
+                <a class="list-group-item {% if side_nav == 'offsale-course-list' %}active{% endif %}" href="{{ path('mysale_offsale_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                  邀请码日志
+                </a>
+
+                <a class="list-group-item {% if side_nav == 'offsale-course-list' %}active{% endif %}" href="{{ path('mysale_offsale_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                  推广链日志
                 </a>
 
               
