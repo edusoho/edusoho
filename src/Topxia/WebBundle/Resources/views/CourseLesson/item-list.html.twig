@@ -40,9 +40,6 @@
 	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
 		    	<a class="title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
 		    		{{ item.title }}
-		    		{% if item.quizNum > 0 %}
-				      <span class="plll glyphicon  glyphicon-ok-circle" title="测验">测验</span>
-				    {% endif %}
 				    {% if item.materialNum > 0 %}
 				      <span class="plll glyphicon  glyphicon-download" title="资料">资料</span>
 				    {% endif %}
