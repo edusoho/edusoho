@@ -23,6 +23,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         if ($question['parentId'] > 0) {
             $subCount = $this->getQuizQuestionDao()->findQuestionsCountByParentId($question['parentId']);
             $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+            $parent = $this->getQuizQuestionDao()->getQuestion($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['id'], array(
+                'targetType' => $parent['targetType'],
+                'targetId' => $parent['targetId']
+            ));
         }
 
         return $question;
