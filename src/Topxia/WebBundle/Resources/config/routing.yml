@@ -1292,27 +1292,30 @@ mysale:
     pattern: /mysale
     defaults: {_controller:TopxiaWebBundle:MySale:overview}
 
-mysale_course_list:
-    pattern: /mysale/course/list
-    defaults: {_controller:TopxiaWebBundle:MySale:courseList}
+mysale_link_course_list:
+    pattern: /mysale/link/course/list
+    defaults: {_controller:TopxiaWebBundle:MySale:linkCourseList}
 
-mysale_course_link:
-    pattern: /mysale/course/{id}/link
-    defaults: {_controller:TopxiaWebBundle:MySale:courseLink}
+mysale_link_course_link:
+    pattern: /mysale/link/course/{id}/link
+    defaults: {_controller:TopxiaWebBundle:MySale:linkCourseLink}
+
+mysale_link_course_reduce:
+    pattern: /mysale/link/course/{id}/reduce
+    defaults: {_controller:TopxiaWebBundle:MySale:linkCourseReduce}
+
+
+mysale_link_web_link:
+    pattern: /mysale/link/web/
+    defaults: {_controller:TopxiaWebBundle:MySale:linkWebLink}
+
+
+mysale_offsale_course_list:
+    pattern: /mysale/offsale/course/list
+    defaults: {_controller:TopxiaWebBundle:MySale:offsaleCourseList}
+
+
 
 mysale_commission_list:
     pattern: /mysale/commission/list
     defaults: {_controller:TopxiaWebBundle:MySale:commissionList}
-
-mysale_web_link:
-    pattern: /mysale/web/link
-    defaults: {_controller:TopxiaWebBundle:MySale:webLink}
-
-mysale_offsale_apply:
-    pattern: /mysale/offsale/{id}/apply
-    defaults: {_controller:TopxiaWebBundle:MySale:offsaleApply}
-
-
-mysale_offsale_list:
-    pattern: /mysale/offsale/list
-    defaults: {_controller:TopxiaWebBundle:MySale:offsaleList}

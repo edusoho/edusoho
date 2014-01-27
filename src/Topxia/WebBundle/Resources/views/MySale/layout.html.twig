@@ -32,15 +32,15 @@
 
           <div class="list-group-block">
             <div class="list-group-panel">
-              <div class="list-group-heading">营销推广</div>
+              <div class="list-group-heading">线上推广</div>
               <ul class="list-group">
               
-                <a class="list-group-item {% if side_nav == 'course-list' %}active{% endif %}" href="{{ path('mysale_course_list') }}"> <i class="glyphicon glyphicon-plus"></i>
-                  课程推广
+                <a class="list-group-item {% if side_nav == 'link-course-list' %}active{% endif %}" href="{{ path('mysale_link_course_list') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  课程链接推广
                 </a>
 
-                <a class="list-group-item {% if side_nav == 'web-link' %}active{% endif %}" href="{{ path('mysale_web_link') }}"> <i class="glyphicon glyphicon-plus"></i>
-                  网站推广
+                <a class="list-group-item {% if side_nav == 'link-web' %}active{% endif %}" href="{{ path('mysale_link_web_link') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  网站链接推广
                 </a>             
 
               </ul>
@@ -48,31 +48,24 @@
           </div>
           <!-- /list-group-block -->   
 
-          <div class="list-group-block">
-            <div class="list-group-panel">
-              <div class="list-group-heading">推广访问流量</div>
-              <ul class="list-group">
-              
+         <div class="list-group-block">
+           <div class="list-group-panel">
+             <div class="list-group-heading">线下推广</div>
+             <ul class="list-group">
 
-                <a class="list-group-item {% if side_nav == 'offsale-course-list' %}active{% endif %}" href="{{ path('mysale_offsale_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
-                  邀请码日志
-                </a>
+               <a class="list-group-item {% if side_nav == 'offsale-course-list' %}active{% endif %}" href="{{ path('mysale_offsale_course_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                 课程优惠码推广
+               </a>
 
-                <a class="list-group-item {% if side_nav == 'offsale-course-list' %}active{% endif %}" href="{{ path('mysale_offsale_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
-                  推广链日志
-                </a>
-
-              
-
-              </ul>
-            </div>
-          </div>
-          <!-- /list-group-block -->  
+              <a class="list-group-item {% if side_nav == 'offsale-web' %}active{% endif %}" href="{{ path('mysale_offsale_course_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
+                 网站优惠码推广
+               </a>
 
 
-
-         
-          <!-- /list-group-block -->          
+             </ul>
+           </div>
+         </div>
+         <!-- /list-group-block -->         
 
 
 

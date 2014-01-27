@@ -25,141 +25,6 @@ class MySaleController extends BaseController
         ));
 	}
 
-
-    public function courseListAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $sort  = 'recommended';
-
-        $conditions = array(
-            'status' => 'published',
-            'recommended' => ($sort == 'recommended') ? null : null
-        );
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
-            ,12
-        );
-
-
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions, $sort,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
- 
-       
-        return $this->render('TopxiaWebBundle:MySale:course-list.html.twig', array(
-            'courses'=>$courses,
-            'paginator' => $paginator
-        ));
-       
-       
-    }
-
-    public function courseLinkAction(Request $request,$id)
-    {
-        $user = $this->getCurrentUser();
-
-
-        $course = $this->getCourseService()->getCourse($id);
-
-
-        $mysale=$this->getMySaleService()->getMySaleByProdAndUser('course',$course['id'],$user['id']);
-
-
-        if(empty($mysale)){
-
-            $mysale=array();
-
-            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
-           
-
-            $mysale['adCommissionType']= $course['adCommissionType'];
-
-            $mysale['adCommission']= $course['adCommission'];
-           
-
-            $mysale['prodType']='course';
-            $mysale['prodId']=$course['id'];
-            $mysale['prodName']=$course['title'];
-
-            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
-
-
-            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
-
-            $mysale['validTime']=$course['saleValidTime'];
-
-            $mysale['userId']=$user['id'];
-          
-
-            $this->getMySaleService()->createMySale($mysale);
-
-        }
-
-
-       
-        return $this->render('TopxiaWebBundle:MySale:course-mysale-modal.html.twig', array(
-            'mysale'=>$mysale,
-            'user'=>$user            
-        ));
-       
-       
-    }
-
-    public function webLinkAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-
-        $prodType='web';
-        $prodId=987654321;
-        $prodName='网站推广';
-
-
-        $mysale=$this->getMySaleService()->getMySaleByProdAndUser($prodType,$prodId,$user['id']);
-
-
-        if(empty($mysale)){
-
-            $mysale=array();
-
-            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
-           
-
-            $mysale['adCommissionType']= 'ratio';
-
-            $mysale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
-           
-
-            $mysale['prodType']=$prodType;
-            $mysale['prodId']=$prodId;
-            $mysale['prodName']=$prodName;
-
-            $webUrl = $this->generateUrl('homepage',array(),true);
-
-            $mysale['tUrl']=$webUrl.'?mu='.$mysale['mTookeen'];
-
-            $mysale['validTime']=time()+time();
-
-            $mysale['userId']=$user['id'];
-          
-            $mysale = $this->getMySaleService()->createMySale($mysale);
-
-        }
-       
-        return $this->render('TopxiaWebBundle:MySale:web-link.html.twig', array(
-            'mysale'=>$mysale,
-            'user'=>$user            
-        ));
-       
-       
-    }
-
-
     public function commissionListAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -205,6 +70,141 @@ class MySaleController extends BaseController
         ));       
     }
 
+
+    public function linkCourseListAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $sort  = 'recommended';
+
+        $conditions = array(
+            'status' => 'published',
+            'recommended' => ($sort == 'recommended') ? null : null
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions)
+            ,12
+        );
+
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions, $sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+ 
+       
+        return $this->render('TopxiaWebBundle:MySale:link-course-list.html.twig', array(
+            'courses'=>$courses,
+            'paginator' => $paginator
+        ));
+       
+       
+    }
+
+    public function linkCourseLinkAction(Request $request,$id)
+    {
+        $user = $this->getCurrentUser();
+
+
+        $course = $this->getCourseService()->getCourse($id);
+
+
+        $mysale=$this->getMySaleService()->getMySaleByProdAndUser('course',$course['id'],$user['id']);
+
+
+        if(empty($mysale)){
+
+            $mysale=array();
+
+            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+           
+
+            $mysale['adCommissionType']= $course['adCommissionType'];
+
+            $mysale['adCommission']= $course['adCommission'];
+           
+
+            $mysale['prodType']='course';
+            $mysale['prodId']=$course['id'];
+            $mysale['prodName']=$course['title'];
+
+            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
+
+
+            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+
+            $mysale['validTime']=$course['saleValidTime'];
+
+            $mysale['userId']=$user['id'];
+          
+
+            $this->getMySaleService()->createMySale($mysale);
+
+        }
+
+
+       
+        return $this->render('TopxiaWebBundle:MySale:link-course-modal.html.twig', array(
+            'mysale'=>$mysale,
+            'user'=>$user            
+        ));
+       
+       
+    }
+
+    public function linkWebLinkAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+
+        $prodType='web';
+        $prodId=987654321;
+        $prodName='网站推广';
+
+
+        $mysale=$this->getMySaleService()->getMySaleByProdAndUser($prodType,$prodId,$user['id']);
+
+
+        if(empty($mysale)){
+
+            $mysale=array();
+
+            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+           
+
+            $mysale['adCommissionType']= 'ratio';
+
+            $mysale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
+           
+
+            $mysale['prodType']=$prodType;
+            $mysale['prodId']=$prodId;
+            $mysale['prodName']=$prodName;
+
+            $webUrl = $this->generateUrl('homepage',array(),true);
+
+            $mysale['tUrl']=$webUrl.'?mu='.$mysale['mTookeen'];
+
+            $mysale['validTime']=time()+time();
+
+            $mysale['userId']=$user['id'];
+          
+            $mysale = $this->getMySaleService()->createMySale($mysale);
+
+        }
+       
+        return $this->render('TopxiaWebBundle:MySale:link-web.html.twig', array(
+            'mysale'=>$mysale,
+            'user'=>$user            
+        ));
+       
+       
+    }
+
+    
 
      public function offsaleCourseListAction(Request $request)
     {

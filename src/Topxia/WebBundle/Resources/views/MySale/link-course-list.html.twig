@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:MySale:layout.html.twig' %}
 
 {% block title %}单品课程推广 - {{ parent() }}{% endblock %}
-{% set side_nav = 'course-list' %}
+{% set side_nav = 'link-course-list' %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
@@ -17,7 +17,7 @@
       <th>销量/热度</th>
       <th>价格(元)</th>
 
-      <th>佣金(元)</th>
+      <th>佣金</th>
       <th>有效期</th>
       <th>操作</th>
     </tr>
@@ -43,16 +43,16 @@
             {% elseif (course.adCommissionType=="ratio") %}
                 {{ course.adCommission }}%
             {% else %}
-               30%
+               30.00%
             {% endif %}
           </td>
 
           <td>{{course.saleValidTime|date('Y-n-d H:i') }}</td>
           <td>
                     
-          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_course_link', {id:course.id}) }}"> 链接推广 </a>
+          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_link', {id:course.id}) }}"> 推广链接 </a>
 
-          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_offsale_apply', {id:course.id}) }}"> 优惠码推广 </a>        
+          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_reduce', {id:course.id}) }}"> 促销让利 </a>        
           </td>
         </tr>
       {% else %}
