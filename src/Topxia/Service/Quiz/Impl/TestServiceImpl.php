@@ -415,8 +415,8 @@ class TestServiceImpl extends BaseService implements TestService
 
             if (in_array($question['type'], array('single_choice', 'choice'))){
 
-                foreach ($question['metas']['choices'] as $key => $choice) {
-                    $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
+                foreach ($question['metas']['choices'] as $k => $choice) {
+                    $question['choices'][$k] = array( 'content' => $choice, 'questionId' => $key);
                 }
             }
             unset($question);
