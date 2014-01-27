@@ -207,24 +207,6 @@ course_lesson_plugin_question_answer:
     pattern:  /lessonplugin/question/answer
     defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:answer }
 
-course_lesson_plugin_quiz_init:
-    pattern:  /lessonplugin/quiz/init/{courseId}/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:init }
-
-course_lesson_plugin_quiz_item_post:
-    pattern:  /lessonplugin/quiz/item/post/{quizId}/{quizItemId}
-    defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:postItem }
-    methods: [POST]
-
-course_lesson_plugin_quiz_check_result:
-    pattern:  /lessonplugin/quiz/check/result/{quizId}
-    defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:checkResult }
-    methods: [POST]
-
-course_lesson_plugin_quiz_start:
-    pattern:  /lessonplugin/quiz/start/{courseId}/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LessonQuizPlugin:start }
-
 course_lesson_plugin_material_init:
     pattern:  /lessonplugin/material/init
     defaults: { _controller: TopxiaWebBundle:LessonMaterialPlugin:init }
@@ -452,20 +434,6 @@ course_manage_lesson_publish:
 course_manage_lesson_unpublish:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
-    methods: [POST]
-
-course_manage_quiz:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/quiz
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:index }
-
-course_manage_quiz_item_save:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/quiz/saveitem
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:saveItem }
-    methods: [POST]
-
-course_manage_quiz_item_delete:
-    pattern: /course/{courseId}/manage/quiz/{itemId}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseQuizManage:deleteItem }
     methods: [POST]
 
 course_manage_quiz_question:
