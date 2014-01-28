@@ -110,7 +110,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if(!empty($order['mTookeen']))
         {
 
-            $linksale = $this->getMySaleService()->getMySaleBymTookeen($order['mTookeen']);
+            $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($order['mTookeen']);
 
             if(!empty($linksale)){
 

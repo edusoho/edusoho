@@ -65,9 +65,13 @@ class CourseStudentManageController extends BaseController
                 'payment' => 'none',
             );
 
-            if (!empty($_COOKIE["mc".$course['id']])){
-          
-                $formData['mTookeen'] = $_COOKIE["mc".$course['id']];
+            $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+
+            $mTookeenCookie = isset($_COOKIE["mc".$course['id']]) ?$_COOKIE["mc".$course['id']] : $mTookeenCookie;
+
+            if (!empty($mTookeenCookie)){
+              
+                 $formData['mTookeen'] = $mTookeenCookie;
 
             }
 

@@ -99,7 +99,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     public function createCommission($commission){
 
-        $commission = ArrayToolkit::parts($commission, array('id', 'mysaleId','mTookeen','buyerId','salerId', 'orderId', 'orderSn', 'orderPrice','commission','note', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
+        $commission = ArrayToolkit::parts($commission, array('id', 'saleType','saleId','saleTookeen','buyerId','salerId', 'orderId', 'orderSn', 'orderPrice','commission','note', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
 
         $commission['createdTime']=time();
 
@@ -124,39 +124,40 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     }
 
 
-    public function computeCommission($order,$mysale)
+    public function computeCommission($order,$linksale)
     {
 
-         if($mysale['prodType']=='course' or $mysale['prodType']=='web'){
+         if($linksale['prodType']=='course'){
 
-            $commission['mysaleId']= $mysale['id'];
-            $commission['mTookeen'] = $mysale['mTookeen'];
+            $commission['saleType']= $linksale['saleType'];
+            $commission['saleId']= $linksale['id'];
+            $commission['saleTookeen'] = $linksale['mTookeen'];
             $commission['buyerId'] = $order['userId'];
-            $commission['salerId'] = $mysale['userId'];
+            $commission['salerId'] = $linksale['partnerId'];
             $commission['orderId'] = $order['id'];
             $commission['orderSn'] = $order['sn'];
             $commission['orderPrice'] = $order['price'];
 
-            if($order['userId']==$mysale['userId']){
+            if($order['userId']==$linksale['partnerId']){
 
                  $commission['commission']=0;
                  $commission['note']='本人定单不能享受佣金收入';
 
 
-            }else if (!empty($mysale['validTime']) and $mysale['validTimeNum']<time()){
+            }else if (!empty($linksale['validTime']) and $linksale['validTimeNum']<time()){
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
 
             }else{
 
-                if($mysale['adCommissionType']=='ratio'){
+                if($linksale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= $mysale['adCommission']*$order['price']/100;   //30%
+                    $commission['commission']= $linksale['adCommission']*$order['price']/100;   
 
-                }else if ($mysale['adCommissionType']=='quota'){
+                }else if ($linksale['adCommissionType']=='quota'){
 
-                     $commission['commission']= $mysale['adCommission'];
+                     $commission['commission']= $linksale['adCommission'];
 
                 }else
                 {
