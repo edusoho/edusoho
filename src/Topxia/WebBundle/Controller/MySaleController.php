@@ -52,7 +52,7 @@ class MySaleController extends BaseController
 
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
 
-        $linksaleIds=ArrayToolkit::column($commissions,'mysaleId');
+        $linksaleIds=ArrayToolkit::column($commissions,'saleId');
 
         $linksales = $this->getLinkSaleService()->findLinkSalesByIds($linksaleIds);
 
@@ -126,7 +126,7 @@ class MySaleController extends BaseController
 
             $linksale['adCommission']= $course['adCommission'];
            
-
+            $linksale['saleType']='linksale-course';
             $linksale['prodType']='course';
             $linksale['prodId']=$course['id'];
             $linksale['prodName']=$course['title'];
@@ -138,7 +138,7 @@ class MySaleController extends BaseController
 
             $linksale['validTime']=$course['saleValidTime'];
 
-            $linksale['userId']=$user['id'];
+            $linksale['partnerId']=$user['id'];
           
 
             $this->getLinkSaleService()->createLinkSale($linksale);
@@ -169,31 +169,7 @@ class MySaleController extends BaseController
 
         if(empty($linksale)){
 
-            $linksale=array();
-
-            $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
-           
-
-            $linksale['adCommissionType']= $course['adCommissionType'];
-
-            $linksale['adCommission']= $course['adCommission'];
-           
-
-            $linksale['prodType']='course';
-            $linksale['prodId']=$course['id'];
-            $linksale['prodName']=$course['title'];
-
-            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
-
-
-            $linksale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$linksale['mTookeen'];
-
-            $linksale['validTime']=$course['saleValidTime'];
-
-            $linksale['userId']=$user['id'];
-          
-
-            $this->getLinkSaleService()->createLinkSale($linksale);
+            
 
         }
 
@@ -212,9 +188,9 @@ class MySaleController extends BaseController
         $user = $this->getCurrentUser();
 
 
-        $prodType='web';
-        $prodId=987654321;
-        $prodName='网站推广';
+        $prodType='course';
+        $prodId=0;
+        $prodName='所有课程';
 
 
         $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser($prodType,$prodId,$user['id']);
@@ -231,7 +207,7 @@ class MySaleController extends BaseController
 
             $linksale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
            
-
+            $linksale['saleType']='linksale-web';
             $linksale['prodType']=$prodType;
             $linksale['prodId']=$prodId;
             $linksale['prodName']=$prodName;
@@ -242,7 +218,7 @@ class MySaleController extends BaseController
 
             $linksale['validTime']=time()+time();
 
-            $linksale['userId']=$user['id'];
+            $linksale['partnerId']=$user['id'];
           
             $linksale = $this->getLinkSaleService()->createLinkSale($linksale);
 

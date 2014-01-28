@@ -109,7 +109,7 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 
     public function createLinkSale($mysale){
 
-        $mysale = ArrayToolkit::parts($mysale, array('id', 'prodType','prodId','prodName','adCommissionType','adCommission', 'mTookeen', 'tUrl', 'validTime', 'userId', 'updatedTime','createdTime', 'managerId'));
+        $mysale = ArrayToolkit::parts($mysale, array('id', 'saleType','prodType','prodId','prodName','adCommissionType','adCommission','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
 
         $mysale['createdTime']=time();
 

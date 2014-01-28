@@ -102,7 +102,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
     public function createOffSale($offsale){
 
-        $offsale = ArrayToolkit::parts($offsale, array('promoName', 'promoCode','reducePrice','prodType', 'prodName', 'prodId', 'reuse', 'valid', 'strvalidTime','validTime', 'createdTime', 'id'));
+        $offsale = ArrayToolkit::parts($offsale, array( 'id','saleType','prodType','prodId', 'prodName','promoName', 'promoCode','adCommissionType','adCommission','reduceType','reducePrice',  'strvalidTime','validTime', 'reuse', 'valid','partnerId','createdTime','managerId'));
 
         $offsale['createdTime']=time();
 
@@ -123,25 +123,33 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
             $offsetting['prodName'] = $course['title'];
+            $offsetting['saleType']='offsale-course';
         }
 
         if($offsetting['prodType']=='活动')
         {
             $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
             $offsetting['prodName'] = $activity['title'];
+            $offsetting['saleType']='offsale-activity';
         }
 
         for ($i = 1; $i<= $offsetting['promoNum']; $i++) {
 
+            $offsale['saleType'] = $offsetting['saleType'];
             $offsale['prodType'] = $offsetting['prodType'];
             $offsale['prodName'] = $offsetting['prodName'];
             $offsale['prodId']  = $offsetting['prodId'];
             $offsale['promoName'] = $offsetting['promoName'];
             $offsale['promoCode']= $this->generateOffSaleCode($offsetting['promoPrefix']);
+            $offsale['adCommissionType'] = $offsetting['adCommissionType'];
+            $offsale['adCommission'] = $offsetting['adCommission'];
+            $offsale['reduceType'] = $offsetting['reduceType'];
             $offsale['reducePrice'] = $offsetting['reducePrice'];
             $offsale['reuse']= $offsetting['reuse'];
             $offsale['valid']= '有效';
             $offsale['strvalidTime']= $offsetting['strvalidTime'];
+            $offsale['partnerId']= $offsetting['partnerId'];
+            $offsale['managerId']= $offsetting['managerId'];
            
             $this->createOffSale($offsale);        
         }

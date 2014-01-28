@@ -23,9 +23,9 @@ class DefaultController extends BaseController
 
             if(!empty($mtookeen)){
 
-                $mysale = $this->getMySaleService()->getMySaleBymTookeen($mtookeen);
+                $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($mtookeen);
 
-                if(!empty( $mysale) and( $mysale['validTimeNum']>time() or empty( $mysale['validTimeNum']))){
+                if(!empty( $linksale) and( $linksale['validTimeNum']>time() or empty( $linksale['validTimeNum']))){
 
                     setcookie("mu",  $mtookeen, time()+3600*24*90,'/');
 
@@ -267,9 +267,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Content.NavigationService');
     }
 
-    protected function getMySaleService()
+    protected function getLinkSaleService()
     {
-        return $this->getServiceKernel()->createService('Sale.MySaleService');
+        return $this->getServiceKernel()->createService('Sale.LinkSaleService');
     }
 
     protected function getBlockService()
