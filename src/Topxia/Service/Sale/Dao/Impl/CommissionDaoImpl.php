@@ -8,7 +8,7 @@ use Topxia\Service\Sale\Dao\CommissionDao;
 class CommissionDaoImpl extends BaseDao implements CommissionDao
 {
 
-    protected $table = 'mysale_commission';
+    protected $table = 'sale_commission';
 
     public function getCommission($id)
     {

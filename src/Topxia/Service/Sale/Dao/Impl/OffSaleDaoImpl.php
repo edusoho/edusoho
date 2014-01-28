@@ -8,7 +8,7 @@ use Topxia\Service\Sale\Dao\OffSaleDao;
 class OffSaleDaoImpl extends BaseDao implements OffSaleDao
 {
 
-    protected $table = 'offsale';
+    protected $table = 'sale_offsale';
 
     public function getOffSale($id)
     {
@@ -93,7 +93,7 @@ class OffSaleDaoImpl extends BaseDao implements OffSaleDao
        
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from(self::TABLENAME, 'offsale')
+            ->from(self::TABLENAME, 'sale_offsale')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
             ->andWhere('prodName LIKE :prodNameLike')

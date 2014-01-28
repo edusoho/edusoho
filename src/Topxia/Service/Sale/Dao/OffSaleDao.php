@@ -4,7 +4,7 @@ namespace Topxia\Service\Sale\Dao;
 
 interface OffSaleDao
 {
-	const TABLENAME = 'offsale';
+	const TABLENAME = 'sale_offsale';
 
     public function getOffSale($id);
 

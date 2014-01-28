@@ -144,11 +144,11 @@ class CourseController extends BaseController
 
             if(!empty($mtookeen)){
 
-                $mysale = $this->getMySaleService()->getMySaleBymTookeen($mtookeen);
+                $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($mtookeen);
 
               
 
-                if(!empty( $mysale) and $mysale['validTimeNum']>time()){
+                if(!empty( $linksale) and $linksale['validTimeNum']>time()){
 
                     if(empty($course['adCommissionDay'])){
                             $course['adCommissionDay'] = 7;
@@ -486,9 +486,9 @@ class CourseController extends BaseController
             ->getForm();
     }
 
-    private function getMySaleService()
+    private function getLinkSaleService()
     {
-        return $this->getServiceKernel()->createService('Sale.MySaleService');
+        return $this->getServiceKernel()->createService('Sale.LinkSaleService');
     }
 
     protected function getUserService()

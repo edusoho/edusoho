@@ -110,11 +110,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         if(!empty($order['mTookeen']))
         {
 
-            $mysale = $this->getMySaleService()->getMySaleBymTookeen($order['mTookeen']);
+            $linksale = $this->getMySaleService()->getMySaleBymTookeen($order['mTookeen']);
 
-            if(!empty($mysale)){
+            if(!empty($linksale)){
 
-                  $this->getCommissionService()->computeCommission($order,$mysale);
+                  $this->getCommissionService()->computeCommission($order,$linksale);
             }
         }
 
@@ -517,9 +517,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createService('Sale.CommissionService');
     }
 
-    private function getMySaleService()
+    private function getLinkSaleService()
     {
-        return $this->createService('Sale.MySaleService');
+        return $this->createService('Sale.LinkSaleService');
     }
 
     private function getOffSaleService()

@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:MySale:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Sale:layout.html.twig' %}
 
 {% block title %}收入明细 - {{ parent() }}{% endblock %}
 {% set side_nav = 'commission-list' %}
@@ -26,10 +26,10 @@
     <tbody>
       {% for commission in commissions %}
         {% set order = orders[commission.orderId] %}
-        {% set mysale = mysales[commission.mysaleId] %}
+        {% set linksale = linksales[commission.mysaleId] %}
         {% set buyer = buyers[commission.buyerId] %}
         <tr>
-          <td class="text-muted text-sm">定单号：{{commission.orderSn }}<br>{{mysale.prodName }}</td>
+          <td class="text-muted text-sm">定单号：{{commission.orderSn }}<br>{{linksale.prodName }}</td>
           <td class="text-muted text-sm">{{commission.orderPrice }}<br>{{dict_text('orderStatus:html', order.status) }}</td>
           <td>{{commission.paidTime|date('Y-n-d H:i') }}</td>
           <td>{{commission.commission }}</td>

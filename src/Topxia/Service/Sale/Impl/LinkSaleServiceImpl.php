@@ -2,43 +2,43 @@
 namespace Topxia\Service\Sale\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Sale\MySaleService;
+use Topxia\Service\Sale\LinkSaleService;
 use Topxia\Common\ArrayToolkit;
 
-class MySaleServiceImpl extends BaseService implements MySaleService
+class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 {
 
-    public function findMySalesByIds(array $ids)
+    public function findLinkSalesByIds(array $ids)
     {
-        $mysales =  MySaleSerialize::unserializes(
-             $this->getMySaleDao()->findMySalesByIds($ids)
+        $mysales =  LinkSaleSerialize::unserializes(
+             $this->getLinkSaleDao()->findLinkSalesByIds($ids)
         );
 
         return ArrayToolkit::index($mysales, 'id');
     }
 
-    public function getMySale($id)
+    public function getLinkSale($id)
     {
-        return MySaleSerialize::unserialize($this->getMySaleDao()->getMySale($id));
+        return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getLinkSale($id));
     }
 
 
-    public function getMySaleByProdAndUser($prodType,$prodId,$userId){
+    public function getLinkSaleByProdAndUser($prodType,$prodId,$userId){
 
-        return MySaleSerialize::unserialize($this->getMySaleDao()->getMySaleByProdAndUser($prodType,$prodId,$userId));
+        return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getLinkSaleByProdAndUser($prodType,$prodId,$userId));
 
     }
 
 
-    public function getMySaleBymTookeen($mTookeen)
+    public function getLinkSaleBymTookeen($mTookeen)
     {
-        return MySaleSerialize::unserialize($this->getMySaleDao()->getMySaleBymTookeen($mTookeen));
+        return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getLinkSaleBymTookeen($mTookeen));
     }
 
 
-    public function searchMySales($conditions, $sort = 'latest', $start, $limit)
+    public function searchLinkSales($conditions, $sort = 'latest', $start, $limit)
     {
-        $conditions = $this->_prepareMySaleConditions($conditions);
+        $conditions = $this->_prepareLinkSaleConditions($conditions);
         if ($sort == 'popular') {
             $orderBy =  array('hitNum', 'DESC');
         } else if ($sort == 'recommended') {
@@ -47,17 +47,17 @@ class MySaleServiceImpl extends BaseService implements MySaleService
             $orderBy = array('createdTime', 'DESC');
         }
         
-        return MySaleSerialize::unserializes($this->getMySaleDao()->searchMySales($conditions, $orderBy, $start, $limit));
+        return LinkSaleSerialize::unserializes($this->getLinkSaleDao()->searchLinkSales($conditions, $orderBy, $start, $limit));
     }
 
 
-    public function searchMySaleCount($conditions)
+    public function searchLinkSaleCount($conditions)
     {
-        $conditions = $this->_prepareMySaleConditions($conditions);
-        return $this->getMySaleDao()->searchMySaleCount($conditions);
+        $conditions = $this->_prepareLinkSaleConditions($conditions);
+        return $this->getLinkSaleDao()->searchLinkSaleCount($conditions);
     }
 
-    private function _prepareMySaleConditions($conditions)
+    private function _prepareLinkSaleConditions($conditions)
     {
         $conditions = array_filter($conditions);
         if (isset($conditions['date'])) {
@@ -107,28 +107,28 @@ class MySaleServiceImpl extends BaseService implements MySaleService
     }
 
 
-    public function createMySale($mysale){
+    public function createLinkSale($mysale){
 
         $mysale = ArrayToolkit::parts($mysale, array('id', 'prodType','prodId','prodName','adCommissionType','adCommission', 'mTookeen', 'tUrl', 'validTime', 'userId', 'updatedTime','createdTime', 'managerId'));
 
         $mysale['createdTime']=time();
 
-        $mysale = $this->getMySaleDao()->addMySale(MySaleSerialize::serialize($mysale));
+        $mysale = $this->getLinkSaleDao()->addLinkSale(LinkSaleSerialize::serialize($mysale));
 
-        return $this->getMySale($mysale['id']);
+        return $this->getLinkSale($mysale['id']);
 
     }
 
 
-    public function deleteMySales(array $ids)
+    public function deleteLinkSales(array $ids)
     {
         foreach ($ids as $id) {
-            $this->getMySaleDao()->deleteMySale($id);
+            $this->getLinkSaleDao()->deleteLinkSale($id);
         }
     }
 
 
-    public function generateMySaleTookeen($tookeenPrefix='')
+    public function generateLinkSaleTookeen($tookeenPrefix='')
     {
         return  date('YmdHis', time()).$tookeenPrefix.$this->generateChars(24);
     }
@@ -149,9 +149,9 @@ class MySaleServiceImpl extends BaseService implements MySaleService
         return $password;  
     }
 
-    private function getMySaleDao()
+    private function getLinkSaleDao()
     {
-        return $this->createDao('Sale.MySaleDao');
+        return $this->createDao('Sale.LinkSaleDao');
     }
 
     private function getActivityService()
@@ -188,7 +188,7 @@ class MySaleServiceImpl extends BaseService implements MySaleService
 }
 
 
-class MySaleSerialize
+class LinkSaleSerialize
 {
 
      //将php对象变成数据库字段。。。数组变为以|连接的字符串,时间字符串变成时间戳数字。。。。
@@ -228,7 +228,7 @@ class MySaleSerialize
     public static function unserializes(array $mysales)
     {
         return array_map(function($mysale) {
-            return MySaleSerialize::unserialize($mysale);
+            return LinkSaleSerialize::unserialize($mysale);
         }, $mysales);
     }
 }

@@ -3,20 +3,20 @@ namespace Topxia\Service\Sale\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 
-use Topxia\Service\Sale\Dao\MySaleDao;
+use Topxia\Service\Sale\Dao\LinkSaleDao;
 
-class MySaleDaoImpl extends BaseDao implements MySaleDao
+class LinkSaleDaoImpl extends BaseDao implements LinkSaleDao
 {
 
-    protected $table = 'mysale';
+    protected $table = 'sale_linksale';
 
-    public function getMySale($id)
+    public function getLinkSale($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findMySalesByIds(array $ids)
+    public function findLinkSalesByIds(array $ids)
     {
         if(empty($ids)){
             return array();
@@ -26,14 +26,14 @@ class MySaleDaoImpl extends BaseDao implements MySaleDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function getMySaleByProdAndUser($prodType,$prodId,$userId)
+    public function getLinkSaleByProdAndUser($prodType,$prodId,$userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE prodType = ? and prodId=? and userId=? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE prodType = ? and prodId=? and partnerId=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($prodType,$prodId,$userId)) ? : null;
     }
 
 
-    public function searchMySales($conditions, $orderBy, $start, $limit)
+    public function searchLinkSales($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -44,35 +44,35 @@ class MySaleDaoImpl extends BaseDao implements MySaleDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function searchMySaleCount($conditions)
+    public function searchLinkSaleCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addMySale($mysale)
+    public function addLinkSale($linksale)
     {
-        $affected = $this->getConnection()->insert($this->table, $mysale);
+        $affected = $this->getConnection()->insert($this->table, $linksale);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert  mysale error.');
+            throw $this->createDaoException('Insert  linksale error.');
         }
-        return $this->getMySale($this->getConnection()->lastInsertId());
+        return $this->getLinkSale($this->getConnection()->lastInsertId());
     }
 
-    public function updateMySale($id, $mysale)
+    public function updateLinkSale($id, $linksale)
     {
-        $this->getConnection()->update($this->table, $mysale, array('id' => $id));
-        return $this->getMySale($id);
+        $this->getConnection()->update($this->table, $linksale, array('id' => $id));
+        return $this->getLinkSale($id);
     }
 
-    public function deleteMySale($id)
+    public function deleteLinkSale($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
 
-    public function getMySaleBymTookeen($mTookeen)
+    public function getLinkSaleBymTookeen($mTookeen)
     {
         $sql = "SELECT * FROM {$this->table} WHERE mTookeen = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($mTookeen)) ? : null;
@@ -93,12 +93,12 @@ class MySaleDaoImpl extends BaseDao implements MySaleDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from(self::TABLENAME, 'mysale')
+            ->from(self::TABLENAME, 'sale_linksale')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
             ->andWhere('prodName LIKE :prodNameLike')
             ->andWhere('mTookeen LIKE :mTookeenLike')
-            ->andWhere('userId = :userId')
+            ->andWhere('partnerId = :partnerId')
             ->andWhere('managerId = :managerId')
             ->andWhere('validTime >= :startTimeGreaterThan')
             ->andWhere('validTime < :startTimeLessThan');

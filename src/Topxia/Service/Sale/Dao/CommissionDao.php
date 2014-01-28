@@ -4,7 +4,7 @@ namespace Topxia\Service\Sale\Dao;
 
 interface CommissionDao
 {
-	const TABLENAME = 'mysale_commission';
+	const TABLENAME = 'sale_commission';
 
     public function getCommission($id);
 

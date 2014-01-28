@@ -20,7 +20,7 @@ class MySaleController extends BaseController
 		$user = $this->getCurrentUser();
 
        
-        return $this->render('TopxiaWebBundle:MySale:overview.html.twig', array(
+        return $this->render('TopxiaWebBundle:Sale:overview.html.twig', array(
           
         ));
 	}
@@ -52,19 +52,19 @@ class MySaleController extends BaseController
 
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
 
-        $mysaleIds=ArrayToolkit::column($commissions,'mysaleId');
+        $linksaleIds=ArrayToolkit::column($commissions,'mysaleId');
 
-        $mysales = $this->getMySaleService()->findMySalesByIds($mysaleIds);
+        $linksales = $this->getLinkSaleService()->findLinkSalesByIds($linksaleIds);
 
         $buyerIds=ArrayToolkit::column($commissions,'buyerId');
 
         $buyers = $this->getUserService()->findUsersByIds($buyerIds);
  
        
-        return $this->render('TopxiaWebBundle:MySale:commission-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:Sale:commission-list.html.twig', array(
             'commissions'=>$commissions,
             'orders' => $orders,
-            'mysales' => $mysales,
+            'linksales' => $linksales,
             'buyers' => $buyers,
             'paginator' => $paginator
         ));       
@@ -96,7 +96,7 @@ class MySaleController extends BaseController
         );
  
        
-        return $this->render('TopxiaWebBundle:MySale:link-course-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:Sale:link-course-list.html.twig', array(
             'courses'=>$courses,
             'paginator' => $paginator
         ));
@@ -112,43 +112,43 @@ class MySaleController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
 
-        $mysale=$this->getMySaleService()->getMySaleByProdAndUser('course',$course['id'],$user['id']);
+        $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser('course',$course['id'],$user['id']);
 
 
-        if(empty($mysale)){
+        if(empty($linksale)){
 
-            $mysale=array();
+            $linksale=array();
 
-            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+            $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
            
 
-            $mysale['adCommissionType']= $course['adCommissionType'];
+            $linksale['adCommissionType']= $course['adCommissionType'];
 
-            $mysale['adCommission']= $course['adCommission'];
+            $linksale['adCommission']= $course['adCommission'];
            
 
-            $mysale['prodType']='course';
-            $mysale['prodId']=$course['id'];
-            $mysale['prodName']=$course['title'];
+            $linksale['prodType']='course';
+            $linksale['prodId']=$course['id'];
+            $linksale['prodName']=$course['title'];
 
             $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
 
 
-            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+            $linksale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$linksale['mTookeen'];
 
-            $mysale['validTime']=$course['saleValidTime'];
+            $linksale['validTime']=$course['saleValidTime'];
 
-            $mysale['userId']=$user['id'];
+            $linksale['userId']=$user['id'];
           
 
-            $this->getMySaleService()->createMySale($mysale);
+            $this->getLinkSaleService()->createLinkSale($linksale);
 
         }
 
 
        
-        return $this->render('TopxiaWebBundle:MySale:link-course-modal.html.twig', array(
-            'mysale'=>$mysale,
+        return $this->render('TopxiaWebBundle:Sale:link-course-modal.html.twig', array(
+            'linksale'=>$linksale,
             'user'=>$user            
         ));
        
@@ -164,43 +164,43 @@ class MySaleController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
 
-        $mysale=$this->getMySaleService()->getMySaleByProdAndUser('course',$course['id'],$user['id']);
+        $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser('course',$course['id'],$user['id']);
 
 
-        if(empty($mysale)){
+        if(empty($linksale)){
 
-            $mysale=array();
+            $linksale=array();
 
-            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+            $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
            
 
-            $mysale['adCommissionType']= $course['adCommissionType'];
+            $linksale['adCommissionType']= $course['adCommissionType'];
 
-            $mysale['adCommission']= $course['adCommission'];
+            $linksale['adCommission']= $course['adCommission'];
            
 
-            $mysale['prodType']='course';
-            $mysale['prodId']=$course['id'];
-            $mysale['prodName']=$course['title'];
+            $linksale['prodType']='course';
+            $linksale['prodId']=$course['id'];
+            $linksale['prodName']=$course['title'];
 
             $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
 
 
-            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+            $linksale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$linksale['mTookeen'];
 
-            $mysale['validTime']=$course['saleValidTime'];
+            $linksale['validTime']=$course['saleValidTime'];
 
-            $mysale['userId']=$user['id'];
+            $linksale['userId']=$user['id'];
           
 
-            $this->getMySaleService()->createMySale($mysale);
+            $this->getLinkSaleService()->createLinkSale($linksale);
 
         }
 
 
        
-        return $this->render('TopxiaWebBundle:MySale:link-course-reduce.html.twig', array(
-            'mysale'=>$mysale,
+        return $this->render('TopxiaWebBundle:Sale:link-course-reduce.html.twig', array(
+            'linksale'=>$linksale,
             'user'=>$user            
         ));
        
@@ -217,39 +217,39 @@ class MySaleController extends BaseController
         $prodName='网站推广';
 
 
-        $mysale=$this->getMySaleService()->getMySaleByProdAndUser($prodType,$prodId,$user['id']);
+        $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser($prodType,$prodId,$user['id']);
 
 
-        if(empty($mysale)){
+        if(empty($linksale)){
 
-            $mysale=array();
+            $linksale=array();
 
-            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+            $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
            
 
-            $mysale['adCommissionType']= 'ratio';
+            $linksale['adCommissionType']= 'ratio';
 
-            $mysale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
+            $linksale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
            
 
-            $mysale['prodType']=$prodType;
-            $mysale['prodId']=$prodId;
-            $mysale['prodName']=$prodName;
+            $linksale['prodType']=$prodType;
+            $linksale['prodId']=$prodId;
+            $linksale['prodName']=$prodName;
 
             $webUrl = $this->generateUrl('homepage',array(),true);
 
-            $mysale['tUrl']=$webUrl.'?mu='.$mysale['mTookeen'];
+            $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
 
-            $mysale['validTime']=time()+time();
+            $linksale['validTime']=time()+time();
 
-            $mysale['userId']=$user['id'];
+            $linksale['userId']=$user['id'];
           
-            $mysale = $this->getMySaleService()->createMySale($mysale);
+            $linksale = $this->getLinkSaleService()->createLinkSale($linksale);
 
         }
        
-        return $this->render('TopxiaWebBundle:MySale:link-web.html.twig', array(
-            'mysale'=>$mysale,
+        return $this->render('TopxiaWebBundle:Sale:link-web.html.twig', array(
+            'linksale'=>$linksale,
             'user'=>$user            
         ));
        
@@ -283,7 +283,7 @@ class MySaleController extends BaseController
         );
  
        
-        return $this->render('TopxiaWebBundle:MySale:offsale-course-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:Sale:offsale-course-list.html.twig', array(
             'courses'=>$courses,
             'paginator' => $paginator
         ));
@@ -301,9 +301,9 @@ class MySaleController extends BaseController
         return $this->getServiceKernel()->createService('Sale.CommissionService');
     }
      
-    protected function getMySaleService()
+    protected function getLinkSaleService()
     {
-        return $this->getServiceKernel()->createService('Sale.MySaleService');
+        return $this->getServiceKernel()->createService('Sale.LinkSaleService');
     }
   
 
