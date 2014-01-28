@@ -321,3 +321,11 @@
 	vertical-align: middle !important;
 }
 
+.text-break{
+	word-wrap:break-word; 
+	overflow:hidden;
+	word-break:break-all;
+
+}
+
+

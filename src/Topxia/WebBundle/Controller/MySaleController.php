@@ -56,6 +56,10 @@ class MySaleController extends BaseController
 
         $linksales = $this->getLinkSaleService()->findLinkSalesByIds($linksaleIds);
 
+        $offsaleIds=ArrayToolkit::column($commissions,'saleId');
+
+        $offsales = $this->getOffSaleService()->findOffSalesByIds($offsaleIds);
+
         $buyerIds=ArrayToolkit::column($commissions,'buyerId');
 
         $buyers = $this->getUserService()->findUsersByIds($buyerIds);
@@ -65,6 +69,7 @@ class MySaleController extends BaseController
             'commissions'=>$commissions,
             'orders' => $orders,
             'linksales' => $linksales,
+            'offsales' => $offsales,
             'buyers' => $buyers,
             'paginator' => $paginator
         ));       
@@ -281,7 +286,12 @@ class MySaleController extends BaseController
     {
         return $this->getServiceKernel()->createService('Sale.LinkSaleService');
     }
-  
+
+    protected function getOffSaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.OffSaleService');
+    }
+    
 
     protected function getFileService()
     {

@@ -15,22 +15,22 @@
     <tr>
      
       
-      <th>日期</th>
-      <th>本笔佣金(元)</th>
+      <th  width="10%">日期</th>
+      <th>佣金(元)</th>
       <th>状态</th>
 
       <th>备注</th>
-      <th>所属推广</th>        
+      <th width="30%">所属推广</th>       
       
-       <th>成交定单</th>
-       <th>定单成交价(元)</th>
-      
+       <th width="27%">所属定单</th>
     </tr>
     </thead>
     <tbody>
       {% for commission in commissions %}
         {% set order = orders[commission.orderId] %}
-        {% set linksale = linksales[commission.saleId] %}
+
+      
+       
         {% set buyer = buyers[commission.buyerId] %}
         <tr>
          
@@ -39,9 +39,18 @@
           <td>￥{{commission.commission }}</td>
           <td>{{ dict_text('commissionStatus:html', commission.status) }}</td>
           <td>{{commission.note }}</td>
-          <td class="text-muted text-sm">{{commission.saleType }}</td>
-          <td class="text-muted text-sm">定单号：{{commission.orderSn }}<br>{{linksale.prodName }}</td>
-          <td class="text-muted text-sm">￥{{commission.orderPrice }}<br>{{dict_text('orderStatus:html', order.status) }}</td>
+          <td class="text-muted text-sm text-break">
+            {% if commission.saleType=='linksale-course' %}
+               课程链接推广:
+               {% set linksale = linksales[commission.saleId] %}
+                <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a>
+            {% endif %}
+
+          </td>
+          <td class="text-muted text-sm">定单号：{{commission.orderSn }}  
+            ￥{{commission.orderPrice }}  {{dict_text('orderStatus:html', order.status) }}<br>{{linksale.prodName }}
+          </td>
+         
         </tr>
       {% else %}
         <tr><td colspan="7">无数据</td></tr>
