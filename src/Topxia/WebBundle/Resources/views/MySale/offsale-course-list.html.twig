@@ -14,11 +14,12 @@
     <thead>
     <tr>
       <th width="30%">课程名称</th>
-      <th>销量/热度</th>
-      <th>价格(元)</th>
+      <th>销量/浏览量</th>
+      <th>单价</th>
 
-      <th>佣金(元)</th>
-      <th>有效期</th>
+      <th>佣金比率</th>
+      <th>佣金</th>
+     
       <th>操作</th>
     </tr>
     </thead>
@@ -35,24 +36,34 @@
 
           </td>
           <td>{{ course.studentNum }}/{{ course.hitNum }}</td>
-          <td>{{ course.price }}</td>
+          <td>￥{{ course.price|number_format(2, '.', ',')  }}</td>
           
           <td>
             {% if(course.adCommissionType=='quota') %}
-                {{course.adCommission}}
+                {{course.adCommission/course.price*100|number_format(2, '.', ',') }}%
             {% elseif (course.adCommissionType=="ratio") %}
-                {{ course.adCommission }}%
+                {{ course.adCommission|number_format(2, '.', ',')  }}%
             {% else %}
-               30%
+               30.00%
             {% endif %}
           </td>
 
-          <td>{{course.saleValidTime|date('Y-n-d H:i') }}</td>
+          <td>￥
+             {% if(course.adCommissionType=='quota') %}
+                {{course.adCommission|number_format(2, '.', ',') }}
+            {% elseif (course.adCommissionType=="ratio") %}
+                {{ course.adCommission/100*course.price|number_format(2, '.', ',')   }}
+            {% else %}
+               {{0.3*course.price|number_format(2, '.',',') }}
+            {% endif %}
+
+          </td>
           <td>
                     
-          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_link', {id:course.id}) }}"> 优惠码管理 </a>
+          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_link', {id:course.id}) }}"> 获取推广邀请码 </a>
 
-
+          <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_link', {id:course.id}) }}"> 设置促销让利 </a>
+      
           </td>
         </tr>
       {% else %}

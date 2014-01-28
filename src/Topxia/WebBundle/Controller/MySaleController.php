@@ -155,6 +155,58 @@ class MySaleController extends BaseController
        
     }
 
+
+    public function linkCourseReduceAction(Request $request,$id)
+    {
+        $user = $this->getCurrentUser();
+
+
+        $course = $this->getCourseService()->getCourse($id);
+
+
+        $mysale=$this->getMySaleService()->getMySaleByProdAndUser('course',$course['id'],$user['id']);
+
+
+        if(empty($mysale)){
+
+            $mysale=array();
+
+            $mysale['mTookeen'] = $this->getMySaleService()->generateMySaleTookeen();
+           
+
+            $mysale['adCommissionType']= $course['adCommissionType'];
+
+            $mysale['adCommission']= $course['adCommission'];
+           
+
+            $mysale['prodType']='course';
+            $mysale['prodId']=$course['id'];
+            $mysale['prodName']=$course['title'];
+
+            $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
+
+
+            $mysale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$mysale['mTookeen'];
+
+            $mysale['validTime']=$course['saleValidTime'];
+
+            $mysale['userId']=$user['id'];
+          
+
+            $this->getMySaleService()->createMySale($mysale);
+
+        }
+
+
+       
+        return $this->render('TopxiaWebBundle:MySale:link-course-reduce.html.twig', array(
+            'mysale'=>$mysale,
+            'user'=>$user            
+        ));
+       
+       
+    }
+
     public function linkWebLinkAction(Request $request)
     {
         $user = $this->getCurrentUser();
