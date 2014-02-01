@@ -436,51 +436,51 @@ course_manage_lesson_unpublish:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
     methods: [POST]
 
-course_manage_quiz_question:
+course_manage_question:
     pattern: /course/{courseId}/manage/question
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:index }
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:index }
 
-course_manage_quiz_question_create:
+course_manage_question_create:
     pattern: /course/{courseId}/manage/question/create/{type}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
 
-course_manage_quiz_question_upload:
+course_manage_question_upload:
     pattern: /course/{courseId}/manage/question/uploadfile/{type}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:uploadFile }
 
-course_manage_quiz_question_update:
+course_manage_question_update:
     pattern: /course/{courseId}/manage/question/edit/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:edit }
 
-course_manage_quiz_question_delete:
+course_manage_question_delete:
     pattern: /course/{courseId}/manage/question/delete/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:delete }
 
-course_manage_quiz_question_deletes:
-    pattern: /course/{courseId}/manage/question/deletes
+course_manage_question_deletes:
+    pattern: /course/{courseId}/manage/question/batch_delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deletes }
 
-course_manage_quiz_question_preview:
+course_manage_question_preview:
     pattern: /manage/question/preview/{id}
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:previewQuestion }
 
-course_manage_quiz_question_category:
+course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:category }
 
-course_manage_quiz_question_category_create:
+course_manage_question_category_create:
     pattern: /course/{courseId}/manage/question/category/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:createCategory }
 
-course_manage_quiz_question_category_edit:
+course_manage_question_category_edit:
     pattern: /course/{courseId}/manage/question/category/{categoryId}/edit
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:updateCategory }
 
-course_manage_quiz_question_category_delete:
+course_manage_question_category_delete:
     pattern: /course/{courseId}/manage/question/category/{categoryId}/delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:deleteCategory }
 
-course_manage_quiz_question_category_sort:
+course_manage_question_category_sort:
     pattern: /course/{courseId}/manage/question/categorys/sort
     defaults: { _controller: TopxiaWebBundle:QuizQuestion:sortCategories }
     methods: [POST]

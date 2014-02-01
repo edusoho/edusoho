@@ -14,7 +14,7 @@
 <div class="tab-content">
 
   <div class="tab-pane active" id="image">
-    <form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
+    <form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2  controls">
           <label for="uploadInput">上传图片</label>
@@ -34,7 +34,7 @@
   </div>
 
   <div class="tab-pane" id="video">
-    <form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
+    <form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2  controls">
           <label for="uploadInput">上传视频</label>
@@ -54,7 +54,7 @@
   </div>
   
   <div class="tab-pane" id="audio">
-    <form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_quiz_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
+    <form id="quiz-upload-form" class="form-horizontal" action="{{ path('course_manage_question_upload', {courseId:course.id, type:type}) }}" enctype="multipart/form-data" method="post">
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2  controls">
           <label for="uploadInput">上传音频</label>

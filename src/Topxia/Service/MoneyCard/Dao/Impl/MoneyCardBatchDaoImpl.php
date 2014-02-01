@@ -16,7 +16,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
 
 	public function searchBatchs($conditions, $orderBy, $start, $limit)
     {
-        $orderBy = $this->checkOrderByField($orderBy, array('id','createdTime'));
+        $this->checkOrderBy($orderBy, array('id','createdTime'));
 
         $this->filterStartLimit($start, $limit);
         $builder = $this->createBatchQueryBuilder($conditions)

@@ -12,6 +12,8 @@ abstract class BaseDao
 
     protected $primaryKey = 'id';
 
+    private static $cachedObjects = array();
+
     protected function wave ($id, $fields) 
     {
         $sql = "UPDATE {$this->getTable()} SET ";
@@ -55,24 +57,31 @@ abstract class BaseDao
         return new DynamicQueryBuilder($this->getConnection(), $conditions);
     }
 
+    protected function createSerializer()
+    {
+        if (!isset(self::$cachedObjects['field_serializer'])) {
+            self::$cachedObjects['field_serializer'] = new FieldSerializer();
+        }
+        return self::$cachedObjects['field_serializer'];
+    }
+
     protected function filterStartLimit(&$start, &$limit)
     {
        $start = (int) $start;
        $limit = (int) $limit; 
     }
 
-    protected function checkOrderByField (array $orderBy, array $allowedOrderByFields)
+    protected function checkOrderBy (array $orderBy, array $allowedOrderByFields)
     {
-        if (count($orderBy) != 2) {
-            throw new \Exception("参数错误", 1);
+        if (empty($orderBy[0]) or empty($orderBy[1])) {
+            throw new \RuntimeException('orderBy参数不正确');
         }
         
-        $orderBy = array_values($orderBy);
         if (!in_array($orderBy[0], $allowedOrderByFields)){
-            throw new \Exception("参数错误", 1);
+            throw new \RuntimeException("不允许对{$orderBy[0]}字段进行排序", 1);
         }
         if (!in_array($orderBy[1], array('ASC','DESC'))){
-            throw new \Exception("参数错误", 1);
+            throw new \RuntimeException("orderBy排序方式错误", 1);
         }
 
         return $orderBy;

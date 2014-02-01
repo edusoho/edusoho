@@ -10,7 +10,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">题目类别管理
-  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_category_create', {courseId:course.id}) }}">添加类别</button>
+  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_question_category_create', {courseId:course.id}) }}">添加类别</button>
 
   </div>
   <div class="panel-body">
@@ -22,7 +22,7 @@
         <th width="20%">操作</th>
       </tr>
     </thead>
-    <tbody data-sort-url="{{ path('course_manage_quiz_question_category_sort',{courseId:course.id})}}" class="tbady-category table-bordered table-condensed">
+    <tbody data-sort-url="{{ path('course_manage_question_category_sort',{courseId:course.id})}}" class="tbady-category table-bordered table-condensed">
       {% for id, category in categorys %}
         {% include 'TopxiaWebBundle:QuizQuestionCategory:tr.html.twig' %}
       {% else %}

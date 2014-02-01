@@ -1,7 +1,7 @@
 <tr data-role='item'>
   <td><input value="{{item.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">{{ item.stem |fill_question_stem_text| plain_text(40) }}</a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:item.id}) }}">{{ item.stem |fill_question_stem_text| plain_text(40) }}</a>
     {% if item.type == 'material'%}<small class="text-muted">({{ item.subCount }}子题)</small>{% endif %}
   </td>
   <td>{{ dict('questionType')[item.type] }}</td>
@@ -21,14 +21,14 @@
   </td>
   <td>
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz_question_preview', {id:item.id}) }}">预览</a>
+      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_question_preview', {id:item.id}) }}">预览</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu pull-right">
         {% if item.type == 'material'%}
-          <li><a href="{{ path('course_manage_quiz_question',{courseId:course.id, parentId:item.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
+          <li><a href="{{ path('course_manage_question',{courseId:course.id, parentId:item.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
         {% endif %}
-        <li><a href="{{ path('course_manage_quiz_question_update', {courseId:course.id,id:item.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑</a></li>
-        <li><a href="javascript:" data-name='题目{% if item.type == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_quiz_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除</a></li>
+        <li><a href="{{ path('course_manage_question_update', {courseId:course.id,id:item.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑</a></li>
+        <li><a href="javascript:" data-name='题目{% if item.type == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_question_delete', {courseId:course.id, id:item.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除</a></li>
       </ul>
     </div>
   </td>

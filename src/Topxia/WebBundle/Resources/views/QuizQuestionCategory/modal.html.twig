@@ -5,9 +5,9 @@
 {% block body %}
 	<form id="category-form" class="form-horizontal" action="
 	{% if category %}
-	  {{ path('course_manage_quiz_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
+	  {{ path('course_manage_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
 	{% else %}
-	  {{ path('course_manage_quiz_question_category_create', {courseId:course.id}) }}
+	  {{ path('course_manage_question_category_create', {courseId:course.id}) }}
 	{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-name-field">名称</label>

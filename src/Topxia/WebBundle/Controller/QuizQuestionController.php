@@ -38,7 +38,7 @@ class QuizQuestionController extends BaseController
 			$question = $this->getQuestionService()->getQuestion($field['parentId']);
 
 			if (empty($question)){
-				return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId)));
+				return $this->redirect($this->generateUrl('course_manage_question',array('courseId' => $courseId)));
 			}
 
 			$conditions['parentId'] = $field['parentId'];
@@ -98,7 +98,7 @@ class QuizQuestionController extends BaseController
 		} else {
 			$parentQuestion = $this->getQuestionService()->getQuestion($parentId);
 			if (empty($parentQuestion)){
-				return $this->redirect($this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId)));
+				return $this->redirect($this->generateUrl('course_manage_question',array('courseId' => $courseId)));
 			}
 		}
 
@@ -125,7 +125,7 @@ class QuizQuestionController extends BaseController
 
 	        	$this->setFlashMessage('success', '题目添加成功，请继续添加！');
 
-	            return $this->redirect($this->generateUrl('course_manage_quiz_question_create',$default));
+	            return $this->redirect($this->generateUrl('course_manage_question_create',$default));
 
 	        } else if ($submission == 'submit'){
 
@@ -135,7 +135,7 @@ class QuizQuestionController extends BaseController
 					$parentId = $question['id'];
 				}
 
-	        	return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $parentId))));
+	        	return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question',array('courseId' => $courseId,'parentId' => $parentId))));
 	        }
         }
 
@@ -176,7 +176,7 @@ class QuizQuestionController extends BaseController
 
 	        $this->setFlashMessage('success', '题目修改成功！');
 
-            return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_quiz_question',array('courseId' => $courseId,'parentId' => $question['parentId']))));
+            return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question',array('courseId' => $courseId,'parentId' => $question['parentId']))));
         }
 
         $question['choices'] = array();
