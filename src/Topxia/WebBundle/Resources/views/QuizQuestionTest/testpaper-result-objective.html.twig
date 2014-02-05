@@ -10,7 +10,7 @@
       <thead>
           <th></th>
           {% for type in paper.metas.question_type_seq %}
-            <th>{{ dict('questionBlockType')[type] }} <small class="text-muted">({{ accuracy[type].all }}道)</small></th>
+            <th>{{ dict('questionType')[type] }} <small class="text-muted">({{ accuracy[type].all }}道)</small></th>
           {% endfor %}
       </thead>
       <tbody>

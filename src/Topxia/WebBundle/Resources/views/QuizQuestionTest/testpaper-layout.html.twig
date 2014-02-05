@@ -22,7 +22,7 @@
       <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
         <ul class="nav nav navbar-nav nav-pills">
           {% for type in paper.metas.question_type_seq %}
-            <li><a href="#testpaper-questions-{{ type }}">{{dict('questionBlockType')[type]}}</a></li>
+            <li><a href="#testpaper-questions-{{ type }}">{{dict('questionType')[type]}}</a></li>
           {% endfor %}
         </ul>
       </div>

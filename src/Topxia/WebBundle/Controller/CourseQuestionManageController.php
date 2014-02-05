@@ -40,7 +40,22 @@ class CourseQuestionManageController extends BaseController
             'users' => $users,
             'targets' => $targets,
             'paginator' => $paginator,
-            'questionCount' => $questionCount
+            'parentId' => 0,
+        ));
+    }
+
+    public function createAction(Request $request, $courseId, $type)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $question = array(
+            'id' => 0,
+            'type' => $type,
+        );
+
+        return $this->render("TopxiaWebBundle:CourseQuestionManage:question-form-{$type}.html.twig", array(
+            'course' => $course,
+            'question' => $question,
         ));
     }
 

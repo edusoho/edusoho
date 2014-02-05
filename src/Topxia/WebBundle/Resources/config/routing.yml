@@ -442,7 +442,7 @@ course_manage_question:
 
 course_manage_question_create:
     pattern: /course/{courseId}/manage/question/create/{type}
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:create }
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:create }
 
 course_manage_question_upload:
     pattern: /course/{courseId}/manage/question/uploadfile/{type}
