@@ -53,10 +53,54 @@ class CourseQuestionManageController extends BaseController
             'type' => $type,
         );
 
+        if ($request->getMethod() == 'POST') {
+            $question = $request->request->all();
+            $question = $this->getQuestionService()->createQuestion($question);
+
+        }
+
         return $this->render("TopxiaWebBundle:CourseQuestionManage:question-form-{$type}.html.twig", array(
             'course' => $course,
             'question' => $question,
+            'targetsChoices' => $this->getQuestionTargetChoices($course),
+            // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
         ));
+    }
+
+    public function updateAction(Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $question = $this->getQuestionService()->getQuestion($id);
+
+
+        if ($request->getMethod() == 'POST') {
+            $question = $request->request->all();
+            $question = $this->getQuestionService()->updateQuestion($id, $question);
+        }
+
+        return $this->render("TopxiaWebBundle:CourseQuestionManage:question-form-{$question['type']}.html.twig", array(
+            'course' => $course,
+            'question' => $question,
+            'targetsChoices' => $this->getQuestionTargetChoices($course),
+            // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
+        ));
+
+
+    }
+
+    private function getQuestionTargetChoices($course)
+    {
+        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+        $choices = array();
+        $choices["course-{$course['id']}"] = '本课程';
+        foreach ($lessons as $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+        }
+        return $choices;
     }
 
     private function getCourseService()

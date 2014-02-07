@@ -11,6 +11,10 @@ interface QuestionService
 
     public function searchQuestionsCount($conditions);
 
+    public function createQuestion($fields);
+
+    public function updateQuestion($id, $fields);
+
     /**
      * 判断题目的回答是否正确
      *

@@ -17,7 +17,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $question = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-        return $this->createSerializer()->serialize($question, $this->serializeFields);
+        return $this->createSerializer()->unserialize($question, $this->serializeFields);
     }
 
     public function findQuestionsByIds(array $ids)
@@ -49,14 +49,20 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addQuestion($question)
+    public function addQuestion($fields)
     {
-
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->table, $fields);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert question error.');
+        }
+        return $this->getQuestion($this->getConnection()->lastInsertId());
     }
 
-    public function updateQuestion($id, $question)
+    public function updateQuestion($id, $fields)
     {
-
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getQuestion($id);
     }
 
     private function _createSearchQueryBuilder($conditions)

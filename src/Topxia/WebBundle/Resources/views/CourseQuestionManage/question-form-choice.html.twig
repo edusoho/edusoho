@@ -9,7 +9,6 @@
        <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">新增选项</button>
     </div>
   </div>
-  <input type="hidden" name="answers" />
   {% if question.choices|default(null) %}
     <script type="text/plain" data-role="choices-data">{{ question.choices|json_encode|raw}}</script>
   {% endif %}
