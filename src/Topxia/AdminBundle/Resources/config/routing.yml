@@ -630,6 +630,11 @@ admin_sale_offsale_invalid_batch:
     defaults: { _controller: TopxiaAdminBundle:OffSale:batchInvalid }
     methods: [POST]
 
+admin_sale_offsale_parnter_check:
+    pattern: admin/sale/offsale/partner/check
+    defaults: {_controller: TopxiaAdminBundle:OffSale:partnerCheck }
+    methods:  [POST]
+
 admin_money_card:
     pattern: /money_card
     defaults: {_controller: TopxiaAdminBundle:MoneyCard:index }

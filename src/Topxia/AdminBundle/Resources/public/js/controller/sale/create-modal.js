@@ -15,6 +15,36 @@ define(function(require, exports, module) {
             autoSubmit: true
         });
 
+        if ($('#offsale-form').find('input[name="partnerName"]')){
+            validator.addItem({
+                element: '[name="partnerName"]',
+                required: true,
+                rule: 'remotePost',
+                hideMessage:function(msg,ele,eve){               
+                    if(null != msg ){
+                        $("#parterName_info").html(msg);
+                        $("#parterName_info").addClass('text-color-green');
+                    }
+                }          
+             });
+        }
+
+        if ($('#offsale-form').find('input[name="prodId"]')){
+
+            validator.addItem({
+                element: '[name="prodId"]',         
+                required: true,
+                rule: 'integer remotePost',
+                hideMessage:function(msg,ele,eve){
+                   
+                    if(null != msg ){
+                        $("#prod_info").html(msg);
+                        $("#prod_info").addClass('text-color-green');
+                    }
+                }
+            });
+        }
+
         validator.addItem({
             element: '[name="promoNum"]',
             required: true,
@@ -24,27 +54,15 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="reducePrice"]',
             required: true,
-            rule: 'integer  min{min:1} max{max:100}'
+            rule: 'integer  min{min:0} max{max:100}'
         });
 
          validator.addItem({
             element: '[name="adCommission"]',
             required: true,
-            rule: 'integer  min{min:1} max{max:100}'
+            rule: 'integer  min{min:0} max{max:100}'
         });
-
-        validator.addItem({
-            element: '[name="prodId"]',         
-            required: true,
-            rule: 'integer remotePost',
-            hideMessage:function(msg,ele,eve){
-               
-                if(null != msg ){
-                    $("#prod_info").html(msg);
-                    $("#prod_info").addClass('text-color-green');
-                }
-            }
-        });
+       
 
         validator.addItem({
             element: '[name="strvalidTime"]',         

@@ -23,7 +23,7 @@ class OffSaleController extends BaseController
         $orders = $this->getOrderService()->findOrdersByPromoCodes($codes);
 
         $userIds = ArrayToolkit::column($orders,'userId');
-
+ 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
@@ -44,12 +44,13 @@ class OffSaleController extends BaseController
     public function createAction(Request $request)
     {
         if('POST' == $request->getMethod()){
+
             $offsetting = $request->request->all();
 
             $data = $request->request->all();
-            $user = $this->getUserService()->getUserByNickname($data['partnerNname']);
+            $user = $this->getUserService()->getUserByNickname($data['partnerName']);
             if (empty($user)) {
-                throw $this->createNotFoundException("用户{$data['partnerNname']}不存在");
+                throw $this->createNotFoundException("用户{$data['partnerName']}不存在");
             }
 
 
@@ -66,7 +67,7 @@ class OffSaleController extends BaseController
             'reducePrice'=>0,
             'promoNum'=>1,
             'promoPrefix'=>'',
-            'prodType'=>'课程',
+            'prodType'=>'course',
             'prodId'=>'',
             'strvalidTime'=>'',
             'reuse'=>'不可以'
@@ -88,6 +89,23 @@ class OffSaleController extends BaseController
         }
          
         return $this->createJsonResponse($response);
+    }
+
+    public function partnerCheckAction(Request $request){
+
+            $offsetting = $request->request->all();
+
+            $data = $request->request->all();
+            $user = $this->getUserService()->getUserByNickname($data['partnerName']);
+            if (empty($user)) {
+
+                 $response = array('success' => false, 'message' => "用户{$data['partnerName']}不存在");
+             
+            }
+
+             return $this->createJsonResponse($response);
+
+
     }
 
     public function batchDeleteAction(Request $request)

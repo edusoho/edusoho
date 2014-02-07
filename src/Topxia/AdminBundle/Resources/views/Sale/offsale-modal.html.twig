@@ -12,9 +12,9 @@
     </div>
     <div class="col-md-6 controls">
       <div  class="input-group">
-      <input class="form-control" type="text" id="partnerName" value="{{offsetting.partnerName}}" name="partnerName">
+      <input class="form-control" type="text" id="partnerName" value="{{offsetting.partnerName}}" name="partnerName"  data-url="{{ path('admin_sale_offsale_parnter_check') }}"  data-fid="offsale-form"  >
       </div>
-      <div class="help-block">请输入系统中已注册的渠道用户昵称</div>
+      <div class="help-block"  id="parterName_info">请输入系统中已注册的渠道用户昵称</div>
     </div>
   </div>
 
