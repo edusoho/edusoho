@@ -17,9 +17,37 @@ interface TestpaperService
 
     public function deleteTestpaperByIds(array $ids);
 
-    public function buildTestpaper($testpaper, $builder, $builderOptions);
+    public function buildTestpaper($id, $builder, $builderOptions);
 
-    public function rebuildTestpaper($testpaperId, $builder, $builderOptions);
+    public function rebuildTestpaper($id, $builder, $builderOptions);
+
+    /**
+     * 开始做试卷
+     * 
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function startTestpaper($id);
+
+    public function finishTestpaper($resultId);
+
+    /**
+     * [submitTestpaperAnswer description]
+     * @param  [type] $testpaperId [description]
+     * @param  [type] $answers     [description]
+     * @return [type]              [description]
+     */
+    public function submitTestpaperAnswer($resultId, $answers);
+
+    public function reviewTestpaper($resultId, $items, $remark = null);
+
+    /**
+     * 获取试卷的所有题目
+     * 
+     * @param  integer $id 试卷ID
+     * @return array     试卷所有题目，包含item对应的question的信息
+     */
+    public function getTestpaperItems($testpaperId);
 
     public function addItem($testpaperId, $questionId, $afterItemId = null);
 
