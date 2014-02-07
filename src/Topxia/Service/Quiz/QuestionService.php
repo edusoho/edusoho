@@ -20,20 +20,6 @@ interface QuestionService
     public function findQuestionsByIds(array $ids);
 
     /**
-     *  quiz_question_category
-     */
-    
-    public function getCategory($id);
-
-    public function createCategory($category);
-
-	public function updateCategory($categoryId, $category);		
-
-    public function findCategorysByCourseIds(array $id);
-
-    public function sortCategories($courseId, array $categoryIds);
-
-    /**
     *  
     **/
     public function findQuestionsByTypeAndTypeIds($type, $ids);

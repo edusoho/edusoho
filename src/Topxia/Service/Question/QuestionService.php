@@ -43,4 +43,16 @@ interface QuestionService
      * @return array 回答结果
      */
     public function judgeQuestions(array $answers, $refreshStats = false);
+
+    public function getCategory($id);
+
+    public function findCategoriesByTarget($target, $start, $limit);
+
+    public function createCategory($fields);
+
+    public function updateCategory($id, $fields);
+
+    public function deleteCategory($id);
+
+    public function sortCategories($target, array $sortedIds);
 }

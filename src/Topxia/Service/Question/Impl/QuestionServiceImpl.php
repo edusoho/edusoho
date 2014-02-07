@@ -64,9 +64,50 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         
     }
 
-    private function getQuestionDao()
+    public function getCategory($id)
     {
-        return $this->createDao('Question.QuestionDao');
+        return $this->getCategoryDao()->getCategoryDao($id);
+    }
+
+    public function findCategoriesByTarget($target, $start, $limit)
+    {
+        return $this->getCategoryDao()->findCategoriesByTarget($target, $start, $limit);
+    }
+
+    public function createCategory($fields)
+    {
+        return $this->getCategoryDao()->createCategory($fields);
+    }
+
+    public function updateCategory($id, $fields)
+    {
+        return $this->getCategoryDao()->updateCategory($id, $fields);
+    }
+
+    public function deleteCategory($id)
+    {
+        return $this->getCategoryDao()->deleteCategory($id);
+    }
+
+    public function sortCategories($target, array $sortedIds)
+    {
+        $categories = $this->findCategoriesByTarget($target);
+        $categories = ArrayToolkit::index($categories,'id');
+
+        $seq = 1;
+        foreach ($sortedIds as $categoryId) {
+            if (array_key_exists($categoryId, $categories)) {
+                continue;
+            }
+
+            if ($seq == $categories[$categoryId]['seq']) {
+                continue;
+            }
+
+            $fields = array('seq' => $seq);
+            $this->getCategoryDao()->updateCategory($categoryId, $fields);
+            $seq ++;
+        }
     }
 
     protected function createQuestionFilter($type)
@@ -85,6 +126,16 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
         $class = __NAMESPACE__  . "\\Filter\\{$name}Filter";
         return new $class();
+    }
+
+    private function getQuestionDao()
+    {
+        return $this->createDao('Question.QuestionDao');
+    }
+
+    private function getCategoryDao()
+    {
+        return $this->createDao('Question.CategoryDao');
     }
 
 }
