@@ -32,7 +32,7 @@ class MySaleController extends BaseController
         $sort  = 'latest';
 
         $conditions = array(
-           
+            'salerId'=>$user['id']           
         );
 
         $paginator = new Paginator(

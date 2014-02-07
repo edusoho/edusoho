@@ -146,7 +146,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             $offsale['reduceType'] = $offsetting['reduceType'];
             $offsale['reducePrice'] = $offsetting['reducePrice'];
             $offsale['reuse']= $offsetting['reuse'];
-            $offsale['valid']= '有效';
+            $offsale['valid']= $offsetting['valid'];
             $offsale['strvalidTime']= $offsetting['strvalidTime'];
             $offsale['partnerId']= $offsetting['partnerId'];
             $offsale['managerId']= $offsetting['managerId'];
@@ -170,7 +170,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             return array('hasProd'=>'false',"prodName"=>"此商品不存在");
         }
 
-        if($offsetting['prodType']=='课程')
+        if($offsetting['prodType']=='course')
         {
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
@@ -178,12 +178,12 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
                  return array('hasProd'=>'false',"prodName"=>"此商品不存在");
             }else {
 
-                 return array('hasProd'=>'true',"prodName"=>$course['title']);
+                 return array('hasProd'=>'true',"prodName"=>$course['title'].',￥'.$course['price']);
             }
            
         }
        
-        if($offsetting['prodType']=='活动')
+        if($offsetting['prodType']=='activity')
         {
             $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
             if(empty($activity)){

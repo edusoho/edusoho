@@ -22,14 +22,12 @@
       <th>备注</th>
       <th width="30%">所属推广</th>       
       
-       <th width="27%">所属定单</th>
+      <th width="27%">所属定单</th>
     </tr>
     </thead>
     <tbody>
       {% for commission in commissions %}
-        {% set order = orders[commission.orderId] %}
-
-      
+        {% set order = orders[commission.orderId] %}      
        
         {% set buyer = buyers[commission.buyerId] %}
         <tr>

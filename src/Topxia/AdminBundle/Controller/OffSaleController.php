@@ -30,12 +30,18 @@ class OffSaleController extends BaseController
         
         $orderss = $this->getOrderService()->findOrderssByPromoCodes($codes);
 
+
+        $partnerIds = ArrayToolkit::column($offsales,"partnerId");
+
+        $partners = $this->getUserService()->findUsersByIds($partnerIds);
+
         return $this->render('TopxiaAdminBundle:Sale:index.html.twig', array(
             'conditions' => $conditions,
             'offsales' => $offsales ,
             'orderss' => $orderss,
             'users' => $users,
             'profiles' => $profiles,
+            'partners'=> $partners,
             'paginator' => $paginator
         ));
 
@@ -47,11 +53,18 @@ class OffSaleController extends BaseController
 
             $offsetting = $request->request->all();
 
-            $data = $request->request->all();
-            $user = $this->getUserService()->getUserByNickname($data['partnerName']);
-            if (empty($user)) {
-                throw $this->createNotFoundException("用户{$data['partnerName']}不存在");
+            $user = $this->getCurrentUser();
+
+          
+            $partner = $this->getUserService()->getUserByNickname($offsetting['partnerName']);
+
+            if (empty($partner)) {
+                throw $this->createNotFoundException("用户{$offsetting['partnerName']}不存在");
             }
+
+            $offsetting['partnerId'] = $partner['id'];
+            $offsetting['managerId'] = $user['id'];
+
 
 
             $this->getOffSaleService()->createOffSales($offsetting);
@@ -79,31 +92,41 @@ class OffSaleController extends BaseController
     public function prodCheckAction(Request $request)
     {
         $offsetting =  $request->request->all();
+        
 
         $result = $this->getOffSaleService()->checkProd($offsetting);
 
         if ("true"==$result['hasProd']) {
             $response = array('success' => true, 'message' => $result['prodName']);
+             return $this->createJsonResponse($response);
         } else {
             $response = array('success' => false, 'message' => $result['prodName']);
+             return $this->createJsonResponse($response);
         }
          
-        return $this->createJsonResponse($response);
+       
     }
 
     public function partnerCheckAction(Request $request){
 
-            $offsetting = $request->request->all();
+        $offsetting = $request->request->all();
 
-            $data = $request->request->all();
-            $user = $this->getUserService()->getUserByNickname($data['partnerName']);
-            if (empty($user)) {
+      
+        $partner = $this->getUserService()->getUserByNickname($offsetting['partnerName']);
+        
+        if (empty($partner)) {
 
-                 $response = array('success' => false, 'message' => "用户{$data['partnerName']}不存在");
-             
-            }
+             $response = array('success' => false, 'message' => "用户{$offsetting['partnerName']}不存在");
+            return $this->createJsonResponse($response);
+         
+        }else{
 
-             return $this->createJsonResponse($response);
+            $response = array('success' => true, 'message' => "用户{$offsetting['partnerName']}存在");
+            return $this->createJsonResponse($response);
+
+        }
+
+        
 
 
     }
