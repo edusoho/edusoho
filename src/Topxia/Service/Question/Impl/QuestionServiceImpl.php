@@ -7,6 +7,8 @@ use Topxia\Common\ArrayToolkit;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
+    protected $cachedJudger = array();
+
     protected $supportedQuestionTypes = array('choice','single_choice', 'fill', 'material', 'essay', 'determine');
 
     public function getQuestion($id)
@@ -56,12 +58,28 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function judgeQuestion($id, $answer, $refreshStats = false)
     {
-
+        $results = $this->judgeQuestions(array($id => $answers), $refreshStats);
+        return $results[$id];
     }
 
     public function judgeQuestions(array $answers, $refreshStats = false)
     {
-        
+        $questionIds = array_keys($answers);
+        $questions = $this->getQuestionDao()->findQuestionsByIds($questionIds);
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $results = array();
+        foreach ($answers as $id => $answer) {
+            if (empty($questions[$id])) {
+                $results[$id] = array('status' => 'error', 'reason' => 'notFound');
+            } else {
+                $question = $questions['id'];
+                $judger = $this->createQuestionJudger($question['type']);
+                $results[$id] = $judger->judge($question, $answer);
+            }
+        }
+
+        return $results;
     }
 
     public function getCategory($id)
@@ -127,6 +145,32 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $class = __NAMESPACE__  . "\\Filter\\{$name}Filter";
         return new $class();
     }
+
+    protected function createQuestionJudger($type)
+    {
+        if (empty($this->cachedJudger[$type])) {
+            switch ($type) {
+                case 'choice':
+                case 'single_choice':
+                    $name = 'Choice';
+                    break;
+                case 'fill':
+                    $name = 'Fill';
+                    break;
+                case 'determine':
+                    $name = 'Determine';
+                    break;
+                default:
+                    $name = 'Not';
+                    break;
+            }
+            $class = __NAMESPACE__  . "\\Judger\\{$name}Judger";
+            $this->cachedJudger[$type] = new $class();
+        }
+
+        return $this->cachedJudger[$type];
+    }
+
 
     private function getQuestionDao()
     {
