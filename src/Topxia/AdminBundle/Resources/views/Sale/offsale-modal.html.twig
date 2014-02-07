@@ -7,67 +7,75 @@
 <form class="form-horizontal" id="offsale-form"  action="{{ path('admin_sale_offsale_create') }}" method="post">
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="promoName">优惠码描述</label>
+    <div class="col-md-4 control-label">
+      <label for="promoPrefix">所属渠道</label>
     </div>
-    <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="promoName" value="{{offsetting.promoName}}" name="promoName" required/>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="reducePrice">优惠幅度（元）</label>
-    </div>
-    <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="reducePrice" value="{{offsetting.reducePrice}}" name="reducePrice" required/>
+    <div class="col-md-6 controls">
+      <div  class="input-group">
+      <input class="form-control" type="text" id="partnerName" value="{{offsetting.partnerName}}" name="partnerName">
+      </div>
+      <div class="help-block">请输入系统中已注册的渠道用户昵称</div>
     </div>
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-4 control-label">
+      <label for="adCommission">佣金比例（百分比）</label>
+    </div>
+    <div class="col-md-6 controls">
+      <div class="input-group">
+         <input class="form-control" type="text" id="adCommission" value="{{offsetting.adCommission}}" name="adCommission" required/><span class="input-group-addon">%</span>
+      </div>
+     
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-4 control-label">
+      <label for="reducePrice">优惠幅度（百分比）</label>
+    </div>
+    <div class="col-md-6 controls">
+      <div  class="input-group">
+        <input class="form-control" type="text" id="reducePrice" value="{{offsetting.reducePrice}}" name="reducePrice" required/><span class="input-group-addon">%</span>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-4 control-label">
       <label for="promoNum">生成数量</label>
     </div>
-    <div class="col-md-8 controls">
+    <div class="col-md-6 controls">
       <input class="form-control" type="text" id="promoNum" value="{{offsetting.promoNum}}" name="promoNum" required/>
     </div>
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-4 control-label">
       <label for="promoPrefix">编码前缀</label>
     </div>
-    <div class="col-md-8 controls">
+    <div class="col-md-6 controls">
       <input class="form-control" type="text" id="promoPrefix" value="{{offsetting.promoPrefix}}" name="promoPrefix"></div>
   </div>
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="prodType">商品类型</label>
-    </div>
-    <div class="col-md-8 controls">
-      <select name="prodType" id="prodType">
-        <option value='课程' selected>课程</option>
-        <option value'活动'>活动</option>
-      </select>
-    </div>
-  </div>
+
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="prodId">商品编号</label>
+    <div class="col-md-4 control-label">
+      <label for="prodId">课程编号</label>
     </div>
-    <div class="col-md-8 controls">
+    <div class="col-md-6 controls">
       <input class="form-control" type="text" id="prodId" value="{{offsetting.prodId}}" name="prodId" data-url="{{ path('admin_sale_offsale_prod_check')}}"  data-fid="offsale-form" required/>
-      <p class="help-block" id="prod_info">请输入商品编号</p>
+      <p class="help-block" id="prod_info">请输入课程编号</p>
     </div>
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-4 control-label">
       <label for="strvalidTime">有效期</label>
     </div>
-    <div class="col-md-8 controls">
+    <div class="col-md-6 controls">
       <div class="input-group">
         <input class="form-control" type="text" id="strvalidTime" value="{{offsetting.strvalidTime}}" name="strvalidTime" >
          <p class="help-block" id="prod_info">格式：yyyy-mm-dd hh:mm 空表示无限制期限</p>     
@@ -76,16 +84,14 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="reuse">可多次使用</label>
+    <div class="col-md-4 control-label">
+      <label for="promoName">备注描述</label>
     </div>
-    <div class="col-md-8 controls">
-      <select name="reuse" id="reuse">
-        <option value='不可以' selected>不可以</option>
-        <option value'可以'>可以</option>
-      </select>
+    <div class="col-md-6 controls">
+      <input class="form-control" type="text" id="promoName" value="{{offsetting.promoName}}" name="promoName" required/>
     </div>
   </div>
+
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></form>
 

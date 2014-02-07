@@ -24,7 +24,13 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="reducePrice"]',
             required: true,
-            rule: 'currency  min{min:1}'
+            rule: 'integer  min{min:1} max{max:100}'
+        });
+
+         validator.addItem({
+            element: '[name="adCommission"]',
+            required: true,
+            rule: 'integer  min{min:1} max{max:100}'
         });
 
         validator.addItem({

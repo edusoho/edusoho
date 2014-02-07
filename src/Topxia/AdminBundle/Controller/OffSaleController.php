@@ -46,6 +46,13 @@ class OffSaleController extends BaseController
         if('POST' == $request->getMethod()){
             $offsetting = $request->request->all();
 
+            $data = $request->request->all();
+            $user = $this->getUserService()->getUserByNickname($data['partnerNname']);
+            if (empty($user)) {
+                throw $this->createNotFoundException("用户{$data['partnerNname']}不存在");
+            }
+
+
             $this->getOffSaleService()->createOffSales($offsetting);
             
             return $this->redirect($this->generateUrl('admin_sale')); 
@@ -53,7 +60,9 @@ class OffSaleController extends BaseController
 
         $offsetting = array(
             'id'=>0,
+            'partnerName'=>'',
             'promoName'=>'',
+            'adCommission'=>0,
             'reducePrice'=>0,
             'promoNum'=>1,
             'promoPrefix'=>'',

@@ -35,7 +35,7 @@
         <tr>
          
           
-          <td>{{commission.paidTime|date('Y-n-d H:i') }}</td>
+          <td>{{commission.paidTime|date('Y-n-d') }}</td>
           <td>￥{{commission.commission }}</td>
           <td>{{ dict_text('commissionStatus:html', commission.status) }}</td>
           <td>{{commission.note }}</td>
@@ -44,11 +44,16 @@
                课程链接推广:
                {% set linksale = linksales[commission.saleId] %}
                 <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a>
+            {% elseif commission.saleType=='linksale-web' %}
+                网站链接推广:
+               {% set linksale = linksales[commission.saleId] %}
+                <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a>
+
             {% endif %}
 
           </td>
-          <td class="text-muted text-sm">定单号：{{commission.orderSn }}  
-            ￥{{commission.orderPrice }}  {{dict_text('orderStatus:html', order.status) }}<br>{{linksale.prodName }}
+          <td class="text-muted text-sm">定单名称：{{order.title }}<br>  定单号：{{commission.orderSn }}<br>  
+            价格：￥{{commission.orderPrice }} &nbsp;&nbsp;   {{dict_text('orderStatus:html', order.status) }}
           </td>
          
         </tr>

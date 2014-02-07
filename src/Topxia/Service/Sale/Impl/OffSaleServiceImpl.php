@@ -118,7 +118,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             return 0;
         }
 
-        if($offsetting['prodType']=='课程')
+        if($offsetting['prodType']=='course')
         {
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
@@ -126,7 +126,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             $offsetting['saleType']='offsale-course';
         }
 
-        if($offsetting['prodType']=='活动')
+        if($offsetting['prodType']=='activity')
         {
             $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
             $offsetting['prodName'] = $activity['title'];
