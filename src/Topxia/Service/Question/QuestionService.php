@@ -20,7 +20,7 @@ interface QuestionService
      *
      * 回答结果分4种情况：
      *   完全正确： 返回 array('status' => 'right')
-     *   部分正确： 返回 array('status' => 'partRight', 'percentage' => '50%')，percentage为正确的比例
+     *   部分正确： 返回 array('status' => 'partRight', 'percentage' => '50')，percentage为正确的比例
      *   错误： 返回 array('status' => 'wrong')
      *   未回答： 返回 array('status' => 'noAnswer')
      *   无法判断，题目不存在： 返回 array('status' => 'error', 'reason' => 'notFound')，题目不存在reason为notFound，无法判断reason为unableJudge

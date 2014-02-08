@@ -70,10 +70,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $results = array();
         foreach ($answers as $id => $answer) {
-            if (empty($questions[$id])) {
+            if (empty($answer)) {
+                $results[$id] = array('status' => 'noAnswer');
+            } elseif (empty($questions[$id])) {
                 $results[$id] = array('status' => 'error', 'reason' => 'notFound');
             } else {
-                $question = $questions['id'];
+                $question = $questions[$id];
                 $judger = $this->createQuestionJudger($question['type']);
                 $results[$id] = $judger->judge($question, $answer);
             }
