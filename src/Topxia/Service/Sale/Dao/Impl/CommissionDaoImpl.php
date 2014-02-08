@@ -65,10 +65,10 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function getCommissionByOrder($order)
+    public function getCommissionsByOrder($order)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE orderId = ? and orderSn = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($order['id'],$order['sn'])) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE orderId = ? and orderSn = ? ";
+        return $this->getConnection()->fetchAll($sql, array($order['id'],$order['sn']));
     }
 
 
@@ -87,11 +87,12 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'mysale_commission')
-            ->andWhere('mysaleId = :mysaleId')
+            ->andWhere('saleId = :saleId')
             ->andWhere('buyerId = :buyerId')
+            ->andWhere('salerId = :salerId')
             ->andWhere('orderSnLike LIKE :orderSnLike')
             ->andWhere('mTookeen LIKE :mTookeenLike')
-            ->andWhere('userId = :userId')
+        
             ->andWhere('status = :status')
             ->andWhere('paidTime >= :startTimeGreaterThan')
             ->andWhere('paidTime < :startTimeLessThan');

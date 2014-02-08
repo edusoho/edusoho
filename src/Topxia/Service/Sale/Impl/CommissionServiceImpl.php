@@ -23,9 +23,9 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     }
 
 
-    public function getCommissionByOrder($order)
+    public function getCommissionsByOrder($order)
     {
-        return CommissionSerialize::unserialize($this->getCommissionDao()->getCommissionByOrder($order));
+        return CommissionSerialize::unserializes($this->getCommissionDao()->getCommissionsByOrder($order));
     }
 
 
@@ -124,7 +124,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     }
 
 
-    public function computeCommission($order,$linksale)
+    public function computeLinkSaleCommission($order,$linksale)
     {
 
          if($linksale['prodType']=='course'){
@@ -173,38 +173,86 @@ class CommissionServiceImpl extends BaseService implements CommissionService
        
     }
 
+     public function computeOffSaleCommission($order,$offsale)
+    {
+
+         if($offsale['prodType']=='course' or $offsale['prodType']=='课程'){
+
+            $commission['saleType']= empty($offsale['saleType'])?'offsale-course':$offsale['saleType'];
+            $commission['saleId']= $offsale['id'];
+            $commission['saleTookeen'] = $offsale['promoCode'];
+            $commission['buyerId'] = $order['userId'];
+            $commission['salerId'] = $offsale['partnerId'];
+            $commission['orderId'] = $order['id'];
+            $commission['orderSn'] = $order['sn'];
+            $commission['orderPrice'] = $order['price'];
+
+            if($order['userId']==$offsale['partnerId']){
+
+                 $commission['commission']=0;
+                 $commission['note']='本人定单不能享受佣金收入';
+
+
+            }else if (!empty($offsale['validTime']) and $offsale['validTimeNum']<time()){
+
+                 $commission['commission']=0;
+                 $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
+
+            }else{
+
+                if($offsale['adCommissionType']=='ratio'){
+
+                    $commission['commission']= $offsale['adCommission']*$order['price']/100;   
+
+                }else if ($offsale['adCommissionType']=='quota'){
+
+                     $commission['commission']= $offsale['adCommission'];
+
+                }else
+                {
+                    $commission['commission']=0;
+                }
+            }
+
+            $commission['status']='created';
+
+            return $this->createCommission($commission);
+           
+        }
+       
+    }
+
 
     public function confirmCommission($order)
     {
 
-        $commission = $this->getCommissionByOrder($order);
+        $commissions = $this->getCommissionsByOrder($order);
 
-        if(!empty($commission)){
+        foreach ($commissions as $commission ) {
 
-            $this->updateCommission($commission['id'], array(
-                    'status' => 'paid',
-                    'paidTime' => $order['paidTime'],
-                ));   
+            if(!empty($commission)){
+
+                $this->updateCommission($commission['id'], array(
+                        'status' => 'paid',
+                        'paidTime' => $order['paidTime'],
+                    ));   
+            }
+            
         }
-
          
     }
 
     public function frozenCommissionWithOrder($order)
     {
 
-        $commission = $this->getCommissionByOrder($order);
-
-        $this->frozenCommission($commission);
+        
 
     }
 
     public function unFrozenCommissionWithOrder($order)
     {
 
-        $commission = $this->getCommissionByOrder($order);
-
-        $this->frozenCommission($commission);
+      
 
     }
 

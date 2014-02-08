@@ -1312,6 +1312,10 @@ mysale_offsale_course_list:
     pattern: /mysale/offsale/course/list
     defaults: {_controller:TopxiaWebBundle:MySale:offsaleCourseList}
 
+mysale_offsale_course_code:
+    pattern: /mysale/offsale/course/{id}/code
+    defaults: {_controller:TopxiaWebBundle:MySale:offsaleCourseCode}
+
 
 
 mysale_commission_list:

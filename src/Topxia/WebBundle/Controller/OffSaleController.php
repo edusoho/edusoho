@@ -21,10 +21,17 @@ class OffSaleController extends BaseController
         
         $offsale = $this->getOffSaleService()->getOffSaleByCode($code);
 
+        $course = $this->getCourseService()->getCourse($order['courseId']);
+
         $result = $this->getOffSaleService()->isValiable($offsale,$courseId);
 
         if ("success" == $result) {
-            $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.$offsale['reducePrice'].'元！');
+            if($offsale['reduceType']=='ratio'){
+                 $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.($offsale['reducePrice']*$course['price']/100).'元,现在购买只需'.($course['price']-($offsale['reducePrice']*$course['price']/100)).'元！');
+             }else{
+                 $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.$offsale['reducePrice'].'元,现在购买只需'.($course['price']-$offsale['reducePrice']).'元！');
+             }
+           
         } else {
             $response = array('success' => false, 'message' => $result);
         }

@@ -71,6 +71,13 @@ class OffSaleDaoImpl extends BaseDao implements OffSaleDao
         return $this->getConnection()->fetchAssoc($sql, array($code)) ? : null;
     }
 
+    public function getOffSaleBySPPP($saleType,$partnerId,$prodType,$prodId){
+
+        $sql = "SELECT * FROM {$this->table} WHERE saleType = ?  and partnerId = ?  and prodType=? and prodId=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($saleType,$partnerId,$prodType,$prodId)) ? : null;
+        
+    }
+
 
     private function _createSearchQueryBuilder($conditions)
     {
