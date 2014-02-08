@@ -5,7 +5,7 @@
 {% block body %}
   <form id="category-form" class="form-horizontal" action="
   {% if category %}
-    {{ path('course_manage_question_category_edit', {courseId:course.id,categoryId:category.id}) }}
+    {{ path('course_manage_question_category_update', {courseId:course.id, id:category.id}) }}
   {% else %}
     {{ path('course_manage_question_category_create', {courseId:course.id}) }}
   {% endif %}" method="post">

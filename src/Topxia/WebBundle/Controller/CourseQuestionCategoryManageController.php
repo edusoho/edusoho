@@ -27,7 +27,6 @@ class CourseQuestionCategoryManageController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $field =$request->request->all();
-            $field['courseId'] = $courseId;
             $category = $this->getQuestionService()->createCategory($field);
 
             return $this->render('TopxiaWebBundle:CourseQuestionCategoryManage:tr.html.twig', array(
@@ -43,11 +42,10 @@ class CourseQuestionCategoryManageController extends BaseController
     public function updateAction(Request $request, $courseId, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $category = $this->getQuestionService()->getCategory($categoryId);
+        $category = $this->getQuestionService()->getCategory($id);
         if ($request->getMethod() == 'POST') {
             $field = $request->request->all();
-
-            $category = $this->getQuestionService()->updateCategory($categoryId, $field);
+            $category = $this->getQuestionService()->updateCategory($id, $field);
             return $this->render('TopxiaWebBundle:CourseQuestionCategoryManage:tr.html.twig', array(
                 'category' => $category,
                 'course' => $course,
@@ -62,19 +60,20 @@ class CourseQuestionCategoryManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $category = $this->getQuestionService()->getCategory($categoryId);
+        $category = $this->getQuestionService()->getCategory($id);
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
-        $this->getQuestionService()->deleteCategory($categoryId);
+
+        $this->getQuestionService()->deleteCategory($id);
         return $this->createJsonResponse(true);
     }
 
     public function sortAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
-        $this->getQuestionService()->sortCategories($course['id'], $request->request->get('ids'));
+        
+        $this->getQuestionService()->sortCategories("course-".$course['id'], $request->request->get('ids'));
         return $this->createJsonResponse(true);
     }
 
