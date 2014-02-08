@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}课程推广码{% endblock %}
+{% block body %}
+
+
+      <div class="row form-group">
+
+    	<div class="col-md-9">
+    		<textarea id="content" name="tUrl" class="form-control" rows="3">{{ offsale.promoCode }}</textarea>
+    	</div>
+    	<div class="col-md-3">
+    		<button id="copy-button" value="abc">点击复制该推广码</button>
+    		<div id="copy"></div>
+    	</div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+<div class="pull-right">
+ <script type="text/javascript">
+    app.load('mysale/course-link');
+  </script> 
+</div>
+{% endblock %}

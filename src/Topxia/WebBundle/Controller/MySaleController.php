@@ -272,6 +272,61 @@ class MySaleController extends BaseController
        
     }
 
+
+    public function offsaleCourseCodeAction(Request $request,$id)
+    {
+        $user = $this->getCurrentUser();
+
+
+        $course = $this->getCourseService()->getCourse($id);
+
+
+        $offsale=$this->getOffSaleService()->getOffSaleBySPPP('invite-course',$user['id'],'course',$course['id']);
+
+
+        if(empty($offsale)){
+
+            $offsale=array();
+
+            $offsale['saleType'] = 'invite-course';
+            $offsale['prodType'] = 'course';
+            $offsale['prodName'] = $course['title'];
+            $offsale['prodId']  = $course['id'];
+            $offsale['promoName'] = $course['title'].'推广码';
+            $offsale['promoCode']= $this->getOffSaleService()->generateOffSaleCode('');
+          
+            $offsale['adCommissionType']= empty($course['adCommissionType']) ?'ratio':$course['adCommissionType'];
+
+            $offsale['adCommission']= empty($course['adCommission'])?'30':$course['adCommission'];
+
+            $offsale['reduceType'] = 'quota';
+            $offsale['reducePrice'] = 0;
+            $offsale['reuse']= '可以';
+            $offsale['valid']= '有效';
+            $offsale['strvalidTime']=$course['saleValidTime'];
+            $offsale['partnerId']= $user['id'];
+            $offsale['managerId']= 0;
+         
+
+            $offsale['validTime']=$course['saleValidTime'];
+
+          
+          
+
+            $this->getOffSaleService()->createOffSale($offsale);
+
+        }
+
+
+       
+        return $this->render('TopxiaWebBundle:Sale:off-course-modal.html.twig', array(
+            'offsale'=>$offsale,
+            'user'=>$user            
+        ));
+       
+       
+    }
+
     private function getOrderService()
     {
         return $this->getServiceKernel()->createService('Course.OrderService');

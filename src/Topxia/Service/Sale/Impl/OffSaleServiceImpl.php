@@ -28,6 +28,12 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
         return OffSaleSerialize::unserialize($this->getOffSaleDao()->getOffSaleByCode($code));
     }
 
+    public function getOffSaleBySPPP($saleType,$partnerId,$prodType,$prodId)
+    {
+        return OffSaleSerialize::unserialize($this->getOffSaleDao()->getOffSaleBySPPP($saleType,$partnerId,$prodType,$prodId));
+    }
+
+
 
     public function searchOffSales($conditions, $sort = 'latest', $start, $limit)
     {
@@ -219,8 +225,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
                 {
                     return "该优惠码已被使用";
                 }
-            }
-            
+            }            
                 
         }
 
