@@ -13,4 +13,7 @@ interface CategoryDao
     public function deleteCategory($id);
 
     public function findCategoriesByTarget($target, $start, $limit);
+
+    public function getCategorysCountByTarget($target);
+
 }

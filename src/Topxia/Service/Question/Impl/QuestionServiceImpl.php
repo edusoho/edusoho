@@ -11,6 +11,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected $supportedQuestionTypes = array('choice','single_choice', 'fill', 'material', 'essay', 'determine');
 
+    const MAX_CATEGORY_COUNT = 1000;
+
     public function getQuestion($id)
     {
         return $this->getQuestionDao()->getQuestion($id);
@@ -105,7 +107,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function getCategory($id)
     {
-        return $this->getCategoryDao()->getCategoryDao($id);
+        return $this->getCategoryDao()->getCategory($id);
     }
 
     public function findCategoriesByTarget($target, $start, $limit)
@@ -114,13 +116,21 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     }
 
     public function createCategory($fields)
-    {
-        return $this->getCategoryDao()->createCategory($fields);
+    {   
+        $field['userId'] = $this->getCurrentUser()->id;
+        $field['name'] = empty($fields['name'])?'':$fields['name'];
+        $field['createdTime'] = time();
+        $field['target'] = "course-".$fields['courseId'];
+        $field['seq'] = $this->getCategoryDao()->getCategorysCountByTarget($field['target'])+1;
+
+        return $this->getCategoryDao()->addCategory($field);
     }
 
     public function updateCategory($id, $fields)
-    {
-        return $this->getCategoryDao()->updateCategory($id, $fields);
+    {   
+        $field['name'] = empty($fields['name'])?'':$fields['name'];
+        $field['updatedTime'] = time();
+        return $this->getCategoryDao()->updateCategory($id, $field);
     }
 
     public function deleteCategory($id)
@@ -130,21 +140,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function sortCategories($target, array $sortedIds)
     {
-        $categories = $this->findCategoriesByTarget($target);
+        $categories = $this->findCategoriesByTarget($target,0, self::MAX_CATEGORY_COUNT);
         $categories = ArrayToolkit::index($categories,'id');
-
         $seq = 1;
-        foreach ($sortedIds as $categoryId) {
-            if (array_key_exists($categoryId, $categories)) {
-                continue;
-            }
 
-            if ($seq == $categories[$categoryId]['seq']) {
+        foreach ($sortedIds as $categoryId) {
+            if (!array_key_exists($categoryId, $categories)) {
                 continue;
             }
 
             $fields = array('seq' => $seq);
-            $this->getCategoryDao()->updateCategory($categoryId, $fields);
+            if ($fields['seq'] != $categories[$categoryId]['seq']) {
+                $this->getCategoryDao()->updateCategory($categoryId, $fields);
+            }
+
             $seq ++;
         }
     }

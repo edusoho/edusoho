@@ -17,12 +17,18 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
     public function findCategoriesByTarget($target, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE target = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE target = ? ORDER BY seq ASC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($target)) ? : array();
     }
 
-    public function addCategory($fields)
+    public function getCategorysCountByTarget($target)
     {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE target = ?";
+        return $this->getConnection()->fetchColumn($sql, array($target));
+    }
+
+    public function addCategory($fields)
+    {   
         $affected = $this->getConnection()->insert($this->table, $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert question category error.');
