@@ -41,10 +41,9 @@
           <td>
             {% if(course.adCommissionType=='quota') %}
                 {{course.adCommission/course.price*100|number_format(2, '.', ',') }}%
-            {% elseif (course.adCommissionType=="ratio") %}
-                {{ course.adCommission|number_format(2, '.', ',')  }}%
+           
             {% else %}
-               30.00%
+                 {{ course.adCommission|number_format(2, '.', ',')  }}%
             {% endif %}
           </td>
 

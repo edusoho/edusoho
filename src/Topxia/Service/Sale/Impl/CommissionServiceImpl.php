@@ -190,7 +190,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
             if($order['userId']==$offsale['partnerId']){
 
                  $commission['commission']=0;
-                 $commission['note']='本人定单不能享受佣金收入';
+                 $commission['note']='本人定单0佣金';
 
 
             }else if (!empty($offsale['validTime']) and $offsale['validTimeNum']<time()){

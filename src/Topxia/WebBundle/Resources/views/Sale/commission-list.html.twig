@@ -54,6 +54,12 @@
                 课程优惠码:{{ offsale.promoCode }}<br>
                  佣金比例：{{ offsale.adCommission }}%
 
+            {% elseif commission.saleType=='invite-course' %}
+                课程邀请码推广<br>
+               {% set offsale = offsales[commission.saleId] %}
+                课程邀请码:{{ offsale.promoCode }}<br>
+                 佣金比例：{{ offsale.adCommission }}%
+
             {% endif %}
 
           </td>

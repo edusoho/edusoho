@@ -240,7 +240,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
     }
 
 
-    private function generateOffSaleCode($promoPrefix)
+    public function generateOffSaleCode($promoPrefix)
     {
         return  date('ymd', time()).$promoPrefix.$this->generateChars(8);
     }
