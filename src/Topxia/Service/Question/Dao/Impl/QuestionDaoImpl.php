@@ -22,7 +22,13 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
     public function findQuestionsByIds(array $ids)
     {
-
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $questions = $this->getConnection()->fetchAll($sql, $ids);
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
     public function searchQuestions($conditions, $orderBy, $start, $limit)

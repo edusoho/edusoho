@@ -130,18 +130,22 @@ define(function(require, exports, module) {
 
             if ($.type(choicesData) != 'undefined') {
                 var choices = $.parseJSON(choicesData);
-                $.each(choices, function() {
-                    var choiceCount = self.$('[data-role=choice]').length;
-                    var code = String.fromCharCode(choiceCount + 65);
-                    var choiceModel = {code:code, id:self._generateNextGlobalId(), content:this.content, isAnswer: this.isAnswer};
-                    self.addChoice(choiceModel);
+                var answers = $.parseJSON(this.$('[data-role=answers-data]').html());
+
+                $.each(choices, function(index, choiceContent) {
+                    self.addChoice({
+                        code: String.fromCharCode(index + 65),
+                        id: self._generateNextGlobalId(),
+                        content:choiceContent,
+                        isAnswer: $.inArray(index+'', answers) != -1
+                    });
                 });
             } else {
                 for (var i = 0; i < 4; i++) {
-                    var choiceCount = this.$('[data-role=choice]').length;
-                    var code = String.fromCharCode(choiceCount + 65);
-                    var model = {code: code, id: self._generateNextGlobalId() }
-                    this.addChoice(model);
+                    this.addChoice({
+                        code: String.fromCharCode(i + 65),
+                        id: self._generateNextGlobalId()
+                    });
                 }
             }
         },

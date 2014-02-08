@@ -512,7 +512,7 @@ course_manage_show_test:
 
 course_manage_preview_test:
     pattern: /preview/test/{testId}
-    defaults: { _controller: TopxiaWebBundle:DoTest:testPreview }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:previewTest }
 
 course_manage_do_test_pause:
     pattern: /pause/test

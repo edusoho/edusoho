@@ -9,8 +9,9 @@
        <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">新增选项</button>
     </div>
   </div>
-  {% if question.choices|default(null) %}
-    <script type="text/plain" data-role="choices-data">{{ question.choices|json_encode|raw}}</script>
+  {% if question.metas.choices|default(null) %}
+    <script type="text/plain" data-role="choices-data">{{ question.metas.choices|json_encode|raw}}</script>
+    <script type="text/plain" data-role="answers-data">{{ question.answer|json_encode|raw}}</script>
   {% endif %}
   <script type="text/x-handlebars-template" data-role="choice-template">
     {% verbatim %}

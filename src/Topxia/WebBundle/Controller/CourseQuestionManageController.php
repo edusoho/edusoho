@@ -73,7 +73,6 @@ class CourseQuestionManageController extends BaseController
 
         $question = $this->getQuestionService()->getQuestion($id);
 
-
         if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
             $question = $this->getQuestionService()->updateQuestion($id, $question);
@@ -85,7 +84,6 @@ class CourseQuestionManageController extends BaseController
             'targetsChoices' => $this->getQuestionTargetChoices($course),
             // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
         ));
-
 
     }
 
