@@ -96,8 +96,15 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $result = $this->getOffSaleService()->isValiable($offsale,$course['id']);
 
-            if("success" == $result){               
-                 $order['price']=  $order['price']-$offsale['reducePrice'];
+            if("success" == $result){
+
+                if($offsale['reduceType']=='ratio'){
+                    $order['price']=  $order['price']-$offsale['reducePrice']*$order['price']/100;
+                }else{
+                    $order['price']=  $order['price']-$offsale['reducePrice'];
+                }
+
+                
             }else{
                  throw $this->createServiceException('创建订单失败'.$result);
             }
@@ -108,6 +115,16 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrderDao()->addOrder($order);
 
 
+        if(!empty($order['promoCode']))
+        {
+
+            $offsale = $this->getOffSaleService()->getOffSaleByCode($order['promoCode']);
+
+            if(!empty($offsale)){
+
+                  $this->getCommissionService()->computeOffSaleCommission($order,$offsale);
+            }
+        }
 
         if(!empty($order['mTookeen']))
         {
@@ -116,7 +133,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             if(!empty($linksale)){
 
-                  $this->getCommissionService()->computeCommission($order,$linksale);
+                  $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
             }
         }
 

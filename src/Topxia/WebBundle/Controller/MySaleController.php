@@ -127,9 +127,9 @@ class MySaleController extends BaseController
             $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
            
 
-            $linksale['adCommissionType']= $course['adCommissionType'];
+            $linksale['adCommissionType']= empty($course['adCommissionType']) ?'ratio':$course['adCommissionType'];
 
-            $linksale['adCommission']= $course['adCommission'];
+            $linksale['adCommission']= empty($course['adCommission'])?'30':$course['adCommission'];
            
             $linksale['saleType']='linksale-course';
             $linksale['prodType']='course';

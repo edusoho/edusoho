@@ -32,25 +32,24 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="adCommission">佣金比例（百分比）</label>
+      <label for="adCommission">佣金比例</label>
     </div>
     <div class="col-md-8 controls">
       <div class="input-group">
         <input class="form-control" type="text" id="adCommission" value="{{offsetting.adCommission}}" name="adCommission" required/>
         <span class="input-group-addon">%</span>
       </div>
-
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="reducePrice">优惠幅度（百分比）</label>
+      <label for="reducePrice">优惠幅度</label>
     </div>
     <div class="col-md-8 controls">
       <div  class="input-group">
         <input class="form-control" type="text" id="reducePrice" value="{{offsetting.reducePrice}}" name="reducePrice" required/>
-        <span class="input-group-addon">%</span>
+        <span class="input-group-addon">元</span>
       </div>
 
     </div>
@@ -99,7 +98,7 @@
    <input type="hidden" name="prodType" value="course">   
    <input type="hidden" name="saleType" value="offsale-course">   
    <input type="hidden" name="adCommissionType" value="ratio">   
-   <input type="hidden" name="reduceType" value="ratio">   
+   <input type="hidden" name="reduceType" value="quota"> 
    <input type="hidden" name="reuse" value="不可以">
    <input type="hidden" name="valid" value="有效">   
 

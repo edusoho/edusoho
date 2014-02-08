@@ -229,7 +229,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
         }
 
         if($offsale['prodId'] != $prodId){
-            return "该优惠码不适用于该".$offsale['prodType'];
+            return "该优惠码不适用于该商品";
         }
         return "success";
     }
@@ -237,7 +237,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
     private function generateOffSaleCode($promoPrefix)
     {
-        return  $promoPrefix.$this->generateChars(8);
+        return  date('ymd', time()).$promoPrefix.$this->generateChars(8);
     }
 
     private function generateChars( $length = 8 ) {  

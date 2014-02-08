@@ -2,15 +2,15 @@
 <tr id="offsale-table-tr-{{ offsale.id }}" data-role="item">
   <td><input value="{{offsale.id}}" type="checkbox"  data-role="batch-item" ></td>
   <td>{{ offsale.promoCode }}</td>
-  <td>{{ offsale.reducePrice}}%</td>
-  <td>{{ offsale.adCommission}}%</td>
+  <td>￥{{ offsale.reducePrice}}</td>
+ 
   <td class="text-muted text-sm text-break">{{ offsale.prodName }}</td>
   <td>
     {% if partner %}
        {{ partner.nickname }}
     {% endif %}
   </td>
-  
+   <td>{{ offsale.adCommission}}%</td>
 
   <td class="text-muted text-sm text-break">{{ offsale.validTime }}</td>
  

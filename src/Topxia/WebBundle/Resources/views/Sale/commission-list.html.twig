@@ -41,11 +41,18 @@
             {% if commission.saleType=='linksale-course' %}
                课程链接推广:
                {% set linksale = linksales[commission.saleId] %}
-                <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a>
+                <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a><br>
+                佣金比例：{{ linksale.adCommission }}%
             {% elseif commission.saleType=='linksale-web' %}
                 网站链接推广:
                {% set linksale = linksales[commission.saleId] %}
-                <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a>
+                <a href = "{{ linksale.tUrl }}"> {{linksale.tUrl}} </a><br>
+                 佣金比例：{{ linksale.adCommission }}%
+            {% elseif commission.saleType=='offsale-course' %}
+                课程优惠码推广<br>
+               {% set offsale = offsales[commission.saleId] %}
+                课程优惠码:{{ offsale.promoCode }}<br>
+                 佣金比例：{{ offsale.adCommission }}%
 
             {% endif %}
 
