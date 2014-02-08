@@ -21,13 +21,19 @@ interface TestpaperService
 
     public function rebuildTestpaper($id, $builder, $builderOptions);
 
+
+    public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);
+
+    public function findTestPaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
+
+
     /**
      * 开始做试卷
      * 
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    public function startTestpaper($id);
+    public function startTestpaper($id, $target);
 
     public function finishTestpaper($resultId);
 
