@@ -30,6 +30,60 @@ class CourseController extends BaseController
         ));
     }
 
+    public function adCommissionAction(Request $request, $id)
+    {
+        
+
+        if ('POST' == $request->getMethod()) {
+            $tag = $this->getTagService()->updateTag($id, $request->request->all());
+            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+                'tag' => $tag
+            ));
+        }
+
+        return $this->render('TopxiaAdminBundle:CourseAdCommission:index.html.twig', array(
+            'tag' => $tag
+        ));
+    }
+
+    public function teachCommissionAction(Request $request, $id)
+    {
+        $tag = $this->getTagService()->getTag($id);
+        if (empty($tag)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $tag = $this->getTagService()->updateTag($id, $request->request->all());
+            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+                'tag' => $tag
+            ));
+        }
+
+        return $this->render('TopxiaAdminBundle:CourseTeachCommission:index.html.twig', array(
+            'tag' => $tag
+        ));
+    }
+
+    public function saleValidTimeAction(Request $request, $id)
+    {
+        $tag = $this->getTagService()->getTag($id);
+        if (empty($tag)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $tag = $this->getTagService()->updateTag($id, $request->request->all());
+            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+                'tag' => $tag
+            ));
+        }
+
+        return $this->render('TopxiaAdminBundle:CourseSaleValidTime:index.html.twig', array(
+            'tag' => $tag
+        ));
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $result = $this->getCourseService()->deleteCourse($id);
