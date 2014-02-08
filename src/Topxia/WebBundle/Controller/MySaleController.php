@@ -19,8 +19,20 @@ class MySaleController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 
+        $yesCommission = $this->getCommissionService()->computeMyCommissionsOfYesterday($user['id']);
+
+        $monthCommission = $this->getCommissionService()->computeMyCommissionsOfMonth($user['id']);
+
+        $lastCommission = $this->getCommissionService()->computeMyCommissionsOfLast($user['id']);
+
+        $commission = $this->getCommissionService()->computeMyCommissions($user['id']);
+
        
         return $this->render('TopxiaWebBundle:Sale:overview.html.twig', array(
+            'yesCommission'=>$yesCommission['commissions'],
+            'monthCommission'=>$monthCommission['commissions'],
+            'lastCommission'=> $lastCommission['commissions'],
+            'commission'=>$commission['commissions']
           
         ));
 	}

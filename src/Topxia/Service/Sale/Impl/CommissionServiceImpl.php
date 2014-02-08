@@ -47,6 +47,26 @@ class CommissionServiceImpl extends BaseService implements CommissionService
         return $this->getCommissionDao()->searchCommissionCount($conditions);
     }
 
+    public function computeMyCommissionsOfYesterday($partnerId){
+
+        return  $this->getCommissionDao()->computeMyCommissionsOfYesterday($partnerId);
+    }
+
+    public function computeMyCommissionsOfMonth($partnerId){
+
+        return  $this->getCommissionDao()->computeMyCommissionsOfMonth($partnerId);
+    }
+
+    public function computeMyCommissionsOfLast($partnerId){
+
+        return  $this->getCommissionDao()->computeMyCommissionsOfLast($partnerId);
+    }
+
+    public function computeMyCommissions($partnerId){
+
+        return  $this->getCommissionDao()->computeMyCommissions($partnerId);
+    }
+
     private function _prepareCommissionConditions($conditions)
     {
         $conditions = array_filter($conditions);
@@ -173,7 +193,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
        
     }
 
-     public function computeOffSaleCommission($order,$offsale)
+    public function computeOffSaleCommission($order,$offsale)
     {
 
          if($offsale['prodType']=='course' or $offsale['prodType']=='课程'){

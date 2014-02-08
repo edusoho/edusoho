@@ -71,6 +71,31 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
         return $this->getConnection()->fetchAll($sql, array($order['id'],$order['sn']));
     }
 
+    public function computeMyCommissionsOfYesterday($partnerId)
+    {
+        $sql = "SELECT sum(commission)  as commissions FROM {$this->table} WHERE status='paid' and  salerId = ? and paidTime > ".strtotime('yesterday')." and paidTime < ".strtotime('today');
+       return $this->getConnection()->fetchAssoc($sql, array($partnerId));
+    }
+
+
+    public function computeMyCommissionsOfMonth($partnerId)
+    {
+        $sql = "SELECT sum(commission)  as commissions FROM {$this->table} WHERE status='paid' and  salerId = ? and paidTime > ".strtotime('first day of this month midnight')." and paidTime < ".strtotime('first day of next month midnight');
+       return $this->getConnection()->fetchAssoc($sql, array($partnerId));
+    }
+
+    public function computeMyCommissionsOfLast($partnerId)
+    {
+        $sql = "SELECT sum(commission)  as commissions FROM {$this->table} WHERE status='paid' and  salerId = ? and paidTime > ".strtotime('first day of last month midnight')." and paidTime < ".strtotime('first day of this month midnight');
+       return $this->getConnection()->fetchAssoc($sql, array($partnerId));
+    }
+
+    public function computeMyCommissions($partnerId)
+    {
+        $sql = "SELECT sum(commission)  as commissions FROM {$this->table} WHERE status='paid' and  salerId = ? ";
+       return $this->getConnection()->fetchAssoc($sql, array($partnerId));
+    }
+
 
     private function _createSearchQueryBuilder($conditions)
     {
