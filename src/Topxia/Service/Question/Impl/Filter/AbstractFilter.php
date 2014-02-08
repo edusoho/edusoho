@@ -19,6 +19,10 @@ abstract class AbstractFilter extends BaseService
         $filtered['score'] = empty($fields['score'])? 0 : $fields['score'];
         $filtered['categoryId'] = empty($fields['categoryId']) ? 0 : (int) $fields['categoryId'];
         $filtered['parentId'] = empty($fields['parentId']) ? 0 : (int)$fields['parentId'];
+        if ($mode == 'update') {
+            unset($filtered['parentId']);
+        }
+
         $filtered['updatedTime'] = time();
         if ($mode == 'create') {
             $filtered['createdTime'] = time();

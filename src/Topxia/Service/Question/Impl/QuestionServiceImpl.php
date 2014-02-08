@@ -34,13 +34,29 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function createQuestion($fields)
     {
         if (!in_array($fields['type'], $this->supportedQuestionTypes)) {
-                throw $this->createServiceException('question type error！');
+            throw $this->createServiceException('question type error！');
         }
 
         $filter = $this->createQuestionFilter($fields['type']);
-        $fields = $filter->filter($fields, 'create'); 
+        $fields = $filter->filter($fields, 'create');
 
-        return $this->getQuestionDao()->addQuestion($fields);
+        if ($fields['parentId'] > 0) {
+            $parentQuestion = $this->getQuestion($fields['parentId']);
+            if (empty($parentQuestion)) {
+                $fields['parentId'] = 0;
+            } else {
+                $fields['target'] = $parentQuestion['target'];
+            }
+        }
+
+        $question = $this->getQuestionDao()->addQuestion($fields);
+
+        if ($question['parentId'] >0) {
+            $subCount = $this->getQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuizQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+
+        return $question;
     }
 
     public function updateQuestion($id, $fields)
@@ -51,7 +67,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         $filter = $this->createQuestionFilter($question['type']);
-        $fields = $filter->filter($fields, 'create'); 
+        $fields = $filter->filter($fields, 'update');
+        if ($question['parentId'] > 0) {
+            unset($fields['target']);
+        }
 
         return $this->getQuestionDao()->updateQuestion($id, $fields);
     }

@@ -12,6 +12,8 @@ interface QuestionDao
 
     public function searchQuestionsCount($conditions);
 
+    public function findQuestionsCountByParentId($parentId);
+
     public function addQuestion($fields);
 
     public function updateQuestion($id, $fields);

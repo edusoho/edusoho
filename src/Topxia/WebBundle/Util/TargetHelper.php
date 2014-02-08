@@ -35,6 +35,9 @@ class TargetHelper
     {
         $groupedTargets = array();
         foreach ($targets as $target) {
+            if ($target['type'] == 'unknow') {
+                continue;
+            }
             if (empty($groupedTargets[$target['type']])) {
                 $groupedTargets[$target['type']] = array();
             }
@@ -58,8 +61,13 @@ class TargetHelper
         foreach ($targets as $target) {
             $explodedTarget = explode('/', $target);
             $lastTarget = end($explodedTarget);
-            list($type, $id) = explode('-', $lastTarget);
-            $parsedTargets[$target] =  array('type' => $type, 'id' => $id);
+
+            if (strpos($lastTarget, '-') === false) {
+                $parsedTargets[$target] = array('type' => 'unknow', 'id' => 0);
+            } else {
+                list($type, $id) = explode('-', $lastTarget);
+                $parsedTargets[$target] =  array('type' => $type, 'id' => $id);
+            }
         }
 
         return $parsedTargets;

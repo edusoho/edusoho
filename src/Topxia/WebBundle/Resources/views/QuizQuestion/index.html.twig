@@ -26,10 +26,10 @@
   <div class="panel-body " id="quiz-table-container">
 
     {% if parentId %}
-        <ol class="breadcrumb">
-            <li><a href="{{ path('course_manage_question',{courseId:course.id}) }}">题目管理</a></li>
-            <li class="active">材料题</li>
-        </ol>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('course_manage_question',{courseId:course.id}) }}">题目管理</a></li>
+        <li class="active">材料题</li>
+      </ol>
     {% endif %}
 
     {% if question.stem | default(null) %}
