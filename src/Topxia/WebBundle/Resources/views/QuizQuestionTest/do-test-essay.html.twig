@@ -1,4 +1,4 @@
-<div class="testpaper-question testpaper-question-essay" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-essay" id="question{{ item.question.id }}">
 	<div class="testpaper-question-body">
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
@@ -91,7 +91,7 @@
 		  <div class="testpaper-question-essay-inputs">
 		  	<textarea class="form-control testpaper-question-essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
 
-			<textarea class="form-control testpaper-question-essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|raw }}{% endif %}</textarea>
+			<textarea class="form-control testpaper-question-essay-input-long" data-type="essay" name="{{ item.question.id }}" style="display:none;">{% if item.question.testResult.answer[0]|default(null) %}{{ item.question.testResult.answer[0]|raw }}{% endif %}</textarea>
 
 			<a class="btn btn-link btn-muted btn-sm testpaper-question-essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a>
 

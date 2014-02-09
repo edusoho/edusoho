@@ -1,26 +1,26 @@
 <div class="material">
-<div class="well testpaper-question-stem-material">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
-{% for question in question.questions|default([]) %}
+<div class="well testpaper-question-stem-material">{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
+{% for item in item.question.items|default([]) %}
 
-	{% if question.type == 'single_choice' or question.type == 'choice' %}
+	{% if item.questionType == 'single_choice' or item.questionType == 'choice' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
 	{% endif %}
 
-	{% if question.type == 'determine' %}
+	{% if item.questionType == 'determine' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-determine.html.twig' %}
 
 	{% endif %}
 
-	{% if question.type == 'fill' %}
+	{% if item.questionType == 'fill' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-fill.html.twig' %}
 
 	{% endif %}
 
-	{% if question.type == 'essay' %}
+	{% if item.questionType == 'essay' %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-essay.html.twig' %}
 

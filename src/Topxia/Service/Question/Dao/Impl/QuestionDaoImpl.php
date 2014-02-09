@@ -72,6 +72,11 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getQuestion($id);
     }
 
+    public function findQuestionsCountByParentId($parentId)
+    {
+        
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetPrefix'])) {

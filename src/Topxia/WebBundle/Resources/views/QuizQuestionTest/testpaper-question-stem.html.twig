@@ -1,11 +1,11 @@
 <div class="testpaper-question-stem-wrap clearfix">
   <div class="testpaper-question-seq-wrap">
-    <div class="testpaper-question-seq">{% if question.seq|default(null) %}{{ question.seq }}{% endif %}</div>
-    <div class="testpaper-question-score">{{ question.itemScore|default(question.score) }}分</div>
+    <div class="testpaper-question-seq">{% if item.seq|default(null) %}{{ item.seq }}{% endif %}</div>
+    <div class="testpaper-question-score">{{ item.score|default(item.question.score) }}分</div>
   </div>
-  {% if question.type == 'fill' %}
-    <div class="testpaper-question-stem">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
+  {% if item.questionType == 'fill' %}
+    <div class="testpaper-question-stem">{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
   {% else %}
-    <div class="testpaper-question-stem">{{ question.stem|bbCode2Html|raw }}</div>
+    <div class="testpaper-question-stem">{{ item.question.stem|bbCode2Html|raw }}</div>
     {% endif %}
 </div>

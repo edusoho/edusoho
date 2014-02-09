@@ -12,6 +12,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 		return $this->getTestpaperDao()->getTestpaper($id);
 	}
 
+    public function getTestpaperResult($id)
+    {
+        return $this->getTestpaperResultDao()->getTestpaperResult($id);
+    }
+
 	public function searchTestpapers($conditions, $sort, $start, $limit)
 	{
 
@@ -94,9 +99,72 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function previewTestpaper($testpaperId)
     {
         $items = $this->getTestpaperItems($testpaperId);
+        $items = ArrayToolkit::index($items, 'questionId');
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
-var_dump($questions);exit();
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $formatItems = array();
+        foreach ($items as $questionId => $item) {
+            $items[$questionId]['question'] = $questions[$questionId];
+
+            if ($item['parentId'] != 0) {
+                if (!array_key_exists('items', $items[$item['parentId']])) {
+                    $items[$item['parentId']]['items'] = array();
+                }
+                $items[$item['parentId']]['items'][$questionId] = $items[$questionId];
+                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
+                unset($items[$questionId]);
+            } else {
+                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
+            }
+
+        }
+        ksort($formatItems);
+        return $formatItems;
+    }
+
+    public function showTestpaper($testpaperResultId)
+    {
+        $itemResults = $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testpaperResultId);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($testpaperResultId);
+
+        $items = $this->getTestpaperItems($testpaperResult['testId']);
+        $items = ArrayToolkit::index($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $formatItems = array();
+        foreach ($items as $questionId => $item) {
+
+            if (array_key_exists($questionId, $itemResults)){
+                $questions[$questionId]['testResult'] = $itemResults[$questionId];
+            }
+
+            $items[$questionId]['question'] = $questions[$questionId];
+
+            if ($item['parentId'] != 0) {
+                if (!array_key_exists('items', $items[$item['parentId']])) {
+                    $items[$item['parentId']]['items'] = array();
+                }
+                $items[$item['parentId']]['items'][$questionId] = $items[$questionId];
+                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
+                unset($items[$questionId]);
+            } else {
+                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
+            }
+
+        }
+        ksort($formatItems);
+        return $formatItems;
+    }
+
+    private function makeMaterial($items)
+    {
+
     }
 
 
@@ -173,6 +241,10 @@ var_dump($questions);exit();
 
     private function getTestItemDao(){
         return $this->createDao('Quiz.TestItemDao');
+    }
+
+    private function getTestpaperItemResultDao(){
+        return $this->createDao('Testpaper.TestpaperItemResultDao');
     }
 
     private function getCourseService()

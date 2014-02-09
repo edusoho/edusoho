@@ -9,7 +9,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 	protected $table = 'testpaper';
 
     private $serializeFields = array(
-            'metas' => 'json',
+            'metas' => 'json'
     );
 
     public function getTestpaper($id)
