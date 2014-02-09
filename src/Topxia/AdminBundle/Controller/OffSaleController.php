@@ -12,6 +12,21 @@ class OffSaleController extends BaseController
 
 		$conditions = $request->query->all();
 
+        if (isset($conditions['nickName'])){
+
+            $partner = $this->getUserService()->getUserByNickname($conditions['nickName']);
+
+            if (!empty($partner)) {
+
+                $conditions['partnerId'] = $partner['id'];
+               
+            }
+
+        }
+
+        
+
+
         $count = $this->getOffSaleService()->searchOffSaleCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);

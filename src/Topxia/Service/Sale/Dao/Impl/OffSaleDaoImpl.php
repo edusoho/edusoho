@@ -103,6 +103,7 @@ class OffSaleDaoImpl extends BaseDao implements OffSaleDao
             ->from(self::TABLENAME, 'sale_offsale')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
+            ->andWhere('partnerId = :partnerId')
             ->andWhere('prodName LIKE :prodNameLike')
             ->andWhere('promoName LIKE :promoNameLike')
             ->andWhere('promoCode LIKE :promoCodeLike')
