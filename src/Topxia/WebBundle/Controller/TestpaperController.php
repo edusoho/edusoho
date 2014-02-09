@@ -147,6 +147,66 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function submitTestAction (Request $request, $id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $answers = array_key_exists('data', $data) ? $data['data'] : array();
+            $usedTime = $data['usedTime'];
+
+            $result = $this->getTestpaperService()->submitTest($answers, $id);
+
+            $this->getTestpaperService()->updatePaperResult($id, $usedTime);
+
+            return $this->createJsonResponse(true);
+        }
+    }
+
+    public function finishTestAction (Request $request, $id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $answers = array_key_exists('data', $data) ? $data['data'] : array();
+            $usedTime = $data['usedTime'];
+            $user = $this->getCurrentUser();
+
+            //提交变化的答案
+            $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
+
+            //完成试卷，计算得分
+            $testResults = $this->getTestpaperService()->makeFinishTestResults($id);
+
+            $testPaperResult = $this->getTestpaperService()->getTestPaperResult($id);
+
+            $testPaper = $this->getTestpaperService()->getTestPaper($testPaperResult['testId']);
+            //试卷信息记录
+            $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
+
+            if ($this->getTestpaperService()->isExistsEssay($testResults)) {
+                $user = $this->getCurrentUser();
+                $course = $this->getCourseService()->getCourse($testPaper['targetId']);
+
+                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testPaperResult['id']), true);
+
+                foreach ($course['teacherIds'] as $receiverId) {
+                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+                }
+            }
+
+            // @todo refactor.
+            if ($testPaperResult['targetType'] == 'lesson' and !empty($testPaperResult['targetId'])) {
+                $lessons = $this->getCourseService()->findLessonsByIds(array($testPaperResult['targetId']));
+                if (!empty($lessons[$testPaperResult['targetId']])) {
+                    $lesson = $lessons[$testPaperResult['targetId']];
+                    $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+                }
+            }
+
+            return $this->createJsonResponse(true);
+            // return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $id)));
+        }
+    }
 
 
 

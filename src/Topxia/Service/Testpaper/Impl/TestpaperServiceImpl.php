@@ -162,15 +162,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $formatItems;
     }
 
-    private function makeMaterial($items)
-    {
-
-    }
-
 
     public function finishTestpaper($resultId)
     {
-
+        
     }
 
     public function submitTestpaperAnswer($resultId, $answers)

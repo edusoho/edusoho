@@ -8,11 +8,11 @@
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
-				{% if question.testResult.status == 'right' %}
+				{% if item.question.testResult.status == 'right' %}
 					正确答案是 <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">，你答对了
-				{% elseif question.testResult.status == 'wrong' %}
+				{% elseif item.question.testResult.status == 'wrong' %}
 					正确答案是 <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>， 你<strong class="text-danger">答错</strong>了
-				{% elseif question.testResult.status == 'noAnswer' %}
+				{% elseif item.question.testResult.status == 'noAnswer' %}
 					正确答案： <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，你未答题
 				{% endif %}
 		  </div>

@@ -18,7 +18,7 @@
 				{% if key in item.question.answer %}
 					{% set keys = keys|merge([choiceIndex]) %}
 				{% endif  %}
-				{% if key in item.testResult.answer|default([]) %}
+				{% if key in item.question.testResult.answer|default([]) %}
 					{% set keys_answer = keys_answer|merge([choiceIndex]) %}
 				{% endif %}
 			{% endfor %}
@@ -27,11 +27,11 @@
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
-				{% if question.testResult.status == 'right' %}
+				{% if item.question.testResult.status == 'right' %}
 					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，回答正确
-				{% elseif question.testResult.status == 'wrong' %}
+				{% elseif item.question.testResult.status == 'wrong' %}
 					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。回答错误
-				{% elseif question.testResult.status == 'noAnswer' %}
+				{% elseif item.question.testResult.status == 'noAnswer' %}
 				  正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你未答题
 				{% endif %}
 		  </div>
