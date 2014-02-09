@@ -108,9 +108,11 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
     public function createOffSale($offsale){
 
-        $offsale = ArrayToolkit::parts($offsale, array( 'id','saleType','prodType','prodId', 'prodName','promoName', 'promoCode','adCommissionType','adCommission','reduceType','reducePrice',  'strvalidTime','validTime', 'reuse', 'valid','partnerId','createdTime','managerId'));
+        $offsale = ArrayToolkit::parts($offsale, array( 'id','partnerIP','saleType','prodType','prodId', 'prodName','promoName', 'promoCode','adCommissionType','adCommission','reduceType','reducePrice',  'strvalidTime','validTime', 'reuse', 'valid','partnerId','createdTime','managerId'));
 
         $offsale['createdTime']=time();
+
+        $offsale['parnterIP'] = $this->getCurrentUser()->currentIp;
 
         $offsale = $this->getOffSaleDao()->addOffSale(OffSaleSerialize::serialize($offsale));
 

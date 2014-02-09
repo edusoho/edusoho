@@ -119,9 +119,11 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     public function createCommission($commission){
 
-        $commission = ArrayToolkit::parts($commission, array('id', 'saleType','saleId','saleTookeen','buyerId','salerId', 'orderId', 'orderSn', 'orderPrice','commission','note', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
+        $commission = ArrayToolkit::parts($commission, array('id','buyerIP', 'saleType','saleId','saleTookeen','buyerId','salerId', 'orderId', 'orderSn', 'orderPrice','commission','note', 'status', 'drawedTime','paidTime','updatedTime','createdTime'));
 
         $commission['createdTime']=time();
+
+        $commission['buyerIP'] = $this->getCurrentUser()->currentIp;
 
         $commission = $this->getCommissionDao()->addCommission(CommissionSerialize::serialize($commission));
 
@@ -158,6 +160,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
             $commission['orderSn'] = $order['sn'];
             $commission['orderPrice'] = $order['price'];
 
+
             if($order['userId']==$linksale['partnerId']){
 
                  $commission['commission']=0;
@@ -169,7 +172,13 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
 
-            }else{
+            }else if($linksale['parnterIP'] ==  $this->getCurrentUser()->currentIp){
+
+                 $commission['commission']=0;
+                 $commission['note']='购买人IP与推广人IP相同，不能享受佣金收入';
+
+            }
+            else{
 
                 if($linksale['adCommissionType']=='ratio'){
 
@@ -217,6 +226,11 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
+
+            }else if($offsale['parnterIP'] ==  $this->getCurrentUser()->currentIp){
+
+                 $commission['commission']=0;
+                 $commission['note']='购买人IP与推广人IP相同，不能享受佣金收入';
 
             }else{
 

@@ -114,7 +114,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order = $this->getOrderDao()->addOrder($order);
 
-
+        //如果通过优惠码推广，优先计算优惠码。
         if(!empty($order['promoCode']))
         {
 
@@ -123,20 +123,25 @@ class OrderServiceImpl extends BaseService implements OrderService
             if(!empty($offsale)){
 
                   $this->getCommissionService()->computeOffSaleCommission($order,$offsale);
+
+                  $this->getLogService()->info('commission', 'compute_commission', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+
+            }
+        }else{
+
+            if(!empty($order['mTookeen']))
+            {
+
+                $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($order['mTookeen']);
+
+                if(!empty($linksale)){
+
+                      $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
+                }
             }
         }
 
-        if(!empty($order['mTookeen']))
-        {
-
-            $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($order['mTookeen']);
-
-            if(!empty($linksale)){
-
-                  $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
-            }
-        }
-
+       
         
 
         $this->_createLog($order['id'], 'created', '创建订单');
