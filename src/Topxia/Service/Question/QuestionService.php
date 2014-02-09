@@ -15,6 +15,8 @@ interface QuestionService
 
     public function updateQuestion($id, $fields);
 
+    public function deleteQuestion($id);
+
     /**
      * 判断题目的回答是否正确
      *

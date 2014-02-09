@@ -78,6 +78,17 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getQuestion($id);
     }
 
+    public function deleteQuestion($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    } 
+
+    public function deleteQuestionsByParentId($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE parentId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($id));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetPrefix'])) {

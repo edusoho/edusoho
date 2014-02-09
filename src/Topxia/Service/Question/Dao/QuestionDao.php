@@ -17,4 +17,8 @@ interface QuestionDao
     public function addQuestion($fields);
 
     public function updateQuestion($id, $fields);
+
+    public function deleteQuestion($id);
+
+    public function deleteQuestionsByParentId($id);
 }

@@ -77,6 +77,24 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->updateQuestion($id, $fields);
     }
 
+    public function deleteQuestion($id)
+    {
+        $question = $this->getQuestionDao()->getQuestion($id);
+        if (empty($question)) {
+            throw $this->createNotFoundException();
+        }
+        $this->getQuestionDao()->deleteQuestion($id);
+
+        if ($question['subCount'] > 0) {
+            $this->getQuestionDao()->deleteQuestionsByParentId($id);
+        }
+
+        if ($question['parentId'] > 0) {
+            $subCount = $this->getQuestionDao()->findQuestionsCountByParentId($question['parentId']);
+            $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
+        }
+    }
+
     public function judgeQuestion($id, $answer, $refreshStats = false)
     {
         $results = $this->judgeQuestions(array($id => $answers), $refreshStats);

@@ -448,21 +448,27 @@ course_manage_question_update:
     pattern: /course/{courseId}/manage/question/{id}/update
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:update }
 
-course_manage_question_upload:
-    pattern: /course/{courseId}/manage/question/uploadfile/{type}
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:uploadFile }
-
 course_manage_question_delete:
     pattern: /course/{courseId}/manage/question/delete/{id}
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:delete }
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:delete }
+    methods: [POST]
 
 course_manage_question_deletes:
-    pattern: /course/{courseId}/manage/question/batch_delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:deletes }
+    pattern: /course/{courseId}/manage/question/deletes
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:deletes }
+    methods: [POST]
 
 course_manage_question_preview:
     pattern: /manage/question/preview/{id}
-    defaults: { _controller: TopxiaWebBundle:QuizQuestion:previewQuestion }
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
+
+course_manage_question_upload:
+    pattern: /course/{courseId}/manage/question/uploadfile/{type}
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
+    methods: [POST]
+
+
+
 
 course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category

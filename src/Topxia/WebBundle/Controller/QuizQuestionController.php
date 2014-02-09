@@ -204,29 +204,7 @@ class QuizQuestionController extends BaseController
 		));
 	}
 
-	public function deleteAction(Request $request, $courseId, $id)
-    {
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$question = $this->getQuestionService()->getQuestion($id);
-        if (empty($question)) {
-            throw $this->createNotFoundException('question not found');
-        }
-        $this->getQuestionService()->deleteQuestion($id);
-        return $this->createJsonResponse(true);
-    }
 
-    public function deletesAction(Request $request, $courseId)
-    {   
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-        $ids = $request->request->get('ids');
-        if(empty($ids)){
-        	throw $this->createNotFoundException();
-        }
-        foreach ($ids as $id) {
-        	$this->getQuestionService()->deleteQuestion($id);
-        }
-        return $this->createJsonResponse(true);
-    }
 
     public function uploadFileAction (Request $request, $courseId, $type)
     {
