@@ -55,6 +55,12 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function findQuestionsCountByParentId($parentId)
+    {
+        $sql ="SELECT count(*) FROM {$this->table} WHERE parentId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($parentId));
+    }
+
     public function addQuestion($fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
