@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
 class TestpaperController extends BaseController
@@ -84,7 +85,66 @@ class TestpaperController extends BaseController
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
 
+        $total = array();
+        foreach ($testpaper['metas']['question_type_seq'] as $type) {
+            if (empty($items[$type])) {
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
+            } else {
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['number'] = count($items[$type]);
+            }
+        }
 
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
+            'items' => $items,
+            'limitTime' => $testpaper['limitedTime'] * 60,
+            'paper' => $testpaper,
+            'id' => 0,
+            'isPreview' => 'preview',
+            'total' => $total
+        ));
+    }
+
+    public function showTestAction (Request $request, $id)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+        if (!$testpaperResult) {
+            throw $this->createNotFoundException('试卷不存在!');
+        }
+        if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+        }
+        if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
+            return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestPaper($testpaperResult['testId']);
+
+        $items = $this->getTestpaperService()->showTestpaper($id);
+
+        $total = array();
+        foreach ($testpaper['metas']['question_type_seq'] as $type) {
+            if (empty($items[$type])) {
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
+            } else {
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['number'] = count($items[$type]);
+            }
+        }
+
+        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
+
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
+            'items' => $items,
+            'limitTime' => $testpaperResult['limitedTime'] * 60,
+            'paper' => $testpaper,
+            'paperResult' => $testpaperResult,
+            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'id' => $id,
+            'total' => $total
+        ));
     }
 
 

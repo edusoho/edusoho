@@ -2,7 +2,7 @@
 {% if not role|default(null) == 'teacher' %}
 
 
-<div class="testpaper-question testpaper-question-choice" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-choice" id="question{{ item.questionId }}">
 
 	{% set keys = [] %}
 	{% set keys_answer = [] %}
@@ -10,15 +10,16 @@
     {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
 
 		<ul class="testpaper-question-choices">
-			{% for key, choice in question.choices %}
-			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in question.answer)) ? 'testpaper-question-choice-right' : '' %}
+			{% for key, choice in item.question.metas.choices %}
+			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in item.question.answer)) ? 'testpaper-question-choice-right' : '' %}
+			  {% set choiceIndex = (65+key)|chr %}
 
-				<li class="{{ itemClass }}"><span class="testpaper-question-choice-index">{{ choice.choiceIndex }}.</span> {{ choice.content|bbCode2Html|raw }}</li>
-				{% if key in question.answer %}
-					{% set keys = keys|merge([choice.choiceIndex]) %}
+				<li class="{{ itemClass }}"><span class="testpaper-question-choice-index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
+				{% if key in item.question.answer %}
+					{% set keys = keys|merge([choiceIndex]) %}
 				{% endif  %}
-				{% if key in question.testResult.answer|default([]) %}
-					{% set keys_answer = keys_answer|merge([choice.choiceIndex]) %}
+				{% if key in item.testResult.answer|default([]) %}
+					{% set keys_answer = keys_answer|merge([choiceIndex]) %}
 				{% endif %}
 			{% endfor %}
 		</ul>
@@ -45,10 +46,12 @@
 		<div class="testpaper-question-footer clearfix">
 
 		  <div class="testpaper-question-choice-inputs">
-				{% for key, choice in question.choices %}
-					<label class="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choice.choiceIndex in keys_answer %}active{% endif %}">
-						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ choice.questionId }}" value="{{ key }}" {% if choice.choiceIndex in keys_answer %}checked{% endif %} >
-						{{ choice.choiceIndex }}
+				{% for key, choice in item.question.metas.choices %}
+					{% set choiceIndex = (65+key)|chr %}
+
+					<label class="{% if item.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choiceIndex in keys_answer %}active{% endif %}">
+						<input type="{% if item.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ item.questionId }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
+						{{ choiceIndex }}
 					</label> 
 				{% endfor %}
 		  </div>

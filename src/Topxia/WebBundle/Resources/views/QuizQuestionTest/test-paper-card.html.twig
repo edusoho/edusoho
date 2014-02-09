@@ -13,12 +13,12 @@
 
 		{% for type in paper.metas.question_type_seq %}
 
-			{% for question in questions[type] %}
-				{% if question.type != 'material' %}
-					<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
+			{% for item in items[type] %}
+				{% if item.questionType != 'material' %}
+					<a href="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ item.seq }}</a>
 				{% else %}
-					{% for question in question.questions|default([]) %}
-						<a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
+					{% for item in item.items|default([]) %}
+						<a href="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if question.testResult|default(null) %}active{% endif %}">{{ item.seq }}</a>
 					{% endfor %}
 				{% endif %}
 				

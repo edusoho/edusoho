@@ -514,7 +514,7 @@ course_manage_redo_test:
 
 course_manage_show_test:
     pattern: /show/test/{id}
-    defaults: { _controller: TopxiaWebBundle:DoTest:showTest }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:showTest }
 
 course_manage_preview_test:
     pattern: /preview/test/{testId}

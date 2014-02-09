@@ -5,7 +5,7 @@
 
 {% for type in types|default(paper.metas.question_type_seq) %}
 
-{% if questions[type] != [] %}
+{% if items[type] != [] %}
 
 <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
   <div class="panel-heading"><strong class="">{{dict('questionType')[type]}}</strong>
@@ -13,7 +13,7 @@
   </div>
   <div class="panel-body">
 
-		{% for question in questions[type] %}
+		{% for item in items[type] %}
 
 			{% if type in ['single_choice', 'choice'] %}
 				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}

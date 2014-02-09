@@ -219,6 +219,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->cachedJudger[$type];
     }
 
+    public function findAllFavoriteQuestionsByUserId ($id)
+    {
+        return $this->getQuestionFavoriteDao()->findAllFavoriteQuestionsByUserId($id);
+    }
+
 
     private function getQuestionDao()
     {
@@ -228,6 +233,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     private function getCategoryDao()
     {
         return $this->createDao('Question.CategoryDao');
+    }
+
+    private function getQuestionFavoriteDao()
+    {
+        return $this->createDao('Quiz.QuestionFavoriteDao');
     }
 
 }
