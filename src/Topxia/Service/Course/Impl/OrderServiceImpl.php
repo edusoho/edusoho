@@ -124,7 +124,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
                   $this->getCommissionService()->computeOffSaleCommission($order,$offsale);
 
-                  $this->getLogService()->info('commission', 'compute_commission', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+                  $this->getLogService()->info('commission', 'compute_offsale_commission', "计算订单《{$order['sn']}》的佣金", $offsale);
 
             }
         }else{
@@ -137,6 +137,8 @@ class OrderServiceImpl extends BaseService implements OrderService
                 if(!empty($linksale)){
 
                       $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
+
+                      $this->getLogService()->info('commission', 'compute_linksale_commission', "计算订单《{$order['sn']}》的佣金", $linksale);
                 }
             }
         }
@@ -180,6 +182,8 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $this->getCourseService()->becomeStudent($order['courseId'], $order['userId'], $info);
 
                 $this->getCommissionService()->confirmCommission($order);
+
+                $this->getLogService()->info('commission', 'comfirm_commission', "确认订单《{$order['sn']}》的佣金", $order);
 
 
             } else {

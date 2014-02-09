@@ -24,8 +24,6 @@ class OffSaleController extends BaseController
 
         }
 
-        
-
 
         $count = $this->getOffSaleService()->searchOffSaleCount($conditions);
 
