@@ -492,10 +492,6 @@ course_manage_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
-course_manage_test_paper:
-    pattern: /course/{courseId}/manage/test/paper
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:index }
-
 course_manage_open_test:
     pattern: /open/test/{id}
     defaults: { _controller: TopxiaWebBundle:DoTest:openTestPaper }
@@ -571,6 +567,10 @@ course_manage_list_teacher_test_reviewing:
 course_manage_list_teacher_test_finished:
     pattern: /my/list/teacher/test/finished
     defaults: { _controller: TopxiaWebBundle:MyQuestion:listFinishedTest }
+
+course_manage_testpaper:
+    pattern: /course/{courseId}/manage/testpaper
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:index }
 
 course_manage_test_check:
     pattern: /list/course/check/{id}/{status}

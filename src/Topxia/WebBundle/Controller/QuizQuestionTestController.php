@@ -7,42 +7,6 @@ use Topxia\Common\Paginator;
 
 class QuizQuestionTestController extends BaseController
 {
-	public function indexAction(Request $request, $courseId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
-
-		$parentId = $request->query->get('parentId');
-
-		$conditions['target']['course'] = array($courseId);
-		if (!empty($lessons)){
-			$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
-		}
-
-		$paginator = new Paginator(
-			$this->get('request'),
-			$this->getTestService()->searchTestPaperCount($conditions),
-			10
-		);
-
-		$testPapers = $this->getTestService()->searchTestPaper(
-			$conditions,
-			array('createdTime' ,'DESC'),
-			$paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-		);
-
-		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testPapers, 'updatedUserId')); 
-		
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:index.html.twig', array(
-			'course' => $course,
-			'testPapers' => $testPapers,
-			'users' => $users,
-			'lessons' => $lessons,
-			'paginator' => $paginator,
-
-		));
-	}
 
 	public function createAction(Request $request, $courseId)
 	{
