@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Question\QuestionService;
 
 class CourseQuestionManageController extends BaseController
 {
@@ -101,7 +102,7 @@ class CourseQuestionManageController extends BaseController
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'targetsChoices' => $this->getQuestionTargetChoices($course),
-            // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
+            'categoryChoices' => $this->getQuestionCategoryChoices($course),
         ));
     }
 
@@ -131,7 +132,7 @@ class CourseQuestionManageController extends BaseController
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'targetsChoices' => $this->getQuestionTargetChoices($course),
-            // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
+            'categoryChoices' => $this->getQuestionCategoryChoices($course),
         ));
 
     }
@@ -244,6 +245,16 @@ class CourseQuestionManageController extends BaseController
                 continue;
             }
             $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+        }
+        return $choices;
+    }
+
+    private function getQuestionCategoryChoices($course)
+    {
+        $categories = $this->getQuestionService()->findCategoriesByTarget("course-{$course['id']}", 0, QuestionService::MAX_CATEGORY_QUERY_COUNT);
+        $choices = array();
+        foreach ($categories as $category) {
+            $choices[$category['id']] = $category['name'];
         }
         return $choices;
     }

@@ -3,6 +3,8 @@ namespace Topxia\Service\Question;
 
 interface QuestionService
 {
+    const MAX_CATEGORY_QUERY_COUNT = 1000;
+
     public function getQuestion($id);
 
     public function findQuestionsByIds(array $ids);

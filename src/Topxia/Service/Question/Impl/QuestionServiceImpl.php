@@ -136,9 +136,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function createCategory($fields)
     {   
         $field['userId'] = $this->getCurrentUser()->id;
-        $field['name'] = empty($fields['name'])?'':$fields['name'];
+        $field['name'] = empty($fields['name']) ? '' : $fields['name'];
         $field['createdTime'] = time();
-        $field['target'] = "course-".$fields['courseId'];
+        $field['target'] = empty($fields['target']) ? '' : $fields['target'];
         $field['seq'] = $this->getCategoryDao()->getCategorysCountByTarget($field['target'])+1;
 
         return $this->getCategoryDao()->addCategory($field);
@@ -158,8 +158,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function sortCategories($target, array $sortedIds)
     {
-        $categories = $this->findCategoriesByTarget($target,0, self::MAX_CATEGORY_COUNT);
-        $categories = ArrayToolkit::index($categories,'id');
+        $categories = $this->findCategoriesByTarget($target, 0, self::MAX_CATEGORY_COUNT);
+        $categories = ArrayToolkit::index($categories, 'id');
         $seq = 1;
 
         foreach ($sortedIds as $categoryId) {
