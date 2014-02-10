@@ -253,13 +253,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createServiceException("已经交卷的试卷不能更改答案!");
         }
 
-        $items = $this->getTestpaperItems($id);
+        $items = $this->getTestpaperItems($testpaperResult['testId']);
         $items = ArrayToolkit::index($items, 'questionId');
 
         //得到当前用户答案
         $answers = $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testpaperResult['id']);
+        $answers = ArrayToolkit::index($answers, 'questionId');
 
-        $answers = $this->getQuestionService()->formatAnswers($answers, $items);
+        $answers = $this->formatAnswers($answers, $items);
 
         $answers = $this->getQuestionService()->judgeQuestions($answers, true);
 
@@ -268,14 +269,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         //记分
         $this->getTestpaperItemResultDao()->updateItemResults($answers, $testpaperResult['id']);
 
-        return $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testResult['id']);
+        return $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testpaperResult['id']);
     }
 
     private function formatAnswers($answers, $items)
     {
         $results = array();
         foreach ($items as $item) {
-            if (array_key_exists($item['questionId'], $answers)){
+            if (!array_key_exists($item['questionId'], $answers)){
                 $results[$item['questionId']] = 'noAnswer';
             } else {
                 $results[$item['questionId']] = $answers[$item['questionId']]['answer'];
@@ -321,9 +322,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
             throw $this->createServiceException("已经交卷的试卷不能更改答案!");
         }
-        
+
         //已经有记录的
-        $itemResults = $this->filterTestAnswers($answers, $testpaperResult['id']);
+        $itemResults = $this->filterTestAnswers($testpaperResult['id'], $answers);
         $itemIdsOld = ArrayToolkit::index($itemResults, 'questionId');
 
         $answersOld = ArrayToolkit::parts($answers, array_keys($itemIdsOld));

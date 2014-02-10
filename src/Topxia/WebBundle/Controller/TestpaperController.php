@@ -219,7 +219,7 @@ class TestpaperController extends BaseController
 
             //完成试卷，计算得分
             $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
-
+var_dump($testResults);exit();
             $testPaperResult = $this->getTestpaperService()->getTestPaperResult($id);
 
             $testPaper = $this->getTestpaperService()->getTestPaper($testPaperResult['testId']);
