@@ -5,15 +5,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Question\QuestionService;
 
 class CourseQuestionCategoryManageController extends BaseController
 {
-    const MAX_CATEGORY_COUNT = 1000;
 
     public function indexAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $categories = $this->getQuestionService()->findCategoriesByTarget("course-{$course['id']}", 0, self::MAX_CATEGORY_COUNT);
+        $categories = $this->getQuestionService()->findCategoriesByTarget("course-{$course['id']}", 0, QuestionService::MAX_CATEGORY_QUERY_COUNT);
 
         return $this->render('TopxiaWebBundle:CourseQuestionCategoryManage:index.html.twig', array(
             'course' => $course,
@@ -26,8 +26,9 @@ class CourseQuestionCategoryManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
 
-            $field =$request->request->all();
-            $category = $this->getQuestionService()->createCategory($field);
+            $data =$request->request->all();
+            $data['target'] = "course-{$course['id']}";
+            $category = $this->getQuestionService()->createCategory($data);
 
             return $this->render('TopxiaWebBundle:CourseQuestionCategoryManage:tr.html.twig', array(
                 'category' => $category,
@@ -43,14 +44,17 @@ class CourseQuestionCategoryManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $category = $this->getQuestionService()->getCategory($id);
+
         if ($request->getMethod() == 'POST') {
-            $field = $request->request->all();
-            $category = $this->getQuestionService()->updateCategory($id, $field);
+            $data = $request->request->all();
+            $category = $this->getQuestionService()->updateCategory($id, $data);
+
             return $this->render('TopxiaWebBundle:CourseQuestionCategoryManage:tr.html.twig', array(
                 'category' => $category,
                 'course' => $course,
             ));
         }
+
         return $this->render('TopxiaWebBundle:CourseQuestionCategoryManage:modal.html.twig', array(
             'category' => $category,
             'course' => $course,
@@ -61,10 +65,6 @@ class CourseQuestionCategoryManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $category = $this->getQuestionService()->getCategory($id);
-        if (empty($category)) {
-            throw $this->createNotFoundException();
-        }
-
         $this->getQuestionService()->deleteCategory($id);
         return $this->createJsonResponse(true);
     }
@@ -86,6 +86,4 @@ class CourseQuestionCategoryManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
-
-
 }

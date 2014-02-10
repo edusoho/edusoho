@@ -11,8 +11,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected $supportedQuestionTypes = array('choice','single_choice', 'fill', 'material', 'essay', 'determine');
 
-    const MAX_CATEGORY_COUNT = 1000;
-
     public function getQuestion($id)
     {
         return $this->getQuestionDao()->getQuestion($id);
@@ -112,7 +110,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             if (empty($answer)) {
                 $results[$id] = array('status' => 'noAnswer');
             } elseif (empty($questions[$id])) {
-                $results[$id] = array('status' => 'error', 'reason' => 'notFound');
+                $results[$id] = array('status' => 'notFound');
             } else {
                 $question = $questions[$id];
                 $judger = $this->createQuestionJudger($question['type']);
@@ -135,20 +133,29 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function createCategory($fields)
     {   
-        $field['userId'] = $this->getCurrentUser()->id;
-        $field['name'] = empty($fields['name'])?'':$fields['name'];
-        $field['createdTime'] = time();
-        $field['target'] = "course-".$fields['courseId'];
-        $field['seq'] = $this->getCategoryDao()->getCategorysCountByTarget($field['target'])+1;
+        if (!ArrayToolkit::requireds($fields, array('name'))) {
+            throw $this->createServiceException("缺少必要参数，添加类别失败");
+        }
 
-        return $this->getCategoryDao()->addCategory($field);
+        $category['userId'] = $this->getCurrentUser()->id;
+        $category['name'] = $fields['name'];
+        $category['createdTime'] = time();
+        $category['updatedTime'] = time();
+        $category['target'] = empty($fields['target']) ? '' : $fields['target'];
+        $category['seq'] = $this->getCategoryDao()->getCategorysCountByTarget($category['target'])+1;
+
+        return $this->getCategoryDao()->addCategory($category);
     }
 
     public function updateCategory($id, $fields)
     {   
-        $field['name'] = empty($fields['name'])?'':$fields['name'];
-        $field['updatedTime'] = time();
-        return $this->getCategoryDao()->updateCategory($id, $field);
+        if (!ArrayToolkit::requireds($fields, array('name'))) {
+            throw $this->createServiceException("缺少必要参数，更新类别失败");
+        }
+        
+        $category['name'] = $fields['name'];
+        $category['updatedTime'] = time();
+        return $this->getCategoryDao()->updateCategory($id, $category);
     }
 
     public function deleteCategory($id)
@@ -158,8 +165,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function sortCategories($target, array $sortedIds)
     {
-        $categories = $this->findCategoriesByTarget($target,0, self::MAX_CATEGORY_COUNT);
-        $categories = ArrayToolkit::index($categories,'id');
+        $categories = $this->findCategoriesByTarget($target, 0, self::MAX_CATEGORY_COUNT);
+        $categories = ArrayToolkit::index($categories, 'id');
         $seq = 1;
 
         foreach ($sortedIds as $categoryId) {

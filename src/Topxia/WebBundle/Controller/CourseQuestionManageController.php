@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Question\QuestionService;
 
 class CourseQuestionManageController extends BaseController
 {
@@ -14,6 +15,14 @@ class CourseQuestionManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         
         $conditions = $request->query->all();
+
+        if (empty($conditions['target'])) {
+            $conditions['targetPrefix'] = "course-{$course['id']}";
+        }
+
+        if (!empty($conditions['keyword'])) {
+            $conditions['stem'] = $conditions['keyword'];
+        }
 
         if (!empty($conditions['parentId'])) {
 
@@ -51,6 +60,8 @@ class CourseQuestionManageController extends BaseController
             'targets' => $targets,
             'paginator' => $paginator,
             'parentQuestion' => $parentQuestion,
+            'conditions' => $conditions,
+            'targetChoices' => $this->getQuestionTargetChoices($course),
         ));
     }
 
@@ -63,17 +74,18 @@ class CourseQuestionManageController extends BaseController
 
             $question = $this->getQuestionService()->createQuestion($data);
 
-            $this->setFlashMessage('success', '题目添加成功，请继续添加！');
-
             if ($data['submission'] == 'continue') {
                 $urlParams = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
                 $urlParams['type'] = $type;
                 $urlParams['courseId'] = $courseId;
                 $urlParams['goto'] = $request->query->get('goto', null);
+                $this->setFlashMessage('success', '题目添加成功，请继续添加。');
                 return $this->redirect($this->generateUrl('course_manage_question_create', $urlParams));
             } elseif ($data['submission'] == 'continue_sub') {
+                $this->setFlashMessage('success', '题目添加成功，请继续添加子题。');
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['id']))));
             } else {
+                $this->setFlashMessage('success', '题目添加成功。');
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId))));
             }
         }
@@ -101,7 +113,7 @@ class CourseQuestionManageController extends BaseController
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'targetsChoices' => $this->getQuestionTargetChoices($course),
-            // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
+            'categoryChoices' => $this->getQuestionCategoryChoices($course),
         ));
     }
 
@@ -131,7 +143,7 @@ class CourseQuestionManageController extends BaseController
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'targetsChoices' => $this->getQuestionTargetChoices($course),
-            // 'categoryChoices' => $this->getQuestionCategoryChoices($course),
+            'categoryChoices' => $this->getQuestionCategoryChoices($course),
         ));
 
     }
@@ -244,6 +256,16 @@ class CourseQuestionManageController extends BaseController
                 continue;
             }
             $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+        }
+        return $choices;
+    }
+
+    private function getQuestionCategoryChoices($course)
+    {
+        $categories = $this->getQuestionService()->findCategoriesByTarget("course-{$course['id']}", 0, QuestionService::MAX_CATEGORY_QUERY_COUNT);
+        $choices = array();
+        foreach ($categories as $category) {
+            $choices[$category['id']] = $category['name'];
         }
         return $choices;
     }

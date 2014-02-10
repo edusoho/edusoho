@@ -91,9 +91,15 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
     private function _createSearchQueryBuilder($conditions)
     {
+        $conditions = array_filter($conditions);
+
         if (isset($conditions['targetPrefix'])) {
             $conditions['targetLike'] = "{$conditions['targetPrefix']}%";
             unset($conditions['target']);
+        }
+
+        if (isset($conditions['stem'])) {
+            $conditions['stem'] = "%{$conditions['stem']}%";
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -101,7 +107,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->andWhere('parentId = :parentId')
             ->andWhere('type = :type')
             ->andWhere('target = :target')
-            ->andWhere('target LIKE :targetLike');
+            ->andWhere('target LIKE :targetLike')
+            ->andWhere('stem LIKE :stem');
 
         return $builder;
     }

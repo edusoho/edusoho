@@ -89,7 +89,7 @@
             <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
             <div class="col-md-8 controls">
                 <select class="form-control width-input width-input-large" name="categoryId" data-role="category">
-                  <option value=''> 请选择类别 </option>
+                  {{ select_options(categoryChoices, question.categoryId|default(0), '请选择类别') }}
                 </select>
             </div>
           </div>

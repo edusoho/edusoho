@@ -230,8 +230,7 @@ class UserServiceTest extends BaseTestCase
         $result = $this->getQuestionService()->judgeQuestions(array(
             $question['id'] => array('answer'),
         ));
-        $this->assertEquals('error', $result[$question['id']]['status']);
-        $this->assertEquals('unableJudge', $result[$question['id']]['reason']);
+        $this->assertEquals('unableJudge', $result[$question['id']]['status']);
     }
 
 
