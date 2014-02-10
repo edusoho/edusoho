@@ -32,55 +32,52 @@ class CourseController extends BaseController
 
     public function adCommissionAction(Request $request, $id)
     {
-        
-
-        if ('POST' == $request->getMethod()) {
-            $tag = $this->getTagService()->updateTag($id, $request->request->all());
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
-                'tag' => $tag
-            ));
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException();
         }
 
+        if ('POST' == $request->getMethod()) {
+            $course = $this->getCourseService()->updateCourseCommission($id, $request->request->all());
+            return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        
         return $this->render('TopxiaAdminBundle:CourseAdCommission:index.html.twig', array(
-            'tag' => $tag
+            'course' => $course
         ));
     }
 
     public function teachCommissionAction(Request $request, $id)
     {
-        $tag = $this->getTagService()->getTag($id);
-        if (empty($tag)) {
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
             throw $this->createNotFoundException();
         }
 
         if ('POST' == $request->getMethod()) {
-            $tag = $this->getTagService()->updateTag($id, $request->request->all());
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
-                'tag' => $tag
-            ));
+            $course = $this->getCourseService()->updateCourseCommission($id, $request->request->all());
+            return $this->createJsonResponse(array('status' => 'ok'));
         }
-
+        
         return $this->render('TopxiaAdminBundle:CourseTeachCommission:index.html.twig', array(
-            'tag' => $tag
+            'course' => $course
         ));
     }
 
     public function saleValidTimeAction(Request $request, $id)
     {
-        $tag = $this->getTagService()->getTag($id);
-        if (empty($tag)) {
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
             throw $this->createNotFoundException();
         }
 
         if ('POST' == $request->getMethod()) {
-            $tag = $this->getTagService()->updateTag($id, $request->request->all());
-            return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
-                'tag' => $tag
-            ));
+            $course = $this->getCourseService()->updateCourseCommission($id, $request->request->all());
+            return $this->createJsonResponse(array('status' => 'ok'));
         }
-
+        
         return $this->render('TopxiaAdminBundle:CourseSaleValidTime:index.html.twig', array(
-            'tag' => $tag
+            'course' => $course
         ));
     }
 

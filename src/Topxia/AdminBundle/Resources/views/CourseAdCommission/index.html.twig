@@ -1,27 +1,43 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% set tag = tag|default(null) %}
+{% set course = course|default(null) %}
 
 {% block title %}
-{% if tag.id %}编辑{% else %}新增{% endif %}标签
+设置推广佣金
 {% endblock %}
 {% block body %}
-  <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_tag_create') }}{% endif %}" method="post">
+  <form class="form-horizontal" id="course-form" action="{{ path('admin_course_ad_commission', {id:course.id}) }}" method="post">
+
     <div class="form-group">
-      <label class="col-md-3 control-label" for="tag-name-field">标签名称</label>
+      <label class="col-md-3 control-label" for="course-adCommissionType-field">佣金计算类型</label>
       <div class="col-md-6 controls">
-        <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_tag_checkname', {exclude:tag.name}) }}">
+        <div class="controls col-md-8 radios">
+          {{ radios('adCommissionType', {'quota':'定额', 'ratio':'比例'}, course.adCommissionType) }}
+        </div>
       </div>
     </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="course-adCommission-field">佣金额度</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="course-adCommission-field" type="text" name="adCommission" value="{{ course.adCommission }}" >
+        <span class="{% if course.adCommissionType != 'quota' %} hidden {% endif %} small quota-text">  </span>
+        <span class="{% if course.adCommissionType != 'ratio' %} hidden {% endif %} small ratio-text ">  </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="course-adCommissionDay-field">推广天数</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="course-adCommissionDay-field" type="text" name="adCommissionDay" value="{{ course.adCommissionDay }}" >
+      </div>
+    </div>
+
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  <script type="text/javascript">app.load('tag/save-modal')</script>
+  <script type="text/javascript">app.load('courseAdCommission/save-modal')</script>
 {% endblock %}
 
 {% block footer %}
-  {% if tag.id %}
-    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}" data-target="{{ tag.id }}" data-tag-id="{{ tag.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-  {% endif %}
-
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">保存</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-form">保存</button>
 {% endblock %}

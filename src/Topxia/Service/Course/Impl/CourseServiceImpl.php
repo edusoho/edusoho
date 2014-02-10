@@ -286,6 +286,37 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->updateCourse($id, $fields);
 	}
 
+	public function updateCourseCommission($id, $fields)
+	{
+		$data = array();
+		
+		if (!empty($fields['adCommissionType'])) {
+			$data['adCommissionType'] = $fields['adCommissionType'];
+		}
+
+		if (!empty($fields['adCommission'])) {
+			$data['adCommission'] = $fields['adCommission'];
+		}
+
+		if (!empty($fields['adCommissionDay'])) {
+			$data['adCommissionDay'] = $fields['adCommissionDay'];
+		}
+
+		if (!empty($fields['teachCommissionType'])) {
+			$data['teachCommissionType'] = $fields['teachCommissionType'];
+		}
+
+		if (!empty($fields['teachCommission'])) {
+			$data['teachCommission'] = $fields['teachCommission'];
+		}
+
+		if (!empty($fields['saleValidTime'])) {
+			$data['saleValidTime'] = strtotime($fields['saleValidTime']);
+		}
+
+		$this->getCourseDao()->updateCourse($id, $data);
+	}
+
 	private function _filterCourseFields($fields)
 	{
 		$fields = ArrayToolkit::filter($fields, array(
