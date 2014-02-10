@@ -253,45 +253,49 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createServiceException("已经交卷的试卷不能更改答案!");
         }
 
+        $items = $this->getTestpaperItems($id);
+        $items = ArrayToolkit::index($items, 'questionId');
 
         //得到当前用户答案
         $answers = $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testpaperResult['id']);
 
-        $answers = $this->getQuestionService()->formatAnswers($answers);
+        $answers = $this->getQuestionService()->formatAnswers($answers, $items);
 
-        $answers = $this->getQuestionService()->judgeQuestions($answers, $refreshStats = false);
+        $answers = $this->getQuestionService()->judgeQuestions($answers, true);
 
-
-
-        $results = $this->makeTestResults($answers, $questions);
-
-        $results['oldAnswers'] = array_map(function($result){
-            $result['answer'] = json_encode($result['answer']);
-            return $result;
-        }, $results['oldAnswers']);
-        $results['newAnswers'] = array_map(function($result){
-            $result['answer'] = json_encode($result['answer']);
-            return $result;
-        }, $results['newAnswers']);
-
-        $this->getQuestionService()->statQuestionTimes($results['oldAnswers']);
-        $this->getQuestionService()->statQuestionTimes($results['newAnswers']);
+        $answers = $this->makeScores($answers, $items);
 
         //记分
-        $this->getDoTestDao()->updateItemResults($results['oldAnswers'], $testResult['id']);
-        //未答题目记分
-        $this->getDoTestDao()->addItemResults($results['newAnswers'], $testResult['testId'], $testResult['id'], $userId);
+        $this->getTestpaperItemResultDao()->updateItemResults($answers, $testpaperResult['id']);
 
-        return $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
+        return $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testResult['id']);
     }
 
-    private function formatAnswers($answers)
+    private function formatAnswers($answers, $items)
     {
         $results = array();
-        foreach ($answers as $answer) {
-            $results[$answer['questionId']] = $answer['answer'];
+        foreach ($items as $item) {
+            if (array_key_exists($item['questionId'], $answers)){
+                $results[$item['questionId']] = 'noAnswer';
+            } else {
+                $results[$item['questionId']] = $answers[$item['questionId']]['answer'];
+            }
         }
         return $results;
+    }
+
+    public function makeScores($answers, $items)
+    {
+        foreach ($answers as $questionId => $answer) {
+            if ($answer['status'] == 'right') {
+                $answers[$questionId]['score'] = $items[$questionId]['score'];
+            } elseif ($answer['status'] == 'partRight') {
+                $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
+            } else {
+                $answers[$questionId]['score'] = 0;
+            }
+        }
+        return $answers;
     }
 
 
@@ -337,7 +341,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         //测试数据
-        return $this->filterTestAnswers($answers, $testpaperResult['id']);
+        return $this->filterTestAnswers($testpaperResult['id'], $answers);
     }
 
     private function filterTestAnswers ($testPaperResultId, $answers)
