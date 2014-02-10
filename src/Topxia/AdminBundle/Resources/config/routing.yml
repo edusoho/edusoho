@@ -402,6 +402,10 @@ admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
 
+admin_setting_web_commission:
+    pattern:  /setting/web_commission
+    defaults: { _controller: TopxiaAdminBundle:Setting:webCommission }
+
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
