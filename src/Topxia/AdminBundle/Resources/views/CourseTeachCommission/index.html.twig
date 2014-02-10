@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set course = course|default(null) %}
+
+{% block title %}
+设置推广佣金
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="course-form" action="{{ path('admin_course_ad_commission', {id:course.id}) }}" method="post">
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="course-teachCommissionType-field">佣金计算类型</label>
+      <div class="col-md-6 controls">
+        <div class="controls col-md-8 radios">
+          {{ radios('teachCommissionType', {'quota':'定额', 'ratio':'比例'}, course.teachCommissionType) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="course-teachCommission-field">佣金额度</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="course-teachCommission-field" type="text" name="teachCommission" value="{{ course.teachCommission }}" >
+        <span class="{% if course.teachCommissionType != 'quota' %} hidden {% endif %} small quota-text">  </span>
+        <span class="{% if course.teachCommissionType != 'ratio' %} hidden {% endif %} small ratio-text ">  </span>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('CourseTeachCommission/save-modal')</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-form">保存</button>
+{% endblock %}

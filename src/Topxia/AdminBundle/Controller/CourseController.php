@@ -30,6 +30,57 @@ class CourseController extends BaseController
         ));
     }
 
+    public function adCommissionAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $course = $this->getCourseService()->updateCourseCommission($id, $request->request->all());
+            return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        
+        return $this->render('TopxiaAdminBundle:CourseAdCommission:index.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function teachCommissionAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $course = $this->getCourseService()->updateCourseCommission($id, $request->request->all());
+            return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        
+        return $this->render('TopxiaAdminBundle:CourseTeachCommission:index.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function saleValidTimeAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $course = $this->getCourseService()->updateCourseCommission($id, $request->request->all());
+            return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        
+        return $this->render('TopxiaAdminBundle:CourseSaleValidTime:index.html.twig', array(
+            'course' => $course
+        ));
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $result = $this->getCourseService()->deleteCourse($id);

@@ -282,6 +282,18 @@ admin_course_cancel_recommend:
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
 
+admin_course_ad_commission:
+    pattern: /course/{id}/ad/commission
+    defaults: { _controller: TopxiaAdminBundle:Course:adCommission }
+
+admin_course_teach_commission:
+    pattern: /course/{id}/teach/commission
+    defaults: { _controller: TopxiaAdminBundle:Course:teachCommission }
+
+admin_course_sale_valid_time:
+    pattern: /course/{id}/sale/valid/time
+    defaults: { _controller: TopxiaAdminBundle:Course:saleValidTime }
+
 admin_course_category:
     pattern: /course/category
     defaults: { _controller: TopxiaAdminBundle:Course:category }

@@ -48,6 +48,8 @@ interface CourseService
 
 	public function updateCourse($id, $fields);
 
+	public function updateCourseCommission($id, $fields);
+
 	public function updateCourseCounter($id, $counter);
 
 	public function changeCoursePicture ($courseId, $filePath, array $options);

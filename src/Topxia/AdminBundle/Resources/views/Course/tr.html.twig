@@ -35,6 +35,10 @@
         <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
         <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>
 
+        <li><a class="xxxxxxxxx" href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_ad_commission', {id:course.id}) }}" > 设置推广佣金</a></li>
+        <li><a class="xxxxxxxxx" href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_teach_commission', {id:course.id}) }}" > 设置讲师报酬</a></li>
+        <li><a class="xxxxxxxxx" href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_sale_valid_time', {id:course.id}) }}" > 设置销售有效期</a></li>
+
         <li class="divider"></li>
 
         {% if course.status == 'published' %}
