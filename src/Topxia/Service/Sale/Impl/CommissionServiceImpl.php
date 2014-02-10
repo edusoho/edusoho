@@ -127,6 +127,8 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
         $commission = $this->getCommissionDao()->addCommission(CommissionSerialize::serialize($commission));
 
+        $this->getLogService()->info('commission', 'add_commission', "记录渠道《{$commission['salerId']}》在订单《{$commission['orderSn']}》的佣金", $commission);
+
         return $this->getCommission($commission['id']);
 
     }
@@ -269,7 +271,9 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                 $this->updateCommission($commission['id'], array(
                         'status' => 'paid',
                         'paidTime' => $order['paidTime'],
-                    ));   
+                    ));
+
+                $this->getLogService()->info('commission', 'comfirm_commission', "确认渠道《{$commission['salerId']}》在订单《{$commission['orderSn']}》的佣金", $commission);  
             }
             
         }

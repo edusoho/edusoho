@@ -92,12 +92,18 @@ class LinkSaleDaoImpl extends BaseDao implements LinkSaleDao
             unset($conditions['mTookeen']);
         }
 
+        if (isset($conditions['tUrl'])) {
+            $conditions['tUrlLike'] = "%{$conditions['tUrl']}%";
+            unset($conditions['tUrl']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'sale_linksale')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
             ->andWhere('prodName LIKE :prodNameLike')
             ->andWhere('mTookeen LIKE :mTookeenLike')
+            ->andWhere('tUrl LIKE :tUrlLike')
             ->andWhere('partnerId = :partnerId')
             ->andWhere('managerId = :managerId')
             ->andWhere('validTime >= :startTimeGreaterThan')

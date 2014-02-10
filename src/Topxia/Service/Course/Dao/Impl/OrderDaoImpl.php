@@ -22,12 +22,6 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 
-    public function getOrdersByPromoCode($code)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE promoCode = ? ";
-        return $this->getConnection()->fetchAll($sql, array($code));
-    }
-
     public function findOrdersByIds(array $ids)
     {
         if(empty($ids)) {
@@ -39,6 +33,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function getOrdersByPromoCode($code)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE promoCode = ? ";
+        return $this->getConnection()->fetchAll($sql, array($code));
+    }
+
     public function findOrdersByPromoCodes(array $codes)
     {
         if(empty($codes)) {
@@ -48,6 +48,24 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $marks = str_repeat('?,', count($codes) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE promoCode IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $codes);
+    }
+
+
+    public function getOrdersBymTookeen($mTookeen)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE mTookeen = ? ";
+        return $this->getConnection()->fetchAll($sql, array($mTookeen));
+    }
+
+    public function findOrdersBymTookeens(array $mTookeens)
+    {
+        if(empty($mTookeens)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($mTookeens) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE mTookeen IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $mTookeens);
     }
 
 	public function addOrder($order)

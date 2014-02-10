@@ -12,7 +12,7 @@ class OffSaleController extends BaseController
 
 		$conditions = $request->query->all();
 
-        if (isset($conditions['nickName'])){
+        if (isset($conditions['nickName']) and !empty($conditions['nickName']) ){
 
             $partner = $this->getUserService()->getUserByNickname($conditions['nickName']);
 
@@ -20,6 +20,8 @@ class OffSaleController extends BaseController
 
                 $conditions['partnerId'] = $partner['id'];
                
+             }else {
+                $conditions['partnerId']=-1;
             }
 
         }
@@ -48,7 +50,7 @@ class OffSaleController extends BaseController
 
         $partners = $this->getUserService()->findUsersByIds($partnerIds);
 
-        return $this->render('TopxiaAdminBundle:Sale:index.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Sale:offsale-list.html.twig', array(
             'conditions' => $conditions,
             'offsales' => $offsales ,
             'orderss' => $orderss,

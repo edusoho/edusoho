@@ -16,17 +16,17 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function getOrderBySn($sn)
     {
         return $this->getOrderDao()->getOrderBySn($sn);
-    }
-
-    public function getOrdersByPromoCode($code)
-    {
-        return $this->getOrderDao()->getOrdersByPromoCode($code);
-    }
+    }   
 
     public function findOrdersByIds(array $ids)
     {
         $orders = $this->getOrderDao()->findOrdersByIds($ids);
         return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function getOrdersByPromoCode($code)
+    {
+        return $this->getOrderDao()->getOrdersByPromoCode($code);
     }
 
     public function findOrdersByPromoCodes(array $codes)
@@ -41,6 +41,27 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orders = $this->getOrderDao()->findOrdersByPromoCodes($codes);
         return ArrayToolkit::indexs($orders, 'promoCode');
     }
+
+
+    public function getOrdersBymTookeen($mTookeen)
+    {
+        return $this->getOrderDao()->getOrdersBymTookeen($mTookeen);
+    }
+
+    public function findOrdersBymTookeens(array $mTookeens)
+    {
+        $orders = $this->getOrderDao()->findOrdersBymTookeens($mTookeens);
+
+        return $orders;
+    }
+
+    public function findOrderssBymTookeens(array $mTookeens)
+    {
+        $orders = $this->getOrderDao()->findOrdersBymTookeens($mTookeens);
+        return ArrayToolkit::indexs($orders, 'mTookeen');
+    }
+
+
 
     public function createOrder($order)
     {
@@ -123,9 +144,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             if(!empty($offsale)){
 
                   $this->getCommissionService()->computeOffSaleCommission($order,$offsale);
-
-                  $this->getLogService()->info('commission', 'compute_offsale_commission', "计算订单《{$order['sn']}》的佣金", $offsale);
-
             }
         }else{
 
@@ -137,8 +155,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 if(!empty($linksale)){
 
                       $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
-
-                      $this->getLogService()->info('commission', 'compute_linksale_commission', "计算订单《{$order['sn']}》的佣金", $linksale);
+ 
                 }
             }
         }
@@ -183,7 +200,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
                 $this->getCommissionService()->confirmCommission($order);
 
-                $this->getLogService()->info('commission', 'comfirm_commission', "确认订单《{$order['sn']}》的佣金", $order);
+               
 
 
             } else {

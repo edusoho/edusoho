@@ -105,9 +105,9 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
             unset($conditions['orderSn']);
         }
 
-        if (isset($conditions['mTookeen'])) {
-            $conditions['mTookeenLike'] = "%{$conditions['mTookeen']}%";
-            unset($conditions['mTookeen']);
+        if (isset($conditions['saleTookeen'])) {
+            $conditions['saleTookeenLike'] = "%{$conditions['saleTookeen']}%";
+            unset($conditions['saleTookeen']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -115,8 +115,8 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
             ->andWhere('saleId = :saleId')
             ->andWhere('buyerId = :buyerId')
             ->andWhere('salerId = :salerId')
-            ->andWhere('orderSnLike LIKE :orderSnLike')
-            ->andWhere('mTookeen LIKE :mTookeenLike')
+            ->andWhere('orderSn LIKE :orderSnLike')
+            ->andWhere('saleTookeen LIKE :saleTookeenLike')
         
             ->andWhere('status = :status')
             ->andWhere('paidTime >= :startTimeGreaterThan')

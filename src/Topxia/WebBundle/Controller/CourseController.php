@@ -149,9 +149,9 @@ class CourseController extends BaseController
               
 
                 if(!empty( $linksale) and $linksale['validTimeNum']>time()){
-
+                    //默认推广链接30天内有效
                     if(empty($course['adCommissionDay'])){
-                            $course['adCommissionDay'] = 7;
+                            $course['adCommissionDay'] = 30;
                     }
 
                     setcookie("mc".$id,  $mtookeen, time()+3600*24*$course['adCommissionDay'],'/');

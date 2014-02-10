@@ -26,8 +26,8 @@ class DefaultController extends BaseController
                 $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($mtookeen);
 
                 if(!empty( $linksale) and( $linksale['validTimeNum']>time() or empty( $linksale['validTimeNum']))){
-
-                    setcookie("mu",  $mtookeen, time()+3600*24*90,'/');
+                    //网站推广，默认30天有效
+                    setcookie("mu",  $mtookeen, time()+3600*24*30,'/');
 
                 }
 

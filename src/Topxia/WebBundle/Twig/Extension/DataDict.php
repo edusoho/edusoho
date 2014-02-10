@@ -182,6 +182,24 @@ class DataDict
 			'frozen ' =>            '<span class="text-danger">冻结状态</span> ',
 		),
 
+		'saleType' => array(
+        	'linksale-web' =>            '网站链接推广',
+			'linksale-course' =>         '课程链接推广',
+			'offsale-course' =>           '课程优惠码推广',
+			
+            'invite-course' =>            '课程邀请码推广',
+            'invite-web' =>            '注册邀请码推广',
+			
+		),
+		'saleType:html' => array(
+			'linksale-web' =>            '<span class="text-muted">网站链接推广</span>',
+			'linksale-course' =>               '<span class="text-success">课程链接推广</span>',
+			'offsale-course' =>           '<span class="text-muted">课程优惠码推广</span>',
+            'invite-course' =>            '<span class="text-danger">课程邀请码推广</span>',
+			'invite-web' =>          '<span class="text-muted">注册邀请码推广</span>',
+			
+		),
+
 	);
 
 	public static function dict($type)

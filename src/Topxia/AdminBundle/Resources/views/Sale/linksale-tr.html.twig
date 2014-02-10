@@ -1,0 +1,41 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="offsale-table-tr-{{ linksale.id }}" data-role="item">
+  <td><input value="{{linksale.id}}" type="checkbox"  data-role="batch-item" ></td>
+
+  <td class="text-muted text-sm text-break">{{ dict_text('saleType:html', linksale.saleType) }}</td>
+  <td class="text-muted text-sm text-break">{{ linksale.tUrl }}</td>
+  
+  <td>
+    {% if partner %}
+       {{ partner.nickname }}
+    {% endif %}
+  </td>
+   <td>{{ linksale.adCommission}}%</td>
+   <td>￥{{ linksale.reducePrice}}</td>
+  <td class="text-muted text-sm text-break">{{ linksale.prodName }}</td>
+ 
+
+  <td class="text-muted text-sm text-break">{{ linksale.validTime }}</td>
+ 
+ 
+
+  <td class="mz pz">
+    
+    {% for order in orders %}
+    {% set buyer = users[order.userId]|default(null) %}
+    <p class="mz phz pts {% if not loop.first %} h-divider {% endif %}">
+      
+       <span class="text-muted text-sm" >{{ admin_macro.user_link(buyer) }}  
+     {{ order.createdTime|date('Y-n-d H:i') }}
+     {{ dict_text('orderStatus:html', order.status) }} </span>
+
+      <a href="javascript:;" class=" text-sm"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_order_detail', {id:order.id}) }}">查看详细</a>
+       
+    </p>
+   
+   {% endfor %}
+  </td>
+
+ 
+
+</tr>

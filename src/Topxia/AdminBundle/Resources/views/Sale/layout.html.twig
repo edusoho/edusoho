@@ -6,7 +6,15 @@
   <div class="col-lg-2">
     {% block sidebar %}
       <div class="list-group">
-        <a href="{{ path('admin_sale') }}" class="list-group-item {% if menu == 'sale' %}active{% endif %}">优惠码管理</a>
+        
+
+        <a href="{{ path('admin_sale_commission') }}" class="list-group-item {% if menu == 'admin_commission' %}active{% endif %}">佣金管理</a>
+
+        <a href="{{ path('admin_sale_offsale') }}" class="list-group-item {% if menu == 'admin_offsale' %}active{% endif %}">优惠码管理</a>
+
+
+        <a href="{{ path('admin_sale_linksale') }}" class="list-group-item {% if menu == 'admin_linksale' %}active{% endif %}">推广链接管理</a>
+
 
        
 

@@ -51,7 +51,7 @@
 
           <li {% if nav == 'photo' %}class="active"{% endif %}><a href="{{ path('admin_photo') }}">相册</a></li>
 
-          <li {% if nav == 'photo' %}class="active"{% endif %}><a href="{{ path('admin_sale') }}">营销</a></li>
+          <li {% if nav == 'sale' %}class="active"{% endif %}><a href="{{ path('admin_sale_commission') }}">营销</a></li>
 
           {% if is_granted('ROLE_SUPER_ADMIN') %}
           <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
