@@ -14,11 +14,15 @@ class TestpaperItemResultDaoImpl extends BaseDao
             'answer' => 'json'
     );
 
-	public function addItemAnswers ($answers, $testPaperId, $testPaperResultId, $userId)
+	public function addItemAnswers ($testPaperResultId, $answers, $testPaperId, $userId)
 	{
 		if(empty($answers)){ 
             return array(); 
         }
+
+        $answers = array_map(function($answer){
+            return json_encode($answer);
+        }, $answers);
 
         $mark = "(".str_repeat('?,', 4)."? )";
         $marks = str_repeat($mark.',', count($answers) - 1).$mark;
@@ -32,11 +36,15 @@ class TestpaperItemResultDaoImpl extends BaseDao
 		return $this->getConnection()->executeUpdate($sql, $answersForSQL);
 	}
 
-    public function addItemResults ($answers, $testId, $testPaperResultId, $userId)
+    public function addItemResults ($testPaperResultId, $answers, $testId, $userId)
     {
         if(empty($answers)){ 
             return array(); 
         }
+
+        $answers = array_map(function($answer){
+            return json_encode($answer);
+        }, $answers);
 
         $mark = "(".str_repeat('?,', 6)."? )";
         $marks = str_repeat($mark.',', count($answers) - 1).$mark;
@@ -51,12 +59,17 @@ class TestpaperItemResultDaoImpl extends BaseDao
     }
 
     //要不要给这三个字段加上索引呢
-	public function updateItemAnswers ($answers, $testPaperResultId)
+	public function updateItemAnswers ($testPaperResultId, $answers)
 	{
         //事务
 		if(empty($answers)){
             return array(); 
         }
+
+        $answers = array_map(function($answer){
+            return json_encode($answer);
+        }, $answers);
+
         $sql ='';
         $answersForSQL = array();
         foreach ($answers as $key => $value) {

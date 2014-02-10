@@ -54,6 +54,13 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
     public function updateTestpaperResult($id, $fields)
     {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getTestpaperResult($id);
+    }
 
+    public function updateTestpaperResultActive($testId,$userId)
+    {
+        $sql = "UPDATE {$this->table} SET `active` = 0 WHERE `testId` = ? AND `userId` = ? AND `active` = 1";
+        return $this->getConnection()->executeQuery($sql, array($testId, $userId));
     }
 }
