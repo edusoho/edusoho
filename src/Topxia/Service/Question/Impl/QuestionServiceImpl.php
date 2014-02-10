@@ -135,20 +135,27 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function createCategory($fields)
     {   
-        $field['userId'] = $this->getCurrentUser()->id;
-        $field['name'] = empty($fields['name']) ? '' : $fields['name'];
-        $field['createdTime'] = time();
-        $field['target'] = empty($fields['target']) ? '' : $fields['target'];
-        $field['seq'] = $this->getCategoryDao()->getCategorysCountByTarget($field['target'])+1;
+        if(empty($fields['name'])) {
+            throw $this->createServiceException("Category argument is not exist.");      
+        }
+        $category['userId'] = $this->getCurrentUser()->id;
+        $category['name'] = $fields['name'];
+        $category['createdTime'] = time();
+        $category['updatedTime'] = time();
+        $category['target'] = empty($fields['target']) ? '' : $fields['target'];
+        $category['seq'] = $this->getCategoryDao()->getCategorysCountByTarget($category['target'])+1;
 
-        return $this->getCategoryDao()->addCategory($field);
+        return $this->getCategoryDao()->addCategory($category);
     }
 
     public function updateCategory($id, $fields)
     {   
-        $field['name'] = empty($fields['name'])?'':$fields['name'];
-        $field['updatedTime'] = time();
-        return $this->getCategoryDao()->updateCategory($id, $field);
+        if(empty($fields['name'])) {
+            throw $this->createServiceException("Category argument is not exist.");      
+        }
+        $category['name'] = $fields['name'];
+        $category['updatedTime'] = time();
+        return $this->getCategoryDao()->updateCategory($id, $category);
     }
 
     public function deleteCategory($id)
