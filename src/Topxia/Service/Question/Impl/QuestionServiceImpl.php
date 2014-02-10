@@ -11,8 +11,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected $supportedQuestionTypes = array('choice','single_choice', 'fill', 'material', 'essay', 'determine');
 
-    const MAX_CATEGORY_COUNT = 1000;
-
     public function getQuestion($id)
     {
         return $this->getQuestionDao()->getQuestion($id);

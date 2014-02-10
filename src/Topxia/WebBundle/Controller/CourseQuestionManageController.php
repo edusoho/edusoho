@@ -16,6 +16,14 @@ class CourseQuestionManageController extends BaseController
         
         $conditions = $request->query->all();
 
+        if (empty($conditions['target'])) {
+            $conditions['targetPrefix'] = "course-{$course['id']}";
+        }
+
+        if (!empty($conditions['keyword'])) {
+            $conditions['stem'] = $conditions['keyword'];
+        }
+
         if (!empty($conditions['parentId'])) {
 
             $parentQuestion = $this->getQuestionService()->getQuestion($conditions['parentId']);
@@ -52,6 +60,8 @@ class CourseQuestionManageController extends BaseController
             'targets' => $targets,
             'paginator' => $paginator,
             'parentQuestion' => $parentQuestion,
+            'conditions' => $conditions,
+            'targetChoices' => $this->getQuestionTargetChoices($course),
         ));
     }
 
