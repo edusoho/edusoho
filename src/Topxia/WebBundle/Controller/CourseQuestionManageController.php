@@ -74,17 +74,18 @@ class CourseQuestionManageController extends BaseController
 
             $question = $this->getQuestionService()->createQuestion($data);
 
-            $this->setFlashMessage('success', '题目添加成功，请继续添加！');
-
             if ($data['submission'] == 'continue') {
                 $urlParams = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
                 $urlParams['type'] = $type;
                 $urlParams['courseId'] = $courseId;
                 $urlParams['goto'] = $request->query->get('goto', null);
+                $this->setFlashMessage('success', '题目添加成功，请继续添加。');
                 return $this->redirect($this->generateUrl('course_manage_question_create', $urlParams));
             } elseif ($data['submission'] == 'continue_sub') {
+                $this->setFlashMessage('success', '题目添加成功，请继续添加子题。');
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['id']))));
             } else {
+                $this->setFlashMessage('success', '题目添加成功。');
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId))));
             }
         }
