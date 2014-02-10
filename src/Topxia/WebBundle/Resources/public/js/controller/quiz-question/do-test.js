@@ -186,7 +186,7 @@ define(function(require, exports, module) {
             $finishBtn = $(this);
 
             $.post($(this).data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
-                // window.location.href = $finishBtn.data('goto');
+                window.location.href = $finishBtn.data('goto');
             });
 
         });

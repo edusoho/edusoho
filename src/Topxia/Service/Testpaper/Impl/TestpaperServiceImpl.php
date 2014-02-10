@@ -300,9 +300,65 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     }
 
 
+    public function finishTest($id, $userId, $usedTime)
+    {
+        $itemResults = $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($id);
+
+        $testPaperResult = $this->getTestPaperResultDao()->getTestpaperResult($id);
+
+        $testPaper = $this->getTestPaperDao()->getTestPaper($testPaperResult['testId']);
+
+        $fields['status'] = $this->isExistsEssay($itemResults) ? 'reviewing' : 'finished';
+
+        $accuracy = $this->sumScore($itemResults);
+        $fields['objectiveScore'] = $accuracy['sumScore'];
+
+        if (!$this->isExistsEssay($itemResults)){
+            $fields['score'] = $fields['objectiveScore'];
+        }
+
+        $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        $fields['usedTime'] = $usedTime + $testPaperResult['usedTime'];
+        $fields['endTime'] = time();
+        $fields['active'] = 1;
+        $fields['checkedTime'] = time();
+
+        $this->getTestPaperResultDao()->updateTestpaperResultActive($testPaperResult['testId'],$testPaperResult['userId']);
+
+        return $this->getTestPaperResultDao()->updateTestpaperResult($id, $fields);
+    }
+
+    public function isExistsEssay ($itemResults)
+    {
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($itemResults, 'questionId'));
+        foreach ($questions as $value) {
+            if ($value['type'] == 'essay') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function sumScore ($itemResults)
+    {
+        $score = 0;
+        $rightItemCount = 0;
+        foreach ($itemResults as $itemResult) {
+            $score += $itemResult['score'];
+            if ($itemResult['status'] == 'right'){
+                $rightItemCount++;
+            }
+        }
+        return array(
+            'sumScore' => $score,
+            'rightItemCount' => $rightItemCount
+        );
+    }
+
     public function finishTestpaper($resultId)
     {
-        
+
     }
 
     public function submitTestpaperAnswer($id, $answers)

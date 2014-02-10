@@ -219,7 +219,7 @@ class TestpaperController extends BaseController
 
             //完成试卷，计算得分
             $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
-var_dump($testResults);exit();
+
             $testPaperResult = $this->getTestpaperService()->getTestPaperResult($id);
 
             $testPaper = $this->getTestpaperService()->getTestPaper($testPaperResult['testId']);
@@ -267,6 +267,20 @@ var_dump($testResults);exit();
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
+    private function getCourseService ()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
 
 
 
