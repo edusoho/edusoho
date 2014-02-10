@@ -222,7 +222,14 @@ class MySaleController extends BaseController
 
             $linksale['adCommissionType']= 'ratio';
 
-            $linksale['adCommission']= 5;  //网站推广，获取所有注册用户的5%的佣金
+            $lswSetting = $this->getSettingService()->get('linksaleWebSetting', array());
+
+            //默认推广链接30天内有效
+            if(empty($lswSetting['webCommission'])){
+                 $lswSetting['webCommission'] = 5;
+            }
+
+            $linksale['adCommission']= $lswSetting['webCommission'];  //网站推广，获取所有注册用户的5%的佣金
            
             $linksale['saleType']='linksale-web';
             $linksale['prodType']=$prodType;

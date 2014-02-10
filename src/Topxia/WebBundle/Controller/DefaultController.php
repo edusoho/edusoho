@@ -27,6 +27,14 @@ class DefaultController extends BaseController
 
                 if(!empty( $linksale) and( $linksale['validTimeNum']>time() or empty( $linksale['validTimeNum']))){
                     //网站推广，默认30天有效
+
+                    $lswSetting = $this->getSettingService()->get('linksaleWebSetting', array());
+
+                    //默认推广链接30天内有效
+                    if(empty($lswSetting['webCommissionDay'])){
+                         $lswSetting['webCommissionDay'] = 30;
+                    }
+
                     setcookie("mu",  $mtookeen, time()+3600*24*30,'/');
 
                 }

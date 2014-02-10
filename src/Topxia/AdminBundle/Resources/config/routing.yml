@@ -656,6 +656,11 @@ admin_sale_linksale:
     defaults: { _controller: TopxiaAdminBundle:LinkSale:index }
 
 
+admin_sale_setting:
+    pattern: /sale/setting
+    defaults: { _controller: TopxiaAdminBundle:SettingSale:saleSetting }
+
+
 admin_money_card:
     pattern: /money_card
     defaults: {_controller: TopxiaAdminBundle:MoneyCard:index }
