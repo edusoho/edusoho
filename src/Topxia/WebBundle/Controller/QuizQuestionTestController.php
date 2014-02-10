@@ -7,42 +7,6 @@ use Topxia\Common\Paginator;
 
 class QuizQuestionTestController extends BaseController
 {
-	public function indexAction(Request $request, $courseId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-		$lessons = ArrayToolkit::index($this->getCourseService()->getCourseLessons($courseId),'id');
-
-		$parentId = $request->query->get('parentId');
-
-		$conditions['target']['course'] = array($courseId);
-		if (!empty($lessons)){
-			$conditions['target']['lesson'] = ArrayToolkit::column($lessons,'id');;
-		}
-
-		$paginator = new Paginator(
-			$this->get('request'),
-			$this->getTestService()->searchTestPaperCount($conditions),
-			10
-		);
-
-		$testPapers = $this->getTestService()->searchTestPaper(
-			$conditions,
-			array('createdTime' ,'DESC'),
-			$paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-		);
-
-		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testPapers, 'updatedUserId')); 
-		
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:index.html.twig', array(
-			'course' => $course,
-			'testPapers' => $testPapers,
-			'users' => $users,
-			'lessons' => $lessons,
-			'paginator' => $paginator,
-
-		));
-	}
 
 	public function createAction(Request $request, $courseId)
 	{
@@ -64,7 +28,7 @@ class QuizQuestionTestController extends BaseController
 
 	        $testPaper['courseId'] = $courseId;
 	        $testPaper['testPaperId'] = $result['id'];
-			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
+			return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
         }
 
         if(empty($testPaper['target'])){
@@ -109,7 +73,7 @@ class QuizQuestionTestController extends BaseController
 
 	        $this->setFlashMessage('success', '试卷修改成功！');
 
-			return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
+			return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
         }
 
         if(empty($testPaper['target'])){
@@ -151,7 +115,7 @@ class QuizQuestionTestController extends BaseController
 
 			$result = $this->getTestService()->createUpdateTestPaper($testPaper['testPaperId'], $testPaper);
 
-			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
+			return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
         }
 
         if(empty($testPaper['target'])){
@@ -206,7 +170,7 @@ class QuizQuestionTestController extends BaseController
 	    	}
 
 	    	$this->setFlashMessage('success', '试卷题目保存成功！');
-        	return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
+        	return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
         }
 
 		$parentTestPaper = array_merge($request->query->all(), $testPaper);

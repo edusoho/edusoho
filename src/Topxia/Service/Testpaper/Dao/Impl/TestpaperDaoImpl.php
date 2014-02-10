@@ -24,14 +24,28 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     }
 
-    public function searchTestpapers($conditions, $sort, $start, $limit)
+    public function searchTestpapers($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy, array('createdTime'));
 
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy($orderBy[0], $orderBy[1]);
+
+        $questions = $builder->execute()->fetchAll() ? : array();
+
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
     public function searchTestpapersCount($conditions)
     {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+             ->select('COUNT(id)');
 
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function addTestpaper($fields)
@@ -43,4 +57,22 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     {
 
     }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions);
+
+        if (isset($conditions['targetPrefix'])) {
+            $conditions['targetLike'] = "{$conditions['targetPrefix']}%";
+            unset($conditions['target']);
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'questions')
+            ->andWhere('target = :target')
+            ->andWhere('target LIKE :targetLike');
+
+        return $builder;
+    }
+
 }

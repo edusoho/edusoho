@@ -19,12 +19,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 	public function searchTestpapers($conditions, $sort, $start, $limit)
 	{
+        return $this->getTestpaperDao()->searchTestpapers($conditions, $sort, $start, $limit);
+    }
 
-	}
-
-	public function searchTestpapersCount($conditions)
-	{
-
+    public function searchTestpapersCount($conditions)
+    {
+        return $this->getTestpaperDao()->searchTestpapersCount($conditions);
 	}
 
     public function publishTestpaper($id)
