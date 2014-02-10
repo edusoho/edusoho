@@ -256,18 +256,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         //得到当前用户答案
         $answers = $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($testpaperResult['id']);
-        $answers = ArrayToolkit::index($answers, 'questionId');
-  
-        $items = $this->getTestpaperItems($testpaperResult['testId']);
 
-        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::index($item, 'questionId'));
+        $answers = $this->getQuestionService()->formatAnswers($answers);
 
-        $questions = ArrayToolkit::index($questions, 'id');
+        $answers = $this->getQuestionService()->judgeQuestions($answers, $refreshStats = false);
 
-        foreach ($items as $item) {
-            $questions[$item['questionId']]['score'] = $item['score'];
-            $questions[$item['questionId']]['missScore'] = $item['missScore'];
-        }
+
 
         $results = $this->makeTestResults($answers, $questions);
 
@@ -291,12 +285,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getDoTestDao()->findTestResultsByTestPaperResultId($testResult['id']);
     }
 
+    private function formatAnswers($answers)
+    {
+        $results = array();
+        foreach ($answers as $answer) {
+            $results[$answer['questionId']] = $answer['answer'];
+        }
+        return $results;
+    }
+
+
     public function finishTestpaper($resultId)
     {
         
     }
 
-    public function submitTestpaperAnswer($resultId, $answers)
+    public function submitTestpaperAnswer($id, $answers)
     {
         if (empty($answers)) {
             return array();
