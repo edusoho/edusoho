@@ -21,18 +21,18 @@ class CourseTestpaperManageController extends BaseController
         );
 
 
-        $testPapers = $this->getTestpaperService()->searchTestpapers(
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
             array('createdTime' ,'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testPapers, 'updatedUserId')); 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpapers, 'updatedUserId')); 
         
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:index.html.twig', array(
             'course' => $course,
-            'testPapers' => $testPapers,
+            'testpapers' => $testpapers,
             'users' => $users,
             'paginator' => $paginator,
 

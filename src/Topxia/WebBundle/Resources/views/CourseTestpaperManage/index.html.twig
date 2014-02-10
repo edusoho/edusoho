@@ -31,9 +31,9 @@
     </tr>
     </thead>
     <tbody>
-        {% for testPaper in testPapers %}
-            {% set user = users[testPaper.updatedUserId] %}
-            {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {item:testPaper} %}
+        {% for testpaper in testpapers %}
+            {% set user = users[testpaper.updatedUserId] %}
+            {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {item:testpaper} %}
         {% else %}
             <tr><td colspan="20"><div class="empty">还没有试卷，请点击右上角按钮，<a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}">创建一个新试卷</a></div></td></tr>
         {% endfor %}
