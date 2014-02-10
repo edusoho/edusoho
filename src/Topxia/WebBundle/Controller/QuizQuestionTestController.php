@@ -28,7 +28,7 @@ class QuizQuestionTestController extends BaseController
 
 	        $testPaper['courseId'] = $courseId;
 	        $testPaper['testPaperId'] = $result['id'];
-			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
+			return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
         }
 
         if(empty($testPaper['target'])){
@@ -115,7 +115,7 @@ class QuizQuestionTestController extends BaseController
 
 			$result = $this->getTestService()->createUpdateTestPaper($testPaper['testPaperId'], $testPaper);
 
-			return $this->redirect($this->generateUrl('course_manage_test_paper_create_two',$testPaper));
+			return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
         }
 
         if(empty($testPaper['target'])){

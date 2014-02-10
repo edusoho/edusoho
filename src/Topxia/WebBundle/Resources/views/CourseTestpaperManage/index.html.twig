@@ -11,7 +11,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    <a href="{{ path('course_manage_test_paper_create',{courseId:course.id}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>创建试卷</a>
+    <a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>创建试卷</a>
     试卷管理
   </div>
 
@@ -35,13 +35,13 @@
             {% set user = users[testPaper.updatedUserId] %}
             {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {item:testPaper} %}
         {% else %}
-            <tr><td colspan="20"><div class="empty">还没有试卷，请点击右上角按钮，<a href="{{ path('course_manage_test_paper_create',{courseId:course.id}) }}">创建一个新试卷</a></div></td></tr>
+            <tr><td colspan="20"><div class="empty">还没有试卷，请点击右上角按钮，<a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}">创建一个新试卷</a></div></td></tr>
         {% endfor %}
     </tbody>
   </table>
   <div>
     <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> 全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="试卷" data-url="{{ path('course_manage_test_paper_deletes',{courseId:course.id}) }}">删除</button>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="试卷" data-url="{{ path('course_manage_testpaper_deletes',{courseId:course.id}) }}">删除</button>
   </div>
 
   {{ web_macro.paginator(paginator) }}

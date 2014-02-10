@@ -70,7 +70,7 @@
 
             {#<button type="button" class="btn btn-primary pull-right mlm" >验证</button>#}
             {#% if parentTestPaper.itemCounts |default(null)%}
-              <a href="{{ path('course_manage_test_paper_create',{testPaperId:testPaper.id,courseId:course.id, percentage:parentTestPaper.percentage, itemCounts:parentTestPaper.itemCounts, itemScores:parentTestPaper.itemScores, target:parentTestPaper.target,}) }}" class="btn btn-link  pull-right">上一步</a>
+              <a href="{{ path('course_manage_testpaper_create',{testPaperId:testPaper.id,courseId:course.id, percentage:parentTestPaper.percentage, itemCounts:parentTestPaper.itemCounts, itemScores:parentTestPaper.itemScores, target:parentTestPaper.target,}) }}" class="btn btn-link  pull-right">上一步</a>
             {% endif %#}
             
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
