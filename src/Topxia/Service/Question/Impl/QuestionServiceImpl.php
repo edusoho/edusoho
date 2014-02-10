@@ -135,9 +135,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function createCategory($fields)
     {   
-        if(empty($fields['name'])) {
-            throw $this->createServiceException("Category argument is not exist.");      
+        if (!ArrayToolkit::requireds($fields, array('name'))) {
+            throw $this->createServiceException("缺少必要参数，添加类别失败");
         }
+
         $category['userId'] = $this->getCurrentUser()->id;
         $category['name'] = $fields['name'];
         $category['createdTime'] = time();
@@ -150,9 +151,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function updateCategory($id, $fields)
     {   
-        if(empty($fields['name'])) {
-            throw $this->createServiceException("Category argument is not exist.");      
+        if (!ArrayToolkit::requireds($fields, array('name'))) {
+            throw $this->createServiceException("缺少必要参数，更新类别失败");
         }
+        
         $category['name'] = $fields['name'];
         $category['updatedTime'] = time();
         return $this->getCategoryDao()->updateCategory($id, $category);
