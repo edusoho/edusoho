@@ -73,7 +73,7 @@ class QuizQuestionTestController extends BaseController
 
 	        $this->setFlashMessage('success', '试卷修改成功！');
 
-			return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
+			return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
         }
 
         if(empty($testPaper['target'])){
@@ -170,7 +170,7 @@ class QuizQuestionTestController extends BaseController
 	    	}
 
 	    	$this->setFlashMessage('success', '试卷题目保存成功！');
-        	return $this->redirect($this->generateUrl('course_manage_test_paper',array( 'courseId' => $courseId)));
+        	return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
         }
 
 		$parentTestPaper = array_merge($request->query->all(), $testPaper);

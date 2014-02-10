@@ -12,13 +12,14 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
         $paginator = new Paginator(
             $this->get('request'),
             $this->getTestpaperService()->searchTestpapersCount($conditions),
             10
         );
 
-        $conditions['target'] = "course-{$course['id']}";
 
         $testPapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
@@ -33,7 +34,6 @@ class CourseTestpaperManageController extends BaseController
             'course' => $course,
             'testPapers' => $testPapers,
             'users' => $users,
-            'lessons' => $lessons,
             'paginator' => $paginator,
 
         ));
@@ -47,10 +47,5 @@ class CourseTestpaperManageController extends BaseController
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
-    }
-
-    private function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
