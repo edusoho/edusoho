@@ -9,8 +9,8 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		    <ul>
-		      {% for index, answer in question.answer %}
-		        {% set userAnswer = question.testResult.answer[index] %}
+		      {% for index, answer in item.question.answer %}
+		        {% set userAnswer = item.question.testResult.answer[index] %}
 			    	<li>
 			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 			    	  {% if userAnswer == '' %}
@@ -30,7 +30,7 @@
 			</div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|raw }}</div>
 	{% else %}
 	  <div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-fill-inputs">

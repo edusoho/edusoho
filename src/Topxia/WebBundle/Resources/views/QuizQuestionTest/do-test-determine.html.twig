@@ -9,11 +9,11 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 				{% if item.question.testResult.status == 'right' %}
-					正确答案是 <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">，你答对了
+					正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">，你答对了
 				{% elseif item.question.testResult.status == 'wrong' %}
-					正确答案是 <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>， 你<strong class="text-danger">答错</strong>了
+					正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>， 你<strong class="text-danger">答错</strong>了
 				{% elseif item.question.testResult.status == 'noAnswer' %}
-					正确答案： <strong class="text-success">{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，你未答题
+					正确答案： <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，你未答题
 				{% endif %}
 		  </div>
 
@@ -22,7 +22,7 @@
 		  </div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|raw }}</div>
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-determine-inputs">

@@ -55,7 +55,7 @@
 			  <div class="testpaper-question-result">
 			    <div class="testpaper-question-result-suggested">
 				    <div class="testpaper-question-result-title">参考答案：</div>
-				    <div>{{ question.answer[0]|raw }}</div>
+				    <div>{{ item.question.answer[0]|raw }}</div>
 			    </div>
 			    <div class="testpaper-question-result-your">
 				    <div class="testpaper-question-result-title">你的回答：</div>
@@ -63,12 +63,12 @@
 			    </div>
 			  {% if paperResult.status == 'finished' %}
 			  	<div class="testpaper-question-result-score mtl">
-			  		<div class="testpaper-question-result-title">得分：<strong>{{ question.testResult.score }} 分</strong></div>
+			  		<div class="testpaper-question-result-title">得分：<strong>{{ item.question.testResult.score }} 分</strong></div>
 			  	</div>
-			  	{% if question.testResult.teacherSay != '' %}
+			  	{% if item.question.testResult.teacherSay != '' %}
 			  	<div class="testpaper-question-teacherSay mtl">
 					<div class="testpaper-question-result-title">评语：</div>
-					<div>{{ question.testResult.teacherSay|raw }}</div>
+					<div>{{ item.question.testResult.teacherSay|raw }}</div>
 				</div>
 				{% endif %}
 			  {% else %}
@@ -82,7 +82,7 @@
 					{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 				</div>
 			</div>
-			<div class="testpaper-question-analysis well" style="display:none;">{{ question.analysis|raw }}</div>
+			<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|raw }}</div>
 		{% endif %}
 
 	{% else %}

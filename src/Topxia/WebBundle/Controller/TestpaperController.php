@@ -121,7 +121,8 @@ class TestpaperController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestPaper($testpaperResult['testId']);
 
-        $items = $this->getTestpaperService()->showTestpaper($id);
+        $result = $this->getTestpaperService()->showTestpaper($id);
+        $items = $result['formatItems'];
 
         $total = array();
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
@@ -147,6 +148,49 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function testResultAction (Request $request, $id)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+        if (!$testpaperResult) {
+            throw $this->createNotFoundException('试卷不存在!');
+        }
+        if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestPaper($testpaperResult['testId']);
+
+        $result = $this->getTestpaperService()->showTestpaper($id, true);
+        $items = $result['formatItems'];
+        $accuracy = $result['accuracy'];
+
+        $total = array();
+        foreach ($testpaper['metas']['question_type_seq'] as $type) {
+            if (empty($items[$type])) {
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
+            } else {
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['number'] = count($items[$type]);
+            }
+        }
+
+        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
+
+        $student = $this->getUserService()->getUser($testpaperResult['userId']);
+
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
+            'items' => $items,
+            'accuracy' => $accuracy,
+            'paper' => $testpaper,
+            'paperResult' => $testpaperResult,
+            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'id' => $id,
+            'total' => $total,
+            'student' => $student
+        ));
+    }
+
     public function submitTestAction (Request $request, $id)
     {
         if ($request->getMethod() == 'POST') {
@@ -154,9 +198,9 @@ class TestpaperController extends BaseController
             $answers = array_key_exists('data', $data) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
 
-            $result = $this->getTestpaperService()->submitTest($answers, $id);
+            $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
 
-            $this->getTestpaperService()->updatePaperResult($id, $usedTime);
+            $this->getTestpaperService()->updateTestpaperResult($id, $usedTime);
 
             return $this->createJsonResponse(true);
         }
@@ -174,7 +218,7 @@ class TestpaperController extends BaseController
             $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
 
             //完成试卷，计算得分
-            $testResults = $this->getTestpaperService()->makeFinishTestResults($id);
+            $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
 
             $testPaperResult = $this->getTestpaperService()->getTestPaperResult($id);
 
@@ -207,6 +251,9 @@ class TestpaperController extends BaseController
             // return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $id)));
         }
     }
+
+
+    
 
 
 

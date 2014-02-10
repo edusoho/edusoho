@@ -530,7 +530,7 @@ course_manage_do_test_suspend:
 
 course_manage_submit_test:
     pattern: /submit/test/{id}
-    defaults: { _controller: TopxiaWebBundle:DoTest:submitTest }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:submitTest }
 
 course_manage_finish_test:
     pattern: /finish/test/{id}
@@ -538,7 +538,7 @@ course_manage_finish_test:
 
 course_manage_test_results:
     pattern: /test/result/{id}
-    defaults: { _controller: TopxiaWebBundle:DoTest:testResults }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:testResult }
 
 course_manage_test_teacher_check:
     pattern: /test/teacher/check/{id}
