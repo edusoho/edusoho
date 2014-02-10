@@ -179,8 +179,12 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['commission']=0;
                  $commission['note']='购买人IP与推广人IP相同，不能享受佣金收入';
 
-            }
-            else{
+            }else if(!empty($order['promoCode'])){
+
+                 $commission['commission']=0;
+                 $commission['note']='该订单已被优惠码推广，不能享受佣金收入';
+
+            }else{
 
                 if($linksale['adCommissionType']=='ratio'){
 
@@ -221,7 +225,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
             if($order['userId']==$offsale['partnerId']){
 
                  $commission['commission']=0;
-                 $commission['note']='本人定单0佣金';
+                 $commission['note']='本人定单不能享受佣金收入';
 
 
             }else if (!empty($offsale['validTime']) and $offsale['validTimeNum']<time()){

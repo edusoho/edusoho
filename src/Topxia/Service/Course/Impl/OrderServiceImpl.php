@@ -145,20 +145,21 @@ class OrderServiceImpl extends BaseService implements OrderService
 
                   $this->getCommissionService()->computeOffSaleCommission($order,$offsale);
             }
-        }else{
+        }
 
-            if(!empty($order['mTookeen']))
-            {
+        //如果通过优惠码推广，优先计算优惠码。
+        if(!empty($order['mTookeen']))
+        {
 
-                $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($order['mTookeen']);
+            $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($order['mTookeen']);
 
-                if(!empty($linksale)){
+            if(!empty($linksale)){
 
-                      $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
- 
-                }
+                  $this->getCommissionService()->computeLinkSaleCommission($order,$linksale);
+
             }
         }
+        
 
        
         
