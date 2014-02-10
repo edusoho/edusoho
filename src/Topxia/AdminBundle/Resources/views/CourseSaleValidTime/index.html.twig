@@ -2,7 +2,7 @@
 {% set course = course|default(null) %}
 
 {% block title %}
-设置推广佣金
+设置销售有效期
 {% endblock %}
 {% block body %}
   <form class="form-horizontal" id="course-form" action="{{ path('admin_course_ad_commission', {id:course.id}) }}" method="post">

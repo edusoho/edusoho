@@ -11,17 +11,17 @@
       <label class="col-md-3 control-label" for="course-adCommissionType-field">佣金计算类型</label>
       <div class="col-md-6 controls">
         <div class="controls col-md-8 radios">
-          {{ radios('adCommissionType', {'quota':'定额', 'ratio':'比例'}, course.adCommissionType) }}
+          {{ radios('adCommissionType', {'ratio':'比例'}, course.adCommissionType) }}{#'quota':'定额', #}
         </div>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="col-md-3 control-label" for="course-adCommission-field">佣金额度</label>
+      <label class="col-md-3 control-label" for="course-adCommission-field">佣金<span class="{% if course.adCommissionType != 'quota' %} hidden {% endif %} quota-text">额度</span><span class="{% if course.adCommissionType != 'ratio' %} hidden {% endif %} ratio-text ">比例</span></label>
       <div class="col-md-6 controls">
         <input class="form-control" id="course-adCommission-field" type="text" name="adCommission" value="{{ course.adCommission }}" >
-        <span class="{% if course.adCommissionType != 'quota' %} hidden {% endif %} small quota-text">  </span>
-        <span class="{% if course.adCommissionType != 'ratio' %} hidden {% endif %} small ratio-text ">  </span>
+        <span class="{% if course.adCommissionType != 'quota' %} hidden {% endif %} small quota-text">单位：元</span>
+        <span class="{% if course.adCommissionType != 'ratio' %} hidden {% endif %} small ratio-text ">百分比</span>
       </div>
     </div>
 
