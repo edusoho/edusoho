@@ -15,6 +15,23 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
             'answer' => 'json'
     );
 
+    public function getItemResult($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $ItemResult = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $ItemResult ? $this->createSerializer()->unserialize($ItemResult, $this->serializeFields) : null;
+    }
+
+    public function addItemResult($fields)
+    {
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->table, $fields);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert ItemResult error.');
+        }
+        return $this->getItemResult($this->getConnection()->lastInsertId());
+    }
+
 	public function addItemAnswers ($testPaperResultId, $answers, $testPaperId, $userId)
 	{
 		if(empty($answers)){ 
@@ -39,24 +56,22 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
 
     public function addItemResults ($testPaperResultId, $answers, $testId, $userId)
     {
-        if(empty($answers)){ 
-            return array(); 
-        }
+        // if(empty($answers)){ 
+        //     return array(); 
+        // }
 
-        $answers = array_map(function($answer){
-            return json_encode($answer);
-        }, $answers);
+        // $answers = $this->createSerializer()->serializes($answers, $this->serializeFields);
 
-        $mark = "(".str_repeat('?,', 6)."? )";
-        $marks = str_repeat($mark.',', count($answers) - 1).$mark;
-        $answersForSQL = array();
-        foreach ($answers as $key => $value) {
-            array_push($answersForSQL, (int)$testId, (int)$testPaperResultId, (int)$userId, (int)$key, $value['status'], $value['score'], $value['answer']);
-        }
+        // $mark = "(".str_repeat('?,', 6)."? )";
+        // $marks = str_repeat($mark.',', count($answers) - 1).$mark;
+        // $answersForSQL = array();
+        // foreach ($answers as $key => $value) {
+        //     array_push($answersForSQL, (int)$testId, (int)$testPaperResultId, (int)$userId, (int)$key, $value['status'], $value['score'], $value['answer']);
+        // }
 
-        $sql = "INSERT INTO {$this->table} (`testId`, `testPaperResultId`, `userId`, `questionId`, `status`, `score`, `answer`) VALUES {$marks};";
+        // $sql = "INSERT INTO {$this->table} (`testId`, `testPaperResultId`, `userId`, `questionId`, `status`, `score`, `answer`) VALUES {$marks};";
 
-        return $this->getConnection()->executeUpdate($sql, $answersForSQL);
+        // return $this->getConnection()->executeUpdate($sql, $answersForSQL);
     }
 
     //要不要给这三个字段加上索引呢
