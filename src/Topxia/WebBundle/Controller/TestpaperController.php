@@ -96,7 +96,7 @@ class TestpaperController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
+        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
@@ -260,7 +260,7 @@ class TestpaperController extends BaseController
             $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
 
             $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-
+exit();
             $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
             //试卷信息记录
             $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
@@ -287,7 +287,6 @@ class TestpaperController extends BaseController
             }
 
             return $this->createJsonResponse(true);
-            // return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $id)));
         }
     }
 

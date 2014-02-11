@@ -387,6 +387,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $answers = $this->makeScores($answers, $items);
 
+        foreach ($answers as $questionId => $answer) {
+            if($answer['status'] == 'noAnswer'){
+                $answer['answer'] = array();
+                $answer['testId'] = $testpaperResult['testId'];
+                $answer['testPaperResultId'] = $testpaperResult['id'];
+                $answer['userId'] = $userId;
+                $answer['questionId'] = $questionId;
+                $this->getTestpaperItemResultDao()->addItemResult($answer);
+            }
+        }
+
         //记分
         $this->getTestpaperItemResultDao()->updateItemResults($answers, $testpaperResult['id']);
 
@@ -398,7 +409,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $results = array();
         foreach ($items as $item) {
             if (!array_key_exists($item['questionId'], $answers)){
-                $results[$item['questionId']] = 'noAnswer';
+                $results[$item['questionId']] = array();
             } else {
                 $results[$item['questionId']] = $answers[$item['questionId']]['answer'];
             }
