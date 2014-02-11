@@ -494,19 +494,19 @@ course_manage_question_category_sort:
 
 course_manage_open_test:
     pattern: /open/test/{id}
-    defaults: { _controller: TopxiaWebBundle:DoTest:openTestPaper }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:openTestpaper }
 
 course_manage_close_test:
     pattern: /close/test/{id}
-    defaults: { _controller: TopxiaWebBundle:DoTest:closeTestPaper }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:closeTestpaper }
 
 course_manage_do_test:
     pattern: /do/test/{testId}
-    defaults: { _controller: TopxiaWebBundle:DoTest:index }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:doTestpaper }
 
 course_manage_redo_test:
     pattern: /redo/test/{testId}
-    defaults: { _controller: TopxiaWebBundle:DoTest:reDo }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:reDoTestpaper }
 
 course_manage_show_test:
     pattern: /show/test/{id}
@@ -518,7 +518,7 @@ course_manage_preview_test:
 
 course_manage_do_test_pause:
     pattern: /pause/test
-    defaults: { _controller: TopxiaWebBundle:DoTest:testPause }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:pauseTest }
 
 course_manage_do_test_suspend:
     pattern: /suspend/test/{id}
@@ -538,7 +538,7 @@ course_manage_test_results:
 
 course_manage_test_teacher_check:
     pattern: /test/teacher/check/{id}
-    defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheck }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheck }
 
 course_manage_test_teacher_finish_check:
     pattern: /test/teacher/finish/check
@@ -562,11 +562,11 @@ course_manage_show_favorite_question:
 
 course_manage_list_teacher_test_reviewing:
     pattern: /my/list/teacher/test/reviewing
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:listReviewingTest }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
 
 course_manage_list_teacher_test_finished:
     pattern: /my/list/teacher/test/finished
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:listFinishedTest }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
 
 course_manage_testpaper:
     pattern: /course/{courseId}/manage/testpaper
@@ -574,7 +574,7 @@ course_manage_testpaper:
 
 course_manage_test_check:
     pattern: /list/course/check/{id}/{status}
-    defaults: { _controller: TopxiaWebBundle:DoTest:teacherCheckInCourse }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheckInCourse }
 
 course_manage_testpaper_create:
     pattern: /course/{courseId}/manage/testpaper/create

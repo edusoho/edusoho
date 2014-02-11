@@ -17,6 +17,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->getTestpaperResult($id);
     }
 
+    public function findTestpapersByIds($ids)
+    {
+        return $this->getTestpaperDao()->findTestpapersByIds($ids);
+    }
+
 	public function searchTestpapers($conditions, $sort, $start, $limit)
 	{
         return $this->getTestpaperDao()->searchTestpapers($conditions, $sort, $start, $limit);
@@ -29,12 +34,32 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function publishTestpaper($id)
     {
-
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)){
+            throw $this->createNotFoundException();
+        }
+        if (!in_array($testpaper['status'], array('closed', 'draft'))){
+            throw $this->createAccessDeniedException('试卷状态不合法!');
+        }
+        $testpaper = array(
+            'status' => 'open'
+        );
+        return $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
     }
 
     public function closeTestpaper($id)
     {
-
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)){
+            throw $this->createNotFoundException();
+        }
+        if (!in_array($testpaper['status'], array('open'))){
+            throw $this->createAccessDeniedException('试卷状态不合法!');
+        }
+        $testpaper = array(
+            'status' => 'closed'
+        );
+        return $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
     }
 
     public function deleteTestpaper($id)
@@ -69,8 +94,31 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     	return $this->getTestpaperResultDao()->findTestPaperResultsByTestIdAndStatusAndUserId($testpaperId, $status, $userId);
     }
 
+    public function findTestPaperResultsByStatusAndTestIds ($ids, $status, $start, $limit)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultsByStatusAndTestIds($ids, $status, $start, $limit);
+    }
 
+    public function findTestPaperResultCountByStatusAndTestIds ($ids, $status)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultCountByStatusAndTestIds($ids, $status);
+    }
 
+    public function findTestPaperResultsByStatusAndTeacherIds ($ids, $status, $start, $limit)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultsByStatusAndTeacherIds($ids, $status, $start, $limit);
+    }
+
+    public function findTestPaperResultCountByStatusAndTeacherIds ($ids, $status)
+    {
+        return $this->getTestPaperResultDao()->findTestPaperResultCountByStatusAndTeacherIds($ids, $status);
+    }
+
+    public function findAllTestPapersByTarget ($id)
+    {
+        $target = 'course-'.$id;
+        return $this->getTestPaperDao()->findTestPaperByTargets(array($target));
+    }
 
 
 
@@ -356,6 +404,60 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
     }
 
+    public function makeTeacherFinishTest ($id, $paperId, $teacherId, $field)
+    {
+        $testResults = array();
+        
+        $teacherSay = $field['teacherSay'];
+        unset($field['teacherSay']);
+
+
+        $items = $this->getTestItemDao()->findItemsByTestPaperId($paperId);
+        $items = ArrayToolkit::index($items, 'questionId');
+
+        $userAnswers = $this->getTestpaperItemResultDao()->findTestResultsByTestPaperResultId($id);
+        $userAnswers = ArrayToolkit::index($userAnswers, 'questionId');
+
+        foreach ($field as $key => $value) {
+            $keys = explode('_', $key);
+
+            if (!is_numeric($keys[1])) {
+                throw $this->createServiceException('得分必须为数字！');
+            }
+
+            $testResults[$keys[1]][$keys[0]] = $value;
+            $userAnswer = $userAnswers[$keys[1]]['answer'];
+            if ($keys[0] == 'score'){
+                if ($value == $items[$keys[1]]['score']){
+                    $testResults[$keys[1]]['status'] = 'right';
+                } elseif ($userAnswer[0] == '') {
+                    $testResults[$keys[1]]['status'] = 'noAnswer';
+                } else {
+                    $testResults[$keys[1]]['status'] = 'wrong';
+                }
+            }
+        }
+        //是否要加入教师阅卷的锁
+        $this->getTestpaperItemResultDao()->updateItemEssays($testResults, $id);
+
+        // $this->getQuestionService()->statQuestionTimes($testResults);
+
+        $testpaperResult = $this->getTestPaperResultDao()->getTestpaperResult($id);
+
+        $subjectiveScore = array_sum(ArrayToolkit::column($testResults, 'score'));
+
+        $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
+
+        return $this->getTestPaperResultDao()->updateTestpaperResult($id, array(
+            'score' => $totalScore,
+            'subjectiveScore' => $subjectiveScore,
+            'status' => 'finished',
+            'checkTeacherId' => $teacherId,
+            'checkedTime' => time(),
+            'teacherSay' => $teacherSay
+        ));
+    }
+
     public function finishTestpaper($resultId)
     {
 
@@ -472,6 +574,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    public function findTeacherTestpapersByTeacherId ($teacherId)
+    {
+        $members = $this->getMemberDao()->findAllMemberByUserIdAndRole($teacherId, 'teacher');
+
+        $targets = array_map(function($member){
+            return "course-".$member['courseId'];
+        }, $members);
+
+        return $this->getTestPaperDao()->findTestpaperByTargets($targets);
+    }
 
 
 
@@ -502,5 +614,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     private function getQuestionService()
     {
         return $this->createService('Question.QuestionService');
+    }
+
+    private function getMemberDao ()
+    {
+        return $this->createDao('Course.CourseMemberDao');
     }
 }

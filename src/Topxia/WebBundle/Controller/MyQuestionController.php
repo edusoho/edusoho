@@ -191,27 +191,27 @@ class MyQuestionController extends BaseController
         ));
     }
 
-    private function formatQuestions ($questions)
-    {
-        $formatQuestions = array();
+    // private function formatQuestions ($questions)
+    // {
+    //     $formatQuestions = array();
 
-        foreach ($questions as $key => $value) {
+    //     foreach ($questions as $key => $value) {
 
-            if(in_array($value['type'], array('single_choice', 'choice'))) {
-                $i = 65;
-                foreach ($value['choices'] as $key => $v) {
-                    $v['choiceIndex'] = chr($i);
-                    $value['choices'][$key] = $v;
-                    $i++;
-                }
-            }
+    //         if(in_array($value['type'], array('single_choice', 'choice'))) {
+    //             $i = 65;
+    //             foreach ($value['choices'] as $key => $v) {
+    //                 $v['choiceIndex'] = chr($i);
+    //                 $value['choices'][$key] = $v;
+    //                 $i++;
+    //             }
+    //         }
 
             
-            $formatQuestions[$value['id']] = $value;
-        }
+    //         $formatQuestions[$value['id']] = $value;
+    //     }
 
-        return $formatQuestions;
-    }
+    //     return $formatQuestions;
+    // }
 
 
 	private function getMyQuestionService ()

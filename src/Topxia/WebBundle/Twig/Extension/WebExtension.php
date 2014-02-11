@@ -32,6 +32,7 @@ class WebExtension extends \Twig_Extension
             'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter'),
             'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
+            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter')
         );
     }
 
@@ -318,6 +319,13 @@ class WebExtension extends \Twig_Extension
             return "<span class='question-stem-fill-blank'>({$index})</span>";
         }, $stem);
         return $stem;
+    }
+
+    public function getCourseidFilter($target)
+    {
+        $target = explode('/', $target);
+        $target = explode('-', $target[0]);
+        return $target[1];
     }
 
     public function getSetting($name, $default = null)

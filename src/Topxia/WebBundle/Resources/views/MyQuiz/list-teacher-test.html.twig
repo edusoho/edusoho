@@ -7,7 +7,7 @@
 			{% set testPaper = testPapers[paperResult.testId] %}
 			{% set student = users[paperResult.userId] %}
 			{% if courses|default(null) %}
-				{% set course = courses[testPaper.targetId] %}
+				{% set course = courses[testPaper.target|get_course_id] %}
 			{% endif %}
 			{% if teachers|default(null) %}
 				{% set teacher = teachers[paperResult.checkTeacherId]|default(null) %}
