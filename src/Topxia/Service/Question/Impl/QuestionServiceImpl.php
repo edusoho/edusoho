@@ -84,8 +84,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 array_push($rightIds, $questionId);
             }
         }
-        $this->getQuizQuestionDao()->updateQuestionCountByIds($ids, 'finishedTimes');
-        $this->getQuizQuestionDao()->updateQuestionCountByIds($rightIds, 'passedTimes');
+        $this->getQuestionDao()->updateQuestionCountByIds($ids, 'finishedTimes');
+        $this->getQuestionDao()->updateQuestionCountByIds($rightIds, 'passedTimes');
     }
 
     public function deleteQuestion($id)
@@ -297,7 +297,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     private function getQuestionFavoriteDao()
     {
-        return $this->createDao('Quiz.QuestionFavoriteDao');
+        return $this->createDao('Question.QuestionFavoriteDao');
     }
 
 }

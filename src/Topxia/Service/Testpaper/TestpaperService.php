@@ -5,6 +5,10 @@ interface TestpaperService
 {
     public function getTestpaper($id);
 
+    public function getTestpaperResult($id);
+
+    public function findTestpapersByIds($ids);
+
     public function searchTestpapers($conditions, $sort, $start, $limit);
 
     public function searchTestpapersCount($conditions);
@@ -21,11 +25,23 @@ interface TestpaperService
 
     public function rebuildTestpaper($id, $builder, $builderOptions);
 
+    public function findTestpaperResultsByUserId ($id, $start, $limit);
+
+    public function findTestpaperResultsCountByUserId ($id);
 
     public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);
 
-    public function findTestPaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
+    public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
 
+    public function findTestpaperResultsByStatusAndTestIds ($ids, $status, $start, $limit);
+
+    public function findTestpaperResultCountByStatusAndTestIds ($ids, $status);
+
+    public function findTestpaperResultsByStatusAndTeacherIds ($ids, $status, $start, $limit);
+
+    public function findTestpaperResultCountByStatusAndTeacherIds ($ids, $status);
+
+    public function findAllTestpapersByTarget ($id);
 
     /**
      * 开始做试卷
@@ -37,6 +53,10 @@ interface TestpaperService
 
     public function finishTestpaper($resultId);
 
+    public function previewTestpaper($testpaperId);
+
+    public function showTestpaper($testpaperResultId, $isAccuracy = null);
+
     /**
      * [submitTestpaperAnswer description]
      * @param  [type] $testpaperId [description]
@@ -46,6 +66,16 @@ interface TestpaperService
     public function submitTestpaperAnswer($resultId, $answers);
 
     public function reviewTestpaper($resultId, $items, $remark = null);
+
+    public function makeTestpaperResultFinish ($id);
+
+    public function finishTest($id, $userId, $usedTime);
+
+    public function makeTeacherFinishTest ($id, $paperId, $teacherId, $field);
+
+    public function updateTestpaperResult($id, $usedTime);
+
+    public function findTeacherTestpapersByTeacherId ($teacherId);
 
     /**
      * 获取试卷的所有题目

@@ -609,7 +609,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     }
 
     private function getTestItemDao(){
-        return $this->createDao('Quiz.TestItemDao');
+        return $this->createDao('Testpaper.TestpaperItemDao');
     }
 
     private function getTestpaperItemResultDao(){

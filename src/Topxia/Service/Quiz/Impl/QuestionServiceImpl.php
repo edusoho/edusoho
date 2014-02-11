@@ -186,7 +186,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     private function getQuestionFavoriteDao()
     {
-        return $this->createDao('Quiz.QuestionFavoriteDao');
+        return $this->createDao('Question.QuestionFavoriteDao');
     }
 
     private function getQuestionImplementor($name)
