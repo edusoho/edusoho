@@ -7,8 +7,51 @@ use Topxia\Common\ArrayToolkit;
 
 class TestpaperServiceTest extends BaseTestCase
 {
+    /**
+     * @group current
+     */
+    public function testBuildTestpaperWithRandMode()
+    {
+        $target = 'course-1';
 
-    public function testCanBuildRandTestpaper()
+        $this->generateChoiceQuestions($target, 5, 'simple');
+        $this->generateChoiceQuestions($target, 5, 'normal');
+        $this->generateChoiceQuestions($target, 5, 'difficulty');
+
+        $this->generateFillQuestions($target, 5, 'simple');
+        $this->generateFillQuestions($target, 5, 'normal');
+        $this->generateFillQuestions($target, 5, 'difficulty');
+
+        $this->generateDetermineQuestions($target, 5, 'simple');
+        $this->generateDetermineQuestions($target, 5, 'normal');
+
+        $this->generateEssayQuestions($target, 1, 'simple');
+        $this->generateEssayQuestions($target, 2, 'normal');
+        $this->generateEssayQuestions($target, 1, 'difficulty');
+
+        list($testpaper, $items) = $this->getTestpaperService()->createTestpaper(array(
+            'name' => 'test paper', 
+            'pattern' => 'QuestionType', 
+            'mode' => 'difficulty',
+            'target' => $target,
+            'counts' => array(
+                'essay' => 4,
+                'choice' => 2,
+            ),
+            'scores' => array(
+                'essay' => 1,
+                'choice' => 2,
+            ),
+            'percentages' => array(
+                'simple' => 30,
+                'normal' => 40,
+                'difficulty' => 30,
+            ),
+        ));
+
+    }
+
+    public function testCanBuildTestpaper()
     {
         $target = 'course-1';
         $questions = $this->generateEssayQuestions($target, 5, 'simple');
@@ -75,47 +118,6 @@ class TestpaperServiceTest extends BaseTestCase
 
         $this->assertEquals('yes', $result['status']);
     }
-
-    /**
-     * @group current
-     */
-    public function testCanBuildDifficultyTestpaper()
-    {
-        $target = 'course-1';
-        $questions = $this->generateChoiceQuestions($target, 5, 'simple');
-        $questions = $this->generateChoiceQuestions($target, 5, 'normal');
-        $questions = $this->generateChoiceQuestions($target, 5, 'difficulty');
-
-        $questions = $this->generateFillQuestions($target, 5, 'simple');
-        $questions = $this->generateFillQuestions($target, 5, 'normal');
-        $questions = $this->generateFillQuestions($target, 5, 'difficulty');
-
-        $questions = $this->generateDetermineQuestions($target, 5, 'simple');
-        $questions = $this->generateDetermineQuestions($target, 5, 'normal');
-
-        $questions = $this->generateEssayQuestions($target, 1, 'simple');
-        $questions = $this->generateEssayQuestions($target, 2, 'normal');
-        $questions = $this->generateEssayQuestions($target, 1, 'difficulty');
-        
-        $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', array(
-            'target' => $target,
-            'mode' => 'difficulty',
-            'counts' => array(
-                'essay' => 4,
-            ),
-            'scores' => array(
-                'essay' => 1,
-            ),
-            'percentage' => array(
-                'simple' => 25,
-                'normal' => 40,
-                'difficulty' => 35,
-            )
-        ));
-
-    }
-
-
 
     private function generateChoiceQuestions($target, $count, $difficulty = null)
     {

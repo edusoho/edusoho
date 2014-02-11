@@ -8,34 +8,44 @@ define(function(require, exports, module) {
 
     var CreateBase = {
 
-        noUiSlider:null,
-
-        initNoUiSlider: function(){
-            CreateBase.noUiSlider = $('.noUiSlider').noUiSlider({
+        initDifficultyPercentageSlider: function($form) {
+            return $form.find('.difficulty-percentage-slider').noUiSlider({
                 range: [0,100],
                 start: [30,70],
                 step: 5,
                 serialization: {
                     resolution: 1
                 },
-                slide: function(){
-                    var values = $(".noUiSlider").val();
-                    $('#value-0').text($('#value-0').data('text')+values['0']+'%');
-                    $('#value-1').text($('#value-1').data('text')+(values['1']-values['0'])+'%');
-                    $('#value-2').text($('#value-2').data('text')+(100-values['1'])+'%');
-                    $("#perventage-1").val(values['0']);
-                    $("#perventage-2").val(values['1']);
+                slide: function() {
+                    this.trigger('change');
                 }
+            }).change(function(){
+                var values = $(this).val();
+
+                var simplePercentage = values[0],
+                    normalPercentage = values[1] - values[0],
+                    difficultyPercentage = 100 - values[1];
+
+                $form.find('.simple-percentage-text').html('简单' + simplePercentage + '%');
+                $form.find('.normal-percentage-text').html('一般' + normalPercentage + '%');
+                $form.find('.difficulty-percentage-text').html('困难' + difficultyPercentage + '%');
+
+                $form.find('input[name="percentages[simple]"]').val(simplePercentage);
+                $form.find('input[name="percentages[normal]"]').val(normalPercentage);
+                $form.find('input[name="percentages[difficulty]"]').val(difficultyPercentage);
+
             });
         },
 
-        isDifficulty: function(){
-            $('[name=isDifficulty]').on('click', function(){
-                var val = $('input[name="isDifficulty"]:checked').val();
-                if(val == 0){
-                    $('.difficulty-html').addClass('hidden');
-                }else{
-                    $('.difficulty-html').removeClass('hidden');
+        initModeField: function(){
+            var $form = $('#testpaper-form');
+            var $slider = this.initDifficultyPercentageSlider($form);
+             $form.find('[name=mode]').on('click', function(){
+                if ($(this).val() == 'difficulty') {
+                    $form.find('.difficulty-form-group').removeClass('hidden');
+                    $slider.change();
+                } else {
+                    $form.find('.difficulty-form-group').addClass('hidden');
                 }
             });
         },
@@ -140,6 +150,7 @@ define(function(require, exports, module) {
         },
 
         getCheckResult : function(){
+            return true;
             var flag = 0;
 
             var isDifficulty = $('input[name="isDifficulty"]:checked').val();

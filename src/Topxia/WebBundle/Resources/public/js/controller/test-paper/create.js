@@ -9,14 +9,11 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var validator = new Validator({
-            element: '#test-create-form',
+            element: '#testpaper-form',
             autoSubmit: false,
         });
 
-        CreateBase.initNoUiSlider();
-
-        CreateBase.isDifficulty();
-
+        CreateBase.initModeField();
         CreateBase.initRangeField();
 
         CreateBase.sortable();

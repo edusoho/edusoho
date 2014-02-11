@@ -38,9 +38,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
 
         $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
-        $items = $builder->build($testpaper, $fields);
-        var_dump($items);
-        exit();
+        $result = $builder->build($testpaper, $fields);
+
+        if ($result['status'] != 'ok') {
+            throw $this->createServiceException("构建试卷(#{testpaper['id']})题目失败");
+        }
+
+        return array($testpaper, $result['items']);
     }
 
     public function updateTestpaper($id, $fields)
@@ -122,14 +126,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     }
 
-    public function buildTestpaper($id, $builder, $builderOptions)
+    public function buildTestpaper($id, $builderOptions)
     {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)) {
+            throw $this->createServiceException("Testpaper #{$id} is not found.");
+        }
+        $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
 
-    }
-
-    public function rebuildTestpaper($id, $builder, $builderOptions)
-    {
-
+        return $builder->build($testpaper, $options);
     }
 
     public function canBuildTestpaper($builder, $options)
