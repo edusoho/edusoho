@@ -15,8 +15,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     public function getTestpaper($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $testpaper = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-        return $this->createSerializer()->unserialize($testpaper, $this->serializeFields);
+        $testpaper = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $testpaper ? $this->createSerializer()->unserialize($testpaper, $this->serializeFields) : null;
     }
 
     public function findTestpapersByIds(array $ids)
@@ -50,12 +50,19 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     public function addTestpaper($fields)
     {
-
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->table, $fields);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert testpaper error.');
+        }
+        return $this->getTestpaper($this->getConnection()->lastInsertId());
     }
 
     public function updateTestpaper($id, $fields)
     {
-
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getTestpaper($id);
     }
 
     private function _createSearchQueryBuilder($conditions)

@@ -9,6 +9,10 @@ interface TestpaperService
 
     public function searchTestpapersCount($conditions);
 
+    public function createTestpaper($fields);
+
+    public function updateTestpaper($id, $fields);
+
     public function publishTestpaper($id);
 
     public function closeTestpaper($id);
@@ -17,9 +21,11 @@ interface TestpaperService
 
     public function deleteTestpaperByIds(array $ids);
 
-    public function buildTestpaper($id, $builder, $builderOptions);
+    public function buildTestpaper($id, $builder, $options);
 
-    public function rebuildTestpaper($id, $builder, $builderOptions);
+    public function rebuildTestpaper($id, $builder, $options);
+
+    public function canBuildTestpaper($builder, $options);
 
 
     public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);

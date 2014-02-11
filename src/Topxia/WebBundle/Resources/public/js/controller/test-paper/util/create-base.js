@@ -150,7 +150,7 @@ define(function(require, exports, module) {
             var itemScores = new Object;
 
             var allCountZero = true;
-            $('.item-number[name^=itemCounts]').each(function(index){
+            $('.item-number[name^=count]').each(function(index){
                 var count = parseInt($(this).val());
                 if (count > 0) {
                     allCountZero = false;
@@ -163,7 +163,7 @@ define(function(require, exports, module) {
                 Notify.danger('题目数量不能全为0');
             }
 
-            $('.item-number[name^=itemScores]').each(function(index){
+            $('.item-number[name^=score]').each(function(index){
                 itemScores[$(this).data('key')] = $(this).val() ;
             });
 

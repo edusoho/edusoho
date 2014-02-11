@@ -578,7 +578,7 @@ course_manage_test_check:
 
 course_manage_testpaper_create:
     pattern: /course/{courseId}/manage/testpaper/create
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:create }
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:create }
 
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/update

@@ -5,7 +5,7 @@ namespace Topxia\Service\Question\Tests;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
 
-class UserServiceTest extends BaseTestCase
+class QuestionServiceTest extends BaseTestCase
 {
 
     public function testSingleJudgeChoiceQuestions()

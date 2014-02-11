@@ -1,7 +1,7 @@
 <div class="form-group">
   <div class="col-md-2 control-label"><label for="test-percentage-field">生成方式</label></div>
   <div class="col-md-8 controls radios">
-       {{ radios('isDifficulty', {'0':'随机生成', '1':'按难易程度'}, 0) }}
+       {{ radios('mode', {'rand':'随机生成', 'difficulty':'按难易程度'}, 'rand') }}
   </div>
 </div>
 
@@ -54,12 +54,12 @@
 
                 <div class="form-control-static pull-left plm">题目数量:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}0{% endif %}" />
+                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="count[{{key}}]"  value="0" />
                 </div>
 
                 <div class="form-control-static pull-left plm">题目分值:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}2{% endif %}" />
+                  <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="score[{{key}}]"  value="2" />
                 </div>
 
             </div>
@@ -74,11 +74,5 @@
 
 <input type="hidden" id="perventage-1" name="perventage[]" value="30">
 <input type="hidden" id="perventage-2" name="perventage[]" value="70">
-
-<input type="hidden" name="target" value="{{ testPaper.target }}">
-
-{% if testPaperId %}
-    <input type="hidden" name="testPaperId" value="{{ testPaperId }}">
-{% endif %}
 
 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

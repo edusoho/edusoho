@@ -39,6 +39,41 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
+    public function createAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testPaper = $request->query->all();
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $fields['target'] = "course-{$course['id']}";
+            $fields['pattern'] = 'QuestionType';
+            $testpaper = $this->getTestpaperService()->createTestpaper($fields);
+            var_dump($testpaper);exit();
+            return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
+            'course'    => $course,
+            'ranges' => $this->getQuestionRanges($course),
+        ));
+    }
+
+    private function getQuestionRanges($course)
+    {
+        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+        $ranges = array();
+        foreach ($lessons as  $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+            $ranges["lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+        }
+
+        return $ranges;
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

@@ -3,6 +3,7 @@ namespace Topxia\Service\Testpaper\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Testpaper\TestpaperService;
+use Topxia\Service\Testpaper\Builder\TestpaperBuilderFactory;
 use Topxia\Common\ArrayToolkit;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -26,6 +27,55 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         return $this->getTestpaperDao()->searchTestpapersCount($conditions);
 	}
+
+    public function createTestpaper($fields)
+    {
+        $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
+
+        $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
+        $items = $builder->build($testpaper, $fields);
+        var_dump($items);
+        exit();
+    }
+
+    public function updateTestpaper($id, $fields)
+    {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)) {
+            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+        }
+        $fields = $this->filterTestpaperFields($fields, 'update');
+        return $this->getTestpaperDao()->updateTestpaper($id, $fields);
+    }
+
+    private function filterTestpaperFields($fields, $mode = 'create')
+    {
+        if(!ArrayToolkit::requireds($fields, array('name', 'pattern', 'target'))){
+            throw $this->createServiceException('缺少必要字段！');
+        }
+
+        $filtedFields = array();
+
+        $filtedFields['name'] = $fields['name'];
+        $filtedFields['target'] = $fields['target'];
+        $filtedFields['pattern'] = $fields['pattern'];
+        $filtedFields['missScore'] =  empty($fields['missScore']) ? 0 : $fields['missScore'];
+        $filtedFields['description']   = empty($fields['description'])? '' : $fields['description'];
+        $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
+        $filtedFields['metas']   = empty($fields['metas'])? array() : $fields['metas'];
+        $filtedFields['updatedUserId'] = $this->getCurrentUser()->id;
+        $filtedFields['updatedTime']   = time();
+
+        if ($mode == 'create') {
+            $filtedFields['status'] = 'draft';
+            $filtedFields['createdUserId'] = $this->getCurrentUser()->id;
+            $filtedFields['createdTime']   = time();
+        }
+
+        return $filtedFields;
+    }
+
+
 
     public function publishTestpaper($id)
     {
@@ -57,7 +107,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     }
 
-
+    public function canBuildTestpaper($builder, $options)
+    {
+        $builder = TestpaperBuilderFactory::create($builder);
+        return $builder->canBuild($options);
+    }
 
     public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId)
     {
