@@ -20,64 +20,21 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         $typedQuestions = $this->buildQuestionsGroupByType($typedQuestions);
 
         $items = array();
-        $seq = 1;
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
             if ($needCount == 0) {
                 continue;
             }
 
-            if ($options['mode'] == 'difi') {
+            if ($options['mode'] == 'difficulty') {
+                $difficultiedQuestions = $this->buildQuestionsGroupByDifficulty();
 
             } else {
-
                 $itemsOfType = $this->convertQuestionsToItems($testpaper, $typedQuestions[$type], $needCount);
-
                 $items = array_merge($items, $itemsOfType);
-
-                for ($i=0; $i<$needCount; $i++) {
-                    $question = $typedQuestions[$type][$i];
-                    $item[] = array(
-                        'testId' => $testpaper['id'],
-                        'seq' => $seq,
-                        'questionId' => $question['id'],
-                        'questionType' => $question['type'],
-                        'parentId' => $question['parentId'],
-                        'score' => $options['scores'][$type],
-                        'missScore' => $testpaper['missScore'],
-                    );
-
-                }
-
             }
         }
 
-
-
-    }
-
-    private function convertQuestionsToItems($testpaper, $questions, $count)
-    {
-        $items = array();
-        for ($i=0; $i<$count; $i++) {
-            $question = $questions[$i];
-            $item = array(
-                'testId' => $testpaper['id'],
-                'seq' => $seq,
-                'questionId' => $question['id'],
-                'questionType' => $question['type'],
-                'parentId' => $question['parentId'],
-                'score' => $options['scores'][$type],
-                'missScore' => $testpaper['missScore'],
-            );
-            $items[] = $item;
-
-            if ($question['subCount'] > 0) {
-                $subQuestions = $this->getQuestionService()->findQuestionsByParentId();
-            }
-
-
-        }
         return $items;
     }
 
@@ -141,6 +98,35 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         $total = $this->getQuestionService()->searchQuestionsCount($conditions);
 
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+    }
+
+    private function convertQuestionsToItems($testpaper, $questions, $count)
+    {
+        $items = array();
+        for ($i=0; $i<$count; $i++) {
+            $question = $questions[$i];
+            $items[] = $this->makeItem($testpaper, $question);
+            if ($question['subCount'] > 0) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id'], 0, $question['subCount']);
+                foreach ($subQuestions as $subQuestion) {
+                    $items[] = $this->makeItem($testpaper, $subQuestion);
+                }
+            }
+        }
+        return $items;
+    }
+
+    private function makeItem($testpaper, $question)
+    {
+        return array(
+            'testId' => $testpaper['id'],
+            'seq' => $seq,
+            'questionId' => $question['id'],
+            'questionType' => $question['type'],
+            'parentId' => $question['parentId'],
+            'score' => $options['scores'][$type],
+            'missScore' => $testpaper['missScore'],
+        );
     }
 
     private function getQuestionService()
