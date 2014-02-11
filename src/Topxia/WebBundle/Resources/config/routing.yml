@@ -589,7 +589,7 @@ course_manage_testpaper_update_reset:
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateReset }
 
 course_manage_testpaper_create_two:
-    pattern: /course/{courseId}/manage/testpaper/{testPaperId}/create/two
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/create/two
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createTwo }
 
 course_manage_testpaper_create_check:
@@ -597,7 +597,7 @@ course_manage_testpaper_create_check:
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:quesitonNumberCheck }
 
 course_manage_testpaper_delete:
-    pattern: /course/{courseId}/manage/testpaper/{testPaperId}/delete
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPaper }
 
 course_manage_testpaper_deletes:
