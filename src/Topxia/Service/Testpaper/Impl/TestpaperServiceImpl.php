@@ -36,15 +36,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function createTestpaper($fields)
     {
         $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
+        $items = $this->buildTestpaper($testpaper['id'], $fields);
 
-        $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
-        $result = $builder->build($testpaper, $fields);
-
-        if ($result['status'] != 'ok') {
-            throw $this->createServiceException("构建试卷(#{testpaper['id']})题目失败");
-        }
-
-        return array($testpaper, $result['items']);
+        return array($testpaper, $items);
     }
 
     public function updateTestpaper($id, $fields)
@@ -126,7 +120,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     }
 
-    public function buildTestpaper($id, $builderOptions)
+    public function buildTestpaper($id, $options)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($id);
         if (empty($testpaper)) {
@@ -134,7 +128,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
 
-        return $builder->build($testpaper, $options);
+        $result = $builder->build($testpaper, $options);
+        if ($result['status'] != 'ok') {
+            throw $this->createServiceException("Build testpaper #{$id} items error.");
+        }
+
+        $items = array();
+        foreach ($result['items'] as $index => $item) {
+            $item['seq'] = $index + 1;
+            $items[] = $this->getTestItemDao()->addItem($item);
+        }
+        return $items;
     }
 
     public function canBuildTestpaper($builder, $options)

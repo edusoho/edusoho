@@ -10,6 +10,8 @@ class ServiceKernel
     protected $debug;
     protected $booted;
 
+    protected $parameterBag;
+
     protected $currentUser;
 
     protected $pool = array();

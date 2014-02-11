@@ -49,8 +49,8 @@ class CourseTestpaperManageController extends BaseController
             $fields = $request->request->all();
             $fields['target'] = "course-{$course['id']}";
             $fields['pattern'] = 'QuestionType';
-            var_dump($fields);exit();
-            $testpaper = $this->getTestpaperService()->createTestpaper($fields);
+            list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
+            var_dump($items);exit();
             return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
         }
 
