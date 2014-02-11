@@ -3,6 +3,7 @@ namespace Topxia\Service\Testpaper\Builder;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Testpaper\TestpaperBuilder;
+use Topxia\Common\ArrayToolkit;
 
 class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuilder
 {
@@ -10,14 +11,13 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
     public function build($testpaper, $options)
     {
         $questions = $this->getQuestions($options);
-        $typedQuestions = $this->buildQuestionsGroupByType($questions);
+        shuffle($questions);
+        $typedQuestions = ArrayToolkit::group($questions, 'type');
 
         $canBuildResult = $this->canBuildWithQuestions($options, $typedQuestions);
         if ($canBuildResult['status'] == 'no') {
             return array('status' => 'error', 'missing' => $canBuildResult['missing']);
         }
-
-        $typedQuestions = $this->buildQuestionsGroupByType($typedQuestions);
 
         $items = array();
         foreach ($options['counts'] as $type => $needCount) {
@@ -27,22 +27,62 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
             }
 
             if ($options['mode'] == 'difficulty') {
-                $difficultiedQuestions = $this->buildQuestionsGroupByDifficulty();
+                $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
 
+                // 按难度百分比选取Question
+                $selectedQuestions = $this->selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $options['percentages']);
+
+                // 选择的Question不足的话，补足
+                $selectedQuestions = $this->fillQuestionsToNeedCount($selectedQuestions, $typedQuestions[$type], $needCount);
+
+                $itemsOfType = $this->convertQuestionsToItems($testpaper, $selectedQuestions, $needCount, $options['scores'][$type]);
             } else {
-                $itemsOfType = $this->convertQuestionsToItems($testpaper, $typedQuestions[$type], $needCount);
-                $items = array_merge($items, $itemsOfType);
+                $itemsOfType = $this->convertQuestionsToItems($testpaper, $typedQuestions[$type], $needCount, $options['scores'][$type]);
             }
+            $items = array_merge($items, $itemsOfType);
         }
 
-        return $items;
+        return array('status' => 'ok', 'items' => $items);
     }
 
     public function canBuild($options)
     {
         $questions = $this->getQuestions($options);
-        $typedQuestions = $this->buildQuestionsGroupByType($questions);
+        $typedQuestions = ArrayToolkit::group($questions, 'type');
         return $this->canBuildWithQuestions($options, $typedQuestions);
+    }
+
+    private function fillQuestionsToNeedCount($selectedQuestions, $allQuestions, $needCount)
+    {
+        $indexedQuestions = ArrayToolkit::index($allQuestions, 'id');
+        foreach ($selectedQuestions as $question) {
+            unset($indexedQuestions[$question['id']]);
+        }
+
+        if (count($selectedQuestions) < $needCount) {
+            $stillNeedCount = $needCount - count($selectedQuestions);
+        }
+
+        $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
+        $selectedQuestions = array_merge($selectedQuestions, $questions);
+
+        return $selectedQuestions;
+    }
+
+    private function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
+    {
+        $selectedQuestions = array();
+        foreach ($percentages as $difficulty => $percentage) {
+            $subNeedCount = intval($needCount * $percentage / 100);
+            if ($subNeedCount == 0) {
+                continue;
+            }
+
+            $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
+            $selectedQuestions = array_merge($selectedQuestions, $questions);
+        }
+
+        return $selectedQuestions;
     }
 
     private function canBuildWithQuestions($options, $questions)
@@ -55,13 +95,13 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
                 continue;
             }
 
-            if (empty($typedQuestions[$type])) {
+            if (empty($questions[$type])) {
                 $missing[$type] = $needCount;
                 continue;
             }
 
-            if (count($typedQuestions[$type]) < $needCount) {
-                $missing[$type] = $needCount - count($typedQuestions[$type]);
+            if (count($questions[$type]) < $needCount) {
+                $missing[$type] = $needCount - count($questions[$type]);
             }
         }
 
@@ -70,19 +110,6 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         }
 
         return array('status' => 'no', 'missing' => $missing);
-    }
-
-    private function buildQuestionsGroupByType($questions)
-    {
-        $typeToids = array();
-        foreach ($questions as $question) {
-            if (empty($typeToids[$question['type']])) {
-                $typeToids[$question['type']] = array();
-            }
-            $typeToids[$question['type']][] = $question;
-        }
-
-        return $typeToids;
     }
 
     private function getQuestions($options)
@@ -100,31 +127,30 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
-    private function convertQuestionsToItems($testpaper, $questions, $count)
+    private function convertQuestionsToItems($testpaper, $questions, $count, $score)
     {
         $items = array();
         for ($i=0; $i<$count; $i++) {
             $question = $questions[$i];
-            $items[] = $this->makeItem($testpaper, $question);
+            $items[] = $this->makeItem($testpaper, $question, $score);
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id'], 0, $question['subCount']);
                 foreach ($subQuestions as $subQuestion) {
-                    $items[] = $this->makeItem($testpaper, $subQuestion);
+                    $items[] = $this->makeItem($testpaper, $subQuestion, $score);
                 }
             }
         }
         return $items;
     }
 
-    private function makeItem($testpaper, $question)
+    private function makeItem($testpaper, $question, $score)
     {
         return array(
             'testId' => $testpaper['id'],
-            'seq' => $seq,
             'questionId' => $question['id'],
             'questionType' => $question['type'],
             'parentId' => $question['parentId'],
-            'score' => $options['scores'][$type],
+            'score' => $score,
             'missScore' => $testpaper['missScore'],
         );
     }
