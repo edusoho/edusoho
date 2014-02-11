@@ -260,7 +260,7 @@ class TestpaperController extends BaseController
             $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
 
             $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-exit();
+
             $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
             //试卷信息记录
             $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
