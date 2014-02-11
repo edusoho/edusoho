@@ -3,7 +3,7 @@
 
 {% block title %}试卷题目管理 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'testPaper' %}
+{% set side_nav = 'testpaper' %}
 {% set parentId = parentId | default(null)%}
 {% set flag = flag | default(null)%}
 {% set script_controller = 'test-paper/item' %}
@@ -13,7 +13,7 @@
 
 <div class="panel panel-default panel-col" id="test-item-container">
     <div class="panel-heading">
-      {{testPaper.name}}
+      {{testpaper.name}}
     </div>
 
     <div class="panel-body clearfix">
@@ -24,9 +24,9 @@
         </ol>
 
         <div class="clearfix mbm">
-            <button  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testPaperId:testPaper.id,1:1}) }}" data-role="item-modal-btn" data-target="#test-item-modal" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>新增试题</button>
+            <button  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testpaperId:testpaper.id,1:1}) }}" data-role="item-modal-btn" data-target="#test-item-modal" class="btn btn-info btn-sm pull-right mls"><span class="glyphicon glyphicon-plus"></span>新增试题</button>
             <ul class="nav nav-pills nav-mini" id="myTab">
-                {% for key,type in testPaper['metas']['question_type_seq'] %}
+                {% for key,type in testpaper['metas']['question_type_seq'] %}
                     <li><a href="#questionType-{{type}}" data-toggle="tab">{{dict('questionType')[type]}}</a></li>
                 {% endfor %}
             </ul>
@@ -69,8 +69,8 @@
             <button type="button" class="btn btn-primary pull-right mlm" data-toggle="modal" data-target="#confirm-modal" >保存</button>
 
             {#<button type="button" class="btn btn-primary pull-right mlm" >验证</button>#}
-            {#% if parentTestPaper.itemCounts |default(null)%}
-              <a href="{{ path('course_manage_testpaper_create',{testPaperId:testPaper.id,courseId:course.id, percentage:parentTestPaper.percentage, itemCounts:parentTestPaper.itemCounts, itemScores:parentTestPaper.itemScores, target:parentTestPaper.target,}) }}" class="btn btn-link  pull-right">上一步</a>
+            {#% if parentTestpaper.itemCounts |default(null)%}
+              <a href="{{ path('course_manage_testpaper_create',{testpaperId:testpaper.id,courseId:course.id, percentage:parentTestpaper.percentage, itemCounts:parentTestpaper.itemCounts, itemScores:parentTestpaper.itemScores, target:parentTestpaper.target,}) }}" class="btn btn-link  pull-right">上一步</a>
             {% endif %#}
             
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -124,7 +124,7 @@
 
     <script type="text/plain" data-role="questionType-data">{{ dict('questionType')| json_encode | raw}}</script>
 
-    <script type="text/plain" data-role="item-scores">{{ parentTestPaper.itemScores | default(null) | json_encode | raw }}</script>
+    <script type="text/plain" data-role="item-scores">{{ parentTestpaper.itemScores | default(null) | json_encode | raw }}</script>
 
 
 </div>

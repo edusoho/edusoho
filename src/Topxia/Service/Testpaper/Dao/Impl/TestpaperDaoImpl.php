@@ -21,7 +21,12 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     public function findTestpapersByIds(array $ids)
     {
-
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
     }
 
     public function searchTestpapers($conditions, $orderBy, $start, $limit)
@@ -63,6 +68,17 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getTestpaper($id);
+    }
+
+    public function findTestpaperByTargets(array $targets)
+    {
+        if(empty($targets)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($targets) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks});";
+        $results = $this->getConnection()->fetchAll($sql, $targets) ? : array();
+        return $this->createSerializer()->unserialize($results, $this->serializeFields);
     }
 
     private function _createSearchQueryBuilder($conditions)

@@ -89,6 +89,16 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
+    public function updateQuestionCountByIds($ids, $status)
+    {
+        if(empty($ids)){ 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "UPDATE {$this->table} SET {$status} = {$status}+1 WHERE id IN ({$marks})";
+        return $this->getConnection()->executeQuery($sql, $ids);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);

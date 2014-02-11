@@ -39,7 +39,7 @@
               {% if item.questionType != 'material' %}
                 <a href="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
               {% else %}
-                {% for item in item.questions|default([]) %}
+                {% for item in item.items|default([]) %}
                   <a href="#question{{ item.question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
                 {% endfor %}
               {% endif %}

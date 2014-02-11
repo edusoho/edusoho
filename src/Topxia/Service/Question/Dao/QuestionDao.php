@@ -21,4 +21,6 @@ interface QuestionDao
     public function deleteQuestion($id);
 
     public function deleteQuestionsByParentId($id);
+
+    public function updateQuestionCountByIds($ids, $status);
 }

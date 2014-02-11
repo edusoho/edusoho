@@ -3,10 +3,11 @@
 namespace Topxia\Service\Testpaper\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
+use Topxia\Service\Testpaper\Dao\TestpaperItemResultDao;
 use Doctrine\DBAL\Query\QueryBuilder,
     Doctrine\DBAL\Connection;
 
-class TestpaperItemResultDaoImpl extends BaseDao
+class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultDao
 {
 	protected $table = "testpaper_item_result";
 
