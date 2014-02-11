@@ -43,7 +43,7 @@ define(function(require, exports, module) {
         });
 
         var validator = new Validator({
-            element: '#test-create-form',
+            element: '#testpaper-form',
             autoSubmit: false,
         });
 

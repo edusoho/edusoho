@@ -49,8 +49,8 @@ class CourseTestpaperManageController extends BaseController
             $fields = $request->request->all();
             $fields['target'] = "course-{$course['id']}";
             $fields['pattern'] = 'QuestionType';
+            var_dump($fields);exit();
             $testpaper = $this->getTestpaperService()->createTestpaper($fields);
-            var_dump($testpaper);exit();
             return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
         }
 
@@ -68,7 +68,7 @@ class CourseTestpaperManageController extends BaseController
             if ($lesson['type'] == 'testpaper') {
                 continue;
             }
-            $ranges["lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+            $ranges["course-{$lesson['courseId']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
         }
 
         return $ranges;
