@@ -7,6 +7,45 @@ use Topxia\Common\Paginator;
 
 class TestpaperController extends BaseController
 {
+    public function indexAction (Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']),
+            10
+        );
+
+        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
+        $testpapers = ArrayToolkit::index($testpapers, 'id');
+
+        $targets = ArrayToolkit::column($testpapers, 'target');
+        $courseIds = array_map(function($target){
+            $course = explode('/', $target);
+            $course = explode('-', $course[0]);
+            return $course[1];
+        }, $targets);
+
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
+            'myQuizActive' => 'active',
+            'user' => $user,
+            'myTestpaperResults' => $testpaperResults,
+            'myTestpapers' => $testpapers,
+            'courses' => $courses,
+            'paginator' => $paginator
+        ));
+    }
 
     public function doTestpaperAction (Request $request, $testId)
     {
@@ -15,7 +54,7 @@ class TestpaperController extends BaseController
 
         $userId = $this->getCurrentUser()->id;
 
-        $testpaper = $this->getTestpaperService()->getTestPaper($testId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
@@ -51,22 +90,22 @@ class TestpaperController extends BaseController
 
         $userId = $this->getCurrentUser()->id;
 
-        $testpaper = $this->getTestpaperService()->getTestPaper($testId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
-        if (empty($testPaper)) {
+        if (empty($testpaper)) {
             throw $this->createNotFoundException();
         }
 
-        $testResult = $this->getTestpaperService()->findTestPaperResultByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
+        $testResult = $this->getTestpaperService()->findTestpaperResultByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
         }
 
-        if ($testPaper['status'] == 'draft') {
+        if ($testpaper['status'] == 'draft') {
             return $this->createMessageResponse('info', '该试卷未发布，如有疑问请联系老师！');
         }
-        if ($testPaper['status'] == 'closed') {
+        if ($testpaper['status'] == 'closed') {
             return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
         }
 
@@ -77,7 +116,7 @@ class TestpaperController extends BaseController
 
     public function previewTestAction (Request $request, $testId)
     {
-        $testpaper = $this->getTestpaperService()->getTestPaper($testId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
             throw createAccessDeniedException('无权预览试卷！');
@@ -119,7 +158,7 @@ class TestpaperController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
         }
 
-        $testpaper = $this->getTestpaperService()->getTestPaper($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $result = $this->getTestpaperService()->showTestpaper($id);
         $items = $result['formatItems'];
@@ -158,7 +197,7 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestPaper($testpaperResult['testId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $result = $this->getTestpaperService()->showTestpaper($id, true);
         $items = $result['formatItems'];
@@ -220,29 +259,29 @@ class TestpaperController extends BaseController
             //完成试卷，计算得分
             $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
 
-            $testPaperResult = $this->getTestpaperService()->getTestPaperResult($id);
+            $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
-            $testPaper = $this->getTestpaperService()->getTestPaper($testPaperResult['testId']);
+            $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
             //试卷信息记录
             $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
 
             if ($this->getTestpaperService()->isExistsEssay($testResults)) {
                 $user = $this->getCurrentUser();
-                $course = $this->getCourseService()->getCourse($testPaper['targetId']);
+                $course = $this->getCourseService()->getCourse($testpaper['targetId']);
 
                 $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testPaperResult['id']), true);
+                $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
 
                 foreach ($course['teacherIds'] as $receiverId) {
-                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testPaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
                 }
             }
 
             // @todo refactor.
-            if ($testPaperResult['targetType'] == 'lesson' and !empty($testPaperResult['targetId'])) {
-                $lessons = $this->getCourseService()->findLessonsByIds(array($testPaperResult['targetId']));
-                if (!empty($lessons[$testPaperResult['targetId']])) {
-                    $lesson = $lessons[$testPaperResult['targetId']];
+            if ($testpaperResult['targetType'] == 'lesson' and !empty($testpaperResult['targetId'])) {
+                $lessons = $this->getCourseService()->findLessonsByIds(array($testpaperResult['targetId']));
+                if (!empty($lessons[$testpaperResult['targetId']])) {
+                    $lesson = $lessons[$testpaperResult['targetId']];
                     $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
                 }
             }
@@ -277,9 +316,9 @@ class TestpaperController extends BaseController
             $user = $this->getCurrentUser();
 
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-            $testPaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$testpaperResult['id']), true);
+            $testpaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$testpaperResult['id']), true);
 
-            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$testpaperResult['paperName']} ，<a href='{$testPaperResultUrl}' target='_blank'>请点击查看结果</a>");
+            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$testpaperResult['paperName']} ，<a href='{$testpaperResultUrl}' target='_blank'>请点击查看结果</a>");
             
             return $this->createJsonResponse(true);
         }
@@ -339,34 +378,34 @@ class TestpaperController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $teacherTests = $this->getTestpaperService()->findTeacherTestPapersByTeacherId($user['id']);
+        $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
 
-        $testPaperIds = ArrayToolkit::column($teacherTests, 'id');
+        $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
 
-        $testPapers = $this->getTestpaperService()->findTestpapersByIds($testPaperIds);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestPaperResultCountByStatusAndTestIds($testPaperIds, 'reviewing'),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'reviewing'),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestPaperResultsByStatusAndTestIds(
-            $testPaperIds,
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
+            $testpaperIds,
             'reviewing',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         
-        $testPaperIds = ArrayToolkit::column($paperResults, 'testId');
+        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
-        $testPapers = $this->getTestpaperService()->findTestPapersByIds($testPaperIds);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
         $userIds = ArrayToolkit::column($paperResults, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $targets = ArrayToolkit::column($testPapers, 'target');
+        $targets = ArrayToolkit::column($testpapers, 'target');
         $courseIds = array_map(function($target){
             $course = explode('/', $target);
             $course = explode('-', $course[0]);
@@ -380,7 +419,7 @@ class TestpaperController extends BaseController
             'users' => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
             'courses' => ArrayToolkit::index($courses, 'id'),
-            'testPapers' => ArrayToolkit::index($testPapers, 'id'),
+            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'teacher' => $user,
             'paginator' => $paginator
         ));
@@ -393,26 +432,26 @@ class TestpaperController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestPaperResultCountByStatusAndTeacherIds(array($user['id']), 'finished'),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTeacherIds(array($user['id']), 'finished'),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestPaperResultsByStatusAndTeacherIds(
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTeacherIds(
             array($user['id']),
             'finished',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         
-        $testPaperIds = ArrayToolkit::column($paperResults, 'testId');
+        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
-        $testPapers = $this->getTestpaperService()->findTestPapersByIds($testPaperIds);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
         $userIds = ArrayToolkit::column($paperResults, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $targets = ArrayToolkit::column($testPapers, 'target');
+        $targets = ArrayToolkit::column($testpapers, 'target');
         $courseIds = array_map(function($target){
             $course = explode('/', $target);
             $course = explode('-', $course[0]);
@@ -426,7 +465,7 @@ class TestpaperController extends BaseController
             'users' => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
             'courses' => ArrayToolkit::index($courses, 'id'),
-            'testPapers' => ArrayToolkit::index($testPapers, 'id'),
+            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'teacher' => $user,
             'paginator' => $paginator
         ));
@@ -438,17 +477,17 @@ class TestpaperController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $papers = $this->getTestpaperService()->findAllTestPapersByTarget($id);
+        $papers = $this->getTestpaperService()->findAllTestpapersByTarget($id);
 
         $paperIds = ArrayToolkit::column($papers, 'id');
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestPaperResultCountByStatusAndTestIds($paperIds, $status),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($paperIds, $status),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestPaperResultsByStatusAndTestIds(
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
             $paperIds,
             $status,
             $paginator->getOffsetCount(),
@@ -464,7 +503,7 @@ class TestpaperController extends BaseController
 
         return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
             'status' => $status,
-            'testPapers' => ArrayToolkit::index($papers, 'id'),
+            'testpapers' => ArrayToolkit::index($papers, 'id'),
             'paperResults' => ArrayToolkit::index($paperResults, 'id'),
             'course' => $course,
             'users' => $users,
@@ -571,12 +610,12 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('error' => '您尚未登录系统或登录已超时，请先登录。'));
         }
 
-        $testPaper = $this->getTestpaperService()->getTestPaper($id);
-        if (empty($testPaper)) {
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if (empty($testpaper)) {
             return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
         }
 
-        $testResult = $this->getTestpaperService()->findTestPaperResultByTestIdAndUserId( $id, $user);
+        $testResult = $this->getTestpaperService()->findTestpaperResultByTestIdAndUserId( $id, $user);
 
         if (empty($testResult)) {
             return $this->createJsonResponse(array('status' => 'nodo'));

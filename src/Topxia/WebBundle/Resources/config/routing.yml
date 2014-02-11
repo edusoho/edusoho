@@ -546,7 +546,7 @@ course_manage_test_teacher_finish_check:
 
 course_manage_my_quiz:
     pattern: /my/quiz
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:index }
+    defaults: { _controller: TopxiaWebBundle:Testpaper:index }
 
 course_manage_favorite_question:
     pattern: /question/{id}/favorite

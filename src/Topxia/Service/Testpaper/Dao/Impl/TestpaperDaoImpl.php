@@ -61,7 +61,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     public function updateTestpaper($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getTestPaper($id);
+        return $this->getTestpaper($id);
     }
 
     public function findTestpaperByTargets(array $targets)

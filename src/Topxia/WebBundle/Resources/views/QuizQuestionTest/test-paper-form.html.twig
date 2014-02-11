@@ -54,12 +54,12 @@
 
                 <div class="form-control-static pull-left plm">题目数量:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testPaper.itemCounts[key] | default(null) %}{{testPaper.itemCounts[key]}}{% else %}0{% endif %}" />
+                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemCounts[{{key}}]"  value="{% if testpaper.itemCounts[key] | default(null) %}{{testpaper.itemCounts[key]}}{% else %}0{% endif %}" />
                 </div>
 
                 <div class="form-control-static pull-left plm">题目分值:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testPaper.itemScores[key]  | default(null) %}{{testPaper.itemScores[key]}}{%else%}2{% endif %}" />
+                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="itemScores[{{key}}]"  value="{% if testpaper.itemScores[key]  | default(null) %}{{testpaper.itemScores[key]}}{%else%}2{% endif %}" />
                 </div>
 
             </div>
@@ -75,10 +75,10 @@
 <input type="hidden" id="perventage-1" name="perventage[]" value="30">
 <input type="hidden" id="perventage-2" name="perventage[]" value="70">
 
-<input type="hidden" name="target" value="{{ testPaper.target }}">
+<input type="hidden" name="target" value="{{ testpaper.target }}">
 
-{% if testPaperId %}
-    <input type="hidden" name="testPaperId" value="{{ testPaperId }}">
+{% if testpaperId %}
+    <input type="hidden" name="testpaperId" value="{{ testpaperId }}">
 {% endif %}
 
 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

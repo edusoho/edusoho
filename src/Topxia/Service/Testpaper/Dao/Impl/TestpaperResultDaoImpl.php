@@ -87,6 +87,19 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
         return $this->getConnection()->fetchColumn($sql, $ids);
     }
 
+    public function findTestPaperResultsByUserId ($id, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? ORDER BY beginTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
+    }
+
+    public function findTestPaperResultsCountByUserId ($id)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ?";
+        return $this->getConnection()->fetchColumn($sql, array($id));
+    }
+
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
 

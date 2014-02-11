@@ -75,6 +75,19 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->updateQuestion($id, $fields);
     }
 
+    public function statQuestionTimes ($answers)
+    {
+        $ids = array_keys($answers);
+        $rightIds = array();
+        foreach ($answers as $questionId => $answer) {
+            if ($answer['status'] == 'right'){
+                array_push($rightIds, $questionId);
+            }
+        }
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($ids, 'finishedTimes');
+        $this->getQuizQuestionDao()->updateQuestionCountByIds($rightIds, 'passedTimes');
+    }
+
     public function deleteQuestion($id)
     {
         $question = $this->getQuestionDao()->getQuestion($id);
@@ -231,6 +244,46 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionFavoriteDao()->findAllFavoriteQuestionsByUserId($id);
     }
 
+    public function findFavoriteQuestionsByUserId ($id, $start, $limit)
+    {
+        return $this->getQuestionFavoriteDao()->findFavoriteQuestionsByUserId($id, $start, $limit);
+    }
+
+    public function findFavoriteQuestionsCountByUserId ($id)
+    {
+        return $this->getQuestionFavoriteDao()->findFavoriteQuestionsCountByUserId($id);
+    }
+
+    public function favoriteQuestion($questionId, $targetType, $targetId, $userId)
+    {
+        $favorite = array(
+            'questionId' => $questionId,
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+            'userId' => $userId,
+            'createdTime' => time()
+        );
+
+        $favoriteBack = $this->getQuestionFavoriteDao()->getFavoriteByQuestionIdAndTargetAndUserId($favorite);
+
+        if (!$favoriteBack) {
+            return $this->getQuestionFavoriteDao()->addFavorite($favorite);
+        }
+
+        return $favoriteBack;
+    }
+
+    public function unFavoriteQuestion ($questionId, $targetType, $targetId, $userId)
+    {
+        $favorite = array(
+            'questionId' => $questionId,
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+            'userId' => $userId
+        );
+
+        return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
+    }
 
     private function getQuestionDao()
     {
