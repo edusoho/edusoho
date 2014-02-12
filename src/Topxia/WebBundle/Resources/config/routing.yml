@@ -459,8 +459,8 @@ course_manage_question_deletes:
     methods: [POST]
 
 course_manage_question_preview:
-    pattern: /manage/question/preview/{id}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
+    pattern: /manage/question/{id}/preview
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:previewQuestion }
 
 course_manage_question_upload:
     pattern: /course/{courseId}/manage/question/uploadfile/{type}

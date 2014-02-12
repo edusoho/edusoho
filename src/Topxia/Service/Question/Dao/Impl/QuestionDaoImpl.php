@@ -31,6 +31,13 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    public function findQuestionsByParentId($id)
+    {
+        $sql ="SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY createdTime ASC";
+        $questions = $this->getConnection()->fetchAll($sql, array($id));
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
+    }
+
     public function searchQuestions($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
