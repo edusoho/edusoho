@@ -43,7 +43,7 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function deleteItemsByTestPaperId($id)
+    public function deleteItemsByTestpaperId($id)
     {
         $sql = "DELETE FROM {$this->table} WHERE testId = ? ";
         return $this->getConnection()->executeUpdate($sql, array($id));

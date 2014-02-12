@@ -70,6 +70,41 @@ class CourseTestpaperManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function deleteAction(Request $request, $courseId, $testpaperId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $this->deleteTestpaper($course, $testpaperId);
+        return $this->createJsonResponse(true);
+    }
+
+    public function deletesAction(Request $request, $courseId)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $ids = $request->request->get('ids');
+
+        foreach (is_array($ids) ? $ids : array() as $id) {
+            $this->deleteTestpaper($course, $id);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    private function deleteTestpaper($course, $testpaperId)
+    {
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException();
+        }
+
+
+        if ($testpaper['target'] != "course-{$course['id']}") {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getTestpaperService()->deleteTestpaper($testpaperId);
+    }
+
     public function itemsAction(Request $request, $courseId, $testpaperId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);

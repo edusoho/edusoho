@@ -12,7 +12,7 @@ interface TestItemDao
 
     public function deleteItemsByParentId($id);
 
-    public function deleteItemsByTestPaperId($id);
+    public function deleteItemsByTestpaperId($id);
 
     public function getItem($id);
 

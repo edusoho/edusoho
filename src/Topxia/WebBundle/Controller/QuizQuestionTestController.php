@@ -100,7 +100,7 @@ class QuizQuestionTestController extends BaseController
 			throw $this->createNotFoundException('缺少参数');
 		}
 
-		$this->getTestService()->deleteItemsByTestPaperId($testPaper['testPaperId']);
+		$this->getTestService()->deleteItemsByTestpaperId($testPaper['testPaperId']);
 
 	    if ($request->getMethod() == 'POST') {
 
@@ -332,38 +332,6 @@ class QuizQuestionTestController extends BaseController
 
         foreach ($ids as $id) {
         	$this->getTestService()->deleteItem($id);
-        }
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function deleteTestPaperAction(Request $request, $courseId, $testPaperId)
-    {
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-        $testPaper = $this->getTestService()->getTestPaper($testPaperId);
-
-        if (empty($testPaper)) {
-            throw $this->createNotFoundException();
-        }
-
-        $this->getTestService()->deleteTestPaper($testPaperId);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function deleteTestPapersAction(Request $request, $courseId)
-    {   
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-        $ids = $request->request->get('ids');
-
-        if(empty($ids)){
-        	throw $this->createNotFoundException();
-        }
-
-        foreach ($ids as $id) {
-        	$this->getTestService()->deleteTestPaper($id);
         }
 
         return $this->createJsonResponse(true);

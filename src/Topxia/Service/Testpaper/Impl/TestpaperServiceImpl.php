@@ -112,7 +112,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function deleteTestpaper($id)
     {
-
+        $this->getTestpaperDao()->deleteTestpaper($id);
+        $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
     }
 
     public function deleteTestpaperByIds(array $ids)
@@ -137,7 +138,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $types = array();
         foreach ($result['items'] as $index => $item) {
             $item['seq'] = $index + 1;
-            $items[] = $this->getTestItemDao()->addItem($item);
+            $items[] = $this->getTestpaperItemDao()->addItem($item);
             if (!in_array($item['questionType'], $types)) {
                 $types[] = $item['questionType'];
             }
@@ -511,7 +512,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         unset($field['teacherSay']);
 
 
-        $items = $this->getTestItemDao()->findItemsByTestpaperId($paperId);
+        $items = $this->getTestpaperItemDao()->findItemsByTestpaperId($paperId);
         $items = ArrayToolkit::index($items, 'questionId');
 
         $userAnswers = $this->getTestpaperItemResultDao()->findTestResultsByTestpaperResultId($id);
@@ -633,7 +634,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getTestpaperItems($testpaperId)
     {
-        return $this->getTestItemDao()->findItemsByTestpaperId($testpaperId);
+        return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
     }
 
     public function addItem($testpaperId, $questionId, $afterItemId = null)
@@ -697,7 +698,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createDao('Testpaper.TestpaperResultDao');
     }
 
-    private function getTestItemDao(){
+    private function getTestpaperItemDao(){
         return $this->createDao('Testpaper.TestpaperItemDao');
     }
 

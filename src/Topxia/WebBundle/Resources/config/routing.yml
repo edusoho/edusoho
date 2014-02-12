@@ -568,6 +568,14 @@ course_manage_testpaper_build_check:
     pattern: /course/{courseId}/manage/testpaper/build_check
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
 
+course_manage_testpaper_delete:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
+
+course_manage_testpaper_deletes:
+    pattern: /course/{courseId}/manage/testpaper/deletes
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+
 course_manage_testpaper_items:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
@@ -575,6 +583,8 @@ course_manage_testpaper_items:
 course_manage_testpaper_item_pick:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_pick
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPick }
+
+
 
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/update
@@ -584,13 +594,7 @@ course_manage_testpaper_update_reset:
     pattern: /course/{courseId}/manage/testpaper/update/reset
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateReset }
 
-course_manage_testpaper_delete:
-    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPaper }
 
-course_manage_testpaper_deletes:
-    pattern: /course/{courseId}/manage/testpaper/deletes
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPapers }
 
 course_manage_test_item_list:
     pattern: /course/{courseId}/manage/test/{testpaperId}/item/list

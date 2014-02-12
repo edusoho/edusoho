@@ -16,5 +16,7 @@ interface TestpaperDao
 
     public function updateTestpaper($id, $fields);
 
+    public function deleteTestpaper($id);
+
     public function findTestpaperByTargets(array $targets);
 }

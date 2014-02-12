@@ -63,7 +63,7 @@ class TestServiceImpl extends BaseService implements TestService
             throw $this->createNotFoundException();
         }
 
-        $this->getTestItemDao()->deleteItemsByTestPaperId($id);
+        $this->getTestItemDao()->deleteItemsByTestpaperId($id);
 
         $this->getTestPaperDao()->deleteTestPaper($id);
     }
@@ -293,9 +293,9 @@ class TestServiceImpl extends BaseService implements TestService
         $this->getTestItemDao()->deleteItem($id);
     }
 
-    public function deleteItemsByTestPaperId($id)
+    public function deleteItemsByTestpaperId($id)
     {
-        $this->getTestItemDao()->deleteItemsByTestPaperId($id);
+        $this->getTestItemDao()->deleteItemsByTestpaperId($id);
     }
 
     private function sortTestItemsByTestId($testId)

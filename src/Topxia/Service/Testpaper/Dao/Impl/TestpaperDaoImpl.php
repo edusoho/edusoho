@@ -70,6 +70,11 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         return $this->getTestpaper($id);
     }
 
+    public function deleteTestpaper($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
     public function findTestpaperByTargets(array $targets)
     {
         if(empty($targets)){ 
