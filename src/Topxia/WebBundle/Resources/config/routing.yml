@@ -459,7 +459,7 @@ course_manage_question_deletes:
     methods: [POST]
 
 course_manage_question_preview:
-    pattern: /manage/question/preview/{id}
+    pattern: /course/{courseId}/manage/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
 
 course_manage_question_upload:
@@ -584,6 +584,9 @@ course_manage_testpaper_build_check:
     pattern: /course/{courseId}/manage/testpaper/build_check
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
 
+course_manage_testpaper_items:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/update
@@ -592,12 +595,6 @@ course_manage_testpaper_update:
 course_manage_testpaper_update_reset:
     pattern: /course/{courseId}/manage/testpaper/update/reset
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateReset }
-
-course_manage_testpaper_create_two:
-    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/create/two
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createTwo }
-
-
 
 course_manage_testpaper_delete:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
@@ -608,15 +605,15 @@ course_manage_testpaper_deletes:
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteTestPapers }
 
 course_manage_test_item_list:
-    pattern: /course/{courseId}/manage/test/{testPaperId}/item/list
+    pattern: /course/{courseId}/manage/test/{testpaperId}/item/list
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:itemList }
 
 course_manage_test_item_create:
-    pattern: /course/{courseId}/manage/test/{testPaperId}/item/create
+    pattern: /course/{courseId}/manage/test/{testpaperId}/item/create
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createItem }
 
 course_manage_test_item_update:
-    pattern: /course/{courseId}/manage/test/{testPaperId}/item/update
+    pattern: /course/{courseId}/manage/test/{testpaperId}/item/update
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateItem }
 
 course_manage_test_item_delete:

@@ -1,7 +1,7 @@
 <tr data-role='item'>
   <td><input value="{{question.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id}) }}">{{ question.stem |fill_question_stem_text| plain_text(40) }}</a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">{{ question.stem |fill_question_stem_text| plain_text(40) }}</a>
     <div>
       {% set target = targets[question.target]|default(null) %}
       {% if target.type|default(null) != 'course' %}
@@ -23,7 +23,7 @@
   </td>
   <td>
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_question_preview', {id:question.id}) }}">预览</a>
+      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu pull-right">
         {% if question.type == 'material'%}

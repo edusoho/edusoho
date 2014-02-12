@@ -51,7 +51,7 @@ class CourseTestpaperManageController extends BaseController
             $fields['pattern'] = 'QuestionType';
             list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
             var_dump($items);exit();
-            return $this->redirect($this->generateUrl('course_manage_testpaper_create_two',$testPaper));
+            return $this->redirect($this->generateUrl('course_manage_testpaper_items',$testPaper));
         }
 
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
@@ -68,6 +68,34 @@ class CourseTestpaperManageController extends BaseController
         $data['target'] = "course-{$course['id']}";
         $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);
+    }
+
+    public function itemsAction(Request $request, $courseId, $testpaperId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if(empty($testpaper)){
+            throw $this->createNotFoundException('试卷不存在');
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+
+            $this->setFlashMessage('success', '试卷题目保存成功！');
+            return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
+        }
+
+        $items = $this->getTestpaperService()->getTestpaperItems($testpaper['id']);
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:items.html.twig', array(
+            'course' => $course,
+            'testpaper' => $testpaper,
+            'items' => ArrayToolkit::group($items, 'questionType'),
+            'questions' => $questions,
+        ));
     }
 
     private function getQuestionRanges($course)
@@ -92,5 +120,10 @@ class CourseTestpaperManageController extends BaseController
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 }
