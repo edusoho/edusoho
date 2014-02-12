@@ -73,7 +73,9 @@ class CourseTestpaperManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $testpaperId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $this->deleteTestpaper($course, $testpaperId);
+        $testpaper = $this->getTestpaperWithException($course, $testpaperId);
+        $this->getTestpaperService()->deleteTestpaper($testpaper['id']);
+
         return $this->createJsonResponse(true);
     }
 
@@ -84,25 +86,59 @@ class CourseTestpaperManageController extends BaseController
         $ids = $request->request->get('ids');
 
         foreach (is_array($ids) ? $ids : array() as $id) {
-            $this->deleteTestpaper($course, $id);
+            $testpaper = $this->getTestpaperWithException($course, $id);
+            $this->getTestpaperService()->deleteTestpaper($testpaperId);
         }
 
         return $this->createJsonResponse(true);
     }
 
-    private function deleteTestpaper($course, $testpaperId)
+    public function publishAction (Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getTestpaperWithException($course, $id);
+
+        $testpaper = $this->getTestpaperService()->publishTestpaper($id);
+
+        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:tr.html.twig', array(
+            'testpaper' => $testpaper,
+            'user' => $user,
+            'course' => $course,
+        ));
+    }
+
+    public function closeAction (Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getTestpaperWithException($course, $id);
+
+        $testpaper = $this->getTestpaperService()->closeTestpaper($id);
+
+        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:tr.html.twig', array(
+            'testpaper' => $testpaper,
+            'user' => $user,
+            'course' => $course,
+        ));
+    }
+
+
+    private function getTestpaperWithException($course, $testpaperId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
         }
 
-
         if ($testpaper['target'] != "course-{$course['id']}") {
-            throw $this->createNotFoundException();
+            throw $this->createAccessDeniedException();
         }
-
-        $this->getTestpaperService()->deleteTestpaper($testpaperId);
+        return $testpaper;
     }
 
     public function itemsAction(Request $request, $courseId, $testpaperId)

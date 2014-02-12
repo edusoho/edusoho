@@ -87,7 +87,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createNotFoundException();
         }
         if (!in_array($testpaper['status'], array('closed', 'draft'))){
-            throw $this->createAccessDeniedException('试卷状态不合法!');
+            throw $this->createServiceException('试卷状态不合法!');
         }
         $testpaper = array(
             'status' => 'open'

@@ -492,14 +492,6 @@ course_manage_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
-course_manage_open_test:
-    pattern: /open/test/{id}
-    defaults: { _controller: TopxiaWebBundle:Testpaper:openTestpaper }
-
-course_manage_close_test:
-    pattern: /close/test/{id}
-    defaults: { _controller: TopxiaWebBundle:Testpaper:closeTestpaper }
-
 course_manage_do_test:
     pattern: /test/{testId}/do
     defaults: { _controller: TopxiaWebBundle:Testpaper:doTestpaper }
@@ -575,6 +567,14 @@ course_manage_testpaper_delete:
 course_manage_testpaper_deletes:
     pattern: /course/{courseId}/manage/testpaper/deletes
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+
+course_manage_testpaper_publish:
+    pattern: /course/{courseId}/manage/testpaper/{id}/publish
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:publish }
+
+course_manage_testpaper_close:
+    pattern: /course/{courseId}/manage/testpaper/{id}/close
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:close }
 
 course_manage_testpaper_items:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items
