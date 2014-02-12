@@ -193,11 +193,18 @@ class TestpaperController extends BaseController
         if (!$testpaperResult) {
             throw $this->createNotFoundException('试卷不存在!');
         }
-        if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
-        }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+
+
+
+        if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+        }
 
         $result = $this->getTestpaperService()->showTestpaper($id, true);
         $items = $result['formatItems'];
