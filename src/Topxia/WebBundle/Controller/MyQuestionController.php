@@ -77,10 +77,8 @@ class MyQuestionController extends BaseController
         ));
     }
 
-    public function previewAction (Request $request, $courseId, $id)
+    public function previewAction (Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-
         $question = $this->getQuestionService()->getQuestion($id);
 
         $userId = $this->getCurrentUser()->id;
@@ -89,8 +87,10 @@ class MyQuestionController extends BaseController
             throw $this->createNotFoundException('题目不存在！');
         }
 
-        if (!$this->getCourseService()->isCourseStudent($courseId, $userId)) {
-            throw $this->createAccessDeniedException('非课程学生无权预览课程所属题目！');
+        $myFavorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($userId);
+
+        if (!in_array($question['id'], ArrayToolkit::column($myFavorites, 'questionId'))){
+            throw $this->createAccessDeniedException('无权预览非本人收藏的题目!');
         }
 
         $item = array(

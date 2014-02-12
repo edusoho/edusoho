@@ -880,6 +880,10 @@ my_show_favorite_question:
     pattern: /my/favorite/question/show
     defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
 
+my_favorite_question_preview:
+    pattern: /my/favorite/question/{id}/preview
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
+
 
 user_show: 
     pattern:  /user/{id}
