@@ -142,6 +142,9 @@ class MySaleController extends BaseController
             $linksale['adCommissionType']= empty($course['adCommissionType']) ?'ratio':$course['adCommissionType'];
 
             $linksale['adCommission']= empty($course['adCommission'])?'30':$course['adCommission'];
+
+            $linksale['adCommissionDay']= empty($course['adCommissionDay'])?'30':$course['adCommissionDay'];
+            $linksale['customized']=0;
            
             $linksale['saleType']='linksale-course';
             $linksale['prodType']='course';
@@ -226,10 +229,15 @@ class MySaleController extends BaseController
 
             //默认推广链接30天内有效
             if(empty($lswSetting['webCommission'])){
-                 $lswSetting['webCommission'] = 5;
+                 $lswSetting['webCommissionType'] = 'ratio';
+                 $lswSetting['webCommission'] = 5;//网站推广，获取所有注册用户的5%的佣金
+                 $lswSetting['webCommissionDay'] = 30;
             }
 
-            $linksale['adCommission']= $lswSetting['webCommission'];  //网站推广，获取所有注册用户的5%的佣金
+            $linksale['adCommissionType']= $lswSetting['webCommissionType'];
+            $linksale['adCommission']= $lswSetting['webCommission'];  
+            $linksale['adCommissionDay']= empty($lswSetting['webCommissionDay'])?'30':$lswSetting['webCommissionDay'];
+            $linksale['customized']=0;
            
             $linksale['saleType']='linksale-web';
             $linksale['prodType']=$prodType;

@@ -19,6 +19,7 @@
 
       <th>佣金比率</th>
       <th>佣金</th>
+      <th>链接有效期</th>
      
       <th>操作</th>
     </tr>
@@ -35,7 +36,7 @@
           <a href="{{ path('course_show', {id:course.id}) }}"  target="_blank">{{ course.title }}</a>
 
           </td>
-          <td>{{ course.studentNum }}/{{ course.hitNum }}</td>
+          <td>{{ course.studentNum }}/ {% if(course.hitNum > 1000) %}<span class="text-color-red"> {{ course.hitNum }} </span> {% else %} {{ course.hitNum }} {% endif %}</td>
           <td>￥{{ course.price|number_format(2, '.', ',')  }}</td>
           
           <td>
@@ -57,6 +58,7 @@
             {% endif %}
 
           </td>
+           <td>{{ course.adCommissionDay }}天</td>
           <td>
                     
           <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_link', {id:course.id}) }}"> 获取推广链接 </a>

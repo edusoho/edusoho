@@ -66,6 +66,15 @@ class LinkSaleDaoImpl extends BaseDao implements LinkSaleDao
         return $this->getLinkSale($id);
     }
 
+    public function updateCourseLinkSale4unCustomized($adCommissionType,$adCommission,$adCommissionDay,$courseId)
+    {
+        
+        $sql = "UPDATE   {$this->table}  SET adCommissionType=? ,adCommission=?, adCommissionDay=?  WHERE prodType='course' and  prodId = ?  and customized=0 ";
+
+        return $this->getConnection()->executeQuery($sql, array($adCommissionType, $adCommission,$adCommissionDay,$courseId));
+      
+    }
+
     public function deleteLinkSale($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));

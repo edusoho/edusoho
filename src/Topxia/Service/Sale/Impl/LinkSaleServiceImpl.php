@@ -10,11 +10,11 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 
     public function findLinkSalesByIds(array $ids)
     {
-        $mysales =  LinkSaleSerialize::unserializes(
+        $linksales =  LinkSaleSerialize::unserializes(
              $this->getLinkSaleDao()->findLinkSalesByIds($ids)
         );
 
-        return ArrayToolkit::index($mysales, 'id');
+        return ArrayToolkit::index($linksales, 'id');
     }
 
     public function getLinkSale($id)
@@ -107,26 +107,37 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
     }
 
 
-    public function createLinkSale($mysale){
+    public function createLinkSale($linksale){
 
-        $mysale = ArrayToolkit::parts($mysale, array('id','partnerIP','saleType','prodType','prodId','prodName','adCommissionType','adCommission','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
+        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
 
-        $mysale['createdTime']=time();
+        $linksale['createdTime']=time();
 
-        $mysale['parnterIP'] = $this->getCurrentUser()->currentIp;
+        $linksale['parnterIP'] = $this->getCurrentUser()->currentIp;
 
-        $mysale = $this->getLinkSaleDao()->addLinkSale(LinkSaleSerialize::serialize($mysale));
+        $linksale = $this->getLinkSaleDao()->addLinkSale(LinkSaleSerialize::serialize($linksale));
 
-        return $this->getLinkSale($mysale['id']);
+        return $this->getLinkSale($linksale['id']);
 
     }
 
+    public function updateLinkSale($id, $linksale)
+    {
+
+       return $this->getLinkSaleDao()->updateLinkSale($id, $linksale);
+    }
 
     public function deleteLinkSales(array $ids)
     {
         foreach ($ids as $id) {
             $this->getLinkSaleDao()->deleteLinkSale($id);
         }
+    }
+
+    public function updateCourseLinkSale4unCustomized($adCommissionType,$adCommission,$adCommissionDay,$courseId)
+    {
+
+        return $this->getLinkSaleDao()->updateCourseLinkSale4unCustomized($adCommissionType,$adCommission,$adCommissionDay,$courseId);
     }
 
 
@@ -194,43 +205,43 @@ class LinkSaleSerialize
 {
 
      //将php对象变成数据库字段。。。数组变为以|连接的字符串,时间字符串变成时间戳数字。。。。
-    public static function serialize(array &$mysale)
+    public static function serialize(array &$linksale)
     {
        
-        if (isset($mysale['strvalidTime'])) {
-            if (!empty($mysale['strvalidTime'])) {
-                $mysale['validTime'] = strtotime($mysale['strvalidTime']);
+        if (isset($linksale['strvalidTime'])) {
+            if (!empty($linksale['strvalidTime'])) {
+                $linksale['validTime'] = strtotime($linksale['strvalidTime']);
             }
         }
-        unset($mysale['strvalidTime']);
+        unset($linksale['strvalidTime']);
 
 
-        return $mysale;
+        return $linksale;
     }
 
     //将数据库字段变成php对象。。。以|连接的字符串变为数组,时间戳数字变成时间字符串。。。。
 
-    public static function unserialize(array $mysale = null)
+    public static function unserialize(array $linksale = null)
     {
-        if (empty($mysale)) {
-            return $mysale;
+        if (empty($linksale)) {
+            return $linksale;
         }
 
 
-        if(empty($mysale['validTime'])){
-            $mysale['validTime']='';
+        if(empty($linksale['validTime'])){
+            $linksale['validTime']='';
         }else{
-            $mysale['validTimeNum']=$mysale['validTime'];
-            $mysale['validTime']=date("Y-m-d H:i",$mysale['validTime']);
+            $linksale['validTimeNum']=$linksale['validTime'];
+            $linksale['validTime']=date("Y-m-d H:i",$linksale['validTime']);
         }
 
-        return $mysale;
+        return $linksale;
     }
 
-    public static function unserializes(array $mysales)
+    public static function unserializes(array $linksales)
     {
-        return array_map(function($mysale) {
-            return LinkSaleSerialize::unserialize($mysale);
-        }, $mysales);
+        return array_map(function($linksale) {
+            return LinkSaleSerialize::unserialize($linksale);
+        }, $linksales);
     }
 }

@@ -35,7 +35,7 @@
           <a href="{{ path('course_show', {id:course.id}) }}"  target="_blank">{{ course.title }}</a>
 
           </td>
-          <td>{{ course.studentNum }}/{{ course.hitNum }}</td>
+        <td>{{ course.studentNum }}/ {% if(course.hitNum > 1000) %}<span class="text-color-red">{{ course.hitNum }} </span> {% else %}{{ course.hitNum }} {% endif %}</td>
           <td>￥{{ course.price|number_format(2, '.', ',')  }}</td>
           
           <td>

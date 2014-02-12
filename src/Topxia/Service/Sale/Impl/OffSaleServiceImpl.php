@@ -108,7 +108,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
     public function createOffSale($offsale){
 
-        $offsale = ArrayToolkit::parts($offsale, array( 'id','partnerIP','saleType','prodType','prodId', 'prodName','promoName', 'promoCode','adCommissionType','adCommission','reduceType','reducePrice',  'strvalidTime','validTime', 'reuse', 'valid','partnerId','createdTime','managerId'));
+        $offsale = ArrayToolkit::parts($offsale, array( 'id','partnerIP','saleType','prodType','prodId', 'prodName','promoName', 'promoCode','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice',  'strvalidTime','validTime', 'reuse', 'valid','partnerId','createdTime','managerId'));
 
         $offsale['createdTime']=time();
 
@@ -164,6 +164,13 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
         
     }
+
+    public function updateCourseOffSale4unCustomized($adCommissionType,$adCommission,$adCommissionDay,$courseId)
+    {
+
+        return $this->getOffSaleDao()->updateCourseOffSale4unCustomized($adCommissionType,$adCommission,$adCommissionDay,$courseId);
+    }
+
 
     public function deleteOffSales(array $ids)
     {

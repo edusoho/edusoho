@@ -64,6 +64,15 @@ class OffSaleDaoImpl extends BaseDao implements OffSaleDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function updateCourseOffSale4unCustomized($adCommissionType,$adCommission,$adCommissionDay,$courseId)
+    {
+        
+        $sql = "UPDATE   {$this->table}  SET adCommissionType=? ,adCommission=?, adCommissionDay=?  WHERE prodType='course' and  prodId = ?  and customized=0 ";
+
+        return $this->getConnection()->executeQuery($sql, array($adCommissionType, $adCommission,$adCommissionDay,$courseId));
+      
+    }
+
 
     public function getOffSaleByCode($code)
     {
