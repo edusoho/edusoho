@@ -100,6 +100,35 @@ class CourseTestpaperManageController extends BaseController
 
     public function itemPickAction(Request $request, $courseId, $testpaperId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        $conditions = $request->query->all();
+        $conditions['parentId'] = 0;
+        $conditions['excludeIds'] = empty($conditions['excludeIds']) ? array() : explode(',', $conditions['excludeIds']);
+
+        $replaceFor = empty($conditions['replaceFor']) ? '' : $conditions['replaceFor'];
+
+        $paginator = new Paginator(
+            $request,
+            $this->getQuestionService()->searchQuestionsCount($conditions),
+            7
+        );
+
+        $questions = $this->getQuestionService()->searchQuestions(
+                $conditions, 
+                array('createdTime' ,'DESC'), 
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-pick-modal.html.twig', array(
+            'course' => $course,
+            'testpaper' => $testpaper,
+            'questions' => $questions,
+            'replaceFor' => $replaceFor,
+            'paginator' => $paginator,
+        ));
         
     }
 

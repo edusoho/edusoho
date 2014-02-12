@@ -1,0 +1,19 @@
+<tr>
+  <td>
+    {{ question.stem|fill_question_stem_text|plain_text(40) }}
+    {% if question.type == 'material' %}
+      <small class="text-muted">({{ question.subCount}}子题)</small>
+    {% endif %}
+    <br>
+    从属：{{ question.target }}
+  </td>
+  <td>{{ dict_text('questionType', question.type) }}</td>
+  <td>{{question.score }}</td>
+  <td>
+    {% if replaceFor %}
+      <button type="button" class="btn btn-primary btn-sm replace-btn">替换</button>
+    {% else %}
+      <button type="button" class="btn btn-primary btn-sm add-btn">选择</button>
+    {% endif %}
+  </td>
+</tr>
