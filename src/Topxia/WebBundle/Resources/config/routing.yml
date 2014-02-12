@@ -588,6 +588,10 @@ course_manage_testpaper_items:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
+course_manage_testpaper_item_pick:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_pick
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPick }
+
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/update
     defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:update }

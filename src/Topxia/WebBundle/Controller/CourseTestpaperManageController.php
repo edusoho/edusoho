@@ -98,6 +98,11 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
+    public function itemPickAction(Request $request, $courseId, $testpaperId)
+    {
+        
+    }
+
     private function getQuestionRanges($course)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);

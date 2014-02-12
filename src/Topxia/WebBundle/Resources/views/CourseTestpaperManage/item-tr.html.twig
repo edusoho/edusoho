@@ -4,22 +4,12 @@
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
   </td>
   <td class="seq">{{ item.seq }}</td>
-
   <td>
     {{question['stem']|plain_text(40) }}
-    <div class="text-muted text-sm">
-      从属：{{ question.target }}
-    </div>
+    <div class="text-muted text-sm">从属：{{ question.target }}</div>
   </td>
-
-  <td>
-    {{ dict_text('questionType',question.type ) }}
-  </td>
-
-  <td>
-    {{ dict_text('difficulty', question.difficulty)}}
-  </td>
-    
+  <td>{{ dict_text('questionType',question.type ) }}</td>
+  <td>{{ dict_text('difficulty', question.difficulty)}}</td>
   <td>
     <input name="scores[]" class="notMoveHandle form-control input-sm"
       {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %}value="{{ item.score }}"/></input>
@@ -29,10 +19,9 @@
     <div class="btn-group">
       {% if question.parentId == 0 %}
         <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}" class="notMoveHandle btn btn-default btn-sm">预览</a>
-        <a href="javascript:" data-name='题目' data-role='item-delete' class="notMoveHandle btn btn-default btn-sm">删除</a>
-        <a href="javascript:" data-role="item-modal-btn"  data-target="#test-item-modal" class="notMoveHandle btn btn-default btn-sm"  data-url="{{ path('course_manage_test_item_list',{courseId:course.id,testpaperId:testpaper.id,testItemId:question.id,replaceId:question.id}) }}" >替换</a>
+        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm item-delete-btn">删除</a>
+        <a href="#modal" data-toggle="modal" data-role="item-modal-btn" class="notMoveHandle btn btn-default btn-sm"  data-url="{{ path('course_manage_testpaper_item_pick', {courseId:course.id, testpaperId:testpaper.id}) }}" >替换</a>
       {% endif %}
     </div>
   </td>
 </tr>
-
