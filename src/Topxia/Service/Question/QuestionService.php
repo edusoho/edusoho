@@ -9,6 +9,8 @@ interface QuestionService
 
     public function findQuestionsByIds(array $ids);
 
+    public function findQuestionsByParentId($id);
+
     public function searchQuestions($conditions, $sort, $start, $limit);
 
     public function searchQuestionsCount($conditions);

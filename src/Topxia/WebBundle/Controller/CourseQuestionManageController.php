@@ -186,61 +186,37 @@ class CourseQuestionManageController extends BaseController
      */
     public function previewQuestionAction (Request $request, $id)
     {
-        $questions = $this->getQuestionService()->findQuestions(array($id));
-
-        $question = $questions[$id];
-
-        if (in_array($question['type'], array('single_choice', 'choice'))){
-            foreach ($question['metas']['choices'] as $key => $choice) {
-                $question['choices'][$key] = array( 'content' => $choice, 'questionId' => $key);
-            }
-        }
+        $question = $this->getQuestionService()->getQuestion($id);
 
         if (empty($question)) {
             throw $this->createNotFoundException('题目不存在！');
         }
 
+        $item = array(
+            'questionId' => $question['id'],
+            'questionType' => $question['type'],
+            'question' => $question
+        );
+
         if ($question['type'] == 'material'){
-            $questions = $this->getQuestionService()->findQuestionsByParentIds(array($id));
-            if (!empty($questions)) {
-                $questions = $this->getQuestionService()->findQuestions(ArrayToolkit::column($questions, 'id'));
+            $questions = $this->getQuestionService()->findQuestionsByParentId($id);
+
+            foreach ($questions as $value) {
+                $items[] = array(
+                    'questionId' => $value['id'],
+                    'questionType' => $value['type'],
+                    'question' => $value
+                );
             }
 
-            foreach ($questions as $key => $value) {
-                if (!in_array($value['type'], array('single_choice', 'choice'))){
-                    continue;
-                }
-
-                foreach ($value['metas']['choices'] as $choiceKey => $content) {
-                    $value['choices'][$choiceKey] = array('content' => $content, 'questionId' => $choiceKey);
-                }
-                ksort($value['choices']);
-                $value['choices'] = array_values($value['choices']);
-                foreach ($value['choices'] as $k => $v) {
-                    $v['choiceIndex'] = chr($k+65);
-                    $value['choices'][$k] = $v;
-                }
-                $questions[$key] = $value;
-            }
-
-            $question['questions'] = $questions;
-        } else {
-            if (in_array($question['type'], array('single_choice', 'choice'))){
-
-                ksort($question['choices']);
-                $question['choices'] = array_values($question['choices']);
-                foreach ($question['choices'] as $k => $v) {
-                    $v['choiceIndex'] = chr($k+65);
-                    $question['choices'][$k] = $v;
-                }
-            }
+            $item['items'] = $items;
         }
 
         $type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
         $questionPreview = true;
-
+// var_dump($item);exit();
         return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
-            'question' => $question,
+            'item' => $item,
             'type' => $type,
             'questionPreview' => $questionPreview
         ));

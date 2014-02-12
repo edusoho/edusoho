@@ -50,7 +50,7 @@
 	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <ul>
-		      {% for index, answer in question.answer %}
+		      {% for index, answer in item.question.answer %}
 		    	<li>
 		    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 		    	</li>

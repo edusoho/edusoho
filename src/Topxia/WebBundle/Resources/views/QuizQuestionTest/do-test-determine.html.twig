@@ -35,7 +35,7 @@
 	 		</div>
 		</div>
 
-		{% if item.questionPreview|default(false) %}
+		{% if questionPreview|default(false) %}
 		  <div class="testpaper-preview-answer clearfix mtl mbl">
 		  	<div class="testpaper-question-result">
 			    正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">

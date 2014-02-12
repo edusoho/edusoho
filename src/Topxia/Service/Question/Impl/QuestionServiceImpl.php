@@ -21,6 +21,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return ArrayToolkit::index($this->getQuestionDao()->findQuestionsByIds($ids), 'id');
     }
 
+    public function findQuestionsByParentId($id)
+    {
+        return $this->getQuestionDao()->findQuestionsByParentId($id);
+    }
+
+
     public function searchQuestions($conditions, $orderBy, $start, $limit)
     {
         return $this->getQuestionDao()->searchQuestions($conditions, $orderBy, $start, $limit);
