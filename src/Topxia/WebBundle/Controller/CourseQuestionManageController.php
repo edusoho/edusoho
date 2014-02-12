@@ -184,8 +184,10 @@ class CourseQuestionManageController extends BaseController
     /**
      * @todo refact it, to xxvholic.
      */
-    public function previewQuestionAction (Request $request, $id)
+    public function previewAction (Request $request, $courseId, $id)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
         $question = $this->getQuestionService()->getQuestion($id);
 
         if (empty($question)) {
