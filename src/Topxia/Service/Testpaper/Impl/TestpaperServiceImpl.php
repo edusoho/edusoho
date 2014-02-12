@@ -134,10 +134,25 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $items = array();
+        $types = array();
         foreach ($result['items'] as $index => $item) {
             $item['seq'] = $index + 1;
             $items[] = $this->getTestItemDao()->addItem($item);
+            if (!in_array($item['questionType'], $types)) {
+                $types[] = $item['questionType'];
+            }
         }
+
+        $metas = empty($testpaper['metas']) ? array() : $testpaper['metas'];
+        $metas['question_type_seq'] = $types;
+
+        $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
+            'metas' => $metas,
+        ));
+
+        $testpaper['metas']['question_type_seq'] = $types;
+
+
         return $items;
     }
 

@@ -8,7 +8,7 @@
 <div class="form-group difficulty-form-group hidden">
   <div class="col-md-2 control-label"><label for="test-percentage-field">试卷难度</label></div>
   <div class="col-md-8 controls form-control-static">
-      <div class="difficulty-percentage-slider" data-url="{{ path('course_manage_testpaper_create_check',{courseId:course.id})}}"  ></div>
+      <div class="difficulty-percentage-slider"></div>
       <div class="help-block">
           <span class="simple-percentage-text"></span>
           <span class="normal-percentage-text"></span>
@@ -56,12 +56,12 @@
 
                 <div class="form-control-static pull-left plm">题目数量:</div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="counts[{{key}}]"  value="0" />
+                    <input type="text" class="form-control item-number input-sm" name="counts[{{key}}]"  value="0" />
                 </div>
 
                 <div class="form-control-static pull-left plm">题目分值:</div>
                 <div class="col-md-2">
-                  <input type="text" class="form-control item-number input-sm" data-key="{{key}}" name="scores[{{key}}]"  value="2" />
+                  <input type="text" class="form-control item-score input-sm" name="scores[{{key}}]"  value="2" />
                 </div>
 
             </div>
