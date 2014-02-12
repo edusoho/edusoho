@@ -230,6 +230,31 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function testSuspendAction (Request $request, $id)
+    {
+        $testpaperResult = $this->getTestpaperService()->getTestPaperResult($id);
+        if (!$testpaperResult) {
+            throw $this->createNotFoundException('试卷不存在!');
+        }
+        //权限！
+        if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $answers = array_key_exists('data', $data) ? $data['data'] : array();
+            $usedTime = $data['usedTime'];
+
+            $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
+
+            $this->getTestpaperService()->updateTestpaperResult($id, $usedTime);
+
+            return $this->createJsonResponse(true);
+        }
+
+    }
+
     public function submitTestAction (Request $request, $id)
     {
         if ($request->getMethod() == 'POST') {
