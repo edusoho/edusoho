@@ -15,6 +15,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getTestpaperResult($id)
     {
+        $realPath = $this->getKernel()->getParameter('kernel.root_dir');
+        $x = dirname($realPath).DIRECTORY_SEPARATOR;
+        $x = $x.DIRECTORY_SEPARATOR.'app';
+        var_dump($x);exit();
+
         return $this->getTestpaperResultDao()->getTestpaperResult($id);
     }
 
