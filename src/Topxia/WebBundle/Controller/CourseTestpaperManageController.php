@@ -60,6 +60,16 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
+    public function buildCheckAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $data = $request->request->all();
+        $data['target'] = "course-{$course['id']}";
+        $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
+        return $this->createJsonResponse($result);
+    }
+
     private function getQuestionRanges($course)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);

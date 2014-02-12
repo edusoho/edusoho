@@ -19,7 +19,7 @@
     </ol>
 
     <div id="test-creator-widget">
-      <form id="testpaper-form" class="form-horizontal quiz-test" method="post" action="">
+      <form id="testpaper-form" class="form-horizontal" method="post" data-build-check-url="{{ path('course_manage_testpaper_build_check',{courseId:course.id})}}">
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">

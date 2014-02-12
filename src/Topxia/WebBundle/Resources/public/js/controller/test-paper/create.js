@@ -26,13 +26,13 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            if(!CreateBase.checkIsNum()){
+            if(!CreateBase.checkBuildCountAndScoreInputs()){
                 return ;
             }
 
             if(validator.get('autoSubmit') == false){
 
-                if(!CreateBase.getCheckResult()){
+                if(!CreateBase.canBuild()) {
                     return ;
                 }else{
                     validator.set('autoSubmit',true);

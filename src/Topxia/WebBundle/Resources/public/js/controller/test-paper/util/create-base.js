@@ -149,63 +149,66 @@ define(function(require, exports, module) {
             });
         },
 
-        getCheckResult : function(){
-            return true;
-            var flag = 0;
+        canBuild : function() {
+            var $form = $("#testpaper-form"),
+                isOk = true;
 
-            var isDifficulty = $('input[name="isDifficulty"]:checked').val();
-
-            var perventage = CreateBase.noUiSlider.val();
-
-            var itemCounts = new Object;
-            var itemScores = new Object;
-
-            var allCountZero = true;
-            $('.item-number[name^=count]').each(function(index){
-                var count = parseInt($(this).val());
-                if (count > 0) {
-                    allCountZero = false;
-                }
-                itemCounts[$(this).data('key')] = count;
-            });
-
-            if (allCountZero) {
-                flag = 1;
-                Notify.danger('题目数量不能全为0');
-            }
-
-            $('.item-number[name^=score]').each(function(index){
-                itemScores[$(this).data('key')] = $(this).val() ;
-            });
-
-            var ranges = $('input[name="ranges"]').val();
-
-            $.ajaxSetup({
-                async : false
-            });    
-
-            $.post($('.noUiSlider').data('url'), {isDifficulty: isDifficulty, itemCounts: itemCounts,itemScores: itemScores, perventage:perventage, ranges:ranges}, function(data) {
-                if (data) {
-                    Notify.danger(data);
-                    flag = 1 ;
+            $.ajax($form.data('buildCheckUrl'), {
+                type: 'POST',
+                async: false,
+                data: $form.serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status != 'yes') {
+                        var missingTexts = [];
+                        var types = {single_choice:'单选题', choice:'多选题', fill:'填空题', determine: '判断题', essay: '问答题', material: '材料题'}
+                        $.each(response.missing, function(type, count) {
+                            missingTexts.push(types[type] + '缺<strong>' + count + '</strong>道');
+                        });
+                        Notify.danger('课程题库题目数量不足，无法生成试卷：<br>' + missingTexts.join('，'), 5);
+                        isOk = false;
+                    }
                 }
             });
 
-            return flag == 0 ? true : false ;
+            return isOk;
         },
 
-        checkIsNum : function(){
-            var flag = 0;
-            $('.item-number:input').each(function(){
-                if(isNaN($(this).val())){
+        checkBuildCountAndScoreInputs : function() {
+            var $form = $("#testpaper-form");
+            var totalNumber = 0,
+                isOk = true;
+
+            $form.find('.item-number').each(function() {
+                var number = $(this).val();
+                if (!/^[0-9]*$/.test(number)) {
+                    Notify.danger('题目数量只能填写数字');
                     $(this).focus();
-                    Notify.danger('请填写数字');
-                    flag = 1;
+                    isOk = false;
+                    return false;
+                }
+                totalNumber += parseInt(number);
+            });
+
+            if (isOk) {
+                if (totalNumber > 1000) {
+                    isOk = false;
+                    Notify.danger('试卷题目总数不能超过1000道。');
+                    return isOk;
+                }
+            }
+
+            $form.find('.item-score').each(function() {
+                var score = $(this).val();
+                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger('题目分值只能填写数字，且最多一位小数。');
+                    $(this).focus();
+                    isOk = false;
                     return false;
                 }
             });
-            
-            return flag == 0 ? true : false ;
+
+            return isOk;
         },
 
         initValidator: function(validator){
