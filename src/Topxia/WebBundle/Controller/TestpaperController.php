@@ -193,11 +193,18 @@ class TestpaperController extends BaseController
         if (!$testpaperResult) {
             throw $this->createNotFoundException('试卷不存在!');
         }
-        if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
-        }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+
+
+
+        if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+        }
 
         $result = $this->getTestpaperService()->showTestpaper($id, true);
         $items = $result['formatItems'];
@@ -501,34 +508,34 @@ class TestpaperController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $papers = $this->getTestpaperService()->findAllTestpapersByTarget($id);
+        $testpapers = $this->getTestpaperService()->findAllTestpapersByTarget($id);
 
-        $paperIds = ArrayToolkit::column($papers, 'id');
+        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($paperIds, $status),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $paperIds,
+        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
+            $testpaperIds,
             $status,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpaperResults, 'userId'));
 
-        $teacherIds = ArrayToolkit::column($paperResults, 'checkTeacherId');
+        $teacherIds = ArrayToolkit::column($testpaperResults, 'checkTeacherId');
 
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
 
         return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
             'status' => $status,
-            'testpapers' => ArrayToolkit::index($papers, 'id'),
-            'paperResults' => ArrayToolkit::index($paperResults, 'id'),
+            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
+            'paperResults' => ArrayToolkit::index($testpaperResults, 'id'),
             'course' => $course,
             'users' => $users,
             'teachers' => ArrayToolkit::index($teachers, 'id'),

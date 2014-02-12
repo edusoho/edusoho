@@ -544,22 +544,6 @@ course_manage_test_teacher_finish_check:
     pattern: /test/teacher/check/finish
     defaults: { _controller: TopxiaWebBundle:DoTest:testFinishCheck }
 
-course_manage_my_quiz:
-    pattern: /my/quiz
-    defaults: { _controller: TopxiaWebBundle:Testpaper:index }
-
-course_manage_favorite_question:
-    pattern: /question/{id}/favorite
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
-
-course_manage_unfavorite_question:
-    pattern: /question/{id}/unfavorite
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
-
-course_manage_show_favorite_question:
-    pattern: /my/favorite/question/show
-    defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
-
 course_manage_list_teacher_test_reviewing:
     pattern: /my/teacher/reviewing/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
@@ -883,6 +867,27 @@ my_order_cancel_refund:
 my_refunds:
     pattern: /my/refunds
     defaults: { _controller: TopxiaWebBundle:MyOrder:refunds }
+
+my_quiz:
+    pattern: /my/quiz
+    defaults: { _controller: TopxiaWebBundle:Testpaper:index }
+
+my_favorite_question:
+    pattern: /question/{id}/favorite
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:favoriteQuestion }
+
+my_unfavorite_question:
+    pattern: /question/{id}/unfavorite
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:unFavoriteQuestion }
+
+my_show_favorite_question:
+    pattern: /my/favorite/question/show
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:showFavoriteQuestion }
+
+my_favorite_question_preview:
+    pattern: /my/favorite/question/{id}/preview
+    defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
+
 
 user_show: 
     pattern:  /user/{id}

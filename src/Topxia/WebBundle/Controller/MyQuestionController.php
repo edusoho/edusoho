@@ -12,26 +12,30 @@ class MyQuestionController extends BaseController
 {
     public function favoriteQuestionAction(Request $request ,$id)
     {
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
+        if ($request->getMethod() == 'POST') {
+            $targetType = $request->query->get('targetType');
+            $targetId = $request->query->get('targetId');
 
-        $user = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
 
-        $favorite = $this->getQuestionService()->favoriteQuestion($id, $targetType, $targetId, $user['id']);
-    
-        return $this->createJsonResponse(true);
+            $favorite = $this->getQuestionService()->favoriteQuestion($id, $targetType, $targetId, $user['id']);
+        
+            return $this->createJsonResponse(true);
+        }
     }
 
     public function unFavoriteQuestionAction(Request $request ,$id)
     {
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
+        if ($request->getMethod() == 'POST') {
+            $targetType = $request->query->get('targetType');
+            $targetId = $request->query->get('targetId');
 
-        $user = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
 
-        $this->getQuestionService()->unFavoriteQuestion($id, $targetType, $targetId, $user['id']);
+            $this->getQuestionService()->unFavoriteQuestion($id, $targetType, $targetId, $user['id']);
 
-        return $this->createJsonResponse(true);
+            return $this->createJsonResponse(true);
+        }
     }
 
     public function showFavoriteQuestionAction (Request $request)
@@ -70,6 +74,52 @@ class MyQuestionController extends BaseController
             'testpapers' => ArrayToolkit::index($myTestpapers, 'id'),
             'questions' => ArrayToolkit::index($questions, 'id'),
             'paginator' => $paginator
+        ));
+    }
+
+    public function previewAction (Request $request, $id)
+    {
+        $question = $this->getQuestionService()->getQuestion($id);
+
+        $userId = $this->getCurrentUser()->id;
+
+        if (empty($question)) {
+            throw $this->createNotFoundException('题目不存在！');
+        }
+
+        $myFavorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($userId);
+
+        if (!in_array($question['id'], ArrayToolkit::column($myFavorites, 'questionId'))){
+            throw $this->createAccessDeniedException('无权预览非本人收藏的题目!');
+        }
+
+        $item = array(
+            'questionId' => $question['id'],
+            'questionType' => $question['type'],
+            'question' => $question
+        );
+
+        if ($question['type'] == 'material'){
+            $questions = $this->getQuestionService()->findQuestionsByParentId($id);
+
+            foreach ($questions as $value) {
+                $items[] = array(
+                    'questionId' => $value['id'],
+                    'questionType' => $value['type'],
+                    'question' => $value
+                );
+            }
+
+            $item['items'] = $items;
+        }
+
+        $type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
+        $questionPreview = true;
+
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
+            'item' => $item,
+            'type' => $type,
+            'questionPreview' => $questionPreview
         ));
     }
 
