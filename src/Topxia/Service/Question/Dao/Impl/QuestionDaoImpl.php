@@ -127,6 +127,15 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->andWhere('target LIKE :targetLike')
             ->andWhere('stem LIKE :stem');
 
+        if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
+            $excludeIds = array();
+            foreach ($conditions['excludeIds'] as $id) {
+                $excludeIds[] = intval($ids);
+            }
+
+            $builder->addStaticWhere("id NOT IN (" . implode(',', $excludeIds) . ")");
+        }
+
         return $builder;
     }
 

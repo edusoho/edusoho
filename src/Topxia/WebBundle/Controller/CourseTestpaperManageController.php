@@ -70,6 +70,76 @@ class CourseTestpaperManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function deleteAction(Request $request, $courseId, $testpaperId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $testpaper = $this->getTestpaperWithException($course, $testpaperId);
+        $this->getTestpaperService()->deleteTestpaper($testpaper['id']);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function deletesAction(Request $request, $courseId)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $ids = $request->request->get('ids');
+
+        foreach (is_array($ids) ? $ids : array() as $id) {
+            $testpaper = $this->getTestpaperWithException($course, $id);
+            $this->getTestpaperService()->deleteTestpaper($id);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function publishAction (Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getTestpaperWithException($course, $id);
+
+        $testpaper = $this->getTestpaperService()->publishTestpaper($id);
+
+        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:tr.html.twig', array(
+            'testpaper' => $testpaper,
+            'user' => $user,
+            'course' => $course,
+        ));
+    }
+
+    public function closeAction (Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getTestpaperWithException($course, $id);
+
+        $testpaper = $this->getTestpaperService()->closeTestpaper($id);
+
+        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:tr.html.twig', array(
+            'testpaper' => $testpaper,
+            'user' => $user,
+            'course' => $course,
+        ));
+    }
+
+    private function getTestpaperWithException($course, $testpaperId)
+    {
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($testpaper['target'] != "course-{$course['id']}") {
+            throw $this->createAccessDeniedException();
+        }
+        return $testpaper;
+    }
+
     public function itemsAction(Request $request, $courseId, $testpaperId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -96,6 +166,40 @@ class CourseTestpaperManageController extends BaseController
             'items' => ArrayToolkit::group($items, 'questionType'),
             'questions' => $questions,
         ));
+    }
+
+    public function itemPickAction(Request $request, $courseId, $testpaperId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        $conditions = $request->query->all();
+        $conditions['parentId'] = 0;
+        $conditions['excludeIds'] = empty($conditions['excludeIds']) ? array() : explode(',', $conditions['excludeIds']);
+
+        $replaceFor = empty($conditions['replaceFor']) ? '' : $conditions['replaceFor'];
+
+        $paginator = new Paginator(
+            $request,
+            $this->getQuestionService()->searchQuestionsCount($conditions),
+            7
+        );
+
+        $questions = $this->getQuestionService()->searchQuestions(
+                $conditions, 
+                array('createdTime' ,'DESC'), 
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-pick-modal.html.twig', array(
+            'course' => $course,
+            'testpaper' => $testpaper,
+            'questions' => $questions,
+            'replaceFor' => $replaceFor,
+            'paginator' => $paginator,
+        ));
+        
     }
 
     private function getQuestionRanges($course)

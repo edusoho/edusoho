@@ -3,7 +3,7 @@
 
 {% block title %}试卷管理 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'testPaper' %}
+{% set side_nav = 'testpaper' %}
 {% set parentId = parentId | default(null)%}
 {% set script_controller = 'test-paper/index' %}
 
@@ -31,12 +31,12 @@
     </tr>
     </thead>
     <tbody>
-        {% for testpaper in testpapers %}
-            {% set user = users[testpaper.updatedUserId] %}
-            {% include 'TopxiaWebBundle:QuizQuestionTest:tr.html.twig' with {item:testpaper} %}
-        {% else %}
-            <tr><td colspan="20"><div class="empty">还没有试卷，请点击右上角按钮，<a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}">创建一个新试卷</a></div></td></tr>
-        {% endfor %}
+      {% for testpaper in testpapers %}
+        {% set user = users[testpaper.updatedUserId] %}
+        {% include 'TopxiaWebBundle:CourseTestpaperManage:tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">还没有试卷，请点击右上角按钮，<a href="{{ path('course_manage_testpaper_create',{courseId:course.id}) }}">创建一个新试卷</a></div></td></tr>
+      {% endfor %}
     </tbody>
   </table>
   <div>

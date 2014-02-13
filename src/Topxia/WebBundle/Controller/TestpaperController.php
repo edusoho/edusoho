@@ -550,43 +550,6 @@ class TestpaperController extends BaseController
         ));
     }
     
-    public function openTestpaperAction (Request $request, $id)
-    {
-        $testpaper = $this->getTestpaperService()->publishTestpaper($id);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
-
-        $target = explode('/', $testpaper['target']);
-        $target = explode('-', $target[0]);
-
-        $course = $this->getCourseService()->getCourse($target[1]);
-
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
-            'item' => $testpaper,
-            'user' => $user,
-            'course' => $course
-        ));
-    }
-
-    public function closeTestpaperAction (Request $request, $id)
-    {
-        $testpaper = $this->getTestpaperService()->closeTestpaper($id);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
-
-        $target = explode('/', $testpaper['target']);
-        $target = explode('-', $target[0]);
-
-        $course = $this->getCourseService()->getCourse($target[1]);
-
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:tr.html.twig', array(
-            'item' => $testpaper,
-            'user' => $user,
-            'course' => $course
-        ));
-    }
-
-
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');

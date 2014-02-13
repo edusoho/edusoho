@@ -200,7 +200,7 @@ class CourseQuestionManageController extends BaseController
             'question' => $question
         );
 
-        if ($question['type'] == 'material'){
+        if ($question['subCount'] > 0) {
             $questions = $this->getQuestionService()->findQuestionsByParentId($id);
 
             foreach ($questions as $value) {
