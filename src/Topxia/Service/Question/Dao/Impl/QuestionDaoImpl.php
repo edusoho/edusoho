@@ -138,7 +138,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
                 $excludeIds[] = intval($ids);
             }
 
-            $builder->addStaticWhere("id NOT IN (" . implode(',', $excludeIds) . ")");
+            if (!empty($excludeIds)) {
+                $builder->andStaticWhere("id NOT IN (" . implode(',', $excludeIds) . ")");
+            }
         }
 
         return $builder;
