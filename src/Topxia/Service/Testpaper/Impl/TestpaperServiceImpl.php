@@ -54,26 +54,34 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     private function filterTestpaperFields($fields, $mode = 'create')
     {
-        if(!ArrayToolkit::requireds($fields, array('name', 'pattern', 'target'))){
-            throw $this->createServiceException('缺少必要字段！');
-        }
-
         $filtedFields = array();
-
-        $filtedFields['name'] = $fields['name'];
-        $filtedFields['target'] = $fields['target'];
-        $filtedFields['pattern'] = $fields['pattern'];
-        $filtedFields['missScore'] =  empty($fields['missScore']) ? 0 : $fields['missScore'];
-        $filtedFields['description']   = empty($fields['description'])? '' : $fields['description'];
-        $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
-        $filtedFields['metas']   = empty($fields['metas'])? array() : $fields['metas'];
         $filtedFields['updatedUserId'] = $this->getCurrentUser()->id;
         $filtedFields['updatedTime']   = time();
-
         if ($mode == 'create') {
+            if(!ArrayToolkit::requireds($fields, array('name', 'pattern', 'target'))){
+                throw $this->createServiceException('缺少必要字段！');
+            }
+            $filtedFields['name'] = $fields['name'];
+            $filtedFields['target'] = $fields['target'];
+            $filtedFields['pattern'] = $fields['pattern'];
+            $filtedFields['description']   = empty($fields['description'])? '' : $fields['description'];
+            $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
+            $filtedFields['metas']   = empty($fields['metas'])? array() : $fields['metas'];
             $filtedFields['status'] = 'draft';
             $filtedFields['createdUserId'] = $this->getCurrentUser()->id;
             $filtedFields['createdTime']   = time();
+        } else {
+            if (array_key_exists('name', $fields)) {
+                $filtedFields['name'] = empty($fields['name']) ? '' : $fields['name'];
+            }
+
+            if (array_key_exists('description', $fields)) {
+                $filtedFields['description'] = empty($fields['description']) ? '' : $fields['description'];
+            }
+
+            if (array_key_exists('limitedTime', $fields)) {
+                $filtedFields['limitedTime'] = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
+            }
         }
 
         return $filtedFields;
@@ -159,7 +167,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $metas['question_type_seq'] = $types;
 
         $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
-            'itemCount' => $seq,
+            'itemCount' => $seq -1,
             'score' => $totalScore,
             'metas' => $metas,
         ));

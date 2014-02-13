@@ -77,13 +77,17 @@ class CourseTestpaperManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $testpaper = $this->getTestpaperService()->updateTestpaper($id, $data);
+            $this->setFlashMessage('success', '试卷信息保存成功！');
+            return $this->redirect($this->generateUrl('course_manage_testpaper', array('courseId' => $course['id'])));
         }
 
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:update.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:update.html.twig', array(
             'course'    => $course,
+            'testpaper' => $testpaper,
         ));
     }
-
 
     public function deleteAction(Request $request, $courseId, $testpaperId)
     {
