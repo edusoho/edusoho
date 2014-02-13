@@ -562,7 +562,7 @@ course_manage_testpaper_build_check:
 
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/{id}/update
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:update }
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
 
 
 course_manage_testpaper_delete:
