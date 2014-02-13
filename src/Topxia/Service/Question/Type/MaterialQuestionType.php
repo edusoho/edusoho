@@ -3,8 +3,8 @@ namespace Topxia\Service\Question\Type;
 
 class MaterialQuestionType extends AbstractQuestionType
 {
-    public function canHaveSubQuestion()
+    public function judge(array $question, $answer)
     {
-        return true;
+        return array('status' => 'unableJudge');
     }
 }

@@ -3,6 +3,7 @@ namespace Topxia\Service\Question\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Question\QuestionService;
+use Topxia\Service\Question\Type\QuestionTypeFactory;
 use Topxia\Common\ArrayToolkit;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
@@ -43,8 +44,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             throw $this->createServiceException('question type error！');
         }
 
-        $filter = $this->createQuestionFilter($fields['type']);
-        $fields = $filter->filter($fields, 'create');
+        $fields = QuestionTypeFactory::create($fields['type'])->filter($fields, 'create');
 
         if ($fields['parentId'] > 0) {
             $parentQuestion = $this->getQuestion($fields['parentId']);
@@ -72,8 +72,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             throw $this->createServiceException("Question #{$id} is not exist.");
         }
 
-        $filter = $this->createQuestionFilter($question['type']);
-        $fields = $filter->filter($fields, 'update');
+        $fields = QuestionTypeFactory::create($question['type'])->filter($fields, 'update');
         if ($question['parentId'] > 0) {
             unset($fields['target']);
         }
@@ -132,8 +131,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 $results[$id] = array('status' => 'notFound');
             } else {
                 $question = $questions[$id];
-                $judger = $this->createQuestionJudger($question['type']);
-                $results[$id] = $judger->judge($question, $answer);
+                $results[$id] = QuestionTypeFactory::create($question['type'])->judge($question, $answer);
             }
         }
 
@@ -200,49 +198,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
             $seq ++;
         }
-    }
-
-    protected function createQuestionFilter($type)
-    {
-        switch ($type) {
-            case 'choice':
-            case 'single_choice':
-                $name = 'Choice';
-                break;
-            case 'fill':
-                $name = 'Fill';
-                break;
-            default:
-                $name = 'Default';
-                break;
-        }
-        $class = __NAMESPACE__  . "\\Filter\\{$name}Filter";
-        return new $class();
-    }
-
-    protected function createQuestionJudger($type)
-    {
-        if (empty($this->cachedJudger[$type])) {
-            switch ($type) {
-                case 'choice':
-                case 'single_choice':
-                    $name = 'Choice';
-                    break;
-                case 'fill':
-                    $name = 'Fill';
-                    break;
-                case 'determine':
-                    $name = 'Determine';
-                    break;
-                default:
-                    $name = 'Not';
-                    break;
-            }
-            $class = __NAMESPACE__  . "\\Judger\\{$name}Judger";
-            $this->cachedJudger[$type] = new $class();
-        }
-
-        return $this->cachedJudger[$type];
     }
 
     public function findAllFavoriteQuestionsByUserId ($id)
