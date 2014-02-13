@@ -343,7 +343,7 @@ class TestpaperController extends BaseController
         }
 
         if ($testpaperResult['status'] != 'reviewing') {
-            return $this->createMessageResponse('info', '只有待批阅状态的试卷，才能批阅！');
+            return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
         }
 
         if ($request->getMethod() == 'POST') {
