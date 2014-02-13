@@ -5,6 +5,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Testpaper\TestpaperService;
 use Topxia\Service\Testpaper\Builder\TestpaperBuilderFactory;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
@@ -136,9 +137,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $items = array();
         $types = array();
-        $totalCount = $totalScore = $seq = 0;
+
+        $totalScore = 0;
+        $seq = 0;
         foreach ($result['items'] as $item) {
-            $item['seq'] = $seq + 1;
+            $questionType = QuestionTypeFactory::create($item['questionType']);
+
+            if (!$questionType->canHaveSubQuestion()) {
+                $seq++;
+                $totalScore += $item['score'] ;
+            }
+            $item['seq'] = $seq;
+
             $items[] = $this->getTestpaperItemDao()->addItem($item);
             if (!in_array($item['questionType'], $types)) {
                 $types[] = $item['questionType'];
@@ -149,11 +159,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $metas['question_type_seq'] = $types;
 
         $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
+            'itemCount' => $seq,
+            'score' => $totalScore,
             'metas' => $metas,
         ));
 
         $testpaper['metas']['question_type_seq'] = $types;
-
 
         return $items;
     }
