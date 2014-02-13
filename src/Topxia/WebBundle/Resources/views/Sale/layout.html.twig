@@ -21,7 +21,7 @@
                 </a>
 
                 <a class="list-group-item {% if side_nav == 'commission-list' %}active{% endif %}" href="{{ path('mysale_commission_list') }}"> <i class="glyphicon glyphicon-briefcase"></i>
-                 收入明细
+                 佣金明细
                 </a>
                 
 
@@ -64,6 +64,27 @@
            </div>
          </div>
          <!-- /list-group-block -->         
+
+         <div class="list-group-block">
+           <div class="list-group-panel">
+             <div class="list-group-heading">关于开源推广联盟</div>
+             <ul class="list-group">
+
+               <a class="list-group-item {% if side_nav == 'sale_about' %}active{% endif %}" href="{{ path('mysale_offsale_course_list') }}"> <i class="glyphicon glyphicon-certificate"></i>
+                 开源推广联盟介绍
+               </a>
+
+                <a class="list-group-item {% if side_nav == 'sale_policy' %}active{% endif %}" href="{{ path('mysale_offsale_course_list') }}"> <i class="glyphicon glyphicon-certificate"></i>
+                 推广合作声明
+               </a>
+
+            
+
+
+             </ul>
+           </div>
+         </div>
+         <!-- /list-group-block -->      
 
 
 

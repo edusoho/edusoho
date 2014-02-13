@@ -8,7 +8,7 @@
 {% block main %}
 
 <div class="panel panel-default panel-col">
-	<div class="panel-heading">网站推广链接</div>
+	<div class="panel-heading">网站链接推广</div>
 	<div class="panel-body">
 		<div class="row form-group">
 			<div class="col-md-8">
@@ -21,14 +21,41 @@
 			</div>
 
 		</div>
+
+
 		<div class="row form-group">
 
-			<div class="col-md-9">
-				佣金比例:{{linksale.adCommission}}% ,  链接有效期:{{linksale.adCommissionDay}}天
+			<div class="col-md-12">
+				
+					<h3>关于网站链接推广：</h3>
+					<ul class="list-unstyled">
+						<li>1、网站链接推广适用本站所有课程。</li>
+						
+						<li>2、任何用户通过您的专属网站推广链接访问本网站后，该用户在<span class="text-color-red text-size-18">{{linksale.adCommissionDay}}天</span>内在本网站购买的所有课程你都能获得<span class="text-color-red text-size-18">{{linksale.adCommission}}%</span>的佣金收入。</li>
+
+						<li>
+							3、您可以通过<a  href="{{ path('mysale_commission_list') }}">佣金明细</a>	来查看您的网站链接推广佣金明细及分成情况。
+						</li>
+
+						<li>
+							4、支付更快，次月结算当月的提成金额，满200元就支付，提成由管理员人工审核发放，有任何问题您可以人工申诉。
+						</li>
+
+						<li>
+							5、如果推荐人和课程购买人在同一IP上或同一人，则视为无效推荐。
+						</li>
+						
+
+
+
+					</ul>
+
+
+					</p>
+			
 			</div>
 
 		</div>
-
 	</div>
 </div>
 
