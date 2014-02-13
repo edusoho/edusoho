@@ -16,7 +16,7 @@
 		{% endif %}
 
 		{% if status == 'finished' %}
-		  <div class="pull-right">
+		  <div>
 		  	<div class="text-warning">总分 <strong>{{ paperResult.score }}</strong> 分</div>
 				<div class="text-muted"><small>客观题{{ paperResult.objectiveScore }}分 / 主观题{{ paperResult.subjectiveScore }}分</small></div>
 				<div class="text-success"><small>{{ teacher.nickname|default('系统') }} 批于{{ paperResult.checkedTime|date("Y年n月d日 H:i") }}</small></div>
