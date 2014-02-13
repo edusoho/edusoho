@@ -87,7 +87,7 @@ class CourseTestpaperManageController extends BaseController
 
         foreach (is_array($ids) ? $ids : array() as $id) {
             $testpaper = $this->getTestpaperWithException($course, $id);
-            $this->getTestpaperService()->deleteTestpaper($testpaperId);
+            $this->getTestpaperService()->deleteTestpaper($id);
         }
 
         return $this->createJsonResponse(true);
@@ -126,7 +126,6 @@ class CourseTestpaperManageController extends BaseController
             'course' => $course,
         ));
     }
-
 
     private function getTestpaperWithException($course, $testpaperId)
     {
