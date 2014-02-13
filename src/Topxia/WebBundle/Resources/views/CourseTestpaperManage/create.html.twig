@@ -4,7 +4,7 @@
 {% block title %}创建试卷 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'testpaper' %}
-{% set script_controller = 'test-paper/testpaper-editor' %}
+{% set script_controller = 'testpaper/testpaper-form' %}
 
 {% block main %}
 
@@ -14,63 +14,27 @@
   <div class="panel-body">
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">试卷管理</a></li>
-        <li class="active">创建试卷</li>
+      <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">试卷管理</a></li>
+      <li class="active">创建试卷</li>
     </ol>
 
-    <div id="test-creator-widget">
-      <form id="testpaper-form" class="form-horizontal" method="post" data-build-check-url="{{ path('course_manage_testpaper_build_check',{courseId:course.id})}}">
-        {{ web_macro.flash_messages() }}
+    <form id="testpaper-form" class="form-horizontal" method="post" data-build-check-url="{{ path('course_manage_testpaper_build_check',{courseId:course.id})}}" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true">
+      {{ web_macro.flash_messages() }}
 
-        <div class="form-group">
-          <div class="col-md-2 control-label"><label for="test-name-field">试卷名称</label></div>
-          <div class="col-md-8 controls">
-              <input class="form-control"  value="{% if testpaper.name | default(null)%}{{testpaper.name }}{% endif %}" name="name"   id="test-name-field"/>
-          </div>
+      {% include 'TopxiaWebBundle:CourseTestpaperManage:testpaper-form-base-fields.html.twig'%}
+      {% include 'TopxiaWebBundle:CourseTestpaperManage:testpaper-form-build-fields.html.twig'%}
+
+      <div class="form-group">
+        <div class="col-md-8 col-md-offset-2 controls">
+          <button type="submit" class="btn btn-primary" >保存，下一步</button>
+          <a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>
         </div>
+      </div>
 
-        <div class="form-group">
-          <div class="col-md-2 control-label"><label for="test-description-field">试卷说明</label></div>
-          <div class="col-md-8 controls">
-            <textarea class="form-control" id="test-description-field" name="description">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
-          </div>
-        </div>
+    </form>
 
-        <div class="form-group">
-          <div class="col-md-2 control-label"><label for="test-limitedTime-field">时间限制</label></div>
-          <div class="col-md-8 controls">
-              <input class="form-control width-input width-input-large" name="limitedTime" id="test-limitedTime-field" value="{% if testpaper.limitedTime | default(null)%}{{testpaper.limitedTime }}{%else%}0{% endif %}" /> 分钟
-              <div class="help-block">0分钟，表示无限制</div>
-          </div>
-        </div>
-
-        {% include 'TopxiaWebBundle:CourseTestpaperManage:question-build-form.html.twig'%}
-
-        <div class="form-group">
-          <div class="col-md-2 control-label"><label for="missScore">漏选得分</label></div>
-          <div class="col-md-8 controls">
-            <input name="missScore" class="form-control width-input width-input-large" type="text" value="{{ missScore|default(0) }}" /></input>
-            <div class="help-block">设置多选题漏选但没错选时的得分</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-8 col-md-offset-2 controls">
-            <button type="submit" class="btn btn-primary" >保存，下一步</button>
-            <a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>
-          </div>
-        </div>
-
-      </form>
-
-
-    </div>
-    
   </div>
 </div>
-
-
-
 {% endblock %}
 
 
