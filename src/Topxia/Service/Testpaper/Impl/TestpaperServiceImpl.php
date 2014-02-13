@@ -139,18 +139,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $types = array();
 
         $totalScore = 0;
-        $seq = 0;
+        $seq = 1;
         foreach ($result['items'] as $item) {
             $questionType = QuestionTypeFactory::create($item['questionType']);
 
+            $item['seq'] = $seq;
             if (!$questionType->canHaveSubQuestion()) {
                 $seq++;
                 $totalScore += $item['score'] ;
             }
-            $item['seq'] = $seq;
 
             $items[] = $this->getTestpaperItemDao()->addItem($item);
-            if (!in_array($item['questionType'], $types)) {
+            if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
                 $types[] = $item['questionType'];
             }
         }

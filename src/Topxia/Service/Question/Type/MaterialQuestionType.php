@@ -7,4 +7,10 @@ class MaterialQuestionType extends AbstractQuestionType
     {
         return array('status' => 'unableJudge');
     }
+
+    public function canHaveSubQuestion()
+    {
+        return true;
+    }
+
 }

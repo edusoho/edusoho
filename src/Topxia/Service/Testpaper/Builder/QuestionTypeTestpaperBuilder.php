@@ -122,6 +122,8 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
             $conditions['targetPrefix'] = $options['target'];
         }
 
+        $conditions['parentId'] = 0;
+
         $total = $this->getQuestionService()->searchQuestionsCount($conditions);
 
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
