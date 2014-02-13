@@ -147,13 +147,14 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
 
     private function makeItem($testpaper, $question, $score)
     {
+        //@todo misssScore, wellming.
         return array(
             'testId' => $testpaper['id'],
             'questionId' => $question['id'],
             'questionType' => $question['type'],
             'parentId' => $question['parentId'],
             'score' => $score,
-            'missScore' => $testpaper['missScore'],
+            'missScore' => 0,
         );
     }
 
