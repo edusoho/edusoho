@@ -1,18 +1,40 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="offsale-table-tr-{{ offsale.id }}" data-role="item">
   <td><input value="{{offsale.id}}" type="checkbox"  data-role="batch-item" ></td>
+  
+
+  <td class="text-muted text-sm text-break"> {{ dict_text('offsaleType',offsale.saleType) }}</td>
+
   <td>{{ offsale.promoCode }}</td>
-  <td>￥{{ offsale.reducePrice}}</td>
- 
-  <td class="text-muted text-sm text-break">{{ offsale.prodName }}</td>
+
+  
+
   <td>
     {% if partner %}
        {{ partner.nickname }}
     {% endif %}
   </td>
-   <td>{{ offsale.adCommission}}%</td>
 
-  <td class="text-muted text-sm text-break">{{ offsale.validTime }}</td>
+  <td>{{ offsale.adCommission}}%</td>
+
+  <td>￥{{ offsale.reducePrice}}</td>
+ 
+  <td class="text-muted text-sm text-break">{{ offsale.prodName }}</td>
+
+   
+
+  <td class="text-muted text-sm text-break">
+    {% if offsale.saleType=='offsale-course' %}
+         {{ offsale.validTime }}
+    {% endif %}
+
+    {% if offsale.saleType=='invite-course' %}
+         {{ offsale.adCommissionDay }}天
+    {% endif %}
+
+  
+
+  </td>
  
   <td class="text-muted text-sm text-break">{{ offsale.promoName }}</td>
 

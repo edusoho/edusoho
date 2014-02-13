@@ -26,6 +26,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name="adCommissionType"]',
+            required: true
+           
+        });
+
+        validator.addItem({
             element: '[name="adCommission"]',
             required: true,
             rule: 'currency maxlength{max:25}'

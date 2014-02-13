@@ -178,27 +178,7 @@ class MySaleController extends BaseController
 
     public function linkCourseReduceAction(Request $request,$id)
     {
-        $user = $this->getCurrentUser();
-
-
-        $course = $this->getCourseService()->getCourse($id);
-
-
-        $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser('course',$course['id'],$user['id']);
-
-
-        if(empty($linksale)){
-
-            
-
-        }
-
-
        
-        return $this->render('TopxiaWebBundle:Sale:link-course-reduce.html.twig', array(
-            'linksale'=>$linksale,
-            'user'=>$user            
-        ));
        
        
     }
@@ -321,10 +301,15 @@ class MySaleController extends BaseController
             $offsale['prodId']  = $course['id'];
             $offsale['promoName'] = $course['title'].'推广码';
             $offsale['promoCode']= $this->getOffSaleService()->generateOffSaleCode('');
-          
+
+            
             $offsale['adCommissionType']= empty($course['adCommissionType']) ?'ratio':$course['adCommissionType'];
 
             $offsale['adCommission']= empty($course['adCommission'])?'30':$course['adCommission'];
+
+            $offsale['adCommissionDay']= empty($course['adCommissionDay'])?'30':$course['adCommissionDay'];
+            $offsale['customized']=0;
+
 
             $offsale['reduceType'] = 'quota';
             $offsale['reducePrice'] = 0;

@@ -183,12 +183,11 @@ class DataDict
 		),
 
 		'saleType' => array(
-        	'linksale-web' =>            '网站链接推广',
-			'linksale-course' =>         '课程链接推广',
+        	'linksale-web' =>             '网站链接推广',
+			'linksale-course' =>          '课程链接推广',
 			'offsale-course' =>           '课程优惠码推广',
-			
             'invite-course' =>            '课程邀请码推广',
-            'invite-web' =>            '注册邀请码推广',
+            'invite-web' =>               '注册邀请码推广',
 			
 		),
 		'saleType:html' => array(
@@ -198,6 +197,15 @@ class DataDict
             'invite-course' =>            '<span class="text-danger">课程邀请码推广</span>',
 			'invite-web' =>          '<span class="text-muted">注册邀请码推广</span>',
 			
+		),
+		'offsaleType' => array(
+			'offsale-course' =>           '课程优惠码',
+            'invite-course' =>            '课程邀请码',			
+		),
+		
+		'linksaleType' => array(
+			'linksale-course' =>         '课程链接推广',
+            'linksale-web' =>            '网站链接推广',			
 		),
 
 	);

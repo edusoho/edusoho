@@ -10,14 +10,23 @@
 <div class="panel panel-default panel-col">
 	<div class="panel-heading">网站推广链接</div>
 	<div class="panel-body">
-		
-		<div class="col-md-8">
-			<textarea  id="content" class="form-control"  cols="60" rows="3">{{linksale.tUrl}}</textarea>
-		</div>
+		<div class="row form-group">
+			<div class="col-md-8">
+				<textarea  id="content" class="form-control"  cols="60" rows="3">{{linksale.tUrl}}</textarea>
+			</div>
 
-		<div class="col-md-4">
-			<button id="copy-button" value="abc">点击复制该链接</button>
-		<div id="copy"></div>
+			<div class="col-md-4">
+				<button id="copy-button" value="abc">点击复制该链接</button>
+				<div id="copy"></div>
+			</div>
+
+		</div>
+		<div class="row form-group">
+
+			<div class="col-md-9">
+				佣金比例:{{linksale.adCommission}}% ,  链接有效期:{{linksale.adCommissionDay}}天
+			</div>
+
 		</div>
 
 	</div>

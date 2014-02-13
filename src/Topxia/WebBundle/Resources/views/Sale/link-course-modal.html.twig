@@ -6,7 +6,7 @@
 {% block body %}
 
 
-      <div class="row form-group">
+    <div class="row form-group">
 
     	<div class="col-md-9">
     		<textarea id="content" name="tUrl" class="form-control" rows="3">{{ linksale.tUrl }}</textarea>
@@ -17,6 +17,16 @@
     	</div>
 
     </div>
+
+    <div class="row form-group">
+
+        <div class="col-md-9">
+            佣金比例:{{linksale.adCommission}}% ,  链接有效期:{{linksale.adCommissionDay}}天
+        </div>
+        
+
+    </div>
+
 
 
 {% endblock %}

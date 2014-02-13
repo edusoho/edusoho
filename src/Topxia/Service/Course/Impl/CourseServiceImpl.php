@@ -315,6 +315,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getCourseDao()->updateCourse($id, $data);
+
+		$course = $this->getCourseDao()->getCourse($id);
+
+		$this->getLinkSaleService()->updateCourseLinkSale4unCustomized($course['adCommissionType'],$course['adCommission'],$course['adCommissionDay'],$course['id']);
+
+		$this->getOffSaleService()->updateCourseOffSale4unCustomized($course['adCommissionType'],$course['adCommission'],$course['adCommissionDay'],$course['id']);
+
+
+
 	}
 
 	private function _filterCourseFields($fields)
@@ -1687,6 +1696,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
+
+    protected function getCommissionService()
+    {
+        return $this->createService('Sale.CommissionService');
+    }
+     
+    protected function getLinkSaleService()
+    {
+        return $this->createService('Sale.LinkSaleService');
+    }
+
+    protected function getOffSaleService()
+    {
+        return $this->createService('Sale.OffSaleService');
+    }
+    
 
 }
 

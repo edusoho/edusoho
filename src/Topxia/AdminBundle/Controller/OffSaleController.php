@@ -80,8 +80,6 @@ class OffSaleController extends BaseController
             $offsetting['partnerId'] = $partner['id'];
             $offsetting['managerId'] = $user['id'];
 
-
-
             $this->getOffSaleService()->createOffSales($offsetting);
             
             return $this->redirect($this->generateUrl('admin_sale')); 
@@ -91,7 +89,9 @@ class OffSaleController extends BaseController
             'id'=>0,
             'partnerName'=>'',
             'promoName'=>'',
+            'adCommissionType'=>'ratio',
             'adCommission'=>0,
+            'adCommissionDay'=>0,
             'reducePrice'=>0,
             'promoNum'=>1,
             'promoPrefix'=>'',

@@ -2,7 +2,7 @@
 
 {% block title %}优惠码管理 - {{ parent() }}{% endblock %}
 
-{% set menu = 'admin_offsale' %}
+{% set menu = 'admin_offsale_off' %}
 
 {% set script_controller = 'sale/offsale' %}
 
@@ -15,7 +15,15 @@
 <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
   <div class="form-group">
-    <input class="form-control" type="text" placeholder="优惠码编号" name="promoCode" value="{{ app.request.get('promoCode') }}"></div>
+   
+    <select class="form-control" name="saleType">
+        {{ select_options(dict('offsaleType'), app.request.query.get('saleType'), '码类型') }}
+      </select>
+  </div>
+  
+  <div class="form-group">
+    <input class="form-control" type="text" placeholder="码编号" name="promoCode" value="{{ app.request.get('promoCode') }}"></div>
+  
   <div class="form-group">
     <input class="form-control" type="text" placeholder="适用商品" name="prodName" value="{{ app.request.get('prodName') }}"></div>
 
@@ -31,11 +39,16 @@
       <tr >
         <th width="2%">
           <input type="checkbox" data-role="batch-select"></th>
-        <th width="15%">优惠码编号</th>
-        <th width="8%">优惠(元)</th>       
-        <th width="20%">适用商品</th>
+        <th width="8%">码类型</th>
+        <th width="10%">码编号</th>
         <th width="8%">所属渠道</th>
         <th width="8%">佣金比例</th>
+       
+
+        <th width="8%">优惠(元)</th>       
+        <th width="15%">适用商品</th>
+       
+       
         <th width="10%">有效期</th>
               
         <th width="15%">优惠码描述</th>

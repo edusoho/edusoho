@@ -108,6 +108,7 @@ class LinkSaleDaoImpl extends BaseDao implements LinkSaleDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'sale_linksale')
+            ->andWhere('saleType = :saleType')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
             ->andWhere('prodName LIKE :prodNameLike')

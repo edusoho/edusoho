@@ -30,6 +30,8 @@ class SettingSaleController extends BaseController
             $this->getSettingService()->set('linksaleWebSetting', $lswSetting);
             $this->getLogService()->info('system', 'update_linksaleWebSetting', "更新网站链接推广设置", $lswSetting);
             $this->setFlashMessage('success','已更新网站链接推广设置');
+
+            $this->getLinkSaleService()->updateCourseLinkSale4unCustomized($lswSetting['webCommissionType'],$lswSetting['webCommission'],$lswSetting['webCommissionDay'],0);
         }
 
         return $this->render('TopxiaAdminBundle:Sale:sale-setting.html.twig', array(
@@ -46,6 +48,21 @@ class SettingSaleController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getCommissionService()
+    {
+        return $this->getServiceKernel()->createService('Sale.CommissionService');
+    }
+     
+    protected function getLinkSaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.LinkSaleService');
+    }
+
+    protected function getOffSaleService()
+    {
+        return $this->getServiceKernel()->createService('Sale.OffSaleService');
     }
 
 }

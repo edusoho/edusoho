@@ -623,7 +623,11 @@ admin_photo_delete:
     defaults: { _controller: TopxiaAdminBundle:Photo:delete }
 
 
-admin_sale_offsale:
+admin_sale_offsale_off:
+    pattern: /sale/offsale
+    defaults: { _controller: TopxiaAdminBundle:OffSale:index }
+
+admin_sale_offsale_invite:
     pattern: /sale/offsale
     defaults: { _controller: TopxiaAdminBundle:OffSale:index }
 

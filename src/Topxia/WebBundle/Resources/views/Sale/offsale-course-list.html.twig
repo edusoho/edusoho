@@ -6,7 +6,7 @@
 {% block main %}
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-     可使用优惠码课程列表
+     可推广课程列表
   </div>
   <div class="panel-body">
 
@@ -15,10 +15,11 @@
     <tr>
       <th width="30%">课程名称</th>
       <th>销量/浏览量</th>
-      <th>单价</th>
+      <th>单价(元)</th>
 
       <th>佣金比率</th>
-      <th>佣金</th>
+      <th>佣金(元)</th>
+      <th>推广有效期</th>
      
       <th>操作</th>
     </tr>
@@ -46,7 +47,7 @@
                 {{ course.adCommission|number_format(2, '.', ',')  }}%
             {% endif %}
           </td>
-
+ 
           <td>￥
              {% if(course.adCommissionType=='quota') %}
                 {{course.adCommission|number_format(2, '.', ',') }}
@@ -57,6 +58,7 @@
             {% endif %}
 
           </td>
+          <td>{{ course.adCommissionDay }}天</td>
           <td>
                     
           <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_offsale_course_code', {id:course.id}) }}"> 获取推广邀请码 </a>

@@ -7,15 +7,17 @@
     {% block sidebar %}
       <div class="list-group">
         
+        <a href="{{ path('admin_sale_setting') }}" class="list-group-item {% if menu == 'admin_sale_setting' %}active{% endif %}">全局设置</a>
 
         <a href="{{ path('admin_sale_commission') }}" class="list-group-item {% if menu == 'admin_commission' %}active{% endif %}">佣金管理</a>
 
-        <a href="{{ path('admin_sale_offsale') }}" class="list-group-item {% if menu == 'admin_offsale' %}active{% endif %}">优惠码管理</a>
-
+       
 
         <a href="{{ path('admin_sale_linksale') }}" class="list-group-item {% if menu == 'admin_linksale' %}active{% endif %}">推广链接管理</a>
 
-        <a href="{{ path('admin_sale_setting') }}" class="list-group-item {% if menu == 'admin_sale_setting' %}active{% endif %}">网站链接推广设置</a>
+         <a href="{{ path('admin_sale_offsale_off') }}" class="list-group-item {% if menu == 'admin_offsale_off' %}active{% endif %}">推广码管理</a>
+
+       
 
 
        

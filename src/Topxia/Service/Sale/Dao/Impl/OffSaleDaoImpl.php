@@ -110,6 +110,7 @@ class OffSaleDaoImpl extends BaseDao implements OffSaleDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'sale_offsale')
+            ->andWhere('saleType = :saleType')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
             ->andWhere('partnerId = :partnerId')
