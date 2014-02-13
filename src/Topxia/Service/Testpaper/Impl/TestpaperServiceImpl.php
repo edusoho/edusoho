@@ -424,7 +424,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $answers = $this->getQuestionService()->judgeQuestions($answers, true);
 
         $answers = $this->makeScores($answers, $items);
-var_dump($answers);exit();
+
         foreach ($answers as $questionId => $answer) {
             if($answer['status'] == 'noAnswer'){
                 $answer['answer'] = array();
@@ -467,7 +467,6 @@ var_dump($answers);exit();
                 $answers[$questionId]['score'] = $items[$questionId]['score'];
             } elseif ($answer['status'] == 'partRight') {
                 if ($items[$questionId]['missScore'] > 0){
-                    var_dump($items[$questionId]['missScore']);
                     $answers[$questionId]['score'] = $items[$questionId]['missScore'];
                 } else {
                     $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
