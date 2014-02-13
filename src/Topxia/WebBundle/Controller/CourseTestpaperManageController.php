@@ -198,6 +198,8 @@ class CourseTestpaperManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['target'] = "course-{$course['id']}";
+            $this->getTestpaperService()->buildTestpaper($testpaper['id'], $data);
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $courseId, 'testpaperId' => $testpaperId)));
         }
 

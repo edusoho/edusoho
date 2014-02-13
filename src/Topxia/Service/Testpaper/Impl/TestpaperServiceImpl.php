@@ -136,6 +136,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if (empty($testpaper)) {
             throw $this->createServiceException("Testpaper #{$id} is not found.");
         }
+
+        $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testpaper['id']);
+
+
         $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
 
         $result = $builder->build($testpaper, $options);
