@@ -95,6 +95,7 @@ class MySaleController extends BaseController
         $sort  = 'recommended';
 
         $conditions = array(
+            'price'=>1,
             'status' => 'published',
             'recommended' => ($sort == 'recommended') ? null : null
         );
@@ -253,6 +254,7 @@ class MySaleController extends BaseController
         $sort  = 'recommended';
 
         $conditions = array(
+            'price'=>1,
             'status' => 'published',
             'recommended' => ($sort == 'recommended') ? null : null
         );

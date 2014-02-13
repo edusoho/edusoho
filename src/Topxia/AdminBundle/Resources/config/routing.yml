@@ -623,13 +623,11 @@ admin_photo_delete:
     defaults: { _controller: TopxiaAdminBundle:Photo:delete }
 
 
-admin_sale_offsale_off:
+admin_sale_offsale:
     pattern: /sale/offsale
     defaults: { _controller: TopxiaAdminBundle:OffSale:index }
 
-admin_sale_offsale_invite:
-    pattern: /sale/offsale
-    defaults: { _controller: TopxiaAdminBundle:OffSale:index }
+
 
 admin_sale_offsale_create:
     pattern: /sale/offsale/create
@@ -662,6 +660,11 @@ admin_sale_commission:
 admin_sale_linksale:
     pattern: /sale/linksale
     defaults: { _controller: TopxiaAdminBundle:LinkSale:index }
+
+admin_sale_linksale_delete_batch:
+    pattern: /sale/linksale/delete/batch
+    defaults: { _controller: TopxiaAdminBundle:LinkSale:batchDelete }
+    methods: [POST]
 
 
 admin_sale_setting:

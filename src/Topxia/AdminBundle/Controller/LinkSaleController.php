@@ -62,6 +62,14 @@ class LinkSaleController extends BaseController
 
 	}
 
+    public function batchDeleteAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array());
+        $this->getLinkSaleService()->deleteLinkSales($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
    
     private function getOrderService()
     {
