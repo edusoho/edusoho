@@ -108,7 +108,12 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions);
+        $conditions = array_filter($conditions, function($value) {
+            if ($value === '' or is_null($value)) {
+                return false;
+            }
+            return true;
+        });
 
         if (isset($conditions['targetPrefix'])) {
             $conditions['targetLike'] = "{$conditions['targetPrefix']}%";
