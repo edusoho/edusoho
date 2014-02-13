@@ -316,14 +316,14 @@ class TestpaperController extends BaseController
                 }
             }
 
-            // @todo refactor.
-            if ($targets[$testpaper['target']]['type'] == 'lesson' and !empty($targets[$testpaper['target']]['id'])) {
-                $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaper['target']]['id']));
-                if (!empty($lessons[$targets[$testpaper['target']]['id']])) {
-                    $lesson = $lessons[$targets[$testpaper['target']]['id']];
-                    $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
-                }
-            }
+            // @todo refactor. , wellming
+            // if ($targets[$testpaper['target']]['type'] == 'lesson' and !empty($targets[$testpaper['target']]['id'])) {
+            //     $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaper['target']]['id']));
+            //     if (!empty($lessons[$targets[$testpaper['target']]['id']])) {
+            //         $lesson = $lessons[$targets[$testpaper['target']]['id']];
+            //         $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+            //     }
+            // }
 
             return $this->createJsonResponse(true);
         }

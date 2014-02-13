@@ -394,6 +394,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $items = $this->getTestpaperItems($testpaperResult['testId']);
         $items = ArrayToolkit::index($items, 'questionId');
 
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+
         //得到当前用户答案
         $answers = $this->getTestpaperItemResultDao()->findTestResultsByTestpaperResultId($testpaperResult['id']);
         $answers = ArrayToolkit::index($answers, 'questionId');
@@ -407,6 +409,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($answers as $questionId => $answer) {
             if($answer['status'] == 'noAnswer'){
                 $answer['answer'] = array();
+
+                // if ($questions[$questionId] == 'fill'){
+                    $answer['answer'] = array_pad($answer['answer'], count($questions[$questionId]['answer']), '');
+                // }
+
                 $answer['testId'] = $testpaperResult['testId'];
                 $answer['testPaperResultId'] = $testpaperResult['id'];
                 $answer['userId'] = $userId;
