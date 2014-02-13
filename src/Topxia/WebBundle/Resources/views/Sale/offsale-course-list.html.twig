@@ -49,12 +49,11 @@
           </td>
  
           <td>￥
-             {% if(course.adCommissionType=='quota') %}
+             {% if (course.adCommissionType=='quota') %}
                 {{course.adCommission|number_format(2, '.', ',') }}
-            {% elseif (course.adCommissionType=="ratio") %}
-                {{ course.adCommission/100*course.price|number_format(2, '.', ',')   }}
             {% else %}
-               {{0.3*course.price|number_format(2, '.',',') }}
+                {{ course.price*(course.adCommission/100)|number_format(2, '.', ',')   }}
+            
             {% endif %}
 
           </td>

@@ -188,7 +188,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                 if($linksale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= $linksale['adCommission']*$order['price']/100;   
+                    $commission['commission']= $order['price']*($linksale['adCommission']/100);
 
                 }else if ($linksale['adCommissionType']=='quota'){
 
@@ -242,7 +242,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                 if($offsale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= $offsale['adCommission']*$order['price']/100;   
+                    $commission['commission']= $order['price']*($offsale['adCommission']/100);   
 
                 }else if ($offsale['adCommissionType']=='quota'){
 
