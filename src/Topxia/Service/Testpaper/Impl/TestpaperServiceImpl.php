@@ -466,7 +466,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ($answer['status'] == 'right') {
                 $answers[$questionId]['score'] = $items[$questionId]['score'];
             } elseif ($answer['status'] == 'partRight') {
-                $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
+                if ($items[$questionId]['missScore'] > 0){
+                    $answers[$questionId]['score'] = $items[$questionId]['missScore'];
+                } else {
+                    $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
+                }
             } else {
                 $answers[$questionId]['score'] = 0;
             }
