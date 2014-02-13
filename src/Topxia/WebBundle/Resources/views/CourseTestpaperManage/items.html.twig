@@ -46,8 +46,8 @@
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="hide">
             {% for item in typeItems %}
               {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
-              {% if subItems[item.id]|default(null) %}
-                {% for item in subItems[item.id] %}
+              {% if subItems[item.questionId]|default(null) %}
+                {% for item in subItems[item.questionId] %}
                   {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
                 {% endfor %}
               {% endif %}
