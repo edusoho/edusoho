@@ -59,38 +59,6 @@ class QuizQuestionTestController extends BaseController
 		));
 	}
 
-	public function updateAction(Request $request, $courseId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-		$testPaper = $request->query->all();
-
-	    if ($request->getMethod() == 'POST') {
-
-	    	$testPaper = $request->request->all();
-
-	        $result = $this->getTestService()->updateTestPaper($testPaper['testPaperId'], $testPaper);
-
-	        $this->setFlashMessage('success', '试卷修改成功！');
-
-			return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
-        }
-
-        if(empty($testPaper['target'])){
-			$testPaper['target']  = 'course-'.$courseId;
-		}
-
-        if(!empty($testPaper['testPaperId'])){
-			$paper = $this->getTestService()->getTestPaper($testPaper['testPaperId']);
-			$testPaper = array_merge($testPaper, $paper);
-		}
-
-		return $this->render('TopxiaWebBundle:QuizQuestionTest:update.html.twig', array(
-			'course'    => $course,
-			'testPaper' => $testPaper,
-		));
-	}
-
 	public function updateResetAction(Request $request, $courseId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);

@@ -43,8 +43,6 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $testPaper = $request->query->all();
-
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $fields['target'] = "course-{$course['id']}";
@@ -68,6 +66,24 @@ class CourseTestpaperManageController extends BaseController
         $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);
     }
+
+    public function updateAction(Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException('试卷不存在');
+        }
+
+        if ($request->getMethod() == 'POST') {
+        }
+
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:update.html.twig', array(
+            'course'    => $course,
+        ));
+    }
+
 
     public function deleteAction(Request $request, $courseId, $testpaperId)
     {
