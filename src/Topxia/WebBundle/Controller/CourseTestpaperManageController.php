@@ -191,15 +191,20 @@ class CourseTestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if(empty($testpaper)){
+            throw $this->createNotFoundException('试卷不存在');
+        }
+
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $courseId, 'testpaperId' => $testpaperId)));
         }
 
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:update-reset.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:items-reset.html.twig', array(
             'course'    => $course,
-            'testPaper' => $testPaper,
-            'ranges' => $ranges,
+            'testpaper' => $testpaper,
+            'ranges' => $this->getQuestionRanges($course),
         ));
     }
 

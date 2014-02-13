@@ -13,11 +13,6 @@ define(function(require, exports, module) {
             autoSubmit: false,
         });
 
-        CreateBase.initModeField();
-        CreateBase.initRangeField();
-
-        CreateBase.sortable();
-
         CreateBase.initValidator(validator);
 
         validator.on('formValidated', function(error, msg, $form) {

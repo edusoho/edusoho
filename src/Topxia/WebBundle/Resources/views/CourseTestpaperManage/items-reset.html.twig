@@ -17,10 +17,10 @@
 
     <ol class="breadcrumb">
       <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">试卷管理</a></li>
-      <li class="active"重新生成试卷题目</li>
+      <li class="active">重新生成试卷题目</li>
     </ol>
 
-    <form id="test-reset-form" class="form-horizontal quiz-test" method="post" action="">
+    <form id="testpaper-form" class="form-horizontal" method="post" action="">
       {{ web_macro.flash_messages() }}
       {% include 'TopxiaWebBundle:CourseTestpaperManage:question-build-form.html.twig'%}
       <div class="form-group">
