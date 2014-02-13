@@ -37,10 +37,10 @@
 
             {% for item in items[type] %}
               {% if item.questionType != 'material' %}
-                <a href="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
+                <a href="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
               {% else %}
                 {% for item in item.items|default([]) %}
-                  <a href="#question{{ item.question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
+                  <a href="#question{{ item.question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
                 {% endfor %}
               {% endif %}
               
