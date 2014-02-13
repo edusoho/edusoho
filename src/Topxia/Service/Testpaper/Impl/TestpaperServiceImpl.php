@@ -252,6 +252,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->addTestpaperResult($testpaperResult);
     }
 
+    private function completeQuestion($items, $questions)
+    {
+        foreach ($items as $item) {
+            if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))){
+                $questions[$item['questionId']] = array(
+                    'isDeleted' => true,
+                    'stem' => '此题已删除',
+                    'score' => 0,
+                    'answer' => ''
+                );
+            }
+        }
+        return $questions;
+    }
+
     public function previewTestpaper($testpaperId)
     {
         $items = $this->getTestpaperItems($testpaperId);
@@ -259,6 +274,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         $questions = ArrayToolkit::index($questions, 'id');
+
+        $questions = $this->completeQuestion($items, $questions);
 
         $formatItems = array();
         foreach ($items as $questionId => $item) {
@@ -292,6 +309,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         $questions = ArrayToolkit::index($questions, 'id');
+
+        $questions = $this->completeQuestion($items, $questions);
 
         $formatItems = array();
         foreach ($items as $questionId => $item) {
@@ -425,13 +444,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $answers = $this->makeScores($answers, $items);
 
+        $questions = $this->completeQuestion($items, $questions);
+
         foreach ($answers as $questionId => $answer) {
             if($answer['status'] == 'noAnswer'){
-                $answer['answer'] = array();
-
-                // if ($questions[$questionId] == 'fill'){
-                    $answer['answer'] = array_pad($answer['answer'], count($questions[$questionId]['answer']), '');
-                // }
+                $answer['answer'] = array_pad(array(), count($questions[$questionId]['answer']), '');
 
                 $answer['testId'] = $testpaperResult['testId'];
                 $answer['testPaperResultId'] = $testpaperResult['id'];

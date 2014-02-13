@@ -15,16 +15,24 @@
 
 		{% for item in items[type] %}
 
-			{% if type in ['single_choice', 'choice'] %}
-				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-
+			{% if item.question.isDeleted|default(null) %}
+				<div class="testpaper-question testpaper-question-choice" id="question{{ item.questionId }}">
+					<div class="testpaper-question-body">
+						{% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+					</div>
+				</div>
 			{% else %}
 
-				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+				{% if type in ['single_choice', 'choice'] %}
+					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+
+				{% else %}
+
+					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+
+				{% endif %}
 
 			{% endif %}
-
-
 		{% endfor %}
   </div>
 </div>
