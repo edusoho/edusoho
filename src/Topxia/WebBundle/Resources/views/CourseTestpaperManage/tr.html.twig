@@ -35,9 +35,9 @@
             {% endif %}
 
             {% if testpaper.status == 'draft' %}
-              <li><a href="{{ path('course_manage_testpaper_items', {courseId:course.id,testpaperId:testpaper.id,flag:'update'}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
-              <li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> 重新生成题目</a></li>
               <li><a href="{{ path('course_manage_testpaper_update', {courseId:course.id,id:testpaper.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑试卷信息</a></li>
+              <li><a href="{{ path('course_manage_testpaper_items', {courseId:course.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
+              <li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> 重新生成题目</a></li>
               <li><a href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('course_manage_testpaper_delete', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除试卷</a></li>
             {% endif %}
           </ul>

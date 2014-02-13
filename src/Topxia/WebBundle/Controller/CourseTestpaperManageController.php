@@ -179,10 +179,19 @@ class CourseTestpaperManageController extends BaseController
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
 
+        $subItems = array();
+        foreach ($items as $key => $item) {
+            if ($item['parentId'] > 0) {
+                $subItems[$item['parentId']][] = $item;
+                unset($items[$key]);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items.html.twig', array(
             'course' => $course,
             'testpaper' => $testpaper,
             'items' => ArrayToolkit::group($items, 'questionType'),
+            'subItems' => $subItems,
             'questions' => $questions,
         ));
     }
