@@ -4,17 +4,30 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
 
-    var CreateBase = require('./util/create-base');
-    
     exports.run = function() {
 
         var validator = new Validator({
-            element: '#test-update-form',
+            element: '#testpaper-form'
         });
 
-        CreateBase.initValidator(validator);
+        validator.addItem({
+            element: '#testpaper-name-field',
+            required: true
+        });
 
-        var editor = EditorFactory.create('#test-description-field', 'simple_noimage');
+        validator.addItem({
+            element: '#testpaper-description-field',
+            required: true,
+            rule: 'maxlength{max:500}'
+        });
+
+        validator.addItem({
+            element: '#testpaper-limitedTime-field',
+            required: true,
+            rule: 'integer'
+        });
+
+        var editor = EditorFactory.create('#testpaper-description-field', 'simple_noimage');
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
         });
