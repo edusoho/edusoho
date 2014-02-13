@@ -50,8 +50,7 @@ class CourseTestpaperManageController extends BaseController
             $fields['target'] = "course-{$course['id']}";
             $fields['pattern'] = 'QuestionType';
             list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
-            var_dump($items);exit();
-            return $this->redirect($this->generateUrl('course_manage_testpaper_items',$testPaper));
+            return $this->redirect($this->generateUrl('course_manage_testpaper_items',array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
