@@ -10,7 +10,7 @@
 		  <div class="testpaper-question-result">
 		    <ul>
 		      {% for index, answer in item.question.answer %}
-		        {% set userAnswer = item.question.testResult.answer[index] %}
+		        {% set userAnswer = item.question.testResult.answer[index]|default(null) %}
 			    	<li>
 			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 			    	  {% if userAnswer == '' %}

@@ -194,6 +194,10 @@ class TestpaperController extends BaseController
             throw $this->createNotFoundException('试卷不存在!');
         }
 
+        if (in_array($testpaperResult['status'], array('doing', 'paused'))){
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
+        }
+
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
@@ -299,7 +303,10 @@ class TestpaperController extends BaseController
 
             if ($this->getTestpaperService()->isExistsEssay($testResults)) {
                 $user = $this->getCurrentUser();
-                $course = $this->getCourseService()->getCourse($testpaper['targetId']);
+
+                $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+                $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
                 $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
                 $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
@@ -310,10 +317,10 @@ class TestpaperController extends BaseController
             }
 
             // @todo refactor.
-            if ($testpaperResult['targetType'] == 'lesson' and !empty($testpaperResult['targetId'])) {
-                $lessons = $this->getCourseService()->findLessonsByIds(array($testpaperResult['targetId']));
-                if (!empty($lessons[$testpaperResult['targetId']])) {
-                    $lesson = $lessons[$testpaperResult['targetId']];
+            if ($targets[$testpaper['target']]['type'] == 'lesson' and !empty($targets[$testpaper['target']]['id'])) {
+                $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaper['target']]['id']));
+                if (!empty($lessons[$targets[$testpaper['target']]['id']])) {
+                    $lesson = $lessons[$targets[$testpaper['target']]['id']];
                     $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
                 }
             }
