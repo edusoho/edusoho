@@ -69,8 +69,44 @@ class DefaultController extends BaseController
         $feild['roles']='ROLE_USER';
         $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,29);
         //
-        $conditions = array('status' => 'published','recommended'=>1);
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 6);
+
+
+        $openTag = $this->getTagService()->getTagByName('公开课');
+
+        $openConditions = array('status' => 'published','recommended'=>1,'tagId' => $openTag['id']);
+
+        $openCourses = $this->getCourseService()->searchCourses($openConditions, 'latest', 0, 3);
+
+
+
+
+        $bigdataTag = $this->getTagService()->getTagByName('大数据');
+
+        $bigdataConditions = array('status' => 'published','recommended'=>1,'tagId' => $bigdataTag['id']);
+
+        $bigdataCourses = $this->getCourseService()->searchCourses($bigdataConditions, 'latest', 0, 3);
+
+
+
+        $vitualTag = $this->getTagService()->getTagByName('虚拟化');
+
+        $vitualConditions = array('status' => 'published','recommended'=>1,'tagId' => $vitualTag['id']);
+
+        $vitualCourses = $this->getCourseService()->searchCourses($vitualConditions, 'latest', 0, 3);
+
+
+
+
+        $kernalTag = $this->getTagService()->getTagByName('linux内核');
+
+        $kernalConditions = array('status' => 'published','recommended'=>1,'tagId' => $kernalTag['id']);
+
+        $kernalCourses = $this->getCourseService()->searchCourses($vitualConditions, 'latest', 0, 3);
+
+       
+
+
+
 
         //公开课问题讨论
         $activityThreads=$this->getActivityThreadService()->searchThreads(array(),'createdNotStick',0,5);
@@ -133,7 +169,10 @@ class DefaultController extends BaseController
           
             "users"=>$users,
         
-            "courses"=>$courses,
+            "openCourses"=>$openCourses,
+            "bigdataCourses"=>$bigdataCourses,
+            "vitualCourses"=>$vitualCourses,
+            "kernalCourses"=>$kernalCourses,
 
             "activityThreads"=>$activityThreads,
             "activitys"=>$activitys,
@@ -320,6 +359,11 @@ class DefaultController extends BaseController
 
     protected function getUserActionService(){
         return $this->getServiceKernel()->createService('User.UserActionService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
 
