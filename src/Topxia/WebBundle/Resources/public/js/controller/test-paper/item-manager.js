@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Widget     = require('widget');
     var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
+    require('jquery.sortable');
 
     var TestpaperItemManager = Widget.extend({
 
@@ -19,7 +20,7 @@ define(function(require, exports, module) {
 
         setup:function() {
             this.$('.testpaper-nav-link').eq(0).click();
-
+            this.initItemSortable();
         },
 
         onClickBatchDelete: function(e) {
@@ -70,6 +71,27 @@ define(function(require, exports, module) {
             $("#testpaper-table").find('tbody').addClass('hide');
             $("#testpaper-items-" + $nav.data('type')).removeClass('hide'); 
             return true;
+        },
+
+        initItemSortable: function(e) {
+            var $table = this.$('table');
+            $table.sortable({
+                containerSelector: '> tbody',
+                containerPath: '> tr',
+                // itemPath: '> tbody',
+                itemSelector: 'tr',
+                placeholder: '<tr class="placeholder"/>',
+                exclude: '.notMoveHandle',
+                onDrop: function (item, container, _super) {
+                    _super(item, container);
+                    // if (item.data('type') == 'material') {
+                    //     var id = item.data('id');
+                    //     var $subItems = $("#questionType-material").find("[data-type=" + id + "]");
+                    //     $subItems.detach().insertAfter(item);
+                    // }
+                    // Test.sortable();
+                },
+            });
         }
 
     });
