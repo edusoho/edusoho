@@ -91,6 +91,7 @@ class DoTestController extends BaseController
 
 		$questions = $this->getTestService()->findQuestionsByTestId($testId);
 
+
 		$questions = $this->formatQuestions($questions, $paper);
 
 		$total = array();
@@ -547,7 +548,7 @@ class DoTestController extends BaseController
 				$number++;
 			}
 
-			if ($value['targetId'] != 0) {
+			if ($value['parentId'] == 0) {
 				$formatQuestions[$value['type']][$key] = $value;
 
 

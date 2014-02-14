@@ -394,6 +394,7 @@ class TestServiceImpl extends BaseService implements TestService
     {
         $items = $this->getTestItemDao()->findItemsByTestPaperId($testId);
 
+
         $materialIds = $this->findMaterial($items);
         $materialQuestions = $this->getQuestionService()->findQuestionsByParentIds($materialIds);
 
@@ -408,6 +409,7 @@ class TestServiceImpl extends BaseService implements TestService
         $questions = ArrayToolkit::index($questions, 'id');
 
         $items = ArrayToolkit::index($items, 'questionId');
+
 
         foreach ($questions as $key => &$question) {
             $question['itemScore'] = $items[$key]['score'];
@@ -661,7 +663,7 @@ class TestServiceImpl extends BaseService implements TestService
     private function makeMaterial ($questions)
     {
         foreach ($questions as $key => $value) {
-            if ($value['targetId'] == 0) {
+            if ($value['parentId'] > 0) {
                 if (!array_key_exists('questions', $questions[$value['parentId']])) {
                     $questions[$value['parentId']]['questions'] = array();
                 }
