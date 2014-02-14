@@ -8,7 +8,7 @@ abstract class BaseQuestionImplementor extends BaseService implements QuestionIm
 {
     protected function filterQuestionFields($fields)
     {
-        if (!in_array($fields['type'], array('choice','single_choice', 'fill', 'material', 'essay', 'determine'))) {
+        if (!in_array($fields['type'], array('choice','single_choice', 'uncertain_choice', 'fill', 'material', 'essay', 'determine'))) {
                 throw $this->createServiceException('question type error！');
         }
 

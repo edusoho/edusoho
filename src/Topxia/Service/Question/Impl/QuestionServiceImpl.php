@@ -10,7 +10,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 {
     protected $cachedJudger = array();
 
-    protected $supportedQuestionTypes = array('choice','single_choice', 'fill', 'material', 'essay', 'determine');
+    protected $supportedQuestionTypes = array('choice','single_choice', 'uncertain_choice', 'fill', 'material', 'essay', 'determine');
 
     public function getQuestion($id)
     {

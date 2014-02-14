@@ -362,6 +362,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $accuracy = array(
             'single_choice' => $accuracyResult,
             'choice' => $accuracyResult,
+            'uncertain_choice' => $accuracyResult,
             'determine' => $accuracyResult,
             'fill' => $accuracyResult,
             'essay' => $accuracyResult,

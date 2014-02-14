@@ -23,7 +23,7 @@
 				</div>
 			{% else %}
 
-				{% if type in ['single_choice', 'choice'] %}
+				{% if type in ['single_choice', 'choice', 'uncertain_choice'] %}
 					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
 				{% else %}
