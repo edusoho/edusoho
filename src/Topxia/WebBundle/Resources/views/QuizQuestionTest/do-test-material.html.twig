@@ -2,7 +2,7 @@
 <div class="well testpaper-question-stem-material">{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
 {% for item in item.items|default([]) %}
 
-	{% if item.questionType == 'single_choice' or item.questionType == 'choice' %}
+	{% if item.questionType in ['single_choice', 'choice', 'uncertain_choice'] %}
 
 		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
 
