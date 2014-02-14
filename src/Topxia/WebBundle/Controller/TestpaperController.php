@@ -550,6 +550,27 @@ class TestpaperController extends BaseController
         ));
     }
     
+    public function userResultJsonAction(Request $request, $id)
+    {
+        $user = $this->getCurrentUser()->id;
+        if (empty($user)) {
+            return $this->createJsonResponse(array('error' => '您尚未登录系统或登录已超时，请先登录。'));
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if (empty($testpaper)) {
+            return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
+        }
+
+        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestpaperIdAndUserId( $id, $user);
+
+        if (empty($testResult)) {
+            return $this->createJsonResponse(array('status' => 'nodo'));
+        }
+
+        return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
+    }
+
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
@@ -574,60 +595,5 @@ class TestpaperController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function userResultJsonAction(Request $request, $id)
-    {
-        $user = $this->getCurrentUser()->id;
-        if (empty($user)) {
-            return $this->createJsonResponse(array('error' => '您尚未登录系统或登录已超时，请先登录。'));
-        }
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($id);
-        if (empty($testpaper)) {
-            return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
-        }
-
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestIdAndUserId( $id, $user);
-
-        if (empty($testResult)) {
-            return $this->createJsonResponse(array('status' => 'nodo'));
-        }
-
-        return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
-    }
-
-    // private function getTestpaperService()
-    // {
-    //     return $this -> getServiceKernel()->createService('Quiz.TestService');
-    // }
 
 }
