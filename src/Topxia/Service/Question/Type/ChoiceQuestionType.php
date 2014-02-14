@@ -6,7 +6,12 @@ class ChoiceQuestionType extends AbstractQuestionType
 
     public function filter($fields, $mode = 'create')
     {
-        $fields['type'] = count($fields['answer']) == 1 ? 'single_choice' : 'choice';
+        if (empty($fields['uncertain'])) {
+            $fields['type'] = count($fields['answer']) == 1 ? 'single_choice' : 'choice';
+        } else {
+            $fields['type'] = 'uncertain_choice';
+        }
+
         $fields['metas'] = array('choices' => $fields['choices']);
         return $this->commonFilter($fields, $mode);
     }
