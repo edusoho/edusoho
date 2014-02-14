@@ -101,7 +101,7 @@ class DefaultController extends BaseController
 
         $kernalConditions = array('status' => 'published','recommended'=>1,'tagId' => $kernalTag['id']);
 
-        $kernalCourses = $this->getCourseService()->searchCourses($vitualConditions, 'latest', 0, 3);
+        $kernalCourses = $this->getCourseService()->searchCourses($kernalConditions, 'latest', 0, 3);
 
        
 
