@@ -118,13 +118,13 @@ class DefaultController extends BaseController
       
         //学习动态
         $studyLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
-            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'course_learning'),'created',0,5);
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'course_learning'),'created',0,7);
         $studyLogUserIds=ArrayToolkit::column($studyLogs,'userId');
         $studyLogUsers=$this->getUserService()->findUsersByIds($studyLogUserIds); 
 
         //答疑动态
         $answerLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
-            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,5);
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,7);
         $answerLogUserIds=ArrayToolkit::column($answerLogs,'userId');
         $answerLogUsers=$this->getUserService()->findUsersByIds($answerLogUserIds); 
        
@@ -139,7 +139,7 @@ class DefaultController extends BaseController
 
 
         //点评动态
-        $reviews=$this->getReviewService()->searchReviews(array(),'latest',0,4);
+        $reviews=$this->getReviewService()->searchReviews(array(),'latest',0,6);
         $reviewUserIds=ArrayToolkit::column($reviews,'userId');
         $reviewUsers=$this->getUserService()->findUsersByIds($reviewUserIds);
         $reviewCourseIds=ArrayToolkit::column($reviews,'courseId');
@@ -147,7 +147,7 @@ class DefaultController extends BaseController
 
 
         //笔记动态
-        $notes=$this->getNoteService()->searchNotes(array(),'updated',0,4);
+        $notes=$this->getNoteService()->searchNotes(array(),'updated',0,6);
         $noteUserIds=ArrayToolkit::column($notes,'userId');
         $noteUsers=$this->getUserService()->findUsersByIds($noteUserIds);
         $noteCourseIds=ArrayToolkit::column($notes,'courseId');
