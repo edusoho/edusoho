@@ -216,7 +216,7 @@ class CourseQuestionManageController extends BaseController
 
         $type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
         $questionPreview = true;
-// var_dump($item);exit();
+
         return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
             'item' => $item,
             'type' => $type,
