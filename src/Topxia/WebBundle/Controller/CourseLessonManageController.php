@@ -271,7 +271,7 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
-	public function editTestPaperAction(Request $request, $courseId, $lessonId)
+	public function editTestpaperAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
@@ -280,9 +280,19 @@ class CourseLessonManageController extends BaseController
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
 
-    	$papers = $this->getTestpaperService()->findTestPapersByTarget('course', $courseId, 0, 1000);
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            1000
+        );
+
     	$paperOptions = array();
-    	foreach ($papers as $paper) {
+    	foreach ($testpapers as $paper) {
     		$paperOptions[$paper['id']] = $paper['name'];
     	}
 

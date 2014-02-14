@@ -406,7 +406,7 @@ course_manage_lesson_create:
 
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestPaper }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestpaper }
 
 course_manage_lesson_sort:
     pattern:  /course/{id}/manage/lesson/sort
@@ -419,7 +419,7 @@ course_manage_lesson_edit:
 
 course_manage_lesson_edit_testpaper:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestPaper }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestpaper }
 
 course_manage_lesson_delete:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/delete
