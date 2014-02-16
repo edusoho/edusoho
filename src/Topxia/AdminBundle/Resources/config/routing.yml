@@ -620,3 +620,34 @@ admin_approval_cancel:
 show_idcard:
     pattern:   approvals/idcard/show/{userId}/{type}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }
+    
+admin_article:
+    pattern:  /article
+    defaults: { _controller: TopxiaAdminBundle:Article:index }
+
+admin_article_create:
+    pattern:  /article/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:Article:create }
+
+admin_article_edit:
+    pattern:  /article/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Article:edit }
+
+admin_article_publish:
+    pattern:  /article/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Article:publish }
+    methods:  [POST]
+
+admin_article_trash:
+    pattern:  /article/{id}/trash
+    defaults: { _controller: TopxiaAdminBundle:Article:trash }
+    methods:  [POST]
+
+admin_article_delete:
+    pattern:  /article/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Article:delete }
+    methods:  [POST]
+
+admin_article_alias_check:
+    pattern:  /article/alias/check
+    defaults: { _controller: TopxiaAdminBundle:Article:aliasCheck }

@@ -1,0 +1,58 @@
+{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+
+{% block title %}文章管理 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'article/list' %}
+
+{% set menu = 'article' %}
+
+{% block main %}
+
+{% set type = app.request.get('type') %}
+{% set typeName = dict('articleType')[type] %}
+
+
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_article_create', {type: type}) }}"><span class="glyphicon glyphicon-plus"></span> 添加{{ typeName }}</button>
+  <h1 class="pull-left">{{ typeName }}管理</h1>
+</div>
+
+<form class="well well-sm form-inline">
+	<div class="form-group">
+		<select class="form-control" name="status">
+		  {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--所有状态--') }}
+		</select>
+	</div>
+	<div class="form-group">
+		<input class="form-control" name="keywords" type="text" placeholder="关键词" value="{{ app.request.query.get('keywords') }}">
+	</div>
+		<input type="hidden" name="type" value="{{ type }}">
+	<button class="btn btn-primary" type="submit">搜索</button>
+</form>
+
+<table class="table table-hover" id="article-table">
+	<thead>
+		<tr>
+			<th width="50%">标题</th>
+			<th>类型</th>
+			<th>状态</th>
+			<th>发布时间/人</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% if articles %}
+			{% for article in articles %}
+			  {% set user = users[article.userId] %}
+			  {% set category = categories[article.categoryId]|default(null) %}
+			  {% include 'TopxiaAdminBundle:Article:article-tr.html.twig' %}
+			{% endfor %}
+		{% else %}
+			<tr><td colspan="20"><div class="empty">暂无页面记录</div></td></tr>
+		{% endif %}
+	</tbody>
+</table>
+
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}

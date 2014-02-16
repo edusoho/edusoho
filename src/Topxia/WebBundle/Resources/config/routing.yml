@@ -989,6 +989,30 @@ content_page_show:
 content_page_list:
     pattern: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
+    
+article_article_show:
+    pattern: /article/{alias}
+    defaults: {_controller: TopxiaWebBundle:Article:articleShow }
+
+article_article_list:
+    pattern: /article
+    defaults: {_controller: TopxiaWebBundle:Article:articleList }
+
+article_activity_show:
+    pattern: /activity/{alias}
+    defaults: {_controller: TopxiaWebBundle:Article:activityShow }
+
+article_activity_list:
+    pattern: /activity
+    defaults: {_controller: TopxiaWebBundle:Article:activityList }
+
+article_page_show:
+    pattern: /page/{alias}
+    defaults: {_controller: TopxiaWebBundle:Article:pageShow }
+
+article_page_list:
+    pattern: /page
+    defaults: {_controller: TopxiaWebBundle:Article:pageList }    
 
 teacher:
     pattern: /teacher

@@ -1,0 +1,177 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_size = 'xlarge' %}
+
+{% block title %}{{ type.name }}{% endblock %}
+{% block body %}
+
+{% set article = article|default(null) %}
+
+<form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
+	{% if article %}
+		action="{{ path('admin_article_edit', {id:article.id}) }}"
+	{% else %}
+		action="{{ path('admin_article_create', {type:type.alias}) }}"
+	{% endif %}
+	>
+	<div class="row">
+		<div class="col-md-8 two-col-main">
+			{% if 'title' in type.basicFields %}
+				<div class="form-group">
+				  <label for="article-title-field" class="control-label">标题</label>
+				  <div class="controls">
+				  	<input class="form-control" id="article-title-field" type="text" name="title" value="{{ field_value(article, 'title') }}">
+				  </div>
+				</div>
+			{% endif %}
+
+			<div class="form-group">
+				<label for="editor-field" class="control-label">编辑器类型</label>
+				<div class="controls radios">
+	              	<label><input type="radio" name="editor" value="richeditor" 
+	              		{% if article is empty %}
+	              		 checked="checked" 
+	              		{% elseif article.editor == 'richeditor'%}
+	              		 checked="checked"
+	              		{% endif %}>
+	              		可视化编辑器</label>
+	             	<label><input type="radio" name="editor" value="none"
+	             		{% if article and article.editor == 'none' %} checked="checked" {% endif %}
+	             		>HTML编辑器</label>
+	            </div>
+	        </div>
+
+			{% if 'body' in type.basicFields %}
+				<label for="article-body-field" class="control-label">正文</label>
+
+				<div class="form-group" 
+				{% if article and article.editor == 'none' %}
+					style="display:none"
+				{% endif %}
+				>
+					<div class="controls">
+						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body">{{ field_value(article, 'body') }}</textarea>
+					</div>
+				</div>
+
+				<div class="form-group" 
+				{% if article is empty %}
+          		 style="display:none" 
+          		{% elseif article.editor == 'richeditor'%}
+          		 style="display:none"
+          		{% endif %}>
+					<div class="controls">
+						<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(article, 'body') }}</textarea>
+					</div>
+				</div> 
+			{% endif %}
+
+			{% if type.extendedFields %}
+			  {% include 'TopxiaAdminBundle:Article:' ~ type.alias ~ '-extended-fields.html.twig' %}
+			{% endif %}
+		</div>
+		<div class="col-md-4 two-col-side">
+			{% if 'alias' in type.basicFields %}
+				<div class="panel panel-default">
+				  <div class="panel-heading">URL路径</div>
+				  <div class="panel-body">
+					  <div class="form-group">
+					  	<div class="controls">
+							  <input class="form-control" type="text" name="alias" value="{{ field_value(article, 'alias') }}" data-url="{{ path('admin_article_alias_check', {that:article.alias|default('')}) }}">
+					  	</div>
+					  </div>
+				  </div>
+				</div>
+			{% endif %}
+
+			{% if 'categoryId' in type.basicFields %}
+				<div class="panel">
+				  <div class="panel-heading">分类</div>
+				  <select name="categoryId">
+				  	{{ select_options(category_choices('default'), field_value(article, 'categoryId'), '请选择分类') }}
+				  </select>
+				</div>
+			{% endif %}
+
+			{% if 'tagIds' in type.basicFields %}
+				<div class="panel">
+				  <div class="panel-heading">标签</div>
+				  <div class="form-group">
+				  	<div class="controls" style="width:100%;">
+						  <input class="width-full" id="article-tags-field" type="text" name="tags" value="{{ field_value(article, 'tagIds')|tags_join }}">
+				  	</div>
+				  </div>
+				</div>
+			{% endif %}
+
+			{% if 'template' in type.basicFields %}
+				<div class="panel panel-default">
+				  <div class="panel-heading">模版</div>
+				  <div class="panel-body">
+					  {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
+					  {% set templates = {'default': '默认模版'} %}
+					  <select class="form-control" name="template">
+					  	{{ select_options(templates, field_value(article, 'template')) }}
+					  </select>
+				  </div>
+				</div>
+			{% endif %}
+
+			<input type="hidden" name="publishedTime" value="{{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+
+			{#
+			{% if 'picture' in type.basicFields %}
+				<div class="panel panel-default" id="picture-panel">
+					<div class="panel-heading">附图</div>
+					<div class="panel-body">
+					  <p data-role="picture-container">
+					  	{% if article.picture|default(null) %}
+					  	  <a href="{{ file_path(article.picture) }}" target="_blank">
+						  	  <img src="{{ file_path(article.picture) }}" class="img-responsive">
+					  	  </a>
+					  	{% endif %}
+					  </p>
+					  <p> <input type="file" name="picture"> </p>
+					</div>
+				</div>
+			{% endif %}
+
+			<div class="panel panel-default">
+				<div class="panel-heading">设置</div>
+				<div class="panel-body">
+					<div>
+						<label>发布时间</label><input type="text" name="publishedTime" value="{{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+						<div class="help-block">内容条目默认按发布时间的倒序显示</div>
+					</div>
+
+					<div class="checkbox">
+						<label><input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted', 1) %} checked="checked" {% endif %}> 在列：<span class="text-muted">在列表中显示</span></label>
+					</div>
+
+					<div class="checkbox">
+						<label><input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> 置顶：<span class="text-muted">内容条目显示在列表顶部</span></label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}> 头条：<span class="text-muted">在头条区域显示</span></label>
+					</div>
+				</div>
+			</div>
+			#}
+			
+
+		</div>
+	</div>
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+<script> app.load('article/article-modal') </script>
+
+{% endblock %}
+
+{% block footer %}
+
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#article-form" data-loading-text="正在保存...">保存</button>
+{% endblock %}
+
+{% set hideFooter = true %}
