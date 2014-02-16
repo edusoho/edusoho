@@ -13,6 +13,7 @@ define(function(require, exports, module) {
 
         events: {
             'click .testpaper-nav-link': 'onClickNav',
+            'click [data-role=add-item]': 'onClickAddItem',
             'click .item-delete-btn': 'onClickItemDeleteBtn',
             'click [data-role=batch-select]': 'onClickBatchSelect',
             'click [data-role=batch-delete]': 'onClickBatchDelete',
@@ -21,6 +22,10 @@ define(function(require, exports, module) {
         setup:function() {
             this.$('.testpaper-nav-link').eq(0).click();
             this.initItemSortable();
+        },
+
+        onClickAddItem: function(e) {
+
         },
 
         onClickBatchDelete: function(e) {

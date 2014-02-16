@@ -250,16 +250,22 @@ class CourseTestpaperManageController extends BaseController
             'questions' => $questions,
             'replaceFor' => $replaceFor,
             'paginator' => $paginator,
+            'targetChoices' => $this->getQuestionRanges($course, true),
         ));
         
     }
 
 
 
-    private function getQuestionRanges($course)
+    private function getQuestionRanges($course, $includeCourse = false)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $ranges = array();
+
+        if ($includeCourse == true) {
+            $ranges["course-{$course['id']}"] = '本课程';
+        }
+
         foreach ($lessons as  $lesson) {
             if ($lesson['type'] == 'testpaper') {
                 continue;

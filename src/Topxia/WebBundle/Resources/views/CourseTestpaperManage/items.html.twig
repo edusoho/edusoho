@@ -3,7 +3,7 @@
 {% block title %}试卷题目管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'testpaper' %}
-{% set script_controller = 'test-paper/item-manager' %}
+{% set script_controller = 'testpaper/item-manager' %}
 
 {% block main %}
 
@@ -20,7 +20,7 @@
     </ol>
 
     <div class="clearfix mbm">
-      <button data-url="{{ path('course_manage_testpaper_item_pick',{courseId:course.id, testpaperId:testpaper.id}) }}" data-target="#modal" data-toggle="modal" class="btn btn-info btn-sm pull-right" data-role="add-item"><span class="glyphicon glyphicon-plus"></span> 新增试题</button>
+      <button data-url="{{ path('course_manage_testpaper_item_pick',{courseId:course.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="add-item"><span class="glyphicon glyphicon-plus"></span> 新增试题</button>
       <ul class="nav nav-pills nav-mini">
         {% for type in testpaper['metas']['question_type_seq'] %}
           <li><a href="javascript:" data-type="{{ type }}" class="testpaper-nav-link">{{ dict_text('questionType', type) }}</a></li>
