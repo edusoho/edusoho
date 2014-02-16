@@ -43,7 +43,7 @@
         </thead>
 
         {% for type, typeItems in items %}
-          <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="hide">
+          <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="hide testpaper-table-tbody">
             {% for item in typeItems %}
               {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
               {% if subItems[item.questionId]|default(null) %}
