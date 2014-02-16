@@ -79,9 +79,9 @@ define(function(require, exports, module) {
         },
 
         initItemSortable: function(e) {
-            var $table = this.$('table');
+            var $table = this.$('.testpaper-table-tbody');
             $table.sortable({
-                containerSelector: '> tbody',
+                // containerSelector: '> tbody',
                 containerPath: '> tr',
                 // itemPath: '> tbody',
                 itemSelector: 'tr',
