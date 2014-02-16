@@ -197,9 +197,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->findTestpaperResultsCountByUserId($id);
     }
 
-    public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId)
+    public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId)
     {
-    	return $this->getTestpaperResultDao()->findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);
+    	return $this->getTestpaperResultDao()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
     }
 
     public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status)
