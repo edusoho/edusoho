@@ -112,23 +112,29 @@ define(function(require, exports, module) {
         },
 
         initItemSortable: function(e) {
-            var $table = this.$('.testpaper-table-tbody');
+            var $table = this.$('.testpaper-table-tbody'),
+                self = this;
             $table.sortable({
-                // containerSelector: '> tbody',
                 containerPath: '> tr',
-                // itemPath: '> tbody',
-                itemSelector: 'tr',
+                itemSelector: 'tr.is-question',
                 placeholder: '<tr class="placeholder"/>',
                 exclude: '.notMoveHandle',
                 onDrop: function (item, container, _super) {
                     _super(item, container);
-                    // if (item.data('type') == 'material') {
-                    //     var id = item.data('id');
-                    //     var $subItems = $("#questionType-material").find("[data-type=" + id + "]");
-                    //     $subItems.detach().insertAfter(item);
-                    // }
-                    // Test.sortable();
-                },
+                    if (item.hasClass('have-sub-questions')) {
+                        var $tbody = item.parents('tbody');
+                        $tbody.find('tr.is-question').each(function() {
+                            var $tr = $(this);
+                            $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+                        });
+
+                        // console.log($tbody.find('[data-parent-id=' + item.data('id') + ']'));
+
+                        // $tbody.find('[data-parent-id=' + item.data('id') + ']').detach().insertAfter(item);
+                    }
+
+                    self.refreshSeqs();
+                }
             });
         }
 

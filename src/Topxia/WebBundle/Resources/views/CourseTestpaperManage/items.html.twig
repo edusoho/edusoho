@@ -7,6 +7,28 @@
 
 {% block main %}
 
+<style>
+tr.placeholder {
+  display: block;
+  background: red;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+tr.placeholder:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-left-color: red;
+    margin-top: -5px;
+    left: -5px;
+    border-right: none;
+}
+</style>
+
 <div class="panel panel-default panel-col" id="testpaper-items-manager">
   <div class="panel-heading">
     {{testpaper.name}}
