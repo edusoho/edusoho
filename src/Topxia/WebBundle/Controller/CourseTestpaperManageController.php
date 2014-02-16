@@ -220,16 +220,20 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
-    public function itemPickAction(Request $request, $courseId, $testpaperId)
+    public function itemPickerAction(Request $request, $courseId, $testpaperId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException();
+        }
 
         $conditions = $request->query->all();
+        $conditions['target'] = "course-{$courseId}";
         $conditions['parentId'] = 0;
         $conditions['excludeIds'] = empty($conditions['excludeIds']) ? array() : explode(',', $conditions['excludeIds']);
 
-        $replaceFor = empty($conditions['replaceFor']) ? '' : $conditions['replaceFor'];
+        $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
 
         $paginator = new Paginator(
             $request,
@@ -244,15 +248,44 @@ class CourseTestpaperManageController extends BaseController
                 $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-pick-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-picker-modal.html.twig', array(
             'course' => $course,
             'testpaper' => $testpaper,
             'questions' => $questions,
-            'replaceFor' => $replaceFor,
+            'replace' => $replace,
             'paginator' => $paginator,
             'targetChoices' => $this->getQuestionRanges($course, true),
         ));
         
+    }
+
+    public function itemPickedAction(Request $request, $courseId, $testpaperId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException();
+        }
+
+
+        $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
+        if (empty($question)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($question['subCount'] > 0) {
+            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        } else {
+            $subQuestions = array();
+        }
+
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-picked.html.twig', array(
+            'course'    => $course,
+            'testpaper' => $testpaper,
+            'question' => $question,
+            'subQuestions' => $subQuestions,
+        ));
+
     }
 
 

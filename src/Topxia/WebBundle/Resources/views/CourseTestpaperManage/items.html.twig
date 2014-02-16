@@ -20,7 +20,7 @@
     </ol>
 
     <div class="clearfix mbm">
-      <button data-url="{{ path('course_manage_testpaper_item_pick',{courseId:course.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="add-item"><span class="glyphicon glyphicon-plus"></span> 新增试题</button>
+      <button data-url="{{ path('course_manage_testpaper_item_picker',{courseId:course.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="glyphicon glyphicon-plus"></span> 新增试题</button>
       <ul class="nav nav-pills nav-mini">
         {% for type in testpaper['metas']['question_type_seq'] %}
           <li><a href="javascript:" data-type="{{ type }}" class="testpaper-nav-link">{{ dict_text('questionType', type) }}</a></li>
@@ -45,9 +45,11 @@
         {% for type, typeItems in items %}
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="hide testpaper-table-tbody">
             {% for item in typeItems %}
+              {% set question = questions[item.questionId] %}
               {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
               {% if subItems[item.questionId]|default(null) %}
                 {% for item in subItems[item.questionId] %}
+                  {% set question = questions[item.questionId] %}
                   {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
                 {% endfor %}
               {% endif %}

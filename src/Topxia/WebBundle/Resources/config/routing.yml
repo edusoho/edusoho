@@ -589,9 +589,13 @@ course_manage_testpaper_items_reset:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsReset }
 
-course_manage_testpaper_item_pick:
-    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_pick
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPick }
+course_manage_testpaper_item_picker:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picker
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicker }
+
+course_manage_testpaper_item_picked:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
 
 course_manage_test_item_list:
     pattern: /course/{courseId}/manage/test/{testpaperId}/item/list

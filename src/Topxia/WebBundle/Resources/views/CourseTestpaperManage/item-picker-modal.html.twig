@@ -8,7 +8,7 @@
 
 {% block body %}
 
-  <form id="item-picker-form" class="form-inline well well-sm" action="{{ path('course_manage_testpaper_item_pick', {courseId:course.id, testpaperId:testpaper.id}) }}" novalidate>
+  <form id="testpaper-item-picker-form" class="form-inline well well-sm" action="{{ path('course_manage_testpaper_item_picker', {courseId:course.id, testpaperId:testpaper.id}) }}" novalidate>
     <div class="form-group">
       <select class="form-control" name="target" style="width:200px;">
         {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
@@ -23,7 +23,7 @@
 
   </form>
 
-  <table class="table table-condensed">
+  <table class="table table-condensed" id="testpaper-item-picker-table">
     <thead>
     <tr>
       <th width="45%">题干</th>

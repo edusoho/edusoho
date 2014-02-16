@@ -7,13 +7,14 @@ define(function(require, exports, module) {
 
     var TestpaperItemManager = Widget.extend({
 
-        attrs:{
+        attrs: {
+            currentType: null
 
         },
 
         events: {
             'click .testpaper-nav-link': 'onClickNav',
-            'click [data-role=add-item]': 'onClickAddItem',
+            'click [data-role=pick-item]': 'onClickPickItem',
             'click .item-delete-btn': 'onClickItemDeleteBtn',
             'click [data-role=batch-select]': 'onClickBatchSelect',
             'click [data-role=batch-delete]': 'onClickBatchDelete',
@@ -24,8 +25,33 @@ define(function(require, exports, module) {
             this.initItemSortable();
         },
 
-        onClickAddItem: function(e) {
+        refreshSeqs: function () {
+            var seq = 1;
+            $("#testpaper-table").find("tbody tr").each(function(){
+                var $tr = $(this);
 
+                if (!$tr.hasClass('have-sub-questions')) {
+                    $tr.find('td.seq').html(seq);
+                    seq ++;
+                }
+            });
+        },
+
+        onClickPickItem: function(e) {
+            var $btn = $(e.currentTarget);
+            console.log(this.get('currentType'));
+            console.log($btn.data('url'));
+
+            var excludeIds = [];
+            $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
+                excludeIds.push($(this).val());
+            });
+
+            var $modal = $("#modal").modal();
+            $modal.data('manager', this);
+            $.get($btn.data('url'), {excludeIds: excludeIds.join(','), type: this.get('currentType')}, function(html) {
+                $modal.html(html);
+            });
         },
 
         onClickBatchDelete: function(e) {
@@ -44,12 +70,15 @@ define(function(require, exports, module) {
             }
 
             this.$('[data-role=batch-item]:checked').each(function() {
-                var $item = $(this).parents('tr');
-                $item.remove();
-                //@todo 移除子题
+                var $tr = $(this).parents('tr');
+
+                $tr.parents('tbody').find('[data-parent-id=' + $tr.data('id') + ']').remove();
+                $tr.remove();
             });
 
             this.$('[data-role=batch-select]:visible').prop('checked', false);
+
+            this.refreshSeqs();
         },
 
         onClickBatchSelect: function(e) {
@@ -65,7 +94,10 @@ define(function(require, exports, module) {
             if (!confirm('您真的要删除该题目吗？')) {
                 return ;
             }
-            $btn.parents('tr').remove();
+            var $tr = $btn.parents('tr');
+            $tr.parents('tbody').find('[data-parent-id=' + $tr.data('id') + ']').remove();
+            $tr.remove();
+            this.refreshSeqs();
         },
 
         onClickNav: function(e) {
@@ -74,7 +106,8 @@ define(function(require, exports, module) {
             $nav.parent().addClass('active');
 
             $("#testpaper-table").find('tbody').addClass('hide');
-            $("#testpaper-items-" + $nav.data('type')).removeClass('hide'); 
+            $("#testpaper-items-" + $nav.data('type')).removeClass('hide');
+            this.set('currentType', $nav.data('type')); 
             return true;
         },
 
