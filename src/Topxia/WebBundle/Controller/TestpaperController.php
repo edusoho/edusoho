@@ -60,7 +60,7 @@ class TestpaperController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestpaperIdAndUserId($testId, $userId);
+        $testpaperResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testId, $userId);
 
         if (empty($testpaperResult)) {
 
@@ -562,7 +562,7 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
         }
 
-        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestpaperIdAndUserId( $id, $user);
+        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive( $id, $user);
 
         if (empty($testResult)) {
             return $this->createJsonResponse(array('status' => 'nodo'));

@@ -33,7 +33,7 @@ interface TestpaperService
 
     public function findTestpaperResultsCountByUserId ($id);
 
-    public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);
+    public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
 
     public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
 

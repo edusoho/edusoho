@@ -8,7 +8,7 @@ interface TestpaperResultDao
 
     public function findTestpaperResultsByIds(array $ids);
 
-    public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);
+    public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
 
     public function findTestPaperResultsByTestIdAndStatusAndUserId($testpaperId, array $status, $userId);
 
