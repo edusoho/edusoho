@@ -61,10 +61,15 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
 
         if (count($selectedQuestions) < $needCount) {
             $stillNeedCount = $needCount - count($selectedQuestions);
+        } else {
+            $stillNeedCount = 0;
         }
 
-        $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
-        $selectedQuestions = array_merge($selectedQuestions, $questions);
+        if ($stillNeedCount) {
+            $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
+            $selectedQuestions = array_merge($selectedQuestions, $questions);
+        }
+
 
         return $selectedQuestions;
     }
