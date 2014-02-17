@@ -11,6 +11,7 @@ define(function(require, exports, module) {
         var QuestionCreator;
         switch (type) {
             case 'single-choice':
+            case 'uncertain-choice':
             case 'choice':
                 QuestionCreator = Choice;
                 break;
