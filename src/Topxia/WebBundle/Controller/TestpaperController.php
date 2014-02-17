@@ -379,7 +379,7 @@ class TestpaperController extends BaseController
             
             foreach ($items['material'] as $key => $item) {
 
-                $questionTypes = ArrayToolkit::index(empty($item['items']) ? array() : $item['items'], 'type');
+                $questionTypes = ArrayToolkit::index(empty($item['items']) ? array() : $item['items'], 'questionType');
 
                 if(array_key_exists('essay', $questionTypes)){
                     array_push($types, 'material');
