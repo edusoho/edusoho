@@ -30,6 +30,9 @@ define(function(require, exports, module) {
 
                 $modal.modal('hide');
                 $modal.data('manager').refreshSeqs();
+                $modal.data('manager').refreshTestpaperStats();
+                
+                
             });
             
         });

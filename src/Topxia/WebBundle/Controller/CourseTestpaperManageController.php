@@ -170,6 +170,23 @@ class CourseTestpaperManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            
+            if (empty($data['questionId']) or empty($data['scores'])) {
+                return $this->createMessageResponse('error', '试卷题目不能为空！');
+            }
+            if (count($data['questionId']) != count($data['scores'])) {
+                return $this->createMessageResponse('error', '试卷题目数据不正确');
+            }
+
+            $data['questionId'] = array_values($data['questionId']);
+            $data['scores'] = array_values($data['scores']);
+
+            $items = array();
+            foreach ($data['questionId'] as $index => $questionId) {
+                $items[] = array('questionId' => $questionId, 'score' => $data['scores'][$index]);
+            }
+
+            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
 
             $this->setFlashMessage('success', '试卷题目保存成功！');
             return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));

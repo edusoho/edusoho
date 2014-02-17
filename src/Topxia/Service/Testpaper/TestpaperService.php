@@ -89,8 +89,6 @@ interface TestpaperService
      */
     public function getTestpaperItems($testpaperId);
 
-    public function addItem($testpaperId, $questionId, $afterItemId = null);
-
-    public function replaceItem($testpaperId, $itemId, $questionId);
+    public function updateTestpaperItems($testpaperId, $items);
 
 }
