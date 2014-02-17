@@ -6,7 +6,14 @@
   <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
   <td>
     {{question['stem']|plain_text(40) }}
-    <div class="text-muted text-sm">从属：{{ question.target }}</div>
+    <div class="text-muted text-sm">
+      从属：
+      {% if question.target == 'course-' ~ course.id %}
+        本课程
+      {% else %}
+        {{ targets[question.target].simple_name|default('--') }}
+      {% endif %}
+    </div>
   </td>
   <td>{{ dict_text('questionType',question.type ) }}</td>
   <td>{{ dict_text('difficulty', question.difficulty)}}</td>

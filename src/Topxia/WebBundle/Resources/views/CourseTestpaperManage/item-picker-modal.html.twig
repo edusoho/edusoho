@@ -19,6 +19,9 @@
       <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
     </div>
 
+    <input type="hidden" name="excludeIds" value="{{ conditions.excludeIds|join(',') }}">
+    <input type="hidden" name="type" value="{{ conditions.type }}">
+
     <button class="btn btn-primary btn-sm">搜索</button>
 
   </form>

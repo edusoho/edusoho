@@ -5,7 +5,13 @@
       <small class="text-muted">({{ question.subCount}}子题)</small>
     {% endif %}
     <br>
-    从属：{{ question.target }}
+    <small class="text-muted">从属：
+      {% if question.target == 'course-' ~ course.id %}
+        本课程
+      {% else %}
+        {{ targets[question.target].simple_name|default('--') }}
+      {% endif %}
+    </small>
   </td>
   <td>{{ dict_text('questionType', question.type) }}</td>
   <td>{{question.score }}</td>

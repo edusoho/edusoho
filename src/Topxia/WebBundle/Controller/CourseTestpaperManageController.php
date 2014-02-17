@@ -196,6 +196,8 @@ class CourseTestpaperManageController extends BaseController
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
 
+        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
+
         $subItems = array();
         foreach ($items as $key => $item) {
             if ($item['parentId'] > 0) {
@@ -211,6 +213,7 @@ class CourseTestpaperManageController extends BaseController
             'items' => ArrayToolkit::group($items, 'questionType'),
             'subItems' => $subItems,
             'questions' => $questions,
+            'targets' => $targets,
         ));
     }
 
@@ -250,6 +253,11 @@ class CourseTestpaperManageController extends BaseController
         $conditions['parentId'] = 0;
         $conditions['excludeIds'] = empty($conditions['excludeIds']) ? array() : explode(',', $conditions['excludeIds']);
 
+        if (!empty($conditions['keyword'])) {
+            $conditions['stem'] = $conditions['keyword'];
+        }
+
+
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
 
         $paginator = new Paginator(
@@ -265,6 +273,8 @@ class CourseTestpaperManageController extends BaseController
                 $paginator->getPerPageCount()
         );
 
+        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-picker-modal.html.twig', array(
             'course' => $course,
             'testpaper' => $testpaper,
@@ -272,6 +282,8 @@ class CourseTestpaperManageController extends BaseController
             'replace' => $replace,
             'paginator' => $paginator,
             'targetChoices' => $this->getQuestionRanges($course, true),
+            'targets' => $targets,
+            'conditions' => $conditions,
         ));
         
     }

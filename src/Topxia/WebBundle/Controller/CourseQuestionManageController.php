@@ -31,9 +31,11 @@ class CourseQuestionManageController extends BaseController
                 return $this->redirect($this->generateUrl('course_manage_question',array('courseId' => $courseId)));
             }
 
+            $orderBy = array('createdTime' ,'ASC');
         } else {
             $conditions['parentId'] = 0;
             $parentQuestion = null;
+            $orderBy = array('createdTime' ,'DESC');
         }
 
         $paginator = new Paginator(
@@ -44,7 +46,7 @@ class CourseQuestionManageController extends BaseController
 
         $questions = $this->getQuestionService()->searchQuestions(
             $conditions,
-            array('createdTime' ,'DESC'),
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

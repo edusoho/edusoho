@@ -44,19 +44,19 @@ define(function(require, exports, module) {
 
             validator.addItem({
                 element: '#testpaper-name-field',
-                required: true,
+                required: true
             });
 
             validator.addItem({
                 element: '#testpaper-description-field',
                 required: true,
-                rule: 'maxlength{max:500}',
+                rule: 'maxlength{max:500}'
             });
 
             validator.addItem({
                 element: '#testpaper-limitedTime-field',
                 required: true,
-                rule: 'integer'
+                rule: 'integer,max{max:10000}'
             });
         },
 
