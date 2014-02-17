@@ -301,12 +301,12 @@ class TestpaperController extends BaseController
             //试卷信息记录
             $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
 
+            $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+            $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+
             if ($this->getTestpaperService()->isExistsEssay($testResults)) {
                 $user = $this->getCurrentUser();
-
-                $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-                $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
                 $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
                 $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
@@ -317,13 +317,15 @@ class TestpaperController extends BaseController
             }
 
             // @todo refactor. , wellming
-            // if ($targets[$testpaper['target']]['type'] == 'lesson' and !empty($targets[$testpaper['target']]['id'])) {
-            //     $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaper['target']]['id']));
-            //     if (!empty($lessons[$targets[$testpaper['target']]['id']])) {
-            //         $lesson = $lessons[$targets[$testpaper['target']]['id']];
-            //         $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
-            //     }
-            // }
+            $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
+
+            if ($targets[$testpaperResult['target']]['type'] == 'lesson' and !empty($targets[$testpaperResult['target']]['id'])) {
+                $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
+                if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
+                    $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
+                    $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+                }
+            }
 
             return $this->createJsonResponse(true);
         }
