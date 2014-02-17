@@ -20,10 +20,10 @@ class QuestionUpgradeCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getConnection()->beginTransaction();
-        try{
+        $connection = $this->getContainer()->get('database_connection');
 
-            $connection = $this->getContainer()->get('database_connection');
+        $connection->beginTransaction();
+        try{
 
 
             $sql = "ALTER TABLE  `question` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
