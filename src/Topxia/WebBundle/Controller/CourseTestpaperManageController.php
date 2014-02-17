@@ -21,7 +21,6 @@ class CourseTestpaperManageController extends BaseController
             10
         );
 
-
         $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
             array('createdTime' ,'DESC'),
@@ -46,8 +45,10 @@ class CourseTestpaperManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+            $fields['ranges'] = explode(',', $fields['ranges']);
             $fields['target'] = "course-{$course['id']}";
             $fields['pattern'] = 'QuestionType';
+            // var_dump($fields);exit();
             list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
             return $this->redirect($this->generateUrl('course_manage_testpaper_items',array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
@@ -76,6 +77,7 @@ class CourseTestpaperManageController extends BaseController
 
         $data = $request->request->all();
         $data['target'] = "course-{$course['id']}";
+        $data['ranges'] = explode(',', $data['ranges']);
         $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);
     }

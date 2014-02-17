@@ -125,10 +125,26 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions')
-            ->andWhere('target = :target')
-            ->andWhere('target LIKE :targetLike')
-            ->andWhere('parentId = :parentId')
+            ->from($this->table, 'questions');
+
+
+        if (isset($conditions['targets']) and is_array($conditions['targets'])) {
+            $targets = array();
+            foreach ($conditions['targets'] as $target) {
+                if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $target)) {
+                    $targets[] = $target;
+                }
+            }
+            if (!empty($targets)) {
+                $targets = "'" . implode("','", $targets) . "'";
+                $builder->andStaticWhere("target IN ({$targets})");
+            }
+        } else {
+            $builder->andWhere('target = :target')
+                ->andWhere('target LIKE :targetLike');
+        }
+
+        $builder->andWhere('parentId = :parentId')
             ->andWhere('type = :type')
             ->andWhere('stem LIKE :stem');
 

@@ -126,8 +126,6 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         if (!empty($options['ranges'])) {
             $conditions['targets'] = $options['ranges'];
         } else {
-
-
             $conditions['targetPrefix'] = $options['target'];
         }
 
