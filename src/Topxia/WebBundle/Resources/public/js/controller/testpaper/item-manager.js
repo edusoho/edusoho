@@ -9,7 +9,6 @@ define(function(require, exports, module) {
 
         attrs: {
             currentType: null
-
         },
 
         events: {
@@ -18,11 +17,18 @@ define(function(require, exports, module) {
             'click .item-delete-btn': 'onClickItemDeleteBtn',
             'click [data-role=batch-select]': 'onClickBatchSelect',
             'click [data-role=batch-delete]': 'onClickBatchDelete',
+            'click .confirm-submit': 'onConfirmSubmit',
+            'click .request-save': 'onRequestSave',
+            'change [name="scores[]"]': 'onChangeScore',
         },
 
         setup:function() {
             this.$('.testpaper-nav-link').eq(0).click();
             this.initItemSortable();
+
+            $("#testpaper-confirm-modal").modal('hide').on('hidden.bs.modal', function (e) {
+                $(this).find('.confirm-submit').button('reset');    
+            })
         },
 
         refreshSeqs: function () {
@@ -35,6 +41,94 @@ define(function(require, exports, module) {
                     seq ++;
                 }
             });
+        },
+
+        onChangeScore: function(e) {
+            this.refreshTestpaperStats();
+        },
+
+        onConfirmSubmit: function (e) {
+            var $btn = $(e.currentTarget),
+                $modal = $btn.parents('.modal');
+
+            $btn.button('saving');
+
+            $("#testpaper-items-form").submit();
+        },
+
+        onRequestSave: function(e) {
+            var isOk = true;
+            $("#testpaper-table").find('[name="scores[]"]').each(function() {
+                var score = $(this).val();
+
+                if (score == '0') {
+                    Notify.danger('题目分值不能为0。');
+                    isOk = false;
+                    return false;
+                }
+
+                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger('题目分值只能填写数字，且最多一位小数。');
+                    $(this).focus();
+                    isOk = false;
+                    return false;
+                }
+            });
+
+            if (!isOk) {
+                return ;
+            }
+
+            $modal = $("#testpaper-confirm-modal");
+
+            var stats = this._calTestpaperStats();
+
+            var html='';
+            $.each(stats, function(index, statsItem){
+                var tr = "<tr>";
+                    tr += "<td>" + statsItem.name + "</td>";
+                    tr += "<td>" + statsItem.count + "</td>";
+                    tr += "<td>" + statsItem.score + "</td>";
+                    tr += "</tr>";
+                html += tr;
+            });
+
+            $modal.find('.detail-tbody').html(html);
+
+            $modal.modal('show');
+        },
+
+        refreshTestpaperStats: function() {
+            var type = this.get('currentType');
+            var stats = this._calTestpaperStats();
+            var html = '试卷总分<strong>' + stats.total.score + '</strong>分';
+            html += ' <span class="stats-part">';
+            html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score + '</strng>分';
+            $("#testpaper-stats").html(html);
+        },
+
+        _calTestpaperStats: function() {
+            var stats = {};
+            this.$('.testpaper-nav-link').each(function() {
+                var type = $(this).data('type'),
+                    name = $(this).data('name');
+
+                stats[type] = {name:name, count:0, score:0};
+                $("#testpaper-items-" + type).find('[name="scores[]"][type=text]').each(function() {
+                    stats[type]['count'] ++;
+                    stats[type]['score'] += parseInt($(this).val());
+                });
+            });
+
+            var total = {name:'总计', count:0, score:0};
+            $.each(stats, function(index, statsItem) {
+                total.count += statsItem.count;
+                total.score += statsItem.score;
+            });
+
+            stats.total = total;
+
+            return stats;
         },
 
         onClickPickItem: function(e) {
@@ -79,6 +173,7 @@ define(function(require, exports, module) {
             this.$('[data-role=batch-select]:visible').prop('checked', false);
 
             this.refreshSeqs();
+            this0.refreshTestpaperStats();
         },
 
         onClickBatchSelect: function(e) {
@@ -98,6 +193,7 @@ define(function(require, exports, module) {
             $tr.parents('tbody').find('[data-parent-id=' + $tr.data('id') + ']').remove();
             $tr.remove();
             this.refreshSeqs();
+            this.refreshTestpaperStats();
         },
 
         onClickNav: function(e) {
@@ -107,7 +203,8 @@ define(function(require, exports, module) {
 
             $("#testpaper-table").find('tbody').addClass('hide');
             $("#testpaper-items-" + $nav.data('type')).removeClass('hide');
-            this.set('currentType', $nav.data('type')); 
+            this.set('currentType', $nav.data('type'));
+            this.refreshTestpaperStats();
             return true;
         },
 

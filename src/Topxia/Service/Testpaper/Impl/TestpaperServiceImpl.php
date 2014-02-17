@@ -176,8 +176,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'metas' => $metas,
         ));
 
-        $testpaper['metas']['question_type_seq'] = $types;
-
         return $items;
     }
 
@@ -682,24 +680,78 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
     }
 
-
-
-
     public function getTestpaperItems($testpaperId)
     {
         return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
     }
 
-    public function addItem($testpaperId, $questionId, $afterItemId = null)
+    public function updateTestpaperItems($testpaperId, $items)
     {
+        $testpaper = $this->getTestpaper($testpaperId);
+        if (empty($testpaperId)) {
+            throw $this->createServiceException();
+        }
+        $existItems = $this->getTestpaperItems($testpaperId);
+
+        $existItems = ArrayToolkit::index($existItems, 'questionId');
+
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        if (count($items) != count($questions)) {
+            throw $this->createServiceException('数据缺失');
+        }
+
+        $types = array();
+        $totalScore = 0;
+        $seq = 1;
+        foreach ($items as $item) {
+            $question = $questions[$item['questionId']];
+            $item['seq'] = $seq;
+            if ($question['subCount'] == 0) {
+                $seq ++;
+                $totalScore += $item['score'] ;
+            }
+
+            if (empty($existItems[$item['questionId']])) {
+                $item['questionType'] = $question['type'];
+                $item['parentId'] = $question['parentId'];
+                // @todo, wellming.
+                $item['missScore'] = 0;
+                $item['testId'] = $testpaperId;
+                $item = $this->getTestpaperItemDao()->addItem($item);
+            } else {
+                $existItem = $existItems[$item['questionId']];
+
+                if ($item['seq'] != $existItem['seq'] or $item['score'] != $existItem['score']) {
+                    $existItem['seq'] = $item['seq'];
+                    $existItem['score'] = $item['score'];
+                    $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
+                } else {
+                    $item = $existItem;
+                }
+                unset($existItems[$item['questionId']]);
+            }
+
+            if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
+                $types[] = $item['questionType'];
+            }
+        }
+
+        foreach ($existItems as $existItem) {
+            $this->getTestpaperItemDao()->deleteItem($existItem['id']);
+        }
+
+        $metas = empty($testpaper['metas']) ? array() : $testpaper['metas'];
+        $metas['question_type_seq'] = $types;
+
+        $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
+            'itemCount' => $seq -1,
+            'score' => $totalScore,
+            'metas' => $metas,
+        ));
+
 
     }
-
-    public function replaceItem($testpaperId, $itemId, $questionId)
-    {
-
-    }
-
 
     public function canTeacherCheck($id)
     {
