@@ -113,7 +113,7 @@ class MyQuestionController extends BaseController
             $item['items'] = $items;
         }
 
-        $type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
+        $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
         $questionPreview = true;
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
