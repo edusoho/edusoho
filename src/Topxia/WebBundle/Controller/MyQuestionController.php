@@ -15,10 +15,11 @@ class MyQuestionController extends BaseController
         if ($request->getMethod() == 'POST') {
             $targetType = $request->query->get('targetType');
             $targetId = $request->query->get('targetId');
+            $target = $targetType."-".$targetId;
 
             $user = $this->getCurrentUser();
 
-            $favorite = $this->getQuestionService()->favoriteQuestion($id, $targetType, $targetId, $user['id']);
+            $favorite = $this->getQuestionService()->favoriteQuestion($id, $target, $user['id']);
         
             return $this->createJsonResponse(true);
         }
@@ -29,10 +30,11 @@ class MyQuestionController extends BaseController
         if ($request->getMethod() == 'POST') {
             $targetType = $request->query->get('targetType');
             $targetId = $request->query->get('targetId');
+            $target = $targetType."-".$targetId;
 
             $user = $this->getCurrentUser();
 
-            $this->getQuestionService()->unFavoriteQuestion($id, $targetType, $targetId, $user['id']);
+            $this->getQuestionService()->unFavoriteQuestion($id, $target, $user['id']);
 
             return $this->createJsonResponse(true);
         }

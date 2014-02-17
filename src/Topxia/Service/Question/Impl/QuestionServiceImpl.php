@@ -215,12 +215,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionFavoriteDao()->findFavoriteQuestionsCountByUserId($id);
     }
 
-    public function favoriteQuestion($questionId, $targetType, $targetId, $userId)
+    public function favoriteQuestion($questionId, $target, $userId)
     {
         $favorite = array(
             'questionId' => $questionId,
-            'targetType' => $targetType,
-            'targetId' => $targetId,
+            'target' => $target,
             'userId' => $userId,
             'createdTime' => time()
         );
@@ -234,12 +233,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $favoriteBack;
     }
 
-    public function unFavoriteQuestion ($questionId, $targetType, $targetId, $userId)
+    public function unFavoriteQuestion ($questionId, $target, $userId)
     {
         $favorite = array(
             'questionId' => $questionId,
-            'targetType' => $targetType,
-            'targetId' => $targetId,
+            'targetType' => $target,
             'userId' => $userId
         );
 
