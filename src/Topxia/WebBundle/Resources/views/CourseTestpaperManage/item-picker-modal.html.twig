@@ -1,12 +1,29 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set modal_class = 'modal-lg' %}
+
 {% set replaceFor= replaceFor|default(null) %}
 
 {% block title %}试卷{% if replaceFor %}替换{% else %}添加{% endif %}题目{% endblock %}
 
 {% block body %}
 
-  <table class="table table-condensed">
+  <form id="testpaper-item-picker-form" class="form-inline well well-sm" action="{{ path('course_manage_testpaper_item_picker', {courseId:course.id, testpaperId:testpaper.id}) }}" novalidate>
+    <div class="form-group">
+      <select class="form-control" name="target" style="width:200px;">
+        {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+    </div>
+
+    <button class="btn btn-primary btn-sm">搜索</button>
+
+  </form>
+
+  <table class="table table-condensed" id="testpaper-item-picker-table">
     <thead>
     <tr>
       <th width="45%">题干</th>
@@ -25,7 +42,7 @@
   </table>
   {{ web_macro.paginator(paginator) }}
 
-  <script>app.load('test-paper/item-list')</script>
+  <script>app.load('testpaper/item-picker')</script>
 
 {% endblock %}
 

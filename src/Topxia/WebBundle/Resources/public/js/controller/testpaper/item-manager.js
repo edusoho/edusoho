@@ -7,12 +7,14 @@ define(function(require, exports, module) {
 
     var TestpaperItemManager = Widget.extend({
 
-        attrs:{
+        attrs: {
+            currentType: null
 
         },
 
         events: {
             'click .testpaper-nav-link': 'onClickNav',
+            'click [data-role=pick-item]': 'onClickPickItem',
             'click .item-delete-btn': 'onClickItemDeleteBtn',
             'click [data-role=batch-select]': 'onClickBatchSelect',
             'click [data-role=batch-delete]': 'onClickBatchDelete',
@@ -21,6 +23,35 @@ define(function(require, exports, module) {
         setup:function() {
             this.$('.testpaper-nav-link').eq(0).click();
             this.initItemSortable();
+        },
+
+        refreshSeqs: function () {
+            var seq = 1;
+            $("#testpaper-table").find("tbody tr").each(function(){
+                var $tr = $(this);
+
+                if (!$tr.hasClass('have-sub-questions')) {
+                    $tr.find('td.seq').html(seq);
+                    seq ++;
+                }
+            });
+        },
+
+        onClickPickItem: function(e) {
+            var $btn = $(e.currentTarget);
+            console.log(this.get('currentType'));
+            console.log($btn.data('url'));
+
+            var excludeIds = [];
+            $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
+                excludeIds.push($(this).val());
+            });
+
+            var $modal = $("#modal").modal();
+            $modal.data('manager', this);
+            $.get($btn.data('url'), {excludeIds: excludeIds.join(','), type: this.get('currentType')}, function(html) {
+                $modal.html(html);
+            });
         },
 
         onClickBatchDelete: function(e) {
@@ -39,12 +70,15 @@ define(function(require, exports, module) {
             }
 
             this.$('[data-role=batch-item]:checked').each(function() {
-                var $item = $(this).parents('tr');
-                $item.remove();
-                //@todo 移除子题
+                var $tr = $(this).parents('tr');
+
+                $tr.parents('tbody').find('[data-parent-id=' + $tr.data('id') + ']').remove();
+                $tr.remove();
             });
 
             this.$('[data-role=batch-select]:visible').prop('checked', false);
+
+            this.refreshSeqs();
         },
 
         onClickBatchSelect: function(e) {
@@ -60,7 +94,10 @@ define(function(require, exports, module) {
             if (!confirm('您真的要删除该题目吗？')) {
                 return ;
             }
-            $btn.parents('tr').remove();
+            var $tr = $btn.parents('tr');
+            $tr.parents('tbody').find('[data-parent-id=' + $tr.data('id') + ']').remove();
+            $tr.remove();
+            this.refreshSeqs();
         },
 
         onClickNav: function(e) {
@@ -69,28 +106,35 @@ define(function(require, exports, module) {
             $nav.parent().addClass('active');
 
             $("#testpaper-table").find('tbody').addClass('hide');
-            $("#testpaper-items-" + $nav.data('type')).removeClass('hide'); 
+            $("#testpaper-items-" + $nav.data('type')).removeClass('hide');
+            this.set('currentType', $nav.data('type')); 
             return true;
         },
 
         initItemSortable: function(e) {
-            var $table = this.$('.testpaper-table-tbody');
+            var $table = this.$('.testpaper-table-tbody'),
+                self = this;
             $table.sortable({
-                // containerSelector: '> tbody',
                 containerPath: '> tr',
-                // itemPath: '> tbody',
-                itemSelector: 'tr',
+                itemSelector: 'tr.is-question',
                 placeholder: '<tr class="placeholder"/>',
                 exclude: '.notMoveHandle',
                 onDrop: function (item, container, _super) {
                     _super(item, container);
-                    // if (item.data('type') == 'material') {
-                    //     var id = item.data('id');
-                    //     var $subItems = $("#questionType-material").find("[data-type=" + id + "]");
-                    //     $subItems.detach().insertAfter(item);
-                    // }
-                    // Test.sortable();
-                },
+                    if (item.hasClass('have-sub-questions')) {
+                        var $tbody = item.parents('tbody');
+                        $tbody.find('tr.is-question').each(function() {
+                            var $tr = $(this);
+                            $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+                        });
+
+                        // console.log($tbody.find('[data-parent-id=' + item.data('id') + ']'));
+
+                        // $tbody.find('[data-parent-id=' + item.data('id') + ']').detach().insertAfter(item);
+                    }
+
+                    self.refreshSeqs();
+                }
             });
         }
 

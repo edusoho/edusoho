@@ -10,10 +10,6 @@
   <td>{{ dict_text('questionType', question.type) }}</td>
   <td>{{question.score }}</td>
   <td>
-    {% if replaceFor %}
-      <button type="button" class="btn btn-primary btn-sm replace-btn">替换</button>
-    {% else %}
-      <button type="button" class="btn btn-primary btn-sm add-btn">选择</button>
-    {% endif %}
+    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ replace|default('') }}" data-url="{{ path('course_manage_testpaper_item_picked', {courseId:course.id, testpaperId:testpaper.id, questionId:question.id }) }}">{% if replace %}替换{% else %}选择{% endif %}</button>
   </td>
 </tr>
