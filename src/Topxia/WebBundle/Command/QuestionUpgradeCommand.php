@@ -20,109 +20,109 @@ class QuestionUpgradeCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $connection = $this->getContainer()->get('database_connection');
+        $this->getConnection()->beginTransaction();
+        try{
+
+            $connection = $this->getContainer()->get('database_connection');
 
 
-        $sql = "ALTER TABLE  `question` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-        $connection->executeUpdate($sql);
+            $sql = "ALTER TABLE  `question` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
+            $connection->executeUpdate($sql);
 
-        $oldQuestions = $connection->fetchAll("select * from question;");
+            $oldQuestions = $connection->fetchAll("select * from question;");
 
-        foreach ($oldQuestions as $oldQuestion) {
+            foreach ($oldQuestions as $oldQuestion) {
 
-            if ($oldQuestion['targetType'] == 'course'){
+                if ($oldQuestion['targetType'] == 'course'){
+                    $newQuestion = array(
+                        'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
+                    );
+                } elseif ($oldQuestion['targetType'] == 'lesson'){
+
+                    $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldQuestion['targetId']));
+
+                    $newQuestion = array(
+                        'target' => 'course-'.$lesson['courseId']."/".$oldQuestion['targetType']."-".$oldQuestion['targetId']
+                    );
+                }
+
+                $connection->update('question', $newQuestion, array('id'=>$oldQuestion['id']));
+            }
+
+
+            $sql = "ALTER TABLE  `question_category` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
+            $connection->executeUpdate($sql);
+
+            $oldQuestion_categorys = $connection->fetchAll("select * from question_category;");
+
+            foreach ($oldQuestion_categorys as $oldQuestion_category) {
+
+                $newQuestion_category = array(
+                    'target' => $oldQuestion_category['targetType']."-".$oldQuestion_category['targetId']
+                );
+
+                $connection->update('question_category', $newQuestion_category, array('id'=>$oldQuestion_category['id']));
+            }
+
+
+
+            $sql = "ALTER TABLE  `question_favorite` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
+            $connection->executeUpdate($sql);
+
+            $oldQuestions = $connection->fetchAll("select * from question_favorite;");
+
+            foreach ($oldQuestions as $oldQuestion) {
+
                 $newQuestion = array(
                     'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
                 );
-            } elseif ($oldQuestion['targetType'] == 'lesson'){
+                
 
-                $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldQuestion['targetId']));
-
-                $newQuestion = array(
-                    'target' => 'course-'.$lesson['courseId']."/".$oldQuestion['targetType']."-".$oldQuestion['targetId']
-                );
+                $connection->update('question_favorite', $newQuestion, array('id'=>$oldQuestion['id']));
             }
 
-            $connection->update('question', $newQuestion, array('id'=>$oldQuestion['id']));
-        }
 
+            $sql = "ALTER TABLE  `testpaper` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
+            $connection->executeUpdate($sql);
 
-        $sql = "ALTER TABLE  `question_category` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-        $connection->executeUpdate($sql);
+            $oldTestpapers = $connection->fetchAll("select * from testpaper;");
 
-        $oldQuestion_categorys = $connection->fetchAll("select * from question_category;");
+            foreach ($oldTestpapers as $oldTestpaper) {
 
-        foreach ($oldQuestion_categorys as $oldQuestion_category) {
-
-            $newQuestion_category = array(
-                'target' => $oldQuestion_category['targetType']."-".$oldQuestion_category['targetId']
-            );
-
-            $connection->update('question_category', $newQuestion_category, array('id'=>$oldQuestion_category['id']));
-        }
-
-
-
-        $sql = "ALTER TABLE  `question_favorite` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-        $connection->executeUpdate($sql);
-
-        $oldQuestions = $connection->fetchAll("select * from question_favorite;");
-
-        foreach ($oldQuestions as $oldQuestion) {
-
-            if ($oldQuestion['targetType'] == 'course'){
-                $newQuestion = array(
-                    'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
+                $newTestpaper = array(
+                    'target' => $oldTestpaper['targetType']."-".$oldTestpaper['targetId']
                 );
-            } elseif ($oldQuestion['targetType'] == 'lesson'){
 
-                $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldQuestion['targetId']));
-
-                $newQuestion = array(
-                    'target' => 'course-'.$lesson['courseId']."/".$oldQuestion['targetType']."-".$oldQuestion['targetId']
-                );
+                $connection->update('testpaper', $newTestpaper, array('id'=>$oldTestpaper['id']));
             }
 
-            $connection->update('question_favorite', $newQuestion, array('id'=>$oldQuestion['id']));
-        }
 
+            $sql = "ALTER TABLE  `testpaper_result` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
+            $connection->executeUpdate($sql);
 
-        $sql = "ALTER TABLE  `testpaper` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-        $connection->executeUpdate($sql);
+            $oldTestpaperResults = $connection->fetchAll("select * from testpaper_result;");
 
-        $oldTestpapers = $connection->fetchAll("select * from testpaper;");
+            foreach ($oldTestpaperResults as $oldTestpaperResult) {
 
-        foreach ($oldTestpapers as $oldTestpaper) {
+                if ($oldTestpaperResult['targetType'] == 'course'){
+                    $newTestpaperResult = array(
+                        'target' => $oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
+                    );
+                } elseif ($oldTestpaperResult['targetType'] == 'lesson'){
 
-            $newTestpaper = array(
-                'target' => $oldTestpaper['targetType']."-".$oldTestpaper['targetId']
-            );
+                    $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldTestpaperResult['targetId']));
 
-            $connection->update('testpaper', $newTestpaper, array('id'=>$oldTestpaper['id']));
-        }
+                    $newTestpaperResult = array(
+                        'target' => 'course-'.$lesson['courseId']."/".$oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
+                    );
+                }
 
-
-        $sql = "ALTER TABLE  `testpaper_result` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-        $connection->executeUpdate($sql);
-
-        $oldTestpaperResults = $connection->fetchAll("select * from testpaper_result;");
-
-        foreach ($oldTestpaperResults as $oldTestpaperResult) {
-
-            if ($oldTestpaperResult['targetType'] == 'course'){
-                $newTestpaperResult = array(
-                    'target' => $oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
-                );
-            } elseif ($oldTestpaperResult['targetType'] == 'lesson'){
-
-                $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldTestpaperResult['targetId']));
-
-                $newTestpaperResult = array(
-                    'target' => 'course-'.$lesson['courseId']."/".$oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
-                );
+                $connection->update('testpaper_result', $newTestpaperResult, array('id'=>$oldTestpaperResult['id']));
             }
 
-            $connection->update('testpaper_result', $newTestpaperResult, array('id'=>$oldTestpaperResult['id']));
+        }catch(\Exception $e){
+            $this->getConnection()->rollback();
+            throw $e;
         }
 
     }
