@@ -5,6 +5,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class KernelRequestListener
 {
@@ -34,15 +35,21 @@ class KernelRequestListener
     		if ($token != $expectedToken) {
 
                 // @todo 需要区分ajax的response
+                if ($request->getPathInfo() == '/admin') {
+                    $result = ServiceKernel::instance()->createService('Upgrade.UpgradeService')->check('EDUMAIN');
+                    $result = array('comments' => "echo 'hello';");
+                    $this->container->set('EDUMAIN', $result);
+                } else {
+        			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
+        				'type' => 'error',
+        				'message' => '页面已过期，请重新提交数据！',
+        				'goto' => '',
+        				'duration' => 0,
+    				));
 
-    			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
-    				'type' => 'error',
-    				'message' => '页面已过期，请重新提交数据！',
-    				'goto' => '',
-    				'duration' => 0,
-				));
+        			$event->setResponse($response);
+                }
 
-    			$event->setResponse($response);
     		}
     	}
     }
