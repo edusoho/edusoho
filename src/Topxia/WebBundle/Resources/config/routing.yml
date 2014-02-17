@@ -597,26 +597,6 @@ course_manage_testpaper_item_picked:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
 
-course_manage_test_item_list:
-    pattern: /course/{courseId}/manage/test/{testpaperId}/item/list
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:itemList }
-
-course_manage_test_item_create:
-    pattern: /course/{courseId}/manage/test/{testpaperId}/item/create
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createItem }
-
-course_manage_test_item_update:
-    pattern: /course/{courseId}/manage/test/{testpaperId}/item/update
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateItem }
-
-course_manage_test_item_delete:
-    pattern: /course/{courseId}/manage/test/{testItemId}/item/delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItem }
-
-course_manage_test_item_deletes:
-    pattern: /course/{courseId}/manage/test/item/deletes
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItems }
-
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
     defaults: { _controller: TopxiaWebBundle:CourseChapterManage:create }
