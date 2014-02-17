@@ -3361,6 +3361,13 @@ body {
 	color: #f60;
 }
 
+@media (max-width: 767px) {
+	.testpaper-result-total {
+		float: none;
+		width: 100%;
+	}
+}
+
 .testpaper-result-total .well {
 	padding-top: 33px;
 	padding-bottom: 34px;
