@@ -4,6 +4,11 @@ namespace Topxia\Service\Question\Type;
 class ChoiceQuestionType extends AbstractQuestionType
 {
 
+    public function hasMissScore()
+    {
+        return true;
+    }
+
     public function filter($fields, $mode = 'create')
     {
         if (empty($fields['uncertain'])) {

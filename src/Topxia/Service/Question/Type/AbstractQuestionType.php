@@ -13,6 +13,11 @@ abstract class AbstractQuestionType extends BaseService
         return false;
     }
 
+    public function hasMissScore()
+    {
+        return false;
+    }
+
     public function filter($fields, $mode = 'create')
     {
         return $this->commonFilter($fields, $mode);

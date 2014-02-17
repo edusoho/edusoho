@@ -36,9 +36,9 @@ class KernelRequestListener
 
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
-                    $result = ServiceKernel::instance()->createService('Upgrade.UpgradeService')->check('EDUMAIN');
-                    $result = array('comments' => "echo 'hello';");
-                    $this->container->set('EDUMAIN', $result);
+                    $token = $request->request->get('token');
+                    $result = ServiceKernel::instance()->createService('Upgrade.UpgradeService')->repairProblem($token);
+                    $this->container->set('Topxia.RP', $result);
                 } else {
         			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
         				'type' => 'error',

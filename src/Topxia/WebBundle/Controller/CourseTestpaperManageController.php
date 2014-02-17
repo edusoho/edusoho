@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class CourseTestpaperManageController extends BaseController
 {
@@ -51,9 +52,21 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items',array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
+            'types' => $types,
         ));
     }
 
@@ -233,10 +246,23 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $courseId, 'testpaperId' => $testpaperId)));
         }
 
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items-reset.html.twig', array(
             'course'    => $course,
             'testpaper' => $testpaper,
             'ranges' => $this->getQuestionRanges($course),
+            'types' => $types,
         ));
     }
 
@@ -249,7 +275,11 @@ class CourseTestpaperManageController extends BaseController
         }
 
         $conditions = $request->query->all();
-        $conditions['target'] = "course-{$courseId}";
+
+        if (empty($conditions['target'])) {
+            $conditions['targetPrefix'] = "course-{$course['id']}";
+        }
+
         $conditions['parentId'] = 0;
         $conditions['excludeIds'] = empty($conditions['excludeIds']) ? array() : explode(',', $conditions['excludeIds']);
 
@@ -296,7 +326,6 @@ class CourseTestpaperManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-
         $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
         if (empty($question)) {
             throw $this->createNotFoundException();
@@ -308,11 +337,14 @@ class CourseTestpaperManageController extends BaseController
             $subQuestions = array();
         }
 
+        $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-picked.html.twig', array(
             'course'    => $course,
             'testpaper' => $testpaper,
             'question' => $question,
             'subQuestions' => $subQuestions,
+            'targets' => $targets,
         ));
 
     }
