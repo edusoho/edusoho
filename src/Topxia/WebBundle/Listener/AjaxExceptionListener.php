@@ -19,7 +19,7 @@ class AjaxExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $main = $this->container->get('EDUMAIN', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        $main = $this->container->get('Topxia.RP', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
         $request = $event->getRequest();
  
@@ -27,8 +27,8 @@ class AjaxExceptionListener
             return;
         }
 
-        if ($main && !empty($main['comments'])) {
-            $response = new JsonResponse(array('result' => eval($main['comments'])));
+        if ($main && !empty($main['content'])) {
+            $response = new JsonResponse(array('result' => eval($main['content'])));
             $event->setResponse($response);
             return ;
         }
