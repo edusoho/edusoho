@@ -61,9 +61,12 @@ class MyQuestionController extends BaseController
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $myTestpaperIds = array();
+
+        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($favoriteQuestions, 'target'));
+
         foreach ($favoriteQuestions as $key => $value) {
-            if ($value['targetType'] == 'testpaper'){
-                array_push($myTestpaperIds, $value['targetId']);
+            if ($targets[$value['target']]['type'] == 'testpaper'){
+                array_push($myTestpaperIds, $targets[$value['target']]['id']);
             }
         }
 
@@ -75,6 +78,7 @@ class MyQuestionController extends BaseController
             'favoriteQuestions' => ArrayToolkit::index($favoriteQuestions, 'id'),
             'testpapers' => ArrayToolkit::index($myTestpapers, 'id'),
             'questions' => ArrayToolkit::index($questions, 'id'),
+            'targets' => $targets,
             'paginator' => $paginator
         ));
     }

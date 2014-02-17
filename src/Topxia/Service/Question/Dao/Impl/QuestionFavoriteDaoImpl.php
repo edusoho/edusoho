@@ -27,8 +27,8 @@ class QuestionFavoriteDaoImpl extends BaseDao
 
 	public function getFavoriteByQuestionIdAndTargetAndUserId ($favorite)
 	{
-        $sql = "SELECT * FROM {$this->table} WHERE questionId = ? AND targetType = ? AND targetId = ? AND userId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($favorite['questionId'], $favorite['targetType'], $favorite['targetId'], $favorite['userId'])) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE questionId = ? AND target = ? AND userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($favorite['questionId'], $favorite['target'], $favorite['userId'])) ? : null;
 	}
 
 	public function deleteFavorite ($favorite)
