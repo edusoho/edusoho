@@ -3586,6 +3586,10 @@ body {
 	margin-left: 50px;
 }
 
+.testpaper-question-analysis img {
+	max-width: 100%;
+}
+
 .testpaper-card .btn-index {
 	font-size: 12px;
 	padding: 0;
