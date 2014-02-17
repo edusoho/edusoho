@@ -5,7 +5,7 @@ class PageArticleType extends ArticleType
 {
 	public function getBasicFields()
 	{
-		return array('title', 'body', 'picture', 'alias', 'template','editor');
+		return array('title', 'categoryId','body', 'promoted','featured','sticky','tagIds','source','sourceUrl','picture', 'isFirstThumbnail','alias', 'template','editor');
 	}
 
 	public function getAlias()

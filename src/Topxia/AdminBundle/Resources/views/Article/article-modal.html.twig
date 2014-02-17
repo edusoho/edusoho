@@ -18,9 +18,18 @@
 		<div class="col-md-8 two-col-main">
 			{% if 'title' in type.basicFields %}
 				<div class="form-group">
-				  <label for="article-title-field" class="control-label">标题</label>
+				  <label for="article-title-field" class="control-label">文章标题</label>
 				  <div class="controls">
 				  	<input class="form-control" id="article-title-field" type="text" name="title" value="{{ field_value(article, 'title') }}">
+				  </div>
+				</div>
+			{% endif %}
+
+			{% if 'categoryId' in type.basicFields %}
+				<div class="form-group">
+				  <label for="article-category-field" class="control-label">所属栏目</label>
+				  <div class="controls">
+				  	<input class="form-control" id="article-category-field" type="text" name="categoryId" value="{{ field_value(article, 'categoryId') }}">
 				  </div>
 				</div>
 			{% endif %}
@@ -71,7 +80,54 @@
 			{% endif %}
 		</div>
 		<div class="col-md-4 two-col-side">
-			{% if 'alias' in type.basicFields %}
+			{% if 'sticky' in type.basicFields  %}
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      <label for="article-attr">文章属性</label>
+				    </div>
+				    <div class="col-md-7 controls">
+				      <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}>  置顶  
+					  <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured', 1) %} checked="checked" {% endif %}>  头条  
+				      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted', 1) %} checked="checked" {% endif %}>  推荐  
+				    </div>
+				  </div>
+			{% endif %}
+
+			{% if 'tagIds' in type.basicFields  %}
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      <label for="article-tagIds">TAG标签</label>
+				    </div>
+				    <div class="col-md-7 controls">
+						  <input class="width-full" id="article-tags-field" type="text" name="tags" value="{{ field_value(article, 'tagIds')|tags_join }}">
+				    </div>
+				  </div>
+			{% endif %}
+
+			{% if 'source' in type.basicFields  %}
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      <label for="article-source">来源</label>
+				    </div>
+				    <div class="col-md-7 controls">
+				      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
+				    </div>
+				  </div>
+			{% endif %}
+
+			{% if 'sourceUrl' in type.basicFields  %}
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      <label for="article-sourceUrl">来源地址</label>
+				    </div>
+				    <div class="col-md-7 controls">
+				      <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
+				    </div>
+				  </div>
+			{% endif %}
+
+			
+			<!--{% if 'alias' in type.basicFields %}	
 				<div class="panel panel-default">
 				  <div class="panel-heading">URL路径</div>
 				  <div class="panel-body">
@@ -92,7 +148,7 @@
 				  </select>
 				</div>
 			{% endif %}
-
+			
 			{% if 'tagIds' in type.basicFields %}
 				<div class="panel">
 				  <div class="panel-heading">标签</div>
@@ -116,15 +172,23 @@
 				  </div>
 				</div>
 			{% endif %}
+			-->
 
-			<input type="hidden" name="publishedTime" value="{{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
-
-			{#
-			{% if 'picture' in type.basicFields %}
-				<div class="panel panel-default" id="picture-panel">
-					<div class="panel-heading">附图</div>
-					<div class="panel-body">
-					  <p data-role="picture-container">
+			{% if 'picture' in type.basicFields  %}
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      <label for="article-sourceUrl">缩略图</label>
+				    </div>
+				    <div class="col-md-7 controls">
+				     <input type="checkbox" name="isFirstThumbnail" value="1" {% if field_value(article, 'isFirstThumbnail') %} checked="checked" {% endif %}>  提取文章第一个图片为缩略图
+				    </div>
+				  </div>
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      
+				    </div>
+				    <div class="col-md-7 controls">
+				      <p data-role="picture-container">
 					  	{% if article.picture|default(null) %}
 					  	  <a href="{{ file_path(article.picture) }}" target="_blank">
 						  	  <img src="{{ file_path(article.picture) }}" class="img-responsive">
@@ -132,9 +196,12 @@
 					  	{% endif %}
 					  </p>
 					  <p> <input type="file" name="picture"> </p>
-					</div>
-				</div>
+				    </div>
+				  </div>
+
+
 			{% endif %}
+			
 
 			<div class="panel panel-default">
 				<div class="panel-heading">设置</div>
@@ -144,19 +211,9 @@
 						<div class="help-block">内容条目默认按发布时间的倒序显示</div>
 					</div>
 
-					<div class="checkbox">
-						<label><input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted', 1) %} checked="checked" {% endif %}> 在列：<span class="text-muted">在列表中显示</span></label>
-					</div>
-
-					<div class="checkbox">
-						<label><input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> 置顶：<span class="text-muted">内容条目显示在列表顶部</span></label>
-					</div>
-					<div class="checkbox">
-						<label><input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}> 头条：<span class="text-muted">在头条区域显示</span></label>
-					</div>
 				</div>
 			</div>
-			#}
+			
 			
 
 		</div>
