@@ -110,6 +110,7 @@ define(function(require, exports, module) {
                         var missingTexts = [];
                         var types = {
                             single_choice: '单选题',
+                            uncertain_choice: '不定向选择题',
                             choice: '多选题',
                             fill: '填空题',
                             determine: '判断题',
@@ -174,6 +175,18 @@ define(function(require, exports, module) {
                     return false;
                 }
             });
+
+            $form.find('.item-miss-score').each(function() {
+                var score = $(this).val();
+
+                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger('题目漏选分值只能填写数字，且最多一位小数。');
+                    $(this).focus();
+                    isOk = false;
+                    return false;
+                }
+            });
+
 
             return isOk;
         },

@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class CourseTestpaperManageController extends BaseController
 {
@@ -51,9 +52,21 @@ class CourseTestpaperManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_testpaper_items',array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
+            'types' => $types,
         ));
     }
 

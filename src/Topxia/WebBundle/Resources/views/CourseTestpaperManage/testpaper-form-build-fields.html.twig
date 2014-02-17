@@ -38,16 +38,21 @@
   <style>.testpaper-question-option-item{margin-left:-12px;margin-bottom:5px;}</style>
   <div class="col-md-2 control-label"><label>题目设置</label></div>
   <div class="col-md-8 controls" id="testpaper-question-options">
-    {% for key, type in dict('questionType') %}
+    {% for type in types %}
       <div class="testpaper-question-option-item">
-          <button type="button" class="btn btn-link testpaper-question-option-item-sort-handler"><span class="glyphicon glyphicon-move hidden-lt-ie8"></span></button>
-          <span>{{type}}</span>
+          <button type="button" class="btn btn-link testpaper-question-option-item-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
+          <span style="min-width:85px;display:inline-block;_display:inline;">{{type.name}}</span>
           
-          <span class="mll">题目数量:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number mrl" name="counts[{{key}}]"  value="0" />
+          <span class="mlm">题目数量:</span>
+          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{type.key}}]"  value="0" />
 
-          <span class="mll">题目分值:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-score" name="scores[{{key}}]"  value="2" />
+          <span class="mlm">题目分值:</span>
+          <input type="text" class="form-control width-input width-input-mini input-sm item-score" name="scores[{{type.key}}]"  value="2" />
+
+          {% if type.hasMissScore %}
+            <span class="mlm">漏选分值:</span>
+            <input type="text" class="form-control width-input width-input-mini input-sm item-miss-score" name="missScores[{{type.key}}]"  value="0" />
+          {% endif %}
       </div>
 
     {% endfor %}
