@@ -177,14 +177,24 @@ define(function(require, exports, module) {
             });
 
             $form.find('.item-miss-score').each(function() {
-                var score = $(this).val();
+                var missScore = $(this).val();
 
-                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(missScore)) {
                     Notify.danger('题目漏选分值只能填写数字，且最多一位小数。');
                     $(this).focus();
                     isOk = false;
                     return false;
                 }
+
+                var score=$(this).parent().find('.item-score').val();
+
+                if (Number(missScore) > Number(score)) {
+                    Notify.danger('题目漏选分值不能大于题目分值。');
+                    isOk = false;
+                    $(this).focus();
+                    return false;
+                }
+
             });
 
 
