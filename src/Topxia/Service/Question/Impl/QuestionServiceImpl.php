@@ -237,7 +237,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $favorite = array(
             'questionId' => $questionId,
-            'targetType' => $target,
+            'target' => $target,
             'userId' => $userId
         );
 
