@@ -275,7 +275,11 @@ class CourseTestpaperManageController extends BaseController
         }
 
         $conditions = $request->query->all();
-        $conditions['target'] = "course-{$courseId}";
+
+        if (empty($conditions['target'])) {
+            $conditions['targetPrefix'] = "course-{$course['id']}";
+        }
+
         $conditions['parentId'] = 0;
         $conditions['excludeIds'] = empty($conditions['excludeIds']) ? array() : explode(',', $conditions['excludeIds']);
 
@@ -322,7 +326,6 @@ class CourseTestpaperManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-
         $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
         if (empty($question)) {
             throw $this->createNotFoundException();
@@ -334,11 +337,14 @@ class CourseTestpaperManageController extends BaseController
             $subQuestions = array();
         }
 
+        $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-picked.html.twig', array(
             'course'    => $course,
             'testpaper' => $testpaper,
             'question' => $question,
             'subQuestions' => $subQuestions,
+            'targets' => $targets,
         ));
 
     }
