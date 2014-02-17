@@ -30,11 +30,11 @@ class QuestionUpgradeCommand extends BaseCommand
 
         foreach ($oldQuestions as $oldQuestion) {
 
-            if ($oldQuestion['target'] == 'course'){
+            if ($oldQuestion['targetType'] == 'course'){
                 $newQuestion = array(
                     'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
                 );
-            } elseif ($oldQuestion['target'] == 'lesson'){
+            } elseif ($oldQuestion['targetType'] == 'lesson'){
 
                 $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldQuestion['targetId']));
 
@@ -43,7 +43,7 @@ class QuestionUpgradeCommand extends BaseCommand
                 );
             }
 
-            $connection->update('question', $newQuestion);
+            $connection->update('question', $newQuestion, array('id'=>$oldQuestion['id']));
         }
 
 
@@ -58,7 +58,7 @@ class QuestionUpgradeCommand extends BaseCommand
                 'target' => $oldQuestion_category['targetType']."-".$oldQuestion_category['targetId']
             );
 
-            $connection->update('question', $newQuestion_category);
+            $connection->update('question_category', $newQuestion_category, array('id'=>$oldQuestion_category['id']));
         }
 
 
@@ -70,11 +70,11 @@ class QuestionUpgradeCommand extends BaseCommand
 
         foreach ($oldQuestions as $oldQuestion) {
 
-            if ($oldQuestion['target'] == 'course'){
+            if ($oldQuestion['targetType'] == 'course'){
                 $newQuestion = array(
                     'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
                 );
-            } elseif ($oldQuestion['target'] == 'lesson'){
+            } elseif ($oldQuestion['targetType'] == 'lesson'){
 
                 $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldQuestion['targetId']));
 
@@ -83,7 +83,7 @@ class QuestionUpgradeCommand extends BaseCommand
                 );
             }
 
-            $connection->update('question', $newQuestion);
+            $connection->update('question_favorite', $newQuestion, array('id'=>$oldQuestion['id']));
         }
 
 
@@ -98,7 +98,7 @@ class QuestionUpgradeCommand extends BaseCommand
                 'target' => $oldTestpaper['targetType']."-".$oldTestpaper['targetId']
             );
 
-            $connection->update('question', $newTestpaper);
+            $connection->update('testpaper', $newTestpaper, array('id'=>$oldTestpaper['id']));
         }
 
 
@@ -109,11 +109,11 @@ class QuestionUpgradeCommand extends BaseCommand
 
         foreach ($oldTestpaperResults as $oldTestpaperResult) {
 
-            if ($oldTestpaperResult['target'] == 'course'){
+            if ($oldTestpaperResult['targetType'] == 'course'){
                 $newTestpaperResult = array(
                     'target' => $oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
                 );
-            } elseif ($oldTestpaperResult['target'] == 'lesson'){
+            } elseif ($oldTestpaperResult['targetType'] == 'lesson'){
 
                 $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldTestpaperResult['targetId']));
 
@@ -122,7 +122,7 @@ class QuestionUpgradeCommand extends BaseCommand
                 );
             }
 
-            $connection->update('question', $newTestpaperResult);
+            $connection->update('testpaper_result', $newTestpaperResult, array('id'=>$oldTestpaperResult['id']));
         }
 
     }
