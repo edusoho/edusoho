@@ -88,7 +88,7 @@ define(function(require, exports, module) {
                 var tr = "<tr>";
                     tr += "<td>" + statsItem.name + "</td>";
                     tr += "<td>" + statsItem.count + "</td>";
-                    tr += "<td>" + statsItem.score + "</td>";
+                    tr += "<td>" + statsItem.score.toFixed(1) + "</td>";
                     tr += "</tr>";
                 html += tr;
             });
@@ -101,9 +101,9 @@ define(function(require, exports, module) {
         refreshTestpaperStats: function() {
             var type = this.get('currentType');
             var stats = this._calTestpaperStats();
-            var html = '试卷总分<strong>' + stats.total.score + '</strong>分';
+            var html = '试卷总分<strong>' + stats.total.score.toFixed(1) + '</strong>分';
             html += ' <span class="stats-part">';
-            html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score + '</strng>分';
+            html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score.toFixed(1) + '</strng>分';
             $("#testpaper-stats").html(html);
         },
 
@@ -116,7 +116,7 @@ define(function(require, exports, module) {
                 stats[type] = {name:name, count:0, score:0};
                 $("#testpaper-items-" + type).find('[name="scores[]"][type=text]').each(function() {
                     stats[type]['count'] ++;
-                    stats[type]['score'] += parseInt($(this).val());
+                    stats[type]['score'] += parseFloat($(this).val());
                 });
             });
 
