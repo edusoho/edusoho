@@ -95,8 +95,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function deleteFile($file)
     {
-    	$file = $this->getFile($file);
-
         $keys = array($file['hashId']);
         $keyPrefixs = array();
         foreach (array('sd', 'hd', 'shd') as $key) {
