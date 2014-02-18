@@ -62,7 +62,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     	throw $this->createServiceException('本地文件暂不支持转换');
     }
 
-    public function deleteFile($file)
+    public function deleteFile($file, $deleteSubFile = true)
     {
     	$filename = $this->getFileFullPath($file);
     	@unlink($filename);

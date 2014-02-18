@@ -12,6 +12,6 @@ interface FileImplementor
 
     public function convertFile($file, $status, $result=null, $callback = null);
 
-    public function deleteFile($file);
+    public function deleteFile($file, $deleteSubFile = true);
 
 }
