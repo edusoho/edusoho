@@ -26,8 +26,7 @@ define(function(require, exports, module) {
 
          validator.addItem({
             element: '[name="customer_of_phone"]',
-            required: true,
-            rule: 'phone'
+            required: true
         });
 
     };
