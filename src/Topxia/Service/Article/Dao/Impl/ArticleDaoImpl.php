@@ -6,7 +6,7 @@ use Topxia\Service\Article\Dao\ArticleDao;
 
 class ArticleDaoImpl extends BaseDao implements ArticleDao
 {
-	protected $table = 'Article';
+	protected $table = 'article';
 
 	public function getArticle($id)
 	{

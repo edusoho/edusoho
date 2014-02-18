@@ -177,6 +177,13 @@ class ArticleController extends BaseController
         return $article;
     }
 
+    public function categoryAction(Request $request)
+    {
+        return $this->forward('TopxiaAdminBundle:ArticleCategory:embed', array(
+            'layout' => 'TopxiaAdminBundle:Article:layout.html.twig',
+        ));
+    }
+
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
@@ -185,6 +192,11 @@ class ArticleController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getCategoryService2()
+    {
+        return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
     private function getCategoryService()
