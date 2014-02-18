@@ -62,10 +62,12 @@
   </tr>
 
   <tr>
-    <th>姓别</th>
+    <th>性别</th>
     <td>
       {% if profile.gender %}
-        {{ profile.gender }}
+        {% if profile.gender == 'male' %}男性{% endif %}
+        {% if profile.gender == 'female' %}女性{% endif %}
+        {% if profile.gender == 'secret' %}秘密{% endif %}
       {% else %}
         暂无
       {% endif %}
