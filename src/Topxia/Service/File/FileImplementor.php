@@ -14,5 +14,4 @@ interface FileImplementor
 
     public function deleteFile($file);
 
-    public function deleteSubFile($file, $subFileHashId);
 }

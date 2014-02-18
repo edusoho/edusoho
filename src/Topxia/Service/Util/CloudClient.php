@@ -26,4 +26,6 @@ interface CloudClient
 
     public function convertVideo($bucket, $key, $commands, $notifyUrl);
 
+    public function deleteFiles(array $keys, array $prefixs = array());
+
 }

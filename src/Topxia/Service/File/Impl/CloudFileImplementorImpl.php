@@ -93,35 +93,20 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function deleteSubFile($file,$subFileHashId)
-    {
-        $file = $this->getFile($file);
-        if(empty($file['metas2'])){
-            return;
-        } 
-        foreach ($file['metas2'] as $key => $value) {
-            if($subFileHashId==$value['key']){
-               $this->getCloudClient()->removeFile($subFileHashId);
-               unset($file['metas2'][$key]);
-               break;
-            }
-        } 
-        $file['metas2'] = $this->encodeMetas($file['metas2']);
-        return $file;             
-    }
-
     public function deleteFile($file)
     {
-        return ;
     	$file = $this->getFile($file);
-        if(empty($file['metas2'])){
-            return;
-        }
-        foreach ($file['metas2'] as $key => $value) {
-            $this->getCloudClient()->removeFile($value['key']);
-        }
-        $this->getCloudClient()->removeFile($file['hashId']);
 
+        $keys = array($file['hashId']);
+        $keyPrefixs = array();
+        foreach (array('sd', 'hd', 'shd') as $key) {
+            if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
+                continue ;
+            }
+            $keyPrefixs[] = $file['metas2'][$key]['key'];
+        }
+
+        $this->getCloudClient()->deleteFiles($keys, $keyPrefixs);
     }
 
     private function getFileFullName($file)
