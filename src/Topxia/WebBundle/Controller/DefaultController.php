@@ -124,7 +124,7 @@ class DefaultController extends BaseController
 
         //答疑动态
         $answerLogs=$this->getLogService()->searchLogs(array('startDateTime'=>'',
-            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,7);
+            'endDateTime'=>'','level'=>'','moudule'=>'course','action'=>'teacher_post'),'created',0,6);
         $answerLogUserIds=ArrayToolkit::column($answerLogs,'userId');
         $answerLogUsers=$this->getUserService()->findUsersByIds($answerLogUserIds); 
        
