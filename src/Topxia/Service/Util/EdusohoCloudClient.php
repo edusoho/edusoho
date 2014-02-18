@@ -193,8 +193,6 @@ class EdusohoCloudClient implements CloudClient
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
-        var_dump($result);exit();
-
         return json_decode($result, true);
     }
 
