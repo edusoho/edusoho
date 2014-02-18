@@ -188,6 +188,8 @@ class CourseQuestionManageController extends BaseController
      */
     public function previewAction (Request $request, $courseId, $id)
     {
+        $isNewWindow = $request->query->get('isNew');
+
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $question = $this->getQuestionService()->getQuestion($id);
@@ -218,6 +220,14 @@ class CourseQuestionManageController extends BaseController
 
         $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
         $questionPreview = true;
+
+        if($isNewWindow){
+            return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview.html.twig', array(
+                'item' => $item,
+                'type' => $type,
+                'questionPreview' => $questionPreview
+            ));
+        }
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
             'item' => $item,

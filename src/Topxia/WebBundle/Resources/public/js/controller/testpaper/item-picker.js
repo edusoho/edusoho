@@ -37,6 +37,12 @@ define(function(require, exports, module) {
             
         });
 
+
+        $("#testpaper-item-picker-table").on('click', '.newWindowPreview', function() {
+            window.open($(this).data('url'), '_blank',
+                "directories=0,height=580,width=820,toolbar=0,status=0,menubar=0,location=0");
+        });
+
     }
 
 });

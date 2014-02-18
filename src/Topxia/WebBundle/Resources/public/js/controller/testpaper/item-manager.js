@@ -133,8 +133,6 @@ define(function(require, exports, module) {
 
         onClickPickItem: function(e) {
             var $btn = $(e.currentTarget);
-            console.log(this.get('currentType'));
-            console.log($btn.data('url'));
 
             var excludeIds = [];
             $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
