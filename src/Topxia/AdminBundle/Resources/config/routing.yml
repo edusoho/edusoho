@@ -286,6 +286,10 @@ admin_course_category:
     pattern: /course/category
     defaults: { _controller: TopxiaAdminBundle:Course:category }
 
+admin_article_category:
+    pattern: /article/category
+    defaults: { _controller: TopxiaAdminBundle:Article:category }
+
 admin_course_disk:
     pattern: /course/disk
     defaults: { _controller: TopxiaAdminBundle:CourseDisk:index }
@@ -493,6 +497,10 @@ admin_category_create:
     pattern:  /category/create
     defaults: { _controller: TopxiaAdminBundle:Category:create }
 
+admin_article_category_create:
+    pattern:  /Articlecategory/create
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:create }
+
 admin_category_checkcode:
     pattern:  /category/checkcode
     defaults: { _controller: TopxiaAdminBundle:Category:checkCode }
@@ -500,6 +508,10 @@ admin_category_checkcode:
 admin_category_edit:
     pattern:  /category/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Category:edit }
+
+admin_article_category_edit:
+    pattern:  /category/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:edit }
 
 admin_category_delete:
     pattern:  /category/{id}/delete
