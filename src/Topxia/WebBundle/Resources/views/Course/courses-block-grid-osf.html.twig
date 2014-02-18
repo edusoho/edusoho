@@ -8,12 +8,12 @@
           <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb ">
           
           <div class="phm">         
-              <div class="text-size-13 pvm phs mvz  text-weight-800">{{ course.title }}</div>
+              <div class="text-size-12 pvm phs mvz  text-weight-800">{{ course.title }}</div>
 
               {% if mode in ['default', 'teach'] %}
                 <div class="pvs phs mvz bor-t text-size-12 text-color-999 clearfix">
                   <div class="pull-left ">
-                    <p class="">价格</p>
+                 
                     {% if course.price > 0 %}
                       <p class="text-size-15  text-color-red-e5 text-weight ">{{ course.price }}元</p>
                     {% else %}
@@ -24,7 +24,7 @@
                 
 
                   <div class="pull-right ">
-                    <p class="meta-label">学生</p>
+                   
                     <p class="student-num">{{ course.studentNum }}人</p>
                   </div>
 
