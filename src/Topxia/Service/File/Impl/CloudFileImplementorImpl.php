@@ -34,6 +34,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['filename'] = $fileInfo['filename'];
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
         $uploadFile['size'] = (int) $fileInfo['size'];
+        $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
 
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
         $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
