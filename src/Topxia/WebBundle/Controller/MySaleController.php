@@ -157,7 +157,7 @@ class MySaleController extends BaseController
 
             $linksale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$linksale['mTookeen'];
 
-            $linksale['validTime']=$course['saleValidTime'];
+            $linksale['validTime']=0;//优惠有效期
 
             $linksale['partnerId']=$user['id'];
           
@@ -229,7 +229,7 @@ class MySaleController extends BaseController
 
             $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
 
-            $linksale['validTime']=time()+time();
+            $linksale['validTime']=0;//优惠有效期
 
             $linksale['partnerId']=$user['id'];
           
