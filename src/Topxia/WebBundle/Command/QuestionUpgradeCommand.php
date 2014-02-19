@@ -102,7 +102,7 @@ class QuestionUpgradeCommand extends BaseCommand
             }
 
         }catch(\Exception $e){
-            $this->getConnection()->rollback();
+            $connection->rollback();
             throw $e;
         }
 
