@@ -131,6 +131,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         if (isset($conditions['targets']) and is_array($conditions['targets'])) {
             $targets = array();
             foreach ($conditions['targets'] as $target) {
+                if (empty($target)) {
+                    continue;
+                }
                 if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $target)) {
                     $targets[] = $target;
                 }

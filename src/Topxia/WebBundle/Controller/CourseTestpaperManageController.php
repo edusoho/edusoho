@@ -45,10 +45,9 @@ class CourseTestpaperManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $fields['ranges'] = explode(',', $fields['ranges']);
+            $fields['ranges'] = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
             $fields['target'] = "course-{$course['id']}";
             $fields['pattern'] = 'QuestionType';
-            // var_dump($fields);exit();
             list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
             return $this->redirect($this->generateUrl('course_manage_testpaper_items',array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
@@ -77,7 +76,7 @@ class CourseTestpaperManageController extends BaseController
 
         $data = $request->request->all();
         $data['target'] = "course-{$course['id']}";
-        $data['ranges'] = explode(',', $data['ranges']);
+        $fields['ranges'] = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
         $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);
     }
