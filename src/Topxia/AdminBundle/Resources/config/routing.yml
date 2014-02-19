@@ -627,8 +627,6 @@ admin_sale_offsale:
     pattern: /sale/offsale
     defaults: { _controller: TopxiaAdminBundle:OffSale:index }
 
-
-
 admin_sale_offsale_create:
     pattern: /sale/offsale/create
     defaults: { _controller: TopxiaAdminBundle:OffSale:create }

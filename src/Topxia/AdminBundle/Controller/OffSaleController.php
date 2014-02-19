@@ -82,7 +82,7 @@ class OffSaleController extends BaseController
 
             $this->getOffSaleService()->createOffSales($offsetting);
             
-            return $this->redirect($this->generateUrl('admin_sale')); 
+            return $this->redirect($this->generateUrl('admin_sale_offsale')); 
         }
 
         $offsetting = array(

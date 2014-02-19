@@ -238,7 +238,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
                 
         }
 
-        if(empty($offsale['validTime'])?false:time() > $offsale['validTime']){
+        if(empty($offsale['validTimeNum'])?false:time() > $offsale['validTimeNum']){
             return "该优惠码已过期";
         }
 
