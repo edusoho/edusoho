@@ -403,7 +403,7 @@ define(function(require, exports, module) {
                 } else {
                     return false;
                 }
-            }, '{{display}}只能是<=题目分数、且>=0的整数或者浮点数');
+            }, '{{display}}只能是<=题目分数、且>=0的整数或者1位小数');
         }
 
         $('[name^="score_"]').each(function(){

@@ -23,16 +23,10 @@ class QuestionUpgradeCommand extends BaseCommand
         $connection = $this->getContainer()->get('database_connection');
 
         $connection->beginTransaction();
-        try{
-
-
-            $sql = "ALTER TABLE  `question` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
+        try {
 
             $oldQuestions = $connection->fetchAll("select * from question;");
-
             foreach ($oldQuestions as $oldQuestion) {
-
                 $newQuestion = array();
                 if ($oldQuestion['targetType'] == 'course'){
                     $newQuestion = array(
@@ -47,50 +41,32 @@ class QuestionUpgradeCommand extends BaseCommand
                         );
                     }
                 }
-
                 if ($newQuestion) {
                     $connection->update('question', $newQuestion, array('id'=>$oldQuestion['id']));
                 }
             }
 
-
-            $sql = "ALTER TABLE  `question_category` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldQuestion_categorys = $connection->fetchAll("select * from question_category;");
-
             foreach ($oldQuestion_categorys as $oldQuestion_category) {
-
                 $newQuestion_category = array(
                     'target' => $oldQuestion_category['targetType']."-".$oldQuestion_category['targetId']
                 );
-
                 $connection->update('question_category', $newQuestion_category, array('id'=>$oldQuestion_category['id']));
             }
 
 
-
-            $sql = "ALTER TABLE  `question_favorite` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldQuestions = $connection->fetchAll("select * from question_favorite;");
-
             foreach ($oldQuestions as $oldQuestion) {
 
                 $newQuestion = array(
                     'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
                 );
-                
 
                 $connection->update('question_favorite', $newQuestion, array('id'=>$oldQuestion['id']));
             }
 
 
-            $sql = "ALTER TABLE  `testpaper` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldTestpapers = $connection->fetchAll("select * from testpaper;");
-
             foreach ($oldTestpapers as $oldTestpaper) {
 
                 $newTestpaper = array(
@@ -101,11 +77,7 @@ class QuestionUpgradeCommand extends BaseCommand
             }
 
 
-            $sql = "ALTER TABLE  `testpaper_result` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldTestpaperResults = $connection->fetchAll("select * from testpaper_result;");
-
             foreach ($oldTestpaperResults as $oldTestpaperResult) {
 
                 $newTestpaperResult = array();
@@ -127,7 +99,6 @@ class QuestionUpgradeCommand extends BaseCommand
                 if ($newTestpaperResult) {
                     $connection->update('testpaper_result', $newTestpaperResult, array('id'=>$oldTestpaperResult['id']));
                 }
-
             }
 
         }catch(\Exception $e){
