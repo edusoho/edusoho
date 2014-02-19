@@ -351,6 +351,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $accuracyResult = array(
             'right' => 0,
+            'partRight' => 0,
             'wrong' => 0,
             'noAnswer' => 0,
             'all' => 0,
@@ -386,6 +387,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     if ($v['question']['testResult']['status'] == 'right'){
                         $accuracy['material']['right']++;
                     }
+                    if ($v['question']['testResult']['status'] == 'partRight'){
+                        $accuracy['material']['partRight']++;
+                    }
                     if ($v['question']['testResult']['status'] == 'wrong'){
                         $accuracy['material']['wrong']++;
                     }
@@ -401,6 +405,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $accuracy[$item['questionType']]['all']++;
                 if ($item['question']['testResult']['status'] == 'right'){
                     $accuracy[$item['questionType']]['right']++;
+                }
+                if ($item['question']['testResult']['status'] == 'partRight'){
+                    $accuracy[$item['questionType']]['partRight']++;
                 }
                 if ($item['question']['testResult']['status'] == 'wrong'){
                     $accuracy[$item['questionType']]['wrong']++;
