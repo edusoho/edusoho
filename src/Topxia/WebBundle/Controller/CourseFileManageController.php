@@ -37,15 +37,13 @@ class CourseFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $updatedUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'updatedUserId'));
-        $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'createdUserId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
             'courseLessons' => $courseLessons,
-            'updatedUsers' => $updatedUsers,
-            'createdUsers' => $createdUsers,
+            'users' => ArrayToolkit::index($users, 'id'),
             'paginator' => $paginator
         ));
     }
