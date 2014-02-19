@@ -768,7 +768,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $target = explode('-', $paper['target']);
 
         if ($target[0] == 'course') {
-            $targetId = explode('/', $targetType[1]);
+            $targetId = explode('/', $target[1]);
             $course = $this->getCourseService()->getCourse($targetId[0]);
 
             // @todo: 这个是有问题的。
