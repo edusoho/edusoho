@@ -103,7 +103,11 @@ define(function(require, exports, module) {
             var stats = this._calTestpaperStats();
             var html = '试卷总分<strong>' + stats.total.score.toFixed(1) + '</strong>分';
             html += ' <span class="stats-part">';
-            html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score.toFixed(1) + '</strng>分';
+            if (type == 'material') {
+                html += stats[type].name + '<strong>' + stats[type].count + '</strong>子题/<strong>' + stats[type].score.toFixed(1) + '</strng>分';
+            } else {
+                html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score.toFixed(1) + '</strng>分';
+            }
             $("#testpaper-stats").html(html);
         },
 

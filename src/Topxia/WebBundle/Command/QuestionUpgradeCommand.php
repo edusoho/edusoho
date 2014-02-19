@@ -33,6 +33,7 @@ class QuestionUpgradeCommand extends BaseCommand
 
             foreach ($oldQuestions as $oldQuestion) {
 
+                $newQuestion = array();
                 if ($oldQuestion['targetType'] == 'course'){
                     $newQuestion = array(
                         'target' => $oldQuestion['targetType']."-".$oldQuestion['targetId']
@@ -40,13 +41,16 @@ class QuestionUpgradeCommand extends BaseCommand
                 } elseif ($oldQuestion['targetType'] == 'lesson'){
 
                     $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldQuestion['targetId']));
-
-                    $newQuestion = array(
-                        'target' => 'course-'.$lesson['courseId']."/".$oldQuestion['targetType']."-".$oldQuestion['targetId']
-                    );
+                    if ($lesson) {
+                        $newQuestion = array(
+                            'target' => 'course-'.$lesson['courseId']."/".$oldQuestion['targetType']."-".$oldQuestion['targetId']
+                        );
+                    }
                 }
 
-                $connection->update('question', $newQuestion, array('id'=>$oldQuestion['id']));
+                if ($newQuestion) {
+                    $connection->update('question', $newQuestion, array('id'=>$oldQuestion['id']));
+                }
             }
 
 
@@ -104,20 +108,26 @@ class QuestionUpgradeCommand extends BaseCommand
 
             foreach ($oldTestpaperResults as $oldTestpaperResult) {
 
+                $newTestpaperResult = array();
                 if ($oldTestpaperResult['targetType'] == 'course'){
                     $newTestpaperResult = array(
                         'target' => $oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
                     );
-                } elseif ($oldTestpaperResult['targetType'] == 'lesson'){
+                } elseif ($oldTestpaperResult['targetType'] == 'lesson') {
 
                     $lesson = $connection->fetchAssoc("select * from course_lesson where id = ? ;", array($oldTestpaperResult['targetId']));
 
-                    $newTestpaperResult = array(
-                        'target' => 'course-'.$lesson['courseId']."/".$oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
-                    );
+                    if ($lesson) {
+                        $newTestpaperResult = array(
+                            'target' => 'course-'.$lesson['courseId']."/".$oldTestpaperResult['targetType']."-".$oldTestpaperResult['targetId']
+                        );
+                    }
                 }
 
-                $connection->update('testpaper_result', $newTestpaperResult, array('id'=>$oldTestpaperResult['id']));
+                if ($newTestpaperResult) {
+                    $connection->update('testpaper_result', $newTestpaperResult, array('id'=>$oldTestpaperResult['id']));
+                }
+
             }
 
         }catch(\Exception $e){
