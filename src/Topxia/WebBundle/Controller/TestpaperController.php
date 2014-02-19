@@ -201,10 +201,10 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-        $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
-
-
+       
+        if ($testpaperResult['userId'] != $this->getCurrentUser()->id){
+            $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+        }
 
         if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
             throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
