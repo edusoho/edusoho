@@ -169,7 +169,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['note']='本人定单不能享受佣金收入';
 
 
-            }else if (!empty($linksale['validTime']) and $linksale['validTimeNum']<time()){
+            }else if (!empty($linksale['validTimeNum']) and $linksale['validTimeNum']<time()){
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
@@ -188,7 +188,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                 if($linksale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= $order['price']*($linksale['adCommission']/100);
+                    $commission['commission']= ($order['price']*$linksale['adCommission'])/100;
 
                 }else if ($linksale['adCommissionType']=='quota'){
 
@@ -228,7 +228,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['note']='本人定单不能享受佣金收入';
 
 
-            }else if (!empty($offsale['validTime']) and $offsale['validTimeNum']<time()){
+            }else if (!empty($offsale['validTimeNum']) and $offsale['validTimeNum']<time()){
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
@@ -242,7 +242,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                 if($offsale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= $order['price']*($offsale['adCommission']/100);   
+                    $commission['commission']= ($order['price']*$offsale['adCommission'])/100;
 
                 }else if ($offsale['adCommissionType']=='quota'){
 
