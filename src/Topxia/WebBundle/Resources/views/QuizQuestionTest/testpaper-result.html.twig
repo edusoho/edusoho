@@ -18,7 +18,7 @@
     {% if paperResult.teacherSay %}
       <div class="alert alert-success">
         <div class=""><strong>评语：</strong></div>
-        <div class="mtm">{{ paperResult.teacherSay|raw }}</div>
+        <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
       </div>
     {% endif %}
   {% endif %}
@@ -35,12 +35,12 @@
 
           {% for type in paper.metas.question_type_seq %}
 
-            {% for question in questions[type] %}
-              {% if question.type != 'material' %}
-                <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and question.type == 'essay' %}checking{% else %}{{ question.testResult.status|default(null) }}{% endif %}">{{ question.seq }}</a>
+            {% for item in items[type] %}
+              {% if item.questionType != 'material' %}
+                <a href="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
               {% else %}
-                {% for question in question.questions|default([]) %}
-                  <a href="#question{{ question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and question.type == 'essay' %}checking{% else %}{{ question.testResult.status|default(null) }}{% endif %}">{{ question.seq }}</a>
+                {% for item in item.items|default([]) %}
+                  <a href="#question{{ item.question.id }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
                 {% endfor %}
               {% endif %}
               

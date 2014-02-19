@@ -10,61 +10,34 @@ use Topxia\Service\Quiz\Impl\QuestionSerialize;
 
 class MyQuestionController extends BaseController
 {
-	public function indexAction (Request $request)
-	{
-		$user = $this->getCurrentUser();
-
-        $paginator = new Paginator(
-            $request,
-            $this->getMyQuestionService()->findTestPaperResultsCountByUserId($user['id']),
-            10
-        );
-
-        $myTestPaperResults = $this->getMyQuestionService()->findTestPaperResultsByUserId(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $myTestPapersIds = ArrayToolkit::column($myTestPaperResults, 'testId');
-
-        $myTestPapers = $this->getMyQuestionService()->findTestPapersByIds($myTestPapersIds);
-        $myTestPapers = ArrayToolkit::index($myTestPapers, 'id');
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($myTestPapers, 'targetId'));
-
-        return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
-            'myQuizActive' => 'active',
-            'user' => $user,
-            'myTestPaperResults' => $myTestPaperResults,
-            'myTestPapers' => $myTestPapers,
-            'courses' => $courses,
-            'paginator' => $paginator
-        ));
-	}
-
     public function favoriteQuestionAction(Request $request ,$id)
     {
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
+        if ($request->getMethod() == 'POST') {
+            $targetType = $request->query->get('targetType');
+            $targetId = $request->query->get('targetId');
+            $target = $targetType."-".$targetId;
 
-        $user = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
 
-        $favorite = $this->getQuestionService()->favoriteQuestion($id, $targetType, $targetId, $user['id']);
-    
-        return $this->createJsonResponse(true);
+            $favorite = $this->getQuestionService()->favoriteQuestion($id, $target, $user['id']);
+        
+            return $this->createJsonResponse(true);
+        }
     }
 
     public function unFavoriteQuestionAction(Request $request ,$id)
     {
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
+        if ($request->getMethod() == 'POST') {
+            $targetType = $request->query->get('targetType');
+            $targetId = $request->query->get('targetId');
+            $target = $targetType."-".$targetId;
 
-        $user = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
 
-        $this->getQuestionService()->unFavoriteQuestion($id, $targetType, $targetId, $user['id']);
+            $this->getQuestionService()->unFavoriteQuestion($id, $target, $user['id']);
 
-        return $this->createJsonResponse(true);
+            return $this->createJsonResponse(true);
+        }
     }
 
     public function showFavoriteQuestionAction (Request $request)
@@ -73,11 +46,11 @@ class MyQuestionController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMyQuestionService()->findFavoriteQuestionsCountByUserId($user['id']),
+            $this->getQuestionService()->findFavoriteQuestionsCountByUserId($user['id']),
             10
         );
 
-        $favoriteQuestions = $this->getMyQuestionService()->findFavoriteQuestionsByUserId(
+        $favoriteQuestions = $this->getQuestionService()->findFavoriteQuestionsByUserId(
             $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -85,147 +58,89 @@ class MyQuestionController extends BaseController
  
         $questionIds = ArrayToolkit::column($favoriteQuestions, 'questionId');
 
-        $questions = $this->getMyQuestionService()->findFavoriteQuestionsByIds($questionIds);
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        // $questions = $this->formatQuestions($questions);
+        $myTestpaperIds = array();
 
-        $myTestPaperIds = array();
+        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($favoriteQuestions, 'target'));
+
         foreach ($favoriteQuestions as $key => $value) {
-            if ($value['targetType'] == 'testpaper'){
-                array_push($myTestPaperIds, $value['targetId']);
+            if ($targets[$value['target']]['type'] == 'testpaper'){
+                array_push($myTestpaperIds, $targets[$value['target']]['id']);
             }
         }
 
-        $myTestPapers = $this->getMyQuestionService()->findTestPapersByIds($myTestPaperIds);
+        $myTestpapers = $this->getTestpaperService()->findTestpapersByIds($myTestpaperIds);
  
         return $this->render('TopxiaWebBundle:MyQuiz:my-favorite-question.html.twig', array(
             'favoriteActive' => 'active',
             'user' => $user,
             'favoriteQuestions' => ArrayToolkit::index($favoriteQuestions, 'id'),
-            'testPapers' => ArrayToolkit::index($myTestPapers, 'id'),
+            'testpapers' => ArrayToolkit::index($myTestpapers, 'id'),
             'questions' => ArrayToolkit::index($questions, 'id'),
+            'targets' => $targets,
             'paginator' => $paginator
         ));
     }
 
-    public function listReviewingTestAction (Request $request)
+    public function previewAction (Request $request, $id)
     {
-        $user = $this->getCurrentUser();
+        $question = $this->getQuestionService()->getQuestion($id);
 
-        $teacherTests = $this->getMyQuestionService()->findTeacherTestPapersByTeacherId($user['id']);
+        $userId = $this->getCurrentUser()->id;
 
-        $testPaperIds = ArrayToolkit::column($teacherTests, 'id');
-
-        $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
-
-        $paginator = new Paginator(
-            $request,
-            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTestIds($testPaperIds, 'reviewing'),
-            10
-        );
-
-        $paperResults = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTestIds(
-            $testPaperIds,
-            'reviewing',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        
-        $testPaperIds = ArrayToolkit::column($paperResults, 'testId');
-
-        $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
-
-        $userIds = ArrayToolkit::column($paperResults, 'userId');
-
-        $users = $this->getMyQuestionService()->findUsersByIds($userIds);
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($testPapers, 'targetId'));
-
-        return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
-            'status' => 'reviewing',
-            'users' => ArrayToolkit::index($users, 'id'),
-            'paperResults' => $paperResults,
-            'courses' => ArrayToolkit::index($courses, 'id'),
-            'testPapers' => ArrayToolkit::index($testPapers, 'id'),
-            'teacher' => $user,
-            'paginator' => $paginator
-        ));
-    }
-
-    public function listFinishedTestAction (Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-
-        $paginator = new Paginator(
-            $request,
-            $this->getMyQuestionService()->findTestPaperResultCountByStatusAndTeacherIds(array($user['id']), 'finished'),
-            10
-        );
-
-        $paperResults = $this->getMyQuestionService()->findTestPaperResultsByStatusAndTeacherIds(
-            array($user['id']),
-            'finished',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        
-        $testPaperIds = ArrayToolkit::column($paperResults, 'testId');
-
-        $testPapers = $this->getMyQuestionService()->findTestPapersByIds($testPaperIds);
-
-        $userIds = ArrayToolkit::column($paperResults, 'userId');
-
-        $users = $this->getMyQuestionService()->findUsersByIds($userIds);
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($testPapers, 'targetId'));
-
-        return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
-            'status' => 'finished',
-            'users' => ArrayToolkit::index($users, 'id'),
-            'paperResults' => $paperResults,
-            'courses' => ArrayToolkit::index($courses, 'id'),
-            'testPapers' => ArrayToolkit::index($testPapers, 'id'),
-            'teacher' => $user,
-            'paginator' => $paginator
-        ));
-    }
-
-    private function formatQuestions ($questions)
-    {
-        $formatQuestions = array();
-
-        foreach ($questions as $key => $value) {
-
-            if(in_array($value['type'], array('single_choice', 'choice'))) {
-                $i = 65;
-                foreach ($value['choices'] as $key => $v) {
-                    $v['choiceIndex'] = chr($i);
-                    $value['choices'][$key] = $v;
-                    $i++;
-                }
-            }
-
-            
-            $formatQuestions[$value['id']] = $value;
+        if (empty($question)) {
+            throw $this->createNotFoundException('题目不存在！');
         }
 
-        return $formatQuestions;
+        $myFavorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($userId);
+
+        if (!in_array($question['id'], ArrayToolkit::column($myFavorites, 'questionId'))){
+            throw $this->createAccessDeniedException('无权预览非本人收藏的题目!');
+        }
+
+        $item = array(
+            'questionId' => $question['id'],
+            'questionType' => $question['type'],
+            'question' => $question
+        );
+
+        if ($question['type'] == 'material'){
+            $questions = $this->getQuestionService()->findQuestionsByParentId($id);
+
+            foreach ($questions as $value) {
+                $items[] = array(
+                    'questionId' => $value['id'],
+                    'questionType' => $value['type'],
+                    'question' => $value
+                );
+            }
+
+            $item['items'] = $items;
+        }
+
+        $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
+        $questionPreview = true;
+
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
+            'item' => $item,
+            'type' => $type,
+            'questionPreview' => $questionPreview
+        ));
     }
 
-
-	private function getMyQuestionService ()
+	private function getQuestionService ()
 	{
-		return $this->getServiceKernel()->createService('Quiz.MyQuestionService');
+		return $this->getServiceKernel()->createService('Question.QuestionService');
 	}
-
-    private function getQuestionService()
-    {
-        return $this->getServiceKernel()->createService('Quiz.QuestionService');
-    }
 
 	private function getCourseService ()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
 }

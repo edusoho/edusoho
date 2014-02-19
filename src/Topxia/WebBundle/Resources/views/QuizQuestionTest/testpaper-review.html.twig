@@ -28,13 +28,13 @@
 
           {% for type in types|default(paper.metas.question_type_seq) %}
 
-            {% for question in questions[type] %}
-              {% if question.type != 'material' %}
-                <a href="#question{{ question.id }}" class="btn btn-default btn-index {{ question.testResult.status }}">{{ question.seq }}</a>
+            {% for item in items[type] %}
+              {% if item.questionType != 'material' %}
+                <a href="#question{{ item.questionId }}" class="btn btn-default btn-index {{ item.question.testResult.status }}">{{ item.seq }}</a>
               {% else %}
-                {% for question in question.questions|default([]) %}
-                  {% if question.type == 'essay' %}
-                    <a href="#question{{ question.id }}" class="btn btn-default btn-index {{ question.testResult.status }}">{{ question.seq }}</a>
+                {% for item in item.items|default([]) %}
+                  {% if item.questionType == 'essay' %}
+                    <a href="#question{{ item.questionId }}" class="btn btn-default btn-index {{ item.question.testResult.status }}">{{ item.seq }}</a>
                   {% endif %}
                 {% endfor %}
               {% endif %}
@@ -47,7 +47,7 @@
 
         </div>
         <div class="panel-footer">
-          <button class="btn btn-success btn-block" id="finishCheck" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_test_teacher_finish_check') }}" data-post-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}">完成批阅</button>
+          <button class="btn btn-success btn-block" id="finishCheck">完成批阅</button>
         </div>
     </div>
   </div>

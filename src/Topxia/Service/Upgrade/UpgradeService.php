@@ -5,6 +5,8 @@ interface UpgradeService
 {
 	public function check();
 
+	public function repairProblem($token);
+
 	public function commit($id,$result);
 
 	public function checkEnvironment();

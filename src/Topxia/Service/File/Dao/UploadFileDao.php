@@ -12,6 +12,8 @@ interface UploadFileDao
 
 	public function findFilesByIds($ids);
 
+    public function findFilesCountByEtag($etag);
+
 	public function searchFiles($conditions, $sort, $start, $limit);
 
 	public function searchFileCount($conditions);

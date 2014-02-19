@@ -8,6 +8,7 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 {
 	CONST BASE_URL = 'http://www.edusoho.com/';
 	CONST CHECK_URL = 'upgrade/check';
+	CONST REPAIR_URL = 'upgrade/repair';
 	CONST COMMIT_URL = 'upgrade/commit';
 	CONST GET_URL = 'upgrade/get';
 
@@ -17,6 +18,24 @@ class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeSer
 		$postData['client'] = $this->getClientInfo();
 		$sendJsonData = json_encode($postData);
 		$ch = curl_init(self::BASE_URL.self::CHECK_URL);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($sendJsonData))
+		);
+		$result = json_decode(curl_exec($ch),true);
+		curl_close($ch);
+		return $result;
+	}
+
+	public function repairProblem($token)
+	{
+		$postData = array('token' => $token);
+		$postData['client'] = $this->getClientInfo();
+		$sendJsonData = json_encode($postData);
+		$ch = curl_init(self::BASE_URL.self::REPAIR_URL);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $sendJsonData);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

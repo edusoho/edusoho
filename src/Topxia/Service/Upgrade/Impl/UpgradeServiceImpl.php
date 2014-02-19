@@ -80,6 +80,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $this->getEduSohoUpgradeService()->check($packages);
 	}
 
+	public function repairProblem($token)
+	{
+		return $this->getEduSohoUpgradeService()->repairProblem($token);
+	}
+
 	public function hasLastError($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->getPackage($id);
@@ -108,16 +113,16 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if (!FileUtil::is_writable($this->getBackUpPath())){
 			$result[] = "备份目录{$this->getBackUpPath()})无写权限<br>";
 		}
-		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().'app')){
 			$result[] = 'app目录无写权限<br>';
 		}
-		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'src')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().'src')){
 			$result[] = 'src目录无写权限<br>';
 		}
-		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'web')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().'web')){
 			$result[] = 'web目录无写权限<br>';
 		}
-		if(!FileUtil::is_writable($this->getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache')){
+		if(!FileUtil::is_writable($this->getSystemRootPath().'app'.DIRECTORY_SEPARATOR.'cache')){
 			$result[] = 'app/cache目录无写权限<br>';
 		}	
 		return $result;

@@ -46,9 +46,6 @@
 
 	<div class="item-actions">
 	  {% if lesson.type != 'testpaper' %}
-		<button class="btn btn-link" title="添加测验" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_quiz', {courseId:course.id, lessonId:lesson.id}) }}" style="display:none;">
-			<span class="glyphicon glyphicon-list-alt"></span>
-		</button>
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
 		</button>
 	  {% endif %}
@@ -66,7 +63,7 @@
 	  	<button class="btn btn-link unpublish-lesson-btn" title="取消发布" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span></button>
 	  {% endif %}
 
-		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal"
+		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
 		  {% if lesson.type == 'testpaper' %}
 			  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% else %}

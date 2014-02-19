@@ -380,23 +380,15 @@ define(function(require, exports, module) {
         });
 
         //老师阅卷校验
+
+        $('#testpaper-checked-dialog').modal({
+            'show': false
+        });
         
         if ($('#teacherCheckForm').length > 0) {
             var validator = new Validator({
                 element: '#teacherCheckForm',
-                autoSubmit: false,
-                onFormValidated: function(error, results, $form) {
-                    if (error) {
-                        return false;
-                    }
-                    
-                    $.post($('#finishCheck').data('post-url'), $form.serialize(), function(response) {
-                        window.location.href = $('#finishCheck').data('goto');
-                    }).error(function(){
-
-                    });
-                }
-
+                autoSubmit: false
             });
 
             Validator.addRule('score', function(options) {
@@ -411,11 +403,7 @@ define(function(require, exports, module) {
                 } else {
                     return false;
                 }
-            }, '{{display}}只能是小于题目分数的数字');
-
-
-
-
+            }, '{{display}}只能是<=题目分数、且>=0的整数或者浮点数');
         }
 
         $('[name^="score_"]').each(function(){
@@ -428,7 +416,34 @@ define(function(require, exports, module) {
             });
         });
 
+        $('#finishCheck').on('click', function(){
+            validator.execute(function(error, results, element) {
+                if (error) {
+                    return false;
+                }
+                $('#testpaper-checked-dialog').modal('show');
+            });
+        });
 
+        $('#testpaper-teacherSay-select').change(function() {
+            var $option = $(this).find('option:checked');
+            if ($option.val() == '') {
+                $('#testpaper-teacherSay-input').val('');
+            } else {
+                $('#testpaper-teacherSay-input').val($option.text());
+            }
+        });
+
+        $('#testpaper-teacherSay-btn').on('click', function(){
+            val = $('#testpaper-teacherSay-input').val();
+            $('#teacherSay').val(val);
+
+            $form = $('#teacherCheckForm');
+
+            $.post($('#testpaper-teacherSay-btn').data('post-url'), $form.serialize(), function(response) {
+                window.location.href = $('#testpaper-teacherSay-btn').data('goto');
+            })
+        });
 
     };
 

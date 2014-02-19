@@ -12,8 +12,6 @@ define(function(require, exports, module) {
         attrs: {
             validator : null,
             form : null,
-            targets: [],
-            categories: [],
             stemEditorName: 'simple_noimage'
         },
 
@@ -22,14 +20,6 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            if ($('[data-role=targets-data]').length > 0) {
-                this.set('targets', $.parseJSON($('[data-role=targets-data]').html()));
-            }
-
-            if ($('[data-role=category-data]').length > 0) {
-                this.set('categories', $.parseJSON($('[data-role=category-data]').html()));
-            }
-
             this._initForm();
             this._initStemField();
             this._initAnalysisField();
@@ -67,7 +57,8 @@ define(function(require, exports, module) {
         },
 
         _initStemField: function() {
-            var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'));
+            var height = $('#question-stem-field').height();
+            var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'), {height:height});
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.sync();
             });
@@ -103,7 +94,6 @@ define(function(require, exports, module) {
         _createValidator: function($form){
             var self = this;
 
-            Validator.addRule('fillCheck',/(\[\[(.+?)\]\])/i, '请输入正确的答案,如今天是[[晴|阴|雨]]天.');
             Validator.addRule('score',/^(\d){1,10}$/i, '请输入正确的分值');
 
             validator = new Validator({
@@ -130,42 +120,6 @@ define(function(require, exports, module) {
             });
 
             return validator;
-        },
-
-        _onChangeCategories: function(categories) {
-            var options = "<option value=''>请选择类别</option>";
-            var selected = categories['default'] ? categories['default'] : '';
-
-            $.each(categories, function(index, category){
-                if (index == 'default') {
-                    return ;
-                }
-                if(category.id == selected){
-                    options += '<option selected=selected value=' + category.id + '>' + category.name + '</option>';
-                }else{
-                    options += '<option value=' + category.id + '>' + category.name + '</option>';
-                }
-            });
-
-            this.$('[data-role=category]').html(options);
-        },
-
-        _onChangeTargets: function(targets) {
-            var options = '';
-            var selected = targets['default'] ? targets['default'] : '';
-
-            $.each(targets, function(index, target){
-                if (index == 'default') {
-                    return ;
-                }
-                if(index == selected){
-                    options += '<option selected=selected value=' + index + '>' + target + '</option>';
-                }else{
-                    options += '<option value=' + index + '>' + target + '</option>';
-                }
-            });
-            
-            this.$('[data-role=target]').html(options);
         }
 
     });

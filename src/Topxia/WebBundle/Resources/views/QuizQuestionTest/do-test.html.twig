@@ -5,26 +5,34 @@
 
 {% for type in types|default(paper.metas.question_type_seq) %}
 
-{% if questions[type] != [] %}
+{% if items[type] != [] %}
 
 <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
-  <div class="panel-heading"><strong class="">{{dict('questionBlockType')[type]}}</strong>
+  <div class="panel-heading"><strong class="">{{dict('questionType')[type]}}</strong>
   	<small class="text-muted">共{{ total[type].number }}题，共{{ total[type].score }}分</small>
   </div>
   <div class="panel-body">
 
-		{% for question in questions[type] %}
+		{% for item in items[type] %}
 
-			{% if type in ['single_choice', 'choice'] %}
-				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-
+			{% if item.question.isDeleted|default(null) %}
+				<div class="testpaper-question testpaper-question-choice" id="question{{ item.questionId }}">
+					<div class="testpaper-question-body">
+						{% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+					</div>
+				</div>
 			{% else %}
 
-				{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+				{% if type in ['single_choice', 'choice', 'uncertain_choice'] %}
+					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+
+				{% else %}
+
+					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+
+				{% endif %}
 
 			{% endif %}
-
-
 		{% endfor %}
   </div>
 </div>
