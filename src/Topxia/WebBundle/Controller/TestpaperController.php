@@ -64,8 +64,8 @@ class TestpaperController extends BaseController
 
         $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
-        if (empty($course) or $course['status'] != 'published') {
-            return $this->createMessageResponse('info', '试卷所属课程不存在或未发布！');
+        if (empty($course)) {
+            return $this->createMessageResponse('info', '试卷所属课程不存在！');
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
@@ -116,8 +116,8 @@ class TestpaperController extends BaseController
 
         $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
-        if (empty($course) or $course['status'] != 'published') {
-            return $this->createMessageResponse('info', '试卷所属课程不存在或未发布！');
+        if (empty($course)) {
+            return $this->createMessageResponse('info', '试卷所属课程不存在！');
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
