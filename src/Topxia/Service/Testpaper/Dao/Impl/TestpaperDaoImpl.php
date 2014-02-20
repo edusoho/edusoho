@@ -96,9 +96,11 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions')
+            ->from($this->table, 'testpaper')
             ->andWhere('target = :target')
-            ->andWhere('target LIKE :targetLike');
+            ->andWhere('target LIKE :targetLike')
+            ->andWhere('status LIKE :status');
+            
 
         return $builder;
     }

@@ -31,9 +31,11 @@ class CourseQuestionManageController extends BaseController
                 return $this->redirect($this->generateUrl('course_manage_question',array('courseId' => $courseId)));
             }
 
+            $orderBy = array('createdTime' ,'ASC');
         } else {
             $conditions['parentId'] = 0;
             $parentQuestion = null;
+            $orderBy = array('createdTime' ,'DESC');
         }
 
         $paginator = new Paginator(
@@ -44,7 +46,7 @@ class CourseQuestionManageController extends BaseController
 
         $questions = $this->getQuestionService()->searchQuestions(
             $conditions,
-            array('createdTime' ,'DESC'),
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -186,6 +188,8 @@ class CourseQuestionManageController extends BaseController
      */
     public function previewAction (Request $request, $courseId, $id)
     {
+        $isNewWindow = $request->query->get('isNew');
+
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $question = $this->getQuestionService()->getQuestion($id);
@@ -214,9 +218,17 @@ class CourseQuestionManageController extends BaseController
             $item['items'] = $items;
         }
 
-        $type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
+        $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
         $questionPreview = true;
-// var_dump($item);exit();
+
+        if($isNewWindow){
+            return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview.html.twig', array(
+                'item' => $item,
+                'type' => $type,
+                'questionPreview' => $questionPreview
+            ));
+        }
+
         return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
             'item' => $item,
             'type' => $type,

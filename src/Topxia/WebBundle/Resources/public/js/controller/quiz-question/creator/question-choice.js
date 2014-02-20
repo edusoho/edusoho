@@ -77,7 +77,8 @@ define(function(require, exports, module) {
 
         deleteChoice: function(e){
             var $btn = $(e.currentTarget);
-            var id = '#' + $btn.parents('.input-group').find('input:first').attr('id');
+            var id = '#' + $btn.parents('.form-group').find('input.item-input').attr('id');
+
             this.get('validator').removeItem(id);
             $btn.parents('[data-role=choice]').remove();
             this.$('[data-role=choice]').each(function(index, item){

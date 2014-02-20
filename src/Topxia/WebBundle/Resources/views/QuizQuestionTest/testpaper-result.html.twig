@@ -18,7 +18,7 @@
     {% if paperResult.teacherSay %}
       <div class="alert alert-success">
         <div class=""><strong>评语：</strong></div>
-        <div class="mtm">{{ paperResult.teacherSay|raw }}</div>
+        <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
       </div>
     {% endif %}
   {% endif %}

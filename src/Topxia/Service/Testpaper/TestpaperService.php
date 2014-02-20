@@ -33,7 +33,7 @@ interface TestpaperService
 
     public function findTestpaperResultsCountByUserId ($id);
 
-    public function findTestpaperResultsByTestpaperIdAndUserId($testpaperId, $userId);
+    public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
 
     public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
 
@@ -89,8 +89,6 @@ interface TestpaperService
      */
     public function getTestpaperItems($testpaperId);
 
-    public function addItem($testpaperId, $questionId, $afterItemId = null);
-
-    public function replaceItem($testpaperId, $itemId, $questionId);
+    public function updateTestpaperItems($testpaperId, $items);
 
 }

@@ -26,6 +26,8 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
                 continue;
             }
 
+            $missScore = empty($options['missScores'][$type]) ? 0 :  intval($options['missScores'][$type]);
+
             if ($options['mode'] == 'difficulty') {
                 $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
 
@@ -35,9 +37,9 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
                 // 选择的Question不足的话，补足
                 $selectedQuestions = $this->fillQuestionsToNeedCount($selectedQuestions, $typedQuestions[$type], $needCount);
 
-                $itemsOfType = $this->convertQuestionsToItems($testpaper, $selectedQuestions, $needCount, $options['scores'][$type]);
+                $itemsOfType = $this->convertQuestionsToItems($testpaper, $selectedQuestions, $needCount, $options);
             } else {
-                $itemsOfType = $this->convertQuestionsToItems($testpaper, $typedQuestions[$type], $needCount, $options['scores'][$type]);
+                $itemsOfType = $this->convertQuestionsToItems($testpaper, $typedQuestions[$type], $needCount, $options);
             }
             $items = array_merge($items, $itemsOfType);
         }
@@ -61,10 +63,15 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
 
         if (count($selectedQuestions) < $needCount) {
             $stillNeedCount = $needCount - count($selectedQuestions);
+        } else {
+            $stillNeedCount = 0;
         }
 
-        $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
-        $selectedQuestions = array_merge($selectedQuestions, $questions);
+        if ($stillNeedCount) {
+            $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
+            $selectedQuestions = array_merge($selectedQuestions, $questions);
+        }
+
 
         return $selectedQuestions;
     }
@@ -129,32 +136,34 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
-    private function convertQuestionsToItems($testpaper, $questions, $count, $score)
+    private function convertQuestionsToItems($testpaper, $questions, $count, $options)
     {
         $items = array();
         for ($i=0; $i<$count; $i++) {
             $question = $questions[$i];
-            $items[] = $this->makeItem($testpaper, $question, $score);
+            $score = empty($options['scores'][$question['type']]) ? 0 : $options['scores'][$question['type']];
+            $missScore = empty($options['missScores'][$question['type']]) ? 0 : $options['missScores'][$question['type']];
+            $items[] = $this->makeItem($testpaper, $question, $score, $missScore);
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id'], 0, $question['subCount']);
                 foreach ($subQuestions as $subQuestion) {
-                    $items[] = $this->makeItem($testpaper, $subQuestion, $score);
+                    $missScore = empty($options['missScores'][$subQuestion['type']]) ? 0 : $options['missScores'][$subQuestion['type']];
+                    $items[] = $this->makeItem($testpaper, $subQuestion, $score, $missScore);
                 }
             }
         }
         return $items;
     }
 
-    private function makeItem($testpaper, $question, $score)
+    private function makeItem($testpaper, $question, $score, $missScore)
     {
-        //@todo misssScore, wellming.
         return array(
             'testId' => $testpaper['id'],
             'questionId' => $question['id'],
             'questionType' => $question['type'],
             'parentId' => $question['parentId'],
             'score' => $score,
-            'missScore' => 0,
+            'missScore' => $missScore,
         );
     }
 

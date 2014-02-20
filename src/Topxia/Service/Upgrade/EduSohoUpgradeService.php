@@ -7,4 +7,5 @@ interface EduSohoUpgradeService
 	public function commit($id,$result);
 	public function downloadPackage($uri,$filename);
 	public function getPackage($packId);
+    public function repairProblem($token);
 }
