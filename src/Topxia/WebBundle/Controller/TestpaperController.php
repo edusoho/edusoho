@@ -56,6 +56,22 @@ class TestpaperController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        if ($targets[$testpaper['target']]['type'] != 'course') {
+            throw $this->createAccessDeniedException('试卷只能属于课程');
+        }
+
+        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+
+        if (empty($course) or $course['status'] != 'published') {
+            return $this->createMessageResponse('info', '试卷所属课程不存在或未发布！');
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $this->createMessageResponse('info', '不是试卷所属课程老师或学生');
+        }
+
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
         }
@@ -91,6 +107,22 @@ class TestpaperController extends BaseController
         $userId = $this->getCurrentUser()->id;
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        if ($targets[$testpaper['target']]['type'] != 'course') {
+            throw $this->createAccessDeniedException('试卷只能属于课程');
+        }
+
+        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+
+        if (empty($course) or $course['status'] != 'published') {
+            return $this->createMessageResponse('info', '试卷所属课程不存在或未发布！');
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $this->createMessageResponse('info', '不是试卷所属课程老师或学生');
+        }
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
