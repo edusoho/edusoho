@@ -118,9 +118,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight', 'groupId', 'parentId'));
+        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight'
+            ,'parentId', 'publishArticle' ,'pagesize','seoTitle','seoKeyword'
+            ,'seoDesc','published','type','templateName','urlNameRule','comment'));
 
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加分类失败");
         }
 
@@ -246,13 +248,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                         }
                     }
                     break;
-                case 'groupId':
-                    $category['groupId'] = (int) $category['groupId'];
-                    $group = $this->getGroup($category['groupId']);
-                    if (empty($group)) {
-                        throw $this->createServiceException("分类分组ID({$category['groupId']})不存在，保存分类失败");
-                    }
-                    break;
+                // case 'groupId':
+                //     $category['groupId'] = (int) $category['groupId'];
+                //     $group = $this->getGroup($category['groupId']);
+                //     if (empty($group)) {
+                //         throw $this->createServiceException("分类分组ID({$category['groupId']})不存在，保存分类失败");
+                //     }
+                //     break;
                 case 'parentId':
                     $category['parentId'] = (int) $category['parentId'];
                     if ($category['parentId'] > 0) {

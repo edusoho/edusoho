@@ -14,8 +14,10 @@ define(function(require, exports, module) {
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
+                    alert(11);
                     return ;
                 }
+                alert(22);
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);

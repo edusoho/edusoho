@@ -17,12 +17,12 @@ class ArticleCategoryController extends BaseController
 
     public function createAction(Request $request)
     {
-        
+
         if ($request->getMethod() == 'POST') {
             $category = $this->getCategoryService()->createCategory($request->request->all());
             return $this->renderTbody();
         }
-
+        // echo "string";exit();
         $category = array(
             'id' => 0,
             'name' => '',
@@ -31,7 +31,12 @@ class ArticleCategoryController extends BaseController
             // 'groupId' => (int) $request->query->get('groupId'),
             'parentId' => (int) $request->query->get('parentId', 0),
             'weight' => 0,
-            'publishArticle' => 1
+            'publishArticle' => 1,
+            'seoTitle' => '',
+            'seoKeyword' => '',
+            'seoDesc' => '',
+            'published' => 1
+            
         );
 
         return $this->render('TopxiaAdminBundle:Article_Category:modal.html.twig', array(
@@ -71,6 +76,7 @@ class ArticleCategoryController extends BaseController
     public function checkCodeAction(Request $request)
     {
         $code = $request->query->get('value');
+
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
