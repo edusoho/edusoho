@@ -183,12 +183,15 @@ define(function(require, exports, module) {
         });
 
         $('body').on('click', '#finishPaper', function(){
-            $finishBtn = $(this);
+            $('#testpaper-finished-dialog').modal('show');
+        });
 
-            $.post($(this).data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
+        $('#testpaper-finish-btn').on('click', function(){
+            $finishBtn = $('#finishPaper');
+            $('#testpaper-finish-btn').button('saving');
+            $.post($finishBtn.data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $finishBtn.data('goto');
             });
-
         });
 
         $('body').on('click', '#suspend', function(){
