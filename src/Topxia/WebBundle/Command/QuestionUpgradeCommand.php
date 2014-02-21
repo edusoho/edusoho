@@ -24,10 +24,6 @@ class QuestionUpgradeCommand extends BaseCommand
 
         $connection->beginTransaction();
         try{
-
-            $sql = "ALTER TABLE  `question` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldQuestions = $connection->fetchAll("select * from question;");
 
             foreach ($oldQuestions as $oldQuestion) {
@@ -52,10 +48,6 @@ class QuestionUpgradeCommand extends BaseCommand
                 }
             }
 
-
-            $sql = "ALTER TABLE  `question_category` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldQuestion_categorys = $connection->fetchAll("select * from question_category;");
 
             foreach ($oldQuestion_categorys as $oldQuestion_category) {
@@ -66,11 +58,6 @@ class QuestionUpgradeCommand extends BaseCommand
 
                 $connection->update('question_category', $newQuestion_category, array('id'=>$oldQuestion_category['id']));
             }
-
-
-
-            $sql = "ALTER TABLE  `question_favorite` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
 
             $oldQuestions = $connection->fetchAll("select * from question_favorite;");
 
@@ -85,9 +72,6 @@ class QuestionUpgradeCommand extends BaseCommand
             }
 
 
-            $sql = "ALTER TABLE  `testpaper` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
-
             $oldTestpapers = $connection->fetchAll("select * from testpaper;");
 
             foreach ($oldTestpapers as $oldTestpaper) {
@@ -99,9 +83,6 @@ class QuestionUpgradeCommand extends BaseCommand
                 $connection->update('testpaper', $newTestpaper, array('id'=>$oldTestpaper['id']));
             }
 
-
-            $sql = "ALTER TABLE  `testpaper_result` ADD  `target` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' AFTER  `targetType`";
-            $connection->executeUpdate($sql);
 
             $oldTestpaperResults = $connection->fetchAll("select * from testpaper_result;");
 
