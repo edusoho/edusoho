@@ -189,6 +189,7 @@ define(function(require, exports, module) {
         $('#testpaper-finish-btn').on('click', function(){
             $finishBtn = $('#finishPaper');
             $('#testpaper-finish-btn').button('saving');
+            $('#testpaper-finish-btn').attr('disabled', 'disabled');
             $.post($finishBtn.data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $finishBtn.data('goto');
             });
