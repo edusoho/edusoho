@@ -15,10 +15,11 @@ class MyQuestionController extends BaseController
         if ($request->getMethod() == 'POST') {
             $targetType = $request->query->get('targetType');
             $targetId = $request->query->get('targetId');
+            $target = $targetType."-".$targetId;
 
             $user = $this->getCurrentUser();
 
-            $favorite = $this->getQuestionService()->favoriteQuestion($id, $targetType, $targetId, $user['id']);
+            $favorite = $this->getQuestionService()->favoriteQuestion($id, $target, $user['id']);
         
             return $this->createJsonResponse(true);
         }
@@ -29,10 +30,11 @@ class MyQuestionController extends BaseController
         if ($request->getMethod() == 'POST') {
             $targetType = $request->query->get('targetType');
             $targetId = $request->query->get('targetId');
+            $target = $targetType."-".$targetId;
 
             $user = $this->getCurrentUser();
 
-            $this->getQuestionService()->unFavoriteQuestion($id, $targetType, $targetId, $user['id']);
+            $this->getQuestionService()->unFavoriteQuestion($id, $target, $user['id']);
 
             return $this->createJsonResponse(true);
         }
@@ -59,9 +61,12 @@ class MyQuestionController extends BaseController
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $myTestpaperIds = array();
+
+        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($favoriteQuestions, 'target'));
+
         foreach ($favoriteQuestions as $key => $value) {
-            if ($value['targetType'] == 'testpaper'){
-                array_push($myTestpaperIds, $value['targetId']);
+            if ($targets[$value['target']]['type'] == 'testpaper'){
+                array_push($myTestpaperIds, $targets[$value['target']]['id']);
             }
         }
 
@@ -73,6 +78,7 @@ class MyQuestionController extends BaseController
             'favoriteQuestions' => ArrayToolkit::index($favoriteQuestions, 'id'),
             'testpapers' => ArrayToolkit::index($myTestpapers, 'id'),
             'questions' => ArrayToolkit::index($questions, 'id'),
+            'targets' => $targets,
             'paginator' => $paginator
         ));
     }
@@ -113,7 +119,7 @@ class MyQuestionController extends BaseController
             $item['items'] = $items;
         }
 
-        $type = $question['type'] == 'single_choice'? 'choice' : $question['type'];
+        $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
         $questionPreview = true;
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:question-preview-modal.html.twig', array(

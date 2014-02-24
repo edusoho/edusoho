@@ -143,7 +143,7 @@ CREATE TABLE `course_announcement` (
   `createdTime` int(10) NOT NULL,
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_chapter`;
 CREATE TABLE `course_chapter` (
@@ -154,7 +154,7 @@ CREATE TABLE `course_chapter` (
   `title` varchar(255) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_favorite`;
 CREATE TABLE `course_favorite` (
@@ -308,47 +308,6 @@ CREATE TABLE `course_order_refund` (
   `createdTime` int(10) unsigned NOT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `course_quiz`;
-CREATE TABLE `course_quiz` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `courseId` int(10) unsigned NOT NULL DEFAULT '0',
-  `lessonId` int(10) unsigned NOT NULL DEFAULT '0',
-  `itemIds` varchar(255) NOT NULL DEFAULT '' COMMENT '对应的题目Id',
-  `answerIds` varchar(255) NOT NULL DEFAULT '' COMMENT '对应的答案Id',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0',
-  `score` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '测验分数',
-  `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
-  `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='测验的数据库表,自动生成';
-
-DROP TABLE IF EXISTS `course_quiz_item`;
-CREATE TABLE `course_quiz_item` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `courseId` int(10) unsigned NOT NULL DEFAULT '0',
-  `lessonId` int(10) unsigned NOT NULL DEFAULT '0',
-  `description` text COMMENT '题目描述',
-  `choices` text COMMENT '课时测验的可选结果',
-  `answers` varchar(255) NOT NULL DEFAULT '' COMMENT '答案可以多个，用|竖线分割',
-  `level` enum('low','normal','high') NOT NULL COMMENT '难度等级',
-  `type` enum('single','multiple') NOT NULL COMMENT '问答题目类型',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '课时测验创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='单个测验题目所对应的数据库表';
-
-DROP TABLE IF EXISTS `course_quiz_item_answer`;
-CREATE TABLE `course_quiz_item_answer` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int(10) unsigned NOT NULL,
-  `quizId` int(10) unsigned NOT NULL,
-  `itemId` int(10) unsigned NOT NULL,
-  `answers` varchar(255) NOT NULL COMMENT '测验时用户提供的答案',
-  `isCorrect` tinyint(1) NOT NULL COMMENT '测验正确与否结果',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用于记录用户答题的数据库表，对应与item的内容';
 
 DROP TABLE IF EXISTS `course_review`;
 CREATE TABLE `course_review` (
@@ -532,14 +491,13 @@ CREATE TABLE `question` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(64) NOT NULL DEFAULT '',
   `stem` text COMMENT '题干',
-  `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分数',
+  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分数',
   `answer` text COMMENT '参考答案',
   `analysis` text COMMENT '解析',
   `metas` text COMMENT '题目元信息',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类别',
   `difficulty` varchar(64) NOT NULL DEFAULT 'normal',
-  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '从属于',
-  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '从属类型：课时、课程、科目',
+  `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
   `parentId` int(10) unsigned DEFAULT '0' COMMENT '材料父ID',
   `subCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子题数量',
   `finishedTimes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成次数',
@@ -554,25 +512,23 @@ DROP TABLE IF EXISTS `question_category`;
 CREATE TABLE `question_category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT '类别名称',
-  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '从属课程、科目id',
-  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '从属课程、科目',
+  `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `seq` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='题库类别表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库类别表';
 
 DROP TABLE IF EXISTS `question_favorite`;
 CREATE TABLE `question_favorite` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `questionId` int(10) unsigned NOT NULL DEFAULT '0',
-  `targetType` varchar(255) NOT NULL DEFAULT '',
-  `targetId` int(10) unsigned NOT NULL DEFAULT '0',
+  `target` varchar(255) NOT NULL DEFAULT '',
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `session`;
 CREATE TABLE `session` (
@@ -607,11 +563,9 @@ CREATE TABLE `testpaper` (
   `description` text COMMENT '试卷说明',
   `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '限时(单位：\r\n秒)',
   `pattern` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷生成/显示模式',
-  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷从属',
-  `targetType` char(64) NOT NULL DEFAULT '' COMMENT '从属类别',
-  `choiceMissScore` int(11) NOT NULL DEFAULT '0',
+  `target` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(32) NOT NULL DEFAULT 'draft' COMMENT '试卷状\r\n态：draft,open,closed',
-  `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '总分',
+  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '总分',
   `itemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
   `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -629,8 +583,8 @@ CREATE TABLE `testpaper_item` (
   `questionId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
   `questionType` varchar(64) NOT NULL DEFAULT '' COMMENT '题目类别',
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
-  `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分值',
-  `missScore` int(10) unsigned NOT NULL DEFAULT '0',
+  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分值',
+  `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -642,12 +596,12 @@ CREATE TABLE `testpaper_item_result` (
   `testPaperResultId` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `questionId` int(10) unsigned NOT NULL DEFAULT '0',
-  `status` enum('none','right','wrong','noAnswer') NOT NULL DEFAULT 'none',
+  `status` enum('none','right','partRight','wrong','noAnswer') NOT NULL DEFAULT 'none',
   `score` float(10,1) NOT NULL DEFAULT '0.0',
   `answer` text,
   `teacherSay` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper_result`;
 CREATE TABLE `testpaper_result` (
@@ -655,9 +609,9 @@ CREATE TABLE `testpaper_result` (
   `paperName` varchar(255) NOT NULL DEFAULT '',
   `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'testId',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'UserId',
-  `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分数',
-  `objectiveScore` int(10) unsigned NOT NULL DEFAULT '0',
-  `subjectiveScore` int(10) unsigned NOT NULL DEFAULT '0',
+  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分数',
+  `objectiveScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
+  `subjectiveScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
   `teacherSay` text,
   `rightItemCount` int(10) unsigned NOT NULL DEFAULT '0',
   `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷限制时间(秒)',
@@ -666,13 +620,12 @@ CREATE TABLE `testpaper_result` (
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
   `active` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `status` enum('doing','paused','reviewing','finished') NOT NULL COMMENT '状态',
-  `targetType` varchar(64) NOT NULL DEFAULT '',
-  `targetId` int(10) unsigned NOT NULL DEFAULT '0',
+  `target` varchar(255) NOT NULL DEFAULT '',
   `checkTeacherId` int(10) unsigned NOT NULL DEFAULT '0',
   `checkedTime` int(11) NOT NULL DEFAULT '0',
   `usedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `upgrade_logs`;
 CREATE TABLE `upgrade_logs` (
@@ -703,6 +656,7 @@ CREATE TABLE `upload_files` (
   `filename` varchar(1024) NOT NULL DEFAULT '',
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
   `size` bigint(20) NOT NULL DEFAULT '0',
+  `etag` varchar(256) NOT NULL DEFAULT '',
   `convertHash` varchar(256) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
   `metas` text,

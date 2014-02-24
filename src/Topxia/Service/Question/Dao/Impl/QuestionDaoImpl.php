@@ -125,17 +125,36 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions')
-            ->andWhere('parentId = :parentId')
+            ->from($this->table, 'questions');
+
+
+        if (isset($conditions['targets']) and is_array($conditions['targets'])) {
+            $targets = array();
+            foreach ($conditions['targets'] as $target) {
+                if (empty($target)) {
+                    continue;
+                }
+                if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $target)) {
+                    $targets[] = $target;
+                }
+            }
+            if (!empty($targets)) {
+                $targets = "'" . implode("','", $targets) . "'";
+                $builder->andStaticWhere("target IN ({$targets})");
+            }
+        } else {
+            $builder->andWhere('target = :target')
+                ->andWhere('target LIKE :targetLike');
+        }
+
+        $builder->andWhere('parentId = :parentId')
             ->andWhere('type = :type')
-            ->andWhere('target = :target')
-            ->andWhere('target LIKE :targetLike')
             ->andWhere('stem LIKE :stem');
 
         if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
             $excludeIds = array();
             foreach ($conditions['excludeIds'] as $id) {
-                $excludeIds[] = intval($ids);
+                $excludeIds[] = intval($id);
             }
 
             if (!empty($excludeIds)) {

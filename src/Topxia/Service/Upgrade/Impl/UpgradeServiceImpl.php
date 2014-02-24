@@ -80,6 +80,11 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		return $this->getEduSohoUpgradeService()->check($packages);
 	}
 
+	public function repairProblem($token)
+	{
+		return $this->getEduSohoUpgradeService()->repairProblem($token);
+	}
+
 	public function hasLastError($id)
 	{
 		$package = $this->getEduSohoUpgradeService()->getPackage($id);

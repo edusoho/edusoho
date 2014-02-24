@@ -57,7 +57,8 @@ define(function(require, exports, module) {
         },
 
         _initStemField: function() {
-            var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'));
+            var height = $('#question-stem-field').height();
+            var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'), {height:height});
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.sync();
             });

@@ -6,8 +6,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 
-
-
 class BuildPackageCommand extends BaseCommand
 {
 	private $fileSystem;
@@ -25,90 +23,106 @@ class BuildPackageCommand extends BaseCommand
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
+		$output->writeln('<question>开始编制升级包</question>');
 
-		$output->writeln('<info>开始编制升级包</info>');
 		$name = $input->getArgument('name');
 		$version = $input->getArgument('version');
 		$diff_file = $input->getArgument('diff_file');
+
+		$this->filesystem = new Filesystem();
 		
-		$path = $this->createDirectory($name,$version);
+		$packageDirectory = $this->createDirectory($name, $version);
 
-		$this->generateFiles($diff_file,$path);
+		$this->generateFiles($diff_file, $packageDirectory, $output);
 
-
-
-
-
-		$output->writeln('<info>编制升级包完毕</info>');
+		$output->writeln('<question>编制升级包完毕</question>');
 	}
 
-	private function generateFiles($diff_file,$path)
+	private function generateFiles($diff_file, $packageDirectory, $output)
 	{
 		$file = @fopen($diff_file, "r") ;  
 		while (!feof($file))
 		{
-		    $currentLine = fgets($file) ;
-		    if($currentLine[0]=='M' || $currentLine[0]=='A'){
-		    	echo "增加更新文件：{$currentLine}";
-		    	$this->copyFileAndDir($currentLine,$path);
-		    }else if($currentLine[0]=='D'){
-		    	echo "增加删除文件：{$currentLine}";
-		    	$this->insertDelete($currentLine,$path);
-		    }else{
-			    echo "无法处理该文件：{$currentLine}";
-			}
+		    $line = fgets($file);
+		    $op = $line[0];
+		    if (!in_array($line[0], array('M', 'A', 'D'))) {
+		    	echo "无法处理该文件：{$line}";
+		    	continue;
+		    }
 
-		}   
+		    $opFile = trim(substr($line,1));
+		    if (empty($opFile)) {
+		    	echo "无法处理该文件：{$line}";
+		    	continue;
+		    }
+
+		    $opBundleFile = $this->getBundleFile($opFile);
+
+		    if ($op == 'M' or $op == 'A') {
+		    	$output->writeln("<info>增加更新文件：{$opFile}</info>");
+		    	$this->copyFileAndDir($opFile, $packageDirectory);
+		    	if ($opBundleFile) {
+			    	$output->writeln("<info>增加更新文件：[BUNDLE]        {$opBundleFile}</info>");
+			    	$this->copyFileAndDir($opBundleFile, $packageDirectory);
+		    	}
+		    }
+
+		    if ($op == 'D') {
+		    	$output->writeln("<comment>增加删除文件：{$opFile}</comment>");
+		    	$this->insertDelete($opFile, $packageDirectory);
+		    	if ($opBundleFile) {
+		    		$output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
+			    	$this->insertDelete($opBundleFile, $packageDirectory);
+		    	}
+
+		    }
+
+		}
 	}
 
-	private function insertDelete($line,$path)
+	private function insertDelete($opFile, $packageDirectory)
 	{
-		$file = trim(substr($line,1)," ");
-		$destPath = $path.'/delete';
-		$f = fopen($destPath,'a+'); 
-		fwrite($f,$file,strlen($file)); 
-		fclose($f);
+		file_put_contents("{$packageDirectory}/delete", "{$opFile}\n", FILE_APPEND);
 	}
 
-	private function copyFileAndDir($line,$path)
+	private function copyFileAndDir($opFile, $packageDirectory)
 	{
-		$file = trim(substr($line,1),"\n  \t\r");
-		$destPath = $path.'/source/'.$file;
-		if(!file_exists(dirname($destPath))){
+		$destPath = $packageDirectory . '/source/'. $opFile;
+		if (!file_exists(dirname($destPath))) {
 			mkdir(dirname($destPath), 0777, true);
 		}
-		copy($file, $destPath);
+
+		$root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+
+		$this->filesystem->copy("{$root}/{$opFile}", $destPath, true);
 	}
 
-	private function createDirectory($name,$version)
+	private function createDirectory($name, $version)
 	{
-		$path = 'build/'.$name.'_'.$version.'/';
+		$root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+		$path = "{$root}/build/{$name}_{$version}/";
 
-		if(!file_exists($path )){
-			mkdir($path,0777,true);
-		}else{
-			$this->emptyDir($path);
+		if ($this->filesystem->exists($path)) {
+			$this->filesystem->remove($path);
 		}
+
+		$this->distDirectory = $path;
+		$this->filesystem->mkdir($path);
+
 		return $path;
 	}
-	private function emptyDir($dirPath,$includeDir=false){
-		if(!$this->getFileSystem()->exists($dirPath)) return ;
-		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
-    		$path->isFile() ? $this->getFileSystem()->remove($path->getPathname()) : rmdir($path->getPathname());
+
+	private function getBundleFile($file)
+	{
+		if (stripos($file, 'src/Topxia/WebBundle/Resources/public') === 0) {
+			 return str_ireplace('src/Topxia/WebBundle/Resources/public', 'web/bundles/topxiaweb', $file);
 		}
-		if($includeDir){
-			rmdir($dirPath);
+
+		if (stripos($file, 'src/Topxia/AdminBundle/Resources/public') === 0) {
+			 return str_ireplace('src/Topxia/AdminBundle/Resources/public', 'web/bundles/topxiaadmin', $file);
 		}
+
+		return null;
 	}
-
-
-
-    private function getFileSystem()
-    {
-    	if($this->fileSystem==null){
-    		$this->fileSystem = new FileSystem();
-    	}
-    	return $this->fileSystem;
-    }
 
 }

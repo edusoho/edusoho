@@ -50,7 +50,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="question-stem-field">{{ question_stem_label|default('题干') }}</label></div>
           <div class="col-md-8 controls">
-            <textarea class="form-control" id="question-stem-field" name="stem">{{question.stem | default('')}}</textarea>
+            <textarea class="form-control" id="question-stem-field" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
             {% set question_stem_help = question_stem_help|default('') %}
             {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
           </div>
@@ -74,7 +74,7 @@
                 <textarea class="form-control" id="question-analysis-field" name="analysis">{{ question.analysis|default('') }}</textarea>
             </div>
             <div class="col-md-2" style="padding-left:0;">
-              <button class="btn btn-sm btn-default" data-role="analysis-uploader"><i class="glyphicon glyphicon-picture"></i></button>
+              <button class="btn btn-sm btn-default" data-role="analysis-uploader" data-target="#question-analysis-field" style="height:30px;"><i class="glyphicon glyphicon-picture"></i></button>
             </div>
           </div>
 

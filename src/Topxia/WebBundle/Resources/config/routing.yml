@@ -406,7 +406,7 @@ course_manage_lesson_create:
 
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestPaper }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestpaper }
 
 course_manage_lesson_sort:
     pattern:  /course/{id}/manage/lesson/sort
@@ -419,7 +419,7 @@ course_manage_lesson_edit:
 
 course_manage_lesson_edit_testpaper:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestPaper }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editTestpaper }
 
 course_manage_lesson_delete:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/delete
@@ -589,29 +589,13 @@ course_manage_testpaper_items_reset:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsReset }
 
-course_manage_testpaper_item_pick:
-    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_pick
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPick }
+course_manage_testpaper_item_picker:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picker
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicker }
 
-course_manage_test_item_list:
-    pattern: /course/{courseId}/manage/test/{testpaperId}/item/list
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:itemList }
-
-course_manage_test_item_create:
-    pattern: /course/{courseId}/manage/test/{testpaperId}/item/create
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:createItem }
-
-course_manage_test_item_update:
-    pattern: /course/{courseId}/manage/test/{testpaperId}/item/update
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:updateItem }
-
-course_manage_test_item_delete:
-    pattern: /course/{courseId}/manage/test/{testItemId}/item/delete
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItem }
-
-course_manage_test_item_deletes:
-    pattern: /course/{courseId}/manage/test/item/deletes
-    defaults: { _controller: TopxiaWebBundle:QuizQuestionTest:deleteItems }
+course_manage_testpaper_item_picked:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

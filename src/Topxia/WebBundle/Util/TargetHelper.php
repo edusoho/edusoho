@@ -128,3 +128,24 @@ class LessonTargetFinder extends AbstractTargetFinder
         return $targets;
     }
 }
+
+class TestpaperTargetFinder extends AbstractTargetFinder
+{
+    public function find(array $ids)
+    {
+        $testpapers = ServiceKernel::instance()->createService('Testpaper.TestpaperService')->findTestpapersByIds($ids);
+
+        $targets = array();
+        foreach ($testpapers as $id => $testpaper) {
+            $targets[$id] = array(
+                'type' => 'testpaper',
+                'id' => $id,
+                'simple_name' => $testpaper['name'],
+                'name' => $testpaper['name'],
+                'full_name' => $testpaper['name'],
+                'url' => '',
+            );
+        }
+        return $targets;
+    }
+}

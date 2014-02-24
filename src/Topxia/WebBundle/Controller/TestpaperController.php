@@ -56,11 +56,27 @@ class TestpaperController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        if ($targets[$testpaper['target']]['type'] != 'course') {
+            throw $this->createAccessDeniedException('试卷只能属于课程');
+        }
+
+        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+
+        if (empty($course)) {
+            return $this->createMessageResponse('info', '试卷所属课程不存在！');
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $this->createMessageResponse('info', '不是试卷所属课程老师或学生');
+        }
+
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
         }
 
-        $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestpaperIdAndUserId($testId, $userId);
+        $testpaperResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testId, $userId);
 
         if (empty($testpaperResult)) {
 
@@ -91,6 +107,22 @@ class TestpaperController extends BaseController
         $userId = $this->getCurrentUser()->id;
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        if ($targets[$testpaper['target']]['type'] != 'course') {
+            throw $this->createAccessDeniedException('试卷只能属于课程');
+        }
+
+        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+
+        if (empty($course)) {
+            return $this->createMessageResponse('info', '试卷所属课程不存在！');
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $this->createMessageResponse('info', '不是试卷所属课程老师或学生');
+        }
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
@@ -201,10 +233,10 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-        $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
-
-
+       
+        if ($testpaperResult['userId'] != $this->getCurrentUser()->id){
+            $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+        }
 
         if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
             throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
@@ -301,12 +333,12 @@ class TestpaperController extends BaseController
             //试卷信息记录
             $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
 
+            $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+            $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+
             if ($this->getTestpaperService()->isExistsEssay($testResults)) {
                 $user = $this->getCurrentUser();
-
-                $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-                $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
                 $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
                 $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
@@ -317,13 +349,15 @@ class TestpaperController extends BaseController
             }
 
             // @todo refactor. , wellming
-            // if ($targets[$testpaper['target']]['type'] == 'lesson' and !empty($targets[$testpaper['target']]['id'])) {
-            //     $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaper['target']]['id']));
-            //     if (!empty($lessons[$targets[$testpaper['target']]['id']])) {
-            //         $lesson = $lessons[$targets[$testpaper['target']]['id']];
-            //         $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
-            //     }
-            // }
+            $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
+
+            if ($targets[$testpaperResult['target']]['type'] == 'lesson' and !empty($targets[$testpaperResult['target']]['id'])) {
+                $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
+                if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
+                    $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
+                    $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+                }
+            }
 
             return $this->createJsonResponse(true);
         }
@@ -379,7 +413,7 @@ class TestpaperController extends BaseController
             
             foreach ($items['material'] as $key => $item) {
 
-                $questionTypes = ArrayToolkit::index(empty($item['items']) ? array() : $item['items'], 'type');
+                $questionTypes = ArrayToolkit::index(empty($item['items']) ? array() : $item['items'], 'questionType');
 
                 if(array_key_exists('essay', $questionTypes)){
                     array_push($types, 'material');
@@ -550,6 +584,27 @@ class TestpaperController extends BaseController
         ));
     }
     
+    public function userResultJsonAction(Request $request, $id)
+    {
+        $user = $this->getCurrentUser()->id;
+        if (empty($user)) {
+            return $this->createJsonResponse(array('error' => '您尚未登录系统或登录已超时，请先登录。'));
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if (empty($testpaper)) {
+            return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
+        }
+
+        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive( $id, $user);
+
+        if (empty($testResult)) {
+            return $this->createJsonResponse(array('status' => 'nodo'));
+        }
+
+        return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
+    }
+
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
@@ -574,60 +629,5 @@ class TestpaperController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function userResultJsonAction(Request $request, $id)
-    {
-        $user = $this->getCurrentUser()->id;
-        if (empty($user)) {
-            return $this->createJsonResponse(array('error' => '您尚未登录系统或登录已超时，请先登录。'));
-        }
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($id);
-        if (empty($testpaper)) {
-            return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
-        }
-
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestIdAndUserId( $id, $user);
-
-        if (empty($testResult)) {
-            return $this->createJsonResponse(array('status' => 'nodo'));
-        }
-
-        return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
-    }
-
-    // private function getTestpaperService()
-    // {
-    //     return $this -> getServiceKernel()->createService('Quiz.TestService');
-    // }
 
 }

@@ -498,12 +498,16 @@ admin_category_create:
     defaults: { _controller: TopxiaAdminBundle:Category:create }
 
 admin_article_category_create:
-    pattern:  /Articlecategory/create
+    pattern:  /ArticleCategory/create
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:create }
 
 admin_category_checkcode:
     pattern:  /category/checkcode
     defaults: { _controller: TopxiaAdminBundle:Category:checkCode }
+
+admin_article_category_checkcode:
+    pattern:  /article/category/checkcode
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkCode }
 
 admin_category_edit:
     pattern:  /category/{id}/edit

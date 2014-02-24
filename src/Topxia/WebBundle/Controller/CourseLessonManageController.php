@@ -235,13 +235,20 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 
-    	$papers = $this->getTestService()->findTestPapersByTarget('course', $id, 0, 1000);
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            1000
+        );
+
     	$paperOptions = array();
-    	foreach ($papers as $paper) {
-            if ($paper['status'] != 'open') {
-                continue;
-            } 
-    		$paperOptions[$paper['id']] = $paper['name'];
+    	foreach ($testpapers as $testpaper) {
+    		$paperOptions[$testpaper['id']] = $testpaper['name'];
     	}
 
 	    if($request->getMethod() == 'POST') {
@@ -264,7 +271,7 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
-	public function editTestPaperAction(Request $request, $courseId, $lessonId)
+	public function editTestpaperAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
@@ -273,9 +280,19 @@ class CourseLessonManageController extends BaseController
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
 
-    	$papers = $this->getTestService()->findTestPapersByTarget('course', $courseId, 0, 1000);
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            1000
+        );
+
     	$paperOptions = array();
-    	foreach ($papers as $paper) {
+    	foreach ($testpapers as $paper) {
     		$paperOptions[$paper['id']] = $paper['name'];
     	}
 
@@ -350,9 +367,9 @@ class CourseLessonManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTestService()
+    private function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Quiz.TestService');
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     private function getCourseMaterialService()

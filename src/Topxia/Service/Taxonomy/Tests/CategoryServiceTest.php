@@ -241,7 +241,7 @@ class CategoryServiceTest extends BaseTestCase
     }
 
     /**
-     * @group group
+     * @group current
      */
     public function testGetGroupByCode()
     {
