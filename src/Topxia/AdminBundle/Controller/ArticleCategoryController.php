@@ -94,11 +94,10 @@ class ArticleCategoryController extends BaseController
 
     private function renderTbody()
     {
-        $categories = $this->getCategoryService()->findAllCategories();
-        $allCategories = $this->getCategoryService()->getCategoryTree();
+        $categories = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:Article_Category:tbody.html.twig', array(
             'categories' => $categories,
-            'categoryTree'  => $categoryTree
+            'categoryTree'  => $categories
         ));
     }
 
