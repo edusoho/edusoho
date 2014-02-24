@@ -131,6 +131,25 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $contents;
     }
 
+
+    public function getBlocksByCodes(array $codes)
+    {
+        if(empty($codes)){
+            throw $this->createServiceException("获取内容失败，不允许查询空编号所对应的内容!");
+        }
+        $contents = array();
+        foreach ($codes as $key => $value) {
+            $block = $this->getBlockDao()->getBlockByCode($value);
+            if($block){
+                $contents[$value] = $block;
+            } else {
+                $contents[$value] = '';
+            }
+        }
+        return $contents;
+    }
+
+
     public function updateContent($id, $content)
     {
         $block = $this->getBlockDao()->getBlock($id);

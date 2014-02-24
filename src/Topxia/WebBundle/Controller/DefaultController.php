@@ -70,6 +70,14 @@ class DefaultController extends BaseController
         $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,29);
         //
 
+        $recomTag = $this->getTagService()->getTagByName('重点推荐');
+
+        $recomConditions = array('status' => 'published','recommended'=>1,'tagId' => $recomTag['id']);
+
+        $recomCourses = $this->getCourseService()->searchCourses($recomConditions, 'latest', 0, 3);
+
+
+
 
         $openTag = $this->getTagService()->getTagByName('公开课');
 
@@ -160,7 +168,9 @@ class DefaultController extends BaseController
         $teacherIds=ArrayToolkit::column($teachers,'id');
         $teacherinfos=$this->getUserService()->findUserProfilesByIds($teacherIds);
 
-        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+        $blocks = $this->getBlockService()->getBlocksByCodes(array('home_top_banner','home_new_banner'));
+
+       
 
        
         return $this->render('TopxiaWebBundle:Default:index-osf.html.twig',array(
@@ -168,6 +178,8 @@ class DefaultController extends BaseController
             "lastActivitys"=>$lastActivitys,
           
             "users"=>$users,
+
+            "recomCourses"=>$recomCourses,
         
             "openCourses"=>$openCourses,
             "bigdataCourses"=>$bigdataCourses,
@@ -197,6 +209,7 @@ class DefaultController extends BaseController
             "teachers"=>$teachers,
             "teacherinfos"=>$teacherinfos,
             "blocks" => $blocks
+           
             ));
     }
 
