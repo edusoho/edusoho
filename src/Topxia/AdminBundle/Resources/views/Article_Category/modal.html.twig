@@ -24,6 +24,9 @@
 			<div class="col-md-8 controls">
 				<select class="form-control" id="category-parentId-field" type="text" name="parentId" tabindex="2">
 					<option value=0>选择栏目</option>
+					{% for tree in categoryTree %}
+					<option value={{ tree.id }} {% if tree.id == category.parentId  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
+					{% endfor %}
 				</select>
 			</div>
 			
@@ -101,7 +104,7 @@
 
 {% block footer %}
 	{% if category.id %}
-		<button type="button" class="btn btn-default pull-left delete-category" data-url="{{ path('admin_category_delete', {id:category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+		<button type="button" class="btn btn-default pull-left delete-category" data-url="{{ path('admin_article_category_delete', {id:category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
 	{% else %}
 
 	{% endif %}

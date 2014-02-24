@@ -27,16 +27,4 @@ interface CategoryService
     public function updateCategory($id, array $fields);
 
     public function deleteCategory($id);
-    
-    // public function getGroup($id);
-
-    // public function getGroupByCode($code);
-
-    // public function getGroups($start, $limit);
-
-    // public function findAllGroups();
-
-    // public function addGroup(array $group);
-
-    // public function deleteGroup($id);
 }

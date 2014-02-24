@@ -8,7 +8,7 @@ class ArticleCategoryController extends BaseController
 {
     public function embedAction($layout)
     {
-        $categories = $this->getCategoryService()->findAllCategories();
+        $categories = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:Article_Category:embed.html.twig', array(
             'categories' => $categories,
             'layout' => $layout
@@ -36,11 +36,12 @@ class ArticleCategoryController extends BaseController
             'seoKeyword' => '',
             'seoDesc' => '',
             'published' => 1
-            
         );
 
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:Article_Category:modal.html.twig', array(
-            'category' => $category
+            'category' => $category,
+            'categoryTree'  => $categoryTree
         ));
     }
 
@@ -55,9 +56,10 @@ class ArticleCategoryController extends BaseController
             $category = $this->getCategoryService()->updateCategory($id, $request->request->all());
             return $this->renderTbody();
         }
-
-        return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+        return $this->render('TopxiaAdminBundle:Article_Category:modal.html.twig', array(
             'category' => $category,
+            'categoryTree'  => $categoryTree
         ));
     }
 
@@ -70,7 +72,7 @@ class ArticleCategoryController extends BaseController
 
         $this->getCategoryService()->deleteCategory($id);
 
-        return $this->renderTbody($category['groupId']);
+        return $this->renderTbody();
     }
 
     public function checkCodeAction(Request $request)
@@ -93,8 +95,10 @@ class ArticleCategoryController extends BaseController
     private function renderTbody()
     {
         $categories = $this->getCategoryService()->findAllCategories();
+        $allCategories = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:Article_Category:tbody.html.twig', array(
-            'categories' => $categories
+            'categories' => $categories,
+            'categoryTree'  => $categoryTree
         ));
     }
 

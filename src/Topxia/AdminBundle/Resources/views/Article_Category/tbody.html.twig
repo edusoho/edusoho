@@ -2,14 +2,14 @@
   {% for category in categories %}
 		<tr id="category-tr-{{ category.id }}">
 		  <td>
-		    └─ {{ category.name }}
+		    {% for i in 0..(category.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─  {{ category.name }}
 		  </td>
 		  <td>{{ category.code }}</td>
 		  <td>{{ category.weight }}</td>
 		  <td>
-		    <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+		    <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_article_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
 		    
-		      <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_category_create', {parentId:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加子分类</a>
+		      <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_article_category_create', {parentId:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加子分类</a>
 		    
 
 		  </td>
