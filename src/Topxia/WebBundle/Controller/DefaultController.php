@@ -74,7 +74,7 @@ class DefaultController extends BaseController
 
         $recomConditions = array('status' => 'published','recommended'=>1,'tagId' => $recomTag['id']);
 
-        $recomCourses = $this->getCourseService()->searchCourses($recomConditions, 'latest', 0, 3);
+        $recomCourses = $this->getCourseService()->searchCourses($recomConditions, 'recommended', 0, 3);
 
 
 
@@ -83,7 +83,7 @@ class DefaultController extends BaseController
 
         $openConditions = array('status' => 'published','recommended'=>1,'tagId' => $openTag['id']);
 
-        $openCourses = $this->getCourseService()->searchCourses($openConditions, 'latest', 0, 3);
+        $openCourses = $this->getCourseService()->searchCourses($openConditions, 'recommended', 0, 3);
 
 
 
@@ -92,7 +92,7 @@ class DefaultController extends BaseController
 
         $bigdataConditions = array('status' => 'published','recommended'=>1,'tagId' => $bigdataTag['id']);
 
-        $bigdataCourses = $this->getCourseService()->searchCourses($bigdataConditions, 'latest', 0, 3);
+        $bigdataCourses = $this->getCourseService()->searchCourses($bigdataConditions, 'recommended', 0, 3);
 
 
 
@@ -100,7 +100,7 @@ class DefaultController extends BaseController
 
         $vitualConditions = array('status' => 'published','recommended'=>1,'tagId' => $vitualTag['id']);
 
-        $vitualCourses = $this->getCourseService()->searchCourses($vitualConditions, 'latest', 0, 3);
+        $vitualCourses = $this->getCourseService()->searchCourses($vitualConditions, 'recommended', 0, 3);
 
 
 
@@ -109,7 +109,7 @@ class DefaultController extends BaseController
 
         $kernalConditions = array('status' => 'published','recommended'=>1,'tagId' => $kernalTag['id']);
 
-        $kernalCourses = $this->getCourseService()->searchCourses($kernalConditions, 'latest', 0, 3);
+        $kernalCourses = $this->getCourseService()->searchCourses($kernalConditions, 'recommended', 0, 3);
 
        
 
