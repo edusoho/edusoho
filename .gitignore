@@ -2,7 +2,7 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
-/app/discuz/
+/app/config/discuz/
 /app/logs/*
 /build
 /files
