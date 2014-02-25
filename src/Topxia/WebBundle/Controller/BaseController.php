@@ -75,6 +75,8 @@ abstract class BaseController extends Controller
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
 
+        ServiceKernel::instance()->setCurrentUser($currentUser);
+
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser['roles']);
         $this->container->get('security.context')->setToken($token);
 
