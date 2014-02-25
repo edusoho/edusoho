@@ -257,7 +257,7 @@ class PartnerDiscuzController extends BaseController
 
     private function writeCacheFile($filename, $content)
     {
-        $cacheDirectory = $this->container->getParameter('kernel.root_dir') . '/discuz/';
+        $cacheDirectory = $this->container->getParameter('kernel.root_dir') . '/config/discuz/';
 
         if (!is_dir($cacheDirectory)) {
             mkdir($cacheDirectory);
