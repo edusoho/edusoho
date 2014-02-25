@@ -1,141 +1,242 @@
 {% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
 
 {% block title %}实名认证 - {{ parent() }}{% endblock %}
-{% set side_nav = 'profile' %}
+{% set side_nav = 'auth' %}
 {% set script_controller = 'settings/approval' %}
 
 {% block main %}
 
 {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     	
-    	{% block heading %}  实名认证
+    	{% block heading %}
+
+    	实名认证
+
+    	<div class="pull-right">
+    		{% if app.user.approvalStatus == 'approving' %}
+    		<p class="text-warning" >正在实名认证中，管理员会尽快答复您。</p>
+
+    		{% elseif  app.user.approvalStatus == 'approved' %}
+
+    		<p class="text-success" >您已通过实名认证！如果您的信息有变更，您可以点击这里 <strong><a href="{{ path('setting_approval_resubmit') }}">重新认证</a>。</strong> </p>    		
+
+    		{% elseif  app.user.approvalStatus == 'unapprove' %}
+    		<p class="text-warning" >
+    			您尚未开始实名认证，请输入您的实名信息并提交认证。
+    		</p>
+
+    		{% elseif app.user.approvalStatus == 'approve_fail' %}
+    		<p class="text-warning" >
+    			尚未完成实名认证(原因：{{ userApprovalInfo.note }})，请修改实名信息再提交认证。
+    		</p>
+    		{% endif %}
+    	</div>
+
+
     	{% endblock %}
 
     	{% block body %}
 
-    	{% if app.user.approvalStatus in ['approved', 'unapprove', 'approve_fail'] %}
+    	{% if app.user.approvalStatus in ['unapprove','approve_fail'] %}
+	    	
 	    	<form id="approval-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+	    		{{ web_macro.flash_messages() }}
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="truename">真实姓名</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="truename" name="truename" class="form-control" value="{{userApprovalInfo.truename}}"></div>
+	    		</div>
 
-	        	{{ web_macro.flash_messages() }}
-	        		
-				    <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="truename">真实姓名</label> 
-				      </div>
-				      <div class="col-md-4 controls">
-				       <input type="text" id="truename" name="truename" class="form-control" value="">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="birthday2">出生年月</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="birthday2" name="birthday2" class="form-control" value="{{userApprovalInfo.birthday2}}"></div>
+	    		</div>
 
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="mobile">联系电话</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="mobile" name="mobile" class="form-control" value="{{userApprovalInfo.mobile}}"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="mobile">联系电话</label> 
-				      </div>
-				      <div class="col-md-4 controls">
-				       <input type="text" id="mobile" name="mobile" class="form-control" value="">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="email2">常用邮箱</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="email2" name="email2" class="form-control" value="{{userApprovalInfo.email2}}"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="email2">常用邮箱</label> 
-				      </div>
-				      <div class="col-md-4 controls">
-				       <input type="text" id="email2" name="email2" class="form-control" value="">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="postAddr">证书邮寄地址</label>
+	    			</div>
+	    			<div class="col-md-8 controls">
+	    				<input type="text" id="postAddr" name="postAddr" class="form-control" value="{{userApprovalInfo.postAddr}}"></div>
+	    		</div>
 
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="company">所在公司/单位</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="company" name="company" class="form-control" value="{{userApprovalInfo.company}}"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="postAddr">证书邮寄地址</label> 
-				      </div>
-				      <div class="col-md-8 controls">
-				       <input type="text" id="postAddr" name="postAddr" class="form-control" value="">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="job">当前职位</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="job" name="job" class="form-control" value="{{userApprovalInfo.job}}"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="company">公司</label> 
-				      </div>
-				      <div class="col-md-4 controls">
-				       <input type="text" id="company" name="company" class="form-control" value="">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="lastDegree">最高学历</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
 
+	    				<select class="form-control" name="lastDegree">
+        					{{ select_options(dict('degreeType'), userApprovalInfo.lastDegree, '最高学历') }}
+    					</select>
+	    				
 
-				     <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="job">职位</label> 
-				      </div>
-				      <div class="col-md-4 controls">
-				       <input type="text" id="job" name="job" class="form-control" value="">
-				      </div>
-				    </div>
+	    			</div>
+	    		</div>
 
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="lastSchool">毕业院校</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="lastSchool" name="lastSchool" class="form-control" value="{{userApprovalInfo.lastSchool}}"></div>
+	    		</div>
 
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="lastMajors">所学专业</label>
+	    			</div>
+	    			<div class="col-md-4 controls">
+	    				<input type="text" id="lastMajors" name="lastMajors" class="form-control" value="{{userApprovalInfo.lastMajors}}"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label"> 
-				        <label for="idcard">身份证号</label> 
-				      </div>
-				      <div class="col-md-8 controls">
-				       <input type="text" id="idcard" name="idcard" class="form-control" value="">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="idcard">身份证号</label>
+	    			</div>
+	    			<div class="col-md-8 controls">
+	    				<input type="text" id="idcard" name="idcard" class="form-control" value="{{userApprovalInfo.idcard}}"></div>
+	    		</div>
 
-					<div class="form-group">
-				      <div class="col-md-2 control-label">
-				      <label for="faceImg">身份证正面照</label>
-				      </div>
-				      <div class="controls col-md-8 controls">
-				        <input type="file" id="faceImg" name="faceImg" accept="image/bmp,image/jpeg,image/png">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="faceImg">身份证正面照</label>
+	    			</div>
+	    			<div class="controls col-md-8 controls">
+	    				<input type="file" id="faceImg" name="faceImg" accept="image/bmp,image/jpeg,image/png"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label">
-				      <label for="backImg">身份证反面照</label>
-				      </div>
-				      <div class="controls col-md-8 controls">
-				        <input type="file" id="backImg" name="backImg" accept="image/bmp,image/jpeg,image/png">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="backImg">身份证反面照</label>
+	    			</div>
+	    			<div class="controls col-md-8 controls">
+	    				<input type="file" id="backImg" name="backImg" accept="image/bmp,image/jpeg,image/png"></div>
+	    		</div>
 
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label for="headImg">正面免冠人头照</label>
+	    			</div>
+	    			<div class="controls col-md-8 controls">
+	    				<input type="file" id="headImg" name="headImg" accept="image/bmp,image/jpeg,image/png"></div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label">
-				      <label for="headImg">正面免冠人头照</label>
-				      </div>
-				      <div class="controls col-md-8 controls">
-				        <input type="file" id="headImg" name="headImg" accept="image/bmp,image/jpeg,image/png">
-				      </div>
-				    </div>
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
+	    				<label>照片要求</label>
+	    			</div>
+	    			<div class="controls col-md-8 controls">
+	    				<p class="text-warning">
+	    					身份证件照必须是清晰彩色电子版，可以是扫描或者数码相机拍摄照片。
+	    					<br />	    	
+	    					正面免冠人头照必须是清晰彩色电子版，人像清晰，层次丰富，神态自然。
+	    					<br />	    	
+	    					图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。
+	    				</p>
+	    			</div>
+	    		</div>
 
+	    		<div class="row">
+	    			<div class="col-md-7 col-md-offset-2">
+	    				<button type="submit" class="btn btn-primary">提交</button>
+	    				<a class="btn btn-link" href="{{ path('settings') }}">返回</a>
+	    			</div>
+	    		</div>
 
-				    <div class="form-group">
-				      <div class="col-md-2 control-label">
-				      <label>照片要求</label>
-				      </div>
-				      <div class="controls col-md-8 controls">
-				        <p class="text-warning">身份证件照必须是清晰彩色电子版，可以是扫描或者数码相机拍摄照片。<br />
-							正面免冠人头照必须是清晰彩色电子版，人像清晰，层次丰富，神态自然。<br />
-				        	图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>
-				      </div>
-				    </div>
-
-	        <div class="row">
-	            <div class="col-md-7 col-md-offset-2">
-	             <button type="submit" class="btn btn-primary">提交</button>
-		    	 <a class="btn btn-link" href="{{ path('settings') }}">返回</a>
-	            </div>
-	        </div>
-
-	           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-	        </form>
+	    		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	    	</form>
         
+        {% else %}
+
+			<table class="table table-striped table-condenseda table-bordered">
+			  <tr>
+			    <th width="15%">用户名</th>
+			    <td width="35%">{{ user.nickname }}</td>
+			    <th width="15%">真实姓名</th>
+			    <td width="35%">{{ userApprovalInfo.truename }}</td>
+			  </tr>
+
+			  <tr>
+			    <th width="15%">身份证</th>
+			    <td width="35%">{{ userApprovalInfo.idcard }}</td>
+			    <th width="15%">常用邮箱</th>
+			    <td width="35%">{{ userApprovalInfo.email2 }}</td>
+			  </tr>
+
+			  <tr>
+			    <th width="15%">联系电话</th>
+			    <td width="35%">{{ userApprovalInfo.mobile }}</td>
+			    <th width="15%">邮寄地址</th>
+			    <td width="35%">{{ userApprovalInfo.postAddr }}</td>
+			  </tr>
+
+			  <tr>
+			    <th width="15%">公司</th>
+			    <td width="35%">{{ userApprovalInfo.company }}</td>
+			    <th width="15%">职位</th>
+			    <td width="35%">{{ userApprovalInfo.job }}</td>
+			  </tr>
+			</table>
+			<table class="table table-striped table-condenseda table-bordered">
+			  <tr>
+			    <th width="10%">身份证照</th>
+			    <td width="20%" >
+			      <a href="{{ url('show_idcard', {userId: userApprovalInfo.userId, type:'face'})}}" target="_blank">
+			        <img src="{{url('show_idcard', {userId: userApprovalInfo.userId, type:'face'})}}" width="200" />
+			      </a>
+			    </td>
+			    <td width="20%" >
+			      <a href="{{url('show_idcard', {userId: userApprovalInfo.userId, type: 'back'})}}" target="_blank">
+			        <img src="{{url('show_idcard', {userId: userApprovalInfo.userId, type: 'back'})}}" width="200" />
+			      </a>
+			    </td>
+			    <th width="10%">免冠照</th>
+			    <td width="20%" >
+			      <a href="{{url('show_head', {userId: userApprovalInfo.userId, type: 'head'})}}" target="_blank">
+			        <img src="{{url('show_head', {userId: userApprovalInfo.userId, type: 'head'})}}" width="200" />
+			      </a>
+			    </td>
+			  </tr>
+			</table>
+
         {% endif %}
 
 	    {% endblock %}

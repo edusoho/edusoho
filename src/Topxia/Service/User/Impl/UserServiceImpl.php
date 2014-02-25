@@ -776,10 +776,23 @@ class UserServiceImpl extends BaseService implements UserService
             'company'=> $lastestApproval['company'],
             'job'=> $lastestApproval['job']
         ));
+
+
         
         $currentUser = $this->getCurrentUser();
+
+
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
+            array(
+            
+            'note'=> $note,
+            'status' => 'approved',
+            'operatorId' => $currentUser['id'])
+        );
+
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
         $message = '您的个人实名认证，审核已经通过！' . ($note ? "({$note})" : '');
+
         $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;
     }
@@ -797,9 +810,13 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->addApproval(
+
+        $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserId($user['id']);
+
+
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
             array(
-            'userId'=> $user['id'],
+            
             'note'=> $note,
             'status' => 'approve_fail',
             'operatorId' => $currentUser['id'])

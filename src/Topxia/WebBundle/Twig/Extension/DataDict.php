@@ -193,6 +193,17 @@ class DataDict
             'linksale-web' =>            '网站链接推广',			
 		),
 
+		'degreeType' => array(
+			'小学' =>            '小学',
+        	'初中' =>            '初中',	
+        	'高中' =>            '高中',	
+        	'大专' =>            '大专',	
+        	'本科' =>            '本科',	
+        	'硕士' =>            '硕士',	
+        	'博士' =>            '博士',
+        				
+		),
+
 	);
 
 	public static function dict($type)

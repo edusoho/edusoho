@@ -1034,6 +1034,15 @@ setting_approval_submit:
     pattern: /settings/approval/submit
     defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
 
+setting_approval_resubmit:
+    pattern: /settings/approval/resubmit
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalReSubmit }
+
+setting_approval_cancel:
+    pattern: /settings/approval/cancel
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalCancel }
+    methods: [POST]
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }

@@ -45,23 +45,73 @@ class SettingsController extends BaseController
     public function approvalSubmitAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        
+        $approval = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        if(empty($approval)){
+            $approval=array(
+                'truename'=>'',
+                'idcard'=>'',
+                'mobile'=>'',
+                'company'=>'',
+                'note'=>'',
+                'job'=>'',
+                'email2'=>'',
+                'postAddr'=>''
+                );
+        }
+
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
             $headImg = $request->files->get('headImg');
             
-            if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg) ) {
+            if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg) || !FileToolkit::isImageFile($headImg) ) {
                 return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory') . '/approval';
+
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg,$headImg, $directory);
             $this->setFlashMessage('success', '实名认证提交成功！');
             return $this->redirect($this->generateUrl('settings'));
         }
+
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig',array(
+            'userApprovalInfo'=>$approval,
+            'user'=>$user
         ));
     }
+
+    public function approvalReSubmitAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        return $this->render('TopxiaWebBundle:Settings:re-approval.html.twig',array(
+            
+            'user'=>$user
+        ));
+    }
+
+    public function approvalCancelAction(Request $request)
+    {
+        
+        $user = $this->getCurrentUser();
+        if ($request->getMethod() == 'POST') {
+
+             $approval = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+             if($approval)
+             {
+                $this->getUserService()->rejectApproval($user['id'], '自己撤销，重新认证');
+             }         
+
+        }
+
+        return $this->redirect($this->generateUrl('setting_approval_submit'));
+    }
+
+
 
     public function nicknameAction(Request $request)
     {

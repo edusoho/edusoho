@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+
+{% block title %}实名认证 - {{ parent() }}{% endblock %}
+{% set side_nav = 'auth' %}
+{% set script_controller = 'settings/re-approval' %}
+
+{% block main %}
+
+{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    	
+    	{% block heading %}
+
+    	确定修改实名信息并重新认证？
+
+    	{% endblock %}
+
+    	{% block body %}
+
+    	<form id="cancel-approval-form" class="form-horizontal" method="post" action="{{ path('setting_approval_cancel') }}">
+
+    		<div class="jumbotron" id="cancel-table">
+    			<h3>注意：该功能慎用。请仔细阅读下列说明：</h3>
+    			<p class="text-size-14">1.重新认证后，原有认证信息将清除，您需要重新认证。</p>
+    			<p class="text-size-14">1.系统中需要您的实名信息才能使用的功能，将暂时禁用，待您通过认证后，将恢复使用。</p>
+    			<p>
+    				<a id="cancel-approval"  class="btn btn-danger btn-lg" role="button">重新认证</a>
+    			</p>
+    		</div>
+
+    		 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">    
+
+    	</form>
+
+	    {% endblock %}
+
+
+{% endembed %}
+
+{% endblock %}

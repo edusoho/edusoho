@@ -2,6 +2,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
+    require('jquery.bootstrap-datetimepicker');
+
     exports.run = function() {
 
         var validator = new Validator({
@@ -67,6 +69,19 @@ define(function(require, exports, module) {
             element: '[name="headImg"]',
             required: true
         });
+
+
+          //日期时间选择
+        $('#birthday2').datetimepicker({
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            pickDate: true,
+            pickTime: true,
+            hourStep: 1,
+            minuteStep: 30,
+            secondStep: 30,
+            inputMask: true
+      });
 
    
 
