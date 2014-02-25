@@ -5,7 +5,7 @@ namespace Topxia\WebBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class UserProfileType extends AbstractType
+class UserApprovalType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -28,6 +28,6 @@ class UserProfileType extends AbstractType
 
     public function getName()
     {
-        return 'profile';
+        return 'approval';
     }
 }

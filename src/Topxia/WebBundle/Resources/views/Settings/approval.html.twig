@@ -51,6 +51,17 @@
 
 	    		<div class="form-group">
 	    			<div class="col-md-2 control-label">
+	    				<label for="gender">性别</label>
+	    			</div>
+	    			<div class="col-md-4 controls radios">
+	    				
+	    				 {{ radios('gender',dict('genderType'),userApprovalInfo.gender) }}{#'quota':'定额', #}
+
+	    			</div>
+	    		</div>
+
+	    		<div class="form-group">
+	    			<div class="col-md-2 control-label">
 	    				<label for="birthday2">出生年月</label>
 	    			</div>
 	    			<div class="col-md-4 controls">
@@ -187,33 +198,50 @@
         {% else %}
 
 			<table class="table table-striped table-condenseda table-bordered">
-			  <tr>
-			    <th width="15%">用户名</th>
-			    <td width="35%">{{ user.nickname }}</td>
-			    <th width="15%">真实姓名</th>
-			    <td width="35%">{{ userApprovalInfo.truename }}</td>
-			  </tr>
+			 
+  <tr>
+    <th width="15%">真实姓名</th>
+    <td width="35%">{{ userApprovalInfo.truename }}</td>
+    <th width="15%">性别</th>
+    <td width="35%">{{ userApprovalInfo.gender }}</td>
+  </tr>
 
-			  <tr>
-			    <th width="15%">身份证</th>
-			    <td width="35%">{{ userApprovalInfo.idcard }}</td>
-			    <th width="15%">常用邮箱</th>
-			    <td width="35%">{{ userApprovalInfo.email2 }}</td>
-			  </tr>
+  <tr>    
+    <th width="15%">出生年月</th>
+    <td width="35%">{{ userApprovalInfo.birthday2 }}</td>
+    <th width="15%">最高学历</th>
+    <td width="35%">{{ userApprovalInfo.lastDegree }}</td>
+  </tr>
 
-			  <tr>
-			    <th width="15%">联系电话</th>
-			    <td width="35%">{{ userApprovalInfo.mobile }}</td>
-			    <th width="15%">邮寄地址</th>
-			    <td width="35%">{{ userApprovalInfo.postAddr }}</td>
-			  </tr>
+  <tr>
+    <th width="15%">毕业院校</th>
+    <td width="35%">{{ userApprovalInfo.lastSchool }}</td>
+    <th width="15%">所学专业</th>
+    <td width="35%">{{ userApprovalInfo.lastMajors }}</td>
+  </tr>
 
-			  <tr>
-			    <th width="15%">公司</th>
-			    <td width="35%">{{ userApprovalInfo.company }}</td>
-			    <th width="15%">职位</th>
-			    <td width="35%">{{ userApprovalInfo.job }}</td>
-			  </tr>
+
+  <tr>
+    <th width="15%">身份证</th>
+    <td width="35%">{{ userApprovalInfo.idcard }}</td>
+    <th width="15%">常用邮箱</th>
+    <td width="35%">{{ userApprovalInfo.email2 }}</td>
+  </tr>
+
+  <tr>
+    <th width="15%">联系电话</th>
+    <td width="35%">{{ userApprovalInfo.mobile }}</td>
+    <th width="15%">邮寄地址</th>
+    <td width="35%">{{ userApprovalInfo.postAddr }}</td>
+  </tr>
+
+  <tr>
+    <th width="15%">所在公司/单位</th>
+    <td width="35%">{{ userApprovalInfo.company }}</td>
+    <th width="15%">当前职位</th>
+    <td width="35%">{{ userApprovalInfo.job }}</td>
+  </tr>
+			 
 			</table>
 			<table class="table table-striped table-condenseda table-bordered">
 			  <tr>

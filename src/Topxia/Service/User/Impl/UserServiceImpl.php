@@ -354,6 +354,7 @@ class UserServiceImpl extends BaseService implements UserService
             'truename' => '',
             'gender' => 'secret',
             'birthday' => null,
+            'birthday2' => null,
             'city' => '',
             'mobile' => '',
             'qq' => '',
@@ -771,6 +772,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getProfileDao()->updateProfile($userId, array(
             'truename'=>$lastestApproval['truename'],
+            'birthday2'=>$lastestApproval['birthday2'],
+            'gender'=>$lastestApproval['gender'],
             'idcard'=> $lastestApproval['idcard'],
             'mobile'=> $lastestApproval['mobile'],
             'company'=> $lastestApproval['company'],

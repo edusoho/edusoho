@@ -8,14 +8,24 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: '#approval-form'
-        });
-
-       
+        });       
 
         validator.addItem({
             element: '[name="truename"]',
             required: true,
             rule: 'chinese byte_minlength{min:4} byte_maxlength{max:50}'
+        });
+
+        validator.addItem({
+            element: '[name="gender"]',
+            required: true
+           
+        });
+
+        validator.addItem({
+            element: '[name="birthday2"]',
+            required: true
+           
         });
 
         validator.addItem({
@@ -33,6 +43,24 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="postAddr"]',
+            required: true
+           
+        });
+
+        validator.addItem({
+            element: '[name="lastDegree"]',
+            required: true
+           
+        });
+
+        validator.addItem({
+            element: '[name="lastSchool"]',
+            required: true
+           
+        });
+
+        validator.addItem({
+            element: '[name="lastMajors"]',
             required: true
            
         });
@@ -65,7 +93,7 @@ define(function(require, exports, module) {
             required: true
         });
 
-          validator.addItem({
+        validator.addItem({
             element: '[name="headImg"]',
             required: true
         });

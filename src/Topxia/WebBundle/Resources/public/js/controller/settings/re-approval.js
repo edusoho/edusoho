@@ -13,9 +13,6 @@ define(function(require, exports, module) {
             $("#cancel-approval-form").submit();
 
         });
-
-   
-
     };
 
 });

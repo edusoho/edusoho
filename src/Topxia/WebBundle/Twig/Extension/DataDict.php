@@ -204,6 +204,14 @@ class DataDict
         				
 		),
 
+		'genderType' => array(
+			'male' =>            '男',
+        	'female' =>            '女',	
+        	
+       
+        				
+		),
+
 	);
 
 	public static function dict($type)

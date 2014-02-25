@@ -51,7 +51,7 @@
                 </p>
               {% elseif app.user.approvalStatus == 'approve_fail' %}
                  <p class="text-danger" > 
-                  实名认证审核尚未通过，请参照通知中的信息，修改后重新<strong><a href="{{ path('setting_approval_submit') }}">认证。</a>
+                  实名认证尚未成功，请参照通知中的信息，修改后重新<strong><a href="{{ path('setting_approval_submit') }}">认证。</a>
                   </strong>
                  </p>
               {% endif %}
