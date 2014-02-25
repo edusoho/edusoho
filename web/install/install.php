@@ -9,6 +9,8 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
 ));
 
+$twig->addGlobal('edusho_version', \Topxia\System::VERSION);
+
 $step =intval(empty($_GET['step']) ? 0 : $_GET['step']);
 
 $functionName = 'install_step' . $step;
