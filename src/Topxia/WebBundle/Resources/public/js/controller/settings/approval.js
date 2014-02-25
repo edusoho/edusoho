@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     require('jquery.bootstrap-datetimepicker');
+    require('jquery.bootstrap-datetimepicker-css');
 
     exports.run = function() {
 
@@ -104,7 +105,7 @@ define(function(require, exports, module) {
             format: 'yyyy-mm-dd',
             language: 'zh-CN',
             pickDate: true,
-            pickTime: true,
+            pickTime: false,
             hourStep: 1,
             minuteStep: 30,
             secondStep: 30,

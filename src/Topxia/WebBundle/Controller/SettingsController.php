@@ -59,6 +59,16 @@ class SettingsController extends BaseController
                 'email2'=>'',
                 'postAddr'=>''
                 );
+        }else{
+
+            if(empty($approval['birthday2'])){
+                $approval['birthday2']='';
+            }else{
+                $approval['birthday2']=date("Y-m-d",$approval['birthday2']);
+            }
+
+
+            
         }
 
         if ($request->getMethod() == 'POST') {

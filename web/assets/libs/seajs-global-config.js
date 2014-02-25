@@ -15,6 +15,7 @@ seajs.config({
 		"jquery.nouislider": "jquery-plugin/nouislider/5.0.0/nouislider",
 		"jquery.nouislider-css": "jquery-plugin/nouislider/5.0.0/nouislider.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
+		'jquery.bootstrap-datetimepicker-css': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker.css",
 		'jquery.bootstrap-datetimepicker.cn': "jquery-plugin/bootstrap-datetimepicker/1.0.0/i18n/zh-cn.js",
 		"jquery.lazyload" : "jquery-plugin/lazyload/jquery.lazyload.min.js",
 		'jquery.slides' : 'jquery-plugin/slide/slide.js',

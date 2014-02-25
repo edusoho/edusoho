@@ -743,7 +743,18 @@ class UserServiceImpl extends BaseService implements UserService
         $approval['backImg'] = $backImg->getPathname();
         $approval['headImg'] = $headImg->getPathname();
         $approval['status'] = 'approving';
+        
+        
+
+        if($approval['birthday2']){
+            $approval['birthday2'] = strtotime($approval['birthday2']);
+        }
+
         $approval['createdTime'] = time();
+
+       
+
+        
 
         $this->getUserDao()->updateUser($userId, array(
             'approvalStatus' => 'approving',
