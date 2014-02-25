@@ -36,8 +36,8 @@ define(function(require, exports, module) {
 
             $form.ajaxSubmit({
                 clearForm: true,
-                success: function(html){
-                    $('#modal').html(html);
+                success: function(){
+                    $('#modal').load($('#upload-picture-btn').data('goto'));
                 }
             });
 

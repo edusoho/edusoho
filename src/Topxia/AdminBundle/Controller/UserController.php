@@ -257,8 +257,8 @@ class UserController extends BaseController
 
             $this->getUserService()->changeAvatar($id, realpath($pictureFilePath), $options);
 
-            return $this->redirect($this->generateUrl('admin_user'));
-            // return $this->createJsonResponse(true);
+            // return $this->redirect($this->generateUrl('admin_user'));
+            return $this->createJsonResponse(true);
         }
 
         

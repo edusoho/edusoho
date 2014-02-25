@@ -23,7 +23,7 @@
           <input type="hidden" name="y">
           <input type="hidden" name="width">
           <input type="hidden" name="height">
-          <button class="btn btn-fat btn-primary" id="upload-picture-btn">保存</button>
+          <a class="btn btn-fat btn-primary" id="upload-picture-btn" data-goto="{{ path('admin_user_avatar', {id: user.id}) }}">保存</a>
         </div>
       </div>
 
