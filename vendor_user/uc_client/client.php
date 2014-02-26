@@ -17,7 +17,7 @@ define('IN_UC', TRUE);
 define('UC_CLIENT_VERSION', '1.6.0');
 define('UC_CLIENT_RELEASE', '20110501');
 define('UC_ROOT', substr(__FILE__, 0, -10));
-define('UC_DATADIR', UC_ROOT.'../../app/cache/discuz/');
+define('UC_DATADIR', UC_ROOT.'../../app/data/discuz/');
 // define('UC_DATAURL', UC_API.'/data');
 define('UC_API_FUNC', UC_CONNECT == 'mysql' ? 'uc_api_mysql' : 'uc_api_post');
 $GLOBALS['uc_controls'] = array();
