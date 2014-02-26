@@ -1,6 +1,6 @@
-{% if showTestpaperNavbar|default('on') == 'off' %}
-	<form id='teacherCheckForm'>
-{% endif %}
+{# {% if showTestpaperNavbar|default('on') == 'off' %} #}
+	<form id='teacherCheckForm' autocomplete="off">
+{# {% endif %} #}
 
 
 {% for type in types|default(paper.metas.question_type_seq) %}
@@ -43,7 +43,7 @@
 
 {% if showTestpaperNavbar|default('on') == 'off' %}
 <textarea name="teacherSay" id="teacherSay" style="display:none"></textarea>
+{% endif %}
 
 
 </form>
-{% endif %}
