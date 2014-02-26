@@ -14,6 +14,9 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 
+
+use Topxia\Common\ImgConverToData;
+
 class SettingsController extends BaseController
 {
 
@@ -119,6 +122,56 @@ class SettingsController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('setting_approval_submit'));
+    }
+
+
+    public function showIdcardAction($userId, $type)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $currentUser = $this->getCurrentUser();
+
+        if (empty($currentUser)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($currentUser['id'] != $userId) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+        $imgConverToData = new ImgConverToData;
+        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> img2Data();
+        $imgData = $imgConverToData -> data2Img();
+        echo $imgData;
+        exit;
+    }
+
+    public function showHeadAction($userId, $type)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $currentUser = $this->getCurrentUser();
+
+        if (empty($currentUser)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($currentUser['id'] != $userId) {
+            throw $this->createAccessDeniedException();
+        }
+
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
+
+        $idcardPath = $type === 'head' ? $userApprovalInfo['headImg'] : $userApprovalInfo['headImg'];
+        $imgConverToData = new ImgConverToData;
+        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> img2Data();
+        $imgData = $imgConverToData -> data2Img();
+        echo $imgData;
+        exit;
     }
 
 

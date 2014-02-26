@@ -57,19 +57,19 @@
   <tr>
     <th width="10%">身份证照</th>
     <td width="20%" >
-      <a href="{{ url('show_idcard', {userId: user.id, type:'face'})}}" target="_blank">
-        <img src="{{url('show_idcard', {userId: user.id, type:'face'})}}" width="200" />
+      <a href="{{ url('admin_approval_show_idcard', {userId: user.id, type:'face'})}}" target="_blank">
+        <img src="{{url('admin_approval_show_idcard', {userId: user.id, type:'face'})}}" width="200" />
       </a>
     </td>
     <td width="20%" >
-      <a href="{{url('show_idcard', {userId: user.id, type: 'back'})}}" target="_blank">
-        <img src="{{url('show_idcard', {userId: user.id, type: 'back'})}}" width="200" />
+      <a href="{{url('admin_approval_show_idcard', {userId: user.id, type: 'back'})}}" target="_blank">
+        <img src="{{url('admin_approval_show_idcard', {userId: user.id, type: 'back'})}}" width="200" />
       </a>
     </td>
     <th width="10%">正面免冠人头照</th>
     <td width="20%" >
-      <a href="{{url('show_head', {userId: user.id, type: 'head'})}}" target="_blank">
-        <img src="{{url('show_head', {userId: user.id, type: 'head'})}}" width="200" />
+      <a href="{{url('admin_approval_show_head', {userId: user.id, type: 'head'})}}" target="_blank">
+        <img src="{{url('admin_approval_show_head', {userId: user.id, type: 'head'})}}" width="200" />
       </a>
     </td>
   </tr>

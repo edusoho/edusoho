@@ -752,8 +752,6 @@ settings_binds_bind_callback:
     pattern: /settings/bind/{type}/callback
     defaults: { _controller: TopxiaWebBundle:Settings:bindCallback }
 
-
-
 settings_setup:
     pattern: /settings/setup
     defaults: { _controller: TopxiaWebBundle:Settings:setup }
@@ -761,6 +759,28 @@ settings_setup:
 settings_setup_check_nickname:
     pattern: /settings/setup/check_nickname
     defaults: { _controller: TopxiaWebBundle:Settings:setupCheckNickname }
+
+setting_approval_submit:
+    pattern: /settings/approval/submit
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
+
+setting_approval_resubmit:
+    pattern: /settings/approval/resubmit
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalReSubmit }
+
+setting_approval_cancel:
+    pattern: /settings/approval/cancel
+    defaults: { _controller: TopxiaWebBundle:Settings:approvalCancel }
+    methods: [POST]
+
+setting_show_idcard:
+    pattern:   /settings/approvals/idcard/show/{userId}/{type}
+    defaults: { _controller: TopxiaWebBundle:Settings:showIdcard }
+
+setting_show_head:
+    pattern:   /settings/approvals/head/show/{userId}/{type}
+    defaults: { _controller: TopxiaWebBundle:Settings:showHead }
+
 
 auth_email_confirm:
     pattern:  /auth/email/confirm
@@ -1030,18 +1050,6 @@ systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
 
-setting_approval_submit:
-    pattern: /settings/approval/submit
-    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit }
-
-setting_approval_resubmit:
-    pattern: /settings/approval/resubmit
-    defaults: { _controller: TopxiaWebBundle:Settings:approvalReSubmit }
-
-setting_approval_cancel:
-    pattern: /settings/approval/cancel
-    defaults: { _controller: TopxiaWebBundle:Settings:approvalCancel }
-    methods: [POST]
 
 test:
     pattern:  /test/
@@ -1293,8 +1301,6 @@ mysale_offsale_course_list:
 mysale_offsale_course_code:
     pattern: /mysale/offsale/course/{id}/code
     defaults: {_controller:TopxiaWebBundle:MySale:offsaleCourseCode}
-
-
 
 mysale_commission_list:
     pattern: /mysale/commission/list
