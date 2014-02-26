@@ -104,6 +104,48 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function exportCsvAction (Request $request, $id)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,1000);
+
+        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+
+        foreach ($courseMembers as $student) {
+            $progresses[] = $this->calculateUserLearnProgress($course, $student);
+        }
+        $str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
+
+        $students = array_map(function($user,$courseMember,$progress,$profile){
+            $card['nickname']   = $user['nickname'];
+            $card['joinedTime'] = $courseMember['createdTime'];
+            $card['percent']  = $progress['percent'];
+            $card['truename'] = $profile['truename'];
+            $card['email'] = $user['email'] ? $user['email'] : "email为空";
+            $card['company'] = $profile['company'];
+            $card['title'] = $user['title'];
+            $card['mobile'] = $profile['mobile'];
+            $card['weixin'] = $profile['weixin'];
+            $card['qq'] = $profile['qq'] ? $profile['qq'] : "QQ空";
+            return implode(',',$card);
+        }, $users,$courseMembers,$progresses,$profiles);
+        $str .= implode("\r\n",$students);
+
+        $filename = $course['title']."-学员信息"."-".date("YmdHi").".csv";
+
+        $userId = $this->getCurrentUser()->id;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
 
     public function remarkAction(Request $request, $courseId, $userId)
     {
