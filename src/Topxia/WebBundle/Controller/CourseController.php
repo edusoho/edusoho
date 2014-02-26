@@ -324,6 +324,10 @@ class CourseController extends BaseController
 
     public function learnAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
         try{
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
             if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
