@@ -9,7 +9,7 @@
       <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }}</span>
     {% endif %}
   </td>
-  <td>{{ course.studentNum }}</td>
+  <td>{{ course.studentNum }}/<span class="text-color-green">{{ course.hitNum }}</span></td>
   <td><span class="money-text">{{ course.income }}</span></td>
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
   <td>
