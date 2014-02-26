@@ -21,7 +21,6 @@ define(function(require, exports, module) {
             });
         });
 
-
         $("#avatar-upload-btn").click(function() {
 
             var $form = $('#user-avatar-form');
