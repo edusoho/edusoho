@@ -27,8 +27,7 @@ services:
     user.login_listener:
         class: Topxia\WebBundle\Handler\LoginSuccessHandler
         arguments: ['@security.context', '@doctrine']
-        tags:
-          - { name: kernel.event_listener, event: security.interactive_login }
+        tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
 security:
     encoders:
