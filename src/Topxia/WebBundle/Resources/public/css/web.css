@@ -160,27 +160,6 @@ textarea {
 
 
 @media screen and (min-width: 768px) {
-  .modal-dialog-small {
-	width: 480px;
-  }
-
-  .modal-dialog-small .modal-footer {
-  	padding-top: 15px;
-  	padding-bottom: 15px;
-
-  }
-
-  .modal-dialog-medium {
-    width: 700px;
-  }
-
-  .modal-dialog-large {
-    width: 800px;
-  }
-
-  .modal-dialog-xlarge {
-    width: 900px;
-  }
 
   .date-selects select {
     width: 18%;
