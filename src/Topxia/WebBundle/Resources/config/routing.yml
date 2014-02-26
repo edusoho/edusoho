@@ -1043,6 +1043,10 @@ setting_approval_cancel:
     defaults: { _controller: TopxiaWebBundle:Settings:approvalCancel }
     methods: [POST]
 
+setting_jobs_resume:
+    pattern: /settings/jobs/resume
+    defaults: { _controller: TopxiaWebBundle:Settings:jobResume }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
