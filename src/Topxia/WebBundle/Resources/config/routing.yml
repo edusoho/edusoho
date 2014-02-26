@@ -781,6 +781,10 @@ setting_show_head:
     pattern:   /settings/approvals/head/show/{userId}/{type}
     defaults: { _controller: TopxiaWebBundle:Settings:showHead }
 
+setting_jobs_resume:
+    pattern: /settings/jobs/resume
+    defaults: { _controller: TopxiaWebBundle:Settings:jobResume }
+
 
 auth_email_confirm:
     pattern:  /auth/email/confirm
@@ -1050,10 +1054,6 @@ systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
 
-
-setting_jobs_resume:
-    pattern: /settings/jobs/resume
-    defaults: { _controller: TopxiaWebBundle:Settings:jobResume }
 
 test:
     pattern:  /test/

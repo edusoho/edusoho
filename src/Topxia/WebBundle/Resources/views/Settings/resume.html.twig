@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+
+{% block title %}简历完善 - {{ parent() }}{% endblock %}
+{% set side_nav = 'jobs' %}
+{% set script_controller = 'settings/resume' %}
+
+{% block main %}
+
+{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    	
+    	{% block heading %}
+
+    	简历完善
+
+    	{% endblock %}
+
+    	{% block body %}
+
+    	<form id="cancel-approval-form" class="form-horizontal" method="post" action="">
+
+    		<div class="jumbotron" id="cancel-table">
+    			<h1>coming soon...</h1>
+    			
+    		</div>
+
+    		 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">    
+
+    	</form>
+
+	    {% endblock %}
+
+
+{% endembed %}
+
+{% endblock %}

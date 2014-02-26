@@ -100,8 +100,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        return $this->render('TopxiaWebBundle:Settings:re-approval.html.twig',array(
-            
+        return $this->render('TopxiaWebBundle:Settings:re-approval.html.twig',array(            
             'user'=>$user
         ));
     }
@@ -172,6 +171,16 @@ class SettingsController extends BaseController
         $imgData = $imgConverToData -> data2Img();
         echo $imgData;
         exit;
+    }
+
+
+     public function jobResumeAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        return $this->render('TopxiaWebBundle:Settings:resume.html.twig',array(            
+            'user'=>$user
+        ));
     }
 
 
