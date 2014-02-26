@@ -40,7 +40,7 @@
         {% endif %}
 
         {% if app.user.isAdmin() %}
-          <li><a class="student-remove" href="" data-url="{{path('course_manage_student_remove', {courseId:course.id, userId:user.id})}}">移除</a></li>
+          <li><a class="student-remove" href="javascript:;" data-url="{{path('course_manage_student_remove', {courseId:course.id, userId:user.id})}}">移除</a></li>
         {% endif %}
       </ul>
     </div>

@@ -170,6 +170,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $metas = empty($testpaper['metas']) ? array() : $testpaper['metas'];
         $metas['question_type_seq'] = $types;
+        $metas['missScore'] = $options['missScores'];
 
         $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
             'itemCount' => $seq -1,
@@ -711,6 +712,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $types = array();
         $totalScore = 0;
         $seq = 1;
+
         foreach ($items as $item) {
             $question = $questions[$item['questionId']];
             $item['seq'] = $seq;
@@ -723,7 +725,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['questionType'] = $question['type'];
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
-                $item['missScore'] = 0;
+                $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
             } else {
