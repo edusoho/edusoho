@@ -1,6 +1,5 @@
 {
     "name": "topxia/edusoho",
-    "license": "MIT",
     "type": "project",
     "description": "Edusoho",
     "autoload": {
