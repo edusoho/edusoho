@@ -140,8 +140,16 @@ class SettingsController extends BaseController
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+
+        $parsed = $this->getFileService()->parseFileUri($idcardPath);
+
+        $directory = $this->container->getParameter('topxia.upload.private_directory');
+
+        $filename = $directory . '/' .  $parsed['path'];
+
+
         $imgConverToData = new ImgConverToData;
-        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> getImgDir($filename);
         $imgConverToData -> img2Data();
         $imgData = $imgConverToData -> data2Img();
         echo $imgData;
@@ -165,8 +173,15 @@ class SettingsController extends BaseController
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         $idcardPath = $type === 'head' ? $userApprovalInfo['headImg'] : $userApprovalInfo['headImg'];
+
+        $parsed = $this->getFileService()->parseFileUri($idcardPath);
+
+        $directory = $this->container->getParameter('topxia.upload.private_directory');
+
+        $filename = $directory . '/' .  $parsed['path'];
+
         $imgConverToData = new ImgConverToData;
-        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> getImgDir($filename);
         $imgConverToData -> img2Data();
         $imgData = $imgConverToData -> data2Img();
         echo $imgData;
@@ -174,7 +189,7 @@ class SettingsController extends BaseController
     }
 
 
-     public function jobResumeAction(Request $request)
+    public function jobResumeAction(Request $request)
     {
         $user = $this->getCurrentUser();
 

@@ -113,8 +113,16 @@ class UserApprovalController extends BaseController
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+
+        $parsed = $this->getFileService()->parseFileUri($idcardPath);
+
+        $directory = $this->container->getParameter('topxia.upload.private_directory');
+
+        $filename = $directory . '/' .  $parsed['path'];
+
+
         $imgConverToData = new ImgConverToData;
-        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> getImgDir($filename);
         $imgConverToData -> img2Data();
         $imgData = $imgConverToData -> data2Img();
         echo $imgData;
@@ -133,8 +141,16 @@ class UserApprovalController extends BaseController
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
         $idcardPath = $type === 'head' ? $userApprovalInfo['headImg'] : $userApprovalInfo['headImg'];
+
+        $parsed = $this->getFileService()->parseFileUri($idcardPath);
+
+        $directory = $this->container->getParameter('topxia.upload.private_directory');
+
+        $filename = $directory . '/' .  $parsed['path'];
+
+
         $imgConverToData = new ImgConverToData;
-        $imgConverToData -> getImgDir($idcardPath);
+        $imgConverToData -> getImgDir($filename);
         $imgConverToData -> img2Data();
         $imgData = $imgConverToData -> data2Img();
         echo $imgData;
@@ -146,6 +162,12 @@ class UserApprovalController extends BaseController
     {
         $this->getUserService()->rejectApproval($id, '管理员撤销');
         return $this->createJsonResponse(true);
+    }
+
+
+     private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
 }

@@ -731,17 +731,19 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException("用户#{$userId}不存在！");
         }
 
-        $faceImgPath = 'userFaceImg'.$userId.time().'.'. $faceImg->getClientOriginalExtension();
-        $backImgPath = 'userbackImg'.$userId.time().'.'. $backImg->getClientOriginalExtension();
-        $headImgPath = 'userHeadImg'.$userId.time().'.'. $headImg->getClientOriginalExtension();
-        $faceImg = $faceImg->move($directory, $faceImgPath);
-        $backImg = $backImg->move($directory, $backImgPath);
-        $headImg = $headImg->move($directory, $headImgPath);
+        $faceImgFile = $this->getFileService()->uploadImgFile('user_private',$faceImg);
+
+        $backImgFile = $this->getFileService()->uploadImgFile('user_private',$backImg);
+
+        $headImgFile = $this->getFileService()->uploadImgFile('user_private',$headImg);
+     
         
         $approval['userId'] = $user['id'];
-        $approval['faceImg'] = $faceImg->getPathname();
-        $approval['backImg'] = $backImg->getPathname();
-        $approval['headImg'] = $headImg->getPathname();
+
+        $approval['faceImg'] = $faceImgFile['uri'];
+        $approval['backImg'] = $backImgFile['uri'];
+        $approval['headImg'] = $headImgFile['uri'];
+
         $approval['status'] = 'approving';
         
         
@@ -751,10 +753,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $approval['createdTime'] = time();
-
-       
-
-        
 
         $this->getUserDao()->updateUser($userId, array(
             'approvalStatus' => 'approving',
