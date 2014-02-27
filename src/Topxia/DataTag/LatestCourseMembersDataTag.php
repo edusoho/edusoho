@@ -30,7 +30,12 @@ class LatestCourseMembersDataTag extends CourseBaseDataTag implements DataTag
         $memberIds = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, $arguments['count']);
         $memberIds = ArrayToolkit::column($memberIds, 'userId');
         $users = $this->getUserService()->findUsersByIds($memberIds);
+        $users = ArrayToolkit::index($users, 'id');
 
-        return $users;
+        $courseMembers= array();
+        foreach ($memberIds as $memberId) {
+            $courseMembers[$memberId] = $users[$memberId];
+        }
+        return $this->unsetUserPasswords($courseMembers);
     }
 }
