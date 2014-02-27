@@ -20,12 +20,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findCategoryByCode($code);
     }
 
-    public function getCategoryTree($groupId)
+    public function getCategoryTree()
     {
-        $group = $this->getGroup($groupId);
-        if (empty($group)) {
-            throw $this->createServiceException("分类Group #{$groupId}，不存在");
-        }
         $prepare = function($categories) {
             $prepared = array();
             foreach ($categories as $category) {
@@ -37,7 +33,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return $prepared;
         };
 
-        $categories = $prepare($this->findCategories($groupId));
+        $categories = $prepare($this->findAllCategories());
 
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
@@ -45,23 +41,21 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $tree;
     }
 
-    // public function findCategories($groupId)
-    // {
-    //     $group = $this->getGroup($groupId);
-    //     if (empty($group)) {
-    //         throw $this->createServiceException("分类Group #{$groupId}，不存在");
-    //     }
-    //     return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
-    // }
-
-    // public function findGroupRootCategories($groupCode)
-    // {
-    //     $group = $this->getGroupByCode($groupCode);
-    //     if (empty($group)) {
-    //         throw $this->createServiceException("分类Group #{$groupCode}，不存在");
-    //     }        
-    //     return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($group['id'], 0);
-    // }
+    private function makeCategoryTree(&$tree, &$categories, $parentId)
+    {
+        static $depth = 0;
+        static $leaf = false;
+        if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
+            foreach ($categories[$parentId] as $category) {
+                $depth++;
+                $category['depth'] = $depth;
+                $tree[] = $category;
+                $this->makeCategoryTree($tree, $categories, $category['id']);
+                $depth--;
+            }
+        }
+        return $tree;
+    }
 
     public function findCategoryChildrenIds($id)
     {
@@ -69,7 +63,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($category)) {
             return array();
         }
-        $tree = $this->getCategoryTree($category['groupId']);
+        $tree = $this->getCategoryTree();
 
         $childrenIds = array();
         $depth = 0;
@@ -142,13 +136,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle' ,'pagesize','seoTitle','seoKeyword'
+            ,'seoDesc','published','type','templateName','urlNameRule','comment'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新分类失败！');
         }
-
-        // filterCategoryFields里有个判断，需要用到这个$fields['groupId']
-        $fields['groupId'] = $category['groupId'];
 
         $this->filterCategoryFields($fields, $category);
 
@@ -171,55 +163,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
-    }
-
-    /**
-     * group
-     */
-    public function getGroup($id)
-    {   
-        return $this->getGroupDao()->getGroup($id);
-    }
-
-    public function getGroupByCode($code)
-    {
-        return $this->getGroupDao()->findGroupByCode($code);
-    }
-
-    public function getGroups($start, $limit)
-    {
-        return $this->getGroupDao()->findGroups($start, $limit);
-    }
-
-    public function findAllGroups()
-    {
-        return $this->getGroupDao()->findAllGroups();
-    }
-
-    public function addGroup(array $group)
-    {
-        return $this->getGroupDao()->addGroup($group);
-    }
-
-    public function deleteGroup($id)
-    {
-        return $this->getGroupDao()->deleteGroup($id);
-    }
-
-    private function makeCategoryTree(&$tree, &$categories, $parentId)
-    {
-        static $depth = 0;
-        static $leaf = false;
-        if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
-            foreach ($categories[$parentId] as $category) {
-                $depth++;
-                $category['depth'] = $depth;
-                $tree[] = $category;
-                $this->makeCategoryTree($tree, $categories, $category['id']);
-                $depth--;
-            }
-        }
-        return $tree;
     }
 
     private function filterCategoryFields(&$category, $releatedCategory = null)
@@ -248,19 +191,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                         }
                     }
                     break;
-                // case 'groupId':
-                //     $category['groupId'] = (int) $category['groupId'];
-                //     $group = $this->getGroup($category['groupId']);
-                //     if (empty($group)) {
-                //         throw $this->createServiceException("分类分组ID({$category['groupId']})不存在，保存分类失败");
-                //     }
-                //     break;
+
                 case 'parentId':
                     $category['parentId'] = (int) $category['parentId'];
                     if ($category['parentId'] > 0) {
                         $parentCategory = $this->getCategory($category['parentId']);
-                        if (empty($parentCategory) or $parentCategory['groupId'] != $category['groupId']) {
-                            throw $this->createServiceException("父分类(ID:{$category['groupId']})不存在，保存分类失败");
+                        if (empty($parentCategory)) {
+                            throw $this->createServiceException("父分类(ID:{$category['parentId']})不存在，保存分类失败");
                         }
                     }
                     break;
@@ -273,11 +210,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     private function getCategoryDao ()
     {
         return $this->createDao('Article.CategoryDao');
-    }
-
-    private function getGroupDao()
-    {
-        return $this->createDao('Article.CategoryGroupDao');
     }
 
     private function getLogService()
