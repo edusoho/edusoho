@@ -13,7 +13,7 @@ class LatestCourseMembersDataTag extends CourseBaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   categoryId 必需 分类ID
-     *   count    必需 课程数量，取值不能超过100
+     *   count    必需 学员数量，取值不能超过100
      * 
      * @param  array $arguments 参数
      * @return array 课程成员列表
@@ -21,16 +21,16 @@ class LatestCourseMembersDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {	
         $this->checkCount($arguments);
+        
         $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         $courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, 1000);
-
         $courseIds = ArrayToolkit::column($courses, 'id');
 
-        $conditions = array('courseIds' => $courseIds, 'unique' => true);
-        $memberIds = $this->getCourseService()->searchMemberIds($conditions, array('createdTime', 'DESC'), 0, $arguments['count']);
-
+        $conditions = array('courseIds' => $courseIds, 'unique' => true , 'role' => 'student');
+        $memberIds = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, $arguments['count']);
+        $memberIds = ArrayToolkit::column($memberIds, 'userId');
         $users = $this->getUserService()->findUsersByIds($memberIds);
 
-        return $this->unsetUserPasswords($users);
+        return $users;
     }
 }

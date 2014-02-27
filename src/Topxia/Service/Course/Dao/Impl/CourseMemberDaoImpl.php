@@ -118,6 +118,23 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+    public function searchMemberIds($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions);
+
+        if(isset($conditions['unique'])){
+            $builder->select('DISTINCT userId');
+        }else {
+            $builder->select('userId');
+        }
+        $builder->orderBy($orderBy[0], $orderBy[1]);
+        $builder->setFirstResult($start);
+        $builder->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
     public function updateMember($id, $member)
     {
         $this->getConnection()->update($this->table, $member, array('id' => $id));
@@ -142,8 +159,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     }
 
     private function _createSearchQueryBuilder($conditions)
-    {
-        return $this->createDynamicQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_member')
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
@@ -151,6 +168,21 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime < :startTimeLessThan');
+
+        if (isset($conditions['courseIds'])) {
+            $courseIds = array();
+            foreach ($conditions['courseIds'] as $courseId) {
+                if (ctype_digit($courseId)) {
+                    $courseIds[] = $courseId;
+                }
+            }
+            if ($courseIds) {
+                $courseIds = join(',', $courseIds);
+                $builder->andStaticWhere("courseId IN ($courseIds)");
+            }
+        }
+
+        return $builder;
     }
 
 }
