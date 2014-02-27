@@ -284,6 +284,11 @@ define(function(require, exports, module) {
                 }
             });
 
+            var testpaperBodyHeight = $('.testpaper-body').height();
+            var testpaperCardHeight = $('.testpaper-card').height();
+            if (testpaperCardHeight > testpaperBodyHeight) {
+                $('.testpaper-body').css('min-height', testpaperCardHeight);
+            }
         });
 
         $.each(alls, function(index, val){
