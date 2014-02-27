@@ -124,12 +124,12 @@ class CourseStudentManageController extends BaseController
             $card['joinedTime'] = $courseMember['createdTime'];
             $card['percent']  = $progress['percent'];
             $card['truename'] = $profile['truename'];
-            $card['email'] = $user['email'] ? $user['email'] : "email为空";
-            $card['company'] = $profile['company'];
-            $card['title'] = $user['title'];
-            $card['mobile'] = $profile['mobile'];
-            $card['weixin'] = $profile['weixin'];
-            $card['qq'] = $profile['qq'] ? $profile['qq'] : "QQ空";
+            $card['email'] = $user['email'] ? $user['email'] : "Email空";
+            $card['company'] = $profile['company'] ? $profile['company'] : "公司空";
+            $card['title'] = $user['title'] ? $user['title'] : "头衔空";
+            $card['mobile'] = $profile['mobile'] ? $profile['mobile'] : "电话空";
+            $card['weixin'] = $profile['weixin'] ? $profile['weixin'] : "微信空";
+            $card['qq'] = $profile['qq'] ? $profile['qq'] : "QQ号空";
             return implode(',',$card);
         }, $users,$courseMembers,$progresses,$profiles);
         $str .= implode("\r\n",$students);
