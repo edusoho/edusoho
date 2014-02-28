@@ -8,22 +8,23 @@ use Topxia\Service\Common\ServiceKernel;
 
 class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 {
-	public function onLogoutSuccess(Request $request)
-	{
-		if ($this->getAuthService()->hasPartnerAuth()) {
-			$user = ServiceKernel::instance()->getCurrentUser();
-			if (!$user->isLogin()) {
-				return parent::onLogoutSuccess($request);
-			}
+    public function onLogoutSuccess(Request $request)
+    {
+        $this->targetUrl = 'login';
+        if ($this->getAuthService()->hasPartnerAuth()) {
+            $user = ServiceKernel::instance()->getCurrentUser();
+            if (!$user->isLogin()) {
+                return parent::onLogoutSuccess($request);
+            }
 
-			$url = $this->httpUtils->generateUri($request, 'partner_logout');
-			$queries = array('userId' => $user['id'], 'goto' => $this->targetUrl);
-			$url = $url . '?' . http_build_query($queries);
-			return $this->httpUtils->createRedirectResponse($request, $url);
-		}
+            $url = $this->httpUtils->generateUri($request, 'partner_logout');
+            $queries = array('userId' => $user['id'], 'goto' => $this->targetUrl);
+            $url = $url . '?' . http_build_query($queries);
+            return $this->httpUtils->createRedirectResponse($request, $url);
+        }
 
-		return parent::onLogoutSuccess($request);
-	}
+        return parent::onLogoutSuccess($request);
+    }
 
     private function getAuthService()
     {

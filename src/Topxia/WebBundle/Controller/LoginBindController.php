@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 
 class LoginBindController extends BaseController
@@ -10,6 +9,9 @@ class LoginBindController extends BaseController
 
     public function indexAction (Request $request, $type)
     {
+        if ($request->query->has('_target_path')) {
+            $request->getSession()->set('_target_path', $request->query->get('_target_path'));
+        }
 
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
@@ -31,9 +33,10 @@ class LoginBindController extends BaseController
             }
             $this->authenticateUser($user);
             if ($this->getAuthService()->hasPartnerAuth()) {
-                return $this->redirect($this->generateUrl('partner_login'));
+                return $this->redirect($this->generateUrl('partner_login', 'goto' => $request->getSession()->get('_target_path', '')));
             } else {
-                return $this->redirect($this->generateUrl('homepage'));
+                $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
+                return $this->redirect($goto);
             }
         } else {
             $request->getSession()->set('oauth_token', $token);
@@ -79,7 +82,7 @@ class LoginBindController extends BaseController
         }
 
         $this->authenticateUser($user);
-        $response = array('success' => true);
+        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
 
         response:
         return $this->createJsonResponse($response);
@@ -138,7 +141,7 @@ class LoginBindController extends BaseController
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
-            $response = array('success' => true);
+            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }
