@@ -5,11 +5,14 @@
   <form id="review-form" method="post" action="{{ path('course_review_create', {id:course.id}) }}">
       {{ web_macro.flash_messages() }}
 
-    <div class="form-group">
-      <div class="controls">
+    <div class="form-group clearfix">
+      <div class="controls pull-left">
         请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
         {{ form_widget(form.rating) }}
       </div>
+
+      <a id="list_reviews" class="btn btn-sm btn-info pull-right" data-url="{{ path('course_review_list', {id:course.id}) }}">查看全部评价</a>
+
     </div>
 
     <div class="form-group">

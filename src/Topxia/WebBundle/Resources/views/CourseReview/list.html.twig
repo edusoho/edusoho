@@ -1,5 +1,19 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
+{% if isModal|default(null) %}
+
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h4 class="modal-title">评价课程</h4>
+    </div>
+    <div class="modal-body">
+
+{% endif %}
+
+
+
 <ul class="media-list">
 	{% for review in reviews %}
 	  {% set user = users[review.userId] %}
@@ -26,3 +40,17 @@
 {% if paginator|default(null) %}
 	{{ web_macro.paginator(paginator) }}
 {% endif  %}
+
+
+{% if isModal|default(null) %}
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+    <button class="btn btn-primary" data-url="{{ path('course_review_create', {id:course.id}) }}" id="back_to_create">返回</button>
+  
+</div>
+      </div>
+</div>
+
+{% endif %}

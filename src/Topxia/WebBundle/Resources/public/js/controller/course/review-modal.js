@@ -46,6 +46,17 @@ define(function(require, exports, module) {
         });
 
 
+        $('#modal').on('click', '#list_reviews', function(){
+            $.get($('#list_reviews').data('url'), function(html) {
+                $('#modal').html(html);
+            });
+        });
+
+        $('#modal').on('click', '#back_to_create', function(){
+            $('#modal').load($('#back_to_create').data('url'));
+        });
+
+
     };
 
 });
