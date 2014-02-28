@@ -379,6 +379,10 @@ course_manage_student_create:
     pattern:  /course/{id}/manage/student/create
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
 
+course_manage_student_export_csv:
+    pattern:  /course/{id}/manage/student/export
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportCsv }
+
 course_manage_student_remove:
     pattern:  /course/{courseId}/manage/student/{userId}/remove
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remove }

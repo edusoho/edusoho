@@ -1,5 +1,17 @@
 define(function(require, exports, module) {
 
+    var resetPosition = function($bar) {
+        if (!$bar) {
+            var $bar = $('.bootstrap-notify-bar');
+            if ($bar.length == 0) {
+                return ;
+            }
+        }
+
+        var left = $(window).width() / 2 - ($bar.outerWidth() / 2);
+        $bar.css({left:left});
+    }
+
     var showMessage = function(type, message, duration) {
         var $exist = $('.bootstrap-notify-bar');
         if ($exist.length > 0) {
@@ -12,7 +24,11 @@ define(function(require, exports, module) {
         html += '</div>';
 
         var $html = $(html);
-        $html.appendTo('body').slideDown(100, function(){
+        $html.appendTo('body');
+
+        resetPosition($html);
+
+        $html.slideDown(100, function(){
             duration = $.type(duration) == 'undefined' ? 3 :  duration;
             if (duration > 0) {
                 setTimeout(function(){
@@ -20,6 +36,7 @@ define(function(require, exports, module) {
                 }, duration * 1000);
             }
         });
+
     }
 
     var Notify = {
