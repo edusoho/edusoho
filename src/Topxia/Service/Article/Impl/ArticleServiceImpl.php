@@ -49,7 +49,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	public function createArticle($Article)
 	{
 		if (empty($Article['type'])) {
-			throw $this->createServiceException('参数缺失，创建内容失败！');
+			throw $this->createServiceException('参数缺失，创建文章失败！');
 		}
 
 		$type = ArticleTypeFactory::create($Article['type']);
@@ -58,11 +58,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$Article['type'] = $type->getAlias();
 
 		if (empty($Article['title'])) {
-			throw $this->createServiceException('内容标题不能为空，创建内容失败！');
+			throw $this->createServiceException('文章标题不能为空，创建文章失败！');
 		}
 
 		$Article['userId'] = $this->getCurrentUser()->id;
 		$Article['createdTime'] = time();
+		$Article['updated']=$Article['createdTime']; //update time
 		
         if (empty($Article['publishedTime'])) {
 			$Article['publishedTime'] = $Article['createdTime'];
@@ -77,7 +78,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 		$Article = $this->getArticle($id);
 
-        $this->getLogService()->info('Article', 'create', "创建内容《({$Article['title']})》({$Article['id']})", $Article);
+        $this->getLogService()->info('Article', 'create', "创建文章《({$Article['title']})》({$Article['id']})", $Article);
 
 		return $Article;
 	}
@@ -86,12 +87,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	{
 		$Article = $this->getArticle($id);
 		if (empty($Article)) {
-			throw $this->createServiceException('内容不存在，更新失败！');
+			throw $this->createServiceException('文章不存在，更新失败！');
 		}
 
 		$type = ArticleTypeFactory::create($Article['type']);
 		$fields = $type->convert($fields);
 		$fields = ArrayToolkit::parts($fields, $type->getFields());
+
+		$fields['updated']=time();
 
         // if(isset($fields['body'])){
         //     $fields['body'] = $this->purifyHtml($fields['body']);
@@ -101,7 +104,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 		$Article = $this->getArticle($id);
 
-		$this->getLogService()->info('Article', 'update', "内容《({$Article['title']})》({$Article['id']})更新", $Article);
+		$this->getLogService()->info('Article', 'update', "文章《({$Article['title']})》({$Article['id']})更新", $Article);
 
 		return $Article;
 	}
@@ -109,19 +112,19 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	public function trashArticle($id)
 	{
 		$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
-		$this->getLogService()->info('Article', 'trash', "内容#{$id}移动到回收站");
+		$this->getLogService()->info('Article', 'trash', "文章#{$id}移动到回收站");
 	}
 
 	public function deleteArticle($id)
 	{
 		$this->getArticleDao()->deleteArticle($id);
-		$this->getLogService()->info('Article', 'delete', "内容#{$id}永久删除");
+		$this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
 	}
 
 	public function publishArticle($id)
 	{
 		$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
-		$this->getLogService()->info('Article', 'publish', "内容#{$id}发布");
+		$this->getLogService()->info('Article', 'publish', "文章#{$id}发布");
 	}
 
 	public function isAliasAvaliable($alias)

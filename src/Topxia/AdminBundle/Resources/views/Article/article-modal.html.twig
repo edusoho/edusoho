@@ -28,9 +28,15 @@
 			{% if 'categoryId' in type.basicFields %}
 				<div class="form-group">
 				  <label for="article-category-field" class="control-label">所属栏目</label>
-				  <div class="controls">
-				  	<input class="form-control" id="article-category-field" type="text" name="categoryId" value="{{ field_value(article, 'categoryId') }}">
-				  </div>
+				   <div class="controls">
+					  <select class="form-control" id="article-categoryId-field" type="text" name="categoryId" tabindex="2">
+							<option value=0>选择栏目</option>
+							{% for tree in categoryTree %}
+							<option value={{ tree.id }} {% if tree.id == field_value(article, 'categoryId', -1)  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}
+							</option>
+							{% endfor %}
+						</select>
+ 					</div>
 				</div>
 			{% endif %}
 
@@ -214,11 +220,10 @@
 				</div>
 			</div>
 			
-			
-
 		</div>
 	</div>
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	
 </form>
 
 <script> app.load('article/article-modal') </script>

@@ -67,8 +67,11 @@ class ArticleController extends BaseController
             ));
         }
 
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'type' => $type,
+            'categoryTree'  => $categoryTree
         ));
 	}
 
@@ -98,9 +101,12 @@ class ArticleController extends BaseController
             ));
         }
 
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+        
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'type' => $type,
             'article' => $article,
+            'categoryTree'  => $categoryTree
         ));
 
     }
@@ -201,7 +207,7 @@ class ArticleController extends BaseController
 
     private function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
     private function getFileService()
