@@ -12,48 +12,12 @@
  
 
   <!-- banner -->
-  <div class="container  pz mtl">  
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-        </ol>
+  <div class="container  pz mtl"> 
 
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner pbl">
-          <div class="item active">
-            <img  src="{{ asset('bundles/topxiaweb/img/home-slide/banner-index.jpg')}}" >
-           
-          </div>
-
-          <div class="item ">
-            <img  src="{{ asset('bundles/topxiaweb/img/home-slide/banner-openclass.jpg')}}" >
-           
-          </div>
-
-          <div class="item ">
-            <img  src="{{ asset('bundles/topxiaweb/img/home-slide/banner-taining.jpg')}}" >
-           
-          </div>
-
-          <div class="item ">
-            <img  src="{{ asset('bundles/topxiaweb/img/home-slide/banner-online.jpg')}}" >
-           
-          </div>
-         
-        </div>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-      </div>
+    {% if blocks.home_top_banner %}
+            {{ blocks.home_top_banner.content|raw }}
+    {% endif %}
+    
   </div>
 
 
@@ -224,7 +188,7 @@
        
           <div class="col-md-4 ">
 
-            {% if blocks.home_new_banner %}
+          {% if blocks.home_new_banner %}
             <div>
               <div class="es-row-wrap container-gap">
                 <div class="kytitle clearfix es-box-heading mtm">
@@ -234,7 +198,7 @@
                 <div class="es-box-body pll prm pbm">{{ blocks.home_new_banner.content|raw }}</div>
               </div>
             </div>
-            {% endif %}
+          {% endif %}
 
            
             

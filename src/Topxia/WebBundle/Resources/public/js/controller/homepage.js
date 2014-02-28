@@ -57,13 +57,7 @@ define(function(require, exports, module) {
 			
 		});
 
-		$('#teacher-carousel').carousel({interval: 0});
-        $('#teacher-carousel').on('slide.bs.carousel', function (e) {
-            var teacherId = $(e.relatedTarget).data('id');
-
-            $('#teacher-detail').find('.teacher-item-user').removeClass('teacher-item-user-active');
-            $('#teacher-detail').find('.teacher-item-user-' + teacherId).addClass('teacher-item-user-active');
-        });
+		
     	
 
     };
