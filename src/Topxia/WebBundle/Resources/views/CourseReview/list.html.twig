@@ -45,11 +45,10 @@
 {% if isModal|default(null) %}
 
 </div>
-          <div class="modal-footer">    <button class="btn btn-link" data-dismiss="modal">取消</button>
-    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form">保存</button>
-  <script>
-      app.load('course/review-modal');
-  </script>
+<div class="modal-footer">
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+    <button class="btn btn-primary" data-url="{{ path('course_review_create', {id:course.id}) }}" id="back_to_create">返回</button>
+  
 </div>
       </div>
 </div>
