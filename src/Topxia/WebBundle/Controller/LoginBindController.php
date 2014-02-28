@@ -33,7 +33,7 @@ class LoginBindController extends BaseController
             }
             $this->authenticateUser($user);
             if ($this->getAuthService()->hasPartnerAuth()) {
-                return $this->redirect($this->generateUrl('partner_login', 'goto' => $request->getSession()->get('_target_path', '')));
+                return $this->redirect($this->generateUrl('partner_login', array('goto'=>$request->getSession()->get('_target_path', ''))));
             } else {
                 $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
                 return $this->redirect($goto);
