@@ -120,17 +120,17 @@ class CourseStudentManageController extends BaseController
         $str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
 
         $students = array_map(function($user,$courseMember,$progress,$profile){
-            $card['nickname']   = $user['nickname'];
-            $card['joinedTime'] = $courseMember['createdTime'];
-            $card['percent']  = $progress['percent'];
-            $card['truename'] = $profile['truename'];
-            $card['email'] = $user['email'] ? $user['email'] : "Email空";
-            $card['company'] = $profile['company'] ? $profile['company'] : "公司空";
-            $card['title'] = $user['title'] ? $user['title'] : "头衔空";
-            $card['mobile'] = $profile['mobile'] ? $profile['mobile'] : "电话空";
-            $card['weixin'] = $profile['weixin'] ? $profile['weixin'] : "微信空";
-            $card['qq'] = $profile['qq'] ? $profile['qq'] : "QQ号空";
-            return implode(',',$card);
+            $member['nickname']   = $user['nickname'];
+            $member['joinedTime'] = $courseMember['createdTime'];
+            $member['percent']  = $progress['percent'];
+            $member['truename'] = $profile['truename'] ? $profile['truename'] : "姓名空";
+            $member['email'] = $user['email'] ? $user['email'] : "Email空";
+            $member['company'] = $profile['company'] ? $profile['company'] : "公司空";
+            $member['title'] = $user['title'] ? $user['title'] : "头衔空";
+            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "电话空";
+            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "微信空";
+            $member['qq'] = $profile['qq'] ? $profile['qq'] : "QQ号空";
+            return implode(',',$member);
         }, $users,$courseMembers,$progresses,$profiles);
         $str .= implode("\r\n",$students);
 
