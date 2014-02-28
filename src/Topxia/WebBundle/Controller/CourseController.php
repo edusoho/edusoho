@@ -177,6 +177,7 @@ class CourseController extends BaseController
             'groupedItems' => $groupedItems,
             'hasFavorited' => $hasFavorited,
             'category' => $category,
+            'previewAs' => $previewAs,
             'tags' => $tags,
         ));
 

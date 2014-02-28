@@ -46,6 +46,14 @@ define(function(require, exports, module) {
         });
 
 
+        $('#list_reviews').on('click', function(){
+            var $modal = $('#modal');
+            $.get($(this).data('url'), function(html) {
+                $modal.html(html);
+            });
+        });
+
+
     };
 
 });
