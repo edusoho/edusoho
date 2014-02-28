@@ -57,8 +57,10 @@ class CourseLessonManageController extends BaseController
         		$lesson['media'] = json_decode($lesson['media'], true);
         	}
 
-        	if ($lesson['length']) {
-        		$lesson['length'] = $this->textToSeconds($lesson['length']);
+        	if ($lesson['second']) {
+        		$lesson['length'] = $this->textToSeconds($lesson['minute'], $lesson['second']);
+        		unset($lesson['minute']);
+        		unset($lesson['second']);
         	}
         	$lesson = $this->getCourseService()->createLesson($lesson);
 
@@ -138,8 +140,10 @@ class CourseLessonManageController extends BaseController
         	if ($fields['media']) {
         		$fields['media'] = json_decode($fields['media'], true);
         	}
-        	if ($fields['length']) {
-        		$fields['length'] = $this->textToSeconds($fields['length']);
+        	if ($fields['second']) {
+        		$fields['length'] = $this->textToSeconds($fields['minute'], $fields['second']);
+        		unset($fields['minute']);
+        		unset($fields['second']);
         	}
 
         	$fields['free'] = empty($fields['free']) ? 0 : 1;
@@ -173,7 +177,7 @@ class CourseLessonManageController extends BaseController
 	    	);
         }
 
-        $lesson['length'] = $this->secondsToText($lesson['length']);
+        list($lesson['minute'], $lesson['second']) = $this->secondsToText($lesson['length']);
 
         $user = $this->getCurrentUser();
 
@@ -350,15 +354,11 @@ class CourseLessonManageController extends BaseController
 	{
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
-        return sprintf('%02d', $minutes) . ':' . sprintf('%02d', $seconds);
+        return array($minutes, $seconds);
 	}
 
-	private function textToSeconds($text)
+	private function textToSeconds($minutes, $seconds)
 	{
-		if (strpos($text, ':') === false) {
-			return 0;
-		}
-		list($minutes, $seconds) = explode(':', $text, 2);
 		return intval($minutes) * 60 + intval($seconds);
 	}
 
