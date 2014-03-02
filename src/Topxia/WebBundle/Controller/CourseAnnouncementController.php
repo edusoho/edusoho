@@ -38,6 +38,16 @@ class CourseAnnouncementController extends BaseController
 	    if($request->getMethod() == 'POST'){
         	$announcement = $this->getCourseService()->createAnnouncement($courseId, $request->request->all());
 
+        	$count = $this->getCourseService()->getCourseStudentCount($courseId);
+
+        	$members = $this->getCourseService()->findCourseStudents($courseId, 0, $count);
+
+        	$courseUrl = $this->generateUrl('course_show', array('id'=>$courseId), true);
+        	foreach ($members as $member) {
+	        	$result = $this->getNotificationService()->notify($member['userId'], 'default', "课程<a href='{$courseUrl}' target='_blank'>{$course['title']}</a>更新了公告：{$announcement['content']}");
+        	}
+
+
         	return $this->createJsonResponse(true);
 		}
 
