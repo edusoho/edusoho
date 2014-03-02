@@ -40,7 +40,7 @@ define(function(require, exports, module) {
         });
 
 // 做试卷
-        var interval = 180;
+        var interval = 600;
 
         var changeAnswers = {};
 
