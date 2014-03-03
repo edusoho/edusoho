@@ -106,7 +106,7 @@ class CourseStudentManageController extends BaseController
 
     public function exportCsvAction (Request $request, $id)
     {   
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryAdminCourse($id);
 
         $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,1000);
 
@@ -121,20 +121,20 @@ class CourseStudentManageController extends BaseController
 
         $students = array_map(function($user,$courseMember,$progress,$profile){
             $member['nickname']   = $user['nickname'];
-            $member['joinedTime'] = $courseMember['createdTime'];
+            $member['joinedTime'] = date('Y-n-d H:i:s', $courseMember['createdTime']);
             $member['percent']  = $progress['percent'];
-            $member['truename'] = $profile['truename'] ? $profile['truename'] : "姓名空";
-            $member['email'] = $user['email'] ? $user['email'] : "Email空";
-            $member['company'] = $profile['company'] ? $profile['company'] : "公司空";
-            $member['title'] = $user['title'] ? $user['title'] : "头衔空";
-            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "电话空";
-            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "微信空";
-            $member['qq'] = $profile['qq'] ? $profile['qq'] : "QQ号空";
+            $member['truename'] = $profile['truename'] ? $profile['truename'] : "-";
+            $member['email'] = $user['email'] ? $user['email'] : "-";
+            $member['company'] = $profile['company'] ? $profile['company'] : "-";
+            $member['title'] = $user['title'] ? $user['title'] : "-";
+            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "-";
+            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "-";
+            $member['qq'] = $profile['qq'] ? $profile['qq'] : "-";
             return implode(',',$member);
         }, $users,$courseMembers,$progresses,$profiles);
         $str .= implode("\r\n",$students);
 
-        $filename = $course['title']."-学员信息"."-".date("YmdHi").".csv";
+        $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
         $userId = $this->getCurrentUser()->id;
 
