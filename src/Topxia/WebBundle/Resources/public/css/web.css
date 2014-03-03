@@ -168,6 +168,10 @@ textarea {
 
 }
 
+.control-label .required {
+	color: #f60;
+}
+
 .bootstrap-notify-bar {
 	position: fixed;
 	top: 0px;
