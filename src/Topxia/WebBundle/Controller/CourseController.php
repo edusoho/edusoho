@@ -373,6 +373,8 @@ class CourseController extends BaseController
 
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
+        if (empty($member)) { $member['deadline'] = 0; }
+
         $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
