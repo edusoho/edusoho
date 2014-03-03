@@ -36,14 +36,14 @@ define(function(require, exports, module) {
        
 
         validator.addItem({
-            element: '[name="validTime"]',         
+            element: '[name="strvalidTime"]',         
             required: false,
             rule: 'datetime-i'
         });
 
 
         //日期时间选择
-        $('#validTime').datetimepicker({
+        $('#strvalidTime').datetimepicker({
             format: 'yyyy-mm-dd hh:ii',
             language: 'zh-CN',
             pickDate: true,

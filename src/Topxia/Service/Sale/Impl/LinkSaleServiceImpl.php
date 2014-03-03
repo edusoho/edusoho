@@ -124,7 +124,9 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
     public function updateLinkSale($id, $linksale)
     {
 
-       return $this->getLinkSaleDao()->updateLinkSale($id, $linksale);
+        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','linkName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
+
+       return $this->getLinkSaleDao()->updateLinkSale($id, LinkSaleSerialize::serialize($linksale));
     }
 
     public function deleteLinkSales(array $ids)
