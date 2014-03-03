@@ -78,6 +78,9 @@ define(function(require, exports, module) {
                         changeAnswers = {};
                         $('#timeout-dialog').show();
                         timer.stop();
+                    }).error(function(){
+                        $('#timeout-dialog').show();
+                        timer.stop();
                     });
                 }
                 if (deadline == timeLastPost) {
