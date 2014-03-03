@@ -54,7 +54,8 @@ define(function(require, exports, module) {
         validator.removeItem('#lesson-title-field');
         validator.removeItem('#lesson-content-field');
         validator.removeItem('#lesson-media-field');
-        validator.removeItem('#lesson-length-field');
+        validator.removeItem('#lesson-second-field');
+        validator.removeItem('#lesson-minute-field');
 
         validator.addItem({
             element: '#lesson-title-field',
