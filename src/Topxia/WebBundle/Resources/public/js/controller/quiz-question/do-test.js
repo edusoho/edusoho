@@ -27,6 +27,12 @@ define(function(require, exports, module) {
             }
         });
 
+        $('.testpaper-card').on('click', '.btn-index', function() {
+            var position = $($(this).data('anchor')).offset();
+            $(document).scrollTop(position.top - 55);
+            console.log(position);
+        });
+
 
         var $body = $(document.body);
 
