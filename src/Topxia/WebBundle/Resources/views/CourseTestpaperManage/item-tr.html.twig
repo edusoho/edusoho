@@ -19,7 +19,7 @@
   <td>{{ dict_text('difficulty', question.difficulty)}}</td>
   <td>
     <input name="scores[]" class="notMoveHandle form-control input-sm"
-      {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %} value="{{ item.score|default(question.score)|score_text }}" data-miss-score="{{ item.missScore }}" >
+      {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %} value="{{ item.score|default(question.score)|score_text }}" data-miss-score="{{ testpaper.metas.missScore[type]|default(0) }}" >
   </td>
 
   <td>
