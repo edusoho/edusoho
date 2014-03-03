@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         [
             'phone', 
             /^1\d{10}$/,
-            '请输入合法的{{display}}'
+            '请输入有效的{{display}}'
         ],
         [
             'chinese_alphanumeric',

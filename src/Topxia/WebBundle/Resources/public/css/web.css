@@ -889,6 +889,13 @@ body {
 	font-size: 12px;
 }
 
+.material-pane {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	overflow: hidden;
+}
 .material-pane h5 {
 	font-weight: bold;
 	font-size: 13px;
@@ -1543,7 +1550,9 @@ body {
 .lesson-dashboard .lesson-content-text-body img {
 	max-width: 100%;
 }
-
+.lesson-dashboard .lesson-content-text-body blockquote p {
+	font-size: 14px;
+}
 .lesson-dashboard .nav-btn {
 	position: absolute;
 	background: #f9f9f9;

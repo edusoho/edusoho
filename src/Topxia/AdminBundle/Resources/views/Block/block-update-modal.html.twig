@@ -26,6 +26,9 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
+<div class="mbm mtl"><strong>设置提示</strong></div>
+<div class="text-info">{{block.tips}}</div>
+
 <div class="mbm mtl"><strong>变更记录</strong></div>
   <table id="block-history-table" class="table table-striped table-condensed">
   <tbody>
