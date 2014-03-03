@@ -15,26 +15,24 @@
     {% endif %}
   </td>
 
-  <td>{{ offsale.adCommission}}%</td>
+  <td>
+    {{ offsale.adCommission}}%
+    <br>  
+    <span class="text-muted text-sm text-break">推广有效期：{{ offsale.adCommissionDay }}天</span>
 
-  <td>￥{{ offsale.reducePrice}}</td>
+  </td>
+
+  <td>
+    ￥{{ offsale.reducePrice}}
+    <br>  
+    <span class="text-muted text-sm text-break">优惠有效期：{{ offsale.validTime|default('永久')}}</span>
+  </td>
  
   <td class="text-muted text-sm text-break">{{ offsale.prodName }}</td>
 
    
 
-  <td class="text-muted text-sm text-break">
-    {% if offsale.saleType=='offsale-course' %}
-         {{ offsale.validTime }}
-    {% endif %}
-
-    {% if offsale.saleType=='invite-course' %}
-         {{ offsale.adCommissionDay }}天
-    {% endif %}
-
-  
-
-  </td>
+ 
  
   <td class="text-muted text-sm text-break">{{ offsale.promoName }}</td>
 

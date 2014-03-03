@@ -157,9 +157,15 @@ class MySaleController extends BaseController
 
             $linksale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$linksale['mTookeen'];
 
+            $linksale['reduceType'] = 'quota';
+            $linksale['reducePrice'] = 0.00;
             $linksale['validTime']=0;//优惠有效期
 
+
+
             $linksale['partnerId']=$user['id'];
+
+            $linksale['managerId']= 2;
           
 
             $this->getLinkSaleService()->createLinkSale($linksale);
@@ -229,9 +235,15 @@ class MySaleController extends BaseController
 
             $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
 
+            $linksale['reduceType'] = 'quota';
+            $linksale['reducePrice'] = 0.00;         
+
+
             $linksale['validTime']=0;//优惠有效期
 
             $linksale['partnerId']=$user['id'];
+
+            $linksale['managerId']= 2;
           
             $linksale = $this->getLinkSaleService()->createLinkSale($linksale);
 
@@ -315,15 +327,16 @@ class MySaleController extends BaseController
 
             $offsale['reduceType'] = 'quota';
             $offsale['reducePrice'] = 0;
+            $offsale['validTime']==0;//优惠有效期
+
             $offsale['reuse']= '可以';
             $offsale['valid']= '有效';
-            $offsale['strvalidTime']=$course['saleValidTime'];
+           
             $offsale['partnerId']= $user['id'];
-            $offsale['managerId']= 0;
+            $offsale['managerId']= 2;
          
 
-            $offsale['validTime']=$course['saleValidTime'];
-
+           
           
           
 

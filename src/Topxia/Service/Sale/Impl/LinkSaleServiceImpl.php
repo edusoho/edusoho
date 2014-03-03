@@ -109,7 +109,7 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 
     public function createLinkSale($linksale){
 
-        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
+        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','linkName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
 
         $linksale['createdTime']=time();
 

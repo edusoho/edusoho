@@ -101,7 +101,7 @@ class OffSaleController extends BaseController
             'reuse'=>'不可以'
               );
 
-        return $this->render('TopxiaAdminBundle:Sale:offsale-modal.html.twig',array('offsetting' => $offsetting));
+        return $this->render('TopxiaAdminBundle:Sale:offsale-create-modal.html.twig',array('offsetting' => $offsetting));
     }
 
     public function prodCheckAction(Request $request)

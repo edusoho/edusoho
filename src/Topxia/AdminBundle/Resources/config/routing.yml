@@ -659,6 +659,10 @@ admin_sale_linksale:
     pattern: /sale/linksale
     defaults: { _controller: TopxiaAdminBundle:LinkSale:index }
 
+admin_sale_linksale_setting:
+    pattern: /sale/linksale/{id}/setting
+    defaults: { _controller: TopxiaAdminBundle:LinkSale:setting }
+
 admin_sale_linksale_delete_batch:
     pattern: /sale/linksale/delete/batch
     defaults: { _controller: TopxiaAdminBundle:LinkSale:batchDelete }

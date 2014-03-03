@@ -151,6 +151,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             $offsale['promoCode']= $this->generateOffSaleCode($offsetting['promoPrefix']);
             $offsale['adCommissionType'] = $offsetting['adCommissionType'];
             $offsale['adCommission'] = $offsetting['adCommission'];
+            $offsale['adCommissionDay'] = $offsetting['adCommissionDay'];
             $offsale['reduceType'] = $offsetting['reduceType'];
             $offsale['reducePrice'] = $offsetting['reducePrice'];
             $offsale['reuse']= $offsetting['reuse'];

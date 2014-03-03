@@ -2,20 +2,44 @@
 <tr id="offsale-table-tr-{{ linksale.id }}" data-role="item">
   <td><input value="{{linksale.id}}" type="checkbox"  data-role="batch-item" ></td>
 
-  <td class="text-muted text-sm text-break">{{ dict_text('saleType:html', linksale.saleType) }}</td>
+  <td class="text-muted text-sm text-break">{{ dict_text('saleType:html', linksale.saleType) }}<br>
+    
+     {% if linksale.customized == '0' %}
+        <span >系统默认佣金设置</span>
+      {% else %}
+        <span class="text-color-red">已单独设置佣金</span>
+      {% endif %}
+
+  </td>
   <td class="text-muted text-sm text-break">{{ linksale.tUrl }}</td>
   
   <td>
     {% if partner %}
        {{ partner.nickname }}
     {% endif %}
+
+     <button class="btn btn-warning btn-sm"  id="setting-linksale-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_sale_linksale_setting',{id:linksale.id}) }}">单独设置</button>
   </td>
-   <td>{{ linksale.adCommission}}%</td>
-   <td>￥{{ linksale.reducePrice}}</td>
+
+
+   <td>
+     {{ linksale.adCommission}}%
+     <br>   
+     <span class="text-muted text-sm text-break">推广有效期：{{ linksale.adCommissionDay }}天</span>
+   </td>
+
+
+   <td>
+     ￥{{ linksale.reducePrice}}
+     <br>   
+     <span class="text-muted text-sm text-break">优惠有效期：{{ linksale.validTime|default('永久')}}</span>
+   </td>
+
+
   <td class="text-muted text-sm text-break">{{ linksale.prodName }}</td>
  
 
-  <td class="text-muted text-sm text-break">{{ linksale.adCommissionDay }}天</td>
+ 
  
  
 

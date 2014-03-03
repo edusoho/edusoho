@@ -70,6 +70,27 @@ class LinkSaleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+
+    public function settingAction(Request $request,$id){
+
+         
+
+         if('POST' == $request->getMethod()){
+
+            $lsFields = $request->request->all();
+
+            $user = $this->getCurrentUser();
+
+            $this->getLinkSaleService()->updateLinkSale($id,$lsFields);
+            
+            return $this->redirect($this->generateUrl('admin_sale_linksale')); 
+        }
+
+        $linksale=$this->getLinkSaleService()->getLinkSale($id);
+
+        return $this->render('TopxiaAdminBundle:Sale:linksale-setting-modal.html.twig',array('linksale'=>$linksale));
+    }
+
    
     private function getOrderService()
     {

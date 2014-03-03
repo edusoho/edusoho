@@ -1,8 +1,8 @@
 <?php
-namespace Topxia\Service\Sale\Impl;
+namespace Topxia\Service\Delivery\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Sale\CommissionService;
+use Topxia\Service\Delivery\CommissionService;
 use Topxia\Common\ArrayToolkit;
 
 class CommissionServiceImpl extends BaseService implements CommissionService
@@ -228,8 +228,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
                  $commission['note']='本人定单不能享受佣金收入';
 
 
-            //}else if (!empty($offsale['validTimeNum']) and $offsale['validTimeNum']<time()){
-            }else if ( (time()-$offsale['createdTime']) < ($offsale['adCommissionDay']*24*3600) ){
+            }else if (!empty($offsale['validTimeNum']) and $offsale['validTimeNum']<time()){
 
                  $commission['commission']=0;
                  $commission['note']='已过推广有效期，本笔定单不能享受佣金收入';
