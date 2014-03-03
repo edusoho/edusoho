@@ -79,6 +79,13 @@ define(function(require, exports, module) {
                     display: '时长'
                 });
 
+                validator.addItem({
+                    element: '#lesson-minute-field',
+                    required: true,
+                    rule: 'integer',
+                    display: '时长'
+                });
+
                 break;
             case 'text':
                 validator.addItem({
