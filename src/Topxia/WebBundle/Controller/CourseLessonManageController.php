@@ -56,8 +56,7 @@ class CourseLessonManageController extends BaseController
         	if ($lesson['media']) {
         		$lesson['media'] = json_decode($lesson['media'], true);
         	}
-
-        	if ($lesson['second']) {
+        	if (is_numeric($lesson['second'])) {
         		$lesson['length'] = $this->textToSeconds($lesson['minute'], $lesson['second']);
         		unset($lesson['minute']);
         		unset($lesson['second']);
