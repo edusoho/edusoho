@@ -228,7 +228,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         array_map(function($oldAvatar){
-            if (empty($oldAvatar)) {
+            if (!empty($oldAvatar)) {
                 @unlink($oldAvatar);
             }
         }, $oldAvatars);
