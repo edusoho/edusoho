@@ -112,6 +112,7 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'mysale_commission')
+            ->andWhere('saleType = :saleType')
             ->andWhere('saleId = :saleId')
             ->andWhere('buyerId = :buyerId')
             ->andWhere('salerId = :salerId')

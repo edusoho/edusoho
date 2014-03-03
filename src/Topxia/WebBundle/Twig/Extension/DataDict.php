@@ -184,8 +184,9 @@ class DataDict
 			
 		),
 		'offsaleType' => array(
-			'offsale-course' =>           '课程优惠码',
-            'invite-course' =>            '课程邀请码',			
+			'offsale-course' =>           '课程优惠码推广',
+            'invite-course' =>            '课程邀请码推广',
+            'invite-web' =>               '注册邀请码推广',		
 		),
 		
 		'linksaleType' => array(

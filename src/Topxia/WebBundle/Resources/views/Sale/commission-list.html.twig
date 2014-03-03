@@ -28,7 +28,12 @@
     <select class="form-control" name="status">
         {{ select_options(dict('commissionStatus'), app.request.query.get('status'), '佣金状态') }}
     </select>
+    </div>
 
+    <div class="form-group">
+    <select class="form-control" name="saleType">
+        {{ select_options(dict('saleType'), app.request.query.get('saleType'), '所属推广类型') }}
+    </select>
     </div>
 
   <button class="btn btn-primary">搜索</button>
