@@ -159,9 +159,9 @@ define(function(require, exports, module) {
 
 
                 if (values.length > 0 && !isEmpty(values)) {
-                    $('a[href="#question' + name + '"]').addClass('active');
+                    $('a[data-anchor="#question' + name + '"]').addClass('active');
                 } else {
-                    $('a[href="#question' + name + '"]').removeClass('active');
+                    $('a[data-anchor="#question' + name + '"]').removeClass('active');
                 }
 
 
@@ -172,7 +172,7 @@ define(function(require, exports, module) {
         $('.testpaper-question-actions').on('click', 'a.marking', function(){
 
             id = $(this).parents('.testpaper-question').attr('id');
-            btn = $('.testpaper-card .panel-body [href="#'+id+'"]');
+            btn = $('.testpaper-card .panel-body [data-anchor="#'+id+'"]');
 
             btn.addClass('have-pro');
 
@@ -183,7 +183,7 @@ define(function(require, exports, module) {
 
         $('.testpaper-question-actions').on('click', 'a.unMarking', function(){
             id = $(this).parents('.testpaper-question').attr('id');
-            btn = $('.testpaper-card .panel-body [href="#'+id+'"]');
+            btn = $('.testpaper-card .panel-body [data-anchor="#'+id+'"]');
 
             btn.removeClass('have-pro');
 
@@ -255,21 +255,21 @@ define(function(require, exports, module) {
         
 // 学生查看试卷结果
 
-        $('.testpaper-card .panel-body a.btn[href^="#question"]').each(function(){
+        $('.testpaper-card .panel-body a.btn[data-anchor^="#question"]').each(function(){
 
             if ($(this).hasClass('wrong')) {
-                wrongs.push($(this).attr('href'));
+                wrongs.push($(this).attr('data-anchor'));
                 $(this).addClass('btn-danger');
             }
             if ($(this).hasClass('right')) {
-                rights.push($(this).attr('href'));
+                rights.push($(this).attr('data-anchor'));
                 $(this).addClass('btn-success');
             }
             if ($(this).hasClass('checking')) {
                 
                 $(this).addClass('btn-warning');
             }
-            alls.push($(this).attr('href'));
+            alls.push($(this).attr('data-anchor'));
         });
 
         $('.testpaper-card').on('click', '#showWrong', function(){
