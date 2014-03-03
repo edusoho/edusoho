@@ -161,9 +161,11 @@ class TestpaperController extends BaseController
             if (empty($items[$type])) {
                 $total[$type]['score'] = 0;
                 $total[$type]['number'] = 0;
+                $total[$type]['missScore'] = 0;
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
+                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
             }
         }
 
@@ -200,9 +202,11 @@ class TestpaperController extends BaseController
             if (empty($items[$type])) {
                 $total[$type]['score'] = 0;
                 $total[$type]['number'] = 0;
+                $total[$type]['missScore'] = 0;
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
+                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
             }
         }
 
@@ -251,9 +255,11 @@ class TestpaperController extends BaseController
             if (empty($items[$type])) {
                 $total[$type]['score'] = 0;
                 $total[$type]['number'] = 0;
+                $total[$type]['missScore'] = 0;
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
+                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
             }
         }
 
@@ -401,8 +407,16 @@ class TestpaperController extends BaseController
 
         $total = array();
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
-            $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
-            $total[$type]['number'] = count($items[$type]);
+
+            if (empty($items[$type])) {
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
+                $total[$type]['missScore'] = 0;
+            } else {
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['number'] = count($items[$type]);
+                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
+            }
         }
 
         $types =array();
