@@ -134,6 +134,7 @@ class CourseStudentManageController extends BaseController
             return implode(',',$member);
         }, $users,$courseMembers,$progresses,$profiles);
         $str .= implode("\r\n",$students);
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
