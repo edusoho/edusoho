@@ -28,7 +28,7 @@ seajs.config({
 		'class': 'arale/class/1.1.0/class',
 		'base': 'arale/base/1.1.1/base',
 		'widget': 'arale/widget/1.1.1/widget',
-		'sticky': 'arale/sticky/1.2.1/sticky',
+		'sticky': 'arale/sticky/1.3.1/sticky',
 		"templatable": "arale/templatable/0.9.1/templatable",
 		'placeholder': 'arale/placeholder/1.1.0/placeholder',
 		'json': 'gallery/json/1.0.3/json',
