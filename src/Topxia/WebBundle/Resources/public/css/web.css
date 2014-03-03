@@ -168,7 +168,7 @@ textarea {
 
 }
 
-.control-label .required {
+.control-label span.required {
 	color: #f60;
 }
 

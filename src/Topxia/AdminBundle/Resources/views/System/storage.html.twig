@@ -20,10 +20,10 @@
       <div id="upload_mode">
         <input type="radio" id="upload_mode_0" name="upload_mode" value="local"
         {% if storageSetting.upload_mode == 'local' %} checked="checked" {% endif %}>
-        <label for="upload_mode_0" class="required">网站本地存储</label>
+        <label for="upload_mode_0">网站本地存储</label>
         <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" 
         {% if storageSetting.upload_mode == 'cloud' %} checked="checked" {% endif %}>
-        <label for="upload_mode_1" class="required">云存储</label>
+        <label for="upload_mode_1">云存储</label>
       </div>
 
       <div class="help-block">
