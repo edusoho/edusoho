@@ -222,13 +222,15 @@ class UserServiceImpl extends BaseService implements UserService
         @unlink($filePath);
 
         $oldAvatars = array(
-            'smallAvatar' => $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']),
-            'mediumAvatar' => $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']),
-            'largeAvatar' => $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar'])
+            'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
+            'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
+            'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
         );
 
         array_map(function($oldAvatar){
-            @unlink($oldAvatar);
+            if (empty($oldAvatar)) {
+                @unlink($oldAvatar);
+            }
         }, $oldAvatars);
 
         return  $this->getUserDao()->updateUser($userId, array(
