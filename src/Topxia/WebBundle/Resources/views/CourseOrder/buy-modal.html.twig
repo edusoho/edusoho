@@ -36,12 +36,15 @@
           </div>
         </div>
 
-        {% if payments.alipay.type|default(null) == 'direct' %}
+        {% if payments.alipay.type|default(null) == 'dualfun' %}
         <div class="row">
           <div class="col-md-12">
             <div class="alert alert-info">
             <h4>付款提示</h4>
-            支付宝支持“担保交易”和“立即到帐交易”两种交易方式。<br>推荐使用<strong>“立即到帐交易”</strong>。“担保交易”需要人工确认发货、确认收货后才能学习课程，<strong>会产生较大延迟</strong>。</div>
+            请在随后的支付宝支付页面中，选择“<strong>即时到帐交易</strong>”，如下图所示。如果选择“担保交易”需要人工确认，将会产生较大延迟。
+            <br>
+            <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
+            </div>
           </div>
         </div>
         {% endif %}
