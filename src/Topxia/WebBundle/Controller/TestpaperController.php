@@ -281,7 +281,7 @@ class TestpaperController extends BaseController
 
     public function testSuspendAction (Request $request, $id)
     {
-        $testpaperResult = $this->getTestpaperService()->getTestPaperResult($id);
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
         if (!$testpaperResult) {
             throw $this->createNotFoundException('试卷不存在!');
         }
@@ -321,6 +321,13 @@ class TestpaperController extends BaseController
 
     public function finishTestAction (Request $request, $id)
     {
+
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+
+        if (!empty($testpaperResult) and !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+            return $this->createJsonResponse(true);
+        }
+
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $answers = array_key_exists('data', $data) ? $data['data'] : array();

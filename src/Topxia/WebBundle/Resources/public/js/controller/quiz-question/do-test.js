@@ -78,6 +78,11 @@ define(function(require, exports, module) {
                         changeAnswers = {};
                         $('#timeout-dialog').show();
                         timer.stop();
+                    }).error(function(){
+                        $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
+                        $('#timeout-dialog').find('#show_testpaper_result').text('确定');
+                        $('#timeout-dialog').show();
+                        timer.stop();
                     });
                 }
                 if (deadline == timeLastPost) {
