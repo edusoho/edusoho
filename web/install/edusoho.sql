@@ -4,12 +4,13 @@ CREATE TABLE `block` (
   `userId` int(11) NOT NULL COMMENT '用户Id',
   `title` varchar(255) NOT NULL COMMENT '编辑时的题目',
   `content` text COMMENT '编辑区的内容',
+  `tips` text,
   `code` varchar(255) NOT NULL DEFAULT '',
   `createdTime` int(11) unsigned NOT NULL,
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_history`;
 CREATE TABLE `block_history` (
@@ -19,7 +20,7 @@ CREATE TABLE `block_history` (
   `userId` int(11) NOT NULL COMMENT 'userId',
   `createdTime` int(11) unsigned NOT NULL COMMENT 'createdTime',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='历史表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='历史表';
 
 DROP TABLE IF EXISTS `cache`;
 CREATE TABLE `cache` (
@@ -154,7 +155,7 @@ CREATE TABLE `course_chapter` (
   `title` varchar(255) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_favorite`;
 CREATE TABLE `course_favorite` (
@@ -307,7 +308,7 @@ CREATE TABLE `course_order_refund` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_review`;
 CREATE TABLE `course_review` (
@@ -319,7 +320,7 @@ CREATE TABLE `course_review` (
   `rating` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '评价创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_thread`;
 CREATE TABLE `course_thread` (
@@ -600,8 +601,9 @@ CREATE TABLE `testpaper_item_result` (
   `score` float(10,1) NOT NULL DEFAULT '0.0',
   `answer` text,
   `teacherSay` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `testPaperResultId` (`testPaperResultId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper_result`;
 CREATE TABLE `testpaper_result` (
@@ -625,7 +627,7 @@ CREATE TABLE `testpaper_result` (
   `checkedTime` int(11) NOT NULL DEFAULT '0',
   `usedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `upgrade_logs`;
 CREATE TABLE `upgrade_logs` (
@@ -735,7 +737,7 @@ CREATE TABLE `user_bind` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`fromId`),
   UNIQUE KEY `type_2` (`type`,`toId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_fortune_log`;
 CREATE TABLE `user_fortune_log` (
