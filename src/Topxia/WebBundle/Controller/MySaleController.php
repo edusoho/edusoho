@@ -43,9 +43,9 @@ class MySaleController extends BaseController
 
         $sort  = 'latest';
 
-        $conditions = array(
-            'salerId'=>$user['id']           
-        );
+        $conditions = $request->query->all();
+
+        $conditions['salerId'] = $user['id'];
 
         $paginator = new Paginator(
             $this->get('request'),

@@ -117,6 +117,8 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
             ->andWhere('salerId = :salerId')
             ->andWhere('orderSn LIKE :orderSnLike')
             ->andWhere('saleTookeen LIKE :saleTookeenLike')
+
+            ->andWhere('commission  >=  :commission')
         
             ->andWhere('status = :status')
             ->andWhere('paidTime >= :startTimeGreaterThan')
