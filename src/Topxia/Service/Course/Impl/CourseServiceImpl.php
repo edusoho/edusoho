@@ -351,6 +351,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         	'largePicture' => $largeFileRecord['uri'],
     	);
 
+    	@unlink($filePath);
+
+    	$oldPictures = array(
+            'smallPicture' => $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['smallPicture']),
+            'middlePicture' => $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['middlePicture']),
+            'largePicture' => $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['largePicture'])
+        );
+
+        array_map(function($oldPicture){
+            @unlink($oldPicture);
+        }, $oldPictures);
+
 		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
         
         return $this->getCourseDao()->updateCourse($courseId, $fields);
