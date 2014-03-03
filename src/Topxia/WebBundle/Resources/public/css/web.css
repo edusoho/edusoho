@@ -168,16 +168,21 @@ textarea {
 
 }
 
+.control-label .required {
+	color: #f60;
+}
+
 .bootstrap-notify-bar {
 	position: fixed;
-	top: 10px;
+	top: 0px;
 	left: 0;
+	right: 0;
 	border-radius: 0;
 	text-align: center;
 	z-index: 2000;
 	padding: 10px;
 	margin: 0;
-	max-width: 600px;
+	/*max-width: 600px;*/
 }
 
 .bootstrap-notify-bar .close {
