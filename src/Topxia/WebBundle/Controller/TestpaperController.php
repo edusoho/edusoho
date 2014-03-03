@@ -165,7 +165,11 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                } else {
+                    $total[$type]['missScore'] = 0;
+                }
             }
         }
 
@@ -206,7 +210,11 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                } else {
+                    $total[$type]['missScore'] = 0;
+                }
             }
         }
 
@@ -259,7 +267,11 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                } else {
+                    $total[$type]['missScore'] = 0;
+                }
             }
         }
 
@@ -422,7 +434,11 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                $total[$type]['missScore'] = array_key_exists($type, $testpaper["metas"]["missScore"]) ? $testpaper["metas"]["missScore"][$type] : 0;
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                } else {
+                    $total[$type]['missScore'] = 0;
+                }
             }
         }
 
