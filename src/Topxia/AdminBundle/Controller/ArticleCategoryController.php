@@ -70,6 +70,17 @@ class ArticleCategoryController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $childrenCnt = $this->getCategoryService()->findCategoriesCountByParentId($id);
+        
+        if($childrenCnt>0){
+            throw $this->createNotFoundException("can't delete catagory when it has child catagory");
+        }
+        
+        $condition=array('parentId' => $id) ;
+        $articleCnt=$this->getArticleService()->searchArticleCount($condition);
+        if($articleCnt>0){
+            throw $this->createNotFoundException("can't delete catagory when it has articles");
+        }
         $this->getCategoryService()->deleteCategory($id);
 
         return $this->renderTbody();
@@ -104,5 +115,10 @@ class ArticleCategoryController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
+    }
+
+    private function getArticleService()
+    {
+        return $this->getServiceKernel()->createService('Article.ArticleService');
     }
 }

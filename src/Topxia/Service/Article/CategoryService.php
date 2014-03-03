@@ -27,4 +27,6 @@ interface CategoryService
     public function updateCategory($id, array $fields);
 
     public function deleteCategory($id);
+
+    public function findCategoriesCountByParentId($parentId);
 }

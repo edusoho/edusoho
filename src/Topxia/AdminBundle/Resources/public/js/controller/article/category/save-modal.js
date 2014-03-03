@@ -54,14 +54,16 @@ define(function(require, exports, module) {
         
 
         $modal.find('.delete-category').on('click', function() {
-            if (!confirm('真的要删除该分类及其子分类吗？')) {
+            if (!confirm('真的要删除该分类吗？')) {
                 return ;
             }
 
             $.post($(this).data('url'), function(html) {
                 $modal.modal('hide');
                 $table.find('tbody').replaceWith(html);
-            });
+            }).error(function(error) {
+                Notify.danger("删除分类失败，请重试！"+error.responseJSON.error.message);
+            });;
 
         });
 
