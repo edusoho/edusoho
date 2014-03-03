@@ -68,5 +68,4 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         $sql = "SELECT * FROM {$this->table}";
         return $this->getConnection()->fetchAll($sql) ? : array();
     }
-
 }
