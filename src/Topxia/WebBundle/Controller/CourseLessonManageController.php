@@ -56,9 +56,10 @@ class CourseLessonManageController extends BaseController
         	if ($lesson['media']) {
         		$lesson['media'] = json_decode($lesson['media'], true);
         	}
-
-        	if ($lesson['length']) {
-        		$lesson['length'] = $this->textToSeconds($lesson['length']);
+        	if (is_numeric($lesson['second'])) {
+        		$lesson['length'] = $this->textToSeconds($lesson['minute'], $lesson['second']);
+        		unset($lesson['minute']);
+        		unset($lesson['second']);
         	}
         	$lesson = $this->getCourseService()->createLesson($lesson);
 
@@ -138,8 +139,10 @@ class CourseLessonManageController extends BaseController
         	if ($fields['media']) {
         		$fields['media'] = json_decode($fields['media'], true);
         	}
-        	if ($fields['length']) {
-        		$fields['length'] = $this->textToSeconds($fields['length']);
+        	if ($fields['second']) {
+        		$fields['length'] = $this->textToSeconds($fields['minute'], $fields['second']);
+        		unset($fields['minute']);
+        		unset($fields['second']);
         	}
 
         	$fields['free'] = empty($fields['free']) ? 0 : 1;
@@ -173,7 +176,7 @@ class CourseLessonManageController extends BaseController
 	    	);
         }
 
-        $lesson['length'] = $this->secondsToText($lesson['length']);
+        list($lesson['minute'], $lesson['second']) = $this->secondsToText($lesson['length']);
 
         $user = $this->getCurrentUser();
 
@@ -231,6 +234,88 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
+	public function createTestPaperAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->tryManageCourse($id);
+
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            1000
+        );
+
+    	$paperOptions = array();
+    	foreach ($testpapers as $testpaper) {
+    		$paperOptions[$testpaper['id']] = $testpaper['name'];
+    	}
+
+	    if($request->getMethod() == 'POST') {
+
+            $lesson = $request->request->all();
+            $lesson['type'] = 'testpaper';
+            $lesson['courseId'] = $course['id'];
+            $lesson = $this->getCourseService()->createLesson($lesson);
+
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+				'course' => $course,
+				'lesson' => $lesson,
+			));
+
+    	}
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+			'course' => $course,
+			'paperOptions' => $paperOptions,
+		));
+	}
+
+	public function editTestpaperAction(Request $request, $courseId, $lessonId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            1000
+        );
+
+    	$paperOptions = array();
+    	foreach ($testpapers as $paper) {
+    		$paperOptions[$paper['id']] = $paper['name'];
+    	}
+
+        if($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'paperOptions' => $paperOptions,
+        ));
+
+	}
+
 	public function publishAction(Request $request, $courseId, $lessonId)
 	{
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
@@ -268,21 +353,22 @@ class CourseLessonManageController extends BaseController
 	{
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
-        return sprintf('%02d', $minutes) . ':' . sprintf('%02d', $seconds);
+        return array($minutes, $seconds);
 	}
 
-	private function textToSeconds($text)
+	private function textToSeconds($minutes, $seconds)
 	{
-		if (strpos($text, ':') === false) {
-			return 0;
-		}
-		list($minutes, $seconds) = explode(':', $text, 2);
 		return intval($minutes) * 60 + intval($seconds);
 	}
 
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     private function getCourseMaterialService()

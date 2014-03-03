@@ -54,6 +54,19 @@ class ArrayToolkit
 		return $changes;
 	}
 
+    public static function group(array $array, $key)
+    {
+        $grouped = array();
+        foreach ($array as $item) {
+            if (empty($grouped[$item[$key]])) {
+                $grouped[$item[$key]] = array();
+            }
+            $grouped[$item[$key]][] = $item;
+        }
+
+        return $grouped;
+    }
+
     public static function index (array $array, $name)
     {
         $indexedArray = array();

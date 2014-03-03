@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的批阅 - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-teaching-check' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+
+	<div class="panel-heading">
+		我的批阅
+	</div>
+	<div class="panel-body">
+		<ul class="nav nav-tabs">
+			<li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test_reviewing') }}">未批阅</a></li>
+			<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test_finished') }}">已批阅</a></li>
+		</ul>
+		<br>
+		{# {% block list %}{% endblock %} #}
+		{% include 'TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig' %}
+		
+	</div>
+</div>
+{% endblock %}

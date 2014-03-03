@@ -1,10 +1,11 @@
 define(function(require, exports, module) {
 
+    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
     var VideoChooser = require('../widget/media-chooser/video-chooser');
     var AudioChooser = require('../widget/media-chooser/audio-chooser');
     var Notify = require('common/bootstrap-notify');
-    var EditorFactory = require('common/kindeditor-factory');
 
     function createValidator ($form) {
 
@@ -53,7 +54,8 @@ define(function(require, exports, module) {
         validator.removeItem('#lesson-title-field');
         validator.removeItem('#lesson-content-field');
         validator.removeItem('#lesson-media-field');
-        validator.removeItem('#lesson-length-field');
+        validator.removeItem('#lesson-second-field');
+        validator.removeItem('#lesson-minute-field');
 
         validator.addItem({
             element: '#lesson-title-field',
@@ -71,9 +73,17 @@ define(function(require, exports, module) {
                 });
 
                 validator.addItem({
-                    element: '#lesson-length-field',
+                    element: '#lesson-second-field',
                     required: true,
-                    rule: 'timeLength'
+                    rule: 'integer',
+                    display: '时长'
+                });
+
+                validator.addItem({
+                    element: '#lesson-minute-field',
+                    required: true,
+                    rule: 'integer',
+                    display: '时长'
                 });
 
                 break;
@@ -133,7 +143,15 @@ define(function(require, exports, module) {
             }
 
             if (info.duration) {
-                $("#lesson-length-field").val(info.duration);
+
+                if (info.duration.match(':')){
+                    var durations = info.duration.split(':');
+                    $("#lesson-minute-field").val(duration[0]);
+                    $("#lesson-second-field").val(duration[1]);
+                } else{
+                    $("#lesson-second-field").val(info.duration);
+                }
+
             }
         }
 

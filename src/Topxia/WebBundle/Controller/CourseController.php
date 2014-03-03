@@ -55,7 +55,7 @@ class CourseController extends BaseController
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         }
-
+     
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
             'category' => $category,
@@ -177,6 +177,7 @@ class CourseController extends BaseController
             'groupedItems' => $groupedItems,
             'hasFavorited' => $hasFavorited,
             'category' => $category,
+            'previewAs' => $previewAs,
             'tags' => $tags,
         ));
 
@@ -324,6 +325,10 @@ class CourseController extends BaseController
 
     public function learnAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
         try{
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
             if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
@@ -368,7 +373,9 @@ class CourseController extends BaseController
 
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        $isNonExpired = $user->isAdmin() ? true : $this->getCourseService()->isMemberNonExpired($course, $member);
+        if (empty($member)) { $member['deadline'] = 0; }
+
+        $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,

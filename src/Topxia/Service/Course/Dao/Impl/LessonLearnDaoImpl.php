@@ -39,6 +39,19 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $this->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
 	}
 
+    public function findLearnsByLessonId($lessonId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE lessonId = ? ORDER BY startTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($lessonId));
+    }
+
+    public function findLearnsCountByLessonId($lessonId)
+    {
+        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE lessonId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($lessonId));
+    }
+
 	public function addLearn($learn)
 	{
         $affected = $this->getConnection()->insert($this->table, $learn);
@@ -53,4 +66,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLearn($id);
 	}
+
+    public function deleteLearnsByLessonId($lessonId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE lessonId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($lessonId));
+    }
 }

@@ -12,14 +12,17 @@ define(function(require, exports, module) {
         html += '</div>';
 
         var $html = $(html);
-        $html.appendTo('body').slideDown(100, function(){
-            duration = duration ? duration : 3;
+        $html.appendTo('body');
+
+        $html.slideDown(100, function(){
+            duration = $.type(duration) == 'undefined' ? 3 :  duration;
             if (duration > 0) {
                 setTimeout(function(){
                     $html.remove();
                 }, duration * 1000);
             }
         });
+
     }
 
     var Notify = {

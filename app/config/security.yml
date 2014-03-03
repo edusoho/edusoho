@@ -23,6 +23,12 @@ services:
         class: Topxia\WebBundle\Handler\LogoutSuccessHandler
         parent: security.logout.success_handler
 
+
+    user.login_listener:
+        class: Topxia\WebBundle\Handler\LoginSuccessHandler
+        arguments: ['@security.context', '@doctrine']
+        tags: [{ name: kernel.event_listener, event: security.interactive_login }]
+
 security:
     encoders:
         Topxia\Service\User\CurrentUser: sha256
@@ -60,7 +66,6 @@ security:
                 domain: ~
             logout:
                 path:   logout
-                target: /
                 success_handler: topxia.logout.success_handler
             anonymous:  true
     access_control:

@@ -34,6 +34,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['filename'] = $fileInfo['filename'];
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
         $uploadFile['size'] = (int) $fileInfo['size'];
+        $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
 
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
         $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
@@ -93,35 +94,21 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function deleteSubFile($file,$subFileHashId)
+    public function deleteFile($file, $deleteSubFile = true)
     {
-        $file = $this->getFile($file);
-        if(empty($file['metas2'])){
-            return;
-        } 
-        foreach ($file['metas2'] as $key => $value) {
-            if($subFileHashId==$value['key']){
-               $this->getCloudClient()->removeFile($subFileHashId);
-               unset($file['metas2'][$key]);
-               break;
+        $keys = array($file['hashId']);
+        $keyPrefixs = array();
+
+        if ($deleteSubFile) {
+            foreach (array('sd', 'hd', 'shd') as $key) {
+                if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
+                    continue ;
+                }
+                $keyPrefixs[] = $file['metas2'][$key]['key'];
             }
-        } 
-        $file['metas2'] = $this->encodeMetas($file['metas2']);
-        return $file;             
-    }
-
-    public function deleteFile($file)
-    {
-        return ;
-    	$file = $this->getFile($file);
-        if(empty($file['metas2'])){
-            return;
         }
-        foreach ($file['metas2'] as $key => $value) {
-            $this->getCloudClient()->removeFile($value['key']);
-        }
-        $this->getCloudClient()->removeFile($file['hashId']);
 
+        $this->getCloudClient()->deleteFiles($keys, $keyPrefixs);
     }
 
     private function getFileFullName($file)

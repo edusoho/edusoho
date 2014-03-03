@@ -1,0 +1,67 @@
+{% if not role|default(null) == 'teacher' %}
+
+<div class="testpaper-question testpaper-question-fill" id="question{{ item.question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+  </div>
+
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in item.question.answer %}
+		        {% set userAnswer = item.question.testResult.answer[index]|default(null) %}
+			    	<li>
+			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+			    	  {% if userAnswer == '' %}
+			    	  。你未回答
+			    	  {% elseif userAnswer in answer %}
+			    	  。回答正确
+			    	  {% else %}
+			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。回答错误
+			    	  {% endif %}
+			    	</li>
+		    	{% endfor %}
+		    </ul>
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+	{% else %}
+	  <div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-fill-inputs">
+				{% set input_index = 1 %}
+				{% for answer in item.question.answer %}
+					<input class="form-control " type="text" data-type="fill" name="{{ item.question.id }}" placeholder="填空({{ input_index }})答案，请填在这里" {% if item.question.testResult.answer[input_index - 1]|default(null) %}value="{{ item.question.testResult.answer[input_index - 1] }}"{% endif %} />
+					{% set input_index = input_index + 1 %}
+				{% endfor %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+			</div>
+	  </div>
+
+	  {% if questionPreview|default(false) %}
+	  <div class="testpaper-preview-answer clearfix mtl mbl">
+	  	<div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in item.question.answer %}
+		    	<li>
+		    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    	</li>
+		      {% endfor %}
+		    </ul>
+		</div>
+	  </div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}</div>
+	  {% endif %}
+
+	{% endif %}
+</div>
+
+{% endif %}

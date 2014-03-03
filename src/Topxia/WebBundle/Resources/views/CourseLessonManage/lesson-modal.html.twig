@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set modal_size = 'xlarge' %}
+{% set modal_class = 'modal-lg' %}
 {% set lesson = lesson|default(null) %}
 
 {% block title %}
@@ -66,8 +66,9 @@
       <div class="hide"><label for="lesson-length-field">视频时长或</label></div>
       <div class="col-md-2 control-label for-audio-type"><label for="lesson-length-field">音频时长</label></div>
     <div class="col-md-9 controls">
-      <input class="form-control width-input width-input-small" id="lesson-length-field" type="text" name="length" value="{{ field_value(lesson, 'length') }}">
-      <div class="help-block">比如15分32秒，则填写15:32。</div>
+      <input class="form-control width-input width-input-small" id="lesson-minute-field" type="text" name="minute" value="{{ field_value(lesson, 'minute') }}">分
+      <input class="form-control width-input width-input-small" id="lesson-second-field" type="text" name="second" value="{{ field_value(lesson, 'second') }}">秒
+      <div class="help-block">时长必须为整数。</div>
     </div>
   </div>
 

@@ -1,0 +1,120 @@
+<div class="testpaper-question testpaper-question-essay" id="question{{ item.question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+  </div>
+
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+
+		{% if role|default(null) == 'teacher' %}
+
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
+
+					<ul class="nav nav-pills nav-mini mbm">
+						<li class="active"><a href="#studentAnswer{{ item.questionId }}" data-toggle="tab">学员回答</a></li>
+						<li><a href="#teacherAnswer{{ item.questionId }}" data-toggle="tab">参考答案</a></li>
+					</ul>
+					<div class="tab-content mbl">
+						<div class="tab-pane active" id="studentAnswer{{ item.questionId }}">{{ item.question.testResult.answer[0]|default('<span class="text-muted">未回答</span>')|bbCode2Html|raw }}</div>
+						<div class="tab-pane" id="teacherAnswer{{ item.questionId }}">{{ item.question.answer[0]|bbCode2Html|raw }}</div>
+					</div>
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">得分</label>
+							<div class="col-sm-3 controls">
+								<input type="text" class="form-control" placeholder="得分" name="score_{{ item.questionId }}" data-score="{{ item.score }}" value="{% if item.question.testResult.answer[0]|default('') == '' %}0{% endif %}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">评语</label>
+							<div class="col-sm-9">
+
+								<div class="testpaper-result-essay-teacherSay">
+								  	<textarea class="form-control testpaper-question-essay-teacherSay-short" rows="1" style="overflow:hidden;line-height:20px;"></textarea>
+
+									<textarea class="form-control testpaper-question-essay-teacherSay-long" name="teacherSay_{{ item.questionId }}" style="display:none;"></textarea>
+
+									<a class="btn btn-link btn-muted btn-sm testpaper-question-essay-teacherSay-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a>
+
+								  </div>
+
+							</div>
+						</div>
+
+					</div>
+
+
+
+				</div>
+
+			</div>
+
+		{% else %}
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
+			    <div class="testpaper-question-result-suggested">
+				    <div class="testpaper-question-result-title">参考答案：</div>
+				    <div>{{ item.question.answer[0]|bbCode2Html|raw }}</div>
+			    </div>
+			    <div class="testpaper-question-result-your">
+				    <div class="testpaper-question-result-title">你的回答：</div>
+						<div>{{ item.question.testResult.answer[0]|default('未回答')|bbCode2Html|raw }}</div>
+			    </div>
+			  {% if paperResult.status == 'finished' %}
+			  	<div class="testpaper-question-result-score mtl">
+			  		<div class="testpaper-question-result-title">得分：<strong>{{ item.question.testResult.score }} 分</strong></div>
+			  	</div>
+			  	{% if item.question.testResult.teacherSay != '' %}
+			  	<div class="testpaper-question-teacherSay mtl">
+					<div class="testpaper-question-result-title">评语：</div>
+					<div>{{ item.question.testResult.teacherSay|bbCode2Html|raw }}</div>
+				</div>
+				{% endif %}
+			  {% else %}
+			  	<div class="testpaper-question-score mtl">
+			  		<div class="testpaper-question-result-title">老师正在批阅！</div>
+			  	</div>
+			  {% endif %}		
+			  </div>
+
+				<div class="testpaper-question-actions pull-right">
+					{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+				</div>
+			</div>
+			<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+		{% endif %}
+
+	{% else %}
+
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-essay-inputs">
+		  	<textarea class="form-control testpaper-question-essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if item.question.testResult.answer[0]|default(null) %}{{ item.question.testResult.answer[0]|bbCode2Html|raw }}{% endif %}</textarea>
+
+			<textarea class="form-control testpaper-question-essay-input-long" data-type="essay" name="{{ item.question.id }}" style="display:none;">{% if item.question.testResult.answer[0]|default(null) %}{{ item.question.testResult.answer[0]|bbCode2Html|raw }}{% endif %}</textarea>
+
+			<a class="btn btn-link btn-muted btn-sm testpaper-question-essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a>
+
+		  </div>
+		  <div class="testpaper-question-actions pull-right">
+		  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+		  </div>
+	  </div>
+
+
+	  {% if questionPreview|default(false) %}
+	  <div class="testpaper-preview-answer clearfix mtl mbl">
+	  	<div class="testpaper-question-result">
+		    <div class="testpaper-question-result-suggested">
+			    <div class="testpaper-question-result-title">参考答案：</div>
+			    <div>{{ item.question.answer[0]|bbCode2Html|raw }}</div>
+		    </div>
+		</div>
+	  </div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}</div>
+	  {% endif %}
+
+	  
+
+	{% endif %}
+</div>

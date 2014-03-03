@@ -1,0 +1,30 @@
+<div class="material">
+<div class="well testpaper-question-stem-material">{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
+{% for item in item.items|default([]) %}
+
+	{% if item.questionType in ['single_choice', 'choice', 'uncertain_choice'] %}
+
+		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+
+	{% endif %}
+
+	{% if item.questionType == 'determine' %}
+
+		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-determine.html.twig' %}
+
+	{% endif %}
+
+	{% if item.questionType == 'fill' %}
+
+		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-fill.html.twig' %}
+
+	{% endif %}
+
+	{% if item.questionType == 'essay' %}
+
+		{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-essay.html.twig' %}
+
+	{% endif %}
+
+{% endfor %}
+</div>

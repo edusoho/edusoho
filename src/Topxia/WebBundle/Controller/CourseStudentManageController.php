@@ -104,6 +104,48 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function exportCsvAction (Request $request, $id)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,1000);
+
+        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+
+        foreach ($courseMembers as $student) {
+            $progresses[] = $this->calculateUserLearnProgress($course, $student);
+        }
+        $str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
+
+        $students = array_map(function($user,$courseMember,$progress,$profile){
+            $member['nickname']   = $user['nickname'];
+            $member['joinedTime'] = $courseMember['createdTime'];
+            $member['percent']  = $progress['percent'];
+            $member['truename'] = $profile['truename'] ? $profile['truename'] : "姓名空";
+            $member['email'] = $user['email'] ? $user['email'] : "Email空";
+            $member['company'] = $profile['company'] ? $profile['company'] : "公司空";
+            $member['title'] = $user['title'] ? $user['title'] : "头衔空";
+            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "电话空";
+            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "微信空";
+            $member['qq'] = $profile['qq'] ? $profile['qq'] : "QQ号空";
+            return implode(',',$member);
+        }, $users,$courseMembers,$progresses,$profiles);
+        $str .= implode("\r\n",$students);
+
+        $filename = $course['title']."-学员信息"."-".date("YmdHi").".csv";
+
+        $userId = $this->getCurrentUser()->id;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
 
     public function remarkAction(Request $request, $courseId, $userId)
     {

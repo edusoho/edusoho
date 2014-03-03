@@ -539,6 +539,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'type' => 'text',
 			'content' => '',
 			'media' => array(),
+			'mediaId' => 0,
 			'length' => 0,
 		));
 
@@ -555,7 +556,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -624,6 +625,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$lesson['mediaSource'] = $media['source'];
 				$lesson['mediaUri'] = $media['uri'];
 			}
+		} elseif ($lesson['type'] == 'testpaper') {
+			$lesson['mediaId'] = $lesson['mediaId'];
 		} else {
 			$lesson['mediaId'] = 0;
 			$lesson['mediaName'] = '';
@@ -653,6 +656,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'summary' => '',
 			'content' => '',
 			'media' => array(),
+			'mediaId' => 0,
 			'free' => 0,
 			'length' => 0,
 		));
@@ -689,8 +693,28 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
+		// 更新已学该课时会员的计数器
+		$learnCount = $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
+		if ($learnCount > 0) {
+			$learns = $this->getLessonLearnDao()->findLearnsByLessonId($lessonId, 0, $learnCount);
+			foreach ($learns as $learn) {
+				if ($learn['status'] == 'finished') {
+					$member = $this->getCourseMember($learn['courseId'], $learn['userId']);
+					if ($member) {
+						$memberFields = array();
+						$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($learn['userId'], $learn['courseId'], 'finished') - 1;
+						$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+						// var_dump($member);exit();
+						$this->getMemberDao()->updateMember($member['id'], $memberFields);
+					}
+				}
+			}
+		}
+		$this->getLessonLearnDao()->deleteLearnsByLessonId($lessonId);
+
 		$this->getLessonDao()->deleteLesson($lessonId);
 
+		// 更新课时序号
 		$number = 1;
 		$lessons = $this->getCourseLessons($courseId);
         foreach ($lessons as $lesson) {
@@ -703,7 +727,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
-
+		// [END] 更新课时序号
+		
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
 		// $this->autosetCourseFields($courseId);
@@ -847,11 +872,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return null;
 		}
 		return $this->getLessonDao()->getLesson($nextLearnLessonId);
-	}
-
-	public function getLessonByMediaId($mediaId)
-	{
-		return $this->getLessonDao()->getLessonByMediaId($mediaId);
 	}
 
 	public function getChapter($courseId, $chapterId)
@@ -1021,6 +1041,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
+	}
+	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
+	{	
+		$conditions = $this->_prepareCourseConditions($conditions);
+		if ($sort = 'latest') {
+			$orderBy = array('createdTime', 'DESC');
+		} 
+		return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
 	}
 
 	public function updateCourseMember($id, $fields)

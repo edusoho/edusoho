@@ -1,0 +1,18 @@
+{% set favorites = favorites|default([]) %}
+
+{% if 'mark' in flags and id|default(null) %}
+  <a class="btn btn-link btn-muted btn-sm marking text-muted"><span class="glyphicon glyphicon-bookmark text-muted"></span> 标记</a>
+  <a class="btn btn-link btn-sm unMarking" style="display:none"><span class="glyphicon glyphicon-bookmark"></span> 取消标记</a>
+{% endif %}
+
+{% if 'favorite' in flags and id|default(null) %}
+  <button data-url="{{ path('my_favorite_question', {id:item.question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-link btn-muted btn-sm btn-default favorite-btn" {% if item.question.id in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-star-empty text-muted"></span> 收藏</button>
+  <button data-url="{{ path('my_unfavorite_question', {id:item.question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-link btn-sm unfavorite-btn" {% if item.question.id not in favorites %}style="display:none"{% endif %}><span class="glyphicon glyphicon-star"></span> 取消收藏</button>
+{% endif %}
+
+{% if 'analysis' in flags and id|default(null) %}
+	{% if not item.question.analysis == '' %}
+		<a class="btn btn-sm btn-link analysis-btn"><span class="glyphicon glyphicon-chevron-down"></span> 展开解析</a>
+		<a class="btn btn-sm btn-link unanalysis-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up"></span> 收起解析</a>
+	{% endif %}
+{% endif %}

@@ -18,12 +18,30 @@ class LoginController extends BaseController
         return $this->render('TopxiaWebBundle:Login:index.html.twig',array(
             'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
+            'targetPath' => $this->getTargetPath($request),
         ));
     }
 
-    public function ajaxAction()
+    private function getTargetPath($request)
     {
-        return $this->render('TopxiaWebBundle:Login:ajax.html.twig');
+        if ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        if ($targetPath == $this->generateUrl('login', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        return $targetPath;
+    }
+
+    public function ajaxAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Login:ajax.html.twig', array(
+            'targetPath' => $this->getTargetPath($request),
+        ));
     }
 
     public function checkEmailAction(Request $request)

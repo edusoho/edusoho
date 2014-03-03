@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}题目类别管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'question_category' %}
+{% set script_controller = 'quiz-question/catgory' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">题目类别管理
+  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_question_category_create', {courseId:course.id}) }}">添加类别</button>
+
+  </div>
+  <div class="panel-body">
+  <table class="table table-hover" id="category-table">
+    <thead>
+      <tr>
+        <th width="70%">名称</th>
+        <th width="30%">操作</th>
+      </tr>
+    </thead>
+    <tbody data-sort-url="{{ path('course_manage_question_category_sort',{courseId:course.id})}}" class="tbady-category">
+      {% for id, category in categories %}
+        {% include 'TopxiaWebBundle:CourseQuestionCategoryManage:tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="4"><div class="empty">暂无分类，请添加</div></td></tr>
+      {% endfor %}
+    </tbody>
+   </table>
+      
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+ 
