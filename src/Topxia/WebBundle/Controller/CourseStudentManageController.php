@@ -114,6 +114,7 @@ class CourseStudentManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
 
+        $progresses = array();
         foreach ($courseMembers as $student) {
             $progresses[] = $this->calculateUserLearnProgress($course, $student);
         }
