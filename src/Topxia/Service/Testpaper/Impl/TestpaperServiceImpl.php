@@ -725,7 +725,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['questionType'] = $question['type'];
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
-                $item['missScore'] = array_key_exists($question['type'], $testpaper['metas']['missScore']) ? $testpaper['metas']['missScore'][$question['type']] : 0;
+
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($question['type'], $testpaper['metas']['missScore'])){
+                    $item['missScore'] = testpaper['metas']['missScore'][$question['type']];
+                } else {
+                    $item['missScore'] = 0;
+                }
+
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
             } else {
