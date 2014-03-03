@@ -43,6 +43,13 @@ define(function(require, exports, module) {
         addItemWithEnter: function(e) {
             if (e.which == 13) {
                 e.preventDefault();
+
+                if (this.get('onlyAddItemWithModel')) {
+                    var value = this.$('[data-role=item-input]').val();
+                    this.trigger('beforeAddItem', value);
+                    return ;
+                }
+
                 this.addItem();
             }
         },
