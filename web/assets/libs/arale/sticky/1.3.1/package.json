@@ -1,7 +1,7 @@
 {
     "family": "arale",
     "name": "sticky",
-    "version": "1.2.1",
+    "version": "1.3.1",
     "keywords": ["utility"],
     "description": "实现元素跟随滚动的效果。",
     "homepage": "http://aralejs.org/sticky/",
