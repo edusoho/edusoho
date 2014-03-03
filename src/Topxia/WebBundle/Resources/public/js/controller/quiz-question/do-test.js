@@ -79,6 +79,8 @@ define(function(require, exports, module) {
                         $('#timeout-dialog').show();
                         timer.stop();
                     }).error(function(){
+                        $('#timeout-dialog').find('.empty').text('试卷提交失败，Orz');
+                        $('#timeout-dialog').find('#show_testpaper_result').text('重新来过');
                         $('#timeout-dialog').show();
                         timer.stop();
                     });
