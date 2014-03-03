@@ -494,7 +494,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ($answer['status'] == 'right') {
                 $answers[$questionId]['score'] = $items[$questionId]['score'];
             } elseif ($answer['status'] == 'partRight') {
-                if ($items[$questionId]['missScore'] > 0){
+                if ($items[$questionId]['parentId'] == 0 and $items[$questionId]['missScore'] > 0){
                     $answers[$questionId]['score'] = $items[$questionId]['missScore'];
                 } else {
                     $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
@@ -725,7 +725,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['questionType'] = $question['type'];
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
-                $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
+                $item['missScore'] = array_key_exists($question['type'], $testpaper['metas']['missScore']) ? $testpaper['metas']['missScore'][$question['type']] : 0;
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
             } else {
