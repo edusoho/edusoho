@@ -146,10 +146,8 @@ define(function(require, exports, module) {
 
                 if (info.duration.match(':')){
                     var durations = info.duration.split(':');
-                    $("#lesson-minute-field").val(duration[0]);
-                    $("#lesson-second-field").val(duration[1]);
-                } else{
-                    $("#lesson-second-field").val(info.duration);
+                    $("#lesson-minute-field").val(durations[0]);
+                    $("#lesson-second-field").val(durations[1]);
                 }
 
             }
@@ -189,10 +187,12 @@ define(function(require, exports, module) {
             editor.sync();
             var z = editor.html();
             var x = editor.html().match(/<embed[\s\S]*?\/>/g);
-            for (var i = x.length - 1; i >= 0; i--) {
-               var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
-               var z =  z.replace(x[i],y);
-            };
+            if (x) {
+                for (var i = x.length - 1; i >= 0; i--) {
+                   var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+                   var z =  z.replace(x[i],y);
+                };
+            }
             $content.val(z);
         });
  
