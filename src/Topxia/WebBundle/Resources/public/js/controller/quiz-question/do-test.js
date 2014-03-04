@@ -27,6 +27,11 @@ define(function(require, exports, module) {
             }
         });
 
+        $('.testpaper-card').on('click', '.btn-index', function() {
+            var position = $($(this).data('anchor')).offset();
+            $(document).scrollTop(position.top - 55);
+        });
+
 
         var $body = $(document.body);
 
@@ -40,7 +45,7 @@ define(function(require, exports, module) {
         });
 
 // 做试卷
-        var interval = 180;
+        var interval = 600;
 
         var changeAnswers = {};
 
@@ -76,6 +81,11 @@ define(function(require, exports, module) {
                 if (deadline <= 0) {
                     $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                         changeAnswers = {};
+                        $('#timeout-dialog').show();
+                        timer.stop();
+                    }).error(function(){
+                        $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
+                        $('#timeout-dialog').find('#show_testpaper_result').text('确定');
                         $('#timeout-dialog').show();
                         timer.stop();
                     });
@@ -149,9 +159,9 @@ define(function(require, exports, module) {
 
 
                 if (values.length > 0 && !isEmpty(values)) {
-                    $('a[href="#question' + name + '"]').addClass('active');
+                    $('a[data-anchor="#question' + name + '"]').addClass('active');
                 } else {
-                    $('a[href="#question' + name + '"]').removeClass('active');
+                    $('a[data-anchor="#question' + name + '"]').removeClass('active');
                 }
 
 
@@ -162,7 +172,7 @@ define(function(require, exports, module) {
         $('.testpaper-question-actions').on('click', 'a.marking', function(){
 
             id = $(this).parents('.testpaper-question').attr('id');
-            btn = $('.testpaper-card .panel-body [href="#'+id+'"]');
+            btn = $('.testpaper-card .panel-body [data-anchor="#'+id+'"]');
 
             btn.addClass('have-pro');
 
@@ -173,7 +183,7 @@ define(function(require, exports, module) {
 
         $('.testpaper-question-actions').on('click', 'a.unMarking', function(){
             id = $(this).parents('.testpaper-question').attr('id');
-            btn = $('.testpaper-card .panel-body [href="#'+id+'"]');
+            btn = $('.testpaper-card .panel-body [data-anchor="#'+id+'"]');
 
             btn.removeClass('have-pro');
 
@@ -189,6 +199,7 @@ define(function(require, exports, module) {
         $('#testpaper-finish-btn').on('click', function(){
             $finishBtn = $('#finishPaper');
             $('#testpaper-finish-btn').button('saving');
+            $('#testpaper-finish-btn').attr('disabled', 'disabled');
             $.post($finishBtn.data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                 window.location.href = $finishBtn.data('goto');
             });
@@ -244,21 +255,21 @@ define(function(require, exports, module) {
         
 // 学生查看试卷结果
 
-        $('.testpaper-card .panel-body a.btn[href^="#question"]').each(function(){
+        $('.testpaper-card .panel-body a.btn[data-anchor^="#question"]').each(function(){
 
             if ($(this).hasClass('wrong')) {
-                wrongs.push($(this).attr('href'));
+                wrongs.push($(this).attr('data-anchor'));
                 $(this).addClass('btn-danger');
             }
             if ($(this).hasClass('right')) {
-                rights.push($(this).attr('href'));
+                rights.push($(this).attr('data-anchor'));
                 $(this).addClass('btn-success');
             }
             if ($(this).hasClass('checking')) {
                 
                 $(this).addClass('btn-warning');
             }
-            alls.push($(this).attr('href'));
+            alls.push($(this).attr('data-anchor'));
         });
 
         $('.testpaper-card').on('click', '#showWrong', function(){
@@ -283,6 +294,11 @@ define(function(require, exports, module) {
                 }
             });
 
+            var testpaperBodyHeight = $('.testpaper-body').height();
+            var testpaperCardHeight = $('.testpaper-card').height();
+            if (testpaperCardHeight > testpaperBodyHeight) {
+                $('.testpaper-body').css('min-height', testpaperCardHeight);
+            }
         });
 
         $.each(alls, function(index, val){

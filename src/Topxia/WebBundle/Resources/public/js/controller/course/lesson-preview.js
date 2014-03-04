@@ -61,7 +61,7 @@ define(function(require, exports, module) {
 		}
 
 		if ($("#lesson-preview-swf-player").length > 0) {
-			swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '360', "9.0.0");
+			swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '360', "9.0.0", null, null, {wmode: 'transparent'});
 
 	    	$('#modal').one('hidden.bs.modal', function () {
 	    		swfobject.removeSWF('lesson-preview-swf-player');

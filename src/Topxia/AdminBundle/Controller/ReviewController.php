@@ -18,7 +18,7 @@ class ReviewController extends BaseController {
 
         $reviews = $this->getReviewService()->searchReviews(
             $conditions,
-            null,
+            'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         ); 

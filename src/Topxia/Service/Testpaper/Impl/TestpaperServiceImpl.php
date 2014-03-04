@@ -170,6 +170,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $metas = empty($testpaper['metas']) ? array() : $testpaper['metas'];
         $metas['question_type_seq'] = $types;
+        $metas['missScore'] = $options['missScores'];
 
         $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
             'itemCount' => $seq -1,
@@ -493,7 +494,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ($answer['status'] == 'right') {
                 $answers[$questionId]['score'] = $items[$questionId]['score'];
             } elseif ($answer['status'] == 'partRight') {
-                if ($items[$questionId]['missScore'] > 0){
+                if ($items[$questionId]['parentId'] == 0 and $items[$questionId]['missScore'] > 0){
                     $answers[$questionId]['score'] = $items[$questionId]['missScore'];
                 } else {
                     $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
@@ -711,6 +712,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $types = array();
         $totalScore = 0;
         $seq = 1;
+
         foreach ($items as $item) {
             $question = $questions[$item['questionId']];
             $item['seq'] = $seq;
@@ -723,7 +725,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['questionType'] = $question['type'];
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
-                $item['missScore'] = 0;
+
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
+                    $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
+                } else {
+                    $item['missScore'] = 0;
+                }
+
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
             } else {

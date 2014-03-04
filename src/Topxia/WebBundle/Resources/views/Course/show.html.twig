@@ -116,7 +116,7 @@
               <a href="#course-about-pane" data-toggle="tab">课程介绍</a>
             </li>
             <li>
-              <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id}) }}">
+              <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">
                 课程评价
                 <span class="badge">{{ course.ratingNum }}</span>
               </a>

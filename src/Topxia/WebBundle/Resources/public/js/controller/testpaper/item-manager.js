@@ -104,10 +104,15 @@ define(function(require, exports, module) {
             var html = '试卷总分<strong>' + stats.total.score.toFixed(1) + '</strong>分';
             html += ' <span class="stats-part">';
             if (type == 'material') {
-                html += stats[type].name + '<strong>' + stats[type].count + '</strong>子题/<strong>' + stats[type].score.toFixed(1) + '</strng>分';
+                html += stats[type].name + '<strong>' + stats[type].count + '</strong>子题/<strong>' + stats[type].score.toFixed(1) + '</strong>分';
             } else {
-                html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score.toFixed(1) + '</strng>分';
+                html += stats[type].name + '<strong>' + stats[type].count + '</strong>题/<strong>' + stats[type].score.toFixed(1) + '</strong>分';
             }
+
+            if (stats[type].missScore > 0) {
+                html += ' 漏选得分<strong>' + stats[type].missScore + '</strong>分</span>';
+            }
+
             $("#testpaper-stats").html(html);
         },
 
@@ -117,10 +122,11 @@ define(function(require, exports, module) {
                 var type = $(this).data('type'),
                     name = $(this).data('name');
 
-                stats[type] = {name:name, count:0, score:0};
+                stats[type] = {name:name, count:0, score:0, missScore:0};
                 $("#testpaper-items-" + type).find('[name="scores[]"][type=text]').each(function() {
                     stats[type]['count'] ++;
                     stats[type]['score'] += parseFloat($(this).val());
+                    stats[type]['missScore'] = parseFloat($(this).data('miss-score'));
                 });
             });
 

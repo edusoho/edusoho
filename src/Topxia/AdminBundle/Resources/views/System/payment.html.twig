@@ -2,6 +2,8 @@
 
 {% block title %}支付方式 - {{ parent() }}{% endblock %}
 
+{% set script_controller = 'system/payment' %}
+
 {% set submenu = 'payment' %}
 
 {% block maincontent %}
@@ -10,7 +12,7 @@
 
 {{ web_macro.flash_messages() }}
 
-<form class="form-horizontal" method="post" novalidate>
+<form class="form-horizontal" method="post" id="payment-form" novalidate >
   
   <div class="form-group">
     <div class="col-md-3 control-label">

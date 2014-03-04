@@ -1,6 +1,6 @@
-{% if showTestpaperNavbar|default('on') == 'off' %}
-	<form id='teacherCheckForm'>
-{% endif %}
+{# {% if showTestpaperNavbar|default('on') == 'off' %} #}
+	<form id='teacherCheckForm' autocomplete="off">
+{# {% endif %} #}
 
 
 {% for type in types|default(paper.metas.question_type_seq) %}
@@ -9,7 +9,7 @@
 
 <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
   <div class="panel-heading"><strong class="">{{dict('questionType')[type]}}</strong>
-  	<small class="text-muted">共{{ total[type].number }}题，共{{ total[type].score }}分</small>
+  	<small class="text-muted">共{{ total[type].number }}题，共{{ total[type].score }}分{% if total[type].missScore > 0 %}，漏选得{{ total[type].missScore }}分{% endif %}</small>
   </div>
   <div class="panel-body">
 
@@ -43,7 +43,7 @@
 
 {% if showTestpaperNavbar|default('on') == 'off' %}
 <textarea name="teacherSay" id="teacherSay" style="display:none"></textarea>
+{% endif %}
 
 
 </form>
-{% endif %}

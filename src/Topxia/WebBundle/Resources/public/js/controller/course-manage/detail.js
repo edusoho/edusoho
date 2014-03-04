@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var EditorFactory = require('common/kindeditor-factory');
-    var DynamicCollection = require('../widget/dynamic-collection2');
+    var DynamicCollection = require('../widget/dynamic-collection3');
     require('jquery.sortable');
 
     exports.run = function() {
@@ -13,12 +13,18 @@ define(function(require, exports, module) {
             element: '#course-goals-form-group',
         });
 
-        var goalDynamicCollection = new DynamicCollection({
+        var audiencesDynamicCollection = new DynamicCollection({
             element: '#course-audiences-form-group',
         });
 
         $(".sortable-list").sortable({
             'distance':20
+        });
+
+        $("#course-base-form").on('submit', function() {
+            goalDynamicCollection.addItem();
+            audiencesDynamicCollection.addItem();
+
         });
 
     };

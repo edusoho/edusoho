@@ -26,13 +26,12 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             return new JsonResponse($content, 400);
         }
 
- 
-        $result = parent::onAuthenticationFailure($request, $exception);
+        $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
 
         $username = $request->request->get('_username');
         $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
         
-        return $result;
+        return parent::onAuthenticationFailure($request, $exception);
     }
 
     public function setTranslator($translator)

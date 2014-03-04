@@ -25,6 +25,8 @@ interface CourseMemberDao
     
     public function searchMember($conditions, $start, $limit);
 
+    public function searchMemberIds($conditions, $orderBy, $start, $limit);
+
     public function addMember($member);
 
     public function updateMember($id, $member);

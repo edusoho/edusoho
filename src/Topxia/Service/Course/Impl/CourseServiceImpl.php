@@ -391,6 +391,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         	'largePicture' => $largeFileRecord['uri'],
     	);
 
+    	@unlink($filePath);
+
+    	$oldPictures = array(
+            'smallPicture' => $course['smallPicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['smallPicture']) : null,
+            'middlePicture' => $course['middlePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['middlePicture']) : null,
+            'largePicture' => $course['largePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['largePicture']) : null
+        );
+
+
+        array_map(function($oldPicture){
+        	if (!empty($oldPicture)){
+	            @unlink($oldPicture);
+        	}
+        }, $oldPictures);
+
 		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
         
         return $this->getCourseDao()->updateCourse($courseId, $fields);
@@ -744,8 +759,28 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
+		// 更新已学该课时会员的计数器
+		$learnCount = $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
+		if ($learnCount > 0) {
+			$learns = $this->getLessonLearnDao()->findLearnsByLessonId($lessonId, 0, $learnCount);
+			foreach ($learns as $learn) {
+				if ($learn['status'] == 'finished') {
+					$member = $this->getCourseMember($learn['courseId'], $learn['userId']);
+					if ($member) {
+						$memberFields = array();
+						$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($learn['userId'], $learn['courseId'], 'finished') - 1;
+						$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+						// var_dump($member);exit();
+						$this->getMemberDao()->updateMember($member['id'], $memberFields);
+					}
+				}
+			}
+		}
+		$this->getLessonLearnDao()->deleteLearnsByLessonId($lessonId);
+
 		$this->getLessonDao()->deleteLesson($lessonId);
 
+		// 更新课时序号
 		$number = 1;
 		$lessons = $this->getCourseLessons($courseId);
         foreach ($lessons as $lesson) {
@@ -758,7 +793,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
-
+		// [END] 更新课时序号
+		
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
 		// $this->autosetCourseFields($courseId);
@@ -1071,6 +1107,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
+	}
+	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
+	{	
+		$conditions = $this->_prepareCourseConditions($conditions);
+		if ($sort = 'latest') {
+			$orderBy = array('createdTime', 'DESC');
+		} 
+		return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
 	}
 
 	public function updateCourseMember($id, $fields)

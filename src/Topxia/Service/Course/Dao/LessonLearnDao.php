@@ -14,7 +14,13 @@ interface LessonLearnDao
 
 	public function getLearnCountByUserIdAndCourseIdAndStatus($userId, $courseId, $status);
 
+    public function findLearnsByLessonId($lessonId, $start, $limit);
+
+    public function findLearnsCountByLessonId($lessonId);
+
 	public function addLearn($learn);
 
 	public function updateLearn($id, $fields);
+
+    public function deleteLearnsByLessonId($lessonId);
 }

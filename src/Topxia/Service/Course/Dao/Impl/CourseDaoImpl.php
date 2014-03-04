@@ -92,7 +92,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['categoryIds'])) {
             $categoryIds = array();
             foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit($categoryId)) {
+                if (ctype_digit((string)abs($categoryId))) {
                     $categoryIds[] = $categoryId;
                 }
             }
@@ -100,6 +100,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $categoryIds = join(',', $categoryIds);
                 $builder->andStaticWhere("categoryId IN ($categoryIds)");
             }
+
         }
 
         return $builder;

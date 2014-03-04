@@ -51,7 +51,10 @@
           <div class="col-md-12">
             <div class="alert alert-info">
             <h4>付款提示</h4>
-            支付宝支持“担保交易”和“立即到帐交易”两种交易方式。<br>推荐使用<strong>“立即到帐交易”</strong>。“担保交易”需要人工确认发货、确认收货后才能学习课程，<strong>会产生较大延迟</strong>。</div>
+            请在随后的支付宝支付页面中，选择“<strong>即时到帐交易</strong>”，如下图所示。如果选择“担保交易”需要人工确认，将会产生较大延迟。
+            <br>
+            <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
+            </div>
           </div>
         </div>
         {% endif %}
@@ -78,12 +81,12 @@
 
 
     <div class="form-group">
-      <label class="col-md-3 control-label" for="truename">真实姓名</label>
+      <label class="col-md-3 control-label" for="truename">真实姓名 <span class="required">*</span></label>
       <div class="col-md-6 controls">
         {% if user.approvalStatus == 'approved' %}
-          <span class="control-text"><strong>{{ user.truename }}</strong></span>
+          <div class="control-text">{{ user.truename }} <small class="text-success">(已认证)</small></div>
         {% elseif user.approvalStatus == 'approving' %}
-          <span class="control-text"><strong>{{ user.truename }} </strong><small class="text-info"> 实名认证正在审核中</small></span>
+          <div class="control-text">{{ user.truename }} <small class="text-warning">(真实认证中)</small></div>
         {% else %}
           <input class="form-control" id="truename" type="text" name="truename" value="{{ user.truename }}">
         {% endif %}
@@ -91,7 +94,7 @@
     </div>
 
     <div class="form-group">
-      <label class="col-md-3 control-label" for="mobile">手机</label>
+      <label class="col-md-3 control-label" for="mobile">手机 <span class="required">*</span></label>
       <div class="col-md-6 controls">
         <input class="form-control" id="mobile" type="text" name="mobile" value="{{ user.mobile }}">
       </div>
@@ -105,21 +108,21 @@
     </div>
 
     <div class="form-group">
-      <div class="col-md-3 control-label">所在公司</div>
+      <label class="col-md-3 control-label" for="company">所在公司</label>
       <div class="col-md-6 controls">
         <input class="form-control" id="company" type="text" name="company" value="{{ user.company }}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-md-3 control-label">职位</div>
+      <label class="col-md-3 control-label">职位</label>
       <div class="col-md-6 controls">
         <input class="form-control" id="job" type="text" name="job" value="{{ user.job }}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-md-3 control-label">备注</div>
+      <label class="col-md-3 control-label">备注</label>
       <div class="col-md-6 controls">
         <textarea class="form-control" id="note" name="note"></textarea>
       </div>

@@ -168,14 +168,25 @@ textarea {
 
 }
 
+.control-label span.required {
+	color: #f60;
+}
+
 .bootstrap-notify-bar {
 	position: fixed;
-	top: 0;
+	top: 0px;
 	left: 0;
 	right: 0;
 	border-radius: 0;
 	text-align: center;
 	z-index: 2000;
+	padding: 10px;
+	margin: 0;
+	/*max-width: 600px;*/
+}
+
+.bootstrap-notify-bar .close {
+	margin-left: 10px;
 }
 
 .empty {
@@ -218,7 +229,9 @@ textarea {
 	padding-right: 15px;
 	float: left;
 }
-
+.site-navbar .navbar-brand-logo img {
+	/*height: 50px;*/
+}
 .site-navbar .navbar-nav > li > a {
   color: #fff;
   padding-top: 17px;
@@ -876,6 +889,13 @@ body {
 	font-size: 12px;
 }
 
+.material-pane {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	overflow: hidden;
+}
 .material-pane h5 {
 	font-weight: bold;
 	font-size: 13px;
@@ -1530,7 +1550,9 @@ body {
 .lesson-dashboard .lesson-content-text-body img {
 	max-width: 100%;
 }
-
+.lesson-dashboard .lesson-content-text-body blockquote p {
+	font-size: 14px;
+}
 .lesson-dashboard .nav-btn {
 	position: absolute;
 	background: #f9f9f9;

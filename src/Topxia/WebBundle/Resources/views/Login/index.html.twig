@@ -41,7 +41,9 @@
             <button type="submit" class="btn btn-fat btn-primary btn-large">登录</button>
           </div>
         </div>
-
+        {% if targetPath|default(null) %}
+          <input type="hidden" name="_target_path" value="{{ targetPath }}">
+        {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
