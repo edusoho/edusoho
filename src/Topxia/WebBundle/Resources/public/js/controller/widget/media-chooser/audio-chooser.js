@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var BaseChooser = require('./base-chooser-2');
-    require('jquery.perfect-scrollbar');
+    require('jquery.nicescroll');
 
     var AudioChooser = BaseChooser.extend({
     	attrs: {
@@ -14,9 +14,7 @@ define(function(require, exports, module) {
         
         setup: function() {
             AudioChooser.superclass.setup.call(this);
-            $('#disk-browser-audio').perfectScrollbar({
-                wheelSpeed: 50
-            });
+            $('#disk-browser-audio').niceScroll({cursorcolor:"#CCC",cursorwidth:"10px"});
         }
 
     });

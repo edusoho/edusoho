@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
       var Widget = require('widget');
 
-      require('jquery.perfect-scrollbar');
+      require('jquery.nicescroll');
 
       var LessonPane = Widget.extend({
 
@@ -29,7 +29,7 @@ define(function(require, exports, module) {
                         });
                         toolbar.setLessons(lessons);
 
-                        $('.course-item-list-in-toolbar-pane').perfectScrollbar({wheelSpeed:50});
+                        $('.course-item-list-in-toolbar-pane').niceScroll({cursorcolor:"#CCC",cursorwidth:"10px"});
 
                   });
 
