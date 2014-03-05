@@ -906,8 +906,6 @@ my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
 
->>>>>>> develop
-
 user_show: 
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
