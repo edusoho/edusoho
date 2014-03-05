@@ -1,0 +1,22 @@
+<tr>
+  <td>
+    {{ question.stem|fill_question_stem_text|plain_text(40) }}
+    {% if question.type == 'material' %}
+      <small class="text-muted">({{ question.subCount}}子题)</small>
+    {% endif %}
+    <br>
+    <small class="text-muted">从属：
+      {% if question.target == 'course-' ~ course.id %}
+        本课程
+      {% else %}
+        {{ targets[question.target].simple_name|default('--') }}
+      {% endif %}
+    </small>
+  </td>
+  <td>{{ dict_text('questionType', question.type) }}</td>
+  <td>{{question.score }}</td>
+  <td>
+    <button data-url="{{ path('course_manage_question_preview', {courseId:course.id, id:question.id, isNew:true }) }}" class="btn btn-default btn-sm newWindowPreview">预览</button>
+    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ replace|default('') }}" data-url="{{ path('course_manage_testpaper_item_picked', {courseId:course.id, testpaperId:testpaper.id, questionId:question.id }) }}">{% if replace %}替换{% else %}选择{% endif %}</button>
+  </td>
+</tr>

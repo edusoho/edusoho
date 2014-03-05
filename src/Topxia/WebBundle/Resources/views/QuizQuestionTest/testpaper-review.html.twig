@@ -1,0 +1,57 @@
+{% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
+
+{% set role = 'teacher' %}
+
+{% set showTestpaperNavbar = 'off' %}
+
+{% block testpaper_heading_status %}
+  {% if paperResult.status == 'finished' %}
+    <div class="label label-success">批阅完成</div>
+  {% elseif paperResult.status == 'reviewing' %}
+    <div class="label label-info">批阅中</div>
+  {% endif %}
+{% endblock %}
+
+{% block testpaper_heading_content %}
+
+{% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
+
+<div class="text-info mbl">请完成以下题目的批阅：</div>
+
+{% endblock %}
+
+{% block testpaper_body_sidebar %}
+
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+          {% for type in types|default(paper.metas.question_type_seq) %}
+
+            {% for item in items[type] %}
+              {% if item.questionType != 'material' %}
+                <a href="#question{{ item.questionId }}" class="btn btn-default btn-index {{ item.question.testResult.status }}">{{ item.seq }}</a>
+              {% else %}
+                {% for item in item.items|default([]) %}
+                  {% if item.questionType == 'essay' %}
+                    <a href="#question{{ item.questionId }}" class="btn btn-default btn-index {{ item.question.testResult.status }}">{{ item.seq }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              
+            {% endfor %}
+
+            <div class="clearfix mtm mbm"></div>
+
+          {% endfor %}
+
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-success btn-block" id="finishCheck">完成批阅</button>
+        </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

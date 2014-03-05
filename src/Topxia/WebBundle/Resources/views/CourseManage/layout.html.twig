@@ -32,6 +32,17 @@
               <a class="list-group-item {% if side_nav == 'coupons' %}active{% endif %}" href="{{ path('course_manage_coupons', {id:course.id}) }}">优惠码管理</a>
             </div>
           </div>
+
+          <div class="list-group-panel">
+            <div class="list-group-heading">题库</div>
+            <div class="list-group">
+              <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="{{ path('course_manage_question', {courseId:course.id}) }}">题目管理</a>
+              <a class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}" href="{{ path('course_manage_question_category', {courseId:course.id}) }}">题目类别管理</a>
+              <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">试卷管理</a>
+              <a class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">试卷批阅</a>
+            </div>
+          </div>
+
         </div>
 
       </div>

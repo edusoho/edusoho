@@ -1,0 +1,79 @@
+
+{% if not role|default(null) == 'teacher' %}
+
+
+<div class="testpaper-question testpaper-question-choice" id="question{{ item.questionId }}">
+
+	{% set keys = [] %}
+	{% set keys_answer = [] %}
+	<div class="testpaper-question-body">
+    {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+
+		<ul class="testpaper-question-choices">
+			{% for key, choice in item.question.metas.choices %}
+			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in item.question.answer)) ? 'testpaper-question-choice-right' : '' %}
+			  {% set choiceIndex = (65+key)|chr %}
+
+				<li class="{{ itemClass }}"><span class="testpaper-question-choice-index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
+				{% if key in item.question.answer %}
+					{% set keys = keys|merge([choiceIndex]) %}
+				{% endif  %}
+				{% if key in item.question.testResult.answer|default([]) %}
+					{% set keys_answer = keys_answer|merge([choiceIndex]) %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+				{% if item.question.testResult.status == 'right' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，回答正确
+				{% elseif item.question.testResult.status == 'partRight' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。回答部分正确。得分：{{ item.question.testResult.score }}分
+				{% elseif item.question.testResult.status == 'wrong' %}
+					正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。回答错误
+				{% elseif item.question.testResult.status == 'noAnswer' %}
+				  正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>，你未答题
+				{% endif %}
+		  </div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+	{% else %}
+		<div class="testpaper-question-footer clearfix">
+
+		  <div class="testpaper-question-choice-inputs">
+				{% for key, choice in item.question.metas.choices %}
+					{% set choiceIndex = (65+key)|chr %}
+
+					<label class="{% if item.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choiceIndex in keys_answer %}active{% endif %}">
+						<input type="{% if item.questionType == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ item.questionId }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
+						{{ choiceIndex }}
+					</label> 
+				{% endfor %}
+		  </div>
+		  <div class="testpaper-question-actions pull-right">
+			{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+		  </div>
+		</div>
+
+		{% if questionPreview|default(false) %}
+		  <div class="testpaper-preview-answer clearfix mtl mbl">
+		  	<div class="testpaper-question-result">
+				正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>
+		  	</div>
+		  </div>
+
+		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}</div>
+		{% endif %}
+
+
+	{% endif %}
+</div>
+
+{% endif %}

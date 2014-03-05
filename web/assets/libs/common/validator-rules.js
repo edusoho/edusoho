@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         [
             'phone', 
             /^1\d{10}$/,
-            '请输入合法的{{display}}'
+            '请输入有效的{{display}}'
         ],
         [
             'chinese_alphanumeric',
@@ -133,6 +133,20 @@ define(function(require, exports, module) {
             'integer',
             /^[+-]?\d+$/,
             '{{display}}必须为整数'
+        ],
+        [
+            'maxsize_image',
+            function (options) {
+                var element = options.element;
+                if (!window.ActiveXObject){
+                    var image_size = element[0].files[0].size;
+                    image_size = image_size / 1048576;
+                    return image_size <= 5;
+                } else {
+                    return true;
+                }
+            },
+            '{{display}}必须小于5M'
         ],
         [
             'remote',

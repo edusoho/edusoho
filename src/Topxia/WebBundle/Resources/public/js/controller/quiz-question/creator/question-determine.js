@@ -10,11 +10,11 @@ define(function(require, exports, module) {
 
         _initValidator: function(){
             this.get("validator").addItem({
-                element: '[name^=answers]',
+                element: '[name^=answer]',
                 required: true,
-                errormessage:"请选择您的答案。",
+                errormessage:"请选择您的答案"
             });
-        },
+        }
     });
 
     module.exports = DetermineQuestion;

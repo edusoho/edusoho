@@ -117,7 +117,7 @@
               <a href="#course-about-pane" data-toggle="tab">课程介绍</a>
             </li>
             <li>
-              <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id}) }}">
+              <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">
                 课程评价
                 <span class="badge">{{ course.ratingNum }}</span>
               </a>
@@ -140,6 +140,13 @@
                 {{ course.about|raw }}
               {% else %}
               <span class="text-muted">还没有课程介绍...</span>
+              {% endif %}
+              {% if tags %}
+                <div class="mtm">
+                <span class="text-muted">标签：</span>{% for tag in tags %}
+                <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
+                {% endfor %}
+                </div>
               {% endif %}
             </div>
             <div class="tab-pane" id="course-review-pane">正在载入课程评价数据...</div>

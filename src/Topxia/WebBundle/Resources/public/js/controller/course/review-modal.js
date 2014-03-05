@@ -29,11 +29,6 @@ define(function(require, exports, module) {
             errormessageRequired: '请打分'
         });
 
-        validator.addItem({
-            element: '[name="review[content]"]',
-            required: true
-        });
-
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
                 return;
@@ -43,6 +38,17 @@ define(function(require, exports, module) {
                 window.location.reload();
             }, 'json');
 
+        });
+
+
+        $('#modal').on('click', '#list_reviews', function(){
+            $.get($('#list_reviews').data('url'), function(html) {
+                $('#modal').html(html);
+            });
+        });
+
+        $('#modal').on('click', '#back_to_create', function(){
+            $('#modal').load($('#back_to_create').data('url'));
         });
 
 

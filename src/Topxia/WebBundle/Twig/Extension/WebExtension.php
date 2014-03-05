@@ -28,6 +28,12 @@ class WebExtension extends \Twig_Extension
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
+            'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
+            'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter'),
+            'score_text' => new \Twig_Filter_Method($this, 'scoreTextFilter'),
+            'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
+            'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
+            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter')
         );
     }
 
@@ -275,6 +281,62 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function chrFilter($index)
+    {
+        return chr($index);
+    }
+
+    public function bbCode2HtmlFilter($bbCode)
+    {
+        $isFind = preg_match_all("#\[image\].*?\[\/image\]|\[video\].*?\[\/video\]#", $bbCode, $matches);
+
+        if($isFind){
+            foreach ($matches[0] as $value) {
+                $old = $value;
+                $src = "/files/" . str_replace(array('[image]', '[/image]'), '', $value);
+
+                $new = "<img src='" . $src . "' />";
+
+                $bbCode = str_replace($old, $new, $bbCode);
+            }
+
+        }
+
+        return $bbCode;
+    }
+
+    public function scoreTextFilter($text)
+    {
+        $text = number_format($text, 1, '.', '');
+
+        if (intval($text) == $text) {
+            return (string) intval($text);
+        }
+        return $text;
+    }
+
+    public function fillQuestionStemTextFilter($stem)
+    {
+        return preg_replace('/\[\[.+?\]\]/', '____', $stem);
+    }
+
+    public function fillQuestionStemHtmlFilter($stem)
+    {
+        $index = 0;
+        $stem = preg_replace_callback('/\[\[.+?\]\]/', function($matches) use (&$index) {
+            $index ++;
+            return "<span class='question-stem-fill-blank'>({$index})</span>";
+        }, $stem);
+        return $stem;
+    }
+
+    public function getCourseidFilter($target)
+    {
+        $target = explode('/', $target);
+        $target = explode('-', $target[0]);
+        return $target[1];
     }
 
     public function getSetting($name, $default = null)

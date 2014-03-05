@@ -35,6 +35,10 @@ services:
         class:			Topxia\Common\TimeMachine
         arguments:		['Asia/Shanghai']
 
+    topxia.target_helper:
+        class:          Topxia\WebBundle\Util\TargetHelper
+        arguments:      [@service_container]
+
     topxia.file_locator:
         class:          Topxia\WebBundle\Theme\FileLocator
         arguments:      [@kernel, '%kernel.root_dir%/Resources']

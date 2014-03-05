@@ -13,8 +13,11 @@
   <meta name="description" content="{% block description %}{% endblock %}" />
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   {{ setting('login_bind.verify_code', '')|raw }}
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
   {% block stylesheets %}
-    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.0.1/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
@@ -112,11 +115,11 @@
 
       <div class="footer-links">
         {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-        {% if setting('site.icp') %} <a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a> {% endif %}
       </div>
 
       <div class="footer-copyright">
-        Powered by <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a> ©2013 <a href="http://www.edusoho.com" target="_blank">edusoho.com</a> & <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+        Powered by <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a> ©2013-2014 <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>{{ setting('site.analytics')|raw }}
+        {% if setting('site.copyright') %}<div class="mts">课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>{% endif %}
       </div>
 
     </div>

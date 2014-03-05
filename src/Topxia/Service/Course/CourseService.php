@@ -105,8 +105,6 @@ interface CourseService
 
 	public function getUserNextLearnLesson($userId, $courseId);
 
-	public function getLessonByMediaId($mediaId);
-
 	/**
 	 * Chapter API
 	 */
@@ -141,6 +139,8 @@ interface CourseService
 	public function searchMemberCount($conditions);
 
 	public function getCourseMember($courseId, $userId);
+
+	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit);
 
 	public function updateCourseMember($id, $fields);
 

@@ -166,8 +166,34 @@ class EdusohoCloudClient implements CloudClient
         return $this->getVideoInfo($bucket, $key);
     }
 
-    public function removeFile($key){
+    public function removeFile($key)
+    {
 
+    }
+
+    public function deleteFiles(array $keys, array $prefixs = array())
+    {
+        $args = array();
+        $args['keys'] = $keys;
+        $args['prefixs'] = $prefixs;
+
+        $args = array_filter($args);
+
+        return $this->callRemoteApi('POST', 'FileDelete', $args);
+    }
+
+    private function callRemoteApi($httpMethod, $action, array $args)
+    {
+        $url = $this->makeApiUrl($action);
+
+        $httpParams = array();
+        $httpParams['accessKey'] = $this->accessKey;
+        $httpParams['args'] = $args;
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+
+        $result = $this->sendRequest($httpMethod, $url, $httpParams);
+
+        return json_decode($result, true);
     }
 
     public function getFileUrl($key,$targetId,$targetType){
@@ -239,6 +265,43 @@ class EdusohoCloudClient implements CloudClient
         return $this->apiServer . '/convert.php';
     }
 
+    private function makeApiUrl($action)
+    {
+        return $this->apiServer . '/api.php?action=' . $action;
+    }
+
+    private function sendRequest($method, $url, $params = array())
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        if (strtoupper($method) == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            $params = http_build_query($params);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        } else {
+            if (!empty($params)) {
+                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+            }
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
+    }
+
+    /**
+     * @todo remove it.
+     */
     private function getRequest($url, $params = array(), $cookie = array())
     {
 

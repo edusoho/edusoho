@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Widget = require('widget'),
     Validator = require('bootstrap.validator'),
     ThreadShowWidget = require('../../../course-thread/show-widget');
-    require('jquery.perfect-scrollbar');
+    require('jquery.nicescroll');
 
     var QuestionPane = Widget.extend({
         _dataInitialized: false,
@@ -118,7 +118,7 @@ define(function(require, exports, module) {
         _showListPane: function() {
             this.$('[data-role=show-pane]').hide();
             this.$('[data-role=list-pane]').show();
-            this.element.find('.question-list-pane').perfectScrollbar({wheelSpeed:50});
+            this.element.find('.question-list-pane').niceScroll({cursorcolor:"#CCC",cursorwidth:"10px"});
             return this.$('[data-role=list-pane]');
         },
         _showItemPane: function() {

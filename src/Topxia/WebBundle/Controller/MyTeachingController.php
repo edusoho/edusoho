@@ -35,6 +35,14 @@ class MyTeachingController extends BaseController
 
 		$user = $this->getCurrentUser();
 		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
+
+        if (empty($myTeachingCourseCount)) {
+            return $this->render('TopxiaWebBundle:MyTeaching:threads.html.twig', array(
+                'type'=>$type,
+                'threads' => array()
+            ));
+        }
+
 		$myTeachingCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, $myTeachingCourseCount, true);
 
 		$conditions = array(
@@ -54,7 +62,7 @@ class MyTeachingController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
 

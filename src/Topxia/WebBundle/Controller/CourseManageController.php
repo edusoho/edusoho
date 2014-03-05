@@ -161,13 +161,24 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        $canModifyPrice = true;
+        $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
+        if (empty($teacherModifyPrice)) {
+            if (!$this->getCurrentUser()->isAdmin()) {
+                $canModifyPrice = false;
+                goto response;
+            }
+        }
+
         if ($request->getMethod() == 'POST') {
             $course = $this->getCourseService()->updateCourse($id, $request->request->all());
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
+        response:
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
-            'course' => $course
+            'course' => $course,
+            'canModifyPrice' => $canModifyPrice,
         ));
         
     }

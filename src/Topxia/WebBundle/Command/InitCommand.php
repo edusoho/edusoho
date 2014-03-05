@@ -99,7 +99,7 @@ class InitCommand extends BaseCommand
         $user['currentIp'] = '127.0.0.1';
         $currentUser->fromArray($user);
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser->getRoles());
-        static::$this->getContainer()->get('security.context')->setToken($token);
+        $this->getContainer()->get('security.context')->setToken($token);
 
 		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
 

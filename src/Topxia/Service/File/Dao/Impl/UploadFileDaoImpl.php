@@ -35,6 +35,16 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findFilesCountByEtag($etag)
+    {
+        if (empty($etag)) {
+            return 0;
+        }
+
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE etag = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($etag));
+    }
+
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -89,6 +99,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
             ->andWhere('type = :type')
+            ->andWhere('storage = :storage')
             ->andWhere('filename LIKE :filenameLike');
     }
 

@@ -93,11 +93,11 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::nickname($nickname)) {
             throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
         }
-        $user = $this->getUserDao()->findUserByNickname($nickname);
-        if ($user && $user['id'] != $userId) {
+        $existUser = $this->getUserDao()->findUserByNickname($nickname);
+        if ($existUser && $existUser['id'] != $userId) {
             throw $this->createServiceException('昵称已存在！');
         }
-
+        $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 
@@ -144,6 +144,18 @@ class UserServiceImpl extends BaseService implements UserService
         $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
 
         @unlink($filePath);
+
+        $oldAvatars = array(
+            'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
+            'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
+            'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
+        );
+
+        array_map(function($oldAvatar){
+            if (!empty($oldAvatar)) {
+                @unlink($oldAvatar);
+            }
+        }, $oldAvatars);
 
         return  $this->getUserDao()->updateUser($userId, array(
             'smallAvatar' => $smallFileRecord['uri'],

@@ -27,6 +27,8 @@ class SettingController extends BaseController
             'analytics'=>'',
             'status'=>'open',
             'closed_note'=>'',
+            'favicon'=>'',
+            'copyright'=>''
         );
 
         $site = array_merge($default, $site);
@@ -81,6 +83,46 @@ class SettingController extends BaseController
         $this->getSettingService()->set('site', $setting);
 
         $this->getLogService()->info('system', 'update_settings', "移除站点LOGO");
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function faviconUploadAction(Request $request)
+    {
+        $file = $request->files->get('favicon');
+        if (!FileToolkit::isIcoFile($file)) {
+            throw $this->createAccessDeniedException('图标格式不正确！');
+        }
+        $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $site = $this->getSettingService()->get('site', array());
+
+        $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['favicon'] = ltrim($site['favicon'], '/');
+
+        $this->getSettingService()->set('site', $site);
+
+        $this->getLogService()->info('system', 'update_settings', "更新浏览器图标", array('favicon' => $site['favicon']));
+
+        $response = array(
+            'path' => $site['favicon'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function faviconRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("site");
+        $setting['favicon'] = '';
+
+        $this->getSettingService()->set('site', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除站点浏览器图标");
 
         return $this->createJsonResponse(true);
     }
@@ -374,7 +416,8 @@ class SettingController extends BaseController
         $default = array(
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
-            'buy_fill_userinfo' => '0'
+            'buy_fill_userinfo' => '0',
+            'teacher_modify_price' => '1',
         );
 
         $courseSetting = array_merge($default, $courseSetting);

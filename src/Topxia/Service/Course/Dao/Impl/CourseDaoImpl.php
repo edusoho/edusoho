@@ -109,14 +109,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
-            ->andWhere('tagId LIKE :tagsLike')
+            ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan');
 
         if (isset($conditions['categoryIds'])) {
             $categoryIds = array();
             foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit($categoryId)) {
+                if (ctype_digit((string)abs($categoryId))) {
                     $categoryIds[] = $categoryId;
                 }
             }
@@ -124,6 +124,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $categoryIds = join(',', $categoryIds);
                 $builder->andStaticWhere("categoryId IN ($categoryIds)");
             }
+
         }
 
         return $builder;

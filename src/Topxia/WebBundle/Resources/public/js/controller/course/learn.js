@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var LessonDashboard = require('../lesson/lesson-dashboard2');
+    var LessonDashboard = require('../lesson/lesson-dashboard4');
 
     exports.run = function() {
         

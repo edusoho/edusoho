@@ -1,7 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set modal_size = 'small' %}
-
 {% block title %}登录{{ setting('site.name') }}{% endblock %}
 
 {% block body %}
@@ -45,4 +43,7 @@
   <span class="text-muted">还没有注册帐号？</span>
   <a href="{{ path('register') }}">立即注册</a>
 </div>
+
+ {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
+ 
 {% endblock %}

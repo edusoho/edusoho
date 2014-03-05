@@ -1,0 +1,9 @@
+<tr id="{{ category.id }}" class="catgory-tr">
+  <td>
+    {{ category.name }}
+  </td>
+  <td>
+    <button class="btn btn-default btn-sm"  data-url="{{ path('course_manage_question_category_update', {courseId:course.id, id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    <button type="button" data-id="{{category.id}}" class="btn btn-default btn-sm delete-category" data-url="{{ path('course_manage_question_category_delete', {courseId:course.id, id:category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+  </td>
+</tr>
