@@ -211,7 +211,8 @@ class CourseController extends BaseController
                     'isVisible' => 0,
                     'role' => 'teacher',
                     'locked' => 0,
-                    'createdTime' => time()
+                    'createdTime' => time(),
+                    'deadline' => 0
                 );
             }
 
@@ -399,11 +400,12 @@ class CourseController extends BaseController
         ));
     }
 
-    public function progressBlockAction($course)
+    public function progressBlockAction($course, $member)
     {
         $user = $this->getCurrentUser();
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        if (empty($member)) {
+            $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        }
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
         $progress = $this->calculateUserLearnProgress($course, $member);
