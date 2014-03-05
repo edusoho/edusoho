@@ -10,6 +10,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="form[avatar]"]',
             required: true,
+            rule: 'maxsize_image',
             requiredErrorMessage: '请选择要上传的头像文件。'
         });
 
