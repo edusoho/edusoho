@@ -54,7 +54,14 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="reducePrice"]',
             required: true,
-            rule: 'integer  min{min:0} max{max:100}'
+            rule: 'integer  min{min:0} remotePost',
+            hideMessage:function(msg,ele,eve){
+                   
+                    if(null != msg ){
+                        $("#reducePrice_info").html(msg);
+                        $("#reducePrice_info").addClass('text-color-green');
+                    }
+            }
         });
 
          validator.addItem({

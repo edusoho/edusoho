@@ -57,17 +57,19 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="reducePrice">优惠幅度</label>
+      <label for="reducePrice">优惠额度</label>
     </div>
     <div class="col-md-8 controls">
       <div  class="input-group">
-        <input class="form-control" type="text" id="reducePrice" value="{{offsetting.reducePrice}}" name="reducePrice" required/>
+        <input class="form-control" type="text" id="reducePrice" value="{{offsetting.reducePrice}}" name="reducePrice"  data-url="{{ path('admin_sale_offsale_reduce_check') }}"  data-fid="offsale-form"  required/>  
         <span class="input-group-addon">元</span>
-      </div>
 
+      </div>
+      <div class="help-block"  id="reducePrice_info">请输入优惠额度</div>
     </div>
   </div>
 
+  
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="strvalidTime">优惠截止期</label>

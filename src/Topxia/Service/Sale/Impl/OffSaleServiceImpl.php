@@ -191,7 +191,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
             if(empty($course)){
-                 return array('hasProd'=>'false',"prodName"=>"此商品不存在");
+                 return array('hasProd'=>'false',"prodName"=>"商品不存在，请输入正确的商品！");
             }else {
 
                  return array('hasProd'=>'true',"prodName"=>$course['title'].',￥'.$course['price']);
@@ -203,17 +203,49 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
         {
             $activity = $this->getActivityService()->getActivity($offsetting['prodId']);
             if(empty($activity)){
-                return array('hasProd'=>'false',"prodName"=>"此商品不存在");
+                return array('hasProd'=>'false',"prodName"=>"商品不存在，请输入正确的商品！");
             }else{
                  return array('hasProd'=>'true',"prodName"=>$activity['title']);
             }
         }
 
-        return array('hasProd'=>'false',"prodName"=>"此商品不存在");
-
-
+        return array('hasProd'=>'false',"prodName"=>"商品不存在，请输入正确的商品！");
 
     }
+
+    public function checkReduce($offsetting){
+
+        if(empty($offsetting)){
+            return array('status'=>'false',"msg"=>"请输入优惠额度！");
+        }
+
+        if($offsetting['prodType']=='course')
+        {
+            $course = $this->getCourseService()->getCourse($offsetting['prodId']);
+
+            if(empty($course)){
+                 return array('status'=>'false',"msg"=>"请先输入商品编号！");
+            }else {
+
+                if($course['price'] < $offsetting['reducePrice'] ){
+
+                    return array('status'=>'false',"msg"=>"优惠额度大于商品原价（".$course['price']."元），请核对后输入！");
+
+                }else{
+
+                    return array('status'=>'true',"msg"=>"优惠额度小于商品原价，合法数据！");
+                }
+
+                 
+            }
+           
+        }
+       
+
+        return array('status'=>'false',"msg"=>"请输入优惠额度！");
+        
+    }
+
 
 
     public function isValiable($offsale,$prodId){

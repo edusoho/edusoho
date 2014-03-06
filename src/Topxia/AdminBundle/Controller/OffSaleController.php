@@ -126,7 +126,6 @@ class OffSaleController extends BaseController
 
         $offsetting = $request->request->all();
 
-      
         $partner = $this->getUserService()->getUserByNickname($offsetting['partnerName']);
         
         if (empty($partner)) {
@@ -141,10 +140,25 @@ class OffSaleController extends BaseController
 
         }
 
-        
+    }
 
+    public function reduceCheckAction(Request $request){
+
+        $offsetting =  $request->request->all();
+
+        $result = $this->getOffSaleService()->checkReduce($offsetting);
+
+        if ("true"==$result['status']) {
+            $response = array('success' => true, 'message' => $result['msg']);
+             return $this->createJsonResponse($response);
+        } else {
+            $response = array('success' => false, 'message' => $result['msg']);
+             return $this->createJsonResponse($response);
+        }
+         
 
     }
+
 
     public function batchDeleteAction(Request $request)
     {

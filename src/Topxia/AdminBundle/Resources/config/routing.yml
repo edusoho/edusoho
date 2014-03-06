@@ -659,6 +659,11 @@ admin_sale_offsale_parnter_check:
     defaults: {_controller: TopxiaAdminBundle:OffSale:partnerCheck }
     methods:  [POST]
 
+admin_sale_offsale_reduce_check:
+    pattern: admin/sale/offsale/reduce/check
+    defaults: {_controller: TopxiaAdminBundle:OffSale:reduceCheck }
+    methods:  [POST]
+
 admin_sale_commission:
     pattern: /sale/commission
     defaults: { _controller: TopxiaAdminBundle:Commission:index }
