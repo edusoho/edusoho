@@ -9,7 +9,7 @@ use PDO;
 
 class LevelDaoImpl extends BaseDao implements LevelDao
 {
-	protected $table = 'user_level';
+	protected $table = 'member_level';
 
     public function getLevel($id)
     {
@@ -19,7 +19,7 @@ class LevelDaoImpl extends BaseDao implements LevelDao
 
     public function getLevelByName($name)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE Name = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($name)) ? : null;
     }
 
@@ -65,10 +65,10 @@ class LevelDaoImpl extends BaseDao implements LevelDao
     {
         
         $builder = $this->createDynamicQueryBuilder($conditions)
-        ->from($this->table, 'user_level')
+        ->from($this->table, 'member_level')
         ->andWhere('id = :id')
-        ->andWhere('levelName LIKE :Name')
-        ->andWhere('levelIcon = :Icon')
+        ->andWhere('name LIKE :name')
+        ->andWhere('icon = :icon')
         ->andWhere('seq < :seq');
 
         return $builder;

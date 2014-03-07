@@ -203,6 +203,14 @@ admin_user_level_sort:
     pattern: /userlevel/sort
     defaults: { _controller: TopxiaAdminBundle:Userlevel:sort }
 
+admin_user_level_picture:
+    pattern: /userlevel/picture
+    defaults: { _controller: TopxiaAdminBundle:Userlevel:picture }
+
+admin_level_zone:
+    pattern: /levelzone
+    defaults: { _controller: TopxiaAdminBundle:Userlevel:zone }
+
 admin_comment:
     pattern:  /comment
     defaults: { _controller: TopxiaAdminBundle:Comment:index }

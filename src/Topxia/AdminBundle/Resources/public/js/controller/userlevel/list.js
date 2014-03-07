@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
 	require('jquery.sortable');
 	var Notify = require('common/bootstrap-notify');
+	var $table = $('#userlevel-table');
 
 	exports.run = function() {
 
@@ -21,6 +22,23 @@ define(function(require, exports, module) {
 		        return isContainer ? children : parent.attr('id');
 		    }
 		});
+
+		$table.on('click', 'button.delete-userlevel', function() {
+			if (!confirm('确认要删除此用户类型？')) return false;
+			var $btn = $(this);
+
+			var $tr = $(this).parents('tr');
+			$.post($(this).data('url'), function(response){
+				if (response == true) {
+					$tr.remove();
+					Notify.success('删除成功!');
+				} else {
+					Notify.warning('删除失败!');
+				}
+			}, 'json');
+
+		});
+
 	};
 
 });

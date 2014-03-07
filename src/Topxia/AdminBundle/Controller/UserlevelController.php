@@ -31,11 +31,22 @@
 		public function createAction (Request $request)
    		{   
 	        if ('POST' == $request->getMethod()) {
-			$userlevel = $this->getLevelService()->createLevel($request->request->all());
-			return $this->render('TopxiaAdminBundle:Userlevel:tr.html.twig', array('userlevel' => $userlevel));
+	        	$conditions = $request->request->all();
+	        	if(@$conditions['monthType']){
+	        		unset($conditions['monthType']);
+	        	} else { unset($conditions['monthPrice']); }
+	        	if(@$conditions['yearType']){
+	        		unset($conditions['yearType']);
+	        	} else { unset($conditions['yearPrice']); }
+
+				$userlevel = $this->getLevelService()->createLevel($conditions);
+				if($userlevel){
+					$this->setFlashMessage('success', '会员类型已保存！');
+				}
+				return $this->redirect($this->generateUrl('admin_user_level'));
 			}
 
-			return $this->render('TopxiaAdminBundle:Userlevel:userlevel-modal.html.twig');
+			return $this->render('TopxiaAdminBundle:Userlevel:userlevel.html.twig');
     	}
 
     	public function updateAction (Request $request,$id)
@@ -60,6 +71,11 @@
 			return $this->createJsonResponse(true);
 		}
 
+		public function pictureAction(Request $request)
+		{
+			return $this->render('TopxiaAdminBundle:Userlevel:userlevel-modal.html.twig');
+		}
+
 		public function checknameAction(Request $request)
 	    {
 	        $name = $request->query->get('value');
@@ -68,7 +84,7 @@
 		       if ($avaliable) {
 	            $response = array('success' => true, 'message' => '');
 	        } else {
-	            $response = array('success' => false, 'message' => '会员等级已存在');
+	            $response = array('success' => false, 'message' => '会员类型已存在');
 	        }
 
 	        return $this->createJsonResponse($response);
@@ -78,6 +94,11 @@
 	    {
 	    	$this->getLevelService()->sortLevels($request->request->get('ids'));
 			return $this->createJsonResponse(true);
+	    }
+
+	    public function zoneAction(Request $request)
+	    {
+	    	return $this->render('TopxiaAdminBundle:Userlevel:zone.html.twig');
 	    }
 
 		private function getLevel($id)

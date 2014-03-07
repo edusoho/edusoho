@@ -8,33 +8,13 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 		var $form = $('#userlevel-form');
-		var $modal = $form.parents('.modal');
         var $table = $('#userlevel-table');
 
 		var validator = new Validator({
-            element: $form,
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return ;
-                }
-
-                $.post($form.attr('action'), $form.serialize(), function(html){
-                    var $html = $(html);
-                    if ($table.find( '#' +  $html.attr('id')).length > 0) {
-                        $('#' + $html.attr('id')).replaceWith($html);
-                        Notify.success('会员等级更新成功！');
-                    } else {
-                        $table.find('tbody').prepend(html);
-                        Notify.success('会员等级添加成功!');
-                    }
-                    $modal.modal('hide');
-				});
-
-            }
+            element: $form
         });
 
-        $("#changeButton").on('click', function() {
+     /*   $("#changeButton").on('click', function() {
             $("#icon_uploadform_area").show();
             $(this).hide();
         })
@@ -64,37 +44,26 @@ define(function(require, exports, module) {
             });
 
             return false;
-        });
+        });*/
 
         validator.addItem({
-            element: '[name="Name"]',
+            element: '[name="name"]',
             required: true,
             rule: 'remote'
         });
 
         validator.addItem({
-            element: '[name="Icon"]',
-            required: true,
+            element: '[class="boughtType"]',
+            required: true
         });
 
-        $modal.find('.delete-tag').on('click', function() {
-            if (!confirm('真的要删除该会员等级吗？')) {
-                return ;
-            }
 
-            var trId = '#userlevel-' + $(this).data('userlevelId');
-            $.post($(this).data('url'), function(html) {
-                $modal.modal('hide');
-                $table.find(trId).remove();
-            });
 
-        });
-
-    var editor = EditorFactory.create('#userlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '300px'});
-        
-        validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
-        });
-	};
+ /*       var editor = EditorFactory.create('#userlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '300px'});
+            
+            validator.on('formValidate', function(elemetn, event) {
+                editor.sync();
+            });*/
+    };
 
 });

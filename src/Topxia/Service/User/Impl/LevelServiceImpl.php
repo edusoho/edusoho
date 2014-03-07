@@ -39,7 +39,7 @@ class LevelServiceImpl extends BaseService implements LevelService
 	}
 
 	public function createLevel($level)
-	{
+	{	
 	    $level['createdTime'] = time();
 	    @$level['seq'] = $this->searchLevelsCount()+1;
 	    $level = $this->getLevelDao()->createLevel($level);
