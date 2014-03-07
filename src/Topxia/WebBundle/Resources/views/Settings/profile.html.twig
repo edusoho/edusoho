@@ -21,6 +21,11 @@
             </div>
           </div>
 
+{#           <div class="form-group form-iam-group">
+            <div class="col-md-2 control-label">{{ form_label(form.iam, '我是') }}</div>
+            <div class="col-md-7 controls radios">{{ form_widget(form.iam) }}</div>
+          </div> #}
+
           <div class="form-group">
             {{ form_label(form.truename, '姓名', {label_attr:{class:'col-md-2 control-label'}}) }}
             <div class="col-md-7 controls">
@@ -62,12 +67,22 @@
             <div class="col-md-7 controls radios">{{ form_widget(form.gender) }}</div>
           </div>
 
-          <div class="form-group">
+{#           <div class="form-group form-forIam-group form-student-group">
+            <div class="col-md-2 control-label">{{ form_label(form.school, '学校') }}</div>
+            <div class="col-md-7 controls">{{ form_widget(form.school, {attr:{class:'form-control'}}) }}</div>
+          </div>
+
+          <div class="form-group form-forIam-group form-student-group">
+            <div class="col-md-2 control-label"> {{ form_label(form.class, '班级') }} </div>
+            <div class="col-md-7 controls"> {{ form_widget(form.class, {attr:{class:'form-control'}}) }} </div>
+          </div> #}
+
+          <div class="form-group form-forIam-group form-notStudent-group">
             <div class="col-md-2 control-label">{{ form_label(form.company, '公司') }}</div>
             <div class="col-md-7 controls">{{ form_widget(form.company, {attr:{class:'form-control'}}) }}</div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group form-forIam-group form-notStudent-group">
             <div class="col-md-2 control-label"> {{ form_label(form.job, '职业') }} </div>
             <div class="col-md-7 controls"> {{ form_widget(form.job, {attr:{class:'form-control'}}) }} </div>
           </div>
