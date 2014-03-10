@@ -2,16 +2,16 @@ define(function(require, exports, module) {
 
 	require('jquery.sortable');
 	var Notify = require('common/bootstrap-notify');
-	var $table = $('#userlevel-table');
+	var $table = $('#memberlevel-table');
 
 	exports.run = function() {
 
-		var $list = $("#userlevel-list").sortable({
+		var $list = $("#memberlevel-list").sortable({
 			distance: 10,
 			handle: 'span.glyphicon-move',
 			containerSelector: "tbody",
 			itemSelector: "tr",
-			placeholder: '<tr class="placeholder"><td></td><td></td><td></td><td></td><td></td></tr>',
+			placeholder: '<tr class="placeholder"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>',
 		    onDrop: function (item, container, _super) {
 
 		        _super(item, container);
@@ -23,8 +23,8 @@ define(function(require, exports, module) {
 		    }
 		});
 
-		$table.on('click', 'button.delete-userlevel', function() {
-			if (!confirm('确认要删除此用户类型？')) return false;
+		$table.on('click', 'a.delete-memberlevel', function() {
+			if (!confirm('确认要删除此会员类型？')) return false;
 			var $btn = $(this);
 
 			var $tr = $(this).parents('tr');

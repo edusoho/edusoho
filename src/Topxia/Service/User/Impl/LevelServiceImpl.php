@@ -40,7 +40,9 @@ class LevelServiceImpl extends BaseService implements LevelService
 
 	public function createLevel($level)
 	{	
+
 	    $level['createdTime'] = time();
+	    // $level['seq'] = $this->generateNextSeq();
 	    @$level['seq'] = $this->searchLevelsCount()+1;
 	    $level = $this->getLevelDao()->createLevel($level);
 
@@ -58,21 +60,21 @@ class LevelServiceImpl extends BaseService implements LevelService
 
 	public function updateLevel($id,$fields)
 	{
-	    $level = $this->getLevelDao()->updateLevel($id,$fields);
+	    $level = $this->getLevelDao()->updateLevel($id, $fields);
 	    $this->getLogService()->info('level', 'update', "编辑会员等级{$level['name']}(#{$level['id']})");
 	    return $level;
 	}
 
 	public function sortLevels(array $ids)
-	{   
+	{
 	    $levelId  = 0;
 	    foreach ($ids as $itemId) {
 	        list(, $type) = explode("-",$itemId);
-	            $levelId ++;
-	            $item = $this->getLevel($type);
-	            $fields = array('seq' => $levelId);
-	            if ($fields['seq'] != $item['seq']) {
-	                $this->updateLevel($item['id'], $fields);
+            $levelId ++;
+            $item = $this->getLevel($type);
+            $fields = array('seq' => $levelId);
+            if ($fields['seq'] != $item['seq']) {
+                $this->updateLevel($item['id'], $fields);
 	        }
 	    }
 	}

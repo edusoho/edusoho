@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% set userlevel = userlevel|default(null) %}
+{% set memberlevel = memberlevel|default(null) %}
 {% set modalSize = 'large' %}
 {% block title %}
 展示图片
@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#userlevel-form">确定</button>
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#memberlevel-form">确定</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 {% endblock %}
   

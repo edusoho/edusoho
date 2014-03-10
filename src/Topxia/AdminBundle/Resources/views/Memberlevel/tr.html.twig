@@ -1,0 +1,42 @@
+<tr id="userlevel-{{ memberlevel.id }}" class="item-userlevel">
+  <td>
+    <span class="glyphicon glyphicon-move" style="cursor:move"></span>
+  </td>
+  <td width="30%">
+    <img src="{{ memberlevel.icon }}">&nbsp;{{ memberlevel.name}}
+  </td>
+  <td>
+    {% if memberlevel.monthPrice == 0 %}-{% else %}{{ memberlevel.monthPrice }}{% endif %}
+  </td>
+  <td>
+    {% if memberlevel.yearPrice == 0 %}-{% else %}{{ memberlevel.yearPrice }}{% endif %}
+  </td>
+  <td>
+    123
+  </td>
+  <td>
+    {% if memberlevel.enabled %}
+      <span class="text-success">开启</span>
+      <br>
+    {% else %}
+      <span class="text-muted">关闭</span>
+    {% endif %}  
+  </td>
+  <td>
+    <div class="btn-group">
+      <button class="btn btn-default btn-sm" data-url="{{path('admin_user_level_update',{id:memberlevel.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="javascript:" class="delete-memberlevel" data-url="{{path('admin_user_level_delete',{id:memberlevel.id}) }}" >删除</a>
+        </li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+      </ul>
+    </div>
+    
+    
+  </td>
+</tr>

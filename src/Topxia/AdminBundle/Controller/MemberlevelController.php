@@ -6,7 +6,7 @@
 	use Topxia\Common\ArrayToolkit;
 	use Topxia\Common\Paginator;
 
-	class UserlevelController extends BaseController 
+	class MemberlevelController extends BaseController 
 	{
 
 		public function indexAction (Request $request)
@@ -17,13 +17,15 @@
 	            $this->getLevelService()->searchLevelsCount($conditions),
 	            20
 	        );
-				$userlevels = $this->getLevelService()->searchLevels(
+
+			$memberlevels = $this->getLevelService()->searchLevels(
 	            $conditions,
 	            $paginator->getOffsetCount(),
 	            $paginator->getPerPageCount()
 	        );
-				return $this->render('TopxiaAdminBundle:Userlevel:index.html.twig', array(
-	            'userlevels' => $userlevels,
+
+			return $this->render('TopxiaAdminBundle:Memberlevel:index.html.twig', array(
+	            'memberlevels' => $memberlevels,
 	            'paginator' => $paginator
 	        ));
 		}
@@ -34,35 +36,39 @@
 	        	$conditions = $request->request->all();
 	        	if(@$conditions['monthType']){
 	        		unset($conditions['monthType']);
-	        	} else { unset($conditions['monthPrice']); }
+	        	} else { 
+	        		unset($conditions['monthPrice']); 
+	        	}
 	        	if(@$conditions['yearType']){
 	        		unset($conditions['yearType']);
-	        	} else { unset($conditions['yearPrice']); }
+	        	} else { 
+	        		unset($conditions['yearPrice']); 
+	        	}
 
-				$userlevel = $this->getLevelService()->createLevel($conditions);
-				if($userlevel){
+				$memberlevel = $this->getLevelService()->createLevel($conditions);
+				if($memberlevel){
 					$this->setFlashMessage('success', '会员类型已保存！');
 				}
 				return $this->redirect($this->generateUrl('admin_user_level'));
 			}
 
-			return $this->render('TopxiaAdminBundle:Userlevel:userlevel.html.twig');
+			return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel.html.twig');
     	}
 
     	public function updateAction (Request $request,$id)
    		{   
-   			$userlevel = $this->getLevelService()->getLevel($id);
-			if (empty($userlevel)) {
+   			$memberlevel = $this->getLevelService()->getLevel($id);
+			if (empty($memberlevel)) {
 				throw $this->createNotFoundException();
 			}
 
 	        if ('POST' == $request->getMethod()) {
-			$userlevel = $this->getLevelService()->updateLevel($id, $request->request->all());
-			return $this->render('TopxiaAdminBundle:Userlevel:tr.html.twig', array('userlevel' => $userlevel));
+			$memberlevel = $this->getLevelService()->updateLevel($id, $request->request->all());
+			return $this->render('TopxiaAdminBundle:Memberlevel:tr.html.twig', array('memberlevel' => $memberlevel));
 			}
 
-	        return $this->render('TopxiaAdminBundle:Userlevel:userlevel-modal.html.twig', array(
-			'userlevel' => $userlevel));
+	        return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel-modal.html.twig', array(
+			'memberlevel' => $memberlevel));
 	    }
 
     	public function deleteAction(Request $request,$id)
@@ -73,7 +79,7 @@
 
 		public function pictureAction(Request $request)
 		{
-			return $this->render('TopxiaAdminBundle:Userlevel:userlevel-modal.html.twig');
+			return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel-modal.html.twig');
 		}
 
 		public function checknameAction(Request $request)
@@ -98,7 +104,7 @@
 
 	    public function zoneAction(Request $request)
 	    {
-	    	return $this->render('TopxiaAdminBundle:Userlevel:zone.html.twig');
+	    	return $this->render('TopxiaAdminBundle:Memberlevel:zone.html.twig');
 	    }
 
 		private function getLevel($id)

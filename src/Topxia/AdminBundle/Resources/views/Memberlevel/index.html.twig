@@ -2,15 +2,15 @@
 
 {% block title %}会员等级管理 - {{ parent() }}{% endblock %}
 
-{% set menu = 'userlevel' %}
-{% set script_controller = 'userlevel/list' %}
+{% set menu = 'memberlevel' %}
+{% set script_controller = 'memberlevel/list' %}
 
-{% set submenu = 'userlevel' %}
+{% set submenu = 'memberlevel' %}
 
 {% block main %}
 
-{% include 'TopxiaAdminBundle:Userlevel:level-header.html.twig' %}
-  <table id="userlevel-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+{% include 'TopxiaAdminBundle:Memberlevel:level-header.html.twig' %}
+  <table id="memberlevel-table" class="table table-striped table-hover" data-search-form="#user-search-form">
     <thead>
       <tr>
         <th></th>
@@ -22,9 +22,9 @@
         <th>操作</th>
       </tr>
     </thead>
-    <tbody id="userlevel-list" data-sort-url="{{path('admin_user_level_sort')}}" class="sortable-list">
-      {% for userlevel in userlevels %}
-        {% include 'TopxiaAdminBundle:Userlevel:tr.html.twig' with {userlevel:userlevel} %}
+    <tbody id="memberlevel-list" data-sort-url="{{path('admin_user_level_sort')}}" class="sortable-list">
+      {% for memberlevel in memberlevels %}
+        {% include 'TopxiaAdminBundle:Memberlevel:tr.html.twig' with {memberlevel:memberlevel} %}
       {% else %}
         <tr><td colspan="20"><div class="empty">无会员类型记录</div></td></tr>
       {% endfor %}

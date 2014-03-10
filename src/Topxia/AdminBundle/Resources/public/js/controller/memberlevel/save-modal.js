@@ -7,8 +7,8 @@ define(function(require, exports, module) {
     require('jquery.form');
 
 	exports.run = function() {
-		var $form = $('#userlevel-form');
-        var $table = $('#userlevel-table');
+		var $form = $('#memberlevel-form');
+        var $table = $('#memberlevel-table');
 
 		var validator = new Validator({
             element: $form
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
 
 
 
- /*       var editor = EditorFactory.create('#userlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '300px'});
+ /*       var editor = EditorFactory.create('#memberlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '300px'});
             
             validator.on('formValidate', function(elemetn, event) {
                 editor.sync();
