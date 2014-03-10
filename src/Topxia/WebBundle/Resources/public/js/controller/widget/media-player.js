@@ -49,11 +49,13 @@ define(function(require, exports, module) {
         _initGrindPlayer: function() {
             var flashvars = {
                 src: encodeURIComponent(this.get('src')),
-                javascriptCallbackFunction: "GrindPlayerEventProcesser"
+                javascriptCallbackFunction: "GrindPlayerEventProcesser",
+                autoPlay:true
             };
 
-            if (this.get('src').indexOf('.m3u8') > 0) {
-                flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf"
+            if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
+                // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf";
+                flashvars.plugin_hls = "http://hlstest.qiniudn.com/HLSProviderOSMF.swf";
             }
 
             var params = {
@@ -68,7 +70,8 @@ define(function(require, exports, module) {
             };
 
             swfobject.embedSWF(
-                "http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf",
+                // "http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf",
+                "http://hlstest.qiniudn.com/GrindPlayer.swf",
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
