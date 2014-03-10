@@ -74,7 +74,7 @@ class DefaultController extends BaseController
 
         $recomConditions = array('status' => 'published','recommended'=>1,'tagId' => $recomTag['id']);
 
-        $recomCourses = $this->getCourseService()->searchCourses($recomConditions, 'recommended', 0, 3);
+        $recomCourses = $this->getCourseService()->searchCourses($recomConditions, 'recommended', 0, 6);
 
 
 
