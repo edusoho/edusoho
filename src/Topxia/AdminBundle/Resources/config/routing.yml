@@ -207,6 +207,14 @@ admin_user_level_picture:
     pattern: /memberlevel/picture
     defaults: { _controller: TopxiaAdminBundle:Memberlevel:picture }
 
+admin_user_level_on:
+    pattern: /memberlevel/{id}/on
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:on }
+
+admin_user_level_off:
+    pattern: /memberlevel/{id}/off
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:off }
+
 admin_level_zone:
     pattern: /levelzone
     defaults: { _controller: TopxiaAdminBundle:Memberlevel:zone }

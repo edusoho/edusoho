@@ -1,4 +1,4 @@
-<tr id="userlevel-{{ memberlevel.id }}" class="item-userlevel">
+<tr id="{{ memberlevel.id }}" class="item-memberlevel">
   <td>
     <span class="glyphicon glyphicon-move" style="cursor:move"></span>
   </td>
@@ -6,20 +6,20 @@
     <img src="{{ memberlevel.icon }}">&nbsp;{{ memberlevel.name}}
   </td>
   <td>
-    {% if memberlevel.monthPrice == 0 %}-{% else %}{{ memberlevel.monthPrice }}{% endif %}
+    {% if memberlevel.monthPrice == 0 %}未设置{% else %}{{ memberlevel.monthPrice }}{% endif %}
   </td>
   <td>
-    {% if memberlevel.yearPrice == 0 %}-{% else %}{{ memberlevel.yearPrice }}{% endif %}
+    {% if memberlevel.yearPrice == 0 %}未设置{% else %}{{ memberlevel.yearPrice }}{% endif %}
   </td>
   <td>
     123
   </td>
   <td>
     {% if memberlevel.enabled %}
-      <span class="text-success">开启</span>
+      <span class="text-success">允许加入会员</span>
       <br>
     {% else %}
-      <span class="text-muted">关闭</span>
+      <span class="text-muted">禁止加入会员</span>
     {% endif %}  
   </td>
   <td>
@@ -30,13 +30,21 @@
       </a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="javascript:" class="delete-memberlevel" data-url="{{path('admin_user_level_delete',{id:memberlevel.id}) }}" >删除</a>
+          {% if memberlevel.enabled %}
+          <a href="javascript:" class="off-memberlevel" data-url="{{path('admin_user_level_off',{id:memberlevel.id}) }}"> 
+            <span class="glyphicon glyphicon-ban-circle"></span> 关闭加入会员
+          </a>
+          {% else %}
+          <a href="javascript:" class="on-memberlevel" data-url="{{path('admin_user_level_on',{id:memberlevel.id}) }}"> 
+            <span class="glyphicon glyphicon-ok-circle"></span> 开启加入会员
+          </a>
+          {% endif %}
         </li>
-        <li><a href="#">Another action</a></li>
-        <li><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li>
+          <a href="javascript:" class="delete-memberlevel" data-url="{{path('admin_user_level_delete',{id:memberlevel.id}) }}" ><span class="glyphicon glyphicon-trash"></span> 删除会员类型</a>
+        </li>
       </ul>
-    </div>
-    
-    
+    </div> 
   </td>
 </tr>

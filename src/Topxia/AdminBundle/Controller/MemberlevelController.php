@@ -77,24 +77,24 @@
 			return $this->createJsonResponse(true);
 		}
 
+		public function onAction(Request $request,$id)
+		{
+			$this->getLevelService()->onLevel($id);
+
+			return $this->createJsonResponse(true);
+		}
+
+		public function offAction(Request $request,$id)
+		{
+			$this->getLevelService()->offLevel($id);
+
+			return $this->createJsonResponse(true);
+		}
+
 		public function pictureAction(Request $request)
 		{
 			return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel-modal.html.twig');
 		}
-
-		public function checknameAction(Request $request)
-	    {
-	        $name = $request->query->get('value');
-	        $exclude = $request->query->get('exclude');
-	        $avaliable = $this->getLevelService()->isLevelNameAvailable($name, $exclude);
-		       if ($avaliable) {
-	            $response = array('success' => true, 'message' => '');
-	        } else {
-	            $response = array('success' => false, 'message' => '会员类型已存在');
-	        }
-
-	        return $this->createJsonResponse($response);
-    	}
 
 	    public function sortAction(Request $request)
 	    {
@@ -111,7 +111,7 @@
 		{
 			$level = $this->getLevelService()->getLevel($id);
 			if (empty($level)) {
-				throw $this->createNotFoundException('会员等级不存在!');
+				throw $this->createNotFoundException('会员类型不存在!');
 			}
 			return $level;
 		}

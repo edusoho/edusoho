@@ -39,6 +39,34 @@ define(function(require, exports, module) {
 
 		});
 
+		$table.on('click', 'a.on-memberlevel', function() {
+			if (!confirm('确认要开启加入会员？')) return false;
+
+			$.post($(this).data('url'), function(response){
+				if (response == true) {
+					Notify.success('开启成功!');
+					window.location.reload();
+				} else {
+					Notify.warning('开启失败!');
+				}
+			}, 'json');
+
+		});
+
+		$table.on('click', 'a.off-memberlevel', function() {
+			if (!confirm('确认要关闭加入会员？')) return false;
+
+			$.post($(this).data('url'), function(response){
+				if (response == true) {
+					Notify.success('关闭成功!');
+					window.location.reload();
+				} else {
+					Notify.warning('关闭失败!');
+				}
+			}, 'json');
+
+		});
+
 	};
 
 });
