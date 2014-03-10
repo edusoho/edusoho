@@ -110,7 +110,7 @@ class CourseStudentManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getCourseService()->getCourseStudentCount($course['id']),
-            1000
+            10000
         );
 
         $students = $this->getCourseService()->findCourseStudents(
