@@ -33,7 +33,7 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
         }
 
-        $tags = $this->getCourseService()->findCourseTagsById($course['id']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
@@ -309,5 +309,10 @@ class CourseManageController extends BaseController
     private function getOrderService()
     {
         return $this->getServiceKernel()->createService('Course.OrderService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }
