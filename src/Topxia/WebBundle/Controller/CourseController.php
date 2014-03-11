@@ -384,7 +384,8 @@ class CourseController extends BaseController
             'member' => $member,
             'users' => $users,
             'manage' => $manage,
-            'isNonExpired' => $isNonExpired
+            'isNonExpired' => $isNonExpired,
+            'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
 
