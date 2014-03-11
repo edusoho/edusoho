@@ -24,19 +24,20 @@ class CourseManageController extends BaseController
 	public function baseAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-		$form = $this->createCourseBaseForm($course);
+
 	    if($request->getMethod() == 'POST'){
-	        $form->bind($request);
-	        if($form->isValid()){
-	            $courseBaseInfo = $form->getData();
-	            $this->getCourseService()->updateCourse($id, $courseBaseInfo);
-	            $this->setFlashMessage('success', '课程基本信息已保存！');
-	            return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
-	        }
+            $data = $request->request->all();
+
+            $this->getCourseService()->updateCourse($id, $data);
+            $this->setFlashMessage('success', '课程基本信息已保存！');
+            return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
         }
+
+        $tags = $this->getCourseService()->findCourseTagsById($course['id']);
+
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
-			'form' => $form->createView(),
+            'tags' => ArrayToolkit::column($tags, 'name')
 		));
 	}
 
@@ -278,6 +279,11 @@ class CourseManageController extends BaseController
             'number' => $member['learnedNum'],
             'total' => $course['lessonNum']
         );
+    }
+
+    private function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
     private function getCourseService()

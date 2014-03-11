@@ -26,6 +26,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCourseTagsById ($id)
+	{
+		$course = $this->getCourse($id);
+		return $this->getTagService()->findTagsByIds($course['tags']);
+	}
+
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -268,6 +274,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields = $this->_filterCourseFields($fields);
+
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		$fields = CourseSerialize::serialize($fields);
@@ -293,10 +300,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'subtitle' => '',
 			'about' => '',
 			'expiryDay' => 0,
+			'isShowStudentNum' => 'opened',
 			'categoryId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
-			'tags' => array(),
+			'tags' => '',
 			'price' => 0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
@@ -309,11 +317,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (!empty($fields['tags'])) {
+			$fields['tags'] = explode(',', $fields['tags']);
+			$fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
 			array_walk($fields['tags'], function(&$item, $key) {
-				$item = (int) $item;
+				$item = (int) $item['id'];
 			});
 		}
-
 		return $fields;
 	}
 
@@ -1688,6 +1697,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    private function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 
 }

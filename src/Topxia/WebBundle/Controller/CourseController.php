@@ -28,7 +28,7 @@ class CourseController extends BaseController
         }
 
 
-        $sort = $request->query->get('sort', 'popular');
+        $sort = $request->query->get('sort', 'latest');
 
         $conditions = array(
             'status' => 'published',
@@ -200,7 +200,7 @@ class CourseController extends BaseController
 
 
         if (in_array($as, array('member', 'guest'))) {
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN') and empty($member)) {
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 $member = array(
                     'id' => 0,
                     'courseId' => $course['id'],
@@ -389,7 +389,8 @@ class CourseController extends BaseController
             'member' => $member,
             'users' => $users,
             'manage' => $manage,
-            'isNonExpired' => $isNonExpired
+            'isNonExpired' => $isNonExpired,
+            'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
 

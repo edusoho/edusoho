@@ -26,11 +26,11 @@ class EdusohoCloudClient implements CloudClient
     public function __construct (array $options)
     {
     	if (substr($options['apiServer'], 0, 7) != 'http://') {
-    		throw new \RuntimeException('云存储apiServer参数不正确，请更改云存储设置。');
+    		throw new \RuntimeException('云视频apiServer参数不正确，请更改云视频设置。');
     	}
 
     	if (empty($options['accessKey']) or empty($options['secretKey'])) {
-    		throw new \RuntimeException('云存储accessKey/secretKey不能为空，请更改云存储设置。');
+    		throw new \RuntimeException('云视频accessKey/secretKey不能为空，请更改云视频设置。');
     	}
     	
     	$this->apiServer = rtrim($options['apiServer'], '/');
@@ -156,7 +156,7 @@ class EdusohoCloudClient implements CloudClient
     public function getBucket()
     {
         if (empty($this->bucket)) {
-            throw new \RuntimeException('云存储bucket不能为空，请更改云存储设置。');
+            throw new \RuntimeException('云视频bucket不能为空，请更改云视频设置。');
         }
         return $this->bucket;
     }
