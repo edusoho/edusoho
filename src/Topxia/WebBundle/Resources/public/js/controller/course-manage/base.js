@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         
         require('./header').run();
-        
+
             $('#course_tags').select2({
             
                 ajax: {
@@ -70,17 +70,17 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="course[title]"]',
+            element: '[name=title]',
             required: true
         });
         
         validator.addItem({
-            element: '[name="course[subtitle]"]',
+            element: '[name=subtitle]',
             rule: 'maxlength{max:70}'
         });
 
         validator.addItem({
-            element: '[name="course[expiryDay]"]',
+            element: '[name=expiryDay]',
             rule: 'integer'
         });
     };
