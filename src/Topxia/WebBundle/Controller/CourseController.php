@@ -28,7 +28,7 @@ class CourseController extends BaseController
         }
 
 
-        $sort = $request->query->get('sort', 'popular');
+        $sort = $request->query->get('sort', 'latest');
 
         $conditions = array(
             'status' => 'published',
