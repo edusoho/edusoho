@@ -132,16 +132,28 @@ class CourseStudentManageController extends BaseController
 
             if(! empty($profile['truename'])){
                  $studentsInfo =$studentsInfo.",".$profile['truename'];
+            }else{
+                 $studentsInfo =$studentsInfo.", ";
             }
+
             if(! empty($profile['mobile'])){
                  $studentsInfo =$studentsInfo.",".$profile['mobile'];
+            }else{
+                 $studentsInfo =$studentsInfo.", ";
             }
+
             if(! empty($profile['job'])){
                  $studentsInfo =$studentsInfo.",".$profile['job'];
+            }else{
+                 $studentsInfo =$studentsInfo.", ";
             }
+
             if(! empty($profile['company'])){
                  $studentsInfo =$studentsInfo.",".$profile['company'];
+            }else{
+                 $studentsInfo =$studentsInfo.", ";
             }
+
             $studentsInfo =$studentsInfo."\n";
                
 
@@ -174,7 +186,7 @@ class CourseStudentManageController extends BaseController
     {   
         $course = $this->getCourseService()->tryAdminCourse($id);
 
-        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,1000);
+        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,10000);
 
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
