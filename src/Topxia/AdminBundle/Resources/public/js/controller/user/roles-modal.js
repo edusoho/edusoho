@@ -16,6 +16,8 @@ define(function(require, exports, module) {
         $form.on('submit', function() {
             var roles = [];
 
+            var $modal = $('#modal');
+
             $form.find('input[name="roles[]"]:checked').each(function(){
                 roles.push($(this).val());
             });
@@ -31,7 +33,17 @@ define(function(require, exports, module) {
                 }
             }
 
-            return true;
+            $.post($form.attr('action'), $form.serialize(), function(html) {
+
+                $modal.modal('hide');
+                Notify.success('用户组保存成功');
+                var $tr = $(html);
+                $('#' + $tr.attr('id')).replaceWith($tr);
+            }).error(function(){
+                Notify.danger('操作失败');
+            });
+
+            return false;
         });
 
 	};
