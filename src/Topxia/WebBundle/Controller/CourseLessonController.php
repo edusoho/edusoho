@@ -168,7 +168,16 @@ class CourseLessonController extends BaseController
     public function learnFinishAction(Request $request, $courseId, $lessonId)
     {
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
-        return $this->createJsonResponse(true);
+
+        $user = $this->getCurrentUser();
+        $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+
+        $response = array(
+            'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
+            'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
+        );
+
+        return $this->createJsonResponse($response);
     }
 
     public function learnCancelAction(Request $request, $courseId, $lessonId)

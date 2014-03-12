@@ -63,6 +63,10 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
 
+        if (isset($conditions['role'])) {
+            $conditions['role'] = "|{$conditions['role']}|";
+        }
+
         if(isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
             unset($conditions['keywordType']);
@@ -77,6 +81,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
+            ->andWhere('roles = :role')
             ->andWhere('nickname LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('approvalStatus = :approvalStatus')

@@ -82,7 +82,10 @@ define(function(require, exports, module) {
 				toolbar = this._toolbar,
 				self = this;
 			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
-			$.post(url, function(json) {
+			$.post(url, function(response) {
+                if (response.isLearned) {
+                    $('#course-learned-modal').modal('show');
+                }
 				$btn.addClass('btn-success');
                 $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
