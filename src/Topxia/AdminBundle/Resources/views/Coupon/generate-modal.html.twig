@@ -1,0 +1,113 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}生成优惠码{% endblock %}
+{% block body %}
+
+<form id="coupon-generate-form" class="form-horizontal" method="post">
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="name">优惠码名称</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" name="name" class="form-control" id="name">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="prefix">优惠码前缀</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" name="prefix" class="form-control" id="prefix">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="type">优惠方式</label>
+    </div>
+    <div class="col-md-7 controls">
+      <div class="radios">
+        <label><input type="radio" name="type" value="minus" checked="checked"> 抵价</label>
+        <label><input type="radio" name="type" value="discount"> 打折</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group minus-rate">
+    <div class="col-md-3 control-label">
+      <label for="minus-rate">抵价金额</label>
+    </div>
+    <div class="col-md-3 controls">
+      <input type="text" id="minus-rate" name="minus-rate" class="form-control">
+    </div>
+    <div style="margin-top:5px;">元</div>
+  </div>
+
+  <div class="row form-group discount-rate" style="display:none;">
+    <div class="col-md-3 control-label">
+      <label for="discount-rate">打折幅度</label>
+    </div>
+    <div class="col-md-3 controls">
+      <input type="text" id="discount-rate" name="discount-rate" class="form-control">
+    </div>
+    <div style="margin-top:5px;">折</div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="generatedNum">生成数量</label>
+    </div>
+    <div class="col-md-3 controls">
+      <input type="text" id="generatedNum" name="generatedNum" class="form-control">
+    </div>
+    <div style="margin-top:5px;">个</div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="digits">优惠码位数</label>
+    </div>
+    <div class="col-md-3 controls">
+      <input type="text" id="digits" name="digits" class="form-control">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="deadline">有效期至</label>
+    </div>
+    <div class="col-md-3 controls">
+      <input type="text" id="coupon-deadline" name="deadline" class="form-control">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="description">优惠说明</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="description" name="description" class="form-control">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="deadline">使用对象</label>
+    </div>
+    <div class="col-md-3 controls">
+      <input type="text" id="coupon-deadline" name="deadline" class="form-control">
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#coupon-generate-form" data-url="{{ path('admin_coupon_generate') }}">生成</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('coupon/generate')</script>
+{% endblock %}

@@ -223,6 +223,23 @@ admin_level_zone:
     pattern: /levelzone
     defaults: { _controller: TopxiaAdminBundle:Memberlevel:zone }
 
+admin_coupon:
+    pattern: /coupon
+    defaults: { _controller: TopxiaAdminBundle:Coupon:index }
+
+admin_coupon_generate:
+    pattern: /coupon/generate
+    defaults: { _controller: TopxiaAdminBundle:Coupon:generate }
+
+admin_coupon_delete:
+    pattern: /coupon/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Coupon:delete }
+    methods: [POST]
+
+admin_coupon_query:
+    pattern: /coupon/query
+    defaults: { _controller: TopxiaAdminBundle:Coupon:query }
+
 admin_comment:
     pattern:  /comment
     defaults: { _controller: TopxiaAdminBundle:Comment:index }

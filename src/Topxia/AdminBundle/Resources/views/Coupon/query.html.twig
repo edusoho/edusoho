@@ -1,0 +1,15 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% block title %}优惠码管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'coupon' %}
+{# {% set script_controller = 'userlevel/list' %} #}
+
+{% set submenu = 'coupon_query' %}
+
+{% block main %}
+
+{% include 'TopxiaAdminBundle:Coupon:coupon-header.html.twig' %}
+
+
+{% endblock %}
