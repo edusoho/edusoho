@@ -200,19 +200,26 @@ define(function(require, exports, module) {
                         if (lesson.mediaSource == 'self') {
                             $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
 
+
+
                             var player = VideoJS("lesson-video-player", {
                                 techOrder: ['flash','html5']
                             });
+                            var hasPlayerError = false;
 
                             player.dimensions('100%', '100%');
                             player.src(lesson.mediaUri);
-                            player.on('ended', function(){
+                            player.on('ended', function() {
+                                if (hasPlayerError) {
+                                    return ;
+                                }
                                 that._onFinishLearnLesson();
                                 player.currentTime(0);
                                 player.pause();
                             });
                        
                             player.on('error', function(error){
+                                hasPlayerError = true;
                                 var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
                                 Notify.danger(message, 60);
                             });
