@@ -3,7 +3,7 @@
     <span class="glyphicon glyphicon-move" style="cursor:move"></span>
   </td>
   <td width="30%">
-    <img src="{{ memberlevel.icon }}">&nbsp;{{ memberlevel.name}}
+    <img src="{{ memberlevel.icon }}"> {{ memberlevel.name}}
   </td>
   <td>
     {% if memberlevel.monthPrice == 0 %}未设置{% else %}{{ memberlevel.monthPrice }}{% endif %}
@@ -16,15 +16,15 @@
   </td>
   <td>
     {% if memberlevel.enabled %}
-      <span class="text-success">允许加入会员</span>
+      <span class="text-success">允许</span>
       <br>
     {% else %}
-      <span class="text-muted">禁止加入会员</span>
+      <span class="text-muted">禁止</span>
     {% endif %}  
   </td>
   <td>
     <div class="btn-group">
-      <button class="btn btn-default btn-sm" data-url="{{path('admin_user_level_update',{id:memberlevel.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+      <a class="btn btn-default btn-sm" href="{{path('admin_user_level_update',{id:memberlevel.id}) }}">编辑</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>

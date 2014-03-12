@@ -55,7 +55,6 @@ class LevelServiceImpl extends BaseService implements LevelService
 
 	public function sortLevels(array $ids)
 	{	
-
 	    $seq = 0;
 	    foreach ($ids as $itemId) {
             $seq ++;

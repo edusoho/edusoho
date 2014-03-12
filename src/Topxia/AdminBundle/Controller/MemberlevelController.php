@@ -63,11 +63,27 @@
 			}
 
 	        if ('POST' == $request->getMethod()) {
-			$memberlevel = $this->getLevelService()->updateLevel($id, $request->request->all());
-			return $this->render('TopxiaAdminBundle:Memberlevel:tr.html.twig', array('memberlevel' => $memberlevel));
+	        	$conditions = $request->request->all();
+	        	if(@$conditions['monthType']){
+	        		unset($conditions['monthType']);
+	        	} else { 
+	        		unset($conditions['monthPrice']); 
+	        	}
+	        	if(@$conditions['yearType']){
+	        		unset($conditions['yearType']);
+	        	} else { 
+	        		unset($conditions['yearPrice']); 
+	        	}
+
+				$memberlevel = $this->getLevelService()->updateLevel($id, $conditions);
+
+				if($memberlevel){
+					$this->setFlashMessage('success', '会员类型已更新！');
+				}
+				return $this->redirect($this->generateUrl('admin_user_level'));
 			}
 
-	        return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel-modal.html.twig', array(
+	        return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel.html.twig', array(
 			'memberlevel' => $memberlevel));
 	    }
 
@@ -80,20 +96,23 @@
 		public function onAction(Request $request,$id)
 		{
 			$this->getLevelService()->onLevel($id);
-
 			return $this->createJsonResponse(true);
 		}
 
 		public function offAction(Request $request,$id)
 		{
 			$this->getLevelService()->offLevel($id);
-
 			return $this->createJsonResponse(true);
 		}
 
 		public function pictureAction(Request $request)
 		{
-			return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel-modal.html.twig');
+			return $this->render('TopxiaAdminBundle:Memberlevel:picture-modal.html.twig');
+		}
+
+		public function iconAction(Request $request)
+		{
+			return $this->render('TopxiaAdminBundle:Memberlevel:icon-modal.html.twig');
 		}
 
 	    public function sortAction(Request $request)
