@@ -341,7 +341,7 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
-            return $this->redirect($this->generateUrl('admin_user'));
+            return $this->createJsonResponse(true);
         }
         
         return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
