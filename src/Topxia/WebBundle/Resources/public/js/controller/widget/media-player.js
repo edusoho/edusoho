@@ -9,12 +9,14 @@ define(function(require, exports, module) {
             srcType: '',
             width: '100%',
             height: '100%',
+            _firstPlay: true
         },
 
         events: {},
 
         setup: function() {
-            window.GrindPlayerEventProcesser = this._evetProcesser;
+            window.__MediaPlayerEventProcesser = this._evetProcesser;
+            window.__MediaPlayer = this;
         },
 
         setSrc: function(src, type) {
@@ -49,15 +51,16 @@ define(function(require, exports, module) {
         _initGrindPlayer: function() {
             var flashvars = {
                 src: encodeURIComponent(this.get('src')),
-                javascriptCallbackFunction: "GrindPlayerEventProcesser",
-                autoPlay:true
+                javascriptCallbackFunction: "__MediaPlayerEventProcesser",
+                autoPlay:false,
+                autoRewind: false,
+                loop:false
             };
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
-                // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf";
                 flashvars.plugin_hls = "http://hlstest.qiniudn.com/HLSProviderOSMF.swf";
             }
-// 1000
+
             var params = {
                 wmode:'opaque',
                 allowFullScreen: true
@@ -66,11 +69,10 @@ define(function(require, exports, module) {
             };
 
             var attrs = {
-                name: "player"
+                name: this.get('playerId')
             };
 
             swfobject.embedSWF(
-                // "http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf",
                 "http://hlstest.qiniudn.com/GrindPlayer.swf",
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
@@ -81,27 +83,16 @@ define(function(require, exports, module) {
             var firstload= true;
             switch(event) {
                 case "onJavaScriptBridgeCreated":
-                    console.log('onJavaScriptBridgeCreated');
-                    this.set('flashPlayer', document.getElementById(playerId));
                     break;
-                // case "ready":
-                //     console.log('ready');
-                //     if(firstload){
-                //         console.log('firstloadb');
-                //         var player = this.get('flashPlayer');
-                //         //这个必须调用，否则播放器的播放按钮和播放状态会处于不同步状态
-                //         console.log('firstload 1');
-                //         player.play2();
-                //         console.log('firstload 2');
-                //         //跳转到某个时间，并进行播放
-                //         player.seek(10);
-                //         //一定设置这个值，避免播放完后重复跳转
-                //         firstload = false;
-                //         console.log('firstload end');
-                //     }
-                //     break;
+                case "ready":
+                    if(window.__MediaPlayer.get('_firstPlay')) {
+                        var player = document.getElementById(playerId);
+                        player.play2();
+                        window.__MediaPlayer.set('_firstPlay', false);
+                    }
+                    break;
                 case "complete":
-                    this.trigger('ended');
+                    window.__MediaPlayer.trigger('ended');
                     break;
             }
         }

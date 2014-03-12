@@ -183,6 +183,9 @@ define(function(require, exports, module) {
             		});
 
             		mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
+                    mediaPlayer.on('ended', function() {
+                        that._onFinishLearnLesson();
+                    });
             		mediaPlayer.play();
 
             	} else {
