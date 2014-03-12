@@ -57,7 +57,7 @@
           <span class="rating-num">{{ course.rating|number_format(1) }}分</span>
           <a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}人评价)</a>
         </p>
-        {% if course.showStudentType == 'opened' %}
+        {% if course.showStudentNumType == 'opened' %}
         <p>
           学员数：
           <span class="member-num">{{ course.studentNum }}</span>
