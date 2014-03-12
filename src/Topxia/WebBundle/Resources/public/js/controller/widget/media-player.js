@@ -78,10 +78,28 @@ define(function(require, exports, module) {
         },
 
         _evetProcesser: function(playerId, event, data) {
+            var firstload= true;
             switch(event) {
                 case "onJavaScriptBridgeCreated":
+                    console.log('onJavaScriptBridgeCreated');
                     this.set('flashPlayer', document.getElementById(playerId));
                     break;
+                // case "ready":
+                //     console.log('ready');
+                //     if(firstload){
+                //         console.log('firstloadb');
+                //         var player = this.get('flashPlayer');
+                //         //这个必须调用，否则播放器的播放按钮和播放状态会处于不同步状态
+                //         console.log('firstload 1');
+                //         player.play2();
+                //         console.log('firstload 2');
+                //         //跳转到某个时间，并进行播放
+                //         player.seek(10);
+                //         //一定设置这个值，避免播放完后重复跳转
+                //         firstload = false;
+                //         console.log('firstload end');
+                //     }
+                //     break;
                 case "complete":
                     this.trigger('ended');
                     break;
