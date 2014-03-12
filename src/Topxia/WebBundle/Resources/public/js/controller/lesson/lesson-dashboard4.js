@@ -39,6 +39,8 @@ define(function(require, exports, module) {
 			this._initToolbar();
 			this._initRouter();
 			this._initListeners();
+
+            $('.prev-lesson-btn, .next-lesson-btn').tooltip();
 		},
 
 		onNextLesson: function(e) {
@@ -59,8 +61,8 @@ define(function(require, exports, module) {
 			var $btn = this.element.find('[data-role=finish-lesson]');
 			if ($btn.hasClass('btn-success')) {
 				this._onCancelLearnLesson();
-			} else {
-				this._onFinishLearnLesson();
+            } else {
+                this._onFinishLearnLesson();
 			}
 		},
 
@@ -82,6 +84,7 @@ define(function(require, exports, module) {
 			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
 			$.post(url, function(json) {
 				$btn.addClass('btn-success');
+                $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 			}, 'json');
 		},
@@ -93,6 +96,7 @@ define(function(require, exports, module) {
 			var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/cancel';
 			$.post(url, function(json) {
 				$btn.removeClass('btn-success');
+                $btn.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
 				toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
 			}, 'json');
 		},
@@ -183,6 +187,9 @@ define(function(require, exports, module) {
             		});
 
             		mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
+                    mediaPlayer.on('ended', function() {
+                        that._onFinishLearnLesson();
+                    });
             		mediaPlayer.play();
 
             	} else {
@@ -300,8 +307,10 @@ define(function(require, exports, module) {
             	var $finishButton = that.element.find('[data-role=finish-lesson]');
             	if (json.status != 'finished') {
 	            	$finishButton.removeClass('btn-success');
+                    $finishButton.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
             	} else {
             		$finishButton.addClass('btn-success');
+                    $finishButton.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
             	}
             }, 'json');
 

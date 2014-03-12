@@ -9,12 +9,14 @@ define(function(require, exports, module) {
             srcType: '',
             width: '100%',
             height: '100%',
+            _firstPlay: true
         },
 
         events: {},
 
         setup: function() {
-            window.GrindPlayerEventProcesser = this._evetProcesser;
+            window.__MediaPlayerEventProcesser = this._evetProcesser;
+            window.__MediaPlayer = this;
         },
 
         setSrc: function(src, type) {
@@ -49,15 +51,16 @@ define(function(require, exports, module) {
         _initGrindPlayer: function() {
             var flashvars = {
                 src: encodeURIComponent(this.get('src')),
-                javascriptCallbackFunction: "GrindPlayerEventProcesser",
-                autoPlay:true
+                javascriptCallbackFunction: "__MediaPlayerEventProcesser",
+                autoPlay:false,
+                autoRewind: false,
+                loop:false
             };
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
-                // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayer/1.0.0/HLSProviderOSMF.swf";
                 flashvars.plugin_hls = "http://hlstest.qiniudn.com/HLSProviderOSMF.swf";
             }
-// 1000
+
             var params = {
                 wmode:'opaque',
                 allowFullScreen: true
@@ -66,24 +69,30 @@ define(function(require, exports, module) {
             };
 
             var attrs = {
-                name: "player"
+                name: this.get('playerId')
             };
 
             swfobject.embedSWF(
-                // "http://cdn.staticfile.org/GrindPlayer/1.0.0/GrindPlayer.swf",
-                "http://hlstest.qiniudn.com/GrindPlayer.swf",
+                "http://hlstest.qiniudn.com/GrindPlayer-1.swf",
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
         },
 
         _evetProcesser: function(playerId, event, data) {
+            var firstload= true;
             switch(event) {
                 case "onJavaScriptBridgeCreated":
-                    this.set('flashPlayer', document.getElementById(playerId));
+                    break;
+                case "ready":
+                    if(window.__MediaPlayer.get('_firstPlay')) {
+                        var player = document.getElementById(playerId);
+                        player.play2();
+                        window.__MediaPlayer.set('_firstPlay', false);
+                    }
                     break;
                 case "complete":
-                    this.trigger('ended');
+                    window.__MediaPlayer.trigger('ended');
                     break;
             }
         }

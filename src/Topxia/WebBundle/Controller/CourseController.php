@@ -406,12 +406,11 @@ class CourseController extends BaseController
         ));
     }
 
-    public function progressBlockAction($course, $member)
+    public function progressBlockAction($course)
     {
         $user = $this->getCurrentUser();
-        if (empty($member)) {
-            $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-        }
+
+        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
         $progress = $this->calculateUserLearnProgress($course, $member);

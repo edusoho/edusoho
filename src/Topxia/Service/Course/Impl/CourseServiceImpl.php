@@ -1243,7 +1243,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	        $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
 	    }
 
-		$fields = array('studentNum'=> $this->getCourseStudentCount($courseId));
+		$fields = array(
+			'studentNum'=> $this->getCourseStudentCount($courseId),
+			'income' => $this->getOrderDao()->sumOrderPriceByCourseIdAndStatuses($courseId, array('paid', 'cancelled')),
+		);
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 
 		return $member;
