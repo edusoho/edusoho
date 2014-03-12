@@ -73,7 +73,7 @@ define(function(require, exports, module) {
             };
 
             swfobject.embedSWF(
-                "http://hlstest.qiniudn.com/GrindPlayer.swf",
+                "http://hlstest.qiniudn.com/GrindPlayer-1.swf",
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
