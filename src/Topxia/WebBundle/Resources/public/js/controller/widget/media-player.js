@@ -74,7 +74,8 @@ define(function(require, exports, module) {
             };
 
             swfobject.embedSWF(
-                "http://cdn.staticfile.org/GrindPlayerCN/1.0.0/GrindPlayerCN.swf",
+                // "http://cdn.staticfile.org/GrindPlayerCN/1.0.0/GrindPlayerCN.swf",
+                "http://hlstest.qiniudn.com/GrindPlayer-4.swf",
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
