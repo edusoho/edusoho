@@ -1168,6 +1168,15 @@ activity_manage_members:
     pattern:  /openclass/{id}/manage/members
     defaults: { _controller: TopxiaWebBundle:ActivityManage:members }
 
+activity_manage_members_export:
+    pattern:  /openclass/{id}/manage/members/export
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:export }
+
+activity_manage_members_export_csv:
+    pattern:  /openclass/{id}/manage/members/export/csv
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:exportCsv }
+
+
 activity_manage_teachers_match:
     pattern: /openclass/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:ActivityManage:teachersMatch }
