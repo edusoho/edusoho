@@ -111,12 +111,18 @@
        
           <ul id="last-list" class="phz mvz clearfix ps-re">
                 {% for activity in lastActivitys %}
-                <li class="col-md-4 pvs phs mbl display-no ">
+                <li class="col-md-4 pvs phs mbl display-no li-no">
                   
                   <div class="activity-last-bgcolor-white pvm phm  ps-re  clearfix ">
                     <div class="grid-img ps-re">
                       <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card" ><img class="img-responsive" src="{{ file_path(activity.largePicture,'activity-large.jpg') }}" alt="{{ activity.subtitle}}"> 
                         <div class="card-desc">
+
+                           {% if activity.subtitle is not empty %}
+    
+                          <p class="btn btn-danger btn-xs text-size-14" style="display:inline">{{ activity.subtitle}}</p>
+
+                            {% endif %}
                    
                            {% if activity.expired==1 %}
 
@@ -124,7 +130,7 @@
 
                              <img   class="pz mz" style="display:inline" src="{{ asset('assets/img/default/play_icon_normal.png') }}" />
 
-                             <span class="btn btn-info btn-xs text-normal" style="display:inline"  >回看详情</span>
+                             <span class="btn btn-primary btn-xs  text-size-14" style="display:inline"  >回看详情</span>
 
                            </div>
 
@@ -134,11 +140,11 @@
                     </div>      
 
 
-                      <p class="text-color-gray  text-normal">{{ activity.subtitle}}</p>
-                      <p> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card text-font-14 text-weight-700" >{{ activity.title}}</a></p>                       
-                      <p class="text-color-gray  text-normal">时间： {{activity.startTime}} </p>
-                      <p class="text-color-gray  text-normal">地点：{{activity.address}} </p>
-                      <p class="text-color-gray  text-normal">主讲： 
+                      
+                      <p class="pvs"> <a href="{{ path('activity_show',{id:activity.id})}}"  class="show-user-card text-size-14 text-weight-700" >{{ activity.title}}</a></p>                       
+                      <p class="text-color-gray  text-normal"><span class="glyphicon glyphicon-time text-muted"></span>   {{activity.startTime}} </p>
+                      <p class="text-color-gray  text-normal">{{activity.address}} </p>
+                      <p class="text-color-gray  text-normal"><span class="glyphicon glyphicon-user text-muted"></span> 
                             {% for userProfile in activity['userProfiles'] %} 
                              <span class="prm"> {{userProfile.nickname}}</span>
                             {% endfor %}
@@ -220,7 +226,7 @@
                           {% set user = thread_users[thread.userId] %}
                           {% set profile = thread_users[thread.userId] %}
                           {% set thread_activity = thread_activitys[thread.activityId] %}
-               <li class="media  pbz">
+               <li class="media  pbz li-no">
                  <a class="pull-left" href="{{ path('user_show',{id:user.id}) }}">
                    <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(user.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                  <div class="media-body">
