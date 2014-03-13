@@ -115,8 +115,8 @@
                         <p>
                           <img src="{{ asset('bundles/topxiaweb/img/smile.png') }}"></p>
                         <div class="checkbox">
-                          <label>
-                            <input type="checkbox" name="qustion[castweibo]">转发微博</label>
+                          <!--label>
+                            <input type="checkbox" name="qustion[castweibo]">转发微博</label-->
                         </div>
                         <button type="submit" class="btn btn-success"  data-toggle="form-submit" data-target="#qustion-form">提问</button>
                       </div>
@@ -135,23 +135,20 @@
                   {% else %}
                   <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" >{% endif %}</a>
                 <div class="media-body">
-                  <p class="media-content">
+                  <div class="media-content post-list">
                     <a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a>
-                    {{qustion.content}}
+                    {{qustion.content}} 
                     <a hef="javascript:" class="reply btn btn-link">
-                      <span class="glyphicon glyphicon-share-alt"></span>
-                      回复
+                      <span class="glyphicon glyphicon-share-alt text-size-10">回复</span>
                     </a>
-                  </p>
-                  <div class="reply-tools media-content">
-
-                    <p style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</p>
+                    <span class="pull-right">{{qustion.createdTime|smart_time }}</span>
                   </div>
-                  <div class="post-list media-content">
+                 
+                  <div class=" media-content">
                     {% for post in qustion.bindpost %}
-                    <div class="post-item">
+                    <div class="post-item post-list">
                       <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>
-                      :{{post.content}}
+                      : {{post.content}}
                       <span class="post-item-time">{{ post.createdTime|smart_time }}</span>
                     </div>
                     {% endfor %}
