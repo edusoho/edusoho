@@ -2,6 +2,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
+    require('common/validator-rules').inject(Validator);
+    
     exports.run = function() {
 
         var $table = $('#cancel-table');

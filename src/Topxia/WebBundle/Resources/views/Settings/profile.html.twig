@@ -21,16 +21,24 @@
             </div>
           </div>
 
+         {#
+         <div class="form-group form-iam-group">
+            <label class="col-md-2 control-label">我是</label>
+            <div class="col-md-7 controls radios">
+              <div id="profile_iam">
+                <input type="radio" id="profile_iam_0" name="profile[iam]" required="required" value="student" {% if profile.iam == 'student' %}checked="checked"{% endif %}>
+                <label for="profile_iam_0" class="required">在校生</label>
+                <input type="radio" id="profile_iam_1" name="profile[iam]" required="required" value="notStudent" {% if profile.iam == 'notStudent' %}checked="checked"{% endif %}>
+                <label for="profile_iam_1" class="required">非在校生</label></div>
+              </div>
+          </div> 
+          #}
+
           <div class="form-group">
-            {{ form_label(form.truename, '姓名', {label_attr:{class:'col-md-2 control-label'}}) }}
+          <label class="col-md-2 control-label" >姓名</label>
             <div class="col-md-7 controls">
-
-              {% if app.user.approvalStatus == 'approved' %}
-                {{ form_widget(form.truename, {attr:{class:'form-control', readonly:'readonly' }}) }}
-              {% else %}
-                {{ form_widget(form.truename, {attr:{class:'form-control' }}) }}
-              {% endif %}
-
+              <input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">              
+              <div class="help-block" style="display:none;"></div>
             </div>
           </div>
 
@@ -58,63 +66,119 @@
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label">{{ form_label(form.gender, '性别') }}</div>
-            <div class="col-md-7 controls radios">{{ form_widget(form.gender) }}</div>
+            <label class="col-md-2 control-label">性别</label>
+            <div class="col-md-7 controls radios">
+              <div id="profile_gender">
+                <input type="radio" id="profile_gender_0" name="profile[gender]" required="required" value="male" {% if profile.gender == 'male' %}checked="checked"{% endif %}>
+                <label for="profile_gender_0" class="required">男</label>
+                <input type="radio" id="profile_gender_1" name="profile[gender]" required="required" value="female" {% if profile.gender == 'female' %}checked="checked"{% endif %}>
+                <label for="profile_gender_1" class="required">女</label>
+              </div>
+            </div>
+          </div>
+ {#
+          <div class="form-group form-forIam-group form-student-group">
+            <label class="col-md-2 control-label">学校</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_school" name="profile[school]" class="form-control" value="{{ profile.school|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+
+          <div class="form-group form-forIam-group form-student-group">
+            <label class="col-md-2 control-label">班级</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_class" name="profile[class]" class="form-control" value="{{ profile.class|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div> 
+  #}
+          <div class="form-group form-forIam-group form-notStudent-group">
+            <label class="col-md-2 control-label">公司</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="form-group form-forIam-group form-notStudent-group">
+            <label class="col-md-2 control-label">职位</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label">{{ form_label(form.company, '公司') }}</div>
-            <div class="col-md-7 controls">{{ form_widget(form.company, {attr:{class:'form-control'}}) }}</div>
+            <label class="col-md-2 control-label">头衔</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{ profile.title|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div> 
+
+          <div class="form-group">
+            <label class="col-md-2 control-label">个人签名</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.job, '职位') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.job, {attr:{class:'form-control'}}) }} </div>
+            <label class="col-md-2 control-label">自我介绍</label>
+            <div class="col-md-7 controls">
+              <textarea name="profile[about]" rows="10" id="profile_about" class="form-control">{{ profile.about|default('') }}</textarea>
+            </div>
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.title, '头衔') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.title, {attr:{class:'form-control'}}) }} </div>
+            <label class="col-md-2 control-label">个人主页</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_site" name="profile[site]" class="form-control" data-widget-cid="widget-4" data-explain="" value="{{ profile.site|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="col-md-2 control-label">微博</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.signature, '个人签名') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.signature, {attr:{class:'form-control'}}) }} </div>
-          </div>          
+            <label class="col-md-2 control-label">微信</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>       
 
-          <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.about, '自我介绍') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.about, {attr:{class:'form-control'}}) }} </div>
+                   
+
+         <div class="form-group">
+            <label class="col-md-2 control-label">QQ</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.site, '个人主页') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.site, {attr:{class:'form-control'}}) }} </div>
-          </div>  
-
-          <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.mobile, '手机') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.mobile, {attr:{class:'form-control'}}) }} </div>
-          </div>  
-
-          <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.weibo, '微博') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.weibo, {attr:{class:'form-control'}}) }} </div>
+            <label class="col-md-2 control-label">手机</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
           </div>
 
-          <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.weixin, '微信') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.weixin, {attr:{class:'form-control'}}) }} </div>
-          </div>         
 
-          <div class="form-group">
-            <div class="col-md-2 control-label"> {{ form_label(form.qq, 'QQ') }} </div>
-            <div class="col-md-7 controls"> {{ form_widget(form.qq, {attr:{class:'form-control'}}) }} </div>
-          </div>  
-                           
           <div class="row">
             <div class="col-md-7 col-md-offset-2">
-              {{ form_rest(form) }}
               <button type="submit" class="btn btn-primary">保存</button>
             </div>
           </div>

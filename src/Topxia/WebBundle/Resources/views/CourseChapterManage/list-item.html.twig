@@ -2,7 +2,7 @@
 	<div class="item-content">章节 <span class="number">{{ chapter.number }}</span>： {{ chapter.title }}</div>
 	<div class="item-actions pull-right">
 
-		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
+		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
 
 		<button class="btn btn-link delete-chapter-btn" title="删除" data-url="{{ path('course_manage_chapter_delete', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
 	</div>
