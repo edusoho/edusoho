@@ -349,7 +349,8 @@ class UserController extends BaseController
             $this->getNotificationService()->notify($currentUser['id'], 'default', $messageToSuperAadmin);
 
 
-            return $this->redirect($this->generateUrl('admin_user'));
+            //return $this->redirect($this->generateUrl('admin_user'));
+            return $this->createJsonResponse(true);
         }
         
         return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(

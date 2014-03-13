@@ -126,6 +126,7 @@ class EdusohoCloudClient implements CloudClient
 
         $args = array(
             'items' => $items,
+            'timestamp' => (string) time(),
             'duration' => (string) $duration
         );
 

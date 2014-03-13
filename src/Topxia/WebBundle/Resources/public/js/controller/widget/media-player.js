@@ -54,11 +54,12 @@ define(function(require, exports, module) {
                 javascriptCallbackFunction: "__MediaPlayerEventProcesser",
                 autoPlay:false,
                 autoRewind: false,
-                loop:false
+                loop:false,
+                bufferTime: 8
             };
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
-                flashvars.plugin_hls = "http://hlstest.qiniudn.com/HLSProviderOSMF.swf";
+                flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.0/HLSProviderOSMF-0.5.0.swf";
             }
 
             var params = {
@@ -73,7 +74,7 @@ define(function(require, exports, module) {
             };
 
             swfobject.embedSWF(
-                "http://hlstest.qiniudn.com/GrindPlayer.swf",
+                "http://cdn.staticfile.org/GrindPlayerCN/1.0.0/GrindPlayerCN.swf",
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );

@@ -334,7 +334,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'subtitle' => '',
 			'about' => '',
 			'expiryDay' => 0,
-			'isShowStudentNum' => 'opened',
+			'showStudentNumType' => 'opened',
 			'categoryId' => 0,
 			'goals' => array(),
 			'audiences' => array(),

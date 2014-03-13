@@ -4,7 +4,7 @@
 {% block keywords %}{{ content.title }} {{ setting('site.name') }}{% endblock %}
 {% block description %}{{ content.body|plain_text(100) }}{% endblock %}
 
-{% set nav = 'course' %}
+{% set siteNav = 'page/' ~ content.alias|default(content.id) %}
 
 {% set bodyClass = 'contentpage' %}
 {% block content %}
