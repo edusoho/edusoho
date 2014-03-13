@@ -60,6 +60,7 @@ define(function(require, exports, module) {
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
                 flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.0/HLSProviderOSMF-0.5.0.swf";
+                flashvars.plugin_hls = "http://hlstest.qiniudn.com/HLSProviderOSMF.swf";
             }
 
             var params = {
