@@ -59,10 +59,12 @@
           {% else %}
             <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
           {% endif %}
-      </div>
-      
-      <div class="nav navbar-nav navbar-right navbar-collapse collapse">
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation')) }}
+        </div>
+        
+        <div class="navbar-right navbar-collapse collapse">
+          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+
+
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
             {% if app.user %}

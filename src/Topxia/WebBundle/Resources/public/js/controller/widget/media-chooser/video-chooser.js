@@ -19,9 +19,7 @@ define(function(require, exports, module) {
 
     	setup: function() {
     		VideoChooser.superclass.setup.call(this);
-            $('#disk-browser-video').perfectScrollbar({
-                wheelSpeed: 50
-            });
+            $('#disk-browser-video').perfectScrollbar({wheelSpeed:50});
     	},
 
     	onImport: function(e) {

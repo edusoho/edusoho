@@ -184,7 +184,9 @@ function install_step4()
 function _create_database($config, $replace)
 {
 	try {
-		$pdo = new PDO("mysql:host={$config['database_host']}", "{$config['database_user']}", "{$config['database_password']}", array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'));
+		$pdo = new PDO("mysql:host={$config['database_host']}", "{$config['database_user']}", "{$config['database_password']}");
+
+		$pdo->exec("SET NAMES utf8");
 
 		$result = $pdo->exec("create database `{$config['database_name']}`;");
 		if (empty($result) and !$replace) {
@@ -250,7 +252,9 @@ function _create_connection()
      	array('enum' => 'string')
  	);
 
-     return $connection;
+    $connection->exec("SET NAMES utf8");
+
+    return $connection;
 }
 
 class SystemInit

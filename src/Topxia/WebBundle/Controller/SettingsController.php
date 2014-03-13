@@ -28,20 +28,17 @@ class SettingsController extends BaseController
        
         $profile['title'] = $user['title'];
 
-        $form = $this->createForm(new UserProfileType(), $profile);
-
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $profile = $form->getData();
-                $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->setFlashMessage('success', '基础信息保存成功。');
-                return $this->redirect($this->generateUrl('settings'));
-            }
+            $profile = $request->request->get('profile');
+
+            $this->getUserService()->updateUserProfile($user['id'], $profile);
+            $this->setFlashMessage('success', '基础信息保存成功。');
+            return $this->redirect($this->generateUrl('settings'));
+
         }
 
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
-            'form' => $form->createView()
+            'profile' => $profile
         ));
 	}
 

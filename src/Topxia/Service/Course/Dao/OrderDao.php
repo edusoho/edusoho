@@ -19,4 +19,6 @@ interface OrderDao
 
     public function searchOrderCount($conditions);
 
+    public function sumOrderPriceByCourseIdAndStatuses($courseId, array $statuses);
+
 }

@@ -22,7 +22,19 @@ class UserProfileType extends AbstractType
         $builder->add('weibo', 'text', array('required' => false)); 
         $builder->add('qq', 'text', array('required' => false));
         $builder->add('weixin', 'text', array('required' => false));
-        $builder->add('mobile', 'text', array('required' => false));
+
+
+        $builder->add('iam', 'choice', array(
+            'choices' => array(
+                'student' => '在校生',
+                'notStudent' => '非在校生'
+            ),
+            'expanded' => true,
+            // 'required' => true
+        ));
+        $builder->add('school', 'text', array('required' => false));
+        $builder->add('class', 'text', array('required' => false));
+
     }
 
     public function getName()

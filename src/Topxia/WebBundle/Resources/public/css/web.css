@@ -1293,14 +1293,18 @@ body {
 	width: 100% !important;
 }
 
+.lesson-dashboard-page .site-navbar {
+	display: none;
+}
+
 .lesson-dashboard {
 	position: fixed;
 	background: #fff;
-	top: 56px;
+	top: 0px;
 	bottom: 0px;
 	left: 0;
 	right: 0;
-	background: #f9f9f9;
+	background: #e5e5e5;
 }
 
 .lesson-dashboard .dashboard-content {
@@ -1337,7 +1341,7 @@ body {
 	bottom: 0;
 	width: 60px;
 	border-left: 1px solid #e9e9e9;
-	background: #f3f3f3;
+	background: #363e45;
 }
 
 .lesson-dashboard .toolbar-pane-container {
@@ -1404,12 +1408,13 @@ body {
 	text-align: center;
 	display: inline-block;
 	width: 100%;
-	color: #888;
+	color: #ccc;
 	text-decoration: none;
 }
 
 .lesson-dashboard .toolbar-nav-stacked li a:hover {
-	background: #e3e3e3;
+	background: #aaa;
+	color: #fff;
 }
 
 .lesson-dashboard .toolbar-nav-stacked li a .glyphicon {
@@ -1418,7 +1423,7 @@ body {
 }
 
 .lesson-dashboard .toolbar-nav-stacked li.active a {
-	background-color: #aaa;
+	background-color: #999;
 	color: #fff;
 }
 
@@ -1555,9 +1560,8 @@ body {
 }
 .lesson-dashboard .nav-btn {
 	position: absolute;
-	background: #f9f9f9;
+	/*background: #f3f3f3;*/
 	border-radius: 0;
-	color: #777;
 	z-index: 1000;
 	padding: 3px 10px;
 }

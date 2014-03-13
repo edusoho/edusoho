@@ -14,9 +14,7 @@ define(function(require, exports, module) {
         
         setup: function() {
             AudioChooser.superclass.setup.call(this);
-            $('#disk-browser-audio').perfectScrollbar({
-                wheelSpeed: 50
-            });
+            $('#disk-browser-audio').perfectScrollbar({wheelSpeed:50});
         }
 
     });

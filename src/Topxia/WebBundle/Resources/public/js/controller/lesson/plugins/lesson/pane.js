@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
       var Widget = require('widget');
 
-      require('jquery.perfect-scrollbar');
+      require('jquery.perfect-scrollbar')
 
       var LessonPane = Widget.extend({
 

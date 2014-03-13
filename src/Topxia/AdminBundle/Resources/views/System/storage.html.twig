@@ -1,12 +1,12 @@
 {% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
 
-{% block title %}云存储设置 - {{ parent() }}{% endblock %}
+{% block title %}云视频设置 - {{ parent() }}{% endblock %}
 
 {% set submenu = 'storage' %}
 
 {% block maincontent %}
 
-<div class="page-header"><h1>云存储设置</h1></div>
+<div class="page-header"><h1>云视频设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
@@ -26,12 +26,12 @@
         <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" 
 
         {% if storageSetting.upload_mode == 'cloud' %} checked="checked" {% endif %}>
-        <label for="upload_mode_1">云存储</label>
+        <label for="upload_mode_1">云视频</label>
       </div>
 
       <div class="help-block">
-        云存储，提供更快的视频播放速度，以及更低廉的网络流量价格。<br />
-        如需使用云存储，请联系Edusoho官方。
+        云视频，提供更快的视频播放速度，以及更低廉的网络流量价格。<br />
+        <strong class="text-info">如需使用云视频，请联系Edusoho官方</strong>。
 
       </div>
 
@@ -40,7 +40,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="cloud_api_server" >云存储API地址</label>
+      <label for="cloud_api_server" >云视频API地址</label>
     </div>
     <div class="controls col-md-8 radios">
       <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
@@ -49,7 +49,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="cloud_access_key" >云存储AccessKey</label>
+      <label for="cloud_access_key" >云视频AccessKey</label>
     </div>
     <div class="controls col-md-8 radios">
       <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" value="{{storageSetting.cloud_access_key}}">
@@ -58,7 +58,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="cloud_secret_key" >云存储SecretKey</label>
+      <label for="cloud_secret_key" >云视频SecretKey</label>
     </div>
     <div class="controls col-md-8 radios">
       <input type="text" id="cloud_secret_key" class="form-control" name="cloud_secret_key" value="{{storageSetting.cloud_secret_key}}">
@@ -67,7 +67,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="cloud_bucket" >云存储Bucket</label>
+      <label for="cloud_bucket" >云视频Bucket</label>
     </div>
     <div class="controls col-md-8 radios">
       <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">

@@ -144,7 +144,11 @@ class UserController extends BaseController
                 $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
             }
 
-            return $this->redirect($this->generateUrl('admin_user'));
+            $user = $this->getUserService()->getUser($id);
+
+            return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
+            'user' => $user
+        ));
         }
 
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
@@ -345,7 +349,8 @@ class UserController extends BaseController
             $this->getNotificationService()->notify($currentUser['id'], 'default', $messageToSuperAadmin);
 
 
-            return $this->redirect($this->generateUrl('admin_user'));
+            //return $this->redirect($this->generateUrl('admin_user'));
+            return $this->createJsonResponse(true);
         }
         
         return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
