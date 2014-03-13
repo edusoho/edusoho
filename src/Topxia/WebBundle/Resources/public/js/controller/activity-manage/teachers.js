@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var AutoComplete = require('autocomplete');
-    var DynamicCollection = require('../widget/dynamic-collection2');
+    var DynamicCollection = require('../widget/dynamic-collection3');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
 
