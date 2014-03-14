@@ -93,15 +93,20 @@ define(function(require, exports, module) {
             $(this).find(".card-desc").css({display:"none"});
             
         });
+         
 
-         $(function(){
-                $("#photoId-list li").wookmark({ 
-                        container:$("#photoId-list"), 
-                        offset:0
-                          
+        $(document).ready(function() {
+
+            $(function() {
+                $("#photoId-list li").wookmark({
+                    container: $("#photoId-list"),
+                    offset: 0
+
                 });
+            });
+
         });
-       
+        
 
 
     };

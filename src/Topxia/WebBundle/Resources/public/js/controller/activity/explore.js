@@ -13,11 +13,16 @@ define(function(require, exports, module) {
         });
 
 
-        $("#last-list li").wookmark({ 
-		    container:$("#last-list"), 
-		    offset:0
-		  	  
-		}); 
+        $(document).ready(function() {
+
+            $("#last-list li").wookmark({
+                container: $("#last-list"),
+                offset: 0
+
+            });
+
+        });
+       
 
 
 
