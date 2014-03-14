@@ -1472,7 +1472,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function canTakeCourse($course)
 	{
-		$course = !is_array($course['id']) ? $this->getCourse(intval($course)) : $course;
+		$course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
 		if (empty($course)) {
 			return false;
 		}
