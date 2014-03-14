@@ -135,20 +135,20 @@
                   {% else %}
                   <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" >{% endif %}</a>
                 <div class="media-body">
-                  <div class="media-content post-list">
+                  <div class="media-content post-list phm">
                     <a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a>
                     {{qustion.content}} 
                     <a hef="javascript:" class="reply btn btn-link">
                       <span class="glyphicon glyphicon-share-alt text-size-10">回复</span>
                     </a>
-                    <span class="pull-right">{{qustion.createdTime|smart_time }}</span>
+                    <span class="post-item-time">{{qustion.createdTime|smart_time }}</span>
                   </div>
                  
                   <div class=" media-content">
                     {% for post in qustion.bindpost %}
                     <div class="post-item post-list">
                       <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>
-                      : {{post.content}}
+                      :{{post.content}}
                       <span class="post-item-time">{{ post.createdTime|smart_time }}</span>
                     </div>
                     {% endfor %}

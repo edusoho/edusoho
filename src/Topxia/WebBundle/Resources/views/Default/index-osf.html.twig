@@ -161,7 +161,7 @@
                    <ul class="pz">
                      {% for teacher in teachers  %}
                      {% set teacherinfo =teacherinfos[teacher.id] %}
-                     <li class="col-md-4 pz mz">
+                     <li class="col-md-4 pz mz li-no">
                        <div class="white-grid media " >
                          <a class="pull-left" href="{{ path('user_show',{id:teacher.id}) }}">
                            <img width="100px" class="img-responsive media-object " src="{{ file_path(teacher.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
@@ -215,7 +215,7 @@
                   <ul class="media-list">
                     {% for studyLog in studyLogs  %}
                     {% set userProfile = studyLogUsers[studyLog.userId] %}
-                    <li class="media pbz">
+                    <li class="media pbz li-no">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
@@ -251,7 +251,7 @@
                     {% for answerLog in answerLogs  %}
                           {% set userProfile = answerLogUsers[answerLog.userId] %}
                           {% set qu = questionUsers[answerLog.data.userId] %}
-                    <li class="media  pbz">
+                    <li class="media  pbz li-no">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
@@ -290,7 +290,7 @@
                     {% for note in notes  %}
                           {% set userProfile = noteUsers[note.userId] %}
                           {% set noteCourse = noteCourses[note.courseId] %}
-                    <li class="media  pbz">
+                    <li class="media  pbz li-no">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
@@ -330,7 +330,7 @@
                     {% for review in reviews  %}
                           {% set userProfile = reviewUsers[review.userId] %}
                           {% set reviewCourse = reviewCourses[review.courseId] %}
-                    <li class="media  pbz">
+                    <li class="media  pbz li-no">
                       <a class="pull-left" href="{{ path('user_show',{id:userProfile.id}) }}">
                         <img class="img-responsive media-object user-logo-small-size" src="{{ file_path(userProfile.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
                       <div class="media-body">
