@@ -22,7 +22,7 @@
         <label for="levelName">会员类型名称 <span class="glyphicon glyphicon-star"></span></label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="levelName" data-url="{% if memberlevel %}{{ path('admin_user_level_checkname', {exclude:memberlevel.name}) }}{% else %}{{path('admin_user_level_checkname')}}{% endif %}" name="name" class="form-control" value="{% if memberlevel %}{{ memberlevel.name }}{% endif %}">
+        <input type="text" id="levelName" name="name" class="form-control" value="{% if memberlevel %}{{ memberlevel.name }}{% endif %}">
       </div>
     </div>
 

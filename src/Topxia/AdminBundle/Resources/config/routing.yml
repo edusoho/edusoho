@@ -12,7 +12,7 @@ admin_question_remind_teachers:
     methods:  [POST]
 
 admin_dashboard:
-    pattern:  dashboard
+    pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
 
 admin_content:
@@ -195,10 +195,6 @@ admin_user_level_delete:
     defaults: { _controller: TopxiaAdminBundle:Memberlevel:delete }
     methods: [POST]
 
-admin_user_level_checkname:
-    pattern: /memberlevel/checkname
-    defaults: { _controller: TopxiaAdminBundle:Memberlevel:checkname }
-
 admin_user_level_sort:
     pattern: /memberlevel/sort
     defaults: { _controller: TopxiaAdminBundle:Memberlevel:sort }
@@ -231,6 +227,10 @@ admin_coupon_generate:
     pattern: /coupon/generate
     defaults: { _controller: TopxiaAdminBundle:Coupon:generate }
 
+admin_coupon_checkprefix:
+    pattern: /coupon/checkprefix
+    defaults: { _controller: TopxiaAdminBundle:Coupon:checkPrefix }
+
 admin_coupon_delete:
     pattern: /coupon/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Coupon:delete }
@@ -239,6 +239,18 @@ admin_coupon_delete:
 admin_coupon_query:
     pattern: /coupon/query
     defaults: { _controller: TopxiaAdminBundle:Coupon:query }
+
+admin_coupon_course:
+    pattern: /coupon/course
+    defaults: { _controller: TopxiaAdminBundle:Coupon:course }
+
+admin_coupon_batch_export:
+    pattern: /coupon/export/csv/{batchId}
+    defaults: { _controller: TopxiaAdminBundle:Coupon:exportCsv }
+
+admin_coupon_show:
+    pattern: /coupon/show/{batchId}
+    defaults: { _controller: TopxiaAdminBundle:Coupon:couponShow }
 
 admin_comment:
     pattern:  /comment
@@ -585,7 +597,6 @@ admin_login_record_details:
     pattern: /login_record/{id}/details
     defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
 
-
 admin_thread:
     pattern:  /thread
     defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
@@ -651,7 +662,6 @@ admin_money_card_batch_export_csv:
 admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
-
 
 admin_approval_approving:
     pattern:  approvals/approving

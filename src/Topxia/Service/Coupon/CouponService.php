@@ -2,12 +2,20 @@
 namespace Topxia\Service\Coupon;
 
 interface CouponService
-{
-	public function searchCouponsCount($conditions);
+{	
+	public function getBatch ($id);
 
-	public function searchCoupons($conditions, $sort = 'latest', $start, $limit);
+	public function searchCoupons (array $conditions, $sort = 'latest', $start, $limit);
 
-	public function deleteCoupon($id);
+	public function searchCouponsCount(array $conditions);
+	
+	public function generateCoupon($couponData);
 
-	/*public function generateCoupon($couponData);*/
+	public function searchBatchs (array $conditions, $sort = 'latest', $start, $limit);
+
+	public function searchBatchsCount(array $conditions);
+
+	public function deleteBatch($id);
+
+	public function checkPrefix($prefix);
 }

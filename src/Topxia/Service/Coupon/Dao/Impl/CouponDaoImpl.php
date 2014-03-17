@@ -8,18 +8,11 @@ use PDO;
 
 class CouponDaoImpl extends BaseDao implements CouponDao
 {
-    protected $table = 'coupon_batch';
-
-    public function searchCouponsCount($conditions)
-    {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
-    }
+    protected $table = 'coupon';
 
     public function searchCoupons($conditions, $orderBy, $start, $limit)
     {
-    	$this->filterStartLimit($start, $limit);
+        $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -28,37 +21,44 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-/*    public function getCoupon($id)
+    public function searchCouponsCount(array $conditions)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+    
+    public function addCoupons($coupons)
+    {
+        if(empty($coupons)){ return array(); }
+        $couponsForSQL = array();
+        foreach ($coupons as $value) {
+            $couponsForSQL = array_merge($couponsForSQL, array_values($value));
+        }
+
+        $sql = "INSERT INTO $this->table (code, type, rate, batchId, deadline, targetType, createdTime)  VALUE ";
+        for ($i=0; $i < count($coupons); $i++) {
+            $sql .= "(?, ?, ?, ?, ?, ?, ?),";
+        }
+
+        $sql = substr($sql, 0, -1);
+
+        return $this->getConnection()->executeUpdate($sql, $couponsForSQL);
     }
 
-    public function generateCoupon($coupon)
+    public function deleteCouponsByBatch($id)
     {
-        $affected = $this->getConnection()->insert($this->table, $coupon);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert coupon error.');
-        }
-        return $this->getCoupon($this->getConnection()->lastInsertId());
-    }*/
-
-    public function deleteCoupon($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return $this->getConnection()->delete($this->table, array('batchId' => $id));
     }
 
     private function _createSearchQueryBuilder($conditions)
     {   
-        if (isset($conditions['name'])) {
-            $conditions['nameLike'] = "%{$conditions['name']}%";
-            unset($conditions['name']);
-        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'coupon_batch')
+            ->from($this->table, 'coupon')
             ->andWhere('targetId = :targetId')
             ->andWhere('targetType = :targetType')
-            ->andWhere('name LIKE :nameLike')
+            ->andWhere('batchId = :batchId')
             ->andWhere('type = :type');
 
         return $builder;

@@ -135,6 +135,11 @@ define(function(require, exports, module) {
             '{{display}}必须为整数'
         ],
         [
+            'positive_integer',
+            /^[0-9]*[1-9][0-9]*$/,
+            '{{display}}必须为正整数'
+        ],
+        [
             'maxsize_image',
             function (options) {
                 var element = options.element;
