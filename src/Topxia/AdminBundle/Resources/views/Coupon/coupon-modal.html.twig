@@ -26,14 +26,14 @@
 		  	{% if coupon.targetType == 'course' and coupon.targetId != 0 %}
 		  		购买课程《{{ course.title }}》
 		  	{% else %}
-		  		无
+		  		未使用
 		  	{% endif %}
 		  </td> 
 		  <td>
 		  	{% if coupon.targetType == 'course' and coupon.targetId != 0 %}
 		  		{{ course.price }}元
 		  	{% else %}
-		  		无
+		  		-
 		  	{% endif %}
 		  </td>
 		  <td>
@@ -44,10 +44,16 @@
 			  		{{ course.price * coupon.rate * 0.1 }}元
 			  	{% endif %}
 			{% else %}
-			 	无
+			 	-
 		  	{% endif %}
 		  </td>
-		  <td>{{ coupon.orderTime }}</td> 
+		  <td>
+		  	{% if coupon.userId %}
+			  	{{ coupon.orderTime }}
+			{% else %}
+				-
+			{% endif %}
+		  </td> 
 		</tr>
       {% endfor %}
     </tbody>
