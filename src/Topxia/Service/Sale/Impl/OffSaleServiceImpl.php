@@ -128,9 +128,19 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
         if($offsetting['prodType']=='course')
         {
-            $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
-            $offsetting['prodName'] = $course['title'];
+            if($offsetting['prodId']=='0'){
+
+                  $offsetting['prodName'] = "所有课程";
+
+            }else{
+
+                $course = $this->getCourseService()->getCourse($offsetting['prodId']);
+
+                $offsetting['prodName'] = $course['title'];
+
+            }
+
             $offsetting['saleType']='offsale-course';
         }
 
@@ -188,6 +198,13 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
         if($offsetting['prodType']=='course')
         {
+
+            if($offsetting['prodId']=='0'){
+
+                 return array('hasProd'=>'true',"prodName"=>'您输入的商品编号为0,表示适用所有课程');
+
+            }
+
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
             if(empty($course)){
@@ -221,6 +238,14 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
         if($offsetting['prodType']=='course')
         {
+
+            if($offsetting['prodId']=='0'){
+
+                 return array('status'=>'true',"msg"=>"本优惠码适用所有课程，请慎重输入优惠额度！");
+
+            }
+
+
             $course = $this->getCourseService()->getCourse($offsetting['prodId']);
 
             if(empty($course)){
@@ -275,9 +300,15 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
             return "该优惠码已过期";
         }
 
+        if($offsale['prodId'] =='0'){
+
+            return "success";
+        }
+
         if($offsale['prodId'] != $prodId){
             return "该优惠码不适用于该商品";
         }
+        
         return "success";
     }
 
