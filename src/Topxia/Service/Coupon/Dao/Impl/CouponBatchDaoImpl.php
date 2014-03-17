@@ -17,6 +17,16 @@ class CouponBatchDaoImpl extends BaseDao implements CouponBatchDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function findBatchsByIds($ids)
+    {
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function searchBatchsCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)

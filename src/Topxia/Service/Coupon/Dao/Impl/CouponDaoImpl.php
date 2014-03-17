@@ -36,9 +36,9 @@ class CouponDaoImpl extends BaseDao implements CouponDao
             $couponsForSQL = array_merge($couponsForSQL, array_values($value));
         }
 
-        $sql = "INSERT INTO $this->table (code, type, rate, batchId, deadline, targetType, createdTime)  VALUE ";
+        $sql = "INSERT INTO $this->table (code, type, status, rate, batchId, deadline, targetType, createdTime)  VALUE ";
         for ($i=0; $i < count($coupons); $i++) {
-            $sql .= "(?, ?, ?, ?, ?, ?, ?),";
+            $sql .= "(?, ?, ?, ?, ?, ?, ?, ?),";
         }
 
         $sql = substr($sql, 0, -1);
@@ -53,13 +53,29 @@ class CouponDaoImpl extends BaseDao implements CouponDao
 
     private function _createSearchQueryBuilder($conditions)
     {   
-
+        if (isset($conditions['code'])) 
+        {
+            $conditions['codeLike'] = "%{$conditions['code']}%";
+            unset($conditions['code']);
+        }
+        if (isset($conditions['startDateTime'])) 
+        {
+            $conditions['startDateTime'] = strtotime($conditions['startDateTime']);
+        }
+        if (isset($conditions['endDateTime']))
+        {
+            $conditions['endDateTime'] = strtotime($conditions['endDateTime']);
+        }
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'coupon')
             ->andWhere('targetId = :targetId')
             ->andWhere('targetType = :targetType')
             ->andWhere('batchId = :batchId')
-            ->andWhere('type = :type');
+            ->andWhere('type = :type')
+            ->andWhere('status = :status')
+            ->andWhere('createdTime >= :startDateTime')
+            ->andWhere('createdTime < :endDateTime')
+            ->andWhere('code LIKE :codeLike');
 
         return $builder;
     }

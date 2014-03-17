@@ -17,27 +17,27 @@
     </thead>
     <tbody>
       {% for coupon in coupons %}
-      	{% if coupon.userId %}{% set user = data('User',{ userId: coupon.userId }) %}{% endif %}
-      	{% if coupon.targetType == 'course' and coupon.targetId != 0 %}{% set course = data('Course',{ courseId: coupon.targetId }) %}{% endif %}
+      	{% set user = users[coupon.userId]|default(null) %}
+      	{% set course = courses[coupon.targetId]|default(null) %}
 		<tr>
 		  <td>{{ coupon.code }}</td>  
-		  <td>{% if coupon.userId %}{{ web_macro.user_link(user) }}{% else %}未使用{% endif %}</td>
+		  <td>{% if user %}{{ web_macro.user_link(user) }}{% else %}未使用{% endif %}</td>
 		  <td>
-		  	{% if coupon.targetType == 'course' and coupon.targetId != 0 %}
-		  		购买课程《{{ course.title }}》
+		  	{% if course %}
+		  		购买课程《<a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>》
 		  	{% else %}
 		  		未使用
 		  	{% endif %}
 		  </td> 
 		  <td>
-		  	{% if coupon.targetType == 'course' and coupon.targetId != 0 %}
+		  	{% if course %}
 		  		{{ course.price }}元
 		  	{% else %}
 		  		-
 		  	{% endif %}
 		  </td>
 		  <td>
-		  	{% if coupon.targetType == 'course' and coupon.targetId != 0 %}
+		  	{% if course %}
 			  	{% if coupon.type == 'minus' %}
 			  		{{ course.price - coupon.rate }}元
 			  	{% else %}
@@ -48,7 +48,7 @@
 		  	{% endif %}
 		  </td>
 		  <td>
-		  	{% if coupon.userId %}
+		  	{% if user %}
 			  	{{ coupon.orderTime }}
 			{% else %}
 				-

@@ -12,6 +12,13 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponBatchDao()->getBatch($id);
     }
 
+    public function findBatchsByIds(array $ids)
+    {
+        $batchs = $this->getCouponBatchDao()->findBatchsByIds($ids);
+
+        return ArrayToolkit::index($batchs, 'id');
+    }
+
     public function searchCoupons (array $conditions, $sort = 'latest', $start, $limit)
     {
         $orderBy = array();
@@ -63,6 +70,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             $coupons[] = array(
                 'code' => $couponCode,
                 'type' => $batch['type'],
+                'status'=> 'unused',
                 'rate' => $batch['rate'],
                 'batchId' => $batch['id'],
                 'deadline' => $batch['deadline'],

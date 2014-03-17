@@ -5,6 +5,8 @@ interface CouponService
 {	
 	public function getBatch ($id);
 
+	public function findBatchsByIds(array $ids);
+
 	public function searchCoupons (array $conditions, $sort = 'latest', $start, $limit);
 
 	public function searchCouponsCount(array $conditions);

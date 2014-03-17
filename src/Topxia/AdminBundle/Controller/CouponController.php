@@ -62,8 +62,32 @@ class CouponController extends BaseController
     }
 
 	public function queryAction (Request $request)
-	{
-		return $this->render('TopxiaAdminBundle:Coupon:query.html.twig');
+	{   
+        $conditions = $request->query->all();
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCouponService()->searchCouponsCount($conditions),
+            20
+        );
+
+        $coupons = $this->getCouponService()->searchCoupons(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),  
+            $paginator->getPerPageCount()
+        );
+        $batchs = $this->getCouponService()->findBatchsbyIds(ArrayToolkit::column($coupons, 'batchId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($coupons, 'targetId'));
+
+		return $this->render('TopxiaAdminBundle:Coupon:query.html.twig', array(
+            'coupons' => $coupons,
+            'paginator' => $paginator,
+            'batchs' => $batchs,
+            'users' => $users,
+            'courses' =>$courses  
+        ));
 	}
 
 	public function checkPrefixAction(Request $request)
@@ -155,11 +179,15 @@ class CouponController extends BaseController
             $paginator->getOffsetCount(),  
             $paginator->getPerPageCount()
         );
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($coupons, 'targetId'));
 
         return $this->render('TopxiaAdminBundle:Coupon:coupon-modal.html.twig', array(
             'coupons' => $coupons,
             'batch' => $batch,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'users' => $users,
+            'courses' => $courses
         ));
     }
 

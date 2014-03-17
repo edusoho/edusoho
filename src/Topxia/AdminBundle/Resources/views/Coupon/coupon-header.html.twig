@@ -8,6 +8,6 @@
     <a  href="{{ path('admin_coupon') }}">按批次管理</a>
   </li>
   <li {% if submenu == 'coupon_query' %} class="active" {% endif %} >
-    <a  href="{{ path('admin_coupon_query') }}">优惠码使用查询</a>
+    <a  href="{{ url('admin_coupon_query', { status:'used' }) }}">优惠码使用查询</a>
   </li>
 </ul>

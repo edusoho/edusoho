@@ -11,7 +11,7 @@
 
 {% include 'TopxiaAdminBundle:Coupon:coupon-header.html.twig' %}
 
-  <form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+<br /><form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="type">
         {{ select_options(dict('couponType'), app.request.query.get('type'), '按优惠方式') }}
