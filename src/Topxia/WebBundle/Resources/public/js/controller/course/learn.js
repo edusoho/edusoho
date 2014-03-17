@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var MediaPlayer = require('../widget/media-player');
+    var MediaPlayer = require('../widget/media-player2');
 
     var LessonDashboard = Widget.extend({
 
