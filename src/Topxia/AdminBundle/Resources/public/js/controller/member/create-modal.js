@@ -5,9 +5,9 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 
-        var $modal = $('#user-create-form').parents('.modal');
+        var $modal = $('#member-create-form').parents('.modal');
         var validator = new Validator({
-            element: '#user-create-form',
+            element: '#member-create-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
             	if (error) {
@@ -23,28 +23,17 @@ define(function(require, exports, module) {
 
             }
         });
-        validator.addItem({
-            element: '[name="email"]',
-            required: true,
-            rule: 'email email_remote'
-        });
 
         validator.addItem({
-            element: '[name="nickname"]',
+            element: '[id="nickname"]',
             required: true,
             rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
         });
 
         validator.addItem({
-            element: '[name="password"]',
+            element: '[id="deadline"]',
             required: true,
-            rule: 'minlength{min:5} maxlength{max:20}'
-        });
-
-        validator.addItem({
-            element: '[name="confirmPassword"]',
-            required: true,
-            rule: 'confirmation{target:#password}'
+            rule: 'date'
         });
 	};
 

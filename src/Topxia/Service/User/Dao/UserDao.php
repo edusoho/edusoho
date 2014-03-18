@@ -24,4 +24,6 @@ interface UserDao
 
 	public function clearCounterById($id, $name);
 
+	public function findMemberByNickname($nickname);
+
 }

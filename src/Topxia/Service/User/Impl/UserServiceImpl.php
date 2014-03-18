@@ -735,6 +735,16 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;
     }
+    
+    public function updateMemberLevel($Userdata)
+    {
+        return $this->getUserDao()->updateUser($id, $fields);
+    }
+
+    public function findMemberByNickname($nickname)
+    {
+        return $this->getUserDao()->findMemberByNickname($nickname);
+    }
 
     public function getUserCountByApprovalStatus($approvalStatus)
     {

@@ -1,0 +1,43 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  <td>
+    <strong>{{ admin_macro.user_link(user) }}</strong>
+
+    {% if user.locked %}
+      <label class="label label-danger">禁</label>
+    {% endif %}
+
+    <br>
+    <span class="text-muted text-sm">
+      {% for role in user.roles %}
+        {{ dict_text('userRole', role) }}
+      {% endfor %}
+    </span>
+  </td>
+
+  <td>
+    {{ dict_text('memberLevel',user.level) }}
+    <br>
+    {% if user.emailVerified %}
+      <label class="label label-success" title="该Email地址已验证">已验证</label>
+    {% endif %}
+  </td>
+
+  <td>
+    {% set color = 'green' %}
+    {% if (date(user.deadlineTime)) < date() %}
+      {% set color = 'red' %}
+    {% endif %}
+    <span class="text-sm"><font color={{ color }}>{{ user.deadlineTime|date('Y-m-d') }}</font></span>
+
+    <br>
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.createdIp }}" target="_blank">{{ user.createdIp }}</a>
+    <span></span>
+  </td>
+
+  <td>
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">购买历史</a>
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_login_record_details', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">编辑</a>
+  </td>
+</tr>
+

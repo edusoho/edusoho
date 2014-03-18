@@ -168,4 +168,8 @@ interface UserService
 
     public function rejectApproval($userId, $note = null);
 
+    public function findMemberByNickname($nickname);
+
+    public function updateMemberLevel($Userdata);
+
 }

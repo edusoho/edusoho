@@ -28,6 +28,11 @@ class UserDaoImpl extends BaseDao implements UserDao
         $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
+    public function findMemberByNickname($nickname)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE nickname = ? and level >0 LiMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($nickname));
+    }
 
     public function findUsersByIds(array $ids)
     {
@@ -45,7 +50,6 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-
         return $builder->execute()->fetchAll() ? : array();
     }
 
@@ -73,14 +77,16 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+        return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('nickname LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('approvalStatus = :approvalStatus')
-            ->andWhere('email = :email');
+            ->andWhere('email = :email')
+            ->andWhere('level = :level')
+            ->andWhere('level >= :greatLevel');
     }
 
     public function addUser($user)

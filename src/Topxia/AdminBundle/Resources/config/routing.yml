@@ -108,6 +108,30 @@ admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
 
+admin_member:
+    pattern: /member
+    defaults: { _controller: TopxiaAdminBundle:Member:index }
+
+admin_member_all:
+    pattern: /member/all 
+    defaults: { _controller: TopxiaAdminBundle:Member:all }
+
+admin_member_update:
+    pattern: /member/update
+    defaults: { _controller: TopxiaAdminBundle:Member:update }
+    
+admin_member_create_nickname_check:
+    pattern:  /member/create/nickname/check
+    defaults: { _controller: TopxiaAdminBundle:Member:nicknameCheck }
+
+admin_member_expire:
+    pattern: /member/expire
+    defaults: { _controller: TopxiaAdminBundle:Member:expire }
+
+admin_member_justexpire:
+    pattern: /member/justexpire
+    defaults: { _controller: TopxiaAdminBundle:Member:justexpire }
+
 admin_user_create:
     pattern:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }

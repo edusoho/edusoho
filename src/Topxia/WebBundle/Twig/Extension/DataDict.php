@@ -103,6 +103,11 @@ class DataDict
 			'ROLE_ADMIN' => '管理员',
 			'ROLE_SUPER_ADMIN' => '超级管理员'
 		),
+		'memberLevel' => array(
+			'1' => '银牌会员',
+			'2' => '金牌会员',
+			'3' => '钻石会员'
+		),
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
 			'email' => '邮件地址',
