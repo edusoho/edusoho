@@ -17,20 +17,6 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: $form ,
             autoSubmit: true
-/*            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return false;
-                }
-                
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    $modal.modal('hide');
-                    Notify.success('优惠码添加成功');
-                    window.location.reload();
-                }).error(function(){
-                    Notify.danger('优惠码添加失败');
-                });
-
-            }*/
         });
 
         $form.on('change', '[name=course]', function(e){

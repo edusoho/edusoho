@@ -28,21 +28,6 @@ class MoneyRecordsDaoImpl extends BaseDao implements MoneyRecordsDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function getCoupon($id)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-    }
-
-    public function generateCoupon($coupon)
-    {
-        $affected = $this->getConnection()->insert($this->table, $coupon);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert coupon error.');
-        }
-        return $this->getCoupon($this->getConnection()->lastInsertId());
-    }
-
     private function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
