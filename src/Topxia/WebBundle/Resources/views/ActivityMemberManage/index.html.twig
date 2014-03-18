@@ -12,7 +12,7 @@
 
     {% if app.user.isAdmin() %}
       
-      <button class="btn btn-info btn-sm pull-right mhs" id="student-exp-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('activity_manage_members_export', {id:activity.id}) }}"><i class="glyphicon glyphicon-file"></i> 导出报名人员</button>
+      
 
        <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('activity_manage_members_export_csv', {id:activity.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出报名人员csv</a>
 

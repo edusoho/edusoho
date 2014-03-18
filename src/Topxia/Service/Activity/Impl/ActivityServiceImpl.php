@@ -20,6 +20,30 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 			return ActivitySerialize::unserialize($this->getActivityDao()->getActivity($id));
 	}
 
+
+	public function tryAdminActivity($id)
+	{
+		$activity = $this->getActivityDao()->getActivity($id);
+		
+		if (empty($activity)) {
+			throw $this->createNotFoundException();
+		}
+
+		$user = $this->getCurrentUser();
+		if (empty($user->id)) {
+			throw $this->createAccessDeniedException('未登录用户，无权操作！');
+		}
+
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+			throw $this->createAccessDeniedException('您不是管理员，无权操作！');
+		}
+
+		return ActivitySerialize::unserialize($activity);
+	}
+
+
+
+
 	public function findActivitysByIds(array $ids){
 		$activity = ActivitySerialize::unserializes(
             $this->getActivityDao()->findActivitysByIds($ids)

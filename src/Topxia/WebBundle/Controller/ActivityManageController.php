@@ -271,6 +271,53 @@ class ActivityManageController extends BaseController
     }
 
 
+    public function exportCsvAction (Request $request, $id)
+    {   
+
+        $activity = $this->getActivityService()->tryAdminActivity($id);
+
+        $courseMembers = $this->getActivityService()->findActivityStudents($activity['id'],0,10000);
+
+        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+
+       
+        $str = "用户名,报名时间,姓名,Email,公司,职位,头衔,电话,微信号,QQ号"."\r\n";
+
+        $students = array_map(function($user,$courseMember,$profile){
+            $member['nickname']   = $user['nickname'];
+            $member['joinedTime'] = date('Y-n-d H:i:s', $courseMember['createdTime']);
+      
+            $member['truename'] = $profile['truename'] ? $profile['truename'] : "-";
+            $member['email'] = $user['email'] ? $user['email'] : "-";
+            $member['company'] = $profile['company'] ? $profile['company'] : "-";
+            
+            $member['job'] = $profile['job'] ? $profile['job'] : "-";
+
+            $member['title'] = $user['title'] ? $user['title'] : "-";
+            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "-";
+            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "-";
+            $member['qq'] = $profile['qq'] ? $profile['qq'] : "-";
+            return implode(',',$member);
+        }, $users,$courseMembers,$profiles);
+        $str .= implode("\r\n",$students);
+        $str = chr(239) . chr(187) . chr(191) . $str;
+
+        $filename = sprintf("activity-%s-members-(%s).csv", $activity['id'], date('Y-n-d'));
+
+        $userId = $this->getCurrentUser()->id;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
+
+
 
     public function publishAction(Request $request, $id)
     {
