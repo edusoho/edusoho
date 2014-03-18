@@ -40,6 +40,7 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function generateCoupon($couponData)
     {   
+
         $couponData = array_filter($couponData);
         $batch_array = array(
             'name', 
@@ -58,10 +59,16 @@ class CouponServiceImpl extends BaseService implements CouponService
         $deadline = explode("-", $batch['deadline']);
         $batch['deadline'] = mktime(23,59,59,$deadline[1],$deadline[2],$deadline[0]);
         $batch['createdTime'] = time();
-        $batch['description'] = $couponData['description'];
+        if (isset($couponData['targetId'])) {
+            $batch['targetId'] = $couponData['targetId'];
+        }
+        if (isset($couponData['description'])) {
+            $batch['description'] = $couponData['description'];
+        }
         if ($batch['deadline'] < $batch['createdTime']) {
             throw $this->createServiceException(sprintf('优惠码有效期不能比当前日期晚！'));
         }
+
         $batch = $this->getCouponBatchDao()->addBatch($batch);
 
         $couponCodes = $this->makeRands($batch['digits'], $batch['generatedNum'], $batch['prefix']);
@@ -124,22 +131,22 @@ class CouponServiceImpl extends BaseService implements CouponService
         return empty($prefix) ? true : false;
     }
 
-    private function makeRands ($median, $number, $cardPrefix)
+    private function makeRands ($median, $number, $prefix)
     {
-        $cardIds = array();
+        $batchIds = array();
         $i = 0;
         while(true) {
             $id = '';
             for ($j=0; $j < (int)$median; $j++) {
                 $id .= mt_rand(0, 9);
             }
-            $cardIds[] = $cardPrefix.$id;
+            $batchIds[] = $prefix.$id;
             $i++;
             if ($i >= $number) {
                 break;
             }
         }
-        return $cardIds;
+        return $batchIds;
     }
 
     private function getCouponDao()

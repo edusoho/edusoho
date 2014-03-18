@@ -110,8 +110,7 @@
       <div class="col-md-offset-2 col-md-3">
         <div class="radio">
           <label>
-            <input type="radio" name="courseId" id="all-courses-input" value=""  checked="checked">
-            全部课程
+            <input type="radio" name="courseId" id="all-courses-input" value="0" data-toggle="modal"  checked="checked">全部课程
           </label>
         </div>
         <div class="radio">
@@ -133,7 +132,7 @@
         <input type="submit" class="btn btn-primary pull-left" value="生成">
       </div>   
       <div class="col-md-1">
-        <a href="{{ path('admin_coupon') }}" class="btn btn-primary">后退</a>
+        <a href="{{ path('admin_coupon') }}" class="btn btn-link">后退</a>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -8,6 +8,7 @@
     <thead>
       <tr>
         <th>优惠码</th>
+        <th>状态</th>
         <th>使用者</th>
         <th>使用</th>
         <th>原价</th>
@@ -20,13 +21,14 @@
       	{% set user = users[coupon.userId]|default(null) %}
       	{% set course = courses[coupon.targetId]|default(null) %}
 		<tr>
-		  <td>{{ coupon.code }}</td>  
-		  <td>{% if user %}{{ web_macro.user_link(user) }}{% else %}未使用{% endif %}</td>
+		  <td>{{ coupon.code }}</td>
+		  <td>{% if coupon.status == 'unused' %}未使用{% else %}已使用{% endif %}</td> 
+		  <td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
 		  <td>
 		  	{% if course %}
 		  		购买课程《<a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>》
 		  	{% else %}
-		  		未使用
+		  		-
 		  	{% endif %}
 		  </td> 
 		  <td>

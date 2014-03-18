@@ -6,9 +6,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
+
+/*
+ * @todo rename CouponBatchController
+ */
 class CouponController extends BaseController 
 {	
-
 	public function indexAction (Request $request)
 	{	
         $conditions = $request->query->all();
@@ -38,6 +41,7 @@ class CouponController extends BaseController
         return $this->createJsonResponse(true);
 	}
 
+    /* AdminBundle->CourseController->chooserAction  */
     public function courseAction (Request $request)
     {   
         $conditions = $request->query->all();
@@ -61,6 +65,7 @@ class CouponController extends BaseController
         ));
     }
 
+    /* AdminBundle->CouponController->indexAction  */
 	public function queryAction (Request $request)
 	{   
         $conditions = $request->query->all();
@@ -133,6 +138,7 @@ class CouponController extends BaseController
     {
         $batch = $this->getCouponService()->getBatch($batchId);
 
+        // findCouponsByBacthId($batchId, $start, $limit);
         $coupons = $this->getCouponService()->searchCoupons(
             array('batchId' => $batchId),
             'latest',
@@ -140,21 +146,24 @@ class CouponController extends BaseController
             $batch['generatedNum']
         );
 
-        $str = "批次,有效期至,优惠码"."\r\n";
+        $str = "批次,有效期至,优惠码,状态"."\r\n";
 
-        $coupons = array_map(function($coupon){
+        $statusNames = array('unused' => '未使用', 'used' => '已使用');
+
+        $coupons = array_map(function($coupon) {
+            $coupon['status'] = $statusNames[$coupon['status']];
             $export_coupon['batchId']  = $coupon['batchId'];
             $export_coupon['deadline'] = date('Y-m-d',$coupon['deadline']);
             $export_coupon['code']   = $coupon['code'];
-            return implode(',',$export_coupon);
+            $export_coupon['status'] = $coupon['status'];
+            return implode(',', $export_coupon);
         }, $coupons);
 
-        $str .= implode("\r\n",$coupons);
+        $str .= implode("\r\n", $coupons);
 
-        $filename = "coupons-".$batchId."-".date("YmdHi").".csv";
+        $filename = "couponBatch-".$batchId."-".date("YmdHi").".csv";
 
-        $userId = $this->getCurrentUser()->id;
-        $this->getLogService()->info('coupon_export', 'export', "导出了批次为{$batchId}的优惠码");
+        $this->getLogService()->info('couponBatch_export', 'export', "导出了批次为{$batchId}的优惠码");
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -165,6 +174,18 @@ class CouponController extends BaseController
         return $response;
     }
 
+    private function createExporteCSVResponse(array $header, array $data, $outputFilename)
+    {
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$outputFilename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
+
+    /** detail  **/
     public function couponShowAction(Request $request, $batchId)
     {   
         $count = $this->getCouponService()->searchCouponsCount(array('batchId' => $batchId));

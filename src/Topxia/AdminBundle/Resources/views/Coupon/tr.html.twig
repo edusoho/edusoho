@@ -11,7 +11,7 @@
   <td>{{ batch.generatedNum }}</td>  
   <td>{{ batch.usedNum }}</td>
   <td>{{ batch.money }}</td>
-  <td>{{ batch.description }}</td>
+  <td>{{ batch.description|default('无说明') }}</td>
   <td>{{ batch.deadline|date('Y-n-d') }}</td>
   <td>{{ batch.createdTime|date('Y-n-d H:i') }}</td>
   <td>
