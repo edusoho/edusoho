@@ -26,6 +26,10 @@ define(function(require, exports, module) {
             }
         });
 
+        $form.on('click', '#all-courses-input', function(e){
+            $('#course-display').hide();
+        });
+        
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
             var minus = $('.minus-rate');

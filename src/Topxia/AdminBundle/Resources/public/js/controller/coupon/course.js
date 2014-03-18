@@ -20,9 +20,14 @@ define(function(require, exports, module) {
         	$('#choose-course-input').val(courseId);
         	$('#course-display .well').html(courseName);
         	$('#course-display').show();
-
             $modal.modal('hide');
             Notify.success('指定课程成功');
         });
+
+        $modal.on('hidden.bs.modal', function (e) {
+            if (!$('#choose-course-input').val()) {
+                $('.radio').button('reset');
+            };
+        })
     };
 })
