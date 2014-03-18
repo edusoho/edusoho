@@ -221,36 +221,36 @@ admin_level_zone:
 
 admin_coupon:
     pattern: /coupon
-    defaults: { _controller: TopxiaAdminBundle:Coupon:index }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:index }
 
 admin_coupon_generate:
     pattern: /coupon/generate
-    defaults: { _controller: TopxiaAdminBundle:Coupon:generate }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:generate }
 
 admin_coupon_checkprefix:
     pattern: /coupon/checkprefix
-    defaults: { _controller: TopxiaAdminBundle:Coupon:checkPrefix }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:checkPrefix }
 
 admin_coupon_delete:
     pattern: /coupon/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Coupon:delete }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:delete }
     methods: [POST]
 
 admin_coupon_query:
-    pattern: /coupon/query
-    defaults: { _controller: TopxiaAdminBundle:Coupon:query }
+    pattern: /coupon/index
+    defaults: { _controller: TopxiaAdminBundle:Coupon:index }
 
 admin_coupon_course:
     pattern: /coupon/course
-    defaults: { _controller: TopxiaAdminBundle:Coupon:course }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:course }
 
 admin_coupon_batch_export:
     pattern: /coupon/export/csv/{batchId}
-    defaults: { _controller: TopxiaAdminBundle:Coupon:exportCsv }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:exportCsv }
 
 admin_coupon_show:
     pattern: /coupon/show/{batchId}
-    defaults: { _controller: TopxiaAdminBundle:Coupon:couponShow }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:detail }
 
 admin_comment:
     pattern:  /comment
