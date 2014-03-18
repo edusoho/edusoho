@@ -17,7 +17,7 @@
       -
     {% endif %}
   </td>
-  <td>
+  <td class="text-danger">
     {% if course %}
       {% if coupon.type == 'minus' %}
         抵价{{ coupon.rate }}元
@@ -28,14 +28,14 @@
       -
     {% endif %}
   </td>
-  <td>
+  <td class="text-danger">
     {% if course %}
       {{ course.price }}元
     {% else %}
       -
     {% endif %}
   </td>
-  <td>
+  <td class="text-danger">
     {% if course %}
       {% if coupon.type == 'minus' %}
         {{ course.price - coupon.rate }}元

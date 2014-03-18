@@ -148,14 +148,15 @@ class CouponController extends BaseController
 
         $str = "批次,有效期至,优惠码,状态"."\r\n";
 
-        $statusNames = array('unused' => '未使用', 'used' => '已使用');
-
         $coupons = array_map(function($coupon) {
-            $coupon['status'] = $statusNames[$coupon['status']];
             $export_coupon['batchId']  = $coupon['batchId'];
             $export_coupon['deadline'] = date('Y-m-d',$coupon['deadline']);
             $export_coupon['code']   = $coupon['code'];
-            $export_coupon['status'] = $coupon['status'];
+            if ($coupon['status'] == 'unused') {
+                $export_coupon['status'] = '未使用';
+            } else {
+                $export_coupon['status'] = '已使用'; 
+            }
             return implode(',', $export_coupon);
         }, $coupons);
 

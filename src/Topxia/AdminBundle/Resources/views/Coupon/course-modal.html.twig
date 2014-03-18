@@ -37,7 +37,7 @@
 		    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
 		  </td>
 		  <td>{{ course.studentNum }}</td>
-		  <td>{{ course.price }}</td>
+		  <td class="text-danger">{{ course.price }}</td>
 		  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
 		  <td>{{ user.nickname }}</td>
 		  <td>

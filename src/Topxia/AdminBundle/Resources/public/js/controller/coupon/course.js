@@ -17,8 +17,9 @@ define(function(require, exports, module) {
         $table.on('click', '.choose-course', function(e){
         	var courseId = $(this).data('target');
         	var courseName = $(this).data('name');
+            var html = '<a href="/course/'+courseId+'" target="_blank"><strong>'+courseName+'</strong></a>';
         	$('#choose-course-input').val(courseId);
-        	$('#course-display .well').html(courseName);
+        	$('#course-display .well').html(html);
         	$('#course-display').show();
             $modal.modal('hide');
             Notify.success('指定课程成功');
