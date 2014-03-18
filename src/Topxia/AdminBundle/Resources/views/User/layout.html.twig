@@ -16,7 +16,12 @@
         <a href="{{ url('admin_member') }}" class="list-group-item {% if menu == 'member' %}active{% endif %}">会员管理</a>
         <a href="{{ url('admin_level_zone') }}" class="list-group-item {% if menu == 'userlevel' %}active{% endif %}" >会员专区设置</a>
         <a href="{{ url('admin_money_card') }}" class="list-group-item {% if menu == 'money_card' %}active{% endif %}" >充值卡管理</a>
+
+        <a href="{{ url('admin_money_card') }}" class="list-group-item {% if menu == 'money_card' %}active{% endif %}">充值卡管理</a>
+
         <a href="{{ url('admin_login_record') }}" class="list-group-item {% if menu == 'login_record' %}active{% endif %}">用户登录日志</a>
+
+        <a href="{{ url('admin_coupon') }}" class="list-group-item {% if menu == 'coupon' %}active{% endif %}">优惠码管理</a>
       </div>
     {% endblock %}
   </div>

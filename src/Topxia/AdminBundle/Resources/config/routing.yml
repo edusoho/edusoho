@@ -12,7 +12,7 @@ admin_question_remind_teachers:
     methods:  [POST]
 
 admin_dashboard:
-    pattern:  dashboard
+    pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
 
 admin_content:
@@ -203,37 +203,78 @@ admin_user_send_emailverify_email:
     methods:  [POST]
 
 admin_user_level:
-    pattern: /userlevel
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:index }
+    pattern: /memberlevel
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:index }
 
 admin_user_level_create:
-    pattern: /userlevel/create
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:create }
+    pattern: /memberlevel/create
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:create }
 
 admin_user_level_update:
-    pattern: /userlevel/{id}/update
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:update }
+    pattern: /memberlevel/{id}/update
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:update }
 
 admin_user_level_delete:
-    pattern: /userlevel/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:delete }
+    pattern: /memberlevel/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:delete }
     methods: [POST]
 
-admin_user_level_checkname:
-    pattern: /userlevel/checkname
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:checkname }
-
 admin_user_level_sort:
-    pattern: /userlevel/sort
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:sort }
+    pattern: /memberlevel/sort
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:sort }
 
 admin_user_level_picture:
-    pattern: /userlevel/picture
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:picture }
+    pattern: /memberlevel/picture
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:picture }
+
+admin_user_level_icon:
+    pattern: /memberlevel/icon
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:icon }
+
+admin_user_level_on:
+    pattern: /memberlevel/{id}/on
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:on }
+
+admin_user_level_off:
+    pattern: /memberlevel/{id}/off
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:off }
 
 admin_level_zone:
     pattern: /levelzone
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:zone }
+    defaults: { _controller: TopxiaAdminBundle:Memberlevel:zone }
+
+admin_coupon:
+    pattern: /coupon
+    defaults: { _controller: TopxiaAdminBundle:Coupon:index }
+
+admin_coupon_generate:
+    pattern: /coupon/generate
+    defaults: { _controller: TopxiaAdminBundle:Coupon:generate }
+
+admin_coupon_checkprefix:
+    pattern: /coupon/checkprefix
+    defaults: { _controller: TopxiaAdminBundle:Coupon:checkPrefix }
+
+admin_coupon_delete:
+    pattern: /coupon/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Coupon:delete }
+    methods: [POST]
+
+admin_coupon_query:
+    pattern: /coupon/query
+    defaults: { _controller: TopxiaAdminBundle:Coupon:query }
+
+admin_coupon_course:
+    pattern: /coupon/course
+    defaults: { _controller: TopxiaAdminBundle:Coupon:course }
+
+admin_coupon_batch_export:
+    pattern: /coupon/export/csv/{batchId}
+    defaults: { _controller: TopxiaAdminBundle:Coupon:exportCsv }
+
+admin_coupon_show:
+    pattern: /coupon/show/{batchId}
+    defaults: { _controller: TopxiaAdminBundle:Coupon:couponShow }
 
 admin_comment:
     pattern:  /comment
@@ -580,7 +621,6 @@ admin_login_record_details:
     pattern: /login_record/{id}/details
     defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
 
-
 admin_thread:
     pattern:  /thread
     defaults: { _controller: TopxiaAdminBundle:CourseThread:index }
@@ -646,7 +686,6 @@ admin_money_card_batch_export_csv:
 admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
-
 
 admin_approval_approving:
     pattern:  approvals/approving

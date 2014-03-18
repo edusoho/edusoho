@@ -19,7 +19,9 @@ interface LevelService
 
     public function getLevelByName($name);
 
-    public function sortLevels(array $id);
+    public function sortLevels(array $ids);
 
-    public function isLevelNameAvailable($name, $exclude=null);
+    public function onLevel($id);
+
+    public function offLevel($id);
 }

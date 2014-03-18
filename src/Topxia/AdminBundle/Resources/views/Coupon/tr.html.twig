@@ -1,0 +1,22 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as web_macro %}
+<tr>
+  <td>{{ batch.name }}</td>
+  <td>
+  {% if batch.type=='discount' %}
+    <span>打折{{ batch.rate|number_format(1) }}折</span>
+  {% elseif batch.type=='minus' %}
+    <span>抵价{{ batch.rate }}元</span>
+  {% endif %}
+  </td>
+  <td>{{ batch.generatedNum }}</td>  
+  <td>{{ batch.usedNum }}</td>
+  <td>{{ batch.money }}</td>
+  <td>{{ batch.description }}</td>
+  <td>{{ batch.deadline|date('Y-n-d') }}</td>
+  <td>{{ batch.createdTime|date('Y-n-d H:i') }}</td>
+  <td>
+    <a href="{{ path('admin_coupon_batch_export', {batchId:batch.id}) }}" >导出CSV文件</a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show', {batchId:batch.id}) }}">详情</a>
+    <a class="coupon-remove" href="javascript:;" data-url="{{ path('admin_coupon_delete', {id:batch.id}) }}">删除</a>
+  </td>
+</tr>

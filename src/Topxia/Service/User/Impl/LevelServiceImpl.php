@@ -18,33 +18,23 @@ class LevelServiceImpl extends BaseService implements LevelService
 	    return $this->getLevelDao()->getLevelByName($name);
 	}
 
-	public function isLevelNameAvailable($name, $exclude=null)
-	{
-	    if (empty($name)) {
-	        return false;
-	    }
-
-	    if ($name == $exclude) {
-	        return true;
-	    }
-
-	    $level = $this->getLevelByName($name);
-
-	    return $level ? false : true;
+	public function searchLevelsCount($conditions)
+	{	
+	    return $this->getLevelDao()->searchLevelsCount($conditions);
 	}
 
-	public function searchLevelsCount($conditions)
-	{
-	    return $this->getLevelDao()->searchLevelsCount($conditions);
+	public function generateNextSeq()
+	{	
+		return $this->searchLevelsCount()+1;
 	}
 
 	public function createLevel($level)
 	{	
-	    $level['createdTime'] = time();
-	    @$level['seq'] = $this->searchLevelsCount()+1;
-	    $level = $this->getLevelDao()->createLevel($level);
 
-	    $this->getLogService()->info('level', 'create', "添加会员等级{$level['name']}(#{$level['id']})");
+	    $level['createdTime'] = time();
+	    @$level['seq'] = $this->generateNextSeq();
+	    $level = $this->getLevelDao()->createLevel($level);
+	    $this->getLogService()->info('level', 'create', "添加会员类型{$level['name']}(#{$level['id']})", $level);
 
 	    return $level;
 	}
@@ -58,29 +48,54 @@ class LevelServiceImpl extends BaseService implements LevelService
 
 	public function updateLevel($id,$fields)
 	{
-	    $level = $this->getLevelDao()->updateLevel($id,$fields);
-	    $this->getLogService()->info('level', 'update', "编辑会员等级{$level['name']}(#{$level['id']})");
+	    $level = $this->getLevelDao()->updateLevel($id, $fields);
+	    $this->getLogService()->info('level', 'update', "编辑会员类型{$level['name']}(#{$level['id']})", $level);
 	    return $level;
 	}
 
 	public function sortLevels(array $ids)
-	{   
-	    $levelId  = 0;
+	{	
+	    $seq = 0;
 	    foreach ($ids as $itemId) {
-	        list(, $type) = explode("-",$itemId);
-	            $levelId ++;
-	            $item = $this->getLevel($type);
-	            $fields = array('seq' => $levelId);
-	            if ($fields['seq'] != $item['seq']) {
-	                $this->updateLevel($item['id'], $fields);
+            $seq ++;
+            $item = $this->getLevel($itemId);
+            $fields = array('seq' => $seq);
+            if ($fields['seq'] != $item['seq']) {
+                $this->updateLevel($item['id'], $fields);
 	        }
 	    }
 	}
 
+    public function onLevel($id)
+    {
+        $level = $this->getLevel($id);
+        if (empty($level)) {
+            throw $this->createServiceException('会员类型不存在，开启失败！');
+        }
+        $this->getLevelDao()->updateLevel($level['id'], array('enabled' => 1));
+
+        $this->getLogService()->info('level', 'on', "会员类型{$level['name']}(#{$level['id']})允许加入会员", $level);
+
+        return true;
+    }
+
+    public function offLevel($id)
+    {
+        $level = $this->getLevel($id);
+        if (empty($level)) {
+            throw $this->createServiceException('会员等级不存在，关闭失败！');
+        }
+        $this->getLevelDao()->updateLevel($level['id'], array('enabled' => 0));
+
+        $this->getLogService()->info('level', 'off', "会员类型{$level['name']}(#{$level['id']})禁止加入会员", $level);
+
+        return true;
+    }
+
 	public function deleteLevel($id)
 	{
 	    $level = $this->getLevel($id);
-	    $this->getLogService()->info('level', 'delete', "删除用户等级{$level['name']}(#{$level['id']})");
+	    $this->getLogService()->info('level', 'delete', "删除用户类型{$level['name']}(#{$level['id']})", $level);
 	    return $this->getLevelDao()->deleteLevel($id);
 	}
 

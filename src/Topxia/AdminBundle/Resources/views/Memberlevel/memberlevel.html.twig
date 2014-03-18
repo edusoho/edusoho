@@ -1,0 +1,141 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% set memberlevel = memberlevel|default(null) %}
+{% block title %}
+{% if memberlevel %}编辑{% else %}新增{% endif %}会员类型
+{% endblock %}
+
+{% set menu = 'memberlevel' %}
+
+{% set script_controller = 'memberlevel/save' %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <h1 class="pull-left">{% if memberlevel %}编辑{% else %}新增{% endif %}会员类型</h1>
+</div>
+<form id="memberlevel-form" class="form-horizontal" method="post" action="{% if memberlevel %}{{path('admin_user_level_update',{id:memberlevel.id}) }}{% else %}{{ path('admin_user_level_create') }}{% endif %}">
+  <fieldset>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="levelName">会员类型名称 <span class="glyphicon glyphicon-star"></span></label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="levelName" name="name" class="form-control" value="{% if memberlevel %}{{ memberlevel.name }}{% endif %}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="monthType">购买类型 <span class="glyphicon glyphicon-star"></span></label>
+      </div>
+      <div class="col-md-1">
+        <div class="checkbox">
+          <label>
+            <input {% if memberlevel %}{% if memberlevel.monthPrice != 0.00 %} checked="checked" {% endif %}{% endif %} id="monthType"  class="boughtType" type="checkbox" name="monthType" value="month">包月
+          </label>
+        </div>
+      </div>
+      <div class="col-md-6 controls">
+        <input type="text" name="monthPrice" class="form-control" value="{% if memberlevel %}{{ memberlevel.monthPrice }}{% else %}0.00{% endif %}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="yearType"></label>
+      </div>
+      <div class="col-md-1">
+        <div class="checkbox">
+          <label>
+            <input {% if memberlevel %}{% if memberlevel.yearPrice != 0.00 %} checked="checked" {% endif %}{% endif %} id="yearType" class="boughtType" type="checkbox" name="yearType" value="year">包年
+          </label>
+        </div>
+      </div>
+      
+      <div class="col-md-6 controls">
+        <input type="text" name="yearPrice" class="form-control" value="{% if memberlevel %}{{ memberlevel.yearPrice }}{% else %}0.00{% endif %}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="freeLearned">可免费学习所有课程</label>
+      </div>
+      <div class="col-md-7 radios controls">
+          {% if memberlevel %} 
+            {{ radios('freeLearned', {'1':'是', '0':'否'}, memberlevel.freeLearned) }}
+          {% else %}
+            {{ radios('freeLearned', {'1':'是', '0':'否'}) }}
+          {% endif %}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="memberlevel-content-field">一句话描述</label>
+      </div>
+      <div class="col-md-7 controls">
+        <textarea class="form-control" id="memberlevel-content-field" name="description">{% if memberlevel %}{{ memberlevel.description }}{% endif %}</textarea>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="memberlevel-content-field">展示图片</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="hidden" name="picture" value="{% if memberlevel %}{{ memberlevel.picture }}{% endif %}" >
+        <p>
+          <img id="picture-show" src="{% if memberlevel %}{{ memberlevel.picture }}{% endif %}" class="img-responsive" style="display:block;">
+        </p>
+        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_user_level_picture') }}" data-toggle="modal" data-target="#modal">设置图片</a>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="memberlevel-content-field">示意图标</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="hidden" name="icon" value="{% if memberlevel %}{{ memberlevel.icon }}{% endif %}" >
+        <p>
+          <img id="icon-show" src="{% if memberlevel %}{{ memberlevel.icon }}{% endif %}" class="img-responsive" style="display:block;">
+        </p>
+        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_user_level_icon') }}" data-toggle="modal" data-target="#modal">设置图标</a>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enabled">加入会员</label>
+      </div>
+      <div class="col-md-7 controls radios">
+        {% if memberlevel %}
+           {{ radios('enabled', {'1':'允许', '0':'禁止'}, memberlevel.enabled) }}
+        {% else %}
+          <label>
+            <input type="radio" name="enabled" value="1" checked="checked"> 开启
+          </label>
+          <label>
+            <input type="radio" name="enabled" value="0"> 关闭
+          </label>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-offset-2 col-md-1">
+        <input type="submit" class="btn btn-primary pull-left" value="保存">
+      </div>   
+      <div class="col-md-1">
+        <a href="{{ path('admin_user_level') }}" class="btn btn-primary">后退</a>
+      </div>
+    </div> 
+
+  </fieldset>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

@@ -14,9 +14,13 @@ class DataDict
 			'published' => '<span class="text-success">已发布</span>',
 			'closed' => '<span class="text-danger">已关闭</span>'
 		),
+		'couponType' => array(
+			'minus' => '抵价',
+			'discount' => '打折'
+		),
 		'couponStatus' => array(
-			'unused' => '未使用',
-			'used' => '已使用'
+			'used' => '已使用',
+			'unused' => '未使用'
 		),
 		'fileType' => array(
 			'video' => '视频',
