@@ -16,10 +16,12 @@
               {% endif %}
             </span>
 
+            {% if course.showStudentNumType == 'opened' %}
             <span class="student-col">
               <span class="meta-label">学生</span>
               <span class="student-num">{{ course.studentNum }}人</span>
             </span>
+            {% endif %}
 
             <span class="review-col">
               {% if course.ratingNum > 0 %}

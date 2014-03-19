@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
+{% set siteNav = 'course/explore' %}
+
 {% block title %}{% if not category.id %}全部课程{% else %}{{ category.name }} 课程{% endif %} 第{{ app.request.get('page', 1)}}页- {{ parent() }}{% endblock %}
 
 {% block keywords %}{% if category.id %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
@@ -32,8 +34,8 @@
     <div class="col-md-9">
 
       <div class="category-filters">
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="selected"{% endif %}>最新</a>        
         <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}" {% if sort == 'popular' %}class="selected"{% endif %}>热门</a>
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="selected"{% endif %}>最新</a>
         <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommended'}) }}" {% if sort == 'recommended' %}class="selected"{% endif %}>推荐</a>
       </div>
 

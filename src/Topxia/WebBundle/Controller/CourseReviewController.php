@@ -14,6 +14,7 @@ class CourseReviewController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $previewAs = $request->query->get('previewAs');
+        $isModal = $request->query->get('isModal');
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -28,10 +29,6 @@ class CourseReviewController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($course);
-
-        $isModal = $previewAs == 'guest' ? false : $canTakeCourse ? true : false;
 
         return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
             'course' => $course,

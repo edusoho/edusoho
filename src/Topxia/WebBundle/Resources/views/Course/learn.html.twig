@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
    {{ parent() }}
-   <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar.css') }}" />
+   <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar.css') }}" />
 {% endblock %}
 
 {% set hideSetupHint = true %}
@@ -17,9 +17,9 @@
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
          data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}">
       <div class="dashboard-content">
-         <a class="btn btn-default btn-sm nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
-         <a class="btn btn-default btn-sm nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson"><span class="glyphicon glyphicon-chevron-up" title="上一课时"></span></a>
-         <a class="btn btn-default btn-sm nav-btn next-lesson-btn" href="javascript:" data-role="next-lesson" title="下一课时"><span class="glyphicon glyphicon-chevron-down"></span></a>
+         <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
+         <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson" data-placement="right" title="上一课时"><span class="glyphicon glyphicon-chevron-up" title="上一课时"></span></a>
+         <a class="btn btn-primary nav-btn next-lesson-btn" href="javascript:" data-role="next-lesson" data-placement="right" title="下一课时"><span class="glyphicon glyphicon-chevron-down"></span></a>
 
         <div class="dashboard-header">
           <div class="pull-left title-group">
@@ -50,7 +50,7 @@
         <div class="dashboard-footer clearfix">
 
           <div class="pull-right">
-            <button class="btn btn-default btn-sm" data-role="finish-lesson"><span class="glyphicon glyphicon-check"></span> 学过了</button>
+            <button class="btn btn-primary finish-btn" data-role="finish-lesson"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
           </div>
 
         </div>
@@ -72,6 +72,26 @@
       </div>
 
     </div>
+
+
+
+
+<div class="modal" id="course-learned-modal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">学习进度提示</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-success">赞一个，这个课程你已经都学完啦，你可以再回顾一下或者去看看别的课程～～～</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">回课程主页</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 
