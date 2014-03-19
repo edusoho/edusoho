@@ -8,6 +8,7 @@ use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
