@@ -21,7 +21,7 @@ class CouponController extends BaseController
 
         $coupons = $this->getCouponService()->searchCoupons(
             $conditions,
-            'latest',
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),  
             $paginator->getPerPageCount()
         );

@@ -240,10 +240,6 @@ admin_coupon_query:
     pattern: /coupon/index
     defaults: { _controller: TopxiaAdminBundle:Coupon:index }
 
-admin_coupon_course:
-    pattern: /coupon/course
-    defaults: { _controller: TopxiaAdminBundle:CouponBatch:course }
-
 admin_coupon_batch_export:
     pattern: /coupon/export/csv/{batchId}
     defaults: { _controller: TopxiaAdminBundle:CouponBatch:exportCsv }
@@ -338,6 +334,10 @@ admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
+
+admin_course_chooser:
+    pattern: /course/chooser
+    defaults: { _controller: TopxiaAdminBundle:Course:chooser }
 
 admin_course_category:
     pattern: /course/category

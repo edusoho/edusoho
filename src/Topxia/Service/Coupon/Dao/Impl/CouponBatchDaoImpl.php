@@ -68,6 +68,7 @@ class CouponBatchDaoImpl extends BaseDao implements CouponBatchDao
 
     private function _createSearchQueryBuilder($conditions)
     {   
+        $conditions = array_filter($conditions);
         if (isset($conditions['name'])) {
             $conditions['nameLike'] = "%{$conditions['name']}%";
             unset($conditions['name']);

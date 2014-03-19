@@ -4,6 +4,7 @@ namespace Topxia\Service\Coupon\Dao;
 
 interface CouponDao
 {
+	public function findCouponsByBatchId($batchId, $start, $limit);
 
 	public function searchCoupons($conditions, $orderBy, $start, $limit);
 	
@@ -11,6 +12,6 @@ interface CouponDao
 
     public function deleteCouponsByBatch($id);
 
-    public function addCoupons($coupons);
+    public function addCoupon($coupons);
 
 }

@@ -7,17 +7,19 @@ interface CouponService
 
 	public function findBatchsByIds(array $ids);
 
-	public function searchCoupons (array $conditions, $sort = 'latest', $start, $limit);
+	public function findCouponsByBatchId($batchId, $start, $limit);
+
+	public function searchCoupons (array $conditions, $orderBy, $start, $limit);
 
 	public function searchCouponsCount(array $conditions);
 	
 	public function generateCoupon($couponData);
 
-	public function searchBatchs (array $conditions, $sort = 'latest', $start, $limit);
+	public function searchBatchs (array $conditions, $orderBy, $start, $limit);
 
 	public function searchBatchsCount(array $conditions);
 
 	public function deleteBatch($id);
 
-	public function checkPrefix($prefix);
+	public function checkBatchPrefix($prefix);
 }

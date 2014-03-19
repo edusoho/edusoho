@@ -20,7 +20,7 @@ class CouponBatchController extends BaseController
 
     	$batchs = $this->getCouponService()->searchBatchs(
     		$conditions, 
-    		'latest', 
+    		array('createdTime', 'DESC'), 
     		$paginator->getOffsetCount(),
         	$paginator->getPerPageCount()
         );
@@ -37,34 +37,10 @@ class CouponBatchController extends BaseController
         return $this->createJsonResponse(true);
 	}
 
-    /* AdminBundle->CourseController->chooserAction  */
-    public function courseAction (Request $request)
-    {   
-        $conditions = $request->query->all();
-
-        $count = $this->getCourseService()->searchCourseCount($conditions);
-
-        $paginator = new Paginator($this->get('request'), $count, 20);
-
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
-
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:Coupon:course-modal.html.twig', array(
-            'conditions' => $conditions,
-            'courses' => $courses ,
-            'users' => $users,
-            'categories' => $categories,
-            'paginator' => $paginator
-        ));
-    }
-
 	public function checkPrefixAction(Request $request)
 	{
 		$prefix = $request->query->get('value');
-		$result = $this->getCouponService()->checkPrefix($prefix);
+		$result = $this->getCouponService()->checkBatchPrefix($prefix);
         if ($result == true) {
             $response = array('success' => true, 'message' => '该前缀可以使用');
         } else {
@@ -104,15 +80,11 @@ class CouponBatchController extends BaseController
     {
         $batch = $this->getCouponService()->getBatch($batchId);
 
-        // findCouponsByBacthId($batchId, $start, $limit);
-        $coupons = $this->getCouponService()->searchCoupons(
-            array('batchId' => $batchId),
-            'latest',
+        $coupons = $this->getCouponService()->findCouponsByBatchId(
+            $batchId,
             1,
             $batch['generatedNum']
         );
-
-        $str = "批次,有效期至,优惠码,状态"."\r\n";
 
         $coupons = array_map(function($coupon) {
             $export_coupon['batchId']  = $coupon['batchId'];
@@ -126,23 +98,23 @@ class CouponBatchController extends BaseController
             return implode(',', $export_coupon);
         }, $coupons);
 
-        $str .= implode("\r\n", $coupons);
+        $exportFilename = "couponBatch-".$batchId."-".date("YmdHi").".csv";
 
-        $filename = "couponBatch-".$batchId."-".date("YmdHi").".csv";
+        $titles = array("批次","有效期至","优惠码","状态");
 
-        $this->getLogService()->info('couponBatch_export', 'export', "导出了批次为{$batchId}的优惠码");
+        $exportFile = $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
 
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
+        return $exportFile;
     }
 
     private function createExporteCSVResponse(array $header, array $data, $outputFilename)
-    {
+    {   
+        $header = implode(',', $header);
+
+        $str = $header."\r\n";
+
+        $str .= implode("\r\n", $data);
+
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="'.$outputFilename.'"');
@@ -162,7 +134,7 @@ class CouponBatchController extends BaseController
 
         $coupons = $this->getCouponService()->searchCoupons(
             array('batchId' => $batchId),
-            'latest',
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),  
             $paginator->getPerPageCount()
         );

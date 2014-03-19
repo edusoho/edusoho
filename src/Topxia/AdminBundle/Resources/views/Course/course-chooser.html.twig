@@ -4,7 +4,7 @@
 {% block title %}指定课程{% endblock %}
 {% block body %}
 
-<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_coupon_course') }}" method="get" novalidate>
+<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_course_chooser') }}" method="get" novalidate>
 	<div class="form-group">
 	  <select class="form-control" name="categoryId">
 	    {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
@@ -74,6 +74,5 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
-  <script>app.load('coupon/course')</script>
+  <script>app.load('course/chooser')</script>
 {% endblock %}
-  
