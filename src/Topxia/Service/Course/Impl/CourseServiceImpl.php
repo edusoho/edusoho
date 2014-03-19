@@ -306,6 +306,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields = $this->_filterCourseFields($fields);
+
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		$fields = CourseSerialize::serialize($fields);
@@ -331,10 +332,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'subtitle' => '',
 			'about' => '',
 			'expiryDay' => 0,
+			'showStudentNumType' => 'opened',
 			'categoryId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
-			'tags' => array(),
+			'tags' => '',
 			'price' => 0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
@@ -347,11 +349,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (!empty($fields['tags'])) {
+			$fields['tags'] = explode(',', $fields['tags']);
+			$fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
 			array_walk($fields['tags'], function(&$item, $key) {
-				$item = (int) $item;
+				$item = (int) $item['id'];
 			});
 		}
-
 		return $fields;
 	}
 
@@ -1278,7 +1281,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	        $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
 	    }
 
-		$fields = array('studentNum'=> $this->getCourseStudentCount($courseId));
+		$fields = array(
+			'studentNum'=> $this->getCourseStudentCount($courseId),
+			'income' => $this->getOrderDao()->sumOrderPriceByCourseIdAndStatuses($courseId, array('paid', 'cancelled')),
+		);
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 
 		return $member;
@@ -1504,7 +1510,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function canTakeCourse($course)
 	{
-		$course = empty($course['id']) ? $this->getCourse(intval($course)) : $course;
+		$course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
 		if (empty($course)) {
 			return false;
 		}
@@ -1731,6 +1737,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getLevelService()
     {
     	return $this->createService('User.LevelService');
+    }
+    
+    private function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 
 }

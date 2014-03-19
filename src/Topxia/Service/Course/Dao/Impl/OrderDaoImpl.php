@@ -79,4 +79,16 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('paidTime < :paidEndTime');
     }
 
+    public function sumOrderPriceByCourseIdAndStatuses($courseId, array $statuses)
+    {
+        if(empty($statuses)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($statuses) - 1) . '?';
+        $sql = "SELECT sum(price) FROM {$this->table} WHERE courseId = ? AND status in ({$marks})";
+
+        return $this->getConnection()->fetchColumn($sql, array_merge(array($courseId), $statuses));
+    }
+
 }

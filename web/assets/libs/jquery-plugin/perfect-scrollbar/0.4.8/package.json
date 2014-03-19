@@ -1,7 +1,7 @@
 {
   "family": "jquery-plugin",
   "name": "perfect-scrollbar",
-  "version": "0.4.5",
+  "version": "0.4.8",
   "description": "Tiny but perfect jquery scrollbar plugin.",
   "homepage": "http://noraesae.github.io/perfect-scrollbar/",
   "author": {
@@ -24,7 +24,7 @@
   "spm": {
     "alias": {
       "$": "$",
-      "jquery.mousewheel": "jquery-plugin/mousewheel/3.0.6/mousewheel"
+      "jquery.mousewheel": "jquery-plugin/mousewheel/3.1.9/mousewheel"
     },
     "output": [
       "perfect-scrollbar.js",

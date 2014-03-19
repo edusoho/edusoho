@@ -1,18 +1,39 @@
-define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-debug", "jquery-plugin/mousewheel/3.0.6/mousewheel-debug" ], function(require) {
+define("jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar-debug", [ "$-debug", "jquery-plugin/mousewheel/3.1.9/mousewheel-debug" ], function(require) {
     var jQuery = require("$-debug");
-    require("jquery-plugin/mousewheel/3.0.6/mousewheel-debug");
+    require("jquery-plugin/mousewheel/3.1.9/mousewheel-debug");
     /* Copyright (c) 2012 HyeonJe Jun (http://github.com/noraesae)
    * Licensed under the MIT License
    */
-    (function($) {
+    "use strict";
+    (function(factory) {
+        if (typeof define === "function" && define.amd) {
+            // AMD. Register as an anonymous module.
+            define([ "jquery" ], factory);
+        } else {
+            // Browser globals
+            factory(jQuery);
+        }
+    })(function($) {
         // The default settings for the plugin
         var defaultSettings = {
             wheelSpeed: 10,
             wheelPropagation: false,
             minScrollbarLength: null,
             useBothWheelAxes: false,
-            useKeyboard: true
+            useKeyboard: true,
+            suppressScrollX: false,
+            suppressScrollY: false,
+            scrollXMarginOffset: 0,
+            scrollYMarginOffset: 0
         };
+        var getEventClassName = function() {
+            var incrementingId = 0;
+            return function() {
+                var id = incrementingId;
+                incrementingId += 1;
+                return ".perfect-scrollbar-" + id;
+            };
+        }();
         $.fn.perfectScrollbar = function(suppliedSettings, option) {
             return this.each(function() {
                 // Use the default settings
@@ -43,15 +64,31 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                 // Or generate new perfectScrollbar
                 // Set class to the container
                 $this.addClass("ps-container");
-                var $scrollbarXRail = $("<div class='ps-scrollbar-x-rail'></div>").appendTo($this), $scrollbarYRail = $("<div class='ps-scrollbar-y-rail'></div>").appendTo($this), $scrollbarX = $("<div class='ps-scrollbar-x'></div>").appendTo($scrollbarXRail), $scrollbarY = $("<div class='ps-scrollbar-y'></div>").appendTo($scrollbarYRail), scrollbarXActive, scrollbarYActive, containerWidth, containerHeight, contentWidth, contentHeight, scrollbarXWidth, scrollbarXLeft, scrollbarXBottom = parseInt($scrollbarXRail.css("bottom"), 10), scrollbarYHeight, scrollbarYTop, scrollbarYRight = parseInt($scrollbarYRail.css("right"), 10);
-                var updateContentScrollTop = function() {
+                var $scrollbarXRail = $("<div class='ps-scrollbar-x-rail'></div>").appendTo($this), $scrollbarYRail = $("<div class='ps-scrollbar-y-rail'></div>").appendTo($this), $scrollbarX = $("<div class='ps-scrollbar-x'></div>").appendTo($scrollbarXRail), $scrollbarY = $("<div class='ps-scrollbar-y'></div>").appendTo($scrollbarYRail), scrollbarXActive, scrollbarYActive, containerWidth, containerHeight, contentWidth, contentHeight, scrollbarXWidth, scrollbarXLeft, scrollbarXBottom = parseInt($scrollbarXRail.css("bottom"), 10), scrollbarYHeight, scrollbarYTop, scrollbarYRight = parseInt($scrollbarYRail.css("right"), 10), eventClassName = getEventClassName();
+                var updateContentScrollTop = function(currentTop, deltaY) {
+                    var newTop = currentTop + deltaY, maxTop = containerHeight - scrollbarYHeight;
+                    if (newTop < 0) {
+                        scrollbarYTop = 0;
+                    } else if (newTop > maxTop) {
+                        scrollbarYTop = maxTop;
+                    } else {
+                        scrollbarYTop = newTop;
+                    }
                     var scrollTop = parseInt(scrollbarYTop * (contentHeight - containerHeight) / (containerHeight - scrollbarYHeight), 10);
                     $this.scrollTop(scrollTop);
                     $scrollbarXRail.css({
                         bottom: scrollbarXBottom - scrollTop
                     });
                 };
-                var updateContentScrollLeft = function() {
+                var updateContentScrollLeft = function(currentLeft, deltaX) {
+                    var newLeft = currentLeft + deltaX, maxLeft = containerWidth - scrollbarXWidth;
+                    if (newLeft < 0) {
+                        scrollbarXLeft = 0;
+                    } else if (newLeft > maxLeft) {
+                        scrollbarXLeft = maxLeft;
+                    } else {
+                        scrollbarXLeft = newLeft;
+                    }
                     var scrollLeft = parseInt(scrollbarXLeft * (contentWidth - containerWidth) / (containerWidth - scrollbarXWidth), 10);
                     $this.scrollLeft(scrollLeft);
                     $scrollbarYRail.css({
@@ -68,12 +105,14 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                     $scrollbarXRail.css({
                         left: $this.scrollLeft(),
                         bottom: scrollbarXBottom - $this.scrollTop(),
-                        width: containerWidth
+                        width: containerWidth,
+                        display: scrollbarXActive ? "inherit" : "none"
                     });
                     $scrollbarYRail.css({
                         top: $this.scrollTop(),
                         right: scrollbarYRight - $this.scrollLeft(),
-                        height: containerHeight
+                        height: containerHeight,
+                        display: scrollbarYActive ? "inherit" : "none"
                     });
                     $scrollbarX.css({
                         left: scrollbarXLeft,
@@ -89,7 +128,7 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                     containerHeight = $this.height();
                     contentWidth = $this.prop("scrollWidth");
                     contentHeight = $this.prop("scrollHeight");
-                    if (containerWidth < contentWidth) {
+                    if (!settings.suppressScrollX && containerWidth + settings.scrollXMarginOffset < contentWidth) {
                         scrollbarXActive = true;
                         scrollbarXWidth = getSettingsAdjustedThumbSize(parseInt(containerWidth * containerWidth / contentWidth, 10));
                         scrollbarXLeft = parseInt($this.scrollLeft() * (containerWidth - scrollbarXWidth) / (contentWidth - containerWidth), 10);
@@ -99,7 +138,7 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         scrollbarXLeft = 0;
                         $this.scrollLeft(0);
                     }
-                    if (containerHeight < contentHeight) {
+                    if (!settings.suppressScrollY && containerHeight + settings.scrollYMarginOffset < contentHeight) {
                         scrollbarYActive = true;
                         scrollbarYHeight = getSettingsAdjustedThumbSize(parseInt(containerHeight * containerHeight / contentHeight, 10));
                         scrollbarYTop = parseInt($this.scrollTop() * (containerHeight - scrollbarYHeight) / (contentHeight - containerHeight), 10);
@@ -117,56 +156,23 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                     }
                     updateScrollbarCss();
                 };
-                var moveBarX = function(currentLeft, deltaX) {
-                    var newLeft = currentLeft + deltaX, maxLeft = containerWidth - scrollbarXWidth;
-                    if (newLeft < 0) {
-                        scrollbarXLeft = 0;
-                    } else if (newLeft > maxLeft) {
-                        scrollbarXLeft = maxLeft;
-                    } else {
-                        scrollbarXLeft = newLeft;
-                    }
-                    $scrollbarXRail.css({
-                        left: $this.scrollLeft()
-                    });
-                    $scrollbarX.css({
-                        left: scrollbarXLeft
-                    });
-                };
-                var moveBarY = function(currentTop, deltaY) {
-                    var newTop = currentTop + deltaY, maxTop = containerHeight - scrollbarYHeight;
-                    if (newTop < 0) {
-                        scrollbarYTop = 0;
-                    } else if (newTop > maxTop) {
-                        scrollbarYTop = maxTop;
-                    } else {
-                        scrollbarYTop = newTop;
-                    }
-                    $scrollbarYRail.css({
-                        top: $this.scrollTop()
-                    });
-                    $scrollbarY.css({
-                        top: scrollbarYTop
-                    });
-                };
                 var bindMouseScrollXHandler = function() {
                     var currentLeft, currentPageX;
-                    $scrollbarX.bind("mousedown.perfect-scrollbar", function(e) {
+                    $scrollbarX.bind("mousedown" + eventClassName, function(e) {
                         currentPageX = e.pageX;
                         currentLeft = $scrollbarX.position().left;
                         $scrollbarXRail.addClass("in-scrolling");
                         e.stopPropagation();
                         e.preventDefault();
                     });
-                    $(document).bind("mousemove.perfect-scrollbar", function(e) {
+                    $(document).bind("mousemove" + eventClassName, function(e) {
                         if ($scrollbarXRail.hasClass("in-scrolling")) {
-                            updateContentScrollLeft();
-                            moveBarX(currentLeft, e.pageX - currentPageX);
+                            updateContentScrollLeft(currentLeft, e.pageX - currentPageX);
                             e.stopPropagation();
                             e.preventDefault();
                         }
                     });
-                    $(document).bind("mouseup.perfect-scrollbar", function(e) {
+                    $(document).bind("mouseup" + eventClassName, function(e) {
                         if ($scrollbarXRail.hasClass("in-scrolling")) {
                             $scrollbarXRail.removeClass("in-scrolling");
                         }
@@ -175,47 +181,53 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                 };
                 var bindMouseScrollYHandler = function() {
                     var currentTop, currentPageY;
-                    $scrollbarY.bind("mousedown.perfect-scrollbar", function(e) {
+                    $scrollbarY.bind("mousedown" + eventClassName, function(e) {
                         currentPageY = e.pageY;
                         currentTop = $scrollbarY.position().top;
                         $scrollbarYRail.addClass("in-scrolling");
                         e.stopPropagation();
                         e.preventDefault();
                     });
-                    $(document).bind("mousemove.perfect-scrollbar", function(e) {
+                    $(document).bind("mousemove" + eventClassName, function(e) {
                         if ($scrollbarYRail.hasClass("in-scrolling")) {
-                            updateContentScrollTop();
-                            moveBarY(currentTop, e.pageY - currentPageY);
+                            updateContentScrollTop(currentTop, e.pageY - currentPageY);
                             e.stopPropagation();
                             e.preventDefault();
                         }
                     });
-                    $(document).bind("mouseup.perfect-scrollbar", function(e) {
+                    $(document).bind("mouseup" + eventClassName, function(e) {
                         if ($scrollbarYRail.hasClass("in-scrolling")) {
                             $scrollbarYRail.removeClass("in-scrolling");
                         }
                     });
                     currentTop = currentPageY = null;
                 };
+                // check if the default scrolling should be prevented.
+                var shouldPreventDefault = function(deltaX, deltaY) {
+                    var scrollTop = $this.scrollTop();
+                    if (deltaX === 0) {
+                        if (!scrollbarYActive) {
+                            return false;
+                        }
+                        if (scrollTop === 0 && deltaY > 0 || scrollTop >= contentHeight - containerHeight && deltaY < 0) {
+                            return !settings.wheelPropagation;
+                        }
+                    }
+                    var scrollLeft = $this.scrollLeft();
+                    if (deltaY === 0) {
+                        if (!scrollbarXActive) {
+                            return false;
+                        }
+                        if (scrollLeft === 0 && deltaX < 0 || scrollLeft >= contentWidth - containerWidth && deltaX > 0) {
+                            return !settings.wheelPropagation;
+                        }
+                    }
+                    return true;
+                };
                 // bind handlers
                 var bindMouseWheelHandler = function() {
-                    var shouldPreventDefault = function(deltaX, deltaY) {
-                        var scrollTop = $this.scrollTop();
-                        if (scrollTop === 0 && deltaY > 0 && deltaX === 0) {
-                            return !settings.wheelPropagation;
-                        } else if (scrollTop >= contentHeight - containerHeight && deltaY < 0 && deltaX === 0) {
-                            return !settings.wheelPropagation;
-                        }
-                        var scrollLeft = $this.scrollLeft();
-                        if (scrollLeft === 0 && deltaX < 0 && deltaY === 0) {
-                            return !settings.wheelPropagation;
-                        } else if (scrollLeft >= contentWidth - containerWidth && deltaX > 0 && deltaY === 0) {
-                            return !settings.wheelPropagation;
-                        }
-                        return true;
-                    };
                     var shouldPrevent = false;
-                    $this.bind("mousewheel.perfect-scrollbar", function(e, delta, deltaX, deltaY) {
+                    $this.bind("mousewheel" + eventClassName, function(e, delta, deltaX, deltaY) {
                         if (!settings.useBothWheelAxes) {
                             // deltaX will only be used for horizontal scrolling and deltaY will
                             // only be used for vertical scrolling - this is the default
@@ -246,37 +258,22 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         }
                     });
                     // fix Firefox scroll problem
-                    $this.bind("MozMousePixelScroll.perfect-scrollbar", function(e) {
+                    $this.bind("MozMousePixelScroll" + eventClassName, function(e) {
                         if (shouldPrevent) {
                             e.preventDefault();
                         }
                     });
                 };
                 var bindKeyboardHandler = function() {
-                    var shouldPreventDefault = function(deltaX, deltaY) {
-                        var scrollTop = $this.scrollTop();
-                        if (scrollTop === 0 && deltaY > 0 && deltaX === 0) {
-                            return false;
-                        } else if (scrollTop >= contentHeight - containerHeight && deltaY < 0 && deltaX === 0) {
-                            return false;
-                        }
-                        var scrollLeft = $this.scrollLeft();
-                        if (scrollLeft === 0 && deltaX < 0 && deltaY === 0) {
-                            return false;
-                        } else if (scrollLeft >= contentWidth - containerWidth && deltaX > 0 && deltaY === 0) {
-                            return false;
-                        }
-                        return true;
-                    };
                     var hovered = false;
-                    $this.bind("mouseenter.perfect-scrollbar", function(e) {
+                    $this.bind("mouseenter" + eventClassName, function(e) {
                         hovered = true;
                     });
-                    $this.bind("mouseleave.perfect-scrollbar", function(e) {
+                    $this.bind("mouseleave" + eventClassName, function(e) {
                         hovered = false;
                     });
                     var shouldPrevent = false;
-                    $(document).bind("keydown.perfect-scrollbar", function(e) {
+                    $(document).bind("keydown" + eventClassName, function(e) {
                         if (!hovered) {
                             return;
                         }
@@ -302,13 +299,33 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                             deltaY = -3;
                             break;
 
+                          case 33:
+                            // page up
+                            deltaY = 9;
+                            break;
+
+                          case 32:
+                          // space bar
+                            case 34:
+                            // page down
+                            deltaY = -9;
+                            break;
+
+                          case 35:
+                            // end
+                            deltaY = -containerHeight;
+                            break;
+
+                          case 36:
+                            // home
+                            deltaY = containerHeight;
+                            break;
+
                           default:
                             return;
                         }
                         $this.scrollTop($this.scrollTop() - deltaY * settings.wheelSpeed);
                         $this.scrollLeft($this.scrollLeft() + deltaX * settings.wheelSpeed);
-                        // update bar position
-                        updateBarSizeAndPosition();
                         shouldPrevent = shouldPreventDefault(deltaX, deltaY);
                         if (shouldPrevent) {
                             e.preventDefault();
@@ -319,8 +336,8 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                     var stopPropagation = function(e) {
                         e.stopPropagation();
                     };
-                    $scrollbarY.bind("click.perfect-scrollbar", stopPropagation);
-                    $scrollbarYRail.bind("click.perfect-scrollbar", function(e) {
+                    $scrollbarY.bind("click" + eventClassName, stopPropagation);
+                    $scrollbarYRail.bind("click" + eventClassName, function(e) {
                         var halfOfScrollbarLength = parseInt(scrollbarYHeight / 2, 10), positionTop = e.pageY - $scrollbarYRail.offset().top - halfOfScrollbarLength, maxPositionTop = containerHeight - scrollbarYHeight, positionRatio = positionTop / maxPositionTop;
                         if (positionRatio < 0) {
                             positionRatio = 0;
@@ -328,11 +345,9 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                             positionRatio = 1;
                         }
                         $this.scrollTop((contentHeight - containerHeight) * positionRatio);
-                        // update bar position
-                        updateBarSizeAndPosition();
                     });
-                    $scrollbarX.bind("click.perfect-scrollbar", stopPropagation);
-                    $scrollbarXRail.bind("click.perfect-scrollbar", function(e) {
+                    $scrollbarX.bind("click" + eventClassName, stopPropagation);
+                    $scrollbarXRail.bind("click" + eventClassName, function(e) {
                         var halfOfScrollbarLength = parseInt(scrollbarXWidth / 2, 10), positionLeft = e.pageX - $scrollbarXRail.offset().left - halfOfScrollbarLength, maxPositionLeft = containerWidth - scrollbarXWidth, positionRatio = positionLeft / maxPositionLeft;
                         if (positionRatio < 0) {
                             positionRatio = 0;
@@ -340,8 +355,6 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                             positionRatio = 1;
                         }
                         $this.scrollLeft((contentWidth - containerWidth) * positionRatio);
-                        // update bar position
-                        updateBarSizeAndPosition();
                     });
                 };
                 // bind mobile touch handler
@@ -353,13 +366,13 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         updateBarSizeAndPosition();
                     };
                     var startCoords = {}, startTime = 0, speed = {}, breakingProcess = null, inGlobalTouch = false;
-                    $(window).bind("touchstart.perfect-scrollbar", function(e) {
+                    $(window).bind("touchstart" + eventClassName, function(e) {
                         inGlobalTouch = true;
                     });
-                    $(window).bind("touchend.perfect-scrollbar", function(e) {
+                    $(window).bind("touchend" + eventClassName, function(e) {
                         inGlobalTouch = false;
                     });
-                    $this.bind("touchstart.perfect-scrollbar", function(e) {
+                    $this.bind("touchstart" + eventClassName, function(e) {
                         var touch = e.originalEvent.targetTouches[0];
                         startCoords.pageX = touch.pageX;
                         startCoords.pageY = touch.pageY;
@@ -369,7 +382,7 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         }
                         e.stopPropagation();
                     });
-                    $this.bind("touchmove.perfect-scrollbar", function(e) {
+                    $this.bind("touchmove" + eventClassName, function(e) {
                         if (!inGlobalTouch && e.originalEvent.targetTouches.length === 1) {
                             var touch = e.originalEvent.targetTouches[0];
                             var currentCoords = {};
@@ -385,7 +398,7 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                             e.preventDefault();
                         }
                     });
-                    $this.bind("touchend.perfect-scrollbar", function(e) {
+                    $this.bind("touchend" + eventClassName, function(e) {
                         clearInterval(breakingProcess);
                         breakingProcess = setInterval(function() {
                             if (Math.abs(speed.x) < .01 && Math.abs(speed.y) < .01) {
@@ -398,10 +411,15 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         }, 10);
                     });
                 };
+                var bindScrollHandler = function() {
+                    $this.bind("scroll" + eventClassName, function(e) {
+                        updateBarSizeAndPosition();
+                    });
+                };
                 var destroy = function() {
-                    $this.unbind(".perfect-scrollbar");
-                    $(window).unbind(".perfect-scrollbar");
-                    $(document).unbind(".perfect-scrollbar");
+                    $this.unbind(eventClassName);
+                    $(window).unbind(eventClassName);
+                    $(document).unbind(eventClassName);
                     $this.data("perfect-scrollbar", null);
                     $this.data("perfect-scrollbar-update", null);
                     $this.data("perfect-scrollbar-destroy", null);
@@ -421,11 +439,11 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         var mouseleave = function() {
                             $(this).removeClass("hover");
                         };
-                        $this.bind("mouseenter.perfect-scrollbar", mouseenter).bind("mouseleave.perfect-scrollbar", mouseleave);
-                        $scrollbarXRail.bind("mouseenter.perfect-scrollbar", mouseenter).bind("mouseleave.perfect-scrollbar", mouseleave);
-                        $scrollbarYRail.bind("mouseenter.perfect-scrollbar", mouseenter).bind("mouseleave.perfect-scrollbar", mouseleave);
-                        $scrollbarX.bind("mouseenter.perfect-scrollbar", mouseenter).bind("mouseleave.perfect-scrollbar", mouseleave);
-                        $scrollbarY.bind("mouseenter.perfect-scrollbar", mouseenter).bind("mouseleave.perfect-scrollbar", mouseleave);
+                        $this.bind("mouseenter" + eventClassName, mouseenter).bind("mouseleave" + eventClassName, mouseleave);
+                        $scrollbarXRail.bind("mouseenter" + eventClassName, mouseenter).bind("mouseleave" + eventClassName, mouseleave);
+                        $scrollbarYRail.bind("mouseenter" + eventClassName, mouseenter).bind("mouseleave" + eventClassName, mouseleave);
+                        $scrollbarX.bind("mouseenter" + eventClassName, mouseenter).bind("mouseleave" + eventClassName, mouseleave);
+                        $scrollbarY.bind("mouseenter" + eventClassName, mouseenter).bind("mouseleave" + eventClassName, mouseleave);
                     };
                     var fixIe6ScrollbarPosition = function() {
                         updateScrollbarCss = function() {
@@ -442,19 +460,6 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                             $scrollbarX.hide().show();
                             $scrollbarY.hide().show();
                         };
-                        updateContentScrollTop = function() {
-                            var scrollTop = parseInt(scrollbarYTop * contentHeight / containerHeight, 10);
-                            $this.scrollTop(scrollTop);
-                            $scrollbarX.css({
-                                bottom: scrollbarXBottom
-                            });
-                            $scrollbarX.hide().show();
-                        };
-                        updateContentScrollLeft = function() {
-                            var scrollLeft = parseInt(scrollbarXLeft * contentWidth / containerWidth, 10);
-                            $this.scrollLeft(scrollLeft);
-                            $scrollbarY.hide().show();
-                        };
                     };
                     if (version === 6) {
                         bindHoverHandlers();
@@ -469,6 +474,7 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                         ieSupport(parseInt(ieMatch[2], 10));
                     }
                     updateBarSizeAndPosition();
+                    bindScrollHandler();
                     bindMouseScrollXHandler();
                     bindMouseScrollYHandler();
                     bindRailClickHandler();
@@ -490,5 +496,5 @@ define("jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug", [ "$-deb
                 return $this;
             });
         };
-    })(jQuery);
+    });
 });
