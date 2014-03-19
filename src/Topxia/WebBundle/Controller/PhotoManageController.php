@@ -75,6 +75,11 @@ class PhotoManageController extends BaseController
         if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
 
+             if (!FileToolkit::isImageFile($file)) {
+                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+                }
+
+
             $filenamePrefix = "photo_{$photo['id']}_";
             $hash = substr(md5($filenamePrefix . time()), -8);
             $filename = $filenamePrefix . $hash . '.' . $file->getClientOriginalExtension();

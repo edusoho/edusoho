@@ -7,6 +7,7 @@ use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -109,6 +110,11 @@ class ActivityManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($id);
         if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
+
+             if (!FileToolkit::isImageFile($file)) {
+                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+                }
+
 
             $filenamePrefix = "activity_{$activity['id']}_";
             $hash = substr(md5($filenamePrefix . time()), -8);
