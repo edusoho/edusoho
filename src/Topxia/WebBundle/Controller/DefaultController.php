@@ -15,27 +15,7 @@ class DefaultController extends BaseController
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
         //return $this->forward("TopxiaWebBundle:Default:index{$template}");
         //下一期公开课
-
-        $mtookeen = $request->query->get('mu');
-        $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
-
-        if (empty($mTookeenCookie)){           
-
-            if(!empty($mtookeen)){
-
-                $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($mtookeen);
-
-                if(!empty( $linksale) ){
-                        
-                    setcookie("mu",  $mtookeen, time()+3600*24*$linksale['adCommissionDay'],'/');
-
-                }
-
-               
-            }
-          
-        }
-
+     
 
 
         $currentuser=$this->getCurrentUser();

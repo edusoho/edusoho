@@ -1312,8 +1312,12 @@ mysale_link_course_reduce:
     pattern: /mysale/link/course/{id}/reduce
     defaults: {_controller:TopxiaWebBundle:MySale:linkCourseReduce}
 
+mysale_link_web_list:
+    pattern: /mysale/link/web/list
+    defaults: {_controller:TopxiaWebBundle:MySale:linkWebList}
+
 mysale_link_web_link:
-    pattern: /mysale/link/web/
+    pattern: /mysale/link/web/link
     defaults: {_controller:TopxiaWebBundle:MySale:linkWebLink}
 
 mysale_offsale_course_list:

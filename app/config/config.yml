@@ -113,11 +113,11 @@ services:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority:255 }
 
 
-    kernel.listener.request_all_listener:
-        class: Topxia\WebBundle\Listener\RequestAllListener
+    kernel.listener.linksale_tooken_listener:
+        class: Topxia\WebBundle\Listener\LinkSaleTookenListener
         arguments:    [@service_container]
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequestAll, priority:255 }
+            - { name: kernel.event_listener, event: kernel.request, method: onLinkSaleTookenRequest, priority:255 }
 
     kernel.listener.kernel_request_listener:
         class: Topxia\WebBundle\Listener\KernelRequestListener

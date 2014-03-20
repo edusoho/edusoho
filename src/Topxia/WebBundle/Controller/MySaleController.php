@@ -190,6 +190,54 @@ class MySaleController extends BaseController
        
     }
 
+
+    public function linkWebListAction(Request $request){
+
+        $user = $this->getCurrentUser();
+
+        $conditions = $request->query->all();
+
+        $conditions['partnerId'] = $user['id'];
+
+        $conditions['saleType'] = 'linksale-web';
+      
+
+
+        $count = $this->getLinkSaleService()->searchLinkSaleCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $linksales = $this->getLinkSaleService()->searchLinkSales($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        $mTookeens = ArrayToolkit::column($linksales,"mTookeen");
+
+        $orders = $this->getOrderService()->findOrdersBymTookeens($mTookeens);
+
+        $userIds = ArrayToolkit::column($orders,'userId');
+ 
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        
+        $orderss = $this->getOrderService()->findOrderssBymTookeens($mTookeens);
+
+
+        $partnerIds = ArrayToolkit::column($linksales,"partnerId");
+
+        $partners = $this->getUserService()->findUsersByIds($partnerIds);
+
+        return $this->render('TopxiaWebBundle:Sale:link-web-list.html.twig', array(
+            'conditions' => $conditions,
+            'linksales' => $linksales ,
+            'orderss' => $orderss,
+            'users' => $users,
+            'profiles' => $profiles,
+            'partners'=> $partners,
+            'paginator' => $paginator
+        ));
+
+    }
+
     public function linkWebLinkAction(Request $request)
     {
         $user = $this->getCurrentUser();
