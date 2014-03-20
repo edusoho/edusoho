@@ -29,7 +29,7 @@ interface QuestionService
      *   部分正确： 返回 array('status' => 'partRight', 'percentage' => '50')，percentage为正确的比例
      *   错误： 返回 array('status' => 'wrong')
      *   未回答： 返回 array('status' => 'noAnswer')
-     *   无法判断： 返回 array('status' => 'unableJudge')
+     *   无法判断： 返回 array('status' => 'none')
      *   题目不存在：返回 array('status' => 'notFound')
      * @param integer $id 题目ID
      * @param mixed $answer 题目的回答
