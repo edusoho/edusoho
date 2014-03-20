@@ -6,42 +6,27 @@
   <td class="text-muted text-sm text-break">{{ linksale.tUrl }}</td>
   
   
-
-
    <td>
      {{ linksale.adCommission}}%
     
    </td>
 
- <td>
-   
+  <td>   
      <span class="text-muted text-sm text-break">{{ linksale.adCommissionDay }}天</span>
-   </td>
+  </td>
   
 
 
-  <td class="text-muted text-sm text-break">{{ linksale.prodName }}</td>
- 
-
- 
- 
+  <td class="text-muted text-sm text-break">{{ linksale.linkName }}</td>
  
 
   <td class="mz pz">
     
-    {% for order in orders %}
-    {% set buyer = users[order.userId]|default(null) %}
-    <p class="mz phz pts {% if not loop.first %} h-divider {% endif %}">
+    
+        <button id="copy-button" value="abc">点击复制该链接</button>
+        <div id="copy"></div>
       
-       <span class="text-muted text-sm" >{{ admin_macro.user_link(buyer) }}  
-     {{ order.createdTime|date('Y-n-d H:i') }}
-     {{ dict_text('orderStatus:html', order.status) }} </span>
 
-      <a href="javascript:;" class=" text-sm"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_order_detail', {id:order.id}) }}">查看详细</a>
-       
-    </p>
-   
-   {% endfor %}
   </td>
 
  
