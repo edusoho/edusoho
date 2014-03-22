@@ -120,6 +120,8 @@ class CommissionDaoImpl extends BaseDao implements CommissionDao
             ->andWhere('saleTookeen LIKE :saleTookeenLike')
 
             ->andWhere('commission  >=  :commission')
+
+            ->andWhere('orderPrice  >=  :orderPrice')
         
             ->andWhere('status = :status')
             ->andWhere('paidTime >= :startTimeGreaterThan')
