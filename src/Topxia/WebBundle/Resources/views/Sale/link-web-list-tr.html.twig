@@ -1,6 +1,6 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="offsale-table-tr-{{ linksale.id }}" data-role="item">
-  <td><input value="{{linksale.id}}" type="checkbox"  data-role="batch-item" ></td>
+ 
 
   
   <td class="text-muted text-sm text-break">{{ linksale.tUrl }}</td>
@@ -20,11 +20,11 @@
   <td class="text-muted text-sm text-break">{{ linksale.linkName }}</td>
  
 
-  <td class="mz pz">
+  <td class="mvl">
     
     
-        <button id="copy-button" value="abc">点击复制该链接</button>
-        <div id="copy"></div>
+        <button id="copy-button" class="copy-button" value="abc">点击复制该链接</button>
+        <div id="copy" class="copy"></div>
       
 
   </td>

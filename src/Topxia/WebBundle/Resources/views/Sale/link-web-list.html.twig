@@ -22,7 +22,7 @@
   <div class="form-group">
     <input class="form-control" type="text" placeholder="推广链接" name="tUrl" value="{{ app.request.get('tUrl') }}"></div>
   <div class="form-group">
-    <input class="form-control" type="text" placeholder="适用商品" name="prodName" value="{{ app.request.get('prodName') }}"></div>
+    <input class="form-control" type="text" placeholder="链接描述" name="linkName" value="{{ app.request.get('linkName') }}"></div>
 
 
   <button class="btn btn-primary">搜索</button>
@@ -32,8 +32,7 @@
   <table class="table table-striped table-hover" id="linksale-table">
     <thead>
       <tr >
-        <th width="2%">
-          <input type="checkbox" data-role="batch-select"></th>
+        
        
         <th width="30%">推广链接</th>
        
@@ -63,11 +62,7 @@
     </tbody>
   </table>
 
-  <div>
-    <label class="checkbox-inline">
-      <input type="checkbox" data-role="batch-select">全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="推广链接" data-url="{{ path('admin_sale_linksale_delete_batch') }}">删除</button>
-  </div>
+  
 </div>
 
   </div>
