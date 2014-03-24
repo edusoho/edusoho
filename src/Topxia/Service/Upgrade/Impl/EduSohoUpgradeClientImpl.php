@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\Upgrade\Impl;
 
-use Topxia\Service\Upgrade\EduSohoUpgradeService;
+use Topxia\Service\Upgrade\EduSohoUpgradeClient;
 use Topxia\Service\Common\BaseService;
 
-class EduSohoUpgradeServiceImpl extends BaseService implements EduSohoUpgradeService 
+class EduSohoUpgradeClientImpl extends BaseService implements EduSohoUpgradeClient 
 {
 	CONST BASE_URL = 'http://www.edusoho.com/';
 	CONST CHECK_URL = 'upgrade/check';

@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Upgrade;
 
-interface EduSohoUpgradeService 
+interface EduSohoUpgradeClient 
 {
 	public function check($packages);
 	public function commit($id,$result);
