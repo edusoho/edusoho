@@ -500,6 +500,18 @@ admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
+admin_app_installed:
+    pattern:  /app/installed
+    defaults: { _controller: TopxiaAdminBundle:App:installed }
+
+admin_app_updates:
+    pattern:  /app/updates
+    defaults: { _controller: TopxiaAdminBundle:App:updates }
+
+admin_app_logs:
+    pattern:  /app/logs
+    defaults: { _controller: TopxiaAdminBundle:App:logs }
+
 admin_upgrade:
     pattern:  /upgrade
     defaults: { _controller: TopxiaAdminBundle:Upgrade:index }
