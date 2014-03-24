@@ -459,6 +459,10 @@ admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
+admin_setting_developer:
+    pattern:  /setting/developer
+    defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+
 admin_optimize:
     pattern:  /optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }

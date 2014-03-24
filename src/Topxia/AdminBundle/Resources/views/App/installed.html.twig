@@ -20,21 +20,22 @@
       </tr>
     </thead>
     <tbody>
+      {% for app in apps %}
       <tr>
         <td>
-          <div><a href="#">会员系统</a> <strong class="text-info">2.1.1</strong></div>
-          <div class="">会员系统会员系统，会员系统会员系统，会员系统会员系统。</div>
-          <div class="text-muted"><small>最后更新： 2013-12-12</small></div>
+          <div><strong class="text-primary">{{ app.name }} - </strong><span class="text-info">{{ app.version }}</span></div>
+          <div class="">{{ app.description|plain_text(100) }}</div>
+          <div class="text-muted"><small>最后更新： {{ app.updatedTime|date('Y-m-d') }}</small></div>
         </td>
         <td>
-          <a href="#">EduSoho官方</a>
+          {{ app.developerName }}
         </td>
         <td>
           <a href="#" class="btn btn-primary">管理</a>
         </td>
       </tr>
+      {% endfor %}
     </tbody>
   </table>
-
 
 {% endblock %}
