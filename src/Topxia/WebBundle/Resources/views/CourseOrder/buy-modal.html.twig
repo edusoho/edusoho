@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}购买课程{% endblock %}
+{% block title %}{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
   
   {% if app.request.query.get('preview') %}
