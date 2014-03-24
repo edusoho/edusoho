@@ -7,34 +7,59 @@
 <div class="es-row-wrap container-gap">
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>会员专区</h1></div>
+      <div class="page-header"><h1>会员频道</h1></div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-3">
       {% if app.user %}
         {% if app.user.level > 0 %} 
-          {% for userlevel in userlevels %} 
-            {% if app.user.level == userlevel.id %}
-            <div class="well">我的会员等级:<span class="text-danger">{{ userlevel.name }}</span>
-              {% if not app.user.levelDeadline == 0 %}
-              <span>会员期限： <strong class="text-success">{{ app.user.levelDeadline|date('Y-m-d H:i') }} 剩余{{ app.user.levelDeadline|remain_time }}</strong></span></div>
-              {% else %}
-              <span class="text-primary text-center">会员已到期,请充值续费</span></div>
+          {% for level in levels %} 
+            {% if app.user.level == level.id %}
+              <div class="media">
+                <a href="{{ path('user_show', {id:app.user.id}) }}" class="pull-left">
+                  <img class="author-picture" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
+                </a>
+                <div class="media-body">
+                  <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
+                  <p><span class="glyphicon glyphicon-user"></span>{{ level.name }}</p>
+                  <p class="text-danger">{{ app.user.levelDeadline|date('Y-m-d') }}到期</p>
+                  {% if not app.user.levelDeadline == 0 %}
+                    <div class="well well-sm">会员期限： <strong class="text-success">{{ app.user.levelDeadline|date('Y-m-d H:i') }} 剩余{{ app.user.levelDeadline|remain_time }}</strong></div>
+                  {% else %}
+                    <div class="well well-sm" class="text-primary text-center">会员已到期</div>
+                </div>
+              </div>
               {% endif %}
             {% endif %}
           {% endfor %}
         {% endif %}
       {% else %}
-        <h3 class="text-danger text-center">请先登录后购买</h3>
+        <div class="well well-sm text-danger">请先登录后再购买会员！</div>
       {% endif %}
-
-      <ul class="nav nav-pills nav-stacked list-inline">
-        <li {% if main_nav == 'buyMember' %} class="active"{% endif %} style="position: relative;display: inline-block;"><a href="{{ path('member_show') }}">购买会员</a></li>
-        <li {% if main_nav == 'memberCourses' %} class="active"{% endif %} style="position: relative;display: inline-block;"><a href="{{ path('member_course_show',{ id:1|default(null) }) }}">会员课程</a></li>
-      </ul>
-    {% block main_body %}{% endblock %}
+      <div class="es-box">
+        <div class="es-box-heading"><h2>最新会员</h2></div>
+        <ul class="media-list lastest-member-list">
+          <li class="media">
+            <a href="/user/52" class="member-picture-link">
+              <img class="member-picture" src="/assets/img/default/avatar.png?2.3.3" class="media-object">
+            </a>
+            <div class="media-body">
+              <h5 class="media-heading"><a class="member-nickname ellipsis" href="/course/1">会员1</a></h5>
+              <span class="member-title ellipsis">首席执行官</span>
+            </div>
+          </li>
+          <li class="media">
+            <a href="/user/52" class="member-picture-link">
+              <img class="member-picture" src="/assets/img/default/avatar.png?2.3.3" class="media-object">
+            </a>
+            <div class="media-body">
+              <h5 class="media-heading"><a class="member-nickname ellipsis" href="/course/1">会员1</a></h5>
+              <span class="member-title ellipsis">首席执行官</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
+    {% block main_body %}{% endblock %}
   </div>
 </div>
 

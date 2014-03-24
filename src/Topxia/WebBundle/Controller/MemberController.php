@@ -7,13 +7,13 @@ use Topxia\Common\Paginator;
 
 class MemberController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {	
     	$conditions = array();
-    	$userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
+    	$levels = $this->getLevelService()->searchLevels($conditions,0,100);
     	$courses = $this->getCourseService()->findCoursesByHaveUserLevelIds(0, 100);
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
-        	'userlevels' => $userlevels,
+        	'levels' => $levels,
             'courses' => $courses
         ));
     }
