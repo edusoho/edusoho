@@ -9,12 +9,21 @@ class MemberController extends BaseController
 {
     public function indexAction(Request $request)
     {	
+
+        $currentUser = $this->getCurrentUser();
     	$conditions = array();
+        $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
+        $memberIds = ArrayToolkit::column($members,'userId');
+        $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
     	$levels = $this->getLevelService()->searchLevels($conditions,0,100);
     	$courses = $this->getCourseService()->findCoursesByHaveUserLevelIds(0, 100);
+        $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
         	'levels' => $levels,
-            'courses' => $courses
+            'courses' => $courses,
+            'latestMembers' => $latestMembers,
+            'members'=>$members,
+            'member'=>$member
         ));
     }
 
@@ -50,6 +59,11 @@ class MemberController extends BaseController
         ));
     }
 
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
     protected function getLevelService()
     {
     	return $this->getServiceKernel()->createService('User.LevelService');
@@ -58,5 +72,10 @@ class MemberController extends BaseController
     protected function getCourseService()
     {
     	return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->getServiceKernel()->createService('User.MemberService');
     }
 }

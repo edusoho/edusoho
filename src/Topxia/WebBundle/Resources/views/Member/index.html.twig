@@ -41,92 +41,11 @@
         <h2>最新会员课程</h2>
       </div>
       <div class="es-box-body">
-        <ul class="course-grids">
-          <li class="course-grid">
-            <a href="/course/3" class="grid-body">
-              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
-              <span class="title">外汇管理师课程</span>
-              <span class="metas clearfix">
-                <span class="price-col">
-                  <span class="meta-label">价格</span>
-                  <span class="price-num">免费</span>
-                </span>
-
-                <span class="student-col">
-                  <span class="meta-label">学生</span>
-                  <span class="student-num">3人</span>
-                </span>
-                <span class="review-col">
-                  <span class="meta-label"><strong>2</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-5">&nbsp;</span>
-                  </span>
-                </span>
-              </span>
-              <span class="teacher clearfix">
-                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
-                <span class="nickname ellipsis">测试管理员</span>
-                <span class="user-title ellipsis">CEO</span>
-              </span>
-            </a>
-          </li>
-          <li class="course-grid">
-            <a href="/course/3" class="grid-body">
-              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
-              <span class="title">外汇管理师课程</span>
-              <span class="metas clearfix">
-                <span class="price-col">
-                  <span class="meta-label">价格</span>
-                  <span class="price-num">免费</span>
-                </span>
-
-                <span class="student-col">
-                  <span class="meta-label">学生</span>
-                  <span class="student-num">3人</span>
-                </span>
-                <span class="review-col">
-                  <span class="meta-label"><strong>2</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-5">&nbsp;</span>
-                  </span>
-                </span>
-              </span>
-              <span class="teacher clearfix">
-                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
-                <span class="nickname ellipsis">测试管理员</span>
-                <span class="user-title ellipsis">CEO</span>
-              </span>
-            </a>
-          </li>
-          <li class="course-grid">
-            <a href="/course/3" class="grid-body">
-              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
-              <span class="title">外汇管理师课程</span>
-              <span class="metas clearfix">
-                <span class="price-col">
-                  <span class="meta-label">价格</span>
-                  <span class="price-num">免费</span>
-                </span>
-
-                <span class="student-col">
-                  <span class="meta-label">学生</span>
-                  <span class="student-num">3人</span>
-                </span>
-                <span class="review-col">
-                  <span class="meta-label"><strong>2</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-5">&nbsp;</span>
-                  </span>
-                </span>
-              </span>
-              <span class="teacher clearfix">
-                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
-                <span class="nickname ellipsis">测试管理员</span>
-                <span class="user-title ellipsis">CEO</span>
-              </span>
-            </a>
-          </li>
-        </ul>
+        {% if courses %}
+          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+        {% else %}
+          <div class="empty">还没有发布的课程</div>
+        {% endif %}
       </div>
 
       <div class="es-box-heading">
@@ -134,92 +53,11 @@
         <h2>最新热门课程</h2>
       </div>
       <div class="es-box-body">
-        <ul class="course-grids">
-          <li class="course-grid">
-            <a href="/course/3" class="grid-body">
-              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
-              <span class="title">外汇管理师课程</span>
-              <span class="metas clearfix">
-                <span class="price-col">
-                  <span class="meta-label">价格</span>
-                  <span class="price-num">免费</span>
-                </span>
-
-                <span class="student-col">
-                  <span class="meta-label">学生</span>
-                  <span class="student-num">3人</span>
-                </span>
-                <span class="review-col">
-                  <span class="meta-label"><strong>2</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-5">&nbsp;</span>
-                  </span>
-                </span>
-              </span>
-              <span class="teacher clearfix">
-                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
-                <span class="nickname ellipsis">测试管理员</span>
-                <span class="user-title ellipsis">CEO</span>
-              </span>
-            </a>
-          </li>
-          <li class="course-grid">
-            <a href="/course/3" class="grid-body">
-              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
-              <span class="title">外汇管理师课程</span>
-              <span class="metas clearfix">
-                <span class="price-col">
-                  <span class="meta-label">价格</span>
-                  <span class="price-num">免费</span>
-                </span>
-
-                <span class="student-col">
-                  <span class="meta-label">学生</span>
-                  <span class="student-num">3人</span>
-                </span>
-                <span class="review-col">
-                  <span class="meta-label"><strong>2</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-5">&nbsp;</span>
-                  </span>
-                </span>
-              </span>
-              <span class="teacher clearfix">
-                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
-                <span class="nickname ellipsis">测试管理员</span>
-                <span class="user-title ellipsis">CEO</span>
-              </span>
-            </a>
-          </li>
-          <li class="course-grid">
-            <a href="/course/3" class="grid-body">
-              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
-              <span class="title">外汇管理师课程</span>
-              <span class="metas clearfix">
-                <span class="price-col">
-                  <span class="meta-label">价格</span>
-                  <span class="price-num">免费</span>
-                </span>
-
-                <span class="student-col">
-                  <span class="meta-label">学生</span>
-                  <span class="student-num">3人</span>
-                </span>
-                <span class="review-col">
-                  <span class="meta-label"><strong>2</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-5">&nbsp;</span>
-                  </span>
-                </span>
-              </span>
-              <span class="teacher clearfix">
-                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
-                <span class="nickname ellipsis">测试管理员</span>
-                <span class="user-title ellipsis">CEO</span>
-              </span>
-            </a>
-          </li>
-        </ul>
+        {% if courses %}
+          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+        {% else %}
+          <div class="empty">还没有发布的课程</div>
+        {% endif %}
       </div>
 
     </div>
