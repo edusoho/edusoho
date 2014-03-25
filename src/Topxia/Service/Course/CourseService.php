@@ -54,7 +54,7 @@ interface CourseService
 
 	public function changeCoursePicture ($courseId, $filePath, array $options);
 
-	public function recommendCourse($id);
+	public function recommendCourse($id, $number);
 
 	public function cancelRecommendCourse($id);
 
