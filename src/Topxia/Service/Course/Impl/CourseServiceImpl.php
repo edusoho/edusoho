@@ -384,7 +384,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$course = $this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 1,
-			'recommendedSeq' => $number,
+			'recommendedSeq' => (int)$number,
 			'recommendedTime' => time(),
 		));
 
