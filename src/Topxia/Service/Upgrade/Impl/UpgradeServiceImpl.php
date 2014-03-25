@@ -34,19 +34,19 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 	public function commit($id,$result)
 	{
-		$this->getEduSohoUpgradeService()->commit($id,$result);
+		$this->getEduSohoUpgradeClient()->commit($id,$result);
 	}
 
 
 	public function getRemoteInstallPackageInfo($id)
 	{
-		$package = $this->getEduSohoUpgradeService()->install($id);
+		$package = $this->getEduSohoUpgradeClient()->install($id);
 		return $package;
 	}
 
 	public function getRemoteUpgradePackageInfo($id)
 	{
-		$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		$package = $this->getEduSohoUpgradeClient()->getPackage($id);
 		return $package;
 	}
 
@@ -77,17 +77,17 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		if(!$this->checkMainVersion($packages)){
 			$packages =$this->addMainVersionAndReloadPackages();
 		}
-		return $this->getEduSohoUpgradeService()->check($packages);
+		return $this->getEduSohoUpgradeClient()->check($packages);
 	}
 
 	public function repairProblem($token)
 	{
-		return $this->getEduSohoUpgradeService()->repairProblem($token);
+		return $this->getEduSohoUpgradeClient()->repairProblem($token);
 	}
 
 	public function hasLastError($id)
 	{
-		$package = $this->getEduSohoUpgradeService()->getPackage($id);
+		$package = $this->getEduSohoUpgradeClient()->getPackage($id);
 		if(empty($package)) throw $this->createServiceException("不存在{$id}");
 		$log = $this->getUpgradeLogDao()->getUpdateLogByEnameAndVersion($package['ename'], $package['version']);
 		if('ROLLBACK' == $log['status']){
@@ -132,7 +132,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$result = array();
 		try{
-			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+			$package = $this->getEduSohoUpgradeClient()->getPackage($id);
 		 }catch(\Exception $e){
 			$result[] = $e->getMessage();
 			return $result;
@@ -160,8 +160,8 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$result = array();
 		try{
-			$package = $this->getEduSohoUpgradeService()->getPackage($id);
-			$path = $this->getEduSohoUpgradeService()->downloadPackage($package['uri'],$package['filename']);
+			$package = $this->getEduSohoUpgradeClient()->getPackage($id);
+			$path = $this->getEduSohoUpgradeClient()->downloadPackage($package['uri'],$package['filename']);
 			$dirPath = $this->extractFile($path);		
 	    }catch(\Exception $e){
 	    	$result[] = $e->getMessage();
@@ -173,7 +173,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 	{
 		$result = array();
 		try{
-			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+			$package = $this->getEduSohoUpgradeClient()->getPackage($id);
 			if(isset($package['backupDB']) && $package['backupDB']){
 				$this->backUpDb($package);
 			}
@@ -193,7 +193,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 		$result = array();
 		$touched = false;
 		try{
-			$package = $this->getEduSohoUpgradeService()->getPackage($id);
+			$package = $this->getEduSohoUpgradeClient()->getPackage($id);
 			$deletes = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'delete';
 			$this->deleteFiles($deletes);
 			$source = $this->getExtractPath($package).DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
@@ -437,9 +437,9 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
         return $this->createDao('Upgrade.UpgradeLogDao');
     }	
 
-    private function getEduSohoUpgradeService ()
+    private function getEduSohoUpgradeClient ()
     {
-        return $this->createService('Upgrade.EduSohoUpgradeService');
+        return $this->createService('Upgrade.EduSohoUpgradeClient');
     }	
 
     private function getFileSystem()

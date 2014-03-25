@@ -476,6 +476,29 @@ class SettingController extends BaseController
         ));
     }
 
+    public function developerAction(Request $request)
+    {
+        $developerSetting = $this->getSettingService()->get('developer', array());
+
+        $default = array(
+            'debug' => '0',
+            'app_api_url' => '',
+        );
+
+        $developerSetting = array_merge($default, $developerSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $developerSetting = $request->request->all();
+            $this->getSettingService()->set('developer', $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+            $this->setFlashMessage('success','开发者已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
+            'developerSetting' => $developerSetting
+        ));
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

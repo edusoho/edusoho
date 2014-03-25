@@ -459,6 +459,10 @@ admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
+admin_setting_developer:
+    pattern:  /setting/developer
+    defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+
 admin_optimize:
     pattern:  /optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
@@ -499,6 +503,18 @@ admin_cloud_bill:
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
+
+admin_app_installed:
+    pattern:  /app/installed
+    defaults: { _controller: TopxiaAdminBundle:App:installed }
+
+admin_app_updates:
+    pattern:  /app/updates
+    defaults: { _controller: TopxiaAdminBundle:App:updates }
+
+admin_app_logs:
+    pattern:  /app/logs
+    defaults: { _controller: TopxiaAdminBundle:App:logs }
 
 admin_upgrade:
     pattern:  /upgrade
