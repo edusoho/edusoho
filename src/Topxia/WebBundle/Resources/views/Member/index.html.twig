@@ -41,8 +41,8 @@
         <h2>最新会员课程</h2>
       </div>
       <div class="es-box-body">
-        {% if courses %}
-          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+        {% if latestCourses %}
+          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:latestCourses, view: 'grid'})) }}
         {% else %}
           <div class="empty">还没有发布的课程</div>
         {% endif %}
@@ -53,8 +53,8 @@
         <h2>最新热门课程</h2>
       </div>
       <div class="es-box-body">
-        {% if courses %}
-          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+        {% if hotestCourses %}
+          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:hotestCourses, view: 'grid'})) }}
         {% else %}
           <div class="empty">还没有发布的课程</div>
         {% endif %}
