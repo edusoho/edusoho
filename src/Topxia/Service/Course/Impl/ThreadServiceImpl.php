@@ -36,6 +36,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit);
 	}
 
+	public function findLatestThreadsByType($type, $start, $limit)
+	{
+		return $this->getThreadDao()->findLatestThreadsByType($type, $start, $limit);
+	}
+
 	public function searchThreads($conditions, $sort, $start, $limit)
 	{
 		
