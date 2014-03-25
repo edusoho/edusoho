@@ -60,7 +60,7 @@ define(function(require, exports, module) {
 
         $("#deadlineCreate").datetimepicker({
             language: 'zh-CN',
-            autoclose: true,
+            // autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
         });

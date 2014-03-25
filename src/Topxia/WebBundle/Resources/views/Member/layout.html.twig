@@ -35,6 +35,11 @@
       {% else %}
         <div class="well well-sm text-danger">请先登录后再购买会员！</div>
       {% endif %}
+      <p>
+        <a class="btn btn-primary btn btn-block" href="#">开通会员</a>
+        <a class="btn btn-primary btn btn-block" href="#">会员续费</a>
+        <a class="btn btn-primary btn btn-block" href="{{ path('member_history') }}">购买历史</a>
+      </p>
       <div class="es-box">
         <div class="es-box-heading"><h2>最新会员</h2></div>
         <ul class="media-list lastest-member-list">

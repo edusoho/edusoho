@@ -1,29 +1,38 @@
-{% extends 'TopxiaWebBundle:Member:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set main_nav = 'memberCourses' %}
+{% block title %}会员专区 - {{ parent() }}{% endblock %}
 
-{% block main_body %}
-<div class="userlevel" style="margin-top:20px;">
-	<ul class="nav nav-tabs course-dashboard-tabs clearfix" id="course-tabs">
-    {% if userlevels %}
-        {% for userlevel in userlevels %}
-    	   <li {% if id == userlevel.id %} class="active"{% endif %} ><a class="js-nav" href="{{ path('member_course', {id:userlevel.id}) }}">{{ userlevel.name }}</a></li>
-        {% endfor %}
-    {% else %}
-        <div class="empty">用户等级为空</div>
-    {% endif %}
-	</ul>
-</div>
-<div class="es-box-body">
-  {% if courses %}
-    {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
-    {% if courses|length >= 12 %}
-      <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
-    {% endif %}
-  {% else %}
-    <div class="empty">还没有课程</div>
-  {% endif %}
-        {{ web_macro.paginator(paginator) }}
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>会员频道</h1></div>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('member') }}">会员中心</a></li>
+        <li class="active">会员课程</li>
+      </ol>
+    </div>
+  </div>
+
+    <div class="row row-3-9">
+    <div class="col-md-3">
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="/course/explore">全部会员课程</a></li>
+        <li><a href="/course/explore/zhengshu">钻石会员课程</a></li>
+        <li><a href="/course/explore/default">黄金会员课程</a></li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+
+    <div class="btn-group btn-group-sm">
+      <a class="btn btn-info active" role="button">全部会员课程</a>
+      <a class="btn btn-info" role="button">最新会员课程</a>
+      <a class="btn btn-info" role="button">热门会员课程</a>
+    </div>
+
+    </div>
+  </div>
 </div>
 
 {% endblock %}

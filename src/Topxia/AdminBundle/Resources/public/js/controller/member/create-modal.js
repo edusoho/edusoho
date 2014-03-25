@@ -2,12 +2,13 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-
+    require("jquery.bootstrap-datetimepicker");
+    
 	exports.run = function() {
 
-        var $modal = $('#user-create-form').parents('.modal');
+        var $modal = $('#member-create-form').parents('.modal');
         var validator = new Validator({
-            element: '#user-create-form',
+            element: '#member-create-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
             	if (error) {
@@ -23,28 +24,30 @@ define(function(require, exports, module) {
 
             }
         });
-        validator.addItem({
-            element: '[name="email"]',
-            required: true,
-            rule: 'email email_remote'
-        });
 
         validator.addItem({
-            element: '[name="nickname"]',
+            element: '[id="nickname"]',
             required: true,
             rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
         });
 
         validator.addItem({
-            element: '[name="password"]',
+            element: '[id="deadline"]',
             required: true,
-            rule: 'minlength{min:5} maxlength{max:20}'
+            rule: 'date'
         });
 
         validator.addItem({
-            element: '[name="confirmPassword"]',
+            element: '[name=levelId]',
             required: true,
-            rule: 'confirmation{target:#password}'
+            errormessageRequired: '请选择会员类型!'
+        });
+
+        $("#deadline").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
         });
 	};
 

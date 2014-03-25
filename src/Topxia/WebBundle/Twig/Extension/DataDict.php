@@ -107,6 +107,22 @@ class DataDict
 			'ROLE_ADMIN' => '管理员',
 			'ROLE_SUPER_ADMIN' => '超级管理员'
 		),
+		'memberLevel' => array(
+			'1' => '银牌会员',
+			'2' => '金牌会员',
+			'3' => '钻石会员'
+		),
+		'duration_unit' => array(
+			'month' => '个月',
+			'year' => '年'
+		),
+		'boughtType' => array(
+			'new' => '首次购买',
+			'renew' => '续费',
+			'upgrade' => '升级',
+			'edit' => '管理员设置',
+			'cancel' => '取消会员'
+		),
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
 			'email' => '邮件地址',
