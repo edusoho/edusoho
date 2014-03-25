@@ -3,9 +3,6 @@
 {% block title %}{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
   
-  {% if app.request.query.get('preview') %}
-    <div class="alert alert-info">该课时非免费课时，不能预览，需购买后才能查看。</div>
-  {% endif %}
   <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
 
     <div class="form-group">
