@@ -4,16 +4,15 @@ namespace Topxia\Service\User\Dao;
 
 interface MemberDao
 {
+	public function getMemberByUserId($userId);
+	
 	public function searchMembers($conditions, $orderBy, $start, $limit);
 
 	public function searchMembersCount($conditions);
 
-	public function getMember($id);
+	public function deleteMember($userId);
 
-	public function cancelMember($id);
+	public function addMember($member);
 
-	public function addMember();
-
-	public function updateMember();
-
+	public function updateMember($id, $fields);
 }

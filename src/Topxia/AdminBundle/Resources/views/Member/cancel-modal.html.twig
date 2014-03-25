@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{# 
+{% block title %}温馨提示{% endblock %}
+{% block body %} #}
+
+{# <form id="member-cancel-form" class="form-horizontal" method="post" action="{{ url('admin_member_cancel', {id:member.id}) }}">
+  <div>确认取消这个会员？</div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">           
+</form> #}
+{# {% endblock %} #}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#member-cancel-form">保存</button>
+  {# <button class="btn btn-default pull-left delete-member" data-url="{{ path('admin_member_cancel', {id:member.id}) }}" data-target="{{ member.id }}" data-member-id="{{ member.id }}"><i class="glyphicon glyphicon-trash"></i> 取消</button> #}
+  <script>app.load('member/cancel-modal')</script>
+{% endblock %}

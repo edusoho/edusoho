@@ -6,13 +6,19 @@ use Topxia\Service\Common\BaseDao;
 use Topxia\Service\User\Dao\MemberDao;
 use PDO;
 
-class MemberDao extends BaseDao implements MemberDao
+class MemberDaoImpl extends BaseDao implements MemberDao
 {
 	protected $table = 'member';
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
-
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createMemberQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
     }
 
     public function searchMembersCount($conditions)
@@ -27,26 +33,39 @@ class MemberDao extends BaseDao implements MemberDao
         $conditions = array_filter($conditions);
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'member')
-            ->andWhere('level = :level');
+            ->andWhere('levelId = :level')
+            ->andWhere('userId = :userId')
+            ->andWhere('deadline >= :deadlineMoreThan')
+            ->andWhere('deadline < :deadlineLessThan');
     }
 
-	public function getMember($id)
+	public function getMemberByUserId($userId)
 	{
-
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
 	}
 
-	public function cancelMember($id)
+	public function deleteMember($userId)
 	{
-
+        $affected = $this->getConnection()->delete($this->table, $userId);
+        if ($affected <= 0) {
+            throw $this->createDaoException('delete member error.');
+        }
+        return true;
 	}
 
-	public function addMember()
+	public function addMember($member)
 	{
-
+        $affected = $this->getConnection()->insert($this->table, $member);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert member error.');
+        }
+        return $this->getMemberByUserId($this->getConnection()->lastInsertId());
 	}
 
-	public function updateMember()
+	public function updateMember($userId, $fields)
 	{
-
+        $this->getConnection()->update($this->table, $fields, array('userId' => $userId));
+        return $this->getMemberByUserId($userId);
 	}
 }

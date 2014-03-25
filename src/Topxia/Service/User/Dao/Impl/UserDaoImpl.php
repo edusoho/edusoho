@@ -28,11 +28,6 @@ class UserDaoImpl extends BaseDao implements UserDao
         $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
-    public function findMemberByNickname($nickname)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE nickname = ? and level >0 LiMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($nickname));
-    }
 
     public function findUsersByIds(array $ids)
     {

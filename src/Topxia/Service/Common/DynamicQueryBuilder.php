@@ -49,7 +49,6 @@ class DynamicQueryBuilder extends QueryBuilder
     	if (empty($matched)) {
     		return false;
     	}
-
         return array_key_exists($matches[1], $this->conditions) && !is_null($this->conditions[$matches[1]]);
     }
 }

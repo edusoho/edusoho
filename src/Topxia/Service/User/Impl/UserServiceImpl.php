@@ -258,7 +258,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
-
         return $user;
     }
 
@@ -736,15 +735,7 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
     
-    public function updateMemberLevel($Userdata)
-    {
-        return $this->getUserDao()->updateUser($id, $fields);
-    }
 
-    public function findMemberByNickname($nickname)
-    {
-        return $this->getUserDao()->findMemberByNickname($nickname);
-    }
 
     public function getUserCountByApprovalStatus($approvalStatus)
     {

@@ -5,7 +5,7 @@
 {% block title %}添加新会员{% endblock %}
 {% block body %}
 
-<form id="member-create-form" class="form-horizontal" method="post" action="{{ path('admin_member_update')}}">
+<form id="member-create-form" class="form-horizontal" method="post" action="{{ path('admin_member_create')}}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
@@ -20,7 +20,7 @@
       <label for="memberLevel">会员类型</label>
     </div>
     <div class="col-md-7 controls">
-     <select class="form-control" name="memberLevel">
+     <select class="form-control" name="levelId">
         {{ select_options(dict('memberLevel'), app.request.query.get('level'), '--按会员类型--') }}
      </select>
     </div>
@@ -30,7 +30,7 @@
     <div class="col-md-2 control-label">
       <label for="deadline">到期日期</label>
     </div>
-    <div class="col-md-7 controls">
+    <div class="col-md-7 controls" style="z-index:2000;">
       <input type="text" id="deadline"  name="deadline" class="form-control" >
     </div>
   </div>
