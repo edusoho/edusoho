@@ -32,6 +32,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+        if ($orderBy[0] == 'recommendedSeq') {
+            $builder->addOrderBy('recommendedTime', 'DESC');
+        }
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
