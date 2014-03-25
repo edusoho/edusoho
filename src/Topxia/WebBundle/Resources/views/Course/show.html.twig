@@ -48,8 +48,12 @@
       <div class="stats">
         <p>
           价　格：
-          <span class="money-num">{{ course.price }}</span>
-          <span class="money-text">元</span>
+          {% if course.price > 0 %}
+            <span class="money-num">{{ course.price }}</span>
+            <span class="money-text">元</span>
+          {% else %}
+            <span class="money-num" style="font-size:16px;">免费</span>
+            {% endif %}
         </p>
         <p>
           评　价：
