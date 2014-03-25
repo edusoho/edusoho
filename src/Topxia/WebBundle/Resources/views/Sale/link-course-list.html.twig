@@ -17,7 +17,7 @@
     <thead>
     <tr>
       <th width="30%">课程名称</th>
-      <th>销量</th>
+      
       <th>单价(元)</th>
 
       <th>佣金比率</th>
@@ -29,6 +29,25 @@
     </thead>
     <tbody>
       {% for course in courses %}
+
+      {% set adCommissionType = course.adCommissionType %}
+
+      {% set adCommission = course.adCommission %}
+
+      {% set adCommissionDay = course.adCommissionDay %}
+     
+      {% if  course.id  in  linksales|keys  %}
+
+          {%  set linksale =  linksales[course.id]  %}
+
+            {% set adCommissionType = linksale.adCommissionType %}
+
+            {% set adCommission = linksale.adCommission %}
+
+            {% set adCommissionDay = linksale.adCommissionDay %}
+
+      {% endif %}
+
         <tr>
           <td>
 
@@ -39,28 +58,34 @@
           <a href="{{ path('course_show', {id:course.id}) }}"  target="_blank">{{ course.title }}</a>
 
           </td>
-          <td>{{ course.studentNum }}</td>
+         
           <td>￥{{ course.price|number_format(2, '.', ',')  }}</td>
           
           <td>
-            {% if(course.adCommissionType=='quota') %}
-                {{course.adCommission/course.price*100|number_format(2, '.', ',') }}%
+            {% if (adCommissionType=='quota') %}
+
+                {{adCommission/course.price*100|number_format(2, '.', ',') }}%
            
             {% else %}
-                 {{ course.adCommission|number_format(2, '.', ',')  }}%
+
+                 {{ adCommission|number_format(2, '.', ',')  }}%
+
             {% endif %}
           </td>
 
           <td>￥
-             {% if (course.adCommissionType=='quota') %}
-                {{course.adCommission|number_format(2, '.', ',') }}
+             {% if (adCommissionType=='quota') %}
+
+                {{adCommission|number_format(2, '.', ',') }}
+
             {% else  %}
-                {{ course.price*(course.adCommission/100)|number_format(2, '.', ',')   }}
+
+                {{ course.price*(adCommission/100)|number_format(2, '.', ',')   }}
             
             {% endif %}
 
           </td>
-           <td>{{ course.adCommissionDay }}天</td>
+           <td>{{ adCommissionDay }}天</td>
           <td>
                     
           <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_course_link', {id:course.id}) }}"> 获取推广链接 </a>

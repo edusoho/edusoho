@@ -112,9 +112,14 @@ class MySaleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
- 
+
+        $prodIds=ArrayToolkit::column($courses,'id');
+
+        $linksales = $this->getLinkSaleService()->getLinkSalesByProdsAndUser('course',$prodIds,$user['id']);
+
        
         return $this->render('TopxiaWebBundle:Sale:link-course-list.html.twig', array(
+            'linksales'=>$linksales,
             'courses'=>$courses,
             'paginator' => $paginator
         ));
@@ -122,6 +127,8 @@ class MySaleController extends BaseController
        
     }
 
+
+    //一个课程对一个用户，只有一个推广链接
     public function linkCourseLinkAction(Request $request,$id)
     {
         $user = $this->getCurrentUser();
@@ -153,6 +160,8 @@ class MySaleController extends BaseController
             $linksale['prodName']=$course['title'];
 
             $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
+
+            $linksale['oUrl']=$courseUrl;
 
 
             $linksale['tUrl']=$courseUrl.'?mc'.$course['id'].'='.$linksale['mTookeen'];
@@ -247,8 +256,10 @@ class MySaleController extends BaseController
         $prodId=0;
         $prodName='所有课程';
 
+        $saleType="linksale-web";
 
-        $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser($prodType,$prodId,$user['id']);
+
+        $linksale=$this->getLinkSaleService()->getLinkSaleByoUrl($saleType,$prodId,$user['id']);
 
 
         if(empty($linksale)){
@@ -280,6 +291,8 @@ class MySaleController extends BaseController
             $linksale['prodName']=$prodName;
 
             $webUrl = $this->generateUrl('homepage',array(),true);
+
+            $linksale['oUrl']=$webUrl;
 
             $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
 

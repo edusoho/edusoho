@@ -28,8 +28,33 @@ class LinkSaleDaoImpl extends BaseDao implements LinkSaleDao
 
     public function getLinkSaleByProdAndUser($prodType,$prodId,$userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE prodType = ? and prodId=? and partnerId=? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE saleType = 'linksale-course' and  prodType = ? and prodId=? and partnerId=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($prodType,$prodId,$userId)) ? : null;
+    }
+
+
+    public function getLinkSalesByProdsAndUser($prodType,$prodIds,$userId)
+    {
+
+        if(empty($prodIds)){
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($prodIds) - 1) . '?';
+
+
+        $sql = "SELECT * FROM {$this->table} WHERE  saleType = 'linksale-course' and  prodType = ? and prodId  IN  ({$marks}) and partnerId=? ";
+
+        return $this->getConnection()->fetchAll($sql, array_merge(array($prodType),$prodIds,array($userId)));
+
+    }
+
+
+
+    public function getLinkSaleByoUrl($saleType,$oUrl,$userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE saleType = ? and oUrl=? and partnerId=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($saleType,$oUrl,$userId)) ? : null;
     }
 
 
@@ -111,6 +136,7 @@ class LinkSaleDaoImpl extends BaseDao implements LinkSaleDao
             ->andWhere('saleType = :saleType')
             ->andWhere('prodType = :prodType')
             ->andWhere('prodId = :prodId')
+            ->andWhere('oUrl = :oUrl')
             ->andWhere('prodName LIKE :prodNameLike')
             ->andWhere('mTookeen LIKE :mTookeenLike')
             ->andWhere('tUrl LIKE :tUrlLike')

@@ -30,6 +30,23 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
     }
 
 
+    public function getLinkSalesByProdsAndUser($prodType,$prodIds,$userId){
+
+        $linksales= LinkSaleSerialize::unserializes($this->getLinkSaleDao()->getLinkSalesByProdsAndUser($prodType,$prodIds,$userId));
+
+         return ArrayToolkit::index($linksales, 'prodId');
+
+
+    }
+
+
+    public function getLinkSaleByoUrl($saleType,$oUrl,$userId){
+
+        return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getLinkSaleByoUrl($saleType,$oUrl,$userId));
+
+    }
+
+
     public function getLinkSaleBymTookeen($mTookeen)
     {
         return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getLinkSaleBymTookeen($mTookeen));
@@ -109,7 +126,7 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 
     public function createLinkSale($linksale){
 
-        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','linkName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
+        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','linkName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'oUrl', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
 
         $linksale['createdTime']=time();
 
@@ -124,7 +141,7 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
     public function updateLinkSale($id, $linksale)
     {
 
-        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','linkName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
+        $linksale = ArrayToolkit::parts($linksale, array('id','partnerIP','saleType','prodType','prodId','prodName','linkName','adCommissionType','adCommission','adCommissionDay','customized','reduceType','reducePrice', 'mTookeen', 'oUrl', 'tUrl', 'strvalidTime','validTime', 'partnerId', 'updatedTime','createdTime', 'managerId'));
 
        return $this->getLinkSaleDao()->updateLinkSale($id, LinkSaleSerialize::serialize($linksale));
     }
