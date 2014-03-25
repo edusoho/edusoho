@@ -26,44 +26,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
-	public function findCoursesByMemberLevelId($id,$start,$limit)
-    {	
-    	$conditions = array(
-            'seq'=>"$id"
-        );
-        $memberlevels = $this->getLevelService()->searchLevels($conditions,0,100);
-        foreach ($memberlevels as $memberlevel) {
-        	$memberlevelId[] = $memberlevel['id'];
-        }
-        $memberlevelId[] = $id;
-    	$courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByMemberlevelId($memberlevelId,$start,$limit)
-        );
-
-        return ArrayToolkit::index($courses, 'id');
-    }
-
-    public function findCoursesByMemberLevelIdCount($id) 
-    {	
-    	$conditions = array(
-            'seq'=>"$id"
-        );
-        $memberlevels = $this->getLevelService()->searchLevels($conditions,0,100);
-        foreach ($memberlevels as $memberlevel) {
-        	$memberlevelId[] = $memberlevel['id'];
-        }
-        $memberlevelId[] = $id;
-
-        return $this->getCourseDao()->findCoursesByMemberlevelIdCount($userlevelId);
-    }
-
-    public function findCoursesByHaveMemberLevelIds($start, $limit)
-    {
-    	$courses = CourseSerialize::unserializes(
-    		$this->getCourseDao()->findCoursesByHaveMemberLevelIds($start, $limit));
-    	return ArrayToolkit::index($courses, 'id');
-    }
-
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);

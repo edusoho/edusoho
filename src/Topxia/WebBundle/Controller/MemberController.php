@@ -16,11 +16,14 @@ class MemberController extends BaseController
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
     	$levels = $this->getLevelService()->searchLevels($conditions,0,100);
-    	$courses = $this->getCourseService()->findCoursesByHaveMemberLevelIds(0, 100);
+        $levelIds = ArrayToolkit::column($levels,'id');
+        $latestCourses = $this->getCourseService()->searchCourses(array('memberLevelIds' => $levelIds), $sort = 'latest', 0, 3);
+        $hotestCourses = $this->getCourseService()->searchCourses(array('memberLevelIds' => $levelIds), $sort = 'popular', 0, 3);
         $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
         	'levels' => $levels,
-            'courses' => $courses,
+            'latestCourses' => $latestCourses,
+            'hotestCourses' => $hotestCourses,
             'latestMembers' => $latestMembers,
             'members'=>$members,
             'member'=>$member
@@ -30,19 +33,6 @@ class MemberController extends BaseController
     public function courseAction(Request $request)
     {   
         $conditions = array();
-
-      /*  $paginator = new Paginator(
-            $request,
-            $this->getCourseService()->findCoursesByMemberLevelIdCount($id),
-            15
-        );
-*/
-     /*   $courses = $this->getCourseService()->findCoursesByMemberLevelId(
-            $id,                
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );*/
-
         
         $levels = $this->getLevelService()->searchLevels($conditions,0,100);
         return $this->render('TopxiaWebBundle:Member:course.html.twig',array(
@@ -63,7 +53,6 @@ class MemberController extends BaseController
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
         $levels = $this->getLevelService()->searchLevels($conditions,0,100);
-        $courses = $this->getCourseService()->findCoursesByHaveMemberLevelIds(0, 100);
         $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
         $memberHistories = $this->getMemberService()->searchMembersHistories(
             array('userId' => $currentUser['id']), array('boughtTime', 'DESC'),
@@ -72,12 +61,12 @@ class MemberController extends BaseController
         );
         return $this->render('TopxiaWebBundle:Member:history.html.twig',array(
             'levels' => $levels,
-            'courses' => $courses,
             'latestMembers' => $latestMembers,
-            'members'=>$members,
-            'member'=>$member,
-            'memberHistories' =>$memberHistories
-        ));
+            'members' => $members,
+            'member' => $member,
+            'memberHistories' => $memberHistories,
+            'paginator' => $paginator
+         ));
     }
 
     protected function getUserService()
