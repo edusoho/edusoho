@@ -14,8 +14,6 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function findApps($start, $limit)
     {
-        $client = $this->createAppClient();
-        var_dump($client);
         return $this->getAppDao()->findApps($start, $limit);
     }
 
