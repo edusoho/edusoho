@@ -29,6 +29,12 @@ class EduSohoAppClient implements AppClient
         $this->debug = empty($options['debug']) ? false : true;
     }
 
+    public function getApps()
+    {
+        $args = array();
+        return $this->callRemoteApi('GET', 'GetApps', $args);
+    }
+
     public function checkUpgradePackages($apps)
     {
         $args = array('apps' => $apps);

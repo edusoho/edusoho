@@ -7,6 +7,8 @@ interface AppService
 
     public function findAppCount();
 
+    public function getCenterApps();
+
     public function checkAppUpgrades();
 
     public function findLogs($start, $limit);

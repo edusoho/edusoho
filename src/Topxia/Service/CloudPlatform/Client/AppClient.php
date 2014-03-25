@@ -4,6 +4,11 @@ namespace Topxia\Service\CloudPlatform\Client;
 interface AppClient 
 {
     /**
+     * 获得所有应用包
+     */
+    public function getApps();
+
+    /**
      * 检查更新包
      */
     public function checkUpgradePackages($apps);

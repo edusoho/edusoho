@@ -22,6 +22,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->findAppCount();
     }
 
+    public function getCenterApps()
+    {
+        return $this->createAppClient()->getApps();
+    }
+
     public function checkAppUpgrades()
     {
         $mainApp = $this->getAppDao()->getAppByCode('MAIN');

@@ -13,6 +13,15 @@ class AppController extends BaseController
 
     }
 
+    public function centerAction(Request $request)
+    {
+        $apps = $this->getAppService()->getCenterApps();
+
+        return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
+            'apps' => $apps,
+        ));
+    }
+
     public function installedAction(Request $request)
     {
         $apps = $this->getAppService()->findApps(0, 100);

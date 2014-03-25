@@ -539,6 +539,10 @@ admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
+admin_app_center:
+    pattern:  /app/center
+    defaults: { _controller: TopxiaAdminBundle:App:center }
+
 admin_app_installed:
     pattern:  /app/installed
     defaults: { _controller: TopxiaAdminBundle:App:installed }
