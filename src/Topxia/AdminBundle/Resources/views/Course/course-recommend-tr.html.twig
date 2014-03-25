@@ -1,6 +1,6 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-<tr id="course-tr-{{ course.id }}" data-sort="{{ course.recommendNum }}">
-  <td>{{ course.recommendNum }}</td>
+<tr id="course-tr-{{ course.id }}" data-sort="{{ course.recommendedSeq }}">
+  <td>{{ course.recommendedSeq }}</td>
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     <br>

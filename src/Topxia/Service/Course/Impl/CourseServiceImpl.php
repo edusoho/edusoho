@@ -44,7 +44,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if ($sort == 'popular') {
 			$orderBy =  array('hitNum', 'DESC');
 		} else if ($sort == 'recommended') {
-			$orderBy = array('recommendNum', 'ASC');
+			$orderBy = array('recommendedSeq', 'ASC');
 		} else if ($sort == 'Rating') {
 			$orderBy = array('Rating' , 'DESC');
 		} else if ($sort == 'hitNum') {
@@ -384,7 +384,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$course = $this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 1,
-			'recommendNum' => $number,
+			'recommendedSeq' => $number,
 			'recommendedTime' => time(),
 		));
 
@@ -399,7 +399,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 0,
-			'recommendNum' => 0,
+			'recommendedSeq' => 0,
 			'recommendedTime' => 0,
 		));
 
