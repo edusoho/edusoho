@@ -82,7 +82,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if ($sort == 'popular') {
 			$orderBy =  array('hitNum', 'DESC');
 		} else if ($sort == 'recommended') {
-			$orderBy = array('recommendedTime', 'DESC');
+			$orderBy = array('recommendedSeq', 'ASC');
 		} else if ($sort == 'Rating') {
 			$orderBy = array('Rating' , 'DESC');
 		} else if ($sort == 'hitNum') {
@@ -412,16 +412,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->updateCourse($courseId, $fields);
     }
 
-	public function recommendCourse($id)
+	public function recommendCourse($id, $number)
 	{
 		$course = $this->tryAdminCourse($id);
 
-		$this->getCourseDao()->updateCourse($id, array(
+		if (!is_numeric($number)) {
+			throw $this->createAccessDeniedException('推荐课程序号只能为数字！');
+		}
+
+		$course = $this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 1,
+			'recommendedSeq' => (int)$number,
 			'recommendedTime' => time(),
 		));
 
-		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']})");
+		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+
+		return $course;
 	}
 
 	public function cancelRecommendCourse($id)
@@ -430,6 +437,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 0,
+			'recommendedSeq' => 0,
 			'recommendedTime' => 0,
 		));
 
@@ -1093,6 +1101,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 	
+	public function searchMembers($conditions, $orderBy, $start, $limit)
+	{
+		$conditions = $this->_prepareCourseConditions($conditions);
+		return $this->getMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);		
+	}
+
 	public function searchMember($conditions, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);

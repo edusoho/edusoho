@@ -1,9 +1,13 @@
-{% import "TopxiaAdminBundle::macro-his.html.twig" as admin_macro %}
 <tr id="member-history-table-tr-{{ memberHistory.id }}">
 
   {% if show_usernick != '-1' %}
     <td>
-       {{ admin_macro.user_link(memberHistory) }}
+    {% if memberHistory %}
+       <a href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:memberHistory.userId}) }}">{{ memberHistory.userNickname }}</a>
+  {% else %}
+       <span class="text-muted">用户已删除</span>
+  {% endif %}
+
       <br>
     </td>
   {% endif %}

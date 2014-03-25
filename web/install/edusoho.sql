@@ -126,6 +126,7 @@ CREATE TABLE `course` (
   `goals` text COMMENT '课程目标',
   `audiences` text COMMENT 'audiences',
   `recommended` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐课程',
+  `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0',
   `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locationId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上课地区ID',
   `address` varchar(255) NOT NULL DEFAULT '',
