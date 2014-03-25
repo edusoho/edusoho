@@ -34,6 +34,11 @@ class LoginController extends BaseController
             return $this->generateUrl('homepage');
         }
 
+        $url = explode('?', $targetPath);
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
         return $targetPath;
     }
 

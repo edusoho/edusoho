@@ -228,8 +228,6 @@ define(function(require, exports, module) {
                             player.on('fullscreenchange', function(e) {
                                 if ($(e.target).hasClass('vjs-fullscreen')) {
                                     $("#site-navbar").hide();
-                                } else {
-                                    $("#site-navbar").show();
                                 }
                             });
 

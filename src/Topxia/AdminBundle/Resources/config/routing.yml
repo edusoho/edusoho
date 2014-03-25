@@ -283,7 +283,6 @@ admin_course_close:
 admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
-    methods: [POST]
 
 admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel
@@ -301,6 +300,11 @@ admin_course_teach_commission:
 admin_course_sale_valid_time:
     pattern: /course/{id}/sale/valid/time
     defaults: { _controller: TopxiaAdminBundle:Course:saleValidTime }
+
+admin_course_recommend_list:
+    pattern: /course/recommend/list
+    defaults: { _controller: TopxiaAdminBundle:Course:recommendList }
+
 
 admin_course_category:
     pattern: /course/category
