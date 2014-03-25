@@ -51,11 +51,32 @@ class MemberController extends BaseController
     }
 
     public function historyAction(Request $request)
-    {       
+    {   
         $conditions = array();
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions)
+            ,10
+        );
+        $currentUser = $this->getCurrentUser();
+        $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
+        $memberIds = ArrayToolkit::column($members,'userId');
+        $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
         $levels = $this->getLevelService()->searchLevels($conditions,0,100);
-        return $this->render('TopxiaWebBundle:Member:history.html.twig', array(
-            'levels' => $levels
+        $courses = $this->getCourseService()->findCoursesByHaveMemberLevelIds(0, 100);
+        $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
+        $memberHistories = $this->getMemberService()->searchMembersHistories(
+            array('userId' => $currentUser['id']), array('boughtTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        return $this->render('TopxiaWebBundle:Member:history.html.twig',array(
+            'levels' => $levels,
+            'courses' => $courses,
+            'latestMembers' => $latestMembers,
+            'members'=>$members,
+            'member'=>$member,
+            'memberHistories' =>$memberHistories
         ));
     }
 

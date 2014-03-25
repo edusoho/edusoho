@@ -17,55 +17,27 @@
           </a>
           <div class="media-body">
             <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
-            <p><span class="glyphicon glyphicon-user"></span>
             {% if member %}
+            <p>
+              <span class="glyphicon glyphicon-user"></span>
               {% for level in levels %}
-                {% if member.levelId == level.id %}
+                {% if level.id == member.levelId %}
                   {{ level.name }}
                 {% endif %}
               {% endfor %}
             </p>
-              <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
+            <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
               {% if member.deadline|remain_time == 0 %}
                 <div class="well well-sm" class="text-primary text-center">会员已到期</div>
               {% else %}
                 <div class="well well-sm" class="text-primary text-center">会员剩余{{ member.deadline|remain_time }}</div>
               {% endif %}
             {% else %}
-              普通用户
+              <span class="glyphicon glyphicon-user"></span>普通用户
             <div class="well" class="text-primary text-center">请在下方开通会员</div>
             {% endif %}
           </div>
         </div>
-  {#      {% for member in members %}
-          <div class="media">
-            <a href="{{ path('user_show', {id:app.user.id}) }}" class="pull-left">
-              <img class="author-picture" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
-            </a>
-            <div class="media-body">
-              <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
-              {% if app.user.id == member.userId %} 
-              <p>
-                <span class="glyphicon glyphicon-user"></span>
-                {% for level in levels %}
-                  {% if member.levelId == level.id %}
-                    {{ level.name }}
-                  {% endif %}
-                {% endfor %}
-          <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
-              {% if member.deadline|remain_time == 0 %}
-                <div class="well well-sm" class="text-primary text-center">会员已到期</div>
-              {% else %}
-                <div class="well well-sm" class="text-primary text-center">会员剩余{{ member.deadline|remain_time }}</div>
-              {% endif %}
-              {% else %}
-                <span class="glyphicon glyphicon-user"></span>普通用户
-                <div class="well" class="text-primary text-center">请在下方开通会员</div>
-              {% endif %}
-            </div>
-          </div>
-        {% endfor %}
-      #}
         <p>
           <a class="btn btn-primary btn btn-block" href="#">开通会员</a>
           <a class="btn btn-primary btn btn-block" href="#">会员续费</a>
