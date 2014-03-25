@@ -20,11 +20,11 @@ interface CourseService
 
 	public function findCoursesByIds(array $ids);
 
-	public function findCoursesByUserLevelId($id,$start,$limit);
+	public function findCoursesByMemberLevelId($id,$start,$limit);
 
-	public function findCoursesByUserLevelIdCount($id);
+	public function findCoursesByMemberLevelIdCount($id);
 
-	public function findCoursesByHaveUserLevelIds($start,$limit);
+	public function findCoursesByHaveMemberLevelIds($start,$limit);
 
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
@@ -134,7 +134,6 @@ interface CourseService
 	/**
 	 * Member API
 	 */
-	public function searchMembers($conditions, $orderBy, $start, $limit);
 
 	public function searchMember($conditions, $start, $limit);
 

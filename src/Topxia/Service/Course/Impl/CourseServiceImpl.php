@@ -26,41 +26,41 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
-	public function findCoursesByUserLevelId($id,$start,$limit)
+	public function findCoursesByMemberLevelId($id,$start,$limit)
     {	
     	$conditions = array(
             'seq'=>"$id"
         );
-        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
-        foreach ($userlevels as $userlevel) {
-        	$userlevelId[] = $userlevel['id'];
+        $memberlevels = $this->getLevelService()->searchLevels($conditions,0,100);
+        foreach ($memberlevels as $memberlevel) {
+        	$memberlevelId[] = $memberlevel['id'];
         }
-        $userlevelId[] = $id;
+        $memberlevelId[] = $id;
     	$courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByUserLevelId($userlevelId,$start,$limit)
+            $this->getCourseDao()->findCoursesByMemberlevelId($memberlevelId,$start,$limit)
         );
 
         return ArrayToolkit::index($courses, 'id');
     }
 
-    public function findCoursesByUserLevelIdCount($id) 
+    public function findCoursesByMemberLevelIdCount($id) 
     {	
     	$conditions = array(
             'seq'=>"$id"
         );
-        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
-        foreach ($userlevels as $userlevel) {
-        	$userlevelId[] = $userlevel['id'];
+        $memberlevels = $this->getLevelService()->searchLevels($conditions,0,100);
+        foreach ($memberlevels as $memberlevel) {
+        	$memberlevelId[] = $memberlevel['id'];
         }
-        $userlevelId[] = $id;
+        $memberlevelId[] = $id;
 
-        return $this->getCourseDao()->findCoursesByUserLevelIdCount($userlevelId);
+        return $this->getCourseDao()->findCoursesByMemberlevelIdCount($userlevelId);
     }
 
-    public function findCoursesByHaveUserLevelIds($start, $limit)
+    public function findCoursesByHaveMemberLevelIds($start, $limit)
     {
     	$courses = CourseSerialize::unserializes(
-    		$this->getCourseDao()->findCoursesByHaveUserLevelIds($start, $limit));
+    		$this->getCourseDao()->findCoursesByHaveMemberLevelIds($start, $limit));
     	return ArrayToolkit::index($courses, 'id');
     }
 
@@ -82,7 +82,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if ($sort == 'popular') {
 			$orderBy =  array('hitNum', 'DESC');
 		} else if ($sort == 'recommended') {
-			$orderBy = array('recommendedSeq', 'ASC');
+			$orderBy = array('recommendedTime', 'DESC');
 		} else if ($sort == 'Rating') {
 			$orderBy = array('Rating' , 'DESC');
 		} else if ($sort == 'hitNum') {
@@ -437,7 +437,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 0,
-			'recommendedSeq' => 0,
 			'recommendedTime' => 0,
 		));
 
@@ -1101,12 +1100,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 	
-	public function searchMembers($conditions, $orderBy, $start, $limit)
-	{
-		$conditions = $this->_prepareCourseConditions($conditions);
-		return $this->getMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);		
-	}
-
 	public function searchMember($conditions, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);

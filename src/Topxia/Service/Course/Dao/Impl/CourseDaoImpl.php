@@ -24,29 +24,29 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findCoursesByHaveUserLevelIds($start, $limit)
+    public function findCoursesByHaveMemberLevelIds($start, $limit)
     {   
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM  {$this->getTablename()} WHERE userLevelIds !='' ORDER BY createdTime DESC LIMIT {$start} , {$limit}";
+        $sql = "SELECT * FROM  {$this->getTablename()} WHERE memberLevelIds !='' ORDER BY createdTime DESC LIMIT {$start} , {$limit}";
 
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function findCoursesByUserLevelIdCount($userlevelId)
+    public function findCoursesByMemberLevelIdCount($memberLevelId)
     {
-        if(empty($userlevelId)){ return array(); };
-        $marks = str_repeat('?,', count($userlevelId) - 1) . '?';
-        $sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE userLevelIds IN ({$marks}) ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchColumn($sql, $userlevelId);
+        if(empty($memberLevelId)){ return array(); };
+        $marks = str_repeat('?,', count($memberLevelId) - 1) . '?';
+        $sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE memberLevelIds IN ({$marks}) ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchColumn($sql, $memberLevelId);
     }
 
-    public function findCoursesByUserLevelId($userlevelId,$start,$limit)
+    public function findCoursesByMemberLevelId($memberLevelId,$start,$limit)
     {      
-        if(empty($userlevelId)){ return array(); };
-        $marks = str_repeat('?,', count($userlevelId) - 1) . '?';
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE userLevelIds IN ({$marks}) ORDER BY createdTime DESC LIMIT {$start} , {$limit};";
+        if(empty($memberLevelId)){ return array(); };
+        $marks = str_repeat('?,', count($memberLevelId) - 1) . '?';
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE memberLevelIds IN ({$marks}) ORDER BY createdTime DESC LIMIT {$start} , {$limit};";
 
-        return $this->getConnection()->fetchAll($sql,$userlevelId);
+        return $this->getConnection()->fetchAll($sql,$memberLevelId);
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)

@@ -16,7 +16,7 @@ class MemberController extends BaseController
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
     	$levels = $this->getLevelService()->searchLevels($conditions,0,100);
-    	$courses = $this->getCourseService()->findCoursesByHaveUserLevelIds(0, 100);
+    	$courses = $this->getCourseService()->findCoursesByHaveMemberLevelIds(0, 100);
         $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
         	'levels' => $levels,
@@ -33,11 +33,11 @@ class MemberController extends BaseController
 
       /*  $paginator = new Paginator(
             $request,
-            $this->getCourseService()->findCoursesByUserLevelIdCount($id),
+            $this->getCourseService()->findCoursesByMemberLevelIdCount($id),
             15
         );
 */
-     /*   $courses = $this->getCourseService()->findCoursesByUserLevelId(
+     /*   $courses = $this->getCourseService()->findCoursesByMemberLevelId(
             $id,                
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()

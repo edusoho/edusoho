@@ -10,11 +10,11 @@ interface CourseDao
 
     public function findCoursesByIds(array $ids);
 
-    public function findCoursesByHaveUserLevelIds($start,$limit);
+    public function findCoursesByHaveMemberLevelIds($start,$limit);
 
-    public function findCoursesByUserLevelId($userlevelId,$start,$limit);
+    public function findCoursesByMemberLevelId($memberLevelId,$start,$limit);
 
-    public function findCoursesByUserLevelIdCount($userlevelId);
+    public function findCoursesByMemberLevelIdCount($memberLevelId);
 
 	public function searchCourses($conditions, $orderBy, $start, $limit);
 
