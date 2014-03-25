@@ -1,4 +1,4 @@
-/*! define jquery-plugin/perfect-scrollbar/0.4.5/perfect-scrollbar-debug.css */
+/*! define jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar-debug.css */
 .ps-container .ps-scrollbar-x-rail {
     position: absolute; /* please don't change 'position' */
     bottom: 3px; /* there must be 'bottom' for ps-scrollbar-x-rail */
@@ -102,11 +102,23 @@
     transition: background-color .2s linear;
 }
 
-.ps-container.ie .ps-scrollbar-y {
+.ps-container.ie6 .ps-scrollbar-y {
     font-size: 0; /* fixed scrollbar height in xp sp3 ie6 */
 }
 
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
     background-color: #999;
+}
+
+.ps-container.ie .ps-scrollbar-x,
+.ps-container.ie .ps-scrollbar-y {
+    visibility: hidden;
+}
+
+.ps-container.ie:hover .ps-scrollbar-x,
+.ps-container.ie:hover .ps-scrollbar-y,
+.ps-container.ie.hover .ps-scrollbar-x,
+.ps-container.ie.hover .ps-scrollbar-y {
+    visibility: visible;
 }

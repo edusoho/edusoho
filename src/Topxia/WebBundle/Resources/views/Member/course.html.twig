@@ -7,7 +7,7 @@
 	<ul class="nav nav-tabs course-dashboard-tabs clearfix" id="course-tabs">
     {% if userlevels %}
         {% for userlevel in userlevels %}
-    	   <li {% if id == userlevel.id %} class="active"{% endif %} ><a class="js-nav" href="{{ path('member_course_show', {id:userlevel.id}) }}">{{ userlevel.name }}</a></li>
+    	   <li {% if id == userlevel.id %} class="active"{% endif %} ><a class="js-nav" href="{{ path('member_course', {id:userlevel.id}) }}">{{ userlevel.name }}</a></li>
         {% endfor %}
     {% else %}
         <div class="empty">用户等级为空</div>

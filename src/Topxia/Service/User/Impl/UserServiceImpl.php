@@ -288,10 +288,13 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = ArrayToolkit::filter($fields, array(
             'truename' => '',
             'gender' => 'secret',
+            'iam' => '',
             'birthday' => null,
             'city' => '',
             'mobile' => '',
             'qq' => '',
+            'school' => '',
+            'class' => '',
             'company' => '',
             'job' => '',
             'signature' => '',

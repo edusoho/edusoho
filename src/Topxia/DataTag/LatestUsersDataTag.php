@@ -18,9 +18,13 @@ class LatestUsersDataTag extends CourseBaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {	
+        $conditions = array();
+        if (!empty($arguments['onlyMember'])) {
+            $conditions['role'] = 'ROLE_USER';
+        }
 
         $this->checkCount($arguments);
-    	$users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, $arguments['count']);
+    	$users = $this->getUserService()->searchUsers($conditions, array('createdTime', 'DESC'), 0, $arguments['count']);
 
         return $this->unsetUserPasswords($users);
     }

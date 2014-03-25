@@ -102,11 +102,11 @@ kindeditor_upload:
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
     methods: [POST]
 
-member_show:
+member:
     pattern: /member
     defaults: { _controller: TopxiaWebBundle:Member:index }
 
-member_course_show:
+member_course:
     pattern: /member/course/{id}
     defaults: { _controller: TopxiaWebBundle:Member:course }
 

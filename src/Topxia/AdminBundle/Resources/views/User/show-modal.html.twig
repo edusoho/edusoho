@@ -75,6 +75,50 @@
   </tr>
 
   <tr>
+    <th>类型</th>
+    <td>
+      {% if profile.iam %}
+        {{ profile.iam }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+ 
+  <tr>
+    <th>学校</th>
+    <td>
+      {% if profile.school %}
+        {{ profile.school }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>班级</th>
+    <td>
+      {% if profile.class %}
+        {{ profile.class }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>公司</th>
+    <td>
+      {% if profile.company %}
+        {{ profile.company }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
     <th>职业</th>
     <td>
       {% if profile.job %}
@@ -84,6 +128,7 @@
       {% endif %}
     </td>
   </tr>
+
 
   <tr>
     <th>头衔</th>

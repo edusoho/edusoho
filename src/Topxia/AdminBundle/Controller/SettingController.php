@@ -312,8 +312,8 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新云存储设置", $storageSetting);
-            $this->setFlashMessage('success', '云存储设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', "更新云视频设置", $storageSetting);
+            $this->setFlashMessage('success', '云视频设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
@@ -473,6 +473,29 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:admin-sync.html.twig', array(
             'mode' => $setting['mode'],
             'bind' => $bind,
+        ));
+    }
+
+    public function developerAction(Request $request)
+    {
+        $developerSetting = $this->getSettingService()->get('developer', array());
+
+        $default = array(
+            'debug' => '0',
+            'app_api_url' => '',
+        );
+
+        $developerSetting = array_merge($default, $developerSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $developerSetting = $request->request->all();
+            $this->getSettingService()->set('developer', $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+            $this->setFlashMessage('success','开发者已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
+            'developerSetting' => $developerSetting
         ));
     }
 

@@ -1,7 +1,13 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as web_macro %}
 <tr>
-  <td>{{ batch.name }}</td>
   <td>
+    {{ batch.name }}
+    <div class="short-long-text">
+      <div class="short-text text-sm text-muted">{{ batch.description|plain_text(10) }} <span class="trigger">(展开)</span></div>
+      <div class="long-text">{{ batch.description|raw }} <span class="trigger">(收起)</span></div>
+    </div>
+  </td>
+  <td class="text-danger">
   {% if batch.type=='discount' %}
     <span>打折{{ batch.rate|number_format(1) }}折</span>
   {% elseif batch.type=='minus' %}
@@ -10,13 +16,20 @@
   </td>
   <td>{{ batch.generatedNum }}</td>  
   <td>{{ batch.usedNum }}</td>
-  <td>{{ batch.money }}</td>
-  <td>{{ batch.description|default('无说明') }}</td>
+  <td class="text-danger">{{ batch.money }}</td>
   <td>{{ batch.deadline|date('Y-n-d') }}</td>
   <td>{{ batch.createdTime|date('Y-n-d H:i') }}</td>
   <td>
-    <a href="{{ path('admin_coupon_batch_export', {batchId:batch.id}) }}" >导出CSV文件</a>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show', {batchId:batch.id}) }}">详情</a>
-    <a class="coupon-remove" href="javascript:;" data-url="{{ path('admin_coupon_delete', {id:batch.id}) }}">删除</a>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show', {batchId:batch.id}) }}">详情</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="{{ path('admin_coupon_batch_export', {batchId:batch.id}) }}" >导出CSV文件</a></li>
+        <li class="divider"></li>
+        <li> <a class="coupon-remove" href="javascript:;" data-url="{{ path('admin_coupon_delete', {id:batch.id}) }}">删除</a></li>
+      </ul>
+    </div>
   </td>
 </tr>

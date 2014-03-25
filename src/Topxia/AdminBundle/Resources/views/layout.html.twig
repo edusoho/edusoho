@@ -46,6 +46,9 @@
           <li {% if nav == 'order' %}class="active"{% endif %}><a href="{{ path('admin_order') }}">订单</a></li>
           <li {% if nav == 'user' %}class="active"{% endif %}><a href="{{ path('admin_user') }}">用户</a></li>
           <li {% if nav == 'content' %}class="active"{% endif %}><a href="{{ path('admin_navigation') }}">内容</a></li>
+          <li {% if nav == 'app' %}class="active"{% endif %}>
+            <a href="{{ path('admin_app_installed') }}">应用</a>
+          </li>
           {% if is_granted('ROLE_SUPER_ADMIN') %}
           <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
           {% endif %}

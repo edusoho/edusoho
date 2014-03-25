@@ -70,6 +70,29 @@ class CourseController extends BaseController
         ));
     }
 
+    public function chooserAction (Request $request)
+    {   
+        $conditions = $request->query->all();
+
+        $count = $this->getCourseService()->searchCourseCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+
+        return $this->render('TopxiaAdminBundle:Course:course-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'courses' => $courses ,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator
+        ));
+    }
+
     private function renderCourseTr($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);

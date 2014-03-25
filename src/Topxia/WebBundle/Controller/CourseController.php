@@ -28,7 +28,7 @@ class CourseController extends BaseController
         }
 
 
-        $sort = $request->query->get('sort', 'popular');
+        $sort = $request->query->get('sort', 'latest');
 
         $conditions = array(
             'status' => 'published',
@@ -200,7 +200,7 @@ class CourseController extends BaseController
 
 
         if (in_array($as, array('member', 'guest'))) {
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN') and empty($member)) {
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 $member = array(
                     'id' => 0,
                     'courseId' => $course['id'],
@@ -211,7 +211,8 @@ class CourseController extends BaseController
                     'isVisible' => 0,
                     'role' => 'teacher',
                     'locked' => 0,
-                    'createdTime' => time()
+                    'createdTime' => time(),
+                    'deadline' => 0
                 );
             }
 
@@ -329,6 +330,11 @@ class CourseController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
+
+        if (!$this->getCourseService()->canTakeCourse($id)) {
+            return $this->createMessageResponse('info', '您还不是该课程的学员，请先购买加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+        } 
+
         try{
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
             if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
@@ -383,7 +389,8 @@ class CourseController extends BaseController
             'member' => $member,
             'users' => $users,
             'manage' => $manage,
-            'isNonExpired' => $isNonExpired
+            'isNonExpired' => $isNonExpired,
+            'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
 

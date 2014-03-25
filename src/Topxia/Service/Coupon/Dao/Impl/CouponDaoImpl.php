@@ -10,6 +10,21 @@ class CouponDaoImpl extends BaseDao implements CouponDao
 {
     protected $table = 'coupon';
 
+    public function getCoupon($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
+    public function findCouponsByBatchId($batchId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM  $this->table WHERE batchId = {$batchId} ORDER BY createdTime DESC LIMIT {$start} , {$limit}";
+
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     public function searchCoupons($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -28,22 +43,14 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         return $builder->execute()->fetchColumn(0);
     }
     
-    public function addCoupons($coupons)
+    public function addCoupon($coupon)
     {
-        if(empty($coupons)){ return array(); }
-        $couponsForSQL = array();
-        foreach ($coupons as $value) {
-            $couponsForSQL = array_merge($couponsForSQL, array_values($value));
+        $affected = $this->getConnection()->insert($this->table, $coupon);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert Coupon error.');
         }
 
-        $sql = "INSERT INTO $this->table (code, type, status, rate, batchId, deadline, targetType, createdTime)  VALUE ";
-        for ($i=0; $i < count($coupons); $i++) {
-            $sql .= "(?, ?, ?, ?, ?, ?, ?, ?),";
-        }
-
-        $sql = substr($sql, 0, -1);
-
-        return $this->getConnection()->executeUpdate($sql, $couponsForSQL);
+        return $this->getCoupon($this->getConnection()->lastInsertId());
     }
 
     public function deleteCouponsByBatch($id)
@@ -53,18 +60,19 @@ class CouponDaoImpl extends BaseDao implements CouponDao
 
     private function _createSearchQueryBuilder($conditions)
     {   
+        $conditions = array_filter($conditions);
         if (isset($conditions['code'])) 
         {
             $conditions['codeLike'] = "%{$conditions['code']}%";
             unset($conditions['code']);
         }
         if (isset($conditions['startDateTime'])) 
-        {
-            $conditions['startDateTime'] = strtotime($conditions['startDateTime']);
+        {   
+            $conditions['startDateTime'] = strtotime($conditions['startDateTime']."\n00:00:00");
         }
         if (isset($conditions['endDateTime']))
         {
-            $conditions['endDateTime'] = strtotime($conditions['endDateTime']);
+            $conditions['endDateTime'] = strtotime($conditions['endDateTime']."+1 day");
         }
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'coupon')

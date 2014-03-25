@@ -1,39 +1,227 @@
 {% extends 'TopxiaWebBundle:Member:layout.html.twig' %}
 
-{% set main_nav = 'buyMember' %}
-
 {% block main_body %}
 
-<ul class="course-wide-list" style="margin-top:20px;">
-  {% for userlevel in userlevels %}
-    <li class="course-item clearfix">
-        <img class="course-picture" style="float:left;width:150px;" src="{{ userlevel.icon}}" alt="{{ userlevel.name}}">
-      <div class="course-view" style="float:right;margin:5px;">
-        <a href="{{ path('member_course_show', {id:userlevel.id}) }}" type="button" class="btn btn-primary btn-sm">查看会员课程</a>
-        <button type="button" class="btn btn-primary btn-sm">购买</button>
-      </div>
-      <div class="course-body">
-        <h4 class="course-title"><a href="/course/5">{{ userlevel.name}}</a></h4>
-        <div class="course-about ellipsis">{{ userlevel.description }}</div>
-        <div class="course-footer clearfix">
-          <div class="teacher">
-            <span class="teacher-title" style="color:#006600;font-size:18px;white-space:nowrap;margin-bottom:10px;">{{ userlevel.monthPrice }}元/月,{{ userlevel.yearPrice }}元/年</span>
-          </div>
-        </div>
-      </div>
-    </li>
-  {% endfor %}
-</ul>
+    <div class="col-md-9">
 
-<div class="es-box-heading"><h2>最新课程</h2></div>
-<div class="es-box-body">
-  {% if courses %}
-    {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
-    {% if courses|length >= 12 %}
-      <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
-    {% endif %}
-  {% else %}
-    <div class="empty">还没有发布的课程</div>
-  {% endif %}
-</div>
+      {% set memberBlocks = data('Blocks',{'codes':['member_banner'] }) %}
+      {% if memberBlocks.member_banner %}
+        <div id="member-carousel" class="carousel slide mbl hidden-xs" data-ride="carousel">
+          <ol class="carousel-indicators">
+              <li data-target="#member-carousel" data-slide-to="0" class="active"></li>
+              <li data-target="#member-carousel" data-slide-to="1" class=""></li>
+              <li data-target="#member-carousel" data-slide-to="2" class=""></li>
+          </ol>
+          <div class="carousel-inner">{{ memberBlocks.member_banner|raw }}</div>
+        </div>
+      {% endif %}
+
+      <div class="es-box-heading"><h2>购买会员</h2></div>
+      <ul class="course-wide-list">
+        {% for level in levels %}
+          <li class="course-item clearfix member-item">
+              <img class="course-picture" src="{{ level.picture }}" alt="{{ level.name}}">
+            <div class="course-view">
+              <a href="{{ path('member_course', {id:level.id}) }}" class="btn btn-primary btn-sm">查看会员课程</a>
+              <a  href="#" class="btn btn-primary btn-sm">购买</a>
+            </div>
+            <div class="course-body">
+              <h4 class="course-title"><a href="{{ path('member_course', {id:level.id}) }}">{{ level.name}}</a></h4>
+              <div class="course-about ellipsis">{{ level.description }}</div>
+              <div class="course-footer clearfix">
+                <span class="course-price" >{{ level.monthPrice }}元/月 {{ level.yearPrice }}元/年</span>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="es-box-heading">
+        <a href="#" class="pull-right">更多 &raquo;</a>
+        <h2>最新会员课程</h2>
+      </div>
+      <div class="es-box-body">
+        <ul class="course-grids">
+          <li class="course-grid">
+            <a href="/course/3" class="grid-body">
+              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
+              <span class="title">外汇管理师课程</span>
+              <span class="metas clearfix">
+                <span class="price-col">
+                  <span class="meta-label">价格</span>
+                  <span class="price-num">免费</span>
+                </span>
+
+                <span class="student-col">
+                  <span class="meta-label">学生</span>
+                  <span class="student-num">3人</span>
+                </span>
+                <span class="review-col">
+                  <span class="meta-label"><strong>2</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-5">&nbsp;</span>
+                  </span>
+                </span>
+              </span>
+              <span class="teacher clearfix">
+                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
+                <span class="nickname ellipsis">测试管理员</span>
+                <span class="user-title ellipsis">CEO</span>
+              </span>
+            </a>
+          </li>
+          <li class="course-grid">
+            <a href="/course/3" class="grid-body">
+              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
+              <span class="title">外汇管理师课程</span>
+              <span class="metas clearfix">
+                <span class="price-col">
+                  <span class="meta-label">价格</span>
+                  <span class="price-num">免费</span>
+                </span>
+
+                <span class="student-col">
+                  <span class="meta-label">学生</span>
+                  <span class="student-num">3人</span>
+                </span>
+                <span class="review-col">
+                  <span class="meta-label"><strong>2</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-5">&nbsp;</span>
+                  </span>
+                </span>
+              </span>
+              <span class="teacher clearfix">
+                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
+                <span class="nickname ellipsis">测试管理员</span>
+                <span class="user-title ellipsis">CEO</span>
+              </span>
+            </a>
+          </li>
+          <li class="course-grid">
+            <a href="/course/3" class="grid-body">
+              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
+              <span class="title">外汇管理师课程</span>
+              <span class="metas clearfix">
+                <span class="price-col">
+                  <span class="meta-label">价格</span>
+                  <span class="price-num">免费</span>
+                </span>
+
+                <span class="student-col">
+                  <span class="meta-label">学生</span>
+                  <span class="student-num">3人</span>
+                </span>
+                <span class="review-col">
+                  <span class="meta-label"><strong>2</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-5">&nbsp;</span>
+                  </span>
+                </span>
+              </span>
+              <span class="teacher clearfix">
+                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
+                <span class="nickname ellipsis">测试管理员</span>
+                <span class="user-title ellipsis">CEO</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="es-box-heading">
+        <a href="#" class="pull-right">更多 &raquo;</a>
+        <h2>最新热门课程</h2>
+      </div>
+      <div class="es-box-body">
+        <ul class="course-grids">
+          <li class="course-grid">
+            <a href="/course/3" class="grid-body">
+              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
+              <span class="title">外汇管理师课程</span>
+              <span class="metas clearfix">
+                <span class="price-col">
+                  <span class="meta-label">价格</span>
+                  <span class="price-num">免费</span>
+                </span>
+
+                <span class="student-col">
+                  <span class="meta-label">学生</span>
+                  <span class="student-num">3人</span>
+                </span>
+                <span class="review-col">
+                  <span class="meta-label"><strong>2</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-5">&nbsp;</span>
+                  </span>
+                </span>
+              </span>
+              <span class="teacher clearfix">
+                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
+                <span class="nickname ellipsis">测试管理员</span>
+                <span class="user-title ellipsis">CEO</span>
+              </span>
+            </a>
+          </li>
+          <li class="course-grid">
+            <a href="/course/3" class="grid-body">
+              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
+              <span class="title">外汇管理师课程</span>
+              <span class="metas clearfix">
+                <span class="price-col">
+                  <span class="meta-label">价格</span>
+                  <span class="price-num">免费</span>
+                </span>
+
+                <span class="student-col">
+                  <span class="meta-label">学生</span>
+                  <span class="student-num">3人</span>
+                </span>
+                <span class="review-col">
+                  <span class="meta-label"><strong>2</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-5">&nbsp;</span>
+                  </span>
+                </span>
+              </span>
+              <span class="teacher clearfix">
+                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
+                <span class="nickname ellipsis">测试管理员</span>
+                <span class="user-title ellipsis">CEO</span>
+              </span>
+            </a>
+          </li>
+          <li class="course-grid">
+            <a href="/course/3" class="grid-body">
+              <img src="/assets/img/default/course-large.png?2.3.3" class="img-responsive thumb">
+              <span class="title">外汇管理师课程</span>
+              <span class="metas clearfix">
+                <span class="price-col">
+                  <span class="meta-label">价格</span>
+                  <span class="price-num">免费</span>
+                </span>
+
+                <span class="student-col">
+                  <span class="meta-label">学生</span>
+                  <span class="student-num">3人</span>
+                </span>
+                <span class="review-col">
+                  <span class="meta-label"><strong>2</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-5">&nbsp;</span>
+                  </span>
+                </span>
+              </span>
+              <span class="teacher clearfix">
+                <img src="/files/user/2014/03-10/16453717c7d5287844.jpg?2.3.3" class="thumb">
+                <span class="nickname ellipsis">测试管理员</span>
+                <span class="user-title ellipsis">CEO</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
 {% endblock %}

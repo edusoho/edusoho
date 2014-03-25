@@ -253,36 +253,32 @@ admin_level_zone:
 
 admin_coupon:
     pattern: /coupon
-    defaults: { _controller: TopxiaAdminBundle:Coupon:index }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:index }
 
 admin_coupon_generate:
     pattern: /coupon/generate
-    defaults: { _controller: TopxiaAdminBundle:Coupon:generate }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:generate }
 
 admin_coupon_checkprefix:
     pattern: /coupon/checkprefix
-    defaults: { _controller: TopxiaAdminBundle:Coupon:checkPrefix }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:checkPrefix }
 
 admin_coupon_delete:
     pattern: /coupon/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Coupon:delete }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:delete }
     methods: [POST]
 
 admin_coupon_query:
-    pattern: /coupon/query
-    defaults: { _controller: TopxiaAdminBundle:Coupon:query }
-
-admin_coupon_course:
-    pattern: /coupon/course
-    defaults: { _controller: TopxiaAdminBundle:Coupon:course }
+    pattern: /coupon/index
+    defaults: { _controller: TopxiaAdminBundle:Coupon:index }
 
 admin_coupon_batch_export:
     pattern: /coupon/export/csv/{batchId}
-    defaults: { _controller: TopxiaAdminBundle:Coupon:exportCsv }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:exportCsv }
 
 admin_coupon_show:
     pattern: /coupon/show/{batchId}
-    defaults: { _controller: TopxiaAdminBundle:Coupon:couponShow }
+    defaults: { _controller: TopxiaAdminBundle:CouponBatch:detail }
 
 admin_comment:
     pattern:  /comment
@@ -370,6 +366,10 @@ admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
+
+admin_course_chooser:
+    pattern: /course/chooser
+    defaults: { _controller: TopxiaAdminBundle:Course:chooser }
 
 admin_course_category:
     pattern: /course/category
@@ -491,6 +491,10 @@ admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
+admin_setting_developer:
+    pattern:  /setting/developer
+    defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+
 admin_optimize:
     pattern:  /optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
@@ -531,6 +535,18 @@ admin_cloud_bill:
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
+
+admin_app_installed:
+    pattern:  /app/installed
+    defaults: { _controller: TopxiaAdminBundle:App:installed }
+
+admin_app_updates:
+    pattern:  /app/updates
+    defaults: { _controller: TopxiaAdminBundle:App:updates }
+
+admin_app_logs:
+    pattern:  /app/logs
+    defaults: { _controller: TopxiaAdminBundle:App:logs }
 
 admin_upgrade:
     pattern:  /upgrade

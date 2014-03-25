@@ -10,7 +10,7 @@
         <th>优惠码</th>
         <th>状态</th>
         <th>使用者</th>
-        <th>使用</th>
+        <th>订单信息</th>
         <th>原价</th>
         <th>实付</th>
         <th>使用时间</th>
@@ -24,21 +24,21 @@
 		  <td>{{ coupon.code }}</td>
 		  <td>{% if coupon.status == 'unused' %}未使用{% else %}已使用{% endif %}</td> 
 		  <td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
-		  <td>
+		  <td class="text-danger">
 		  	{% if course %}
 		  		购买课程《<a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>》
 		  	{% else %}
 		  		-
 		  	{% endif %}
 		  </td> 
-		  <td>
+		  <td class="text-danger">
 		  	{% if course %}
 		  		{{ course.price }}元
 		  	{% else %}
 		  		-
 		  	{% endif %}
 		  </td>
-		  <td>
+		  <td class="text-danger">
 		  	{% if course %}
 			  	{% if coupon.type == 'minus' %}
 			  		{{ course.price - coupon.rate }}元
