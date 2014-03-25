@@ -4,6 +4,7 @@ namespace Topxia\Service\CloudPlatform\Impl;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\Client\EduSohoAppClient;
 use Topxia\Service\Common\BaseService;
+use Topxia\Common\ArrayToolkit;
 use Topxia\System;
 
 class AppServiceImpl extends BaseService implements AppService
@@ -20,6 +21,12 @@ class AppServiceImpl extends BaseService implements AppService
     public function findAppCount()
     {
         return $this->getAppDao()->findAppCount();
+    }
+
+    public function findAppsByCodes(array $codes)
+    {
+        $apps = $this->getAppDao()->findAppsByCodes($codes);
+        return ArrayToolkit::index($apps, 'code');
     }
 
     public function getCenterApps()

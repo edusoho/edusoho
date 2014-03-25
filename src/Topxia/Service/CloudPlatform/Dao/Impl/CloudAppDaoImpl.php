@@ -21,6 +21,18 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
         return $this->getConnection()->fetchAssoc($sql, array($code)) ? : null;
     }
 
+    public function findAppsByCodes(array $codes)
+    {
+        if (empty($codes)) { 
+            return array(); 
+        }
+
+        $marks = str_repeat('?,', count($codes) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE code IN ({$marks});";
+
+        return $this->getConnection()->fetchAll($sql, $codes);
+    }
+
     public function findApps($start, $limit)
     {
          $this->filterStartLimit($start, $limit);

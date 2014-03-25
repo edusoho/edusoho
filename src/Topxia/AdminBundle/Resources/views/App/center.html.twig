@@ -21,6 +21,7 @@
     </thead>
     <tbody>
       {% for app in apps %}
+        {% set installedApp = installedApps[app.code]|default(null) %}
       <tr>
         <td>
           <div><strong class="text-primary">{{ app.name }} - </strong><span class="text-info">{{ app.latestVersion }}</span></div>
@@ -31,7 +32,11 @@
           {{ app.developerName }}
         </td>
         <td>
-          <a href="#" class="btn btn-primary">管理</a>
+          {% if installedApp %}
+            <a href="#" class="btn btn-default disabled">已安装</a>
+          {% else %}
+            <a href="#" class="btn btn-primary">安装</a>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

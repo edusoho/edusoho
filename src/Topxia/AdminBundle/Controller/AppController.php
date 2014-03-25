@@ -17,8 +17,13 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->getCenterApps();
 
+        $codes = ArrayToolkit::column($apps, 'code');
+
+        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
             'apps' => $apps,
+            'installedApps' => $installedApps,
         ));
     }
 
