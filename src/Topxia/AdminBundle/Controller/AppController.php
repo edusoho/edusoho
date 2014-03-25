@@ -21,11 +21,12 @@ class AppController extends BaseController
         ));
     }
 
-    public function updatesAction(Request $request)
+    public function upgradesAction(Request $request)
     {
-        $this->getAppService()->checkAppUpgrades();
-        return $this->render('TopxiaAdminBundle:App:updates.html.twig', array(
+        $apps = $this->getAppService()->checkAppUpgrades();
 
+        return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
+            'apps' => $apps,
         ));
     }
 

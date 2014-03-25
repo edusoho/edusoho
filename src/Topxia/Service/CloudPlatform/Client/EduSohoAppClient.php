@@ -60,6 +60,8 @@ class EduSohoAppClient implements AppClient
     {
         $url = "{$this->apiUrl}?action={$action}";
 
+        $edusoho = array('edition' => 'opensource', 'version' => System::VERSION);
+        $args['_edusoho'] = $edusoho;
 
         $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;

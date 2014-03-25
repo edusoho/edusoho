@@ -30,7 +30,12 @@ class AppServiceImpl extends BaseService implements AppService
         }
         $apps = $this->findApps(0, self::MAX_APP_COUNT);
 
-        // return $this->getEduSohoUpgradeClient()->check($packages);
+        $args = array();
+        foreach ($apps as $app) {
+            $args[$app['code']] = $app['version'];
+        }
+
+        return $this->createAppClient()->checkUpgradePackages($args);
     }
 
     public function findLogs($start, $limit)

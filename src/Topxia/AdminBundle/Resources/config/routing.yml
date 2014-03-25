@@ -543,9 +543,9 @@ admin_app_installed:
     pattern:  /app/installed
     defaults: { _controller: TopxiaAdminBundle:App:installed }
 
-admin_app_updates:
-    pattern:  /app/updates
-    defaults: { _controller: TopxiaAdminBundle:App:updates }
+admin_app_upgrades:
+    pattern:  /app/upgrades
+    defaults: { _controller: TopxiaAdminBundle:App:upgrades }
 
 admin_app_logs:
     pattern:  /app/logs
