@@ -15,6 +15,7 @@
       </div>
     </div>
 
+    {% if course.price > 0 %}
     <div class="form-group">
       <div class="col-md-3 control-label">价格</div>
       <div class="col-md-9 controls">
@@ -23,6 +24,7 @@
       	</span>
       </div>
     </div>
+    {% endif %}
 
     {% if course.price > 0 %}
       {% if payments %}
