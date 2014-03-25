@@ -45,7 +45,7 @@ class MemberDaoImpl extends BaseDao implements MemberDao
         return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
 	}
 
-	public function deleteMember($userId)
+	public function deleteMemberByUserId($userId)
 	{
         $affected = $this->getConnection()->delete($this->table, $userId);
         if ($affected <= 0) {

@@ -10,7 +10,7 @@ interface MemberDao
 
 	public function searchMembersCount($conditions);
 
-	public function deleteMember($userId);
+	public function deleteMemberByUserId($userId);
 
 	public function addMember($member);
 

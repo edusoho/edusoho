@@ -99,8 +99,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $memberHistory = $this->createMemberHistory($historyData);
 
         $condition['userId'] = $member['userId'];
-        // @todo deleteMemberByUserId
-        $this->getMemberDao()->deleteMember($condition);
+        $this->getMemberDao()->deleteMemberByUserId($condition);
 
         $this->getLogService()->info('Member', 'delete', "管理员删除会员资料 {$memberHistory['nickname']} (#{$memberHistory['userId']})", $historyData);
     }
