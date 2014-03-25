@@ -258,7 +258,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
-
         return $user;
     }
 
@@ -738,6 +737,8 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;
     }
+    
+
 
     public function getUserCountByApprovalStatus($approvalStatus)
     {
