@@ -3,7 +3,7 @@
  
 
   
-  <td class="text-muted text-sm text-break">{{ linksale.tUrl }}</td>
+  <td class="text-muted text-sm text-break"><p  id="becopied{{linksale.id}}">{{ linksale.tUrl }}</p></td>
   
   
    <td>
@@ -23,8 +23,8 @@
   <td class="mvl">
     
     
-        <button id="copy-button" class="copy-button" value="abc">点击复制该链接</button>
-        <div id="copy" class="copy"></div>
+        <button id="copy-button{{linksale.id}}" class="copy-button" >点击复制该链接</button>
+        <div id="copy{{linksale.id}}" class="copy{{linksale.id}}"></div>
       
 
   </td>
