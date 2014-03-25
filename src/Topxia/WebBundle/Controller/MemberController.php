@@ -18,29 +18,35 @@ class MemberController extends BaseController
         ));
     }
 
-    public function courseAction(Request $request,$id)
+    public function courseAction(Request $request)
     {   
         $conditions = array();
 
-        $paginator = new Paginator(
+      /*  $paginator = new Paginator(
             $request,
             $this->getCourseService()->findCoursesByUserLevelIdCount($id),
             15
         );
-
-        $courses = $this->getCourseService()->findCoursesByUserLevelId(
+*/
+     /*   $courses = $this->getCourseService()->findCoursesByUserLevelId(
             $id,                
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-        );
+        );*/
 
         
-        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
+        $levels = $this->getLevelService()->searchLevels($conditions,0,100);
         return $this->render('TopxiaWebBundle:Member:course.html.twig',array(
-            'courses' => $courses,
-            'userlevels' => $userlevels,
-            'id' => $id,
-            'paginator' => $paginator
+            'levels' => $levels
+        ));
+    }
+
+    public function historyAction(Request $request)
+    {       
+        $conditions = array();
+        $levels = $this->getLevelService()->searchLevels($conditions,0,100);
+        return $this->render('TopxiaWebBundle:Member:history.html.twig', array(
+            'levels' => $levels
         ));
     }
 
