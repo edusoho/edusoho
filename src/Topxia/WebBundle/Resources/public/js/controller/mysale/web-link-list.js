@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
         $(document).ready(function() {
 
-            var copyButton = 'copy-button';
+            var copyButton = 'button';
 
 
             $('.copy-button').each(function() {
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                     path: '/assets/libs/jquery-plugin/zclip/1.1.1/ZeroClipboard.swf',
                     copy: function() {
 
-                        var hpid='p#becopied' + thisId;
+                        var hpid='p#content' + thisId;
                        
                         return $(hpid).text();
                     },
