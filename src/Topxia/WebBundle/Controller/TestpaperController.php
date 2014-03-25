@@ -151,7 +151,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
-            throw createAccessDeniedException('无权预览试卷！');
+            throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
@@ -353,7 +353,7 @@ class TestpaperController extends BaseController
 
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
-            throw createAccessDeniedException('无权批阅试卷！');
+            throw $this->createAccessDeniedException('无权批阅试卷！');
         }
 
         if ($testpaperResult['status'] != 'reviewing') {

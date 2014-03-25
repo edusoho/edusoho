@@ -784,10 +784,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         if ($target[0] == 'course') {
             $targetId = explode('/', $target[1]);
-            $course = $this->getCourseService()->getCourse($targetId[0]);
+            $member = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
 
             // @todo: 这个是有问题的。
-            if (in_array($user['id'], $course['teacherIds'])) {
+            if ($member['role'] == 'teacher') {
                 return $user['id'];
             }
         }

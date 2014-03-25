@@ -51,14 +51,68 @@ class CourseController extends BaseController
 
     public function recommendAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->recommendCourse($id);
-        return $this->renderCourseTr($id);
+        $course = $this->getCourseService()->getCourse($id);
+
+        $ref = $request->query->get('ref');
+
+        if ($request->getMethod() == 'POST') {
+            $number = $request->request->get('number');
+
+            $course = $this->getCourseService()->recommendCourse($id, $number);
+
+            $user = $this->getUserService()->getUser($course['userId']);
+
+            if ($ref == 'recommendList') {
+                return $this->render('TopxiaAdminBundle:Course:course-recommend-tr.html.twig', array(
+                    'course' => $course,
+                    'user' => $user
+                ));
+            }
+
+
+            return $this->renderCourseTr($id);
+        }
+
+
+        return $this->render('TopxiaAdminBundle:Course:course-recommend-modal.html.twig', array(
+            'course' => $course,
+            'ref' => $ref
+        ));
     }
 
     public function cancelRecommendAction(Request $request, $id)
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
         return $this->renderCourseTr($id);
+    }
+
+    public function recommendListAction(Request $request)
+    {
+        $conditions = array(
+            'status' => 'published',
+            'recommended'=> 1
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions),
+            20
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            'recommended',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+
+        return $this->render('TopxiaAdminBundle:Course:course-recommend-list.html.twig', array(
+            'courses' => $courses,
+            'users' => $users,
+            'paginator' => $paginator
+        ));
     }
 
 
