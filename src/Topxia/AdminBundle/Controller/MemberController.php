@@ -47,10 +47,13 @@ class MemberController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
+        $levels = $this->makeMemberLevelOptions();
+
         return $this->render('TopxiaAdminBundle:Member:index.html.twig', array(
             'members' => $members ,
             'paginator' => $paginator,
             'memberCount' => $memberCount,
+            'levels' => $levels,
             'users' => $users,
             'type' =>$type
         ));
@@ -63,9 +66,19 @@ class MemberController extends BaseController
             
             $formData = $request->request->all();
             $member = $this->getMemberService()->createMember($formData);
-            return $this->redirect($this->generateUrl('admin_member'));
+            $user = $this->getUserService()->getUser($member['userId']);
+            $level = $this->getLevelService()->getLevel($member['levelId']);
+             return $this->render('TopxiaAdminBundle:Member:member-table-tr.html.twig',array(
+                'member' => $member,
+                'user' => $user,
+                'type' => 'all',
+                'level' => $level['name']
+            ));
         }
-        return $this->render('TopxiaAdminBundle:Member:create-model.html.twig');
+        $levels = $this->makeMemberLevelOptions();
+        return $this->render('TopxiaAdminBundle:Member:modal.html.twig',array(
+            'levels' => $levels
+        ));
     }
 
     public function nicknameCheckAction( Request $request )
@@ -102,12 +115,14 @@ class MemberController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-      
+        
+        $levels = $this->makeMemberLevelOptions();
         return $this->render('TopxiaAdminBundle:Member:bought-history.html.twig',array(
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
             'userNickname' => $memberHistories[0]['userNickname'],
-            'show_usernick' => -1
+            'show_usernick' => -1,
+            'levels' => $levels
             ));
     }
 
@@ -133,11 +148,14 @@ class MemberController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $levels = $this->makeMemberLevelOptions();
+
         return $this->render('TopxiaAdminBundle:Member:bought-list.html.twig',array(
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
             'menu' => 'member_history',
-            'show_usernick' => 1
+            'show_usernick' => 1,
+            'levels' => $levels
             ));
     }
 
@@ -146,20 +164,25 @@ class MemberController extends BaseController
         $user = $this->getUserService()->getUser($userId);
         $member = $this->getMemberService()->getMemberByuserId($userId);
 
+         $levels = $this->makeMemberLevelOptions();
+
         if ($request->getMethod() == 'POST') {
 
             $formData = $request->request->all();
             $member = $this->getMemberService()->updateMemberInfo($userId, $formData);
+            $level = $this->getLevelService()->getLevel($member['levelId']);
             return $this->render('TopxiaAdminBundle:Member:member-table-tr.html.twig',array(
                 'member' => $member,
                 'user' => $user,
+                'level' => $level['name'],
                 'type' => 'all'
             ));
         }
 
-        return $this->render('TopxiaAdminBundle:Member:edit-modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Member:modal.html.twig', array(
             'member' => $member,
-            'user' =>$user
+            'user' => $user,
+            'levels' => $levels
         ));
     }
     
@@ -181,7 +204,29 @@ class MemberController extends BaseController
     protected function getMemberService()
     {
         return $this->getServiceKernel()->createService('User.MemberService');
+    }    
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('User.LevelService');
     }
+
+    protected function makeMemberLevelOptions()
+    {
+        $levels = $this->getLevelService()->searchLevels(
+            $conditions=array(),
+            0,
+            $this->getLevelService()->searchLevelsCount(array())
+        );
+
+        $options = array();
+        foreach ($levels as $level) {
+            $options[$level['id']] = $level['name'];
+        }
+
+        return $options;
+    }
+
 
 }
 

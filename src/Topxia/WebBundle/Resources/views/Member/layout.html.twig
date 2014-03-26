@@ -38,11 +38,12 @@
             {% endif %}
           </div>
         </div>
-        <p>
-          <a class="btn btn-primary btn btn-block" href="#">开通会员</a>
-          <a class="btn btn-primary btn btn-block" href="#">会员续费</a>
-          <a class="btn btn-primary btn btn-block" href="{{ path('member_history') }}">购买历史</a>
-        </p>
+        <div class="list-group">
+          <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员频道首页</a>
+          <a class="list-group-item" href="#">开通会员</a>
+          <a class="list-group-item" href="#">会员续费</a>
+          <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('member_history') }}">购买历史</a>
+        </div>  
       {% else %}
         <div class="well text-danger">请先登录后再购买会员</div>
       {% endif %}
@@ -62,7 +63,7 @@
             </li>
             {% endfor %}
           {% else %}
-            <div class="empty">无购买会员记录</div>>
+            <div class="empty">无会员记录</div>
           {% endif %}
         </ul>
       </div>

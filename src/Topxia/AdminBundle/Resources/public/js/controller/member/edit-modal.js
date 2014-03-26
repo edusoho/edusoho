@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
@@ -7,10 +6,9 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 
-        var $modal = $('#member-edit-form').parents('.modal');
-
+        var $modal = $('#member-modal-form').parents('.modal');
         var validator = new Validator({
-            element: '#member-edit-form',
+            element: '#member-modal-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
             	if (error) {
