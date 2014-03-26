@@ -27,7 +27,7 @@
   </td>
 
   <td>
-    {{ dict_text('memberLevel',memberHistory.levelId) }}
+    {{ memberLevel }}
     <br>
   </td>
 

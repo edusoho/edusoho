@@ -39,7 +39,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         if(empty($memberDate)){
             return NULL;
         }
-
         $user = $this->getUserService()->getUserByNickname($memberDate['nickname']);
         if(empty($user)){
             throw $this->createNotFoundException('user not exists!');
@@ -58,7 +57,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $memberHistory = $this->createMemberHistory($historyData);
         
         $this->getLogService()->info('member', 'add', "管理员添加新会员 {$memberHistory['nickname']} ({$memberHistory['userId']})");
-
+        
         return $member;
     }
     

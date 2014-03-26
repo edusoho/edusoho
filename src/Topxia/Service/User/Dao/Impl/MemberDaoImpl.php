@@ -60,7 +60,7 @@ class MemberDaoImpl extends BaseDao implements MemberDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert member error.');
         }
-        return $this->getMemberByUserId($this->getConnection()->lastInsertId());
+        return $this->getMemberByUserId($member['userId']);
 	}
 
 	public function updateMember($userId, $fields)
