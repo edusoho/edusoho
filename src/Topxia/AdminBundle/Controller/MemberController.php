@@ -117,7 +117,6 @@ class MemberController extends BaseController
         );
         
         $levels = $this->makeMemberLevelOptions();
-
         return $this->render('TopxiaAdminBundle:Member:bought-history.html.twig',array(
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,

@@ -26,13 +26,13 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[id="nickname"]',
+            element: '#nickname',
             required: true,
             rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
         });
 
         validator.addItem({
-            element: '[id="deadline"]',
+            element: '#deadline',
             required: true,
             rule: 'date'
         });

@@ -17,7 +17,7 @@
   </thead>
   <tbody>
     {% for memberHistory in memberHistories %}
-    {% set memberLevel = memberLevels[memberHistory.levelId]|default(null) %}
+    {% set level = levels[memberHistory.levelId]|default(null) %}
       {% include 'TopxiaAdminBundle:Member:member-history-table-tr.html.twg' with {memberHistory:memberHistory} %}
     {% endfor %}
   </tbody>
