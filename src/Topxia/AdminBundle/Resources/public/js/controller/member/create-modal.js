@@ -48,6 +48,8 @@ define(function(require, exports, module) {
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
+        }).on('hide', function(ev){
+            validator.query('#deadline').execute();
         });
 	};
 
