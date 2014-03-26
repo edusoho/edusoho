@@ -46,7 +46,7 @@ class MemberController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions)
-            ,10
+            ,15
         );
         $currentUser = $this->getCurrentUser();
         $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
