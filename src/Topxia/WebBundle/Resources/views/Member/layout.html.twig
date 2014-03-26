@@ -38,6 +38,12 @@
             {% endif %}
           </div>
         </div>
+        {% if member.deadline|remain_time < 7 %}
+        <div class="alert alert-danger fade in">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          您的会员即将到期，请及时续费哦
+        </div>
+        {% endif %}
         <div class="list-group">
           <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员频道首页</a>
           <a class="list-group-item" href="#">开通会员</a>
