@@ -1,0 +1,66 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set updateName = package.type == 'upgrade' ? '升级' : '安装' %}
+
+
+{% block title %}{{ updateName }}应用{% endblock %}
+
+{% block body %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th width="40%">应用名称</th>
+      <th width="15%">版本</th>
+      <th>依赖关系</th>
+      <th>备份数据库</th>
+      <th>备份文件</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ package.product.name }}</td>
+      <td>
+        {% if package.type == 'upgrade' %}
+          <strong class="text-muted">{{ package.fromVersion }}</strong> -&gt; <strong class="text-success">{{ package.toVersion }}</strong>
+        {% else %}
+          <strong class="text-success">{{ package.toVersion }}</strong>
+        {% endif %}
+      </td>
+      <td>无</td>
+      <td>{% if package.backupDB == 1 %}是{% elseif package.backupDB == 0 %}否{% endif %}</td>
+      <td>{% if package.backupFile == 1 %}是{% elseif package.backupFile == 0 %}否{% endif %}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="package-update-progress" style="display:none;">
+  <div class="progress progress-striped active">
+    <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+  </div>
+  <div class="text-success package-update-progress-text">正在{{ updateName }}，请稍等。</div>
+</div>
+
+<div id="install-animate" style="display:none;">
+  <p id='step1'>1、检查环境: <span id='step1-process'></span><span id='step1-result'></span></p>
+  <p id='step2'>2、检查依赖包: <span id='step2-process'></span><span id='step2-result'></span></p>
+  <p id='step3'>3、下载解压缩安装包: <span id='step3-process'></span><span id='step3-result'></span></p>
+  <p id='step4'>4、备份系统: <span id='step4-process'></span><span id='step4-result'></span></p>
+  <p id='step5'>5、更新系统文件和数据: <span id='step5-process'></span><span id='step5-result'></span></p>
+  <h2 id='step6'></h2>
+</div>
+
+<script type="text/javascript"> app.load('app/package-update-modal') </script>
+{% endblock %}
+
+{% block footer %}
+  <button id="begin-update" type="button" class="btn btn-primary pull-right"
+    data-check-environment-url="{{ path('admin_app_package_update_check_environment', {id:package.id}) }}"
+    data-check-depends-url="{{ path('admin_app_package_update_check_depends', {id:package.id}) }}"
+    data-check-last-error-url="{{ path('admin_app_package_update_check_last_error', {id:package.id}) }}"
+    data-backup-file-url="{{ path('admin_app_package_update_backup_file', {id:package.id}) }}"
+    data-backup-db-url="{{ path('admin_app_package_update_backup_db', {id:package.id}) }}"
+    data-download-extract-url="{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
+    data-begin-upgrade-url="{{ path('admin_app_package_update_begin_upgrade', {id:package.id}) }}"
+  >开始{{ updateName }}</button>
+{% endblock %}

@@ -23,10 +23,11 @@ interface AppClient
      */
     public function downloadPackage($uri,$filename);
 
+    public function repairProblem($token);
+
     /**
      * 获得包信息
      */
-    public function getPackage($packId);
+    public function getPackage($id);
 
-    public function repairProblem($token);
 }

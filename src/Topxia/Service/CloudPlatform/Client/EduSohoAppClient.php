@@ -52,9 +52,10 @@ class EduSohoAppClient implements AppClient
 
     }
 
-    public function getPackage($packId)
+    public function getPackage($id)
     {
-
+        $args = array('packageId' => (string)$id);
+        return $this->callRemoteApi('GET', 'GetPackage', $args);
     }
 
     public function repairProblem($token)

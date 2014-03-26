@@ -555,6 +555,53 @@ admin_app_logs:
     pattern:  /app/logs
     defaults: { _controller: TopxiaAdminBundle:App:logs }
 
+admin_app_package_update_modal:
+    pattern:  /app/package_update/{id}/modal
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:modal }
+
+admin_app_package_update_check_environment:
+    pattern: /app/package_update/{id}/check_environment
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkEnvironment }
+    methods: [POST]
+
+admin_app_package_update_check_depends:
+    pattern: /app/package_update/{id}/check_depends
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkDepends }
+    methods: [POST]
+
+admin_app_package_update_check_last_error:
+    pattern: /app/package_update/{id}/check_lasterror
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checklastError }
+    methods: [POST]
+
+admin_app_package_update_backup_file:
+    pattern: /app/package_update/{id}/backup_file
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:backupFile }
+    methods: [POST]
+
+admin_app_package_update_backup_db:
+    pattern: /app/package_update/{id}/backup_db
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:backupDb }
+    methods: [POST]
+
+admin_app_package_update_download_and_extract:
+    pattern: /app/package_update/{id}/download_extract
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:downloadAndExtract }
+    methods: [POST]
+
+admin_app_package_update_begin_upgrade:
+    pattern: /app/package_update/{id}/begin_upgrade
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:beginUpgrade }
+    methods: [POST]
+
+
+
+
+
+
+
+
+
 admin_upgrade:
     pattern:  /upgrade
     defaults: { _controller: TopxiaAdminBundle:Upgrade:index }

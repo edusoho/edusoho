@@ -34,6 +34,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->getApps();
     }
 
+    public function getCenterPackageInfo($id)
+    {
+        return $this->createAppClient()->getPackage($id);
+    }
+
     public function checkAppUpgrades()
     {
         $mainApp = $this->getAppDao()->getAppByCode('MAIN');
@@ -59,6 +64,89 @@ class AppServiceImpl extends BaseService implements AppService
     {
         return $this->getAppLogDao()->findLogCount();
     }
+
+    public function checkUpdateEnvironment()
+    {
+        $errors = array();
+
+        if(!class_exists('ZipArchive')) {
+           $errors[] = "php_zip扩展未激活";
+        }
+
+        if(!function_exists('curl_init')) {
+           $errors[] = "php_curl扩展未激活";
+        }
+
+        if (!is_writeable($this->getDownloadDirectory())) {
+            $errors[] = "下载目录({$this->getDownloadDirectory()})无写权限";
+        }
+
+        if (!is_writeable($this->getBackUpDirectory())) {
+            $errors[] = "备份目录{$this->getDownloadDirectory()})无写权限";
+        }
+
+        $rootDirectory = $this->getSystemRootDirectory();
+
+        if(!is_writeable("{rootDirectory}/app")) {
+            $errors[] = 'app目录无写权限';
+        }
+
+        if(!is_writeable("{rootDirectory}/src")) {
+            $errors[] = 'src目录无写权限';
+        }
+
+        if(!is_writeable("{rootDirectory}/web")) {
+            $errors[] = 'web目录无写权限';
+        }
+
+        if(!is_writeable("{rootDirectory}/app/cache")) {
+            $errors[] = 'app/cache目录无写权限';
+        }
+
+        if(!is_writeable("{rootDirectory}/app/cache")) {
+            $errors[] = 'app/cache目录无写权限';
+        }
+
+        if(!is_writeable("{rootDirectory}/app/config")) {
+            $errors[] = 'app/config目录无写权限';
+        }
+
+        if(!is_writeable("{rootDirectory}/app/config/config.yml")) {
+            $errors[] = 'app/config/config.yml文件无写权限';
+        }
+
+        return $errors;
+    }
+
+    private function getSystemRootDirectory()
+    {
+        return dirname($this->getKernel()->getParameter('kernel.root_dir'));
+    }
+
+    private function getDownloadDirectory()
+    {
+        return $this->getKernel()->getParameter('topxia.disk.update_dir');
+    }
+
+    private function getBackUpDirectory()
+    {
+        return $this->getKernel()->getParameter('topxia.disk.backup_dir');
+    }   
+
+    private function getExtractPath($package)
+    {
+        return $this->getDownloadPath().
+                DIRECTORY_SEPARATOR.basename($package['filename'], ".zip");     
+    }   
+
+    private function getCachePath(){
+        $realPath = $this->getKernel()->getParameter('kernel.root_dir');
+        $realPath .= DIRECTORY_SEPARATOR.'cache';   
+        return  $realPath;
+    }
+
+
+
 
 
     private function hasEduSohoMainApp($apps)

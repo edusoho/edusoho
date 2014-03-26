@@ -14,9 +14,13 @@ interface AppService
      */
     public function getCenterApps();
 
+    public function getCenterPackageInfo($id);
+
     public function checkAppUpgrades();
 
     public function findLogs($start, $limit);
 
     public function findLogCount();
+
+    public function checkUpdateEnvironment();
 }
