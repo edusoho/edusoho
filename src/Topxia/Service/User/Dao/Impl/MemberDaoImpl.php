@@ -35,8 +35,8 @@ class MemberDaoImpl extends BaseDao implements MemberDao
             ->from($this->table, 'member')
             ->andWhere('levelId = :level')
             ->andWhere('userId = :userId')
-            ->andWhere('deadline >= :deadlineMoreThan')
-            ->andWhere('deadline < :deadlineLessThan');
+            ->andWhere('deadline <= :deadlineMoreThan')
+            ->andWhere('deadline > :deadlineLessThan');
     }
 
 	public function getMemberByUserId($userId)

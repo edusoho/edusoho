@@ -12,7 +12,7 @@
     </td>
   {% endif %}
   <td>
-    {{ memberHistory.boughtTime | date('Y-m-d') }}
+    {{ memberHistory.boughtTime | date('Y-m-d H:i:s') }}
     <br>
   </td>
 
