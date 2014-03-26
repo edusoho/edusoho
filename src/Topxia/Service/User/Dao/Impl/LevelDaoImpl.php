@@ -23,6 +23,12 @@ class LevelDaoImpl extends BaseDao implements LevelDao
         return $this->getConnection()->fetchAssoc($sql, array($name)) ? : null;
     }
 
+    public function findLevelsBySeq($seq, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE seq >= ? AND enabled = '1' LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql,array($seq)) ? : array(); 
+    }
+
 	public function searchLevels($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -69,6 +75,7 @@ class LevelDaoImpl extends BaseDao implements LevelDao
         ->andWhere('id = :id')
         ->andWhere('name LIKE :name')
         ->andWhere('icon = :icon')
+        ->andWhere('enabled = :enabled')
         ->andWhere('seq < :seq');
 
         return $builder;

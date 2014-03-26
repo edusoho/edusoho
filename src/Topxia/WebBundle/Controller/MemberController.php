@@ -15,7 +15,7 @@ class MemberController extends BaseController
         $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
-    	$levels = $this->getLevelService()->searchLevels($conditions,0,100);
+    	$levels = $this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
         $levelIds = ArrayToolkit::column($levels,'id');
         $latestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'latest', 0, 3);
         $hotestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'popular', 0, 3);
@@ -42,9 +42,12 @@ class MemberController extends BaseController
         } else {
             $level = array('id' => null);
         }
-
-        $memberlevels = $this->getLevelService()->searchLevels(array('id' => $level['id']), 0, 100);
-        $memberlevelIds = ArrayToolkit::column($memberlevels,'id');
+        if (empty($level['id'])) {
+            $memberlevelIds = null;
+        } else {
+            $memberlevels = $this->getLevelService()->findLevelsBySeq($level['seq'], 0, 100);
+            $memberlevelIds = ArrayToolkit::column($memberlevels,'id');
+        }
 
         $sort = $request->query->get('sort', 'latest');
 
@@ -86,7 +89,7 @@ class MemberController extends BaseController
         $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
-        $levels = $this->getLevelService()->searchLevels($conditions,0,100);
+        $levels = $this->getLevelService()->searchLevels( array('enabled' => 1), 0, 100);
         $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
         $memberHistories = $this->getMemberService()->searchMembersHistories(
             array('userId' => $currentUser['id']), array('boughtTime', 'DESC'),

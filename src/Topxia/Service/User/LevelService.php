@@ -7,7 +7,11 @@ interface LevelService
 {
 	public function getLevel($id);
 
+    public function getLevelByName($name);
+
     public function createLevel($level);
+
+    public function findLevelsBySeq($seq, $start, $limit);
 
     public function searchLevelsCount($conditions);
 
@@ -16,8 +20,6 @@ interface LevelService
     public function deleteLevel($id);
 
     public function updateLevel($id,$fields);
-
-    public function getLevelByName($name);
 
     public function sortLevels(array $ids);
 
