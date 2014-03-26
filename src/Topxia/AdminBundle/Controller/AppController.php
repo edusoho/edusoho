@@ -13,6 +13,20 @@ class AppController extends BaseController
 
     }
 
+    public function centerAction(Request $request)
+    {
+        $apps = $this->getAppService()->getCenterApps();
+
+        $codes = ArrayToolkit::column($apps, 'code');
+
+        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+
+        return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
+            'apps' => $apps,
+            'installedApps' => $installedApps,
+        ));
+    }
+
     public function installedAction(Request $request)
     {
         $apps = $this->getAppService()->findApps(0, 100);
@@ -21,11 +35,12 @@ class AppController extends BaseController
         ));
     }
 
-    public function updatesAction(Request $request)
+    public function upgradesAction(Request $request)
     {
-        $this->getAppService()->checkAppUpgrades();
-        return $this->render('TopxiaAdminBundle:App:updates.html.twig', array(
+        $apps = $this->getAppService()->checkAppUpgrades();
 
+        return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
+            'apps' => $apps,
         ));
     }
 

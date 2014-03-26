@@ -8,6 +8,8 @@ interface CloudAppDao
 
     public function getAppByCode($code);
 
+    public function findAppsByCodes(array $codes);
+
     public function findApps($start, $limit);
 
     public function findAppCount();

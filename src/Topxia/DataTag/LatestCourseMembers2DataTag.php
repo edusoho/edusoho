@@ -5,7 +5,7 @@ namespace Topxia\DataTag;
 use Topxia\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
-class LatestCourseMembersDataTag extends CourseBaseDataTag implements DataTag  
+class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag  
 {
 
     /**
@@ -28,17 +28,22 @@ class LatestCourseMembersDataTag extends CourseBaseDataTag implements DataTag
         }
         $courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, 1000);
         $courseIds = ArrayToolkit::column($courses, 'id');
-
         $conditions = array('courseIds' => $courseIds, 'unique' => true , 'role' => 'student');
-        $memberIds = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, $arguments['count']);
-        $memberIds = ArrayToolkit::column($memberIds, 'userId');
-        $users = $this->getUserService()->findUsersByIds($memberIds);
-        $users = ArrayToolkit::index($users, 'id');
 
-        $courseMembers= array();
-        foreach ($memberIds as $memberId) {
-            $courseMembers[$memberId] = $users[$memberId];
+        $members = $this->getCourseService()->searchMembers($conditions,array('createdTime', 'DESC'),0,$arguments['count']);
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
+        $this->unsetUserPasswords($users);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        foreach ($members as &$member) {
+            $member['course'] = $courses[$member["courseId"]];
+            $member['user'] = $users[$member["userId"]];
         }
-        return $this->unsetUserPasswords($courseMembers);
+
+        return $members;
     }
 }

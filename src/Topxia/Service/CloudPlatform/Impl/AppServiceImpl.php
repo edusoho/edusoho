@@ -4,6 +4,7 @@ namespace Topxia\Service\CloudPlatform\Impl;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\Client\EduSohoAppClient;
 use Topxia\Service\Common\BaseService;
+use Topxia\Common\ArrayToolkit;
 use Topxia\System;
 
 class AppServiceImpl extends BaseService implements AppService
@@ -14,14 +15,23 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function findApps($start, $limit)
     {
-        $client = $this->createAppClient();
-        var_dump($client);
         return $this->getAppDao()->findApps($start, $limit);
     }
 
     public function findAppCount()
     {
         return $this->getAppDao()->findAppCount();
+    }
+
+    public function findAppsByCodes(array $codes)
+    {
+        $apps = $this->getAppDao()->findAppsByCodes($codes);
+        return ArrayToolkit::index($apps, 'code');
+    }
+
+    public function getCenterApps()
+    {
+        return $this->createAppClient()->getApps();
     }
 
     public function checkAppUpgrades()
@@ -32,7 +42,12 @@ class AppServiceImpl extends BaseService implements AppService
         }
         $apps = $this->findApps(0, self::MAX_APP_COUNT);
 
-        // return $this->getEduSohoUpgradeClient()->check($packages);
+        $args = array();
+        foreach ($apps as $app) {
+            $args[$app['code']] = $app['version'];
+        }
+
+        return $this->createAppClient()->checkUpgradePackages($args);
     }
 
     public function findLogs($start, $limit)

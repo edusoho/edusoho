@@ -48,8 +48,12 @@
       <div class="stats">
         <p>
           价　格：
-          <span class="money-num">{{ course.price }}</span>
-          <span class="money-text">元</span>
+          {% if course.price > 0 %}
+            <span class="money-num">{{ course.price }}</span>
+            <span class="money-text">元</span>
+          {% else %}
+            <span class="money-num" style="font-size:16px;">免费</span>
+            {% endif %}
         </p>
         <p>
           评　价：
@@ -82,9 +86,9 @@
       <div class="actions clearfix">
         <div class="pull-left">
           {% if course.status != 'published' %}
-            <a class="btn btn-primary disabled" href="javascript:">购买课程</a>
+            <a class="btn btn-primary disabled" href="javascript:">{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
           {% else %}
-            <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">购买课程</a>
+            <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
           {% endif %}
         </div>
         <div class="pull-right">

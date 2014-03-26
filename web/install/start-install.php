@@ -217,7 +217,7 @@ function _create_config($config)
     database_port: null
     database_name: {$config['database_name']}
     database_user: {$config['database_user']}
-    database_password: {$config['database_password']}
+    database_password: '{$config['database_password']}'
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null

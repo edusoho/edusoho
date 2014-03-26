@@ -26,44 +26,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
-	public function findCoursesByUserLevelId($id,$start,$limit)
-    {	
-    	$conditions = array(
-            'seq'=>"$id"
-        );
-        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
-        foreach ($userlevels as $userlevel) {
-        	$userlevelId[] = $userlevel['id'];
-        }
-        $userlevelId[] = $id;
-    	$courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByUserLevelId($userlevelId,$start,$limit)
-        );
-
-        return ArrayToolkit::index($courses, 'id');
-    }
-
-    public function findCoursesByUserLevelIdCount($id) 
-    {	
-    	$conditions = array(
-            'seq'=>"$id"
-        );
-        $userlevels = $this->getLevelService()->searchLevels($conditions,0,100);
-        foreach ($userlevels as $userlevel) {
-        	$userlevelId[] = $userlevel['id'];
-        }
-        $userlevelId[] = $id;
-
-        return $this->getCourseDao()->findCoursesByUserLevelIdCount($userlevelId);
-    }
-
-    public function findCoursesByHaveUserLevelIds($start, $limit)
-    {
-    	$courses = CourseSerialize::unserializes(
-    		$this->getCourseDao()->findCoursesByHaveUserLevelIds($start, $limit));
-    	return ArrayToolkit::index($courses, 'id');
-    }
-
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -412,16 +374,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->updateCourse($courseId, $fields);
     }
 
-	public function recommendCourse($id)
+	public function recommendCourse($id, $number)
 	{
 		$course = $this->tryAdminCourse($id);
 
-		$this->getCourseDao()->updateCourse($id, array(
+		if (!is_numeric($number)) {
+			throw $this->createAccessDeniedException('推荐课程序号只能为数字！');
+		}
+
+		$course = $this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 1,
+			'recommendedSeq' => (int)$number,
 			'recommendedTime' => time(),
 		));
 
-		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']})");
+		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+
+		return $course;
 	}
 
 	public function cancelRecommendCourse($id)

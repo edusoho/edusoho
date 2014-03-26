@@ -6,6 +6,13 @@ use Topxia\System;
 
 class EduSohoAppClient implements AppClient
 {
+
+    protected $userAgent = 'Edusoho App Client 1.0';
+
+    protected $connectTimeout = 5;
+
+    protected $timeout = 5;
+
     private $apiUrl = 'http://cloud.edusoho.com/app_api';
 
     private $debug = false;
@@ -20,6 +27,12 @@ class EduSohoAppClient implements AppClient
         }
 
         $this->debug = empty($options['debug']) ? false : true;
+    }
+
+    public function getApps()
+    {
+        $args = array();
+        return $this->callRemoteApi('GET', 'GetApps', $args);
     }
 
     public function checkUpgradePackages($apps)
@@ -52,6 +65,9 @@ class EduSohoAppClient implements AppClient
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         $url = "{$this->apiUrl}?action={$action}";
+
+        $edusoho = array('edition' => 'opensource', 'version' => System::VERSION);
+        $args['_edusoho'] = $edusoho;
 
         $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;

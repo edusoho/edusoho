@@ -1,0 +1,34 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="course-tr-{{ course.id }}" data-sort="{{ course.recommendedSeq }}">
+  <td>{{ course.recommendedSeq }}</td>
+  <td>
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    <br>
+    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    {% if course.recommended %}
+      <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }}</span>
+    {% endif %}
+  </td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ course.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>
+    {{ course.recommendedTime|date('Y-m-d') }}
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'recommendList'}) }}">设置序号</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+
+        <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+    
+      </ul>
+    </div>
+  </td>
+</tr>

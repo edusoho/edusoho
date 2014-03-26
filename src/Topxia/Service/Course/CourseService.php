@@ -20,12 +20,6 @@ interface CourseService
 
 	public function findCoursesByIds(array $ids);
 
-	public function findCoursesByUserLevelId($id,$start,$limit);
-
-	public function findCoursesByUserLevelIdCount($id);
-
-	public function findCoursesByHaveUserLevelIds($start,$limit);
-
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
 	public function searchCourseCount($conditions);
@@ -58,7 +52,7 @@ interface CourseService
 
 	public function changeCoursePicture ($courseId, $filePath, array $options);
 
-	public function recommendCourse($id);
+	public function recommendCourse($id, $number);
 
 	public function cancelRecommendCourse($id);
 
@@ -134,6 +128,7 @@ interface CourseService
 	/**
 	 * Member API
 	 */
+
 	public function searchMember($conditions, $start, $limit);
 
 	public function searchMemberCount($conditions);

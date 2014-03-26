@@ -360,7 +360,6 @@ admin_course_close:
 admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
-    methods: [POST]
 
 admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel
@@ -370,6 +369,10 @@ admin_course_cancel_recommend:
 admin_course_chooser:
     pattern: /course/chooser
     defaults: { _controller: TopxiaAdminBundle:Course:chooser }
+
+admin_course_recommend_list:
+    pattern: /course/recommend/list
+    defaults: { _controller: TopxiaAdminBundle:Course:recommendList }
 
 admin_course_category:
     pattern: /course/category
@@ -536,13 +539,17 @@ admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
+admin_app_center:
+    pattern:  /app/center
+    defaults: { _controller: TopxiaAdminBundle:App:center }
+
 admin_app_installed:
     pattern:  /app/installed
     defaults: { _controller: TopxiaAdminBundle:App:installed }
 
-admin_app_updates:
-    pattern:  /app/updates
-    defaults: { _controller: TopxiaAdminBundle:App:updates }
+admin_app_upgrades:
+    pattern:  /app/upgrades
+    defaults: { _controller: TopxiaAdminBundle:App:upgrades }
 
 admin_app_logs:
     pattern:  /app/logs

@@ -10,6 +10,8 @@ interface ThreadService
 
 	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit);
 
+	public function findLatestThreadsByType($type, $start, $limit);
+
 	public function searchThreads($conditions, $sort, $start, $limit);
 
 	public function searchThreadCount($conditions);

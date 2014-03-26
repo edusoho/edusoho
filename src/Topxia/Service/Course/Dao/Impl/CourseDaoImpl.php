@@ -24,31 +24,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findCoursesByHaveUserLevelIds($start, $limit)
-    {   
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM  {$this->getTablename()} WHERE userLevelIds !='' ORDER BY createdTime DESC LIMIT {$start} , {$limit}";
-
-        return $this->getConnection()->fetchAll($sql);
-    }
-
-    public function findCoursesByUserLevelIdCount($userlevelId)
-    {
-        if(empty($userlevelId)){ return array(); };
-        $marks = str_repeat('?,', count($userlevelId) - 1) . '?';
-        $sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE userLevelIds IN ({$marks}) ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchColumn($sql, $userlevelId);
-    }
-
-    public function findCoursesByUserLevelId($userlevelId,$start,$limit)
-    {      
-        if(empty($userlevelId)){ return array(); };
-        $marks = str_repeat('?,', count($userlevelId) - 1) . '?';
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE userLevelIds IN ({$marks}) ORDER BY createdTime DESC LIMIT {$start} , {$limit};";
-
-        return $this->getConnection()->fetchAll($sql,$userlevelId);
-    }
-
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -106,6 +81,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
+            ->andWhere('price = :price')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
@@ -123,6 +99,20 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             if ($categoryIds) {
                 $categoryIds = join(',', $categoryIds);
                 $builder->andStaticWhere("categoryId IN ($categoryIds)");
+            }
+
+        }
+
+        if (isset($conditions['memberLevelIds'])) {
+            $memberLevelIds = array();
+            foreach ($conditions['memberLevelIds'] as $memberLevelId) {
+                if (ctype_digit((string)abs($memberLevelId))) {
+                    $memberLevelIds[] = $memberLevelId;
+                }
+            }
+            if ($memberLevelIds) {
+                $memberLevelIds = join(',', $memberLevelIds);
+                $builder->andStaticWhere("memberLevelId IN ($memberLevelIds)");
             }
 
         }
