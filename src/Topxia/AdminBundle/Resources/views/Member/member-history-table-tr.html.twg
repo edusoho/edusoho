@@ -27,7 +27,7 @@
   </td>
 
   <td>
-    {{ memberLevel }}
+    {{ level }}
     <br>
   </td>
 
