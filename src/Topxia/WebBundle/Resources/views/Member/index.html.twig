@@ -1,5 +1,9 @@
 {% extends 'TopxiaWebBundle:Member:layout.html.twig' %}
 
+{% block title %}会员频道 - {{ parent() }}{% endblock %}
+
+{% set menu = 'index' %}
+
 {% block main_body %}
 
     <div class="col-md-9">
@@ -20,13 +24,13 @@
       <ul class="course-wide-list">
         {% for level in levels %}
           <li class="course-item clearfix member-item">
-              <img class="course-picture" src="{{ level.picture }}" alt="{{ level.name}}">
+              <img class="course-picture" src="{{ level.picture }}" alt="{{ level.name }}">
             <div class="course-view">
-              <a href="{{ path('member_course', {id:level.id}) }}" class="btn btn-primary btn-sm">查看会员课程</a>
+              <a href="{{ path('member_course_explore', {levelId:level.id}) }}" class="btn btn-primary btn-sm">查看会员课程</a>
               <a  href="#" class="btn btn-primary btn-sm">购买</a>
             </div>
             <div class="course-body">
-              <h4 class="course-title"><a href="{{ path('member_course', {id:level.id}) }}">{{ level.name}}</a></h4>
+              <h4 class="course-title"><a href="{{ path('member_course_explore', {id:level.id}) }}">{{ level.name}}</a></h4>
               <div class="course-about ellipsis">{{ level.description }}</div>
               <div class="course-footer clearfix">
                 <span class="course-price" >{{ level.monthPrice }}元/月 {{ level.yearPrice }}元/年</span>
@@ -37,7 +41,7 @@
       </ul>
 
       <div class="es-box-heading">
-        <a href="#" class="pull-right">更多 &raquo;</a>
+        <a href="{{ path('member_course_explore', { sort:'latest'} ) }}" class="pull-right">更多 &raquo;</a>
         <h2>最新会员课程</h2>
       </div>
       <div class="es-box-body">
@@ -49,7 +53,7 @@
       </div>
 
       <div class="es-box-heading">
-        <a href="#" class="pull-right">更多 &raquo;</a>
+        <a href="{{ path('member_course_explore', { sort:'popular'} ) }}" class="pull-right">更多 &raquo;</a>
         <h2>最新热门课程</h2>
       </div>
       <div class="es-box-body">

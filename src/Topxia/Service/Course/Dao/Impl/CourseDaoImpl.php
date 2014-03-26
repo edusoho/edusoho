@@ -102,7 +102,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
 
         }
-
         if (isset($conditions['memberLevelIds'])) {
             $memberLevelIds = array();
             foreach ($conditions['memberLevelIds'] as $memberLevelId) {
