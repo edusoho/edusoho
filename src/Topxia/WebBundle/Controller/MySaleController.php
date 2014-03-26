@@ -115,7 +115,7 @@ class MySaleController extends BaseController
 
         $prodIds=ArrayToolkit::column($courses,'id');
 
-        $linksales = $this->getLinkSaleService()->getLinkSalesByProdsAndUser('course',$prodIds,$user['id']);
+        $linksales = $this->getLinkSaleService()->getCourseLinkSalesByProdsAndUser('course',$prodIds,$user['id']);
 
        
         return $this->render('TopxiaWebBundle:Sale:link-course-list.html.twig', array(
@@ -128,7 +128,7 @@ class MySaleController extends BaseController
     }
 
 
-    //一个课程对一个用户，只有一个推广链接
+    //一个课程对一个用户，只有一个课程推广链接
     public function linkCourseLinkAction(Request $request,$id)
     {
         $user = $this->getCurrentUser();
@@ -137,7 +137,7 @@ class MySaleController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
 
-        $linksale=$this->getLinkSaleService()->getLinkSaleByProdAndUser('course',$course['id'],$user['id']);
+        $linksale=$this->getLinkSaleService()->getCourseLinkSaleByProdAndUser('course',$course['id'],$user['id']);
 
 
         if(empty($linksale)){
@@ -200,7 +200,94 @@ class MySaleController extends BaseController
     }
 
 
-    public function linkWebListAction(Request $request){
+   
+    public function linkWebLinkAction(Request $request)
+    {
+        
+        $user = $this->getCurrentUser();
+
+
+        $prodType='course';
+        $prodId=0;
+        $prodName='所有课程';
+
+        $saleType="linksale-web";
+
+        $lswSetting = $this->getSettingService()->get('linksaleWebSetting', array());
+
+        if($request->getMethod() == 'POST'){
+
+                $oUrl = $request->request->get('oUrl');
+
+                $linkname = $request->request->get('linkname');
+
+                $linksale=$this->getLinkSaleService()->getLinkSaleByoUrl($saleType,$oUrl,$user['id']);
+
+                if(empty($linksale)){
+
+                    $linksale=array();
+
+                    $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
+                   
+
+                    $linksale['adCommissionType']= 'ratio';
+
+                    //默认推广链接30天内有效
+                    if(empty($lswSetting['webCommission'])){
+                         $lswSetting['webCommissionType'] = 'ratio';
+                         $lswSetting['webCommission'] = 5;//网站推广，获取所有注册用户的5%的佣金
+                         $lswSetting['webCommissionDay'] = 30;
+                    }
+
+                    $linksale['adCommissionType']= $lswSetting['webCommissionType'];
+                    $linksale['adCommission']= $lswSetting['webCommission'];  
+                    $linksale['adCommissionDay']= empty($lswSetting['webCommissionDay'])?'30':$lswSetting['webCommissionDay'];
+                    $linksale['customized']=0;
+                   
+                    $linksale['saleType']='linksale-web';
+                    $linksale['prodType']=$prodType;
+                    $linksale['prodId']=$prodId;
+                    $linksale['prodName']=$prodName;
+
+                    $webUrl = $this->generateUrl('homepage',array(),true);
+
+                    $linksale['oUrl']=$webUrl;
+
+                    $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
+
+                    $linksale['reduceType'] = 'quota';
+                    $linksale['reducePrice'] = 0.00;         
+
+
+                    $linksale['validTime']=0;//优惠有效期
+
+                    $linksale['partnerId']=$user['id'];
+
+                    $linksale['managerId']= 2;
+                  
+                    $linksale = $this->getLinkSaleService()->createLinkSale($linksale);       
+
+                }
+                return $this->render('TopxiaWebBundle:Sale:link-web-modal.html.twig', array(
+                               'linksale'=>$linksale,
+                                'user'=>$user            
+                ));
+        }
+
+
+
+       
+        return $this->render('TopxiaWebBundle:Sale:link-web.html.twig', array(
+           'lswSetting'=>$lswSetting,
+            'user'=>$user            
+        ));
+       
+       
+    }
+
+
+
+     public function linkWebListAction(Request $request){
 
         $user = $this->getCurrentUser();
 
@@ -245,77 +332,6 @@ class MySaleController extends BaseController
             'paginator' => $paginator
         ));
 
-    }
-
-    public function linkWebLinkAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-
-        $prodType='course';
-        $prodId=0;
-        $prodName='所有课程';
-
-        $saleType="linksale-web";
-
-
-        $linksale=$this->getLinkSaleService()->getLinkSaleByoUrl($saleType,$prodId,$user['id']);
-
-
-        if(empty($linksale)){
-
-            $linksale=array();
-
-            $linksale['mTookeen'] = $this->getLinkSaleService()->generateLinkSaleTookeen();
-           
-
-            $linksale['adCommissionType']= 'ratio';
-
-            $lswSetting = $this->getSettingService()->get('linksaleWebSetting', array());
-
-            //默认推广链接30天内有效
-            if(empty($lswSetting['webCommission'])){
-                 $lswSetting['webCommissionType'] = 'ratio';
-                 $lswSetting['webCommission'] = 5;//网站推广，获取所有注册用户的5%的佣金
-                 $lswSetting['webCommissionDay'] = 30;
-            }
-
-            $linksale['adCommissionType']= $lswSetting['webCommissionType'];
-            $linksale['adCommission']= $lswSetting['webCommission'];  
-            $linksale['adCommissionDay']= empty($lswSetting['webCommissionDay'])?'30':$lswSetting['webCommissionDay'];
-            $linksale['customized']=0;
-           
-            $linksale['saleType']='linksale-web';
-            $linksale['prodType']=$prodType;
-            $linksale['prodId']=$prodId;
-            $linksale['prodName']=$prodName;
-
-            $webUrl = $this->generateUrl('homepage',array(),true);
-
-            $linksale['oUrl']=$webUrl;
-
-            $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
-
-            $linksale['reduceType'] = 'quota';
-            $linksale['reducePrice'] = 0.00;         
-
-
-            $linksale['validTime']=0;//优惠有效期
-
-            $linksale['partnerId']=$user['id'];
-
-            $linksale['managerId']= 2;
-          
-            $linksale = $this->getLinkSaleService()->createLinkSale($linksale);
-
-        }
-       
-        return $this->render('TopxiaWebBundle:Sale:link-web.html.twig', array(
-            'linksale'=>$linksale,
-            'user'=>$user            
-        ));
-       
-       
     }
 
     

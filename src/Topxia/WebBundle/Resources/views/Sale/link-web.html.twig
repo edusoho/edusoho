@@ -2,22 +2,23 @@
 
 {% block title %}网站链接推广 - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'mysale/web-link' %}
+{% set script_controller = 'mysale/link-web' %}
 {% set side_nav = 'link-web-link' %}
 
 {% block main %}
+<form class="form-horizontal" id="weblink-form"  action="{{ path('mysale_link_web_link') }}" method="post">
 
 <div class="panel panel-default panel-col">
-	<div class="panel-heading">生成网站推广链接</div>
+	<div class="panel-heading">请输入您需要转换的网站链接地址</div>
 	<div class="panel-body">
 		<div class="row form-group">
 			<div class="col-md-8">
-				<textarea  id="content" class="form-control"  cols="60" rows="3">{{linksale.tUrl}}</textarea>
+				<textarea  id="oUrl" class="form-control"  cols="60" rows="3"></textarea>
 			</div>
 
 			<div class="col-md-4">
-				<button id="copy-button" value="abc">点击复制该链接</button>
-				<div id="copy"></div>
+				 <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_web_link') }}"> 生成网站推广链接 </a>
+				
 			</div>
 
 		</div>
@@ -31,7 +32,7 @@
 					<ul class="list-unstyled">
 						<li>1、网站链接推广适用本站所有课程。</li>
 						
-						<li>2、任何用户通过您的专属网站推广链接访问本网站后，该用户在<span class="text-color-red text-size-18">{{linksale.adCommissionDay}}天</span>内在本网站购买的所有课程你都能获得<span class="text-color-red text-size-18">{{linksale.adCommission}}%</span>的佣金收入。</li>
+						<li>2、任何用户通过您的专属网站推广链接访问本网站后，该用户在<span class="text-color-red text-size-18">{{lswSetting.webCommissionDay}}天</span>内在本网站购买的所有课程你都能获得<span class="text-color-red text-size-18">{{ lswSetting.webCommission}}%</span>的佣金收入。</li>
 
 						<li>
 							3、您可以通过<a  href="{{ path('mysale_commission_list') }}">佣金明细</a>	来查看您的网站链接推广佣金明细及分成情况。
@@ -58,6 +59,6 @@
 		</div>
 	</div>
 </div>
-
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></form>
 
 {% endblock %}

@@ -23,16 +23,16 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
     }
 
 
-    public function getLinkSaleByProdAndUser($prodType,$prodId,$userId){
+    public function getCourseLinkSaleByProdAndUser($prodType,$prodId,$userId){
 
-        return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getLinkSaleByProdAndUser($prodType,$prodId,$userId));
+        return LinkSaleSerialize::unserialize($this->getLinkSaleDao()->getCourseLinkSaleByProdAndUser($prodType,$prodId,$userId));
 
     }
 
 
-    public function getLinkSalesByProdsAndUser($prodType,$prodIds,$userId){
+    public function getCourseLinkSalesByProdsAndUser($prodType,$prodIds,$userId){
 
-        $linksales= LinkSaleSerialize::unserializes($this->getLinkSaleDao()->getLinkSalesByProdsAndUser($prodType,$prodIds,$userId));
+        $linksales= LinkSaleSerialize::unserializes($this->getLinkSaleDao()->getCourseLinkSalesByProdsAndUser($prodType,$prodIds,$userId));
 
          return ArrayToolkit::index($linksales, 'prodId');
 
