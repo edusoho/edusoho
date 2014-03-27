@@ -51,12 +51,14 @@ class MemberController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         $levels = $this->makeMemberLevelOptions();
+        $levels_enabled = $this->makeMemberLevelOptions('enabled');
 
         return $this->render('TopxiaAdminBundle:Member:index.html.twig', array(
             'members' => $members ,
             'paginator' => $paginator,
             'memberCount' => $memberCount,
             'levels' => $levels,
+            'levels_enabled' => $levels_enabled,
             'users' => $users,
             'type' =>$type
         ));
@@ -78,9 +80,9 @@ class MemberController extends BaseController
                 'level' => $level['name']
             ));
         }
-        $levels = $this->makeMemberLevelOptions();
+        $levels_enabled = $this->makeMemberLevelOptions($operate_type='enabled');
         return $this->render('TopxiaAdminBundle:Member:modal.html.twig',array(
-            'levels' => $levels
+            'levels_enabled' => $levels_enabled
         ));
     }
 
@@ -167,7 +169,7 @@ class MemberController extends BaseController
         $user = $this->getUserService()->getUser($userId);
         $member = $this->getMemberService()->getMemberByuserId($userId);
 
-         $levels = $this->makeMemberLevelOptions();
+        $levels_enabled = $this->makeMemberLevelOptions('enabled');
 
         if ($request->getMethod() == 'POST') {
 
@@ -185,7 +187,7 @@ class MemberController extends BaseController
         return $this->render('TopxiaAdminBundle:Member:modal.html.twig', array(
             'member' => $member,
             'user' => $user,
-            'levels' => $levels
+            'levels_enabled' => $levels_enabled
         ));
     }
     
@@ -214,10 +216,11 @@ class MemberController extends BaseController
         return $this->getServiceKernel()->createService('User.LevelService');
     }
 
-    protected function makeMemberLevelOptions()
+    protected function makeMemberLevelOptions($operate_type=array())
     {
+        $conditions = $operate_type == 'enabled' ? array('enabled'=>1) : array();
         $levels = $this->getLevelService()->searchLevels(
-            $conditions=array('enabled'=>1),
+            $conditions,
             0,
             $this->getLevelService()->searchLevelsCount(array())
         );

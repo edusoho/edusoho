@@ -33,9 +33,9 @@
     <div class="col-md-7 controls">
      <select class="form-control" name="levelId">
        {% if member %}
-         {{ select_options(levels, member.levelId) }}
+         {{ select_options(levels_enabled, member.levelId) }}
         {% else %}
-         {{ select_options(levels, member.levelId|default(''), '--按会员类型--') }}
+         {{ select_options(levels_enabled, member.levelId|default(''), '--按会员类型--') }}
        {% endif %}
      </select>
     </div>
