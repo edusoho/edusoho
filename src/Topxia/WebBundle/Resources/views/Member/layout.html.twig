@@ -7,7 +7,7 @@
 <div class="es-row-wrap container-gap">
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>会员频道</h1></div>
+      <div class="page-header"><h1>会员专区</h1></div>
     </div>
     <div class="col-md-3">
       {% if app.user %}
@@ -45,7 +45,7 @@
         </div>
         {% endif %}
         <div class="list-group">
-          <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员频道首页</a>
+          <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员专区</a>
           <a class="list-group-item" href="#">开通会员</a>
           <a class="list-group-item" href="#">会员续费</a>
           <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('member_history') }}">购买历史</a>
