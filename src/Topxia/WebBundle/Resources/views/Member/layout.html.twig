@@ -9,72 +9,77 @@
     <div class="col-md-12">
       <div class="page-header"><h1>会员专区</h1></div>
     </div>
-    <div class="col-md-3">
-      {% if app.user %}
-        <div class="media">
-          <a href="{{ path('user_show', {id:app.user.id}) }}" class="pull-left">
-            <img class="author-picture" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
-          </a>
-          <div class="media-body">
-            <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
-            {% if member %}
-            <p>
-              <span class="glyphicon glyphicon-user"></span>
-              {% for level in levels %}
-                {% if level.id == member.levelId %}
-                  {{ level.name }}
+    {% if memberZone.enabled %}
+      <div class="col-md-3">
+        {% if app.user %}
+          <div class="media">
+            <a href="{{ path('user_show', {id:app.user.id}) }}" class="pull-left">
+              <img class="author-picture" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
+            </a>
+            <div class="media-body">
+              <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
+              {% if member %}
+              <p>
+                <span class="glyphicon glyphicon-user"></span>
+                {% for level in levels %}
+                  {% if level.id == member.levelId %}
+                    {{ level.name }}
+                  {% endif %}
+                {% endfor %}
+              </p>
+              <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
+                {% if member.deadline|remain_time == 0 %}
+                  <div class="well well-sm" class="text-primary text-center">会员已到期</div>
+                {% else %}
+                  <div class="well well-sm" class="text-primary text-center">会员剩余{{ member.deadline|remain_time }}</div>
                 {% endif %}
-              {% endfor %}
-            </p>
-            <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
-              {% if member.deadline|remain_time == 0 %}
-                <div class="well well-sm" class="text-primary text-center">会员已到期</div>
               {% else %}
-                <div class="well well-sm" class="text-primary text-center">会员剩余{{ member.deadline|remain_time }}</div>
+                <span class="glyphicon glyphicon-user"></span>普通用户
+              <div class="well" class="text-primary text-center">请在下方开通会员</div>
               {% endif %}
-            {% else %}
-              <span class="glyphicon glyphicon-user"></span>普通用户
-            <div class="well" class="text-primary text-center">请在下方开通会员</div>
-            {% endif %}
+            </div>
           </div>
-        </div>
-        {% if member.deadline|remain_time < 7 and member.deadline|remain_time > 0 %}
-        <div class="alert alert-danger fade in">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          您的会员即将到期，请及时续费哦
-        </div>
-        {% endif %}
-        <div class="list-group">
-          <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员专区</a>
-          <a class="list-group-item" href="#">开通会员</a>
-          <a class="list-group-item" href="#">会员续费</a>
-          <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('member_history') }}">购买历史</a>
-        </div>  
-      {% else %}
-        <div class="well text-danger">请先登录后再购买会员</div>
-      {% endif %}
-      <div class="es-box">
-        <div class="es-box-heading"><h2>最新会员</h2></div>
-        <ul class="media-list lastest-member-list">
-          {% if latestMembers %}
-            {% for latestMember in latestMembers %}
-            <li class="media">
-              <a href="{{ path('user_show', {id:latestMember.id}) }}" class="member-picture-link">
-                <img class="member-picture" src="{{ file_path(latestMember.smallAvatar, 'avatar.png') }}" class="media-object">
-              </a>
-              <div class="media-body">
-                <h5 class="media-heading"><a class="member-nickname ellipsis" href="{{ path('user_show', {id:latestMember.id}) }}">{{ latestMember.nickname }}</a></h5>
-                <span class="member-title ellipsis">{{ latestMember.title }}</span>
-              </div>
-            </li>
-            {% endfor %}
-          {% else %}
-            <div class="empty">无会员记录</div>
+          {% if member.deadline|remain_time < 7 and member.deadline|remain_time > 0 %}
+          <div class="alert alert-danger fade in">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            您的会员即将到期，请及时续费哦
+          </div>
           {% endif %}
-        </ul>
+          <div class="list-group">
+            <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员专区</a>
+            <a class="list-group-item" href="#">开通会员</a>
+            <a class="list-group-item" href="#">会员续费</a>
+            <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('member_history') }}">购买历史</a>
+          </div>  
+        {% else %}
+          <div class="well text-danger">请先登录后再购买会员</div>
+        {% endif %}
+        <div class="es-box">
+          <div class="es-box-heading"><h2>最新会员</h2></div>
+          <ul class="media-list lastest-member-list">
+            {% if latestMembers %}
+              {% for latestMember in latestMembers %}
+              <li class="media">
+                <a href="{{ path('user_show', {id:latestMember.id}) }}" class="member-picture-link">
+                  <img class="member-picture" src="{{ file_path(latestMember.smallAvatar, 'avatar.png') }}" class="media-object">
+                </a>
+                <div class="media-body">
+                  <h5 class="media-heading"><a class="member-nickname ellipsis" href="{{ path('user_show', {id:latestMember.id}) }}">{{ latestMember.nickname }}</a></h5>
+                  <span class="member-title ellipsis">{{ latestMember.title }}</span>
+                </div>
+              </li>
+              {% endfor %}
+            {% else %}
+              <div class="empty">无会员记录</div>
+            {% endif %}
+          </ul>
+        </div>
       </div>
+      {% block main_body %}{% endblock %}
+    {% endif %}
+    <div class="col-md-12">
+      <div class="alert alert-danger">会员专区已被管理员关闭</div>
     </div>
-    {% block main_body %}{% endblock %}
   </div>
 </div>
 

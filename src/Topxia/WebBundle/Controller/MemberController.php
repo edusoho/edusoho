@@ -9,7 +9,7 @@ class MemberController extends BaseController
 {
     public function indexAction(Request $request)
     {	
-
+        $memberZone = $this->getSettingService()->get('memberZone', array());
         $currentUser = $this->getCurrentUser();
     	$conditions = array();
         $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
@@ -25,8 +25,9 @@ class MemberController extends BaseController
             'latestCourses' => $latestCourses,
             'hotestCourses' => $hotestCourses,
             'latestMembers' => $latestMembers,
-            'members'=>$members,
-            'member'=>$member
+            'members'=> $members,
+            'member'=> $member,
+            'memberZone'=> $memberZone
         ));
     }
 
@@ -51,10 +52,19 @@ class MemberController extends BaseController
 
         $sort = $request->query->get('sort', 'latest');
 
-        $conditions = array(
+        $memberZone = $this->getSettingService()->get('memberZone', array());
+
+        if ($memberZone['courseLimit'] == 1) {
+             $conditions = array(
+            'status' => 'published',
+            'memberLevelIds' => array($level['id'])
+            );
+        } else {
+            $conditions = array(
             'status' => 'published',
             'memberLevelIds' => $memberlevelIds
-        );
+            );
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -125,4 +135,10 @@ class MemberController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.MemberService');
     }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
 }
