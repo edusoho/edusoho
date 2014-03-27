@@ -65,15 +65,15 @@ class CourseStudentManageController extends BaseController
                 'payment' => 'none',
             );
 
-            $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+            // $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
 
-            $mTookeenCookie = isset($_COOKIE["mc".$course['id']]) ?$_COOKIE["mc".$course['id']] : $mTookeenCookie;
+            // $mTookeenCookie = isset($_COOKIE["mc".$course['id']]) ?$_COOKIE["mc".$course['id']] : $mTookeenCookie;
 
-            if (!empty($mTookeenCookie)){
+            // if (!empty($mTookeenCookie)){
               
-                 $formData['mTookeen'] = $mTookeenCookie;
+            //      $formData['mTookeen'] = $mTookeenCookie;
 
-            }
+            // }
 
             $order = $this->getOrderService()->createOrder($formData);
 
