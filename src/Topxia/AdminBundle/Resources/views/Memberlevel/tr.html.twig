@@ -12,7 +12,7 @@
     {% if memberlevel.yearPrice == 0 %}未设置{% else %}{{ memberlevel.yearPrice }}{% endif %}
   </td>
   <td>
-    123
+    {{ memberlevel.memberNum|default(0) }}
   </td>
   <td>
     {% if memberlevel.enabled %}

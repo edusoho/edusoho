@@ -23,7 +23,9 @@
 	            $paginator->getOffsetCount(),
 	            $paginator->getPerPageCount()
 	        );
-
+			foreach ($memberlevels as &$memberlevel) {
+				$memberlevel['memberNum'] = $this->getMemberService()->searchMembersCount(array( 'level' => $memberlevel['id'] ));
+			}
 			return $this->render('TopxiaAdminBundle:Memberlevel:index.html.twig', array(
 	            'memberlevels' => $memberlevels,
 	            'paginator' => $paginator
@@ -137,6 +139,12 @@
 
 		protected function getLevelService()
     	{
-        return $this->getServiceKernel()->createService('User.LevelService');
+        	return $this->getServiceKernel()->createService('User.LevelService');
     	}
+
+    	protected function getMemberService()
+    	{
+    		return $this->getServiceKernel()->createService('User.MemberService');
+    	}
+
 }
