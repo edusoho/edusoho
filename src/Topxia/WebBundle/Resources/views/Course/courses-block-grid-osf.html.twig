@@ -6,7 +6,7 @@
         
         <a href="{{ path('course_show', {id:course.id}) }}" class="card-body">
           <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb ">
-          
+        </a> 
           <div class="phm">         
               <div class="text-size-12 pvm phs mvz  text-weight-800  div-height-3">{{ course.title }}</div>
 
@@ -43,14 +43,13 @@
                 {% endif %}
               {% endif  %}
 
-              <div class="pvs  mvz bor-t  clearfix">
-             
-                <a  class="btn btn-success btn-xs  text-normal pull-right"   href="{{ path('course_show', {id:course.id}) }}" >加入学习</a>
+              <div class="pvs  mvz bor-t   center-block">             
+                <a  class="btn  text-normal "   href="{{ path('course_show', {id:course.id}) }}" >加入学习</a>
               </div>  
 
 
            </div>
-        </a>
+       
 
          
 
