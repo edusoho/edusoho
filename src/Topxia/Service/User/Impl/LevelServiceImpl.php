@@ -18,6 +18,12 @@ class LevelServiceImpl extends BaseService implements LevelService
 	    return $this->getLevelDao()->getLevelByName($name);
 	}
 
+	public function findLevelsBySeq($seq, $start, $limit)
+	{
+		$levels = $this->getLevelDao()->findLevelsBySeq($seq, $start, $limit);
+		return $levels;
+	}
+
 	public function searchLevelsCount($conditions)
 	{	
 	    return $this->getLevelDao()->searchLevelsCount($conditions);
