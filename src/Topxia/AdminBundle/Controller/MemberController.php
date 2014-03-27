@@ -15,7 +15,6 @@ class MemberController extends BaseController
             'nickname'=>'',
             'level'=>''
         );
-        
         if(!empty($fields)){
             $conditions =$fields;
         }
@@ -27,9 +26,13 @@ class MemberController extends BaseController
         }
 
         if($type == "will_expire"){
-            $conditions['deadlineMoreThan'] = time();
-        }else if($type == "just_expire"){
             $conditions['deadlineLessThan'] = time();
+            $order = array('deadline', 'ASC');
+        }else if($type == "just_expire"){
+            $conditions['deadlineMoreThan'] = time();
+            $order = array('deadline', 'DESC');
+        }else{
+            $order = array('createdTime', 'DESC');
         }
 
         $paginator = new Paginator(
@@ -40,7 +43,7 @@ class MemberController extends BaseController
 
         $members = $this->getMemberService()->searchMembers(
             $conditions,
-            array('createdTime', 'DESC'),
+            $order,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -214,7 +217,7 @@ class MemberController extends BaseController
     protected function makeMemberLevelOptions()
     {
         $levels = $this->getLevelService()->searchLevels(
-            $conditions=array(),
+            $conditions=array('enabled'=>1),
             0,
             $this->getLevelService()->searchLevelsCount(array())
         );
