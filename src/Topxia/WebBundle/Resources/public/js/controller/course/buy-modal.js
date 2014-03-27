@@ -20,7 +20,7 @@ define(function(require, exports, module) {
             element: '#course-buy-form'           
         });
 
-        if ($('#course-buy-form').find('input[name="promoCode"]')){
+        if ($('#course-buy-form').find('input[name="promoCode"]').length > 0){
             validator.addItem({
                 element: '[name="promoCode"]',
                 required: false,
