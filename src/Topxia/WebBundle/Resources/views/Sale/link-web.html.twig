@@ -9,18 +9,25 @@
 <form class="form-horizontal" id="weblink-form"  action="{{ path('mysale_link_web_link') }}" method="post">
 
 <div class="panel panel-default panel-col">
-	<div class="panel-heading">请输入您需要转换的网站链接地址</div>
+	<div class="panel-heading">
+		
+	</div>
 	<div class="panel-body">
 		<div class="row form-group">
-			<div class="col-md-8">
+			<div class="col-md-12">
+				请输入您需要转换的网站链接地址
 				<textarea  id="oUrl" class="form-control"  cols="60" rows="3"></textarea>
 			</div>
+		</div>
 
-			<div class="col-md-4">
-				 <a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_web_link') }}"> 生成网站推广链接 </a>
-				
+		<div class="row form-group">
+			<div class="col-md-8">
+				请输入该链接描述
+				<textarea  id="linkname" class="form-control"  cols="60" rows="2"></textarea>
 			</div>
 
+			
+<a  class="btn btn-default btn-sm pull-right"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_web_link') }}">生成网站推广链接</a>
 		</div>
 
 
