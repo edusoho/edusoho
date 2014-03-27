@@ -8,6 +8,36 @@ define(function(require, exports, module) {
 		var $modal = $form.parents('.modal');
         var $table = $('#tag-table');
 
+
+
+        $("#tag-isStick-field1").on('click',function(){
+           
+            if( $(this).is(":checked") == true){
+
+                $("#tag-isStick-field").val('1');
+
+            }else{
+
+                 $("#tag-isStick-field").val('0');
+                
+            }
+        
+        });
+
+        $(document).ready(function(){
+
+            // alert($("#tag-isStick-field").val());
+           
+            // if( $("#tag-isStick-field").val() == 'on'){
+            //     $("#tag-isStick-field").attr("checked",true);
+            // }else{
+            //       $("#tag-isStick-field").attr("checked",false);
+                
+            // }
+        
+     
+        });
+
 		var validator = new Validator({
             element: $form,
             autoSubmit: false,
@@ -15,6 +45,8 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
+               
+               
 
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     var $html = $(html);
@@ -36,6 +68,18 @@ define(function(require, exports, module) {
             element: '#tag-name-field',
             required: true,
             rule: 'remote'
+        });
+
+        validator.addItem({
+            element: '#tag-stickSeq-field',
+            required: false,
+            rule: 'integer min{min: 0} max{max: 10000}'
+        });
+
+        validator.addItem({
+            element: '#tag-stickNum-field',
+            required: false,
+            rule: 'integer min{min: 0} max{max: 10000}'
         });
 
         $modal.find('.delete-tag').on('click', function() {

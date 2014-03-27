@@ -28,7 +28,7 @@ class TagController extends BaseController
 		}
 
 		return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
-			'tag' => array('id' => 0, 'name' => '')
+			'tag' => array('id' => 0, 'name' => '','isStick'=>0,'stickSeq'=>0,'stickNum'=>0)
 		));
 	}
 
@@ -40,6 +40,9 @@ class TagController extends BaseController
 		}
 
 		if ('POST' == $request->getMethod()) {
+
+			
+
 			$tag = $this->getTagService()->updateTag($id, $request->request->all());
 			return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
 				'tag' => $tag

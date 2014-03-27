@@ -1,8 +1,17 @@
 <tr id="tag-tr-{{ tag.id }}">
   <td>{{ tag.id }}</td>
-  <td>{{ tag.name }}</td>
+  <td>{{ tag.name }}<br>
+ 		{% if tag.isStick %}
+      		<span class="label label-default">首页标签:是 | 显示序号:{{ tag.stickSeq }} | 显示课程:{{ tag.stickNum }}</span>
+    	{% endif %}
+  </td>
   <td>{{ tag.createdTime|date('Y-m-d H:i') }}</td>
-  <td>
-    <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_update', {id:tag.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+  <td >
+    <button class="btn btn-default btn-sm pull-right" data-url="{{ path('admin_tag_update', {id:tag.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+
+   
+
+    <button class="btn btn-default btn-sm  pull-right" data-url="{{ path('admin_tag_update', {id:tag.id}) }}" data-toggle="modal" data-target="#modal">查看课程</button>
+
   </td>
 </tr>

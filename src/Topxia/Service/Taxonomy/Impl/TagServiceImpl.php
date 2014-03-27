@@ -65,7 +65,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTag(array $tag)
     {
-        $tag = ArrayToolkit::parts($tag, array('name'));
+        $tag = ArrayToolkit::parts($tag, array('name','isStick','stickSeq','stickNum'));
 
         $this->filterTagFields($tag);
         $tag['createdTime'] = time();
@@ -84,7 +84,8 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name'));
+        $fields = ArrayToolkit::parts($fields, array('name','isStick','stickSeq','stickNum'));
+
         $this->filterTagFields($fields, $tag);
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
@@ -108,6 +109,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tag['name'] = (string) $tag['name'];
 
         $exclude = $relatedTag ? $relatedTag['name'] : null;
+
         if (!$this->isTagNameAvalieable($tag['name'], $exclude)) {
             throw $this->createServiceException('该标签名已存在，添加失败！');
         }
