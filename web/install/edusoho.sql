@@ -708,7 +708,9 @@ CREATE TABLE `user` (
   `newNotificationNum` int(10) unsigned NOT NULL DEFAULT '0',
   `createdIp` varchar(64) NOT NULL DEFAULT '',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `nickname` (`nickname`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_approval`;
