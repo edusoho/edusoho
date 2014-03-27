@@ -40,6 +40,11 @@ define(function(require, exports, module) {
             '{{display}}必须是英文字母、数字及下划线组成'
         ],
         [
+            'alphabet_underline',
+            /^[a-zA-Z_]+[a-zA-Z0-9_]*/i,
+            '{{display}}必须以英文字母或下划线开头'
+        ],
+        [
             'byte_minlength',
             function(options) {
                 var element = options.element;

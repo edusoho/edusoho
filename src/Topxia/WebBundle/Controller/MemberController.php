@@ -10,16 +10,19 @@ class MemberController extends BaseController
     public function indexAction(Request $request)
     {	
         $memberZone = $this->getSettingService()->get('memberZone', array());
-        $currentUser = $this->getCurrentUser();
+        
     	$conditions = array();
         $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
+
     	$levels = $this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
         $levelIds = ArrayToolkit::column($levels,'id');
         $latestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'latest', 0, 3);
         $hotestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'popular', 0, 3);
-        $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
+
+        $currentUser = $this->getCurrentUser();
+        $member =  $currentUser->isLogin() ? $this->getMemberService()->getMemberByUserId($currentUser['id']) : null;
 
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
         	'levels' => $levels,
@@ -92,6 +95,8 @@ class MemberController extends BaseController
 
     public function historyAction(Request $request)
     {   
+        $memberZone = $this->getSettingService()->get('memberZone', array());
+
         $conditions = array();
         $paginator = new Paginator(
             $this->get('request'),
@@ -115,7 +120,8 @@ class MemberController extends BaseController
             'members' => $members,
             'member' => $member,
             'memberHistories' => $memberHistories,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'memberZone' => $memberZone
          ));
     }
 
