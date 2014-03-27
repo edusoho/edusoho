@@ -16,7 +16,7 @@
     <thead>
     <tr>
       <th width="30%">课程名称</th>
-      <th>销量</th>
+    
       <th>单价(元)</th>
 
       <th>佣金比率</th>
@@ -38,7 +38,7 @@
           <a href="{{ path('course_show', {id:course.id}) }}"  target="_blank">{{ course.title }}</a>
 
           </td>
-        <td>{{ course.studentNum }}</td>
+       
           <td>￥{{ course.price|number_format(2, '.', ',')  }}</td>
           
           <td>

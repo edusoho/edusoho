@@ -420,7 +420,7 @@ class MySaleController extends BaseController
 
             $offsale['reduceType'] = 'quota';
             $offsale['reducePrice'] = 0;
-            $offsale['validTime']==0;//优惠有效期
+            $offsale['validTime']=0;//优惠有效期
 
             $offsale['reuse']= '可以';
             $offsale['valid']= '有效';
