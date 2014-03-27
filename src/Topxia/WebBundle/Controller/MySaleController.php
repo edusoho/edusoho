@@ -158,6 +158,7 @@ class MySaleController extends BaseController
             $linksale['prodType']='course';
             $linksale['prodId']=$course['id'];
             $linksale['prodName']=$course['title'];
+            $linksale['linkName']=$course['title'].'推广链接'.$user['nickname'];
 
             $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']),true);
 
@@ -219,7 +220,8 @@ class MySaleController extends BaseController
 
                 $oUrl = $request->request->get('oUrl');
 
-                $linkname = $request->request->get('linkname');
+
+                $linkName = $request->request->get('linkName');
 
                 $linksale=$this->getLinkSaleService()->getLinkSaleByoUrl($saleType,$oUrl,$user['id']);
 
@@ -249,11 +251,25 @@ class MySaleController extends BaseController
                     $linksale['prodId']=$prodId;
                     $linksale['prodName']=$prodName;
 
-                    $webUrl = $this->generateUrl('homepage',array(),true);
+                    $linksale['linkName']=$linkName;
 
-                    $linksale['oUrl']=$webUrl;
 
-                    $linksale['tUrl']=$webUrl.'?mu='.$linksale['mTookeen'];
+                   
+
+                    $linksale['oUrl']=$oUrl;
+
+                    $pos = strpos($oUrl,"?");
+
+                    if($pos){
+                        
+                         $linksale['tUrl']=$oUrl.'&mu='.$linksale['mTookeen'];
+
+                    }else{
+                          $linksale['tUrl']=$oUrl.'?mu='.$linksale['mTookeen'];
+                    }
+
+
+                   
 
                     $linksale['reduceType'] = 'quota';
                     $linksale['reducePrice'] = 0.00;         

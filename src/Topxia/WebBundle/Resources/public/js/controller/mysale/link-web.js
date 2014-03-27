@@ -10,12 +10,34 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $(document).ready(function() {
 
+		    var validator = new Validator({
+		        element: '#weblink-form',
+		        autoSubmit: false
+		    });
 
+		  
+		    validator.addItem({
+		        element: '[name="oUrl"]',
+		        required: true
+		    });
 
+		    validator.addItem({
+		        element: '[name="linkName"]',
+		        required: true
+		    });
 
-        });
+		    validator.on('formValidated', function(error, msg, $form) {
+		        if (error) {
+		            return;
+		        }
+
+		        $.post($form.attr('action'), $form.serialize(), function(json) {
+		            window.location.reload();
+		        }, 'json');
+
+		    });
+      
 
     };
 });
