@@ -36,15 +36,15 @@
    		{   
 	        if ('POST' == $request->getMethod()) {
 	        	$conditions = $request->request->all();
-	        	if(@$conditions['monthType']){
+	        	if(isset($conditions['monthType'])) {
 	        		unset($conditions['monthType']);
 	        	} else { 
-	        		unset($conditions['monthPrice']); 
+	        		$conditions['monthPrice'] = 0.00; 
 	        	}
-	        	if(@$conditions['yearType']){
+	        	if(isset($conditions['yearType'])) {
 	        		unset($conditions['yearType']);
 	        	} else { 
-	        		unset($conditions['yearPrice']); 
+	        		$conditions['yearPrice'] = 0.00; 
 	        	}
 
 				$memberlevel = $this->getLevelService()->createLevel($conditions);
@@ -66,15 +66,15 @@
 
 	        if ('POST' == $request->getMethod()) {
 	        	$conditions = $request->request->all();
-	        	if(@$conditions['monthType']){
+	        	if(isset($conditions['monthType'])) {
 	        		unset($conditions['monthType']);
 	        	} else { 
-	        		unset($conditions['monthPrice']); 
+	        		$conditions['monthPrice'] = 0.00; 
 	        	}
-	        	if(@$conditions['yearType']){
+	        	if(isset($conditions['yearType'])) {
 	        		unset($conditions['yearType']);
 	        	} else { 
-	        		unset($conditions['yearPrice']); 
+	        		$conditions['yearPrice'] = 0.00;  
 	        	}
 
 				$memberlevel = $this->getLevelService()->updateLevel($id, $conditions);
@@ -125,7 +125,26 @@
 
 	    public function zoneAction(Request $request)
 	    {
-	    	return $this->render('TopxiaAdminBundle:Memberlevel:zone.html.twig');
+	        $memberZone = $this->getSettingService()->get('memberZone', array());
+
+	        $default = array(
+	            'enabled'=> 0,
+	            'upgradeLimit' => 30,
+	            'courseLimit' => 0,
+	        );
+
+	        $memberZone = array_merge($default, $memberZone);
+
+	        if ($request->getMethod() == 'POST') {
+	            $memberZone = $request->request->all();
+	            $this->getSettingService()->set('memberZone', $memberZone);
+	            $this->getLogService()->info('memberZone', 'update_memberZone', "更新会员专区设置", $memberZone);
+	            $this->setFlashMessage('success','会员专区设置已保存！');
+	        }
+
+	    	return $this->render('TopxiaAdminBundle:Memberlevel:zone.html.twig', array(
+	    		'memberZone' => $memberZone
+	    	));
 	    }
 
 		private function getLevel($id)
@@ -146,5 +165,10 @@
     	{
     		return $this->getServiceKernel()->createService('User.MemberService');
     	}
+
+	    protected function getSettingService()
+	    {
+	        return $this->getServiceKernel()->createService('System.SettingService');
+	    }
 
 }
