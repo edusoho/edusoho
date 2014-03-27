@@ -46,7 +46,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="number"]',
             required: true,
-            rule: 'integer'
+            rule: 'integer min{min: 0} max{max: 10000}'
         });
 
 		

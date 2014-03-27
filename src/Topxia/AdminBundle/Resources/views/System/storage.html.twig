@@ -1,66 +1,77 @@
 {% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
 
-{% block title %}云视频设置 - {{ parent() }}{% endblock %}
+{% block title %}云平台设置 - {{ parent() }}{% endblock %}
 
 {% set submenu = 'storage' %}
 
 {% block maincontent %}
 
-<div class="page-header"><h1>云视频设置</h1></div>
+<div class="page-header"><h1>云平台设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" novalidate>
+
+  <fieldset>
+    <legend>云平台参数</legend>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_access_key" >AccessKey</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" value="{{storageSetting.cloud_access_key}}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_secret_key" >SecretKey</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_secret_key" class="form-control" name="cloud_secret_key" value="{{storageSetting.cloud_secret_key}}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_api_server" >API地址</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
+      </div>
+    </div>
+
+  </fieldset>
+
+
+  <fieldset>
+    <legend>云视频设置</legend>
+
+
+  </fieldset>
+
+
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label >上传模式</label>
+      <label >云视频</label>
     </div>
     <div class="controls col-md-8 radios">
-      
-      <div id="upload_mode">
-        <input type="radio" id="upload_mode_0" name="upload_mode" value="local"
-        {% if storageSetting.upload_mode == 'local' %} checked="checked" {% endif %}>
-        <label for="upload_mode_0">网站本地存储</label>
-        <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" 
-        {% if storageSetting.upload_mode == 'cloud' %} checked="checked" {% endif %}>
-        <label for="upload_mode_1">云视频</label>
-      </div>
+
+      {{ radios('upload_mode', {'local':'关闭', 'cloud':'开启'}, storageSetting.upload_mode) }}
 
       <div class="help-block">
         云视频，提供更快的视频播放速度，以及更低廉的网络流量价格。<br />
-        <strong class="text-info">如需使用云视频，请联系Edusoho官方</strong>。
+        <strong class="text-info">如需使用云视频，请联系<a href="http://www.edusoho.com/service" target="_blank">Edusoho官方</a></strong>。
 
       </div>
 
     </div>
   </div>
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_api_server" >云视频API地址</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
-    </div>
-  </div>
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_access_key" >云视频AccessKey</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" value="{{storageSetting.cloud_access_key}}">
-    </div>
-  </div>
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_secret_key" >云视频SecretKey</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_secret_key" class="form-control" name="cloud_secret_key" value="{{storageSetting.cloud_secret_key}}">
-    </div>
-  </div>
+
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
