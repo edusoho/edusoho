@@ -48,50 +48,27 @@ class DefaultController extends BaseController
         //新加入学员
         $feild['roles']='ROLE_USER';
         $users=$this->getUserService()->searchUsers($feild,array('createdTime','DESC'),0,29);
-        //
-
-        $recomTag = $this->getTagService()->getTagByName('重点推荐');
-
-        $recomConditions = array('status' => 'published','recommended'=>1,'tagId' => $recomTag['id']);
-
-        $recomCourses = $this->getCourseService()->searchCourses($recomConditions, 'recommended', 0, 6);
 
 
 
 
-        $openTag = $this->getTagService()->getTagByName('公开课');
-
-        $openConditions = array('status' => 'published','recommended'=>1,'tagId' => $openTag['id']);
-
-        $openCourses = $this->getCourseService()->searchCourses($openConditions, 'recommended', 0, 3);
+        $stickTags = $this->getTagService()->searchTags(array('isStick'=>1),array('stickSeq','DESC'),0,10);
 
 
+        foreach ($stickTags as $stickTag) {
 
 
-        $bigdataTag = $this->getTagService()->getTagByName('大数据');
+            $courseConditions = array('status' => 'published','tagId' => $stickTag['id']);
 
-        $bigdataConditions = array('status' => 'published','recommended'=>1,'tagId' => $bigdataTag['id']);
+            $tagCourses = $this->getCourseService()->searchCourses($courseConditions, 'recommended', 0, $stickTag['stickNum']);
 
-        $bigdataCourses = $this->getCourseService()->searchCourses($bigdataConditions, 'recommended', 0, 3);
-
-
-
-        $vitualTag = $this->getTagService()->getTagByName('虚拟化');
-
-        $vitualConditions = array('status' => 'published','recommended'=>1,'tagId' => $vitualTag['id']);
-
-        $vitualCourses = $this->getCourseService()->searchCourses($vitualConditions, 'recommended', 0, 3);
+            $tagsCourses[$stickTag['id']]=$tagCourses;
+            
+        }
 
 
 
-
-        $kernalTag = $this->getTagService()->getTagByName('linux内核');
-
-        $kernalConditions = array('status' => 'published','recommended'=>1,'tagId' => $kernalTag['id']);
-
-        $kernalCourses = $this->getCourseService()->searchCourses($kernalConditions, 'recommended', 0, 3);
-
-       
+     
 
 
 
@@ -159,12 +136,10 @@ class DefaultController extends BaseController
           
             "users"=>$users,
 
-            "recomCourses"=>$recomCourses,
+            "stickTags"=>$stickTags,
+            "tagsCourses"=>$tagsCourses,
         
-            "openCourses"=>$openCourses,
-            "bigdataCourses"=>$bigdataCourses,
-            "vitualCourses"=>$vitualCourses,
-            "kernalCourses"=>$kernalCourses,
+          
 
             "activityThreads"=>$activityThreads,
             "activitys"=>$activitys,

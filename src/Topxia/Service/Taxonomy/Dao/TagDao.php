@@ -3,6 +3,8 @@ namespace Topxia\Service\Taxonomy\Dao;
 
 interface TagDao
 {
+    const TABLENAME = 'tag';
+
 	public function addTag(array $tag);
 
 	public function updateTag($id, array $fields);

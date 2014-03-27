@@ -51,6 +51,29 @@ class TagDaoImpl extends BaseDao implements TagDao
         return $this->getConnection()->fetchAll($sql, $names);
     }
 
+
+
+    public function searchTags($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
+
+    public function searchTagCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+
+
+
     public function findAllTags($start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -76,5 +99,34 @@ class TagDaoImpl extends BaseDao implements TagDao
         $sql = "SELECT COUNT(*) FROM {$this->table} ";
         return $this->getConnection()->fetchColumn($sql, array());
     }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+
+        if (isset($conditions['name'])) {
+            $conditions['nameLike'] = "%{$conditions['name']}%";
+            unset($conditions['name']);
+        }   
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from(self::TABLENAME, 'tag')
+            ->andWhere('isStick = :isStick')
+            ->andWhere('name LIKE :nameLike')
+            ->andWhere('stickSeq = :stickSeq')
+            ->andWhere('stickNum = :stickNum')
+          
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan');
+
+        
+
+        return $builder;
+    }
+
+    private function getTablename()
+    {
+        return self::TABLENAME;
+    }
+
 
 }
