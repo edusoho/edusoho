@@ -107,8 +107,8 @@ member:
     defaults: { _controller: TopxiaWebBundle:Member:index }
 
 member_course_explore:
-    pattern: /member/course/{levelId}
-    defaults: { _controller: TopxiaWebBundle:Member:course, levelId:'' }
+    pattern: /member/level/{levelId}/course
+    defaults: { _controller: TopxiaWebBundle:Member:course, levelId: 0 }
 
 member_history:
     pattern: /member/history

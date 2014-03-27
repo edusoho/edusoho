@@ -32,10 +32,10 @@
 
     <div class="col-md-9">
       <div class="btn-group btn-group-sm">
-        <a href="{{ path('member_course_explore', { levelId:level.id, sort:'latest'} ) }}" 
-        class="btn btn-info {% if sort == 'latest' %}active{% endif %}">最新</a>        
-        <a href="{{ path('member_course_explore', { levelId:level.id, sort:'popular'} ) }}" 
-        class="btn btn-info {% if sort == 'popular' %}active{% endif %}">热门</a> 
+        <a href="{{ path('member_course_explore', { levelId:level.id|default(0), sort:'latest'} ) }}" 
+        class="btn btn-default {% if sort == 'latest' %}active{% endif %}">最新</a>        
+        <a href="{{ path('member_course_explore', { levelId:level.id|default(0), sort:'popular'} ) }}" 
+        class="btn btn-default {% if sort == 'popular' %}active{% endif %}">热门</a> 
       </div>
 
       <div class="es-box-body">
