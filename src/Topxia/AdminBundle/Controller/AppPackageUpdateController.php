@@ -25,7 +25,7 @@ class AppPackageUpdateController extends BaseController
         if(empty($result)){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
         } else {
-            $this->getUpgradeService()->commit($id,$result);
+            // $this->getUpgradeService()->commit($id,$result);
             return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
         }
     }

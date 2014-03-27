@@ -31,7 +31,7 @@
   <form id="member-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="level">
-        {{ select_options(levels, app.request.query.get('level'), '--按会员类型--') }}
+        {{ select_options(levels_enabled, app.request.query.get('level'), '--按会员类型--') }}
       </select>
     </div>
     <span class="divider"></span>
@@ -55,7 +55,7 @@
     <tbody>
       {% for member in members %}
         {% set user = users[member.userId]|default(null) %}
-        {% set level = levels[member.levelId]|default(null) %}
+        {% set level = levels[member.levelId]|default('--') %}
         {% include 'TopxiaAdminBundle:Member:member-table-tr.html.twig' %}
       {% endfor %}
     </tbody>
