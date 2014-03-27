@@ -87,31 +87,31 @@ class AppServiceImpl extends BaseService implements AppService
 
         $rootDirectory = $this->getSystemRootDirectory();
 
-        if(!is_writeable("{rootDirectory}/app")) {
+        if(!is_writeable("{$rootDirectory}/app")) {
             $errors[] = 'app目录无写权限';
         }
 
-        if(!is_writeable("{rootDirectory}/src")) {
+        if(!is_writeable("{$rootDirectory}/src")) {
             $errors[] = 'src目录无写权限';
         }
 
-        if(!is_writeable("{rootDirectory}/web")) {
+        if(!is_writeable("{$rootDirectory}/web")) {
             $errors[] = 'web目录无写权限';
         }
 
-        if(!is_writeable("{rootDirectory}/app/cache")) {
+        if(!is_writeable("{$rootDirectory}/app/cache")) {
             $errors[] = 'app/cache目录无写权限';
         }
 
-        if(!is_writeable("{rootDirectory}/app/cache")) {
-            $errors[] = 'app/cache目录无写权限';
+        if(!is_writeable("{$rootDirectory}/app/data")) {
+            $errors[] = 'app/data目录无写权限';
         }
 
-        if(!is_writeable("{rootDirectory}/app/config")) {
+        if(!is_writeable("{$rootDirectory}/app/config")) {
             $errors[] = 'app/config目录无写权限';
         }
 
-        if(!is_writeable("{rootDirectory}/app/config/config.yml")) {
+        if(!is_writeable("{$rootDirectory}/app/config/config.yml")) {
             $errors[] = 'app/config/config.yml文件无写权限';
         }
 
