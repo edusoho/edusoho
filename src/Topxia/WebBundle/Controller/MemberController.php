@@ -20,6 +20,7 @@ class MemberController extends BaseController
         $latestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'latest', 0, 3);
         $hotestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'popular', 0, 3);
         $member = $this->getMemberService()->getMemberByUserId($currentUser['id']);
+
         return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
         	'levels' => $levels,
             'latestCourses' => $latestCourses,
@@ -77,7 +78,9 @@ class MemberController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         $levels = $this->getLevelService()->searchLevels(array(), 0, 100);
+
         return $this->render('TopxiaWebBundle:Member:course.html.twig',array(
             'levels' => $levels,
             'courses' => $courses,
