@@ -1,0 +1,41 @@
+{% extends 'TopxiaWebBundle:Sale:layout.html.twig' %}
+
+{% block title %}网站链接推广 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'mysale/link-web-modal' %}
+{% set side_nav = 'link-web-link' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+    <div class="panel-heading">
+        网站链接推广地址生成OK！
+    </div>
+    <div class="panel-body">
+
+
+    <div class="row form-group">
+
+    	<div class="col-md-9">
+    		<textarea id="content" name="tUrl" class="form-control" rows="3">{{ linksale.tUrl }}</textarea>
+    	</div>
+    	<div class="col-md-3">
+    		<button id="copy-button" value="abc">点击复制该链接</button>
+    		<div id="copy"></div>
+    	</div>
+
+    </div>
+
+    <div class="row form-group">
+
+        <div class="col-md-9">
+            佣金比例:{{linksale.adCommission}}% ,  链接有效期:{{linksale.adCommissionDay}}天
+        </div>
+        
+
+    </div>
+
+    </div>
+</div>
+
+{% endblock %}
+

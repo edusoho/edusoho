@@ -284,7 +284,7 @@ class MySaleController extends BaseController
                     $linksale = $this->getLinkSaleService()->createLinkSale($linksale);       
 
                 }
-                return $this->render('TopxiaWebBundle:Sale:link-web-modal.html.twig', array(
+                return $this->render('TopxiaWebBundle:Sale:link-web-show.html.twig', array(
                                'linksale'=>$linksale,
                                 'user'=>$user            
                 ));

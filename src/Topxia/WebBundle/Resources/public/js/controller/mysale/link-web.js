@@ -19,12 +19,14 @@ define(function(require, exports, module) {
 		  
 		    validator.addItem({
 		        element: '[name="oUrl"]',
-		        required: true
+		        required: true,
+		        rule: 'url'
 		    });
 
 		    validator.addItem({
 		        element: '[name="linkName"]',
-		        required: true
+		        required: true,
+		        rule: 'byte_minlength{min:1} byte_maxlength{max:100}'
 		    });
 
       
