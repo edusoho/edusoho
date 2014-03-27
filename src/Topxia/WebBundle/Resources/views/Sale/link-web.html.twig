@@ -10,25 +10,29 @@
 
 <div class="panel panel-default panel-col">
 	<div class="panel-heading">
-		网站链接推广地址生成
+		网站链接推广地址生成  <button class="btn btn-fat btn-primary pull-right" id="course-create-btn" type="submit">生成网站推广链接</button>
 	</div>
 	<div class="panel-body">
 		<div class="row form-group">
-			<div class="col-md-8">
-				请输入您需要转换的网站链接地址
-				<textarea  id="oUrl" name="oUrl" class="form-control"  cols="60" rows="3"></textarea>
-			</div>
+			 <div class="col-md-2 control-label">
+			 	<label for="oUrl">链接地址</label>
+			 </div>
+			 <div class="col-md-8">
+
+			 	<textarea  id="oUrl" name="oUrl" class="form-control"  cols="60" rows="3" placeholder="请输入您需要转换的网站链接地址"></textarea>
+			 	<p class="help-block" id="oUrl"></p>
+			 </div>
 		</div>
 
 		<div class="row form-group">
-			<div class="col-md-8">
-				请输入该链接描述
-				<textarea  id="linkName" name="linkName" class="form-control"  cols="60" rows="2"></textarea>
+			<div class="col-md-2 control-label">
+			 	<label for="linkName">链接描述</label>
+			 </div>
+			<div class="col-md-8">				
+				<textarea  id="linkName" name="linkName" class="form-control"  cols="60" rows="2" placeholder="请输入该链接描述"></textarea>
+				<p class="help-block" id="oUrl"></p>
 			</div>
-			<div class="col-md-4">
-				<br>
-				<a  class="btn btn-default btn-sm"  href="#modal" data-toggle="modal"  data-url="{{ path('mysale_link_web_link') }}">生成网站推广链接</a>
-			</div>
+			
 			
 
 		</div>

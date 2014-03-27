@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 
 		    var validator = new Validator({
 		        element: '#weblink-form',
-		        autoSubmit: false
+		        autoSubmit: true
 		    });
 
 		  
@@ -27,16 +27,6 @@ define(function(require, exports, module) {
 		        required: true
 		    });
 
-		    validator.on('formValidated', function(error, msg, $form) {
-		        if (error) {
-		            return;
-		        }
-
-		        $.post($form.attr('action'), $form.serialize(), function(json) {
-		            window.location.reload();
-		        }, 'json');
-
-		    });
       
 
     };
