@@ -312,8 +312,8 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新云视频设置", $storageSetting);
-            $this->setFlashMessage('success', '云视频设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
+            $this->setFlashMessage('success', '云平台设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(

@@ -11,7 +11,6 @@ define(function(require, exports, module) {
 
         $('[name=enabled]').change(function(e) {
             var radio = e.target.value;
-            console.log(radio);
             if (radio == '1') {
 
                 $('[name=weibo_enabled]').change(function(f){
