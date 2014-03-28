@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -10,7 +11,9 @@ class MemberController extends BaseController
     public function indexAction(Request $request)
     {	
         $memberZone = $this->getSettingService()->get('memberZone', array());
-        
+
+        $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
+
     	$conditions = array();
         $members = $this->getMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
         $memberIds = ArrayToolkit::column($members,'userId');
@@ -31,12 +34,15 @@ class MemberController extends BaseController
             'latestMembers' => $latestMembers,
             'members'=> $members,
             'member'=> $member,
-            'memberZone'=> $memberZone
+            'memberZone'=> $memberZone,
+            'deadlineAlertCookie' => $deadlineAlertCookie
         ));
     }
 
     public function courseAction(Request $request ,$levelId)
     {   
+        $memberZone = $this->getSettingService()->get('memberZone', array());
+
         if (!empty($levelId)) {
             if (ctype_digit((string) $levelId)) {
                 $level = $this->getLevelService()->getLevel($levelId);
@@ -89,13 +95,16 @@ class MemberController extends BaseController
             'courses' => $courses,
             'paginator' => $paginator,
             'level' => $level,
-            'sort' => $sort
+            'sort' => $sort,
+            'memberZone' => $memberZone
         ));
     }
 
     public function historyAction(Request $request)
     {   
         $memberZone = $this->getSettingService()->get('memberZone', array());
+
+        $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
         $conditions = array();
         $paginator = new Paginator(
@@ -121,7 +130,8 @@ class MemberController extends BaseController
             'member' => $member,
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
-            'memberZone' => $memberZone
+            'memberZone' => $memberZone,
+            'deadlineAlertCookie' => $deadlineAlertCookie
          ));
     }
 
