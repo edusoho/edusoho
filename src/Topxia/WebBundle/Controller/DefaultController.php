@@ -256,6 +256,18 @@ class DefaultController extends BaseController
 
     }
 
+
+    public function qunTalkServiceAction()
+    {
+        $customerServiceSetting = $this->getSettingService()->get('customerService', array());
+
+        return $this->render('TopxiaWebBundle:Default:qun-talk-service-online.html.twig', array(
+            'customerServiceSetting' => $customerServiceSetting,
+        ));
+
+    }
+
+
     public function systemInfoAction()
     {
         $info = array(

@@ -121,6 +121,11 @@
             <li class="active">
               <a href="#course-about-pane" data-toggle="tab">课程介绍</a>
             </li>
+            
+             <li>
+              <a href="#course-lesson-pane" data-toggle="tab">课时列表</a>
+            </li>
+
             <li>
               <a id="course-review-tab" href="#course-review-pane" data-toggle="tab" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">
                 课程评价
@@ -137,6 +142,8 @@
               <a href="#course-audience-pane" data-toggle="tab">适合人群</a>
             </li>
             {% endif %}
+           
+
           </ul>
 
           <div class="tab-content">
@@ -184,19 +191,29 @@
               </ul>
             </div>
             {% endif %}
+
+
+             <div class="tab-pane" id="course-lesson-pane">
+              {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+                {% block heading %}
+                <h3 class="panel-title">课时列表</h3>
+                {% endblock %}
+
+                {% block body %}
+
+                  {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
+
+                {% endblock %}
+              {% endembed %}
+
+            </div>
+
+
           </div>
         </div>
       </div>
-      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
-        {% block heading %}
-      <h3 class="panel-title">课时列表</h3>
-      {% endblock %}
-        {% block body %}
 
-          {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
-
-        {% endblock %}
-      {% endembed %}
+      
 
       {{ render(controller('TopxiaWebBundle:CourseReview:latestBlock',{course:course})) }}
     </div>
