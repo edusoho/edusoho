@@ -162,11 +162,11 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 
     public function generateLinkSaleTookeen($tookeenPrefix='')
     {
-        return  date('YmdHis', time()).$tookeenPrefix.$this->generateChars(24);
+        return  $tookeenPrefix.date('ymd', time()).$this->generateChars(6);
     }
 
 
-    private function generateChars( $length = 24 ) {  
+    private function generateChars( $length = 6 ) {  
         // 密码字符集，可任意添加你需要的字符  
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $password ="";  
