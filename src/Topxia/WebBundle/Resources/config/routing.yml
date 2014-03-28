@@ -103,15 +103,15 @@ kindeditor_upload:
     methods: [POST]
 
 member:
-    pattern: /member
+    pattern: /memberzone
     defaults: { _controller: TopxiaWebBundle:Member:index }
 
 member_course_explore:
-    pattern: /member/level/{levelId}/course
+    pattern: /memberzone/level/{levelId}/course
     defaults: { _controller: TopxiaWebBundle:Member:course, levelId: 0 }
 
 member_history:
-    pattern: /member/history
+    pattern: /memberzone/history
     defaults: { _controller: TopxiaWebBundle:Member:history }
 
 course_explore:
