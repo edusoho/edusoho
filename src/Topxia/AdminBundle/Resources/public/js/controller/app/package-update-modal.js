@@ -125,11 +125,11 @@ define(function(require, exports, module) {
         },
 
         active: function() {
-            this.$('.progress').addClass('active').addClass('progress-striped');
+            this.$('.progress').addClass('active');
         },
 
         deactive: function() {
-            this.$('.progress').removeClass('active').removeClass('progress-striped');
+            this.$('.progress').removeClass('active');
         },
 
         text: function(text) {

@@ -269,6 +269,44 @@ class AppServiceImpl extends BaseService implements AppService
         return false;
     }
 
+    public function downloadPackageForUpdate($packageId)
+    {
+        $result = array();
+        try{
+            $package = $this->createAppClient()->
+
+
+
+   $url  = 'http://www.example.com/a-large-file.zip';
+    $path = '/path/to/a-large-file.zip';
+ 
+    $fp = fopen($path, 'w');
+ 
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_FILE, $fp);
+ 
+    $data = curl_exec($ch);
+ 
+    curl_close($ch);
+    fclose($fp);
+
+
+
+
+
+
+
+
+
+
+            // $path = $this->getEduSohoUpgradeClient()->downloadPackage($package['uri'],$package['filename']);
+            // $dirPath = $this->extractFile($path);       
+        }catch(\Exception $e){
+            $result[] = $e->getMessage();
+        }
+        return $result;
+    }
+
     private function getSystemRootDirectory()
     {
         return dirname($this->getKernel()->getParameter('kernel.root_dir'));
