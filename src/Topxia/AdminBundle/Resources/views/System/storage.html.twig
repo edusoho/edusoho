@@ -11,26 +11,6 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" novalidate>
-<<<<<<< HEAD
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label >上传模式</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      
-      <div id="upload_mode">
-        <input type="radio" id="upload_mode_0" name="upload_mode" value="local"
-        {% if storageSetting.upload_mode == 'local' %} checked="checked" {% endif %}>
-
-        <label for="upload_mode_0">网站本地存储</label>
-
-        <input type="radio" id="upload_mode_1" name="upload_mode" value="cloud" 
-
-        {% if storageSetting.upload_mode == 'cloud' %} checked="checked" {% endif %}>
-        <label for="upload_mode_1">云视频</label>
-      </div>
-=======
->>>>>>> origin/master
 
   <fieldset>
     <legend>云平台参数</legend>
