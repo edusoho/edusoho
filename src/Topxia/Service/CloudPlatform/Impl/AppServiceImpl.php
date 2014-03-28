@@ -1,7 +1,10 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Impl;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 use Topxia\Service\CloudPlatform\AppService;
+use Topxia\Service\Util\MySQLDumper;
 use Topxia\Service\CloudPlatform\Client\EduSohoAppClient;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
@@ -65,7 +68,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppLogDao()->findLogCount();
     }
 
-    public function checkUpdateEnvironment()
+    public function checkPackageUpdateEnvironment()
     {
         $errors = array();
 
@@ -77,12 +80,32 @@ class AppServiceImpl extends BaseService implements AppService
            $errors[] = "php_curl扩展未激活";
         }
 
-        if (!is_writeable($this->getDownloadDirectory())) {
-            $errors[] = "下载目录({$this->getDownloadDirectory()})无写权限";
+        $filesystem = new Filesystem();
+
+        $downloadDirectory = $this->getDownloadDirectory();
+        if ($filesystem->exists($downloadDirectory)) {
+            if (!is_writeable($downloadDirectory)) {
+                $errors[] = "下载目录({$downloadDirectory})无写权限";
+            }
+        } else {
+            try {
+                $filesystem->mkdir($downloadDirectory);
+            } catch (\Exception $e) {
+                $errors[] = "下载目录({$downloadDirectory})创建失败";
+            }
         }
 
-        if (!is_writeable($this->getBackUpDirectory())) {
-            $errors[] = "备份目录{$this->getDownloadDirectory()})无写权限";
+        $backupdDirectory = $this->getBackUpDirectory();
+        if ($filesystem->exists($backupdDirectory)) {
+            if (!is_writeable($backupdDirectory)) {
+                $errors[] = "备份({$backupdDirectory})无写权限";
+            }
+        } else {
+            try {
+                $filesystem->mkdir($backupdDirectory);
+            } catch (\Exception $e) {
+                $errors[] = "备份({$backupdDirectory})创建失败";
+            }
         }
 
         $rootDirectory = $this->getSystemRootDirectory();
@@ -118,6 +141,172 @@ class AppServiceImpl extends BaseService implements AppService
         return $errors;
     }
 
+    public function checkPackageUpdateDepends($packageId)
+    {
+        $errors = array();
+
+        try {
+            $package = $this->getCenterPackageInfo($packageId);
+            if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
+                $errors[] = "EduSoho版本需大于等于{$package['edusohoMinVersion']}，您的版本为" . System::VERSION . '，请先升级EduSoho';
+            }
+        } catch(\Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+
+        // @todo 依赖包检测
+        
+        return $errors;
+    }
+
+    public function backupDbForPackageUpdate($packageId)
+    {
+
+        $errors = array();
+        try {
+            $filesystem = new Filesystem();
+
+            $package = $this->getCenterPackageInfo($packageId);
+            if (empty($package)) {
+                $errors[] = "获取应用包#{$packageId}信息失败";
+                goto last;
+            }
+            if (empty($package['backupDB'])) {
+                goto last;
+            }
+
+            $dumper = new MySQLDumper($this->getKernel()->getConnection(), array(
+                'exclude'=>array('session','cache')
+            ));
+
+            $targetBaseDir = "{$this->getBackUpDirectory()}/{$package['id']}_{$package['type']}_{$package['fromVersion']}_to_{$package['toVersion']}_db";
+            $dumper->export($targetBaseDir);
+
+        } catch(\Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+        last:
+        return $errors; 
+
+    }
+
+    public function backupFileForPackageUpdate($packageId)
+    {
+        $errors = array();
+        try {
+            $filesystem = new Filesystem();
+
+            $package = $this->getCenterPackageInfo($packageId);
+
+
+            if (empty($package)) {
+                $errors[] = "获取应用包#{$packageId}信息失败";
+                goto last;
+            }
+            if (empty($package['backupFile'])) {
+                goto last;
+            }
+
+            $targetBaseDir = "{$this->getBackUpDirectory()}/{$package['id']}_{$package['type']}_{$package['fromVersion']}_to_{$package['toVersion']}";
+
+            if (!$filesystem->exists($targetBaseDir)) {
+                $filesystem->mkdir($targetBaseDir);
+            }
+
+            $originDirs = array(
+                'app/Resources',
+                'app/config',
+                'src',
+                'web/assets',
+                'web/bundles',
+                'web/themes',
+            );
+            foreach ($originDirs as $originDir) {
+                $originFullDir = $this->getSystemRootDirectory() . '/' . $originDir;
+                if (!$filesystem->exists($originFullDir)) {
+                    continue;
+                }
+                $filesystem->mirror($originFullDir, $targetBaseDir . '/' . $originDir, null, array(
+                    'override' => true,
+                    'copy_on_windows' => true
+                ));
+            }
+
+            $originFiles = array(
+                'app/AppCache.php',
+                'app/AppKernel.php',
+                'app/autoload.php',
+                'app/bootstrap.php.cache',
+                'app/console',
+                'web/app.php',
+            );
+            foreach ($originFiles as $originFile) {
+                $originFullFile = $this->getSystemRootDirectory() . '/' . $originFile;
+                if (!$filesystem->exists($originFullFile)) {
+                    continue;
+                }
+                $filesystem->copy($originFullFile, $targetBaseDir . '/' . $originFile, true);
+            }
+
+        } catch(\Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+        last:
+        return $errors; 
+    }
+
+    public function hasLastRollbackErrorForPackageUpdate($packageId)
+    {
+        $package = $this->getCenterPackageInfo($packageId);
+        if (empty($package)) {
+            throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+        }
+
+        $log = $this->getUpgradeLogDao()->getUpdateLogByEnameAndVersion($package['ename'], $package['version']);
+        if('ROLLBACK' == $log['status']){
+            return true;
+        }
+        return false;
+    }
+
+    public function downloadPackageForUpdate($packageId)
+    {
+        $result = array();
+        try{
+            $package = $this->createAppClient()->
+
+
+
+   $url  = 'http://www.example.com/a-large-file.zip';
+    $path = '/path/to/a-large-file.zip';
+ 
+    $fp = fopen($path, 'w');
+ 
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_FILE, $fp);
+ 
+    $data = curl_exec($ch);
+ 
+    curl_close($ch);
+    fclose($fp);
+
+
+
+
+
+
+
+
+
+
+            // $path = $this->getEduSohoUpgradeClient()->downloadPackage($package['uri'],$package['filename']);
+            // $dirPath = $this->extractFile($path);       
+        }catch(\Exception $e){
+            $result[] = $e->getMessage();
+        }
+        return $result;
+    }
+
     private function getSystemRootDirectory()
     {
         return dirname($this->getKernel()->getParameter('kernel.root_dir'));
@@ -131,7 +320,8 @@ class AppServiceImpl extends BaseService implements AppService
     private function getBackUpDirectory()
     {
         return $this->getKernel()->getParameter('topxia.disk.backup_dir');
-    }   
+    }
+
 
     private function getExtractPath($package)
     {

@@ -34,20 +34,11 @@
   </tbody>
 </table>
 
-<div class="package-update-progress" style="display:none;">
+<div id="package-update-progress" class="package-update-progress" style="display:none;">
   <div class="progress progress-striped active">
     <div class="progress-bar progress-bar-success" style="width: 0%"></div>
   </div>
-  <div class="text-success package-update-progress-text">正在{{ updateName }}，请稍等。</div>
-</div>
-
-<div id="install-animate" style="display:none;">
-  <p id='step1'>1、检查环境: <span id='step1-process'></span><span id='step1-result'></span></p>
-  <p id='step2'>2、检查依赖包: <span id='step2-process'></span><span id='step2-result'></span></p>
-  <p id='step3'>3、下载解压缩安装包: <span id='step3-process'></span><span id='step3-result'></span></p>
-  <p id='step4'>4、备份系统: <span id='step4-process'></span><span id='step4-result'></span></p>
-  <p id='step5'>5、更新系统文件和数据: <span id='step5-process'></span><span id='step5-result'></span></p>
-  <h2 id='step6'></h2>
+  <div class="text-success progress-text"></div>
 </div>
 
 <script type="text/javascript"> app.load('app/package-update-modal') </script>
@@ -63,4 +54,8 @@
     data-download-extract-url="{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
     data-begin-upgrade-url="{{ path('admin_app_package_update_begin_upgrade', {id:package.id}) }}"
   >开始{{ updateName }}</button>
+
+  <strong class="text text-danger" id="updating-hint" style="display:none;">正在安装，请不要关闭当前窗口...</strong>
+
+  <button id="finish-update-btn" class="btn btn-primary" style="display:none">确定</button>
 {% endblock %}

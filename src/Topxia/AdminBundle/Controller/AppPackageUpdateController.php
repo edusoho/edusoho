@@ -3,6 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -19,55 +20,64 @@ class AppPackageUpdateController extends BaseController
 
     public function checkEnvironmentAction(Request $request, $id)
     {
-        $result = $this->getAppService()->checkUpdateEnvironment();
+        $errors = $this->getAppService()->checkPackageUpdateEnvironment();
 
-
-        if(empty($result)){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
-        } else {
-            // $this->getUpgradeService()->commit($id,$result);
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        if(empty($errors)){
+            return $this->createJsonResponse(array('status' => 'ok'));
         }
+
+        // $this->getUpgradeService()->commit($id,$result);
+        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }
 
     public function checkDependsAction(Request $request, $id)
     {
-        if ($this->isDisabledUpgrade()) {
-            return $this->createDisabledResponse();
-        }
+        $errors = $this->getAppService()->checkPackageUpdateDepends($id);
 
-        $result = $this->getUpgradeService()->checkDepends($id);
-
-        if(empty($result)){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
-        } else {
-            $this->getUpgradeService()->commit($id,$result);
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        if(empty($errors)){
+            return $this->createJsonResponse(array('status' => 'ok'));
         }
+        // $this->getUpgradeService()->commit($id,$errors);
+        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+    }
+
+    public function backupFileAction(Request $request, $id)
+    {
+        $result = $this->getAppService()->backupFileForPackageUpdate($id);
+        if(empty($errors)){
+            return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        // $this->getUpgradeService()->commit($id,$errors);
+        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+    }
+
+    public function backupDbAction(Request $request, $id)
+    {
+        $result = $this->getAppService()->backupDbForPackageUpdate($id);
+        $errors = array();
+
+        if(empty($errors)){
+            return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        // $this->getUpgradeService()->commit($id,$errors);
+        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }
 
     public function downloadAndExtractAction(Request $request, $id)
     {
-        if ($this->isDisabledUpgrade()) {
-            return $this->createDisabledResponse();
-        }
+        // $result = $this->getAppService()->backUpSystem($id);
+        $errors = array();
 
-        $result = $this->getUpgradeService()->downloadAndExtract($id);
-
-        if(empty($result)){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
-        } else {
-            $this->getUpgradeService()->commit($id,$result);
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+        if(empty($errors)){
+            return $this->createJsonResponse(array('status' => 'ok'));
         }
+        // $this->getUpgradeService()->commit($id,$errors);
+        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }
+
 
     public function hasLastErrorAction(Request $request, $id)
     {
-        if ($this->isDisabledUpgrade()) {
-            return $this->createDisabledResponse();
-        }
-
         $result = $this->getUpgradeService()->hasLastError($id);
         if(!$result){
             return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
@@ -76,46 +86,23 @@ class AppPackageUpdateController extends BaseController
         }
     }
 
-    public function backupSystemAction(Request $request, $id)
-    {
-        if ($this->isDisabledUpgrade()) {
-            return $this->createDisabledResponse();
-        }
-        
-        $result = $this->getUpgradeService()->backUpSystem($id);
-
-        if(empty($result)){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
-        } else {
-            $this->getUpgradeService()->commit($id,$result);
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
-        }
-    }
-
-
     public function beginUpgradeAction(Request $request, $id)
     {
-        if ($this->isDisabledUpgrade()) {
-            return $this->createDisabledResponse();
-        }
+        $errors = array();
 
-        $result = $this->getUpgradeService()->beginUpgrade($id);
-
-        if(empty($result)){
+        if(empty($errors)){
             try{
-                $this->getUpgradeService()->refreshCache();
+                // $this->getUpgradeService()->refreshCache();
             }catch(\Exception $e){
-                return $this->createJsonResponse(
-                    array('status' => 'error', 
-                        'result'=>array('升级成功了，但缓存未刷新，请检查 app/cache 权限！')));
+                $errors = array('升级成功了，但缓存未刷新，请检查 app/cache 权限！');
+                return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
             }
-            $this->getUpgradeService()->commit($id,$result);
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>$result));
-        } else {
-            $this->getUpgradeService()->commit($id,$result);
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>$result));
+            // $this->getUpgradeService()->commit($id,$errors);
+            return $this->createJsonResponse(array('status' => 'ok'));
         }
 
+        // $this->getUpgradeService()->commit($id,$errors);
+        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }
 
     protected function getAppService()

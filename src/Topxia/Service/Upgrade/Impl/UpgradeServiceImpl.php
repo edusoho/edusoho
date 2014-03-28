@@ -140,7 +140,7 @@ class UpgradeServiceImpl extends BaseService implements UpgradeService
 
 		$depends = $package['depends'];	
 
-		if(empty($depends)){
+		if(empty($depends)) {
 			return $result;
 		}
 		foreach ($depends as $key => $depend) {

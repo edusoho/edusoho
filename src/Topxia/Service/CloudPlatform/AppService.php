@@ -22,5 +22,7 @@ interface AppService
 
     public function findLogCount();
 
-    public function checkUpdateEnvironment();
+    public function checkPackageUpdateEnvironment();
+
+    public function checkPackageUpdateDepends($packageId);
 }
