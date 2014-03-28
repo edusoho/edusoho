@@ -194,7 +194,16 @@
 
 
              <div class="tab-pane" id="course-lesson-pane">
-              {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+             
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
                 {% block heading %}
                 <h3 class="panel-title">课时列表</h3>
                 {% endblock %}
@@ -204,14 +213,7 @@
                   {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
 
                 {% endblock %}
-              {% endembed %}
-
-            </div>
-
-
-          </div>
-        </div>
-      </div>
+      {% endembed %}
 
       
 
