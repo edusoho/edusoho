@@ -109,7 +109,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '#question-score-field',
                 required: false,
-                rule:'score'
+                rule:'number'
             });
 
             validator.on('formValidated', function(error, msg, $form) {
