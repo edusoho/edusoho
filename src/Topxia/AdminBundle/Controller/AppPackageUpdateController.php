@@ -65,9 +65,7 @@ class AppPackageUpdateController extends BaseController
 
     public function downloadAndExtractAction(Request $request, $id)
     {
-        // $result = $this->getAppService()->backUpSystem($id);
-        $errors = array();
-
+        $errors = $this->getAppService()->downloadPackageForUpdate($id);
         if(empty($errors)){
             return $this->createJsonResponse(array('status' => 'ok'));
         }

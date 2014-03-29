@@ -271,40 +271,47 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function downloadPackageForUpdate($packageId)
     {
-        $result = array();
-        try{
-            $package = $this->createAppClient()->
+        $errors = array();
+        try {
+            $package = $this->getCenterPackageInfo($packageId);
+            if (empty($package)) {
+                throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+            }
 
+            $filepath = $this->createAppClient()->downloadPackage($packageId);
 
+            $this->unzipPackageFile($filepath, $this->makePackageFileUnzipDir($package));
 
-   $url  = 'http://www.example.com/a-large-file.zip';
-    $path = '/path/to/a-large-file.zip';
- 
-    $fp = fopen($path, 'w');
- 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_FILE, $fp);
- 
-    $data = curl_exec($ch);
- 
-    curl_close($ch);
-    fclose($fp);
-
-
-
-
-
-
-
-
-
-
-            // $path = $this->getEduSohoUpgradeClient()->downloadPackage($package['uri'],$package['filename']);
-            // $dirPath = $this->extractFile($path);       
-        }catch(\Exception $e){
-            $result[] = $e->getMessage();
+        } catch(\Exception $e) {
+            $errors[] = $e->getMessage();
         }
-        return $result;
+        return $errors;
+    }
+
+    private function unzipPackageFile($filepath, $unzipDir)
+    {
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists($unzipDir)) {
+            $filesystem->remove($unzipDir);
+        }
+
+        $tmpUnzipDir = $unzipDir . '_tmp';
+        if ($filesystem->exists($tmpUnzipDir)) {
+            $filesystem->remove($tmpUnzipDir);
+        }
+        $filesystem->mkdir($tmpUnzipDir);
+
+        $zip = new \ZipArchive;
+        if ($zip->open($filepath) === TRUE) {
+            $tmpUnzipFullDir = $tmpUnzipDir . '/' . $zip->getNameIndex(0);
+            $zip->extractTo($tmpUnzipDir);
+            $zip->close();
+            $filesystem->rename($tmpUnzipFullDir, $unzipDir);
+            $filesystem->remove($tmpUnzipDir);
+        } else {
+            throw new \Exception('无法解压缩安装包！');
+        }
     }
 
     private function getSystemRootDirectory()
@@ -323,10 +330,9 @@ class AppServiceImpl extends BaseService implements AppService
     }
 
 
-    private function getExtractPath($package)
+    private function makePackageFileUnzipDir($package)
     {
-        return $this->getDownloadPath().
-                DIRECTORY_SEPARATOR.basename($package['filename'], ".zip");     
+        return $this->getDownloadDirectory(). '/' . $package['fileName'];
     }   
 
     private function getCachePath(){

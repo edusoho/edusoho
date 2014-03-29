@@ -27,6 +27,8 @@ class EduSohoAppClient implements AppClient
         }
 
         $this->debug = empty($options['debug']) ? false : true;
+
+        $this->tmpDir = empty($options['tmpDir']) ? '/tmp' : $options['tmpDir'];
     }
 
     public function getApps()
@@ -47,9 +49,12 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('POST', 'CommitPackageLog', $args);
     }
 
-    public function downloadPackage($uri,$filename)
+    public function downloadPackage($packageId)
     {
-
+        $args = array('packageId' => (string)$packageId);
+        list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams('DownloadPackage', $args);
+        $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($httpParams);
+        return $this->download($url);
     }
 
     public function getPackage($id)
@@ -65,6 +70,15 @@ class EduSohoAppClient implements AppClient
 
     private function callRemoteApi($httpMethod, $action, array $args)
     {
+        list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
+
+        $result = $this->sendRequest($httpMethod, $url, $httpParams);
+
+        return json_decode($result, true);
+    }
+
+    private function assembleCallRemoteApiUrlAndParams($action, array $args)
+    {
         $url = "{$this->apiUrl}?action={$action}";
 
         $edusoho = array('edition' => 'opensource', 'version' => System::VERSION);
@@ -76,9 +90,24 @@ class EduSohoAppClient implements AppClient
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
         $httpParams['debug'] = $this->debug ? 1 : 0;
 
-        $result = $this->sendRequest($httpMethod, $url, $httpParams);
+        return array($url, $httpParams);
+    }
 
-        return json_decode($result, true);
+    private function download($url)
+    {
+        $filename = md5($url) . '_' . time();
+        $filepath = $this->tmpDir . '/' . $filename;
+
+        $fp = fopen($filepath, 'w');
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_FILE, $fp);
+        curl_exec($curl);
+        curl_close($curl);
+
+        fclose($fp);
+
+        return $filepath;
     }
 
     private function sendRequest($method, $url, $params = array())

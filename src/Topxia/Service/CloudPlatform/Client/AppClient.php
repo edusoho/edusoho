@@ -21,7 +21,7 @@ interface AppClient
     /**
      * 下载应用包
      */
-    public function downloadPackage($uri,$filename);
+    public function downloadPackage($packageId);
 
     public function repairProblem($token);
 
