@@ -86,7 +86,8 @@ class AppPackageUpdateController extends BaseController
 
     public function beginUpgradeAction(Request $request, $id)
     {
-        $errors = array();
+
+        $errors = $this->getAppService()->beginPackageUpdate($id);
 
         if(empty($errors)){
             try{

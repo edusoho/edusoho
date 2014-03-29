@@ -288,6 +288,48 @@ class AppServiceImpl extends BaseService implements AppService
         return $errors;
     }
 
+    public function beginPackageUpdate($packageId)
+    {
+        $errors = array();
+        try {
+            $package = $this->getCenterPackageInfo($packageId);
+            if (empty($package)) {
+                throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+            }
+
+            $packageDir = $this->makePackageFileUnzipDir($package);
+            $this->deleteFilesForPackageUpdate($package, $packageDir);
+
+            $filesystem = new Filesystem();
+
+            var_dump($packageDir);
+
+
+
+
+        } catch(\Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+        return $errors;
+    }
+
+    private function deleteFilesForPackageUpdate($package, $packageDir)
+    {
+        if (!file_exists($packageDir . '/delete')) {
+            return ;
+        }
+
+        $filesystem = new Filesystem();
+        $fh = fopen($packageDir . '/delete', 'r');
+        while ($filepath = fgets($fh)) {
+            $fullpath = $this->getPackageRootDirectory($package). '/' . trim($filepath);
+            if (file_exists($fullpath)) {
+                $filesystem->remove($fullpath);
+            }
+        }
+        fclose($fh);
+    }
+
     private function unzipPackageFile($filepath, $unzipDir)
     {
         $filesystem = new Filesystem();
@@ -311,6 +353,15 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem->remove($tmpUnzipDir);
         } else {
             throw new \Exception('无法解压缩安装包！');
+        }
+    }
+
+    private function getPackageRootDirectory($package) 
+    {
+        if ($package['product']['code'] == 'MAIN') {
+            return $this->getSystemRootDirectory();
+        } else {
+            return $this->getKernel()->getParameter('kernel.root_dir') . '/' . 'bundles';
         }
     }
 
