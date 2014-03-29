@@ -298,14 +298,9 @@ class AppServiceImpl extends BaseService implements AppService
             }
 
             $packageDir = $this->makePackageFileUnzipDir($package);
-            $this->deleteFilesForPackageUpdate($package, $packageDir);
-
-            $filesystem = new Filesystem();
-
-            var_dump($packageDir);
-
-
-
+            $this->_deleteFilesForPackageUpdate($package, $packageDir);
+            $this->_replaceFileForPackageUpdate($package, $packageDir);
+            $this->_execScriptForPackageUpdate($package, $packageDir);
 
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
@@ -313,7 +308,29 @@ class AppServiceImpl extends BaseService implements AppService
         return $errors;
     }
 
-    private function deleteFilesForPackageUpdate($package, $packageDir)
+    private function _replaceFileForPackageUpdate($package, $packageDir)
+    {
+        $filesystem = new Filesystem();
+        $filesystem->mirror("{$packageDir}/source",  $this->getPackageRootDirectory($package) , null, array(
+            'override' => true,
+            'copy_on_windows' => true
+        ));
+    }
+
+    private function _execScriptForPackageUpdate($package, $packageDir)
+    {
+        if (!file_exists($packageDir . '/Upgrade.php')) {
+            return ;
+        }
+
+        include_once($packageDir . '/Upgrade.php');
+        $upgrade = new \EduSohoUpgrade($this->getKernel());
+        if(method_exists($upgrade, 'update')){
+            $upgrade->update();
+        }
+    }
+
+    private function _deleteFilesForPackageUpdate($package, $packageDir)
     {
         if (!file_exists($packageDir . '/delete')) {
             return ;
