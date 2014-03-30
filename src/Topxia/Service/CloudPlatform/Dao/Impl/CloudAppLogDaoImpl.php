@@ -16,7 +16,7 @@ class CloudAppLogDaoImpl extends BaseDao implements AppLogDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getLastLogByCodeAndToVersion($cide, $toVersion)
+    public function getLastLogByCodeAndToVersion($code, $toVersion)
     {
         $sql = "SELECT * FROM {$this->table} WHERE code = ? AND toVersion = ? ORDER BY createdTime DESC LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($code, $toVersion));

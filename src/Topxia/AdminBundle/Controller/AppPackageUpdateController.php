@@ -74,14 +74,10 @@ class AppPackageUpdateController extends BaseController
     }
 
 
-    public function hasLastErrorAction(Request $request, $id)
+    public function checklastErrorAction(Request $request, $id)
     {
-        $result = $this->getUpgradeService()->hasLastError($id);
-        if(!$result){
-            return $this->createJsonResponse(array('status' => 'ok', 'result'=>array()));
-        } else {
-            return $this->createJsonResponse(array('status' => 'error', 'result'=>array()));
-        }
+        $result = $this->getAppService()->hasLastErrorForPackageUpdate($id);
+        return $this->createJsonResponse($result);
     }
 
     public function beginUpgradeAction(Request $request, $id)

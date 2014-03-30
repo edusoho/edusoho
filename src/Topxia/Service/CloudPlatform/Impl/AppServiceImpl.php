@@ -68,6 +68,22 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppLogDao()->findLogCount();
     }
 
+
+    public function hasLastErrorForPackageUpdate($packageId)
+    {
+        $package = $this->getCenterPackageInfo($packageId);
+        if (empty($package)) {
+            throw $this->createServiceException("获取应用包#{$packageId}信息失败");
+        }
+
+        $log = $this->getAppLogDao()->getLastLogByCodeAndToVersion($package['product']['code'], $package['toVersion']);
+        if (empty($log)) {
+            return false;
+        }
+
+        return $log['status'] == 'ROLLBACK';
+    }
+
     public function checkPackageUpdateEnvironment()
     {
         $errors = array();

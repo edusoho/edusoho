@@ -7,59 +7,72 @@ define(function(require, exports, module) {
             element: '#package-update-progress'
         });
 
-        $("#begin-update").click(function() {
-            progressBar.show();
-            $(this).hide();
+        var $updateBtn = $("#begin-update");
+
+        var urls = $updateBtn.data();
+        var steps = [
+            {
+                title: '检查系统环境',
+                url: urls.checkEnvironmentUrl,
+                progressRange: [5, 15]
+            },
+            {
+                title: '检查依赖',
+                url: urls.checkDependsUrl,
+                progressRange: [20, 30]
+            },
+            {
+                title: '备份系统文件',
+                url: urls.backupFileUrl,
+                progressRange: [35, 45]
+            },
+            {
+                title: '备份数据库',
+                url: urls.backupDbUrl,
+                progressRange: [50, 60]
+            },
+            {
+                title: '下载安装升级程序',
+                url: urls.downloadExtractUrl,
+                progressRange: [65, 80]
+            },
+            {
+                title: '执行安装升级程序',
+                url: urls.beginUpgradeUrl,
+                progressRange: [90, 100]
+            }
+        ];
+
+        $.each(steps, function(i, step) {
+            $(document).queue('update_step_queue', function() {
+                exec(step.title, step.url, progressBar, step.progressRange[0], step.progressRange[1]);
+            });
+        });
+
+        progressBar.on('completed', function() {
+            progressBar.deactive();
+            progressBar.text('应用安装/升级成功！');
+            $("#updating-hint").hide();
+            $("#finish-update-btn").show();
+        });
+
+
+        $updateBtn.click(function() {
+            $updateBtn.hide();
             $("#updating-hint").show();
+            progressBar.show();
 
-            var urls = $(this).data();
-            var steps = [
-                {
-                    title: '检查系统环境',
-                    url: urls.checkEnvironmentUrl,
-                    progressRange: [5, 15]
-                },
-                {
-                    title: '检查依赖',
-                    url: urls.checkDependsUrl,
-                    progressRange: [20, 30]
-                },
-                {
-                    title: '备份系统文件',
-                    url: urls.backupFileUrl,
-                    progressRange: [35, 45]
-                },
-                {
-                    title: '备份数据库',
-                    url: urls.backupDbUrl,
-                    progressRange: [50, 60]
-                },
-                {
-                    title: '下载安装升级程序',
-                    url: urls.downloadExtractUrl,
-                    progressRange: [65, 80]
-                },
-                {
-                    title: '执行安装升级程序',
-                    url: urls.beginUpgradeUrl,
-                    progressRange: [90, 100]
+            $.post(urls.checkLastErrorUrl, function(result) {
+                if (result !== true) {
+                    if(!confirm('上次安装升级应用系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？')) {
+                        $("#updating-hint").hide();
+                        progressBar.hide();
+                        $updateBtn.show();
+                        return ;
+                    }
                 }
-            ];
-
-            $.each(steps, function(i, step) {
-                $(document).queue('update_step_queue', function() {
-                    exec(step.title, step.url, progressBar, step.progressRange[0], step.progressRange[1]);
-                });
-            });
-
-            $(document).dequeue('update_step_queue');
-
-            progressBar.on('completed', function() {
-                progressBar.deactive();
-                progressBar.text('应用安装/升级成功！');
-                $("#updating-hint").hide();
-                $("#finish-update-btn").show();
-            });
+                $(document).dequeue('update_step_queue');
+            }, 'json');
 
         });
 
@@ -82,8 +95,8 @@ define(function(require, exports, module) {
                 progressBar.error(makeErrorsText(title + '失败：', data.errors));
             } else {
                 progressBar.setProgress(endProgress, title + '完成');
+                $(document).dequeue('update_step_queue');
             }
-            $(document).dequeue('update_step_queue');
         }).fail(function(jqXHR, textStatus, errorThrown) {
             progressBar.error( title +  '时，发生了未知错误。');
             $(document).clearQueue('update_step_queue');
