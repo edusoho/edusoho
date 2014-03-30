@@ -63,7 +63,7 @@ define(function(require, exports, module) {
             progressBar.show();
 
             $.post(urls.checkLastErrorUrl, function(result) {
-                if (result !== true) {
+                if (result === true) {
                     if(!confirm('上次安装升级应用系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？')) {
                         $("#updating-hint").hide();
                         progressBar.hide();

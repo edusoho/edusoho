@@ -68,6 +68,32 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppLogDao()->findLogCount();
     }
 
+    private function createPackageUpdateLog($package, $status='SUCCESS', $message='')
+    {
+        $result = array(
+            'code'=>$package['product']['code'],
+            'name'=>$package['product']['name'],
+            'fromVersion'=>$package['fromVersion'],
+            'toVersion'=>$package['toVersion'],
+            'type'=>$package['type'],
+            'status'=>$status,
+            'userId'=>$this->getCurrentUser()->id,
+            'ip'=>$this->getCurrentUser()->currentIp,
+            'message'=>$message,
+            'createdTime'=>time(),
+        );
+        if($package['backupDB']) {
+            $result['dbBackPath'] = '';  // @todo
+        }
+
+        if($package['backupFile']) {
+            $result['srcBackPath'] = ''; // @todo;
+        }
+
+        return $this->getAppLogDao()->addLog($result);
+    }
+
+
 
     public function hasLastErrorForPackageUpdate($packageId)
     {
@@ -323,7 +349,7 @@ class AppServiceImpl extends BaseService implements AppService
             $this->_deleteFilesForPackageUpdate($package, $packageDir);
         } catch(\Exception $e) {
             $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
-            // ROLLBACK
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             return $errors;
         }
 
@@ -331,26 +357,31 @@ class AppServiceImpl extends BaseService implements AppService
             $this->_replaceFileForPackageUpdate($package, $packageDir);
         } catch (\Exception $e) {
             $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
-            // ROLLBACK
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             return $errors;
         }
 
         try {
             $this->_execScriptForPackageUpdate($package, $packageDir);
-            
         } catch (\Exception $e) {
             $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
-            // ROLLBACK
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             return $errors;
         }
 
         try {
-
             $cachePath = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
         } catch (\Exception $e) {
             $errors[] = "应用安装升级成功，但刷新缓存失败！请检查{$cachePath}的权限";
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+            return $errors;
+        }
+
+        if (empty($errors)) {
+            $this->updateAppForPackageUpdate($package);
+            $this->createPackageUpdateLog($package, 'SUCCESS');
         }
 
         return $errors;
@@ -457,10 +488,6 @@ class AppServiceImpl extends BaseService implements AppService
         return  $realPath;
     }
 
-
-
-
-
     private function hasEduSohoMainApp($apps)
     {
         foreach ($apps as $app) {
@@ -486,6 +513,30 @@ class AppServiceImpl extends BaseService implements AppService
             'updatedTime' => time(),
         );
         $this->getAppDao()->addApp($app);
+    }
+
+    private function updateAppForPackageUpdate($package)
+    {
+        $newApp = array(
+            'code' => $package['product']['code'],
+            'name' => $package['product']['name'],
+            'description' => $package['product']['description'],
+            'icon' => $package['product']['icon'],
+            'version' => $package['toVersion'],
+            'fromVersion' => $package['fromVersion'],
+            'developerId' => $package['product']['developerId'],
+            'developerName' => $package['product']['developerName'],
+            'updatedTime' => time(),
+        );
+
+        $app = $this->getAppDao()->getAppByCode($package['product']['code']);
+
+        if (empty($app)) {
+            $newApp['installedTime'] = time();
+            return $this->getAppDao()->addApp($newApp);
+        }
+
+        return $this->getAppDao()->updateApp($app['id'], $newApp);
     }
 
 

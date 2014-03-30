@@ -36,7 +36,7 @@
           </td>
 
           <td>
-            <a href="#" class="btn btn-primary">更新</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.package.id}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">更新</a>
           </td>
         </tr>
       {% endfor %}

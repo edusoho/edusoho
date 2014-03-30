@@ -11,7 +11,7 @@ class AppPackageUpdateController extends BaseController
 {
     public function modalAction(Request $request, $id)
     {
-        $package = $this->getAppService()->getCenterPackageInfo(1);
+        $package = $this->getAppService()->getCenterPackageInfo($id);
 
         return $this->render('TopxiaAdminBundle:AppPackageUpdate:modal.html.twig',array(
             'package'=>$package
@@ -82,21 +82,14 @@ class AppPackageUpdateController extends BaseController
 
     public function beginUpgradeAction(Request $request, $id)
     {
-
         $errors = $this->getAppService()->beginPackageUpdate($id);
 
-        if(empty($errors)){
-            try{
-                // $this->getUpgradeService()->refreshCache();
-            }catch(\Exception $e){
-                $errors = array('升级成功了，但缓存未刷新，请检查 app/cache 权限！');
-                return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
-            }
-            // $this->getUpgradeService()->commit($id,$errors);
+        // @todo log
+        // 
+        if (empty($errors)) {
             return $this->createJsonResponse(array('status' => 'ok'));
         }
 
-        // $this->getUpgradeService()->commit($id,$errors);
         return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }
 
