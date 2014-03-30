@@ -7,13 +7,13 @@ use Topxia\System;
 class EduSohoAppClient implements AppClient
 {
 
-    protected $userAgent = 'Edusoho App Client 1.0';
+    protected $userAgent = 'Open Edusoho App Client 1.0';
 
     protected $connectTimeout = 5;
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://cloud.edusoho.com/app_api';
+    private $apiUrl = 'http://open.edusoho.com/app_api';
 
     private $debug = false;
 
