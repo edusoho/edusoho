@@ -22,7 +22,12 @@
         {% set installedApp = installedApps[app.code]|default(null) %}
       <tr>
         <td>
-          <div><strong class="text-primary">{{ app.name }} - </strong><span class="text-info">{{ app.latestVersion }}</span></div>
+          <div>
+            <strong class="text-primary">{{ app.name }}</strong>
+             - 
+            <span class="text-info">{{ app.latestVersion }}</span>
+            <span class="label label-warning">商业版应用</span>
+          </div>
           <div class="">{{ app.description|plain_text(100) }}</div>
           <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div>
         </td>
@@ -33,7 +38,11 @@
           {% if installedApp %}
             <a href="javascript:;" class="btn btn-default disabled">已安装</a>
           {% else %}
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">安装</a>
+            {% if app.userAccess == 'ok' %}
+              <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">安装</a>
+            {% else %}
+              <a href="http://www.edusoho.com/service" class="btn btn-warning" target="_blank">购买</a>
+            {% endif %}
           {% endif %}
         </td>
       </tr>

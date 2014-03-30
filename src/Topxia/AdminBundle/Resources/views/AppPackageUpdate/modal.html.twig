@@ -49,6 +49,7 @@
     data-check-last-error-url="{{ path('admin_app_package_update_check_last_error', {id:package.id}) }}"
     data-backup-file-url="{{ path('admin_app_package_update_backup_file', {id:package.id}) }}"
     data-backup-db-url="{{ path('admin_app_package_update_backup_db', {id:package.id}) }}"
+    data-check-download-extract-url="{{ path('admin_app_package_update_check_download_and_extract', {id:package.id}) }}"
     data-download-extract-url="{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
     data-begin-upgrade-url="{{ path('admin_app_package_update_begin_upgrade', {id:package.id}) }}"
   >开始{{ updateName }}</button>

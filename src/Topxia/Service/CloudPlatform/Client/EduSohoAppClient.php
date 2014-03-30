@@ -57,6 +57,12 @@ class EduSohoAppClient implements AppClient
         return $this->download($url);
     }
 
+    public function checkDownloadPackage($packageId)
+    {
+        $args = array('packageId' => (string)$packageId);
+        return $this->callRemoteApi('GET', 'CheckDownloadPackage', $args);
+    }
+
     public function getPackage($id)
     {
         $args = array('packageId' => (string)$id);
@@ -73,6 +79,8 @@ class EduSohoAppClient implements AppClient
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
+
+        // var_dump($result);
 
         return json_decode($result, true);
     }
@@ -99,6 +107,7 @@ class EduSohoAppClient implements AppClient
 
     private function download($url)
     {
+        // var_dump($url);
         $filename = md5($url) . '_' . time();
         $filepath = $this->tmpDir . '/' . $filename;
 

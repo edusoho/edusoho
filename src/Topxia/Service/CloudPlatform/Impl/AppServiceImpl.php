@@ -328,6 +328,15 @@ class AppServiceImpl extends BaseService implements AppService
         return $errors;
     }
 
+    public function checkDownloadPackageForUpdate($packageId)
+    {
+        $result = $this->createAppClient()->checkDownloadPackage($packageId);
+        if ($result['status'] == 'ok') {
+            return array();
+        }
+        return $result['errors'];
+    }
+
     public function beginPackageUpdate($packageId)
     {
         $errors = array();

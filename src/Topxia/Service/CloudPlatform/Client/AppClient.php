@@ -23,6 +23,11 @@ interface AppClient
      */
     public function downloadPackage($packageId);
 
+    /**
+     * 检查是否有权限下载应用
+     */
+    public function checkDownloadPackage($packageId);
+
     public function repairProblem($token);
 
     /**

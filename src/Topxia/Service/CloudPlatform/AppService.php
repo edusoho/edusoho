@@ -52,6 +52,8 @@ interface AppService
      */
     public function downloadPackageForUpdate($packageId);
 
+    public function checkDownloadPackageForUpdate($packageId);
+
     /**
      * 为安装升级应用，开始升级
      */

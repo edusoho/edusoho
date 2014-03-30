@@ -594,6 +594,12 @@ admin_app_package_update_download_and_extract:
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:downloadAndExtract }
     methods: [POST]
 
+admin_app_package_update_check_download_and_extract:
+    pattern: /app/package_update/{id}/check_download_extract
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkDownloadAndExtract }
+    methods: [POST]
+
+
 admin_app_package_update_begin_upgrade:
     pattern: /app/package_update/{id}/begin_upgrade
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:beginUpgrade }

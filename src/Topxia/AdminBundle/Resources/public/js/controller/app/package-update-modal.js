@@ -32,9 +32,14 @@ define(function(require, exports, module) {
                 progressRange: [50, 60]
             },
             {
+                title: '检查下载权限',
+                url: urls.checkDownloadExtractUrl,
+                progressRange: [65, 70]
+            },
+            {
                 title: '下载安装升级程序',
                 url: urls.downloadExtractUrl,
-                progressRange: [65, 80]
+                progressRange: [75, 80]
             },
             {
                 title: '执行安装升级程序',

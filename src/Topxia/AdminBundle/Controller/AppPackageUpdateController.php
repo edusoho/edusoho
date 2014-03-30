@@ -48,6 +48,11 @@ class AppPackageUpdateController extends BaseController
         return $this->createResponseWithErrors($errors);
     }
 
+    public function checkDownloadAndExtractAction(Request $request, $id)
+    {
+        $errors = $this->getAppService()->checkDownloadPackageForUpdate($id);
+        return $this->createResponseWithErrors($errors);
+    }
 
     public function checklastErrorAction(Request $request, $id)
     {
