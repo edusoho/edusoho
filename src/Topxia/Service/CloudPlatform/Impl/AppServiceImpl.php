@@ -291,20 +291,52 @@ class AppServiceImpl extends BaseService implements AppService
     public function beginPackageUpdate($packageId)
     {
         $errors = array();
+        $package = $packageDir = null;
         try {
             $package = $this->getCenterPackageInfo($packageId);
             if (empty($package)) {
                 throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
             }
-
             $packageDir = $this->makePackageFileUnzipDir($package);
-            $this->_deleteFilesForPackageUpdate($package, $packageDir);
-            $this->_replaceFileForPackageUpdate($package, $packageDir);
-            $this->_execScriptForPackageUpdate($package, $packageDir);
-
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
+            return $errors;
         }
+
+        try {
+            $this->_deleteFilesForPackageUpdate($package, $packageDir);
+        } catch(\Exception $e) {
+            $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
+            // ROLLBACK
+            return $errors;
+        }
+
+        try {
+            $this->_replaceFileForPackageUpdate($package, $packageDir);
+        } catch (\Exception $e) {
+            $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
+            // ROLLBACK
+            return $errors;
+        }
+
+        try {
+            $this->_execScriptForPackageUpdate($package, $packageDir);
+            
+        } catch (\Exception $e) {
+            $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
+            // ROLLBACK
+            return $errors;
+        }
+
+        try {
+
+            $cachePath = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
+            $filesystem = new Filesystem();
+            $filesystem->remove($cachePath);
+        } catch (\Exception $e) {
+            $errors[] = "应用安装升级成功，但刷新缓存失败！请检查{$cachePath}的权限";
+        }
+
         return $errors;
     }
 
