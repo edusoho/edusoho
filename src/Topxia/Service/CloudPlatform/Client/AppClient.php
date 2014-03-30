@@ -16,7 +16,7 @@ interface AppClient
     /**
      * 提交应用包升级／安装日志数据
      */
-    public function commitPackageLog($packageId, array $data);
+    public function submitRunLog($log);
 
     /**
      * 下载应用包

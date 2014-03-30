@@ -44,6 +44,12 @@ class AppController extends BaseController
         ));
     }
 
+    public function upgradesCountAction(Request $request)
+    {
+        $apps = $this->getAppService()->checkAppUpgrades();
+        return $this->createJsonResponse(count($apps));
+    }
+
     public function logsAction(Request $request)
     {
         $paginator = new Paginator(

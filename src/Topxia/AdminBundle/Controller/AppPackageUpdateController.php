@@ -20,57 +20,32 @@ class AppPackageUpdateController extends BaseController
 
     public function checkEnvironmentAction(Request $request, $id)
     {
-        $errors = $this->getAppService()->checkPackageUpdateEnvironment();
-
-        if(empty($errors)){
-            return $this->createJsonResponse(array('status' => 'ok'));
-        }
-
-        // $this->getUpgradeService()->commit($id,$result);
-        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+        $errors = $this->getAppService()->checkEnvironmentForPackageUpdate($id);
+        return $this->createResponseWithErrors($errors);
     }
 
     public function checkDependsAction(Request $request, $id)
     {
-        $errors = $this->getAppService()->checkPackageUpdateDepends($id);
-
-        if(empty($errors)){
-            return $this->createJsonResponse(array('status' => 'ok'));
-        }
-        // $this->getUpgradeService()->commit($id,$errors);
-        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+        $errors = $this->getAppService()->checkDependsForPackageUpdate($id);
+        return $this->createResponseWithErrors($errors);
     }
 
     public function backupFileAction(Request $request, $id)
     {
-        $result = $this->getAppService()->backupFileForPackageUpdate($id);
-        if(empty($errors)){
-            return $this->createJsonResponse(array('status' => 'ok'));
-        }
-        // $this->getUpgradeService()->commit($id,$errors);
-        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+        $errors = $this->getAppService()->backupFileForPackageUpdate($id);
+        return $this->createResponseWithErrors($errors);
     }
 
     public function backupDbAction(Request $request, $id)
     {
-        $result = $this->getAppService()->backupDbForPackageUpdate($id);
-        $errors = array();
-
-        if(empty($errors)){
-            return $this->createJsonResponse(array('status' => 'ok'));
-        }
-        // $this->getUpgradeService()->commit($id,$errors);
-        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+        $errors = $this->getAppService()->backupDbForPackageUpdate($id);
+        return $this->createResponseWithErrors($errors);
     }
 
     public function downloadAndExtractAction(Request $request, $id)
     {
         $errors = $this->getAppService()->downloadPackageForUpdate($id);
-        if(empty($errors)){
-            return $this->createJsonResponse(array('status' => 'ok'));
-        }
-        // $this->getUpgradeService()->commit($id,$errors);
-        return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
+        return $this->createResponseWithErrors($errors);
     }
 
 
@@ -83,13 +58,14 @@ class AppPackageUpdateController extends BaseController
     public function beginUpgradeAction(Request $request, $id)
     {
         $errors = $this->getAppService()->beginPackageUpdate($id);
+        return $this->createResponseWithErrors($errors);
+    }
 
-        // @todo log
-        // 
+    private function createResponseWithErrors($errors)
+    {
         if (empty($errors)) {
             return $this->createJsonResponse(array('status' => 'ok'));
         }
-
         return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }
 

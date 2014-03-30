@@ -43,10 +43,10 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('POST', 'CheckUpgradePackages', $args);
     }
 
-    public function commitPackageLog($packageId, array $data)
+    public function submitRunLog($log)
     {
-        $args = array('data' => $data);
-        return $this->callRemoteApi('POST', 'CommitPackageLog', $args);
+        $args = array('log' => $log);
+        return $this->callRemoteApi('POST', 'SubmitRunLog', $args);
     }
 
     public function downloadPackage($packageId)
@@ -81,7 +81,12 @@ class EduSohoAppClient implements AppClient
     {
         $url = "{$this->apiUrl}?action={$action}";
 
-        $edusoho = array('edition' => 'opensource', 'version' => System::VERSION, 'debug' => $this->debug ? '1' : '0');
+        $edusoho = array(
+            'edition' => 'opensource', 
+            'host' => $_SERVER['HTTP_HOST'],
+            'version' => System::VERSION, 
+            'debug' => $this->debug ? '1' : '0',
+        );
         $args['_edusoho'] = $edusoho;
 
         $httpParams = array();

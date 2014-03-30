@@ -22,7 +22,39 @@ interface AppService
 
     public function findLogCount();
 
-    public function checkPackageUpdateEnvironment();
+    /**
+     * 是否存在需要回滚的升级
+     */
+    public function hasLastErrorForPackageUpdate($packageId);
 
-    public function checkPackageUpdateDepends($packageId);
+    /**
+     * 为安装升级应用，检查环境
+     */
+    public function checkEnvironmentForPackageUpdate($packageId);
+
+    /**
+     * 为安装升级应用，检查依赖
+     */
+    public function checkDependsForPackageUpdate($packageId);
+
+    /**
+     * 为安装升级应用，备份数据库
+     */
+    public function backupDbForPackageUpdate($packageId);
+
+    /**
+     * 为安装升级应用，备份数据库
+     */
+    public function backupFileForPackageUpdate($packageId);
+
+    /**
+     * 为安装升级应用，下载应用包
+     */
+    public function downloadPackageForUpdate($packageId);
+
+    /**
+     * 为安装升级应用，开始升级
+     */
+    public function beginPackageUpdate($packageId);
+
 }

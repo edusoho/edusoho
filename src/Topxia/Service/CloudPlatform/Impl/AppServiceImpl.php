@@ -110,7 +110,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $log['status'] == 'ROLLBACK';
     }
 
-    public function checkPackageUpdateEnvironment()
+    public function checkEnvironmentForPackageUpdate($packageId)
     {
         $errors = array();
 
@@ -180,10 +180,15 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = 'app/config/config.yml文件无写权限';
         }
 
+
+        $package = $this->getCenterPackageInfo($packageId);
+
+        $this->_submitRunLogForPackageUpdate('检查环境', $package, $errors);
+
         return $errors;
     }
 
-    public function checkPackageUpdateDepends($packageId)
+    public function checkDependsForPackageUpdate($packageId)
     {
         $errors = array();
 
@@ -195,6 +200,8 @@ class AppServiceImpl extends BaseService implements AppService
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
         }
+
+        $this->_submitRunLogForPackageUpdate('检查依赖', $package, $errors);
 
         // @todo 依赖包检测
         
@@ -227,7 +234,9 @@ class AppServiceImpl extends BaseService implements AppService
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
         }
+
         last:
+        $this->_submitRunLogForPackageUpdate('备份数据库', $package, $errors);
         return $errors; 
 
     }
@@ -239,7 +248,6 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem = new Filesystem();
 
             $package = $this->getCenterPackageInfo($packageId);
-
 
             if (empty($package)) {
                 $errors[] = "获取应用包#{$packageId}信息失败";
@@ -293,22 +301,10 @@ class AppServiceImpl extends BaseService implements AppService
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
         }
+
         last:
+        $this->_submitRunLogForPackageUpdate('备份文件', $package, $errors);
         return $errors; 
-    }
-
-    public function hasLastRollbackErrorForPackageUpdate($packageId)
-    {
-        $package = $this->getCenterPackageInfo($packageId);
-        if (empty($package)) {
-            throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
-        }
-
-        $log = $this->getUpgradeLogDao()->getUpdateLogByEnameAndVersion($package['ename'], $package['version']);
-        if('ROLLBACK' == $log['status']){
-            return true;
-        }
-        return false;
     }
 
     public function downloadPackageForUpdate($packageId)
@@ -327,6 +323,8 @@ class AppServiceImpl extends BaseService implements AppService
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
         }
+
+        $this->_submitRunLogForPackageUpdate('下载应用包', $package, $errors);
         return $errors;
     }
 
@@ -342,7 +340,7 @@ class AppServiceImpl extends BaseService implements AppService
             $packageDir = $this->makePackageFileUnzipDir($package);
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
-            return $errors;
+            goto last;
         }
 
         try {
@@ -350,7 +348,7 @@ class AppServiceImpl extends BaseService implements AppService
         } catch(\Exception $e) {
             $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            return $errors;
+            goto last;
         }
 
         try {
@@ -358,7 +356,7 @@ class AppServiceImpl extends BaseService implements AppService
         } catch (\Exception $e) {
             $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            return $errors;
+            goto last;
         }
 
         try {
@@ -366,7 +364,7 @@ class AppServiceImpl extends BaseService implements AppService
         } catch (\Exception $e) {
             $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            return $errors;
+            goto last;
         }
 
         try {
@@ -376,7 +374,7 @@ class AppServiceImpl extends BaseService implements AppService
         } catch (\Exception $e) {
             $errors[] = "应用安装升级成功，但刷新缓存失败！请检查{$cachePath}的权限";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            return $errors;
+            goto last;
         }
 
         if (empty($errors)) {
@@ -384,6 +382,8 @@ class AppServiceImpl extends BaseService implements AppService
             $this->createPackageUpdateLog($package, 'SUCCESS');
         }
 
+        last:
+        $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
         return $errors;
     }
 
@@ -424,6 +424,17 @@ class AppServiceImpl extends BaseService implements AppService
             }
         }
         fclose($fh);
+    }
+
+    private function _submitRunLogForPackageUpdate($message, $package, $errors)
+    {
+        $this->createAppClient()->submitRunLog(array(
+            'level' => empty($errors) ? 'info' : 'error',
+            'code' => $package['product']['code'],
+            'type' => $package['type'],
+            'message' => $message . (empty($errors) ? '成功' : '失败'),
+            'data' => empty($errors) ? '' : $errors,
+        ));
     }
 
     private function unzipPackageFile($filepath, $unzipDir)
