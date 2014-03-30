@@ -11,8 +11,7 @@
   <thead>
     <tr>
       <th width="40%">应用名称</th>
-      <th width="15%">版本</th>
-      <th>依赖关系</th>
+      <th width="25%">版本</th>
       <th>备份数据库</th>
       <th>备份文件</th>
     </tr>
@@ -27,7 +26,6 @@
           <strong class="text-success">{{ package.toVersion }}</strong>
         {% endif %}
       </td>
-      <td>无</td>
       <td>{% if package.backupDB == 1 %}是{% elseif package.backupDB == 0 %}否{% endif %}</td>
       <td>{% if package.backupFile == 1 %}是{% elseif package.backupFile == 0 %}否{% endif %}</td>
     </tr>
