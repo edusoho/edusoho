@@ -63,8 +63,8 @@
   <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#member-modal-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   {% if member %}
-    <script>app.load('memberbundle/controller/MemberAdmin/edit-modal')</script>
+    <script>app.load('memberbundle/controller/memberadmin/edit-modal')</script>
   {% else %}
-    <script>app.load('memberbundle/controller/MemberAdmin/create-modal')</script>
+    <script>app.load('memberbundle/controller/memberadmin/create-modal')</script>
   {% endif %}
 {% endblock %}

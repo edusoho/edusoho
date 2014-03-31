@@ -48,10 +48,10 @@ define(function(require, exports, module) {
         });
 
         var editor = EditorFactory.create('#memberlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '100px'});
-            
-            validator.on('formValidate', function(elemetn, event) {
-                editor.sync();
-            });
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        });
+        
     };
 
 });

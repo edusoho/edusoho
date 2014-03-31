@@ -4,7 +4,10 @@ var Notify = require('common/bootstrap-notify');
 
     exports.run = function(options) {
         var $element = $('#coupon-list');
-        require('../../util/short-long-text')($element);
+        $element.on('click', '.short-text', function() {
+            var $short = $(this);
+            $short.slideUp('fast').parents('.short-long-text').find('.long-text').slideDown('fast');
+        });
 
         $('#coupon-list').on('click', 'a.coupon-remove', function() {
             if (!confirm('确认要删除此批次优惠码？')) return false;

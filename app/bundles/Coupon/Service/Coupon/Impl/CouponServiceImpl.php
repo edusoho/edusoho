@@ -1,8 +1,8 @@
 <?php
-namespace Topxia\Service\Coupon\Impl;
+namespace Coupon\Service\Coupon\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Coupon\CouponService;
+use Coupon\Service\Coupon\CouponService;
 use Topxia\Common\ArrayToolkit;
 
 class CouponServiceImpl extends BaseService implements CouponService
@@ -141,12 +141,12 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function getCouponDao()
     {
-        return $this->createDao('Coupon.CouponDao');
+        return $this->createDao('Coupon:Coupon.CouponDao');
     }
 
     private function getCouponBatchDao()
     {
-        return $this->createDao('Coupon.CouponBatchDao');
+        return $this->createDao('Coupon:Coupon.CouponBatchDao');
     }
 
     private function getLogService()

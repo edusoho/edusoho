@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Coupon\Dao;
+namespace Coupon\Service\Coupon\Dao;
 
 interface CouponDao
 {

@@ -29,7 +29,7 @@ class CouponController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($coupons, 'targetId'));
 
-		return $this->render('TopxiaAdminBundle:Coupon:query.html.twig', array(
+		return $this->render('CouponBundle:Coupon:query.html.twig', array(
             'coupons' => $coupons,
             'paginator' => $paginator,
             'batchs' => $batchs,
@@ -40,7 +40,7 @@ class CouponController extends BaseController
 
     private function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
     }
 
     private function getCourseService()

@@ -25,7 +25,7 @@ class CouponBatchController extends BaseController
         	$paginator->getPerPageCount()
         );
 
-		return $this->render('TopxiaAdminBundle:Coupon:index.html.twig', array(
+		return $this->render('CouponBundle:Coupon:index.html.twig', array(
            'batchs' => $batchs,
            'paginator' =>$paginator
 		));
@@ -73,7 +73,7 @@ class CouponBatchController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_coupon'));
         }
-		return $this->render('TopxiaAdminBundle:Coupon:generate.html.twig');
+		return $this->render('CouponBundle:Coupon:generate.html.twig');
 	}
 
     public function exportCsvAction(Request $request,$batchId)
@@ -141,7 +141,7 @@ class CouponBatchController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($coupons, 'targetId'));
 
-        return $this->render('TopxiaAdminBundle:Coupon:coupon-modal.html.twig', array(
+        return $this->render('CouponBundle:Coupon:coupon-modal.html.twig', array(
             'coupons' => $coupons,
             'batch' => $batch,
             'paginator' => $paginator,
@@ -152,7 +152,7 @@ class CouponBatchController extends BaseController
 
     private function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
     }
 
     private function getCourseService()

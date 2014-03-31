@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\Service\Coupon\Dao\Impl;
+namespace Coupon\Service\Coupon\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Coupon\Dao\CouponBatchDao;
+use Coupon\Service\Coupon\Dao\CouponBatchDao;
 use PDO;
 
 class CouponBatchDaoImpl extends BaseDao implements CouponBatchDao

@@ -1,3 +1,0 @@
-coupon_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: CouponBundle:Default:index }
