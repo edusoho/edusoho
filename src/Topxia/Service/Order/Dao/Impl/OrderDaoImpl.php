@@ -10,16 +10,22 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 {
     protected $table = 'orders';
 
+    private $serializeFields = array(
+        'data' => 'json',
+    );
+
     public function getOrder($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $order = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
     }
 
 	public function getOrderBySn($sn)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($sn));
+        $order = $this->getConnection()->fetchAssoc($sql, array($sn));
+        return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
 	}
 
     public function findOrdersByIds(array $ids)
@@ -30,11 +36,13 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        $orders = $this->getConnection()->fetchAll($sql, $ids);
+        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
 	public function addOrder($order)
 	{
+        $order = $this->createSerializer()->serialize($order, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $order);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert order error.');
@@ -44,6 +52,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
 	public function updateOrder($id, $fields)
 	{
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 		return $this->getOrder($id);
 	}
@@ -56,7 +65,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ? : array(); 
+        $orders = $builder->execute()->fetchAll() ? : array(); 
+        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
     public function searchOrderCount($conditions)

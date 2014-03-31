@@ -3,40 +3,80 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Component\Payment\Payment;
 
 class OrderController extends BaseController
 {
 
-    public function submitPayRequestAction(Request $request , $order)
+    public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
-        echo 'hello';
-        var_dump($_POST);exit();
-        $paymentRequest = $this->createPaymentRequest($order);
+        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
 
-        return $this->render('TopxiaWebBundle:CourseOrder:pay.html.twig', array(
+        return $this->render('TopxiaWebBundle:Order:submit-pay-request.html.twig', array(
             'form' => $paymentRequest->form(),
             'order' => $order,
         ));
     }
 
-    private function createPaymentRequest($order)
+    protected function doPayReturn(Request $request, $name, $successCallback = null, $successUrl = null)
     {
+        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
+        $response = $this->createPaymentResponse($name, $request->query->all());
 
+        $payData = $response->getPayData();
+        $order = $this->getOrderService()->payOrder($payData);
+
+        if ($order['status'] == 'paid' and $successCallback) {
+            $successCallback($order);
+        }
+
+        $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
+
+        return $this->redirect($goto);
+    }
+
+    protected function doPayNotify(Request $request, $name, $successCallback = null)
+    {
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
+        $response = $this->createPaymentResponse($name, $request->request->all());
+
+        $payData = $response->getPayData();
+        try {
+            $order = $this->getOrderService()->payOrder($payData);
+            if ($order['status'] == 'paid' and $successCallback) {
+                $successCallback($order);
+            }
+
+            return new Response('success');
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    private function createPaymentRequest($order, $requestParams)
+    {
         $options = $this->getPaymentOptions($order['payment']);
         $request = Payment::createRequest($order['payment'], $options);
 
-        return $request->setParams(array(
+        $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
             'title' => $order['title'],
             'summary' => '',
             'amount' => $order['amount'],
-            'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
-            'showUrl' => $this->generateUrl('course_show', array('id' => $order['courseId']), true),
         ));
+
+        return $request->setParams($requestParams);
     }
+
+    private function createPaymentResponse($name, $params)
+    {
+        $options = $this->getPaymentOptions($name);
+        $response = Payment::createResponse($name, $options);
+
+        return $response->setParams($params);
+    }
+
 
     private function getPaymentOptions($payment)
     {

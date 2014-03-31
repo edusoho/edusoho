@@ -14,6 +14,18 @@ member_buy:
     pattern: /member/buy
     defaults: { _controller: MemberBundle:MemberOrder:buy }
 
+member_renew:
+    pattern: /member/renew
+    defaults: { _controller: MemberBundle:MemberOrder:renew }
+
 member_pay:
     pattern: /member/pay
     defaults: { _controller: MemberBundle:MemberOrder:pay }
+
+member_pay_return:
+    pattern: /member/pay_return/{name}
+    defaults: { _controller: MemberBundle:MemberOrder:payReturn }
+
+member_pay_notify:
+    pattern: /member/pay_notify/{name}
+    defaults: { _controller: MemberBundle:MemberOrder:payNotify }

@@ -21,7 +21,14 @@ define(function(require, exports, module) {
                     return false;
                 }
 
-                $modal.find('.confirm-level').html($form.find('[name=level]:checked').parent().text());
+                var type = $form.find('[name=type]').val();
+                if (type == 'renew') {
+                    var levelName = $form.find('.level-name').text();
+                } else {
+                    var levelName = $form.find('[name=level]:checked').parent().text();
+                }
+
+                $modal.find('.confirm-level').html(levelName);
                 $modal.find('.confirm-amount').html($form.find('.amount').text());
 
                 $modal.modal('show');
@@ -59,16 +66,31 @@ define(function(require, exports, module) {
 
         var prices = $.parseJSON($form.find('[data-role=prices]').text());
 
-        var level = $form.find('[name=level]:checked').val();
+        var type = $form.find('[name=type]').val();
+
+        if (type == 'renew') {
+            var level = $form.find('[name=level]').val();
+        } else {
+            var level = $form.find('[name=level]:checked').val();
+        }
+
         var unit = $form.find('[name=unit]:checked').val();
         var duration = $form.find('[name=duration]').val();
 
         var currentPrice = prices[level][unit];
         var amount = currentPrice * duration;
 
-        console.log(amount);
+        $form.find('.unit-label').hide();
+        $form.find('.unit-label-' + unit).show();
 
-        var deadline = moment().add(unit+'s', duration).format('YYYY-MM-DD');
+        var startDate = $form.find('[name=startDate]').val();
+        if (startDate) {
+            var deadline = moment(startDate);
+        } else {
+            var deadline = moment();
+        }
+        deadline = deadline.add(unit+'s', duration).format('YYYY-MM-DD');
+
 
         if (isNaN(amount)) {
             $form.find('.amount').html('--');

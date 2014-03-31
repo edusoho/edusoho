@@ -10,6 +10,18 @@ class MemberDaoImpl extends BaseDao implements MemberDao
 {
 	protected $table = 'member';
 
+    public function getMember($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
+    public function getMemberByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
+    }
+
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -39,12 +51,6 @@ class MemberDaoImpl extends BaseDao implements MemberDao
             ->andWhere('deadline > :deadlineLessThan');
     }
 
-	public function getMemberByUserId($userId)
-	{
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
-	}
-
 	public function deleteMemberByUserId($userId)
 	{
         $affected = $this->getConnection()->delete($this->table, $userId);
@@ -63,9 +69,9 @@ class MemberDaoImpl extends BaseDao implements MemberDao
         return $this->getMemberByUserId($member['userId']);
 	}
 
-	public function updateMember($userId, $fields)
+	public function updateMember($id, $fields)
 	{
-        $this->getConnection()->update($this->table, $fields, array('userId' => $userId));
-        return $this->getMemberByUserId($userId);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getMember($id);
 	}
 }

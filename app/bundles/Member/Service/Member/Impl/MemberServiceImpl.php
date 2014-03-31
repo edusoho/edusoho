@@ -34,23 +34,23 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMembersCount($conditions);
     }
 
-    public function createMember($memberDate)
+    public function createMember($memberData)
     {
-        if(empty($memberDate)){
+        if(empty($memberData)){
             return NULL;
         }
-        $user = $this->getUserService()->getUserByNickname($memberDate['nickname']);
+        $user = $this->getUserService()->getUserByNickname($memberData['nickname']);
         if(empty($user)){
             throw $this->createNotFoundException('user not exists!');
         }
 
         $data['userId'] = $user['id'];
-        $data['deadline'] = strtotime($memberDate['deadline']);
-        $data['levelId'] = $memberDate['levelId'];
+        $data['deadline'] = strtotime($memberData['deadline']);
+        $data['levelId'] = $memberData['levelId'];
         $data['createdTime'] = time();
         $member = $this->getMemberDao()->addMember($data);
 
-        $historyData = $memberDate;
+        $historyData = $memberData;
         $historyData['userId'] = $user['id'];
         $historyData['createdTime'] = time();
         $historyData['boughtType'] = 'edit';
@@ -60,7 +60,129 @@ class MemberServiceImpl extends BaseService implements MemberService
         
         return $member;
     }
-    
+
+    public function becomeMember($userId, $levelId, $duration, $unit, $orderId = 0)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，开通会员失败。');
+        }
+
+        $level = $this->getLevelService()->getLevel($levelId);
+        if (empty($level) or empty($level['enabled'])) {
+            throw $this->createServiceException('会员等级不存在，开通会员失败。');
+        }
+
+        if (!in_array($unit, array('month', 'year'))) {
+            throw $this->createServiceException('会员付费方式不正确，开通会员失败。');
+        }
+
+        $orderId = intval($orderId);
+        if ($orderId > 0) {
+            $order = $this->getOrderService()->getOrder($orderId);
+            if (empty($order)) {
+                throw $this->createServiceException('开通会员的订单不存在，开通会员失败。');
+            }
+        } else {
+            $order = array('id' => 0, 'amount' => 0);
+        }
+
+        $member = array();
+        $member['userId'] = $userId;
+        $member['levelId'] = $levelId;
+        $member['deadline'] = strtotime("+ {$duration} {$unit}s");
+        $member['boughtType'] = 'new';
+        $member['boughtTime'] = time();
+        $member['boughtDuration'] = $duration;
+        $member['boughtUnit'] = $unit;
+        $member['boughtAmount'] = $order['amount'];
+        $member['orderId'] = $order['id'];
+        $member['createdTime'] = time();
+
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser->id != $member['userId']) {
+            $member['operatorId'] = $currentUser->id;
+        } else {
+            $member['operatorId'] = 0;
+        }
+
+        $member = $this->getMemberDao()->addMember($member);
+
+        $history = $member;
+        unset($history['id']);
+
+        $this->getMemberHistoryDao()->addMemberHistory($history);
+
+        return $member;
+    }
+
+    public function renewMember($userId, $duration, $unit, $orderId = 0)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，会员续费失败。');
+        }
+
+        $currentMember = $this->getMemberByUserId($user['id']);
+        if (empty($currentMember)) {
+            throw $this->createServiceException('用户不是会员，会员续费失败。');
+        }
+
+        $level = $this->getLevelService()->getLevel($currentMember['levelId']);
+        if (empty($level) or empty($level['enabled'])) {
+            throw $this->createServiceException('会员等级不存在或已关闭，会员续费失败。');
+        }
+
+        $duration = intval($duration);
+        if (empty($duration)) {
+            throw $this->createServiceException('会员开通时长不正确，开通会员失败。');
+        }
+
+        if (!in_array($unit, array('month', 'year'))) {
+            throw $this->createServiceException('会员付费方式不正确，开通会员失败。');
+        }
+
+        $orderId = intval($orderId);
+        if ($orderId > 0) {
+            $order = $this->getOrderService()->getOrder($orderId);
+            if (empty($order)) {
+                throw $this->createServiceException('开通会员的订单不存在，开通会员失败。');
+            }
+        } else {
+            $order = array('id' => 0, 'amount' => 0);
+        }
+
+        $member = array();
+        $member['deadline'] = strtotime("+ {$duration} {$unit}s", $currentMember['deadline']);
+        $member['boughtType'] = 'renew';
+        $member['boughtTime'] = time();
+        $member['boughtDuration'] = $duration;
+        $member['boughtUnit'] = $unit;
+        $member['boughtAmount'] = $order['amount'];
+        $member['orderId'] = $order['id'];
+
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser->id != $currentMember['userId']) {
+            $member['operatorId'] = $currentUser->id;
+        } else {
+            $member['operatorId'] = 0;
+        }
+
+        $member = $this->getMemberDao()->updateMember($currentMember['id'], $member);
+
+        $history = $member;
+        unset($history['id']);
+
+        $this->getMemberHistoryDao()->addMemberHistory($history);
+
+        return $member;
+    }
+
+    public function upgradeMember($userId, $newLevelId)
+    {
+
+    }
+
     public function updateMemberInfo($userId, array $fields)
     {
         $member = $this->getMemberDao()->getMemberByUserId($userId);
@@ -144,6 +266,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ($member == 1) ? true : false;
     }
 
+
     private function getMemberDao()
     {
         return $this->createDao('Member:Member.MemberDao');
@@ -152,6 +275,16 @@ class MemberServiceImpl extends BaseService implements MemberService
     private function getMemberHistoryDao()
     {
         return $this->createDao('Member:Member.MemberHistoryDao');
+    }
+
+    private function getOrderService()
+    {
+        return $this->createService('Order.OrderService');
+    }
+
+    private function getLevelService()
+    {
+        return $this->createService('Member:Member.LevelService');
     }
 
     private function getUserService()

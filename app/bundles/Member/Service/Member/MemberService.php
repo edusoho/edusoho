@@ -11,7 +11,22 @@ interface MemberService
 
     public function searchMembersCount($conditions);
 
-    public function createMember($memberDate);
+    public function createMember($memberData);
+
+    /**
+     * 加入会员
+     */
+    public function becomeMember($userId, $levelId, $duration, $unit, $orderId = 0);
+
+    /**
+     * 续费会员
+     */
+    public function renewMember($userId, $duration, $unit, $orderId = 0);
+
+    /**
+     * 升级会员
+     */
+    public function upgradeMember($userId, $newLevelId);
 
     public function updateMemberInfo($userId, array $fields);
 
