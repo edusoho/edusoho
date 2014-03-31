@@ -7,6 +7,7 @@ use Member\Service\Member\LevelService;
 
 class LevelServiceImpl extends BaseService implements LevelService
 {
+    const MAX_LEVEL = 100;
 
 	public function getLevel($id)
 	{
@@ -20,9 +21,13 @@ class LevelServiceImpl extends BaseService implements LevelService
 
 	public function findLevelsBySeq($seq, $start, $limit)
 	{
-		$levels = $this->getLevelDao()->findLevelsBySeq($seq, $start, $limit);
-		return $levels;
+		return $this->getLevelDao()->findLevelsBySeq($seq, $start, $limit);
 	}
+
+    public function findEnabledLevels()
+    {
+        return $this->getLevelDao()->findLevelsWithEnabled(1, 0, self::MAX_LEVEL);
+    }
 
 	public function searchLevelsCount($conditions)
 	{	
@@ -107,7 +112,7 @@ class LevelServiceImpl extends BaseService implements LevelService
 
     private function getLevelDao()
     {
-        return $this->createDao('User.LevelDao');
+        return $this->createDao('Member:Member.LevelDao');
     }
 
     protected function getLogService()

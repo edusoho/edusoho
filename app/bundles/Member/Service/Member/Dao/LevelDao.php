@@ -10,6 +10,8 @@ interface LevelDao
 
     public function findLevelsBySeq($seq, $start, $limit);
 
+    public function findLevelsWithEnabled($enabled, $start, $limit);
+
     public function searchLevels($conditions, $start, $limit);
 
     public function searchLevelsCount($conditions);

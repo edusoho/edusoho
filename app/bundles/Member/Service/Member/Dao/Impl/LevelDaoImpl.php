@@ -28,6 +28,12 @@ class LevelDaoImpl extends BaseDao implements LevelDao
         return $this->getConnection()->fetchAll($sql,array($seq)) ? : array(); 
     }
 
+    public function findLevelsWithEnabled($enabled, $start, $limit)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE enabled = ? ORDER BY seq ASC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql,array($enabled)) ? : array(); 
+    }
+
 	public function searchLevels($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
