@@ -1,15 +1,19 @@
-{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+{% extends 'MemberBundle:MemberAdmin:layout.html.twig' %}
 
 {% block title %}会员专区设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'memberlevel' %}
 {% set script_controller = 'memberbundle/controller/memberleveladmin/list' %}
 
-{% set submenu = 'memberlevel' %}
+{% set submenu = 'memberzone' %}
 
 {% block main %}
-
-{% include 'MemberBundle:MemberlevelAdmin:level-header.html.twig' %}
+  {{ web_macro.flash_messages() }}
+  <div class="page-header clearfix">
+    <a class="btn btn-info btn-sm pull-right" id="add-navigation-btn" href="{{path('admin_user_level_create')}}">添加会员类型</a>
+    <h1 class="pull-left">会员专区设置</h1>
+  </div>
+  
   <table id="memberlevel-table" class="table table-striped table-hover" data-search-form="#user-search-form">
     <thead>
       <tr>

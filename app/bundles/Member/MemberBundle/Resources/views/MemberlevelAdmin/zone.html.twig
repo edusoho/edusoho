@@ -1,17 +1,17 @@
-{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+{% extends 'MemberBundle:MemberAdmin:layout.html.twig' %}
 
 {% block title %}会员专区设置 - {{ parent() }}{% endblock %}
 
-{% set menu = 'memberlevel' %}
-
-{% set submenu = 'levelzone' %}
+{% set menu = 'memberzone' %}
 
 {% block main %}
 
-{% include 'MemberBundle:MemberlevelAdmin:level-header.html.twig' %}
-
 {{ web_macro.flash_messages() }}
-<br>
+
+  <div class="page-header clearfix">
+    <h1 class="pull-left">会员专区设置</h1>
+  </div>
+
 <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
   <div class="row form-group">
     <div class="col-md-2 control-label">

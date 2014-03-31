@@ -1,17 +1,19 @@
-{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+{% extends 'CouponBundle:Coupon:layout.html.twig' %}
 
 {% block title %}优惠码管理 - {{ parent() }}{% endblock %}
 
-{% set menu = 'coupon' %}
+{% set menu = 'coupon_batch' %}
+
 {% set script_controller = 'couponbundle/controller/coupon/list' %}
 
-{% set submenu = 'coupon_batch' %}
-
 {% block main %}
+  {{ web_macro.flash_messages() }}
+  <div class="page-header clearfix">
+    <a href="{{ path('admin_coupon_generate') }}" class="btn btn-info btn-sm pull-right" id="generate-coupon-btn">生成优惠码</a>
+    <h1 class="pull-left">优惠码批次管理</h1>
+  </div>
 
-{% include 'CouponBundle:Coupon:coupon-header.html.twig' %}
-
-<br /><form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="type">
         {{ select_options(dict('couponType'), app.request.query.get('type'), '按优惠方式') }}
