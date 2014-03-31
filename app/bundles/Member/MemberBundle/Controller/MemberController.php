@@ -1,15 +1,16 @@
 <?php
-namespace Topxia\WebBundle\Controller;
-
+namespace Member\MemberBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\WebBundle\Controller\BaseController;
 
 class MemberController extends BaseController
 {
     public function indexAction(Request $request)
-    {	
+    {	  
+
         $memberZone = $this->getSettingService()->get('memberZone', array());
 
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
@@ -27,7 +28,7 @@ class MemberController extends BaseController
         $currentUser = $this->getCurrentUser();
         $member =  $currentUser->isLogin() ? $this->getMemberService()->getMemberByUserId($currentUser['id']) : null;
 
-        return $this->render('TopxiaWebBundle:Member:index.html.twig',array(
+        return $this->render('MemberBundle:Member:index.html.twig',array(
         	'levels' => $levels,
             'latestCourses' => $latestCourses,
             'hotestCourses' => $hotestCourses,
@@ -90,7 +91,7 @@ class MemberController extends BaseController
 
         $levels = $this->getLevelService()->searchLevels(array(), 0, 100);
 
-        return $this->render('TopxiaWebBundle:Member:course.html.twig',array(
+        return $this->render('MemberBundle:Member:course.html.twig',array(
             'levels' => $levels,
             'courses' => $courses,
             'paginator' => $paginator,
@@ -123,7 +124,7 @@ class MemberController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        return $this->render('TopxiaWebBundle:Member:history.html.twig',array(
+        return $this->render('MemberBundle:Member:history.html.twig',array(
             'levels' => $levels,
             'latestMembers' => $latestMembers,
             'members' => $members,
@@ -142,7 +143,7 @@ class MemberController extends BaseController
 
     protected function getLevelService()
     {
-    	return $this->getServiceKernel()->createService('User.LevelService');
+        return $this->getServiceKernel()->createService('Member:Member.LevelService');
     }
 
     protected function getCourseService()
@@ -152,8 +153,8 @@ class MemberController extends BaseController
 
     protected function getMemberService()
     {
-        return $this->getServiceKernel()->createService('User.MemberService');
-    }
+        return $this->getServiceKernel()->createService('Member:Member.MemberService');
+    }   
 
     protected function getSettingService()
     {
