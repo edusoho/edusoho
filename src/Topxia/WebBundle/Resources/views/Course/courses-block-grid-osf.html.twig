@@ -18,7 +18,7 @@
                    {% if course.price > 0 %}
                       <span class="text-size-15  text-weight pull-left"><i>原价:</i><em class=" text-color-red-e5"><s>¥{{ course.price+250 }}</s></em></span>
 
-                      <span class="text-size-15  text-weight pull-right"><i>优惠价:</i><em class=" text-color-red-e5">¥{{ course.price }}</em></span>
+                      <span class="text-size-15  text-weight pull-right"><i>优惠价:</i><em class=" text-color-red-e5">¥{{ course.price |number_format(0, '', '') }}</em></span>
 
 
 
