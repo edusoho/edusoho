@@ -136,6 +136,7 @@ class CourseController extends BaseController
     public function showAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
+        
         if (empty($course)) {
             throw $this->createNotFoundException();
         }
