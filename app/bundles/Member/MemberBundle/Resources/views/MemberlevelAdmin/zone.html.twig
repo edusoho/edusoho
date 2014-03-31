@@ -4,13 +4,11 @@
 
 {% set menu = 'memberlevel' %}
 
-{% set script_controller = 'block/list' %}
-
 {% set submenu = 'levelzone' %}
 
 {% block main %}
 
-{% include 'TopxiaAdminBundle:Memberlevel:level-header.html.twig' %}
+{% include 'MemberBundle:MemberlevelAdmin:level-header.html.twig' %}
 
 {{ web_macro.flash_messages() }}
 <br>

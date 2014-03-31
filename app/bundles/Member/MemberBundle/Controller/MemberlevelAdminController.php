@@ -26,7 +26,7 @@
 			foreach ($memberlevels as &$memberlevel) {
 				$memberlevel['memberNum'] = $this->getMemberService()->searchMembersCount(array( 'level' => $memberlevel['id'] ));
 			}
-			return $this->render('TopxiaAdminBundle:Memberlevel:index.html.twig', array(
+			return $this->render('MemberBundle:MemberlevelAdmin:index.html.twig', array(
 	            'memberlevels' => $memberlevels,
 	            'paginator' => $paginator
 	        ));
@@ -54,7 +54,7 @@
 				return $this->redirect($this->generateUrl('admin_user_level'));
 			}
 
-			return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel.html.twig');
+			return $this->render('MemberBundle:MemberlevelAdmin:memberlevel.html.twig');
     	}
 
     	public function updateAction (Request $request,$id)
@@ -85,7 +85,7 @@
 				return $this->redirect($this->generateUrl('admin_user_level'));
 			}
 
-	        return $this->render('TopxiaAdminBundle:Memberlevel:memberlevel.html.twig', array(
+	        return $this->render('MemberBundle:MemberlevelAdmin:memberlevel.html.twig', array(
 			'memberlevel' => $memberlevel));
 	    }
 
@@ -109,12 +109,12 @@
 
 		public function pictureAction(Request $request)
 		{
-			return $this->render('TopxiaAdminBundle:Memberlevel:picture-modal.html.twig');
+			return $this->render('MemberBundle:MemberlevelAdmin:picture-modal.html.twig');
 		}
 
 		public function iconAction(Request $request)
 		{
-			return $this->render('TopxiaAdminBundle:Memberlevel:icon-modal.html.twig');
+			return $this->render('MemberBundle:MemberlevelAdmin:icon-modal.html.twig');
 		}
 
 	    public function sortAction(Request $request)
@@ -142,7 +142,7 @@
 	            $this->setFlashMessage('success','会员专区设置已保存！');
 	        }
 
-	    	return $this->render('TopxiaAdminBundle:Memberlevel:zone.html.twig', array(
+	    	return $this->render('MemberBundle:MemberlevelAdmin:zone.html.twig', array(
 	    		'memberZone' => $memberZone
 	    	));
 	    }
@@ -156,15 +156,15 @@
 			return $level;
 		}
 
-		protected function getLevelService()
-    	{
-        	return $this->getServiceKernel()->createService('User.LevelService');
-    	}
+	    protected function getMemberService()
+	    {
+	        return $this->getServiceKernel()->createService('Member:Member.MemberService');
+	    }    
 
-    	protected function getMemberService()
-    	{
-    		return $this->getServiceKernel()->createService('User.MemberService');
-    	}
+	    protected function getLevelService()
+	    {
+	        return $this->getServiceKernel()->createService('Member:Member.LevelService');
+	    }
 
 	    protected function getSettingService()
 	    {
