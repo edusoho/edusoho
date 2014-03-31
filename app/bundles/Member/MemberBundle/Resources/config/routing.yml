@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 member:
     pattern: /memberzone
     defaults: { _controller: MemberBundle:Member:index }
@@ -10,8 +9,7 @@ member_course_explore:
 member_history:
     pattern: /memberzone/history
     defaults: { _controller: MemberBundle:Member:history }
-=======
+
 member_buy:
     pattern: /member/buy
     defaults: { _controller: MemberBundle:MemberOrder:buy }
->>>>>>> a32a23f7816039b973cc429bd07b672c85c697cf
