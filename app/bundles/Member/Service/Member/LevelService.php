@@ -11,6 +11,8 @@ interface LevelService
 
     public function findLevelsBySeq($seq, $start, $limit);
 
+    public function findEnabledLevels();
+
     public function searchLevelsCount($conditions);
 
     public function searchLevels($conditions,$start,$limit);

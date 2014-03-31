@@ -1,0 +1,3 @@
+member_buy:
+    pattern: /member/buy
+    defaults: { _controller: MemberBundle:MemberOrder:buy }
