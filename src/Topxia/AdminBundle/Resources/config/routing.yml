@@ -108,38 +108,6 @@ admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
 
-admin_member_create:
-    pattern: /member/create
-    defaults: { _controller: TopxiaAdminBundle:Member:create }
-    
-admin_member_cancel:
-    pattern: /member/{userId}/cancel
-    defaults: { _controller: TopxiaAdminBundle:Member:cancel }
-
-admin_member:
-    pattern: /member/{type}
-    defaults: { _controller: TopxiaAdminBundle:Member:index, type: 'all' }
-
-admin_member_update:
-    pattern: /member/update
-    defaults: { _controller: TopxiaAdminBundle:Member:update }
-    
-admin_member_bought_history:
-    pattern: /member/bought/history
-    defaults: { _controller: TopxiaAdminBundle:Member:boughtHistory}
-
-admin_member_bought_list:
-    pattern: /member/bought/list
-    defaults: { _controller: TopxiaAdminBundle:Member:boughtList}
-
-admin_member_edit:
-    pattern: /member/{userId}/edit
-    defaults: { _controller: TopxiaAdminBundle:Member:edit}
-    
-admin_member_create_nickname_check:
-    pattern:  /member/create/nickname/check
-    defaults: { _controller: TopxiaAdminBundle:Member:nicknameCheck }
-
 admin_user_create:
     pattern:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }
