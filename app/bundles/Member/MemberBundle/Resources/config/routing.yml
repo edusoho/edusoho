@@ -1,3 +1,7 @@
 member_buy:
     pattern: /member/buy
     defaults: { _controller: MemberBundle:MemberOrder:buy }
+
+member_pay:
+    pattern: /member/pay
+    defaults: { _controller: MemberBundle:MemberOrder:pay }
