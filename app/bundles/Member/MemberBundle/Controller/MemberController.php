@@ -76,13 +76,16 @@ class MemberController extends BaseController
             'memberLevelIds' => $memberlevelIds
             );
         }
+        
+        if ($conditions['memberLevelIds'][0] == null) {
+            $conditions['memberLevelIds'] = null;
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions)
             , 9
         );
-
         $courses = $this->getCourseService()->searchCourses(
             $conditions, $sort,
             $paginator->getOffsetCount(),
