@@ -183,6 +183,29 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     }
 
+    public function calUpgradeMemberAmount($userId, $newLevelId)
+    {
+        $member = $this->getMemberByUserId($userId);
+        if (empty($member)) {
+            throw $this->createServiceException("用户不是会员，无法计算升级金额");
+        }
+
+        $level = $this->getLevelService()->getLevel($newLevelId);
+        if (empty($level)) {
+            throw $this->createServiceException("会员等级不存在，无法计算升级金额");
+        }
+
+        if ($member['boughtUnit'] == 'month') {
+            $months = ($member['deadline'] - time()) / 86400 / 30;
+            $amount = $level['monthPrice'] * $months;
+        } else {
+            $years = ($member['deadline'] - time()) / 86400 / 365;
+            $amount = $level['yearPrice'] * $years;
+        }
+
+        return intval($amount * 100) / 100;
+    }
+
     public function updateMemberInfo($userId, array $fields)
     {
         $member = $this->getMemberDao()->getMemberByUserId($userId);

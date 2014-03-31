@@ -29,6 +29,23 @@ class LevelServiceImpl extends BaseService implements LevelService
         return $this->getLevelDao()->findLevelsWithEnabled(1, 0, self::MAX_LEVEL);
     }
 
+    public function findNextEnabledLevels($levelId)
+    {
+        $ok = false;
+        $levels = $this->findEnabledLevels();
+        $nextLevels = array();
+        foreach ($levels as $level) {
+            if ($levelId == $level['id']) {
+                $ok = true;
+                continue;
+            }
+            if ($ok) {
+                $nextLevels[] = $level;
+            }
+        }
+        return $nextLevels;
+    }
+
 	public function searchLevelsCount($conditions)
 	{	
 	    return $this->getLevelDao()->searchLevelsCount($conditions);

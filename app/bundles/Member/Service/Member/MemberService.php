@@ -28,6 +28,11 @@ interface MemberService
      */
     public function upgradeMember($userId, $newLevelId);
 
+    /**
+     * 计算升级会员，所需要的金额
+     */
+    public function calUpgradeMemberAmount($userId, $newLevelId);
+
     public function updateMemberInfo($userId, array $fields);
 
     public function cancelMemberByUserId($userId);

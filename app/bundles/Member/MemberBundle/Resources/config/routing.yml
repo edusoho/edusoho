@@ -18,6 +18,14 @@ member_renew:
     pattern: /member/renew
     defaults: { _controller: MemberBundle:MemberOrder:renew }
 
+member_upgrade:
+    pattern: /member/upgrade
+    defaults: { _controller: MemberBundle:MemberOrder:upgrade }
+
+member_upgrade_amount:
+    pattern: /member/upgrade/amount
+    defaults: { _controller: MemberBundle:MemberOrder:upgradeAmount }
+
 member_pay:
     pattern: /member/pay
     defaults: { _controller: MemberBundle:MemberOrder:pay }

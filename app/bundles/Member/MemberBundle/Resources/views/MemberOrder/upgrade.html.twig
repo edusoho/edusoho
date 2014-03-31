@@ -1,0 +1,105 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}会员升级 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'memberbundle/controller/order/buy' %}
+
+{% set type = 'upgrade' %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap" style="min-height:500px;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>会员升级</h1></div>
+    </div>
+  </div>
+
+  <form class="form-horizontal" id="member-buy-form" method="post" action="{{ path('member_pay') }}" data-cal-upgrade-amount-url="{{ path('member_upgrade_amount') }}">
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">您现在是</label>
+      <div class="col-sm-8 form-control-static">
+        <strong class="text-primary level-name">{{ level.name }}</strong>
+        {% if member.boughtUnit == 'month' %}
+          <span class="text-primary">( {{ level.monthPrice }}元/月 )</span>
+        {% else %}
+          <span class="text-primary">( {{ level.yearPrice }}元/年 )</span>
+        {% endif %}
+        <span class="text-muted">，有效期至{{ member.deadline|date('Y-m-d') }}，剩余 {{ member.deadline|remain_time }}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">您可升级到</label>
+      <div class="col-sm-8 radios">
+        {{ radios('level', levels, selectedLevel) }}
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">付款方式</label>
+      <div class="col-sm-8 ">
+        <input type="radio" checked="checked">
+        <img src="{{ asset('assets/img/order/alipay.gif') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">应付金额</label>
+      <div class="col-sm-8">
+        <p class="form-control-static"><strong class="money amount">正在计算...</strong></p>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-8">
+        <button type="submit" class="btn btn-primary">确认升级</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="startDate" value="{{ member.deadline|date('Y-m-d') }}">
+
+    
+
+
+  </form>
+
+
+<div class="modal" id="member-buy-confirm-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">确认续费</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="member-buy-form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">会员续费</label>
+            <div class="col-sm-8">
+              <p class="form-control-static"><strong class="text-success confirm-level"></strong></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label">应付金额</label>
+            <div class="col-sm-8">
+              <p class="form-control-static"><strong class="money confirm-amount"></strong></p>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="member-order-confirm-btn">去支付</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+</div>
+{% endblock %}

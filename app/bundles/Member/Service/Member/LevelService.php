@@ -13,6 +13,8 @@ interface LevelService
 
     public function findEnabledLevels();
 
+    public function findNextEnabledLevels($levelId);
+
     public function searchLevelsCount($conditions);
 
     public function searchLevels($conditions,$start,$limit);

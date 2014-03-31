@@ -58,6 +58,52 @@ class MemberOrderController extends OrderController
         ));
     }
 
+    public function upgradeAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isLogin()) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $member = $this->getMemberService()->getMemberByUserId($currentUser->id);
+        if (empty($member)) {
+            return $this->redirect($this->generateUrl('member_buy'));
+        }
+
+        $level = $this->getLevelService()->getLevel($member['levelId']);
+        if (empty($level)) {
+            return $this->createMessageResponse('error', '该会员类型不存在，不能升级！');
+        }
+
+        $levels = $this->getLevelService()->findNextEnabledLevels($level['id']);
+        if (empty($levels)) {
+            return $this->createMessageResponse('info', '没有可升级的会员等级。');
+        }
+
+        return $this->render('MemberBundle:MemberOrder:upgrade.html.twig', array(
+            'member' => $member,
+            'level' => $level,
+            'prices' => $this->makeLevelPrices(array($level)),
+            'levels' => $this->makeLevelChoices($levels, $member['boughtUnit']),
+            'selectedLevel' => $levels[0]['id'],
+        ));
+    }
+
+    public function upgradeAmountAction(Request $request)
+    {
+
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $newLevelId = $request->query->get('levelId');
+
+        $amount = $this->getMemberService()->calUpgradeMemberAmount($currentUser->id, $newLevelId);
+
+        return $this->createJsonResponse($amount);
+    }
+
 
     public function payAction(Request $request)
     {
@@ -159,13 +205,18 @@ class MemberOrderController extends OrderController
         return $prices;
     }
 
-    private function makeLevelChoices($levels)
+    private function makeLevelChoices($levels, $unit = null)
     {
-        $radios = array();
+        $choices = array();
         foreach ($levels as $level) {
-            $radios[$level['id']] = $level['name'];
+            if (empty($unit)) {
+                $choices[$level['id']] = $level['name'];
+            } else {
+                $unitNames = array('month' => '元/月', 'year' => '元/年');
+                $choices[$level['id']] = $level['name'] . '(' . $level[$unit.'Price'] . $unitNames[$unit] . ')';
+            }
         }
-        return $radios;
+        return $choices;
     }
 
     public function getMemberService()
