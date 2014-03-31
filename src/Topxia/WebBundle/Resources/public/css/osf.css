@@ -366,7 +366,7 @@
 .page-grids  li .card{
 	
 	background:#fff; 
-	display:inline-block;
+	
 	border-radius: 6px;box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.45);
 	
 	transition: box-shadow 0.2s;*border:1px solid #e0e0e0;
