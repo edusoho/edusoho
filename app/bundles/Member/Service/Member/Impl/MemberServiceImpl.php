@@ -146,12 +146,12 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     private function getMemberDao()
     {
-        return $this->createDao('User.MemberDao');
+        return $this->createDao('Member:Member.MemberDao');
     }
 
     private function getMemberHistoryDao()
     {
-        return $this->createDao('User.MemberHistoryDao');
+        return $this->createDao('Member:Member.MemberHistoryDao');
     }
 
     private function getUserService()

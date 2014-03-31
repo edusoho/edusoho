@@ -145,6 +145,11 @@ define(function(require, exports, module) {
             '{{display}}必须为正整数'
         ],
         [
+            'arithmetic_number',
+            /^(?!0+(\.0+)?$)\d+(\.\d+)?$/,
+            '{{display}}必须为正数'
+        ],
+        [
             'maxsize_image',
             function (options) {
                 var element = options.element;

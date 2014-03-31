@@ -37,7 +37,7 @@
       <tbody>
         {% for memberHistory in memberHistories %}
           {% set level = levels[memberHistory.levelId]|default('--') %}
-          {% include 'TopxiaAdminBundle:Member:member-history-table-tr.html.twg' with {memberHistory:memberHistory} %}
+          {% include 'MemberBundle:MemberAdmin:member-history-table-tr.html.twg' with {memberHistory:memberHistory} %}
         {% endfor %}
       </tbody>
     </table>

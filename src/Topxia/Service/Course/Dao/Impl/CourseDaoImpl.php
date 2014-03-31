@@ -117,6 +117,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $builder->andStaticWhere("memberLevelId IN ($memberLevelIds)");
             }
 
+        } else {
+            $builder->andStaticWhere("memberLevelId != 0");
         }
 
         return $builder;

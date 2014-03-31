@@ -1,3 +1,15 @@
+member:
+    pattern: /memberzone
+    defaults: { _controller: MemberBundle:Member:index }
+
+member_course_explore:
+    pattern: /memberzone/level/{levelId}/course
+    defaults: { _controller: MemberBundle:Member:course, levelId: 0 }
+
+member_history:
+    pattern: /memberzone/history
+    defaults: { _controller: MemberBundle:Member:history }
+
 member_buy:
     pattern: /member/buy
     defaults: { _controller: MemberBundle:MemberOrder:buy }
