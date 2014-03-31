@@ -56,7 +56,7 @@
       {% for member in members %}
         {% set user = users[member.userId]|default(null) %}
         {% set level = levels[member.levelId]|default('--') %}
-        {% include 'TopxiaAdminBundle:Member:member-table-tr.html.twig' %}
+        {% include 'MemberBundle:MemberAdmin:member-table-tr.html.twig' %}
       {% endfor %}
     </tbody>
   </table>
