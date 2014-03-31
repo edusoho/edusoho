@@ -1,0 +1,70 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% set member = member|default(null) %}
+
+{% block title %}{% if member %}编辑{% else %}创建{% endif %}会员{% endblock %}
+{% block body %}
+
+<form id="member-modal-form" class="form-horizontal" method="post"
+  {% if member %}
+     action="{{ url('admin_member_edit', {userId:member.userId}) }}"
+  {% else %}
+     action="{{ url('admin_member_create') }}"
+  {% endif %}
+>
+<div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="nickname">用户名</label>
+    </div>
+    <div class="col-md-7 controls">
+    {% if member %}
+      <div class = "control-text">{{user.nickname|default('')}}</div>
+    {% else %}
+      <input type="text" id="nickname" name="nickname" data-url="{{path('admin_member_create_nickname_check')}}" class="form-control" >
+    {% endif %}
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="levels">会员类型</label>
+    </div>
+    <div class="col-md-7 controls">
+     <select class="form-control" name="levelId">
+       {% if member %}
+         {{ select_options(levels_enabled, member.levelId) }}
+        {% else %}
+         {{ select_options(levels_enabled, member.levelId|default(''), '--按会员类型--') }}
+       {% endif %}
+     </select>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="deadline">到期日期</label>
+    </div>
+      <div class="col-md-7 controls" style="z-index:2000;">
+      {% if member %}
+        <input type="text" id="deadline"  name="deadline" class="form-control" value="{{member.deadline|date('Y-m-d')|default('')}}" >
+      {% else %}
+        <input type="text" id="deadline"  name="deadline" class="form-control" >
+      {% endif %}
+    </div>
+  </div> 
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">           
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#member-modal-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  {% if member %}
+    <script>app.load('member/edit-modal')</script>
+  {% else %}
+    <script>app.load('member/create-modal')</script>
+  {% endif %}
+{% endblock %}

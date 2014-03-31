@@ -1,0 +1,31 @@
+admin_member_create:
+    pattern: /member/create
+    defaults: { _controller: MemberBundle:MemberAdmin:create }
+
+admin_member_cancel:
+    pattern: /member/{userId}/cancel
+    defaults: { _controller: MemberBundle:MemberAdmin:cancel }
+
+admin_member:
+    pattern: /member/{type}
+    defaults: { _controller: MemberBundle:MemberAdmin:index, type: 'all' }
+
+admin_member_update:
+    pattern: /member/update
+    defaults: { _controller: MemberBundle:MemberAdmin:update }
+
+admin_member_bought_history:
+    pattern: /member/bought/history
+    defaults: { _controller: MemberBundle:MemberAdmin:boughtHistory}
+
+admin_member_bought_list:
+    pattern: /member/bought/list
+    defaults: { _controller: MemberBundle:MemberAdmin:boughtList}
+
+admin_member_edit:
+    pattern: /member/{userId}/edit
+    defaults: { _controller: MemberBundle:MemberAdmin:edit}
+
+admin_member_create_nickname_check:
+    pattern:  /member/create/nickname/check
+    defaults: { _controller: MemberBundle:MemberAdmin:nicknameCheck }

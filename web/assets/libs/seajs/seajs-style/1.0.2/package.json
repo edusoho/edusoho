@@ -1,7 +1,7 @@
 {
   "family": "seajs",
   "name": "seajs-style",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Sea.js plugin for embedding style text in JavaScript code",
   "keywords": ["seajs", "plugin", "style"],
   "author": "Frank Wang <lifesinger@gmail.com>",
@@ -12,7 +12,9 @@
   "devDependencies": {
     "seatools": "*"
   },
-  "spm": {
-    "output": ["seajs-style.js"]
+  "config": {
+    "plugin-concat": [
+      "seajs-style.js"
+    ]
   }
 }

@@ -3,7 +3,7 @@
     "type": "project",
     "description": "Edusoho",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": { "": ["src/", "app/bundles"] }
     },
     "require": {
         "php": ">=5.3.3",

@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{userNickname}}的购买历史{% endblock %}
+{% block body %}
+<table id="member-history-table" class="table table-striped table-hover table-bordered" data-search-form="#member-history-search-form">
+  <thead>
+    <tr>
+      <th>购买时间</th>
+      <th>到期时间</th>
+      <th>购买类型</th>
+      <th>会员类型</th>
+      <th>开通时长</th>
+      <th>支付费用</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for memberHistory in memberHistories %}
+    {% set level = levels[memberHistory.levelId]|default('--') %}
+      {% include 'TopxiaAdminBundle:Member:member-history-table-tr.html.twg' with {memberHistory:memberHistory} %}
+    {% endfor %}
+  </tbody>
+</table>
+ {{ web_macro.paginator(paginator) }} 
+{% endblock %}

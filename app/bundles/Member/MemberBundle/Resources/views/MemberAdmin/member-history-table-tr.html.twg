@@ -1,0 +1,48 @@
+<tr id="member-history-table-tr-{{ memberHistory.id }}">
+
+  {% if show_usernick != '-1' %}
+    <td>
+    {% if memberHistory %}
+       <a href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:memberHistory.userId}) }}">{{ memberHistory.userNickname }}</a>
+  {% else %}
+       <span class="text-muted">用户已删除</span>
+  {% endif %}
+
+      <br>
+    </td>
+  {% endif %}
+  <td>
+    {{ memberHistory.boughtTime | date('Y-m-d H:i:s') }}
+    <br>
+  </td>
+
+  <td>
+    {{ memberHistory.deadline | date('Y-m-d') }}
+    <br>
+  </td>
+
+  <td>
+    {{ dict_text('boughtType',memberHistory.boughtType) }}
+    <br>
+  </td>
+
+  <td>
+    {{ level }}
+    <br>
+  </td>
+
+  <td>
+    {% if memberHistory.boughtDuration != 0 %}
+  {{ memberHistory.boughtDuration }} {{ dict_text('duration_unit',memberHistory.boughtUnit) }}
+   {% else %}
+    --
+    {% endif %}
+    <br>
+  </td>
+
+  <td>
+ {{ memberHistory.boughtPrice }}
+  </td>
+
+</tr>
+

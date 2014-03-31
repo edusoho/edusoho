@@ -21,6 +21,8 @@ class AppKernel extends Kernel {
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Custom\WebBundle\CustomWebBundle(),
             new Custom\AdminBundle\CustomAdminBundle(),
+            new Member\MemberBundle\MemberBundle(),
+            new Coupon\CouponBundle\CouponBundle(),
             );
 
 

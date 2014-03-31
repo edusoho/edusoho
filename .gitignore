@@ -12,7 +12,7 @@
 /app/data/private_files/*
 /app/data/backup/*
 /app/data/upgrade/*
-/app/bundles/*
+#/app/bundles/*
 /build/
 /vendor/
 /bin/
