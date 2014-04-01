@@ -91,6 +91,15 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrder($order['id']);
     }
 
+    public function findOrderLogs($orderId)
+    {
+        $order = $this->getOrder($orderId);
+        if(empty($order)){
+            throw $this->createServiceException("订单不存在，获取订单日志失败！");
+        }
+        return $this->getOrderLogDao()->findLogsByOrderId($orderId);
+    }
+
     public function canOrderPay($order)
     {
         if (empty($order['status'])) {
@@ -120,6 +129,301 @@ class OrderServiceImpl extends BaseService implements OrderService
         );
 
         return $this->getOrderLogDao()->addLog($log);
+    }
+
+    public function cancelOrder($id, $message = '')
+    {
+        
+    }
+
+    public function sumOrderPriceByTarget($targetType, $targetId)
+    {
+        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'cancelled'));
+    }
+
+    public function findUserRefundCount($userId)
+    {
+        return $this->getOrderRefundDao()->findRefundCountByUserId($userId);
+    }
+
+    public function findUserRefunds($userId, $start, $limit)
+    {
+        return $this->getOrderRefundDao()->findRefundsByUserId($userId, $start, $limit);
+    }
+
+    public function searchRefunds($conditions, $sort = 'latest', $start, $limit)
+    {
+        $conditions = array_filter($conditions);
+        $orderBy = array('createdTime', 'DESC');
+        return $this->getOrderRefundDao()->searchRefunds($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchRefundCount($conditions)
+    {
+        $conditions = array_filter($conditions);
+        return $this->getOrderRefundDao()->searchRefundCount($conditions);
+    }
+
+
+    public function applyRefundOrder($id, $expectedAmount = null, $reason = array())
+    {
+        $order = $this->getOrder($id);
+        if (empty($order)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($order['status'] != 'paid') {
+            throw $this->createServiceException("订单#{$order['id']}，不能退款");
+        }
+
+        // 订单金额为０时，不能退款
+        if (intval($order['price'] * 100) == 0) {
+            $expectedAmount = 0;
+        }
+
+        $setting = $this->getSettingService()->get('refund');
+
+        // 系统未设置退款期限，不能退款
+        if (empty($setting) or empty($setting['maxRefundDays'])) {
+            $expectedAmount = 0;
+        }
+
+        // 超出退款期限，不能退款
+        if ( (time() - $order['createdTime']) > (86400 * $setting['maxRefundDays']) ) {
+            $expectedAmount = 0;
+        }
+
+        $status = 'created';
+        if (!is_null($expectedAmount)) {
+            $expectedAmount = number_format($expectedAmount, 2, '.', '');
+            if (intval($expectedAmount * 100) === 0) {
+                $status = 'success';
+            };
+        }
+
+        $refund = $this->getOrderRefundDao()->addRefund(array(
+            'orderId' => $order['id'],
+            'userId' => $order['userId'],
+            'courseId' => $order['courseId'],
+            'status' => $status,
+            'expectedAmount' => $expectedAmount,
+            'reasonType' => empty($reason['type']) ? 'other' : $reason['type'],
+            'reasonNote' => empty($reason['note']) ? '' : $reason['note'],
+            'updatedTime' => time(),
+            'createdTime' => time(),
+        ));
+        
+        $this->getOrderDao()->updateOrder($order['id'], array(
+            'status' => ($refund['status'] == 'success') ? 'cancelled' : 'refunding',
+            'refundId' => $refund['id'],
+        ));
+
+        if ($refund['status'] == 'success') {
+            $this->getCourseService()->removeStudent($order['courseId'], $order['userId']);
+            $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
+        } else {
+            $this->getCourseService()->lockStudent($order['courseId'], $order['userId']);
+            $this->_createLog($order['id'], 'refund_apply', '订单申请退款' . (is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
+        }
+
+        return $refund;
+    }
+
+    public function auditRefundOrder($id, $pass, $actualAmount = null, $note = '')
+    {
+        $order = $this->getOrder($id);
+        if (empty($order)) {
+            throw $this->createServiceException("订单(#{$id})不存在，退款确认失败");
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin()) {
+            throw $this->createServiceException("订单(#{$id})，你无权进行退款确认操作");
+        }
+
+        if ($order['status'] != 'refunding') {
+            throw $this->createServiceException("当前订单(#{$order['id']})状态下，不能进行确认退款操作");
+        }
+
+        $refund = $this->getOrderRefundDao()->getRefund($order['refundId']);
+        if (empty($refund)) {
+            throw $this->createServiceException("当前订单(#{$order['id']})退款记录不存在，不能进行确认退款操作");
+        }
+
+        if ($refund['status'] != 'created') {
+            throw $this->createServiceException("当前订单(#{$order['id']})退款记录状态下，不能进行确认退款操作款");
+        }
+
+
+        if ($pass == true) {
+            if (empty($actualAmount)) {
+                $actualAmount = 0;
+            }
+
+            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
+
+            $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+                'status' => 'success',
+                'actualAmount' => $actualAmount,
+                'updatedTime' => time(),
+            ));
+
+            $this->getOrderDao()->updateOrder($order['id'], array(
+                'status' => 'refunded',
+            ));
+
+            if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
+                $this->getCourseService()->removeStudent($order['courseId'], $order['userId']);
+            }
+
+            $this->_createLog($order['id'], 'refund_success', "退款申请(ID:{$refund['id']})已审核通过：{$note}");
+
+        } else {
+            $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+                'status' => 'failed',
+                'updatedTime' => time(),
+            ));
+
+            $this->getOrderDao()->updateOrder($order['id'], array(
+                'status' => 'paid',
+            ));
+
+            if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
+                $this->getCourseService()->unlockStudent($order['courseId'], $order['userId']);
+            }
+
+            $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
+        }
+
+        $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
+
+    }
+
+    public function cancelRefundOrder($id)
+    {
+        $order = $this->getOrder($id);
+        if (empty($order)) {
+            throw $this->createServiceException("订单(#{$id})不存在，取消退款失败");
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createServiceException("用户未登录，订单(#{$id})取消退款失败");
+        }
+
+        if ($order['userId'] != $user['id'] and !$user->isAdmin()) {
+            throw $this->createServiceException("订单(#{$id})，你无权限取消退款");
+        }
+
+        if ($order['status'] != 'refunding') {
+            throw $this->createServiceException("当前订单(#{$order['id']})状态下，不能取消退款");
+        }
+
+        $refund = $this->getOrderRefundDao()->getRefund($order['refundId']);
+        if (empty($refund)) {
+            throw $this->createServiceException("当前订单(#{$order['id']})退款记录不存在，不能取消退款");
+        }
+
+        if ($refund['status'] != 'created') {
+            throw $this->createServiceException("当前订单(#{$order['id']})退款记录状态下，不能取消退款");
+        }
+
+        $this->getOrderRefundDao()->updateRefund($refund['id'], array(
+            'status' => 'cancelled',
+            'updatedTime' => time(),
+        ));
+
+        $this->getOrderDao()->updateOrder($order['id'], array(
+            'status' => 'paid',
+        ));
+
+        if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
+            $this->getCourseService()->unlockStudent($order['courseId'], $order['userId']);
+        }
+
+        $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
+    }
+
+    public function searchOrders($conditions, $sort = 'latest', $start, $limit)
+    {
+        $orderBy = array();
+        if ($sort == 'latest') {
+            $orderBy =  array('createdTime', 'DESC');
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        $conditions = $this->_prepareSearchConditions($conditions);
+        $orders = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function searchOrderCount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->searchOrderCount($conditions);
+    }
+
+    private function _prepareSearchConditions($conditions)
+    {
+        $conditions = array_filter($conditions);
+        
+        if (isset($conditions['date'])) {
+            $dates = array(
+                'yesterday'=>array(
+                    strtotime('yesterday'),
+                    strtotime('today'),
+                ),
+                'today'=>array(
+                    strtotime('today'),
+                    strtotime('tomorrow'),
+                ),
+                'this_week' => array(
+                    strtotime('Monday this week'),
+                    strtotime('Monday next week'),
+                ),
+                'last_week' => array(
+                    strtotime('Monday last week'),
+                    strtotime('Monday this week'),
+                ),
+                'next_week' => array(
+                    strtotime('Monday next week'),
+                    strtotime('Monday next week', strtotime('Monday next week')),
+                ),
+                'this_month' => array(
+                    strtotime('first day of this month midnight'), 
+                    strtotime('first day of next month midnight'),
+                ),
+                'last_month' => array(
+                    strtotime('first day of last month midnight'),
+                    strtotime('first day of this month midnight'),
+                ),
+                'next_month' => array(
+                    strtotime('first day of next month midnight'),
+                    strtotime('first day of next month midnight', strtotime('first day of next month midnight')),
+                ),
+            );
+
+            if (array_key_exists($conditions['date'], $dates)) {
+                $conditions['paidStartTime'] = $dates[$conditions['date']][0];
+                $conditions['paidEndTime'] = $dates[$conditions['date']][1];
+                unset($conditions['date']);
+            }
+        }
+        
+        if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+        }
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
+        if (isset($conditions['buyer'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
     }
 
     private function getUserService()

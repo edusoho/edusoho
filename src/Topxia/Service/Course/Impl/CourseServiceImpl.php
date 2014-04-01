@@ -1273,7 +1273,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'studentNum'=> $this->getCourseStudentCount($courseId),
 		);
 	    if ($order) {
-	    	$fields['income'] = $this->getOrderDao()->sumOrderPriceByCourseIdAndStatuses($courseId, array('paid', 'cancelled'));
+	    	$fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
 	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 

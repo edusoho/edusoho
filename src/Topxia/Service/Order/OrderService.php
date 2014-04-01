@@ -24,6 +24,8 @@ interface OrderService
 
     public function cancelOrder($id, $message = '');
 
+    public function sumOrderPriceByTarget($targetType, $targetId);
+
     public function findUserRefundCount($userId);
 
     public function findUserRefunds($userId, $start, $limit);
