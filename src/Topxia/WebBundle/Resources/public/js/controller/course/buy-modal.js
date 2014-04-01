@@ -31,16 +31,16 @@ define(function(require, exports, module) {
             });
         }
 
-
-
-
-
         $('#show-coupon-input').on('click', function(){
-            $(this).parents('.form-group').find('.input-group').show();
+            $(this).parents('form').find('.coupon-input-group').show();
+            $(this).parents('form').find('.coupon-btn-group').hide();
         });
 
         $('.btn-cancel-coupon').on('click', function(){
-            $(this).parents('.form-group').find('.input-group').remove();
+            $(this).parents('form').find('.coupon-btn-group').show();
+            $(this).parents('form').find('.coupon-input-group').hide();
+            $('[name="coupon"]').val('');
+            $('.coupon-error').hide();
         });
 
         $('.btn-use-coupon').on('click', function(){
@@ -59,6 +59,7 @@ define(function(require, exports, module) {
                     $('.money-text').html(html);
 
                     $('.coupon-error').hide();
+                    $('.btn-cancel-coupon').hide();
 
                 } else {
                     var message = '<span class="text-danger">'+response.message+'</span>';

@@ -52,6 +52,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $order['amount'] = $couponInfo['afterAmount'];
         }
+        unset($order['couponCode']);
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
         if (intval($order['amount']*100) == 0) {
