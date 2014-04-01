@@ -22,4 +22,17 @@ interface CouponService
 	public function deleteBatch($id);
 
 	public function checkBatchPrefix($prefix);
+
+	// public function getCouponByCode($code);
+
+	/**
+	 * array(
+	 *   'useable' => 'yes', // no
+	 *   'message' => '', // no的时候才会有值
+	 *   'decreaseAmount' => 1.50,
+	 *   'afterAmount' => 5.00,
+	 * )
+	 */
+	// public function checkCouponUseable($code, $targetType, $targetId, $amount);
+
 }
