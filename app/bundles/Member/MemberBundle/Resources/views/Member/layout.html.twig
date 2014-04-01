@@ -50,10 +50,10 @@
             {% endif %}
           {% endif %}
           <div class="list-group">
-            <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('member') }}">会员专区</a>
-            <a class="list-group-item" href="#">开通会员</a>
+            <a class="list-group-item {% if menu == 'index' %}active{% endif %}" href="{{ path('vip') }}">会员专区</a>
+            <a class="list-group-item" href="{{ path('vip_buy')  }}">开通会员</a>
             <a class="list-group-item" href="#">会员续费</a>
-            <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('member_history') }}">购买历史</a>
+            <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('vip_history') }}">购买历史</a>
           </div>  
         {% else %}
           <div class="well text-danger">请先登录后再购买会员</div>

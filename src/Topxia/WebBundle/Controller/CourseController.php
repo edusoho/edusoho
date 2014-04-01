@@ -172,9 +172,18 @@ class CourseController extends BaseController
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
+        $courseMemberLevel = $course['memberLevelId'] > 0 ? $this->getLevelService()->getLevel($course['memberLevelId']) : null;
+        if ($courseMemberLevel) {
+            $checkMemberLevelResult = $this->getMemberService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
+        } else {
+            $checkMemberLevelResult = null;
+        }
+
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,
             'member' => $member,
+            'courseMemberLevel' => $courseMemberLevel,
+            'checkMemberLevelResult' => $checkMemberLevelResult,
             'groupedItems' => $groupedItems,
             'hasFavorited' => $hasFavorited,
             'category' => $category,
@@ -206,6 +215,7 @@ class CourseController extends BaseController
                     'id' => 0,
                     'courseId' => $course['id'],
                     'userId' => $user['id'],
+                    'levelId' => 0,
                     'learnedNum' => 0,
                     'isLearned' => 0,
                     'seq' => 0,
@@ -322,6 +332,16 @@ class CourseController extends BaseController
         }
 
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
+        return $this->createJsonResponse(true);
+    }
+
+    public function becomeUseMemberAction(Request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException();
+        }
+        $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
         return $this->createJsonResponse(true);
     }
 
@@ -458,6 +478,16 @@ class CourseController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Member:Member.LevelService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->getServiceKernel()->createService('Member:Member.MemberService');
     }
 
     private function getCourseService()
