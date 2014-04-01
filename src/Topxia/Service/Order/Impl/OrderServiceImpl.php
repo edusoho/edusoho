@@ -66,6 +66,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $this->_createLog($order['id'], 'created', '创建订单');
 
+        $this->getCouponService()->useCoupon($code);
+
         return $order;
     }
 

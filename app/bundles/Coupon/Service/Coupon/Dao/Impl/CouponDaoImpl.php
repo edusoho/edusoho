@@ -24,6 +24,12 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         return $this->getConnection()->fetchAssoc($sql, array($code)) ? : null;
     }
 
+    public function updateCoupon($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getCoupon($id);
+    }
+
     public function findCouponsByBatchId($batchId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

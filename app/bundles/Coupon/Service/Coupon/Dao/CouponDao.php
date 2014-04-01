@@ -8,6 +8,8 @@ interface CouponDao
 
 	public function getCouponByCode($code);
 
+	public function updateCoupon($id, $fields);
+
 	public function findCouponsByBatchId($batchId, $start, $limit);
 
 	public function searchCoupons($conditions, $orderBy, $start, $limit);
