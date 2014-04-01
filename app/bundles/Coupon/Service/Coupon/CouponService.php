@@ -23,7 +23,7 @@ interface CouponService
 
 	public function checkBatchPrefix($prefix);
 
-	// public function getCouponByCode($code);
+	public function getCouponByCode($code);
 
 	/**
 	 * array(
@@ -33,6 +33,6 @@ interface CouponService
 	 *   'afterAmount' => 5.00,
 	 * )
 	 */
-	// public function checkCouponUseable($code, $targetType, $targetId, $amount);
+	public function checkCouponUseable($code, $targetType, $targetId, $amount);
 
 }

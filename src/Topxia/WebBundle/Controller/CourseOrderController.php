@@ -70,6 +70,11 @@ class CourseOrderController extends OrderController
         $order['payment'] = $formData['payment'];
         $order['amount'] = $course['price'];
         $order['snPrefix'] = 'C';
+
+        if (!empty($formData['coupon'])) {
+            $order['couponCode'] = $formData['coupon'];
+        }
+
         if (!empty($formData['note'])) {
             $order['data'] = array('note' => $formData['note']);
         }

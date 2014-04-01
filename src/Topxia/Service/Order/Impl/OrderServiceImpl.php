@@ -30,7 +30,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data'));
+        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode'));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
         if (empty($orderUser)) {
@@ -43,6 +43,15 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['sn'] = $this->generateOrderSn($order);
         unset($order['snPrefix']);
+
+        if (!empty($order['couponCode'])){
+            $couponInfo = $this->getCouponService()->checkCouponUseable($order['couponCode'], $order['targetType'], $order['targetId'], $order['amount']);
+            if ($couponInfo['useable'] != 'yes') {
+                throw $this->createServiceException("优惠码不可用");            
+            }
+
+            $order['amount'] = $couponInfo['afterAmount'];
+        }
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
         if (intval($order['amount']*100) == 0) {
@@ -433,7 +442,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     private function getUserService()
     {
-        return $this->createDao('User.UserService');
+        return $this->createService('User.UserService');
     }
 
     private function getOrderRefundDao()
@@ -449,6 +458,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getOrderLogDao()
     {
         return $this->createDao('Order.OrderLogDao');
+    }
+
+    private function getCouponService()
+    {
+        return $this->createService('Coupon:Coupon.CouponService');
     }
 
 }
