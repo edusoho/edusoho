@@ -159,6 +159,7 @@ class CourseOrderController extends OrderController
 
             $refund = $this->getOrderService()->applyRefundOrder($member['orderId'], $amount, $reason);
             if ($refund['status'] == 'created') {
+                $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
                 $message = $this->setting('refund.applyNotification', '');
                 if ($message) {
                     $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
@@ -168,6 +169,8 @@ class CourseOrderController extends OrderController
                     $message = StringToolkit::template($message, $variables);
                     $this->getNotificationService()->notify($refund['userId'], 'default', $message);
                 }
+            } elseif ($refund['status'] == 'success') {
+                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
             }
 
             return $this->createJsonResponse($refund);
