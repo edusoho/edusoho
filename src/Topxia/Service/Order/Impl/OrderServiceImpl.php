@@ -336,10 +336,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             'status' => 'paid',
         ));
 
-        if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
-            $this->getCourseService()->unlockStudent($order['courseId'], $order['userId']);
-        }
-
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 
