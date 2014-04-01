@@ -1,12 +1,18 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="order-table-{{order.id}}">
   <td>
-    <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+    {% if order.targetType == 'course' %}
+      <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+    {% elseif order.targetType == 'vip' %}
+      <a href="{{ path('vip_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+    {% else %}
+      <strong>{{order.title}}</strong>
+    {% endif %}
     <br>
     <span class="text-muted text-sm">订单号：{{order.sn}}</span>
   </td>
   <td>{{ dict_text('orderStatus:html', order.status) }}</td>
-  <td><span class="money-text">{{order.price}}</span></td>
+  <td><span class="money-text">{{order.amount}}</span></td>
   <td>
     {{ admin_macro.user_link(buyer) }}
     <br>

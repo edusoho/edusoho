@@ -24,11 +24,11 @@
             {% endif %}
            </td> 
       </tr>
-      <tr> <th width="25%">订单名称</th> <td width="75%">{{ order.title }}</td> </tr>
-      <tr> <th width="25%">所属课程</th> 
+      <tr>
+        <th width="25%">订单名称</th>
         <td width="75%">
-          <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
-        </td> 
+          {{ order.title }}
+        </td>
       </tr>
       <tr> <th width="25%">购买者</th> 
         <td width="75%">
@@ -37,7 +37,7 @@
       </tr>
       <tr> <th width="25%">订单价格</th> 
         <td width="75%">
-          <span class="money-text">{{ order.price }}</span>元
+          <span class="money-text">{{ order.amount }}</span>元
         </td>
       </tr>
       <tr> <th width="25%">是否为赠品</th> 
