@@ -37,6 +37,7 @@
       <tbody>
         {% for memberHistory in memberHistories %}
           {% set level = levels[memberHistory.levelId]|default('--') %}
+          {% set user = users[memberHistory.userId]|default(null) %}
           {% include 'MemberBundle:MemberAdmin:member-history-table-tr.html.twg' with {memberHistory:memberHistory} %}
         {% endfor %}
       </tbody>

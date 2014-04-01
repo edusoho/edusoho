@@ -34,13 +34,20 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#deadline',
             required: true,
-            rule: 'date'
+            rule: 'date',
+            failSilently:true
         });
 
         validator.addItem({
             element: '[name=levelId]',
             required: true,
             errormessageRequired: '请选择会员类型!'
+        });
+
+        validator.addItem({
+            element: '#boughtDuration',
+            required: true,
+            rule: 'number'
         });
 
         $("#deadline").datetimepicker({

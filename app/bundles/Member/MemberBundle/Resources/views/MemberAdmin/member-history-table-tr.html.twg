@@ -3,7 +3,7 @@
   {% if show_usernick != '-1' %}
     <td>
     {% if memberHistory %}
-       <a href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:memberHistory.userId}) }}">{{ memberHistory.userNickname }}</a>
+       <a href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:memberHistory.userId}) }}">{{ user.nickname }}</a>
   {% else %}
        <span class="text-muted">用户已删除</span>
   {% endif %}
@@ -41,7 +41,7 @@
   </td>
 
   <td>
- {{ memberHistory.boughtPrice }}
+ {{ memberHistory.boughtAmount }}
   </td>
 
 </tr>

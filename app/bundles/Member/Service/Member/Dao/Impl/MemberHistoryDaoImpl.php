@@ -49,7 +49,6 @@ class MemberHistoryDaoImpl extends BaseDao implements MemberHistoryDao
             ->from($this->table, 'member_history')
             ->andWhere('levelId = :level')
             ->andWhere('userId = :userId')
-            ->andWhere('userNickname =:nickname')
             ->andWhere('boughtType =:boughtType');
     }
 }

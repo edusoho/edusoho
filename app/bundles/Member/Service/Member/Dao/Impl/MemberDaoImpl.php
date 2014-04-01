@@ -71,7 +71,7 @@ class MemberDaoImpl extends BaseDao implements MemberDao
 
 	public function updateMember($id, $fields)
 	{
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getMember($id);
+        $this->getConnection()->update($this->table, $fields, array('userId' => $id));
+        return $this->getMemberByUserId($id);
 	}
 }

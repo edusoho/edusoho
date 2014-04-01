@@ -15,7 +15,6 @@ define(function(require, exports, module) {
             		return false;
             	}
 				$.post($form.attr('action'), $form.serialize(), function(html) {
-                    console.log(html);
 					$modal.modal('hide');
 					Notify.success('用户信息保存成功');
                     var $tr = $(html);
@@ -27,14 +26,14 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[id="deadline"]',
+            element: '#deadline',
             rule: 'date'
         });
 
         validator.addItem({
             element: '[name=levelId]',
             errormessageRequired: '请选择会员类型!'
-        })
+        });
 
         $("#deadline").datetimepicker({
             language: 'zh-CN',

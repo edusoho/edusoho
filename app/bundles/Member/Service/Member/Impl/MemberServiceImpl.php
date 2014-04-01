@@ -269,6 +269,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $memberData['levelId'] = $fields['levelId'];
         $memberData['deadline'] = strtotime($fields['deadline']);
+        $memberData['boughtUnit'] = $fields['boughtUnit'];
         $member = $this->getMemberDao()->updateMember($userId, $memberData);
 
         $historyData = $fields;
@@ -301,6 +302,13 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function searchMembersHistoriesCount($conditions)
     {
+        if($conditions['nickname']){
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            if(empty($user)){
+                throw $this->createNotFoundException('user not exists!');
+            }
+        }
+        $conditions['userId'] = $user['id'];
         return $this->getMemberHistoryDao()->searchMembersHistoriesCount($conditions);
     }
     
@@ -321,9 +329,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $user = $this->getUserService()->getUser($memberHistoyDate['userId']);
             $memberHistoyDate['nickname'] = $user['nickname'];
         }
-
         $historyData['userId'] = $user['id'];
-        $historyData['userNickname'] = $memberHistoyDate['nickname'];
         $historyData['deadline'] = strtotime($memberHistoyDate['deadline']);
         $historyData['boughtType'] = $memberHistoyDate['boughtType'];
         $historyData['boughtTime'] = $memberHistoyDate['createdTime'];

@@ -71,8 +71,17 @@ class MemberAdminController extends BaseController
         if($request->getMethod() == 'POST'){
             
             $formData = $request->request->all();
-            $member = $this->getMemberService()->createMember($formData);
-            $user = $this->getUserService()->getUser($member['userId']);
+
+            $user = $this->getUserService()->getUserByNickname($formData['nickname']);
+
+            $member = $this->getMemberService()->becomeMember(
+                $user['id'], 
+                $formData['levelId'], 
+                $formData['boughtDuration'], 
+                $formData['boughtUnit'], 
+                $orderId = 0
+            );
+
             $level = $this->getLevelService()->getLevel($member['levelId']);
              return $this->render('MemberBundle:MemberAdmin:member-table-tr.html.twig',array(
                 'member' => $member,
@@ -121,12 +130,13 @@ class MemberAdminController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+        $user = $this->getUserService()->getUser($memberHistories[0]['userId']);
         $levels = $this->makeMemberLevelOptions();
+
         return $this->render('MemberBundle:MemberAdmin:bought-history.html.twig',array(
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
-            'userNickname' => $memberHistories[0]['userNickname'],
+            'userNickname' => $user['nickname'],
             'show_usernick' => -1,
             'levels' => $levels
             ));
@@ -140,7 +150,6 @@ class MemberAdminController extends BaseController
         if(!empty($fields)){
             $conditions =$fields;
         }
-
         $paginator = new Paginator(
             $this->get('request'),
             $memberHistorysCount = $this->getMemberService()->searchMembersHistoriesCount($conditions),
@@ -153,6 +162,8 @@ class MemberAdminController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($memberHistories, 'userId'));
 
         $levels = $this->makeMemberLevelOptions();
 
@@ -161,7 +172,8 @@ class MemberAdminController extends BaseController
             'paginator' => $paginator,
             'menu' => 'member_history',
             'show_usernick' => 1,
-            'levels' => $levels
+            'levels' => $levels,
+            'users' => $users
             ));
     }
 
