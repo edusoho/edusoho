@@ -237,7 +237,9 @@ class MemberOrderController extends OrderController
                     $order['id']
                 );
             }
-        }, $this->generateUrl('vip'));
+
+            $this->generateUrl('vip');
+        });
     }
 
     public function payNotifyAction(Request $request, $name)

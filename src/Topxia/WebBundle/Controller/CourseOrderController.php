@@ -119,16 +119,20 @@ class CourseOrderController extends OrderController
 
     public function payNotifyAction(Request $request, $name)
     {
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        $response = $this->createPaymentResponse($name, $request->request->all());
+        $controller = $this;
+        return $this->doPayNotify($request, $name, function($order) use(&$controller) {
+            if ($order['targetType'] != 'course') {
+                throw \RuntimeException('非课程订单，加入课程失败。');
+            }
 
-        $payData = $response->getPayData();
-        try {
-            $order = $this->getOrderService()->payOrder($payData);
-            return new Response('success');
-        } catch (\Exception $e) {
-            throw $e;
-        }
+            $info = array(
+                'orderId' => $order['id'],
+                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            );
+            $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
+        });
     }
 
     public function refundAction(Request $request , $id)
