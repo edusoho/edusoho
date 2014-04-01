@@ -4,6 +4,8 @@ define(function(require, exports, module) {
     require('jquery.slides');
     require('jquery.slides-css');
 
+    require('wookmark');
+
     exports.run = function() {
 
     	$("#photo .list-item-user").mouseenter(function(){
@@ -56,6 +58,26 @@ define(function(require, exports, module) {
 			$(this).find(".desc").css({display:"none"});
 			
 		});
+
+
+        // $(document).ready(function() {
+
+        //     $("#grids li").wookmark({
+        //         container: $("#grids"),
+        //         offset: 0
+        //     });
+
+        // });
+
+        // $(document).ready(function() {
+
+        //     $("#teachers li").wookmark({
+        //         container: $("#teachers"),
+        //         offset: 0
+        //     });
+
+        // });
+       
 
 		
     	

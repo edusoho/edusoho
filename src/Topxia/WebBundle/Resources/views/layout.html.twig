@@ -49,9 +49,9 @@
 
 {% block body %}
 
-<header class="navbar navbar-inverse site-navbar navbar-fixed-top mz pz" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
-    <div class="container  plz prz"> 
-      <div class="navbar-header ptm">
+<header class="navbar navbar-inverse site-navbar navbar-fixed-top" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">   
+    <div class="container"> 
+        <div class="navbar-header ptm">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -61,13 +61,13 @@
           {% if  setting('site.logo') %}
               <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
           {% else %}
-            <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+              <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
           {% endif %}
         </div>
         
         <div class="navbar-right navbar-collapse collapse">
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
+          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
@@ -104,15 +104,16 @@
                 <li><a href="{{ path('login') }}">登录</a></li>
                 <li><a href="{{ path('register') }}">注册</a></li>
             {% endif %}
-          </ul>           
-      </div>    
+          </ul>
+
+        </div>    
     </div>     
 </header> 
 
 <div class="slide-osf"></div>
  
 <!-- container -->
-<div id="content-container" class="container plz prz">
+<div id="content-container" class="container">
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
       <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

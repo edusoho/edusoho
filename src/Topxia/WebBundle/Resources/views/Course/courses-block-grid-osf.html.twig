@@ -1,7 +1,7 @@
 {% set mode = mode|default('default') %}
-<ul class="page-grids pz">
+<ul class="page-grids pz" id="grids">
   {% for course in courses %}
-    <li class=" col-md-4 plz prz mz li-no">
+    <li class=" col-md-4 col-xs-6 plz prz mz li-no">
       <div class="card  ps-re">
         
         <a href="{{ path('course_show', {id:course.id}) }}" class="card-body">
