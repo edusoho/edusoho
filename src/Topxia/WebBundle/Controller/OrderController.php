@@ -19,7 +19,7 @@ class OrderController extends BaseController
         ));
     }
 
-    protected function doPayReturn(Request $request, $name, $successCallback = null, $successUrl = null)
+    protected function doPayReturn(Request $request, $name, $successCallback = null)
     {
         $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
@@ -28,7 +28,7 @@ class OrderController extends BaseController
         $order = $this->getOrderService()->payOrder($payData);
 
         if ($order['status'] == 'paid' and $successCallback) {
-            $successCallback($order);
+            $successUrl = $successCallback($order);
         }
 
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
@@ -105,6 +105,11 @@ class OrderController extends BaseController
         );
 
         return $options;
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
 }

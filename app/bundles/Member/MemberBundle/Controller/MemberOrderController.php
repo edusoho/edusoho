@@ -145,7 +145,7 @@ class MemberOrderController extends OrderController
         $order['targetId'] = $level['id'];
         $order['payment'] = 'alipay';
         $order['amount'] = $level[$orderData['unit'] . 'Price'] * $orderData['duration'];
-        $order['snPrefix'] = 'M';
+        $order['snPrefix'] = 'V';
         $order['data'] = $orderData;
 
         $payRequestParams = array(
