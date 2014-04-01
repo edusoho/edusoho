@@ -1239,7 +1239,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$deadline = 0;
 		}
 
-		$order = !empty($info['orderId']) ? $this->getOrderDao()->getOrder($info['orderId']) : array();
+		if (!empty($info['orderId'])) {
+			$order = $this->getOrderService()->getOrder($info['orderId']);
+			if (empty($order)) {
+				throw $this->createServiceException("订单(#{$info['orderId']})不存在，加入课程失败！");
+			}
+		} else {
+			$order = null;
+		}
 
 		$fields = array(
 			'courseId' => $courseId,
@@ -1684,6 +1691,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getUserService()
     {
     	return $this->createService('User.UserService');
+    }
+
+    private function getOrderService()
+    {
+    	return $this->createService('Order.OrderService');
     }
 
     private function getMemberService()

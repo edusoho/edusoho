@@ -18,6 +18,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrderBySn($sn);
     }
 
+    public function findOrdersByIds(array $ids)
+    {
+        $orders = $this->getOrderDao()->findOrdersByIds($ids);
+        return ArrayToolkit::index($orders, 'id');
+    }
+
     public function createOrder($order)
     {
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
