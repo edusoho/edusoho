@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         $(document).ready(function() {
 
             $("#last-list li").wookmark({
+                autoResize:true,
                 container: $("#last-list"),
                 offset: 0
 
