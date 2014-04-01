@@ -40,4 +40,9 @@ interface MemberService
     public function searchMembersHistoriesCount($conditions);
 
     public function searchMembersHistories(array $conditions, array $orderBy, $start, $limit);
+
+    /**
+     * 检查用户是否有某等级的权限
+     */
+    public function checkUserInMemberLevel($userId, $levelId);
 }

@@ -1222,7 +1222,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if ($member) {
-			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
+			throw $this->createServiceException("用户(#{$userId})已加入该课程！");
+		}
+
+		if (!empty($info['becomeUseMember'])) {
+			$levelChecked = $this->getMemberService()->checkUserInMemberLevel($user['id'], $course['memberLevelId']);
+			if ($levelChecked != 'ok') {
+				throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
+			}
+			$userMember = $this->getMemberService()->getMemberByUserId($user['id']);
 		}
 
 		if ($course['expiryDay'] > 0) {
@@ -1231,17 +1239,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$deadline = 0;
 		}
 
-		$order = $this->getOrderDao()->getOrder($info['orderId']);
+		$order = !empty($info['orderId']) ? $this->getOrderDao()->getOrder($info['orderId']) : array();
 
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
-			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+			'orderId' => empty($order) ? 0 : $order['id'],
 			'deadline' => $deadline,
+			'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
 			'role' => 'student',
-			'remark' => $order['note'],
+			'remark' => empty($order['note']) ? '' : $order['note'],
 			'createdTime' => time()
 		);
+
+
 
 		$member = $this->getMemberDao()->addMember($fields);
 
@@ -1253,12 +1264,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$fields = array(
 			'studentNum'=> $this->getCourseStudentCount($courseId),
-			'income' => $this->getOrderDao()->sumOrderPriceByCourseIdAndStatuses($courseId, array('paid', 'cancelled')),
 		);
+	    if ($order) {
+	    	$fields['income'] = $this->getOrderDao()->sumOrderPriceByCourseIdAndStatuses($courseId, array('paid', 'cancelled'));
+	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 
 		return $member;
-
 	}
 
 	private function getWelcomeMessageBody($user, $course)
@@ -1672,6 +1684,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getUserService()
     {
     	return $this->createService('User.UserService');
+    }
+
+    private function getMemberService()
+    {
+    	return $this->createService('Member:Member.MemberService');
     }
 
     private function getReviewService()

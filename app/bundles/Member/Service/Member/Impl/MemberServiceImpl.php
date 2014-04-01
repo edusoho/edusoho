@@ -309,6 +309,42 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberHistoryDao()->searchMembersHistories($conditions, $orderBy, $start, $limit);
     }
 
+    public function checkUserInMemberLevel($userId, $levelId)
+    {
+        if (empty($userId)) {
+            return 'not_login';
+        }
+
+        $member = $this->getMemberByUserId($userId);
+        if (empty($member)) {
+            return 'not_member';
+        }
+
+        if ($member['deadline'] < time()) {
+            return 'member_expired';
+        }
+
+        $memberLevel = $this->getLevelService()->getLevel($member['levelId']);
+        if (empty($memberLevel)) {
+            return 'level_not_exist';
+        }
+
+        if (empty($levelId)) {
+            return 'level_not_exist';
+        }
+
+        $level = $this->getLevelService()->getLevel($levelId);
+        if (empty($level)) {
+            return 'level_not_exist';
+        }
+
+        if ($memberLevel['seq'] < $level['seq']) {
+            return 'level_low';
+        }
+
+        return 'ok';
+    }
+
     private function createMemberHistory($memberHistoyDate)
     {
         if(empty($memberHistoyDate)){

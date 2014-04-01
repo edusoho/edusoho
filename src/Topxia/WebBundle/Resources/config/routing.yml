@@ -118,6 +118,11 @@ course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
 
+course_become_use_member:
+    pattern:  /course/{id}/become_use_member
+    defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
+    methods: [POST]
+
 course_buy:
     pattern:  /course/{id}/buy
     defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
