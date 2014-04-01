@@ -84,8 +84,7 @@ class MemberOrderController extends OrderController
             'member' => $member,
             'level' => $level,
             'prices' => $this->makeLevelPrices(array($level)),
-            'levels' => $this->makeLevelChoices($levels, $member['boughtUnit']),
-            'selectedLevel' => $levels[0]['id'],
+            'levels' => $levels
         ));
     }
 
@@ -164,6 +163,54 @@ class MemberOrderController extends OrderController
 
     }
 
+    public function upgradePayAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (empty($currentUser)) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $orderData = $request->request->all();
+        if (empty($orderData['level'])) {
+            return $this->createMessageResponse('error', '订单数据缺失，创建会员升级订单失败。');
+        }
+
+        $orderData['level'] = intval($orderData['level']);
+        $level = $this->getLevelService()->getLevel($orderData['level']);
+        if (empty($level)) {
+            return $this->createMessageResponse('error', '会员等级不存在，创建会员订单失败。');
+        }
+
+        if (empty($level['enabled'])) {
+            return $this->createMessageResponse('error', '会员类型已关闭，创建会员订单失败。');
+        }
+
+        $order = array();
+        $unitNames = array('month' => '个月', 'year' => '年');
+
+        $order['userId'] = $currentUser->id;
+        $order['title'] = "升级会员到 {$level['name']}";
+        $order['targetType'] = 'member';
+        $order['targetId'] = $level['id'];
+        $order['payment'] = 'alipay';
+        $order['amount'] = $this->getMemberService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
+        $order['snPrefix'] = 'M';
+        $order['data'] = array('type' => 'upgrade', 'level' => $level['id']);
+
+        $payRequestParams = array(
+            'returnUrl' => $this->generateUrl('member_pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $this->generateUrl('member_pay_notify', array('name' => $order['payment']), true),
+            'showUrl' => $this->generateUrl('member', array(), true),
+        );
+
+        $order = $this->getOrderService()->createOrder($order);
+
+        return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
+            'order' => $order,
+            'requestParams' => $payRequestParams,
+        ));
+    }
+
     public function payReturnAction(Request $request, $name)
     {
         $controller = $this;
@@ -181,6 +228,12 @@ class MemberOrderController extends OrderController
                     $order['userId'],
                     $order['data']['duration'], 
                     $order['data']['unit'], 
+                    $order['id']
+                );
+            } elseif ($order['data']['type'] == 'upgrade') {
+                $controller->getMemberService()->upgradeMember(
+                    $order['userId'],
+                    $order['data']['level'], 
                     $order['id']
                 );
             }
@@ -205,16 +258,11 @@ class MemberOrderController extends OrderController
         return $prices;
     }
 
-    private function makeLevelChoices($levels, $unit = null)
+    private function makeLevelChoices($levels)
     {
         $choices = array();
         foreach ($levels as $level) {
-            if (empty($unit)) {
-                $choices[$level['id']] = $level['name'];
-            } else {
-                $unitNames = array('month' => '元/月', 'year' => '元/年');
-                $choices[$level['id']] = $level['name'] . '(' . $level[$unit.'Price'] . $unitNames[$unit] . ')';
-            }
+            $choices[$level['id']] = $level['name'];
         }
         return $choices;
     }

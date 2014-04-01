@@ -26,7 +26,7 @@ interface MemberService
     /**
      * 升级会员
      */
-    public function upgradeMember($userId, $newLevelId);
+    public function upgradeMember($userId, $newLevelId, $orderId = 0);
 
     /**
      * 计算升级会员，所需要的金额

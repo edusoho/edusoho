@@ -26,6 +26,10 @@ member_upgrade_amount:
     pattern: /member/upgrade/amount
     defaults: { _controller: MemberBundle:MemberOrder:upgradeAmount }
 
+member_upgrade_pay:
+    pattern: /member/upgrade/pay
+    defaults: { _controller: MemberBundle:MemberOrder:upgradePay }
+
 member_pay:
     pattern: /member/pay
     defaults: { _controller: MemberBundle:MemberOrder:pay }

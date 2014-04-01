@@ -178,9 +178,55 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    public function upgradeMember($userId, $newLevelId)
+    public function upgradeMember($userId, $newLevelId, $orderId = 0)
     {
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，会员升级失败。');
+        }
 
+        $currentMember = $this->getMemberByUserId($user['id']);
+        if (empty($currentMember)) {
+            throw $this->createServiceException('用户不是会员，会员升级失败。');
+        }
+
+        $level = $this->getLevelService()->getLevel($newLevelId);
+        if (empty($level) or empty($level['enabled'])) {
+            throw $this->createServiceException('会员等级不存在或已关闭，会员升级失败。');
+        }
+
+        $orderId = intval($orderId);
+        if ($orderId > 0) {
+            $order = $this->getOrderService()->getOrder($orderId);
+            if (empty($order)) {
+                throw $this->createServiceException('会员升级订单不存在，会员升级失败。');
+            }
+        } else {
+            $order = array('id' => 0, 'amount' => 0);
+        }
+
+        $member = array();
+        $member['levelId'] = $level['id'];
+        $member['boughtType'] = 'upgrade';
+        $member['boughtTime'] = time();
+        $member['boughtAmount'] = $order['amount'];
+        $member['orderId'] = $order['id'];
+
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser->id != $currentMember['userId']) {
+            $member['operatorId'] = $currentUser->id;
+        } else {
+            $member['operatorId'] = 0;
+        }
+
+        $member = $this->getMemberDao()->updateMember($currentMember['id'], $member);
+
+        $history = $member;
+        unset($history['id']);
+
+        $this->getMemberHistoryDao()->addMemberHistory($history);
+
+        return $member;
     }
 
     public function calUpgradeMemberAmount($userId, $newLevelId)
@@ -190,6 +236,11 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户不是会员，无法计算升级金额");
         }
 
+        $preLevel = $this->getLevelService()->getLevel($member['levelId']);
+        if (empty($preLevel)) {
+            throw $this->createServiceException("原始会员等级不存在，无法计算升级金额");
+        }
+
         $level = $this->getLevelService()->getLevel($newLevelId);
         if (empty($level)) {
             throw $this->createServiceException("会员等级不存在，无法计算升级金额");
@@ -197,10 +248,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if ($member['boughtUnit'] == 'month') {
             $months = ($member['deadline'] - time()) / 86400 / 30;
-            $amount = $level['monthPrice'] * $months;
+            $amount = ($level['monthPrice'] - $preLevel['monthPrice']) * $months;
         } else {
             $years = ($member['deadline'] - time()) / 86400 / 365;
-            $amount = $level['yearPrice'] * $years;
+            $amount = ($level['yearPrice'] - $preLevel['yearPrice']) * $years;
         }
 
         return intval($amount * 100) / 100;
