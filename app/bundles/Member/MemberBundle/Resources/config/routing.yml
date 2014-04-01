@@ -1,5 +1,5 @@
-member:
-    pattern: /memberzone
+vip:
+    pattern: /vip/
     defaults: { _controller: MemberBundle:Member:index }
 
 member_course_explore:
