@@ -117,10 +117,10 @@ class DataDict
 			'year' => '年'
 		),
 		'boughtType' => array(
-			'new' => '首次购买',
+			'new' => '购买',
 			'renew' => '续费',
 			'upgrade' => '升级',
-			'edit' => '管理员设置',
+			'edit' => '管理员编辑',
 			'cancel' => '取消会员'
 		),
 		'userKeyWordType' => array(
