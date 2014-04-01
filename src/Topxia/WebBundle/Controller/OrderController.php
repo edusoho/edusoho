@@ -19,6 +19,20 @@ class OrderController extends BaseController
         ));
     }
 
+    public function couponCheckAction (Request $request, $type, $id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $code = $request->request->get('code');
+
+            //判断coupon是否合法，是否存在跟是否过期跟是否可用于当前课程
+            $course = $this->getCourseService()->getCourse($id);
+
+            $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $course['price']);
+            
+            return $this->createJsonResponse($couponInfo);
+        }
+    }
+
     protected function doPayReturn(Request $request, $name, $successCallback = null)
     {
         $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
@@ -110,6 +124,16 @@ class OrderController extends BaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }

@@ -128,6 +128,70 @@ class CouponServiceImpl extends BaseService implements CouponService
         return empty($prefix) ? true : false;
     }
 
+    public function checkCouponUseable($code, $targetType, $targetId, $amount)
+    {
+        $coupon = $this->getCouponByCode($code);
+
+        if (empty($coupon)) {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠码不存在'
+            );            
+        }
+
+        if ($coupon['status'] != 'unused') {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠码已经被使用'
+            );
+        }
+
+        if ($coupon['deadline'] < time()) {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠码已过期'
+            );
+        }
+
+        if ($targetType != $coupon['targetType']) {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠码不可用'
+            );
+        }
+
+        if ($targetId != $coupon['targetId'] && $coupon['targetId'] != 0) {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠码不可用'
+            );
+        }
+
+        if ($coupon['type'] == 'minus') {
+            $decreaseAmount = $coupon['rate'];
+            $afterAmount = $amount - $coupon['rate'];
+        }
+
+        if ($coupon['type'] == 'discount') {
+            $decreaseAmount = $amount * (10 - $coupon['rate']) / 10;
+            $afterAmount = $amount * $coupon['rate'] / 10;
+        }
+
+        $afterAmount = $afterAmount < 0 ? 0.00 : $afterAmount;
+        $decreaseAmount = $afterAmount < 0 ? $amount : $decreaseAmount;
+
+        return array(
+            'useable' => 'yes',
+            'decreaseAmount' => $decreaseAmount,
+            'afterAmount' => $afterAmount
+        );
+    }
+
+    public function getCouponByCode($code)
+    {
+        return $this->getCouponDao()->getCouponByCode($code);
+    }
+
     private function GenerateRandomCode ($length, $prefix)
     {
         $randomCode = "";
