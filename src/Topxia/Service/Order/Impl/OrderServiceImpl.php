@@ -186,7 +186,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         // 订单金额为０时，不能退款
-        if (intval($order['price'] * 100) == 0) {
+        if (intval($order['amount'] * 100) == 0) {
             $expectedAmount = 0;
         }
 
@@ -213,7 +213,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         $refund = $this->getOrderRefundDao()->addRefund(array(
             'orderId' => $order['id'],
             'userId' => $order['userId'],
-            'courseId' => $order['courseId'],
+            'targetType' => $order['targetType'],
+            'targetId' => $order['targetId'],
             'status' => $status,
             'expectedAmount' => $expectedAmount,
             'reasonType' => empty($reason['type']) ? 'other' : $reason['type'],
@@ -228,10 +229,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         ));
 
         if ($refund['status'] == 'success') {
-            $this->getCourseService()->removeStudent($order['courseId'], $order['userId']);
             $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
         } else {
-            $this->getCourseService()->lockStudent($order['courseId'], $order['userId']);
             $this->_createLog($order['id'], 'refund_apply', '订单申请退款' . (is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
         }
 
@@ -346,10 +345,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             'status' => 'paid',
         ));
 
-        if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
-            $this->getCourseService()->unlockStudent($order['courseId'], $order['userId']);
-        }
-
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 
@@ -435,9 +430,24 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $conditions;
     }
 
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
+    }
+
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    private function getOrderRefundDao()
+    {
+        return $this->createDao('Order.OrderRefundDao');
     }
 
     private function getOrderDao()

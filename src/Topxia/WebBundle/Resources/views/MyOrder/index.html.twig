@@ -16,13 +16,19 @@
       {% for order in orders %}
         <tr>
           <td>
-            <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank">{{ order.title }}</a>
+            {% if order.targetType == 'course' %}
+              <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+            {% elseif order.targetType == 'vip' %}
+              <a href="{{ path('vip_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+            {% else %}
+              {{ order.title }}
+            {% endif %}
             <div class="text-sm text-muted">
               订单号：{{ order.sn }}
             </div>
           </td>
           <td>{{ order.createdTime|date('Y-n-d H:i') }}</td>
-          <td>{{ order.price }}元</td>
+          <td>{{ order.amount }}元</td>
           <td>
             {{ dict_text('orderStatus:html', order.status) }}
             <div class="actions">

@@ -164,6 +164,7 @@ class CourseOrderController extends OrderController
 
             $refund = $this->getOrderService()->applyRefundOrder($member['orderId'], $amount, $reason);
             if ($refund['status'] == 'created') {
+                $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
                 $message = $this->setting('refund.applyNotification', '');
                 if ($message) {
                     $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
@@ -173,6 +174,8 @@ class CourseOrderController extends OrderController
                     $message = StringToolkit::template($message, $variables);
                     $this->getNotificationService()->notify($refund['userId'], 'default', $message);
                 }
+            } elseif ($refund['status'] == 'success') {
+                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
             }
 
             return $this->createJsonResponse($refund);
@@ -203,7 +206,7 @@ class CourseOrderController extends OrderController
             throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能取消退款。');
         }
 
-        $this->getOrderService()->cancelRefundOrder($member['orderId']);
+        $this->getCourseOrderService()->cancelRefundOrder($member['orderId']);
 
         return $this->createJsonResponse(true);
 
@@ -212,6 +215,11 @@ class CourseOrderController extends OrderController
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    public function getCourseOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.OrderService');
     }
 
     protected function getSettingService()
