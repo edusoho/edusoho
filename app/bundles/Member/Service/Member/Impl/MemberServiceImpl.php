@@ -304,11 +304,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $new_conditions = array();
         if(array_key_exists('nickname',$conditions)){
+
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             if(empty($user)){
-                 $new_conditions['userId'] = "";
+                 $new_conditions['userId'] = -1;
+            }else{
+                $new_conditions['userId'] = $user['id'];
             }
-            $new_conditions['userId'] = $user['id'];
         }
         if(array_key_exists('boughtType', $conditions)){
             $new_conditions['boughtType'] = $conditions['boughtType'];
@@ -320,12 +322,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $new_conditions = array();
          if(array_key_exists('nickname',$conditions)){
+            
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             if(empty($user)){
-                 $new_conditions['userId'] = "";
+                 $new_conditions['userId'] = -1;
+            }else{
+                 $new_conditions['userId'] = $user['id'];
             }
-
-            $new_conditions['userId'] = $user['id'];
         }
         if(array_key_exists('boughtType', $conditions)){
             $new_conditions['boughtType'] = $conditions['boughtType'];
