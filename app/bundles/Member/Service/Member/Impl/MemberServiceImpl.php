@@ -302,19 +302,38 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function searchMembersHistoriesCount($conditions)
     {
-        if($conditions['nickname']){
+        $new_conditions = array();
+        if(array_key_exists('nickname',$conditions)){
+
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             if(empty($user)){
-                throw $this->createNotFoundException('user not exists!');
+                 $new_conditions['userId'] = -1;
+            }else{
+                $new_conditions['userId'] = $user['id'];
             }
         }
-        $conditions['userId'] = $user['id'];
-        return $this->getMemberHistoryDao()->searchMembersHistoriesCount($conditions);
+        if(array_key_exists('boughtType', $conditions)){
+            $new_conditions['boughtType'] = $conditions['boughtType'];
+        }
+        return $this->getMemberHistoryDao()->searchMembersHistoriesCount($new_conditions);
     }
     
     public function searchMembersHistories(array $conditions, array $orderBy, $start, $limit)
     {
-        return $this->getMemberHistoryDao()->searchMembersHistories($conditions, $orderBy, $start, $limit);
+        $new_conditions = array();
+         if(array_key_exists('nickname',$conditions)){
+            
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            if(empty($user)){
+                 $new_conditions['userId'] = -1;
+            }else{
+                 $new_conditions['userId'] = $user['id'];
+            }
+        }
+        if(array_key_exists('boughtType', $conditions)){
+            $new_conditions['boughtType'] = $conditions['boughtType'];
+        }
+        return $this->getMemberHistoryDao()->searchMembersHistories($new_conditions, $orderBy, $start, $limit);
     }
 
     public function checkUserInMemberLevel($userId, $levelId)
