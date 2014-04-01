@@ -85,14 +85,11 @@ class DefaultController extends BaseController
     public function latestPaidOrdersBlockAction(Request $request)
     {
         $orders = $this->getOrderService()->searchOrders(array('status'=>'paid'), 'latest', 0 , 5);
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($orders, 'courseId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
         
         return $this->render('TopxiaAdminBundle:Default:latest-paid-orders-block.html.twig', array(
             'orders'=>$orders,
             'users'=>$users,
-            'courses'=>$courses
         ));
     }
 
@@ -122,7 +119,7 @@ class DefaultController extends BaseController
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
     protected function getNotificationService()
