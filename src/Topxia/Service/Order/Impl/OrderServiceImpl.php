@@ -280,10 +280,6 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'status' => 'refunded',
             ));
 
-            if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
-                $this->getCourseService()->removeStudent($order['courseId'], $order['userId']);
-            }
-
             $this->_createLog($order['id'], 'refund_success', "退款申请(ID:{$refund['id']})已审核通过：{$note}");
 
         } else {
@@ -296,15 +292,12 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'status' => 'paid',
             ));
 
-            if ($this->getCourseService()->isCourseStudent($order['courseId'], $order['userId'])) {
-                $this->getCourseService()->unlockStudent($order['courseId'], $order['userId']);
-            }
-
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
 
         $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
 
+        return $pass;
     }
 
     public function cancelRefundOrder($id)
