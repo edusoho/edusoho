@@ -18,7 +18,7 @@ class MemberOrderController extends OrderController
 
         $member = $this->getMemberService()->getMemberByUserId($currentUser->id);
         if ($member) {
-            return $this->redirect($this->generateUrl('member_renew'));
+            return $this->redirect($this->generateUrl('vip_renew'));
         }
 
         $levels = $this->getLevelService()->findEnabledLevels();
@@ -43,7 +43,7 @@ class MemberOrderController extends OrderController
 
         $member = $this->getMemberService()->getMemberByUserId($currentUser->id);
         if (empty($member)) {
-            return $this->redirect($this->generateUrl('member_buy'));
+            return $this->redirect($this->generateUrl('vip_buy'));
         }
 
         $level = $this->getLevelService()->getLevel($member['levelId']);
@@ -67,7 +67,7 @@ class MemberOrderController extends OrderController
 
         $member = $this->getMemberService()->getMemberByUserId($currentUser->id);
         if (empty($member)) {
-            return $this->redirect($this->generateUrl('member_buy'));
+            return $this->redirect($this->generateUrl('vip_buy'));
         }
 
         $level = $this->getLevelService()->getLevel($member['levelId']);
@@ -149,9 +149,9 @@ class MemberOrderController extends OrderController
         $order['data'] = $orderData;
 
         $payRequestParams = array(
-            'returnUrl' => $this->generateUrl('member_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('member_pay_notify', array('name' => $order['payment']), true),
-            'showUrl' => $this->generateUrl('member', array(), true),
+            'returnUrl' => $this->generateUrl('vip_pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $this->generateUrl('vip_pay_notify', array('name' => $order['payment']), true),
+            'showUrl' => $this->generateUrl('vip', array(), true),
         );
 
         $order = $this->getOrderService()->createOrder($order);
@@ -198,9 +198,9 @@ class MemberOrderController extends OrderController
         $order['data'] = array('type' => 'upgrade', 'level' => $level['id']);
 
         $payRequestParams = array(
-            'returnUrl' => $this->generateUrl('member_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('member_pay_notify', array('name' => $order['payment']), true),
-            'showUrl' => $this->generateUrl('member', array(), true),
+            'returnUrl' => $this->generateUrl('vip_pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $this->generateUrl('vip_pay_notify', array('name' => $order['payment']), true),
+            'showUrl' => $this->generateUrl('vip', array(), true),
         );
 
         $order = $this->getOrderService()->createOrder($order);
@@ -237,7 +237,7 @@ class MemberOrderController extends OrderController
                     $order['id']
                 );
             }
-        }, null);
+        }, $this->generateUrl('vip'));
     }
 
     public function payNotifyAction(Request $request, $name)

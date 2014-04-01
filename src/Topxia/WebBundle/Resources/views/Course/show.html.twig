@@ -94,7 +94,7 @@
               {% if checkMemberLevelResult == 'not_login' %}
                 <a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
               {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
-                <a href="{{ path('member_buy') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
+                <a href="{{ path('vip_buy') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
               {% elseif checkMemberLevelResult == 'level_low' %}
                 <a href="{{ path('member_upgrade', {level:courseMemberLevel.id}) }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>
               {% elseif checkMemberLevelResult == 'ok' %}

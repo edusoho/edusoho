@@ -2,42 +2,42 @@ vip:
     pattern: /vip/
     defaults: { _controller: MemberBundle:Member:index }
 
-member_course_explore:
+vip_course_explore:
     pattern: /memberzone/level/{levelId}/course
     defaults: { _controller: MemberBundle:Member:course, levelId: 0 }
 
-member_history:
-    pattern: /memberzone/history
+vip_history:
+    pattern: /vip/history
     defaults: { _controller: MemberBundle:Member:history }
 
-member_buy:
-    pattern: /member/buy
+vip_buy:
+    pattern: /vip/buy
     defaults: { _controller: MemberBundle:MemberOrder:buy }
 
-member_renew:
-    pattern: /member/renew
+vip_renew:
+    pattern: /vip/renew
     defaults: { _controller: MemberBundle:MemberOrder:renew }
 
-member_upgrade:
-    pattern: /member/upgrade
+vip_upgrade:
+    pattern: /vip/upgrade
     defaults: { _controller: MemberBundle:MemberOrder:upgrade }
 
-member_upgrade_amount:
-    pattern: /member/upgrade/amount
+vip_upgrade_amount:
+    pattern: /vip/upgrade/amount
     defaults: { _controller: MemberBundle:MemberOrder:upgradeAmount }
 
-member_upgrade_pay:
-    pattern: /member/upgrade/pay
+vip_upgrade_pay:
+    pattern: /vip/upgrade/pay
     defaults: { _controller: MemberBundle:MemberOrder:upgradePay }
 
-member_pay:
-    pattern: /member/pay
+vip_pay:
+    pattern: /vip/pay
     defaults: { _controller: MemberBundle:MemberOrder:pay }
 
-member_pay_return:
-    pattern: /member/pay_return/{name}
+vip_pay_return:
+    pattern: /vip/pay_return/{name}
     defaults: { _controller: MemberBundle:MemberOrder:payReturn }
 
-member_pay_notify:
-    pattern: /member/pay_notify/{name}
+vip_pay_notify:
+    pattern: /vip/pay_notify/{name}
     defaults: { _controller: MemberBundle:MemberOrder:payNotify }

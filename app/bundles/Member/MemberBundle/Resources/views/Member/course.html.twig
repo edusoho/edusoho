@@ -20,10 +20,10 @@
     <div class="row row-3-9">
       <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
-          <li {% if not level.id %}class="active"{% endif %} ><a href="{{ path('member_course_explore') }}">全部会员课程</a></li>
+          <li {% if not level.id %}class="active"{% endif %} ><a href="{{ path('vip_course_explore') }}">全部会员课程</a></li>
           {% for lev in levels %}
             <li {% if level.id == lev.id %}class="active"{% endif %}>
-              <a href="{{ path('member_course_explore', { levelId:lev.id }) }}">
+              <a href="{{ path('vip_course_explore', { levelId:lev.id }) }}">
               {{ lev.name }}课程</a>
             </li>
           {% endfor %}
@@ -32,9 +32,9 @@
 
       <div class="col-md-9">
         <div class="btn-group btn-group-sm">
-          <a href="{{ path('member_course_explore', { levelId:level.id|default(0), sort:'latest'} ) }}" 
+          <a href="{{ path('vip_course_explore', { levelId:level.id|default(0), sort:'latest'} ) }}" 
           class="btn btn-default {% if sort == 'latest' %}active{% endif %}">最新</a>        
-          <a href="{{ path('member_course_explore', { levelId:level.id|default(0), sort:'popular'} ) }}" 
+          <a href="{{ path('vip_course_explore', { levelId:level.id|default(0), sort:'popular'} ) }}" 
           class="btn btn-default {% if sort == 'popular' %}active{% endif %}">热门</a> 
         </div>
 
