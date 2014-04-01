@@ -67,18 +67,19 @@ class MemberController extends BaseController
 
         if ($memberZone['courseLimit'] == 1) {
              $conditions = array(
-            'status' => 'published',
-            'memberLevelIds' => array($level['id'])
+                'status' => 'published',
+                'memberLevelIds' => array($level['id'])
             );
         } else {
             $conditions = array(
-            'status' => 'published',
-            'memberLevelIds' => $memberlevelIds
+                'status' => 'published',
+                'memberLevelIds' => $memberlevelIds
             );
         }
         
-        if ($conditions['memberLevelIds'][0] == null) {
-            $conditions['memberLevelIds'] = null;
+        if ($conditions['memberLevelIds'][0] == null OR $conditions['memberLevelIds'] == null) {
+            unset($conditions['memberLevelIds']);
+            $conditions['memberLevelIdGreaterThan'] = 1;
         }
 
         $paginator = new Paginator(
@@ -86,6 +87,7 @@ class MemberController extends BaseController
             $this->getCourseService()->searchCourseCount($conditions)
             , 9
         );
+
         $courses = $this->getCourseService()->searchCourses(
             $conditions, $sort,
             $paginator->getOffsetCount(),
