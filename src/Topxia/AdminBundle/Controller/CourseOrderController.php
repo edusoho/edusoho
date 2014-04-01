@@ -116,6 +116,16 @@ class CourseOrderController extends BaseController
             $pass = $data['result'] == 'pass' ? true : false;
             $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
 
+            if ($pass) {
+                if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                    $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+                }
+            } else {
+                if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                    $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
+                }
+            }
+
             $this->sendAuditRefundNotification($order, $pass, $data['amount'], $data['note']);
 
             return $this->createJsonResponse(true);
@@ -129,7 +139,7 @@ class CourseOrderController extends BaseController
 
     private function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $course = $this->getCourseService()->getCourse($order['courseId']);
+        $course = $this->getCourseService()->getCourse($order['targetId']);
         if (empty($course)) {
             return false;
         }
