@@ -329,6 +329,10 @@ class VipServiceImpl extends BaseService implements VipService
 
     public function checkUserInMemberLevel($userId, $levelId)
     {
+        $setting = $this->getSettingService()->get('vip');
+        if (empty($setting['enabled'])) {
+            return 'vip_closed';
+        }
         if (empty($userId)) {
             return 'not_login';
         }

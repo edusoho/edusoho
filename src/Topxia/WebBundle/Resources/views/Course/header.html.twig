@@ -106,13 +106,15 @@
       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {% if vipChecked == 'not_member' %}
-          您已经不是会员，不能观看此课程！请重新开通会员，或购买课程！
+          您已经不是会员，不能学习此课程！请重新开通会员，或购买课程！
         {% elseif vipChecked == 'member_expired' %}
-          您的会员已过期，不能观看此课程，请先续费。
+          您的会员已过期，不能学习此课程，请先续费。
         {% elseif vipChecked == 'level_not_exist' %}
-          会员等级已删除，不能观看此课程。
+          会员等级已删除，不能学习此课程。
         {% elseif vipChecked == 'level_low' %}
-          会员等级不够，不能观看此课程。
+          会员等级不够，不能学习此课程。
+        {% elseif vipChecked == 'vip_closed' %}
+          会员专区已关闭，您不能继续学课程。
         {% endif %}
 
       </div>
