@@ -8,15 +8,11 @@
 
     <div class="col-md-9">
 
-      {% set memberBlocks = data('Blocks',{'codes':['member_banner'] }) %}
-      {% if memberBlocks.member_banner %}
-        <div id="member-carousel" class="carousel slide mbl hidden-xs" data-ride="carousel">
-          <ol class="carousel-indicators">
-              <li data-target="#member-carousel" data-slide-to="0" class="active"></li>
-              <li data-target="#member-carousel" data-slide-to="1" class=""></li>
-              <li data-target="#member-carousel" data-slide-to="2" class=""></li>
-          </ol>
-          <div class="carousel-inner">{{ memberBlocks.member_banner|raw }}</div>
+      {% set blocks = data('Blocks',{'codes':['vip_banner'] }) %}
+      {% if blocks.vip_banner %}
+        <div class="homepage-feature homepage-feature-slides mbl">
+          <div class="cycle-pager"></div>
+          {{ blocks.vip_banner|raw }}
         </div>
       {% endif %}
 
