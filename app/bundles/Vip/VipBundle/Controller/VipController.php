@@ -10,8 +10,9 @@ class VipController extends BaseController
 {
     public function indexAction(Request $request)
     {	  
-
-        $vipSetting = $this->getSettingService()->get('memberZone', array());
+        if (!$this->setting('vip.enabled')) {
+            return $this->createMessageResponse('info', '会员专区已关闭');
+        }
 
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
@@ -35,7 +36,6 @@ class VipController extends BaseController
             'latestMembers' => $latestMembers,
             'members'=> $members,
             'userVip'=> $userVip,
-            'vipSetting'=> $vipSetting,
             'deadlineAlertCookie' => $deadlineAlertCookie,
             'nowTime' => time(),
         ));
@@ -43,7 +43,9 @@ class VipController extends BaseController
 
     public function courseAction(Request $request ,$levelId)
     {   
-        $vipSetting = $this->getSettingService()->get('memberZone', array());
+        if (!$this->setting('vip.enabled')) {
+            return $this->createMessageResponse('info', '会员专区已关闭');
+        }
 
         if (!empty($levelId)) {
             if (ctype_digit((string) $levelId)) {
@@ -61,23 +63,13 @@ class VipController extends BaseController
             $memberlevels = $this->getLevelService()->findLevelsBySeq($level['seq'], 0, 100);
             $memberlevelIds = ArrayToolkit::column($memberlevels,'id');
         }
+        $conditions = array(
+            'status' => 'published',
+            'memberLevelIds' => $memberlevelIds
+        );
 
         $sort = $request->query->get('sort', 'latest');
 
-        $vipSetting = $this->getSettingService()->get('memberZone', array());
-
-        if ($vipSetting['courseLimit'] == 1) {
-             $conditions = array(
-                'status' => 'published',
-                'memberLevelIds' => array($level['id'])
-            );
-        } else {
-            $conditions = array(
-                'status' => 'published',
-                'memberLevelIds' => $memberlevelIds
-            );
-        }
-        
         if ($conditions['memberLevelIds'][0] == null OR $conditions['memberLevelIds'] == null) {
             unset($conditions['memberLevelIds']);
             $conditions['memberLevelIdGreaterThan'] = 1;
@@ -103,13 +95,14 @@ class VipController extends BaseController
             'paginator' => $paginator,
             'level' => $level,
             'sort' => $sort,
-            'memberZone' => $vipSetting
         ));
     }
 
     public function historyAction(Request $request)
-    {   
-        $vipSetting = $this->getSettingService()->get('memberZone', array());
+    {
+        if (!$this->setting('vip.enabled')) {
+            return $this->createMessageResponse('info', '会员专区已关闭');
+        }
 
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
@@ -134,10 +127,10 @@ class VipController extends BaseController
             'levels' => $levels,
             'latestMembers' => $latestMembers,
             'members' => $members,
-            'member' => $member,
+            'userVip' => $member,
+            'nowTime' => time(),
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
-            'memberZone' => $vipSetting,
             'deadlineAlertCookie' => $deadlineAlertCookie
          ));
     }

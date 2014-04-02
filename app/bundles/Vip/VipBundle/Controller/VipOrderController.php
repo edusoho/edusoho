@@ -11,6 +11,10 @@ class VipOrderController extends OrderController
 
     public function buyAction(Request $request)
     {
+        if (!$this->setting('vip.enabled')) {
+            return $this->createMessageResponse('info', '会员专区已关闭');
+        }
+
         $currentUser = $this->getCurrentUser();
         if (!$currentUser->isLogin()) {
             return $this->redirect($this->generateUrl('login'));
@@ -36,6 +40,10 @@ class VipOrderController extends OrderController
 
     public function renewAction(Request $request)
     {
+        if (!$this->setting('vip.enabled')) {
+            return $this->createMessageResponse('info', '会员专区已关闭');
+        }
+
         $currentUser = $this->getCurrentUser();
         if (!$currentUser->isLogin()) {
             return $this->redirect($this->generateUrl('login'));
@@ -61,6 +69,10 @@ class VipOrderController extends OrderController
 
     public function upgradeAction(Request $request)
     {
+        if (!$this->setting('vip.enabled')) {
+            return $this->createMessageResponse('info', '会员专区已关闭');
+        }
+        
         $currentUser = $this->getCurrentUser();
         if (!$currentUser->isLogin()) {
             return $this->redirect($this->generateUrl('login'));
