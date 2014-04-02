@@ -1,6 +1,6 @@
 {% extends 'VipBundle:VipAdmin:layout.html.twig' %}
 
-{% block title %}会员专区设置 - {{ parent() }}{% endblock %}
+{% block title %}会员类型设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'memberlevel' %}
 {% set script_controller = 'vipbundle/controller/vipleveladmin/list' %}
@@ -11,7 +11,7 @@
   {{ web_macro.flash_messages() }}
   <div class="page-header clearfix">
     <a class="btn btn-info btn-sm pull-right" id="add-navigation-btn" href="{{path('admin_vip_level_create')}}">添加会员类型</a>
-    <h1 class="pull-left">会员专区设置</h1>
+    <h1 class="pull-left">会员类型设置</h1>
   </div>
   
   <table id="memberlevel-table" class="table table-striped table-hover" data-search-form="#user-search-form">
@@ -35,7 +35,7 @@
     </tbody>
   </table>
   <div class="alert alert-info">
-    注：会员可购买升级，升级的顺序是就上面列表中由下往上的顺序，请注意价格设置
+    注：会员可购买升级，升级的顺序是就上面列表中由上往下的顺序，请注意价格设置。
   </div>
   <div>
       {{ web_macro.paginator(paginator) }}
