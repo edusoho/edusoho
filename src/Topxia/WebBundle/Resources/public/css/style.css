@@ -73,7 +73,6 @@ ul li,ol li{list-style-type: none;}
 
 /*标题*/
 .kytitle{
-	
 	padding: 0 10px;
 	overflow: hidden;
 	position: relative;
@@ -86,8 +85,7 @@ ul li,ol li{list-style-type: none;}
 	float: left;
 	margin: 10px 0;
 }
-.kytitle a{
-	
+.kytitle a{	
 	float: right;
 	color: #999;
 	font-size: 13px;
