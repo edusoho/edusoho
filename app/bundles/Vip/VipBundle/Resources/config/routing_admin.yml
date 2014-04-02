@@ -6,6 +6,10 @@ admin_vip_order:
     pattern: /vip/order
     defaults: { _controller: VipBundle:VipAdmin:order }
 
+admin_vip_setting:
+    pattern: /vip/setting
+    defaults: { _controller: VipBundle:VipAdmin:setting }
+
 admin_vip_cancel:
     pattern: /vip/user/{userId}/cancel
     defaults: { _controller: VipBundle:VipAdmin:cancel }
@@ -70,8 +74,4 @@ admin_vip_level_on:
 admin_vip_level_off:
     pattern: /vip/level/{id}/off
     defaults: { _controller: VipBundle:VipLevelAdmin:off }
-
-admin_level_setting:
-    pattern: /vip/level/setting
-    defaults: { _controller: VipBundle:VipLevelAdmin:zone }
 

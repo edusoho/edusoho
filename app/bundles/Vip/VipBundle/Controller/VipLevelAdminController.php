@@ -123,30 +123,6 @@ class VipLevelAdminController extends BaseController
 		return $this->createJsonResponse(true);
     }
 
-    public function zoneAction(Request $request)
-    {
-        $memberZone = $this->getSettingService()->get('memberZone', array());
-
-        $default = array(
-            'enabled'=> 0,
-            'upgradeLimit' => 30,
-            'courseLimit' => 0,
-        );
-
-        $memberZone = array_merge($default, $memberZone);
-
-        if ($request->getMethod() == 'POST') {
-            $memberZone = $request->request->all();
-            $this->getSettingService()->set('memberZone', $memberZone);
-            $this->getLogService()->info('memberZone', 'update_memberZone', "更新会员专区设置", $memberZone);
-            $this->setFlashMessage('success','会员专区设置已保存！');
-        }
-
-    	return $this->render('VipBundle:VipLevelAdmin:zone.html.twig', array(
-    		'memberZone' => $memberZone
-    	));
-    }
-
 	private function getLevel($id)
 	{
 		$level = $this->getLevelService()->getLevel($id);

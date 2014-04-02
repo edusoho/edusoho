@@ -2,7 +2,7 @@
 
 {% block title %}会员专区设置 - {{ parent() }}{% endblock %}
 
-{% set menu = 'memberzone' %}
+{% set menu = 'setting' %}
 
 {% block main %}
 
@@ -18,7 +18,7 @@
       <label >开启开关</label>
     </div>
     <div class="controls col-md-7 radios">
-      {{ radios('enabled', {1:'开启', 0:'关闭'}, memberZone.enabled|default(0)) }}
+      {{ radios('enabled', {1:'开启', 0:'关闭'}, vipSetting.enabled|default(0)) }}
     </div>
   </div>
 
@@ -28,7 +28,7 @@
       <label for="upgradeLimit">会员升级限制</label>
     </div>
     <div class="controls col-md-5">
-      过期日期前的 <input type="text" id="upgradeLimit" name="upgradeLimit" required="required" class="form-control width-input width-input-mini" value="{{ memberZone.upgradeLimit|default(30) }}" data-widget-cid="widget-3"> 天内无法升级，只能先续费再升级
+      过期日期前的 <input type="text" id="upgradeLimit" name="upgradeLimit" required="required" class="form-control width-input width-input-mini" value="{{ vipSetting.upgradeLimit|default(30) }}" data-widget-cid="widget-3"> 天内无法升级，只能先续费再升级
     </div>
   </div>
 
@@ -37,7 +37,7 @@
       <label for="courseLimit">课程适用范围</label>
     </div>
     <div class="controls col-md-7 radios">
-      {{ radios('courseLimit', {1:'只服务于某一等级会员', 0:'可设置为某一等级及以上等级的会员都适用'}, memberZone.courseLimit|default(0)) }}
+      {{ radios('courseLimit', {1:'只服务于某一等级会员', 0:'可设置为某一等级及以上等级的会员都适用'}, vipSetting.courseLimit|default(0)) }}
     </div>
   </div>
 

@@ -228,6 +228,31 @@ class VipAdminController extends BaseController
         ));
     }
 
+    public function settingAction(Request $request)
+    {
+        $vipSetting = $this->getSettingService()->get('vip', array());
+
+        $default = array(
+            'enabled'=> 0,
+            'upgradeLimit' => 30,
+            'courseLimit' => 0,
+        );
+
+        $vipSetting = array_merge($default, $vipSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $vipSetting = $request->request->all();
+            $this->getSettingService()->set('vip', $vipSetting);
+            $this->getLogService()->info('vip', 'update_memberZone', "更新会员专区设置", $vipSetting);
+            $this->setFlashMessage('success','会员专区设置已保存！');
+        }
+
+        return $this->render('VipBundle:VipAdmin:setting.html.twig', array(
+            'vipSetting' => $vipSetting
+        ));
+    }
+
+
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
@@ -236,6 +261,11 @@ class VipAdminController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function makeMemberLevelOptions($operate_type=array())

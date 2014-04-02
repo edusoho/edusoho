@@ -11,7 +11,7 @@ class VipController extends BaseController
     public function indexAction(Request $request)
     {	  
 
-        $memberZone = $this->getSettingService()->get('memberZone', array());
+        $vipSetting = $this->getSettingService()->get('memberZone', array());
 
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
@@ -35,14 +35,14 @@ class VipController extends BaseController
             'latestMembers' => $latestMembers,
             'members'=> $members,
             'member'=> $member,
-            'memberZone'=> $memberZone,
+            'memberZone'=> $vipSetting,
             'deadlineAlertCookie' => $deadlineAlertCookie
         ));
     }
 
     public function courseAction(Request $request ,$levelId)
     {   
-        $memberZone = $this->getSettingService()->get('memberZone', array());
+        $vipSetting = $this->getSettingService()->get('memberZone', array());
 
         if (!empty($levelId)) {
             if (ctype_digit((string) $levelId)) {
@@ -63,9 +63,9 @@ class VipController extends BaseController
 
         $sort = $request->query->get('sort', 'latest');
 
-        $memberZone = $this->getSettingService()->get('memberZone', array());
+        $vipSetting = $this->getSettingService()->get('memberZone', array());
 
-        if ($memberZone['courseLimit'] == 1) {
+        if ($vipSetting['courseLimit'] == 1) {
              $conditions = array(
                 'status' => 'published',
                 'memberLevelIds' => array($level['id'])
@@ -102,13 +102,13 @@ class VipController extends BaseController
             'paginator' => $paginator,
             'level' => $level,
             'sort' => $sort,
-            'memberZone' => $memberZone
+            'memberZone' => $vipSetting
         ));
     }
 
     public function historyAction(Request $request)
     {   
-        $memberZone = $this->getSettingService()->get('memberZone', array());
+        $vipSetting = $this->getSettingService()->get('memberZone', array());
 
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
@@ -136,7 +136,7 @@ class VipController extends BaseController
             'member' => $member,
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
-            'memberZone' => $memberZone,
+            'memberZone' => $vipSetting,
             'deadlineAlertCookie' => $deadlineAlertCookie
          ));
     }
