@@ -51,7 +51,7 @@ class VipLevelAdminController extends BaseController
 			if($memberlevel){
 				$this->setFlashMessage('success', '会员类型已保存！');
 			}
-			return $this->redirect($this->generateUrl('admin_user_level'));
+			return $this->redirect($this->generateUrl('admin_vip_level'));
 		}
 
 		return $this->render('VipBundle:VipLevelAdmin:memberlevel.html.twig');
@@ -82,7 +82,7 @@ class VipLevelAdminController extends BaseController
 			if($memberlevel){
 				$this->setFlashMessage('success', '会员类型已更新！');
 			}
-			return $this->redirect($this->generateUrl('admin_user_level'));
+			return $this->redirect($this->generateUrl('admin_vip_level'));
 		}
 
         return $this->render('VipBundle:VipLevelAdmin:memberlevel.html.twig', array(
