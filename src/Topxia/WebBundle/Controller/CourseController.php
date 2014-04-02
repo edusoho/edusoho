@@ -172,12 +172,14 @@ class CourseController extends BaseController
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
-        $courseMemberLevel = $course['memberLevelId'] > 0 ? $this->getLevelService()->getLevel($course['memberLevelId']) : null;
-        if ($courseMemberLevel) {
-            $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
-        } else {
-            $checkMemberLevelResult = null;
+        $checkMemberLevelResult = $courseMemberLevel = null;
+        if ($this->setting('vip.enabled')) {
+            $courseMemberLevel = $course['memberLevelId'] > 0 ? $this->getLevelService()->getLevel($course['memberLevelId']) : null;
+            if ($courseMemberLevel) {
+                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
+            }
         }
+
 
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,

@@ -13,22 +13,6 @@ custom_admin:
     resource: "@CustomAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-vip_web:
-    resource: "@VipBundle/Resources/config/routing.yml"
-    prefix:   /
-
-vip_admin:
-    resource: "@VipBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
-
-coupon_web:
-    resource: "@CouponBundle/Resources/config/routing.yml"
-    prefix:   /
-
-coupon_admin:
-    resource: "@CouponBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
-
 # Internal routing configuration to handle ESI
 # _internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

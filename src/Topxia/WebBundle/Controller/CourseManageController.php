@@ -176,7 +176,12 @@ class CourseManageController extends BaseController
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-        $levels = $this->getLevelService()->findEnabledLevels();
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
+
 
         response:
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
