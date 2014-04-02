@@ -153,7 +153,7 @@ class VipServiceImpl extends BaseService implements VipService
         }
 
         $member = array();
-        $member['deadline'] = strtotime("+ {$duration} {$unit}s", $currentMember['deadline']);
+        $member['deadline'] = strtotime("+ {$duration} {$unit}s", max($currentMember['deadline'], time()));
         $member['boughtType'] = 'renew';
         $member['boughtTime'] = time();
         $member['boughtDuration'] = $duration;
