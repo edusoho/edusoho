@@ -1,0 +1,57 @@
+{% extends 'VipBundle:Vip:layout.html.twig' %}
+
+{% block title %}会员购买历史 - {{ parent() }}{% endblock %}
+
+{% set menu = 'history' %}
+
+{% block main_body %}
+
+    <div class="col-md-9">
+      <div class="es-box-heading"><h2>会员购买历史</h2></div>
+      <table id="member-history-table" class="table table-striped table-hover">
+	    <thead>
+	      <tr>
+	        <th>购买时间</th>
+	        <th>到期日期</th>
+	        <th>购买类型</th>
+	        <th>会员类型</th>
+	        <th>开通时长</th>
+	        <th>支付费用</th>
+	      </tr>
+	    </thead>
+	    <tbody id="member-history-list" >
+	    	{% if memberHistories %}
+	    		{% for memberHistory in memberHistories %}
+	    			{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+						<tr data-role="item">
+						  <td>{{ memberHistory.boughtTime|date('Y-n-d H:i') }}</td>
+						  <td class="text-success">{{ memberHistory.deadline|date('Y-n-d') }}</td>
+						  <td>{{ dict_text('boughtType',memberHistory.boughtType) }}</td>
+						  <td>
+						  	{% for level in levels %}
+						  		{% if memberHistory.levelId == level.id %}
+						  			{{ level.name }}
+						  		{% endif %}
+						  	{% endfor %}
+						  </td>
+						  <td>
+						    {% if memberHistory.boughtDuration != 0 %}
+						  		{{ memberHistory.boughtDuration }} {{ dict_text('duration_unit',memberHistory.boughtUnit) }}
+						    {% else %}
+						    	--
+						    {% endif %}
+						  </td>
+						  <td class="text-danger">
+							{{ memberHistory.boughtAmount }}
+						  </td>
+						</tr>
+	    		{% endfor %}
+	    	{% else %}
+	    		<tr><td colspan="20"><div class="empty">暂无会员购买记录</div></td></tr>
+	    	{% endif %}
+	    </tbody>
+	  </table>
+	  {{ web_macro.paginator(paginator) }}
+    </div>
+
+{% endblock %}

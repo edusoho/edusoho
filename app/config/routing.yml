@@ -13,12 +13,12 @@ custom_admin:
     resource: "@CustomAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-member_web:
-    resource: "@MemberBundle/Resources/config/routing.yml"
+vip_web:
+    resource: "@VipBundle/Resources/config/routing.yml"
     prefix:   /
 
-member_admin:
-    resource: "@MemberBundle/Resources/config/routing_admin.yml"
+vip_admin:
+    resource: "@VipBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
 coupon_web:

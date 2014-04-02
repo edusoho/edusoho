@@ -1,0 +1,79 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}会员续费 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'memberbundle/controller/order/buy' %}
+
+{% set type = 'renew' %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap" style="min-height:500px;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>会员续费</h1></div>
+    </div>
+  </div>
+
+  <form class="form-horizontal" id="member-buy-form" method="post" action="{{ path('vip_pay') }}">
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">您现在是</label>
+      <div class="col-sm-8 form-control-static">
+        <input type="hidden" name="level" value="{{ member.levelId }}">
+        <strong class="text-info level-name">{{ level.name }}</strong>
+        <span class="text-muted">，有效期至{{ member.deadline|date('Y-m-d') }} (剩余 {{ member.deadline|remain_time }})</span>
+      </div>
+    </div>
+
+    {% include "VipBundle:VipOrder:buy-form-common.html.twig" %}
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-8">
+        <button type="submit" class="btn btn-primary">确认续费</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="startDate" value="{{ member.deadline|date('Y-m-d') }}">
+
+    
+
+
+  </form>
+
+
+<div class="modal" id="member-buy-confirm-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">确认续费</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="member-buy-form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">会员续费</label>
+            <div class="col-sm-8">
+              <p class="form-control-static"><strong class="text-success confirm-level"></strong></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label">应付金额</label>
+            <div class="col-sm-8">
+              <p class="form-control-static"><strong class="money confirm-amount"></strong></p>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="member-order-confirm-btn">去支付</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+</div>
+{% endblock %}

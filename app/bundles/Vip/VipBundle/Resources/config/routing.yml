@@ -1,0 +1,43 @@
+vip:
+    pattern: /vip/
+    defaults: { _controller: VipBundle:Vip:index }
+
+vip_course_explore:
+    pattern: /vip/course/level/{levelId}
+    defaults: { _controller: VipBundle:Vip:course, levelId: 0 }
+
+vip_history:
+    pattern: /vip/history
+    defaults: { _controller: VipBundle:Vip:history }
+
+vip_buy:
+    pattern: /vip/buy
+    defaults: { _controller: VipBundle:VipOrder:buy }
+
+vip_renew:
+    pattern: /vip/renew
+    defaults: { _controller: VipBundle:VipOrder:renew }
+
+vip_upgrade:
+    pattern: /vip/upgrade
+    defaults: { _controller: VipBundle:VipOrder:upgrade }
+
+vip_upgrade_amount:
+    pattern: /vip/upgrade/amount
+    defaults: { _controller: VipBundle:VipOrder:upgradeAmount }
+
+vip_upgrade_pay:
+    pattern: /vip/upgrade/pay
+    defaults: { _controller: VipBundle:VipOrder:upgradePay }
+
+vip_pay:
+    pattern: /vip/pay
+    defaults: { _controller: VipBundle:VipOrder:pay }
+
+vip_pay_return:
+    pattern: /vip/pay_return/{name}
+    defaults: { _controller: VipBundle:VipOrder:payReturn }
+
+vip_pay_notify:
+    pattern: /vip/pay_notify/{name}
+    defaults: { _controller: VipBundle:VipOrder:payNotify }

@@ -9,8 +9,8 @@ define(function(require, exports, module) {
 	exports.load = function(name) {
 		if (name.substr(0, 7) == 'custom/') {
 			name = '../../../bundles/customadmin/js/controller/' + name.substr(7);
-		} else if (name.substr(0, 13) == 'memberbundle/') {
-			name = '../../../bundles/member/js/' + name.substr(13);
+		} else if (name.substr(0, 10) == 'vipbundle/') {
+			name = '../../../bundles/vip/js/' + name.substr(10);
 		} else if (name.substr(0, 13) == 'couponbundle/') {
 			name = '../../../bundles/coupon/js/' + name.substr(13);
 		} else {
