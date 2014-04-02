@@ -46,7 +46,7 @@
       <label for="levels">付费方式</label>
     </div>
      <div class="col-md-7 controls radios">
-        {{ radios('boughtUnit', {month:'按月', year:'按年'}, 'month') }}
+        {{ radios('boughtUnit', {month:'按月', year:'按年'}, member.boughtUnit|default('month')) }}
       </div>
   </div> 
 
