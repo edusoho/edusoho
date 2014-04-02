@@ -303,15 +303,15 @@ class VipServiceImpl extends BaseService implements VipService
     public function searchMembersHistoriesCount($conditions)
     {
         $new_conditions = array();
+
         if(array_key_exists('nickname',$conditions)){
 
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            if(empty($user)){
-                 $new_conditions['userId'] = -1;
-            }else{
-                $new_conditions['userId'] = $user['id'];
+            if($conditions['nickname']){
+                $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+                $new_conditions['userId'] = $user ? $user['id'] : -1;
             }
         }
+
         if(array_key_exists('boughtType', $conditions)){
             $new_conditions['boughtType'] = $conditions['boughtType'];
         }
@@ -321,18 +321,18 @@ class VipServiceImpl extends BaseService implements VipService
     public function searchMembersHistories(array $conditions, array $orderBy, $start, $limit)
     {
         $new_conditions = array();
+
          if(array_key_exists('nickname',$conditions)){
-            
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            if(empty($user)){
-                 $new_conditions['userId'] = -1;
-            }else{
-                 $new_conditions['userId'] = $user['id'];
+            if($conditions['nickname']){
+                $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+                $new_conditions['userId'] = $user ? $user['id'] : -1;
             }
         }
+        
         if(array_key_exists('boughtType', $conditions)){
             $new_conditions['boughtType'] = $conditions['boughtType'];
         }
+
         return $this->getMemberHistoryDao()->searchMembersHistories($new_conditions, $orderBy, $start, $limit);
     }
 
