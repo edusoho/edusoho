@@ -141,7 +141,7 @@ class VipOrderController extends OrderController
 
         $order['userId'] = $currentUser->id;
         $order['title'] = ($orderData['type'] == 'renew' ? '续费' : '购买') .  "{$level['name']} x {$orderData['duration']}{$unitNames[$orderData['unit']]}";
-        $order['targetType'] = 'member';
+        $order['targetType'] = 'vip';
         $order['targetId'] = $level['id'];
         $order['payment'] = 'alipay';
         $order['amount'] = $level[$orderData['unit'] . 'Price'] * $orderData['duration'];

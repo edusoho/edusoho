@@ -4,7 +4,7 @@
     {% if order.targetType == 'course' %}
       <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
     {% elseif order.targetType == 'vip' %}
-      <a href="{{ path('vip_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+      <a href="{{ path('vip', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
     {% else %}
       <strong>{{order.title}}</strong>
     {% endif %}
