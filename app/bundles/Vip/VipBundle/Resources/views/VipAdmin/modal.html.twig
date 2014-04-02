@@ -47,8 +47,8 @@
     </div>
      <div class="col-md-7 controls">
            <div class="radios">
-             <label><input type="radio" name="boughtUnit" value="month" checked="checked">  按月</label>
-             <label><input type="radio" name="boughtUnit" value="year">  按年</label>
+             <label><input type="radio" name="boughtUnit" value="month" {% if boughtUnit == 'month' %}checked="checked"{% endif %}>  按月</label>
+             <label><input type="radio" name="boughtUnit" value="year" {% if boughtUnit == 'year' %}checked="checked"{% endif %}>  按年</label>
            </div>
       </div>
   </div> 

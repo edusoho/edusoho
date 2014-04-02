@@ -200,7 +200,8 @@ class VipAdminController extends BaseController
         return $this->render('VipBundle:VipAdmin:modal.html.twig', array(
             'member' => $member,
             'user' => $user,
-            'levels_enabled' => $levels_enabled
+            'levels_enabled' => $levels_enabled,
+            'boughtUnit' =>$member['boughtUnit']
         ));
     }
     
