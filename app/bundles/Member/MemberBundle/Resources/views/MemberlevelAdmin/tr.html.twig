@@ -24,25 +24,25 @@
   </td>
   <td>
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" href="{{path('admin_user_level_update',{id:memberlevel.id}) }}">编辑</a>
+      <a class="btn btn-default btn-sm" href="{{path('admin_vip_level_update',{id:memberlevel.id}) }}">编辑</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu" role="menu">
         <li>
           {% if memberlevel.enabled %}
-          <a href="javascript:" class="off-memberlevel" data-url="{{path('admin_user_level_off',{id:memberlevel.id}) }}"> 
+          <a href="javascript:" class="off-memberlevel" data-url="{{path('admin_vip_level_off',{id:memberlevel.id}) }}"> 
             <span class="glyphicon glyphicon-ban-circle"></span> 关闭加入会员
           </a>
           {% else %}
-          <a href="javascript:" class="on-memberlevel" data-url="{{path('admin_user_level_on',{id:memberlevel.id}) }}"> 
+          <a href="javascript:" class="on-memberlevel" data-url="{{path('admin_vip_level_on',{id:memberlevel.id}) }}"> 
             <span class="glyphicon glyphicon-ok-circle"></span> 开启加入会员
           </a>
           {% endif %}
         </li>
         <li class="divider"></li>
         <li>
-          <a href="javascript:" class="delete-memberlevel" data-url="{{path('admin_user_level_delete',{id:memberlevel.id}) }}" ><span class="glyphicon glyphicon-trash"></span> 删除会员类型</a>
+          <a href="javascript:" class="delete-memberlevel" data-url="{{path('admin_vip_level_delete',{id:memberlevel.id}) }}" ><span class="glyphicon glyphicon-trash"></span> 删除会员类型</a>
         </li>
       </ul>
     </div> 

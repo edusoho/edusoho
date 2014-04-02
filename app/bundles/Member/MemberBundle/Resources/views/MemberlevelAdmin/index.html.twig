@@ -10,7 +10,7 @@
 {% block main %}
   {{ web_macro.flash_messages() }}
   <div class="page-header clearfix">
-    <a class="btn btn-info btn-sm pull-right" id="add-navigation-btn" href="{{path('admin_user_level_create')}}">添加会员类型</a>
+    <a class="btn btn-info btn-sm pull-right" id="add-navigation-btn" href="{{path('admin_vip_level_create')}}">添加会员类型</a>
     <h1 class="pull-left">会员专区设置</h1>
   </div>
   
@@ -26,7 +26,7 @@
         <th>操作</th>
       </tr>
     </thead>
-    <tbody id="memberlevel-list" data-sort-url="{{path('admin_user_level_sort')}}" class="sortable-list">
+    <tbody id="memberlevel-list" data-sort-url="{{path('admin_vip_level_sort')}}" class="sortable-list">
       {% for memberlevel in memberlevels %}
         {% include 'MemberBundle:MemberlevelAdmin:tr.html.twig' with {memberlevel:memberlevel} %}
       {% else %}

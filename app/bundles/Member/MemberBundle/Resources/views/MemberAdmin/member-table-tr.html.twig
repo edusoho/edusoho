@@ -20,13 +20,13 @@
   {% if type == 'all' %}
   <td>
    <div class="btn-group">
-        <a href="#modal" data-toggle="modal" data-url="{{ path('admin_member_bought_history',{userId:member.userId}) }}" data-url="" class="btn btn-default btn-sm">购买历史</a>
+        <a href="#modal" data-toggle="modal" data-url="{{ path('admin_vip_bought_history',{userId:member.userId}) }}" data-url="" class="btn btn-default btn-sm">购买历史</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_member_edit', {userId:member.userId}) }}">编辑会员</a></li>
-        <li><a href="javascript:;" class='delete-member' data-url="{{ path('admin_member_cancel', {userId:member.userId}) }}">取消会员</a></li>
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_vip_edit', {userId:member.userId}) }}">编辑会员</a></li>
+        <li><a href="javascript:;" class='delete-member' data-url="{{ path('admin_vip_cancel', {userId:member.userId}) }}">取消会员</a></li>
       </ul>
   </div>
  </td>

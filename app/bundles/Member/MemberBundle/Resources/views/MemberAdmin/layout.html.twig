@@ -10,10 +10,10 @@
         <div class="panel-heading">会员专区</div>
         <div class="list-group">
           <a href="{{ url('admin_member') }}" class="list-group-item {% if menu == 'member' %}active{% endif %}">会员管理</a>
-          <a href="{{ url('admin_member_order') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">会员订单管理</a>
-          <a href="{{ url('admin_member_bought_list') }}" class="list-group-item {% if menu == 'member_history' %}active{% endif %}">会员操作记录</a>
-          <a href="{{ url('admin_level_zone') }}" class="list-group-item {% if menu == 'memberzone' %}active{% endif %}" >会员专区设置</a>
-          <a href="{{ url('admin_user_level') }}" class="list-group-item {% if menu == 'memberlevel' %}active{% endif %}" >会员类型设置</a>
+          <a href="{{ url('admin_vip_order') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">会员订单管理</a>
+          <a href="{{ url('admin_vip_bought_list') }}" class="list-group-item {% if menu == 'member_history' %}active{% endif %}">会员操作记录</a>
+          <a href="{{ url('admin_level_setting') }}" class="list-group-item {% if menu == 'memberzone' %}active{% endif %}" >会员专区设置</a>
+          <a href="{{ url('admin_vip_level') }}" class="list-group-item {% if menu == 'memberlevel' %}active{% endif %}" >会员类型设置</a>
         </div>
       </div>
 

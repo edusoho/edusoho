@@ -9,9 +9,9 @@
 
 <form id="member-modal-form" class="form-horizontal" method="post"
   {% if member %}
-     action="{{ url('admin_member_edit', {userId:member.userId}) }}"
+     action="{{ url('admin_vip_edit', {userId:member.userId}) }}"
   {% else %}
-     action="{{ url('admin_member_create') }}"
+     action="{{ url('admin_vip_create') }}"
   {% endif %}
 >
 <div class="row form-group">
@@ -22,7 +22,7 @@
     {% if member %}
       <div class = "control-text">{{user.nickname|default('')}}</div>
     {% else %}
-      <input type="text" id="nickname" name="nickname" data-url="{{path('admin_member_create_nickname_check')}}" class="form-control" >
+      <input type="text" id="nickname" name="nickname" data-url="{{path('admin_vip_create_nickname_check')}}" class="form-control" >
     {% endif %}
     </div>
   </div>
