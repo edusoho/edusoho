@@ -19,7 +19,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="levelName">会员类型名称 <span class="glyphicon glyphicon-star"></span></label>
+        <label for="levelName">会员类型名称</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="levelName" name="name" class="form-control" value="{% if memberlevel %}{{ memberlevel.name }}{% endif %}">
@@ -28,7 +28,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="monthType">购买类型 <span class="glyphicon glyphicon-star"></span></label>
+        <label for="monthType">购买类型</label>
       </div>
       <div class="col-md-1">
         <div class="checkbox">
@@ -130,7 +130,7 @@
         <input type="submit" class="btn btn-primary pull-left" value="保存">
       </div>   
       <div class="col-md-1">
-        <a href="{{ path('admin_vip_level') }}" class="btn btn-primary">后退</a>
+        <a href="{{ path('admin_vip_level') }}" class="btn btn-link">取消</a>
       </div>
     </div> 
 

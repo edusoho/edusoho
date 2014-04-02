@@ -24,6 +24,9 @@
   <td>
     {{ dict_text('boughtType',memberHistory.boughtType) }}
     <br>
+    {% if memberHistory.operatorId > 0 %}
+      <small>(操作人：{{ operators[memberHistory.operatorId].nickname|default('--') }})</small>
+    {% endif %}
   </td>
 
   <td>
