@@ -26,8 +26,8 @@
           <li class="course-item clearfix member-item">
             <a href="{{ path('vip_course_explore', {levelId:level.id}) }}"><img class="course-picture" src="{{ level.picture }}" alt="{{ level.name }}"></a>
             <div class="course-view">
-              <a href="{{ path('vip_course_explore', {levelId:level.id}) }}" class="btn btn-primary btn-sm">查看会员课程</a>
-              <a  href="{{ path('vip_buy', {level:level.id}) }}" class="btn btn-primary btn-sm">购买</a>
+              <a href="{{ path('vip_course_explore', {levelId:level.id}) }}" class="btn btn-link">查看会员课程</a>
+              <a  href="{{ path('vip_buy', {level:level.id}) }}" class="btn btn-primary">购买</a>
             </div>
             <div class="course-body">
               <h4 class="course-title"><a href="{{ path('vip_course_explore', {levelId:level.id}) }}">{{ level.name}}</a></h4>

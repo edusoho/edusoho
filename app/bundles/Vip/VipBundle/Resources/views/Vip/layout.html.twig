@@ -9,7 +9,7 @@
     <div class="col-md-12">
       <div class="page-header"><h1>会员专区</h1></div>
     </div>
-    {% if memberZone.enabled %}
+    {% if vipSetting.enabled %}
       <div class="col-md-3">
         {% if app.user %}
           <div class="media">
@@ -18,20 +18,20 @@
             </a>
             <div class="media-body">
               <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
-              {% if member %}
+              {% if userVip %}
               <p>
                 <span class="glyphicon glyphicon-user"></span>
                 {% for level in levels %}
-                  {% if level.id == member.levelId %}
+                  {% if level.id == userVip.levelId %}
                     {{ level.name }}
                   {% endif %}
                 {% endfor %}
               </p>
-              <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
-                {% if member.deadline|remain_time == 0 %}
+              <p class="text-danger">{{ userVip.deadline|date('Y-m-d') }}到期</p>
+                {% if userVip.deadline|remain_time == 0 %}
                   <div class="well well-sm" class="text-primary text-center">会员已到期</div>
                 {% else %}
-                  <div class="well well-sm" class="text-primary text-center">会员剩余{{ member.deadline|remain_time }}</div>
+                  <div class="well well-sm" class="text-primary text-center">会员剩余{{ userVip.deadline|remain_time }}</div>
                 {% endif %}
               {% else %}
                 <span class="glyphicon glyphicon-user"></span>普通用户
@@ -39,8 +39,8 @@
               {% endif %}
             </div>
           </div>
-          {% if member %}
-            {% if member.deadline|remain_time < 7 and member.deadline|remain_time > 0 %}
+          {% if userVip %}
+            {% if userVip.deadline|remain_time < 7 and userVip.deadline|remain_time > 0 %}
               {% if deadlineAlertCookie == null %}
                 <div class="alert alert-danger fade in">
                   <button type="button" id ="deadlineAlert" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -56,7 +56,11 @@
             <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('vip_history') }}">购买历史</a>
           </div>  
         {% else %}
-          <div class="well text-danger">请先登录后再购买会员</div>
+          <div class="well">
+            <h4>欢迎来到会员专区</h4>
+            <p><a class="btn btn-block btn-lg btn-primary" href="{{ path('login') }}">用户登录</a></p>
+            <p class="text-muted">没有帐号？ <a href="{{ path('register') }}">用户注册</a></p>
+          </div>
         {% endif %}
         <div class="es-box">
           <div class="es-box-heading"><h2>最新会员</h2></div>
