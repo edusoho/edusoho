@@ -53,22 +53,28 @@
     <div class="container"> 
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-4 col-xs-8 col-sm-8">
         <div class="navbar-header ptm">
-
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-         
           {% if  setting('site.logo') %}
-              <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
+              <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img  class="img-responsive" src="{{ asset(setting('site.logo')) }}"></a>
           {% else %}
               <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
           {% endif %}
         </div>
-        
+  </div>
+  
+   <div class="col-xs-4 col-sm-4">
+       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+       </button>
+   </div>
+
+  <div class="col-md-8 col-xs-12 col-sm-12"> 
+
+           
+
         <div class="navbar-right navbar-collapse collapse">
 
           {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
