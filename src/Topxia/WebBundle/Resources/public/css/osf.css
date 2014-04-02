@@ -282,9 +282,9 @@
 
 /*公开课详情页评论区块*/
 
-.comment-box{padding-right: 166px;border:1px solid #ddd;position: relative;height: 123px;overflow: hidden;zoom:1}
+.comment-box{border:1px solid #ddd;position: relative;height: 123px;overflow: hidden;zoom:1}
 .comment-box textarea{border:none;}
-.comment-box .comment-side{position: absolute;right: 0;top: 0;background-color: #DDD;padding: 0.5em 1em;width: 165px;}
+.comment-box .comment-side{background-color: #DDD;padding: 0.5em 1em;}
 
 .comment-box .comment-side button{width: 63px;margin: 1em 0 .5em;}
 .comment li{margin-bottom: 10px !important;}

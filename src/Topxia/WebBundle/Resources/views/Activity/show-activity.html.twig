@@ -11,57 +11,61 @@
       <img class="img-responsive"  src="{{ file_path(activity.largePicture,'activity-large.jpg') }}"></a>
   </div>
   <div class="col-md-8  plm">
-    <p class="title">
-      <h4>{{ activity.subtitle }}</h4>
-      <h3>{{ activity.title }}</h3>
-    </p>
-    <p>时间： {{activity.startTime}} - {{activity.endTime}} </p>
-   
-    <p>形式：  {{ activity.form }}</p>
+      <p class="title">
+        <h4>{{ activity.subtitle }}</h4>
+        <h3>{{ activity.title }}</h3>
+      </p>
+      <p>时间： {{activity.startTime}}  {{activity.duration}} </p>
+     
+      <p>形式：  {{ activity.form }}</p>
     
-    {% if activity.address %}
+      {% if activity.address %}
 
-        <p>现场地址： {{ activity.address }}</p>
+          <p>现场地址： {{ activity.address }}</p>
 
-    {% endif %}
-
-    {% if activity.onlineAddress %}
-    <p>
-      直播地址： <span class='text-danger'>
-      {% if activity.join %}
-         直播地址已通过邮件方式发送到您的邮箱!(如未收到邮件，请点击这里！）
-      {% else %}
-         报名后将通过邮件告知如何参与本次公开课的方式和地址，请正确填写邮件地址！
       {% endif %}
-      </span>
-    </p>
-    {% endif %}
 
-    <p>
-      价格：
-      <span  class='text-danger'>
-        线上{% if activity.onlinePrice>0 %}{{activity.onlinePrice}}元{% else %}免费{% endif %}  线下{% if  activity.price>0  %}{{activity.price}}元{% else %}免费{% endif %}
-      </span>
-    </p>
+      {% if activity.onlineAddress %}
+      <p>
+        直播地址： <span class='text-danger'>
+        {% if activity.join %}
+           直播地址已通过邮件方式发送到您的邮箱!(如未收到邮件，请点击这里！）
+        {% else %}
+           报名后将通过邮件方式告知参课方式和地址，请正确填写邮件地址！
+        {% endif %}
+        </span>
+      </p>
+      {% endif %}
+
+      <p>
+        价格：
+        <span  class='text-danger'>
+          线上{% if activity.onlinePrice>0 %}{{activity.onlinePrice}}元{% else %}免费{% endif %}  线下{% if  activity.price>0  %}{{activity.price}}元{% else %}免费{% endif %}
+        </span>
+      </p>
+
+      {% if (activity['expired']!=1) %}
+      <div class="pull-right ">
+        <p>
+          {{activity.studentNum}}人已报名
+          {% if activity.join %}
+          <span class="glyphicon glyphicon-ok-circle label label-default text-size-18 pvm">您已报名</span>
+          {% else %}
+          <a  class="mlm btn btn-success  green"   href="{{ path('activity_join',{id:activity.id}) }}" >活动报名</a>
+          {% endif %}
+          <a href="javascript:void(0)" id="media-qustion" class="mlm btn btn-success  green">课前提问</a>
+        </p>
+      </div>
+      {% else %}
+      <h3 class="pull-right ">
+        <span class='label label-default'>已结束</span>
+      </h3>
+      {% endif %}
+
+
   </div>
 
-  {% if (activity['expired']!=1) %}
-  <div class="ps-ab ps-bt ps-rtl">
-    <p>
-      {{activity.studentNum}}人已报名
-      {% if activity.join %}
-      <span class="glyphicon glyphicon-ok-circle label label-default text-size-18 pvm">您已报名</span>
-      {% else %}
-      <a  class="mlm btn btn-success  green"   href="{{ path('activity_join',{id:activity.id}) }}" >活动报名</a>
-      {% endif %}
-      <a href="javascript:void(0)" id="media-qustion" class="mlm btn btn-success  green">课前提问</a>
-    </p>
-  </div>
-  {% else %}
-  <h3 class="ps-ab ps-bt ps-rtl">
-    <span class='label label-default'>已结束</span>
-  </h3>
-  {% endif %}
+  
 
 </div>
 
@@ -96,80 +100,86 @@
     </div>
 
 
-
-
-
     <div class="mhz">
       <div class="plz prz">
         <div class="widget k_postlist shadow">
-          <div class="kytitle clearfix ">
+         
+          <div class="kytitle">
             <h3>提问与交流</h3>
-           
-            <a class="pull-right">如果在公开课前进行提问，我们会挑选关注度最高的几个问题让老师进行回答</a>
+            <a class="pull-right text-color-red">如果在公开课前进行提问，我们会挑选关注度最高的几个问题让老师进行回答</a>
           </div>
-          <div class="content comment  clearfix ">
-            <div class="padding">
-              <div class="clearfix mbm">
-                <div class="imageblock-image">
-                  <a href="javascript:" class="show-user-card user-avatar-link pull-left" >
+
+          <div class="content">
+            <div class="row">
+              
+                <div class="col-md-12 ">
+                  <a href="javascript:" class="pull-left user-link user-avatar-link" >
                     {% if current_user['id']==0 %}
-                    <img src="/assets/img/default/avatar.png" alt="ae120">    
+                      <img src="/assets/img/default/avatar.png">    
                     {% else %}
-                    <img src="{{ file_path(current_user.smallAvatar,'avatar.png') }}" alt="ae120">{% endif %}</a>
-                </div>
-                <div class="imageblock-content">
-                  <div class="comment-box">
-                    <form class="form-horizontal" role="form" id="qustion-form" action="{{ path("activity_qustioncreate",{id:activity.id}) }}" method="post">
-                      <textarea class="form-control" rows="5" name="qustion[content]"
-                                                    id="qustiontext"></textarea>
-                      <div class="comment-side">
-                        <p>
-                          <img src="{{ asset('bundles/topxiaweb/img/smile.png') }}"></p>
-                        <div class="checkbox">
-                          <!--label>
-                            <input type="checkbox" name="qustion[castweibo]">转发微博</label-->
-                        </div>
-                        <button type="submit" class="btn btn-success"  data-toggle="form-submit" data-target="#qustion-form">提问</button>
+                      <img src="{{ file_path(current_user.smallAvatar,'avatar.png') }}" alt="ae120">
+                    {% endif %}
+                  </a>
+
+                  <form class="form-horizontal" role="form" id="qustion-form" action="{{ path("activity_qustioncreate",{id:activity.id}) }}" method="post">
+                      <div class="row ">
+                       
+                          <div class="form-group ">
+
+                              <div class="col-md-8">
+                                 <textarea class="form-control" rows="5" name="qustion[content]"  id="qustiontext"></textarea>
+                              </div>
+                         
+                              <div class="col-md-2">
+                               
+                                  <img src="{{ asset('bundles/topxiaweb/img/smile.png') }}">
+                              
+                                  <button type="submit" class="btn btn-success"  data-toggle="form-submit" data-target="#qustion-form">提问</button>
+                              </div>
+                          </div>
+                      
                       </div>
-                    </form>
-                  </div>
+                  </form>
                 </div>
-              </div>
+             
+            </div>
+            <div class="row">
+              <ul class="col-md-12 mbm mtm" id="qustion-media-list">
+                {% for qustion in qustions %}
+                <li class="media li-no">
+                  <a class="pull-left user-link user-avatar-link" href="javascript:">
+                    {% if qustion['userId']==0 %}
+                    <img src="/assets/img/default/avatar.png" >    
+                    {% else %}
+                    <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" >{% endif %}</a>
+                  <div class="media-body">
+                    <div class="media-content post-list phm">
+                      <a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a>
+                      {{qustion.content}} 
+                      <a hef="javascript:" class="reply btn btn-link">
+                        <span class="glyphicon glyphicon-share-alt text-size-10">回复</span>
+                      </a>
+                      <span class="post-item-time">{{qustion.createdTime|smart_time }}</span>
+                    </div>
+                   
+                    <div class=" media-content">
+                      {% for post in qustion.bindpost %}
+                      <div class="post-item post-list">
+                        <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>
+                        :{{post.content}}
+                        <span class="post-item-time">{{ post.createdTime|smart_time }}</span>
+                      </div>
+                      {% endfor %}
+                    </div>
+                    <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}"></div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
             </div>
 
-            <ul class="mbm" id="qustion-media-list">
-              {% for qustion in qustions %}
-              <li class="media li-no">
-                <a class="pull-left user-link user-avatar-link" href="javascript:">
-                  {% if qustion['userId']==0 %}
-                  <img src="/assets/img/default/avatar.png" >    
-                  {% else %}
-                  <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" >{% endif %}</a>
-                <div class="media-body">
-                  <div class="media-content post-list phm">
-                    <a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a>
-                    {{qustion.content}} 
-                    <a hef="javascript:" class="reply btn btn-link">
-                      <span class="glyphicon glyphicon-share-alt text-size-10">回复</span>
-                    </a>
-                    <span class="post-item-time">{{qustion.createdTime|smart_time }}</span>
-                  </div>
-                 
-                  <div class=" media-content">
-                    {% for post in qustion.bindpost %}
-                    <div class="post-item post-list">
-                      <a  href="{{ path('user_show',{id:post.userId }) }}">{{ post_users[post.userId].nickname }}</a>
-                      :{{post.content}}
-                      <span class="post-item-time">{{ post.createdTime|smart_time }}</span>
-                    </div>
-                    {% endfor %}
-                  </div>
-                  <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}"></div>
-                </div>
-              </li>
-              {% endfor %}
-            </ul>
           </div>
+
         </div>
       </div>
     </div>
