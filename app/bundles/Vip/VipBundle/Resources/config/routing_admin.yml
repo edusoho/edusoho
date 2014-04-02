@@ -11,7 +11,7 @@ admin_vip_cancel:
     defaults: { _controller: VipBundle:VipAdmin:cancel }
 
 admin_vip_list:
-    pattern: /vip/type/{type}
+    pattern: /vip/list/{type}
     defaults: { _controller: VipBundle:VipAdmin:index, type: 'all' }
 
 admin_vip_update:
