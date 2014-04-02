@@ -101,6 +101,8 @@
 .mhm {margin-left: 10px !important; margin-right: 10px !important;}
 .mhl {margin-left: 20px !important; margin-right: 20px !important;}
 
+.mh-s {margin-left: -5px !important; margin-right: -5px !important;}
+
 .mvz {margin-top: 0px !important; margin-bottom: 0px !important;}
 .mvs {margin-top: 5px !important; margin-bottom: 5px !important;}
 .mvm {margin-top: 10px !important; margin-bottom: 10px !important;}
@@ -363,23 +365,5 @@
 
 
 
-.jc_js a {
-display: block;
-width: 120px;
-height: 40px;
-line-height: 40px;
-background: #0D92D0;
-text-align: center;
-color: #fff;
-font-size: 16px;
-font-family: "Microsoft YaHei", "微软雅黑", "SimSun", "宋体";
-margin: 15px auto;
-border-radius: 3px;
-text-decoration: none;
-}
 
-.jc_js a:hover{
-	text-decoration:none;
-	background:#0581BB;
-}
 

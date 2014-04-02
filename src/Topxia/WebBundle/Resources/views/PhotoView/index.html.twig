@@ -14,21 +14,16 @@
   			<div class="widget">
   			  <div new="content clear-pleft clear-pright">
   			    <img src="/assets/img/default/ablum-logo.jpg" class="img-responsive" alt="Responsive image" >
-  			    <hr class="divider" />
-    				<ul class="nav nav-pills nav-mini">
-              {% for tag in tags %}
-    				  <li><a href="{{ path('photoview',{tagId:tag.id}) }}">{{ tag.name }}</a></li>
-              {% endfor %}
-    				</ul>
+  			  
   			    <hr class="divider" />
     				<ul class="photo-nav pz text-normal" >
               {% for photo in photos %}
                 {% if loop.index==loop.last %}
-                  <li class="photo-border-r"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
+                  <li class="photo-border-r li-no"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
                 {% elseif loop.index0%2==0 %}
-                  <li class="photo-border-r photo-border-b"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
+                  <li class="photo-border-r photo-border-b li-no"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
                 {% else %}
-                 <li class="photo-border-b"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
+                 <li class="photo-border-b li-no"><a href="{{ path('photoview',{id:photo.id}) }}">{{ photo.name }}</a></li>
                 {% endif %}
               {% endfor %}
     				</ul>
