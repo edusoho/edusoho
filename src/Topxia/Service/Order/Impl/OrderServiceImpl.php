@@ -52,7 +52,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $order['amount'] = $couponInfo['afterAmount'];
         }
-        $code = empty($order['couponCode']) ? null : $order['couponCode'];
+        $order['coupon'] = empty($order['couponCode']) ? '' : $order['couponCode'];
         unset($order['couponCode']);
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
@@ -65,14 +65,11 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order = $this->getOrderDao()->addOrder($order);
 
-        $this->_createLog($order['id'], 'created', '创建订单');
-
-        if ($code) {
+        if ($order['coupon']) {
             $this->getCouponService()->useCoupon($code, $order);
         }
 
-        $order = $this->getOrderDao()->updateOrder($order['id'], array('coupon' => $code));
-
+        $this->_createLog($order['id'], 'created', '创建订单');
         return $order;
     }
 

@@ -93,14 +93,20 @@ class CourseOrderController extends OrderController
                 'requestParams' => $payRequestParams,
             ));
         } else {
-            $this->getOrderService()->payOrder(array(
+            $order = $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],
                 'status' => 'success', 
                 'amount' => $order['amount'], 
                 'paidTime' => time()
             ));
 
-            return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
+            $info = array(
+                'orderId' => $order['id'],
+                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            );
+            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         }
     }
 
