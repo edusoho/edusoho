@@ -138,12 +138,14 @@ class VipAdminController extends BaseController
         );
         
         $levels = $this->makeMemberLevelOptions();
+        $operators = $this->getUserService()->findUsersByIds(ArrayToolkit::column($memberHistories, 'operatorId'));
 
         return $this->render('VipBundle:VipAdmin:bought-history.html.twig',array(
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
             'user' => $user,
-            'levels' => $levels
+            'levels' => $levels,
+            'operators' => $operators,
         ));
     }
 
