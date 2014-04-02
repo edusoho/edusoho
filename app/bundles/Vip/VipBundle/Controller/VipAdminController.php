@@ -112,11 +112,17 @@ class VipAdminController extends BaseController
 
     public function boughtHistoryAction(Request $request)
     {
-        $fields = $request->query->all();
-        
-        if(!empty($fields)){
-            $conditions =$fields;
+        $userId = $request->query->get('userId');
+        if (empty($userId)) {
+            throw $this->createNotFoundException();
         }
+
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createNotFoundException();
+        }
+
+        $conditions = array('userId' => $userId);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -130,16 +136,15 @@ class VipAdminController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $user = $this->getUserService()->getUser($fields['userId']);
+        
         $levels = $this->makeMemberLevelOptions();
 
         return $this->render('VipBundle:VipAdmin:bought-history.html.twig',array(
             'memberHistories' => $memberHistories,
             'paginator' => $paginator,
-            'userNickname' => $user['nickname'],
-            'show_usernick' => -1,
+            'user' => $user,
             'levels' => $levels
-            ));
+        ));
     }
 
     public function boughtListAction(Request $request)

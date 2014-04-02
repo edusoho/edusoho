@@ -1,12 +1,13 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set modalSize = 'large' %}
+{% set modal_class = 'modal-lg' %}
 
-{% block title %}{{userNickname}}的购买历史{% endblock %}
+{% block title %}{{user.nickname}}的购买历史{% endblock %}
 {% block body %}
 <table id="member-history-table" class="table table-striped table-hover table-bordered" data-search-form="#member-history-search-form">
   <thead>
     <tr>
+      <th>购买人</th>
       <th>购买时间</th>
       <th>到期时间</th>
       <th>购买类型</th>

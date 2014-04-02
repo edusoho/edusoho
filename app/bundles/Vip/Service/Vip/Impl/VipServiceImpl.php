@@ -306,6 +306,11 @@ class VipServiceImpl extends BaseService implements VipService
         if(array_key_exists('boughtType', $conditions)){
             $new_conditions['boughtType'] = $conditions['boughtType'];
         }
+
+        if(array_key_exists('userId', $conditions)) {
+            $new_conditions['userId'] = $conditions['userId'];
+        }
+
         return $this->getMemberHistoryDao()->searchMembersHistoriesCount($new_conditions);
     }
     
@@ -322,6 +327,10 @@ class VipServiceImpl extends BaseService implements VipService
         
         if(array_key_exists('boughtType', $conditions)){
             $new_conditions['boughtType'] = $conditions['boughtType'];
+        }
+
+        if(array_key_exists('userId', $conditions)) {
+            $new_conditions['userId'] = $conditions['userId'];
         }
 
         return $this->getMemberHistoryDao()->searchMembersHistories($new_conditions, $orderBy, $start, $limit);
