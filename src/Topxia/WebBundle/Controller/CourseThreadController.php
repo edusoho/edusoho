@@ -111,6 +111,13 @@ class CourseThreadController extends BaseController
             return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
         }
 
+        if ($member && $member['levelId'] > 0) {
+            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['memberLevelId']) != 'ok') {
+                return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+            }
+        }
+
+
         $type = $request->query->get('type') ? : 'discussion';
         $form = $this->createThreadForm(array(
         	'type' => $type,

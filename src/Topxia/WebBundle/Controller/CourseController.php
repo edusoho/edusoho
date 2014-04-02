@@ -361,6 +361,15 @@ class CourseController extends BaseController
             if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
                 return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
             }
+
+            if ($member && $member['levelId'] > 0) {
+                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['memberLevelId']) != 'ok') {
+                    return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+                }
+            }
+
+
+
         }catch(Exception $e){
             throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
         }
@@ -400,9 +409,19 @@ class CourseController extends BaseController
 
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        if (empty($member)) { $member['deadline'] = 0; }
+        if (empty($member)) {
+            $member['deadline'] = 0; 
+            $member['levelId'] = 0;
+        }
 
         $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
+
+        if ($member['levelId'] > 0) {
+            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['memberLevelId']);
+        } else {
+            $vipChecked = 'ok';
+        }
+
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
@@ -411,6 +430,7 @@ class CourseController extends BaseController
             'users' => $users,
             'manage' => $manage,
             'isNonExpired' => $isNonExpired,
+            'vipChecked' => $vipChecked,
             'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
