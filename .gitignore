@@ -13,6 +13,7 @@
 /app/data/backup/*
 /app/data/upgrade/*
 #/app/bundles/*
+/plugins/*
 /build/
 /vendor/
 /bin/
