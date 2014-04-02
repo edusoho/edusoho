@@ -113,7 +113,7 @@ class VipAdminController extends BaseController
     public function boughtHistoryAction(Request $request)
     {
         $fields = $request->query->all();
-
+        
         if(!empty($fields)){
             $conditions =$fields;
         }
@@ -130,7 +130,7 @@ class VipAdminController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $user = $this->getUserService()->getUser($memberHistories[0]['userId']);
+        $user = $this->getUserService()->getUser($fields['userId']);
         $levels = $this->makeMemberLevelOptions();
 
         return $this->render('VipBundle:VipAdmin:bought-history.html.twig',array(
