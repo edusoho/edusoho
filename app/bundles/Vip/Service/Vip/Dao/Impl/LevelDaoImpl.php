@@ -62,7 +62,7 @@ class LevelDaoImpl extends BaseDao implements LevelDao
     }
 
     public function updateLevel($id,$fields)
-     {
+    {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLevel($id);
     }

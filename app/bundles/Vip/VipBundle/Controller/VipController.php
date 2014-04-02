@@ -107,22 +107,28 @@ class VipController extends BaseController
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
         $conditions = array();
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
-            ,20
-        );
+        
         $currentUser = $this->getCurrentUser();
         $members = $this->getVipService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 10);
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
         $levels = $this->getLevelService()->searchLevels( array('enabled' => 1), 0, 100);
         $member = $this->getVipService()->getMemberByUserId($currentUser['id']);
+
+        $conditions = array('nickname' => $currentUser['nickname']);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getVipService()->searchMembersHistoriesCount($conditions)
+            ,20
+        );
+
         $memberHistories = $this->getVipService()->searchMembersHistories(
-            array('userId' => $currentUser['id']), array('boughtTime', 'DESC'),
+            $conditions, array('boughtTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         return $this->render('VipBundle:Vip:history.html.twig',array(
             'levels' => $levels,
             'latestMembers' => $latestMembers,
