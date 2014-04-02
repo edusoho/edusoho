@@ -239,7 +239,7 @@ class VipOrderController extends OrderController
                 );
             }
 
-            $controller->generateUrl('vip');
+            return $controller->generateUrl('vip');
         });
     }
 

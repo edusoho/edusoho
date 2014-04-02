@@ -71,7 +71,7 @@ class VipDaoImpl extends BaseDao implements VipDao
 
 	public function updateMember($id, $fields)
 	{
-        $this->getConnection()->update($this->table, $fields, array('userId' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getMember($id);
 	}
 }
