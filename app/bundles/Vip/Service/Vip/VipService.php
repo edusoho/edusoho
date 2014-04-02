@@ -26,6 +26,8 @@ interface VipService
      */
     public function upgradeMember($userId, $newLevelId, $orderId = 0);
 
+    public function canUpgradeMember($userId);
+
     /**
      * 计算升级会员，所需要的金额
      */

@@ -168,6 +168,10 @@ class VipServiceImpl extends BaseService implements VipService
             throw $this->createServiceException('会员等级不存在或已关闭，会员升级失败。');
         }
 
+        if (!$this->canUpgradeMember($user['id'])) {
+            throw $this->createServiceException('会员剩余天数小于，系统设定的最小可升级天数，不能升级。请续费后再升级。');
+        }
+
         $orderId = intval($orderId);
         if ($orderId > 0) {
             $order = $this->getOrderService()->getOrder($orderId);
@@ -177,6 +181,8 @@ class VipServiceImpl extends BaseService implements VipService
         } else {
             $order = array('id' => 0, 'amount' => 0);
         }
+
+
 
         $member = array();
         $member['levelId'] = $level['id'];
@@ -200,6 +206,21 @@ class VipServiceImpl extends BaseService implements VipService
         $this->getMemberHistoryDao()->addMemberHistory($history);
 
         return $member;
+    }
+
+    public function canUpgradeMember($userId)
+    {
+        $setting = $this->getSettingService()->get('vip');
+        if (empty($setting['upgrade_min_day'])) {
+            return false;
+        }
+
+        $vip = $this->getMemberByUserId($userId);
+        if (empty($vip)) {
+            return false;
+        }
+
+        return ($vip['deadline'] - time()) > ($setting['upgrade_min_day'] * 86400);
     }
 
     public function calUpgradeMemberAmount($userId, $newLevelId)
@@ -400,6 +421,11 @@ class VipServiceImpl extends BaseService implements VipService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
 }
