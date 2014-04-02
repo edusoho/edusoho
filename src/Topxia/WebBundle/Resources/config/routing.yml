@@ -1034,3 +1034,16 @@ setting_approval_submit:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
+
+#占位
+vip:
+    pattern: /vip/
+
+vip_buy:
+    pattern: /vip/buy
+
+vip_renew:
+    pattern: /vip/renew
+
+vip_upgrade:
+    pattern: /vip/upgrade
