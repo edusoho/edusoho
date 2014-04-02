@@ -66,6 +66,7 @@ class VipLevelAdminController extends BaseController
 
         if ('POST' == $request->getMethod()) {
         	$conditions = $request->request->all();
+
         	if(isset($conditions['monthType'])) {
         		unset($conditions['monthType']);
         	} else { 
