@@ -9,42 +9,44 @@
     <div class="col-md-12">
       <div class="page-header"><h1>会员专区</h1></div>
     </div>
-    {% if memberZone.enabled %}
+    {% if vipSetting.enabled %}
       <div class="col-md-3">
         {% if app.user %}
-          <div class="media">
+          <div class="media mbl">
             <a href="{{ path('user_show', {id:app.user.id}) }}" class="pull-left">
-              <img class="author-picture" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
+              <img class="author-picture" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}" width="100">
             </a>
             <div class="media-body">
               <h5 class="media-heading"><a href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></h5>
-              {% if member %}
+              {% if userVip %}
               <p>
-                <span class="glyphicon glyphicon-user"></span>
                 {% for level in levels %}
-                  {% if level.id == member.levelId %}
-                    {{ level.name }}
+                  {% if level.id == userVip.levelId %}
+                    <img src="{{ asset(level.icon) }}" alt="{{ level.name }}" title="{{ level.name }}" width="35">
                   {% endif %}
                 {% endfor %}
               </p>
-              <p class="text-danger">{{ member.deadline|date('Y-m-d') }}到期</p>
-                {% if member.deadline|remain_time == 0 %}
-                  <div class="well well-sm" class="text-primary text-center">会员已到期</div>
+              <p>
+                <small class="text-primary">{{ userVip.deadline|date('Y-m-d') }}到期</small>
+                <br>
+                {% if userVip.deadline < nowTime %}
+                  <small class="text-danger">会员已过期</small>
                 {% else %}
-                  <div class="well well-sm" class="text-primary text-center">会员剩余{{ member.deadline|remain_time }}</div>
+                  <small class="text-muted">剩余{{ userVip.deadline|remain_time }}</small>
                 {% endif %}
+              </p>
               {% else %}
-                <span class="glyphicon glyphicon-user"></span>普通用户
-              <div class="well" class="text-primary text-center">请在下方开通会员</div>
+                <p class="mtm"><small class="text-muted">您还不是会员，请先开通会员</small></p>
               {% endif %}
             </div>
           </div>
-          {% if member %}
-            {% if member.deadline|remain_time < 7 and member.deadline|remain_time > 0 %}
+
+          {% if userVip %}
+            {% if userVip.deadline|remain_time < 7 and userVip.deadline|remain_time > 0 %}
               {% if deadlineAlertCookie == null %}
                 <div class="alert alert-danger fade in">
                   <button type="button" id ="deadlineAlert" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  您的会员即将到期，请及时续费哦
+                  <small>您的会员即将到期，请及时续费哦。</small>
                 </div>
               {% endif %}
             {% endif %}
@@ -56,7 +58,11 @@
             <a class="list-group-item {% if menu == 'history' %}active{% endif %}" href="{{ path('vip_history') }}">购买历史</a>
           </div>  
         {% else %}
-          <div class="well text-danger">请先登录后再购买会员</div>
+          <div class="well">
+            <h4>欢迎来到会员专区</h4>
+            <p><a class="btn btn-block btn-lg btn-primary" href="{{ path('login') }}">用户登录</a></p>
+            <p class="text-muted">没有帐号？ <a href="{{ path('register') }}">用户注册</a></p>
+          </div>
         {% endif %}
         <div class="es-box">
           <div class="es-box-heading"><h2>最新会员</h2></div>

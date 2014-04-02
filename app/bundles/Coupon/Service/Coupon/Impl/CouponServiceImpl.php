@@ -192,10 +192,20 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponDao()->getCouponByCode($code);
     }
 
-    public function useCoupon($code)
+    public function useCoupon($code, $order)
     {
         $coupon = $this->getCouponDao()->getCouponByCode($code);
-        return $this->getCouponDao()->updateCoupon($coupon['id'], array('status' => 'used'));
+
+        if (empty($coupon)) {
+            return null;
+        }
+
+        return $this->getCouponDao()->updateCoupon($coupon['id'], array(
+            'status' => 'used',
+            'orderTime' => time(),
+            'userId' => $order['userId'],
+            'orderId' => $order['id']
+        ));
     }
 
     private function GenerateRandomCode ($length, $prefix)

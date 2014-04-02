@@ -2,7 +2,7 @@
 
 {% block title %}会员续费 - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'memberbundle/controller/order/buy' %}
+{% set script_controller = 'vipbundle/controller/order/buy' %}
 
 {% set type = 'renew' %}
 
@@ -22,7 +22,12 @@
       <div class="col-sm-8 form-control-static">
         <input type="hidden" name="level" value="{{ member.levelId }}">
         <strong class="text-info level-name">{{ level.name }}</strong>
-        <span class="text-muted">，有效期至{{ member.deadline|date('Y-m-d') }} (剩余 {{ member.deadline|remain_time }})</span>
+        {% if member.deadline > nowTime %}
+          <span class="text-muted">，有效期至{{ member.deadline|date('Y-m-d') }} (剩余 {{ member.deadline|remain_time }})</span>
+        {% else %}
+          <span class="text-muted">，会员已过期</span>
+
+        {% endif %}
       </div>
     </div>
 
@@ -34,10 +39,11 @@
       </div>
     </div>
 
-    <input type="hidden" name="startDate" value="{{ member.deadline|date('Y-m-d') }}">
-
-    
-
+    {% if member.deadline > nowTime %}
+      <input type="hidden" name="startDate" value="{{ member.deadline|date('Y-m-d') }}">
+    {% else %}
+      <input type="hidden" name="startDate" value="{{ nowTime|date('Y-m-d') }}">
+    {% endif %}
 
   </form>
 

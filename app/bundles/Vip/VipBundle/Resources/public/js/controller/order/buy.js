@@ -47,6 +47,11 @@ define(function(require, exports, module) {
         });
 
         $form.find('[name=unit]').on('change', function() {
+            if ($form.find('[name=unit]:checked').val() == 'month') {
+                $form.find('[name=duration]').val(3);
+            } else {
+                $form.find('[name=duration]').val(1);
+            }
             refresh();
         });
 

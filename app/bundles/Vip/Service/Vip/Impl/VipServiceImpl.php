@@ -34,33 +34,6 @@ class VipServiceImpl extends BaseService implements VipService
         return $this->getMemberDao()->searchMembersCount($conditions);
     }
 
-    public function createMember($memberData)
-    {
-        if(empty($memberData)){
-            return NULL;
-        }
-        $user = $this->getUserService()->getUserByNickname($memberData['nickname']);
-        if(empty($user)){
-            throw $this->createNotFoundException('user not exists!');
-        }
-
-        $data['userId'] = $user['id'];
-        $data['deadline'] = strtotime($memberData['deadline']);
-        $data['levelId'] = $memberData['levelId'];
-        $data['createdTime'] = time();
-        $member = $this->getMemberDao()->addMember($data);
-
-        $historyData = $memberData;
-        $historyData['userId'] = $user['id'];
-        $historyData['createdTime'] = time();
-        $historyData['boughtType'] = 'edit';
-        $memberHistory = $this->createMemberHistory($historyData);
-        
-        $this->getLogService()->info('member', 'add', "管理员添加新会员 {$memberHistory['nickname']} ({$memberHistory['userId']})");
-        
-        return $member;
-    }
-
     public function becomeMember($userId, $levelId, $duration, $unit, $orderId = 0)
     {
         $user = $this->getUserService()->getUser($userId);
@@ -153,7 +126,7 @@ class VipServiceImpl extends BaseService implements VipService
         }
 
         $member = array();
-        $member['deadline'] = strtotime("+ {$duration} {$unit}s", $currentMember['deadline']);
+        $member['deadline'] = strtotime("+ {$duration} {$unit}s", max($currentMember['deadline'], time()));
         $member['boughtType'] = 'renew';
         $member['boughtTime'] = time();
         $member['boughtDuration'] = $duration;
@@ -260,25 +233,22 @@ class VipServiceImpl extends BaseService implements VipService
     public function updateMemberInfo($userId, array $fields)
     {
         $member = $this->getMemberDao()->getMemberByUserId($userId);
-
         if(empty($member)){
             throw $this->createNotFoundException('member not exists!');
         }
 
-        $user = $this->getUserService()->getUser($member['userId']);
-
         $memberData['levelId'] = $fields['levelId'];
         $memberData['deadline'] = strtotime($fields['deadline']);
+        $memberData['boughtType'] = 'edit';
         $memberData['boughtUnit'] = $fields['boughtUnit'];
-        $member = $this->getMemberDao()->updateMember($userId, $memberData);
 
-        $historyData = $fields;
-        $historyData['createdTime'] = $member['createdTime'];
-        $historyData['userId'] = $member['userId'];
-        $historyData['boughtType'] = 'edit';
-        $memberHistory = $this->createMemberHistory($historyData);
+        $member = $this->getMemberDao()->updateMember($member['id'], $memberData);
 
-        $this->getLogService()->info('Member', 'edit', "管理员编辑会员资料 {$memberHistory['nickname']} (#{$memberHistory['userId']})", $memberData);
+        $history = $member;
+        unset($history['id']);
+        $this->getMemberHistoryDao()->addMemberHistory($history);
+
+        $this->getLogService()->info('vip', 'edit', "管理员编辑会员)", $member);
         
         return $member;
     }

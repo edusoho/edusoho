@@ -11,8 +11,6 @@ interface VipService
 
     public function searchMembersCount($conditions);
 
-    public function createMember($memberData);
-
     /**
      * 加入会员
      */

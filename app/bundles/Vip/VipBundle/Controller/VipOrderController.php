@@ -55,6 +55,7 @@ class VipOrderController extends OrderController
             'member' => $member,
             'level' => $level,
             'prices' => $this->makeLevelPrices(array($level)),
+            'nowTime' => time(),
         ));
     }
 
@@ -141,7 +142,7 @@ class VipOrderController extends OrderController
 
         $order['userId'] = $currentUser->id;
         $order['title'] = ($orderData['type'] == 'renew' ? '续费' : '购买') .  "{$level['name']} x {$orderData['duration']}{$unitNames[$orderData['unit']]}";
-        $order['targetType'] = 'member';
+        $order['targetType'] = 'vip';
         $order['targetId'] = $level['id'];
         $order['payment'] = 'alipay';
         $order['amount'] = $level[$orderData['unit'] . 'Price'] * $orderData['duration'];
@@ -190,7 +191,7 @@ class VipOrderController extends OrderController
 
         $order['userId'] = $currentUser->id;
         $order['title'] = "升级会员到 {$level['name']}";
-        $order['targetType'] = 'member';
+        $order['targetType'] = 'vip';
         $order['targetId'] = $level['id'];
         $order['payment'] = 'alipay';
         $order['amount'] = $this->getVipService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
@@ -238,7 +239,7 @@ class VipOrderController extends OrderController
                 );
             }
 
-            $this->generateUrl('vip');
+            return $controller->generateUrl('vip');
         });
     }
 
