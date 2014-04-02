@@ -1226,11 +1226,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (!empty($info['becomeUseMember'])) {
-			$levelChecked = $this->getMemberService()->checkUserInMemberLevel($user['id'], $course['memberLevelId']);
+			$levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['memberLevelId']);
 			if ($levelChecked != 'ok') {
 				throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
 			}
-			$userMember = $this->getMemberService()->getMemberByUserId($user['id']);
+			$userMember = $this->getVipService()->getMemberByUserId($user['id']);
 		}
 
 		if ($course['expiryDay'] > 0) {
@@ -1698,9 +1698,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->createService('Order.OrderService');
     }
 
-    private function getMemberService()
+    private function getVipService()
     {
-    	return $this->createService('Member:Member.MemberService');
+    	return $this->createService('Vip:Vip.VipService');
     }
 
     private function getReviewService()

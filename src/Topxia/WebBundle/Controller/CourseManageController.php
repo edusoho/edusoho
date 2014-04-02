@@ -304,7 +304,7 @@ class CourseManageController extends BaseController
 
     private function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Member:Member.LevelService');
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
     private function getFileService()

@@ -174,7 +174,7 @@ class CourseController extends BaseController
 
         $courseMemberLevel = $course['memberLevelId'] > 0 ? $this->getLevelService()->getLevel($course['memberLevelId']) : null;
         if ($courseMemberLevel) {
-            $checkMemberLevelResult = $this->getMemberService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
+            $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
         } else {
             $checkMemberLevelResult = null;
         }
@@ -482,12 +482,12 @@ class CourseController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Member:Member.LevelService');
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
-    protected function getMemberService()
+    protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Member:Member.MemberService');
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
     private function getCourseService()
