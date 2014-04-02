@@ -26,7 +26,7 @@ class VipController extends BaseController
         $hotestCourses = $this->getCourseService()->searchCourses(array('status' => 'published','memberLevelIds' => $levelIds), $sort = 'popular', 0, 3);
 
         $currentUser = $this->getCurrentUser();
-        $member =  $currentUser->isLogin() ? $this->getVipService()->getMemberByUserId($currentUser['id']) : null;
+        $userVip =  $currentUser->isLogin() ? $this->getVipService()->getMemberByUserId($currentUser['id']) : null;
 
         return $this->render('VipBundle:Vip:index.html.twig',array(
         	'levels' => $levels,
@@ -34,9 +34,10 @@ class VipController extends BaseController
             'hotestCourses' => $hotestCourses,
             'latestMembers' => $latestMembers,
             'members'=> $members,
-            'member'=> $member,
-            'memberZone'=> $vipSetting,
-            'deadlineAlertCookie' => $deadlineAlertCookie
+            'userVip'=> $userVip,
+            'vipSetting'=> $vipSetting,
+            'deadlineAlertCookie' => $deadlineAlertCookie,
+            'nowTime' => time(),
         ));
     }
 

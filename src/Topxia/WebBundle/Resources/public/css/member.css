@@ -2,8 +2,15 @@
 	float: left;
 }
 .member-item .course-view {
-	float:right;margin:5px;
+	float:right;
+	margin:10px;
+	visibility: hidden;
 }
+
+.member-item:hover .course-view {
+	visibility: visible;
+}
+
 .lastest-member-list .member-picture-link {
 	float: left;
 	margin: 0 10px 5px 0;
