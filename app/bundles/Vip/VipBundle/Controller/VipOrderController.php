@@ -55,6 +55,7 @@ class VipOrderController extends OrderController
             'member' => $member,
             'level' => $level,
             'prices' => $this->makeLevelPrices(array($level)),
+            'nowTime' => time(),
         ));
     }
 
