@@ -337,6 +337,10 @@ class CourseController extends BaseController
 
     public function becomeUseMemberAction(Request $request, $id)
     {
+        if (!$this->setting('vip.enabled')) {
+            $this->createAccessDeniedException();
+        }
+
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             $this->createAccessDeniedException();
