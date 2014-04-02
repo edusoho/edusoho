@@ -154,7 +154,7 @@ ul li,ol li{list-style-type: none;}
 
 .info .info-content{padding: 10px 10px 10px 0;}
 .info .photo-wall{width: 580px;*width: 742px;position:relative;}
-.info-ad {margin-left: 1em;color:#33aa65;width: 155px;height: 155px;background-color: #33aa65}
+.info-ad {margin-left: 2px;color:#33aa65;width: 155px;height: 155px;background-color: #33aa65}
 .info-ad .info-btn{padding: 25px 20px;}
 .info-ad p {text-align: center;color: #fff;}
 .info-btn .btn {background-color: #dedede;color: #33ab66;border-radius: 3px;}
