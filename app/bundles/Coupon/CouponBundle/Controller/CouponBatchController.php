@@ -115,6 +115,8 @@ class CouponBatchController extends BaseController
 
         $str .= implode("\r\n", $data);
 
+        $str = chr(239) . chr(187) . chr(191) . $str;
+
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="'.$outputFilename.'"');
