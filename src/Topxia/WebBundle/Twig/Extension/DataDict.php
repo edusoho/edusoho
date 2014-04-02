@@ -159,6 +159,10 @@ class DataDict
 	    	'normal' => '一般',
 	    	'difficulty' => '困难',
         ),
+        'targetName' => array(
+        	'course' => '课程',
+        	'vip' => '会员'
+    	),
 
 	);
 

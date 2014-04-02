@@ -219,6 +219,15 @@ class MemberAdminController extends BaseController
         ));
     }
 
+    public function orderAction(Request $request)
+    {
+        return $this->forward('TopxiaAdminBundle:Order:manage', array(
+            'request' => $request,
+            'type' => 'vip',
+            'layout' => 'MemberBundle:MemberAdmin:layout.html.twig',
+        ));
+    }
+
     protected function getMemberService()
     {
         return $this->getServiceKernel()->createService('Member:Member.MemberService');

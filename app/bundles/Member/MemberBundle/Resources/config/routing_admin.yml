@@ -2,6 +2,10 @@ admin_member_create:
     pattern: /member/create
     defaults: { _controller: MemberBundle:MemberAdmin:create }
 
+admin_member_order:
+    pattern: /member/order
+    defaults: { _controller: MemberBundle:MemberAdmin:order }
+
 admin_member_cancel:
     pattern: /member/{userId}/cancel
     defaults: { _controller: MemberBundle:MemberAdmin:cancel }
