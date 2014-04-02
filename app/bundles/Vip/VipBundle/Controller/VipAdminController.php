@@ -235,8 +235,7 @@ class VipAdminController extends BaseController
 
         $default = array(
             'enabled'=> 0,
-            'upgradeLimit' => 30,
-            'courseLimit' => 0,
+            'upgrade_min_day' => 30,
         );
 
         $vipSetting = array_merge($default, $vipSetting);
@@ -244,7 +243,7 @@ class VipAdminController extends BaseController
         if ($request->getMethod() == 'POST') {
             $vipSetting = $request->request->all();
             $this->getSettingService()->set('vip', $vipSetting);
-            $this->getLogService()->info('vip', 'update_memberZone', "更新会员专区设置", $vipSetting);
+            $this->getLogService()->info('vip', 'update_setting', "更新会员专区设置", $vipSetting);
             $this->setFlashMessage('success','会员专区设置已保存！');
         }
 

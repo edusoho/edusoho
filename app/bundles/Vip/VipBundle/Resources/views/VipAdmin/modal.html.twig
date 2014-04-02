@@ -45,11 +45,8 @@
      <div class="col-md-2 control-label">
       <label for="levels">付费方式</label>
     </div>
-     <div class="col-md-7 controls">
-           <div class="radios">
-             <label><input type="radio" name="boughtUnit" value="month" {% if boughtUnit == 'month' %}checked="checked"{% endif %}>  按月</label>
-             <label><input type="radio" name="boughtUnit" value="year" {% if boughtUnit == 'year' %}checked="checked"{% endif %}>  按年</label>
-           </div>
+     <div class="col-md-7 controls radios">
+        {{ radios('boughtUnit', {month:'按月', year:'按年'}, 'month') }}
       </div>
   </div> 
 
