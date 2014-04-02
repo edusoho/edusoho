@@ -28,38 +28,22 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="monthType">购买类型</label>
-      </div>
-      <div class="col-md-1">
-        <div class="checkbox">
-          <label>
-            <input {% if memberlevel %}{% if memberlevel.monthPrice != 0.00 %} checked="checked" {% endif %}{% endif %} id="monthType"  class="boughtType" type="checkbox" name="monthType" value="month">包月
-          </label>
-        </div>
+        <label for="monthType">购买价格</label>
       </div>
       <div class="col-md-6 controls">
-        <input type="text" name="monthPrice" class="form-control" value="{% if memberlevel %}{{ memberlevel.monthPrice }}{% else %}0.00{% endif %}">
+        <spann class="form-control-static">包月</spann>
+        <input type="text" name="monthPrice" class="form-control width-input width-input-large" value="{% if memberlevel %}{{ memberlevel.monthPrice }}{% else %}0.00{% endif %}">
       </div>
     </div>
 
     <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="yearType"></label>
-      </div>
-      <div class="col-md-1">
-        <div class="checkbox">
-          <label>
-            <input {% if memberlevel %}{% if memberlevel.yearPrice != 0.00 %} checked="checked" {% endif %}{% endif %} id="yearType" class="boughtType" type="checkbox" name="yearType" value="year">包年
-          </label>
-        </div>
-      </div>
-      
-      <div class="col-md-6 controls">
-        <input type="text" name="yearPrice" class="form-control" value="{% if memberlevel %}{{ memberlevel.yearPrice }}{% else %}0.00{% endif %}">
+      <div class=" col-md-offset-2 col-md-6 controls">
+        <spann class="form-control-static">包年</spann>
+        <input type="text" name="yearPrice" class="form-control width-input width-input-large" value="{% if memberlevel %}{{ memberlevel.yearPrice }}{% else %}0.00{% endif %}">
       </div>
     </div>
 
-    <div class="row form-group">
+    <div class="row form-group" style="display:none;">
       <div class="col-md-2 control-label">
         <label for="freeLearned">可免费学习所有课程</label>
       </div>

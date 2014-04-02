@@ -36,17 +36,6 @@ class VipLevelAdminController extends BaseController
 		{   
         if ('POST' == $request->getMethod()) {
         	$conditions = $request->request->all();
-        	if(isset($conditions['monthType'])) {
-        		unset($conditions['monthType']);
-        	} else { 
-        		$conditions['monthPrice'] = 0.00; 
-        	}
-        	if(isset($conditions['yearType'])) {
-        		unset($conditions['yearType']);
-        	} else { 
-        		$conditions['yearPrice'] = 0.00; 
-        	}
-
 			$memberlevel = $this->getLevelService()->createLevel($conditions);
 			if($memberlevel){
 				$this->setFlashMessage('success', '会员类型已保存！');
@@ -66,17 +55,6 @@ class VipLevelAdminController extends BaseController
 
         if ('POST' == $request->getMethod()) {
         	$conditions = $request->request->all();
-        	if(isset($conditions['monthType'])) {
-        		unset($conditions['monthType']);
-        	} else { 
-        		$conditions['monthPrice'] = 0.00; 
-        	}
-        	if(isset($conditions['yearType'])) {
-        		unset($conditions['yearType']);
-        	} else { 
-        		$conditions['yearPrice'] = 0.00;  
-        	}
-
 			$memberlevel = $this->getLevelService()->updateLevel($id, $conditions);
 
 			if($memberlevel){

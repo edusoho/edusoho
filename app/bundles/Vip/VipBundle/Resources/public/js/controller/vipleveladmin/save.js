@@ -14,37 +14,23 @@ define(function(require, exports, module) {
             element: $form
         });
 
-        $form.find('[name="monthType"]:checked').trigger('change');
-
-        $form.find('[name="yearType"]:checked').trigger('change');
-
-        $form.on('change', '[name="monthType"]', function(e) {
-            if ($(this).is(':checked')) {
-                validator.addItem({
-                    element: '[name="monthPrice"]',
-                    required: true,
-                    rule:'currency arithmetic_number'            
-                });
-            } else {
-                validator.removeItem('[name="monthPrice"]');
-            };
-        });
-
-        $form.on('change', '[name="yearType"]', function(e) {
-            if ($(this).is(':checked')) {
-                validator.addItem({
-                    element: '[name="yearPrice"]',
-                    required: true,
-                    rule:'currency arithmetic_number'            
-                });
-            } else {
-                validator.removeItem('[name="yearPrice"]');
-            };
-        });
-
         validator.addItem({
             element: '[name="name"]',
             required: true
+        });
+
+        validator.addItem({
+            element: '[name="monthPrice"]',
+            required: true,
+            rule:'currency arithmetic_number',
+            display: '包月价格'           
+        });
+
+        validator.addItem({
+            element: '[name="yearPrice"]',
+            required: true,
+            rule:'currency arithmetic_number',
+            display: '包年价格'            
         });
 
         var editor = EditorFactory.create('#memberlevel-content-field', 'standard', {extraFileUploadParams:{}, height: '100px'});
