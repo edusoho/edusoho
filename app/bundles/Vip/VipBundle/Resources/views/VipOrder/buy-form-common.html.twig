@@ -10,7 +10,7 @@
     <input type="text" class="form-control width-input width-input-mini" name="duration" value="3">
     <span class="unit-label unit-label-month">个月</span>
     <span class="unit-label unit-label-year" style="display:none;">年</span>
-    <span class="text-success mll dealine-hint hide">会员有效期延长至<strong class="deadline"></strong></span>
+    <span class="text-success mll dealine-hint hide">会员有效期{% if type != 'new' %}延长{% endif %}至<strong class="deadline"></strong></span>
   </div>
 </div>
 
