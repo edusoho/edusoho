@@ -26,6 +26,8 @@
 					</div>
 				</div>
 
+				{% if setting('vip.enabled') %}
+
 				<div class="form-group">
 					<div class="col-md-2 control-label">
 						<label for="price">会员课程设置</label>
@@ -37,6 +39,7 @@
 						<div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
 					</div>
 				</div>
+				{% endif %}
 
 
 				<div class="form-group">
