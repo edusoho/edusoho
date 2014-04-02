@@ -262,7 +262,7 @@ class VipOrderController extends OrderController
 
     public function payNotifyAction(Request $request, $name)
     {
-        return $this->doPayNotify($request, $name, function($order) {
+        return $this->doPayNotify($request, $name, function($success, $order) use ($controller) {
             if (!$success) {
                 return ;
             }
