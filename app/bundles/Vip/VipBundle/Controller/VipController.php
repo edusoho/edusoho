@@ -36,7 +36,8 @@ class VipController extends BaseController
             'members'=> $members,
             'userVip'=> $userVip,
             'vipSetting'=> $vipSetting,
-            'deadlineAlertCookie' => $deadlineAlertCookie
+            'deadlineAlertCookie' => $deadlineAlertCookie,
+            'nowTime' => time(),
         ));
     }
 
