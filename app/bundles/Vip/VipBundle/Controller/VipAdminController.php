@@ -164,6 +164,7 @@ class VipAdminController extends BaseController
         );
         
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($memberHistories, 'userId'));
+        $operators = $this->getUserService()->findUsersByIds(ArrayToolkit::column($memberHistories, 'operatorId'));
 
         $levels = $this->makeMemberLevelOptions();
 
@@ -173,7 +174,8 @@ class VipAdminController extends BaseController
             'menu' => 'member_history',
             'show_usernick' => 1,
             'levels' => $levels,
-            'users' => $users
+            'users' => $users,
+            'operators' => $operators,
             ));
     }
 
