@@ -96,7 +96,7 @@ class CourseOrderController extends OrderController
             $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],
                 'status' => 'success', 
-                'amount' => $order['price'], 
+                'amount' => $order['amount'], 
                 'paidTime' => time()
             ));
 
