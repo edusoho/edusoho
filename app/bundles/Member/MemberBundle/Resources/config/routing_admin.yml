@@ -10,7 +10,7 @@ admin_vip_cancel:
     pattern: /vip/user/{userId}/cancel
     defaults: { _controller: MemberBundle:MemberAdmin:cancel }
 
-admin_member:
+admin_vip_list:
     pattern: /vip/type/{type}
     defaults: { _controller: MemberBundle:MemberAdmin:index, type: 'all' }
 

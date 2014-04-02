@@ -16,13 +16,13 @@
 
 <ul class="nav nav-tabs">
   <li {% if type == 'all' %} class="active" {% endif %} >
-    <a  href="{{ path('admin_member', {type:'all'}) }}">全部会员</a>
+    <a  href="{{ path('admin_vip_list', {type:'all'}) }}">全部会员</a>
   </li>
   <li {% if type == 'will_expire' %} class="active" {% endif %} >
-    <a  href="{{ path('admin_member', {type:'will_expire'}) }}">即将到期的会员</a>
+    <a  href="{{ path('admin_vip_list', {type:'will_expire'}) }}">即将到期的会员</a>
   </li>
    <li {% if type == 'just_expire' %} class="active" {% endif %} >
-    <a  href="{{ path('admin_member', {type:'just_expire'}) }}">刚刚到期的会员</a>
+    <a  href="{{ path('admin_vip_list', {type:'just_expire'}) }}">刚刚到期的会员</a>
   </li>
 </ul>
 <br>
