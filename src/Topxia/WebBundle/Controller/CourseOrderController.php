@@ -93,7 +93,7 @@ class CourseOrderController extends OrderController
                 'requestParams' => $payRequestParams,
             ));
         } else {
-            $order = $this->getOrderService()->payOrder(array(
+            list($success, $order) = $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],
                 'status' => 'success', 
                 'amount' => $order['amount'], 
@@ -113,7 +113,11 @@ class CourseOrderController extends OrderController
     public function payReturnAction(Request $request, $name)
     {
         $controller = $this;
-        return $this->doPayReturn($request, $name, function($order) use(&$controller) {
+        return $this->doPayReturn($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                $controller->generateUrl('course_show', array('id' => $order['targetId']));
+            }
+
             if ($order['targetType'] != 'course') {
                 throw \RuntimeException('非课程订单，加入课程失败。');
             }
@@ -132,6 +136,9 @@ class CourseOrderController extends OrderController
     {
         $controller = $this;
         return $this->doPayNotify($request, $name, function($order) use(&$controller) {
+            if (!$success) {
+                return ;
+            }
             if ($order['targetType'] != 'course') {
                 throw \RuntimeException('非课程订单，加入课程失败。');
             }
@@ -142,7 +149,7 @@ class CourseOrderController extends OrderController
             );
             $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
-            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
+            return ;
         });
     }
 

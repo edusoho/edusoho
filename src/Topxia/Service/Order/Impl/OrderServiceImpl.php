@@ -75,6 +75,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function payOrder($payData)
     {
+        $success = false;
         $order = $this->getOrderDao()->getOrderBySn($payData['sn']);
         if (empty($order)) {
             throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
@@ -94,6 +95,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                     'paidTime' => $payData['paidTime'],
                 ));
                 $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
+                $success = true;
 
             } else {
                 $this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
@@ -102,7 +104,9 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->_createLog($order['id'], 'pay_unknown', '', $payData);
         }
 
-        return $this->getOrder($order['id']);
+        $order = $this->getOrder($order['id']);
+
+        return array($success, $order);
     }
 
     public function findOrderLogs($orderId)

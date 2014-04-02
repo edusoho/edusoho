@@ -228,7 +228,11 @@ class VipOrderController extends OrderController
     public function payReturnAction(Request $request, $name)
     {
         $controller = $this;
-        return $this->doPayReturn($request, $name, function($order) use ($controller) {
+        return $this->doPayReturn($request, $name, function($success, $order) use ($controller) {
+            if (!$success) {
+                return $controller->generateUrl('vip');
+            }
+
             if ($order['data']['type'] == 'new') {
                 $controller->getVipService()->becomeMember(
                     $order['userId'],
@@ -259,7 +263,34 @@ class VipOrderController extends OrderController
     public function payNotifyAction(Request $request, $name)
     {
         return $this->doPayNotify($request, $name, function($order) {
+            if (!$success) {
+                return ;
+            }
 
+            if ($order['data']['type'] == 'new') {
+                $controller->getVipService()->becomeMember(
+                    $order['userId'],
+                    $order['data']['level'],
+                    $order['data']['duration'], 
+                    $order['data']['unit'], 
+                    $order['id']
+                );
+            } elseif ($order['data']['type'] == 'renew') {
+                $controller->getVipService()->renewMember(
+                    $order['userId'],
+                    $order['data']['duration'], 
+                    $order['data']['unit'], 
+                    $order['id']
+                );
+            } elseif ($order['data']['type'] == 'upgrade') {
+                $controller->getVipService()->upgradeMember(
+                    $order['userId'],
+                    $order['data']['level'], 
+                    $order['id']
+                );
+            }
+
+            return ;
         });
     }
 

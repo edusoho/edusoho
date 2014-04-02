@@ -39,10 +39,10 @@ class OrderController extends BaseController
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
-        $order = $this->getOrderService()->payOrder($payData);
+        list($success, $order) = $this->getOrderService()->payOrder($payData);
 
         if ($order['status'] == 'paid' and $successCallback) {
-            $successUrl = $successCallback($order);
+            $successUrl = $successCallback($success, $order);
         }
 
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
@@ -57,9 +57,9 @@ class OrderController extends BaseController
 
         $payData = $response->getPayData();
         try {
-            $order = $this->getOrderService()->payOrder($payData);
+            list($success, $order) = $this->getOrderService()->payOrder($payData);
             if ($order['status'] == 'paid' and $successCallback) {
-                $successCallback($order);
+                $successCallback($success, $order);
             }
 
             return new Response('success');
