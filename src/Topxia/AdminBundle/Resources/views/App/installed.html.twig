@@ -31,7 +31,11 @@
           {{ app.developerName }}
         </td>
         <td>
-          <a href="#" class="btn btn-primary">管理</a>
+          {% if app.code == 'vip' %}
+            <a href="../vip/list" class="btn btn-primary">管理</a>
+          {% elseif app.code == 'coupon' %}
+            <a href="../coupon" class="btn btn-primary">管理</a>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
