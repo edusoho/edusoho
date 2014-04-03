@@ -26,7 +26,9 @@
             <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}"><strong class="text-primary">{{ app.name }}</strong></a>
              - 
             <span class="text-info">{{ app.latestVersion }}</span>
-            <span class="label label-warning">商业版应用</span>
+            {% if app.licensed %}
+              <span class="label label-warning">商业版应用</span>
+            {% endif %}
           </div>
           <div class="">{{ app.description|plain_text(100) }}</div>
           <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div>
