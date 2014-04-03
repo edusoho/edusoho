@@ -1259,7 +1259,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'createdTime' => time()
 		);
 
-
+		if (empty($fields['remark'])) {
+			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
+		}
 
 		$member = $this->getMemberDao()->addMember($fields);
 
