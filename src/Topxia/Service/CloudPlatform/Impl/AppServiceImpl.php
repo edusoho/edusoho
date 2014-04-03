@@ -160,6 +160,10 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = 'src目录无写权限';
         }
 
+        if(!is_writeable("{$rootDirectory}/plugins")) {
+            $errors[] = 'plugins目录无写权限';
+        }
+
         if(!is_writeable("{$rootDirectory}/web")) {
             $errors[] = 'web目录无写权限';
         }
@@ -477,7 +481,7 @@ class AppServiceImpl extends BaseService implements AppService
         if ($package['product']['code'] == 'MAIN') {
             return $this->getSystemRootDirectory();
         } else {
-            return $this->getKernel()->getParameter('kernel.root_dir') . '/' . 'bundles';
+            return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
         }
     }
 
