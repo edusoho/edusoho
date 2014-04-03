@@ -50,6 +50,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 throw $this->createServiceException("优惠码不可用");            
             }
 
+            $order['couponDiscount'] = $order['amount'] - $couponInfo['afterAmount'];
             $order['amount'] = $couponInfo['afterAmount'];
         }
         $order['coupon'] = empty($order['couponCode']) ? '' : $order['couponCode'];
@@ -66,7 +67,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrderDao()->addOrder($order);
 
         if ($order['coupon']) {
-            $this->getCouponService()->useCoupon($code, $order);
+            $this->getCouponService()->useCoupon($order['coupon'], $order);
         }
 
         $this->_createLog($order['id'], 'created', '创建订单');

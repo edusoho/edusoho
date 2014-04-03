@@ -40,6 +40,16 @@
           <span class="money-text">{{ order.amount }}</span>元
         </td>
       </tr>
+      <tr> <th width="25%">优惠码</th> 
+        <td width="75%">
+          {% if order.coupon %}{{ order.coupon }}{% else %}无{% endif %}
+        </td>
+      </tr>
+      <tr> <th width="25%">优惠金额</th> 
+        <td width="75%">
+          <span class="money-text">{{ order.couponDiscount }}</span>元
+        </td>
+      </tr>
       <tr> <th width="25%">是否为赠品</th> 
            <td width="75%">
             {% if order.isGift == 0 %} 非赠品
