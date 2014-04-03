@@ -24,7 +24,7 @@ class AppKernel extends Kernel
         );
 
         //@todo refactor.
-        $pluginDir = dirname(__FILE__) . '/bundles';
+        $pluginDir = dirname(__FILE__) . '/../plugins';
         if (file_exists("{$pluginDir}/Vip/VipBundle/VipBundle.php")) {
             $bundles[] = new Vip\VipBundle\VipBundle();
         }
