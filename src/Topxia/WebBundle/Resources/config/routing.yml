@@ -1084,7 +1084,7 @@ activity_email_check:
     defaults: { _controller: TopxiaWebBundle:Activity:emailCheck }
 
 activity_email_resend:
-    pattern:  /openclass/join/email/resend/{id}/{hash}
+    pattern:  /openclass/{activityId}/join/email/resend/{userId}/{hash}
     defaults: { _controller: TopxiaWebBundle:Activity:reSendActivityEmail }
 
 activity_remove:

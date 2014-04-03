@@ -348,7 +348,7 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
-                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
                
                 $this->sendActivityEmail(false,$token,$user,$activity);
 
@@ -699,6 +699,8 @@ class ActivityController extends BaseController
  
     private function sendActivityEmail($isFirst=false,$token, $user,$activity)
     {
+        $token =   $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+        
         $this->sendEmail(
                 $user['email'],
                 "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
