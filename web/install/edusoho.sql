@@ -151,7 +151,7 @@ CREATE TABLE `course` (
   `lessonNum` int(10) unsigned NOT NULL DEFAULT '0',
   `rating` float unsigned NOT NULL DEFAULT '0' COMMENT '排行数值',
   `ratingNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '投票人数',
-  `memberLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可以免费看的，会员等级',
+  `vipLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可以免费看的，会员等级',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0',
   `tags` text,
   `smallPicture` varchar(255) NOT NULL DEFAULT '',
