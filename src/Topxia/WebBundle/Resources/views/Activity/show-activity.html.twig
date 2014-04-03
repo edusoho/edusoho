@@ -134,14 +134,14 @@
             <div class="row">
               <ul class="col-md-12 mbm mtm" id="qustion-media-list">
                 {% for qustion in qustions %}
-                <li class="media li-no">
+                <li class="media">
                   <a class="pull-left user-link user-avatar-link" href="javascript:">
                     {% if qustion['userId']==0 %}
                     <img src="/assets/img/default/avatar.png" >    
                     {% else %}
                     <img src="{{ file_path(qustion_users[qustion['userId']].mediumAvatar,'avatar.png') }}" >{% endif %}</a>
                   <div class="media-body">
-                    <div class="media-content post-list phm">
+                    <div class="media-content post-list phm pvm">
                       <a  href="{{ path('user_show',{id:qustion['userId'] }) }}">{{qustion_users[qustion['userId']].nickname }}:</a>
                       {{qustion.content}} 
                       <a hef="javascript:" class="reply btn btn-link">
@@ -159,6 +159,7 @@
                       </div>
                       {% endfor %}
                     </div>
+                    
                     <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}"></div>
                   </div>
                 </li>
@@ -233,6 +234,7 @@
         {% if students %}
         <ul class="media-list">
           {% for student in students  %}
+          {% set studentInfo = studentInfos[student.id]%}
           <li class="media">
             <a class="pull-left" href="{{ path('user_show',{id:student.id}) }}">
               <img width="30px" class="img-responsive media-object " src="{{ file_path(student.mediumAvatar,'avatar-large.png')  }}" alt="user icon"></a>
@@ -240,9 +242,8 @@
               <h4 class="media-heading">
                 <a href="{{ path('user_show', {id:student.id}) }}" class="text-color-gray text-size-12" >{{ student.nickname }}</a>
               </h4>
-              <p class="text-color-gray text-size-12">{{ student.title }}</p>
+              <p class="text-color-gray text-size-12">{{ studentInfo.job }} {{ studentInfo.company }}</p>
             </div>
-
           </li>
           {% endfor %}
         </ul>

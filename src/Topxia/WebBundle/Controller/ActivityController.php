@@ -107,6 +107,7 @@ class ActivityController extends BaseController
         $students=$this->getActivityService()->findActivityStudents($id,0,20);
         $studentIds=ArrayToolkit::column($students,'userId');
         $students = $this->getUserService()->findUsersByIds($studentIds);
+        $studentInfos = $this->getUserService()->findUserProfilesByIds($studentIds);
         
         
         //小伙伴们正在看的活动
@@ -154,7 +155,8 @@ class ActivityController extends BaseController
 
         return $this->render("TopxiaWebBundle:Activity:show-activity.html.twig",array(
             "activity"=>$activity,
-            "students"=>$students,            
+            "students"=>$students,
+            "studentInfos"=>$studentInfos,         
             "qustions"=>$threadPosts,
             "activitys"=>$activitys,
             "current_user"=> $currentuser,
@@ -452,7 +454,104 @@ class ActivityController extends BaseController
         ));
     }
 
+
+    public function qustionCreateAction(Request $request,$id){        
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm(new QustionType());
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request); 
+                $fields = $form->getData();
+                $fields['activityId']= $id;
+                //$this->sendWeibo($fields['castweibo'],$fields);
+                unset($fields['castweibo']);
+                $qustion=$this->getActivityThreadService()->createThread($fields);
+                $url = $this->get('router')->generate('activity_qustionpost', array('id' =>$qustion['activityId'] ,'qid'=> $qustion['id']));
+                $qustion['action']=$url;
+                $currentuser=$this->getCurrentUser();
+                
+                if(empty($qustion['userId'])){
+                    $qustion['usernickname']="游客";
+                    $qustion['usersmallAvatar']="/assets/img/default/avatar.png";
+                }else{
+                    $qustion['usernickname']=$currentuser['nickname'];
+                    $qustion['usersmallAvatar']=$this->getWebExtension()->getFilePath($currentuser['smallAvatar']);
+                }
+                $newqustion=$qustion; 
+                return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
+                    'qustion'=>$newqustion,
+                    'user'=>$currentuser,
+                ));
+        }
+        
+    }
+
+    public function postCreateAction(Request $request,$id,$qid){
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        $form = $this->createForm(new ActivitypostType());
+        if ($request->getMethod() == 'POST') {
+                $form->bind($request);
+                $fields = $form->getData();
+                $this->sendWeibo(true,$fields);
+                $fields['activityId']= $id;
+                $fields['threadId']=$qid;
+                //$fields['content']="zhaoxin test";
+                $post=$this->getActivityThreadService()->postThread($fields);
+                $currentuser=$this->getCurrentUser();
+                if(empty($currentuser['id'])){
+                    $post['usernickname']="游客";
+                }else{
+                    $post['usernickname']=$currentuser['nickname'];
+                }
+                $newpost=$post;
+                return $this->render('TopxiaWebBundle:Activity:qustion-post-create.html.twig', array(
+                    'post'=>$newpost
+                ));
+            }
+        return $this->createJsonResponse(false);
+    }
+
+
+
+    public function emailCheckAction(Request $request)
+    {
+        $email = $request->query->get('value');
+        $result = $this->getUserService()->isEmailAvaliable($email);
+        if ($result) {
+            $response = array('success' => true, 'message' => '该Email地址可以使用');
+        } else {
+            $response = array('success' => false, 'message' => '该Email地址已注册，如果您是该用户，请登陆！');
+        }
+        return $this->createJsonResponse($response);
+    }
     
+
+    public function createAction(Request $request)
+    {
+        $form = $this->createActivityForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $course = $form->getData();
+                $course = $this->getActivityService()->createActivity($course);
+                return $this->redirect($this->generateUrl('activity_manage', array('id' => $course['id'])));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Activity:create.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
 
     private function getThreadSearchFilters($request)
     {
@@ -548,52 +647,13 @@ class ActivityController extends BaseController
     }
 
 
-    public function qustioncreateAction(Request $request,$id){        
 
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $form = $this->createForm(new QustionType());
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request); 
-                $fields = $form->getData();
-                $fields['activityId']= $id;
-                //$this->sendWeibo($fields['castweibo'],$fields);
-                unset($fields['castweibo']);
-                $qustion=$this->getActivityThreadService()->createThread($fields);
-                $url = $this->get('router')->generate('activity_qustionpost', array('id' =>$qustion['activityId'] ,'qid'=> $qustion['id']));
-                $qustion['action']=$url;
-                $currentuser=$this->getCurrentUser();
-                
-                if(empty($qustion['userId'])){
-                    $qustion['usernickname']="游客";
-                    $qustion['usersmallAvatar']="/assets/img/default/avatar.png";
-                }else{
-                    $qustion['usernickname']=$currentuser['nickname'];
-                    $qustion['usersmallAvatar']=$this->getWebExtension()->getFilePath($currentuser['smallAvatar']);
-                }
-                $newqustion=$qustion; 
-                return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
-                    'qustion'=>$newqustion,
-                    'user'=>$currentuser,
-                ));
-        }
-        
-    }
-
-    public function emailCheckAction(Request $request)
+    private function createActivityForm()
     {
-        $email = $request->query->get('value');
-        $result = $this->getUserService()->isEmailAvaliable($email);
-        if ($result) {
-            $response = array('success' => true, 'message' => '该Email地址可以使用');
-        } else {
-            $response = array('success' => false, 'message' => '该Email地址已注册，如果您是该用户，请登陆！');
-        }
-        return $this->createJsonResponse($response);
+        return $this->createNamedFormBuilder('activity')
+            ->add('title', 'text',array('required'=>true))
+            ->add('actType', 'act_type',array('multiple'=>false,'expanded'=>false,'required'=>true))
+            ->getForm();
     }
 
     private function sendWeibo($castweibo,$fields){
@@ -612,59 +672,7 @@ class ActivityController extends BaseController
 
     }
 
-    public function createAction(Request $request)
-    {
-        $form = $this->createActivityForm();
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $course = $form->getData();
-                $course = $this->getActivityService()->createActivity($course);
-                return $this->redirect($this->generateUrl('activity_manage', array('id' => $course['id'])));
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:Activity:create.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
-
-    private function createActivityForm()
-    {
-        return $this->createNamedFormBuilder('activity')
-            ->add('title', 'text',array('required'=>true))
-            ->add('actType', 'act_type',array('multiple'=>false,'expanded'=>false,'required'=>true))
-            ->getForm();
-    }
-
-    public function postcreateAction(Request $request,$id,$qid){
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-        $form = $this->createForm(new ActivitypostType());
-        if ($request->getMethod() == 'POST') {
-                $form->bind($request);
-                $fields = $form->getData();
-                $this->sendWeibo(true,$fields);
-                $fields['activityId']= $id;
-                $fields['threadId']=$qid;
-                //$fields['content']="zhaoxin test";
-                $post=$this->getActivityThreadService()->postThread($fields);
-                $currentuser=$this->getCurrentUser();
-                if(empty($currentuser['id'])){
-                    $post['usernickname']="游客";
-                }else{
-                    $post['usernickname']=$currentuser['nickname'];
-                }
-                $newpost=$post;
-                return $this->render('TopxiaWebBundle:Activity:qustion-post-create.html.twig', array(
-                    'post'=>$newpost
-                ));
-            }
-        return $this->createJsonResponse(false);
-    }
+  
 
  
     private function sendActivaEmail($token, $user)

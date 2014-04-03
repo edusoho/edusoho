@@ -1,17 +1,20 @@
- <li class="media">
-    <a class="pull-left user-link user-avatar-link" href="javascript:">
-      <img src="{{ file_path(user.mediumAvatar,'avatar.png') }}" >
-    </a>
-    <div class="media-body">
-      <p class="media-content"><a  href="{{ path('user_show',{id:qustion.userId }) }}">{{qustion.usernickname }}:</a> {{qustion.content}}
-      </p>
-      <div class="reply-tools media-content " >
-        <a hef="javascript:" class="reply btn btn-link"><span class="glyphicon glyphicon-share-alt"></span> 回复</a>
-        <p style="float:right;" class="huifu">{{qustion.createdTime|smart_time }}</p>
-      </div>
-      <div class="post-list media-content">
-      </div>
-      <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}">
-      </div>
-    </div>
+<li class="media">
+   <a class="pull-left user-link user-avatar-link" href="javascript:">
+     {% if user.id ==0 %}
+     <img src="/assets/img/default/avatar.png" > 
+     {% else %}
+     <img src="{{ file_path(user.mediumAvatar,'avatar.png') }}" >{% endif %}</a>
+   <div class="media-body">
+     <div class="media-content post-list phm">
+       <a  href="{{ path('user_show',{id:user.id }) }}">{{user.nickname }}:</a>
+       {{qustion.content}}
+       <a hef="javascript:" class="reply btn btn-link">
+         <span class="glyphicon glyphicon-share-alt text-size-10">回复</span>
+       </a>
+       <span class="post-item-time">{{qustion.createdTime|smart_time }}</span>
+     </div>
+
+     
+     <div class="reply-box media-content" style="display:none;" action="{{ path("activity_qustionpost",{id:qustion.activityId,qid:qustion.id}) }}"></div>
+   </div>
 </li>

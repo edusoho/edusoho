@@ -1102,11 +1102,11 @@ activity_expired:
 
 activity_qustioncreate:
     pattern: /openclass/{id}/question/create
-    defaults: { _controller:TopxiaWebBundle:Activity:qustioncreate }
+    defaults: { _controller:TopxiaWebBundle:Activity:qustionCreate }
 
 activity_qustionpost:
     pattern: /openclass/{id}/question/{qid}/postcreate
-    defaults: { _controller: TopxiaWebBundle:Activity:postcreate }
+    defaults: { _controller: TopxiaWebBundle:Activity:postCreate }
 
 activity_manage:
     pattern:  /openclass/{id}/manage

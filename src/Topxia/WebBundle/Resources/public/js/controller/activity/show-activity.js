@@ -51,6 +51,7 @@ define(function(require, exports, module) {
 
                
         $(".reply").bind("click",createReply);
+        
         //提问
         var validator = new Validator({
             element: '#qustion-form',
@@ -75,7 +76,7 @@ define(function(require, exports, module) {
             });
         });
 
-         $(".grid-img").mouseenter(function(){
+        $(".grid-img").mouseenter(function(){
 
            $(this).find(".card-desc").css({display:"block"});
       
@@ -84,9 +85,9 @@ define(function(require, exports, module) {
         
 
             
-         });
+        });
 
-         $(".grid-img").mouseleave(function(){
+        $(".grid-img").mouseleave(function(){
             
             $(this).find(".card-desc").css("opacity", "0");
             $(this).find(".card-desc").css("filter", "alpha(opacity=0)");
