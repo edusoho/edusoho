@@ -513,7 +513,8 @@ class ActivityController extends BaseController
                 }
                 $newpost=$post;
                 return $this->render('TopxiaWebBundle:Activity:qustion-post-create.html.twig', array(
-                    'post'=>$newpost
+                    'post'=>$newpost,
+                    'user'=>$user
                 ));
             }
         return $this->createJsonResponse(false);
