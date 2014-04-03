@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set nav = 'openclass' %}
 {% set bodyClass = 'homepage' %}
-{% set script_controller = 'activity/show' %}
+{% set script_controller = 'activity/show-activity' %}
 
 {% block content %}
 <div class="row widget shadow mhz ps-re ">
@@ -29,9 +29,9 @@
       <p>
         直播地址： <span class='text-danger'>
         {% if activity.join %}
-           直播地址已通过邮件方式发送到您的邮箱!(如未收到邮件，请点击这里！）
+           参课方式已通过邮件方式发送到您的邮箱 (如未收到邮件，请点击这里！）
         {% else %}
-           报名后将通过邮件方式告知参课方式和地址，请正确填写邮件地址！
+           报名后将通过邮件方式告知参课方式和地址，请正确填写邮件地址
         {% endif %}
         </span>
       </p>
@@ -110,39 +110,27 @@
           </div>
 
           <div class="content">
-            <div class="row">
-              
-                <div class="col-md-12 ">
-                  <a href="javascript:" class="pull-left user-link user-avatar-link" >
-                    {% if current_user['id']==0 %}
-                      <img src="/assets/img/default/avatar.png">    
-                    {% else %}
-                      <img src="{{ file_path(current_user.smallAvatar,'avatar.png') }}" alt="ae120">
-                    {% endif %}
-                  </a>
 
-                  <form class="form-horizontal" role="form" id="qustion-form" action="{{ path("activity_qustioncreate",{id:activity.id}) }}" method="post">
-                      <div class="row ">
-                       
-                          <div class="form-group ">
+             <form class="form-horizontal" role="form" id="qustion-form" action="{{ path("activity_qustioncreate",{id:activity.id}) }}" method="post">
 
-                              <div class="col-md-8">
-                                 <textarea class="form-control" rows="5" name="qustion[content]"  id="qustiontext"></textarea>
-                              </div>
-                         
-                              <div class="col-md-2">
-                               
-                                  <img src="{{ asset('bundles/topxiaweb/img/smile.png') }}">
-                              
-                                  <button type="submit" class="btn btn-success"  data-toggle="form-submit" data-target="#qustion-form">提问</button>
-                              </div>
-                          </div>
-                      
-                      </div>
-                  </form>
-                </div>
-             
-            </div>
+              <div class="row">
+                                           
+
+                            <div class="col-md-10 mbl">
+                                  
+                                   <textarea class="form-control" rows="5" name="qustion[content]"  id="qustiontext"></textarea>      
+
+                            </div>
+                           
+                            <div class="col-md-2 mbl">                            
+                                <button type="submit" class="btn btn-success"  data-toggle="form-submit" data-target="#qustion-form">我要提问</button>
+                            </div>
+               
+              </div>
+
+            </form>
+
+
             <div class="row">
               <ul class="col-md-12 mbm mtm" id="qustion-media-list">
                 {% for qustion in qustions %}
