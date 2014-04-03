@@ -489,6 +489,7 @@ CREATE TABLE `orders` (
   `refundId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次退款操作记录的ID',
   `userId` int(10) unsigned NOT NULL,
   `coupon` varchar(255) NOT NULL DEFAULT '',
+  `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
   `payment` enum('none','alipay','tenpay') NOT NULL DEFAULT 'none',
   `bank` varchar(32) NOT NULL DEFAULT '' COMMENT '银行编号',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
