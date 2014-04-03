@@ -1,13 +1,14 @@
-hi，小伙伴，{{ user.nickname }}，这是您第一次参加开源力量公开课！
+hi，小伙伴，{{ user.nickname }}，这是你第一次参加开源力量公开课！
 
 我们已经为您注册一个账号{{ user.email }}，您需要点击下面的链接来完成邮箱验证并初始化密码，这样，您就能参加我们的线上直播课啦！
-
 
 {{ url('register_email_activa', {token:token}) }}
 
 如果您的email程序不支持链接点击，请将上面的地址拷贝至您的浏览器(例如IE)的地址栏进入{{ setting('site.name') }}。
 
-{{ setting('site.name') }} {{ setting('site.url') }}  
+{{ setting('site.name') }} {{ setting('site.url') }}
+
+本次公开课的参课方式的地址为：
 
 如果你发现程序bug，请联系开源力量.清劲，他的新浪微薄：@陈清劲，QQ：3475563。一般他住在终南山。
 

@@ -268,9 +268,11 @@ class ActivityController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
+            
             $form = $this->createForm(new ActivityMemberType());
             $form->bind($request);
             $member = $form->getData();
+
             if ($activity['needApproval']=='需要' or $activity['needApproval']=='yes') {
                 $member['approvalStatus']='checking';
             }
