@@ -250,6 +250,7 @@ class ActivityController extends BaseController
             "appendixs"=>$appendix));
     }
 
+
     //公开课报名，根据用户是否登陆和是否设置价格及支付方式进入不同的报名页面
     public function joinAction(Request $request,$id)
     {  
@@ -268,9 +269,11 @@ class ActivityController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            
+
             $form = $this->createForm(new ActivityMemberType());
+
             $form->bind($request);
+
             $member = $form->getData();
 
             if ($activity['needApproval']=='需要' or $activity['needApproval']=='yes') {
@@ -299,10 +302,6 @@ class ActivityController extends BaseController
 
                 $this->getUserService()->updateUserProfile($user['id'],$userprofile);
 
-                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-               
-                $this->sendActivaEmail($token,$user);
-
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
@@ -316,6 +315,10 @@ class ActivityController extends BaseController
                     $activity_thread['activityId']=$id;
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
+
+                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
+                $this->sendActivityEmail(true,$token,$user,$activity);
 
                 return $this->redirect($this->generateUrl("activity_join_success",array(
                     "id"=>$id,
@@ -344,6 +347,11 @@ class ActivityController extends BaseController
                     $activity_thread['activityId']=$id;
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
+
+                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+               
+                $this->sendActivityEmail(false,$token,$user,$activity);
+
                 return $this->redirect($this->generateUrl("activity_join_success",array(
                     "id"=>$id,
                     "isNew"=>false))
@@ -368,10 +376,21 @@ class ActivityController extends BaseController
         
     }
 
+
+    public function reSendActivityEmailAction(Request $request,$userId,$activityId){
+
+
+
+    }
+
     //如果免费，显示公开课报名成功页面，如果收费，并且线上支付，进入支付页面，如果收费，并且线下支付，进入报名成功页面，提示支付告知页面
     public function successAction(Request $request,$id){
        
         $user=$this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
         
         $activity=$this->getActivityService()->getActivity($id);
 
@@ -678,17 +697,21 @@ class ActivityController extends BaseController
   
 
  
-    private function sendActivaEmail($token, $user)
+    private function sendActivityEmail($isFirst=false,$token, $user,$activity)
     {
         $this->sendEmail(
                 $user['email'],
                 "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
-                $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
+                $this->renderView('TopxiaWebBundle:Activity:join-activity-email.html.twig', array(
+                    'isFirst' => $isFirst,
                     'user' => $user,
                     'token' => $token,
+                    'activity'=>$activity
                 )), 'html'
         );
     }
+
+
 
 
     private function makeHash($user)

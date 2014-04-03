@@ -78,11 +78,6 @@ register_email_activa:
     defaults: { _controller: TopxiaWebBundle:Register:emailActiva }
 
 
-register_email_activaed_send:
-    pattern:  /register/activaed/{id}/{hash}
-    defaults: { _controller: TopxiaWebBundle:Register:activaedSend }
-
-
 register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
@@ -1087,6 +1082,10 @@ activity_join_success:
 activity_email_check:
     pattern:  /openclass/join/email/check
     defaults: { _controller: TopxiaWebBundle:Activity:emailCheck }
+
+activity_email_resend:
+    pattern:  /openclass/join/email/resend/{id}/{hash}
+    defaults: { _controller: TopxiaWebBundle:Activity:reSendActivityEmail }
 
 activity_remove:
     pattern: /openclass/{id}/remove

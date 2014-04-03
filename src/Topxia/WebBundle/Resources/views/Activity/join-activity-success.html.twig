@@ -27,7 +27,7 @@
 						          <ul class="pll">
 						            <li>检查一下上面Email地址是否正确，错了就重新<a  href="{{ path('register') }}">注册</a>一次吧 :)</li>
 						            <li>看看是否在邮箱的垃圾箱里?</li>
-						            <li>稍等几分钟，若仍旧没收到确认信，那就再<a id="resend-email"  href="javascript:" data-url="{{ path('register_email_activaed_send', {id:user.id, hash:hash}) }}">重发</a>一次吧。</li>
+						            <li>稍等几分钟，若仍旧没收到确认信，那就再<a id="resend-email"  href="javascript:" data-url="{{ path('register_email_activa_resend', {id:user.id, hash:hash}) }}">重发</a>一次吧。</li>
 						            <li>等了好久，，，，，，还是没有邮件，那和我们联系吧。</li>
 						          </ul>
 						        </div>

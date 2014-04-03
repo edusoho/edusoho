@@ -263,10 +263,11 @@ class RegisterController extends BaseController
         );
     }
 
-    public function activaedSendAction(Request $request, $id, $hash)
+    public function emailActivaReSendAction(Request $request, $id, $hash)
     { 
 
         $user = $this->checkHash($id, $hash);
+        
         if (empty($user)) {
             return $this->createJsonResponse(false);
         }
