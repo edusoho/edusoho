@@ -296,7 +296,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'expiryDay' => 0,
 			'showStudentNumType' => 'opened',
 			'categoryId' => 0,
-			'memberLevelId' => 0,
+			'vipLevelId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
 			'tags' => '',
@@ -1226,7 +1226,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (!empty($info['becomeUseMember'])) {
-			$levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['memberLevelId']);
+			$levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
 			if ($levelChecked != 'ok') {
 				throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
 			}

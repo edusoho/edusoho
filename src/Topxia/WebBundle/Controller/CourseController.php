@@ -174,7 +174,7 @@ class CourseController extends BaseController
 
         $checkMemberLevelResult = $courseMemberLevel = null;
         if ($this->setting('vip.enabled')) {
-            $courseMemberLevel = $course['memberLevelId'] > 0 ? $this->getLevelService()->getLevel($course['memberLevelId']) : null;
+            $courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
             if ($courseMemberLevel) {
                 $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
             }
@@ -369,7 +369,7 @@ class CourseController extends BaseController
             }
 
             if ($member && $member['levelId'] > 0) {
-                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['memberLevelId']) != 'ok') {
+                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
                     return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
                 }
             }
@@ -423,7 +423,7 @@ class CourseController extends BaseController
         $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
 
         if ($member['levelId'] > 0) {
-            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['memberLevelId']);
+            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
         } else {
             $vipChecked = 'ok';
         }

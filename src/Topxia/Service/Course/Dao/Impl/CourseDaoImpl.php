@@ -91,7 +91,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
-            ->andWhere('memberLevelId >= :memberLevelIdGreaterThan');
+            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan');
 
 
         if (isset($conditions['categoryIds'])) {
@@ -107,16 +107,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
-        if (isset($conditions['memberLevelIds'])) {
-            $memberLevelIds = array();
-            foreach ($conditions['memberLevelIds'] as $memberLevelId) {
-                if (ctype_digit((string)abs($memberLevelId))) {
-                    $memberLevelIds[] = $memberLevelId;
+        if (isset($conditions['vipLevelIds'])) {
+            $vipLevelIds = array();
+            foreach ($conditions['vipLevelIds'] as $vipLevelId) {
+                if (ctype_digit((string)abs($vipLevelId))) {
+                    $vipLevelIds[] = $vipLevelId;
                 }
             }
-            if ($memberLevelIds) {
-                $memberLevelIds = join(',', $memberLevelIds);
-                $builder->andStaticWhere("memberLevelId IN ($memberLevelIds)");
+            if ($vipLevelIds) {
+                $vipLevelIds = join(',', $vipLevelIds);
+                $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
 
         }

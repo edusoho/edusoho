@@ -112,7 +112,7 @@ class CourseThreadController extends BaseController
         }
 
         if ($member && $member['levelId'] > 0) {
-            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['memberLevelId']) != 'ok') {
+            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
                 return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
             }
         }
