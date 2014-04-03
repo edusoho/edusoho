@@ -126,7 +126,10 @@ class CourseOrderController extends OrderController
                 'orderId' => $order['id'],
                 'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
             );
-            $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            }
 
             return $controller->generateUrl('course_show', array('id' => $order['targetId']));
         });
@@ -147,7 +150,10 @@ class CourseOrderController extends OrderController
                 'orderId' => $order['id'],
                 'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
             );
-            $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            }
 
             return ;
         });
