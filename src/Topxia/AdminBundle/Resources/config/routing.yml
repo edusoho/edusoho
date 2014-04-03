@@ -773,3 +773,8 @@ admin_approval_show:
     pattern:  /approvals/{id}/show
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showUserRealInfo }
 
+
+admin_analysis:
+    pattern: /analysis/rigister/user
+    defaults: { _controller: TopxiaAdminBundle:Analysis:registerUser }
+
