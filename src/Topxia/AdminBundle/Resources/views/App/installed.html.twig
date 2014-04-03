@@ -23,7 +23,12 @@
       {% for app in apps %}
       <tr>
         <td>
-          <div><strong class="text-primary">{{ app.name }} - </strong><span class="text-info">{{ app.version }}</span></div>
+          <div>
+            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
+              <strong class="text-primary">{{ app.name }} - </strong><span class="text-info">{{ app.version }}</span>
+            </a>
+
+          </div>
           <div class="">{{ app.description|plain_text(100) }}</div>
           <div class="text-muted"><small>最后更新： {{ app.updatedTime|date('Y-m-d') }}</small></div>
         </td>
