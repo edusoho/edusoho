@@ -48,8 +48,6 @@ class SettingsController extends BaseController
         
         $approval = $this->getUserService()->getLastestApprovalByUserId($user['id']);
 
-
-
         if(empty($approval)){
             $approval=array(
                 'truename'=>'',
