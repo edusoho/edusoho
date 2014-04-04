@@ -36,6 +36,22 @@
 	</div>
 </div>
 
+{% if user.setup == 0   %}
+      <div class="alert alert-danger">
+       
+        您是通过社交账号登陆,尚未设置Email地址,系统无法向您发送报名确认邮件,需要您设置Email并验证后,才能报名公开课!
+        <a href="{{ path('settings_setup') }}">现在就去设置</a>
+      </div>
+{% elseif  user.emailVerified == 0 %}
+<div class="alert alert-danger">
+       
+        您的Email地址尚未通过验证,系统无法向您发送报名确认邮件,需要验证您的邮件后,才能报名公开课!
+        <a href="{{ path('settings_email') }}">现在就去设置</a>
+</div>
+{% endif %}
+
+
+
 <form id="ActivityForm" class="form-horizontal" method="post" action="{{ path('activity_join',{id:activity.id}) }}">					
 <div class="row pld prd mbl">
 	
