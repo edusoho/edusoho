@@ -132,9 +132,9 @@
 
 
             <div class="row">
-              <ul class="col-md-12 mbm mtm" id="qustion-media-list">
+              <ul class="col-md-12 mbm mtm " id="qustion-media-list">
                 {% for qustion in qustions %}
-                <li class="media">
+                <li class="media li-no">
                   <a class="pull-left user-link user-avatar-link" href="javascript:">
                     {% if qustion['userId']==0 %}
                     <img src="/assets/img/default/avatar.png" >    
@@ -228,7 +228,7 @@
     <!-- 已报名 -->
     <div class="widget shadow">
       <div class="kytitle clearfix ">
-        <h3 class="panel-title">报名的小伙伴({{activity.studentNum}}人)</h3>
+        <h3 class="panel-title">新报名小伙伴(总{{activity.studentNum}}人)</h3>
       </div>
       <div class="panel-body pbz ptz">
         {% if students %}
@@ -250,6 +250,7 @@
         {% else %}
         <div class="empty">该课程尚未设置教师</div>
         {% endif %}
+        <div class="empty">更多小伙伴．省略显示．．</div>
       </div>
     </div>
 
