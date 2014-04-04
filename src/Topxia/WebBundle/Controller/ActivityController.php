@@ -316,13 +316,13 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
-                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+                $isNew=true;
                
-                $this->sendActivityEmail(true,$token,$user,$activity);
+                $this->sendActivityEmail($isNew,$user,$activity);
 
                 return $this->redirect($this->generateUrl("activity_join_success",array(
                     "id"=>$id,
-                    "isNew"=>true))
+                    "isNew"=>$isNew))
                 );
               
             }else{ 
@@ -348,13 +348,13 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
+                $isNew=false;
                
-               
-                $this->sendActivityEmail(false,$token,$user,$activity);
+                $this->sendActivityEmail($isNew,$user,$activity);
 
                 return $this->redirect($this->generateUrl("activity_join_success",array(
                     "id"=>$id,
-                    "isNew"=>false))
+                    "isNew"=>$isNew))
                 );  
                         
             }
@@ -377,12 +377,6 @@ class ActivityController extends BaseController
     }
 
 
-    public function reSendActivityEmailAction(Request $request,$userId,$activityId){
-
-
-
-    }
-
     //如果免费，显示公开课报名成功页面，如果收费，并且线上支付，进入支付页面，如果收费，并且线下支付，进入报名成功页面，提示支付告知页面
     public function successAction(Request $request,$id){
        
@@ -399,13 +393,36 @@ class ActivityController extends BaseController
         $hash=$this->makeHash($user);
 
         return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
-            "activityid"=>$id,
             "isNew"=>$isNew,
             "user"=>$user,
             "activity"=>$activity,
             "hash"=>$hash)
         );
     }
+
+
+    public function reSendActivityEmailAction(Request $request,$activityId,$userId,$isNew,$hash){
+
+        $user = $this->checkHash($userId,$hash);
+        
+        if (empty($user)) {
+            return $this->createJsonResponse(false);
+        } 
+
+        $activity=$this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->mixActivity($activity,$user['id']);
+
+               
+        $this->sendActivityEmail($isNew,$user,$activity);
+
+        return $this->createJsonResponse(true);
+
+
+
+    }
+
+
+
 
     //公开课取消报名
     public function removeAction(Request $request,$id){
@@ -697,15 +714,18 @@ class ActivityController extends BaseController
   
 
  
-    private function sendActivityEmail($isFirst=false,$token, $user,$activity)
+    private function sendActivityEmail($isNew,$user,$activity)
     {
+
+
         $token =   $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-        
+
+                
         $this->sendEmail(
                 $user['email'],
-                "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
+                "欢迎参加开源力量公开课[".$activity['title']."],邮件是本期公开课参课方式",
                 $this->renderView('TopxiaWebBundle:Activity:join-activity-email.html.twig', array(
-                    'isFirst' => $isFirst,
+                    'isNew' => $isNew,
                     'user' => $user,
                     'token' => $token,
                     'activity'=>$activity
