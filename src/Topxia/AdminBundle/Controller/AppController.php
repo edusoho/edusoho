@@ -15,7 +15,7 @@ class AppController extends BaseController
 
     public function oldUpgradeCheckAction()
     {
-        return $this->redirect($this->generateUrl('admin_app_installed'));
+        return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
     public function centerAction(Request $request)
