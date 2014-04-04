@@ -160,8 +160,8 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = 'src目录无写权限';
         }
 
-        if(!is_writeable("{$rootDirectory}/vender")) {
-            $errors[] = 'vender目录无写权限';
+        if(!is_writeable("{$rootDirectory}/vendor")) {
+            $errors[] = 'vendor目录无写权限';
         }
 
         if(!is_writeable("{$rootDirectory}/plugins")) {
