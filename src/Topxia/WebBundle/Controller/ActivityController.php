@@ -305,6 +305,7 @@ class ActivityController extends BaseController
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
+                $member['joinMode']='线上';
 
                 $this->getActivityService()->addMeberByActivity($member);
 
@@ -338,6 +339,7 @@ class ActivityController extends BaseController
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
+                $member['joinMode']='线上';
                 
                 $this->getActivityService()->addMeberByActivity($member);
 
@@ -723,7 +725,7 @@ class ActivityController extends BaseController
                 
         $this->sendEmail(
                 $user['email'],
-                "欢迎参加开源力量公开课[".$activity['title']."],邮件是本期公开课参课方式",
+                "欢迎参加开源力量公开课[".$activity['title']."],邮件内容是本期公开课参课方式",
                 $this->renderView('TopxiaWebBundle:Activity:join-activity-email.html.twig', array(
                     'isNew' => $isNew,
                     'user' => $user,
