@@ -16,83 +16,73 @@ class BuildPluginPackageCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName ( 'topxia:build-plugin-package' )
+        $this->setName ( 'topxia:build-plugin' )
             ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
+        $this->filesystem = new Filesystem();
         $name = ucfirst($input->getArgument('name'));
 
         $this->output->writeln("<info>开始编制应用安装/升级包 {$name}</info>");
 
-        $this->makeInstallDistPackage($name);
-        $this->makeUpgradeDistPackage($name);
+        $this->_buildDistPackage($name, 'install');
+        $this->_buildDistPackage($name, 'upgrade');
     }
 
-    private function makeInstallDistPackage($name)
+    private function _buildDistPackage($name, $type)
     {
-        $this->output->writeln("<info>  编制应用安装包</info>");
-
-        $filesystem = new Filesystem();
-        $pluginDir = $this->getPluginDirectory($name);
-        $distDir = $this->_makeDistDirectory($name, 'install');
-
-        $sourceTargetDir = $distDir . '/source/' . $name;
-        $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
-        $filesystem->mirror($pluginDir, $sourceTargetDir);
-
-        $script = "{$pluginDir}/Scripts/install.php";
-        if ($filesystem->exists($script)) {
-            $this->output->writeln("<info>    * 拷贝安装脚本：{$script} -> {$distDir}/Upgrade.php</info>");
-            $filesystem->copy($script, "{$distDir}/Upgrade.php");
-        } else {
-            $this->output->writeln("<comment>    * 拷贝安装脚本：无</comment>");
+        if (!in_array($type, array('install', 'upgrade'))) {
+            throw new \RuntimeException('package type error');
         }
 
-        $this->output->writeln("<info>    * 移除'.git'目录：$pluginDir . /.git/</info>");
-        $filesystem->remove($pluginDir . "/.git/");
+        $typeNames = array('install' => '安装包', 'upgrade' => '升级包');
+        $this->output->writeln("<info>  编制应用{$typeNames[$type]}</info>");
 
-        $this->_zipPackage($distDir);
-    }
-
-    private function makeUpgradeDistPackage($name)
-    {
-        $this->output->writeln("<info>  编制应用升级包</info>");
-        $filesystem = new Filesystem();
         $pluginDir = $this->getPluginDirectory($name);
-        $distDir = $this->_makeDistDirectory($name, 'upgrade');
-
-        $sourceTargetDir = $distDir . '/source/' . $name;
-        $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
-        $filesystem->mirror($pluginDir, $sourceTargetDir);
-
         $version = $this->getPluginVersion($name);
-        $script = "{$pluginDir}/Scripts/update-{$version}.php";
-        if ($filesystem->exists($script)) {
+
+        $distDir = $this->_makeDistDirectory($name, $type);
+        $this->_copySource($name, $pluginDir, $distDir);
+        $this->_copyScript($pluginDir, $distDir, $type, $version);
+        $this->_cleanGit($pluginDir);
+        $this->_zipPackage($distDir);
+    }
+
+    private function _copySource($name, $pluginDir, $distDir)
+    {
+        $sourceTargetDir = $distDir . '/source/' . $name;
+        $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
+        $this->filesystem->mirror($pluginDir, $sourceTargetDir);
+    }
+
+    private function _cleanGit($pluginDir)
+    {
+        $this->output->writeln("<info>    * 移除'.git'目录：{$pluginDir}/.git/</info>");
+        $this->filesystem->remove("{$pluginDir}/.git/"); 
+    }
+
+    private function _copyScript($pluginDir, $distDir, $type, $version)
+    {
+        $scriptNames = array('install' => 'install.php', 'upgrade' => "upgrade-{$version}.php");
+        $script = "{$pluginDir}/Scripts/$scriptNames[$type]";
+        if ($this->filesystem->exists($script)) {
             $this->output->writeln("<info>    * 拷贝安装脚本：{$script} -> {$distDir}/Upgrade.php</info>");
-            $filesystem->copy($script, "{$distDir}/Upgrade.php");
+            $this->filesystem->copy($script, "{$distDir}/Upgrade.php");
         } else {
             $this->output->writeln("<comment>    * 拷贝安装脚本：无</comment>");
         }
-
-        $this->output->writeln("<info>    * 移除'.git'目录：{$pluginDir}/.git/</info>");
-        $filesystem->remove("{$pluginDir}/.git/");
-
-        $this->_zipPackage($distDir);
     }
 
     private function _zipPackage($distDir)
     {
-
-
         $buildDir = dirname($distDir);
         $filename = basename($distDir);
 
-        $filesystem = new Filesystem();
-        if ($filesystem->exists("{$buildDir}/{$filename}.zip")) {
-            $filesystem->remove("{$buildDir}/{$filename}.zip");
+        if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
+            $this->filesystem->remove("{$buildDir}/{$filename}.zip");
         }
 
         $this->output->writeln("<info>    * 制作ZIP包：{$buildDir}/{$filename}.zip</info>");
@@ -107,22 +97,16 @@ class BuildPluginPackageCommand extends BaseCommand
 
     private function _makeDistDirectory($name, $type)
     {
-        if (!in_array($type, array('install', 'upgrade'))) {
-            throw new \RuntimeException('package type error');
-        }
-
         $version = $this->getPluginVersion($name);
 
         $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}/{$name}-{$version}-{$type}";
 
-        $filesystem = new Filesystem();
-
-        if ($filesystem->exists($distDir)) {
+        if ($this->filesystem->exists($distDir)) {
             $this->output->writeln("<info>    清理目录：{$distDir}</info>");
-            $filesystem->remove($distDir);
+            $this->filesystem->remove($distDir);
         }
         $this->output->writeln("<info>    创建目录：{$distDir}</info>");
-        $filesystem->mkdir($distDir);
+        $this->filesystem->mkdir($distDir);
 
         return realpath($distDir);
     }
