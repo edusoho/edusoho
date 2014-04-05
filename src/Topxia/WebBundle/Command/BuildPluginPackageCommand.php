@@ -57,6 +57,10 @@ class BuildPluginPackageCommand extends BaseCommand
         $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($pluginDir, $sourceTargetDir);
 
+        if ($this->filesystem->exists("{$sourceTargetDir}/Scripts")) {
+            $this->filesystem->remove("{$sourceTargetDir}/Scripts");
+        }
+
         return $sourceTargetDir;
     }
 
