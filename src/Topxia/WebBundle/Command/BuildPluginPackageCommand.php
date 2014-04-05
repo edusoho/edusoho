@@ -45,9 +45,9 @@ class BuildPluginPackageCommand extends BaseCommand
         $version = $this->getPluginVersion($name);
 
         $distDir = $this->_makeDistDirectory($name, $type);
-        $this->_copySource($name, $pluginDir, $distDir);
+        $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir, $type, $version);
-        $this->_cleanGit($pluginDir);
+        $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
     }
 
@@ -56,12 +56,18 @@ class BuildPluginPackageCommand extends BaseCommand
         $sourceTargetDir = $distDir . '/source/' . $name;
         $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($pluginDir, $sourceTargetDir);
+
+        return $sourceTargetDir;
     }
 
-    private function _cleanGit($pluginDir)
+    private function _cleanGit($sourceDistDir)
     {
-        $this->output->writeln("<info>    * 移除'.git'目录：{$pluginDir}/.git/</info>");
-        $this->filesystem->remove("{$pluginDir}/.git/"); 
+        if (is_dir("{$sourceDistDir}/.git/")) {
+            $this->output->writeln("<info>    * 移除'.git'目录：{$sourceDistDir}/.git/</info>");
+            $this->filesystem->remove("{$sourceDistDir}/.git/"); 
+        } else {
+            $this->output->writeln("<comment>    * 移除'.git'目录： 无");
+        }
     }
 
     private function _copyScript($pluginDir, $distDir, $type, $version)
@@ -69,10 +75,10 @@ class BuildPluginPackageCommand extends BaseCommand
         $scriptNames = array('install' => 'install.php', 'upgrade' => "upgrade-{$version}.php");
         $script = "{$pluginDir}/Scripts/$scriptNames[$type]";
         if ($this->filesystem->exists($script)) {
-            $this->output->writeln("<info>    * 拷贝安装脚本：{$script} -> {$distDir}/Upgrade.php</info>");
+            $this->output->writeln("<info>    * 拷贝脚本：{$script} -> {$distDir}/Upgrade.php</info>");
             $this->filesystem->copy($script, "{$distDir}/Upgrade.php");
         } else {
-            $this->output->writeln("<comment>    * 拷贝安装脚本：无</comment>");
+            $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
         }
     }
 
