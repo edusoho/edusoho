@@ -29,7 +29,7 @@
       <div class="col-md-8 ">
 
 
-        {% for stickTag in stickTags %}
+      {% for stickTag in stickTags %}
 
         {% set tagCourses = tagsCourses[stickTag.id] %}
             
@@ -68,7 +68,7 @@
               <div class="info-content clearfix">
                 <div id="photo" class="photo-wall pull-left">
                   <span id="wait-you" class=" list-waiting pull-right">
-                     <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
+                     <img  width="101"  src="{{ file_path('','avatar.png')}}" >
                   </span>
                   {% for user in users%}
                   <span class="list-item-user  pull-right" >
