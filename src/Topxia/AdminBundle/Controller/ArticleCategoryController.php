@@ -6,13 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ArticleCategoryController extends BaseController
 {
-    public function embedAction($layout)
+
+    public function indexAction(Request $request)
     {
         $categories = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:ArticleCategory:embed.html.twig', array(
-            'categories' => $categories,
-            'layout' => $layout
-        ));
+            'categories' => $categories
+        ));       
     }
 
     public function createAction(Request $request)
