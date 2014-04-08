@@ -6,6 +6,9 @@ use Topxia\Service\Article\ArticleService;
 use Topxia\Service\Article\Type\ArticleTypeFactory;
 use Topxia\Common\ArrayToolkit;
 
+/**
+ * @todo 序列化／反序列化的操作移动到dao,　参考QuestionDaoImpl
+ */
 class ArticleServiceImpl extends BaseService implements ArticleService
 {
 	public function getArticle($id)
