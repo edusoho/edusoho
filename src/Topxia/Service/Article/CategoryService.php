@@ -8,7 +8,7 @@ interface CategoryService
 
     public function getCategoryByCode($code);
 
-    // public function getCategoryTree($groupId);
+    public function getCategoryTree();
 
     // public function findCategories($groupId);
 

@@ -117,14 +117,14 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             ,'seoDesc','published','type','templateName','urlNameRule','comment'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
-            throw $this->createServiceException("缺少必要参数，，添加分类失败");
+            throw $this->createServiceException("缺少必要参数，，添加栏目失败");
         }
 
         $this->filterCategoryFields($category);
 
         $category = $this->getCategoryDao()->addCategory($category);
 
-        $this->getLogService()->info('category', 'create', "添加分类 {$category['name']}(#{$category['id']})", $category);
+        $this->getLogService()->info('category', 'create', "添加栏目 {$category['name']}(#{$category['id']})", $category);
 
         return $category;
     }
@@ -133,18 +133,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         $category = $this->getCategory($id);
         if (empty($category)) {
-            throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
+            throw $this->createNoteFoundException("栏目(#{$id})不存在，更新栏目失败！");
         }
 
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle' ,'pagesize','seoTitle','seoKeyword'
             ,'seoDesc','published','type','templateName','urlNameRule','comment'));
         if (empty($fields)) {
-            throw $this->createServiceException('参数不正确，更新分类失败！');
+            throw $this->createServiceException('参数不正确，更新栏目失败！');
         }
 
         $this->filterCategoryFields($fields, $category);
 
-        $this->getLogService()->info('category', 'update', "编辑分类 {$fields['name']}(#{$id})", $fields);
+        $this->getLogService()->info('category', 'update', "编辑栏目 {$fields['name']}(#{$id})", $fields);
 
         return $this->getCategoryDao()->updateCategory($id, $fields);
     }
@@ -162,7 +162,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->getCategoryDao()->deleteCategory($id);
         }
 
-        $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
+        $this->getLogService()->info('category', 'delete', "删除栏目{$category['name']}(#{$id})");
     }
 
     private function filterCategoryFields(&$category, $releatedCategory = null)
@@ -172,22 +172,22 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 case 'name':
                     $category['name'] = (string) $category['name'];
                     if (empty($category['name'])) {
-                        throw $this->createServiceException("名称不能为空，保存分类失败");
+                        throw $this->createServiceException("名称不能为空，保存栏目失败");
                     }
                     break;
                 case 'code':
                     if (empty($category['code'])) {
-                        throw $this->createServiceException("编码不能为空，保存分类失败");
+                        throw $this->createServiceException("编码不能为空，保存栏目失败");
                     } else {
                         if (!preg_match("/^[a-zA-Z0-9_]+$/i", $category['code'])) {
-                            throw $this->createServiceException("编码({$category['code']})含有非法字符，保存分类失败");
+                            throw $this->createServiceException("编码({$category['code']})含有非法字符，保存栏目失败");
                         }
                         if (ctype_digit($category['code'])) {
-                            throw $this->createServiceException("编码({$category['code']})不能全为数字，保存分类失败");
+                            throw $this->createServiceException("编码({$category['code']})不能全为数字，保存栏目失败");
                         }
                         $exclude = empty($releatedCategory['code']) ? null : $releatedCategory['code'];
                         if (!$this->isCategoryCodeAvaliable($category['code'], $exclude)) {
-                            throw $this->createServiceException("编码({$category['code']})不可用，保存分类失败");
+                            throw $this->createServiceException("编码({$category['code']})不可用，保存栏目失败");
                         }
                     }
                     break;
@@ -197,7 +197,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                     if ($category['parentId'] > 0) {
                         $parentCategory = $this->getCategory($category['parentId']);
                         if (empty($parentCategory)) {
-                            throw $this->createServiceException("父分类(ID:{$category['parentId']})不存在，保存分类失败");
+                            throw $this->createServiceException("父栏目(ID:{$category['parentId']})不存在，保存栏目失败");
                         }
                     }
                     break;

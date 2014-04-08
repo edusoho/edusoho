@@ -57,6 +57,7 @@ class ArticleCategoryController extends BaseController
             return $this->renderTbody();
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
+        
         return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
             'category' => $category,
             'categoryTree'  => $categoryTree
