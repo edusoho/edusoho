@@ -9,7 +9,7 @@ class ArticleCategoryController extends BaseController
     public function embedAction($layout)
     {
         $categories = $this->getCategoryService()->getCategoryTree();
-        return $this->render('TopxiaAdminBundle:Article_Category:embed.html.twig', array(
+        return $this->render('TopxiaAdminBundle:ArticleCategory:embed.html.twig', array(
             'categories' => $categories,
             'layout' => $layout
         ));
@@ -39,7 +39,7 @@ class ArticleCategoryController extends BaseController
         );
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        return $this->render('TopxiaAdminBundle:Article_Category:modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
             'category' => $category,
             'categoryTree'  => $categoryTree
         ));
@@ -57,7 +57,7 @@ class ArticleCategoryController extends BaseController
             return $this->renderTbody();
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        return $this->render('TopxiaAdminBundle:Article_Category:modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
             'category' => $category,
             'categoryTree'  => $categoryTree
         ));
@@ -106,7 +106,7 @@ class ArticleCategoryController extends BaseController
     private function renderTbody()
     {
         $categories = $this->getCategoryService()->getCategoryTree();
-        return $this->render('TopxiaAdminBundle:Article_Category:tbody.html.twig', array(
+        return $this->render('TopxiaAdminBundle:ArticleCategory:tbody.html.twig', array(
             'categories' => $categories,
             'categoryTree'  => $categories
         ));
