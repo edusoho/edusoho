@@ -19,9 +19,9 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);
-                    Notify.success('保存分类成功！');
+                    Notify.success('保存栏目成功！');
 				}).fail(function() {
-                    Notify.danger("添加分类失败，请重试！");
+                    Notify.danger("添加栏目失败，请重试！");
                 });
 
             }
@@ -54,16 +54,24 @@ define(function(require, exports, module) {
         
 
         $modal.find('.delete-category').on('click', function() {
-            if (!confirm('真的要删除该分类吗？')) {
+            if (!confirm('真的要删除该栏目吗？')) {
                 return ;
             }
 
-            $.post($(this).data('url'), function(html) {
-                $modal.modal('hide');
-                $table.find('tbody').replaceWith(html);
-            }).error(function(error) {
-                Notify.danger("删除分类失败，请重试！"+error.responseJSON.error.message);
-            });;
+            $.post($(this).data('url'), function(response) {
+
+                if (response.status == 'error') {
+                    Notify.danger(response.message);
+                } else {
+                    window.location.reload();
+                    Notify.danger(response.message);
+                }
+                
+            }, 'json').error(function(error) {
+                Notify.danger("删除栏目失败，请重试！"+error.responseJSON.error.message);
+            });
+
+            return false;
 
         });
 
