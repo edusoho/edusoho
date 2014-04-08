@@ -82,6 +82,11 @@ class DataDict
             'article' => '文章',
             'activity' => '活动',
             'page' => '文章',
+        ),   
+        'articleProperty' => array(
+            'featured' => '头条',
+            'promoted' => '推荐',
+            'sticky' => '置顶',
         ),
         'dateType' => array(
             'today' => '今日',

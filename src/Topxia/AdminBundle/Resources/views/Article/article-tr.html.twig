@@ -1,10 +1,10 @@
 <tr id="article-{{ article.id }}">
-	<td>{{article.id}}</td>
+	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item" >{{article.id}}</td>
 	<td>
 		<a href="{{ path('article_' ~ article.type ~ '_show', {alias:article.alias|default(article.id)}) }}" target="_blank">{{ article.title }}</a><br />
-		{% if article.type == 'page' %}
+	{# 	{% if article.type == 'page' %}
 		  <span class="text-muted text-sm">地址：page/{{ article.alias|default(article.id) }}</span>
-		{% endif %}
+		{% endif %} #}
 		{% if category %}
 			<span class="text-muted text-sm">分类：{{ category.name }}</span>
 		{% endif %}
@@ -19,9 +19,11 @@
 	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
 	<td>{{ article.updated|date('Y-n-d H:i') }}</td>
 	<td>
-	<span class="label label-primary">{{ article.featured}}</span> 
-	<span class="label label-primary">{{ article.promoted}}</span> 
-	<span class="label label-primary">{{ article.sticky}}</span> 
+	{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span>
+
+	{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span>
+
+	{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span>
 	</td>
 	
 
@@ -33,7 +35,7 @@
 	</td>
 	<td>
 		<div class="btn-group">
-		  <a href="#modal" data-toggle="modal" data-url="{{ path('admin_article_edit', {id:article.id}) }}" class="btn btn-default btn-sm">编辑</a>
+		  <a  href="{{ path('admin_article_edit', {id:article.id}) }}" class="btn btn-default btn-sm" target="_blank">编辑</a>
 		  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
 		    <span class="caret"></span>
 		  </a>

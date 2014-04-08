@@ -46,8 +46,6 @@ class ArticleController extends BaseController
 	{
         $type = ArticleTypeFactory::create($type);
         if ($request->getMethod() == 'POST') {
-
-
             $article = $request->request->all();
             $article['type'] = $type->getAlias();
 
