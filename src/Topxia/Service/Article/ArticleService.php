@@ -19,5 +19,8 @@ interface ArticleService
 
 	public function deleteArticle($id);
 
+    // @todo
+    // public function publishArticle($id);
+
 	public function isAliasAvaliable($alias);
 }

@@ -13,7 +13,7 @@ class ArticleController extends BaseController
 
 	public function indexAction(Request $request)
 	{
-        $conditions = array_filter($request->query->all());
+        $conditions = $request->query->all();
 
         $paginator = new Paginator(
             $request,
