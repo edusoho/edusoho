@@ -1,20 +1,21 @@
-{% extends layout %}
+{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
 
-{% block title %}分类管理 - {{ parent() }}{% endblock %}
+{% block title %}栏目管理 - {{ parent() }}{% endblock %}
 
 {% set menu = 'category' %}
 
 {% block main %}
 
 <div class="page-header clearfix">
-  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_article_category_create') }}">添加分类</button>
-  <h1 class="pull-left">分类管理</h1>
+  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_article_category_create') }}">添加栏目</button>
+  <h1 class="pull-left">栏目管理</h1>
 </div>
+
 <table class="table table-hover" id="category-table">
   <thead>
     <tr>
       <th width="50%">栏目名称</th>
-      <th width="15%">url目录名称</th>
+      <th width="15%">编码</th>
       <th width="15%">显示序号</th>
       <th width="20%">操作</th>
     </tr>

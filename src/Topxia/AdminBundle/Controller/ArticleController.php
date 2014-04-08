@@ -181,13 +181,6 @@ class ArticleController extends BaseController
         return $article;
     }
 
-    public function categoryAction(Request $request)
-    {
-        return $this->forward('TopxiaAdminBundle:ArticleCategory:embed', array(
-            'layout' => 'TopxiaAdminBundle:Article:layout.html.twig',
-        ));
-    }
-
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');

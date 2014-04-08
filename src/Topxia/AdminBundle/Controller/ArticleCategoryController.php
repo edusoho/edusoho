@@ -6,13 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ArticleCategoryController extends BaseController
 {
-    public function embedAction($layout)
+
+    public function indexAction(Request $request)
     {
         $categories = $this->getCategoryService()->getCategoryTree();
-        return $this->render('TopxiaAdminBundle:ArticleCategory:embed.html.twig', array(
-            'categories' => $categories,
-            'layout' => $layout
-        ));
+        return $this->render('TopxiaAdminBundle:ArticleCategory:index.html.twig', array(
+            'categories' => $categories
+        ));       
     }
 
     public function createAction(Request $request)
@@ -57,6 +57,7 @@ class ArticleCategoryController extends BaseController
             return $this->renderTbody();
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
+        
         return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
             'category' => $category,
             'categoryTree'  => $categoryTree
@@ -70,20 +71,18 @@ class ArticleCategoryController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!$this->canDeleteCategory($id)) {
-            // 给出不能删的提示
+        if ($this->canDeleteCategory($id)) {
+            return $this->createJsonResponse(array('status' => 'error', 'message'=>'此栏目有子栏目，无法删除'));
+        } else {
+            $this->getCategoryService()->deleteCategory($id);
+            return $this->createJsonResponse(array('status' => 'success', 'message'=>'栏目已删除' ));
         }
-
-        // canDeleteCategory($id); 返回/true,false
-        $childrenCnt = $this->getCategoryService()->findCategoriesCountByParentId($id);
-        if($childrenCnt>0){
-            throw $this->createNotFoundException("can't delete catagory when it has child catagory");
-        }
-        //
         
-        $this->getCategoryService()->deleteCategory($id);
+    }
 
-        return $this->renderTbody();
+    public function canDeleteCategory($id)
+    {
+        return $this->getCategoryService()->findCategoriesCountByParentId($id);
     }
 
     public function checkCodeAction(Request $request)
