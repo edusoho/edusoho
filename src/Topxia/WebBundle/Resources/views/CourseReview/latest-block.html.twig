@@ -3,6 +3,10 @@
     <h3 class="panel-title">最新评价</h3>
   </div>
   <div class="panel-body">
-    {% include 'TopxiaWebBundle:CourseReview:list.html.twig' %}
+  	{% if reviews %}
+	    {% include 'TopxiaWebBundle:CourseReview:list.html.twig' %}
+  	{% else %}
+  		<div class="empty">暂无评价！</div>
+  	{% endif %}
   </div>
 </div>

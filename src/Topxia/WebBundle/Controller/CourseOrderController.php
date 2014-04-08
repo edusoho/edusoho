@@ -7,8 +7,9 @@ use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Response;
 
-class CourseOrderController extends BaseController
+class CourseOrderController extends OrderController
 {
+    public $courseId = 0;
 
     public function buyAction(Request $request, $id)
     {
@@ -25,18 +26,11 @@ class CourseOrderController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $data = array('courseId' => $course['id'], 'payment' => 'alipay');
-        $form = $this->createNamedFormBuilder('course_order', $data)
-            ->add('courseId', 'hidden')
-            ->add('payment', 'hidden')
-            ->getForm();
-
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'courseSetting' => $courseSetting,
-            'form' => $form->createView()
         ));
     }
 
@@ -45,6 +39,9 @@ class CourseOrderController extends BaseController
         $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
+        }
 
         $userInfo = ArrayToolkit::parts($formData, array(
             'truename',
@@ -53,53 +50,113 @@ class CourseOrderController extends BaseController
             'company',
             'job'
         ));
-
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-        $order = $this->getOrderService()->createOrder($formData);
+        if (!ArrayToolkit::requireds($formData, array('courseId', 'payment'))) {
+            return $this->createMessageResponse('error', '订单数据缺失，创建课程订单失败。');
+        }
 
-        if (intval($order['price']*100) > 0) {
-            $paymentRequest = $this->createPaymentRequest($order);
+        $course = $this->getCourseService()->getCourse($formData['courseId']);
+        if (empty($course)) {
+            return $this->createMessageResponse('error', '课程不存在，创建课程订单失败。');
+        }
 
-            return $this->render('TopxiaWebBundle:CourseOrder:pay.html.twig', array(
-                'form' => $paymentRequest->form(),
+        $order = array();
+
+        $order['userId'] = $user->id;
+        $order['title'] = "购买课程《{$course['title']}》";
+        $order['targetType'] = 'course';
+        $order['targetId'] = $course['id'];
+        $order['payment'] = $formData['payment'];
+        $order['amount'] = $course['price'];
+        $order['snPrefix'] = 'C';
+
+        if (!empty($formData['coupon'])) {
+            $order['couponCode'] = $formData['coupon'];
+        }
+
+        if (!empty($formData['note'])) {
+            $order['data'] = array('note' => $formData['note']);
+        }
+
+        $order = $this->getOrderService()->createOrder($order);
+
+        if (intval($order['amount']*100) > 0) {
+            $payRequestParams = array(
+                'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
+                'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
+                'showUrl' => $this->generateUrl('course_show', array('id' => $course['id']), true),
+            );
+
+            return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
                 'order' => $order,
+                'requestParams' => $payRequestParams,
             ));
         } else {
-            $this->getOrderService()->payOrder(array(
+            list($success, $order) = $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],
                 'status' => 'success', 
-                'amount' => $order['price'], 
+                'amount' => $order['amount'], 
                 'paidTime' => time()
             ));
 
-            return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
+            $info = array(
+                'orderId' => $order['id'],
+                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            );
+            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         }
     }
 
     public function payReturnAction(Request $request, $name)
     {
-        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
-        $response = $this->createPaymentResponse($name, $request->query->all());
+        $controller = $this;
+        return $this->doPayReturn($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                $controller->generateUrl('course_show', array('id' => $order['targetId']));
+            }
 
-        $payData = $response->getPayData();
-        $order = $this->getOrderService()->payOrder($payData);
+            if ($order['targetType'] != 'course') {
+                throw \RuntimeException('非课程订单，加入课程失败。');
+            }
 
-        return $this->redirect($this->generateUrl('course_show', array('id' => $order['courseId'])));
+            $info = array(
+                'orderId' => $order['id'],
+                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            );
+
+            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            }
+
+            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
+        });
     }
 
     public function payNotifyAction(Request $request, $name)
     {
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        $response = $this->createPaymentResponse($name, $request->request->all());
+        $controller = $this;
+        return $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                return ;
+            }
+            if ($order['targetType'] != 'course') {
+                throw \RuntimeException('非课程订单，加入课程失败。');
+            }
 
-        $payData = $response->getPayData();
-        try {
-            $order = $this->getOrderService()->payOrder($payData);
-            return new Response('success');
-        } catch (\Exception $e) {
-            throw $e;
-        }
+            $info = array(
+                'orderId' => $order['id'],
+                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            );
+
+            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            }
+
+            return ;
+        });
     }
 
     public function refundAction(Request $request , $id)
@@ -126,6 +183,7 @@ class CourseOrderController extends BaseController
 
             $refund = $this->getOrderService()->applyRefundOrder($member['orderId'], $amount, $reason);
             if ($refund['status'] == 'created') {
+                $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
                 $message = $this->setting('refund.applyNotification', '');
                 if ($message) {
                     $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
@@ -135,6 +193,8 @@ class CourseOrderController extends BaseController
                     $message = StringToolkit::template($message, $variables);
                     $this->getNotificationService()->notify($refund['userId'], 'default', $message);
                 }
+            } elseif ($refund['status'] == 'success') {
+                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
             }
 
             return $this->createJsonResponse($refund);
@@ -165,74 +225,20 @@ class CourseOrderController extends BaseController
             throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能取消退款。');
         }
 
-        $this->getOrderService()->cancelRefundOrder($member['orderId']);
+        $this->getCourseOrderService()->cancelRefundOrder($member['orderId']);
 
         return $this->createJsonResponse(true);
 
     }
 
-    private function createPaymentRequest($order)
-    {
-
-        $options = $this->getPaymentOptions($order['payment']);
-        $request = Payment::createRequest($order['payment'], $options);
-
-        return $request->setParams(array(
-            'orderSn' => $order['sn'],
-            'title' => $order['title'],
-            'summary' => '',
-            'amount' => $order['price'],
-            'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
-            'showUrl' => $this->generateUrl('course_show', array('id' => $order['courseId']), true),
-        ));
-    }
-
-    private function createPaymentResponse($name, $params)
-    {
-        $options = $this->getPaymentOptions($name);
-        $response = Payment::createResponse($name, $options);
-
-        return $response->setParams($params);
-    }
-
-    private function getPaymentOptions($payment)
-    {
-        $settings = $this->setting('payment');
-
-        if (empty($settings)) {
-            throw new \RuntimeException('支付参数尚未配置，请先配置。');
-        }
-
-        if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
-        }
-
-        if (empty($settings[$payment. '_enabled'])) {
-            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
-        }
-
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
-        }
-
-        $options = array(
-            'key' => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
-        );
-
-        return $options;
-    }
-
-    private function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Course.OrderService');
-    }
-
-    private function getCourseService()
+    public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    public function getCourseOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.OrderService');
     }
 
     protected function getSettingService()
@@ -254,7 +260,6 @@ class CourseOrderController extends BaseController
         if (empty($setting['enabled'])) {
             return $enableds;
         }
-
 
         $payNames = array('alipay');
         foreach ($payNames as $payName) {

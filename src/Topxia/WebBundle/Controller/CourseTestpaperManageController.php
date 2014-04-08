@@ -347,6 +347,7 @@ class CourseTestpaperManageController extends BaseController
             'question' => $question,
             'subQuestions' => $subQuestions,
             'targets' => $targets,
+            'type' => $question['type']
         ));
 
     }

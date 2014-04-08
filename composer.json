@@ -1,10 +1,9 @@
 {
     "name": "topxia/edusoho",
-    "license": "MIT",
     "type": "project",
     "description": "Edusoho",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": { "": ["src/", "plugins/"] }
     },
     "require": {
         "php": ">=5.3.3",

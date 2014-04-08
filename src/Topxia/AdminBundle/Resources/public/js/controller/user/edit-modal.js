@@ -22,9 +22,10 @@ define(function(require, exports, module) {
                 editor.sync();
 
 				$.post($form.attr('action'), $form.serialize(), function(html) {
-					$modal.modal('hide');
-					Notify.success('用户信息保存成功');
-					var $tr = $(html);
+                    $modal.modal('hide');
+                    Notify.success('用户信息保存成功');
+                    var $tr = $(html);
+                    console.log(html);
 					$('#' + $tr.attr('id')).replaceWith($tr);
 				}).error(function(){
 					Notify.danger('操作失败');

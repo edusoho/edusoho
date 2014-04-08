@@ -8,7 +8,9 @@
       <div class="list-group">
         <a href="{{ path('admin_course') }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">课程管理</a>
 
-        <a href="{{ url('admin_course_order_manage') }}" class="list-group-item {% if menu == 'course-order' %}active{% endif %}">交易管理</a>
+        <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a>
+
+        <a href="{{ url('admin_course_order_manage') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">订单管理</a>
 
         <a href="{{ url('admin_order_refunds', {status:'created'}) }}" class="list-group-item {% if menu == 'refunds' %}active{% endif %}">退款管理</a>
 

@@ -79,82 +79,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
-    public function getUserlevel($id)
-    {
-        return $this->getUserlevelDao()->getUserlevel($id);
-    }
-
-    public function getUserlevelByName($name)
-    {
-        return $this->getUserlevelDao()->getUserlevelByName($name);
-    }
-
-    public function isUserlevelNameAvailable($name, $exclude=null)
-    {
-        if (empty($name)) {
-            return false;
-        }
-
-        if ($name == $exclude) {
-            return true;
-        }
-
-        $userlevel = $this->getUserlevelByName($name);
-
-        return $userlevel ? false : true;
-    }
-
-    public function searchUserlevelsCount($conditions)
-    {
-        return $this->getUserlevelDao()->searchUserlevelsCount($conditions);
-    }
-
-    public function createUserlevel($userlevel)
-    {
-        $userlevel['createdTime'] = time();
-        @$userlevel['seq'] = $this->searchUserlevelsCount()+1;
-        $userlevel = $this->getUserlevelDao()->createUserlevel($userlevel);
-
-        $this->getLogService()->info('userlevel', 'create', "添加会员等级{$userlevel['name']}(#{$userlevel['id']})");
-
-        return $userlevel;
-    }
-
-    public function searchUserlevels($conditions, $start, $limit)
-    {
-        $userlevels = $this->getUserlevelDao()->searchUserlevels($conditions, $start, $limit);
-        return $userlevels;
-    }
-
-
-    public function updateUserlevel($id,$fields)
-    {
-        $userlevel = $this->getUserlevelDao()->updateUserlevel($id,$fields);
-        $this->getLogService()->info('userlevel', 'update', "编辑会员等级{$userlevel['name']}(#{$userlevel['id']})");
-        return $userlevel;
-    }
-
-    public function sortUserlevels(array $ids)
-    {   
-        $levelId  = 0;
-        foreach ($ids as $itemId) {
-            list(, $type) = explode("-",$itemId);
-                $levelId ++;
-                $item = $this->getUserlevel($type);
-                $fields = array('seq' => $levelId);
-                if ($fields['seq'] != $item['seq']) {
-                    $this->updateUserlevel($item['id'], $fields);
-            }
-        }
-    }
-
-    public function deleteUserlevel($id)
-    {
-        $userlevel = $this->getUserlevel($id);
-        $this->getLogService()->info('userlevel', 'delete', "删除用户等级{$userlevel['name']}(#{$userlevel['id']})");
-        return $this->getUserlevelDao()->deleteUserlevel($id);
-    }
-
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
@@ -220,6 +144,18 @@ class UserServiceImpl extends BaseService implements UserService
         $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
 
         @unlink($filePath);
+
+        $oldAvatars = array(
+            'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
+            'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
+            'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
+        );
+
+        array_map(function($oldAvatar){
+            if (!empty($oldAvatar)) {
+                @unlink($oldAvatar);
+            }
+        }, $oldAvatars);
 
         return  $this->getUserDao()->updateUser($userId, array(
             'smallAvatar' => $smallFileRecord['uri'],
@@ -322,7 +258,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
-
         return $user;
     }
 
@@ -353,10 +288,13 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = ArrayToolkit::filter($fields, array(
             'truename' => '',
             'gender' => 'secret',
+            'iam' => '',
             'birthday' => null,
             'city' => '',
             'mobile' => '',
             'qq' => '',
+            'school' => '',
+            'class' => '',
             'company' => '',
             'job' => '',
             'signature' => '',
@@ -799,6 +737,8 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;
     }
+    
+
 
     public function getUserCountByApprovalStatus($approvalStatus)
     {
@@ -836,11 +776,6 @@ class UserServiceImpl extends BaseService implements UserService
     private function getUserDao()
     {
         return $this->createDao('User.UserDao');
-    }
-
-    private function getUserlevelDao()
-    {
-        return $this->createDao('User.UserlevelDao');
     }
 
     private function getProfileDao()

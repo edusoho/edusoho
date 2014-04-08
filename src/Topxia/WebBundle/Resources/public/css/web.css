@@ -160,27 +160,6 @@ textarea {
 
 
 @media screen and (min-width: 768px) {
-  .modal-dialog-small {
-	width: 480px;
-  }
-
-  .modal-dialog-small .modal-footer {
-  	padding-top: 15px;
-  	padding-bottom: 15px;
-
-  }
-
-  .modal-dialog-medium {
-    width: 700px;
-  }
-
-  .modal-dialog-large {
-    width: 800px;
-  }
-
-  .modal-dialog-xlarge {
-    width: 900px;
-  }
 
   .date-selects select {
     width: 18%;
@@ -189,14 +168,25 @@ textarea {
 
 }
 
+.control-label span.required {
+	color: #f60;
+}
+
 .bootstrap-notify-bar {
 	position: fixed;
-	top: 0;
+	top: 0px;
 	left: 0;
 	right: 0;
 	border-radius: 0;
 	text-align: center;
 	z-index: 2000;
+	padding: 10px;
+	margin: 0;
+	/*max-width: 600px;*/
+}
+
+.bootstrap-notify-bar .close {
+	margin-left: 10px;
 }
 
 .empty {
@@ -239,7 +229,9 @@ textarea {
 	padding-right: 15px;
 	float: left;
 }
-
+.site-navbar .navbar-brand-logo img {
+	height: 50px;
+}
 .site-navbar .navbar-nav > li > a {
   color: #fff;
   padding-top: 17px;
@@ -897,6 +889,13 @@ body {
 	font-size: 12px;
 }
 
+.material-pane {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	overflow: hidden;
+}
 .material-pane h5 {
 	font-weight: bold;
 	font-size: 13px;
@@ -1294,14 +1293,18 @@ body {
 	width: 100% !important;
 }
 
+.lesson-dashboard-page .site-navbar {
+	display: none;
+}
+
 .lesson-dashboard {
 	position: fixed;
 	background: #fff;
-	top: 56px;
+	top: 0px;
 	bottom: 0px;
 	left: 0;
 	right: 0;
-	background: #f9f9f9;
+	background: #e5e5e5;
 }
 
 .lesson-dashboard .dashboard-content {
@@ -1338,7 +1341,7 @@ body {
 	bottom: 0;
 	width: 60px;
 	border-left: 1px solid #e9e9e9;
-	background: #f3f3f3;
+	background: #363e45;
 }
 
 .lesson-dashboard .toolbar-pane-container {
@@ -1405,12 +1408,13 @@ body {
 	text-align: center;
 	display: inline-block;
 	width: 100%;
-	color: #888;
+	color: #ccc;
 	text-decoration: none;
 }
 
 .lesson-dashboard .toolbar-nav-stacked li a:hover {
-	background: #e3e3e3;
+	background: #aaa;
+	color: #fff;
 }
 
 .lesson-dashboard .toolbar-nav-stacked li a .glyphicon {
@@ -1419,7 +1423,7 @@ body {
 }
 
 .lesson-dashboard .toolbar-nav-stacked li.active a {
-	background-color: #aaa;
+	background-color: #999;
 	color: #fff;
 }
 
@@ -1551,12 +1555,13 @@ body {
 .lesson-dashboard .lesson-content-text-body img {
 	max-width: 100%;
 }
-
+.lesson-dashboard .lesson-content-text-body blockquote p {
+	font-size: 14px;
+}
 .lesson-dashboard .nav-btn {
 	position: absolute;
-	background: #f9f9f9;
+	/*background: #f3f3f3;*/
 	border-radius: 0;
-	color: #777;
 	z-index: 1000;
 	padding: 3px 10px;
 }

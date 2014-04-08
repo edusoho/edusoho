@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
+	require('common/validator-rules').inject(Validator);
 
 	exports.run = function() {
 
@@ -15,6 +16,7 @@ define(function(require, exports, module) {
 		validator.addItem({
 			element: '#course-picture-field',
 			required: true,
+			rule: 'maxsize_image',
 			errormessageRequired: '请选择要上传的课程图片'
 		});
 

@@ -1,7 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set modal_size = '' %}
-
 {% block title %}退出学习{% endblock %}
 {% block body %}
 
@@ -24,12 +22,12 @@
       </div>
     </div>
 
-    {% if maxRefundDays > 0 and (order.price * 100) > 0 %}
+    {% if maxRefundDays > 0 and (order.amount * 100) > 0 %}
 
       <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
           <div class="checkbox">
-            <label><input type="checkbox" name="applyRefund" value="1" {% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> 申请退款 <span class="text-muted text-sm">（购买课程时的价格：{{ order.price }}元）</span></label>
+            <label><input type="checkbox" name="applyRefund" value="1" {% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> 申请退款 <span class="text-muted text-sm">（购买课程时的价格：{{ order.amount }}元）</span></label>
           </div>
           {% if maxRefundDays > 0 and refundOverdue %}
             <div class="alert alert-warning">已经超出了退款期限{{ maxRefundDays }}天，不能申请退款。</div>

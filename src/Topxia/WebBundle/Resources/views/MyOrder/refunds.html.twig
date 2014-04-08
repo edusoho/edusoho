@@ -17,10 +17,14 @@
     		  {% set order = orders[refund.orderId] %}
     		  <tr>
       		  <td>
-      		    <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank">{{ order.title }}</a>
-      		    <div class="text-sm text-muted">
-  	    		    订单号：{{ order.sn }}
-      		    </div>
+              {% if order.targetType == 'course' %}
+                <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+              {% elseif order.targetType == 'vip' %}
+        		    <a href="{{ path('vip', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+              {% else %}
+                {{ order.title }}
+              {% endif %}
+      		    <div class="text-sm text-muted">订单号：{{ order.sn }}</div>
       		  </td>
       		  <td>
       		  	{{ refund.createdTime|date('Y-n-d H:i') }}

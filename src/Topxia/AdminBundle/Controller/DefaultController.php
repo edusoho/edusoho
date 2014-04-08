@@ -32,7 +32,7 @@ class DefaultController extends BaseController
 
             $orders = $this->getOrderService()->searchOrders(array('courseId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
             foreach ($orders as $id => $order) {
-                $course['addedMoney'] += $order['price'];
+                $course['addedMoney'] += $order['amount'];
             }
 
             $courses[] = $course;
@@ -85,14 +85,11 @@ class DefaultController extends BaseController
     public function latestPaidOrdersBlockAction(Request $request)
     {
         $orders = $this->getOrderService()->searchOrders(array('status'=>'paid'), 'latest', 0 , 5);
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($orders, 'courseId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
         
         return $this->render('TopxiaAdminBundle:Default:latest-paid-orders-block.html.twig', array(
             'orders'=>$orders,
             'users'=>$users,
-            'courses'=>$courses
         ));
     }
 
@@ -101,9 +98,10 @@ class DefaultController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
         $question = $this->getThreadService()->getThread($courseId, $questionId);
         $questionUrl = $this->generateUrl('course_thread_show', array('courseId'=>$course['id'], 'id'=> $question['id']), true);
+        $questionTitle = strip_tags($question['title']);
         foreach ($course['teacherIds'] as $receiverId) {
             $result = $this->getNotificationService()->notify($receiverId, 'default',
-                "课程《{$course['title']}》有新问题 <a href='{$questionUrl}' target='_blank'>{$question['title']}</a>，请及时回答。");
+                "课程《{$course['title']}》有新问题 <a href='{$questionUrl}' target='_blank'>{$questionTitle}</a>，请及时回答。");
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
@@ -121,7 +119,7 @@ class DefaultController extends BaseController
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
     protected function getNotificationService()

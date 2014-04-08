@@ -59,19 +59,28 @@ class CourseStudentManageController extends BaseController
             }
 
             $order = $this->getOrderService()->createOrder(array(
-                'courseId' => $course['id'],
                 'userId' => $user['id'],
-                'price' => $data['price'],
+                'title' => "购买课程《{$course['title']}》(管理员添加)",
+                'targetType' => 'course',
+                'targetId' => $course['id'],
+                'amount' => $data['price'],
                 'payment' => 'none',
+                'snPrefix' => 'C',
             ));
 
             $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],
                 'status' => 'success', 
-                'amount' => $order['price'], 
+                'amount' => $order['amount'], 
                 'paidTime' => time(),
-                'memberRemark' => $data['remark'],
             ));
+
+            $info = array(
+                'orderId' => $order['id'],
+                'note'  => $data['remark'],
+            );
+
+            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
@@ -79,6 +88,8 @@ class CourseStudentManageController extends BaseController
                 'courseId' => $course['id'], 
                 'courseTitle' => $course['title'],
             ));
+
+
 
             $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
@@ -104,6 +115,50 @@ class CourseStudentManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function exportCsvAction (Request $request, $id)
+    {   
+        $course = $this->getCourseService()->tryAdminCourse($id);
+
+        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,1000);
+
+        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+
+        $progresses = array();
+        foreach ($courseMembers as $student) {
+            $progresses[] = $this->calculateUserLearnProgress($course, $student);
+        }
+        $str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
+
+        $students = array_map(function($user,$courseMember,$progress,$profile){
+            $member['nickname']   = $user['nickname'];
+            $member['joinedTime'] = date('Y-n-d H:i:s', $courseMember['createdTime']);
+            $member['percent']  = $progress['percent'];
+            $member['truename'] = $profile['truename'] ? $profile['truename'] : "-";
+            $member['email'] = $user['email'] ? $user['email'] : "-";
+            $member['company'] = $profile['company'] ? $profile['company'] : "-";
+            $member['title'] = $user['title'] ? $user['title'] : "-";
+            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "-";
+            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "-";
+            $member['qq'] = $profile['qq'] ? $profile['qq'] : "-";
+            return implode(',',$member);
+        }, $users,$courseMembers,$progresses,$profiles);
+        $str .= implode("\r\n",$students);
+        $str = chr(239) . chr(187) . chr(191) . $str;
+
+        $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
+
+        $userId = $this->getCurrentUser()->id;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
 
     public function remarkAction(Request $request, $courseId, $userId)
     {
@@ -200,6 +255,6 @@ class CourseStudentManageController extends BaseController
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }

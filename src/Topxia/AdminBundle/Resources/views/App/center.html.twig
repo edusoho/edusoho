@@ -1,0 +1,55 @@
+{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+
+{% block title %}应用中心 - {{ parent() }}{% endblock %}
+
+{% set menu = 'center' %}
+
+{% block main %}
+  <div class="page-header">
+    <h1>应用中心</h1>
+  </div>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>应用描述</th>
+        <th>开发者</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for app in apps %}
+        {% set installedApp = installedApps[app.code]|default(null) %}
+      <tr>
+        <td>
+          <div>
+            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}"><strong class="text-primary">{{ app.name }}</strong></a>
+             - 
+            <span class="text-info">{{ app.latestVersion }}</span>
+            {% if app.licensed %}
+              <span class="label label-warning">商业版应用</span>
+            {% endif %}
+          </div>
+          <div class="">{{ app.description|plain_text(100) }}</div>
+          <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div>
+        </td>
+        <td>
+          {{ app.developerName }}
+        </td>
+        <td>
+          {% if installedApp %}
+            <a href="javascript:;" class="btn btn-default disabled">已安装</a>
+          {% else %}
+            {% if app.userAccess == 'ok' %}
+              <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">安装</a>
+            {% else %}
+              <a href="http://www.edusoho.com/service" class="btn btn-warning" target="_blank">购买</a>
+            {% endif %}
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

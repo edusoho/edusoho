@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set modal_size = 'xlarge' %}
+{% set modal_class = 'modal-lg' %}
 
 {% block title %}
   {% if targetType == 'courselesson' %} 上传课时文件 {% elseif targetType == 'coursematerial' %} 上传资料文件 {% endif %}
@@ -43,7 +43,7 @@
           <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
         {% else %}
           <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-          <li>视频将上传到<strong>网站服务器</strong>，如需使用视频云存储，请联系EduSoho官方购买。</li>
+          <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
         {% endif %}
       </ul>
     </div>
@@ -54,7 +54,7 @@
         {% if storageSetting.upload_mode == 'cloud' %}
           <li>文件将上传到<strong>云服务器</strong>。</li>
         {% else %}
-          <li>文件将上传到<strong>网站服务器</strong>，如需使用云存储，请联系EduSoho官方购买。</li>
+          <li>文件将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
         {% endif %}
       </ul>
     </div>

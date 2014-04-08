@@ -1,7 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set modal_size = '' %}
-
 {% block title %}审核退款申请{% endblock %}
 {% block body %}
 
@@ -10,7 +8,7 @@
     <div class="form-group">
       <label class="col-md-3 control-label">订单成交金额</label>
       <div class="col-md-8 controls">
-        <span class="control-text">{{ order.price }}元</span>
+        <span class="control-text">{{ order.amount }}元</span>
       </div>
     </div>
 

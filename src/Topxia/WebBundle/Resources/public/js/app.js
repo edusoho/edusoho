@@ -6,6 +6,10 @@ define(function(require, exports, module) {
 	exports.load = function(name) {
 		if (name.substr(0, 7) == 'custom/') {
 			name = '../../../bundles/customweb/js/controller/' + name.substr(7) + '.js?';
+		} else if (name.substr(0, 10) == 'vipbundle/') {
+			name = '../../../bundles/vip/js/' + name.substr(10) + '.js?';
+		} else if (name.substr(0, 13) == 'couponbundle/') {
+			name = '../../../bundles/coupon/js/' + name.substr(13) + '.js?';
 		} else {
 			name = './controller/' + name + '.js?';
 		}

@@ -118,9 +118,18 @@ course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
 
+course_become_use_member:
+    pattern:  /course/{id}/become_use_member
+    defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
+    methods: [POST]
+
 course_buy:
     pattern:  /course/{id}/buy
     defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+
+coupon_check:
+    pattern:  /{type}/{id}/coupon/check
+    defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
 
 course_order_pay:
     pattern:  /course/order/pay
@@ -378,6 +387,10 @@ course_manage_students_show:
 course_manage_student_create:
     pattern:  /course/{id}/manage/student/create
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
+
+course_manage_student_export_csv:
+    pattern:  /course/{id}/manage/student/export
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:exportCsv }
 
 course_manage_student_remove:
     pattern:  /course/{courseId}/manage/student/{userId}/remove
@@ -853,6 +866,14 @@ my_refunds:
     pattern: /my/refunds
     defaults: { _controller: TopxiaWebBundle:MyOrder:refunds }
 
+income_records:
+    pattern: /my/income_records
+    defaults: { _controller: TopxiaWebBundle:MoneyRecord:index }
+
+payout_records:
+    pattern: /my/payout_records
+    defaults: { _controller: TopxiaWebBundle:MoneyRecord:payout }
+
 my_quiz:
     pattern: /my/quiz
     defaults: { _controller: TopxiaWebBundle:Testpaper:index }
@@ -872,7 +893,6 @@ my_show_favorite_question:
 my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
-
 
 user_show: 
     pattern:  /user/{id}
@@ -998,6 +1018,7 @@ article_page_list:
     pattern: /page
     defaults: {_controller: TopxiaWebBundle:Article:pageList }    
 
+
 teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
@@ -1022,6 +1043,10 @@ cloud_set_server:
     pattern: /cloud/set-server
     defaults: {_controller: TopxiaWebBundle:Cloud:setServer }
 
+cloud_oldkeys:
+    pattern: /cloud/oldkeys
+    defaults: {_controller: TopxiaWebBundle:Cloud:oldkeys }
+
 systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
@@ -1033,3 +1058,16 @@ setting_approval_submit:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
+
+#占位
+vip:
+    pattern: /vip/
+
+vip_buy:
+    pattern: /vip/buy
+
+vip_renew:
+    pattern: /vip/renew
+
+vip_upgrade:
+    pattern: /vip/upgrade

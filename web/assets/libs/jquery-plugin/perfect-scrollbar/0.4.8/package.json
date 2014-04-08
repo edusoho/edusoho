@@ -1,0 +1,34 @@
+{
+  "family": "jquery-plugin",
+  "name": "perfect-scrollbar",
+  "version": "0.4.8",
+  "description": "Tiny but perfect jquery scrollbar plugin.",
+  "homepage": "http://noraesae.github.io/perfect-scrollbar/",
+  "author": {
+    "name": "HyeonJe Jun",
+    "email": "noraesae@yuiazu.net",
+    "url": "https://github.com/noraesae/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noraesae/perfect-scrollbar.git"
+  },
+  "bugs": "https://github.com/noraesae/perfect-scrollbar/issues/",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/noraesae/perfect-scrollbar#license"
+    }
+  ],
+  "keywords": [ "ui", "scroll", "scrollbar" ],
+  "spm": {
+    "alias": {
+      "$": "$",
+      "jquery.mousewheel": "jquery-plugin/mousewheel/3.1.9/mousewheel"
+    },
+    "output": [
+      "perfect-scrollbar.js",
+      "perfect-scrollbar.css"
+    ]
+  }
+}

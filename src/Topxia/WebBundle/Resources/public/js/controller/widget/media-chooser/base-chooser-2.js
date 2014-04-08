@@ -148,6 +148,7 @@ define(function(require, exports, module) {
                 button_text_left_padding : 18,
                 button_text_top_padding : 5,
                 button_image_url: $btn.data('buttonImage'),
+                button_window_mode: 'transparent',
 
                 file_dialog_complete_handler: function(numFilesSelected, numFilesQueued) {
                     if (numFilesSelected == 0) {

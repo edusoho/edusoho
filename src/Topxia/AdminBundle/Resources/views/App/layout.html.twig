@@ -1,0 +1,26 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'app' %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+
+      <div class="panel panel-default">
+        <div class="panel-heading">应用管理</div>
+        <div class="list-group">
+          <a href="{{ path('admin_app_center') }}" class="list-group-item {% if menu == 'center' %}active{% endif %}">应用中心</a>
+          <a href="{{ path('admin_app_installed') }}" class="list-group-item {% if menu == 'installed' %}active{% endif %}">已安装应用</a>
+          <a href="{{ path('admin_app_upgrades') }}" class="list-group-item {% if menu == 'upgrades' %}active{% endif %}">检查应用更新</a>
+          <a href="{{ path('admin_app_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">应用更新日志</a>
+        </div>
+
+      </div>
+
+
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

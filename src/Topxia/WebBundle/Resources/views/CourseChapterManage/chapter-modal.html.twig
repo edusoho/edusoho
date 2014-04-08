@@ -26,7 +26,7 @@
 
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">添加</button>
+    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">{% if chapter %}保存{% else %}添加{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

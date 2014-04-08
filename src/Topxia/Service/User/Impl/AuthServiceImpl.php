@@ -128,7 +128,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             $providerName = $this->getAuthProvider()->getProviderName();
             $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
             if (!$bind) {
-                return false;
+                return $this->getUserService()->verifyPassword($userId, $password);
             }
             $checked = $this->getAuthProvider()->checkPassword($bind['fromId'], $password);
 

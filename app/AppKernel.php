@@ -4,9 +4,11 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Topxia\Service\Common\ServiceKernel;
 
-class AppKernel extends Kernel {
+class AppKernel extends Kernel
+{
 
-    public function registerBundles () {
+    public function registerBundles ()
+    {
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -19,11 +21,21 @@ class AppKernel extends Kernel {
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
-            new Custom\WebBundle\CustomWebBundle(),
-            new Custom\AdminBundle\CustomAdminBundle(),
-            );
+        );
 
+        //@todo refactor.
+        $pluginDir = dirname(__FILE__) . '/../plugins';
+        if (file_exists("{$pluginDir}/Vip/VipBundle/VipBundle.php")) {
+            $bundles[] = new Vip\VipBundle\VipBundle();
+        }
 
+        if (file_exists("{$pluginDir}/Coupon/CouponBundle/CouponBundle.php")) {
+            $bundles[] = new Coupon\CouponBundle\CouponBundle();
+        }
+
+        $bundles[] = new Custom\WebBundle\CustomWebBundle();
+        $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
+            
         if (in_array($this->getEnvironment(), array('dev' , 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
@@ -33,8 +45,8 @@ class AppKernel extends Kernel {
         return $bundles;
     }
 
-
-    public function init () {
+    public function init ()
+    {
         date_default_timezone_set('Asia/Shanghai');
         parent::init();
     }

@@ -2,6 +2,7 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
+/app/config/discuz/
 /app/logs/*
 /build
 /files
@@ -11,6 +12,8 @@
 /app/data/private_files/*
 /app/data/backup/*
 /app/data/upgrade/*
+/app/config/routing_plugins.yml
+/plugins/*
 /build/
 /vendor/
 /bin/

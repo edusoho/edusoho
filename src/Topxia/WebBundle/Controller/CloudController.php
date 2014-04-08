@@ -35,6 +35,40 @@ class CloudController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function oldkeysAction(Request $request)
+    {
+        $sign = $request->query->get('sign');
+        if (empty($sign)) {
+            return $this->createJsonResponse(array('error' => 'sign param is empty.'));
+        }
+
+        $setting = $this->getSettingService()->get('storage', array());
+        if (empty($setting['cloud_secret_key'])) {
+            return $this->createJsonResponse(array('error' => 'secret key not set.'));
+        }
+
+        if ($sign != md5($setting['cloud_secret_key'])) {
+            return $this->createJsonResponse(array('error' => 'sign error.'));
+        }
+
+        $conditions = array(
+            'storage' => 'cloud',
+        );
+        $count = $this->getUploadFileService()->searchFileCount($conditions);
+
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestCreated', 0, $count);
+
+        foreach ($files as &$file) {
+            $file['metas'] = empty($file['metas']) ?  array() : json_decode($file['metas'], true);
+            $file['metas2'] = empty($file['metas2']) ?  array() : json_decode($file['metas2'], true);
+        }
+
+        return $this->createJsonResponse($files);
+
+
+
+    }
+
     private function checkSign($server, $sign, $secretKey)
     {
         return md5($server . $secretKey) == $sign;
@@ -43,6 +77,11 @@ class CloudController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
 }

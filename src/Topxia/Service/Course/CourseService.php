@@ -52,7 +52,7 @@ interface CourseService
 
 	public function changeCoursePicture ($courseId, $filePath, array $options);
 
-	public function recommendCourse($id);
+	public function recommendCourse($id, $number);
 
 	public function cancelRecommendCourse($id);
 
@@ -128,11 +128,14 @@ interface CourseService
 	/**
 	 * Member API
 	 */
+
 	public function searchMember($conditions, $start, $limit);
 
 	public function searchMemberCount($conditions);
 
 	public function getCourseMember($courseId, $userId);
+
+	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit);
 
 	public function updateCourseMember($id, $fields);
 

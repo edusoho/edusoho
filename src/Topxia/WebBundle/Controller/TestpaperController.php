@@ -151,21 +151,12 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
-            throw createAccessDeniedException('无权预览试卷！');
+            throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
 
-        $total = array();
-        foreach ($testpaper['metas']['question_type_seq'] as $type) {
-            if (empty($items[$type])) {
-                $total[$type]['score'] = 0;
-                $total[$type]['number'] = 0;
-            } else {
-                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
-                $total[$type]['number'] = count($items[$type]);
-            }
-        }
+        $total = $this->makeTestpaperTotal($testpaper, $items);
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items' => $items,
@@ -195,16 +186,7 @@ class TestpaperController extends BaseController
         $result = $this->getTestpaperService()->showTestpaper($id);
         $items = $result['formatItems'];
 
-        $total = array();
-        foreach ($testpaper['metas']['question_type_seq'] as $type) {
-            if (empty($items[$type])) {
-                $total[$type]['score'] = 0;
-                $total[$type]['number'] = 0;
-            } else {
-                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
-                $total[$type]['number'] = count($items[$type]);
-            }
-        }
+        $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 
@@ -246,16 +228,7 @@ class TestpaperController extends BaseController
         $items = $result['formatItems'];
         $accuracy = $result['accuracy'];
 
-        $total = array();
-        foreach ($testpaper['metas']['question_type_seq'] as $type) {
-            if (empty($items[$type])) {
-                $total[$type]['score'] = 0;
-                $total[$type]['number'] = 0;
-            } else {
-                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
-                $total[$type]['number'] = count($items[$type]);
-            }
-        }
+        $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 
@@ -275,7 +248,7 @@ class TestpaperController extends BaseController
 
     public function testSuspendAction (Request $request, $id)
     {
-        $testpaperResult = $this->getTestpaperService()->getTestPaperResult($id);
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
         if (!$testpaperResult) {
             throw $this->createNotFoundException('试卷不存在!');
         }
@@ -315,6 +288,13 @@ class TestpaperController extends BaseController
 
     public function finishTestAction (Request $request, $id)
     {
+
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+
+        if (!empty($testpaperResult) and !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+            return $this->createJsonResponse(true);
+        }
+
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $answers = array_key_exists('data', $data) ? $data['data'] : array();
@@ -373,7 +353,7 @@ class TestpaperController extends BaseController
 
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
-            throw createAccessDeniedException('无权批阅试卷！');
+            throw $this->createAccessDeniedException('无权批阅试卷！');
         }
 
         if ($testpaperResult['status'] != 'reviewing') {
@@ -399,11 +379,7 @@ class TestpaperController extends BaseController
         $items = $result['formatItems'];
         $accuracy = $result['accuracy'];
 
-        $total = array();
-        foreach ($testpaper['metas']['question_type_seq'] as $type) {
-            $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
-            $total[$type]['number'] = count($items[$type]);
-        }
+        $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $types =array();
         if (in_array('essay', $testpaper['metas']['question_type_seq'])){
@@ -441,6 +417,27 @@ class TestpaperController extends BaseController
     }
 
 
+    private function makeTestpaperTotal ($testpaper, $items)
+    {
+        $total = array();
+        foreach ($testpaper['metas']['question_type_seq'] as $type) {
+            if (empty($items[$type])) {
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
+                $total[$type]['missScore'] = 0;
+            } else {
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['number'] = count($items[$type]);
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                } else {
+                    $total[$type]['missScore'] = 0;
+                }
+            }
+        }
+
+        return $total;
+    }
 
 
 

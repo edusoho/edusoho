@@ -13,6 +13,9 @@ class CourseReviewController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
+        $previewAs = $request->query->get('previewAs');
+        $isModal = $request->query->get('isModal');
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getReviewService()->getCourseReviewCount($id)
@@ -31,7 +34,8 @@ class CourseReviewController extends BaseController
             'course' => $course,
             'reviews' => $reviews,
             'users' => $users,
-            'paginator' => $paginator,
+            'isModal' => $isModal,
+            'paginator' => $paginator
         ));
     }
 

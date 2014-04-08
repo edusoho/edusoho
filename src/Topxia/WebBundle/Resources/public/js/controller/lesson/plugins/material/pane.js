@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+    require('jquery.perfect-scrollbar');
+
 	var Widget = require('widget');
 
 	var MaterialPane = Widget.extend({
@@ -16,7 +18,9 @@ define(function(require, exports, module) {
                 courseId: toolbar.get('courseId'),
                 lessonId: toolbar.get('lessonId')
             }, function(html) {
+            	
             	pane.element.html(html);
+            	$('.material-pane').perfectScrollbar({wheelSpeed:50});
             });
 
 		}

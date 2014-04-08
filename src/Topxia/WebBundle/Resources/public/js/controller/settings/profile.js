@@ -49,6 +49,21 @@ define(function(require, exports, module) {
             editor.sync();
         });
 
+        if ($('.form-iam-group').length>=1) {
+
+            var iam = $('.form-iam-group').find('input[type=radio]:checked').val();
+
+            $('.form-forIam-group').hide();
+
+            $('.form-'+ iam +'-group').show();
+
+            $('.form-iam-group').on('change', 'input[type=radio]', function() {
+                iam = $(this).val();
+                $('.form-forIam-group').hide();
+                $('.form-'+ iam +'-group').show();
+            });
+        }
+
     };
 
 });

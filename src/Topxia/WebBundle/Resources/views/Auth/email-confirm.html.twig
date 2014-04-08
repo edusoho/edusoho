@@ -1,6 +1,8 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}邮箱地址验证失败 - {{ parent() }}{% endblock %}
+{% block title %}设置新邮箱 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'auth/email-change' %}
 
 {% block content %}
 <div class="row">
@@ -29,7 +31,7 @@
         <div class="form-group">
           <div class="col-md-3 control-label"></div>
           <div class="col-md-9 controls">
-            <button type="submit" class="btn btn-primary">提交</button>
+            <button type="submit" id="set-email-btn" class="btn btn-primary">提交</button>
           </div>
         </div>
 

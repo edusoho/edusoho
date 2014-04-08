@@ -7,7 +7,7 @@
 	  <ul class="row">
 	    {% for item in group.data %}
 	      <li class="col-md-4 clearfix item">
-	      	<a class="item-object item-object-{{ item.type }}" href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}">
+	      	<a class="item-object item-object-{{ item.type }}" href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">
 	      		{% if item.free %}<span class="item-free"></span>{% endif %}
 		      	<span class="item-icon"></span>
 		      	{% if item.status == 'published' %}
@@ -26,7 +26,7 @@
 	      	</a>
 	      	<div class="item-body">
 	      		<div class="item-seq-name">课时{{ item.number }}:</div>
-	      		<div class="item-title"><a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}">{{ item.title }}</a></div>
+	      		<div class="item-title"><a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">{{ item.title }}</a></div>
 	      	</div>
 	      </li>
 	    {% endfor %}

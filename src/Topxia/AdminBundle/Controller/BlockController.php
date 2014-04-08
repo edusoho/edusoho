@@ -42,8 +42,12 @@ class BlockController extends BaseController
 
     public function updateAction(Request $request, $block)
     {
+        if (is_numeric(($block))) {
+            $block = $this->getBlockService()->getBlock($block);
+        } else {
+            $block = $this->getBlockService()->getBlockByCode($block);
+        }
 
-        $block = $this->getBlockService()->getBlock($block);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),

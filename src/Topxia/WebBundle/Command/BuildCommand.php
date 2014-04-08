@@ -27,6 +27,7 @@ class BuildCommand extends BaseCommand
 		$this->buildVendorDirectory();
 		$this->buildVendorUserDirectory();
 		$this->buildWebDirectory();
+		$this->buildPluginsDirectory();
 		$this->cleanMacosDirectory();
 
 		$this->package();
@@ -97,6 +98,8 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
+		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_plugins.yml");
+		$this->filesystem->touch("{$this->distDirectory}/app/config/routing_plugins.yml");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/uc_client_config.php");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/windid_client_config.php");
@@ -130,6 +133,12 @@ class BuildCommand extends BaseCommand
 		// $this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
 		// $this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
 		$this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
+	}
+
+	public function buildPluginsDirectory()
+	{
+		$this->output->writeln('build plugins/ .');
+		$this->filesystem->mkdir("{$this->distDirectory}/plugins");
 	}
 
 	public function buildSrcDirectory()
@@ -255,7 +264,11 @@ class BuildCommand extends BaseCommand
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
+		$needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin');
 		foreach ($finder as $dir) {
+			if (!in_array($dir->getFilename(), $needs)) {
+				continue;
+			}
 			$this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
 		}
 

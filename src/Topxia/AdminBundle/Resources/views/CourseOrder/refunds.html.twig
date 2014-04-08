@@ -52,11 +52,15 @@
           {% set user = users[refund.userId] %}
           <tr>
             <td>
-              <a href="{{ path('course_show', {id:order.courseId}) }}" target="_blank">{{ order.title }}</a>
+              {% if order.targetType == 'course' %}
+                <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+              {% else %}
+                {{ order.title }}
+              {% endif %}
               <div class="text-muted text-sm">订单号：{{ order.sn }} | 成交时间：{{ order.createdTime|date('Y-n-d H:i') }}</div>
               <div class="text-muted text-sm">退款理由：{{ refund.reasonNote }} | 退款时间：{{ refund.createdTime|date('Y-n-d H:i') }}</div>
             </td>
-            <td>{{ order.price }}元</td>
+            <td>{{ order.amount }}元</td>
             <td>
               {{ admin_macro.user_link(user) }}
             </td>
