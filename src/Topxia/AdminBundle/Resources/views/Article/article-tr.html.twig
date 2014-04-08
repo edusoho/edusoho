@@ -1,4 +1,5 @@
 <tr id="article-{{ article.id }}">
+	<td>{{article.id}}</td>
 	<td>
 		<a href="{{ path('article_' ~ article.type ~ '_show', {alias:article.alias|default(article.id)}) }}" target="_blank">{{ article.title }}</a><br />
 		{% if article.type == 'page' %}
@@ -8,10 +9,23 @@
 			<span class="text-muted text-sm">分类：{{ category.name }}</span>
 		{% endif %}
 	</td>
-	<td>{{ dict_text('articleType', article.type) }}</td>
+	<td>
+	{% if category %}
+		<span class="text-muted">{{ category.name }}</span>
+		{% else %}
+		<span class="text-muted">未分类</span>
+	{% endif %}
+	</td>
+	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
+	<td>{{ article.updated|date('Y-n-d H:i') }}</td>
+	<td>
+	<span class="label label-primary">{{ article.featured}}</span> 
+	<span class="label label-primary">{{ article.promoted}}</span> 
+	<span class="label label-primary">{{ article.sticky}}</span> 
+	</td>
 	
 
-	<td>{{ dict_text('articleType', article.type) }}</td>
+	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
 	<td>{{ dict_text('articleStatus:html', article.status) }}</td>
 	<td>
 		{{ article.publishedTime|date('Y-n-d H:i') }}<br />
