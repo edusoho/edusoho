@@ -44,6 +44,7 @@ seajs.config({
 		"zclip": "jquery-plugin/zclip/1.1.1/jquery.zclip.js",
 		'wookmark': 'wookmark/jquery.wookmark.js',
 		'carousel': 'arale/switchable/1.0.0/carousel',
+		'moment' : 'gallery/moment/2.5.1/moment',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload'
 	},

@@ -352,7 +352,7 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
 
     private function getOrderService()
     {
-        return $this->createService('Course.OrderService');
+        return $this->createService('Order.OrderService');
     }
 
     private function getUserService()

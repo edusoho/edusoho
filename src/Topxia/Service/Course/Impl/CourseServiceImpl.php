@@ -44,7 +44,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if ($sort == 'popular') {
 			$orderBy =  array('hitNum', 'DESC');
 		} else if ($sort == 'recommended') {
-			$orderBy = array('recommendedSeq', 'ASC');
+			$orderBy = array('recommendedTime', 'DESC');
 		} else if ($sort == 'Rating') {
 			$orderBy = array('Rating' , 'DESC');
 		} else if ($sort == 'hitNum') {
@@ -336,6 +336,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'expiryDay' => 0,
 			'showStudentNumType' => 'opened',
 			'categoryId' => 0,
+			'vipLevelId' => 0,
 			'goals' => array(),
 			'audiences' => array(),
 			'tags' => '',
@@ -450,7 +451,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 0,
-			'recommendedSeq' => 0,
 			'recommendedTime' => 0,
 		));
 
@@ -770,7 +770,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
-		// 更新已学该课时会员的计数器
+		// 更新已学该课时学员的计数器
 		$learnCount = $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
 		if ($learnCount > 0) {
 			$learns = $this->getLessonLearnDao()->findLearnsByLessonId($lessonId, 0, $learnCount);
@@ -1113,6 +1113,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
+
+	public function searchMembers($conditions, $orderBy, $start, $limit)
+	{
+		$conditions = $this->_prepareCourseConditions($conditions);
+		return $this->getMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
+	}
 	
 	public function searchMember($conditions, $start, $limit)
 	{
@@ -1196,16 +1202,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 			);
 		}
 
-		// 先清除所有的已存在的教师会员
+		// 先清除所有的已存在的教师学员
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
 		}
 
-		// 逐个插入新的教师的会员数据
+		// 逐个插入新的教师的学员数据
 		$visibleTeacherIds = array();
 		foreach ($teacherMembers as $member) {
-			// 存在会员信息，说明该用户先前是学生会员，则删除该会员信息。
+			// 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
 			$existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
 			if ($existMember) {
 				$this->getMemberDao()->deleteMember($existMember['id']);
@@ -1248,7 +1254,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$member = $this->getCourseMember($courseId, $userId);
 		if (empty($member)) {
-			throw $this->createServiceException('课程会员不存在，备注失败!');
+			throw $this->createServiceException('课程学员不存在，备注失败!');
 		}
 		$fields = array('remark' => empty($remark) ? '' : (string) $remark);
 		return $this->getMemberDao()->updateMember($member['id'], $fields);
@@ -1273,7 +1279,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if ($member) {
-			throw $this->createServiceException("用户(#{$userId})已加入课加入课程！");
+			throw $this->createServiceException("用户(#{$userId})已加入该课程！");
+		}
+
+		if (!empty($info['becomeUseMember'])) {
+			$levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+			if ($levelChecked != 'ok') {
+				throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
+			}
+			$userMember = $this->getVipService()->getMemberByUserId($user['id']);
 		}
 
 		if ($course['expiryDay'] > 0) {
@@ -1282,17 +1296,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$deadline = 0;
 		}
 
-		$order = $this->getOrderDao()->getOrder($info['orderId']);
+		if (!empty($info['orderId'])) {
+			$order = $this->getOrderService()->getOrder($info['orderId']);
+			if (empty($order)) {
+				throw $this->createServiceException("订单(#{$info['orderId']})不存在，加入课程失败！");
+			}
+		} else {
+			$order = null;
+		}
 
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
-			'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+			'orderId' => empty($order) ? 0 : $order['id'],
 			'deadline' => $deadline,
+			'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
 			'role' => 'student',
-			'remark' => $order['note'],
+			'remark' => empty($order['note']) ? '' : $order['note'],
 			'createdTime' => time()
 		);
+
+		if (empty($fields['remark'])) {
+			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
+		}
 
 		$member = $this->getMemberDao()->addMember($fields);
 
@@ -1304,12 +1330,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$fields = array(
 			'studentNum'=> $this->getCourseStudentCount($courseId),
-			'income' => $this->getOrderDao()->sumOrderPriceByCourseIdAndStatuses($courseId, array('paid', 'cancelled')),
 		);
+	    if ($order) {
+	    	$fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
+	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 
 		return $member;
-
 	}
 
 	private function getWelcomeMessageBody($user, $course)
@@ -1725,6 +1752,16 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->createService('User.UserService');
     }
 
+    private function getOrderService()
+    {
+    	return $this->createService('Order.OrderService');
+    }
+
+    private function getVipService()
+    {
+    	return $this->createService('Vip:Vip.VipService');
+    }
+
     private function getReviewService()
     {
     	return $this->createService('Course.ReviewService');
@@ -1755,6 +1792,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('System.SettingService');
     }
 
+
     protected function getCommissionService()
     {
         return $this->createService('Sale.CommissionService');
@@ -1768,6 +1806,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getOffSaleService()
     {
         return $this->createService('Sale.OffSaleService');
+    }
+    
+
+
+    private function getLevelService()
+    {
+    	return $this->createService('User.LevelService');
     }
     
 

@@ -12,7 +12,7 @@ admin_question_remind_teachers:
     methods:  [POST]
 
 admin_dashboard:
-    pattern:  dashboard
+    pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
 
 admin_content:
@@ -178,31 +178,6 @@ admin_user_send_emailverify_email:
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
     methods:  [POST]
 
-admin_user_level:
-    pattern: /userlevel
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:index }
-
-admin_user_level_create:
-    pattern: /userlevel/create
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:create }
-
-admin_user_level_update:
-    pattern: /userlevel/{id}/update
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:update }
-
-admin_user_level_delete:
-    pattern: /userlevel/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:delete }
-    methods: [POST]
-
-admin_user_level_checkname:
-    pattern: /userlevel/checkname
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:checkname }
-
-admin_user_level_sort:
-    pattern: /userlevel/sort
-    defaults: { _controller: TopxiaAdminBundle:Userlevel:sort }
-
 admin_comment:
     pattern:  /comment
     defaults: { _controller: TopxiaAdminBundle:Comment:index }
@@ -301,6 +276,10 @@ admin_course_sale_valid_time:
     pattern: /course/{id}/sale/valid/time
     defaults: { _controller: TopxiaAdminBundle:Course:saleValidTime }
 
+admin_course_chooser:
+    pattern: /course/chooser
+    defaults: { _controller: TopxiaAdminBundle:Course:chooser }
+
 admin_course_recommend_list:
     pattern: /course/recommend/list
     defaults: { _controller: TopxiaAdminBundle:Course:recommendList }
@@ -328,9 +307,13 @@ admin_course_order_manage:
     pattern: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
-admin_course_order_detail:
-    pattern: /course/order/{id}/detail
-    defaults: { _controller: TopxiaAdminBundle:CourseOrder:detail }
+admin_order:
+    pattern: /order
+    defaults: { _controller: TopxiaAdminBundle:Order:index }
+
+admin_order_detail:
+    pattern: /order/{id}/detail
+    defaults: { _controller: TopxiaAdminBundle:Order:detail }
 
 admin_order_refunds:
     pattern: /order/refunds
@@ -422,6 +405,10 @@ admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
+admin_setting_developer:
+    pattern:  /setting/developer
+    defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+
 admin_optimize:
     pattern:  /optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
@@ -463,55 +450,73 @@ admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
-admin_upgrade:
-    pattern:  /upgrade
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:index }
+admin_app_center:
+    pattern:  /app/center
+    defaults: { _controller: TopxiaAdminBundle:App:center }
 
-admin_upgrade_trigger_update_modal:
-    pattern:  /upgrade/trigger/update/{id}/modal
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:triggerUpdateModal }
+admin_app_installed:
+    pattern:  /app/installed
+    defaults: { _controller: TopxiaAdminBundle:App:installed }
 
-admin_upgrade_check_environment:
-    pattern: /upgrade/check/environment/{id}
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:checkEnvironment }
-    methods: [POST]
+admin_app_upgrades:
+    pattern:  /app/upgrades
+    defaults: { _controller: TopxiaAdminBundle:App:upgrades }
 
-admin_upgrade_has_last_error:
-    pattern: /upgrade/{id}/has/last/error
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:hasLastError }
-    methods: [POST]
+admin_app_upgrades_count:
+    pattern:  /app/upgrades_count
+    defaults: { _controller: TopxiaAdminBundle:App:upgradesCount }
 
-admin_upgrade_check_depends:
-    pattern: /upgrade/{id}/check/depends
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:checkDepends }
-    methods: [POST]
-
-admin_upgrade_download_and_extract:
-    pattern: /upgrade/{id}/download/extract
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:downloadAndExtract }
-    methods: [POST]
-
-admin_upgrade_backup_system:
-    pattern: /upgrade/{id}/backup/system
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:backupSystem }
-    methods: [POST]
-
-admin_upgrade_begin_upgrade:
-    pattern: /upgrade/{id}/begin/upgrade
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:beginUpgrade }
-    methods: [POST]
-
-admin_upgrade_logs:
-    pattern:  /upgrade/logs
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:logs }
-
-admin_upgrade_check:
+admin_oldUpgradeCheck:
     pattern:  /upgrade/check
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:check }
+    defaults: { _controller: TopxiaAdminBundle:App:oldUpgradeCheck }
 
-admin_upgrade_check_count:
-    pattern:  /check-upgrade-count
-    defaults: { _controller: TopxiaAdminBundle:Upgrade:checkCount }
+admin_app_logs:
+    pattern:  /app/logs
+    defaults: { _controller: TopxiaAdminBundle:App:logs }
+
+admin_app_package_update_modal:
+    pattern:  /app/package_update/{id}/modal
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:modal }
+
+admin_app_package_update_check_environment:
+    pattern: /app/package_update/{id}/check_environment
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkEnvironment }
+    methods: [POST]
+
+admin_app_package_update_check_depends:
+    pattern: /app/package_update/{id}/check_depends
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkDepends }
+    methods: [POST]
+
+admin_app_package_update_check_last_error:
+    pattern: /app/package_update/{id}/check_lasterror
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checklastError }
+    methods: [POST]
+
+admin_app_package_update_backup_file:
+    pattern: /app/package_update/{id}/backup_file
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:backupFile }
+    methods: [POST]
+
+admin_app_package_update_backup_db:
+    pattern: /app/package_update/{id}/backup_db
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:backupDb }
+    methods: [POST]
+
+admin_app_package_update_download_and_extract:
+    pattern: /app/package_update/{id}/download_extract
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:downloadAndExtract }
+    methods: [POST]
+
+admin_app_package_update_check_download_and_extract:
+    pattern: /app/package_update/{id}/check_download_extract
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkDownloadAndExtract }
+    methods: [POST]
+
+admin_app_package_update_begin_upgrade:
+    pattern: /app/package_update/{id}/begin_upgrade
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:beginUpgrade }
+    methods: [POST]
 
 admin_category:
     pattern:  /category
@@ -559,7 +564,6 @@ admin_login_record:
 admin_login_record_details:
     pattern: /login_record/{id}/details
     defaults: { _controller: TopxiaAdminBundle:LoginRecord:showUserLoginRecord }
-
 
 admin_thread:
     pattern:  /thread
@@ -742,7 +746,6 @@ admin_money_card_batch_export_csv:
 admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
-
 
 admin_approval_approving:
     pattern:  /approvals/approving

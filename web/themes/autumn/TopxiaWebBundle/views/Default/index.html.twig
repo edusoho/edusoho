@@ -3,7 +3,7 @@
 {% block topbanner %}
   {% set blocks = data('Blocks',{'codes':['autumn:home_top_banner'] }) %}
   {% if blocks['autumn:home_top_banner'] %}
-    <div id="autumn-carousel" class="carousel slide hidden-xs" data-ride="carousel">
+    <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
       <ol class="carousel-indicators">
           <li data-target="#autumn-carousel" data-slide-to="0" class="active"></li>
           <li data-target="#autumn-carousel" data-slide-to="1" class=""></li>
@@ -24,36 +24,35 @@
 {% block content %}
   <div class="row">
     <div class="col-lg-12">
-        <div class="panel panel-autumn panel-autumn-primary">
-            <div class="panel-heading panel-heading-important">
-                <h2 class="panel-title">推荐课程 / <small>RecommendCourse</small></h2>
-            </div>
-            <div class="panel-body">
-                <ul class="autumn-grids">
-                  {% for course in data('RecommendCourses',{ count:8 }) %}
-                    {% if course %}
-                      <li class="autumn-grid autumn-course-grid">
-                          <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a>
-                          <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                          <div class="course-about">{{ course.about|plain_text(60) }}</div>
-
-                          <div class="course-metas">
-                            <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                            <span class="teachers">
-                              {% for teacher in course.teachers %}
-                                {{ web_macro.user_link(teacher, 'text-muted') }}
-                              {% endfor %}
-                            </span>
-                          </div>
-                      </li>
-                    {% else %}
-                      <div class="empty">无推荐课程，请在后台课程管理设置。</div>
-                    {% endif %}
-                  {% endfor %}
-                </ul>
-               
-            </div>
+      <div class="panel panel-autumn panel-autumn-primary">
+        <div class="panel-heading panel-heading-important">
+          <h2 class="panel-title">推荐课程 / <small>RecommendCourse</small></h2>
         </div>
+        <div class="panel-body">
+          <ul class="autumn-grids">
+            {% for course in data('RecommendCourses',{ count:8 }) %}
+              {% if course %}
+                <li class="autumn-grid autumn-course-grid">
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a>
+                  <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
+                  <div class="course-about">{{ course.about|plain_text(60) }}</div>
+
+                  <div class="course-metas">
+                    <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                    <span class="teachers">
+                      {% for teacher in course.teachers %}
+                        {{ web_macro.user_link(teacher, 'text-muted') }}
+                      {% endfor %}
+                    </span>
+                  </div>
+                </li>
+              {% else %}
+                <div class="empty">无推荐课程，请在后台课程管理设置。</div>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -61,35 +60,35 @@
     <div class="col-md-8">
       <div class="panel panel-autumn panel-autumn-default">
         <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">最新课程 / <small>LatestCourse</small></h2>
+          <h2 class="panel-title">最新课程 / <small>LatestCourse</small></h2>
         </div>
         <div class="panel-body">
-            <ul class="media-list autumn-course-list">
-              {% for course in data('LatestCourses',{ count:8 }) %}
-                {% if course %}
-                <li class="media">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object"></a>
-                  <div class="media-body">
-                    <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
+          <ul class="media-list autumn-course-list">
+            {% for course in data('LatestCourses',{ count:8 }) %}
+              {% if course %}
+              <li class="media">
+                <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object"></a>
+                <div class="media-body">
+                  <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
 
-                    <div class="course-about"><p>{{ course.about|plain_text(100) }}</p></div>
-                    <div class="course-metas">
-                      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="teachers">
-                        <span class="glyphicon glyphicon-user text-muted"></span> <span class="text-muted">老师</span>
-                        {% for teacher in course.teachers %}
-                          {{ web_macro.user_link(teacher, 'text-muted') }}
-                        {% endfor %}
-                      </span>
-                    </div>
+                  <div class="course-about"><p>{{ course.about|plain_text(100) }}</p></div>
+                  <div class="course-metas">
+                    <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                    <span class="teachers">
+                      <span class="glyphicon glyphicon-user text-muted"></span> <span class="text-muted">老师</span>
+                      {% for teacher in course.teachers %}
+                        {{ web_macro.user_link(teacher, 'text-muted') }}
+                      {% endfor %}
+                    </span>
                   </div>
-                </li>
-                {% else %}
-                  <div class="empty">尚未发布课程，请先发布。</div>
-                {% endif %}
-              {% endfor %}
-            </ul>
-            <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
+                </div>
+              </li>
+              {% else %}
+                <div class="empty">尚未发布课程，请先发布。</div>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
         </div>
       </div>
     </div>
@@ -100,21 +99,21 @@
           <h4 class="panel-title">课程排行榜 / <small>Top10</small></h4>
         </div>
         <div class="panel-body">
-            <ul class="media-list media-list-rank">
-              {% for course in data('CourseRankByHit',{'count':10}) %}
-                {% if course %}
-                  <li class="media">
-                    <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object"></a>
-                    <div class="media-body">
-                      <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
-                      {{ course.subtitle }}
-                    </div>
-                  </li>
-                {% else %}
-                  <div class="empty">无课程排行记录</div>
-                {% endif %}
-              {% endfor %}
-            </ul>
+          <ul class="media-list media-list-rank">
+            {% for course in data('CourseRankByHit',{'count':10}) %}
+              {% if course %}
+                <li class="media">
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object"></a>
+                  <div class="media-body">
+                    <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
+                    {{ course.subtitle }}
+                  </div>
+                </li>
+              {% else %}
+                <div class="empty">无课程排行记录</div>
+              {% endif %}
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>
@@ -125,28 +124,28 @@
     <div class="col-lg-12">
       <div class="panel panel-autumn panel-autumn-primary">
           <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">
-                  讲师团 / <small>Teachers</small>
-              </h2>
+            <h2 class="panel-title">
+                讲师团 / <small>Teachers</small>
+            </h2>
           </div>
           <div class="panel-body">
-              <ul class="autumn-grids">
-                {% for teacher in data('RecommendTeachers',{'count':'8'}) %}
-                  {% if teacher %} 
-                    <li class="autumn-grid">
-                      <div class="media teacher-media">
-                        <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left"><img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}"></a>
-                        <div class="media-body">
-                          <h4 class="media-heading">{{ web_macro.user_link(teacher) }}</h4>
-                          <div class="teacher-title">{{ teacher.title }}</div>
-                        </div>
+            <ul class="autumn-grids">
+              {% for teacher in data('RecommendTeachers',{'count':'8'}) %}
+                {% if teacher %} 
+                  <li class="autumn-grid">
+                    <div class="media teacher-media">
+                      <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left"><img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}"></a>
+                      <div class="media-body">
+                        <h4 class="media-heading">{{ web_macro.user_link(teacher) }}</h4>
+                        <div class="teacher-title">{{ teacher.title }}</div>
                       </div>
-                    </li>
-                  {% else %}
-                    <div class="empty">尚未设置推荐老师，请在管理后台设置。</div>
-                  {% endif %}
-                {% endfor %}
-              </ul>
+                    </div>
+                  </li>
+                {% else %}
+                  <div class="empty">尚未设置推荐老师，请在管理后台设置。</div>
+                {% endif %}
+              {% endfor %}
+            </ul>
           </div>
       </div>
     </div>

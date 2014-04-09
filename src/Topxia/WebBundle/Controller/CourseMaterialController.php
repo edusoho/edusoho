@@ -47,6 +47,12 @@ class CourseMaterialController extends BaseController
             return $this->redirect($this->generateUrl('course_materials',array('id' => $courseId)));
         }
 
+        if ($member && $member['levelId'] > 0) {
+            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+            }
+        }
+
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
         if (empty($material)) {
             throw $this->createNotFoundException();

@@ -15,7 +15,7 @@
     {% if course.price > 0 %}
     <div class="form-group">
       <div class="col-md-3 control-label">价格</div>
-      <div class="col-md-9 controls">
+      <div class="col-md-9 controls money-text">
       	<span class="control-text"><strong class="money">{{ course.price }}</strong>
       		<span class="text-muted">元</span>
       	</span>
@@ -57,6 +57,30 @@
           </div>
         </div>
         {% endif %}
+
+        {% if setting('coupon.enabled') %}
+
+          <div class="form-group coupon-btn-group">
+            <div class="col-md-7 col-md-offset-3 controls">
+              <a href="javascript:;" id="show-coupon-input">使用优惠码</a>
+            </div>
+          </div>
+
+        {% endif %}
+
+        <div class="form-group coupon-input-group" style="display:none">
+          <div class="col-md-7 col-md-offset-3 controls">
+            <div class="input-group">
+              <input type="text" class="form-control" name="coupon">
+              <span class="input-group-btn">
+                <button class="btn btn-default btn-use-coupon" data-url="{{ path('coupon_check', {type:'course', id:course.id}) }}" type="button">使用</button>
+                <button href="javascript:;" class="btn btn-link btn-cancel-coupon" type="button">取消</button>
+              </span>
+            </div>
+            <div class="help-block coupon-error" style="display:none;"></div>
+          </div>
+        </div>
+
       {% else %}
         <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
       {% endif %}

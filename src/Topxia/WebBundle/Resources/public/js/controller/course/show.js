@@ -63,6 +63,18 @@ define(function(require, exports, module) {
             });
         });
 
+        $('.become-use-member-btn').on('click', function() {
+            $.post($(this).data('url'), function(result) {
+                if (result == true) {
+                    window.location.reload();
+                } else {
+                    alert('加入学习失败，请联系管理员！');
+                }
+            }, 'json').error(function(){
+                alert('加入学习失败，请联系管理员！');
+            });
+        });
+
     };
 
 });

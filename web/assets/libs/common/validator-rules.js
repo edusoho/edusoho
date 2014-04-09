@@ -45,6 +45,11 @@ define(function(require, exports, module) {
             '{{display}}必须是英文字母、数字及下划线组成'
         ],
         [
+            'alphabet_underline',
+            /^[a-zA-Z_]+[a-zA-Z0-9_]*/i,
+            '{{display}}必须以英文字母或下划线开头'
+        ],
+        [
             'byte_minlength',
             function(options) {
                 var element = options.element;
@@ -144,11 +149,20 @@ define(function(require, exports, module) {
             /^1\d{10}$/,
             '{{display}}格式不正确'
         ],
-
         [       
             'datetime-i', 
             /^\d{4}\-[01]?\d\-[0-3]?\d [0-2]?\d:[0-5]?\d$/,
             '{{display}}的格式不正确,正确格式为yyyy-mm-dd hh:mm'
+        ],
+        [
+            'positive_integer',
+            /^[0-9]*[1-9][0-9]*$/,
+            '{{display}}必须为正整数'
+        ],
+        [
+            'arithmetic_number',
+            /^(?!0+(\.0+)?$)\d+(\.\d+)?$/,
+            '{{display}}必须为正数'
         ],
 
         [

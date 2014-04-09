@@ -1,0 +1,131 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% set modalSize = 'large' %}
+
+{% block title %}订单详情{% endblock %}
+{% block body %}
+    
+
+<ul class="nav nav-tabs mbl">
+  <li class="active"><a href="#detail" data-toggle="tab">详情</a></li>
+  <li class=""><a href="#log" data-toggle="tab">日志</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="tab-pane fade active in" id="detail">
+    <table class="table table-striped table-condenseda table-bordered">
+
+      <tr> <th width="25%">订单号</th> <td width="75%">{{ order.sn }}</td> </tr>
+      <tr> <th width="25%">订单状态</th> 
+           <td width="75%">
+            {% if order.status == 'created' %} 未完成
+            {% elseif order.status == 'paid' %} 已付款
+            {% endif %}
+           </td> 
+      </tr>
+      <tr>
+        <th width="25%">订单名称</th>
+        <td width="75%">
+          {{ order.title }}
+        </td>
+      </tr>
+      <tr> <th width="25%">购买者</th> 
+        <td width="75%">
+          <strong>{{ admin_macro.user_link(user) }}</strong>
+        </td>
+      </tr>
+      <tr> <th width="25%">订单价格</th> 
+        <td width="75%">
+          <span class="money-text">{{ order.amount }}</span>元
+        </td>
+      </tr>
+      <tr> <th width="25%">优惠码</th> 
+        <td width="75%">
+          {% if order.coupon %}{{ order.coupon }}{% else %}无{% endif %}
+        </td>
+      </tr>
+      <tr> <th width="25%">优惠金额</th> 
+        <td width="75%">
+          <span class="money-text">{{ order.couponDiscount }}</span>元
+        </td>
+      </tr>
+      <tr> <th width="25%">是否为赠品</th> 
+           <td width="75%">
+            {% if order.isGift == 0 %} 非赠品
+            {% elseif order.isGift == 1 %} 已赠送
+            {% endif %}
+           </td> 
+      </tr>
+    <tr> <th width="25%">支付方式</th> 
+           <td width="75%">
+            {% if order.payment == 'none' %} 暂无
+            {% elseif order.payment == 'alipay' %} 支付宝
+            {% elseif order.payment == 'tenpay' %} 财付通
+            {% endif %}
+           </td> 
+      </tr>
+      <tr> <th width="25%">银行编号</th> 
+           <td width="75%">
+            {% if order.bank == null %} 暂无
+            {% else %} {{ order.bank }}
+            {% endif %}
+           </td> 
+      </tr>
+      <tr> <th width="25%">创建时间</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
+      <tr> <th width="25%">付款时间</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="log">
+            
+      {% if orderLogs %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="50%">日志信息</th>
+              <th width="25%">操作人</th>
+              <th width="25%">创建时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for orderLog in orderLogs %}
+              {% set logUser = users[orderLog.userId]|default(null) %}
+              <tr>
+                <td>
+                  {{ orderLog.message | plain_text(50) }}
+                  <br>
+                  <span class="text-muted text-sm">{{ orderLog.type }}</span>
+                </td>
+                <td>
+                  {% if logUser %}
+                    {{ admin_macro.user_link(logUser) }}
+                  {% else %}
+                    --
+                  {% endif %}
+                </td>
+                <td>
+                  {{ orderLog.createdTime|date('Y-n-d H:i')}}
+                  <br>
+                  <span class="text-muted text-sm">{{ orderLog.ip}}</span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+      <div class="empty">暂无交易日志!</div>
+      {% endif %}
+  </div>
+     
+</div>
+
+{% endblock %}
+
+{% block footer %}
+  <div>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  </div>
+
+{% endblock %}
+

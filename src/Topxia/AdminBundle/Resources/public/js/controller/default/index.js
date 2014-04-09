@@ -16,14 +16,15 @@ define(function(require, exports, module) {
             });
         }).trigger('change');
 
-        var $block = $("#noftificationBlock");
-        
-        $.post($block.data('url'), function(response) {
-            if(!response){
-                return;
+        var $alert = $("#app-upgrade-alert");
+        $.post($alert.data('url'), function(result) {
+            var count = parseInt(result);
+            if (count == 0) {
+                return ;
             }
-            $("#upgradeNoftification").html("<a href='" + $block.data('upgradeUrl') + "'>亲爱的用户，系统现在有 <span class='badge'>" + response + " </span> 个更新,请及时去系统安装与升级中心更新，体验最新的功能和改进。</a>");
-            $block.removeClass('hide');
+            var html = "<a href='" + $alert.data('upgradeUrl') + "'>亲爱的用户，系统现在有 <span class='badge'>" + count + " </span> 个更新,请及时去系统安装与升级中心更新，体验最新的功能和改进。</a>";
+            $alert.append(html);
+            $alert.removeClass('hide');
         });
 
     };

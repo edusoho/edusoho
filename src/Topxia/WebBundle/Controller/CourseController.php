@@ -139,6 +139,7 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
 
+
         $mtookeen = $request->query->get('mc'.$id);
         $mTookeenCookie = isset($_COOKIE["mc".$id]) ?$_COOKIE["mc".$id] : null;
 
@@ -160,6 +161,7 @@ class CourseController extends BaseController
             }
           
         }
+
         
         if (empty($course)) {
             throw $this->createNotFoundException();
@@ -196,11 +198,24 @@ class CourseController extends BaseController
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
+
         $this->getCourseService()->hitCourse($id);
+
+        $checkMemberLevelResult = $courseMemberLevel = null;
+        if ($this->setting('vip.enabled')) {
+            $courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseMemberLevel) {
+                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
+            }
+        }
+
+
 
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,
             'member' => $member,
+            'courseMemberLevel' => $courseMemberLevel,
+            'checkMemberLevelResult' => $checkMemberLevelResult,
             'groupedItems' => $groupedItems,
             'hasFavorited' => $hasFavorited,
             'category' => $category,
@@ -232,6 +247,7 @@ class CourseController extends BaseController
                     'id' => 0,
                     'courseId' => $course['id'],
                     'userId' => $user['id'],
+                    'levelId' => 0,
                     'learnedNum' => 0,
                     'isLearned' => 0,
                     'seq' => 0,
@@ -351,6 +367,20 @@ class CourseController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function becomeUseMemberAction(Request $request, $id)
+    {
+        if (!$this->setting('vip.enabled')) {
+            $this->createAccessDeniedException();
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException();
+        }
+        $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
+        return $this->createJsonResponse(true);
+    }
+
     public function learnAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
@@ -367,6 +397,15 @@ class CourseController extends BaseController
             if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
                 return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
             }
+
+            if ($member && $member['levelId'] > 0) {
+                if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                    return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+                }
+            }
+
+
+
         }catch(Exception $e){
             throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
         }
@@ -406,9 +445,19 @@ class CourseController extends BaseController
 
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        if (empty($member)) { $member['deadline'] = 0; }
+        if (empty($member)) {
+            $member['deadline'] = 0; 
+            $member['levelId'] = 0;
+        }
 
         $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
+
+        if ($member['levelId'] > 0) {
+            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+        } else {
+            $vipChecked = 'ok';
+        }
+
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
@@ -417,6 +466,7 @@ class CourseController extends BaseController
             'users' => $users,
             'manage' => $manage,
             'isNonExpired' => $isNonExpired,
+            'vipChecked' => $vipChecked,
             'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
@@ -506,6 +556,16 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
 
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
     private function getCourseService()
