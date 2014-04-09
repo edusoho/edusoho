@@ -81,10 +81,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
+        if (isset($conditions['notFree'])) {
+            $conditions['notFree'] = 0;
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
             ->andWhere('price = :price')
+            ->andWhere('price > :notFree')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
