@@ -12,12 +12,20 @@ class CourseOrderController extends OrderController
     public $courseId = 0;
 
     public function buyAction(Request $request, $id)
-    {
+    {   
+        $course = $this->getCourseService()->getCourse($id);
+
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+
+        $previewAs = $request->query->get('previewAs');
+
+        $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+
+        $member = $this->previewAsMember($previewAs, $member, $course);
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -31,6 +39,7 @@ class CourseOrderController extends OrderController
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'courseSetting' => $courseSetting,
+            'member' => $member
         ));
     }
 
@@ -229,6 +238,46 @@ class CourseOrderController extends OrderController
 
         return $this->createJsonResponse(true);
 
+    }
+
+    private function previewAsMember($as, $member, $course)
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user->id)) {
+            return null;
+        }
+
+
+        if (in_array($as, array('member', 'guest'))) {
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                $member = array(
+                    'id' => 0,
+                    'courseId' => $course['id'],
+                    'userId' => $user['id'],
+                    'levelId' => 0,
+                    'learnedNum' => 0,
+                    'isLearned' => 0,
+                    'seq' => 0,
+                    'isVisible' => 0,
+                    'role' => 'teacher',
+                    'locked' => 0,
+                    'createdTime' => time(),
+                    'deadline' => 0
+                );
+            }
+
+            if (empty($member) or $member['role'] != 'teacher') {
+                return $member;
+            }
+
+            if ($as == 'member') {
+                $member['role'] = 'student';
+            } else {
+                $member = null;
+            }
+        }
+
+        return $member;
     }
 
     public function getCourseService()

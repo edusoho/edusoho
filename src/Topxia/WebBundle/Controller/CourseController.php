@@ -154,7 +154,7 @@ class CourseController extends BaseController
         }
         
         $member = $this->previewAsMember($previewAs, $member, $course);
-
+        
         if ($member && empty($member['locked'])) {
             $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 

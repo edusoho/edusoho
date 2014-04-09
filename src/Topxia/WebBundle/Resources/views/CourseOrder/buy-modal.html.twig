@@ -148,10 +148,20 @@
 {% block footer %}
   {% if course.price > 0 %}
     {% if payments %}
-      <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+      {% if member %}
+        <span class="text-muted">预览模式无法支付</span>
+        <button class="btn btn-primary" disabled="disabled">去支付</button> 
+      {% else %}
+        <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+      {% endif %}
     {% endif %}
   {% else %}
-    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+    {% if member %}
+      <span class="text-muted">预览模式无法加入学习</span>
+      <button class="btn btn-primary" disabled="disabled">加入学习</button> 
+    {% else %}  
+      <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+    {% endif %}
   {% endif %}
 
   <script>
