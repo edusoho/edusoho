@@ -36,7 +36,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-code-field',
             required: true,
-            rule: 'alphanumeric remote'
+            rule: 'alphanumeric not_all_digital remote'
         });
 
         validator.addItem({
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
                     Notify.danger(response.message);
                 } else {
                     window.location.reload();
-                    Notify.danger(response.message);
+                    Notify.success(response.message);
                 }
                 
             }, 'json').error(function(error) {

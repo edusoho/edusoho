@@ -22,13 +22,11 @@ class ArticleCategoryController extends BaseController
             $category = $this->getCategoryService()->createCategory($request->request->all());
             return $this->renderTbody();
         }
-        // echo "string";exit();
         $category = array(
             'id' => 0,
             'name' => '',
             'code' => '',
             'pagesize' => '10',
-            // 'groupId' => (int) $request->query->get('groupId'),
             'parentId' => (int) $request->query->get('parentId', 0),
             'weight' => 0,
             'publishArticle' => 1,

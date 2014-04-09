@@ -37,7 +37,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
-
         return $tree;
     }
 
@@ -120,7 +119,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createServiceException("缺少必要参数，，添加栏目失败");
         }
 
-        $this->filterCategoryFields($category);
+        $this->_filterCategoryFields($category);
 
         $category = $this->getCategoryDao()->addCategory($category);
 
@@ -142,7 +141,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createServiceException('参数不正确，更新栏目失败！');
         }
 
-        $this->filterCategoryFields($fields, $category);
+        $this->_filterCategoryFields($fields);
 
         $this->getLogService()->info('category', 'update', "编辑栏目 {$fields['name']}(#{$id})", $fields);
 
@@ -165,9 +164,45 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->getLogService()->info('category', 'delete', "删除栏目{$category['name']}(#{$id})");
     }
 
-    private function filterCategoryFields(&$category, $releatedCategory = null)
-    {
-        foreach (array_keys($category) as $key) {
+    private function _filterCategoryFields($fields)
+    {   
+
+        $fields = ArrayToolkit::filter($fields, array(
+            'name' => '',
+            'code' => '',
+            'weight' => 0,
+            'publishArticle' => '',
+            'pagesize' => 10,
+            'seoTitle' => '',
+            'seoDesc' => '',
+            'published' => 1,
+            'parentId' => 0,
+            'type' => '',
+            'templateName' => '',
+            'urlNameRule' => '',
+            'comment' => '',
+        ));
+
+        if (empty($fields['name'])) {
+            throw $this->createServiceException("名称不能为空，保存栏目失败");
+        }
+
+        if (empty($fields['code'])) {
+            throw $this->createServiceException("编码不能为空，保存栏目失败");
+        } else {
+
+            if (!preg_match("/^[a-zA-Z0-9_]+$/i", $fields['code'])) {
+                throw $this->createServiceException("编码({$fields['code']})含有非法字符，保存栏目失败");
+            }
+            if (ctype_digit($fields['code'])) {
+                throw $this->createServiceException("编码({$fields['code']})不能全为数字，保存栏目失败");
+            }
+        }
+
+        return $fields;
+
+
+        /*foreach (array_keys($category) as $key) {
             switch ($key) {
                 case 'name':
                     $category['name'] = (string) $category['name'];
@@ -204,7 +239,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             }
         }
 
-        return $category;
+        return $category;*/
     }
 
     public function findCategoriesCountByParentId($parentId){
