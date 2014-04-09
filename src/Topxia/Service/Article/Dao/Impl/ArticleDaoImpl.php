@@ -44,18 +44,19 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Article error.');
         }
-        return $this->getConnection()->lastInsertId();
+        return $this->getArticle($this->getConnection()->lastInsertId());
 	}
 
 	public function updateArticle($id, $Article)
 	{
-        return $this->getConnection()->update($this->table, $Article, array('id' => $id));
+        $this->getConnection()->update($this->table, $Article, array('id' => $id));
+        return $this->getArticle($id);
 	}
 
 	public function deleteArticle($id)
 	{
 		return $this->getConnection()->delete($this->table, array('id' => $id));
-	}
+	}	
 
 	private function _createSearchQueryBuilder($conditions)
 	{
@@ -64,7 +65,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 		}
 
 		$builder = $this->createDynamicQueryBuilder($conditions)
-			->from($this->table, 'Article')
+			->from($this->table, 'article')
 			->andWhere('type = :type')
 			->andWhere('status = :status')
 			->andWhere('title LIKE :keywords');
@@ -81,7 +82,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 				$builder->andStaticWhere("categoryId IN ($categoryIds)");
 			}
 		}
-
 		return $builder;
 	}
 }

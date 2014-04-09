@@ -1,13 +1,7 @@
 <tr id="article-{{ article.id }}">
-	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item" >{{article.id}}</td>
+	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item"  >{{article.id}}</td>
 	<td>
-		<a href="{{ path('article_' ~ article.type ~ '_show', {alias:article.alias|default(article.id)}) }}" target="_blank">{{ article.title }}</a><br />
-	{# 	{% if article.type == 'page' %}
-		  <span class="text-muted text-sm">地址：page/{{ article.alias|default(article.id) }}</span>
-		{% endif %} #}
-		{% if category %}
-			<span class="text-muted text-sm">分类：{{ category.name }}</span>
-		{% endif %}
+			<span class="text-muted text-sm">{{ article.title }}</span>
 	</td>
 	<td>
 	{% if category %}
@@ -31,7 +25,7 @@
 	<td>{{ dict_text('articleStatus:html', article.status) }}</td>
 	<td>
 		{{ article.publishedTime|date('Y-n-d H:i') }}<br />
-		{{ user.nickname }}
+		{# {{ user.nickname }} #}
 	</td>
 	<td>
 		<div class="btn-group">

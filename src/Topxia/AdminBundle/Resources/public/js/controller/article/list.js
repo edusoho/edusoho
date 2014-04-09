@@ -17,11 +17,16 @@ define(function(require, exports, module) {
 			if (!confirm('真的要永久删除该内容吗？')) {
 				return ;
 			}
+
 			$.post($(this).data('url'), function(){
 				window.location.reload();
 			});
 		});
-
+		var $container = $('#aticle-table-container');
+		var $table = $('#article-table');
+		 require('../../util/batch-select')($container);
+		 require('../../util/batch-delete')($container);
+		 require('../../util/item-delete')($container);
 	};
 
 });

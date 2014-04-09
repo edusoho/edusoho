@@ -16,32 +16,53 @@
 	{% if article %}
 		action="{{ path('admin_article_edit', {id:article.id}) }}"
 	{% else %}
-		action="{{ path('admin_article_create') }}"
+		action="{{ path('admin_article_create', {type:type.alias}) }}"
 	{% endif %}
 	>
 	<div class="row">
 		<div class="col-md-8 two-col-main">
+			{% if 'title' in type.basicFields %}
 				<div class="form-group">
 				  <label for="article-title-field" class="control-label">文章标题</label>
 				  <div class="controls">
 				  	<input class="form-control" id="article-title-field" type="text" name="title" value="{{ field_value(article, 'title') }}">
 				  </div>
 				</div>
-			
+			{% endif %}
+
+			{% if 'categoryId' in type.basicFields %}
 				<div class="form-group">
-				  <label for="categoryId" class="control-label">所属栏目</label>
+				  <label for="article-category-field" class="control-label">所属栏目</label>
 				   <div class="controls">
-					  <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
-						{% if article %}
-				         {{ select_options(categoryTree, article.categoryId) }}
-				        {% else %}
-				         {{ select_options(categoryTree, categoryTree_ids|default(''), '--选择栏目--') }}
-				       {% endif %}
-				       	</select>
+					  <select class="form-control" id="article-categoryId-field" type="text" name="categoryId" tabindex="2">
+							<option value=0>选择栏目</option>
+							{% for tree in categoryTree %}
+							<option value={{ tree.id }} {% if tree.id == field_value(article, 'categoryId', -1)  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}
+							</option>
+							{% endfor %}
+						</select>
  					</div>
 				</div>
+			{% endif %}
 
-				<label for="richeditorBody" class="control-label">正文</label>
+			<div class="form-group">
+				<label for="editor-field" class="control-label">编辑器类型</label>
+				<div class="controls radios">
+	              	<label><input type="radio" name="editor" value="richeditor" 
+	              		{% if article is empty %}
+	              		 checked="checked" 
+	              		{% elseif article.editor == 'richeditor'%}
+	              		 checked="checked"
+	              		{% endif %}>
+	              		可视化编辑器</label>
+	             	<label><input type="radio" name="editor" value="none"
+	             		{% if article and article.editor == 'none' %} checked="checked" {% endif %}
+	             		>HTML编辑器</label>
+	            </div>
+	        </div>
+
+			{% if 'body' in type.basicFields %}
+				<label for="article-body-field" class="control-label">正文</label>
 
 				<div class="form-group" 
 				{% if article and article.editor == 'none' %}
@@ -49,7 +70,7 @@
 				{% endif %}
 				>
 					<div class="controls">
-						<textarea class="form-control" id="richeditorBody" rows="16" name="richeditorBody">{{ field_value(article, 'body') }}</textarea>
+						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body">{{ field_value(article, 'body') }}</textarea>
 					</div>
 				</div>
 
@@ -63,9 +84,14 @@
 						<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(article, 'body') }}</textarea>
 					</div>
 				</div> 
-		
+			{% endif %}
+
+			{% if type.extendedFields %}
+			  {% include 'TopxiaAdminBundle:Article:' ~ type.alias ~ '-extended-fields.html.twig' %}
+			{% endif %}
 		</div>
 		<div class="col-md-4 two-col-side">
+			{% if 'sticky' in type.basicFields  %}
 				<div class="row form-group">
 				    <div class="col-md-4 control-label">
 				      <label for="article-attr">文章属性</label>
@@ -76,17 +102,30 @@
 				      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted', 1) %} checked="checked" {% endif %}>  推荐  
 				    </div>
 				  </div>
+			{% endif %}
+
+{# 			{% if 'tagIds' in type.basicFields  %}
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      <label for="article-tagIds">TAG标签</label>
+				    </div>
+				    <div class="col-md-7 controls">
+						  <input class="width-full" id="article-tags-field" type="text" name="tags" value="{{ field_value(article, 'tagIds')|tags_join }}">
+				    </div>
+				  </div>
+			{% endif %} #}
 
 			<div class="row form-group">
 			  <div class="col-md-4 control-label">
 				      <label for="article-tagIds">TAG标签</label>
 			  </div>
 			  <div class="col-md-7 controls">
-			  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="" data-match-url="{{ path('tag_match') }}">
+			  	<input type="text" id="course_tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tags|join(',') }}">
 			  	<div class="help-block" style="display:none;"></div>
 			  </div>
 			</div>
 			
+			{% if 'source' in type.basicFields  %}
 				<div class="row form-group">
 				    <div class="col-md-4 control-label">
 				      <label for="article-source">来源</label>
@@ -95,7 +134,9 @@
 				      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
 				    </div>
 				  </div>
-			
+			{% endif %}
+
+			{% if 'sourceUrl' in type.basicFields  %}
 				<div class="row form-group">
 				    <div class="col-md-4 control-label">
 				      <label for="article-sourceUrl">来源地址</label>
@@ -104,17 +145,36 @@
 				      <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
 				    </div>
 				  </div>
-		
+			{% endif %}
+
+			{% if 'picture' in type.basicFields  %}
 				<div class="row form-group">
 				    <div class="col-md-4 control-label">
-				        <label for="article-sourceUrl">选择图片</label>
+				      <label for="article-sourceUrl">缩略图</label>
 				    </div>
 				    <div class="col-md-7 controls">
-				     <button class="btn btn-default btn-sm" id="article-pic-upload" type="button" data-url="{{ path('admin_aticle_picture_upload') }}">上传</button>
-				      <input type="hidden" name="picture" value="{{ article.picture | default('') }}">
-				     
+				     <input type="checkbox" name="isFirstThumbnail" value="1" {% if field_value(article, 'isFirstThumbnail') %} checked="checked" {% endif %}>  提取文章第一个图片为缩略图
 				    </div>
 				  </div>
+				<div class="row form-group">
+				    <div class="col-md-4 control-label">
+				      
+				    </div>
+				    <div class="col-md-7 controls">
+				      <p data-role="picture-container">
+					  	{% if article.picture|default(null) %}
+					  	  <a href="{{ file_path(article.picture) }}" target="_blank">
+						  	  <img src="{{ file_path(article.picture) }}" class="img-responsive">
+					  	  </a>
+					  	{% endif %}
+					  </p>
+					  <p> <input type="file" name="picture"> </p>
+				    </div>
+				  </div>
+
+
+			{% endif %}
+			
 
 			<div class="panel panel-default">
 				<div class="panel-heading">设置</div>
@@ -134,4 +194,12 @@
     <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">保存</button>
 </form>
 
+{# {% endblock %} #}
+
+{# {% block footer %} #}
+
+   
+{# {% endblock %} #}
+
 {% endblock %}
+{# {% set hideFooter = true %} #}
