@@ -2,7 +2,8 @@
 
 namespace Topxia\Service\Article\Dao;
 
-interface CategoryDao {
+interface CategoryDao 
+{
 
 	public function addCategory($category);
 
@@ -12,7 +13,7 @@ interface CategoryDao {
 
 	public function findCategoryByCode($code);
 
-	// public function findCategoriesByGroupIdAndParentId($groupId, $parentId);
+	public function findAllCategories();
 
 	public function updateCategory($id, $category);
 
@@ -20,10 +21,7 @@ interface CategoryDao {
 
 	public function findCategoriesCountByParentId($parentId);
 
-	// public function findCategoriesByGroupId($groupId);
-
 	public function findCategoriesByIds(array $ids);
 
-	// public function findAllCategories();
-
 }
+	

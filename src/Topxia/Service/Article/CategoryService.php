@@ -10,10 +10,6 @@ interface CategoryService
 
     public function getCategoryTree();
 
-    // public function findCategories($groupId);
-
-    // public function findGroupRootCategories($groupCode);
-
     public function findCategoryChildrenIds($id);
 
     public function findCategoriesByIds(array $ids);
@@ -29,4 +25,5 @@ interface CategoryService
     public function deleteCategory($id);
 
     public function findCategoriesCountByParentId($parentId);
+    
 }

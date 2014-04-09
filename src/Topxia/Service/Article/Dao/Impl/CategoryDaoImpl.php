@@ -65,7 +65,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
     public function findAllCategories()
     {
-        $sql = "SELECT * FROM {$this->table}";
+        $sql = "SELECT * FROM {$this->table} ORDER BY weight ASC";
         return $this->getConnection()->fetchAll($sql) ? : array();
     }
 }
