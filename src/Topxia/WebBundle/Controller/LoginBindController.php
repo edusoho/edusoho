@@ -62,6 +62,7 @@ class LoginBindController extends BaseController
     {
         $token = $request->getSession()->get('oauth_token');
 
+
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
             goto response;
@@ -69,7 +70,8 @@ class LoginBindController extends BaseController
 
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-
+        $oauthUser['createdIp'] = $request->getClientIp();
+        
         if (empty($oauthUser['id'])) {
             $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
             goto response;
@@ -120,6 +122,7 @@ class LoginBindController extends BaseController
         $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
+        $registration['createdIp'] = $oauthUser['createdIp'];
 
         $user = $this->getAuthService()->register($registration, $type);
         return $user;
