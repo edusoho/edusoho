@@ -49,9 +49,9 @@ class AlipayResponse extends Response
                 'partner' => $this->options['key'],
             ));
 
-            // if (strtolower($notifyResult) !== 'true') {
-            //     return 'notify_verify_error';
-            // }
+            if (strtolower($notifyResult) !== 'true') {
+                return 'notify_verify_error';
+            }
         }
 
         return false;
