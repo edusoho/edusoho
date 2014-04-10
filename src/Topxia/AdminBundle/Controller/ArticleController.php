@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\DataDict\ArticleStatusDict;
@@ -154,27 +155,19 @@ class ArticleController extends BaseController
     public function pictureUploadAction(Request $request)
     {
         $file = $request->files->get('picture');
-        // if (!FileToolkit::isIcoFile($file)) {
-        //     throw $this->createAccessDeniedException('图标格式不正确！');
-        // }
-        $filename = 'pic_' . time() . '.' . $file->getClientOriginalExtension();
-        var_dump($filename);
-        
+     
+        $filename = 'article_' . time() .mt_rand(0,10000).".". $file->getClientOriginalExtension();
+
+        $picture['filename'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/aticle/{$filename}";
+        $picture['filename'] = ltrim($picture['filename'], '/');
+
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/aticle";
         $file = $file->move($directory, $filename);
 
-        // $site = $this->getSettingService()->get('site', array());
-
-        // $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
-        // $site['favicon'] = ltrim($site['favicon'], '/');
-
-        // $this->getSettingService()->set('site', $site);
-
-        // $this->getLogService()->info('system', 'update_settings', "上传文章图片", array('favicon' => $site['favicon']));
-
+        $this->getLogService()->info('system', 'article_picture', "aticle上传图片", array('article_picture' => $picture['filename']));
+        
         $response = array(
-            'path' => $site['favicon'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($picture['filename']),
         );
 
         return new Response(json_encode($response));
