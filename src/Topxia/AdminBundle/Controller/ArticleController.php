@@ -156,9 +156,9 @@ class ArticleController extends BaseController
     {
         $file = $request->files->get('picture');
      
-        $filename = 'article_' . time() .mt_rand(0,10000).".". $file->getClientOriginalExtension();
+        $filename = 'article_' . time() .mt_rand(0,1000000).".". $file->getClientOriginalExtension();
 
-        $picture['filename'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/aticle/{$filename}";
+        $picture['filename'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/aticle/{$filename}";
         $picture['filename'] = ltrim($picture['filename'], '/');
 
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/aticle";
