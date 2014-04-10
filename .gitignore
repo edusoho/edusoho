@@ -12,7 +12,7 @@
 /app/data/private_files/*
 /app/data/backup/*
 /app/data/upgrade/*
-/app/config/routing_plugins.yml
+!/app/config/routing_plugins.yml
 /plugins/*
 /build/
 /vendor/
