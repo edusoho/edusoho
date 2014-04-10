@@ -1,7 +1,7 @@
 <tr id="article-{{ article.id }}">
 	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item"  >{{article.id}}</td>
 	<td>
-			<span class="text-muted text-sm">{{ article.title }}</span>
+			<span class="text-muted text-sm">{{ article.title | slice(0,25) }}{% if article.title |length >25 %}...{% endif %}</span>
 	</td>
 	<td>
 	{% if category %}
@@ -10,23 +10,17 @@
 		<span class="text-muted">未分类</span>
 	{% endif %}
 	</td>
-	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
 	<td>{{ article.updated|date('Y-n-d H:i') }}</td>
 	<td>
-	{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span>
+	<a href="javascript:;" class="featured-label" data-url="{{ path('admin_article_update_property', {id:article.id,property:'featured'}) }}">{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span></a>
 
-	{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span>
+	<a href="javascript:;" class="promoted-label" data-url="{{ path('admin_article_update_property', {id:article.id,property:'promoted'}) }}">{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span></a>
 
-	{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span>
+	<a href="javascript:;" class="sticky-label" data-url="{{ path('admin_article_update_property', {id:article.id,property:'sticky'}) }}">{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span></a>
 	</td>
-	
 
-	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
 	<td>{{ dict_text('articleStatus:html', article.status) }}</td>
-	<td>
-		{{ article.publishedTime|date('Y-n-d H:i') }}<br />
-		{# {{ user.nickname }} #}
-	</td>
+
 	<td>
 		<div class="btn-group">
 		  <a  href="{{ path('admin_article_edit', {id:article.id}) }}" class="btn btn-default btn-sm" target="_blank">编辑</a>
@@ -37,6 +31,7 @@
 		  	{% if article.status != 'published' %}
 			    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_article_publish', {id:article.id}) }}">发布</a></li>
 		    {% endif  %}
+		    <li><a href="{{ path('admin_article_preview', {id:article.id}) }}" data-role="preview-item" target="_blank">预览</a></li>
 		    {% if article.status != 'trash' %}
 			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_article_trash', {id:article.id}) }}">移至回收站</a></li>
 		    {% endif %}

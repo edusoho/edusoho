@@ -14,6 +14,7 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{
         $conditions = $request->query->all();
+
         $paginator = new Paginator(
             $request,
             $this->getArticleService()->searchArticleCount($conditions),
@@ -26,29 +27,31 @@ class ArticleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userIds = ArrayToolkit::column($articles, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
+        $categoryTree = $this->makeCategoryOptions('enabled');
+
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
         	'articles' => $articles,
-            'users' => $users,
             'categories' => $categories,
         	'paginator' => $paginator,
+            'categoryTree'  => $categoryTree
     	));
 	}
 
     public function createAction(Request $request)
     {
         $categoryTree = $this->getCategoryService()->getCategoryTree();
+        
         if($request->getMethod() == 'POST'){
             $content = $request->request->all();
             $article = $this->getArticleService()->createArticle($content);
         }
+        
+        $categoryTree = $this->makeCategoryOptions('all');
 
-        $categoryTree = $this->makeCategoryOptions($categoryTree);
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'categoryTree'  => $categoryTree,
         ));
@@ -57,16 +60,14 @@ class ArticleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $article = $this->getArticleService()->getArticle($id);
-
         $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
-        $categoryTree = $this->makeCategoryOptions($categoryTree);
+        $categoryTree = $this->makeCategoryOptions('all');
 
         if ($request->getMethod() == 'POST') {
 
             $formData = $request->request->all();
-
             $article = $this->getArticleService()->updateArticle($id, $formData);
+
             return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
                 'article' => $article,
                 'categoryTree'  => $categoryTree,
@@ -81,6 +82,22 @@ class ArticleController extends BaseController
             'tags' => ArrayToolkit::column($tags, 'name')
         ));
 
+    }
+
+    public function updatePropertyAction(Request $request,$id,$property)
+    {
+         $result = $this->getArticleService()->updateArticleProperty($id, $property);
+
+          if(!$result){
+            return $this->createJsonResponse(array("status" =>"failed")); 
+        } else {
+            return $this->createJsonResponse(array("status" =>"success")); 
+        }
+    }
+   
+    public function previewAction(Request $request,$id)
+    {
+        echo "previewAction";exit();
     }
 
     public function trashAction(Request $request, $id)
@@ -163,8 +180,23 @@ class ArticleController extends BaseController
         return new Response(json_encode($response));
     }
 
-    protected function makeCategoryOptions($categoryTree=array())
+    protected function makeCategoryOptions($operate_type="")
     {
+        if($operate_type == "enabled"){
+                $articles = $this->getArticleService()->searchArticles(
+                array(),
+                array('createdTime', 'DESC'),
+                0,
+                $this->getArticleService()->searchArticleCount(array())
+            );
+            $categoryIds = ArrayToolkit::column($articles, 'categoryId');
+            $categoryTree = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        }
+
+        if($operate_type == "all"){
+            $categoryTree = $this->getCategoryService()->findAllCategories();
+        }
+
         $options = array();
         foreach ($categoryTree as $category) {
             $options[$category['id']] = $category['name'];

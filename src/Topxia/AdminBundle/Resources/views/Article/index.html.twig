@@ -9,8 +9,6 @@
 {% block main %}
 
 {% set type = app.request.get('type') %}
-{# {% set typeName = dict('articleType')[type] %} #}
-
 
 <div class="page-header clearfix">
   <a class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" target="_blank" href="{{ path('admin_article_create') }}"><span class="glyphicon glyphicon-plus"></span> 添加文章</a>
@@ -19,16 +17,9 @@
 
 <form class="well well-sm form-inline">
 	<div class="form-group">
-		<select class="form-control" name="status">
-		  {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--选择栏目--') }}
+		<select class="form-control" name="categoryId">
+		  {{ select_options(categoryTree, app.request.query.get('category'), '--选择栏目--') }}
 		</select>
-		{# <select class="form-control" name="levelId">
-	       {% if categories %}
-	         {{ select_options(categories, categories.Id) }}
-	        {% else %}
-	         {{ select_options(categories, categories.Id|default(''), '--选择栏目--') }}
-	       {% endif %}
-       </select> #}
 	</div>
 	<div class="form-group">
 		<input class="form-control" name="keywords" type="text" placeholder="标题关键词" value="{{ app.request.query.get('keywords') }}">
@@ -43,7 +34,6 @@
 		  {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--选择发布状态--') }}
 		</select>
 	</div>
-		<input type="hidden" name="type" value="{{ type }}">
 	<button class="btn btn-primary pull-right" type="submit">搜索</button>
 </form>
 
@@ -53,20 +43,17 @@
 	<thead>
 		<tr>
 			<th width="10%"><input type="checkbox"  data-role="batch-select">ID</th>
-			<th width="10%">文章标题</th>
-			<th width="10%">栏目</th>
-			<th width="20%">更新时间</th>
-			<th width="16%">属性</th>
-			{# <th>类型</th> #}
-			<th width="10%">状态</th>
-			<th>发布时间/人</th>
-			<th>操作</th>
+			<th width="20%">文章标题</th>
+			<th width="15%">栏目</th>
+			<th width="15%">更新时间</th>
+			<th width="15%">属性</th>
+			<th width="15%">状态</th>
+			<th width="20%">操作</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% if articles %}
 			{% for article in articles %}
-			  {# {% set user = users[article.userId] %} #}
 			  {% set category = categories[article.categoryId]|default(null) %}
 			  {% include 'TopxiaAdminBundle:Article:article-tr.html.twig' %}
 			{% endfor %}

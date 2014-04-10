@@ -91,31 +91,24 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $article;
 	}
 
-	// public function updateArticle($id, $fields)
-	// {
-	// 	$Article = $this->getArticle($id);
-	// 	if (empty($Article)) {
-	// 		throw $this->createServiceException('文章不存在，更新失败！');
-	// 	}
+	public function updateArticleProperty($id, $property)
+	{
+		$article = $this->getArticleDao()->getArticle($id);
+		if(empty($property)){
+			throw $this->createServiceException('属性{$property}不存在，更新失败！');
+		}
 
-	// 	$type = ArticleTypeFactory::create($Article['type']);
-	// 	$fields = $type->convert($fields);
-	// 	$fields = ArrayToolkit::parts($fields, $type->getFields());
-
-	// 	$fields['updated']=time();
-
- //        // if(isset($fields['body'])){
- //        //     $fields['body'] = $this->purifyHtml($fields['body']);
- //        // }
-
-	// 	$this->getArticleDao()->updateArticle($id, ArticleSerialize::serialize($fields));
-
-	// 	$Article = $this->getArticle($id);
-
-	// 	$this->getLogService()->info('Article', 'update', "文章《({$Article['title']})》({$Article['id']})更新", $Article);
-
-	// 	return $Article;
-	// }
+		if($article){
+			if($article[$property] == 1){
+				$property_val = 0;
+				$this->getArticleDao()->updateArticle($id,array("{$property}"=>$property_val));
+			}else{
+				$property_val = 1;
+				$this->getArticleDao()->updateArticle($id,array("{$property}"=>$property_val));
+			}
+		}
+		$this->getLogService()->info('Article', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$property_val}");
+	}
 
 	public function trashArticle($id)
 	{

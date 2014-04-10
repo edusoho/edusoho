@@ -11,13 +11,30 @@ define(function(require, exports, module) {
 			$.post($(this).data('url'), function(){
 				window.location.reload();
 			});
-		});
+		});	
 
 		$("#article-table").on('click', '[data-role=delete-item]', function(){
 			if (!confirm('真的要永久删除该内容吗？')) {
 				return ;
 			}
 
+			$.post($(this).data('url'), function(){
+				window.location.reload();
+			});
+		});
+		$(".featured-label").on('click', function(){
+			$.post($(this).data('url'), function(){
+				window.location.reload();
+			});
+		});		
+
+		$(".promoted-label").on('click', function(){
+			$.post($(this).data('url'), function(){
+				window.location.reload();
+			});
+		});		
+
+		$(".sticky-label").on('click', function(){
 			$.post($(this).data('url'), function(){
 				window.location.reload();
 			});

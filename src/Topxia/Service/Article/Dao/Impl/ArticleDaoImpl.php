@@ -60,28 +60,26 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
 	private function _createSearchQueryBuilder($conditions)
 	{
-		if (isset($conditions['keywords'])) {
+		$conditions = array_filter($conditions);
+		
+		if(array_key_exists('property',$conditions)){
+			$key = $conditions['property'];
+			$conditions[$key] = 1;
+		}
+
+		if(isset($conditions['keywords'])){
 			$conditions['keywords'] = "%{$conditions['keywords']}%";
 		}
 
 		$builder = $this->createDynamicQueryBuilder($conditions)
 			->from($this->table, 'article')
-			->andWhere('type = :type')
 			->andWhere('status = :status')
+			->andWhere('categoryId = :categoryId')
+			->andWhere('featured = :featured')
+			->andWhere('promoted = :promoted')
+			->andWhere('sticky = :sticky')
 			->andWhere('title LIKE :keywords');
 
-		if (isset($conditions['categoryIds'])) {
-			$categoryIds = array();
-			foreach ($conditions['categoryIds'] as $categoryId) {
-				if (ctype_digit($categoryId)) {
-					$categoryIds[] = $categoryId;
-				}
-			}
-			if ($categoryIds) {
-				$categoryIds = join(',', $categoryIds);
-				$builder->andStaticWhere("categoryId IN ($categoryIds)");
-			}
-		}
 		return $builder;
 	}
 }

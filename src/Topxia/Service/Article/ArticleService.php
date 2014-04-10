@@ -11,18 +11,19 @@ interface ArticleService
 
 	public function searchArticleCount($conditions);
 
-	public function createArticle($Article);
+	public function createArticle($article);
 
 	public function updateArticle($id, $Article);
+
+	public function updateArticleProperty($id, $property);
 
 	public function trashArticle($id);
 
 	public function deleteArticle($id);
 
 	public function deleteArticlesByIds($ids);
-
-    // @todo
-    // public function publishArticle($id);
+	
+    public function publishArticle($id);
 
 	public function isAliasAvaliable($alias);
 }
