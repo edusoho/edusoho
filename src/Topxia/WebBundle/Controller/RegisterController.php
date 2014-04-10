@@ -179,16 +179,19 @@ class RegisterController extends BaseController
     {
         $senderUser = array();
         $auth = $this->getSettingService()->get('auth', array());
-        
-        if(!empty($auth['welcome_sender'])){
-            $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-            if(!empty($senderUser)){
-                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
-                $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
-                $this->getMessageService()->deleteConversation($conversation['id']);
+      
+        if ($auth['welcome_enabled'] == 'opened') {
+            if(!empty($auth['welcome_sender'])){
+                $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
+                if(!empty($senderUser)){
+                    $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
+                    $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
+                    $this->getMessageService()->deleteConversation($conversation['id']);
+                }
             }
-        }
 
+        }
+        
         return true;
     }
 
