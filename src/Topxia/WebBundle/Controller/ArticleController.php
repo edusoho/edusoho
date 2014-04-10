@@ -5,19 +5,64 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
-class ContentController extends BaseController
+class ArticleController extends BaseController
 {
 
-	public function articleShowAction(Request $request, $alias)
+	public function indexAction(Request $request)
 	{
-		$content = $this->getContentByAlias('article', $alias);
-		return $this->render('TopxiaWebBundle:Content:show.html.twig', array(
+		$categoryTree = $this->getCategoryService()->getCategoryTree();
+
+		$conditions = array(
 			'type' => 'article',
-			'content' => $content,
+			'status' => 'published'
+		);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getArticleService()->searchArticleCount($conditions),
+            10
+        );
+
+		$latestArticles = $this->getArticleService()->searchArticles(
+			$conditions, array('createdTime', 'DESC'), 
+			$paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+		);
+
+		$hottestArticles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
+		
+		foreach ($latestArticles as &$article) {
+			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
+
+		}
+
+		$featuredConditions = array(
+			'type' => 'article',
+			'status' => 'published',
+			'featured' => 1
+		);
+
+		$featuredArticles = $this->getArticleService()->searchArticles(
+			$featuredConditions,array('createdTime', 'DESC'),
+			0,3
+		);
+
+		foreach ($featuredArticles as &$featuredArticle) {
+			preg_match('/<img[^>]+src="([^"]+)"/i', $featuredArticle['body'], $matches);
+			if (isset($matches[1])) {
+				$featuredArticle['img'] = $matches[1];
+			};
+		};
+
+		return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
+			'categoryTree' => $categoryTree,
+			'latestArticles' => $latestArticles,
+			'hottestArticles' => $hottestArticles,
+			'featuredArticles' => $featuredArticles
 		));
 	}
 
-	public function articleListAction(Request $request)
+	/*public function articleListAction(Request $request)
 	{
 		$conditions = array(
 			'type' => 'article',
@@ -104,16 +149,16 @@ class ContentController extends BaseController
 		}
 
 		return $content;
-	}
-
-    private function getContentService()
-    {
-        return $this->getServiceKernel()->createService('Content.ContentService');
-    }
+	}*/
 
     private function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Article.CategoryService');
+    }
+
+    private function getArticleService()
+    {
+        return $this->getServiceKernel()->createService('Article.ArticleService');
     }
 
 }

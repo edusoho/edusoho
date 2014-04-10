@@ -950,74 +950,29 @@ message_check_receiver:
 
 message_send:
     pattern: /message/send/
-    defaults: {_controller: TopxiaWebBundle:Message:send }
+    defaults: { _controller: TopxiaWebBundle:Message:send }
 
 message_send_to_receiver:
     pattern: /message/send/{receiverId}/to/receiver/
-    defaults: {_controller: TopxiaWebBundle:Message:sendTo }
+    defaults: { _controller: TopxiaWebBundle:Message:sendTo }
 
 message_conversation_show:
     pattern: /message/conversation/{conversationId}
-    defaults: {_controller: TopxiaWebBundle:Message:showConversation }
+    defaults: { _controller: TopxiaWebBundle:Message:showConversation }
 
 message_conversation_delete:
     pattern: /message/conversation/{conversationId}/delete
-    defaults: {_controller: TopxiaWebBundle:Message:deleteConversation }
+    defaults: { _controller: TopxiaWebBundle:Message:deleteConversation }
     methods: [POST]
 
 message_delete:
     pattern: /message/conversation/{conversationId}/message/{messageId}/delete
-    defaults: {_controller: TopxiaWebBundle:Message:deleteConversationMessage }
+    defaults: { _controller: TopxiaWebBundle:Message:deleteConversationMessage }
     methods: [POST]
 
-content_article_show:
-    pattern: /article/{alias}
-    defaults: {_controller: TopxiaWebBundle:Content:articleShow }
-
-content_article_list:
+article_show:
     pattern: /article
-    defaults: {_controller: TopxiaWebBundle:Content:articleList }
-
-content_activity_show:
-    pattern: /activity/{alias}
-    defaults: {_controller: TopxiaWebBundle:Content:activityShow }
-
-content_activity_list:
-    pattern: /activity
-    defaults: {_controller: TopxiaWebBundle:Content:activityList }
-
-content_page_show:
-    pattern: /page/{alias}
-    defaults: {_controller: TopxiaWebBundle:Content:pageShow }
-
-content_page_list:
-    pattern: /page
-    defaults: {_controller: TopxiaWebBundle:Content:pageList }
-    
-article_article_show:
-    pattern: /article/{alias}
-    defaults: {_controller: TopxiaWebBundle:Article:articleShow }
-
-article_article_list:
-    pattern: /article
-    defaults: {_controller: TopxiaWebBundle:Article:articleList }
-
-article_activity_show:
-    pattern: /activity/{alias}
-    defaults: {_controller: TopxiaWebBundle:Article:activityShow }
-
-article_activity_list:
-    pattern: /activity
-    defaults: {_controller: TopxiaWebBundle:Article:activityList }
-
-article_page_show:
-    pattern: /page/{alias}
-    defaults: {_controller: TopxiaWebBundle:Article:pageShow }
-
-article_page_list:
-    pattern: /page
-    defaults: {_controller: TopxiaWebBundle:Article:pageList }    
-
+    defaults: { _controller: TopxiaWebBundle:Article:index }
 
 teacher:
     pattern: /teacher

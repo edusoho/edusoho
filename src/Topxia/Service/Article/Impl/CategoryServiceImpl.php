@@ -200,46 +200,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         return $fields;
-
-
-        /*foreach (array_keys($category) as $key) {
-            switch ($key) {
-                case 'name':
-                    $category['name'] = (string) $category['name'];
-                    if (empty($category['name'])) {
-                        throw $this->createServiceException("名称不能为空，保存栏目失败");
-                    }
-                    break;
-                case 'code':
-                    if (empty($category['code'])) {
-                        throw $this->createServiceException("编码不能为空，保存栏目失败");
-                    } else {
-                        if (!preg_match("/^[a-zA-Z0-9_]+$/i", $category['code'])) {
-                            throw $this->createServiceException("编码({$category['code']})含有非法字符，保存栏目失败");
-                        }
-                        if (ctype_digit($category['code'])) {
-                            throw $this->createServiceException("编码({$category['code']})不能全为数字，保存栏目失败");
-                        }
-                        $exclude = empty($releatedCategory['code']) ? null : $releatedCategory['code'];
-                        if (!$this->isCategoryCodeAvaliable($category['code'], $exclude)) {
-                            throw $this->createServiceException("编码({$category['code']})不可用，保存栏目失败");
-                        }
-                    }
-                    break;
-
-                case 'parentId':
-                    $category['parentId'] = (int) $category['parentId'];
-                    if ($category['parentId'] > 0) {
-                        $parentCategory = $this->getCategory($category['parentId']);
-                        if (empty($parentCategory)) {
-                            throw $this->createServiceException("父栏目(ID:{$category['parentId']})不存在，保存栏目失败");
-                        }
-                    }
-                    break;
-            }
-        }
-
-        return $category;*/
     }
 
     public function findCategoriesCountByParentId($parentId){
