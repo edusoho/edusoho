@@ -1,0 +1,105 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+
+  <div class="row row-8-4 article-row" style="margin-top:20px;">
+    <div class="col-md-8">
+      <ul class="nav nav-tabs" style="margin-bottom:20px;">
+        <li class="active"><a href="#">资讯频道首页</a></li>
+        {% for category in categoryTree %}
+          {% if category.parentId == 0 %}
+            <li><a href="#">{{ category.name }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+        <div id="article-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
+          <ol class="carousel-indicators">
+              <li data-target="#article-carousel" data-slide-to="0" class="active"></li>
+              <li data-target="#article-carousel" data-slide-to="1" class=""></li>
+              <li data-target="#article-carousel" data-slide-to="2" class=""></li>
+          </ol>
+          <div class="carousel-inner">
+            {% for featuredArticle in featuredArticles %}
+                  <div class="item active">
+                      <img style="width:100%;" src={{ featuredArticle.img|default(null) }}  >
+                  </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      <ul class="article-wide-list">
+        {% for article in latestArticles %}
+          {% set category = article.category %}
+        <li class="article-item clearfix">
+          <div class="article-title">
+            <div class="pull-left">
+              <span><a href="#">{{ category.name }} </a> / {{ category.code }}
+              </span>
+            </div>
+            <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
+          </div>
+
+          <div class="media article-content">
+            <a class="pull-right article-picture-link" href="/course/2">
+              <img class="article-picture" src="/assets/img/default/course-large.png?2.5" alt="免费课程">
+            </a>
+            <div class="media-body">
+              <h4 class="media-heading"><a href="#" >{{ article.title }}</a></h4>
+              {{ article.body|plain_text(150) }}
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <div class="es-box">
+        <div class="es-box-heading"><h2>最新评论</h2></div>
+        <div class="es-box-body">
+          <ul class="media-list latest-review-list">
+            <li class="media">
+              <a href="/user/229" class="author-picture-link">
+                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
+              </a>
+              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
+              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
+
+              <div class="review-footer">
+                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
+              </div>
+            </li>
+            <li class="media">
+              <a href="/user/229" class="author-picture-link">
+                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
+              </a>
+              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
+              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
+
+              <div class="review-footer">
+                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
+              </div>
+            </li>
+          </ul>    
+        </div>
+      </div>
+
+      <div class="es-box">
+        <div class="es-box-heading"><h2>热门文章</h2></div>
+        <div class="es-box-body">
+          <ul class="media-list">
+            {% for key,hottestArticle in hottestArticles %}
+              <li class="media">
+                <span class="rank_num">{{ key+1 }}</span>
+                <div class="media-body">{{ hottestArticle.title }}</div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
