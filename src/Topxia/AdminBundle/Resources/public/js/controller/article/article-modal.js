@@ -9,7 +9,10 @@ define(function(require, exports, module) {
     require('jquery.select2');
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
-        
+            
+            var $form = $("#article-form");
+            $modal = $form.parents('.modal');
+            var validator = _initValidator($form, $modal);
             var $editor = _initEditorFields($form, validator);
             $('#article-tags').select2({
             
@@ -61,7 +64,7 @@ define(function(require, exports, module) {
                 createSearchChoice: function() { return null; },
             });
     
-         var $form = $("#article-form");
+        
 
         var uploader = new Uploader({
             trigger: '#article-pic-upload',
@@ -114,5 +117,48 @@ define(function(require, exports, module) {
         });
 
         return editor;
+    }
+
+      function _initValidator($form, $modal)
+    {
+        var validator = new Validator({
+            element: $form,
+            autoSubmit: false,
+            onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return ;
+                }
+
+                if ($form.data('uploading')) {
+                    alert('正在上传附图，请等待附图上传成功后，再保存！');
+                    return ;
+                }
+
+                $form.ajaxSubmit({
+                    clearForm: true,
+                    success: function(data){
+                        $modal.modal('hide');
+                        window.location.reload();
+                    }
+                });
+            }
+            
+        });
+
+        if ($form.find('[name="title"]').length > 0) {
+            validator.addItem({
+                element: '[name="title"]',
+                required: true
+            });
+        }        
+
+        if ($form.find('[name="alias"]').length > 0) {
+            validator.addItem({
+                element: '[name="alias"]',
+                rule: 'remote noNumberFirst'
+            });
+        }
+
+        return validator;
     }
 });
