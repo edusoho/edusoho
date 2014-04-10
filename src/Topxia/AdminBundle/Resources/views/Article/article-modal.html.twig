@@ -1,4 +1,3 @@
-{# {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %} #}
 {% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
 
 {% set modal_size = 'xlarge' %}
@@ -6,9 +5,6 @@
 
 {% block sidebar %}{% endblock %}
 {% block main %}
-
-{# {% block title %}{{ type.name }}{% endblock %} #}
-{# {% block body %} #}
 
 {% set article = article|default(null) %}
 

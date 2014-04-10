@@ -43,20 +43,17 @@
 	<thead>
 		<tr>
 			<th width="10%"><input type="checkbox"  data-role="batch-select">ID</th>
-			<th width="10%">文章标题</th>
-			<th width="10%">栏目</th>
-			<th width="20%">更新时间</th>
-			<th width="16%">属性</th>
-			{# <th>类型</th> #}
-			<th width="10%">状态</th>
-			<th>发布时间/人</th>
-			<th>操作</th>
+			<th width="20%">文章标题</th>
+			<th width="15%">栏目</th>
+			<th width="15%">更新时间</th>
+			<th width="15%">属性</th>
+			<th width="15%">状态</th>
+			<th width="20%">操作</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% if articles %}
 			{% for article in articles %}
-			  {# {% set user = users[article.userId] %} #}
 			  {% set category = categories[article.categoryId]|default(null) %}
 			  {% include 'TopxiaAdminBundle:Article:article-tr.html.twig' %}
 			{% endfor %}

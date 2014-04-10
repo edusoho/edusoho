@@ -1,7 +1,7 @@
 <tr id="article-{{ article.id }}">
 	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item"  >{{article.id}}</td>
 	<td>
-			<span class="text-muted text-sm">{{ article.title }}</span>
+			<span class="text-muted text-sm">{{ article.title | slice(0,25) }}{% if article.title |length >25 %}...{% endif %}</span>
 	</td>
 	<td>
 	{% if category %}
@@ -10,23 +10,17 @@
 		<span class="text-muted">未分类</span>
 	{% endif %}
 	</td>
-	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
 	<td>{{ article.updated|date('Y-n-d H:i') }}</td>
 	<td>
-	{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span>
+	{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span>
 
-	{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span>
+	{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span>
 
-	{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span>
+	{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span>
 	</td>
-	
 
-	{# <td>{{ dict_text('articleType', article.type) }}</td> #}
 	<td>{{ dict_text('articleStatus:html', article.status) }}</td>
-	<td>
-		{{ article.publishedTime|date('Y-n-d H:i') }}<br />
-		{# {{ user.nickname }} #}
-	</td>
+
 	<td>
 		<div class="btn-group">
 		  <a  href="{{ path('admin_article_edit', {id:article.id}) }}" class="btn btn-default btn-sm" target="_blank">编辑</a>

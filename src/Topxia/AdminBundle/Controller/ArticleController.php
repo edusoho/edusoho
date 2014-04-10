@@ -27,16 +27,13 @@ class ArticleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userIds = ArrayToolkit::column($articles, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
+     
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->makeCategoryOptions($categories);
 
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
         	'articles' => $articles,
-            'users' => $users,
             'categories' => $categories,
         	'paginator' => $paginator,
             'categoryTree'  => $categoryTree
