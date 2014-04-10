@@ -45,7 +45,7 @@
 				{% endif %}
 				>
 					<div class="controls">
-						<textarea class="form-control" id="richeditorBody" rows="16" name="richeditorBody">{{ field_value(article, 'body') }}</textarea>
+						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditorBody">{{ field_value(article, 'body') }}</textarea>
 					</div>
 				</div>
 
@@ -106,8 +106,10 @@
 				        <label for="article-sourceUrl">选择图片</label>
 				    </div>
 				    <div class="col-md-7 controls">
+				    <div id="aticle-picture-container"></div>
 				     <button class="btn btn-default btn-sm" id="article-pic-upload" type="button" data-url="{{ path('admin_aticle_picture_upload') }}">上传</button>
-				      <input type="hidden" name="picture" value="{{ article.picture | default('') }}">
+				      <input type="hidden" name="picture" value="xx" id="article-pic">
+				     <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
 				     
 				    </div>
 				  </div>

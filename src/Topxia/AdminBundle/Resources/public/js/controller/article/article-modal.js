@@ -2,15 +2,15 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
+    var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
 
     require('jquery.select2-css');
     require('jquery.select2');
-
+    var Notify = require('common/bootstrap-notify');
     exports.run = function() {
         
-        // require('./header').run();
-
+            var $editor = _initEditorFields($form, validator);
             $('#article-tags').select2({
             
                 ajax: {
@@ -61,7 +61,7 @@ define(function(require, exports, module) {
                 createSearchChoice: function() { return null; },
             });
     
-         var $form = $("#site-form");
+         var $form = $("#article-form");
 
         var uploader = new Uploader({
             trigger: '#article-pic-upload',
@@ -73,10 +73,12 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = eval("(" + response + ")");
-                // $("#site-logo-container").html('<img src="' + response.url + '">');
-                $form.find('[name=picture]').val(response.path);
-                // $("#site-logo-remove").show();
-                Notify.success('上传picture成功！');
+                console.log(response);
+              console.log($form.find('#article-pic').val());
+                $("#article-picture-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                $form.find('#article-pic').val(response.url);
+              console.log($form.find('#article-pic').val());
+                 Notify.success('上传成功！');
             }
         });
 
@@ -103,4 +105,14 @@ define(function(require, exports, module) {
 
     };
 
+  function _initEditorFields($form, validator)
+    {
+        
+        var editor = EditorFactory.create('#richeditor-body-field', 'full', {extraFileUploadParams:{group:'default'}});
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        });
+
+        return editor;
+    }
 });
