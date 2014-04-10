@@ -60,7 +60,7 @@ class WebExtension extends \Twig_Extension
         $plugins = array('coupon', 'vip');
 
         $paths = array(
-            'common' => 'common/',
+            'common' => 'common',
             'theme' => "{$basePath}/themes/{$theme}/js"
         );
 
