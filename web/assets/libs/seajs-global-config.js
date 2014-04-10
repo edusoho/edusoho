@@ -44,9 +44,7 @@ seajs.config({
 	preload: [this.JSON ? '' : 'json'],
 
 	// 路径配置
-	paths: {
-		'common': 'common/'
-	},
+	paths: app.jsPaths,
 
 	// 变量配置
 	vars: {
