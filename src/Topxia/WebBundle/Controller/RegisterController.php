@@ -179,7 +179,7 @@ class RegisterController extends BaseController
     {
         $senderUser = array();
         $auth = $this->getSettingService()->get('auth', array());
-      
+
         if ($auth['welcome_enabled'] == 'opened') {
             if(!empty($auth['welcome_sender'])){
                 $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
@@ -189,7 +189,6 @@ class RegisterController extends BaseController
                     $this->getMessageService()->deleteConversation($conversation['id']);
                 }
             }
-
         }
         
         return true;
