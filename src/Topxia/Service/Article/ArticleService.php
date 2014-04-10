@@ -7,7 +7,7 @@ interface ArticleService
 
 	public function getArticleByAlias($alias);
 
-	public function searchArticles($conditions, $orderBy, $start, $limit);
+	public function searchArticles(array $conditions, array $orderBy, $start, $limit);
 
 	public function searchArticleCount($conditions);
 
@@ -18,6 +18,8 @@ interface ArticleService
 	public function trashArticle($id);
 
 	public function deleteArticle($id);
+
+	public function deleteArticlesByIds($ids);
 
     // @todo
     // public function publishArticle($id);

@@ -21,20 +21,13 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return ArticleSerialize::unserialize($this->getArticleDao()->getArticleByAlias($alias));
 	}
 
-	public function searchArticles($conditions, $sort, $start, $limit)
+	public function searchArticles(array $conditions, array $orderBy, $start, $limit)
 	{
-		switch ($sort) {
-			default:
-				$orderBy = array('createdTime', 'DESC');
-				break;
-		}
-		$conditions = $this->prepareSearchConditions($conditions);
-		return $this->getArticleDao()->searchArticles($conditions, $orderBy, $start, $limit);
+		return $this->getArticleDao()->searchArticles($conditions,$orderBy,$start,$limit);
 	}
 
 	public function searchArticleCount($conditions)
 	{
-		$conditions = $this->prepareSearchConditions($conditions);
 		return $this->getArticleDao()->searchArticleCount($conditions);
 	}
 
@@ -49,68 +42,80 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $conditions;
 	}
 
-	public function createArticle($Article)
+	public function createArticle($article)
 	{
-		if (empty($Article['type'])) {
-			throw $this->createServiceException('参数缺失，创建文章失败！');
-		}
+		$new_article['title'] = $article['title'];
+		$new_article['body'] = $article['richeditorBody'];
 
-		$type = ArticleTypeFactory::create($Article['type']);
-		$Article = $type->convert($Article);
-		$Article = ArrayToolkit::parts($Article, $type->getFields());
-		$Article['type'] = $type->getAlias();
+		$new_article['featured'] = empty($article['featured']) ? 0 : 1;
+		$new_article['promoted'] = empty($article['promoted']) ? 0 : 1;
+		$new_article['sticky'] = empty($article['sticky']) ? 0 : 1;
 
-		if (empty($Article['title'])) {
-			throw $this->createServiceException('文章标题不能为空，创建文章失败！');
-		}
+		$new_article['tagIds'] = $article['tags'];
+		$new_article['categoryId'] = $article['categoryId'];
+		$new_article['source'] = $article['source'];
+		$new_article['sourceUrl'] = $article['sourceUrl'];
+		$new_article['publishedTime'] = strtotime($article['publishedTime']);
+		$new_article['createdTime'] = time();
+		$new_article['updated'] = time();
+		$new_article['userId'] = $this->getCurrentUser()->id;
 
-		$Article['userId'] = $this->getCurrentUser()->id;
-		$Article['createdTime'] = time();
-		$Article['updated']=$Article['createdTime']; //update time
+		$article = $this->getArticleDao()->addArticle($new_article);
+		$this->getLogService()->info('Article', 'create', "创建文章《({$article['title']})》({$article['id']})", $article);
 		
-        if (empty($Article['publishedTime'])) {
-			$Article['publishedTime'] = $Article['createdTime'];
-		}
-
-		// if(isset($Article['body'])){
-  //           $Article['body'] = $this->purifyHtml($Article['body']);
-  //       }
-
-
-		$id = $this->getArticleDao()->addArticle(ArticleSerialize::serialize($Article));
-
-		$Article = $this->getArticle($id);
-
-        $this->getLogService()->info('Article', 'create', "创建文章《({$Article['title']})》({$Article['id']})", $Article);
-
-		return $Article;
+		return $article;
 	}
 
-	public function updateArticle($id, $fields)
+	public function updateArticle($id,$article)
 	{
-		$Article = $this->getArticle($id);
-		if (empty($Article)) {
-			throw $this->createServiceException('文章不存在，更新失败！');
-		}
+		$edit_article['title'] = $article['title'];
+		$edit_article['body'] = $article['richeditorBody'];
 
-		$type = ArticleTypeFactory::create($Article['type']);
-		$fields = $type->convert($fields);
-		$fields = ArrayToolkit::parts($fields, $type->getFields());
+		$edit_article['featured'] = empty($article['featured']) ? 0 : 1;
+		$edit_article['promoted'] = empty($article['promoted']) ? 0 : 1;
+		$edit_article['sticky'] = empty($article['sticky']) ? 0 : 1;
 
-		$fields['updated']=time();
+		$edit_article['tagIds'] = $article['tags'];
+		$edit_article['categoryId'] = $article['categoryId'];
+		$edit_article['source'] = $article['source'];
+		$edit_article['sourceUrl'] = $article['sourceUrl'];
+		$edit_article['publishedTime'] = strtotime($article['publishedTime']);
+		$edit_article['createdTime'] = time();
+		$edit_article['updated'] = time();
+		$edit_article['userId'] = $this->getCurrentUser()->id;
 
-        // if(isset($fields['body'])){
-        //     $fields['body'] = $this->purifyHtml($fields['body']);
-        // }
+		$article = $this->getArticleDao()->updateArticle($id,$edit_article);
 
-		$this->getArticleDao()->updateArticle($id, ArticleSerialize::serialize($fields));
-
-		$Article = $this->getArticle($id);
-
-		$this->getLogService()->info('Article', 'update', "文章《({$Article['title']})》({$Article['id']})更新", $Article);
-
-		return $Article;
+		$this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})", $article);
+		
+		return $article;
 	}
+
+	// public function updateArticle($id, $fields)
+	// {
+	// 	$Article = $this->getArticle($id);
+	// 	if (empty($Article)) {
+	// 		throw $this->createServiceException('文章不存在，更新失败！');
+	// 	}
+
+	// 	$type = ArticleTypeFactory::create($Article['type']);
+	// 	$fields = $type->convert($fields);
+	// 	$fields = ArrayToolkit::parts($fields, $type->getFields());
+
+	// 	$fields['updated']=time();
+
+ //        // if(isset($fields['body'])){
+ //        //     $fields['body'] = $this->purifyHtml($fields['body']);
+ //        // }
+
+	// 	$this->getArticleDao()->updateArticle($id, ArticleSerialize::serialize($fields));
+
+	// 	$Article = $this->getArticle($id);
+
+	// 	$this->getLogService()->info('Article', 'update', "文章《({$Article['title']})》({$Article['id']})更新", $Article);
+
+	// 	return $Article;
+	// }
 
 	public function trashArticle($id)
 	{
@@ -122,6 +127,20 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	{
 		$this->getArticleDao()->deleteArticle($id);
 		$this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
+	}
+
+	public function deleteArticlesByIds($ids)
+	{
+		$id_log = "";
+		if(count($ids) == 1){
+			$this->getArticleDao()->deleteArticle($ids[0]);
+		}else{
+			foreach ($ids as $id) {
+				$this->getArticleDao()->deleteArticle($id);
+			}
+		}
+		
+		$this->getLogService()->info('Article', 'delete', "文章#{$id_log}永久删除");
 	}
 
 	public function publishArticle($id)

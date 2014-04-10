@@ -59,19 +59,24 @@ define(function(require, exports, module) {
 			
 
 			$('#lesson-toolbar-primary').on('click', 'li[data-plugin]', function(e){
-				e.preventDefault();
-				$(e.delegateTarget).find('li[data-plugin]').removeClass('active');
 
-				
-				var $this = $(this);
+					if(!$(this).hasClass('active')){
+						e.preventDefault();
+						$(e.delegateTarget).find('li[data-plugin]').removeClass('active');
 
-				if (!$this.data('noactive')) {
-					$this.addClass('active');
-				}
-				toolbar.get('plugins')[$this.data('plugin')].execute();
 
-				return false;
-			});
+						var $this = $(this);
+
+						if (!$this.data('noactive')) {
+						$this.addClass('active');
+						}
+						toolbar.get('plugins')[$this.data('plugin')].execute();
+					}else{
+						$('.toolbar-nav li').removeClass('active');
+						$('.lesson-dashboard').removeClass('lesson-dashboard-open');
+					}
+					return false;
+				});
 		},
 
 		getPaneContainer: function() {
