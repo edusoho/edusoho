@@ -672,6 +672,14 @@ admin_article_create:
     pattern:  /article/create
     defaults: { _controller: TopxiaAdminBundle:Article:create }
 
+admin_article_preview:
+    pattern:  /article/{id}/preview
+    defaults: { _controller: TopxiaAdminBundle:Article:preview }
+
+admin_article_update_property:
+    pattern:  /article/update/property/{id}/{property}
+    defaults: { _controller: TopxiaAdminBundle:Article:updateProperty }
+
 admin_article_edit:
     pattern:  /article/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Article:edit }

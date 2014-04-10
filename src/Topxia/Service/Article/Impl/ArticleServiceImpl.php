@@ -91,6 +91,25 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $article;
 	}
 
+	public function updateArticleProperty($id, $property)
+	{
+		$article = $this->getArticleDao()->getArticle($id);
+		if(empty($property)){
+			throw $this->createServiceException('属性{$property}不存在，更新失败！');
+		}
+
+		if($article){
+			if($article[$property] == 1){
+				$property_val = 0;
+				$this->getArticleDao()->updateArticle($id,array("{$property}"=>$property_val));
+			}else{
+				$property_val = 1;
+				$this->getArticleDao()->updateArticle($id,array("{$property}"=>$property_val));
+			}
+		}
+		$this->getLogService()->info('Article', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$property_val}");
+	}
+
 	public function trashArticle($id)
 	{
 		$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
