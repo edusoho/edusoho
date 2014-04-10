@@ -10,6 +10,12 @@
             <span class="label label-danger ">已关闭</span>
           {% elseif course.status=='draft' %}
             <span class="label label-warning ">未发布</span>
+          {% elseif course.status=='published' %}
+            {% if course.showCourseStatus=='serialize' %}
+              <span class="label label-success ">更新中</span>
+            {% elseif course.showCourseStatus=='finished' %}
+              <span class="label label-warning ">已完结</span>
+            {% endif %}
           {% endif %}
         </h1>
         <div class="teachers">
