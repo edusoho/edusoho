@@ -34,4 +34,5 @@ app/data/install.lock
 !/web/themes/default
 !/web/themes/default-b
 .sw*
-
+/app/config/routing_plugins.yml
+/plugins/*
