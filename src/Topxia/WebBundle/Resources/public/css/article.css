@@ -39,7 +39,9 @@
 .article-content {
 	float: left;
 }
-
+.article-title {
+	height: 30px;
+}
 .article-title a {
 	color: #66bc4e;
 }
