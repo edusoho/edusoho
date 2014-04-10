@@ -14,6 +14,7 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{
         $conditions = $request->query->all();
+
         $paginator = new Paginator(
             $request,
             $this->getArticleService()->searchArticleCount($conditions),
@@ -31,12 +32,14 @@ class ArticleController extends BaseController
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $categoryTree = $this->makeCategoryOptions($categories);
 
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
         	'articles' => $articles,
             'users' => $users,
             'categories' => $categories,
         	'paginator' => $paginator,
+            'categoryTree'  => $categoryTree
     	));
 	}
 

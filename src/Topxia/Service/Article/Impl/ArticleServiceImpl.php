@@ -91,32 +91,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $article;
 	}
 
-	// public function updateArticle($id, $fields)
-	// {
-	// 	$Article = $this->getArticle($id);
-	// 	if (empty($Article)) {
-	// 		throw $this->createServiceException('文章不存在，更新失败！');
-	// 	}
-
-	// 	$type = ArticleTypeFactory::create($Article['type']);
-	// 	$fields = $type->convert($fields);
-	// 	$fields = ArrayToolkit::parts($fields, $type->getFields());
-
-	// 	$fields['updated']=time();
-
- //        // if(isset($fields['body'])){
- //        //     $fields['body'] = $this->purifyHtml($fields['body']);
- //        // }
-
-	// 	$this->getArticleDao()->updateArticle($id, ArticleSerialize::serialize($fields));
-
-	// 	$Article = $this->getArticle($id);
-
-	// 	$this->getLogService()->info('Article', 'update', "文章《({$Article['title']})》({$Article['id']})更新", $Article);
-
-	// 	return $Article;
-	// }
-
 	public function trashArticle($id)
 	{
 		$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
