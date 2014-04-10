@@ -59,6 +59,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$new_article['createdTime'] = time();
 		$new_article['updated'] = time();
 		$new_article['userId'] = $this->getCurrentUser()->id;
+		$new_article['picture'] = $article['picture'];
 
 		$article = $this->getArticleDao()->addArticle($new_article);
 		$this->getLogService()->info('Article', 'create', "创建文章《({$article['title']})》({$article['id']})", $article);
