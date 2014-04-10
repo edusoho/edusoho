@@ -12,7 +12,7 @@
 /app/data/private_files/*
 /app/data/backup/*
 /app/data/upgrade/*
-!/app/config/routing_plugins.yml
+/app/config/routing_plugins.yml
 /plugins/*
 /build/
 /vendor/
@@ -34,5 +34,3 @@ app/data/install.lock
 !/web/themes/default
 !/web/themes/default-b
 .sw*
-/app/config/routing_plugins.yml
-/plugins/*
