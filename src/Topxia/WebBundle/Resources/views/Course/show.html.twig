@@ -9,7 +9,7 @@
 {%- endblock -%}
 {% block description %}{{ course.about|plain_text(150) }}{% endblock %}
 
-
+{% set bodyClass = 'course-show' %}
 {% set script_controller = 'course/show' %}
 
 {% block content %}

@@ -94,8 +94,12 @@ class CourseOrderController extends OrderController
             $order['promoCode'] = $formData['promoCode'];
         }
 
-        if (!empty($formData['note'])) {
-            $order['data'] = array('note' => $formData['note']);
+        if (!empty($formData['mTookeen'])) {
+            $order['mTookeen'] = $formData['mTookeen'];
+        }
+
+        if (!empty($formData['promoCode'])) {
+            $order['promoCode'] = $formData['promoCode'];
         }
 
 

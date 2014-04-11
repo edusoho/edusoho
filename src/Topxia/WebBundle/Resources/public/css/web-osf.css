@@ -363,11 +363,15 @@
 	height: 27px !important;
 }
 
-img {
+.course-show img, .activity-show img {
 	display: block;
 	max-width: 100%;
 	height: auto;
 	margin: 0 auto;
+}
+
+.display-inline{
+	display:inline !important;
 }
 
 
