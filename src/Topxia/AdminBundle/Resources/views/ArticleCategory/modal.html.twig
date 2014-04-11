@@ -16,7 +16,7 @@
 			<label class="col-md-2 control-label" for="category-code-field">栏目编码</label>
 			<div class="col-md-8 controls">
 				<input class="form-control" id="category-code-field" type="text" name="code" value="{{ category.code }}" data-url="{{ path('admin_article_category_checkcode', {exclude:category.code}) }}" tabindex="2">
-				<div class="help-block">生成列表、文章时使用，例如news、tech等</div>
+				<div class="help-block">生成列表、文章时使用，例如news、bbs等</div>
 			</div>
 		</div>
 
@@ -93,12 +93,7 @@
 		</div>
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
-
-	<div>
-
-	</div>
-
-
+	
 	<script type="text/javascript"> app.load('article/category/save-modal') </script>
 {% endblock %}
 

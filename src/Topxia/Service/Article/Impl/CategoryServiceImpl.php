@@ -202,7 +202,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $fields;
     }
 
-    public function findCategoriesCountByParentId($parentId){
+    public function findCategoriesCountByParentId($parentId)
+    {
        return $this->getCategoryDao()->findCategoriesCountByParentId($parentId);
     }
 
