@@ -67,9 +67,10 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode'));
+        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode','promoCode','mTookeen'));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
+
         if (empty($orderUser)) {
             throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
         }
@@ -84,7 +85,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (!empty($order['couponCode'])){
             $couponInfo = $this->getCouponService()->checkCouponUseable($order['couponCode'], $order['targetType'], $order['targetId'], $order['amount']);
             if ($couponInfo['useable'] != 'yes') {
-                throw $this->createServiceException("优惠码不可用");            
+                throw $this->createServiceException("优惠码不可用");
             }
 
             $order['couponDiscount'] = $order['amount'] - $couponInfo['afterAmount'];
@@ -93,10 +94,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order['coupon'] = empty($order['couponCode']) ? '' : $order['couponCode'];
         unset($order['couponCode']);
 
-        $order['amount'] = number_format($order['amount'], 2, '.', '');
-        if (intval($order['amount']*100) == 0) {
-            $order['payment'] = 'none';
-        }
 
         $order['status'] = 'created';
         $order['createdTime'] = time();
@@ -111,18 +108,29 @@ class OrderServiceImpl extends BaseService implements OrderService
             if("success" == $result){
 
                 if($offsale['reduceType']=='ratio'){
-                    $order['price']=  $order['price']-$offsale['reducePrice']*$order['price']/100;
+                    $discount = $offsale['reducePrice']*$order['amount']/100;
+                    $order['promoDiscount'] = $discount;
+                    $order['amount']=  $order['amount']-$discount;
                 }else{
-                    $order['price']=  $order['price']-$offsale['reducePrice'];
+                    $discount = $offsale['reducePrice'];
+                    $order['promoDiscount'] = $discount;
+                    $order['amount']=  $order['amount']-$discount;
                 }
-
                 
             }else{
-                 throw $this->createServiceException('创建订单失败'.$result);
+                 throw $this->createServiceException('优惠码不可用'.$result);
             }
-           
 
         }
+
+        $order['amount'] = number_format($order['amount'], 2, '.', '');
+        
+        if (intval($order['amount']*100) == 0) {
+            $order['payment'] = 'none';
+        }
+
+        $order['prodType'] =  $order['targetType'];
+        $order['prodId'] =  $order['targetId'];
 
 
 
@@ -184,6 +192,9 @@ class OrderServiceImpl extends BaseService implements OrderService
                     'status' => 'paid',
                     'paidTime' => $payData['paidTime'],
                 ));
+
+                $this->getCommissionService()->confirmCommission($order);
+
                 $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
                 $success = true;
 

@@ -54,6 +54,8 @@ class CourseOrderController extends OrderController
             'job'
         ));
 
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);     
+
 
         $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
 
@@ -64,11 +66,7 @@ class CourseOrderController extends OrderController
              $formData['mTookeen'] = $mTookeenCookie;
 
         }
-
-        
-        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);     
-
-
+       
         if (!ArrayToolkit::requireds($formData, array('courseId', 'payment'))) {
             return $this->createMessageResponse('error', '订单数据缺失，创建课程订单失败。');
         }
@@ -92,6 +90,10 @@ class CourseOrderController extends OrderController
             $order['couponCode'] = $formData['coupon'];
         }
 
+        if (!empty($formData['promoCode'])) {
+            $order['promoCode'] = $formData['promoCode'];
+        }
+
         if (!empty($formData['note'])) {
             $order['data'] = array('note' => $formData['note']);
         }
@@ -101,6 +103,7 @@ class CourseOrderController extends OrderController
 
 
         if (intval($order['amount']*100) > 0) {
+
             $payRequestParams = array(
                 'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
                 'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
@@ -148,6 +151,9 @@ class CourseOrderController extends OrderController
 
             if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+                $controller->getCourseService()->incomeCourse($order['targetId'],'income',$order['amount']);
+
             }
 
             return $controller->generateUrl('course_show', array('id' => $order['targetId']));
@@ -172,6 +178,8 @@ class CourseOrderController extends OrderController
 
             if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                $controller->getCourseService()->incomeCourse($order['targetId'],'income',$order['amount']);
+
             }
 
             return ;

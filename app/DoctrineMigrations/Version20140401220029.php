@@ -26,11 +26,11 @@ class Version20140401220029 extends AbstractMigration
             ALTER TABLE  `course_member` ADD  `levelId` INT NOT NULL COMMENT  '用户以会员的方式加入课程学员时的会员等级ID' AFTER  `deadline`;
             ALTER TABLE  `course_member` CHANGE  `levelId`  `levelId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '用户以会员的方式加入课程学员时的会员ID';
 
-            TRUNCATE `orders`;
-            TRUNCATE `order_log`;
-            TRUNCATE `order_refund`;
-
         ");
+
+        // TRUNCATE `orders`;
+        // TRUNCATE `order_log`;
+        // TRUNCATE `order_refund`;
     }
 
     public function down(Schema $schema)
