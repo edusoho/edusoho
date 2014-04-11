@@ -85,7 +85,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->from(self::TABLENAME, 'course')
             ->andWhere('price >= :price')
             ->andWhere('status = :status')
-            ->andWhere('price = :price')
+            //->andWhere('price = :price')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
