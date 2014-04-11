@@ -70,8 +70,8 @@ class FileServiceImpl extends BaseService implements FileService
 		$record['userId'] = $user['id'];
 		$record['groupId'] = $group['id'];
 		// @todo fix it.
-		$record['mime'] = '';
-		// $record['mime'] = $file->getMimeType();
+		// $record['mime'] = '';
+		$record['mime'] = $file->getMimeType();
 		$record['size'] = $file->getSize();
 		$record['uri'] = $this->generateUri($group, $file);
 		$record['createdTime'] = time();
@@ -161,7 +161,6 @@ class FileServiceImpl extends BaseService implements FileService
 	private function saveFile($file, $uri)
 	{
 		$parsed = $this->parseFileUri($uri);
-
 		if ($parsed['access'] == 'public') {
 			$directory = $this->getKernel()->getParameter('topxia.upload.public_directory');
 		} else {

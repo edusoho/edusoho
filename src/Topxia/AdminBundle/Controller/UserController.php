@@ -167,10 +167,8 @@ class UserController extends BaseController
         $form = $this->createFormBuilder()
             ->add('avatar', 'file')
             ->getForm();
-
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
-
             if ($form->isValid()) {
                 $data = $form->getData();
                 $file = $data['avatar'];
@@ -258,7 +256,6 @@ class UserController extends BaseController
             $filename = str_replace('!', '.', $filename);
             $filename = str_replace(array('..' , '/', '\\'), '', $filename);
             $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
             $this->getUserService()->changeAvatar($id, realpath($pictureFilePath), $options);
 
             // return $this->redirect($this->generateUrl('admin_user'));

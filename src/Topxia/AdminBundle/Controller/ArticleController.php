@@ -5,9 +5,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\WebBundle\DataDict\ArticleStatusDict;
 use Topxia\WebBundle\DataDict\ArticleTypeDict;
 use Topxia\Service\Article\Type\ArticleTypeFactory;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class ArticleController extends BaseController
 {
@@ -160,16 +165,16 @@ class ArticleController extends BaseController
 
         // $user = $this->getUserService()->getUser($id);
 
-        $form = $this->createFormBuilder()
-            ->add('avatar', 'file')
-            ->getForm();
-
+        // $form = $this->createFormBuilder()
+        //     ->add('articel', 'file')
+        //     ->getForm();
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            // $form->bind($request);
 
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $file = $data['avatar'];
+            // if ($form->isValid()) {
+            $file = $request->files->get('picture');
+                // $data = $form->getData();
+                // $file = $data['avatar'];
 
                 if (!FileToolkit::isImageFile($file)) {
                     return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
@@ -180,23 +185,21 @@ class ArticleController extends BaseController
                 $ext = $file->getClientOriginalExtension();
                 $filename = $filenamePrefix . $hash . '.' . $ext;
 
-                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/aticle';
+                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
                 $file = $file->move($directory, $filename);
 
                 $fileName = str_replace('.', '!', $file->getFilename());
 
-                $avatarData = $this->avatar_2($id, $fileName);
-
-                return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
-                    'user' => $user,
+                $avatarData = $this->avatar_2($fileName);
+                return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
+                    // 'user' => $user,
                     'filename' => $fileName,
                     'pictureUrl' => $avatarData['pictureUrl'],
                     'naturalSize' => $avatarData['naturalSize'],
                     'scaledSize' => $avatarData['scaledSize']
                 ));
-            }
+            // }
         }
-
         // $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
         // if ($hasPartnerAuth) {
         //     $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
@@ -205,18 +208,17 @@ class ArticleController extends BaseController
         // }
 
         return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
-            'form' => $form->createView(),
-            // 'partnerAvatar' => $partnerAvatar,
+            // 'form' => $form->createView(),
+            'pictureUrl' => "",
         ));
     }
 
 
-    private function avatar_2 ($id, $filename)
+    private function avatar_2 ($filename)
     {
         $filename = str_replace('!', '.', $filename);
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/article/' . $filename;
-
+        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
         try {
             $imagine = new Imagine();
             $image = $imagine->open($pictureFilePath);
@@ -227,13 +229,33 @@ class ArticleController extends BaseController
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/article/' . $filename;
-
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
         return array(
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
             'pictureUrl' => $pictureUrl
         );
+    }
+
+    public function pictureCropAction(Request $request)
+    {
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+        if($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $filename = $request->query->get('filename');
+
+            $filename = str_replace('!', '.', $filename);
+            $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+            $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+            // $this->getUserService()->changeAvatar($id, realpath($pictureFilePath), $options);
+            $res = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
+
+            return $this->createJsonResponse(true);
+        }
+
+        
     }
 
     public function pictureUploadAction(Request $request)

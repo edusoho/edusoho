@@ -28,6 +28,7 @@ define(function(require, exports, module) {
             $form.ajaxSubmit({
                 clearForm: true,
                 success: function(html){
+                    console.log(html);
                     $('#modal').html(html);
                 }
             });

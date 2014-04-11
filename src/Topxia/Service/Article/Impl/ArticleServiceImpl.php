@@ -6,6 +6,12 @@ use Topxia\Service\Article\ArticleService;
 use Topxia\Service\Article\Type\ArticleTypeFactory;
 use Topxia\Common\ArrayToolkit;
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+use Symfony\Component\HttpFoundation\File\File;
+
 /**
  * @todo 序列化／反序列化的操作移动到dao,　参考QuestionDaoImpl
  */
@@ -153,6 +159,44 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $Article ? false : true;
 	}
 
+	public function changeIndexPicture($filePath, $options)
+	{
+        $pathinfo = pathinfo($filePath);
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($filePath);
+        $largeImage = $rawImage->copy();
+        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        $largeImage->resize(new Box(200, 200));
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
+        $largeImage->save($largeFilePath, array('quality' => 90));
+        $largeFileRecord = $this->getFileService()->uploadFile('article', new File($largeFilePath));
+
+        $largeImage->resize(new Box(120, 120));
+        $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
+        $largeImage->save($mediumFilePath, array('quality' => 90));
+        $mediumFileRecord = $this->getFileService()->uploadFile('article', new File($mediumFilePath));
+        $largeImage->resize(new Box(48, 48));
+        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
+        $largeImage->save($smallFilePath, array('quality' => 90));
+        $smallFileRecord = $this->getFileService()->uploadFile('article', new File($smallFilePath));
+
+        @unlink($filePath);
+
+        // $oldAvatars = array(
+        //     'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
+        //     'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
+        //     'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
+        // );
+
+        // array_map(function($oldAvatar){
+        //     if (!empty($oldAvatar)) {
+        //         @unlink($oldAvatar);
+        //     }
+        // }, $oldAvatars);
+
+        return true;
+	}
+
 	private function getArticleDao()
 	{
 		return $this->createDao('Article.ArticleDao');
@@ -168,8 +212,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $this->createService('System.LogService');
     }
 
+    private function getFileService()
+    {
+        return $this->createService('Content.FileService');
+    }
 }
-
 
 
 class ArticleSerialize
