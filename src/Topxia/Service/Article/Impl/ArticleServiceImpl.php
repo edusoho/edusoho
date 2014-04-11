@@ -84,6 +84,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$edit_article['createdTime'] = time();
 		$edit_article['updated'] = time();
 		$edit_article['userId'] = $this->getCurrentUser()->id;
+		$edit_article['picture'] = $article['picture'];
 
 		$article = $this->getArticleDao()->updateArticle($id,$edit_article);
 
