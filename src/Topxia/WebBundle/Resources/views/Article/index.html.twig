@@ -6,27 +6,28 @@
 
   <div class="row row-8-4 article-row" style="margin-top:20px;">
     <div class="col-md-8">
-      <ul class="nav nav-tabs" style="margin-bottom:20px;">
-        <li class="active"><a href="#">资讯频道首页</a></li>
+      <ul class="nav nav-pills" style="margin-bottom:20px;">
+        <li class="active"><a href="{{ path('article_show') }}">资讯频道首页</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
             <li><a href="#">{{ category.name }}</a></li>
           {% endif %}
         {% endfor %}
       </ul>
-
-        <div class="homepage-feature homepage-feature-slides mbl">
-          <div class="cycle-pager"></div>
-            {% for featuredArticle in featuredArticles %}
-                <img style="width:100%;" src={{ featuredArticle.img|default(asset("/assets/img/default/course-large.png?2.5")) }}  >
-            {% endfor %}
-        </div>
+      {% verbatim %}
+      <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
+      {% endverbatim %}
+        <div class="cycle-overlay"></div>
+          {% for featuredArticle in featuredArticles %}
+              <a href="#" data-cycle-title="{{ featuredArticle.title|plain_text(25) }}" ><img  src={{ featuredArticle.img|default(asset("/assets/img/default/course-large.png?2.5")) }}  ></a>
+          {% endfor %}
+      </div>
 
       <ul class="article-wide-list">
         {% for article in latestArticles %}
           {% set category = article.category %}
         <li class="media article-item clearfix">
-          <div class="article-title">
+          <div class="article-title text-muted">
             <div class="pull-left">
               <span><a href="#">{{ category.name }} </a> / {{ category.code }}
               </span>

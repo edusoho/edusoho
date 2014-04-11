@@ -20,6 +20,7 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	margin-bottom: 20px;
 }
 .article-wide-list li {
 	margin-top: 20px;
@@ -39,11 +40,14 @@
 .article-content {
 	float: left;
 }
+
 .article-title {
 	height: 30px;
 }
+
 .article-title a {
 	color: #66bc4e;
+	font-size: 15px;
 }
 
 .published-time {
@@ -61,4 +65,24 @@
 	text-align: center;
 	float: left;
 	margin-right: 15px;
+}
+
+.homepage-feature .cycle-overlay {
+	text-align: center;
+	width: 100%;
+	z-index: 500;
+	position: absolute;
+	bottom: 0px;
+	overflow: hidden;
+	font-size: 20px;
+	background: black;
+	color: white;
+	padding: 15px;
+	opacity: .5;
+}
+
+.homepage-feature .cycle-overlay a {
+	display: block;
+	color: #fff;
+	text-decoration: none;
 }
