@@ -69,10 +69,15 @@ class ArticleController extends BaseController
 
 		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
+		$categoryChildrenIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
+
+		$categories = $this->getCategoryService()->findCategoriesByIds($categoryChildrenIds);
+
 		return $this->render('TopxiaWebBundle:Article:article-list.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'categoryCode' => $categoryCode,
-			'category' => $category
+			'category' => $category,
+			'categories' => $categories
 		));
 	}
 
