@@ -152,16 +152,100 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
     }
 
+    public function showUploadAction(Request $request)
+    {
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        // $user = $this->getUserService()->getUser($id);
+
+        $form = $this->createFormBuilder()
+            ->add('avatar', 'file')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $file = $data['avatar'];
+
+                if (!FileToolkit::isImageFile($file)) {
+                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+                }
+
+                $filenamePrefix = "article_";
+                $hash = substr(md5($filenamePrefix . time()), -8);
+                $ext = $file->getClientOriginalExtension();
+                $filename = $filenamePrefix . $hash . '.' . $ext;
+
+                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/aticle';
+                $file = $file->move($directory, $filename);
+
+                $fileName = str_replace('.', '!', $file->getFilename());
+
+                $avatarData = $this->avatar_2($id, $fileName);
+
+                return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
+                    'user' => $user,
+                    'filename' => $fileName,
+                    'pictureUrl' => $avatarData['pictureUrl'],
+                    'naturalSize' => $avatarData['naturalSize'],
+                    'scaledSize' => $avatarData['scaledSize']
+                ));
+            }
+        }
+
+        // $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
+        // if ($hasPartnerAuth) {
+        //     $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
+        // } else {
+        //     $partnerAvatar = null;
+        // }
+
+        return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
+            'form' => $form->createView(),
+            // 'partnerAvatar' => $partnerAvatar,
+        ));
+    }
+
+
+    private function avatar_2 ($id, $filename)
+    {
+        $filename = str_replace('!', '.', $filename);
+        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/article/' . $filename;
+
+        try {
+            $imagine = new Imagine();
+            $image = $imagine->open($pictureFilePath);
+        } catch (\Exception $e) {
+            @unlink($pictureFilePath);
+            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+        }
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen(270)->heighten(270);
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/article/' . $filename;
+
+        return array(
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+            'pictureUrl' => $pictureUrl
+        );
+    }
+
     public function pictureUploadAction(Request $request)
     {
         $file = $request->files->get('picture');
-     
+
         $filename = 'article_' . time() .mt_rand(0,1000000).".". $file->getClientOriginalExtension();
 
-        $picture['filename'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/aticle/{$filename}";
+        $picture['filename'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/article/{$filename}";
         $picture['filename'] = ltrim($picture['filename'], '/');
 
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/aticle";
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/article";
         $file = $file->move($directory, $filename);
 
         $this->getLogService()->info('system', 'article_picture', "aticle上传图片", array('article_picture' => $picture['filename']));

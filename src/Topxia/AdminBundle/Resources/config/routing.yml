@@ -525,6 +525,10 @@ admin_aticle_picture_upload:
     pattern:  /aticle/picture/upload
     defaults: { _controller: TopxiaAdminBundle:Article:pictureUpload }
 
+admin_aticle_show_upload:
+    pattern:  /aticle/show/upload
+    defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
+
 admin_article_category_checkcode:
     pattern:  /article/category/checkcode
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkCode }
