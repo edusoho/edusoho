@@ -502,12 +502,16 @@ admin_app_package_update_begin_upgrade:
     methods: [POST]
 
 admin_category:
-    pattern:  /category
+    pattern: /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
 
 admin_category_create:
-    pattern:  /category/create
+    pattern: /category/create
     defaults: { _controller: TopxiaAdminBundle:Category:create }
+
+admin_article_setting:
+    pattern: /article/setting
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:setting }
 
 admin_article_category:
     pattern: /article/category

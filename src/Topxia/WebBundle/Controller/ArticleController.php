@@ -9,7 +9,10 @@ class ArticleController extends BaseController
 {
 
 	public function indexAction(Request $request)
-	{
+	{	
+
+		$articleSetting = $this->getSettingService()->get('articleSetting', array());
+
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$conditions = array(
@@ -59,12 +62,15 @@ class ArticleController extends BaseController
 			'latestArticles' => $latestArticles,
 			'hottestArticles' => $hottestArticles,
 			'featuredArticles' => $featuredArticles,
-			'paginator' => $paginator
+			'paginator' => $paginator,
+			'articleSetting' => $articleSetting
 		));
 	}
 
 	public function categoryAction(Request $request, $categoryCode)
-	{
+	{	
+		$articleSetting = $this->getSettingService()->get('articleSetting', array());
+
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
@@ -77,7 +83,8 @@ class ArticleController extends BaseController
 			'categoryTree' => $categoryTree,
 			'categoryCode' => $categoryCode,
 			'category' => $category,
-			'categories' => $categories
+			'categories' => $categories,
+			'articleSetting' => $articleSetting
 		));
 	}
 
@@ -89,6 +96,11 @@ class ArticleController extends BaseController
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

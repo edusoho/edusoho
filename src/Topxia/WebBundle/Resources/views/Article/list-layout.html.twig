@@ -7,7 +7,7 @@
 		    <div class="col-md-9">
 				{% block headerbar %}
 			      	<ul class="nav nav-pills" style="margin-bottom:20px;">
-				        <li><a href="{{ path('article_show') }}">资讯频道首页</a></li>
+				        <li><a href="{{ path('article_show') }}">{{ articleSetting.name }}首页</a></li>
 				        {% for category in categoryTree %}
 				          {% if category.parentId == 0 %}
 				            <li class="{% if menu == category.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
