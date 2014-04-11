@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block content %}
+
+	<div class="es-row-wrap container-gap">
+		<div class="row row-8-4 article-row" style="margin-top:20px;">
+		    <div class="col-md-8">
+				{% block headerbar %}
+			      	<ul class="nav nav-pills" style="margin-bottom:20px;">
+				        <li><a href="{{ path('article_show') }}">资讯频道首页</a></li>
+				        {% for category in categoryTree %}
+				          {% if category.parentId == 0 %}
+				            <li class="{% if menu == category.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
+				          {% endif %}
+				        {% endfor %}
+			      	</ul>
+				{% endblock %}
+				{% block main %}{% endblock %}
+		    </div>
+		    <div class="col-md-4">
+		    	{% block sub %}{% endblock %}
+		    </div>
+		</div>
+	</div>
+
+{% endblock %}

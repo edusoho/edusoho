@@ -20,7 +20,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticleCount($conditions),
-            10
+            5
         );
 
 		$latestArticles = $this->getArticleService()->searchArticles(
@@ -58,98 +58,23 @@ class ArticleController extends BaseController
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
 			'hottestArticles' => $hottestArticles,
-			'featuredArticles' => $featuredArticles
+			'featuredArticles' => $featuredArticles,
+			'paginator' => $paginator
 		));
 	}
 
-	/*public function articleListAction(Request $request)
+	public function categoryAction(Request $request, $categoryCode)
 	{
-		$conditions = array(
-			'type' => 'article',
-			'status' => 'published',
-			'promoted' => '1',
-			'categoryId' => $request->query->get('categoryId'),
-		);
-		$conditions = array_filter($conditions);
+		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getContentService()->searchContentCount($conditions),
-            10
-        );
+		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
-		$contents = $this->getContentService()->searchContents(
-            $conditions, 'latest',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-		);
-
-        $categoryIds = ArrayToolkit::column($contents, 'categoryId');
-        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
-        $group = $this->getCategoryService()->getGroupByCode('default');
-        $categoryTree = $this->getCategoryService()->getCategoryTree($group['id']);
-
-		return $this->render('TopxiaWebBundle:Content:list.html.twig', array(
-			'type' => 'article',
-			'contents' => $contents,
-			'categories' => $categories,
+		return $this->render('TopxiaWebBundle:Article:article-list.html.twig', array(
 			'categoryTree' => $categoryTree,
-			'paginator' => $paginator,
+			'categoryCode' => $categoryCode,
+			'category' => $category
 		));
 	}
-
-	public function activityShowAction(Request $request, $alias)
-	{
-		$content = $this->getContentByAlias('activity', $alias);
-		return $this->render('TopxiaWebBundle:Content:show.html.twig', array(
-			'type' => 'activity',
-			'content' => $content,
-		));
-	}
-
-	public function activityListAction(Request $request)
-	{
-		return $this->render('TopxiaWebBundle:Content:list.html.twig', array(
-			'type' => 'activity',
-		));
-	}
-
-	public function pageShowAction(Request $request, $alias)
-	{
-		$content = $this->getContentByAlias('page', $alias);
-
-		if ($content['template'] == 'default') {
-			$template = 'TopxiaWebBundle:Content:page-show.html.twig';
-		} else {
-			$alias = $content['alias'] ? : $content['id'];
-			$template = "@customize/content/page/{$alias}/index.html.twig";
-		}
-
-		return $this->render($template, array('content' => $content));
-	}
-
-	public function pageListAction(Request $request)
-	{
-		return $this->render('TopxiaWebBundle:Content:list.html.twig', array(
-			'type' => 'page',
-		));
-	}
-
-	private function getContentByAlias($type, $alias)
-	{
-		if (ctype_digit($alias)) {
-			$content = $this->getContentService()->getContent($alias);
-		} else {
-			$content = $this->getContentService()->getContentByAlias($alias);
-		}
-
-		if (empty($content) or ($content['type'] != $type)) {
-			throw $this->createNotFoundException();
-		}
-
-		return $content;
-	}*/
 
     private function getCategoryService()
     {

@@ -737,8 +737,6 @@ settings_binds_bind_callback:
     pattern: /settings/bind/{type}/callback
     defaults: { _controller: TopxiaWebBundle:Settings:bindCallback }
 
-
-
 settings_setup:
     pattern: /settings/setup
     defaults: { _controller: TopxiaWebBundle:Settings:setup }
@@ -973,6 +971,10 @@ message_delete:
 article_show:
     pattern: /article
     defaults: { _controller: TopxiaWebBundle:Article:index }
+
+article_category:
+    pattern: /article/{categoryCode}
+    defaults: { _controller: TopxiaWebBundle:Article:category }
 
 teacher:
     pattern: /teacher

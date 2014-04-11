@@ -1,19 +1,23 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
+{% block title %}资讯频道首页 - {{ parent() }}{% endblock %}
+
 {% block content %}
 
 <div class="es-row-wrap container-gap">
 
   <div class="row row-8-4 article-row" style="margin-top:20px;">
     <div class="col-md-8">
+
       <ul class="nav nav-pills" style="margin-bottom:20px;">
         <li class="active"><a href="{{ path('article_show') }}">资讯频道首页</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
-            <li><a href="#">{{ category.name }}</a></li>
+            <li><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
           {% endif %}
         {% endfor %}
       </ul>
+
       {% verbatim %}
       <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
       {% endverbatim %}
@@ -45,6 +49,9 @@
         </li>
         {% endfor %}
       </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
     </div>
     <div class="col-md-4">
       <div class="es-box">
@@ -84,7 +91,7 @@
             {% for key,hottestArticle in hottestArticles %}
               <li class="media">
                 <span class="rank_num">{{ key+1 }}</span>
-                <div class="media-body">{{ hottestArticle.title|plain_text(30) }}</div>
+                <div class="media-body">{{ hottestArticle.title|plain_text(35) }}</div>
               </li>
             {% endfor %}
           </ul>
