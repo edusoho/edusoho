@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
-{% block title %}资讯频道首页 - {{ parent() }}{% endblock %}
+{% block title %}{{ articleSetting.name }}首页 - {{ parent() }}{% endblock %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
     <div class="col-md-8">
 
       <ul class="nav nav-pills" style="margin-bottom:20px;">
-        <li class="active"><a href="{{ path('article_show') }}">资讯频道首页</a></li>
+        <li class="active"><a href="{{ path('article_show') }}">{{ articleSetting.name }}首页</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
             <li><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
