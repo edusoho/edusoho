@@ -14,6 +14,9 @@ define(function(require, exports, module) {
             $modal = $form.parents('.modal');
             var validator = _initValidator($form, $modal);
             var $editor = _initEditorFields($form, validator);
+
+
+
             $('#article-tags').select2({
             
                 ajax: {
@@ -85,10 +88,25 @@ define(function(require, exports, module) {
             }
         });
 
+     
+    
+
+
         var validator = new Validator({
             element: '#article-form',
             failSilently: true,
-            triggerType: 'change'
+            triggerType: 'change',
+            onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return false;
+                }
+                // $.post($form.data('url'), $form.serialize(), function(html) {
+                //     Notify.success('操作成功');
+                // }).error(function(){
+                //     Notify.danger('操作失败');
+                // });
+
+            }
         });
 
         validator.addItem({
@@ -141,6 +159,8 @@ define(function(require, exports, module) {
                         window.location.reload();
                     }
                 });
+
+
             }
             
         });

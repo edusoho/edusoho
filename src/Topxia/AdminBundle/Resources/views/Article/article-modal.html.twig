@@ -78,7 +78,7 @@
 				      <label for="article-tagIds">TAG标签</label>
 			  </div>
 			  <div class="col-md-7 controls">
-			  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="" data-match-url="{{ path('tag_match') }}">
+			  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
 			  	<div class="help-block" style="display:none;"></div>
 			  </div>
 			</div>
@@ -130,7 +130,7 @@
 	</div>
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	 <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">保存</button>
+    <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">保存</button>
 </form>
 
 {% endblock %}

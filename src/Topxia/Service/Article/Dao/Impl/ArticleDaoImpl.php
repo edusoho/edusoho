@@ -8,6 +8,10 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 {
 	protected $table = 'article';
 
+	private $serializeFields = array(
+            'tagIds' => 'json',
+    );
+
 	public function getArticle($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -38,9 +42,10 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $builder->execute()->fetchColumn(0);
 	}
 
-	public function addArticle($Article)
+	public function addArticle($article)
 	{
-        $affected = $this->getConnection()->insert($this->table, $Article);
+		// $fields = $this->createSerializer()->serialize($article, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->table, $article);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Article error.');
         }

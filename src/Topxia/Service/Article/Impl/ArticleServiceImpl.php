@@ -50,14 +50,22 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 	public function createArticle($article)
 	{
+		if(empty($article)){
+			$this->createServiceException("文章内容为空，创建文章失败！");
+		}
+
+		$tagNames = array_filter(explode(',', $article['tags']));
+        $tags = $this->getTagService()->findTagsByNames($tagNames);
+        $tagIdsArray = ArrayToolkit::column($tags, 'id');
+        $article['tagIds'] = implode(',', $tagIdsArray);
+
+        $new_article = array();
 		$new_article['title'] = $article['title'];
 		$new_article['body'] = $article['richeditorBody'];
-
 		$new_article['featured'] = empty($article['featured']) ? 0 : 1;
 		$new_article['promoted'] = empty($article['promoted']) ? 0 : 1;
 		$new_article['sticky'] = empty($article['sticky']) ? 0 : 1;
-
-		$new_article['tagIds'] = $article['tags'];
+		$new_article['tagIds'] = $article['tagIds'];
 		$new_article['categoryId'] = $article['categoryId'];
 		$new_article['source'] = $article['source'];
 		$new_article['sourceUrl'] = $article['sourceUrl'];
@@ -75,14 +83,22 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 	public function updateArticle($id,$article)
 	{
+		if(empty($this->getArticle($id))){
+			throw $this->createServiceException("文章不存在，操作失败。");
+		}
+		
+		$tagNames = array_filter(explode(',', $article['tags']));
+        $tags = $this->getTagService()->findTagsByNames($tagNames);
+        $tagIdsArray = ArrayToolkit::column($tags, 'id');
+        $article['tagIds'] = implode(',', $tagIdsArray);
+
+        $edit_article = array();
 		$edit_article['title'] = $article['title'];
 		$edit_article['body'] = $article['richeditorBody'];
-
 		$edit_article['featured'] = empty($article['featured']) ? 0 : 1;
 		$edit_article['promoted'] = empty($article['promoted']) ? 0 : 1;
 		$edit_article['sticky'] = empty($article['sticky']) ? 0 : 1;
-
-		$edit_article['tagIds'] = $article['tags'];
+		$edit_article['tagIds'] = $article['tagIds'];
 		$edit_article['categoryId'] = $article['categoryId'];
 		$edit_article['source'] = $article['source'];
 		$edit_article['sourceUrl'] = $article['sourceUrl'];
@@ -215,6 +231,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     private function getFileService()
     {
         return $this->createService('Content.FileService');
+    }
+
+    private function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 }
 

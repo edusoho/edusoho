@@ -9,11 +9,11 @@ define(function(require, exports, module) {
             element: '#aticel-picture-form'
         });
 
-        validator.addItem({
-            element: '[name="picture"]',
-            required: true,
-            requiredErrorMessage: '请选择要上传的头像文件。'
-        });
+        // validator.addItem({
+        //     element: '[name="picture"]',
+        //     required: true,
+        //     requiredErrorMessage: '请选择要上传的头像文件。'
+        // });
 
         // $('.use-partner-avatar').on('click', function(){
         //     var goto = $(this).data('goto');
@@ -28,7 +28,6 @@ define(function(require, exports, module) {
 
             $form.ajaxSubmit({
                 clearForm: true,
-                 name: 'picture',
                 success: function(html){
                     $('#modal').html(html);
                 }

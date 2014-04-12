@@ -69,8 +69,9 @@ class ArticleController extends BaseController
         $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
         $categoryTree = $this->makeCategoryOptions('all');
 
-        if ($request->getMethod() == 'POST') {
+        $tagNamesStr = empty($article['tagIds'][0]) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds'][0]);
 
+        if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
 
@@ -78,14 +79,16 @@ class ArticleController extends BaseController
                 'article' => $article,
                 'categoryTree'  => $categoryTree,
                 'category' => $this->getCategoryService()->getCategory($article['categoryId']),
-                'tags' => ArrayToolkit::column($tags, 'name')
+                'tags' => ArrayToolkit::column($tags, 'name'),
+                'tagNamesStr' => $formData['tags']
             ));
         }
      
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'article' => $article,
             'categoryTree'  => $categoryTree,
-            'tags' => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
+            'tagNamesStr' => $tagNamesStr
         ));
 
     }
@@ -170,12 +173,10 @@ class ArticleController extends BaseController
         //     ->getForm();
         if ($request->getMethod() == 'POST') {
             // $form->bind($request);
-
             // if ($form->isValid()) {
             $file = $request->files->get('picture');
                 // $data = $form->getData();
                 // $file = $data['avatar'];
-
                 if (!FileToolkit::isImageFile($file)) {
                     return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
                 }
@@ -191,7 +192,7 @@ class ArticleController extends BaseController
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 $avatarData = $this->avatar_2($fileName);
-                return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
+                return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
                     // 'user' => $user,
                     'filename' => $fileName,
                     'pictureUrl' => $avatarData['pictureUrl'],
@@ -213,6 +214,14 @@ class ArticleController extends BaseController
         ));
     }
 
+    private function getTagNamesByTagIdsStr($tagIdsStr)
+    {
+        $tagIds = explode(",", $tagIdsStr);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
+        $tagNamesArray = ArrayToolkit::column($tags, 'name');
+        $tagNamesStr = implode(",", $tagNamesArray);
+        return $tagNamesStr;
+    }
 
     private function avatar_2 ($filename)
     {
