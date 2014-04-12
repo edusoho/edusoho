@@ -20,7 +20,6 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{
         $conditions = $request->query->all();
-
         $paginator = new Paginator(
             $request,
             $this->getArticleService()->searchArticleCount($conditions),
@@ -74,14 +73,13 @@ class ArticleController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
-
-            return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
-                'article' => $article,
-                'categoryTree'  => $categoryTree,
-                'category' => $this->getCategoryService()->getCategory($article['categoryId']),
-                'tags' => ArrayToolkit::column($tags, 'name'),
-                'tagNamesStr' => $formData['tags']
-            ));
+            // return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
+            //     'article' => $article,
+            //     'categoryTree'  => $categoryTree,
+            //     'category' => $this->getCategoryService()->getCategory($article['categoryId']),
+            //     'tags' => ArrayToolkit::column($tags, 'name'),
+            //     'tagNamesStr' => $formData['tags']
+            // ));
         }
      
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
@@ -91,6 +89,11 @@ class ArticleController extends BaseController
             'tagNamesStr' => $tagNamesStr
         ));
 
+    }
+
+    public function previewAction(Request $request,$id)
+    {
+        return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id));
     }
 
     public function updatePropertyAction(Request $request,$id,$property)
@@ -104,11 +107,6 @@ class ArticleController extends BaseController
         }
     }
    
-    public function previewAction(Request $request,$id)
-    {
-        echo "previewAction";exit();
-    }
-
     public function trashAction(Request $request, $id)
     {
         $this->getArticleService()->trashArticle($id);

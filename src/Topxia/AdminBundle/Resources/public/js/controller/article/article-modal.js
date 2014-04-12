@@ -100,12 +100,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                // $.post($form.data('url'), $form.serialize(), function(html) {
-                //     Notify.success('操作成功');
-                // }).error(function(){
-                //     Notify.danger('操作失败');
-                // });
-
+                 Notify.success('设置成功！');
             }
         });
 
@@ -152,13 +147,13 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                $form.ajaxSubmit({
-                    clearForm: true,
-                    success: function(data){
-                        $modal.modal('hide');
-                        window.location.reload();
-                    }
-                });
+                // $form.ajaxSubmit({
+                //     clearForm: true,
+                //     success: function(data){
+                //         $modal.modal('hide');
+                //         window.location.reload();
+                //     }
+                // });
 
 
             }

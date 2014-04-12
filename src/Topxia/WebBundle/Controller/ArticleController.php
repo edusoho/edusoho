@@ -88,6 +88,67 @@ class ArticleController extends BaseController
 		));
 	}
 
+	public function detailAction(Request $request,$id)
+	{
+		$articleSetting = $this->getSettingService()->get('articleSetting', array());
+
+		$categoryTree = $this->getCategoryService()->getCategoryTree();
+
+
+		$conditions = array(
+			'type' => 'article',
+			'status' => 'published'
+		);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getArticleService()->searchArticleCount($conditions),
+            5
+        );
+
+		$latestArticles = $this->getArticleService()->searchArticles(
+			$conditions, array('createdTime', 'DESC'), 
+			$paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+		);
+
+		$hottestArticles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
+		
+		foreach ($latestArticles as &$article) {
+			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
+
+		}
+
+		$featuredConditions = array(
+			'type' => 'article',
+			'status' => 'published',
+			'featured' => 1
+		);
+
+		$featuredArticles = $this->getArticleService()->searchArticles(
+			$featuredConditions,array('createdTime', 'DESC'),
+			0,3
+		);
+
+		foreach ($featuredArticles as &$featuredArticle) {
+			preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $featuredArticle['body'], $matches);
+			if (isset($matches[1])) {
+				$featuredArticle['img'] = $matches[1];
+			};
+		};
+			$article = $this->getArticleService()->getArticle($id);
+			
+		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
+			'categoryTree' => $categoryTree,
+			'latestArticles' => $latestArticles,
+			'hottestArticles' => $hottestArticles,
+			'featuredArticles' => $featuredArticles,
+			'paginator' => $paginator,
+			'articleSetting' => $articleSetting,
+			'article' => $article
+		));
+	}
+
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
