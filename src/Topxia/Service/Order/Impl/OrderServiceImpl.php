@@ -103,19 +103,13 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $offsale = $this->getOffSaleService()->getOffSaleByCode($order['promoCode']);
 
-            $result = $this->getOffSaleService()->isValiable($offsale,$course['id']);
+            $result = $this->getOffSaleService()->checkOffsaleUseable($order['promoCode'],$order['targetType'],$order['targetId'],$order['amount']);
 
-            if("success" == $result){
+            if("yes" == $result['useable']){
 
-                if($offsale['reduceType']=='ratio'){
-                    $discount = $offsale['reducePrice']*$order['amount']/100;
-                    $order['promoDiscount'] = $discount;
-                    $order['amount']=  $order['amount']-$discount;
-                }else{
-                    $discount = $offsale['reducePrice'];
-                    $order['promoDiscount'] = $discount;
-                    $order['amount']=  $order['amount']-$discount;
-                }
+                $discount = $result['discount'];
+                $order['promoDiscount'] = $discount;
+                $order['amount']=  $order['amount']-$discount;                
                 
             }else{
                  throw $this->createServiceException('优惠码不可用'.$result);
@@ -131,8 +125,6 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['prodType'] =  $order['targetType'];
         $order['prodId'] =  $order['targetId'];
-
-
 
         $order = $this->getOrderDao()->addOrder($order);
 

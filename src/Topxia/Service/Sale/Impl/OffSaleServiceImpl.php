@@ -272,6 +272,98 @@ class OffSaleServiceImpl extends BaseService implements OffSaleService
     }
 
 
+    public function checkOffsaleUseable($code, $prodType, $prodId, $amount)
+    {
+        $offsale = $this->getOffSaleByCode($code);
+
+
+        if (empty($offsale)) {
+            return array(
+                'useable' => 'no',
+                'message' => '优惠码不存在'                
+            );            
+        }
+
+
+        $afterAmount=0;
+        $discount=0;
+
+        if($offsale['reduceType']=='ratio'){
+            $discount = $offsale['reducePrice']*$amount/100;
+            $afterAmount=  $amount-$discount;
+
+        }else{
+            $discount = $offsale['reducePrice'];
+            $afterAmount=  $amount-$discount;
+        }
+
+        $afterAmount = $afterAmount < 0 ? 0.00 : $afterAmount;
+
+        $afterAmount = number_format($afterAmount, 2, '.', '');
+
+        $discount = number_format($discount, 2, '.', '');
+
+
+
+        if("无效" == $offsale['valid'] or "停用" == $offsale['valid']){
+            
+            return array(
+                'useable' => 'no',
+                'message' => '该优惠码已被停用'
+            );      
+
+        }
+
+        if("不可以" == $offsale['reuse']){
+
+            $orders = $this->getOrderService()->getOrdersByPromoCode($offsale['promoCode']);
+
+            foreach ($orders as $order) {
+                if ("paid"==$order['status']){
+                    return array(
+                        'useable' => 'no',
+                        'message' => '该优惠码已被使用'
+                    );      
+
+                }
+            }            
+                
+        }
+
+        if(empty($offsale['validTimeNum'])?false:time() > $offsale['validTimeNum']){
+            return array(
+                'useable' => 'no',
+                'message' => '该优惠码已过使用期限'
+            );   
+        }
+
+        if($offsale['prodId'] =='0'){
+
+            return array(
+                'useable' => 'yes',
+                'afterAmount' => $afterAmount,
+                'discount' => $discount,
+            );
+        }
+
+        if($offsale['prodId'] != $prodId or $offsale['prodType'] != $prodType){
+            return array(
+                'useable' => 'no',
+                'message' => '该优惠码不适用该商品'
+            );
+        }
+
+
+        
+
+        return array(
+            'useable' => 'yes',
+            'afterAmount' => $afterAmount,
+            'discount' => $discount,
+        );
+    }
+
+
 
     public function isValiable($offsale,$prodId){
 
