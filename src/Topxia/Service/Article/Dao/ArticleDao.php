@@ -8,6 +8,8 @@ interface ArticleDao
 
 	public function getArticleByAlias($alias);
 
+	public function getArticlesByCategoryId($CategoryId);
+
 	public function searchArticles($conditions, $orderBy, $start, $limit);
 
 	public function searchArticleCount($conditions);

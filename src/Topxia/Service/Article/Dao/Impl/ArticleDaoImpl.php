@@ -22,6 +22,12 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	{
         $sql = "SELECT * FROM {$this->table} WHERE alias = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($alias)) ? : null;
+	}	
+
+	public function getArticlesByCategoryId($CategoryId)
+	{
+        $sql = "SELECT * FROM {$this->table} WHERE CategoryId = ?";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
 	public function searchArticles($conditions, $orderBy, $start, $limit)

@@ -8,7 +8,7 @@
 
   <div class="row row-8-4 article-row" style="margin-top:20px;">
     <div class="col-md-8">
- <ul class="nav nav-pills" style="margin-bottom:20px;">
+      <ul class="nav nav-pills" style="margin-bottom:20px;">
         <li class="active"><a href="{{ path('article_show') }}">{{ articleSetting.name }}首页</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
@@ -16,18 +16,18 @@
           {% endif %}
         {% endfor %}
       </ul>
-标题：{{article.title}}
-   <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
-<br><br>
-内容：<br>{{article.body}}
-<br><br>
-   标签:{{article.tagIds}}<br>
-   分类:{{article.categoryId}}
-<br><br><hr>
-文章评论:<br><br>
-<textarea class="textarea" hidefocus="true" tabindex="" style="width: 100%; height: 172px;">xxx</textarea><br><br>
-<button class="btn-primary pull-right">发表评论</button>
-<br><br>
+      标题：{{article.title}}
+         <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>  <br><br>
+    
+      内容：<br>{{article.body}} <br><br>
+      标签:{{article.tagIds}}<br>
+      分类:{{article.categoryId}} <br><br>
+     <hr>
+      文章评论:<br><br>
+      <textarea class="textarea" hidefocus="true" tabindex="" style="width: 100%; height: 172px;">xxx</textarea><br><br>
+
+      <button class="btn-primary pull-right">发表评论</button>
+      <br><br>
         <ul class="media-list latest-review-list">
             <li class="media">
               <a href="/user/229" class="author-picture-link">
