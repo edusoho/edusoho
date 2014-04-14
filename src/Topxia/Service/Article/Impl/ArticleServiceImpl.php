@@ -220,10 +220,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         @unlink($filePath);
 
+        $webPath = realpath($this->getKernel()->getParameter('topxia.upload.public_directory')."/../");
+
 		return array(
 				'file_original_name'=>$file_original_name,
 				'file_original_name_new'=>$file_original_name_new,
-				'file_original_path'=>str_replace("/var/www/edusoho-dev/web", "", $file_original_directory)
+				'file_original_path'=>str_replace($webPath, "", $file_original_directory)
 			);
 	}
 
