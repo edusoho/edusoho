@@ -404,6 +404,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $errors;
     }
 
+    public function repairProblem($token)
+    {
+        return $this->createAppClient()->repairProblem($token);
+    }
+
     private function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
