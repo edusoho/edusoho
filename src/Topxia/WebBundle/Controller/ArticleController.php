@@ -88,12 +88,11 @@ class ArticleController extends BaseController
 		));
 	}
 
-	public function detailAction(Request $request,$id)
+	public function detailAction(Request $request,$id,$categoryCode)
 	{
 		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
-
 
 		$conditions = array(
 			'type' => 'article',
@@ -136,8 +135,13 @@ class ArticleController extends BaseController
 				$featuredArticle['img'] = $matches[1];
 			};
 		};
-			$article = $this->getArticleService()->getArticle($id);
-			
+		
+		$article = $this->getArticleService()->getArticle($id);
+
+		$tagIdsArray = explode(",", $article['tagIds']);
+
+		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
+
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
@@ -145,7 +149,8 @@ class ArticleController extends BaseController
 			'featuredArticles' => $featuredArticles,
 			'paginator' => $paginator,
 			'articleSetting' => $articleSetting,
-			'article' => $article
+			'article' => $article,
+			'tags' => $tags
 		));
 	}
 
@@ -163,5 +168,10 @@ class ArticleController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
+
+     private function getTagService()
+     {
+	    return $this->getServiceKernel()->createService('Taxonomy.TagService');
+     }
 
 }

@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
@@ -53,6 +54,7 @@ class ArticleController extends BaseController
         if($request->getMethod() == 'POST'){
             $content = $request->request->all();
             $article = $this->getArticleService()->createArticle($content);
+            return $this->forward('TopxiaAdminBundle:Article:index');
         }
         
         $categoryTree = $this->makeCategoryOptions('all');
@@ -73,13 +75,7 @@ class ArticleController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
-            // return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
-            //     'article' => $article,
-            //     'categoryTree'  => $categoryTree,
-            //     'category' => $this->getCategoryService()->getCategory($article['categoryId']),
-            //     'tags' => ArrayToolkit::column($tags, 'name'),
-            //     'tagNamesStr' => $formData['tags']
-            // ));
+            return $this->forward('TopxiaAdminBundle:Article:index');
         }
      
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
@@ -91,9 +87,9 @@ class ArticleController extends BaseController
 
     }
 
-    public function previewAction(Request $request,$id)
+    public function previewAction(Request $request,$id,$categoryCode)
     {
-        return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id));
+        return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id,'categoryCode'=>$categoryCode));
     }
 
     public function updatePropertyAction(Request $request,$id,$property)
@@ -185,7 +181,19 @@ class ArticleController extends BaseController
                 $filename = $filenamePrefix . $hash . '.' . $ext;
 
                 $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+
+
+
+
                 $file = $file->move($directory, $filename);
+
+
+ // $new_file_name = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+ // $new_file = new File($new_file_name);
+
+ // $file_res = $new_file->move($directory, "xxx.jpg");
+ // var_dump($file_res);
+ // exit();
 
                 $fileName = str_replace('.', '!', $file->getFilename());
 
@@ -256,10 +264,10 @@ class ArticleController extends BaseController
             $filename = str_replace('!', '.', $filename);
             $filename = str_replace(array('..' , '/', '\\'), '', $filename);
             $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-            // $this->getUserService()->changeAvatar($id, realpath($pictureFilePath), $options);
-            $res = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
+            $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
 
-            return $this->createJsonResponse(true);
+            // return $this->createJsonResponse(true);
+            return new Response(json_encode($response));
         }
 
         

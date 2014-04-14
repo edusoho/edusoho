@@ -106,10 +106,10 @@
 				        <label for="article-sourceUrl">选择图片</label>
 				    </div>
 				    <div class="col-md-7 controls">
-				    <div id="aticle-picture-container">{% if article %}<img src="{{article.picture |default()}}" class="img-rounded" style="width: 140px; height: 140px;">{% endif %}</div>
+				    <div id="aticle-picture-container"><img src="{{article.picture |default()}}" style="width: 230px; height: 125px;" id="article-pic-preview"></div>
 				   {#   <button class="btn btn-default btn-sm" id="article-pic-upload" type="button" data-url="{{ path('admin_aticle_picture_upload') }}">上传</button> #}
-				   <a href="#modal" data-toggle="modal" data-url="/admin/aticle/show/upload" class="btn btn-primary">上传</a>
-				      <input type="hidden" name="picture" value="" id="article-pic">
+				   <br><a href="#modal" data-toggle="modal" data-url="/admin/aticle/show/upload" class="btn btn-primary">上传</a>
+				      <input type="hidden" name="picture" value="{{article.picture}}" id="article-pic">
 				     <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
 				     
 				    </div>

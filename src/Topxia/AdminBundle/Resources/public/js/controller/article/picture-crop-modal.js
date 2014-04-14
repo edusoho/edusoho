@@ -7,16 +7,17 @@ define(function(require, exports, module) {
 
         var $form = $("#article-pic-crop-form"),
             $picture = $("#article-pic-crop");
+        var $modal = $form.parents('.modal');
 
         var scaledWidth = $picture.attr('width'),
             scaledHeight = $picture.attr('height'),
             naturalWidth = $picture.data('naturalWidth'),
             naturalHeight = $picture.data('naturalHeight'),
-            cropedWidth = 220,
-            cropedHeight = 220,
+            cropedWidth = 250,
+            cropedHeight = 125,
             ratio = cropedWidth / cropedHeight,
-            selectWidth = 200 * (naturalWidth/scaledWidth),
-            selectHeight = 200 * (naturalHeight/scaledHeight);
+            selectWidth = 250 * (naturalWidth/scaledWidth),
+            selectHeight = 125 * (naturalHeight/scaledHeight);
 
         $picture.Jcrop({
             trueSize: [naturalWidth, naturalHeight],
@@ -32,11 +33,15 @@ define(function(require, exports, module) {
 
         $("#upload-picture-crop-btn").click(function() {
 
-            var $form = $('#article-pic-crop-form');
-
             $form.ajaxSubmit({
                 clearForm: true,
-                success: function(){
+                success: function(response){
+                    $modal.modal('hide');
+                    response =  eval("("+response+")");
+                    var file_url = response.file_original_path+"/"+response.file_original_name;
+                    console.log(file_url);
+                    $('#article-pic').val(file_url);
+                    $('#article-pic-preview').attr('src',file_url);
                     $('#modal').load($('#upload-picture-crop-btn').data('goto'));
                 }
             });

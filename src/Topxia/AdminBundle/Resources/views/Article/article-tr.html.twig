@@ -23,7 +23,7 @@
 
 	<td>
 		<div class="btn-group">
-		  <a  href="{{ path('admin_article_edit', {id:article.id}) }}" class="btn btn-default btn-sm" target="_blank">编辑</a>
+		  <a  href="{{ path('admin_article_edit',{id:article.id}) }}" class="btn btn-default btn-sm" target="_blank">编辑</a>
 		  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
 		    <span class="caret"></span>
 		  </a>
@@ -31,7 +31,7 @@
 		  	{% if article.status != 'published' %}
 			    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_article_publish', {id:article.id}) }}">发布</a></li>
 		    {% endif  %}
-		    <li><a href="{{ path('admin_article_preview', {id:article.id}) }}" data-role="preview-item" target="_blank">预览</a></li>
+		    <li><a href="{{ path('admin_article_preview',{categoryCode:category.code,id:article.id}) }}" data-role="preview-item" target="_blank">预览</a></li>
 		    {% if article.status != 'trash' %}
 			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_article_trash', {id:article.id}) }}">移至回收站</a></li>
 		    {% endif %}
