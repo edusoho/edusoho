@@ -18,35 +18,39 @@
         {% endfor %}
       </ul>
 
-      {% verbatim %}
-      <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
-      {% endverbatim %}
-        <div class="cycle-overlay"></div>
-          {% for featuredArticle in featuredArticles %}
-              <a href="#" data-cycle-title="{{ featuredArticle.title|plain_text(25) }}" ><img  src={{ featuredArticle.img|default(asset("/assets/img/default/course-large.png?2.5")) }}  ></a>
-          {% endfor %}
-      </div>
-
+        {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
+          <p>请在后台设置图片</p>
+        {% else %}
+              {% verbatim %}
+              <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
+              {% endverbatim %}
+                <div class="cycle-overlay"></div>
+                  {% for featuredArticle in featuredArticles %}
+                      <a href="#" data-cycle-title="{{ featuredArticle.title|plain_text(25) }}" ><img  src={{ featuredArticle.img|default(asset("/assets/img/default/course-large.png?2.5")) }}  ></a>
+                  {% endfor %}
+              </div>
+        {% endif %}
       <ul class="article-wide-list">
         {% for article in latestArticles %}
           {% set category = article.category %}
-        <li class="media article-item clearfix">
-          <div class="article-title text-muted">
-            <div class="pull-left">
-              <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a> / {{ category.code }}
-              </span>
+          <li class="media article-item clearfix">
+            <div class="article-title text-muted">
+              <div class="pull-left">
+                <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a> / {{ category.code }}
+                </span>
+              </div>
+              <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
             </div>
-            <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
-          </div>
-
-          <a class="pull-right article-picture-link" href="/course/2">
-            <img class="article-picture" src="/assets/img/default/course-large.png?2.5" alt="免费课程">
-          </a>
-          <div class="media-body">
-            <h4 class="media-heading"><a href="#" >{{ article.title|plain_text(25) }}</a></h4>
-            {{ article.body|plain_text(150) }}
-          </div>
-        </li>
+            {% if article.picture %}
+              <a class="pull-right article-picture-link" href="{{ path('article_detail', { categoryCode:category.code, id:article.id }) }}">
+                <img class="article-picture" src="{{ asset(article.picture) }}" alt="文章缩略图">
+              </a>
+            {% endif %}
+            <div class="media-body">
+              <h4 class="media-heading"><a href="{{ path('article_detail', { categoryCode:category.code, id:article.id }) }}" >{{ article.title|plain_text(25) }}</a></h4>
+              {{ article.body|plain_text(150) }}
+            </div>
+          </li>
         {% endfor %}
       </ul>
 
@@ -91,7 +95,7 @@
             {% for key,hottestArticle in hottestArticles %}
               <li class="media">
                 <span class="rank_num">{{ key+1 }}</span>
-                <div class="media-body">{{ hottestArticle.title|plain_text(35) }}</div>
+                <div class="media-body"><a href="#">{{ hottestArticle.title|plain_text(35) }}</a></div>
               </li>
             {% endfor %}
           </ul>
