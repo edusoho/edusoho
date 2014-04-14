@@ -63,7 +63,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
 	public function addArticle($article)
 	{
-		// $fields = $this->createSerializer()->serialize($article, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $article);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Article error.');

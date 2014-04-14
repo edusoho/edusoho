@@ -17,104 +17,102 @@
 	>
 	<div class="row">
 		<div class="col-md-8 two-col-main">
-				<div class="form-group">
-				  <label for="article-title-field" class="control-label">文章标题</label>
-				  <div class="controls">
-				  	<input class="form-control" id="article-title-field" type="text" name="title" value="{{ field_value(article, 'title') }}">
-				  </div>
-				</div>
+			<div class="form-group">
+			  <label for="article-title-field" class="control-label">文章标题</label>
+			  <div class="controls">
+			  	<input class="form-control" id="article-title-field" type="text" name="title" value="{{ field_value(article, 'title') }}">
+			  </div>
+			</div>
 			
-				<div class="form-group">
-				  <label for="categoryId" class="control-label">所属栏目</label>
-				   <div class="controls">
-					  <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
-						{% if article %}
-				         {{ select_options(categoryTree, article.categoryId) }}
-				        {% else %}
-				         {{ select_options(categoryTree, categoryTree_ids|default(''), '--选择栏目--') }}
-				       {% endif %}
-				       	</select>
- 					</div>
-				</div>
+			<div class="form-group">
+			  <label for="categoryId" class="control-label">所属栏目</label>
+			   <div class="controls">
+				  <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
+					{% if article %}
+			         {{ select_options(categoryTree, article.categoryId) }}
+			        {% else %}
+			         {{ select_options(categoryTree, categoryTree_ids|default(''), '--选择栏目--') }}
+			       {% endif %}
+			       	</select>
+					</div>
+			</div>
 
-				<label for="richeditor-body-field" class="control-label">正文</label>
+			<label for="richeditor-body-field" class="control-label">正文</label>
 
-				<div class="form-group" 
+			<div class="form-group" 
 				{% if article and article.editor == 'none' %}
 					style="display:none"
 				{% endif %}
-				>
-					<div class="controls">
-						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditorBody">{{ field_value(article, 'body') }}</textarea>
-					</div>
+			>
+				<div class="controls">
+					<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditorBody">{{ field_value(article, 'body') }}</textarea>
 				</div>
+			</div>
 
-				<div class="form-group" 
+			<div class="form-group" 
 				{% if article is empty %}
-          		 style="display:none" 
-          		{% elseif article.editor == 'richeditor'%}
-          		 style="display:none"
-          		{% endif %}>
-					<div class="controls">
-						<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(article, 'body') }}</textarea>
-					</div>
-				</div> 
+	      		 style="display:none" 
+	      		{% elseif article.editor == 'richeditor'%}
+	      		 style="display:none"
+	      		{% endif %}>
+				<div class="controls">
+					<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(article, 'body') }}</textarea>
+				</div>
+			</div> 
 		
 		</div>
 		<div class="col-md-4 two-col-side">
-				<div class="row form-group">
-				    <div class="col-md-4 control-label">
+			<div class="row form-group">
+			    <div class="col-md-4 control-label">
 				      <label for="article-attr">文章属性</label>
-				    </div>
-				    <div class="col-md-7 controls">
+			    </div>
+			    <div class="col-md-7 controls">
 				      <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}>  置顶  
 					  <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured', 1) %} checked="checked" {% endif %}>  头条  
 				      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted', 1) %} checked="checked" {% endif %}>  推荐  
-				    </div>
-				  </div>
+			    </div>
+		  </div>
 
 			<div class="row form-group">
 			  <div class="col-md-4 control-label">
 				      <label for="article-tagIds">TAG标签</label>
 			  </div>
 			  <div class="col-md-7 controls">
-			  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
-			  	<div class="help-block" style="display:none;"></div>
+				  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
+				  	<div class="help-block" style="display:none;"></div>
 			  </div>
 			</div>
 			
-				<div class="row form-group">
-				    <div class="col-md-4 control-label">
+			<div class="row form-group">
+			    <div class="col-md-4 control-label">
 				      <label for="article-source">来源</label>
-				    </div>
-				    <div class="col-md-7 controls">
+			    </div>
+			    <div class="col-md-7 controls">
 				      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
-				    </div>
-				  </div>
+			    </div>
+			</div>
 			
-				<div class="row form-group">
-				    <div class="col-md-4 control-label">
+			<div class="row form-group">
+			    <div class="col-md-4 control-label">
 				      <label for="article-sourceUrl">来源地址</label>
-				    </div>
-				    <div class="col-md-7 controls">
+			    </div>
+			    <div class="col-md-7 controls">
 				      <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
-				    </div>
-				  </div>
+			    </div>
+			</div>
 		
-				<div class="row form-group">
-				    <div class="col-md-4 control-label">
-				        <label for="article-sourceUrl">设置缩略图</label>
-				    </div>
-				    <div class="col-md-7 controls">
-
+			<div class="row form-group">
+			    <div class="col-md-4 control-label">
+			        <label for="article-sourceUrl">设置缩略图</label>
+			    </div>
+			    <div class="col-md-7 controls">
 				    <div id="aticle-picture-container"><img src='{{ asset(article.picture|default(null)) }}' style="width: 230px; height: 125px;" id="article-pic-preview"></div>
 				    
 				   <br><a href="#modal" data-toggle="modal" data-url="/admin/aticle/show/upload" class="btn btn-primary">上传</a>
 				      <input type="hidden" name="picture" value="{{article.picture |default()}}" id="article-pic">
 				     <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
-				     
-				    </div>
-				  </div>
+				</div>
+			</div>
 
 			<div class="panel panel-default">
 				<div class="panel-heading">设置</div>

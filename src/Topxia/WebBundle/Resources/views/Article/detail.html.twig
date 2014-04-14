@@ -16,15 +16,16 @@
           {% endif %}
         {% endfor %}
       </ul>
-      标题：{{article.title}}
-         <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>  <br><br>
-      <div class="thread-body">内容：<br>{{article.body |raw }}</div>
+      <h2 class="thread-title">{{article.title}}</h2>
+         <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
+         <p><br></p>
+      <div class="thread-body">{{article.body |raw }}</div>
        标签:
       {% for tag in tags %}
-     <span class="label label-info">{{tag.name}}</span>
+           <span class="label label-info">{{tag.name}}</span>
       {% endfor %}
-      <br> <br>
-      分类:&nbsp;{{categoryName}} <br><br>
+      <p><br></p>
+      分类:&nbsp;<span><a href="{{ path('article_category', {categoryCode:categoryCode}) }}">{{categoryName}}</a></span><p><br></p>
      <hr>
       文章评论:<br><br>
       <textarea class="textarea" hidefocus="true" tabindex="" style="width: 100%; height: 172px;">xxx</textarea><br><br>
