@@ -18,18 +18,21 @@
         {% endfor %}
       </ul>
 
-        {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
-          <p>请在后台设置图片</p>
-        {% else %}
-              {% verbatim %}
-              <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
-              {% endverbatim %}
-                <div class="cycle-overlay"></div>
-                  {% for featuredArticle in featuredArticles %}
-                      <a href="#" data-cycle-title="{{ featuredArticle.title|plain_text(25) }}" ><img  src={{ featuredArticle.img|default(asset("/assets/img/default/course-large.png?2.5")) }}  ></a>
-                  {% endfor %}
-              </div>
-        {% endif %}
+      {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
+        <div class="alert alert-warning">头条大图轮播功能需先在后台文章管理页面给正文上传图片以及添加头条属性<a type="btn btn-default" href="{{ path('admin_article') }}">前往设置</a></div>
+      {% else %}
+        {% verbatim %}
+        <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
+        {% endverbatim %}
+          <div class="cycle-overlay"></div>
+            {% for featuredArticle in featuredArticles %}
+              {% if featuredArticle.img %}
+                <a href="#" data-cycle-title="{{ featuredArticle.title|plain_text(25) }}" ><img src={{ featuredArticle.img }} alt="{{ featuredArticle.title }}"></a>
+              {% endif %}
+            {% endfor %}
+        </div>
+      {% endif %}
+
       <ul class="article-wide-list">
         {% for article in latestArticles %}
           {% set category = article.category %}

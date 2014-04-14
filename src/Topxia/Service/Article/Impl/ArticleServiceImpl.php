@@ -38,7 +38,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	}
 
 	public function searchArticles(array $conditions, array $orderBy, $start, $limit)
-	{
+	{	
 		return $this->getArticleDao()->searchArticles($conditions,$orderBy,$start,$limit);
 	}
 

@@ -102,7 +102,9 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('featured = :featured')
 			->andWhere('promoted = :promoted')
 			->andWhere('sticky = :sticky')
-			->andWhere('title LIKE :keywords');
+			->andWhere('title LIKE :keywords')
+			->andWhere('hasPicture = :hasPicture')
+			->andWhere('categoryId = :categoryId');
 
 		return $builder;
 	}

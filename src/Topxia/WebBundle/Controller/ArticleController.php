@@ -45,14 +45,15 @@ class ArticleController extends BaseController
 		$featuredConditions = array(
 			'type' => 'article',
 			'status' => 'published',
-			'featured' => 1
+			'featured' => 1,
+			'hasPicture' => 1
 		);
-
+		
 		$featuredArticles = $this->getArticleService()->searchArticles(
 			$featuredConditions,array('createdTime', 'DESC'),
-			0,3
+			0,10
 		);
-
+		
 		foreach ($featuredArticles as &$featuredArticle) {
 			preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $featuredArticle['body'], $matches);
 			if (isset($matches[1])) {
