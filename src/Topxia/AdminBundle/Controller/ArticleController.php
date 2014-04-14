@@ -160,17 +160,9 @@ class ArticleController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        // $user = $this->getUserService()->getUser($id);
-
-        // $form = $this->createFormBuilder()
-        //     ->add('articel', 'file')
-        //     ->getForm();
         if ($request->getMethod() == 'POST') {
-            // $form->bind($request);
-            // if ($form->isValid()) {
+        
             $file = $request->files->get('picture');
-                // $data = $form->getData();
-                // $file = $data['avatar'];
                 if (!FileToolkit::isImageFile($file)) {
                     return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
                 }
@@ -179,43 +171,20 @@ class ArticleController extends BaseController
                 $hash = substr(md5($filenamePrefix . time()), -8);
                 $ext = $file->getClientOriginalExtension();
                 $filename = $filenamePrefix . $hash . '.' . $ext;
-
                 $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-
-
-
-
                 $file = $file->move($directory, $filename);
-
-
- // $new_file_name = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
- // $new_file = new File($new_file_name);
-
- // $file_res = $new_file->move($directory, "xxx.jpg");
- // var_dump($file_res);
- // exit();
-
                 $fileName = str_replace('.', '!', $file->getFilename());
 
-                $avatarData = $this->avatar_2($fileName);
+                $articlePicture = $this->getPictureAtributes($fileName);
                 return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
-                    // 'user' => $user,
                     'filename' => $fileName,
-                    'pictureUrl' => $avatarData['pictureUrl'],
-                    'naturalSize' => $avatarData['naturalSize'],
-                    'scaledSize' => $avatarData['scaledSize']
+                    'pictureUrl' => $articlePicture['pictureUrl'],
+                    'naturalSize' => $articlePicture['naturalSize'],
+                    'scaledSize' => $articlePicture['scaledSize']
                 ));
-            // }
         }
-        // $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
-        // if ($hasPartnerAuth) {
-        //     $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
-        // } else {
-        //     $partnerAvatar = null;
-        // }
 
         return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
-            // 'form' => $form->createView(),
             'pictureUrl' => "",
         ));
     }
@@ -229,7 +198,7 @@ class ArticleController extends BaseController
         return $tagNamesStr;
     }
 
-    private function avatar_2 ($filename)
+    private function getPictureAtributes($filename)
     {
         $filename = str_replace('!', '.', $filename);
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
@@ -266,7 +235,6 @@ class ArticleController extends BaseController
             $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
             $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
 
-            // return $this->createJsonResponse(true);
             return new Response(json_encode($response));
         }
 

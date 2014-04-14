@@ -103,11 +103,10 @@
 		
 				<div class="row form-group">
 				    <div class="col-md-4 control-label">
-				        <label for="article-sourceUrl">选择图片</label>
+				        <label for="article-sourceUrl">设置缩略图</label>
 				    </div>
 				    <div class="col-md-7 controls">
 				    <div id="aticle-picture-container"><img src="{{article.picture |default()}}" style="width: 230px; height: 125px;" id="article-pic-preview"></div>
-				   {#   <button class="btn btn-default btn-sm" id="article-pic-upload" type="button" data-url="{{ path('admin_aticle_picture_upload') }}">上传</button> #}
 				   <br><a href="#modal" data-toggle="modal" data-url="/admin/aticle/show/upload" class="btn btn-primary">上传</a>
 				      <input type="hidden" name="picture" value="{{article.picture |default()}}" id="article-pic">
 				     <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
