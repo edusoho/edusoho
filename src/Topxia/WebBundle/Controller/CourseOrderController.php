@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
+use Topxia\WebBundle\Util\SetAvatarHelper;
 use Symfony\Component\HttpFoundation\Response;
 
 class CourseOrderController extends OrderController
@@ -25,11 +26,13 @@ class CourseOrderController extends OrderController
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $course = $this->getCourseService()->getCourse($id);
+        $isShouldSetAvatar = SetAvatarHelper::setAvatarWhenJoinCourse($user);
 
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
+            'isShouldSetAvatar' =>$isShouldSetAvatar,
             'courseSetting' => $courseSetting,
         ));
     }
