@@ -7,7 +7,7 @@ interface ArticleService
 
 	public function getArticleByAlias($alias);
 
-	public function getArticlesByCategoryId($categoryId);
+	public function findArticlesByCategoryId($categoryId);
 
 	public function searchArticles(array $conditions, array $orderBy, $start, $limit);
 

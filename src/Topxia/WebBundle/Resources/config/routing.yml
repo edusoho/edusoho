@@ -973,7 +973,7 @@ article_show:
     defaults: { _controller: TopxiaWebBundle:Article:index }
 
 article_detail:
-    pattern: /article/{id}
+    pattern: /article/{categoryCode}/{id}
     defaults: { _controller: TopxiaWebBundle:Article:detail }
 
 article_category:
