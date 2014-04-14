@@ -152,18 +152,6 @@ class ArticleController extends BaseController
 			'status' => 'published',
 			'featured' => 1
 		);
-
-		$featuredArticles = $this->getArticleService()->searchArticles(
-			$featuredConditions,array('createdTime', 'DESC'),
-			0,3
-		);
-
-		foreach ($featuredArticles as &$featuredArticle) {
-			preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $featuredArticle['body'], $matches);
-			if (isset($matches[1])) {
-				$featuredArticle['img'] = $matches[1];
-			};
-		};
 		
 		$article = $this->getArticleService()->getArticle($id);
 
@@ -171,15 +159,18 @@ class ArticleController extends BaseController
 
 		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 
+		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
+
+
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
 			'hottestArticles' => $hottestArticles,
-			'featuredArticles' => $featuredArticles,
 			'paginator' => $paginator,
 			'articleSetting' => $articleSetting,
 			'article' => $article,
-			'tags' => $tags
+			'tags' => $tags,
+			'categoryName' => $category['name']
 		));
 	}
 
