@@ -61,4 +61,6 @@ interface AppService
 
     public function repairProblem($token);
 
+    public function uninstallApp($code);
+
 }

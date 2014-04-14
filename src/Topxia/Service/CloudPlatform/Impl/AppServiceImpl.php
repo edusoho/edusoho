@@ -409,6 +409,25 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->repairProblem($token);
     }
 
+    public function uninstallApp($code)
+    {
+        $app = $this->getAppDao()->getAppByCode($code);
+        if (empty($app)) {
+            throw $this->createServiceException("App {$code} is not exist.");
+        }
+
+        $uninstallScript = realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../plugins/' . ucfirst($app['code']) . '/Scripts/uninstall.php');
+
+        if (file_exists($uninstallScript)) {
+            include $uninstallScript;
+            $uninstaller = new \AppUninstaller($this->getKernel());
+            $uninstaller->uninstall();
+        }
+
+        $this->getAppDao()->deleteApp($app['id']);
+
+    }
+
     private function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
