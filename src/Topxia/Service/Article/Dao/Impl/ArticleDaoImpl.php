@@ -22,12 +22,25 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	{
         $sql = "SELECT * FROM {$this->table} WHERE alias = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($alias)) ? : null;
-	}	
+	}
 
-	public function getArticlesByCategoryId($CategoryId)
+	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
 	{
-        $sql = "SELECT * FROM {$this->table} WHERE CategoryId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+		$this->filterStartLimit($start, $limit);
+		if(empty($categoryIds)){ return array(); };
+        $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId in ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, $categoryIds);
+	}
+
+	public function findArticlesCount(array $categoryIds)
+	{
+		if(empty($categoryIds)){ return array(); };
+        $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
+		$sql = "SELECT COUNT(id) FROM {$this->table} WHERE categoryId in ({$marks})";
+
+        return $this->getConnection()->fetchColumn($sql, $categoryIds);
 	}
 
 	public function searchArticles($conditions, $orderBy, $start, $limit)

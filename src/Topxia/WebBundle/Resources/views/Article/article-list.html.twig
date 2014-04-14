@@ -6,10 +6,35 @@
 
 {% block main %}
 
+	<ul class="article-wide-list">
+    {% for article in articles %}
+      {% set category = article.category %}
+    <li class="media article-item clearfix">
+      <div class="article-title text-muted">
+        <div class="pull-left">
+          <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a> / {{ category.code }}
+          </span>
+        </div>
+        <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
+      </div>
+
+      <a class="pull-right article-picture-link" href="/course/2">
+        <img class="article-picture" src="/assets/img/default/course-large.png?2.5" alt="免费课程">
+      </a>
+      <div class="media-body">
+        <h4 class="media-heading"><a href="#" >{{ article.title|plain_text(25) }}</a></h4>
+        {{ article.body|plain_text(150) }}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+
+  {{ web_macro.paginator(paginator) }}
+
 {% endblock %}
 
 {% block sub %}
-	<ul class="nav nav-pills nav-stacked">
+	<ul class="nav nav-pills nav-stacked article-sub">
 		{% for cat in categoryTree %}
 		  <li {% if category.id == cat.id %}class="active"{% endif %}>
 		    <a href="{{ path('article_category', {categoryCode:cat.code}) }}">

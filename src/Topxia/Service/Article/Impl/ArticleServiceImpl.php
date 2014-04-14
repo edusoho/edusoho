@@ -27,9 +27,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return ArticleSerialize::unserialize($this->getArticleDao()->getArticleByAlias($alias));
 	}
 
-	public function findArticlesByCategoryId($categoryId)
+	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
 	{
-		return $this->getArticleDao()->getArticlesByCategoryId($categoryId);
+		return $this->getArticleDao()->findArticlesByCategoryIds($categoryIds, $start, $limit);
+	}
+
+	public function findArticlesCount(array $categoryIds)
+	{
+		return $this->getArticleDao()->findArticlesCount($categoryIds);
 	}
 
 	public function searchArticles(array $conditions, array $orderBy, $start, $limit)
