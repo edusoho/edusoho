@@ -204,40 +204,21 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $largeFileRecord = $this->getFileService()->uploadFile('article', new File($largeFilePath));
 
-//move yuantu
+		//move yuantu
+		$uri = $largeFileRecord['uri'];
+		$file_original_name = basename($uri);
+		$file_original_extension = pathinfo($uri,PATHINFO_EXTENSION);
 
-$uri = $largeFileRecord['uri'];
-$file_original_name = basename($uri);
-$file_original_name_new = str_replace(".jpg", "_orig.jpg", $file_original_name);
-$file_original_path = str_replace(array('public://',"{$file_original_name}"),'', $uri);
-$file_original_directory =$pathinfo['dirname'] . '/' . $file_original_path;
-$file_original_directory = str_replace("/tmp", "", $file_original_directory);
-$file_original_directory = substr($file_original_directory, 0,-1);
-$new_file = new File($filePath);
-
-$file_res = $new_file->move($file_original_directory, $file_original_name_new);
-        // $largeImage->resize(new Box(120, 120));
-        // $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
-        // $largeImage->save($mediumFilePath, array('quality' => 90));
-        // $mediumFileRecord = $this->getFileService()->uploadFile('article', new File($mediumFilePath));
-        // $largeImage->resize(new Box(48, 48));
-        // $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        // $largeImage->save($smallFilePath, array('quality' => 90));
-        // $smallFileRecord = $this->getFileService()->uploadFile('article', new File($smallFilePath));
+		$file_original_name_new = str_replace(".{$file_original_extension}", "_orig.{$file_original_extension}", $file_original_name);
+		$file_original_path = str_replace(array('public://',"{$file_original_name}"),'', $uri);
+		$file_original_directory =$pathinfo['dirname'] . '/' . $file_original_path;
+		$file_original_directory = str_replace("/tmp", "", $file_original_directory);
+		$file_original_directory = substr($file_original_directory, 0,-1);
+		
+		$new_file = new File($filePath);
+		$file_res = $new_file->move($file_original_directory, $file_original_name_new);
 
         @unlink($filePath);
-
-        // $oldAvatars = array(
-        //     'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
-        //     'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
-        //     'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
-        // );
-
-        // array_map(function($oldAvatar){
-        //     if (!empty($oldAvatar)) {
-        //         @unlink($oldAvatar);
-        //     }
-        // }, $oldAvatars);
 
 		return array(
 				'file_original_name'=>$file_original_name,
