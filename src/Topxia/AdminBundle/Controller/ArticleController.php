@@ -124,7 +124,7 @@ class ArticleController extends BaseController
         
         $result = $this->getArticleService()->deleteArticlesByIds($ids);
         if($result){
-            return $this->createJsonResponse(array("status" =>"failed")); 
+            return $this->createJsonResponse(array("status" =>"failed"));
         } else {
             return $this->createJsonResponse(array("status" =>"success")); 
         }

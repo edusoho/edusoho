@@ -88,7 +88,9 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 	public function updateArticle($id,$article)
 	{
-		if(empty($this->getArticle($id))){
+		$checkArticle = $this->getArticle($id));
+
+		if(empty($checkArticle)){
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
 		
