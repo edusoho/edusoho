@@ -86,3 +86,15 @@
 	color: #fff;
 	text-decoration: none;
 }
+
+.article-sub {
+	margin-bottom: 20px;
+}
+
+.article-row {
+	margin-top: 20px;
+}
+
+.article-nav {
+	margin-bottom: 20px;
+}

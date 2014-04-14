@@ -6,10 +6,10 @@
 
 <div class="es-row-wrap container-gap">
 
-  <div class="row row-8-4 article-row" style="margin-top:20px;">
+  <div class="row row-8-4 article-row">
     <div class="col-md-8">
 
-      <ul class="nav nav-pills" style="margin-bottom:20px;">
+      <ul class="nav nav-pills article-nav">
         <li class="active"><a href="{{ path('article_show') }}">{{ articleSetting.name }}首页</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}

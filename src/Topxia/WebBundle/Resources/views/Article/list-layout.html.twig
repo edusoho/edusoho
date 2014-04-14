@@ -3,15 +3,15 @@
 {% block content %}
 
 	<div class="es-row-wrap container-gap">
-		<div class="row row-9-3 article-row" style="margin-top:20px;">
+		<div class="row row-9-3 article-row">
 		    <div class="col-md-9">
 				{% block headerbar %}
-			      	<ul class="nav nav-pills" style="margin-bottom:20px;">
+			      	<ul class="nav nav-pills article-nav">
 				        <li><a href="{{ path('article_show') }}">{{ articleSetting.name }}首页</a></li>
-				        {% for category in categoryTree %}
-				          {% if category.parentId == 0 %}
-				            <li class="{% if menu == category.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
-				          {% endif %}
+				        {% for cat in categoryTree %}
+					        {% if cat.parentId == 0 %}
+					           <li class="{% if menu == cat.code or topCategory.code == cat.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
+					        {% endif %}
 				        {% endfor %}
 			      	</ul>
 				{% endblock %}
