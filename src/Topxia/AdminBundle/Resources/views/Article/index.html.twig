@@ -15,7 +15,7 @@
   <h1 class="pull-left">文章管理</h1>
 </div>
 
-<form class="well well-sm form-inline">
+<form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
 		  {{ select_options(categoryTree, app.request.query.get('category'), '--选择栏目--') }}

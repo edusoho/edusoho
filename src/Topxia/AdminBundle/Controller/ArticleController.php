@@ -36,7 +36,6 @@ class ArticleController extends BaseController
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
         $categoryTree = $this->makeCategoryOptions('enabled');
 
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
@@ -67,10 +66,10 @@ class ArticleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $article = $this->getArticleService()->getArticle($id);
+        $tagNamesStr = empty($article['tagIds']) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds']);
+
         $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
         $categoryTree = $this->makeCategoryOptions('all');
-
-        $tagNamesStr = empty($article['tagIds'][0]) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds'][0]);
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -87,9 +86,9 @@ class ArticleController extends BaseController
 
     }
 
-    public function previewAction(Request $request,$id,$categoryCode)
+    public function previewAction(Request $request,$id)
     {
-        return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id,'categoryCode'=>$categoryCode));
+        return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id));
     }
 
     public function updatePropertyAction(Request $request,$id,$property)
