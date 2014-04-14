@@ -973,11 +973,11 @@ article_show:
     defaults: { _controller: TopxiaWebBundle:Article:index }
 
 article_detail:
-    pattern: /article/{categoryCode}/{id}
+    pattern: /article/{id}
     defaults: { _controller: TopxiaWebBundle:Article:detail }
 
 article_category:
-    pattern: /article/{categoryCode}
+    pattern: /article/category/{categoryCode}
     defaults: { _controller: TopxiaWebBundle:Article:category }
 
 teacher:

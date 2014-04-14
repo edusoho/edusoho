@@ -18,7 +18,7 @@
       </ul>
       标题：{{article.title}}
          <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>  <br><br>
-      内容：<br>{{article.body |raw }}
+      <div class="content">内容：<br>{{article.body |raw }}</div>
        标签:
       {% for tag in tags %}
      <span class="label label-info">{{tag.name}}</span>
