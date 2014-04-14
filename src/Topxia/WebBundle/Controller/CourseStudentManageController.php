@@ -59,19 +59,28 @@ class CourseStudentManageController extends BaseController
             }
 
             $order = $this->getOrderService()->createOrder(array(
-                'courseId' => $course['id'],
                 'userId' => $user['id'],
-                'price' => $data['price'],
+                'title' => "购买课程《{$course['title']}》(管理员添加)",
+                'targetType' => 'course',
+                'targetId' => $course['id'],
+                'amount' => $data['price'],
                 'payment' => 'none',
+                'snPrefix' => 'C',
             ));
 
             $this->getOrderService()->payOrder(array(
                 'sn' => $order['sn'],
                 'status' => 'success', 
-                'amount' => $order['price'], 
+                'amount' => $order['amount'], 
                 'paidTime' => time(),
-                'memberRemark' => $data['remark'],
             ));
+
+            $info = array(
+                'orderId' => $order['id'],
+                'note'  => $data['remark'],
+            );
+
+            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
@@ -79,6 +88,8 @@ class CourseStudentManageController extends BaseController
                 'courseId' => $course['id'], 
                 'courseTitle' => $course['title'],
             ));
+
+
 
             $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
@@ -244,6 +255,6 @@ class CourseStudentManageController extends BaseController
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }

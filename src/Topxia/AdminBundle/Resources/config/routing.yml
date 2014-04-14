@@ -449,6 +449,9 @@ admin_app_upgrades_count:
     pattern:  /app/upgrades_count
     defaults: { _controller: TopxiaAdminBundle:App:upgradesCount }
 
+admin_oldUpgradeCheck:
+    pattern:  /upgrade/check
+    defaults: { _controller: TopxiaAdminBundle:App:oldUpgradeCheck }
 
 admin_app_logs:
     pattern:  /app/logs

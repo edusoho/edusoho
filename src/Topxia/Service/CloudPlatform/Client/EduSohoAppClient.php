@@ -27,8 +27,7 @@ class EduSohoAppClient implements AppClient
         }
 
         $this->debug = empty($options['debug']) ? false : true;
-
-        $this->tmpDir = empty($options['tmpDir']) ? '/tmp' : $options['tmpDir'];
+        $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
 
     public function getApps()
@@ -109,7 +108,7 @@ class EduSohoAppClient implements AppClient
     {
         // var_dump($url);
         $filename = md5($url) . '_' . time();
-        $filepath = $this->tmpDir . '/' . $filename;
+        $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
 
         $fp = fopen($filepath, 'w');
 

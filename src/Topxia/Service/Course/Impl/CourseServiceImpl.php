@@ -1063,6 +1063,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
+
+	public function searchMembers($conditions, $orderBy, $start, $limit)
+	{
+		$conditions = $this->_prepareCourseConditions($conditions);
+		return $this->getMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
+	}
 	
 	public function searchMember($conditions, $start, $limit)
 	{
@@ -1260,7 +1266,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'createdTime' => time()
 		);
 
-
+		if (empty($fields['remark'])) {
+			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
+		}
 
 		$member = $this->getMemberDao()->addMember($fields);
 

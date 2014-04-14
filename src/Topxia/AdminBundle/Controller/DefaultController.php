@@ -32,7 +32,7 @@ class DefaultController extends BaseController
 
             $orders = $this->getOrderService()->searchOrders(array('courseId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
             foreach ($orders as $id => $order) {
-                $course['addedMoney'] += $order['price'];
+                $course['addedMoney'] += $order['amount'];
             }
 
             $courses[] = $course;
