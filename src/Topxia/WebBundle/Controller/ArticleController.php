@@ -117,7 +117,7 @@ class ArticleController extends BaseController
 		));
 	}
 
-	public function detailAction(Request $request,$id,$categoryCode)
+	public function detailAction(Request $request,$id)
 	{
 		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 
@@ -159,8 +159,7 @@ class ArticleController extends BaseController
 
 		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 
-		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
-
+		$category = $this->getCategoryService()->getCategory($article['categoryId']);
 
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,

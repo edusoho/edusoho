@@ -103,7 +103,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $tags = $this->getTagService()->findTagsByNames($tagNames);
         $tagIdsArray = ArrayToolkit::column($tags, 'id');
         $article['tagIds'] = implode(',', $tagIdsArray);
-
         $edit_article = array();
 		$edit_article['title'] = $article['title'];
 		$edit_article['body'] = $article['richeditorBody'];
