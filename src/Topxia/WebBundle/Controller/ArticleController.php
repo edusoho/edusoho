@@ -147,7 +147,7 @@ class ArticleController extends BaseController
 			$tagIdsArray = explode(",", $article['tagIds']);
 			$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 		}else{
-			echo "没有这篇文章！";exit();
+			return $this->createMessageResponse('error', '没有这篇文章！');
 		}
 
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
