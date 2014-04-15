@@ -70,6 +70,16 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getArticle($this->getConnection()->lastInsertId());
 	}
 
+	public function waveArticle($id,$field,$diff)
+	{
+		$fields = array('hits');
+		if (!in_array($field, $fields)) {
+			throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+		}
+		$sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+	}
+
 	public function updateArticle($id, $Article)
 	{
         $this->getConnection()->update($this->table, $Article, array('id' => $id));
