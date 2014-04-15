@@ -11,6 +11,7 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{	
 
+		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 		if (empty($articleSetting)) {
 			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
 		}
@@ -136,6 +137,10 @@ class ArticleController extends BaseController
 			return $this->createMessageResponse('xxxx');
 		}
 
+
+
+
+		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$conditions = array(
@@ -246,6 +251,11 @@ class ArticleController extends BaseController
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
  	private function getTagService()
