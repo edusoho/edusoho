@@ -30,6 +30,14 @@
 	border-bottom: 1px solid #eee;
 }
 
+.article-wide-list .article-item .media-body {
+	color: #555;
+}
+
+.article-wide-list .article-item .media-heading {
+	font-weight: bold;
+}
+
 .article-wide-list .article-picture {
 	width: 230px;
 	float: right;
@@ -73,10 +81,10 @@
 	bottom: 0px;
 	overflow: hidden;
 	font-size: 20px;
-	background: black;
+	background: rgb(19, 16, 16);
 	color: white;
 	padding: 15px;
-	opacity: .5;
+	opacity: .7;
 }
 
 .homepage-feature .cycle-overlay a {

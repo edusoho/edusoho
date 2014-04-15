@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
 
 {% block title %}栏目管理 - {{ parent() }}{% endblock %}
 
@@ -15,9 +15,9 @@
   <thead>
     <tr>
       <th width="45%">栏目名称</th>
-      <th width="15%">编码</th>
+      <th width="20%">编码</th>
       <th width="10%">显示序号</th>
-      <th width="30%">操作</th>
+      <th width="20%">操作</th>
     </tr>
   </thead>
   {% include 'TopxiaAdminBundle:ArticleCategory:tbody.html.twig' %}

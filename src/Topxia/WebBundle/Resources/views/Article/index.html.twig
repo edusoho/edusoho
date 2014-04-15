@@ -35,7 +35,7 @@
           <li class="media article-item clearfix">
             <div class="article-title text-muted">
               <div class="pull-left">
-                <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a> / {{ category.code }}
+                <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a>
                 </span>
               </div>
               <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
@@ -57,35 +57,6 @@
     </div>
 
     <div class="col-md-4">
-      <div class="es-box">
-        <div class="es-box-heading"><h2>最新评论</h2></div>
-        <div class="es-box-body">
-          <ul class="media-list latest-review-list">
-            <li class="media">
-              <a href="/user/229" class="author-picture-link">
-                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
-              </a>
-              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
-              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
-
-              <div class="review-footer">
-                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
-              </div>
-            </li>
-            <li class="media">
-              <a href="/user/229" class="author-picture-link">
-                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
-              </a>
-              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
-              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
-
-              <div class="review-footer">
-                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
-              </div>
-            </li>
-          </ul>    
-        </div>
-      </div>
 
       <div class="es-box">
         <div class="es-box-heading"><h2>热门文章</h2></div>
@@ -100,6 +71,7 @@
           </ul>
         </div>
       </div>
+
     </div>
 
   </div>
