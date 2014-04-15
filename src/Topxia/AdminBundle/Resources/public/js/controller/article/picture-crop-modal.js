@@ -39,9 +39,10 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     response =  eval("("+response+")");
                     var file_url = response.file_original_path+"/"+response.file_original_name;
-                    console.log(file_url);
-                    $('#article-pic').val(file_url);
-                    $('#article-pic-preview').attr('src',file_url);
+                    var file_url_original = response.file_original_path+"/"+response.file_original_name_new;
+                    $('#article-thumb').val(file_url);
+                    $('#article-originalThumb').val(file_url_original);
+                    $('#article-thumb-preview').attr('src',file_url);
                     $('#modal').load($('#upload-picture-crop-btn').data('goto'));
                 }
             });

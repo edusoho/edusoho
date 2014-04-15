@@ -71,7 +71,7 @@ define(function(require, exports, module) {
 
         var uploader = new Uploader({
             trigger: '#article-pic-upload',
-            name: 'picture',
+            name: 'thumb',
             action: $('#article-pic-upload').data('url'),
             accept: 'image/*',
             error: function(file) {
@@ -79,18 +79,15 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = eval("(" + response + ")");
-                console.log(response);
-              console.log($form.find('#article-pic').val());
-                $("#article-picture-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
-                $form.find('#article-pic').val(response.url);
-              console.log($form.find('#article-pic').val());
+                $("#article-thumb-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                $form.find('#article-thumb').val(response.url);
                  Notify.success('上传成功！');
             }
         });
-
-     
     
-
+        // $('#article-operate-cancel').click(function(){
+        //     window.location.href=$(this).data('url'); 
+        // });
 
         var validator = new Validator({
             element: '#article-form',
@@ -100,7 +97,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                 Notify.success('设置成功！');
+                  Notify.success('设置成功！');
             }
         });
 
@@ -146,7 +143,6 @@ define(function(require, exports, module) {
                     alert('正在上传附图，请等待附图上传成功后，再保存！');
                     return ;
                 }
-
                 // $form.ajaxSubmit({
                 //     clearForm: true,
                 //     success: function(data){
