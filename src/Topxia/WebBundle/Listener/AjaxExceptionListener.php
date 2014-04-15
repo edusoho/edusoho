@@ -19,7 +19,7 @@ class AjaxExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $main = $this->container->get('Topxia.RP', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        $main = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
         $request = $event->getRequest();
  

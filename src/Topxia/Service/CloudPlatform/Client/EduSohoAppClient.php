@@ -70,6 +70,8 @@ class EduSohoAppClient implements AppClient
 
     public function repairProblem($token)
     {
+        $args = array('token' => $token);
+        return $this->callRemoteApi('POST', 'RepairProblem', $args);
 
     }
 

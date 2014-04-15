@@ -5,7 +5,13 @@
       <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
-      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
+      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+      {% if course.showCourseStatus=='serialize' %}
+        <span class="label label-success ">更新中</span>
+      {% elseif course.showCourseStatus=='finished' %}
+        <span class="label label-warning ">已完结</span>
+      {% endif %}
+      </h4>
       <div class="course-about ellipsis">{{ course.subtitle }}</div>
       <div class="course-footer clearfix">
         {% set teacher = users[course.teacherIds|first]|default(null) %}

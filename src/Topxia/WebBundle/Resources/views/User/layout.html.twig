@@ -12,7 +12,6 @@
 {{ render(controller('TopxiaWebBundle:User:headerBlock', {user:user})) }}
 
 <div class="es-row-wrap container-gap userpage-body">
-
   <ul class="nav nav-pills userpage-nav clearfix">
   	{% if 'ROLE_TEACHER' in user.roles %}
 	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">在教课程</a></li>

@@ -50,6 +50,15 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>头像设置提醒</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('isShouldSetAvatar', {'none':'从不', 'notify_avatar':'每次打开我的课程时', 'enforce_avatar':'加入免费课程时强制要求'}, setting.isShouldSetAvatar) }}
+    </div>
+  </div>
+
   <div class="row form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">

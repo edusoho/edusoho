@@ -295,6 +295,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'about' => '',
 			'expiryDay' => 0,
 			'showStudentNumType' => 'opened',
+			'showCourseStatus' => 'unserialize',
 			'categoryId' => 0,
 			'vipLevelId' => 0,
 			'goals' => array(),
@@ -1061,6 +1062,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function searchMemberCount($conditions)
 	{
 		return $this->getMemberDao()->searchMemberCount($conditions);
+	}
+
+	public function searchMembers($conditions, $orderBy, $start, $limit)
+	{
+		$conditions = $this->_prepareCourseConditions($conditions);
+		return $this->getMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
 	}
 	
 	public function searchMember($conditions, $start, $limit)
