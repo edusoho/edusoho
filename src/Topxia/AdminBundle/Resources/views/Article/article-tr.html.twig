@@ -31,6 +31,9 @@
 		  	{% if article.status != 'published' %}
 			    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_article_publish', {id:article.id}) }}">发布</a></li>
 		    {% endif %}
+	     	{% if article.status == 'published' %}
+			    <li><a href="javascript:" data-role="unpublish-item" data-url="{{ path('admin_article_unpublish', {id:article.id}) }}">未发布</a></li>
+		    {% endif %}
 		    {% if article.status == 'published' %}
 			    <li><a href="{{ path('admin_article_preview',{id:article.id}) }}" data-role="preview-item" target="_blank">预览</a></li>
 		    {% endif %}

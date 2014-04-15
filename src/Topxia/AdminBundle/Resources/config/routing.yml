@@ -697,6 +697,11 @@ admin_article_publish:
     defaults: { _controller: TopxiaAdminBundle:Article:publish }
     methods:  [POST]
 
+admin_article_unpublish:
+    pattern:  /article/{id}/unpublish
+    defaults: { _controller: TopxiaAdminBundle:Article:unpublish }
+    methods:  [POST]
+
 admin_article_trash:
     pattern:  /article/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Article:trash }

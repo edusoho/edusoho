@@ -128,8 +128,13 @@ class ArticleController extends BaseController
     {
         $this->getArticleService()->publishArticle($id);
         return $this->createJsonResponse(true);
-    }
+    } 
 
+    public function unpublishAction(Request $request, $id)
+    {
+        $this->getArticleService()->unpublishArticle($id);
+        return $this->createJsonResponse(true);
+    }
 
     public function aliasCheckAction(Request $request)
     {
