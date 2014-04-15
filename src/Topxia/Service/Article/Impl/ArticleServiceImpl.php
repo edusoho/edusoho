@@ -19,6 +19,16 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $this->getArticleDao()->getArticle($id);
 	}
 
+	public function getArticlePrevious($createdTime)
+	{
+		return $this->getArticleDao()->getArticlePrevious($createdTime);
+	}
+
+	public function getArticleNext($createdTime)
+	{
+		return $this->getArticleDao()->getArticleNext($createdTime);
+	}
+
 	public function getArticleByAlias($alias)
 	{
 		return ArticleSerialize::unserialize($this->getArticleDao()->getArticleByAlias($alias));

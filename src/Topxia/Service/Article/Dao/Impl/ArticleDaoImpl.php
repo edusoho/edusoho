@@ -18,6 +18,18 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+	public function getArticlePrevious($createdTime)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE createdTime < ? ORDER by `createdTime` DESC LIMIT 1";
+		return $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+	}
+	
+	public function getArticleNext($createdTime)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE createdTime > ? ORDER by `createdTime` ASC LIMIT 1";
+		return $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+	}
+
 	public function getArticleByAlias($alias)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE alias = ? LIMIT 1";

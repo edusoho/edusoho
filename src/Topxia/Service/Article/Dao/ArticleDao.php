@@ -6,6 +6,10 @@ interface ArticleDao
 {
 	public function getArticle($id);
 
+	public function getArticlePrevious($createdTime);
+	
+	public function getArticleNext($createdTime);
+
 	public function getArticleByAlias($alias);
 
 	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit);

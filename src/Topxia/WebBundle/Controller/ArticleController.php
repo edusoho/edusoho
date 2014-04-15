@@ -118,44 +118,34 @@ class ArticleController extends BaseController
 	public function detailAction(Request $request,$id)
 	{
 		$article = $this->getArticleService()->getArticle($id);
-		
+
 		if (empty($article)) {
-			throw $this->createNotFoundException('文章不存在');
+			throw $this->createNotFoundException('文章已删除或者未发布！');
 		}
 
 		if ($article['status'] != 'published') {
-			return $this->createMessageResponse('xxxx');
+			return $this->createMessageResponse('文章不是发布状态，请查看！');
 		}
 
-		$articleSetting = $this->getSettingService()->get('article', array());
-		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$conditions = array(
 			'status' => 'published'
 		);
+		
+		$createdTime = $article['createdTime'];
+		$articlePrevious = $this->getArticleService()->getArticlePrevious($createdTime);
+		$articleNext = $this->getArticleService()->getArticleNext($createdTime);
+	
+		$articleSetting = $this->getSettingService()->get('article', array());
+		$categoryTree = $this->getCategoryService()->getCategoryTree();
+		
+		$category = $this->getCategoryService()->getCategory($article['categoryId']);
+		$tagIdsArray = explode(",", $article['tagIds']);
+		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 
-		$hottestArticles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
+		$hottestArticles = $this->getArticleService()->searchArticles($conditions, 'popular' , 0 , 10);
 		$this->getArticleService()->hitArticle($id);
 
-		$conditions['id'] = $id;
-		$article = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
-		unset($conditions['id']);
-		$conditions['idLessThan'] = $id;
-		$articleNext = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
-		unset($conditions['idLessThan']);
-		$conditions['idMoreThan'] = $id;
-		$articlePrevious = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
-		$articleNext = $this->arrayChange($articleNext);
-		$articlePrevious = $this->arrayChange($articlePrevious);
-		$article = $this->arrayChange($article);
-
-		if(!empty($article)){
-			$category = $this->getCategoryService()->getCategory($article['categoryId']);
-			$tagIdsArray = explode(",", $article['tagIds']);
-			$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
-		}else{
-			return $this->createMessageResponse('error', '文章已删除或者未发布！');
-		}
 
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,
@@ -213,21 +203,6 @@ class ArticleController extends BaseController
 		}
 
 		return null;
-	}
-
-	protected function arrayChange($changeArray){
-		if(empty($changeArray)){
-			return array();
-		}
-
-	    $newArray = array();
-
-	    foreach($changeArray as $valueArr){
-	    	foreach ($valueArr as $key => $value) {
-	    		$newArray[$key] = $value;
-	    	}
-	    } 
-	    return $newArray; 
 	}
 
     private function getCategoryService()

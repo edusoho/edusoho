@@ -23,7 +23,7 @@ class ArticleController extends BaseController
         $conditions = $request->query->all();
         $paginator = new Paginator(
             $request,
-            $this->getArticleService()->searchArticleCount($conditions),
+            $this->getArticleService()->searchArticlesCount($conditions),
             20
         );
 
@@ -246,7 +246,7 @@ class ArticleController extends BaseController
                 array(),
                 'created',
                 0,
-                $this->getArticleService()->searchArticleCount(array())
+                $this->getArticleService()->searchArticlesCount(array())
             );
             $categoryIds = ArrayToolkit::column($articles, 'categoryId');
             $categoryTree = $this->getCategoryService()->findCategoriesByIds($categoryIds);

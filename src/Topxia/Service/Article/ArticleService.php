@@ -4,6 +4,10 @@ namespace Topxia\Service\Article;
 interface ArticleService
 {
 	public function getArticle($id);
+	
+	public function getArticlePrevious($createdTime);
+
+	public function getArticleNext($createdTime);
 
 	public function getArticleByAlias($alias);
 
