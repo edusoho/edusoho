@@ -25,7 +25,7 @@ class ArticleController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getArticleService()->searchArticleCount($conditions),
+            $this->getArticleService()->searchArticlesCount($conditions),
             $setting['pageNums']
         );
 
@@ -40,7 +40,7 @@ class ArticleController extends BaseController
 
 		}
 
-		$featuredConditions = array(
+	/*	$featuredConditions = array(
 			'type' => 'article',
 			'status' => 'published',
 			'featured' => 1,
@@ -57,12 +57,12 @@ class ArticleController extends BaseController
 			if (isset($matches[1])) {
 				$featuredArticle['img'] = $matches[1];
 			};
-		};
+		};*/
 		
 		return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
-			'featuredArticles' => $featuredArticles,
+			/*'featuredArticles' => $featuredArticles,*/
 			'paginator' => $paginator
 		));
 	}
@@ -75,18 +75,19 @@ class ArticleController extends BaseController
 			throw $this->createNotFoundException('资讯栏目页面不存在');
 		}
 
-		// $conditions = array(
-		// 	'categoryId' => $category['id'],
-		// 	'includeChindren' => true,
-		// );
+		$conditions = array(
+			'categoryId' => $category['id'],
+			'includeChindren' => true,
+		);
+
+		$articles = $this->getArticleService()->searchArticles(
+			$conditions,'published',
+			0,100
+		);
 
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$rootCategory = $this->getRootCategory($categoryTree,$category);
-
-		$categoryIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
-
-		$categoryIds[] = $category['id']; 
 
 		$setting = $this->getSettingService()->get('article', array());
 
@@ -96,14 +97,8 @@ class ArticleController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getArticleService()->findArticlesCount($categoryIds),
+            $this->getArticleService()->searchArticlesCount($conditions),
             $setting['pageNums']
-        );
-
-		$articles = $this->getArticleService()->findArticlesByCategoryIds(
-			$categoryIds, 
-			$paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
         );
 
 		foreach ($articles as &$article) {

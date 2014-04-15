@@ -46,6 +46,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	public function searchArticles($conditions, $orderBys, $start, $limit)
 	{
 		$this->filterStartLimit($start, $limit);
+
 		$builder = $this->_createSearchQueryBuilder($conditions)
 			->select('*')
 			->setFirstResult($start)
@@ -57,8 +58,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 		return $builder->execute()->fetchAll() ? : array();
 	}
 
-	public function searchArticleCount($conditions)
-	{
+	public function searchArticlesCount($conditions)
+	{	
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
@@ -122,6 +123,19 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('id = :id')
 			->andWhere('id > :idMoreThan')
 			->andWhere('id < :idLessThan');
+
+        if (isset($conditions['categoryIds'])) {
+            $categoryIds = array();
+            foreach ($conditions['categoryIds'] as $categoryId) {
+                if (ctype_digit((string)abs($categoryId))) {
+                    $categoryIds[] = $categoryId;
+                }
+            }
+            if ($categoryIds) {
+                $categoryIds = join(',', $categoryIds);
+                $builder->andStaticWhere("categoryId IN ($categoryIds)");
+            }
+        }
 
 		return $builder;
 	}

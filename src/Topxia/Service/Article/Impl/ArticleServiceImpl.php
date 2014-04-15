@@ -38,22 +38,31 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	{	
 		$orderBys = $this->filterSort($sort);
 
+		$conditions = $this->prepareSearchConditions($conditions);
+
 		return $this->getArticleDao()->searchArticles($conditions, $orderBys, $start, $limit);
 	}
 
-	public function searchArticleCount($conditions)
-	{
-		return $this->getArticleDao()->searchArticleCount($conditions);
+	public function searchArticlesCount($conditions)
+	{	
+		$conditions = $this->prepareSearchConditions($conditions);
+
+		return $this->getArticleDao()->searchArticlesCount($conditions);
 	}
 
 	private function prepareSearchConditions($conditions)
 	{
 		$conditions = array_filter($conditions);
-		if (isset($conditions['categoryId'])) {
+
+		if (@$conditions['includeChindren'] == true) {
+			if (isset($conditions['categoryId'])) {
 			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
 			$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
 			unset($conditions['categoryId']);
-		}
+			unset($conditions['includeChindren']);
+			}
+		} 
+
 		return $conditions;
 	}
 
@@ -288,7 +297,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     private function getCategoryService()
     {
-        return $this->createService('Taxonomy.CategoryService');
+        return $this->createService('Article.CategoryService');
     }
 
     private function getLogService()

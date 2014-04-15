@@ -13,7 +13,7 @@ interface ArticleService
 
 	public function searchArticles(array $conditions, $sort, $start, $limit);
 
-	public function searchArticleCount($conditions);
+	public function searchArticlesCount($conditions);
 
 	public function createArticle($article);
 

@@ -14,7 +14,7 @@ interface ArticleDao
 
 	public function searchArticles($conditions, $orderBys, $start, $limit);
 
-	public function searchArticleCount($conditions);
+	public function searchArticlesCount($conditions);
 
 	public function addArticle($Article);
 
