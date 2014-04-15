@@ -1,0 +1,3 @@
+topxia_mobile_user:
+    pattern:  /user/{id}
+    defaults: { _controller: TopxiaMobileBundle:User:getUser }

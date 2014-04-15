@@ -1,0 +1,7 @@
+parameters:
+#    topxia_mobile.example.class: Topxia\MobileBundle\Example
+
+services:
+#    topxia_mobile.example:
+#        class: %topxia_mobile.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
