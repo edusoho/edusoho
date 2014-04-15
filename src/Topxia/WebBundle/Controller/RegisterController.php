@@ -188,7 +188,7 @@ class RegisterController extends BaseController
                 if (empty($welcomeBody)) { return true; }
 
                 if (strlen($welcomeBody) >= 1000) {
-                    $welcomeBody = substr($welcomeBody, 0, 1000);
+                    $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
                 }
 
                 $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
@@ -239,6 +239,11 @@ class RegisterController extends BaseController
            }
         }
         return true;
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
 }
