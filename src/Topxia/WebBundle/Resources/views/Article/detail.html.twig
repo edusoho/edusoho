@@ -30,13 +30,13 @@
         {% if article_previous %}
           <li class="previous"><a href="/article/{{article_previous.id}}">&larr; 上一篇</a></li>
         {% else %}
-          <li class="previous disabled"><a href="#">&larr; 上一篇</a></li>
+          <li class="previous disabled"><a href="javascript:;">&larr; 上一篇</a></li>
         {% endif %}
 
           {% if article_next %}
           <li class="next"><a href="/article/{{article_next.id}}"> 下一篇 &rarr;</a></li>
         {% else %}
-          <li class="next disabled"><a href="#"> 下一篇 &rarr;</a></li>
+          <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
         {% endif %}
       </ul>
      <hr>
