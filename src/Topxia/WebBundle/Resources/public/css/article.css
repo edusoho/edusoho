@@ -1,14 +1,10 @@
-.article-row {
-	margin-top: 20px;
-}
-
 .latest-review-list {
 	font-size: 13px;
 }
 
-.media-list .media {
+.popular-articles .media-list .media {
 	border-bottom: 0px;
-	padding: 0 15px 10px 15px;
+	padding: 0px;
 }
 
 .latest-review-list .review-footer {
@@ -22,9 +18,11 @@
 	padding: 0;
 	margin-bottom: 20px;
 }
+
 .article-wide-list li {
 	margin-top: 20px;
 }
+
 .article-wide-list .article-item {
 	padding-bottom: 20px;
 	border-bottom: 1px solid #eee;
@@ -95,10 +93,6 @@
 
 .article-sub {
 	margin-bottom: 20px;
-}
-
-.article-row {
-	margin-top: 20px;
 }
 
 .article-nav {

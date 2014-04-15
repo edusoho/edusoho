@@ -230,9 +230,9 @@ class ArticleController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-     private function getTagService()
-     {
-	    return $this->getServiceKernel()->createService('Taxonomy.TagService');
-     }
+ 	private function getTagService()
+ 	{
+   		return $this->getServiceKernel()->createService('Taxonomy.TagService');
+ 	}
 
 }
