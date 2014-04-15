@@ -152,7 +152,7 @@ class CourseController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            'recommended',
+            'recommendedSeq',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

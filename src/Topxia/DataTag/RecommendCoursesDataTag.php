@@ -25,7 +25,7 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
         } else {
             $conditions = array('status' => 'published', 'recommended' => 1 ,'categoryId' => $arguments['categoryId']);
         }
-        $courses = $this->getCourseService()->searchCourses($conditions,'recommended', 0, $arguments['count']);
+        $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);
         
         return $this->getCourseTeachersAndCategories($courses);
     }

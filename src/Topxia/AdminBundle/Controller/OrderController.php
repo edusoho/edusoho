@@ -19,7 +19,7 @@ class OrderController extends BaseController
         $conditions['targetType'] = $type;
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getOrderService()->searchOrderCount($conditions),
             20
         );
