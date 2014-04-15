@@ -18,6 +18,8 @@ interface ArticleDao
 
 	public function addArticle($Article);
 
+	public function waveArticle($id,$field,$diff);
+
 	public function updateArticle($id, $Article);
 
 	public function deleteArticle($id);

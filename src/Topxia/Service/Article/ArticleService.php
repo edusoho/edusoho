@@ -19,6 +19,8 @@ interface ArticleService
 
 	public function updateArticle($id, $Article);
 
+	public function hitArticle($id);
+
 	public function updateArticleProperty($id, $property);
 
 	public function trashArticle($id);

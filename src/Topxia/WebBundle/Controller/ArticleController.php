@@ -128,7 +128,8 @@ class ArticleController extends BaseController
 		);
 
 		$hottestArticles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
-		
+		$this->getArticleService()->hitArticle($id);
+
 		$article = $this->getArticleService()->getArticle($id);
 		$category = $this->getCategoryService()->getCategory($article['categoryId']);
 		$tagIdsArray = explode(",", $article['tagIds']);

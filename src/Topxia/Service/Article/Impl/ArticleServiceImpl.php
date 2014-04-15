@@ -126,6 +126,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $article;
 	}
 
+	public function hitArticle($id)
+	{
+		$this->getArticleDao()->waveArticle($id, 'hits', +1);
+	}
+
 	public function updateArticleProperty($id, $property)
 	{
 		$article = $this->getArticleDao()->getArticle($id);
