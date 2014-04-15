@@ -1,11 +1,11 @@
 <tr id="article-{{ article.id }}">
-	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item"  >{{article.id}}</td>
+	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item"  > {{article.id}}</td>
 	<td>
-			<span class="text-muted text-sm">{{ article.title | slice(0,25) }}{% if article.title |length >25 %}...{% endif %}</span>
+			<span class="text-muted"><a href="{{ path('admin_article_preview',{id:article.id}) }}">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a></span>
 	</td>
 	<td>
 	{% if category %}
-		<span class="text-muted">{{ category.name }}</span>
+		<span class="text-muted"><a href="{{ path('article_category',{categoryCode:category.code}) }}">{{ category.name }}</a></span>
 		{% else %}
 		<span class="text-muted">未分类</span>
 	{% endif %}
@@ -23,7 +23,7 @@
 
 	<td>
 		<div class="btn-group">
-		  <a  href="{{ path('admin_article_edit',{id:article.id}) }}" class="btn btn-default btn-sm" target="_blank">编辑</a>
+		  <a  href="{{ path('admin_article_edit',{id:article.id}) }}" class="btn btn-default btn-sm" >编辑</a>
 		  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
 		    <span class="caret"></span>
 		  </a>

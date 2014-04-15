@@ -29,8 +29,11 @@ define(function(require, exports, module) {
 			});
 		});
 		$(".featured-label").on('click', function(){
-			$.post($(this).data('url'), function(){
+			$.post($(this).data('url'), function(response){
 				window.location.reload();
+				// var status = response.status;
+				// console.log(status);
+				// console.log("label label-"+status);
 			});
 		});		
 

@@ -27,48 +27,19 @@
       <p><br></p>
       分类:&nbsp;<span><a href="{{ path('article_category', {categoryCode:categoryCode}) }}">{{categoryName}}</a></span>
       <ul class="pager">
-        {% if article_previous %}
-          <li class="previous"><a href="/article/{{article_previous.id}}">&larr; 上一篇</a></li>
+        {% if articlePrevious %}
+          <li class="previous"><a href="/article/{{articlePrevious.id}}">&larr; 上一篇</a></li>
         {% else %}
           <li class="previous disabled"><a href="javascript:;">&larr; 上一篇</a></li>
         {% endif %}
 
-          {% if article_next %}
-          <li class="next"><a href="/article/{{article_next.id}}"> 下一篇 &rarr;</a></li>
+          {% if articleNext %}
+          <li class="next"><a href="/article/{{articleNext.id}}"> 下一篇 &rarr;</a></li>
         {% else %}
           <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
         {% endif %}
       </ul>
      <hr>
-      文章评论:<br><br>
-      <textarea class="textarea" hidefocus="true" tabindex="" style="width: 100%; height: 172px;">xxx</textarea><br><br>
-
-      <button class="btn-primary pull-right">发表评论</button>
-      <br><br>
-        <ul class="media-list latest-review-list">
-            <li class="media">
-              <a href="/user/229" class="author-picture-link">
-                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
-              </a>
-              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
-              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
-
-              <div class="review-footer">
-                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
-              </div>
-            </li>
-            <li class="media">
-              <a href="/user/229" class="author-picture-link">
-                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
-              </a>
-              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
-              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
-
-              <div class="review-footer">
-                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
-              </div>
-            </li>
-          </ul>
          
     </div>
       <div class="col-md-4">

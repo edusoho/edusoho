@@ -37,7 +37,6 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->makeCategoryOptions('enabled');
-
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
         	'articles' => $articles,
             'categories' => $categories,
@@ -95,7 +94,7 @@ class ArticleController extends BaseController
          $result = $this->getArticleService()->updateArticleProperty($id, $property);
 
           if(!$result){
-            return $this->createJsonResponse(array("status" =>"failed")); 
+            return $this->createJsonResponse(array("status" =>"default")); 
         } else {
             return $this->createJsonResponse(array("status" =>"success")); 
         }
@@ -232,12 +231,10 @@ class ArticleController extends BaseController
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
             $filename = $request->query->get('filename');
-
             $filename = str_replace('!', '.', $filename);
             $filename = str_replace(array('..' , '/', '\\'), '', $filename);
             $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
             $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
-
             return new Response(json_encode($response));
         }
     }

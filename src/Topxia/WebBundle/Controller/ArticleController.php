@@ -146,12 +146,12 @@ class ArticleController extends BaseController
 		$article = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
 		unset($conditions['id']);
 		$conditions['idLessThan'] = $id;
-		$article_next = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
+		$articleNext = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
 		unset($conditions['idLessThan']);
 		$conditions['idMoreThan'] = $id;
-		$article_previous = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
-		$article_next = $this->arrayChange($article_next);
-		$article_previous = $this->arrayChange($article_previous);
+		$articlePrevious = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
+		$articleNext = $this->arrayChange($articleNext);
+		$articlePrevious = $this->arrayChange($articlePrevious);
 		$article = $this->arrayChange($article);
 
 		if(!empty($article)){
@@ -159,16 +159,16 @@ class ArticleController extends BaseController
 			$tagIdsArray = explode(",", $article['tagIds']);
 			$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 		}else{
-			return $this->createMessageResponse('error', '没有这篇文章！');
+			return $this->createMessageResponse('error', '文章已删除或者未发布！');
 		}
 
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'hottestArticles' => $hottestArticles,
 			'articleSetting' => $articleSetting,
-			'article_previous' => $article_previous,
+			'articlePrevious' => $articlePrevious,
 			'article' => $article,
-			'article_next' => $article_next,
+			'articleNext' => $articleNext,
 			'tags' => $tags,
 			'categoryName' => $category['name'],
 			'categoryCode' => $category['code'],

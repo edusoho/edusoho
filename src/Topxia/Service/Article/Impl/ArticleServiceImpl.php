@@ -69,7 +69,10 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $new_article = array();
 		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
-		$new_article['hasPicture'] = $match ? 1 : 0;
+		
+		$new_article['picture'] = $match ? $matches[1] : "null";
+		$new_article['thumb'] = $article['thumb'];
+		$new_article['originalThumb'] = $article['originalThumb'];
 		$new_article['title'] = $article['title'];
 		$new_article['body'] = $article['richeditorBody'];
 		$new_article['featured'] = empty($article['featured']) ? 0 : 1;
@@ -83,7 +86,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$new_article['createdTime'] = time();
 		$new_article['updated'] = time();
 		$new_article['userId'] = $this->getCurrentUser()->id;
-		$new_article['picture'] = $article['picture'];
 
 		$article = $this->getArticleDao()->addArticle($new_article);
 		$this->getLogService()->info('Article', 'create', "创建文章《({$article['title']})》({$article['id']})", $article);
@@ -105,7 +107,10 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         
         $edit_article = array();
 		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
-		$edit_article['hasPicture'] = $match ? 1 : 0;
+		
+		$edit_article['picture'] = $match ? $matches[1] : "null";
+		$edit_article['thumb'] = $article['thumb'];
+		$edit_article['originalThumb'] = $article['originalThumb'];
 		$edit_article['title'] = $article['title'];
 		$edit_article['body'] = $article['richeditorBody'];
 		$edit_article['featured'] = empty($article['featured']) ? 0 : 1;
@@ -119,7 +124,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$edit_article['createdTime'] = time();
 		$edit_article['updated'] = time();
 		$edit_article['userId'] = $this->getCurrentUser()->id;
-		$edit_article['picture'] = $article['picture'];
+		// $edit_article['picture'] = $article['picture'];
 		$article = $this->getArticleDao()->updateArticle($id,$edit_article);
 
 		$this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})", $article);
@@ -149,6 +154,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			}
 		}
 		$this->getLogService()->info('Article', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$property_val}");
+		return $property_val;
 	}
 
 	public function trashArticle($id)

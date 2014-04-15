@@ -1,12 +1,26 @@
 {% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
 
 {% set modal_size = 'xlarge' %}
+
+{% block title %}
+	文章管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}文章 - {{ parent() }}
+{% endblock %}
+
 {% set script_controller = 'article/article-modal' %}
 
-{% block sidebar %}{% endblock %}
 {% block main %}
 
 {% set article = article|default(null) %}
+
+{% set menu = 'article' %}
+
+<div class="page-header clearfix">
+
+  <ol class="breadcrumb">
+	  <li><a href="{{ path('admin_article') }}">文章管理</a></li>
+	  <li class="active">{% if article|default(null) %}编辑{% else %}添加{% endif %}文章</li>
+　</ol>
+</div>
 
 <form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
 	{% if article %}
@@ -31,10 +45,10 @@
 					{% if article %}
 			         {{ select_options(categoryTree, article.categoryId) }}
 			        {% else %}
-			         {{ select_options(categoryTree, categoryTree_ids|default(''), '--选择栏目--') }}
+			         {{ select_options(categoryTree, categoryTree_ids|default(null), '--栏目--') }}
 			       {% endif %}
 			       	</select>
-					</div>
+			   </div>
 			</div>
 
 			<label for="richeditor-body-field" class="control-label">正文</label>
@@ -68,8 +82,8 @@
 			    </div>
 			    <div class="col-md-7 controls">
 				      <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}>  置顶  
-					  <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured', 1) %} checked="checked" {% endif %}>  头条  
-				      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted', 1) %} checked="checked" {% endif %}>  推荐  
+					  <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}>  头条  
+				      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}>  推荐  
 			    </div>
 		  </div>
 
@@ -106,12 +120,14 @@
 			        <label for="article-sourceUrl">设置缩略图</label>
 			    </div>
 			    <div class="col-md-7 controls">
-				    <div id="aticle-picture-container"><img src='{{ asset(article.picture|default(null)) }}' style="width: 230px; height: 125px;" id="article-pic-preview"></div>
-				    
+			    {# {% if article.thumb|default(null) %} #}
+				    <div id="aticle-thumb-container"><img src='{{ asset(article.thumb|default(null)) }}' style="width: 230px; height: 125px;" id="article-thumb-preview"></div>
+				{# {% endif %} #}
 
-				   <br><a href="#modal" data-toggle="modal" data-url="/admin/article/show/upload" class="btn btn-primary">上传</a>
-				      <input type="hidden" name="picture" value="{{article.picture |default()}}" id="article-pic">
-				     <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
+				   <br><a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-primary">上传</a>
+				      <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
+				      <input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
+				     <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
 				</div>
 			</div>
 
@@ -129,8 +145,8 @@
 		</div>
 	</div>
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-	 <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">保存</button>
+    <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">确定</button>
+	 {# <button id ="article-operate-cancel" class="btn btn-link" data-url="/admin/article">取消</button> #}
 </form>
 
 {% endblock %}
