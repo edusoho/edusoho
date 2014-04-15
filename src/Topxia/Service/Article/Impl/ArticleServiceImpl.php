@@ -63,13 +63,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		if(empty($article)){
 			$this->createServiceException("文章内容为空，创建文章失败！");
 		}
-
 		$tagNames = array_filter(explode(',', $article['tags']));
         $tags = $this->getTagService()->findTagsByNames($tagNames);
         $tagIdsArray = ArrayToolkit::column($tags, 'id');
         $article['tagIds'] = implode(',', $tagIdsArray);
 
         $new_article = array();
+		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
+		$new_article['hasPicture'] = $match ? 1 : 0;
 		$new_article['title'] = $article['title'];
 		$new_article['body'] = $article['richeditorBody'];
 		$new_article['featured'] = empty($article['featured']) ? 0 : 1;
@@ -98,12 +99,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		if(empty($checkArticle)){
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
-		
 		$tagNames = array_filter(explode(',', $article['tags']));
         $tags = $this->getTagService()->findTagsByNames($tagNames);
         $tagIdsArray = ArrayToolkit::column($tags, 'id');
         $article['tagIds'] = implode(',', $tagIdsArray);
+        
         $edit_article = array();
+		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
+		$edit_article['hasPicture'] = $match ? 1 : 0;
 		$edit_article['title'] = $article['title'];
 		$edit_article['body'] = $article['richeditorBody'];
 		$edit_article['featured'] = empty($article['featured']) ? 0 : 1;
@@ -118,7 +121,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$edit_article['updated'] = time();
 		$edit_article['userId'] = $this->getCurrentUser()->id;
 		$edit_article['picture'] = $article['picture'];
-
 		$article = $this->getArticleDao()->updateArticle($id,$edit_article);
 
 		$this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})", $article);

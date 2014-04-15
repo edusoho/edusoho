@@ -25,7 +25,20 @@
            <span class="label label-info">{{tag.name}}</span>
       {% endfor %}
       <p><br></p>
-      分类:&nbsp;<span><a href="{{ path('article_category', {categoryCode:categoryCode}) }}">{{categoryName}}</a></span><p><br></p>
+      分类:&nbsp;<span><a href="{{ path('article_category', {categoryCode:categoryCode}) }}">{{categoryName}}</a></span>
+      <ul class="pager">
+        {% if article_previous %}
+          <li class="previous"><a href="/article/{{article_previous.id}}">&larr; 上一篇</a></li>
+        {% else %}
+          <li class="previous disabled"><a href="#">&larr; 上一篇</a></li>
+        {% endif %}
+
+          {% if article_next %}
+          <li class="next"><a href="/article/{{article_next.id}}">&larr; 下一篇</a></li>
+        {% else %}
+          <li class="next disabled"><a href="#">&larr; 下一篇</a></li>
+        {% endif %}
+      </ul>
      <hr>
       文章评论:<br><br>
       <textarea class="textarea" hidefocus="true" tabindex="" style="width: 100%; height: 172px;">xxx</textarea><br><br>
@@ -66,7 +79,7 @@
               {% for key,hottestArticle in hottestArticles %}
                 <li class="media">
                   <span class="rank_num">{{ key+1 }}</span>
-                  <div class="media-body">{{ hottestArticle.title|plain_text(35) }}</div>
+                  <div class="media-body"><a href="/article/{{hottestArticle.id}}">{{ hottestArticle.title|plain_text(35) }}</a></div>
                 </li>
               {% endfor %}
             </ul>

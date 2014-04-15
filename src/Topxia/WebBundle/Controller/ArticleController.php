@@ -130,16 +130,33 @@ class ArticleController extends BaseController
 		$hottestArticles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
 		$this->getArticleService()->hitArticle($id);
 
-		$article = $this->getArticleService()->getArticle($id);
-		$category = $this->getCategoryService()->getCategory($article['categoryId']);
-		$tagIdsArray = explode(",", $article['tagIds']);
-		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
+		$conditions['id'] = $id;
+		$article = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
+		unset($conditions['id']);
+		$conditions['idLessThan'] = $id;
+		$article_next = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
+		unset($conditions['idLessThan']);
+		$conditions['idMoreThan'] = $id;
+		$article_previous = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 1);
+		$article_next = $this->arrayChange($article_next);
+		$article_previous = $this->arrayChange($article_previous);
+		$article = $this->arrayChange($article);
+
+		if(!empty($article)){
+			$category = $this->getCategoryService()->getCategory($article['categoryId']);
+			$tagIdsArray = explode(",", $article['tagIds']);
+			$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
+		}else{
+			echo "没有这篇文章！";exit();
+		}
 
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'hottestArticles' => $hottestArticles,
 			'articleSetting' => $articleSetting,
+			'article_previous' => $article_previous,
 			'article' => $article,
+			'article_next' => $article_next,
 			'tags' => $tags,
 			'categoryName' => $category['name'],
 			'categoryCode' => $category['code'],
@@ -157,6 +174,21 @@ class ArticleController extends BaseController
 				}
 			}
 		}
+	}
+
+	protected function arrayChange($changeArray){
+		if(empty($changeArray)){
+			return array();
+		}
+
+	    $newArray = array();
+
+	    foreach($changeArray as $valueArr){
+	    	foreach ($valueArr as $key => $value) {
+	    		$newArray[$key] = $value;
+	    	}
+	    } 
+	    return $newArray; 
 	}
 
     private function getCategoryService()
