@@ -187,6 +187,10 @@ class RegisterController extends BaseController
                 $welcomeBody = $this->getWelcomeBody($user);
                 if (empty($welcomeBody)) { return true; }
 
+                if (strlen($welcomeBody) >= 1000) {
+                    $welcomeBody = substr($welcomeBody, 0, 1000);
+                }
+
                 $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
                 $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
                 $this->getMessageService()->deleteConversation($conversation['id']);
