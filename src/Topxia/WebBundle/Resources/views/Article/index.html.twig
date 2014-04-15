@@ -1,15 +1,21 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
-{% block title %}{{ articleSetting.name }}首页 - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('article.name') }}首页 - {{ parent() }}{% endblock %}
 
 {% block content %}
 
 <div class="es-row-wrap container-gap">
 
-  <div class="row row-8-4 article-row">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>{{ setting('article.name') }}</h1></div>
+    </div>
+  </div>
+
+  <div class="row row-8-4">
     <div class="col-md-8">
       <ul class="nav nav-pills article-nav">
-        <li class="active"><a href="{{ path('article_show') }}">{{ articleSetting.name }}首页</a></li>
+        <li class="active"><a href="{{ path('article_show') }}">{{ setting('article.name') }}</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
             <li><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
@@ -35,7 +41,7 @@
           <li class="media article-item clearfix">
             <div class="article-title text-muted">
               <div class="pull-left">
-                <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a> / {{ category.code }}
+                <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a>
                 </span>
               </div>
               <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
@@ -57,39 +63,12 @@
     </div>
 
     <div class="col-md-4">
-      <div class="es-box">
-        <div class="es-box-heading"><h2>最新评论</h2></div>
-        <div class="es-box-body">
-          <ul class="media-list latest-review-list">
-            <li class="media">
-              <a href="/user/229" class="author-picture-link">
-                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
-              </a>
-              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
-              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
 
-              <div class="review-footer">
-                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
-              </div>
-            </li>
-            <li class="media">
-              <a href="/user/229" class="author-picture-link">
-                <img class="author-picture" src="/assets/img/default/avatar.png?2.5">
-              </a>
-              <a href="/user/229" class="author-nickname">简爱</a> <span class="text-muted">说：</span> <br>
-              <div class="review-content">实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型实战型</div>
-
-              <div class="review-footer">
-                <span class="text-muted">评论：</span><a href="/course/18" class="course-title"> 发廊「钱」规则之业绩提升「一倍」方案</a>
-              </div>
-            </li>
-          </ul>    
+      <div class="panel panel-default popular-articles">
+        <div class="panel-heading">
+          <h3 class="panel-title">热门文章</h3>
         </div>
-      </div>
-
-      <div class="es-box">
-        <div class="es-box-heading"><h2>热门文章</h2></div>
-        <div class="es-box-body">
+        <div class="panel-body">
           <ul class="media-list">
             {% for key,hottestArticle in hottestArticles %}
               <li class="media">
@@ -100,6 +79,7 @@
           </ul>
         </div>
       </div>
+
     </div>
 
   </div>

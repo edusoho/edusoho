@@ -81,7 +81,7 @@ class ArticleCategoryController extends BaseController
 
     public function settingAction(Request $request)
     {   
-        $articleSetting = $this->getSettingService()->get('articleSetting', array());
+        $articleSetting = $this->getSettingService()->get('article', array());
 
         $default = array(
             'name' => '资讯频道',
@@ -92,7 +92,7 @@ class ArticleCategoryController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleSetting = $request->request->all();
-            $this->getSettingService()->set('articleSetting', $articleSetting);
+            $this->getSettingService()->set('article', $articleSetting);
             $this->getLogService()->info('article', 'update_settings', "更新资讯频道设置", $articleSetting);
             $this->setFlashMessage('success', '资讯频道设置已保存！');
         };

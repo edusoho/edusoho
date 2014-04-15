@@ -9,7 +9,7 @@ class MemberLevelDisct  implements DataDictInterface{
 		return array(
 			'level_p'=>'普通会员',
 			'level_g'=>'金牌会员',
-		)
+		);
 	}
 
 }

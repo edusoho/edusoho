@@ -1,14 +1,10 @@
-.article-row {
-	margin-top: 20px;
-}
-
 .latest-review-list {
 	font-size: 13px;
 }
 
-.media-list .media {
+.popular-articles .media-list .media {
 	border-bottom: 0px;
-	padding: 0 15px 10px 15px;
+	padding: 0px;
 }
 
 .latest-review-list .review-footer {
@@ -22,12 +18,22 @@
 	padding: 0;
 	margin-bottom: 20px;
 }
+
 .article-wide-list li {
 	margin-top: 20px;
 }
+
 .article-wide-list .article-item {
-	padding-bottom: 20px;
+	padding-bottom: 15px;
 	border-bottom: 1px solid #eee;
+}
+
+.article-wide-list .article-item .media-body {
+	color: #555;
+}
+
+.article-wide-list .article-item .media-heading {
+	font-weight: bold;
 }
 
 .article-wide-list .article-picture {
@@ -62,7 +68,7 @@
 	height: 20px;
 	text-align: center;
 	float: left;
-	margin-right: 15px;
+	margin-right: 10px;
 }
 
 .homepage-feature .cycle-overlay {
@@ -73,10 +79,10 @@
 	bottom: 0px;
 	overflow: hidden;
 	font-size: 20px;
-	background: black;
+	background: rgb(19, 16, 16);
 	color: white;
 	padding: 15px;
-	opacity: .5;
+	opacity: .7;
 }
 
 .homepage-feature .cycle-overlay a {
@@ -87,10 +93,6 @@
 
 .article-sub {
 	margin-bottom: 20px;
-}
-
-.article-row {
-	margin-top: 20px;
 }
 
 .article-nav {

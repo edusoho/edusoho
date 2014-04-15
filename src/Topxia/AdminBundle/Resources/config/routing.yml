@@ -441,6 +441,11 @@ admin_app_installed:
     pattern:  /app/installed
     defaults: { _controller: TopxiaAdminBundle:App:installed }
 
+admin_app_uninstall:
+    pattern:  /app/uninstall
+    defaults: { _controller: TopxiaAdminBundle:App:uninstall }
+
+
 admin_app_upgrades:
     pattern:  /app/upgrades
     defaults: { _controller: TopxiaAdminBundle:App:upgrades }

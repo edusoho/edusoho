@@ -54,6 +54,7 @@ class ArticleController extends BaseController
 			0,10
 		);
 		
+		// @todo remove
 		foreach ($featuredArticles as &$featuredArticle) {
 			preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $featuredArticle['body'], $matches);
 			if (isset($matches[1])) {
@@ -66,35 +67,41 @@ class ArticleController extends BaseController
 			'latestArticles' => $latestArticles,
 			'hottestArticles' => $hottestArticles,
 			'featuredArticles' => $featuredArticles,
-			'paginator' => $paginator,
-			'articleSetting' => $articleSetting
+			'paginator' => $paginator
 		));
 	}
 
 	public function categoryAction(Request $request, $categoryCode)
 	{	
-		$articleSetting = $this->getSettingService()->get('articleSetting', array());
-		if (empty($articleSetting)) {
-			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
-		}
-		$categoryTree = $this->getCategoryService()->getCategoryTree();
-
 		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
-		$topCategory = $this->getTopCategory($categoryTree,$category);
-
-		if ($topCategory['parentId'] != 0) {
-			$topCategory = $this->getTopCategory($categoryTree,$topCategory);
+		if (empty($category)) {
+			throw $this->createNotFoundException('资讯不存在');
 		}
+
+		// $conditions = array(
+		// 	'categoryId' => $category['id'],
+		// 	'includeChindren' => true,
+		// );
+
+		$categoryTree = $this->getCategoryService()->getCategoryTree();
+
+		$rootCategory = $this->getRootCategory($categoryTree,$category);
 
 		$categoryIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
 
 		$categoryIds[] = $category['id']; 
 
+		$setting = $this->getSettingService()->get('article', array());
+
+		if (empty($articleSetting)) {
+			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
+		}
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->findArticlesCount($categoryIds),
-            $articleSetting['pageNums']
+            $setting['pageNums']
         );
 
 		$articles = $this->getArticleService()->findArticlesByCategoryIds(
@@ -111,8 +118,8 @@ class ArticleController extends BaseController
 			'categoryTree' => $categoryTree,
 			'categoryCode' => $categoryCode,
 			'category' => $category,
-			'articleSetting' => $articleSetting,
-			'topCategory' => $topCategory,
+			'setting' => $setting,
+			'rootCategory' => $rootCategory,
 			'articles' => $articles,
 			'paginator' => $paginator
 		));
@@ -120,6 +127,19 @@ class ArticleController extends BaseController
 
 	public function detailAction(Request $request,$id)
 	{
+		$article = $this->getArticleService()->getArticle($id);
+		
+		if (empty($article)) {
+			throw $this->createNotFoundException('文章不存在');
+		}
+
+		if ($article['status'] != 'published') {
+			return $this->createMessageResponse('xxxx');
+		}
+
+
+
+
 		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
@@ -163,17 +183,49 @@ class ArticleController extends BaseController
 		));
 	}
 
-	private function getTopCategory($categoryTree,$category)
+	public function popularArticlesBlockAction()
+	{	
+		$conditions = array(
+			'type' => 'article',
+			'status' => 'published'
+		);
+
+		$articles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
+
+		return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
+			'articles' => $articles
+		));
+	}
+
+	public function recommendArticlesBlockAction()
+	{	
+		$conditions = array(
+			'type' => 'article',
+			'status' => 'published',
+			'promoted' => 1
+		);
+
+		$articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' , 'DESC'), 0 , 10);
+
+		return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
+			'articles' => $articles
+		));
+	}
+
+	private function getRootCategory($categoryTree, $category)
 	{
-		if ($category['parentId'] == 0) {
-			return $category;
-		} else {
-			foreach ($categoryTree as $cat) {
-				if ($cat['id'] == $category['parentId']) {
-					return $cat;
-				}
+		$start = false;
+		foreach (array_reverse($categoryTree) as $treeCategory) {
+			if ($treeCategory['id'] == $category['id']) {
+				$start = true;
+			}
+
+			if ($start && $treeCategory['depth'] ==1) {
+				return $treeCategory;
 			}
 		}
+
+		return null;
 	}
 
 	protected function arrayChange($changeArray){
@@ -206,9 +258,9 @@ class ArticleController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-     private function getTagService()
-     {
-	    return $this->getServiceKernel()->createService('Taxonomy.TagService');
-     }
+ 	private function getTagService()
+ 	{
+   		return $this->getServiceKernel()->createService('Taxonomy.TagService');
+ 	}
 
 }

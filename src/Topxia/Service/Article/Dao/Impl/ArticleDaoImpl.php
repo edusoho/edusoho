@@ -114,6 +114,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('title LIKE :keywords')
 			->andWhere('hasPicture = :hasPicture')
 			->andWhere('categoryId = :categoryId')
+
+            // @todo 
 			->andWhere('id = :id')
 			->andWhere('id > :idMoreThan')
 			->andWhere('id < :idLessThan');
