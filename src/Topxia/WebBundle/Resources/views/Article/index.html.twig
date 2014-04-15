@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
-{% block title %}{{ articleSetting.name }}首页 - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('article.name') }}首页 - {{ parent() }}{% endblock %}
 
 {% block content %}
 
@@ -8,14 +8,14 @@
 
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>{{ articleSetting.name }}</h1></div>
+      <div class="page-header"><h1>{{ setting('article.name') }}</h1></div>
     </div>
   </div>
 
   <div class="row row-8-4">
     <div class="col-md-8">
       <ul class="nav nav-pills article-nav">
-        <li class="active"><a href="{{ path('article_show') }}">{{ articleSetting.name }}</a></li>
+        <li class="active"><a href="{{ path('article_show') }}">{{ setting('article.name') }}</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
             <li><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
@@ -79,14 +79,6 @@
           </ul>
         </div>
       </div>
-
-
- <!--      <div class="es-box">
-        <div class="es-box-heading"><h2>热门文章</h2></div>
-        <div class="es-box-body">
-          
-        </div>
-      </div> -->
 
     </div>
 

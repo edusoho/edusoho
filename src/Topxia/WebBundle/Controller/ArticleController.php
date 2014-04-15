@@ -11,7 +11,6 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{	
 
-		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 		if (empty($articleSetting)) {
 			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
 		}
@@ -67,8 +66,7 @@ class ArticleController extends BaseController
 			'latestArticles' => $latestArticles,
 			'hottestArticles' => $hottestArticles,
 			'featuredArticles' => $featuredArticles,
-			'paginator' => $paginator,
-			'articleSetting' => $articleSetting
+			'paginator' => $paginator
 		));
 	}
 
@@ -87,14 +85,14 @@ class ArticleController extends BaseController
 
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
-
-		$topCategory = $this->getTopCategory($categoryTree,$category);
+		$rootCategory = $this->getRootCategory($categoryTree,$category);
 
 		$categoryIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
 
 		$categoryIds[] = $category['id']; 
 
-		$articleSetting = $this->getSettingService()->get('article', array());
+		$setting = $this->getSettingService()->get('article', array());
+
 		if (empty($articleSetting)) {
 			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
 		}
@@ -102,7 +100,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->findArticlesCount($categoryIds),
-            $articleSetting['pageNums']
+            $setting['pageNums']
         );
 
 		$articles = $this->getArticleService()->findArticlesByCategoryIds(
@@ -119,8 +117,8 @@ class ArticleController extends BaseController
 			'categoryTree' => $categoryTree,
 			'categoryCode' => $categoryCode,
 			'category' => $category,
-			'articleSetting' => $articleSetting,
-			'topCategory' => $topCategory,
+			'setting' => $setting,
+			'rootCategory' => $rootCategory,
 			'articles' => $articles,
 			'paginator' => $paginator
 		));
@@ -138,10 +136,6 @@ class ArticleController extends BaseController
 			return $this->createMessageResponse('xxxx');
 		}
 
-
-
-
-		$articleSetting = $this->getSettingService()->get('articleSetting', array());
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$conditions = array(
@@ -184,7 +178,36 @@ class ArticleController extends BaseController
 		));
 	}
 
-	private function getTopCategory($categoryTree, $category)
+	public function popularArticlesBlockAction()
+	{	
+		$conditions = array(
+			'type' => 'article',
+			'status' => 'published'
+		);
+
+		$articles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
+
+		return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
+			'articles' => $articles
+		));
+	}
+
+	public function recommendArticlesBlockAction()
+	{	
+		$conditions = array(
+			'type' => 'article',
+			'status' => 'published',
+			'promoted' => 1
+		);
+
+		$articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' , 'DESC'), 0 , 10);
+
+		return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
+			'articles' => $articles
+		));
+	}
+
+	private function getRootCategory($categoryTree, $category)
 	{
 		$start = false;
 		foreach (array_reverse($categoryTree) as $treeCategory) {
@@ -223,11 +246,6 @@ class ArticleController extends BaseController
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
  	private function getTagService()

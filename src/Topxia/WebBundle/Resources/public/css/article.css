@@ -24,7 +24,7 @@
 }
 
 .article-wide-list .article-item {
-	padding-bottom: 20px;
+	padding-bottom: 15px;
 	border-bottom: 1px solid #eee;
 }
 
@@ -68,7 +68,7 @@
 	height: 20px;
 	text-align: center;
 	float: left;
-	margin-right: 15px;
+	margin-right: 10px;
 }
 
 .homepage-feature .cycle-overlay {
