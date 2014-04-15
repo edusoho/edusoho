@@ -83,7 +83,6 @@ class ArticleController extends BaseController
             'tags' => ArrayToolkit::column($tags, 'name'),
             'tagNamesStr' => $tagNamesStr
         ));
-
     }
 
     public function previewAction(Request $request,$id)
@@ -236,8 +235,6 @@ class ArticleController extends BaseController
 
             return new Response(json_encode($response));
         }
-
-        
     }
 
     protected function makeCategoryOptions($operate_type="")
