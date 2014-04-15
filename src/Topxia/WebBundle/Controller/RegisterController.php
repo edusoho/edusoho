@@ -10,9 +10,11 @@ class RegisterController extends BaseController
     public function indexAction(Request $request)
     {
         $form = $this->createForm(new RegisterType());
+
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
+           
             if ($form->isValid()) {
                 $registration = $form->getData();
                 $registration['createdIp'] = $request->getClientIp();
@@ -179,26 +181,37 @@ class RegisterController extends BaseController
     {
         $senderUser = array();
         $auth = $this->getSettingService()->get('auth', array());
-        
-        if(!empty($auth['welcome_sender'])){
-            $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-            if(!empty($senderUser)){
 
-                $welcomeBody = $this->getWelcomeBody($user);
-                if (empty($welcomeBody)) { return true; }
+        if (empty($auth['welcome_enabled'])) {
+            return ;
+        }
 
-                if (strlen($welcomeBody) >= 1000) {
-                    $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
-                }
+        if ($auth['welcome_enabled'] != 'opened') {
+            return ;
+        }
 
-                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
-                $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
-                $this->getMessageService()->deleteConversation($conversation['id']);
-
-            }
+        if (empty($auth['welcome_sender'])) {
+            return ;
         }
         
-        return true;
+        $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
+        if (empty($senderUser)) {
+            return ;
+        }
+
+        $welcomeBody = $this->getWelcomeBody($user);
+        if (empty($welcomeBody)) {
+            return true;
+        }
+
+        if (strlen($welcomeBody) >= 1000) {
+            $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
+        }
+
+        $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
+        $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
+        $this->getMessageService()->deleteConversation($conversation['id']);
+
     }
 
     private function getWelcomeBody($user)
