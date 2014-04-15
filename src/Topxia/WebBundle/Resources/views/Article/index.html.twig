@@ -49,7 +49,7 @@
               </a>
             {% endif %}
             <div class="media-body">
-              <h4 class="media-heading"><a href="{{ path('article_detail', { categoryCode:category.code, id:article.id }) }}" >{{ article.title|plain_text(25) }}</a></h4>
+              <h4 class="media-heading"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title|plain_text(25) }}</a></h4>
               {{ article.body|plain_text(150) }}
             </div>
           </li>
@@ -104,7 +104,7 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 
 </div>
