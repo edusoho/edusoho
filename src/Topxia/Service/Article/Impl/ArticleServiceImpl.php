@@ -34,9 +34,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $this->getArticleDao()->findArticlesCount($categoryIds);
 	}
 
-	public function searchArticles(array $conditions, array $orderBy, $start, $limit)
+	public function searchArticles(array $conditions, $sort, $start, $limit)
 	{	
-		return $this->getArticleDao()->searchArticles($conditions,$orderBy,$start,$limit);
+		$orderBys = $this->filterSort($sort);
+
+		return $this->getArticleDao()->searchArticles($conditions, $orderBys, $start, $limit);
 	}
 
 	public function searchArticleCount($conditions)
@@ -236,6 +238,41 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 				'file_original_name_new'=>$file_original_name_new,
 				'file_original_path'=>str_replace($webPath, "", $file_original_directory)
 			);
+	}
+
+	private function filterSort($sort)
+	{
+		switch ($sort) {
+
+			case 'created':
+				$orderBys = array(
+					array('createdTime', 'DESC'),
+				);
+				break;
+
+			case 'published':
+				$orderBys = array(
+					array('sticky', 'DESC'),
+					array('publishedTime', 'DESC'),
+				);
+				break;
+
+			case 'normal':
+				$orderBys = array(
+					array('publishedTime', 'DESC'),
+				);
+				break;
+
+			case 'popular':
+				$orderBys = array(
+					array('hits', 'DESC'),
+				);
+				break;
+
+			default:
+				throw $this->createServiceException('参数sort不正确。');
+		}
+		return $orderBys;
 	}
 
 	private function getArticleDao()

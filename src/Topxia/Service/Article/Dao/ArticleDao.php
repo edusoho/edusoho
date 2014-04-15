@@ -12,7 +12,7 @@ interface ArticleDao
 
 	public function findArticlesCount(array $categoryIds);
 
-	public function searchArticles($conditions, $orderBy, $start, $limit);
+	public function searchArticles($conditions, $orderBys, $start, $limit);
 
 	public function searchArticleCount($conditions);
 

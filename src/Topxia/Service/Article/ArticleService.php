@@ -11,7 +11,7 @@ interface ArticleService
 
 	public function findArticlesCount(array $categoryIds);
 
-	public function searchArticles(array $conditions, array $orderBy, $start, $limit);
+	public function searchArticles(array $conditions, $sort, $start, $limit);
 
 	public function searchArticleCount($conditions);
 

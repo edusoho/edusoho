@@ -64,21 +64,9 @@
 
     <div class="col-md-4">
 
-      <div class="panel panel-default popular-articles">
-        <div class="panel-heading">
-          <h3 class="panel-title">热门文章</h3>
-        </div>
-        <div class="panel-body">
-          <ul class="media-list">
-            {% for key,hottestArticle in hottestArticles %}
-              <li class="media">
-                <span class="rank_num">{{ key+1 }}</span>
-                <div class="media-body"><a href="{{ path('article_detail', { id:hottestArticle.id }) }}">{{ hottestArticle.title|plain_text(35) }}</a></div>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
+      {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
+
+      {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
 
     </div>
 

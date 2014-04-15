@@ -11,9 +11,9 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{	
 
-		$articleSetting = $this->getSettingService()->get('articleSetting', array());
-		if (empty($articleSetting)) {
-			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
+		$setting = $this->getSettingService()->get('article', array());
+		if (empty($setting)) {
+			$setting = array('name' => '资讯频道', 'pageNums' => 20);
 		}
 		
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
@@ -26,16 +26,14 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticleCount($conditions),
-            $articleSetting['pageNums']
+            $setting['pageNums']
         );
 
 		$latestArticles = $this->getArticleService()->searchArticles(
-			$conditions, array('createdTime', 'DESC'), 
+			$conditions, 'published', 
 			$paginator->getOffsetCount(),
             $paginator->getPerPageCount()
 		);
-
-		$hottestArticles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
 		
 		foreach ($latestArticles as &$article) {
 			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
@@ -50,10 +48,9 @@ class ArticleController extends BaseController
 		);
 		
 		$featuredArticles = $this->getArticleService()->searchArticles(
-			$featuredConditions,array('createdTime', 'DESC'),
+			$featuredConditions,'published',
 			0,10
 		);
-		
 		// @todo remove
 		foreach ($featuredArticles as &$featuredArticle) {
 			preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $featuredArticle['body'], $matches);
@@ -65,7 +62,6 @@ class ArticleController extends BaseController
 		return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
-			'hottestArticles' => $hottestArticles,
 			'featuredArticles' => $featuredArticles,
 			'paginator' => $paginator
 		));
@@ -76,7 +72,7 @@ class ArticleController extends BaseController
 		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
 		if (empty($category)) {
-			throw $this->createNotFoundException('资讯不存在');
+			throw $this->createNotFoundException('资讯栏目页面不存在');
 		}
 
 		// $conditions = array(
@@ -94,8 +90,8 @@ class ArticleController extends BaseController
 
 		$setting = $this->getSettingService()->get('article', array());
 
-		if (empty($articleSetting)) {
-			$articleSetting = array('name' => '资讯频道', 'pageNums' => 20);
+		if (empty($setting)) {
+			$setting = array('name' => '资讯频道', 'pageNums' => 20);
 		}
 
         $paginator = new Paginator(
@@ -118,7 +114,6 @@ class ArticleController extends BaseController
 			'categoryTree' => $categoryTree,
 			'categoryCode' => $categoryCode,
 			'category' => $category,
-			'setting' => $setting,
 			'rootCategory' => $rootCategory,
 			'articles' => $articles,
 			'paginator' => $paginator
@@ -137,10 +132,7 @@ class ArticleController extends BaseController
 			return $this->createMessageResponse('xxxx');
 		}
 
-
-
-
-		$articleSetting = $this->getSettingService()->get('articleSetting', array());
+		$articleSetting = $this->getSettingService()->get('article', array());
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$conditions = array(
@@ -190,7 +182,7 @@ class ArticleController extends BaseController
 			'status' => 'published'
 		);
 
-		$articles = $this->getArticleService()->searchArticles($conditions, array('hits' , 'DESC'), 0 , 10);
+		$articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 10);
 
 		return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
 			'articles' => $articles
@@ -205,7 +197,7 @@ class ArticleController extends BaseController
 			'promoted' => 1
 		);
 
-		$articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' , 'DESC'), 0 , 10);
+		$articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 10);
 
 		return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
 			'articles' => $articles

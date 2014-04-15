@@ -29,7 +29,7 @@ class ArticleController extends BaseController
 
         $articles = $this->getArticleService()->searchArticles(
             $conditions,
-            array('createdTime', 'DESC'),
+            'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -247,7 +247,7 @@ class ArticleController extends BaseController
         if($operate_type == "enabled"){
                 $articles = $this->getArticleService()->searchArticles(
                 array(),
-                array('createdTime', 'DESC'),
+                'created',
                 0,
                 $this->getArticleService()->searchArticleCount(array())
             );

@@ -43,14 +43,17 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->fetchColumn($sql, $categoryIds);
 	}
 
-	public function searchArticles($conditions, $orderBy, $start, $limit)
+	public function searchArticles($conditions, $orderBys, $start, $limit)
 	{
 		$this->filterStartLimit($start, $limit);
 		$builder = $this->_createSearchQueryBuilder($conditions)
 			->select('*')
-			->addOrderBy($orderBy[0], $orderBy[1])
 			->setFirstResult($start)
 			->setMaxResults($limit);
+		foreach ($orderBys as $orderBy) {
+			$builder->addOrderBy($orderBy[0], $orderBy[1]);
+		}
+
 		return $builder->execute()->fetchAll() ? : array();
 	}
 
