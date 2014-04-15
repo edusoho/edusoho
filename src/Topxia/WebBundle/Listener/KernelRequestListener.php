@@ -38,6 +38,7 @@ class KernelRequestListener
                 if ($request->getPathInfo() == '/admin') {
                     $token = $request->request->get('token');
                     $result = ServiceKernel::instance()->createService('CloudPlatform.AppService')->repairProblem($token);
+
                     $this->container->set('Topxia.RepairProblem', $result);
                 } else {
         			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
