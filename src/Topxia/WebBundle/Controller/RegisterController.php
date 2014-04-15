@@ -194,9 +194,10 @@ class RegisterController extends BaseController
                 $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
                 $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
                 $this->getMessageService()->deleteConversation($conversation['id']);
+
             }
         }
-
+        
         return true;
     }
 

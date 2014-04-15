@@ -2,6 +2,8 @@
 
 {% block title %}已安装应用 - {{ parent() }}{% endblock %}
 
+{% set script_controller = 'app/installed' %}
+
 {% set menu = 'installed' %}
 
 {% block main %}
@@ -38,6 +40,10 @@
             <a href="../vip/list" class="btn btn-primary">管理</a>
           {% elseif app.code == 'coupon' %}
             <a href="../coupon" class="btn btn-primary">管理</a>
+          {% endif %}
+
+          {% if setting('developer.debug') and app.code != 'MAIN' %}
+            <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn">卸载</a>
           {% endif %}
         </td>
       </tr>

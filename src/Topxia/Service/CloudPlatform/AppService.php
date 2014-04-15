@@ -59,4 +59,8 @@ interface AppService
      */
     public function beginPackageUpdate($packageId);
 
+    public function repairProblem($token);
+
+    public function uninstallApp($code);
+
 }
