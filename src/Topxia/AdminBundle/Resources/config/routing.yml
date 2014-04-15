@@ -513,18 +513,6 @@ admin_category_checkcode:
     pattern:  /category/checkcode
     defaults: { _controller: TopxiaAdminBundle:Category:checkCode }
 
-admin_aticle_picture_upload:
-    pattern:  /aticle/picture/upload
-    defaults: { _controller: TopxiaAdminBundle:Article:pictureUpload }
-
-admin_aticle_picture_crop:
-    pattern:  /aticle/picture/crop
-    defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }
-
-admin_aticle_show_upload:
-    pattern:  /aticle/show/upload
-    defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
-
 admin_category_edit:
     pattern:  /category/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Category:edit }
@@ -687,6 +675,18 @@ admin_article_create:
 admin_article_preview:
     pattern:  /article/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Article:preview }
+
+admin_article_picture_upload:
+    pattern:  /article/picture/upload
+    defaults: { _controller: TopxiaAdminBundle:Article:pictureUpload }
+
+admin_article_picture_crop:
+    pattern:  /article/picture/crop
+    defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }
+
+admin_article_show_upload:
+    pattern:  /article/show/upload
+    defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
 
 admin_article_update_property:
     pattern:  /article/update/property/{id}/{property}
