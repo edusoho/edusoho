@@ -12,9 +12,6 @@ use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * @todo 序列化／反序列化的操作移动到dao,　参考QuestionDaoImpl
- */
 class ArticleServiceImpl extends BaseService implements ArticleService
 {
 	public function getArticle($id)
