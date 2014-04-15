@@ -20,14 +20,11 @@
       {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
         <div class="alert alert-warning">头条大图轮播功能需先在后台文章管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
       {% else %}
-        {% verbatim %}
-        <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='<a href="#"> {{title}}  </a>'>
-        {% endverbatim %}
+        
+        <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='{% verbatim %}{{title}}{% endverbatim %}'>
           <div class="cycle-overlay"></div>
             {% for featuredArticle in featuredArticles %}
-              {% if featuredArticle.img %}
-                <a href="#" data-cycle-title="{{ featuredArticle.title|plain_text(25) }}" ><img src={{ featuredArticle.img }} alt="{{ featuredArticle.title }}"></a>
-              {% endif %}
+                <a href="{{ path('article_detail', { id:featuredArticle.id }) }}" data-cycle-title="<a href='{{ path('article_detail', { id:featuredArticle.id }) }}'>{{ featuredArticle.title|plain_text(25) }}</a>" ><img src={{ featuredArticle.img }} alt="{{ featuredArticle.title }}"></a>
             {% endfor %}
         </div>
       {% endif %}
@@ -44,7 +41,7 @@
               <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
             </div>
             {% if article.picture %}
-              <a class="pull-right article-picture-link" href="{{ path('article_detail', { categoryCode:category.code, id:article.id }) }}">
+              <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
                 <img class="article-picture" src="{{ asset(article.picture) }}" alt="文章缩略图">
               </a>
             {% endif %}
