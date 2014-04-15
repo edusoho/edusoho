@@ -676,10 +676,6 @@ admin_article_preview:
     pattern:  /article/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Article:preview }
 
-admin_article_picture_upload:
-    pattern:  /article/picture/upload
-    defaults: { _controller: TopxiaAdminBundle:Article:pictureUpload }
-
 admin_article_picture_crop:
     pattern:  /article/picture/crop
     defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }

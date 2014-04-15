@@ -53,7 +53,7 @@ class ArticleController extends BaseController
         if($request->getMethod() == 'POST'){
             $content = $request->request->all();
             $article = $this->getArticleService()->createArticle($content);
-            return $this->forward('TopxiaAdminBundle:Article:index');
+            return $this->redirect($this->generateUrl('admin_article'));
         }
         
         $categoryTree = $this->makeCategoryOptions('all');
@@ -74,7 +74,7 @@ class ArticleController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
-            return $this->forward('TopxiaAdminBundle:Article:index');
+            return $this->redirect($this->generateUrl('admin_article'));
         }
      
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
@@ -238,27 +238,6 @@ class ArticleController extends BaseController
         }
 
         
-    }
-
-    public function pictureUploadAction(Request $request)
-    {
-        $file = $request->files->get('picture');
-
-        $filename = 'article_' . time() .mt_rand(0,1000000).".". $file->getClientOriginalExtension();
-
-        $picture['filename'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/article/{$filename}";
-        $picture['filename'] = ltrim($picture['filename'], '/');
-
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/article";
-        $file = $file->move($directory, $filename);
-
-        $this->getLogService()->info('system', 'article_picture', "aticle上传图片", array('article_picture' => $picture['filename']));
-        
-        $response = array(
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($picture['filename']),
-        );
-
-        return new Response(json_encode($response));
     }
 
     protected function makeCategoryOptions($operate_type="")
