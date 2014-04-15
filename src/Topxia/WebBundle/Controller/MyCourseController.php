@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Util\SetAvatarHelper;
+use Topxia\WebBundle\Util\AvatarAlert;
 
 class MyCourseController extends BaseController
 {
@@ -93,17 +93,6 @@ class MyCourseController extends BaseController
             'users'=>$users,
             'paginator' => $paginator
         ));
-    }
-
-    public function isShouldSetAvatarAction()
-    {
-        $user = $this->getCurrentUser();
-        $isShouldSetAvatar = SetAvatarHelper::setAvatarGotoMyCourse($user);
-
-        if ($isShouldSetAvatar == 'yes') {
-             return $this->render('TopxiaWebBundle:My:remind-avatar.html.twig', array());
-        }
-        return $this->render('TopxiaWebBundle::empty.html.twig', array());
     }
 
     protected function getCourseService()
