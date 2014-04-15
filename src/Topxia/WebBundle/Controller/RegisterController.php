@@ -183,7 +183,11 @@ class RegisterController extends BaseController
         if(!empty($auth['welcome_sender'])){
             $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
             if(!empty($senderUser)){
-                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
+
+                $welcomeBody = $this->getWelcomeBody($user);
+                if (empty($welcomeBody)) { return true; }
+
+                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
                 $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
                 $this->getMessageService()->deleteConversation($conversation['id']);
             }
