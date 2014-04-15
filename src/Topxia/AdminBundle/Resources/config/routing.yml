@@ -681,10 +681,6 @@ admin_article_preview:
     pattern:  /article/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Article:preview }
 
-admin_article_picture_upload:
-    pattern:  /article/picture/upload
-    defaults: { _controller: TopxiaAdminBundle:Article:pictureUpload }
-
 admin_article_picture_crop:
     pattern:  /article/picture/crop
     defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }
@@ -704,6 +700,11 @@ admin_article_edit:
 admin_article_publish:
     pattern:  /article/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Article:publish }
+    methods:  [POST]
+
+admin_article_unpublish:
+    pattern:  /article/{id}/unpublish
+    defaults: { _controller: TopxiaAdminBundle:Article:unpublish }
     methods:  [POST]
 
 admin_article_trash:

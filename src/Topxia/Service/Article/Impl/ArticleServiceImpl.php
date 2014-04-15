@@ -181,6 +181,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$this->getLogService()->info('Article', 'publish', "文章#{$id}发布");
 	}
 
+	public function unpublishArticle($id)
+	{
+		$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'unpublished'));
+		$this->getLogService()->info('Article', 'unpublish', "文章#{$id}未发布");
+	}
+
 	public function isAliasAvaliable($alias)
 	{
 		if (empty($alias)) {
