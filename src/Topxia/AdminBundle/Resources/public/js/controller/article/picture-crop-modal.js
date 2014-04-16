@@ -37,6 +37,7 @@ define(function(require, exports, module) {
                 clearForm: true,
                 success: function(response){
                     $modal.modal('hide');
+                    $("#article-thumb-container").css('display','block');
                     response =  eval("("+response+")");
                     var file_url = response.file_original_path+"/"+response.file_original_name;
                     var file_url_original = response.file_original_path+"/"+response.file_original_name_new;

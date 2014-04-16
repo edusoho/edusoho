@@ -689,9 +689,13 @@ admin_article_show_upload:
     pattern:  /article/show/upload
     defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
 
-admin_article_update_property:
-    pattern:  /article/update/property/{id}/{property}
-    defaults: { _controller: TopxiaAdminBundle:Article:updateProperty }
+admin_article_set_property:
+    pattern:  /article/set/property/{id}/{property}
+    defaults: { _controller: TopxiaAdminBundle:Article:setArticleProperty }
+
+admin_article_cancel_property:
+    pattern:  /article/cancel/property/{id}/{property}
+    defaults: { _controller: TopxiaAdminBundle:Article:cancelArticleProperty }
 
 admin_article_edit:
     pattern:  /article/{id}/edit

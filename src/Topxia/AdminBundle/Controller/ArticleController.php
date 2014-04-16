@@ -62,8 +62,6 @@ class ArticleController extends BaseController
 
     public function createAction(Request $request)
     {
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
-        
         if($request->getMethod() == 'POST'){
             $content = $request->request->all();
             $article = $this->getArticleService()->createArticle($content);
@@ -95,31 +93,23 @@ class ArticleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $article = $this->getArticleService()->getArticle($id);
+
+        if (empty($article)) {
+            throw $this->createNotFoundException('文章已删除或者未发布！');
+        }
+
         $tagNamesStr = empty($article['tagIds']) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds']);
 
         $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        $category = array(
-            'id' => 0,
-            'name' => '',
-            'code' => '',
-            'pagesize' => '10',
-            'parentId' => (int) $request->query->get('parentId', 0),
-            'weight' => 0,
-            'publishArticle' => 1,
-            'seoTitle' => '',
-            'seoKeyword' => '',
-            'seoDesc' => '',
-            'published' => 1
-        );
-
+        $categoryId = $article['categoryId'];
+        $category = $this->getCategoryService()->getCategory($categoryId);
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
             return $this->redirect($this->generateUrl('admin_article'));
         }
-     
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'article' => $article,
             'categoryTree'  => $categoryTree,
@@ -134,17 +124,18 @@ class ArticleController extends BaseController
         return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id));
     }
 
-    public function updatePropertyAction(Request $request,$id,$property)
+    public function setArticlePropertyAction(Request $request,$id,$property)
     {
-         $result = $this->getArticleService()->updateArticleProperty($id, $property);
-
-          if(!$result){
-            return $this->createJsonResponse(array("status" =>"default")); 
-        } else {
-            return $this->createJsonResponse(array("status" =>"success")); 
-        }
+         $result = $this->getArticleService()->setArticleProperty($id, $property);
+         return $this->createJsonResponse(array("status" =>"success")); 
     }
-   
+
+    public function cancelArticlePropertyAction(Request $request,$id,$property)
+    {
+         $result = $this->getArticleService()->cancelArticleProperty($id, $property);
+         return $this->createJsonResponse(array("status" =>"default")); 
+    }
+
     public function trashAction(Request $request, $id)
     {
         $this->getArticleService()->trashArticle($id);

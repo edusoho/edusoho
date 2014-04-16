@@ -12,11 +12,11 @@
 	</td>
 	<td>{{ article.updated|date('Y-n-d H:i') }}</td>
 	<td>
-	<a href="javascript:;" class="featured-label" data-url="{{ path('admin_article_update_property', {id:article.id,property:'featured'}) }}">{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span></a>
+	<a href="javascript:;" class="featured-label" data-set-url="{{ path('admin_article_set_property', {id:article.id,property:'featured'}) }}" data-cancel-url="{{ path('admin_article_cancel_property', {id:article.id,property:'featured'}) }}">{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span></a>
 
-	<a href="javascript:;" class="promoted-label" data-url="{{ path('admin_article_update_property', {id:article.id,property:'promoted'}) }}">{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span></a>
+	<a href="javascript:;" class="promoted-label" data-set-url="{{ path('admin_article_set_property', {id:article.id,property:'promoted'}) }}" data-cancel-url="{{ path('admin_article_cancel_property', {id:article.id,property:'promoted'}) }}">{% if article.promoted == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}荐</span></a>
 
-	<a href="javascript:;" class="sticky-label" data-url="{{ path('admin_article_update_property', {id:article.id,property:'sticky'}) }}">{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span></a>
+	<a href="javascript:;" class="sticky-label" data-set-url="{{ path('admin_article_set_property', {id:article.id,property:'sticky'}) }}" data-cancel-url="{{ path('admin_article_cancel_property', {id:article.id,property:'sticky'}) }}">{% if article.sticky == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}顶</span></a>
 	</td>
 
 	<td>{{ dict_text('articleStatus:html', article.status) }}</td>
@@ -34,9 +34,9 @@
 	     	{% if article.status == 'published' %}
 			    <li><a href="javascript:" data-role="unpublish-item" data-url="{{ path('admin_article_unpublish', {id:article.id}) }}">未发布</a></li>
 		    {% endif %}
-		    {% if article.status == 'published' %}
+		{#     {% if article.status == 'published' %}
 			    <li><a href="{{ path('admin_article_preview',{id:article.id}) }}" data-role="preview-item" target="_blank">预览</a></li>
-		    {% endif %}
+		    {% endif %} #}
 		    {% if article.status != 'trash' %}
 			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_article_trash', {id:article.id}) }}">移至回收站</a></li>
 		    {% endif %}

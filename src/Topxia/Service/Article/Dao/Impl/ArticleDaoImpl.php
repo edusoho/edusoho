@@ -136,12 +136,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('sticky = :sticky')
 			->andWhere('title LIKE :keywords')
 			->andWhere('picture != :pictureNull')
-			->andWhere('categoryId = :categoryId')
-
-            // @todo 
-			->andWhere('id = :id')
-			->andWhere('id > :idMoreThan')
-			->andWhere('id < :idLessThan');
+			->andWhere('categoryId = :categoryId');
 
         if (isset($conditions['categoryIds'])) {
             $categoryIds = array();

@@ -135,8 +135,11 @@ class ArticleController extends BaseController
 		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 
 		$hottestArticles = $this->getArticleService()->searchArticles($conditions, 'popular' , 0 , 10);
+		// var_dump($hottestArticles);
+		// exit();
 		$this->getArticleService()->hitArticle($id);
 
+		$breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 
 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
 			'categoryTree' => $categoryTree,
@@ -146,6 +149,7 @@ class ArticleController extends BaseController
 			'article' => $article,
 			'articleNext' => $articleNext,
 			'tags' => $tags,
+			'breadcrumbs' => $breadcrumbs,
 			'categoryName' => $category['name'],
 			'categoryCode' => $category['code'],
 		));

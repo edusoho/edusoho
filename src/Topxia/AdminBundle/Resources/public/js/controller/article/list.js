@@ -23,31 +23,70 @@ define(function(require, exports, module) {
 			if (!confirm('真的要永久删除该内容吗？')) {
 				return ;
 			}
-
 			$.post($(this).data('url'), function(){
 				window.location.reload();
 			});
 		});
-		$(".featured-label").on('click', function(){
-			$.post($(this).data('url'), function(response){
-				window.location.reload();
-				// var status = response.status;
-				// console.log(status);
-				// console.log("label label-"+status);
+
+		$(".featured-label").on('click', function() {
+			var $self = $(this);
+			var span = $(".featured-label").find('span');
+			var spanClass = span.attr('class');
+			var postUrl = "";
+
+			if(spanClass == "label label-default"){
+				postUrl = $self.data('setUrl');
+			}else{
+				postUrl = $self.data('cancelUrl');
+			}
+			$.post(postUrl, function(response) {
+				var status = response.status;
+				var labelStatus = "label label-"+status;
+				span.attr('class',labelStatus)
 			});
 		});		
 
 		$(".promoted-label").on('click', function(){
-			$.post($(this).data('url'), function(){
-				window.location.reload();
+
+			var $self = $(this);
+			var span = $(".promoted-label").find('span');
+			var spanClass = span.attr('class');
+			var postUrl = "";
+
+			if(spanClass == "label label-default"){
+				postUrl = $self.data('setUrl');
+			}else{
+				postUrl = $self.data('cancelUrl');
+			}
+
+			console.log(postUrl);
+			$.post(postUrl, function(response) {
+				var status = response.status;
+				var labelStatus = "label label-"+status;
+				span.attr('class',labelStatus)
 			});
 		});		
 
 		$(".sticky-label").on('click', function(){
-			$.post($(this).data('url'), function(){
-				window.location.reload();
+		
+			var $self = $(this);
+			var span = $(".sticky-label").find('span');
+			var spanClass = span.attr('class');
+			var postUrl = "";
+			
+			if(spanClass == "label label-default"){
+				postUrl = $self.data('setUrl');
+			}else{
+				postUrl = $self.data('cancelUrl');
+			}
+
+			$.post(postUrl, function(response) {
+				var status = response.status;
+				var labelStatus = "label label-"+status;
+				span.attr('class',labelStatus)
 			});
 		});
+
 		var $container = $('#aticle-table-container');
 		var $table = $('#article-table');
 		 require('../../util/batch-select')($container);

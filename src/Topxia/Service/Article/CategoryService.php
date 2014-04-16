@@ -10,11 +10,15 @@ interface CategoryService
 
     public function getCategoryTree();
 
+    public function getCategoryByParentId($parentId);
+
     public function findCategoryChildrenIds($id);
 
     public function findCategoriesByIds(array $ids);
 
     public function findAllCategories();
+
+    public function findCategoryBreadcrumbs($categoryId);
 
     public function isCategoryCodeAvaliable($code, $exclude = null);
 

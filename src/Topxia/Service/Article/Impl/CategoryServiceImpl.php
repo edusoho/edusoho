@@ -34,7 +34,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         };
 
         $categories = $prepare($this->findAllCategories());
-
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
         return $tree;
@@ -107,6 +106,51 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->getCategoryDao()->findCategoryByCode($code);
 
         return $category ? false : true;
+    }
+
+    public function getCategoryByParentId($parentId)
+    {
+        return $this->getCategoryDao()->getCategoryByParentId($parentId);
+    }
+    
+    private function getRootCategory($categoryTree, $category)
+    {
+        $start = false;
+        foreach (array_reverse($categoryTree) as $treeCategory) {
+            if ($treeCategory['id'] == $category['id']) {
+                $start = true;
+            }
+
+            if ($start && $treeCategory['depth'] ==1) {
+                return $treeCategory;
+            }
+        }
+
+        return null;
+    }
+
+    public function findCategoryBreadcrumbs($categoryId)
+    {
+        $breadcrumbs = array();
+
+        $categoryTree = $this->getCategoryTree();
+
+        $start = false;
+        foreach (array_reverse($categoryTree) as $treeCategory) {
+            if ($treeCategory['id'] == $categoryId) {
+                $start = true;
+            }
+
+            if ($start) {
+                $breadcrumbs[] = $treeCategory;
+            }
+
+            if ($start && $treeCategory['depth'] ==1) {
+                break;
+            }
+        }
+
+        return array_reverse($breadcrumbs);
     }
 
     public function createCategory(array $category)

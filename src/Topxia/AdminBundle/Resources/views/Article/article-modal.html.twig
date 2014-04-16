@@ -40,7 +40,7 @@
 				  <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
 					  {% if article %}{% else %}<option value="">-选择所属栏目-</option>{% endif %}
 			         {% for tree in categoryTree %}
-						<option value={{ tree.id }} {% if tree.id == category.parentId  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
+						<option value={{ tree.id }} {% if tree.id == category.id  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
 					{% endfor %}
 			      </select>
 			   </div>
@@ -92,32 +92,18 @@
 				</div>
 			</div>
 
-			{# <div class="panel panel-default">
-				<div class="panel-heading">TAG标签</div>
-				<div class="panel-body">
-				   <div class="col-md-7 controls">
-					  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
-					  	<div class="help-block" style="display:none;"></div>
-				  </div>
-				</div>
-			</div> #}
-
 			<div class="panel panel-default">
 				<div class="panel-heading">来源设置</div>
 				<div class="panel-body">
-					 <div class="col-md-4 control-label">
-					      <label for="article-source">来源</label>
+				  <label for="article-source">来源</label>
+				    <div class="controls">
+				      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
 				    </div>
-				    <div class="col-md-7 controls">
-					      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
-				    </div>
-				    <hr>
-					<div class="col-md-4 control-label">
-				      <label for="article-sourceUrl">来源地址</label>
-				    </div>
-					 <div class="col-md-7 controls">
+			    <br>
+			      <label for="article-sourceUrl">来源地址</label>
+				 <div class="controls">
 				      <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
-				    </div>
+			    </div>
 
 				</div>
 			</div>
@@ -126,9 +112,7 @@
 				<div class="panel-heading">设置缩略图</div>
 				<div class="panel-body">
 					<div>
-						{# {% if article.thumb|default(null) %} #}
-				    <div id="aticle-thumb-container"><img src='{{ asset(article.thumb|default(null)) }}' style="width: 230px; height: 125px;" id="article-thumb-preview"></div>
-				{# {% endif %} #}
+						<div id="article-thumb-container" style="{% if article.thumb|default(null) %}display:block{% else %}display:none{% endif %}"><img src='{{ asset(article.thumb|default(null)) }}' style="width: 230px; height: 125px;" id="article-thumb-preview"></div>
 
 				   <br><a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-primary">上传</a>
 				      <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
@@ -154,7 +138,7 @@
 	</div>
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">确定</button>
-	 {# <button id ="article-operate-cancel" class="btn btn-link" data-url="/admin/article">取消</button> #}
+	 <a class="btn btn-link" href="{{ path('admin_article') }}">返回</a>
 </form>
 
 {% endblock %}

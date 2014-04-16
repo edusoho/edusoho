@@ -79,7 +79,10 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = eval("(" + response + ")");
-                $("#article-thumb-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                console.log(response);
+                var thumbContainer = $("#article-thumb-container");
+                thumbContainer.html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
+                $("#article-thumb-container").css('display','block');
                 $form.find('#article-thumb').val(response.url);
                  Notify.success('上传成功！');
             }
@@ -121,7 +124,7 @@ define(function(require, exports, module) {
   function _initEditorFields($form, validator)
     {
         
-        var editor = EditorFactory.create('#richeditor-body-field', 'full', {height:'440px',extraFileUploadParams:{group:'default'}});
+        var editor = EditorFactory.create('#richeditor-body-field', 'full', {height:'500px',extraFileUploadParams:{group:'default'}});
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
         });
