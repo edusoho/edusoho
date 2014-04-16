@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
-{% block title %}{{ setting('article.name') }} - {{ parent() }}{% endblock %}
+{% block title %}{{ setting.name }} - {{ parent() }}{% endblock %}
 
 {% block content %}
 
@@ -8,14 +8,14 @@
 
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>{{ setting('article.name') }}</h1></div>
+      <div class="page-header"><h1>{{ setting.name }}</h1></div>
     </div>
   </div>
 
   <div class="row row-8-4">
     <div class="col-md-8">
       <ul class="nav nav-pills article-nav">
-        <li class="active"><a href="{{ path('article_show') }}">{{ setting('article.name') }}</a></li>
+        <li class="active"><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
         {% for category in categoryTree %}
           {% if category.parentId == 0 %}
             <li><a href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a></li>
@@ -48,7 +48,7 @@
             </div>
             {% if article.picture %}
               <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-                <img class="article-picture" src="{{ asset(article.picture) }}" alt="文章缩略图">
+                <img class="article-picture" src="{{ asset(article.thumb) }}" alt="文章缩略图">
               </a>
             {% endif %}
             <div class="media-body">

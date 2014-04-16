@@ -13,6 +13,7 @@ define(function(require, exports, module) {
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
+                console.log(error);
                 if (error) {
                     return ;
                 }
@@ -42,7 +43,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-parentId-field',
             required: true,
-            rule: 'integer'
+            rule: 'integer remote'
         });
 
         validator.addItem({
@@ -50,8 +51,6 @@ define(function(require, exports, module) {
             required: true,
             rule: 'integer'
         });
-
-        
 
         $modal.find('.delete-category').on('click', function() {
             if (!confirm('真的要删除该栏目吗？')) {

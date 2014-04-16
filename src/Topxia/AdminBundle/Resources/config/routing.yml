@@ -640,10 +640,6 @@ show_idcard:
     pattern:   approvals/idcard/show/{userId}/{type}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }
 
-admin_article_setting:
-    pattern: /article/setting
-    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:setting }
-
 admin_article_category:
     pattern: /article/category
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:index }
@@ -651,6 +647,10 @@ admin_article_category:
 admin_article_category_create:
     pattern:  /article/category/create
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:create }
+
+admin_article_category_checkparentid:
+    pattern:  /article/category/checkparentid
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkParentId }
 
 admin_article_category_checkcode:
     pattern:  /article/category/checkcode
@@ -664,6 +664,10 @@ admin_article_category_delete:
     pattern:  /article/category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:delete }
     methods: [POST]
+
+admin_article_setting:
+    pattern: /article/setting
+    defaults: { _controller: TopxiaAdminBundle:Article:setting }
 
 admin_article:
     pattern:  /article

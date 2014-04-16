@@ -79,29 +79,6 @@ class ArticleCategoryController extends BaseController
         
     }
 
-    public function settingAction(Request $request)
-    {   
-        $articleSetting = $this->getSettingService()->get('article', array());
-
-        $default = array(
-            'name' => '资讯频道',
-            'pageNums' => 20
-        );
-
-        $articleSetting = array_merge($default, $articleSetting);
-
-        if ($request->getMethod() == 'POST') {
-            $articleSetting = $request->request->all();
-            $this->getSettingService()->set('article', $articleSetting);
-            $this->getLogService()->info('article', 'update_settings', "更新资讯频道设置", $articleSetting);
-            $this->setFlashMessage('success', '资讯频道设置已保存！');
-        };
-
-        return $this->render('TopxiaAdminBundle:ArticleCategory:setting.html.twig', array(
-            'articleSetting' => $articleSetting
-        ));
-    }
-
     public function canDeleteCategory($id)
     {
         return $this->getCategoryService()->findCategoriesCountByParentId($id);
@@ -114,11 +91,26 @@ class ArticleCategoryController extends BaseController
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
-
+  
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
             $response = array('success' => false, 'message' => '编码已被占用，请换一个。');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function checkParentIdAction(Request $request)
+    {
+        $selectedParentId = $request->query->get('value');
+
+        $currentId = $request->query->get('currentId');
+
+        if($currentId == $selectedParentId && $selectedParentId != 0){
+            $response = array('success' => false, 'message' => '不能选择自己作为父栏目');
+        } else {
+            $response = array('success' => true, 'message' => '');
         }
 
         return $this->createJsonResponse($response);
@@ -141,11 +133,6 @@ class ArticleCategoryController extends BaseController
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

@@ -55,7 +55,7 @@
       <label>头像设置提醒</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('isShouldSetAvatar', {'none':'从不', 'notify_avatar':'每次打开我的课程时', 'enforce_avatar':'加入免费课程时强制要求'}, setting.isShouldSetAvatar) }}
+      {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入个人中心时', 'when_join_course':'加入免费课程时强制要求'}, setting.avatar_alert) }}
     </div>
   </div>
 

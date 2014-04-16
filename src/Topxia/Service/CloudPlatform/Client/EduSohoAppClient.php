@@ -81,8 +81,6 @@ class EduSohoAppClient implements AppClient
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
-        // var_dump($result);
-
         return json_decode($result, true);
     }
 
