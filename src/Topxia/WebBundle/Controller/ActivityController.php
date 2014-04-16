@@ -306,8 +306,9 @@ class ActivityController extends BaseController
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
                 $member['joinMode']='线上';
+                $member['newUser']='1';
 
-                $this->getActivityService()->addMeberByActivity($member);
+                $member = $this->getActivityService()->addMeberByActivity($member);
 
                 $this->getActivityService()->addActivityStudentNum($id);
 
@@ -317,13 +318,13 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
-                $isNew=true;
                
-                $this->sendActivityEmail($isNew,$user,$activity);
+               
+                $this->sendActivityEmail($user,$activity);
 
                 return $this->redirect($this->generateUrl("activity_join_success",array(
-                    "id"=>$id,
-                    "isNew"=>$isNew))
+                    "id"=>$id
+                   ))
                 );
               
             }else{ 
@@ -340,8 +341,9 @@ class ActivityController extends BaseController
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
                 $member['joinMode']='线上';
+                $member['newUser']='0';
                 
-                $this->getActivityService()->addMeberByActivity($member);
+                $member =  $this->getActivityService()->addMeberByActivity($member);
 
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
@@ -350,13 +352,13 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
-                $isNew=false;
+              
                
-                $this->sendActivityEmail($isNew,$user,$activity);
+                $this->sendActivityEmail($user,$activity);
 
                 return $this->redirect($this->generateUrl("activity_join_success",array(
-                    "id"=>$id,
-                    "isNew"=>$isNew))
+                    "id"=>$id
+                   ))
                 );  
                         
             }
@@ -390,12 +392,12 @@ class ActivityController extends BaseController
         
         $activity=$this->getActivityService()->getActivity($id);
 
-        $isNew = $request->query->get('isNew');
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
 
         $hash=$this->makeHash($user);
 
         return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
-            "isNew"=>$isNew,
+            "newUser"=>$member['newUser'],
             "user"=>$user,
             "activity"=>$activity,
             "hash"=>$hash)
@@ -403,23 +405,23 @@ class ActivityController extends BaseController
     }
 
 
-    public function reSendActivityEmailAction(Request $request,$activityId,$userId,$isNew,$hash){
+    public function reSendActivityEmailAction(Request $request,$activityId){
 
-        $user = $this->checkHash($userId,$hash);
-        
-        if (empty($user)) {
-            return $this->createJsonResponse(false);
-        } 
+        $user=$this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
 
         $activity=$this->getActivityService()->getActivity($activityId);
+
         $activity = $this->getActivityService()->mixActivity($activity,$user['id']);
+     
+        $this->sendActivityEmail($user,$activity);
 
-               
-        $this->sendActivityEmail($isNew,$user,$activity);
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
 
-        return $this->createJsonResponse(true);
-
-
+        return $this->createJsonResponse(array('success'=>true,'message'=>'邮件已发送到您的'.$user['email'].'邮箱，请查收．'));
 
     }
 
@@ -716,18 +718,18 @@ class ActivityController extends BaseController
   
 
  
-    private function sendActivityEmail($isNew,$user,$activity)
+    private function sendActivityEmail($user,$activity)
     {
-
 
         $token =   $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
-                
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
+  
         $this->sendEmail(
                 $user['email'],
-                "欢迎参加开源力量公开课[".$activity['title']."],邮件内容是本期公开课参课方式",
+                "欢迎报名参加开源力量公开课[".$activity['title']."],邮件内容是本期公开课参课方式，请查阅",
                 $this->renderView('TopxiaWebBundle:Activity:join-activity-email.html.twig', array(
-                    'isNew' => $isNew,
+                    'newUser' => $member['newUser'],
                     'user' => $user,
                     'token' => $token,
                     'activity'=>$activity

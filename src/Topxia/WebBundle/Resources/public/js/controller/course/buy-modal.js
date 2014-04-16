@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         });
        
         var validator = new Validator({
-            element: '#course-buy-form'           
+            element: '#course-buy-form'
         });
 
         if ($('#course-buy-form').find('input[name="promoCode"]').length > 0){

@@ -18,7 +18,7 @@
 									<p class="text-success">
 										小伙伴，感谢报名参加开源力量公开课，我们已经把参课方式和地址发送到<strong class="text-danger">{{ user.email }}</strong>邮箱中去啦。请查收邮件!<br><br>
 	 								</p>
-{% if isNew %}
+{% if newUser %}
 	 								<p class="text-success">
 										这是您<strong class="text-danger">第一次</strong>参加开源力量公开课，你需要通过登陆邮箱进行密码初始化设置,完成注册和报名，这样，您就和其他小伙伴们一起参加我们的公开课啦！
 									</p>
@@ -28,7 +28,7 @@
 						          <ul class="pll">
 						            <li>检查一下上面Email地址是否正确，错了就重新<a  href="{{ path('register') }}">注册</a>一次吧 :)</li>
 						            <li>看看是否在邮箱的垃圾箱里?</li>
-						            <li>稍等几分钟，若仍旧没收到确认信，那就再<a id="resend-email"  href="javascript:" data-url="{{ path('activity_email_resend', {userId:user.id,activityId:activity.id,hash:hash,isNew:isNew}) }}">重发</a>一次吧。</li>
+						            <li>稍等几分钟，若仍旧没收到确认信，那就再<a id="resend-email"  href="javascript:" data-url="{{ path('activity_email_resend', {activityId:activity.id}) }}">重发</a>一次吧。</li>
 						            <li>等了好久，，，，，，还是没有邮件，那和我们联系吧。</li>
 						          </ul>
 						        </div>

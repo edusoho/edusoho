@@ -30,7 +30,7 @@
       <p>
         直播地址： <span class='text-danger'>
         {% if activity.join %}
-           参课方式已通过邮件方式发送到您的邮箱 (如未收到邮件，请点击这里！）
+           参课方式已通过邮件方式发送到您的邮箱(<a id="resend-email"  href="javascript:void(0)" data-url="{{ path('activity_email_resend', {activityId:activity.id}) }}">如未收到邮件，请点击这里！</a>)
         {% else %}
            报名后将通过邮件方式告知参课方式和地址，请正确填写邮件地址
         {% endif %}

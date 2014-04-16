@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             if (duration > 0) {
                 setTimeout(function(){
                     $html.remove();
-                }, duration * 1000);
+                }, duration * 5000);
             }
         });
 

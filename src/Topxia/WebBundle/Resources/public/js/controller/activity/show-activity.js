@@ -8,6 +8,8 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     require('wookmark');
 
+    var Notify = require('common/bootstrap-notify');
+
     var createReplyObject=function(templeteHtml){
         return $(templeteHtml);
     }
@@ -96,17 +98,15 @@ define(function(require, exports, module) {
         });
          
 
-        $(document).ready(function() {
+        $('#resend-email').on('click', function(){
+           
+            $.post($(this).data('url'),function(data){
 
-            $(function() {
-                $("#photoId-list li").wookmark({
-                    container: $("#photoId-list"),
-                    offset: 0
+                Notify.danger(data.message);
 
-                });
-            });
-
+            },'json');
         });
+
         
 
 
