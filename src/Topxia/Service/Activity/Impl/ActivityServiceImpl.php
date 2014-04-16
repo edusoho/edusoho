@@ -409,6 +409,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 		$thread['joinMode']=empty($member['joinMode'])?'':$member['joinMode'];
 
+		$thread['firstJoin']=empty($member['firstJoin'])?'0':$member['firstJoin'];
+
 		$thread['truename']=$member['truename'];
 		$thread['createdTime']=time();
 		$thread['mobile']=empty($member['mobile'])?'':$member['mobile'];
@@ -419,9 +421,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		return $this->getMemberDao()->addMember($thread);
 	}
 
-	public function changeActivityPicture($courseId, $filePath, array $options){
+	public function changeActivityPicture($activityId, $filePath, array $options){
 
-		$course = $this->getActivityDao()->getActivity($courseId);
+		$course = $this->getActivityDao()->getActivity($activityId);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，图标更新失败！');
         }
@@ -448,7 +450,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $largeImage->save($smallFilePath, array('quality' => 100));
         $smallFileRecord = $this->getFileService()->uploadImgFile('activity', new File($smallFilePath));
 
-        return $this->getActivityDao()->updateActivity($courseId, array(
+        return $this->getActivityDao()->updateActivity($activityId, array(
         	'smallPicture' => $smallFileRecord['uri'],
         	'middlePicture' => $middleFileRecord['uri'],
         	'largePicture' => $largeFileRecord['uri'],
@@ -482,14 +484,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		return $this->getMemberDao()->updateMember($id, $fields);
 	}
 
-	public function getActivityMember($courseId, $userId)
+	public function getActivityMember($activityId, $userId)
 	{
-		return $this->getMemberDao()->getMemberByActivityIdAndUserId($courseId, $userId);
+		return $this->getMemberDao()->getMemberByActivityIdAndUserId($activityId, $userId);
 	}
 
-	public function findActivityStudents($courseId, $start, $limit)
+	public function findActivityStudents($activityId, $start, $limit)
 	{
-		return $this->getMemberDao()->findMembersByActivityId($courseId, $start, $limit);
+		return $this->getMemberDao()->findMembersByActivityId($activityId, $start, $limit);
 	}
 	public function findStudentActivitys($userid,$start,$limit){
 		return $this->getMemberDao()->findMembersByUserId($userid, $start, $limit);
@@ -499,9 +501,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 		return $this->getMemberDao()->deleteMemberByActivityIdAndUserId($activityId, $userId);	
 	}
 
-	public function getActivityStudentCount($courseId)
+	public function getActivityStudentCount($activityId)
 	{
-		return $this->getMemberDao()->findMemberCountByActivityIdAndRole($courseId);
+		return $this->getMemberDao()->findMemberCountByActivityIdAndRole($activityId);
 	}
 
 
