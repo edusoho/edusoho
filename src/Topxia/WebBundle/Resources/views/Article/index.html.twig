@@ -22,7 +22,7 @@
           {% endif %}
         {% endfor %}
       </ul>
-{#}
+
       {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
         <div class="alert alert-warning">头条大图轮播功能需先在后台文章管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
       {% else %}
@@ -30,11 +30,11 @@
         <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='{% verbatim %}{{title}}{% endverbatim %}'>
           <div class="cycle-overlay"></div>
             {% for featuredArticle in featuredArticles %}
-                <a href="{{ path('article_detail', { id:featuredArticle.id }) }}" data-cycle-title="<a href='{{ path('article_detail', { id:featuredArticle.id }) }}'>{{ featuredArticle.title|plain_text(25) }}</a>" ><img src={{ featuredArticle.img }} alt="{{ featuredArticle.title }}"></a>
+                <a href="{{ path('article_detail', { id:featuredArticle.id }) }}" data-cycle-title="<a href='{{ path('article_detail', { id:featuredArticle.id }) }}'>{{ featuredArticle.title|plain_text(25) }}</a>" ><img src={{ featuredArticle.picture }} alt="{{ featuredArticle.title }}"></a>
             {% endfor %}
         </div>
       {% endif %}
-{#}
+
       <ul class="article-wide-list">
         {% for article in latestArticles %}
           {% set category = article.category %}

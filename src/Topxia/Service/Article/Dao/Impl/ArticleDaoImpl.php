@@ -116,6 +116,13 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			$conditions[$key] = 1;
 		}
 
+		if(array_key_exists('hasPicture',$conditions)){
+			if ($conditions['hasPicture'] == true) {
+				$conditions['pictureNull'] = "";		
+				unset($conditions['hasPicture']);
+			}
+		}
+
 		if(isset($conditions['keywords'])){
 			$conditions['keywords'] = "%{$conditions['keywords']}%";
 		}
@@ -128,7 +135,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('promoted = :promoted')
 			->andWhere('sticky = :sticky')
 			->andWhere('title LIKE :keywords')
-			->andWhere('hasPicture = :hasPicture')
+			->andWhere('picture != :pictureNull')
 			->andWhere('categoryId = :categoryId')
 
             // @todo 
