@@ -37,7 +37,7 @@ class ArticleController extends BaseController
 		foreach ($latestArticles as &$article) {
 			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
 		}
-
+		
 		$featuredConditions = array(
 			'status' => 'published',
 			'featured' => 1,
@@ -102,7 +102,8 @@ class ArticleController extends BaseController
 			'category' => $category,
 			'rootCategory' => $rootCategory,
 			'articles' => $articles,
-			'paginator' => $paginator
+			'paginator' => $paginator,
+			'setting' => $setting
 		));
 	}
 
