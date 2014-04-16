@@ -9,7 +9,7 @@
   <div class="row row-8-4 article-row" style="margin-top:20px;">
     <div class="col-md-8">
       <ol class="breadcrumb">
-          <li><a href="{{path('article_show')}}">首页</a></li>
+          <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
           {% for breadcrumb in breadcrumbs %}
             <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
           {% endfor %}

@@ -30,7 +30,7 @@ define(function(require, exports, module) {
 
 		$(".featured-label").on('click', function() {
 			var $self = $(this);
-			var span = $(".featured-label").find('span');
+			var span = $self.find('span');
 			var spanClass = span.attr('class');
 			var postUrl = "";
 
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
 		$(".promoted-label").on('click', function(){
 
 			var $self = $(this);
-			var span = $(".promoted-label").find('span');
+			var span = $self.find('span');
 			var spanClass = span.attr('class');
 			var postUrl = "";
 
@@ -59,7 +59,6 @@ define(function(require, exports, module) {
 				postUrl = $self.data('cancelUrl');
 			}
 
-			console.log(postUrl);
 			$.post(postUrl, function(response) {
 				var status = response.status;
 				var labelStatus = "label label-"+status;
@@ -70,7 +69,7 @@ define(function(require, exports, module) {
 		$(".sticky-label").on('click', function(){
 		
 			var $self = $(this);
-			var span = $(".sticky-label").find('span');
+			var span = $self.find('span');
 			var spanClass = span.attr('class');
 			var postUrl = "";
 			

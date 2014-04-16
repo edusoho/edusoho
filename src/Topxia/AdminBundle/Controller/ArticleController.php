@@ -21,6 +21,11 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{
         $conditions = $request->query->all();
+        
+        if(array_key_exists('property', $conditions)){
+            $conditions['includeChindren'] =true;
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getArticleService()->searchArticlesCount($conditions),

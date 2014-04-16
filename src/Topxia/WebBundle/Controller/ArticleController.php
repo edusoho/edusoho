@@ -119,6 +119,11 @@ class ArticleController extends BaseController
 			return $this->createMessageResponse('文章不是发布状态，请查看！');
 		}
 
+		$setting = $this->getSettingService()->get('article', array());
+
+		if (empty($setting)) {
+			$setting = array('name' => '资讯频道', 'pageNums' => 20);
+		}
 
 		$conditions = array(
 			'status' => 'published'
@@ -136,8 +141,7 @@ class ArticleController extends BaseController
 		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
 
 		$hottestArticles = $this->getArticleService()->searchArticles($conditions, 'popular' , 0 , 10);
-		// var_dump($hottestArticles);
-		// exit();
+		
 		$this->getArticleService()->hitArticle($id);
 
 		$breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
@@ -150,6 +154,7 @@ class ArticleController extends BaseController
 			'article' => $article,
 			'articleNext' => $articleNext,
 			'tags' => $tags,
+			'setting' => $setting,
 			'breadcrumbs' => $breadcrumbs,
 			'categoryName' => $category['name'],
 			'categoryCode' => $category['code'],

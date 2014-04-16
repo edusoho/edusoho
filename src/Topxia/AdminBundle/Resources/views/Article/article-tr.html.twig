@@ -1,11 +1,11 @@
 <tr id="article-{{ article.id }}">
-	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item"  > {{article.id}}</td>
+	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item" > {{article.id}}</td>
 	<td>
-			<span class="text-muted"><a href="{{ path('admin_article_preview',{id:article.id}) }}">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a></span>
+			<span class="text-muted"><a href="{{ path('admin_article_preview',{id:article.id}) }}" target="_blank">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a></span>
 	</td>
 	<td>
 	{% if category %}
-		<span class="text-muted"><a href="{{ path('article_category',{categoryCode:category.code}) }}">{{ category.name }}</a></span>
+		<span class="text-muted"><a href="{{ path('article_category',{categoryCode:category.code}) }}" target="_blank">{{ category.name }}</a></span>
 		{% else %}
 		<span class="text-muted">未分类</span>
 	{% endif %}
@@ -34,9 +34,6 @@
 	     	{% if article.status == 'published' %}
 			    <li><a href="javascript:" data-role="unpublish-item" data-url="{{ path('admin_article_unpublish', {id:article.id}) }}">未发布</a></li>
 		    {% endif %}
-		{#     {% if article.status == 'published' %}
-			    <li><a href="{{ path('admin_article_preview',{id:article.id}) }}" data-role="preview-item" target="_blank">预览</a></li>
-		    {% endif %} #}
 		    {% if article.status != 'trash' %}
 			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_article_trash', {id:article.id}) }}">移至回收站</a></li>
 		    {% endif %}
