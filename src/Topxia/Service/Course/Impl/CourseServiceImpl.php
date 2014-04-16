@@ -337,6 +337,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'about' => '',
 			'expiryDay' => 0,
 			'showStudentNumType' => 'opened',
+			'serializeMode' => 'none',
 			'categoryId' => 0,
 			'vipLevelId' => 0,
 			'goals' => array(),
@@ -604,6 +605,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
+	}
+
+	public function searchLessons($conditions, $orderBy, $start, $limit)
+	{
+		return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
 	}
 
 	public function createLesson($lesson)

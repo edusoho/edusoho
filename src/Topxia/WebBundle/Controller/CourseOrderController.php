@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
+use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Response;
 
 class CourseOrderController extends OrderController
@@ -30,6 +31,7 @@ class CourseOrderController extends OrderController
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
+            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
             'courseSetting' => $courseSetting,
         ));
     }

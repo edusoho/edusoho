@@ -33,7 +33,13 @@
             {% for course in data('RecommendCourses',{ count:8 }) %}
               {% if course %}
                 <li class="autumn-grid autumn-course-grid">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}"></a>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}">
+                    {% if course.serializeMode == 'serialize' %}
+                      <span class="label label-success series-mode-label">更新中</span>
+                    {% elseif course.serializeMode == 'finished' %}
+                      <span class="label label-warning series-mode-label">已完结</span>
+                    {% endif %}
+                  </a>
                   <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
                   <div class="course-about">{{ course.about|plain_text(60) }}</div>
 
@@ -67,7 +73,13 @@
             {% for course in data('LatestCourses',{ count:8 }) %}
               {% if course %}
               <li class="media">
-                <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object"></a>
+                <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object">
+                  {% if course.serializeMode == 'serialize' %}
+                    <span class="label label-success series-mode-label">更新中</span>
+                  {% elseif course.serializeMode == 'finished' %}
+                    <span class="label label-warning series-mode-label">已完结</span>
+                  {% endif %}
+                </a>
                 <div class="media-body">
                   <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
 

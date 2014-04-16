@@ -35,7 +35,9 @@ class CourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'categoryId' => $category['id'],
-            'recommended' => ($sort == 'recommended') ? null : null
+
+            'recommended' => ($sort == 'recommendedSeq') ? 1 : null
+
         );
 
         $paginator = new Paginator(

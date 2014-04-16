@@ -40,6 +40,13 @@ class AppController extends BaseController
         ));
     }
 
+    public function uninstallAction(Request $request)
+    {
+        $code = $request->get('code');
+        $this->getAppService()->uninstallApp($code);
+        return $this->createJsonResponse(true);
+    }
+
     public function upgradesAction(Request $request)
     {
         $apps = $this->getAppService()->checkAppUpgrades();

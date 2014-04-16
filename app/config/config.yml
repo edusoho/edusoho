@@ -16,8 +16,8 @@ framework:
     templating:
         engines: ['twig']
 
-        assets_version: osf_v2.5.1
-
+        assets_version: osf_v2.6.0
+        
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
