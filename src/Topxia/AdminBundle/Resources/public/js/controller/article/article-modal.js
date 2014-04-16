@@ -121,7 +121,7 @@ define(function(require, exports, module) {
   function _initEditorFields($form, validator)
     {
         
-        var editor = EditorFactory.create('#richeditor-body-field', 'full', {extraFileUploadParams:{group:'default'}});
+        var editor = EditorFactory.create('#richeditor-body-field', 'full', {height:'440px',extraFileUploadParams:{group:'default'}});
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
         });

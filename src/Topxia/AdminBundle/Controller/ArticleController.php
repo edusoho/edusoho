@@ -36,12 +36,27 @@ class ArticleController extends BaseController
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-        $categoryTree = $this->makeCategoryOptions('enabled');
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+        $category = array(
+            'id' => 0,
+            'name' => '',
+            'code' => '',
+            'pagesize' => '10',
+            'parentId' => (int) $request->query->get('parentId', 0),
+            'weight' => 0,
+            'publishArticle' => 1,
+            'seoTitle' => '',
+            'seoKeyword' => '',
+            'seoDesc' => '',
+            'published' => 1
+        );
+
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
         	'articles' => $articles,
             'categories' => $categories,
         	'paginator' => $paginator,
-            'categoryTree'  => $categoryTree
+            'categoryTree'  => $categoryTree,
+            'category'  => $category
     	));
 	}
 
@@ -55,10 +70,25 @@ class ArticleController extends BaseController
             return $this->redirect($this->generateUrl('admin_article'));
         }
         
-        $categoryTree = $this->makeCategoryOptions('all');
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+
+        $category = array(
+            'id' => 0,
+            'name' => '',
+            'code' => '',
+            'pagesize' => '10',
+            'parentId' => (int) $request->query->get('parentId', 0),
+            'weight' => 0,
+            'publishArticle' => 1,
+            'seoTitle' => '',
+            'seoKeyword' => '',
+            'seoDesc' => '',
+            'published' => 1
+        );
 
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'categoryTree'  => $categoryTree,
+            'category'  => $category
         ));
     }
 
@@ -68,7 +98,21 @@ class ArticleController extends BaseController
         $tagNamesStr = empty($article['tagIds']) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds']);
 
         $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
-        $categoryTree = $this->makeCategoryOptions('all');
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
+
+        $category = array(
+            'id' => 0,
+            'name' => '',
+            'code' => '',
+            'pagesize' => '10',
+            'parentId' => (int) $request->query->get('parentId', 0),
+            'weight' => 0,
+            'publishArticle' => 1,
+            'seoTitle' => '',
+            'seoKeyword' => '',
+            'seoDesc' => '',
+            'published' => 1
+        );
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -79,6 +123,7 @@ class ArticleController extends BaseController
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'article' => $article,
             'categoryTree'  => $categoryTree,
+            'category'  => $category,
             'tags' => ArrayToolkit::column($tags, 'name'),
             'tagNamesStr' => $tagNamesStr
         ));
@@ -237,31 +282,6 @@ class ArticleController extends BaseController
             $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
             return new Response(json_encode($response));
         }
-    }
-
-    protected function makeCategoryOptions($operate_type="")
-    {
-        if($operate_type == "enabled"){
-                $articles = $this->getArticleService()->searchArticles(
-                array(),
-                'created',
-                0,
-                $this->getArticleService()->searchArticlesCount(array())
-            );
-            $categoryIds = ArrayToolkit::column($articles, 'categoryId');
-            $categoryTree = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-        }
-
-        if($operate_type == "all"){
-            $categoryTree = $this->getCategoryService()->findAllCategories();
-        }
-
-        $options = array();
-        foreach ($categoryTree as $category) {
-            $options[$category['id']] = $category['name'];
-        }
-
-        return $options;
     }
 
     private function filterEditorField($article)
