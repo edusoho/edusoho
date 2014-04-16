@@ -16,7 +16,6 @@
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
-		  {# {{ select_options(categoryTree, app.request.query.get('category'), '--栏目--') }} #}
 		   {% for tree in categoryTree %}
 					<option value={{ tree.id }} {% if tree.id == category.parentId  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
 					{% endfor %}
