@@ -1,9 +1,11 @@
-{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
 
 {% set modal_size = 'xlarge' %}
 
+{% set menu = 'article' %}
+
 {% block title %}
-	文章管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}文章 - {{ parent() }}
+	资讯管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}文章 - {{ parent() }}
 {% endblock %}
 
 {% set script_controller = 'article/article-modal' %}
@@ -12,14 +14,8 @@
 
 {% set article = article|default(null) %}
 
-{% set menu = 'article' %}
-
 <div class="page-header clearfix">
-
-  <ol class="breadcrumb">
-	  <li><a href="{{ path('admin_article') }}">文章管理</a></li>
-	  <li class="active">{% if article|default(null) %}编辑{% else %}添加{% endif %}文章</li>
-　</ol>
+ 	<h1 class="pull-left">{% if article|default(null) %}编辑{% else %}添加{% endif %}文章</h1>
 </div>
 
 <form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
@@ -42,13 +38,19 @@
 			  <label for="categoryId" class="control-label">所属栏目</label>
 			   <div class="controls">
 				  <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
-					{% if article %}
-			         {{ select_options(categoryTree, article.categoryId) }}
-			        {% else %}
-			         {{ select_options(categoryTree, categoryTree_ids|default(null), '--栏目--') }}
-			       {% endif %}
-			       	</select>
+			         {% for tree in categoryTree %}
+					<option value={{ tree.id }} {% if tree.id == category.parentId  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
+					{% endfor %}
+			      </select>
 			   </div>
+			</div>
+
+			<div class="form-group">
+				      <label for="article-tagIds"　class="control-label">TAG标签</label>
+			  <div class="controls">
+				  	<input type="form-control" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
+				  	<div class="help-block" style="display:none;"></div>
+			  </div>
 			</div>
 
 			<label for="richeditor-body-field" class="control-label">正文</label>
@@ -70,57 +72,60 @@
 	      		 style="display:none"
 	      		{% endif %}>
 				<div class="controls">
-					<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(article, 'body') }}</textarea>
+					<textarea class="form-control" id="noneeditor-body-field" rows="19" name="noneeditor-body">{{ field_value(article, 'body') }}</textarea>
 				</div>
 			</div> 
 		
 		</div>
 		<div class="col-md-4 two-col-side">
-			<div class="row form-group">
-			    <div class="col-md-4 control-label">
-				      <label for="article-attr">文章属性</label>
-			    </div>
-			    <div class="col-md-7 controls">
-				      <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}>  置顶  
-					  <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}>  头条  
-				      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}>  推荐  
-			    </div>
-		  </div>
 
-			<div class="row form-group">
-			  <div class="col-md-4 control-label">
-				      <label for="article-tagIds">TAG标签</label>
-			  </div>
-			  <div class="col-md-7 controls">
-				  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
-				  	<div class="help-block" style="display:none;"></div>
-			  </div>
+			<div class="panel panel-default">
+				<div class="panel-heading">文章属性</div>
+				<div class="panel-body">
+				    <div class="col-md-７ controls">
+					      <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}>  置顶  
+						  <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}>  头条  
+					      <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}>  推荐  
+				    </div>
+
+				</div>
 			</div>
-			
-			<div class="row form-group">
-			    <div class="col-md-4 control-label">
-				      <label for="article-source">来源</label>
-			    </div>
-			    <div class="col-md-7 controls">
-				      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
-			    </div>
-			</div>
-			
-			<div class="row form-group">
-			    <div class="col-md-4 control-label">
+
+			{# <div class="panel panel-default">
+				<div class="panel-heading">TAG标签</div>
+				<div class="panel-body">
+				   <div class="col-md-7 controls">
+					  	<input type="text" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
+					  	<div class="help-block" style="display:none;"></div>
+				  </div>
+				</div>
+			</div> #}
+
+			<div class="panel panel-default">
+				<div class="panel-heading">来源设置</div>
+				<div class="panel-body">
+					 <div class="col-md-4 control-label">
+					      <label for="article-source">来源</label>
+				    </div>
+				    <div class="col-md-7 controls">
+					      <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
+				    </div>
+				    <hr>
+					<div class="col-md-4 control-label">
 				      <label for="article-sourceUrl">来源地址</label>
-			    </div>
-			    <div class="col-md-7 controls">
+				    </div>
+					 <div class="col-md-7 controls">
 				      <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
-			    </div>
+				    </div>
+
+				</div>
 			</div>
 
-			<div class="row form-group">
-			    <div class="col-md-4 control-label">
-			        <label for="article-sourceUrl">设置缩略图</label>
-			    </div>
-			    <div class="col-md-7 controls">
-			    {# {% if article.thumb|default(null) %} #}
+			<div class="panel panel-default">
+				<div class="panel-heading">设置缩略图</div>
+				<div class="panel-body">
+					<div>
+						{# {% if article.thumb|default(null) %} #}
 				    <div id="aticle-thumb-container"><img src='{{ asset(article.thumb|default(null)) }}' style="width: 230px; height: 125px;" id="article-thumb-preview"></div>
 				{# {% endif %} #}
 
@@ -128,11 +133,13 @@
 				      <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
 				      <input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
 				     <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+					</div>
+
 				</div>
 			</div>
 
 			<div class="panel panel-default">
-				<div class="panel-heading">设置</div>
+				<div class="panel-heading">发布时间</div>
 				<div class="panel-body">
 					<div>
 						<label>发布时间</label><input type="text" name="publishedTime" value="{{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
