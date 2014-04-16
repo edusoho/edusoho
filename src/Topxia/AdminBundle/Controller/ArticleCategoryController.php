@@ -114,11 +114,26 @@ class ArticleCategoryController extends BaseController
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
-
+        var_dump($avaliable);exit();
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
             $response = array('success' => false, 'message' => '编码已被占用，请换一个。');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function checkParentIdAction(Request $request)
+    {
+        $selectedParentId = $request->query->get('value');
+
+        $currentId = $request->query->get('currentId');
+
+        if($currentId == $selectedParentId){
+            $response = array('success' => false, 'message' => '不能选择自己作为父栏目');
+        } else {
+            $response = array('success' => true, 'message' => '');
         }
 
         return $this->createJsonResponse($response);

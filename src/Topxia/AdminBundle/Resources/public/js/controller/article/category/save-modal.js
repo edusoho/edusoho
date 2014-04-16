@@ -51,6 +51,10 @@ define(function(require, exports, module) {
             rule: 'integer'
         });
 
+        validator.addItem({
+            element: '[name="parentId"]',
+            rule: 'remote'
+        });
         
 
         $modal.find('.delete-category').on('click', function() {

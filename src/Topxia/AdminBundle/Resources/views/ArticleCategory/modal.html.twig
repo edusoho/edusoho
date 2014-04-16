@@ -23,13 +23,11 @@
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-parentId-field">父栏目</label>
 			<div class="col-md-8 controls">
-				<select class="form-control" id="category-parentId-field" type="text" name="parentId" tabindex="2">
+				<select class="form-control" id="category-parentId-field" type="text" name="parentId" tabindex="2" data-url="{{ path('admin_article_category_checkparentid', {currentId:category.id}) }}">
 					<option value=0>选择栏目</option>
-					{% if category.parentId != 0 %}
-						{% for tree in categoryTree %}
-							<option value={{ tree.id }} {% if tree.id == category.parentId  %}selected{% endif %}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
-						{% endfor %}
-					{% endif %}
+					{% for tree in categoryTree %}
+					<option value="{{ tree.id }}" {% if tree.id == category.parentId  %}selected{% endif %}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
+					{% endfor %}
 				</select>
 			</div>		
 		</div>

@@ -652,6 +652,10 @@ admin_article_category_create:
     pattern:  /article/category/create
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:create }
 
+admin_article_category_checkparentid:
+    pattern:  /article/category/checkparentid
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkParentId }
+
 admin_article_category_checkcode:
     pattern:  /article/category/checkcode
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkCode }
