@@ -142,7 +142,7 @@
 				<div class="panel-heading">发布时间</div>
 				<div class="panel-body">
 					<div>
-						<label>发布时间</label><input type="text" name="publishedTime" value="{{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+						<input type="text" name="publishedTime" value=" {{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
 						<div class="help-block">内容条目默认按发布时间的倒序显示</div>
 					</div>
 
