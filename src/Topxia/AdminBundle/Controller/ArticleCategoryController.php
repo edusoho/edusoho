@@ -91,7 +91,7 @@ class ArticleCategoryController extends BaseController
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
-        var_dump($avaliable);exit();
+  
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
@@ -107,7 +107,7 @@ class ArticleCategoryController extends BaseController
 
         $currentId = $request->query->get('currentId');
 
-        if($currentId == $selectedParentId){
+        if($currentId == $selectedParentId && $selectedParentId != 0){
             $response = array('success' => false, 'message' => '不能选择自己作为父栏目');
         } else {
             $response = array('success' => true, 'message' => '');
