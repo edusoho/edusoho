@@ -306,7 +306,7 @@ class ActivityController extends BaseController
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
                 $member['joinMode']='线上';
-                $member['fistJoin']='1';
+                $member['newUser']='1';
 
                 $member = $this->getActivityService()->addMeberByActivity($member);
 
@@ -341,7 +341,7 @@ class ActivityController extends BaseController
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
                 $member['joinMode']='线上';
-                $member['fistJoin']='1';
+                $member['newUser']='0';
                 
                 $member =  $this->getActivityService()->addMeberByActivity($member);
 
@@ -392,12 +392,12 @@ class ActivityController extends BaseController
         
         $activity=$this->getActivityService()->getActivity($id);
 
-        $member = $this->getActivityService()->getActivityMember($activity['id'],$User['id']);
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
 
         $hash=$this->makeHash($user);
 
         return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
-            "firstJoin"=>$member['firstJoin'],
+            "newUser"=>$member['newUser'],
             "user"=>$user,
             "activity"=>$activity,
             "hash"=>$hash)
@@ -729,7 +729,7 @@ class ActivityController extends BaseController
                 $user['email'],
                 "欢迎报名参加开源力量公开课[".$activity['title']."],邮件内容是本期公开课参课方式，请查阅",
                 $this->renderView('TopxiaWebBundle:Activity:join-activity-email.html.twig', array(
-                    'firstJoin' => $member['firstJoin'],
+                    'newUser' => $member['newUser'],
                     'user' => $user,
                     'token' => $token,
                     'activity'=>$activity

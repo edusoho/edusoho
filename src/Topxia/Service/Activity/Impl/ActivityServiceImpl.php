@@ -409,7 +409,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 		$thread['joinMode']=empty($member['joinMode'])?'':$member['joinMode'];
 
-		$thread['firstJoin']=empty($member['firstJoin'])?'0':$member['firstJoin'];
+		$thread['newUser']=empty($member['newUser'])?'0':$member['newUser'];
 
 		$thread['truename']=$member['truename'];
 		$thread['createdTime']=time();
