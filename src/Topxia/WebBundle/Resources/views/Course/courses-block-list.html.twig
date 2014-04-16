@@ -6,9 +6,9 @@
     </a>
     <div class="course-body">
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
-      {% if course.showCourseStatus=='serialize' %}
+      {% if course.serializeMode=='serialize' %}
         <span class="label label-success ">更新中</span>
-      {% elseif course.showCourseStatus=='finished' %}
+      {% elseif course.serializeMode=='finished' %}
         <span class="label label-warning ">已完结</span>
       {% endif %}
       </h4>

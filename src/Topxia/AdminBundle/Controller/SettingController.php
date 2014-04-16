@@ -353,7 +353,7 @@ class SettingController extends BaseController
         $default = array(
             'mode' => 'default',
             'nickname_enabled' => 0,
-            'isShouldSetAvatar' => 'none',
+            'avatar_alert' => 'none',
         );
         
         $setting = array_merge($default, $setting);
@@ -366,7 +366,7 @@ class SettingController extends BaseController
             $data = $request->request->all();
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
-                            'isShouldSetAvatar' => $data['isShouldSetAvatar'],
+                            'avatar_alert' => $data['avatar_alert'],
             );
             $this->getSettingService()->set('user_partner', $setting);
 
