@@ -64,12 +64,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	{
 		$conditions = array_filter($conditions);
 
-		if (isset($conditions['includeChindren']) && $conditions['includeChindren'] == true) {
+		if (isset($conditions['includeChildren']) && $conditions['includeChildren'] == true) {
 			if (isset($conditions['categoryId'])) {
-			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-			$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
-			unset($conditions['categoryId']);
-			unset($conditions['includeChindren']);
+				$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+				$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+				unset($conditions['categoryId']);
+				unset($conditions['includeChindren']);
 			}
 		} 
 
@@ -81,32 +81,33 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		if(empty($article)){
 			$this->createServiceException("文章内容为空，创建文章失败！");
 		}
+
 		$tagNames = array_filter(explode(',', $article['tags']));
         $tags = $this->getTagService()->findTagsByNames($tagNames);
         $tagIdsArray = ArrayToolkit::column($tags, 'id');
         $article['tagIds'] = implode(',', $tagIdsArray);
 
-        $new_article = array();
+        $newArticle = array();
 		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
 		
-		$new_article['picture'] = $match ? $matches[1] : "null";
-		$new_article['thumb'] = $article['thumb'];
-		$new_article['originalThumb'] = $article['originalThumb'];
-		$new_article['title'] = $article['title'];
-		$new_article['body'] = $article['richeditorBody'];
-		$new_article['featured'] = empty($article['featured']) ? 0 : 1;
-		$new_article['promoted'] = empty($article['promoted']) ? 0 : 1;
-		$new_article['sticky'] = empty($article['sticky']) ? 0 : 1;
-		$new_article['tagIds'] = $article['tagIds'];
-		$new_article['categoryId'] = $article['categoryId'];
-		$new_article['source'] = $article['source'];
-		$new_article['sourceUrl'] = $article['sourceUrl'];
-		$new_article['publishedTime'] = strtotime($article['publishedTime']);
-		$new_article['createdTime'] = time();
-		$new_article['updated'] = time();
-		$new_article['userId'] = $this->getCurrentUser()->id;
+		$newArticle['picture'] = $match ? $matches[1] : "null";
+		$newArticle['thumb'] = $article['thumb'];
+		$newArticle['originalThumb'] = $article['originalThumb'];
+		$newArticle['title'] = $article['title'];
+		$newArticle['body'] = $article['richeditorBody'];
+		$newArticle['featured'] = empty($article['featured']) ? 0 : 1;
+		$newArticle['promoted'] = empty($article['promoted']) ? 0 : 1;
+		$newArticle['sticky'] = empty($article['sticky']) ? 0 : 1;
+		$newArticle['tagIds'] = $article['tagIds'];
+		$newArticle['categoryId'] = $article['categoryId'];
+		$newArticle['source'] = $article['source'];
+		$newArticle['sourceUrl'] = $article['sourceUrl'];
+		$newArticle['publishedTime'] = strtotime($article['publishedTime']);
+		$newArticle['createdTime'] = time();
+		$newArticle['updated'] = time();
+		$newArticle['userId'] = $this->getCurrentUser()->id;
 
-		$article = $this->getArticleDao()->addArticle($new_article);
+		$article = $this->getArticleDao()->addArticle($newArticle);
 		$this->getLogService()->info('Article', 'create', "创建文章《({$article['title']})》({$article['id']})", $article);
 		
 		return $article;
@@ -119,32 +120,33 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		if(empty($checkArticle)){
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
+
 		$tagNames = array_filter(explode(',', $article['tags']));
         $tags = $this->getTagService()->findTagsByNames($tagNames);
         $tagIdsArray = ArrayToolkit::column($tags, 'id');
         $article['tagIds'] = implode(',', $tagIdsArray);
         
-        $edit_article = array();
+        $editArticle = array();
 		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
 		
-		$edit_article['picture'] = $match ? $matches[1] : "null";
-		$edit_article['thumb'] = $article['thumb'];
-		$edit_article['originalThumb'] = $article['originalThumb'];
-		$edit_article['title'] = $article['title'];
-		$edit_article['body'] = $article['richeditorBody'];
-		$edit_article['featured'] = empty($article['featured']) ? 0 : 1;
-		$edit_article['promoted'] = empty($article['promoted']) ? 0 : 1;
-		$edit_article['sticky'] = empty($article['sticky']) ? 0 : 1;
-		$edit_article['tagIds'] = $article['tagIds'];
-		$edit_article['categoryId'] = $article['categoryId'];
-		$edit_article['source'] = $article['source'];
-		$edit_article['sourceUrl'] = $article['sourceUrl'];
-		$edit_article['publishedTime'] = strtotime($article['publishedTime']);
-		$edit_article['createdTime'] = time();
-		$edit_article['updated'] = time();
-		$edit_article['userId'] = $this->getCurrentUser()->id;
-		// $edit_article['picture'] = $article['picture'];
-		$article = $this->getArticleDao()->updateArticle($id,$edit_article);
+		$editArticle['picture'] = $match ? $matches[1] : "null";
+		$editArticle['thumb'] = $article['thumb'];
+		$editArticle['originalThumb'] = $article['originalThumb'];
+		$editArticle['title'] = $article['title'];
+		$editArticle['body'] = $article['richeditorBody'];
+		$editArticle['featured'] = empty($article['featured']) ? 0 : 1;
+		$editArticle['promoted'] = empty($article['promoted']) ? 0 : 1;
+		$editArticle['sticky'] = empty($article['sticky']) ? 0 : 1;
+		$editArticle['tagIds'] = $article['tagIds'];
+		$editArticle['categoryId'] = $article['categoryId'];
+		$editArticle['source'] = $article['source'];
+		$editArticle['sourceUrl'] = $article['sourceUrl'];
+		$editArticle['publishedTime'] = strtotime($article['publishedTime']);
+		$editArticle['createdTime'] = time();
+		$editArticle['updated'] = time();
+		$editArticle['userId'] = $this->getCurrentUser()->id;
+
+		$article = $this->getArticleDao()->updateArticle($id,$editArticle);
 
 		$this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})", $article);
 		
@@ -153,61 +155,81 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 	public function hitArticle($id)
 	{
+		$checkArticle = $this->getArticle($id);
+
+		if(empty($checkArticle)){
+			throw $this->createServiceException("文章不存在，操作失败。");
+		}
+
 		$this->getArticleDao()->waveArticle($id, 'hits', +1);
 	}
 
 	public function setArticleProperty($id, $property)
 	{
 		$article = $this->getArticleDao()->getArticle($id);
+
 		if(empty($property)){
 			throw $this->createServiceException('属性{$property}不存在，更新失败！');
 		}
 
-		$property_val = 1;
-		$this->getArticleDao()->updateArticle($id,array("{$property}"=>$property_val));
+		$propertyVal = 1;
+		$this->getArticleDao()->updateArticle($id,array("{$property}"=>$propertyVal));
 
-		$this->getLogService()->info('setArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$property_val}");
-		return $property_val;
+		$this->getLogService()->info('setArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$propertyVal}");
+		
+		return $propertyVal;
 	}
 
 	public function cancelArticleProperty($id, $property)
 	{
 		$article = $this->getArticleDao()->getArticle($id);
+
 		if(empty($property)){
 			throw $this->createServiceException('属性{$property}不存在，更新失败！');
 		}
 
-		$property_val = 0;
-		$this->getArticleDao()->updateArticle($id,array("{$property}"=>$property_val));
+		$propertyVal = 0;
+		$this->getArticleDao()->updateArticle($id,array("{$property}"=>$propertyVal));
 
-		$this->getLogService()->info('cancelArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$property_val}");
-		return $property_val;
+		$this->getLogService()->info('cancelArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$propertyVal}");
+		
+		return $propertyVal;
 	}
 
 	public function trashArticle($id)
 	{
+		$checkArticle = $this->getArticle($id);
+
+		if(empty($checkArticle)){
+			throw $this->createServiceException("文章不存在，操作失败。");
+		}
+
 		$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
 		$this->getLogService()->info('Article', 'trash', "文章#{$id}移动到回收站");
 	}
 
 	public function deleteArticle($id)
 	{
-		$this->getArticleDao()->deleteArticle($id);
+		$checkArticle = $this->getArticle($id);
+			
+		if(empty($checkArticle)){
+			throw $this->createServiceException("文章不存在，操作失败。");
+		}
+
+		$res = $this->getArticleDao()->deleteArticle($id);
 		$this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
+		return true;
 	}
 
 	public function deleteArticlesByIds($ids)
 	{
-		$id_log = "";
 		if(count($ids) == 1){
-			$this->getArticleDao()->deleteArticle($ids[0]);
+			$this->deleteArticle($ids[0]);
 		}else{
 			foreach ($ids as $id) {
-				$this->getArticleDao()->deleteArticle($id);
+				$this->deleteArticle($id);
 			}
 		}
-		
-		$this->getLogService()->info('Article', 'delete', "文章#{$id_log}永久删除");
 	}
 
 	public function publishArticle($id)
@@ -222,15 +244,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$this->getLogService()->info('Article', 'unpublish', "文章#{$id}未发布");
 	}
 
-	public function isAliasAvaliable($alias)
-	{
-		if (empty($alias)) {
-			return true;
-		}
-		$Article = $this->getArticleDao()->getArticleByAlias($alias);
-		return $Article ? false : true;
-	}
-
 	public function changeIndexPicture($filePath, $options)
 	{
         $pathinfo = pathinfo($filePath);
@@ -238,38 +251,35 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $rawImage = $imagine->open($filePath);
         $largeImage = $rawImage->copy();
 
-
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
         $largeImage->resize(new Box(230, 115));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
 
-         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeFileRecord = $this->getFileService()->uploadFile('article', new File($largeFilePath));
 
-		//move yuantu
 		$uri = $largeFileRecord['uri'];
-		$file_original_name = basename($uri);
-		$file_original_extension = pathinfo($uri,PATHINFO_EXTENSION);
+		$fileOriginalName = basename($uri);
+		$fileOriginalExtension = pathinfo($uri,PATHINFO_EXTENSION);
+		$fileOriginalNameNew = str_replace(".{$fileOriginalExtension}", "_orig.{$fileOriginalExtension}", $fileOriginalName);
 
-		$file_original_name_new = str_replace(".{$file_original_extension}", "_orig.{$file_original_extension}", $file_original_name);
-		$file_original_path = str_replace(array('public://',"{$file_original_name}"),'', $uri);
-		$file_original_directory =$pathinfo['dirname'] . '/' . $file_original_path;
-		$file_original_directory = str_replace("/tmp", "", $file_original_directory);
-		$file_original_directory = substr($file_original_directory, 0,-1);
+		$fileOriginalPath = str_replace(array('public://',"{$fileOriginalName}"),'', $uri);
+		$fileOriginalDirectory =$pathinfo['dirname'] . '/' . $fileOriginalPath;
+		$fileOriginalDirectory = str_replace("/tmp", "", $fileOriginalDirectory);
+		$fileOriginalDirectory = substr($fileOriginalDirectory, 0,-1);
 		
 		$new_file = new File($filePath);
-		$file_res = $new_file->move($file_original_directory, $file_original_name_new);
+		$file_res = $new_file->move($fileOriginalDirectory, $fileOriginalNameNew);
 
         @unlink($filePath);
 
         $webPath = realpath($this->getKernel()->getParameter('topxia.upload.public_directory')."/../");
 
 		return array(
-				'file_original_name'=>$file_original_name,
-				'file_original_name_new'=>$file_original_name_new,
-				'file_original_path'=>str_replace($webPath, "", $file_original_directory)
+				'fileOriginalName'=>$fileOriginalName,
+				'fileOriginalNameNew'=>$fileOriginalNameNew,
+				'fileOriginalPath'=>str_replace($webPath, "", $fileOriginalDirectory)
 			);
 	}
 
@@ -331,39 +341,5 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     private function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
-    }
-}
-
-
-class ArticleSerialize
-{
-    public static function serialize(array &$course)
-    {
-    	if (isset($course['tagIds'])) {
-    		if (is_array($course['tagIds']) and !empty($course['tagIds'])) {
-    			$course['tagIds'] = '|' . implode('|', $course['tagIds']) . '|';
-    		} else {
-    			$course['tagIds'] = '';
-    		}
-    	}
-        return $course;
-    }
-
-    public static function unserialize(array $course = null)
-    {
-    	if (empty($course)) {
-    		return $course;
-    	}
-
-		$course['tagIds'] = empty($course['tagIds']) ? array() : explode('|', trim($course['tagIds'], '|'));
-
-		return $course;
-    }
-
-    public static function unserializes(array $courses)
-    {
-    	return array_map(function($course) {
-    		return ArticleSerialize::unserialize($course);
-    	}, $courses);
     }
 }

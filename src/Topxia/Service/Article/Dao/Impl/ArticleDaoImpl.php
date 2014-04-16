@@ -8,10 +8,6 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 {
 	protected $table = 'article';
 
-	private $serializeFields = array(
-            'tagIds' => 'json',
-    );
-
 	public function getArticle($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -39,7 +35,9 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
 	{
 		$this->filterStartLimit($start, $limit);
+
 		if(empty($categoryIds)){ return array(); };
+
         $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
         $sql = "SELECT * FROM {$this->table} WHERE categoryId in ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
@@ -89,10 +87,12 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	public function waveArticle($id,$field,$diff)
 	{
 		$fields = array('hits');
+
 		if (!in_array($field, $fields)) {
 			throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
 		}
 		$sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+		
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
 	}
 

@@ -116,7 +116,7 @@ class ArticleController extends BaseController
 		}
 
 		if ($article['status'] != 'published') {
-			return $this->createMessageResponse('文章不是发布状态，请查看！');
+			return $this->createMessageResponse('error','文章不是发布状态，请查看！');
 		}
 
 		$setting = $this->getSettingService()->get('article', array());

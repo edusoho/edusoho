@@ -724,7 +724,3 @@ admin_article_delete:
     pattern:  /article/delete
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
-
-admin_article_alias_check:
-    pattern:  /article/alias/check
-    defaults: { _controller: TopxiaAdminBundle:Article:aliasCheck }

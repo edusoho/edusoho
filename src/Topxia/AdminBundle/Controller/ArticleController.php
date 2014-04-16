@@ -21,9 +21,9 @@ class ArticleController extends BaseController
 	public function indexAction(Request $request)
 	{
         $conditions = $request->query->all();
-        
-        if(array_key_exists('property', $conditions)){
-            $conditions['includeChindren'] =true;
+
+        if(!empty($conditions['categoryId'])){
+            $conditions['includeChildren'] =true;
         }
 
         $paginator = new Paginator(
@@ -42,26 +42,12 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        $category = array(
-            'id' => 0,
-            'name' => '',
-            'code' => '',
-            'pagesize' => '10',
-            'parentId' => (int) $request->query->get('parentId', 0),
-            'weight' => 0,
-            'publishArticle' => 1,
-            'seoTitle' => '',
-            'seoKeyword' => '',
-            'seoDesc' => '',
-            'published' => 1
-        );
 
         return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
         	'articles' => $articles,
             'categories' => $categories,
         	'paginator' => $paginator,
             'categoryTree'  => $categoryTree,
-            'category'  => $category
     	));
 	}
 
@@ -70,28 +56,15 @@ class ArticleController extends BaseController
         if($request->getMethod() == 'POST'){
             $content = $request->request->all();
             $article = $this->getArticleService()->createArticle($content);
+
             return $this->redirect($this->generateUrl('admin_article'));
         }
         
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        $category = array(
-            'id' => 0,
-            'name' => '',
-            'code' => '',
-            'pagesize' => '10',
-            'parentId' => (int) $request->query->get('parentId', 0),
-            'weight' => 0,
-            'publishArticle' => 1,
-            'seoTitle' => '',
-            'seoKeyword' => '',
-            'seoDesc' => '',
-            'published' => 1
-        );
-
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'categoryTree'  => $categoryTree,
-            'category'  => $category
+            'category'  => array( 'id' =>0, 'parentId' =>0)
         ));
     }
 
@@ -105,16 +78,18 @@ class ArticleController extends BaseController
 
         $tagNamesStr = empty($article['tagIds']) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds']);
 
+        $categoryId = $article['categoryId'];
+        $category = $this->getCategoryService()->getCategory($categoryId);
+
         $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        $categoryId = $article['categoryId'];
-        $category = $this->getCategoryService()->getCategory($categoryId);
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article = $this->getArticleService()->updateArticle($id, $formData);
             return $this->redirect($this->generateUrl('admin_article'));
         }
+
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'article' => $article,
             'categoryTree'  => $categoryTree,
@@ -126,18 +101,18 @@ class ArticleController extends BaseController
 
     public function previewAction(Request $request,$id)
     {
-        return $this->forward('TopxiaWebBundle:Article:detail', array('id' => $id));
+        return $this->redirect($this->generateUrl('article_detail',array('id' => $id)));
     }
 
     public function setArticlePropertyAction(Request $request,$id,$property)
     {
-         $result = $this->getArticleService()->setArticleProperty($id, $property);
+         $this->getArticleService()->setArticleProperty($id, $property);
          return $this->createJsonResponse(array("status" =>"success")); 
     }
 
     public function cancelArticlePropertyAction(Request $request,$id,$property)
     {
-         $result = $this->getArticleService()->cancelArticleProperty($id, $property);
+         $this->getArticleService()->cancelArticleProperty($id, $property);
          return $this->createJsonResponse(array("status" =>"default")); 
     }
 
@@ -155,7 +130,6 @@ class ArticleController extends BaseController
         if ($id) {
             array_push($ids, $id);
         }
-        
         $result = $this->getArticleService()->deleteArticlesByIds($ids);
         if($result){
             return $this->createJsonResponse(array("status" =>"failed"));
@@ -199,27 +173,6 @@ class ArticleController extends BaseController
         ));
     }
 
-    public function aliasCheckAction(Request $request)
-    {
-        $value = $request->query->get('value');
-        $thatValue = $request->query->get('that');
-
-        if (empty($value)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => ''));
-        }
-
-        if ($value == $thatValue) {
-            return $this->createJsonResponse(array('success' => true, 'message' => ''));
-        }
-
-        $avaliable = $this->getArticleService()->isAliasAvaliable($value);
-        if ($avaliable) {
-            return $this->createJsonResponse(array('success' => true, 'message' => ''));
-        }
-
-        return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
-    }
-
     public function showUploadAction(Request $request)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
@@ -227,7 +180,7 @@ class ArticleController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-        
+
             $file = $request->files->get('picture');
                 if (!FileToolkit::isImageFile($file)) {
                     return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
@@ -237,11 +190,13 @@ class ArticleController extends BaseController
                 $hash = substr(md5($filenamePrefix . time()), -8);
                 $ext = $file->getClientOriginalExtension();
                 $filename = $filenamePrefix . $hash . '.' . $ext;
+
                 $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
                 $file = $file->move($directory, $filename);
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 $articlePicture = $this->getPictureAtributes($fileName);
+
                 return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
                     'filename' => $fileName,
                     'pictureUrl' => $articlePicture['pictureUrl'],
@@ -253,6 +208,24 @@ class ArticleController extends BaseController
         return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
             'pictureUrl' => "",
         ));
+    }
+
+    public function pictureCropAction(Request $request)
+    {
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if($request->getMethod() == 'POST') {
+
+            $options = $request->request->all();
+            $filename = $request->query->get('filename');
+            $filename = str_replace('!', '.', $filename);
+            $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+            $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+            $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
+            return new Response(json_encode($response));
+        }
     }
 
     private function getTagNamesByTagIdsStr($tagIdsStr)
@@ -269,6 +242,7 @@ class ArticleController extends BaseController
         $filename = str_replace('!', '.', $filename);
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
         $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+
         try {
             $imagine = new Imagine();
             $image = $imagine->open($pictureFilePath);
@@ -280,59 +254,12 @@ class ArticleController extends BaseController
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+
         return array(
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
             'pictureUrl' => $pictureUrl
         );
-    }
-
-    public function pictureCropAction(Request $request)
-    {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-        if($request->getMethod() == 'POST') {
-            $options = $request->request->all();
-            $filename = $request->query->get('filename');
-            $filename = str_replace('!', '.', $filename);
-            $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-            $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-            $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
-            return new Response(json_encode($response));
-        }
-    }
-
-    private function filterEditorField($article)
-    {
-        if($article['editor'] == 'richeditor'){
-            $article['body'] = $article['richeditor-body'];
-        } elseif ($article['editor'] == 'none') {
-            $article['body'] = $article['noneeditor-body'];
-        }
-
-        unset($article['richeditor-body']);
-        unset($article['noneeditor-body']);
-        return $article;
-    }
-
-    private function convertArticle($article)
-    {
-        if (isset($article['tags'])) {
-            $tagNames = array_filter(explode(',', $article['tags']));
-            $tags = $this->getTagService()->findTagsByNames($tagNames);
-            $article['tagIds'] = ArrayToolkit::column($tags, 'id');
-        } else {
-            $article['tagIds'] = array();
-        }
-
-        $article['publishedTime'] = empty($article['publishedTime']) ? 0 : strtotime($article['publishedTime']);
-
-        $article['promoted'] = empty($article['promoted']) ? 0 : 1;
-        $article['sticky'] = empty($article['sticky']) ? 0 : 1;
-        $article['featured'] = empty($article['featured']) ? 0 : 1;
-
-        return $article;
     }
 
     private function getArticleService()
@@ -343,11 +270,6 @@ class ArticleController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
-    }
-
-    private function getCategoryService2()
-    {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
     private function getCategoryService()

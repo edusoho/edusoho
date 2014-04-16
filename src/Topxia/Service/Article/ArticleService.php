@@ -39,7 +39,5 @@ interface ArticleService
     
     public function unpublishArticle($id);
 
-	public function isAliasAvaliable($alias);
-
 	public function changeIndexPicture($filePath, $options);
 }

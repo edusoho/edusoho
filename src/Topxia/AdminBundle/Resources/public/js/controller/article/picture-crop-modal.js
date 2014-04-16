@@ -39,11 +39,11 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     $("#article-thumb-container").css('display','block');
                     response =  eval("("+response+")");
-                    var file_url = response.file_original_path+"/"+response.file_original_name;
-                    var file_url_original = response.file_original_path+"/"+response.file_original_name_new;
-                    $('#article-thumb').val(file_url);
-                    $('#article-originalThumb').val(file_url_original);
-                    $('#article-thumb-preview').attr('src',file_url);
+                    var fileUrl = response.fileOriginalPath+"/"+response.fileOriginalName;
+                    var fileUrlOriginal = response.fileOriginalPath+"/"+response.fileOriginalNameNew;
+                    $('#article-thumb').val(fileUrl);
+                    $('#article-originalThumb').val(fileUrlOriginal);
+                    $('#article-thumb-preview').attr('src',fileUrl);
                     $('#modal').load($('#upload-picture-crop-btn').data('goto'));
                 }
             });
