@@ -19,7 +19,6 @@ class ArticleController extends BaseController
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$conditions = array(
-			'type' => 'article',
 			'status' => 'published'
 		);
 
@@ -41,17 +40,16 @@ class ArticleController extends BaseController
 		}
 
 		$featuredConditions = array(
-			'type' => 'article',
 			'status' => 'published',
 			'featured' => 1,
 			'hasPicture' => 1
 		);
 		
 		$featuredArticles = $this->getArticleService()->searchArticles(
-			$featuredConditions,'published',
-			0,5
+			$featuredConditions,'normal',
+			0, 5
 		);
-
+		
 		return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
