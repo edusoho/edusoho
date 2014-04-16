@@ -11,9 +11,9 @@
           {% elseif course.status=='draft' %}
             <span class="label label-warning ">未发布</span>
           {% elseif course.status=='published' %}
-            {% if course.showCourseStatus=='serialize' %}
+            {% if course.serializeMode=='serialize' %}
               <span class="label label-success ">更新中</span>
-            {% elseif course.showCourseStatus=='finished' %}
+            {% elseif course.serializeMode=='finished' %}
               <span class="label label-warning ">已完结</span>
             {% endif %}
           {% endif %}

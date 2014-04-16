@@ -53,9 +53,9 @@
 			</div>
 
 			<div class="form-group">
-				<label class="col-md-2 control-label">课程更新状态</label>
+				<label class="col-md-2 control-label">连载状态</label>
 				<div class="col-md-8 controls radios">
-					{{ radios('showCourseStatus', {'unserialize':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.showCourseStatus ) }}
+					{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
 				</div>
 			</div>
 

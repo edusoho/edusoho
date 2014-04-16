@@ -41,6 +41,17 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
+    public function searchLessons($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
+
     public function getLessonMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  courseId = ?";
@@ -77,6 +88,21 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     public function deleteLesson($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, $this->table)
+            ->andWhere('courseId = :courseId')
+            ->andWhere('status = :status')
+            ->andWhere('type = :type')
+            ->andWhere('free = :free')
+            ->andWhere('userId = :userId')
+            ->andWhere('title LIKE :titleLike');
+
+        return $builder;
     }
 
 }

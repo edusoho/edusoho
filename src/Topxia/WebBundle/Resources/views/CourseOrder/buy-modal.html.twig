@@ -77,8 +77,8 @@
     {% else %}
       <div class="row">
         <div class="col-md-12">
-          {% if isShouldSetAvatar == 'yes' %}
-            <div class="alert alert-info">您还没有头像，设置以后才能继续购买<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦~<a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
+          {% if avatarAlert %}
+            <div class="alert alert-warning">您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
           {% else %}
             <div class="alert alert-info">此课程为免费课程，无需购买，可直接加入学习。</div>
           {% endif %}
@@ -164,7 +164,7 @@
       <span class="text-muted">预览模式无法加入学习</span>
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
-      {% if isShouldSetAvatar == 'no' %}
+      {% if not avatarAlert %}
         <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
