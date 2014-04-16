@@ -79,29 +79,6 @@ class ArticleCategoryController extends BaseController
         
     }
 
-    public function settingAction(Request $request)
-    {   
-        $articleSetting = $this->getSettingService()->get('article', array());
-
-        $default = array(
-            'name' => '资讯频道',
-            'pageNums' => 20
-        );
-
-        $articleSetting = array_merge($default, $articleSetting);
-
-        if ($request->getMethod() == 'POST') {
-            $articleSetting = $request->request->all();
-            $this->getSettingService()->set('article', $articleSetting);
-            $this->getLogService()->info('article', 'update_settings', "更新资讯频道设置", $articleSetting);
-            $this->setFlashMessage('success', '资讯频道设置已保存！');
-        };
-
-        return $this->render('TopxiaAdminBundle:ArticleCategory:setting.html.twig', array(
-            'articleSetting' => $articleSetting
-        ));
-    }
-
     public function canDeleteCategory($id)
     {
         return $this->getCategoryService()->findCategoriesCountByParentId($id);
@@ -156,11 +133,6 @@ class ArticleCategoryController extends BaseController
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
