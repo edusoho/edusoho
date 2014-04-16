@@ -53,7 +53,8 @@ class ArticleController extends BaseController
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
 			'featuredArticles' => $featuredArticles,
-			'paginator' => $paginator
+			'paginator' => $paginator,
+			'setting' =>$setting
 		));
 	}
 
