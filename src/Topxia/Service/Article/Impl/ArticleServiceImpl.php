@@ -90,7 +90,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $newArticle = array();
 		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
 		
-		$newArticle['picture'] = $match ? $matches[1] : "null";
+		$newArticle['picture'] = $match ? $matches[1] : "";
 		$newArticle['thumb'] = $article['thumb'];
 		$newArticle['originalThumb'] = $article['originalThumb'];
 		$newArticle['title'] = $article['title'];
