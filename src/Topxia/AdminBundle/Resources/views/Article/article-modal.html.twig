@@ -104,10 +104,12 @@
 				<div class="panel-body">
 					<div id="article-thumb-container">
 					  {% if article.thumb|default(null) %}
-						  <img src='{{ file_path(article.thumb) }}'>
+						  <img src='{{ article.thumb }}'>
 					  {% endif %}
-				  </div>
+				   </div>
+				   <br>
 					<a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-default">上传</a>
+					<a id="article_thumb_remove"  class="btn btn-default" data-url="{{ path('admin_article_thumb_remove',{id:article.id|default(0)}) }}" {% if not article.thumb|default(null) %}style="display:none;" {% endif %}>删除</a>
 					<input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
 					<input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
 					<p class="help-block">请上传png, gif, jpg格式的图片文件。</p>

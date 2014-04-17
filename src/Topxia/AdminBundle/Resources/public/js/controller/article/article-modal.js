@@ -86,9 +86,10 @@ define(function(require, exports, module) {
             }
         });
         
-         $("#article-thumb-remove").on('click', function(){
+         $("#article_thumb_remove").on('click', function(){
             if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
+            console.log($btn.data('url'));
             $.post($btn.data('url'), function(){
                 $("#article-thumb-container").html('');
                 $form.find('[name=thumb]').val('');
@@ -112,7 +113,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                Notify.success('设置成功！');
+                Notify.success('保存文章成功！');
             }
         });
 

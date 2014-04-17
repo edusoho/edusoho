@@ -87,7 +87,6 @@ class ArticleController extends BaseController
             $article = $this->getArticleService()->updateArticle($id, $formData);
             return $this->redirect($this->generateUrl('admin_article'));
         }
-
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'article' => $article,
             'categoryTree'  => $categoryTree,
@@ -114,7 +113,7 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function thumbRemove(Request $Request,$id)
+    public function thumbRemoveAction(Request $Request,$id)
     {
         $this->getArticleService()->removeArticlethumb($id);
         return $this->createJsonResponse(true);

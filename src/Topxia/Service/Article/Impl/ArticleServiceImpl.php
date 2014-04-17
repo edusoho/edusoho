@@ -179,7 +179,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
 
-		$this->getArticleDao()->updateArticle($id, $fields = array('picture' => ''));
+		$this->getArticleDao()->updateArticle($id, $fields = array('thumb' => ''));
+		$this->getArticleDao()->updateArticle($id, $fields = array('originalThumb' => ''));
 		$this->getLogService()->info('Article', 'removeThumb', "文章#{$id}removeThumb");
 	}
 
