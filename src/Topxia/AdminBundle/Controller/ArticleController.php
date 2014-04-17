@@ -70,6 +70,9 @@ class ArticleController extends BaseController
         if (empty($article)) {
             throw $this->createNotFoundException('文章已删除或者未发布！');
         }
+        if(empty($article['tagIds'])){
+            $article['tagIds'] = array();
+        }
 
         $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
         $tagNames = ArrayToolkit::column($tags, 'name');
