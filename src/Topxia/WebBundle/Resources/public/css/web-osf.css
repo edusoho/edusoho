@@ -363,11 +363,13 @@
 	height: 27px !important;
 }
 
-.course-show img, .activity-show img {
-	display: block;
-	max-width: 100%;
-	height: auto;
-	margin: 0 auto;
+@media (max-width: 767px) {
+	.course-show img, .activity-show img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		margin: 0 auto;
+	}
 }
 
 .display-inline{
