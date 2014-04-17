@@ -34,9 +34,9 @@ class ArticleController extends BaseController
             $paginator->getPerPageCount()
 		);
 		
-		foreach ($latestArticles as &$article) {
-			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
-		}
+		$categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
+
+		$categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 		
 		$featuredConditions = array(
 			'status' => 'published',
@@ -48,13 +48,13 @@ class ArticleController extends BaseController
 			$featuredConditions,'normal',
 			0, 5
 		);
-		
 		return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'latestArticles' => $latestArticles,
 			'featuredArticles' => $featuredArticles,
 			'paginator' => $paginator,
-			'setting' =>$setting
+			'setting' => $setting,
+			'categories' => $categories
 		));
 	}
 
@@ -68,7 +68,7 @@ class ArticleController extends BaseController
 
 		$conditions = array(
 			'categoryId' => $category['id'],
-			'includeChindren' => true,
+			'includeChildren' => true,
 		);
 
 		$articles = $this->getArticleService()->searchArticles(
@@ -79,6 +79,8 @@ class ArticleController extends BaseController
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
 		$rootCategory = $this->getRootCategory($categoryTree,$category);
+
+		$subCategories = $this->getSubCategories($categoryTree, $rootCategory);
 
 		$setting = $this->getSettingService()->get('article', array());
 
@@ -92,10 +94,9 @@ class ArticleController extends BaseController
             $setting['pageNums']
         );
 
-        //@todo 
-		foreach ($articles as &$article) {
-			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
-		}
+        $categoryIds = ArrayToolkit::column($articles, 'categoryId');
+
+		$categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
 		return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
 			'categoryTree' => $categoryTree,
@@ -104,7 +105,9 @@ class ArticleController extends BaseController
 			'rootCategory' => $rootCategory,
 			'articles' => $articles,
 			'paginator' => $paginator,
-			'setting' => $setting
+			'setting' => $setting,
+			'categories' => $categories,
+			'subCategories' => $subCategories
 		));
 	}
 
@@ -207,6 +210,30 @@ class ArticleController extends BaseController
 		}
 
 		return null;
+	}
+
+	private function getSubCategories($categoryTree, $rootCategory)
+	{
+		$categories = array();
+
+		$start = false;
+		foreach ($categoryTree as $treeCategory) {
+			
+			if ($treeCategory['depth'] == 1 && $treeCategory['id'] != $rootCategory['id']) {
+				break;
+			}
+
+			if ($treeCategory['id'] == $rootCategory['id']) {
+				$start = true;
+			}
+
+			if ($start == true) {
+				$categories[] = $treeCategory;
+			}
+
+		}
+
+		return $categories;
 	}
 
     private function getCategoryService()

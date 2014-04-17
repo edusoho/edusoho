@@ -2,6 +2,10 @@
 
 {% block title %}{{ setting.name }} - {{ parent() }}{% endblock %}
 
+{% set bodyClass = 'homepage' %}
+
+{% set script_controller = 'index' %}
+
 {% block content %}
 
   <div class="es-row-wrap container-gap">

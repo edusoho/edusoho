@@ -5,7 +5,7 @@
 {% set menu = 'article' %}
 
 {% block title %}
-	资讯管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}文章 - {{ parent() }}
+	资讯管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯 - {{ parent() }}
 {% endblock %}
 
 {% set script_controller = 'article/article-modal' %}
@@ -15,7 +15,7 @@
 {% set article = article|default(null) %}
 
 <div class="page-header clearfix">
- 	<h1 class="pull-left">{% if article|default(null) %}编辑{% else %}添加{% endif %}文章</h1>
+ 	<h1 class="pull-left">{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯</h1>
 </div>
 
 <form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
@@ -28,7 +28,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div class="form-group">
-			  <label for="article-title-field" class="control-label">文章标题</label>
+			  <label for="article-title-field" class="control-label">资讯标题</label>
 			  <div class="controls">
 			  	<input class="form-control" id="article-title-field" type="text" name="title" value="{{ article.title|default('') }}">
 			  </div>
@@ -65,7 +65,7 @@
 		<div class="col-md-4">
 
 			<div class="panel panel-default">
-				<div class="panel-heading">文章属性</div>
+				<div class="panel-heading">资讯属性</div>
 				<div class="panel-body">
 				  <label class="checkbox-inline">
 						<input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> 置顶

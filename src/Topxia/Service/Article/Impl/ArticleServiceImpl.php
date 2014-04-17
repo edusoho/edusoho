@@ -273,9 +273,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
 			$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
 			unset($conditions['categoryId']);
-			unset($conditions['includeChindren']);
+			unset($conditions['includeChildren']);
 		}
-
 		return $conditions;
 	}
 

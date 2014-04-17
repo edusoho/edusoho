@@ -5,9 +5,8 @@
   {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
 
   {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
-    <div class="alert alert-warning">头条大图轮播功能需先在后台文章管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
+    <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
   {% else %}
-    
     <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='{% verbatim %}{{title}}{% endverbatim %}'>
       <div class="cycle-overlay"></div>
         {% for featuredArticle in featuredArticles %}
@@ -16,31 +15,36 @@
     </div>
   {% endif %}
 
-
-  <ul class="article-wide-list">
-    {% for article in latestArticles %}
-      {% set category = article.category %}
-      <li class="media article-item clearfix">
-        <div class="article-title text-muted">
-          <div class="pull-left">
-            <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a>
-            </span>
+  {% if latestArticles %}
+    <ul class="article-wide-list">
+      {% for article in latestArticles %}
+        <li class="media article-item clearfix">
+          <div class="article-title text-muted">
+            <div class="pull-left">
+              {% for category in categories %}
+                {% if article.categoryId == category.id %}
+                  <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a>
+                  </span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
           </div>
-          <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
-        </div>
-        {% if article.picture %}
-          <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-            <img class="article-picture" src="{{ asset(article.thumb) }}" alt="文章缩略图">
-          </a>
-        {% endif %}
-        <div class="media-body">
-          <h4 class="media-heading"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title|plain_text(25) }}</a></h4>
-          {{ article.body|plain_text(150) }}
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
-
+          {% if article.thumb %}
+            <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
+              <img class="article-picture" src="{{ asset(article.thumb) }}" alt="资讯缩略图">
+            </a>
+          {% endif %}
+          <div class="media-body">
+            <h4 class="media-heading"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title|plain_text(25) }}</a></h4>
+            {{ article.body|plain_text(150) }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty tac text-muted mvl">还没有任何资讯</div>
+  {% endif %}
   {{ web_macro.paginator(paginator) }}
 
 {% endblock %}
