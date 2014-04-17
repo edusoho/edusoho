@@ -15,8 +15,10 @@ class ArticleController extends BaseController
 	{
         $conditions = $request->query->all();
 
+        $categoryId = 0;
         if(!empty($conditions['categoryId'])){
             $conditions['includeChildren'] = true;
+            $categoryId = $conditions['categoryId'];
         }
 
         $paginator = new Paginator(
@@ -27,7 +29,7 @@ class ArticleController extends BaseController
 
         $articles = $this->getArticleService()->searchArticles(
             $conditions,
-            'created',
+            'published',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -41,6 +43,7 @@ class ArticleController extends BaseController
             'categories' => $categories,
         	'paginator' => $paginator,
             'categoryTree'  => $categoryTree,
+            'categoryId'  => $categoryId
     	));
 	}
 

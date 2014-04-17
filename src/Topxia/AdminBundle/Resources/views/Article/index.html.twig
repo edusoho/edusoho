@@ -18,7 +18,7 @@
 		<select class="form-control" name="categoryId">
 		 <option value="">--所属栏目--</option>
 		   {% for tree in categoryTree %}
-					<option value={{ tree.id }}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
+					<option value={{ tree.id }} {% if tree.id == categoryId  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
 					{% endfor %}
 		</select>
 	</div>
