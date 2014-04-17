@@ -21,7 +21,7 @@
         </div>
         {% if article.picture %}
           <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-            <img class="article-picture" src="{{ asset(article.picture) }}" alt="文章缩略图">
+            <img class="article-picture" src="{{ asset(article.thumb) }}" alt="文章缩略图">
           </a>
         {% endif %}
         <div class="media-body">
