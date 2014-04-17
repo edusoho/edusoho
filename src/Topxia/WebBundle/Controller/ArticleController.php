@@ -92,11 +92,12 @@ class ArticleController extends BaseController
             $setting['pageNums']
         );
 
+        //@todo 
 		foreach ($articles as &$article) {
 			$article['category'] = $this->getCategoryService()->getCategory($article['categoryId']);
 		}
 
-		return $this->render('TopxiaWebBundle:Article:article-list.html.twig', array(
+		return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
 			'categoryTree' => $categoryTree,
 			'categoryCode' => $categoryCode,
 			'category' => $category,
@@ -130,6 +131,8 @@ class ArticleController extends BaseController
 		);
 		
 		$createdTime = $article['createdTime'];
+
+		// @todo currentArticleId
 		$articlePrevious = $this->getArticleService()->getArticlePrevious($createdTime);
 		$articleNext = $this->getArticleService()->getArticleNext($createdTime);
 	
@@ -137,9 +140,9 @@ class ArticleController extends BaseController
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 		
 		$category = $this->getCategoryService()->getCategory($article['categoryId']);
-		$tagIdsArray = explode(",", $article['tagIds']);
-		$tags = $this->getTagService()->findTagsByIds($tagIdsArray);
+		$tags = $this->getTagService()->findTagsByIds($article['tagIds']);
 
+		// @todo remove.
 		$hottestArticles = $this->getArticleService()->searchArticles($conditions, 'popular' , 0 , 10);
 		
 		$this->getArticleService()->hitArticle($id);

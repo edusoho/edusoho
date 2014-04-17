@@ -49,7 +49,7 @@
 			<div class="form-group">
 	      <label for="article-tagIds"　class="control-label">TAG标签</label>
 			  <div class="controls">
-				  	<input type="form-control" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{tagNamesStr | default()}}" data-match-url="{{ path('tag_match') }}">
+				  	<input type="form-control" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tagNames|default([])|join(',') }}" data-match-url="{{ path('tag_match') }}">
 				  	<div class="help-block" style="display:none;"></div>
 			  </div>
 			</div>
@@ -57,7 +57,7 @@
 			<div class="form-group">
 				<label for="richeditor-body-field" class="control-label">正文</label>
 				<div class="controls">
-					<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditorBody">{{ article.body|default('') }}</textarea>
+					<textarea class="form-control" id="richeditor-body-field" rows="16" name="body">{{ article.body|default('') }}</textarea>
 				</div>
 			</div>
 		

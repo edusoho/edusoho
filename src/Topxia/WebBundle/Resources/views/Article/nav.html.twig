@@ -1,0 +1,9 @@
+{% set currentNavCategory = currentNavCategory|default(null) %}
+<ul class="nav nav-pills article-nav">
+  <li {% if not currentNavCategory %} class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
+  {% for cat in categoryTree %}
+    {% if cat.parentId == 0 %}
+       <li class="{% if currentNavCategory == cat.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>

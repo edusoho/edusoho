@@ -66,33 +66,10 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			$this->createServiceException("文章内容为空，创建文章失败！");
 		}
 
-		$tagNames = array_filter(explode(',', $article['tags']));
-        $tags = $this->getTagService()->findTagsByNames($tagNames);
-        $tagIdsArray = ArrayToolkit::column($tags, 'id');
-        $article['tagIds'] = implode(',', $tagIdsArray);
+		$article = $this->filterArticleFields($article, 'add');
+		$article = $this->getArticleDao()->addArticle($article);
 
-        $newArticle = array();
-		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
-		
-		$newArticle['picture'] = $match ? $matches[1] : "";
-		$newArticle['thumb'] = $article['thumb'];
-		$newArticle['originalThumb'] = $article['originalThumb'];
-		$newArticle['title'] = $article['title'];
-		$newArticle['body'] = $article['richeditorBody'];
-		$newArticle['featured'] = empty($article['featured']) ? 0 : 1;
-		$newArticle['promoted'] = empty($article['promoted']) ? 0 : 1;
-		$newArticle['sticky'] = empty($article['sticky']) ? 0 : 1;
-		$newArticle['tagIds'] = $article['tagIds'];
-		$newArticle['categoryId'] = $article['categoryId'];
-		$newArticle['source'] = $article['source'];
-		$newArticle['sourceUrl'] = $article['sourceUrl'];
-		$newArticle['publishedTime'] = strtotime($article['publishedTime']);
-		$newArticle['createdTime'] = time();
-		$newArticle['updated'] = time();
-		$newArticle['userId'] = $this->getCurrentUser()->id;
-
-		$article = $this->getArticleDao()->addArticle($newArticle);
-		$this->getLogService()->info('Article', 'create', "创建文章《({$article['title']})》({$article['id']})", $article);
+		$this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 		
 		return $article;
 	}
@@ -105,34 +82,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
 
-		$tagNames = array_filter(explode(',', $article['tags']));
-        $tags = $this->getTagService()->findTagsByNames($tagNames);
-        $tagIdsArray = ArrayToolkit::column($tags, 'id');
-        $article['tagIds'] = implode(',', $tagIdsArray);
-        
-        $editArticle = array();
-		$match = preg_match('/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i', $article['richeditorBody'], $matches);
-		
-		$editArticle['picture'] = $match ? $matches[1] : "null";
-		$editArticle['thumb'] = $article['thumb'];
-		$editArticle['originalThumb'] = $article['originalThumb'];
-		$editArticle['title'] = $article['title'];
-		$editArticle['body'] = $article['richeditorBody'];
-		$editArticle['featured'] = empty($article['featured']) ? 0 : 1;
-		$editArticle['promoted'] = empty($article['promoted']) ? 0 : 1;
-		$editArticle['sticky'] = empty($article['sticky']) ? 0 : 1;
-		$editArticle['tagIds'] = $article['tagIds'];
-		$editArticle['categoryId'] = $article['categoryId'];
-		$editArticle['source'] = $article['source'];
-		$editArticle['sourceUrl'] = $article['sourceUrl'];
-		$editArticle['publishedTime'] = strtotime($article['publishedTime']);
-		$editArticle['createdTime'] = time();
-		$editArticle['updated'] = time();
-		$editArticle['userId'] = $this->getCurrentUser()->id;
+		$article = $this->filterArticleFields($article);
 
-		$article = $this->getArticleDao()->updateArticle($id,$editArticle);
+		$article = $this->getArticleDao()->updateArticle($id, $article);
 
-		$this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})", $article);
+		$this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
 		
 		return $article;
 	}
@@ -265,6 +219,38 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 				'fileOriginalNameNew'=>$fileOriginalNameNew,
 				'fileOriginalPath'=>str_replace($webPath, "", $fileOriginalDirectory)
 			);
+	}
+
+	private function filterArticleFields($fields, $mode = 'update')
+	{
+        $article = array();
+
+		$match = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
+		$article['picture'] = $match ? $matches[1] : "";
+
+		$article['thumb'] = $fields['thumb'];
+		$article['originalThumb'] = $fields['originalThumb'];
+		$article['title'] = $fields['title'];
+		$article['body'] = $fields['body'];
+		$article['featured'] = empty($fields['featured']) ? 0 : 1;
+		$article['promoted'] = empty($fields['promoted']) ? 0 : 1;
+		$article['sticky'] = empty($fields['sticky']) ? 0 : 1;
+		$article['categoryId'] = $fields['categoryId'];
+		$article['source'] = $fields['source'];
+		$article['sourceUrl'] = $fields['sourceUrl'];
+		$article['publishedTime'] = strtotime($fields['publishedTime']);
+		$article['updated'] = time();
+
+		if (!empty($fields['tags']) && is_array($fields['tags'])) {
+	        $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
+		}
+
+		if ($mode == 'add') {
+			$article['createdTime'] = time();
+			$article['userId'] = $this->getCurrentUser()->id;
+		}
+
+		return $article;
 	}
 
 	private function prepareSearchConditions($conditions)

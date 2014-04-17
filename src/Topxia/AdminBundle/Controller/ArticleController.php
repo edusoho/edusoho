@@ -47,8 +47,10 @@ class ArticleController extends BaseController
     public function createAction(Request $request)
     {
         if($request->getMethod() == 'POST'){
-            $content = $request->request->all();
-            $article = $this->getArticleService()->createArticle($content);
+            $article = $request->request->all();
+            $article['tags'] = array_filter(explode(',', $article['tags']));
+
+            $article = $this->getArticleService()->createArticle($article);
 
             return $this->redirect($this->generateUrl('admin_article'));
         }
@@ -69,12 +71,12 @@ class ArticleController extends BaseController
             throw $this->createNotFoundException('文章已删除或者未发布！');
         }
 
-        $tagNamesStr = empty($article['tagIds']) ? "" : $this->getTagNamesByTagIdsStr($article['tagIds']);
+        $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
+        $tagNames = ArrayToolkit::column($tags, 'name');
 
         $categoryId = $article['categoryId'];
         $category = $this->getCategoryService()->getCategory($categoryId);
 
-        $tags = $this->getTagService()->findAllTags(0,$this->getTagService()->getAllTagCount());
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         if ($request->getMethod() == 'POST') {
@@ -87,12 +89,12 @@ class ArticleController extends BaseController
             'article' => $article,
             'categoryTree'  => $categoryTree,
             'category'  => $category,
-            'tags' => ArrayToolkit::column($tags, 'name'),
-            'tagNamesStr' => $tagNamesStr
+            'tagNames' => $tagNames
         ));
     }
 
-    public function previewAction(Request $request,$id)
+    // @todo 去除
+    public function previewAction(Request $request, $id)
     {
         return $this->redirect($this->generateUrl('article_detail',array('id' => $id)));
     }
@@ -100,13 +102,13 @@ class ArticleController extends BaseController
     public function setArticlePropertyAction(Request $request,$id,$property)
     {
          $this->getArticleService()->setArticleProperty($id, $property);
-         return $this->createJsonResponse(array("status" =>"success")); 
+         return $this->createJsonResponse(true); 
     }
 
     public function cancelArticlePropertyAction(Request $request,$id,$property)
     {
          $this->getArticleService()->cancelArticleProperty($id, $property);
-         return $this->createJsonResponse(array("status" =>"default")); 
+         return $this->createJsonResponse(true);
     }
 
     public function trashAction(Request $request, $id)
@@ -168,34 +170,30 @@ class ArticleController extends BaseController
 
     public function showUploadAction(Request $request)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         if ($request->getMethod() == 'POST') {
 
             $file = $request->files->get('picture');
-                if (!FileToolkit::isImageFile($file)) {
-                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-                }
+            if (!FileToolkit::isImageFile($file)) {
+                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+            }
 
-                $filenamePrefix = "article_";
-                $hash = substr(md5($filenamePrefix . time()), -8);
-                $ext = $file->getClientOriginalExtension();
-                $filename = $filenamePrefix . $hash . '.' . $ext;
+            $filenamePrefix = "article_";
+            $hash = substr(md5($filenamePrefix . time()), -8);
+            $ext = $file->getClientOriginalExtension();
+            $filename = $filenamePrefix . $hash . '.' . $ext;
 
-                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-                $file = $file->move($directory, $filename);
-                $fileName = str_replace('.', '!', $file->getFilename());
+            $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+            $file = $file->move($directory, $filename);
+            $fileName = str_replace('.', '!', $file->getFilename());
 
-                $articlePicture = $this->getPictureAtributes($fileName);
+            $articlePicture = $this->getPictureAtributes($fileName);
 
-                return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
-                    'filename' => $fileName,
-                    'pictureUrl' => $articlePicture['pictureUrl'],
-                    'naturalSize' => $articlePicture['naturalSize'],
-                    'scaledSize' => $articlePicture['scaledSize']
-                ));
+            return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
+                'filename' => $fileName,
+                'pictureUrl' => $articlePicture['pictureUrl'],
+                'naturalSize' => $articlePicture['naturalSize'],
+                'scaledSize' => $articlePicture['scaledSize']
+            ));
         }
 
         return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
@@ -205,12 +203,8 @@ class ArticleController extends BaseController
 
     public function pictureCropAction(Request $request)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
 
         if($request->getMethod() == 'POST') {
-
             $options = $request->request->all();
             $filename = $request->query->get('filename');
             $filename = str_replace('!', '.', $filename);
@@ -219,15 +213,6 @@ class ArticleController extends BaseController
             $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
             return new Response(json_encode($response));
         }
-    }
-
-    private function getTagNamesByTagIdsStr($tagIdsStr)
-    {
-        $tagIds = explode(",", $tagIdsStr);
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-        $tagNamesArray = ArrayToolkit::column($tags, 'name');
-        $tagNamesStr = implode(",", $tagNamesArray);
-        return $tagNamesStr;
     }
 
     private function getPictureAtributes($filename)

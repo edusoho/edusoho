@@ -8,28 +8,36 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 {
 	protected $table = 'article';
 
+    private $serializeFields = array(
+            'tagIds' => 'json',
+    );
+
+
 	public function getArticle($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $article = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
 
 	public function getArticlePrevious($createdTime)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE createdTime < ? ORDER by `createdTime` DESC LIMIT 1";
-		return $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+		$sql = "SELECT * FROM {$this->table} WHERE createdTime < ? ORDER BY `createdTime` DESC LIMIT 1";
+		$article = $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+        return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
 	
 	public function getArticleNext($createdTime)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE createdTime > ? ORDER by `createdTime` ASC LIMIT 1";
-		return $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+		$sql = "SELECT * FROM {$this->table} WHERE createdTime > ? ORDER BY `createdTime` ASC LIMIT 1";
+		$article =  $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
 	}
 
 	public function getArticleByAlias($alias)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE alias = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($alias)) ? : null;
+        return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
 
 	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
@@ -41,7 +49,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
         $sql = "SELECT * FROM {$this->table} WHERE categoryId in ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->getConnection()->fetchAll($sql, $categoryIds);
+        $artilces = $this->getConnection()->fetchAll($sql, $categoryIds);
+        return $this->createSerializer()->unserializes($artilces, $this->serializeFields);
 	}
 
 	public function findArticlesCount(array $categoryIds)
@@ -65,7 +74,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			$builder->addOrderBy($orderBy[0], $orderBy[1]);
 		}
 
-		return $builder->execute()->fetchAll() ? : array();
+		$articles = $builder->execute()->fetchAll() ? : array();
+        return $this->createSerializer()->unserializes($articles, $this->serializeFields);
 	}
 
 	public function searchArticlesCount($conditions)
@@ -77,6 +87,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
 	public function addArticle($article)
 	{
+        $article = $this->createSerializer()->serialize($article, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $article);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Article error.');
@@ -96,9 +107,10 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
 	}
 
-	public function updateArticle($id, $Article)
+	public function updateArticle($id, $article)
 	{
-        $this->getConnection()->update($this->table, $Article, array('id' => $id));
+        $article = $this->createSerializer()->serialize($article, $this->serializeFields);
+        $this->getConnection()->update($this->table, $article, array('id' => $id));
         return $this->getArticle($id);
 	}
 

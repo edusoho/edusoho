@@ -1,10 +1,12 @@
-{% extends 'TopxiaWebBundle:Article:list-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Article:layout.html.twig' %}
 
 {% block title %}{{ category.name }}栏目 - {{ parent() }}{% endblock %}
 
 {% set menu = categoryCode %}
 
-{% block main %}
+{% block article_main %}
+
+  {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
 
   <ul class="article-wide-list">
     {% for article in articles %}
@@ -33,7 +35,7 @@
 
 {% endblock %}
 
-{% block sub %}
+{% block article_side %}
 
 	<ul class="nav nav-pills nav-stacked article-sub">
 		{% for cat in categoryTree %}
@@ -46,5 +48,8 @@
 		  </li>
 		{% endfor %}
 	</ul>
+
+  {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
+  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
 
 {% endblock %}
