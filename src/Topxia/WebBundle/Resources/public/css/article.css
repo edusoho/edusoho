@@ -2,7 +2,7 @@
 	font-size: 13px;
 }
 
-.popular-articles .media-list .media {
+.sub-articles .media-list .media {
 	border-bottom: 0px;
 	padding: 0px;
 }
@@ -72,7 +72,7 @@
 }
 
 .homepage-feature .cycle-overlay {
-	text-align: center;
+	text-align: left;
 	width: 100%;
 	z-index: 500;
 	position: absolute;
@@ -83,6 +83,7 @@
 	color: white;
 	padding: 15px;
 	opacity: .7;
+	white-space: nowrap; 
 }
 
 .homepage-feature .cycle-overlay a {
@@ -97,4 +98,8 @@
 
 .article-nav {
 	margin-bottom: 20px;
+}
+
+.thread-title {
+	font-size: 25px;
 }

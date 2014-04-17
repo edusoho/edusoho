@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
 
-{% block title %}文章管理 - {{ parent() }}{% endblock %}
+{% block title %}资讯管理 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'article/list' %}
 
@@ -9,8 +9,8 @@
 {% block main %}
 
 <div class="page-header clearfix">
-  <a class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" href="{{ path('admin_article_create') }}"><span class="glyphicon glyphicon-plus"></span> 添加文章</a>
-  <h1 class="pull-left">文章管理</h1>
+  <a class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" href="{{ path('admin_article_create') }}"><span class="glyphicon glyphicon-plus"></span> 添加资讯</a>
+  <h1 class="pull-left">资讯管理</h1>
 </div>
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
@@ -44,7 +44,7 @@
 	<thead>
 		<tr>
 			<th width="10%"><input type="checkbox"  data-role="batch-select"> ID</th>
-			<th width="20%">文章标题</th>
+			<th width="20%">资讯标题</th>
 			<th width="15%">栏目</th>
 			<th width="18%">更新时间</th>
 			<th width="15%">属性</th>
@@ -65,7 +65,7 @@
 	</table>
   <div>
     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="文章" data-url="{{ path('admin_article_delete') }}">删除</button>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="资讯" data-url="{{ path('admin_article_delete') }}">删除</button>
   </div>
   </div>
 
