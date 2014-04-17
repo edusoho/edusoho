@@ -715,6 +715,10 @@ admin_article_unpublish:
     defaults: { _controller: TopxiaAdminBundle:Article:unpublish }
     methods:  [POST]
 
+admin_article_thumb_remove:
+    pattern:  /article/thumb/{id}/remove
+    defaults: { _controller: TopxiaAdminBundle:Article:thumbRemove }
+
 admin_article_trash:
     pattern:  /article/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Article:trash }

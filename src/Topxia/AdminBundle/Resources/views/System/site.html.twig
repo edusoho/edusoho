@@ -67,11 +67,11 @@
       </div>
       <div class="col-md-8 controls">
         <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
-        <button class="btn btn-default btn-sm" id="site-favicon-upload" type="button" data-url="{{ path('admin_setting_favicon_upload') }}">上传</button>
-        <button class="btn btn-default btn-sm" id="site-favicon-remove" type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>删除</button>
+      </div>
+        <button class="btn btn-default" id="site-favicon-upload" type="button" data-url="{{ path('admin_setting_favicon_upload') }}">上传</button>
+        <button class="btn btn-default" id="site-favicon-remove" type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>删除</button>
         <p class="help-block">请上传ico格式的图标文件。</p>
         <input type="hidden" name="favicon" value="{{ site.favicon }}">
-      </div>
     </div>
 
     <div class="form-group">

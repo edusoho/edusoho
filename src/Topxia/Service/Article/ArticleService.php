@@ -30,6 +30,8 @@ interface ArticleService
 	public function cancelArticleProperty($id, $property);
 	
 	public function trashArticle($id);
+	
+	public function removeArticlethumb($id);
 
 	public function deleteArticle($id);
 
