@@ -9,7 +9,7 @@
 {% block article_main %}
 
   {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
-
+  {% if articles %}
     <ul class="article-wide-list">
       {% for article in articles %}
         <li class="media article-item clearfix">
@@ -25,7 +25,7 @@
             <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
           </div>
           {% if article.thumb %}
-            <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
+            <a class="hidden-xs pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
               <img class="article-picture" src="{{ asset(article.thumb) }}" alt="资讯缩略图">
             </a>
           {% endif %}
@@ -36,6 +36,9 @@
         </li>
       {% endfor %}
     </ul>
+  {% else %}
+    <div class="empty tac text-muted mvl">还没有任何资讯</div>
+  {% endif %}
   {{ web_macro.paginator(paginator) }}
 
 {% endblock %}

@@ -31,7 +31,7 @@
             <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
           </div>
           {% if article.thumb %}
-            <a class="pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
+            <a class="pull-right article-picture-link hidden-xs" href="{{ path('article_detail', { id:article.id }) }}">
               <img class="article-picture" src="{{ asset(article.thumb) }}" alt="资讯缩略图">
             </a>
           {% endif %}
