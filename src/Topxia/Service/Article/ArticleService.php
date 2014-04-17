@@ -5,9 +5,9 @@ interface ArticleService
 {
 	public function getArticle($id);
 	
-	public function getArticlePrevious($createdTime);
+	public function getArticlePrevious($currentArticleId);
 
-	public function getArticleNext($createdTime);
+	public function getArticleNext($currentArticleId);
 
 	public function getArticleByAlias($alias);
 

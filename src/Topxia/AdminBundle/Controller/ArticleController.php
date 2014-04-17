@@ -87,19 +87,12 @@ class ArticleController extends BaseController
             $article = $this->getArticleService()->updateArticle($id, $formData);
             return $this->redirect($this->generateUrl('admin_article'));
         }
-
         return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
             'article' => $article,
             'categoryTree'  => $categoryTree,
             'category'  => $category,
             'tagNames' => $tagNames
         ));
-    }
-
-    // @todo 去除
-    public function previewAction(Request $request, $id)
-    {
-        return $this->redirect($this->generateUrl('article_detail',array('id' => $id)));
     }
 
     public function setArticlePropertyAction(Request $request,$id,$property)
@@ -120,7 +113,7 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function thumbRemove(Request $Request,$id)
+    public function thumbRemoveAction(Request $Request,$id)
     {
         $this->getArticleService()->removeArticlethumb($id);
         return $this->createJsonResponse(true);

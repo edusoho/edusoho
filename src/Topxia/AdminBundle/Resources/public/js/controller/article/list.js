@@ -36,14 +36,17 @@ define(function(require, exports, module) {
 
 			if(spanClass == "label label-default"){
 				postUrl = $self.data('setUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-success";
+					span.attr('class',labelStatus)
+				});
 			}else{
 				postUrl = $self.data('cancelUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-default";
+					span.attr('class',labelStatus)
+				});
 			}
-			$.post(postUrl, function(response) {
-				var status = response.status;
-				var labelStatus = "label label-"+status;
-				span.attr('class',labelStatus)
-			});
 		});		
 
 		$(".promoted-label").on('click', function(){
@@ -55,15 +58,18 @@ define(function(require, exports, module) {
 
 			if(spanClass == "label label-default"){
 				postUrl = $self.data('setUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-success";
+					span.attr('class',labelStatus)
+				});
 			}else{
 				postUrl = $self.data('cancelUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-default";
+					span.attr('class',labelStatus)
+				});
 			}
 
-			$.post(postUrl, function(response) {
-				var status = response.status;
-				var labelStatus = "label label-"+status;
-				span.attr('class',labelStatus)
-			});
 		});		
 
 		$(".sticky-label").on('click', function(){
@@ -75,15 +81,17 @@ define(function(require, exports, module) {
 			
 			if(spanClass == "label label-default"){
 				postUrl = $self.data('setUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-success";
+					span.attr('class',labelStatus)
+				});
 			}else{
 				postUrl = $self.data('cancelUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-default";
+					span.attr('class',labelStatus)
+				});
 			}
-
-			$.post(postUrl, function(response) {
-				var status = response.status;
-				var labelStatus = "label label-"+status;
-				span.attr('class',labelStatus)
-			});
 		});
 
 		var $container = $('#aticle-table-container');

@@ -44,7 +44,8 @@ define(function(require, exports, module) {
                     $('#article-thumb').val(fileUrl);
                     $('#article-originalThumb').val(fileUrlOriginal);
                     $('#article-thumb-preview').attr('src',fileUrl);
-                     $("#article-thumb-remove").attr('style','display:block');
+                    $("#article-thumb-container").html("<img src='"+fileUrl+"'>")
+                    $("#article-thumb-remove").attr('style','display:block');
                     $('#modal').load($('#upload-picture-crop-btn').data('goto'));
                 }
             });

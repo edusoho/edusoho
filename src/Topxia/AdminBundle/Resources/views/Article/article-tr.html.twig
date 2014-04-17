@@ -1,7 +1,7 @@
 <tr id="article-{{ article.id }}">
 	<td><input value="{{article.id}}" type="checkbox" data-role="batch-item" > {{article.id}}</td>
 	<td>
-			<span class="text-muted"><a href="{{ path('admin_article_preview',{id:article.id}) }}" target="_blank">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a></span>
+			<span class="text-muted"><a href="{{ path('article_detail',{id:article.id}) }}" target="_blank">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a></span>
 	</td>
 	<td>
 	{% if category %}

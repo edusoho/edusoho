@@ -19,14 +19,39 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $this->getArticleDao()->getArticle($id);
 	}
 
-	public function getArticlePrevious($createdTime)
+	public function getArticlePrevious($currentArticleId)
 	{
-		return $this->getArticleDao()->getArticlePrevious($createdTime);
+		$article = $this->getArticle($currentArticleId);
+		if(empty($article)){
+			$this->createServiceException('文章内容为空,操作失败！');
+		}
+		$createdTime = $article['createdTime'];
+		$categoryId = $article['categoryId'];
+		$category = $this->getCategoryService()->getCategory($categoryId);
+
+		if(empty($category)){
+			$this->createServiceException('文章分类不存在,操作失败！');
+		}
+
+		return $this->getArticleDao()->getArticlePrevious($categoryId,$createdTime);
 	}
 
-	public function getArticleNext($createdTime)
+	public function getArticleNext($currentArticleId)
 	{
-		return $this->getArticleDao()->getArticleNext($createdTime);
+		$article = $this->getArticle($currentArticleId);
+
+		if(empty($article)){
+			$this->createServiceException('文章内容为空,操作失败！');
+		}
+		$createdTime = $article['createdTime'];
+		$categoryId = $article['categoryId'];
+		$category = $this->getCategoryService()->getCategory($categoryId);
+		
+		if(empty($category)){
+			$this->createServiceException('文章分类不存在,操作失败！');
+		}
+
+		return $this->getArticleDao()->getArticleNext($categoryId,$createdTime);
 	}
 
 	public function getArticleByAlias($alias)
@@ -154,7 +179,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
 
-		$this->getArticleDao()->updateArticle($id, $fields = array('picture' => ''));
+		$this->getArticleDao()->updateArticle($id, $fields = array('thumb' => ''));
+		$this->getArticleDao()->updateArticle($id, $fields = array('originalThumb' => ''));
 		$this->getLogService()->info('Article', 'removeThumb', "文章#{$id}removeThumb");
 	}
 
