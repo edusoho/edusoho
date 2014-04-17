@@ -4,17 +4,18 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack');
 
 	exports.load = function(name) {
-		if (name.substr(0, 7) == 'custom/') {
-			name = '../../../bundles/customweb/js/controller/' + name.substr(7) + '.js?';
-		} else {
-			name = './controller/' + name + '.js?';
+		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
+			name = window.app.basePath + '/bundles/topxiaweb/js/controller/' + name;
 		}
 
-		require.async(name + window.app.version, function(controller){
-			if ($.isFunction(controller.run)) {
-				controller.run();
+		name += '.js?' + window.app.version;
+
+		seajs.use(name, function(module) {
+			if ($.isFunction(module.run)) {
+				module.run();
 			}
 		});
+
 	};
 
 	window.app.load = exports.load;

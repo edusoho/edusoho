@@ -51,13 +51,19 @@ class SettingsController extends BaseController
         if(empty($approval)){
             $approval=array(
                 'truename'=>'',
+                'gender'=>'',
                 'idcard'=>'',
                 'mobile'=>'',
                 'company'=>'',
                 'note'=>'',
                 'job'=>'',
                 'email2'=>'',
-                'postAddr'=>''
+                'birthday2'=>'',
+                'postAddr'=>'',
+                'lastDegree'=>'',
+                'lastSchool'=>'',
+                'lastMajors'=>'',
+
                 );
         }else{
 
@@ -86,6 +92,8 @@ class SettingsController extends BaseController
             $this->setFlashMessage('success', '实名认证提交成功！');
             return $this->redirect($this->generateUrl('settings'));
         }
+
+       
 
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig',array(
             'userApprovalInfo'=>$approval,

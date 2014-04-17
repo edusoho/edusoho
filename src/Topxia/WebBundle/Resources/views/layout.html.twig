@@ -25,6 +25,7 @@
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/style.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/osf.css') }}" />
     
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
     <!--[if lt IE 8]>
       <link href="{{ asset('assets/css/oldie.css') }}" rel="stylesheet">
     <![endif]-->
@@ -140,6 +141,7 @@
 
 
 
+
 {% block bottom %}
     <div class="footer-autumn-primary">
         <div class="container">
@@ -152,6 +154,7 @@
                   {% if setting('site.icp') %} <a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a> {% endif %}
 
                 </div>
+
 
                 <span class="mlr20">Powered by 
                   <a href="http://www.edusoho.com/" target="_blank"> Edusoho v{{ constant('\\Topxia\\System::VERSION') }}</a>

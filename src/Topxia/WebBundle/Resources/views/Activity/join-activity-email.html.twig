@@ -1,0 +1,26 @@
+hi，小伙伴，{{ user.nickname }}，欢迎参加开源力量公开课！
+
+本期公开课名称：{{ activity.title }}
+
+本期公开课参课方式：{{ activity.onlineAddress }}，请记得及时参加哦。
+
+
+{% if newUser %}
+
+您是第一次參加我們的公开课，我们已经用您的邮箱为您注册一个账号:{{ user.email }}.
+
+您需要点击下面的链接来进行密码初始化设置，这样，下次您就能更方便参加我们的线上直播课啦！（24小时有效）
+
+{{ url('register_email_activa', {token:token}) }}
+
+如果您的email程序不支持链接点击，请将上面的地址拷贝至您的浏览器的地址栏进入{{ setting('site.name') }}。
+
+{% endif %}
+
+
+{{ setting('site.name') }} {{ setting('site.url') }}
+
+
+如果您对开源力量有任何建议，请联系开源力量.清劲，他的新浪微薄：@陈清劲。一般他住在终南山。
+
+(这是一封自动产生的email，请勿回复。) 

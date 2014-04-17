@@ -45,7 +45,6 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-
         return $builder->execute()->fetchAll() ? : array();
     }
 
@@ -77,7 +76,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+        return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
@@ -85,7 +84,9 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('nickname LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('approvalStatus = :approvalStatus')
-            ->andWhere('email = :email');
+            ->andWhere('email = :email')
+            ->andWhere('level = :level')
+            ->andWhere('level >= :greatLevel');
     }
 
     public function addUser($user)

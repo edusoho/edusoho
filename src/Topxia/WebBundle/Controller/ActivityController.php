@@ -107,6 +107,7 @@ class ActivityController extends BaseController
         $students=$this->getActivityService()->findActivityStudents($id,0,20);
         $studentIds=ArrayToolkit::column($students,'userId');
         $students = $this->getUserService()->findUsersByIds($studentIds);
+        $studentInfos = $this->getUserService()->findUserProfilesByIds($studentIds);
         
         
         //小伙伴们正在看的活动
@@ -154,7 +155,8 @@ class ActivityController extends BaseController
 
         return $this->render("TopxiaWebBundle:Activity:show-activity.html.twig",array(
             "activity"=>$activity,
-            "students"=>$students,            
+            "students"=>$students,
+            "studentInfos"=>$studentInfos,         
             "qustions"=>$threadPosts,
             "activitys"=>$activitys,
             "current_user"=> $currentuser,
@@ -248,6 +250,7 @@ class ActivityController extends BaseController
             "appendixs"=>$appendix));
     }
 
+
     //公开课报名，根据用户是否登陆和是否设置价格及支付方式进入不同的报名页面
     public function joinAction(Request $request,$id)
     {  
@@ -266,9 +269,13 @@ class ActivityController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
+
             $form = $this->createForm(new ActivityMemberType());
+
             $form->bind($request);
+
             $member = $form->getData();
+
             if ($activity['needApproval']=='需要' or $activity['needApproval']=='yes') {
                 $member['approvalStatus']='checking';
             }
@@ -295,15 +302,13 @@ class ActivityController extends BaseController
 
                 $this->getUserService()->updateUserProfile($user['id'],$userprofile);
 
-                $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-               
-                $this->sendActivaEmail($token,$user);
-
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
+                $member['joinMode']='线上';
+                $member['newUser']='1';
 
-                $this->getActivityService()->addMeberByActivity($member);
+                $member = $this->getActivityService()->addMeberByActivity($member);
 
                 $this->getActivityService()->addActivityStudentNum($id);
 
@@ -313,9 +318,13 @@ class ActivityController extends BaseController
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
 
+               
+               
+                $this->sendActivityEmail($user,$activity);
+
                 return $this->redirect($this->generateUrl("activity_join_success",array(
-                    "id"=>$id,
-                    "isNew"=>true))
+                    "id"=>$id
+                   ))
                 );
               
             }else{ 
@@ -331,8 +340,10 @@ class ActivityController extends BaseController
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
+                $member['joinMode']='线上';
+                $member['newUser']='0';
                 
-                $this->getActivityService()->addMeberByActivity($member);
+                $member =  $this->getActivityService()->addMeberByActivity($member);
 
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
@@ -340,9 +351,14 @@ class ActivityController extends BaseController
                     $activity_thread['activityId']=$id;
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
+
+              
+               
+                $this->sendActivityEmail($user,$activity);
+
                 return $this->redirect($this->generateUrl("activity_join_success",array(
-                    "id"=>$id,
-                    "isNew"=>false))
+                    "id"=>$id
+                   ))
                 );  
                         
             }
@@ -364,25 +380,53 @@ class ActivityController extends BaseController
         
     }
 
+
     //如果免费，显示公开课报名成功页面，如果收费，并且线上支付，进入支付页面，如果收费，并且线下支付，进入报名成功页面，提示支付告知页面
     public function successAction(Request $request,$id){
        
         $user=$this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
         
         $activity=$this->getActivityService()->getActivity($id);
 
-        $isNew = $request->query->get('isNew');
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
 
         $hash=$this->makeHash($user);
 
         return $this->render("TopxiaWebBundle:Activity:join-activity-success.html.twig",array(
-            "activityid"=>$id,
-            "isNew"=>$isNew,
+            "newUser"=>$member['newUser'],
             "user"=>$user,
             "activity"=>$activity,
             "hash"=>$hash)
         );
     }
+
+
+    public function reSendActivityEmailAction(Request $request,$activityId){
+
+        $user=$this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $activity=$this->getActivityService()->getActivity($activityId);
+
+        $activity = $this->getActivityService()->mixActivity($activity,$user['id']);
+     
+        $this->sendActivityEmail($user,$activity);
+
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
+
+        return $this->createJsonResponse(array('success'=>true,'message'=>'邮件已发送到您的'.$user['email'].'邮箱，请查收．'));
+
+    }
+
+
+
 
     //公开课取消报名
     public function removeAction(Request $request,$id){
@@ -452,7 +496,105 @@ class ActivityController extends BaseController
         ));
     }
 
+
+    public function qustionCreateAction(Request $request,$id){        
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm(new QustionType());
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request); 
+                $fields = $form->getData();
+                $fields['activityId']= $id;
+                //$this->sendWeibo($fields['castweibo'],$fields);
+                unset($fields['castweibo']);
+                $qustion=$this->getActivityThreadService()->createThread($fields);
+                $url = $this->get('router')->generate('activity_qustionpost', array('id' =>$qustion['activityId'] ,'qid'=> $qustion['id']));
+                $qustion['action']=$url;
+                $currentuser=$this->getCurrentUser();
+                
+                if(empty($qustion['userId'])){
+                    $qustion['usernickname']="游客";
+                    $qustion['usersmallAvatar']="/assets/img/default/avatar.png";
+                }else{
+                    $qustion['usernickname']=$currentuser['nickname'];
+                    $qustion['usersmallAvatar']=$this->getWebExtension()->getFilePath($currentuser['smallAvatar']);
+                }
+                $newqustion=$qustion; 
+                return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
+                    'qustion'=>$newqustion,
+                    'user'=>$currentuser,
+                ));
+        }
+        
+    }
+
+    public function postCreateAction(Request $request,$id,$qid){
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        $form = $this->createForm(new ActivitypostType());
+        if ($request->getMethod() == 'POST') {
+                $form->bind($request);
+                $fields = $form->getData();
+                $this->sendWeibo(true,$fields);
+                $fields['activityId']= $id;
+                $fields['threadId']=$qid;
+                //$fields['content']="zhaoxin test";
+                $post=$this->getActivityThreadService()->postThread($fields);
+                $currentuser=$this->getCurrentUser();
+                if(empty($currentuser['id'])){
+                    $post['usernickname']="游客";
+                }else{
+                    $post['usernickname']=$currentuser['nickname'];
+                }
+                $newpost=$post;
+                return $this->render('TopxiaWebBundle:Activity:qustion-post-create.html.twig', array(
+                    'post'=>$newpost,
+                    'user'=>$user
+                ));
+            }
+        return $this->createJsonResponse(false);
+    }
+
+
+
+    public function emailCheckAction(Request $request)
+    {
+        $email = $request->query->get('value');
+        $result = $this->getUserService()->isEmailAvaliable($email);
+        if ($result) {
+            $response = array('success' => true, 'message' => '该Email地址可以使用');
+        } else {
+            $response = array('success' => false, 'message' => '该Email地址已注册，如果您是该用户，请登陆！');
+        }
+        return $this->createJsonResponse($response);
+    }
     
+
+    public function createAction(Request $request)
+    {
+        $form = $this->createActivityForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $course = $form->getData();
+                $course = $this->getActivityService()->createActivity($course);
+                return $this->redirect($this->generateUrl('activity_manage', array('id' => $course['id'])));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Activity:create.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
 
     private function getThreadSearchFilters($request)
     {
@@ -548,52 +690,13 @@ class ActivityController extends BaseController
     }
 
 
-    public function qustioncreateAction(Request $request,$id){        
 
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $form = $this->createForm(new QustionType());
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request); 
-                $fields = $form->getData();
-                $fields['activityId']= $id;
-                //$this->sendWeibo($fields['castweibo'],$fields);
-                unset($fields['castweibo']);
-                $qustion=$this->getActivityThreadService()->createThread($fields);
-                $url = $this->get('router')->generate('activity_qustionpost', array('id' =>$qustion['activityId'] ,'qid'=> $qustion['id']));
-                $qustion['action']=$url;
-                $currentuser=$this->getCurrentUser();
-                
-                if(empty($qustion['userId'])){
-                    $qustion['usernickname']="游客";
-                    $qustion['usersmallAvatar']="/assets/img/default/avatar.png";
-                }else{
-                    $qustion['usernickname']=$currentuser['nickname'];
-                    $qustion['usersmallAvatar']=$this->getWebExtension()->getFilePath($currentuser['smallAvatar']);
-                }
-                $newqustion=$qustion; 
-                return $this->render('TopxiaWebBundle:Activity:qustion-create.html.twig', array(
-                    'qustion'=>$newqustion,
-                    'user'=>$currentuser,
-                ));
-        }
-        
-    }
-
-    public function emailCheckAction(Request $request)
+    private function createActivityForm()
     {
-        $email = $request->query->get('value');
-        $result = $this->getUserService()->isEmailAvaliable($email);
-        if ($result) {
-            $response = array('success' => true, 'message' => '该Email地址可以使用');
-        } else {
-            $response = array('success' => false, 'message' => '该Email地址已注册，如果您是该用户，请登陆！');
-        }
-        return $this->createJsonResponse($response);
+        return $this->createNamedFormBuilder('activity')
+            ->add('title', 'text',array('required'=>true))
+            ->add('actType', 'act_type',array('multiple'=>false,'expanded'=>false,'required'=>true))
+            ->getForm();
     }
 
     private function sendWeibo($castweibo,$fields){
@@ -612,72 +715,29 @@ class ActivityController extends BaseController
 
     }
 
-    public function createAction(Request $request)
-    {
-        $form = $this->createActivityForm();
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $course = $form->getData();
-                $course = $this->getActivityService()->createActivity($course);
-                return $this->redirect($this->generateUrl('activity_manage', array('id' => $course['id'])));
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:Activity:create.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
-
-    private function createActivityForm()
-    {
-        return $this->createNamedFormBuilder('activity')
-            ->add('title', 'text',array('required'=>true))
-            ->add('actType', 'act_type',array('multiple'=>false,'expanded'=>false,'required'=>true))
-            ->getForm();
-    }
-
-    public function postcreateAction(Request $request,$id,$qid){
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-        $form = $this->createForm(new ActivitypostType());
-        if ($request->getMethod() == 'POST') {
-                $form->bind($request);
-                $fields = $form->getData();
-                $this->sendWeibo(true,$fields);
-                $fields['activityId']= $id;
-                $fields['threadId']=$qid;
-                //$fields['content']="zhaoxin test";
-                $post=$this->getActivityThreadService()->postThread($fields);
-                $currentuser=$this->getCurrentUser();
-                if(empty($currentuser['id'])){
-                    $post['usernickname']="游客";
-                }else{
-                    $post['usernickname']=$currentuser['nickname'];
-                }
-                $newpost=$post;
-                return $this->render('TopxiaWebBundle:Activity:qustion-post-create.html.twig', array(
-                    'post'=>$newpost
-                ));
-            }
-        return $this->createJsonResponse(false);
-    }
+  
 
  
-    private function sendActivaEmail($token, $user)
+    private function sendActivityEmail($user,$activity)
     {
+
+        $token =   $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
+
+        $member = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
+  
         $this->sendEmail(
                 $user['email'],
-                "欢迎参加开源力量公开课，请激活您的账号并初始化密码",
-                $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
+                "欢迎报名参加开源力量公开课[".$activity['title']."],邮件内容是本期公开课参课方式，请查阅",
+                $this->renderView('TopxiaWebBundle:Activity:join-activity-email.html.twig', array(
+                    'newUser' => $member['newUser'],
                     'user' => $user,
                     'token' => $token,
+                    'activity'=>$activity
                 )), 'html'
         );
     }
+
+
 
 
     private function makeHash($user)

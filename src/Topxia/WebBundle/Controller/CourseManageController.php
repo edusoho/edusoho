@@ -176,12 +176,28 @@ class CourseManageController extends BaseController
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
+
+
         response:
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
+            'levels' => $this->makeLevelChoices($levels),
         ));
-        
+    }
+
+    private function makeLevelChoices($levels)
+    {
+        $choices = array();
+        foreach ($levels as $level) {
+            $choices[$level['id']] = $level['name'];
+        }
+        return $choices;
     }
 
     public function teachersAction(Request $request, $id)
@@ -289,6 +305,11 @@ class CourseManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
     private function getFileService()

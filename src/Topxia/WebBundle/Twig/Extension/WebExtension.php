@@ -49,7 +49,26 @@ class WebExtension extends \Twig_Extension
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
+            'js_paths' => new \Twig_Function_Method($this, 'getJsPaths') ,
         );
+    }
+
+    public function getJsPaths()
+    {
+        $basePath = $this->container->get('request')->getBasePath();
+        $theme = $this->getSetting('theme.uri', 'default');
+        $plugins = array('coupon', 'vip');
+
+        $paths = array(
+            'common' => 'common',
+            'theme' => "{$basePath}/themes/{$theme}/js"
+        );
+
+        foreach ($plugins as $name) {
+            $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
+        }
+
+        return $paths;
     }
 
     public function smarttimeFilter ($time) {

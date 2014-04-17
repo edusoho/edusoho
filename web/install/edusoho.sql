@@ -4,8 +4,8 @@ CREATE TABLE `block` (
   `userId` int(11) NOT NULL COMMENT '用户Id',
   `title` varchar(255) NOT NULL COMMENT '编辑时的题目',
   `content` text COMMENT '编辑区的内容',
-  `tips` text,
   `code` varchar(255) NOT NULL DEFAULT '',
+  `tips` text,
   `createdTime` int(11) unsigned NOT NULL,
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -57,6 +57,41 @@ CREATE TABLE `category_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `cloud_app`;
+CREATE TABLE `cloud_app` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `code` varchar(255) NOT NULL COMMENT '编码',
+  `description` text NOT NULL COMMENT '描述',
+  `icon` varchar(255) NOT NULL COMMENT '图标',
+  `version` varchar(32) NOT NULL COMMENT '当前版本',
+  `fromVersion` varchar(32) NOT NULL DEFAULT '0.0.0' COMMENT '更新前版本',
+  `developerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开发者用户ID',
+  `developerName` varchar(255) NOT NULL DEFAULT '' COMMENT '开发者名称',
+  `installedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '安装时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装的应用';
+
+DROP TABLE IF EXISTS `cloud_app_logs`;
+CREATE TABLE `cloud_app_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(32) NOT NULL DEFAULT '' COMMENT '应用编码',
+  `name` varchar(32) NOT NULL DEFAULT '' COMMENT '应用名称',
+  `fromVersion` varchar(32) DEFAULT '' COMMENT '升级前版本',
+  `toVersion` varchar(32) NOT NULL DEFAULT '' COMMENT '升级后版本',
+  `type` enum('install','upgrade') NOT NULL DEFAULT 'install' COMMENT '升级类型',
+  `dbBackupPath` varchar(255) NOT NULL DEFAULT '' COMMENT '数据库备份文件',
+  `sourceBackupPath` varchar(255) NOT NULL DEFAULT '' COMMENT '源文件备份地址',
+  `status` varchar(32) NOT NULL COMMENT '升级状态(ROLLBACK,ERROR,SUCCESS,RECOVERED)',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
+  `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '升级时的IP',
+  `message` text COMMENT '失败原因',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '日志记录时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='应用升级日志';
+
 DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -101,7 +136,7 @@ CREATE TABLE `content` (
   `publishedTime` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
@@ -112,10 +147,12 @@ CREATE TABLE `course` (
   `price` float(10,2) NOT NULL DEFAULT '0.00',
   `expiryDay` int(10) unsigned NOT NULL DEFAULT '0',
   `showStudentNumType` enum('opened','closed') NOT NULL DEFAULT 'opened',
+  `serializeMode` enum('none','serialize','finished') NOT NULL DEFAULT 'none',
   `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程销售总收入',
   `lessonNum` int(10) unsigned NOT NULL DEFAULT '0',
   `rating` float unsigned NOT NULL DEFAULT '0' COMMENT '排行数值',
   `ratingNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '投票人数',
+  `vipLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可以免费看的，会员等级',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0',
   `tags` text,
   `smallPicture` varchar(255) NOT NULL DEFAULT '',
@@ -146,7 +183,7 @@ CREATE TABLE `course_announcement` (
   `createdTime` int(10) NOT NULL,
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_chapter`;
 CREATE TABLE `course_chapter` (
@@ -180,7 +217,7 @@ CREATE TABLE `course_lesson` (
   `title` varchar(255) NOT NULL,
   `summary` text,
   `tags` text,
-  `type` varchar(64) NOT NULL DEFAULT '',
+  `type` varchar(64) NOT NULL DEFAULT 'text',
   `content` text,
   `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID(user_disk_file.id)',
   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
@@ -224,7 +261,7 @@ CREATE TABLE `course_material` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_member`;
 CREATE TABLE `course_member` (
@@ -233,6 +270,7 @@ CREATE TABLE `course_member` (
   `userId` int(10) unsigned NOT NULL,
   `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员购买课程时的订单ID',
   `deadline` int(10) unsigned NOT NULL DEFAULT '0',
+  `levelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户以会员的方式加入课程学员时的会员ID',
   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0',
   `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数目',
   `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新的笔记更新时间',
@@ -259,58 +297,7 @@ CREATE TABLE `course_note` (
   `createdTime` int(10) NOT NULL COMMENT '笔记创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `course_order`;
-CREATE TABLE `course_order` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `sn` varchar(32) NOT NULL,
-  `status` enum('created','paid','refunding','refunded','cancelled') NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `courseId` int(10) unsigned NOT NULL,
-  `price` float unsigned NOT NULL,
-  `isGift` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `giftTo` varchar(64) NOT NULL DEFAULT '',
-  `refundId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次退款操作记录的ID',
-  `userId` int(10) unsigned NOT NULL,
-  `payment` enum('none','alipay','tenpay') NOT NULL DEFAULT 'none',
-  `bank` varchar(32) NOT NULL DEFAULT '' COMMENT '银行编号',
-  `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `note` varchar(255) NOT NULL DEFAULT '',
-  `createdTime` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `course_order_log`;
-CREATE TABLE `course_order_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `orderId` int(10) unsigned NOT NULL,
-  `type` varchar(32) NOT NULL,
-  `message` text,
-  `data` text,
-  `userId` int(10) unsigned NOT NULL,
-  `ip` varchar(255) NOT NULL,
-  `createdTime` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `orderId` (`orderId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `course_order_refund`;
-CREATE TABLE `course_order_refund` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `orderId` int(10) unsigned NOT NULL,
-  `userId` int(10) unsigned NOT NULL,
-  `courseId` int(10) unsigned NOT NULL,
-  `status` enum('created','success','failed','cancelled') NOT NULL DEFAULT 'created',
-  `expectedAmount` float(10,2) unsigned DEFAULT '0.00' COMMENT '期望退款的金额，NULL代表未知，0代表不需要退款',
-  `actualAmount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '实际退款金额，0代表无退款',
-  `reasonType` varchar(64) NOT NULL DEFAULT '',
-  `reasonNote` varchar(1024) NOT NULL DEFAULT '',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `createdTime` int(10) unsigned NOT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_review`;
 CREATE TABLE `course_review` (
@@ -322,7 +309,7 @@ CREATE TABLE `course_review` (
   `rating` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '评价创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_thread`;
 CREATE TABLE `course_thread` (
@@ -356,7 +343,7 @@ CREATE TABLE `course_thread_post` (
   `content` text NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
@@ -399,7 +386,7 @@ CREATE TABLE `installed_packages` (
   `fromVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '来源',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cname` (`ename`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装包';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已安装包';
 
 DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
@@ -476,7 +463,7 @@ CREATE TABLE `navigation` (
   `isOpen` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认1，为开启',
   `isNewWin` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认为1,另开窗口',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='导航数据表';
 
 DROP TABLE IF EXISTS `notification`;
 CREATE TABLE `notification` (
@@ -487,6 +474,62 @@ CREATE TABLE `notification` (
   `createdTime` int(10) unsigned NOT NULL,
   `isRead` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sn` varchar(32) NOT NULL,
+  `status` enum('created','paid','refunding','refunded','cancelled') NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `targetType` varchar(64) NOT NULL DEFAULT '',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0',
+  `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单实付金额',
+  `isGift` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `giftTo` varchar(64) NOT NULL DEFAULT '',
+  `refundId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次退款操作记录的ID',
+  `userId` int(10) unsigned NOT NULL,
+  `coupon` varchar(255) NOT NULL DEFAULT '',
+  `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
+  `payment` enum('none','alipay','tenpay') NOT NULL DEFAULT 'none',
+  `bank` varchar(32) NOT NULL DEFAULT '' COMMENT '银行编号',
+  `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `note` varchar(255) NOT NULL DEFAULT '',
+  `data` text COMMENT '订单业务数据',
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `order_log`;
+CREATE TABLE `order_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `orderId` int(10) unsigned NOT NULL,
+  `type` varchar(32) NOT NULL,
+  `message` text,
+  `data` text,
+  `userId` int(10) unsigned NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `orderId` (`orderId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `order_refund`;
+CREATE TABLE `order_refund` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `orderId` int(10) unsigned NOT NULL,
+  `userId` int(10) unsigned NOT NULL,
+  `targetType` varchar(64) NOT NULL DEFAULT '',
+  `targetId` int(10) unsigned NOT NULL,
+  `status` enum('created','success','failed','cancelled') NOT NULL DEFAULT 'created',
+  `expectedAmount` float(10,2) unsigned DEFAULT '0.00' COMMENT '期望退款的金额，NULL代表未知，0代表不需要退款',
+  `actualAmount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '实际退款金额，0代表无退款',
+  `reasonType` varchar(64) NOT NULL DEFAULT '',
+  `reasonNote` varchar(1024) NOT NULL DEFAULT '',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL,
+  UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `question`;
@@ -509,7 +552,7 @@ CREATE TABLE `question` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='问题表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题表';
 
 DROP TABLE IF EXISTS `question_category`;
 CREATE TABLE `question_category` (
@@ -576,7 +619,7 @@ CREATE TABLE `testpaper` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   `metas` text COMMENT '题型排序',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper_item`;
 CREATE TABLE `testpaper_item` (
@@ -589,7 +632,7 @@ CREATE TABLE `testpaper_item` (
   `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分值',
   `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper_item_result`;
 CREATE TABLE `testpaper_item_result` (
@@ -605,7 +648,7 @@ CREATE TABLE `testpaper_item_result` (
   `teacherSay` text,
   PRIMARY KEY (`id`),
   KEY `testPaperResultId` (`testPaperResultId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper_result`;
 CREATE TABLE `testpaper_result` (
@@ -629,7 +672,7 @@ CREATE TABLE `testpaper_result` (
   `checkedTime` int(11) NOT NULL DEFAULT '0',
   `usedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `upgrade_logs`;
 CREATE TABLE `upgrade_logs` (
@@ -675,7 +718,7 @@ CREATE TABLE `upload_files` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hashId` (`hashId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -726,7 +769,7 @@ CREATE TABLE `user_approval` (
   `operatorId` int(10) unsigned DEFAULT NULL COMMENT '审核人',
   `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '申请时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户认证表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户认证表';
 
 DROP TABLE IF EXISTS `user_bind`;
 CREATE TABLE `user_bind` (
@@ -741,7 +784,7 @@ CREATE TABLE `user_bind` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`fromId`),
   UNIQUE KEY `type_2` (`type`,`toId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_fortune_log`;
 CREATE TABLE `user_fortune_log` (

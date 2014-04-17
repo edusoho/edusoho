@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
@@ -14,7 +13,6 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
-
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
 					Notify.success('新用户添加成功');
@@ -25,7 +23,6 @@ define(function(require, exports, module) {
 
             }
         });
-
         validator.addItem({
             element: '[name="email"]',
             required: true,

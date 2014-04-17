@@ -113,7 +113,7 @@
 
           </td>
           <td class="text-muted text-sm">定单名称：{{order.title }}<br>  
-            定单号： <a href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_course_order_detail', {id:commission.orderId}) }}">{{commission.orderSn }}</a> 
+            定单号： <a href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:commission.orderId}) }}">{{commission.orderSn }}</a> 
 
             <br>  
             价格：￥{{commission.orderPrice }} &nbsp;&nbsp;   

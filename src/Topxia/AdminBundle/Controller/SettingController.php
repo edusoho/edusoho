@@ -353,6 +353,7 @@ class SettingController extends BaseController
         $default = array(
             'mode' => 'default',
             'nickname_enabled' => 0,
+            'avatar_alert' => 'none',
         );
         
         $setting = array_merge($default, $setting);
@@ -365,6 +366,7 @@ class SettingController extends BaseController
             $data = $request->request->all();
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
+                            'avatar_alert' => $data['avatar_alert'],
             );
             $this->getSettingService()->set('user_partner', $setting);
 
@@ -473,6 +475,29 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:admin-sync.html.twig', array(
             'mode' => $setting['mode'],
             'bind' => $bind,
+        ));
+    }
+
+    public function developerAction(Request $request)
+    {
+        $developerSetting = $this->getSettingService()->get('developer', array());
+
+        $default = array(
+            'debug' => '0',
+            'app_api_url' => '',
+        );
+
+        $developerSetting = array_merge($default, $developerSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $developerSetting = $request->request->all();
+            $this->getSettingService()->set('developer', $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+            $this->setFlashMessage('success','开发者已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
+            'developerSetting' => $developerSetting
         ));
     }
 

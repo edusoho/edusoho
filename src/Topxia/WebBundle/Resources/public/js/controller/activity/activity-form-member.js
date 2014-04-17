@@ -24,14 +24,6 @@ define(function(require, exports, module) {
             required: true,
             rule: 'truename byte_minlength{min:2} byte_maxlength{max:12}'
         });
-
-        validator.addItem({
-            element: '[name="activitymember[joinMode]"]',
-            required: true
-           
-        });
-
-
       
 
     };

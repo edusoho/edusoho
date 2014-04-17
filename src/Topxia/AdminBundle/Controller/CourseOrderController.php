@@ -11,47 +11,10 @@ class CourseOrderController extends BaseController
 
     public function manageAction(Request $request)
     {
-        $conditions = $request->query->all();
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getOrderService()->searchOrderCount($conditions),
-            20
-        );
-
-        $orders = $this->getOrderService()->searchOrders(
-            $conditions,
-            'latest',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:CourseOrder:index.html.twig', array(
-            'orders' => $orders ,
-            'users' => $users,
-            'paginator' => $paginator
-        ));
-
-    }
-
-    public  function detailAction(Request $request, $id)
-    {
-        $order = $this->getOrderService()->getOrder($id);
-        $user = $this->getUserService()->getuser($order['userId']);
-        $course = $this->getCourseService()->getCourse($order['courseId']);
-
-        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-        
-        return $this->render('TopxiaAdminBundle:CourseOrder:detail-modal.html.twig', array(
-            'order'=>$order,
-            'user'=>$user,
-            'course'=>$course,
-            'orderLogs'=>$orderLogs,
-            'users' => $users
+        return $this->forward('TopxiaAdminBundle:Order:manage', array(
+            'request' => $request,
+            'type' => 'course',
+            'layout' => 'TopxiaAdminBundle:Course:layout.html.twig',
         ));
     }
 
@@ -104,7 +67,7 @@ class CourseOrderController extends BaseController
 
     public function cancelRefundAction(Request $request, $id)
     {
-        $this->getOrderService()->cancelRefundOrder($id);
+        $this->getCourseOrderService()->cancelRefundOrder($id);
         return $this->createJsonResponse(true);
     }
 
@@ -117,6 +80,16 @@ class CourseOrderController extends BaseController
 
             $pass = $data['result'] == 'pass' ? true : false;
             $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
+
+            if ($pass) {
+                if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                    $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+                }
+            } else {
+                if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                    $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
+                }
+            }
 
             $this->sendAuditRefundNotification($order, $pass, $data['amount'], $data['note']);
 
@@ -131,7 +104,7 @@ class CourseOrderController extends BaseController
 
     private function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $course = $this->getCourseService()->getCourse($order['courseId']);
+        $course = $this->getCourseService()->getCourse($order['targetId']);
         if (empty($course)) {
             return false;
         }
@@ -160,6 +133,11 @@ class CourseOrderController extends BaseController
     }
 
     protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getCourseOrderService()
     {
         return $this->getServiceKernel()->createService('Course.OrderService');
     }

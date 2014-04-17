@@ -73,25 +73,23 @@ ul li,ol li{list-style-type: none;}
 
 /*标题*/
 .kytitle{
-	height: 38px;
 	padding: 0 10px;
-	line-height: 39px;
-	line-height: 41px;
 	overflow: hidden;
 	position: relative;
 	z-index: 9;
 	border-bottom: 1px solid #DDD;
-	margin-bottom: 1.2em;
+	margin-bottom: 10px;
 }
 .kytitle h3 {
 	font-size: 16px;
 	float: left;
-	margin: 0.8em 0;
+	margin: 10px 0;
 }
-.kytitle a{display: block;
+.kytitle a{	
 	float: right;
 	color: #999;
 	font-size: 13px;
+	margin: 10px 0;
 }
 
 /*内容*/

@@ -94,7 +94,7 @@ class LinkSaleController extends BaseController
    
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
     protected function getCommissionService()

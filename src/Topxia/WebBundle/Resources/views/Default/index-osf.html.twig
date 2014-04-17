@@ -5,7 +5,7 @@
 
 {% set nav = 'index' %}
 
-{% set bodyClass = 'home-page' %}
+{% set bodyClass = 'homepage' %}
 {% set script_controller = 'homepage' %}
 
 {% block content%}
@@ -29,7 +29,7 @@
       <div class="col-md-8 ">
 
 
-        {% for stickTag in stickTags %}
+      {% for stickTag in stickTags %}
 
         {% set tagCourses = tagsCourses[stickTag.id] %}
             
@@ -37,7 +37,7 @@
                 <div class="es-row-wrap container-gap">
                   <div class="kytitle clearfix es-box-heading mtm">
                     <h3>{{stickTag.name}}</h3>
-                    <span class="mll"></span>
+                   
                     <a href="/tag/{{stickTag.name}}"  class="pull-right">更多>></a>
                   </div>
 
@@ -68,7 +68,7 @@
               <div class="info-content clearfix">
                 <div id="photo" class="photo-wall pull-left">
                   <span id="wait-you" class=" list-waiting pull-right">
-                     <img  width="103" height="101" src="{{ file_path('','avatar.png')}}" >
+                     <img  width="101"  src="{{ file_path('','avatar.png')}}" >
                   </span>
                   {% for user in users%}
                   <span class="list-item-user  pull-right" >

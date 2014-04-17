@@ -10,9 +10,11 @@ class RegisterController extends BaseController
     public function indexAction(Request $request)
     {
         $form = $this->createForm(new RegisterType());
+
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
+           
             if ($form->isValid()) {
                 $registration = $form->getData();
                 $registration['createdIp'] = $request->getClientIp();
@@ -179,17 +181,37 @@ class RegisterController extends BaseController
     {
         $senderUser = array();
         $auth = $this->getSettingService()->get('auth', array());
-        
-        if(!empty($auth['welcome_sender'])){
-            $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
-            if(!empty($senderUser)){
-                $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $this->getWelcomeBody($user));
-                $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
-                $this->getMessageService()->deleteConversation($conversation['id']);
-            }
+
+        if (empty($auth['welcome_enabled'])) {
+            return ;
         }
 
-        return true;
+        if ($auth['welcome_enabled'] != 'opened') {
+            return ;
+        }
+
+        if (empty($auth['welcome_sender'])) {
+            return ;
+        }
+        
+        $senderUser = $this->getUserService()->getUserByNickname($auth['welcome_sender']);
+        if (empty($senderUser)) {
+            return ;
+        }
+
+        $welcomeBody = $this->getWelcomeBody($user);
+        if (empty($welcomeBody)) {
+            return true;
+        }
+
+        if (strlen($welcomeBody) >= 1000) {
+            $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
+        }
+
+        $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
+        $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
+        $this->getMessageService()->deleteConversation($conversation['id']);
+
     }
 
     private function getWelcomeBody($user)
@@ -263,33 +285,11 @@ class RegisterController extends BaseController
         );
     }
 
-    public function activaedSendAction(Request $request, $id, $hash)
-    { 
 
-        $user = $this->checkHash($id, $hash);
-        if (empty($user)) {
-            return $this->createJsonResponse(false);
-        }
-
-        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-               
-        $this->sendActivaEmail($token,$user);
-       
-
-        return $this->createJsonResponse(true);
-    }
-
-
-    private function sendActivaEmail($token, $user)
+    private function getWebExtension()
     {
-        $this->sendEmail(
-                $user['email'],
-                "欢迎注册开源力量在线学习网站，请激活您的账号并初始化密码",
-                $this->renderView('TopxiaWebBundle:Activity:send-email.html.twig', array(
-                    'user' => $user,
-                    'token' => $token,
-                )), 'html'
-        );
+        return $this->container->get('topxia.twig.web_extension');
     }
+
 
 }

@@ -250,8 +250,11 @@ class DefaultController extends BaseController
     {
         $customerServiceSetting = $this->getSettingService()->get('customerService', array());
 
+        $blocks = $this->getBlockService()->getBlocksByCodes(array('customer_content'));
+
         return $this->render('TopxiaWebBundle:Default:customer-service-online.html.twig', array(
             'customerServiceSetting' => $customerServiceSetting,
+            'blocks'=>$blocks
         ));
 
     }

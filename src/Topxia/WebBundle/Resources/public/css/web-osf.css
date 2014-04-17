@@ -141,6 +141,7 @@
 .phl {padding-left: 20px !important; padding-right: 20px !important;}
 
 .pvz {padding-top: 0px !important; padding-bottom: 0px !important;}
+.pvzs {padding-top: 3px !important; padding-bottom: 3px !important;}
 .pvs {padding-top: 5px !important; padding-bottom: 5px !important;}
 .pvm {padding-top: 10px !important; padding-bottom: 10px !important;}
 .pvl {padding-top: 20px !important; padding-bottom: 20px !important;}
@@ -344,10 +345,13 @@
 	background:rgba(151, 51, 51, 0.9) !important;
 	position: fixed;
 	bottom: 130px;
-	
 	right: 0px;
 	z-index: 999;
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#E5333333', endColorstr='#E5333333');
+}
+
+.customer-service-online ul li{
+	list-style: none !important;
 }
 
 
@@ -361,6 +365,19 @@
 
 .div-height-1 {
 	height: 27px !important;
+}
+
+@media (max-width: 767px) {
+	.course-show img, .activity-show img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		margin: 0 auto;
+	}
+}
+
+.display-inline{
+	display:inline !important;
 }
 
 

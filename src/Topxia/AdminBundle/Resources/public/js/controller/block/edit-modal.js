@@ -38,7 +38,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="code"]',
             required: true,
-            rule: 'maxlength{max:25} remote'
+            rule: 'maxlength{max:25} alphabet_underline remote'
         });
 
     };

@@ -1,0 +1,15 @@
+vip_web:
+    resource: "@VipBundle/Resources/config/routing.yml"
+    prefix:   /
+
+vip_admin:
+    resource: "@VipBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
+coupon_web:
+    resource: "@CouponBundle/Resources/config/routing.yml"
+    prefix:   /
+
+coupon_admin:
+    resource: "@CouponBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin

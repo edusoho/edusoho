@@ -108,6 +108,16 @@ class ServiceKernel
         return $this->pool[$name];
     }
 
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+
     private function getClassName($type, $name)
     {
         if (strpos($name, ':') > 0) {

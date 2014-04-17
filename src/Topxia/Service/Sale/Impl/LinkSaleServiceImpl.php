@@ -199,7 +199,7 @@ class LinkSaleServiceImpl extends BaseService implements LinkSaleService
 
     private function getOrderService()
     {
-        return $this->createService('Course.OrderService');
+        return $this->createService('Order.OrderService');
     }
 
     private function getUserService()

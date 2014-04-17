@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}账户余额 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'income_records' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">账户余额</div>
+  <div class="panel-body">
+  	<div class="record">
+      余额:<span class="record_num">100.00元</span>
+      <button type="button" class="btn btn-primary">立即充值</button>
+      <span class="glyphicon glyphicon-question-sign"><a href="a">充值帮助</a></span>
+    </div>
+    {% set main_nav = main_nav|default(null) %}
+    <ul class="nav nav-pills nav-pills-mini clearfix">
+      <li{% if main_nav == 'IncomeRecords' %} class="active"{% endif %}><a href="{{ path('income_records') }}">充值记录</a></li>
+      <li{% if main_nav == 'PayoutRecords' %} class="active"{% endif %}><a href="{{ path('payout_records') }}">消费记录</a></li>
+    </ul>
+
+    {% block main_body %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

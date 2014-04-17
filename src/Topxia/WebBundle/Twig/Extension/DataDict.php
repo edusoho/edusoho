@@ -30,6 +30,14 @@ class DataDict
 			'0' => '<span class="text-muted">未置顶</span>',
 			'1' => '<span class="text-danger">已置顶</span>'
 		),
+		'couponType' => array(
+			'minus' => '抵价',
+			'discount' => '打折'
+		),
+		'couponStatus' => array(
+			'used' => '已使用',
+			'unused' => '未使用'
+		),
 		'fileType' => array(
 			'video' => '视频',
 			'audio' => '音频',
@@ -73,6 +81,10 @@ class DataDict
 		'payment' => array(
 			'alipay' => '支付宝'
 		),
+		'moneyRecordType' => array(
+			'income' => '充值',
+			'payout' => '消费',
+		),
 		'threadType' => array(
 			'discussion'=> '话题',
 			'question' => '问答',
@@ -106,10 +118,26 @@ class DataDict
     		'text' => '图文'
 		),
 		'userRole' => array(
-			'ROLE_USER' => '会员',
+			'ROLE_USER' => '学员',
 			'ROLE_TEACHER' => '教师',
 			'ROLE_ADMIN' => '管理员',
 			'ROLE_SUPER_ADMIN' => '超级管理员'
+		),
+		'memberLevel' => array(
+			'1' => '银牌会员',
+			'2' => '金牌会员',
+			'3' => '钻石会员'
+		),
+		'duration_unit' => array(
+			'month' => '个月',
+			'year' => '年'
+		),
+		'boughtType' => array(
+			'new' => '购买',
+			'renew' => '续费',
+			'upgrade' => '升级',
+			'edit' => '编辑',
+			'cancel' => '取消会员'
 		),
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
@@ -147,6 +175,10 @@ class DataDict
 	    	'normal' => '一般',
 	    	'difficulty' => '困难',
         ),
+        'targetName' => array(
+        	'course' => '课程',
+        	'vip' => '会员'
+    	),
 
         'commissionStatus' => array(
         	'created' =>            '不可提款',

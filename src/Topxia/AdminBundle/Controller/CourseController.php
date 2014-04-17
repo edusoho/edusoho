@@ -19,6 +19,7 @@ class CourseController extends BaseController
         $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+  
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
@@ -151,7 +152,7 @@ class CourseController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            'recommended',
+            'recommendedSeq',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -171,6 +172,29 @@ class CourseController extends BaseController
         return $this->forward('TopxiaAdminBundle:Category:embed', array(
             'group' => 'course',
             'layout' => 'TopxiaAdminBundle:Course:layout.html.twig',
+        ));
+    }
+
+    public function chooserAction (Request $request)
+    {   
+        $conditions = $request->query->all();
+
+        $count = $this->getCourseService()->searchCourseCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+
+        return $this->render('TopxiaAdminBundle:Course:course-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'courses' => $courses ,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator
         ));
     }
 

@@ -36,6 +36,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit);
 	}
 
+	public function findLatestThreadsByType($type, $start, $limit)
+	{
+		return $this->getThreadDao()->findLatestThreadsByType($type, $start, $limit);
+	}
+
 	public function searchThreads($conditions, $sort, $start, $limit)
 	{
 		
@@ -89,6 +94,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 					array('latestPostTime', 'DESC'),
 				);
 				break;
+			case 'popular':
+				$orderBys = array(
+					array('hitNum', 'DESC'),
+				);
+				break;
+
 			default:
 				throw $this->createServiceException('参数sort不正确。');
 		}

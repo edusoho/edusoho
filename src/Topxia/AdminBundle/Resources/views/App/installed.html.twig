@@ -1,0 +1,54 @@
+{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+
+{% block title %}已安装应用 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'app/installed' %}
+
+{% set menu = 'installed' %}
+
+{% block main %}
+  <div class="page-header">
+    <h1>已安装应用</h1>
+  </div>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>应用描述</th>
+        <th>开发者</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for app in apps %}
+      <tr>
+        <td>
+          <div>
+            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
+              <strong class="text-primary">{{ app.name }} - </strong><span class="text-info">{{ app.version }}</span>
+            </a>
+
+          </div>
+          <div class="">{{ app.description|plain_text(100) }}</div>
+          <div class="text-muted"><small>最后更新： {{ app.updatedTime|date('Y-m-d') }}</small></div>
+        </td>
+        <td>
+          {{ app.developerName }}
+        </td>
+        <td>
+          {% if app.code == 'vip' %}
+            <a href="../vip/list" class="btn btn-primary">管理</a>
+          {% elseif app.code == 'coupon' %}
+            <a href="../coupon" class="btn btn-primary">管理</a>
+          {% endif %}
+
+          {% if setting('developer.debug') and app.code != 'MAIN' %}
+            <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn">卸载</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

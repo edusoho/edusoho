@@ -69,11 +69,13 @@
         
         {% if activity.onlineAddress  is not null %}
         <p class="text-color-333  text-large">
-            直播地址： {% if activity.join %}
-            <a target="_blank" href="{{ activity.onlineAddress }}">{{ activity.onlineAddress }}</a>
+            直播地址： <span class='text-danger'>
+            {% if activity.join %}
+                参课方式已通过邮件方式发送到您的邮箱,请查收邮件.
             {% else %}
-            <span class='text-danger'>报名后显示直播地址</span>
+               报名后将通过邮件方式告知参课方式和地址，请正确填写邮件地址.
             {% endif %}
+          </span>
         </p>
         {% endif %}
         

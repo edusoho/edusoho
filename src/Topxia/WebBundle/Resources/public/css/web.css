@@ -2424,6 +2424,12 @@ body {
 	border-radius: 4px;
 }
 
+.course-grid .series-mode-label {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
 .lt-ie8 .course-grid {
 	display: inline;
 }
@@ -3234,7 +3240,7 @@ body {
 
 .customer-service-online .float-right .service-category {
 	background: #F7F7F7;
-	width:  148px;
+
 }
 
 .customer-service-online .service-category h3 {
@@ -3270,10 +3276,10 @@ body {
 	z-index:9;
 	top:0;
 	left: 0;
-	background-image: url(../img/customer-service-online.png);
+	background-image: url(../img/customer-service-online1.png);
 	background-repeat: no-repeat;
 	display:block;
-	height: 146px;
+	height: 180px;
 	padding: 8px;
 }
 

@@ -33,6 +33,9 @@ seajs.config({
 		'class': 'arale/class/1.1.0/class',
 		'base': 'arale/base/1.1.1/base',
 		'widget': 'arale/widget/1.1.1/widget',
+		'position' : 'arale/position/1.0.1/position',
+		'overlay' : 'arale/overlay/1.1.4/overlay',
+		'mask' : 'arale/overlay/1.1.4/mask',
 		'sticky': 'arale/sticky/1.3.1/sticky',
 		"templatable": "arale/templatable/0.9.1/templatable",
 		'placeholder': 'arale/placeholder/1.1.0/placeholder',
@@ -44,6 +47,7 @@ seajs.config({
 		"zclip": "jquery-plugin/zclip/1.1.1/jquery.zclip.js",
 		'wookmark': 'wookmark/jquery.wookmark.js',
 		'carousel': 'arale/switchable/1.0.0/carousel',
+		'moment' : 'gallery/moment/2.5.1/moment',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload'
 	},
@@ -52,9 +56,7 @@ seajs.config({
 	preload: [this.JSON ? '' : 'json'],
 
 	// 路径配置
-	paths: {
-		'common': 'common/'
-	},
+	paths: app.jsPaths,
 
 	// 变量配置
 	vars: {

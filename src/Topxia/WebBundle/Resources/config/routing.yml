@@ -78,11 +78,6 @@ register_email_activa:
     defaults: { _controller: TopxiaWebBundle:Register:emailActiva }
 
 
-register_email_activaed_send:
-    pattern:  /register/activaed/{id}/{hash}
-    defaults: { _controller: TopxiaWebBundle:Register:activaedSend }
-
-
 register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
@@ -142,9 +137,18 @@ course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
 
+course_become_use_member:
+    pattern:  /course/{id}/become_use_member
+    defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
+    methods: [POST]
+
 course_buy:
     pattern:  /course/{id}/buy
     defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+
+coupon_check:
+    pattern:  /{type}/{id}/coupon/check
+    defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
 
 course_order_pay:
     pattern:  /course/order/pay
@@ -910,6 +914,14 @@ my_refunds:
     pattern: /my/refunds
     defaults: { _controller: TopxiaWebBundle:MyOrder:refunds }
 
+income_records:
+    pattern: /my/income_records
+    defaults: { _controller: TopxiaWebBundle:MoneyRecord:index }
+
+payout_records:
+    pattern: /my/payout_records
+    defaults: { _controller: TopxiaWebBundle:MoneyRecord:payout }
+
 my_quiz:
     pattern: /my/quiz
     defaults: { _controller: TopxiaWebBundle:Testpaper:index }
@@ -929,7 +941,6 @@ my_show_favorite_question:
 my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
-
 
 user_show: 
     pattern:  /user/{id}
@@ -1031,6 +1042,7 @@ content_page_list:
     pattern: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
 
+
 teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
@@ -1088,6 +1100,10 @@ activity_email_check:
     pattern:  /openclass/join/email/check
     defaults: { _controller: TopxiaWebBundle:Activity:emailCheck }
 
+activity_email_resend:
+    pattern:  /openclass/{activityId}/join/email/resend
+    defaults: { _controller: TopxiaWebBundle:Activity:reSendActivityEmail }
+
 activity_remove:
     pattern: /openclass/{id}/remove
     defaults: { _controller:TopxiaWebBundle:Activity:remove}
@@ -1102,11 +1118,11 @@ activity_expired:
 
 activity_qustioncreate:
     pattern: /openclass/{id}/question/create
-    defaults: { _controller:TopxiaWebBundle:Activity:qustioncreate }
+    defaults: { _controller:TopxiaWebBundle:Activity:qustionCreate }
 
 activity_qustionpost:
     pattern: /openclass/{id}/question/{qid}/postcreate
-    defaults: { _controller: TopxiaWebBundle:Activity:postcreate }
+    defaults: { _controller: TopxiaWebBundle:Activity:postCreate }
 
 activity_manage:
     pattern:  /openclass/{id}/manage
@@ -1331,3 +1347,17 @@ mysale_offsale_course_code:
 mysale_commission_list:
     pattern: /mysale/commission/list
     defaults: {_controller:TopxiaWebBundle:MySale:commissionList}
+
+#占位
+vip:
+    pattern: /vip/
+
+vip_buy:
+    pattern: /vip/buy
+
+vip_renew:
+    pattern: /vip/renew
+
+vip_upgrade:
+    pattern: /vip/upgrade
+

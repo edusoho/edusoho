@@ -18,7 +18,7 @@ class KernelRequestListener
     {
     	$request = $event->getRequest();
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
-            $whiteList = array('/course/order/pay/alipay/notify', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify');
+            $whiteList = array('/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify');
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }
@@ -37,8 +37,9 @@ class KernelRequestListener
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
                     $token = $request->request->get('token');
-                    $result = ServiceKernel::instance()->createService('Upgrade.UpgradeService')->repairProblem($token);
-                    $this->container->set('Topxia.RP', $result);
+                    $result = ServiceKernel::instance()->createService('CloudPlatform.AppService')->repairProblem($token);
+
+                    $this->container->set('Topxia.RepairProblem', $result);
                 } else {
         			$response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
         				'type' => 'error',

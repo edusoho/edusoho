@@ -160,7 +160,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
             $commission['salerId'] = $linksale['partnerId'];
             $commission['orderId'] = $order['id'];
             $commission['orderSn'] = $order['sn'];
-            $commission['orderPrice'] = $order['price'];
+            $commission['orderPrice'] = $order['amount'];
 
 
             if($order['userId']==$linksale['partnerId']){
@@ -188,7 +188,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                 if($linksale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= ($order['price']*$linksale['adCommission'])/100;
+                    $commission['commission']= ($order['amount']*$linksale['adCommission'])/100;
 
                 }else if ($linksale['adCommissionType']=='quota'){
 
@@ -220,7 +220,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
             $commission['salerId'] = $offsale['partnerId'];
             $commission['orderId'] = $order['id'];
             $commission['orderSn'] = $order['sn'];
-            $commission['orderPrice'] = $order['price'];
+            $commission['orderPrice'] = $order['amount'];
 
             if($order['userId']==$offsale['partnerId']){
 
@@ -243,7 +243,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
                 if($offsale['adCommissionType']=='ratio'){
 
-                    $commission['commission']= ($order['price']*$offsale['adCommission'])/100;
+                    $commission['commission']= ($order['amount']*$offsale['adCommission'])/100;
 
                 }else if ($offsale['adCommissionType']=='quota'){
 
@@ -363,7 +363,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
 
     private function getOrderService()
     {
-        return $this->createService('Course.OrderService');
+        return $this->createService('Order.OrderService');
     }
 
     private function getUserService()

@@ -12,11 +12,14 @@
 /app/data/private_files/*
 /app/data/backup/*
 /app/data/upgrade/*
+/app/config/routing_plugins.yml
+/plugins/*
 /build/
 /vendor/
 /bin/
 /composer.phar
 /etc/sublimetext2/edusoho.sublime-workspace
+/etc/UpgradeScripts
 /web/files/*
 !/web/files/.gitkeep
 /web/customize/*
@@ -32,4 +35,3 @@ app/data/install.lock
 !/web/themes/default
 !/web/themes/default-b
 .sw*
-

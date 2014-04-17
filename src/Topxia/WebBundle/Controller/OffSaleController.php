@@ -18,22 +18,19 @@ class OffSaleController extends BaseController
         $code = $order['promoCode'];
 
         $courseId = $order['courseId'];
-        
-        $offsale = $this->getOffSaleService()->getOffSaleByCode($code);
 
         $course = $this->getCourseService()->getCourse($order['courseId']);
 
-        $result = $this->getOffSaleService()->isValiable($offsale,$courseId);
+        $result = $this->getOffSaleService()->checkOffsaleUseable($code,'course',$courseId,$course['price']);
 
-        if ("success" == $result) {
-            if($offsale['reduceType']=='ratio'){
-                 $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.($offsale['reducePrice']*$course['price']/100).'元,现在购买只需'.($course['price']-($offsale['reducePrice']*$course['price']/100)).'元！');
-             }else{
-                 $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.$offsale['reducePrice'].'元,现在购买只需'.($course['price']-$offsale['reducePrice']).'元！');
-             }
+        if ("yes" == $result['useable']) {
+           
+            $response = array('success' => true, 'message' => '感谢使用，该优惠码立减'.$result['discount'].'元,现在购买只需'.$result['afterAmount'].'元！');
            
         } else {
-            $response = array('success' => false, 'message' => $result);
+
+            $response = array('success' => false, 'message' => $result['message']);
+
         }
          
         return $this->createJsonResponse($response);
@@ -47,7 +44,7 @@ class OffSaleController extends BaseController
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
     private function getCourseService()
