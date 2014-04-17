@@ -115,6 +115,7 @@
 						<div id="article-thumb-container" style="{% if article.thumb|default(null) %}display:block{% else %}display:none{% endif %}"><img src='{{ asset(article.thumb|default(null)) }}' style="width: 230px; height: 125px;" id="article-thumb-preview"></div>
 
 				   <br><a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-primary">上传</a>
+				{#    <button class="btn btn-default btn-sm" id="article-thumb-remove" {% if not article.thumb %}style="display:none;"{% endif %} type="button" data-url="{{path('admin_article_thumb_remove',{id:article.id})}}">删除</button> #}
 				      <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
 				      <input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
 				     <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>

@@ -192,6 +192,18 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$this->getLogService()->info('Article', 'trash', "文章#{$id}移动到回收站");
 	}
 
+	public function removeArticlethumb($id)
+	{
+		$checkArticle = $this->getArticle($id);
+
+		if(empty($checkArticle)){
+			throw $this->createServiceException("文章不存在，操作失败。");
+		}
+
+		$this->getArticleDao()->updateArticle($id, $fields = array('picture' => ''));
+		$this->getLogService()->info('Article', 'removeThumb', "文章#{$id}removeThumb");
+	}
+
 	public function deleteArticle($id)
 	{
 		$checkArticle = $this->getArticle($id);

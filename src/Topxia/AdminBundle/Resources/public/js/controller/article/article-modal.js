@@ -87,10 +87,20 @@ define(function(require, exports, module) {
                  Notify.success('上传成功！');
             }
         });
-    
-        // $('#article-operate-cancel').click(function(){
-        //     window.location.href=$(this).data('url'); 
-        // });
+        
+         $("#article-thumb-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
+            var $btn = $(this);
+            $.post($btn.data('url'), function(){
+                $("#article-thumb-container").html('');
+                $form.find('[name=thumb]').val('');
+                $form.find('[name=originalThumb]').val('');
+                $btn.hide();
+                Notify.success('删除成功！');
+            }).error(function(){
+                Notify.danger('删除失败！');
+            });
+        });
 
         var validator = new Validator({
             element: '#article-form',
