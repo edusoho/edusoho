@@ -84,6 +84,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('price >= :price')
+            ->andWhere('income >= :income')
             ->andWhere('status = :status')
             //->andWhere('price = :price')
             ->andWhere('title LIKE :titleLike')
