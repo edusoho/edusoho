@@ -42,11 +42,13 @@
           <h3 class="mbz mtz"> 课程咨询邮件： <a target="_blank" href="mailto:{{customerServiceSetting.customer_of_mail}}">
               {{customerServiceSetting.customer_of_mail}}</a></h3>
           
+<div class="visible-md visible-lg">
+  
 
           {% if blocks.customer_content %}
             {{ blocks.customer_content.content|raw }}
           {% endif %}
-
+</div>
         </div>
       </div>
     </div>
