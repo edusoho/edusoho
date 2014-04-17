@@ -1,6 +1,6 @@
  
   {% if customerServiceSetting.customer_service_mode|default(null) == 'opened' %}
-    <div class="customer-service-online">
+    <div class="customer-service-online pvzs">
 
       <div class="float-left"> 
         <a style="display: block" id="aFloatTools_Show" class="btn-open" title="查看在线客服" 
@@ -28,20 +28,18 @@
       </div>
 
       <div id="divFloatToolsView" class="float-right" style="display: none">
-        <div class="service-category">
+        <div class="service-category phs"> 
 
-          <h3 class="mbz pls"> 课程咨询QQ号：</h3>
+          <h3 class="mbz"> 课程咨询QQ号： </h3>
           <ul>
             <li>
               <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{customerServiceSetting.customer_of_qq}}&site=qq&menu=yes">
-                {{customerServiceSetting.customer_of_qq}} <br>
-                <img border="0" src="http://wpa.qq.com/pa?p=2:{{customerServiceSetting.customer_of_qq}}:51" alt="客服QQ" title="客服QQ" />
-
+                {{customerServiceSetting.customer_of_qq}} <img border="0" src="http://wpa.qq.com/pa?p=2:{{customerServiceSetting.customer_of_qq}}:51" alt="客服QQ" title="客服QQ" /> 
               </a> 
             </li>
           </ul>
 
-          <h3 class="mbz pls"> 课程咨询电话：</h3>
+          <h3 class="mbz"> 课程咨询电话：</h3>
           <ul>
             <li>
               <a target="_blank" href="javascript:;"> 
@@ -50,13 +48,17 @@
             </li>
           </ul>
 
-          <h3 class="mbz pls"> 课程咨询邮件：</h3>
+          <h3 class="mbz"> 课程咨询邮件：</h3>
           <ul >
             <li>
               <a target="_blank" href="mailto:{{customerServiceSetting.customer_of_mail}}">
               {{customerServiceSetting.customer_of_mail}}</a>
             </li>
           </ul>
+
+          {% if blocks.customer_content %}
+            {{ blocks.customer_content.content|raw }}
+          {% endif %}
 
         </div>
       </div>
