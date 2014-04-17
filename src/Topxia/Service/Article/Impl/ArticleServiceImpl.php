@@ -60,22 +60,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $this->getArticleDao()->searchArticlesCount($conditions);
 	}
 
-	private function prepareSearchConditions($conditions)
-	{
-		$conditions = array_filter($conditions);
-
-		if (isset($conditions['includeChildren']) && $conditions['includeChildren'] == true) {
-			if (isset($conditions['categoryId'])) {
-				$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-				$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
-				unset($conditions['categoryId']);
-				unset($conditions['includeChindren']);
-			}
-		} 
-
-		return $conditions;
-	}
-
 	public function createArticle($article)
 	{
 		if(empty($article)){
@@ -281,6 +265,22 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 				'fileOriginalNameNew'=>$fileOriginalNameNew,
 				'fileOriginalPath'=>str_replace($webPath, "", $fileOriginalDirectory)
 			);
+	}
+
+	private function prepareSearchConditions($conditions)
+	{
+		$conditions = array_filter($conditions);
+
+		if (isset($conditions['includeChildren']) && $conditions['includeChildren'] == true) {
+			if (isset($conditions['categoryId'])) {
+				$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+				$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+				unset($conditions['categoryId']);
+				unset($conditions['includeChindren']);
+			}
+		} 
+
+		return $conditions;
 	}
 
 	private function filterSort($sort)

@@ -112,22 +112,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         return $this->getCategoryDao()->getCategoryByParentId($parentId);
     }
-    
-    private function getRootCategory($categoryTree, $category)
-    {
-        $start = false;
-        foreach (array_reverse($categoryTree) as $treeCategory) {
-            if ($treeCategory['id'] == $category['id']) {
-                $start = true;
-            }
-
-            if ($start && $treeCategory['depth'] ==1) {
-                return $treeCategory;
-            }
-        }
-
-        return null;
-    }
 
     public function findCategoryBreadcrumbs($categoryId)
     {
