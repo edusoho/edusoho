@@ -71,10 +71,6 @@ class ArticleController extends BaseController
 			'includeChildren' => true,
 		);
 
-		$articles = $this->getArticleService()->searchArticles(
-			$conditions,'published',
-			0,100
-		);
 
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
 
@@ -83,16 +79,23 @@ class ArticleController extends BaseController
 		$subCategories = $this->getSubCategories($categoryTree, $rootCategory);
 
 		$setting = $this->getSettingService()->get('article', array());
-
-		if (empty($setting)) {
-			$setting = array('name' => '资讯频道', 'pageNums' => 20);
-		}
-
+		
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
             $setting['pageNums']
         );
+
+		$articles = $this->getArticleService()->searchArticles(
+			$conditions,'published',
+			$paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+		);
+
+		if (empty($setting)) {
+			$setting = array('name' => '资讯频道', 'pageNums' => 20);
+		}
+
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 

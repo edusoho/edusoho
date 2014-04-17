@@ -44,13 +44,15 @@
 
 	<ul class="nav nav-pills nav-stacked article-sub">
 		{% for cat in subCategories %}
-		  <li {% if category.id == cat.id %}class="active"{% endif %}>
-		    <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
-		    {% if cat.depth > 1 %}
-		      {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
-		    {% endif %}
-		    {{ cat.name }}</a>
-		  </li>
+      {% if cat.published == 1%}
+  		  <li {% if category.id == cat.id %}class="active"{% endif %}>
+  		    <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
+  		    {% if cat.depth > 1 %}
+  		      {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
+  		    {% endif %}
+  		    {{ cat.name }}</a>
+  		  </li>
+      {% endif %}
 		{% endfor %}
 	</ul>
 
