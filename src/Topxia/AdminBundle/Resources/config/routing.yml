@@ -681,10 +681,6 @@ admin_article_create:
     pattern:  /article/create
     defaults: { _controller: TopxiaAdminBundle:Article:create }
 
-admin_article_preview:
-    pattern:  /article/{id}/preview
-    defaults: { _controller: TopxiaAdminBundle:Article:preview }
-
 admin_article_picture_crop:
     pattern:  /article/picture/crop
     defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }

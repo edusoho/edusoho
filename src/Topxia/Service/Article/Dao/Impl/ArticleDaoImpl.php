@@ -20,17 +20,18 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
 
-	public function getArticlePrevious($createdTime)
+	public function getArticlePrevious($categoryId,$createdTime)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE createdTime < ? ORDER BY `createdTime` DESC LIMIT 1";
-		$article = $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+		$sql = "SELECT * FROM {$this->table} WHERE `categoryId` = ? AND createdTime < ? ORDER BY `createdTime` DESC LIMIT 1";
+		$article = $this->getConnection()->fetchAssoc($sql,array($categoryId,$createdTime) ? :null);
         return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
 	
-	public function getArticleNext($createdTime)
+	public function getArticleNext($categoryId,$createdTime)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE createdTime > ? ORDER BY `createdTime` ASC LIMIT 1";
-		$article =  $this->getConnection()->fetchAssoc($sql,array($createdTime) ? :null);
+		$sql = "SELECT * FROM {$this->table} WHERE  `categoryId` = ? AND createdTime > ? ORDER BY `createdTime` ASC LIMIT 1";
+		$article =  $this->getConnection()->fetchAssoc($sql,array($categoryId,$createdTime) ? :null);
+		return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
 
 	public function getArticleByAlias($alias)

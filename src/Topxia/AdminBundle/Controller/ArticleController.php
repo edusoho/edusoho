@@ -96,12 +96,6 @@ class ArticleController extends BaseController
         ));
     }
 
-    // @todo 去除
-    public function previewAction(Request $request, $id)
-    {
-        return $this->redirect($this->generateUrl('article_detail',array('id' => $id)));
-    }
-
     public function setArticlePropertyAction(Request $request,$id,$property)
     {
          $this->getArticleService()->setArticleProperty($id, $property);
