@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+guest:
+    pattern:  /guest
+    defaults: { _controller: TopxiaWebBundle:Default:guest }
+
 course_page:
     pattern: /course
     defaults: { _controller: TopxiaWebBundle:Default:indexMore }
