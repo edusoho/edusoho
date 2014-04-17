@@ -2,18 +2,11 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\WebBundle\DataDict\ArticleStatusDict;
-use Topxia\WebBundle\DataDict\ArticleTypeDict;
-use Topxia\Service\Article\Type\ArticleTypeFactory;
 use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Imagine\Image\ImageInterface;
 
 class ArticleController extends BaseController
 {
@@ -23,7 +16,7 @@ class ArticleController extends BaseController
         $conditions = $request->query->all();
 
         if(!empty($conditions['categoryId'])){
-            $conditions['includeChildren'] =true;
+            $conditions['includeChildren'] = true;
         }
 
         $paginator = new Paginator(

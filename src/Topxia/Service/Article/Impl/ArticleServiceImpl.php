@@ -271,14 +271,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 	{
 		$conditions = array_filter($conditions);
 
-		if (isset($conditions['includeChildren']) && $conditions['includeChildren'] == true) {
-			if (isset($conditions['categoryId'])) {
-				$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-				$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
-				unset($conditions['categoryId']);
-				unset($conditions['includeChindren']);
-			}
-		} 
+		if (!empty($conditions['includeChildren']) && isset($conditions['categoryId'])) {
+			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+			$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+			unset($conditions['categoryId']);
+			unset($conditions['includeChindren']);
+		}
 
 		return $conditions;
 	}
