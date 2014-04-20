@@ -29,6 +29,12 @@
     <div class="form-group">
       <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
     </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="大于单价" name="price" value="{{ app.request.get('price') }}">
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="大于收入" name="income" value="{{ app.request.get('income') }}">
+    </div>
     <button class="btn btn-primary">搜索</button>
   </form>
 
@@ -36,9 +42,10 @@
     <thead>
     <tr>
       <th>编号</th>
-      <th width="50%">名称</th>
+      <th width="30%">名称</th>
       <th>学生/浏览量</th>
-      <th>收入(元)</th>
+      <th>单价</th>
+      <th>收入</th>
       <th>状态</th>
       <th>创建者</th>
       <th>操作</th>
