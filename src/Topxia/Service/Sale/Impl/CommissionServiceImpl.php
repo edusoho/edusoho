@@ -151,7 +151,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     public function computeLinkSaleCommission($order,$linksale)
     {
 
-         if(in_array($linksale['prodType'],array('course',''))){
+         if(true){
 
             $commission['saleType']= $linksale['saleType'];
             $commission['saleId']= $linksale['id'];
@@ -211,7 +211,7 @@ class CommissionServiceImpl extends BaseService implements CommissionService
     public function computeOffSaleCommission($order,$offsale)
     {
 
-         if($offsale['prodType']=='course' or $offsale['prodType']=='课程'){
+          if(true){
 
             $commission['saleType']= empty($offsale['saleType'])?'offsale-course':$offsale['saleType'];
             $commission['saleId']= $offsale['id'];

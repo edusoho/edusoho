@@ -208,9 +208,9 @@ class MySaleController extends BaseController
         $user = $this->getCurrentUser();
 
 
-        $prodType='course';
+        $prodType='all';
         $prodId=0;
-        $prodName='所有课程';
+        $prodName='所有商品';
 
         $saleType="linksale-web";
 

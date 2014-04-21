@@ -284,7 +284,9 @@ class ActivityController extends BaseController
                 // regitser 
                 $newuser['email']=$member['email'];
                 $newuser['nickname']=$member['nickname'];
+
                 //$newuser['password']=$this->getUserService()->createRandomPassworld();
+
                 $newuser['password']='y**7^ian91!@MWSK';
                 $newuser['createdIp'] = $request->getClientIp();
 
@@ -302,13 +304,45 @@ class ActivityController extends BaseController
 
                 $this->getUserService()->updateUserProfile($user['id'],$userprofile);
 
+                $order = array(
+                    'userId' => $user['id'],
+                    'title' => "参加活动《{$activity['title']}》",
+                    'targetType' => 'activity',
+                    'targetId' => $activity['id'],
+                    'amount' => 0,
+                    'payment' => 'none',
+                    'snPrefix' => 'A',
+                );
+                
+                $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+
+                if (!empty($mTookeenCookie)){
+          
+                     $order['mTookeen']  = $mTookeenCookie;
+
+                }
+
+
+                $order = $this->getOrderService()->createOrder($order);
+
+
+                $this->getOrderService()->payOrder(array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time(),
+                ));
+
+
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
                 $member['joinMode']='线上';
                 $member['newUser']='1';
 
-                $member = $this->getActivityService()->addMeberByActivity($member);
+                $member['orderId']=$order['id'];
+
+                $member = $this->getActivityService()->addMemberByActivity($member);
 
                 $this->getActivityService()->addActivityStudentNum($id);
 
@@ -336,14 +370,45 @@ class ActivityController extends BaseController
                 $userprofile['company']=$member['company'];
 
                 $this->getUserService()->updateUserProfile($user['id'],$userprofile);
+                
+
+                $order = array(
+                    'userId' => $user['id'],
+                    'title' => "参加活动《{$activity['title']}》",
+                    'targetType' => 'activity',
+                    'targetId' => $activity['id'],
+                    'amount' => 0,
+                    'payment' => 'none',
+                    'snPrefix' => 'A',
+                );
+                
+                $mTookeenCookie = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+
+                if (!empty($mTookeenCookie)){
+          
+                     $order['mTookeen']  = $mTookeenCookie;
+
+                }
+
+
+                $order = $this->getOrderService()->createOrder($order);
+
+
+                $this->getOrderService()->payOrder(array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time(),
+                ));
 
 
                 $member['activityId']=$id;
                 $member['userId']=$user['id'];
                 $member['joinMode']='线上';
                 $member['newUser']='0';
+                $member['orderId']=$order['id'];
                 
-                $member =  $this->getActivityService()->addMeberByActivity($member);
+                $member =  $this->getActivityService()->addMemberByActivity($member);
 
                 $this->getActivityService()->addActivityStudentNum($id);
                 if(!empty($member['question'])){
@@ -351,6 +416,7 @@ class ActivityController extends BaseController
                     $activity_thread['activityId']=$id;
                     $this->getActivityThreadService()->createThread($activity_thread);  
                 }
+
 
               
                
@@ -812,6 +878,11 @@ class ActivityController extends BaseController
         $welcomeBody = $this->setting('auth.welcome_body', '注册欢迎内容');
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
         return $welcomeBody;
+    }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
 

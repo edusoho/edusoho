@@ -634,6 +634,10 @@ admin_activity_thread_batch_delete:
     defaults: {_controller: TopxiaAdminBundle:ActivityThread:batchDelete }
     methods: [POST]
 
+admin_activity_order_manage:
+    pattern: /activity/order/manage
+    defaults: { _controller: TopxiaAdminBundle:Activity:orderManage }
+
 
 admin_photo:
     pattern: /photo

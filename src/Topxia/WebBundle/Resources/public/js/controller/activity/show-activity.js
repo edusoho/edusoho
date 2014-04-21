@@ -102,7 +102,7 @@ define(function(require, exports, module) {
            
             $.post($(this).data('url'),function(data){
 
-                Notify.danger(data.message);
+                Notify.success(data.message);
 
             },'json');
         });

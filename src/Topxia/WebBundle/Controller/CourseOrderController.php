@@ -100,9 +100,7 @@ class CourseOrderController extends OrderController
             $order['mTookeen'] = $formData['mTookeen'];
         }
 
-        if (!empty($formData['promoCode'])) {
-            $order['promoCode'] = $formData['promoCode'];
-        }
+       
 
 
         $order = $this->getOrderService()->createOrder($order);
