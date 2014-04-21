@@ -12,6 +12,14 @@
 
 {% block main %}
 
+<style>
+  #article-form .popover {
+  	max-width: 400px;
+  	width: 400px;
+  }	
+
+</style>
+
 {% set article = article|default(null) %}
 
 <div class="page-header clearfix">
@@ -77,14 +85,15 @@
 					<label class="checkbox-inline">
 						<input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> 推荐  
 					</label>
-					<span class="glyphicon glyphicon-question-sign pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" 
-					title="
-设为“置顶”后，该资讯将会显示在列表的最前面;
+					<a class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="">
+					</a>
+					<div id="article-property-tips-html" style="display:none;">
 
-设为“头条”后，如果正文含有图片，则该资讯的第一张图片将显示在资讯首页的头条图片区，图片尺寸建议统一为：750*450px;
+						<p>设为“<strong>置顶</strong>”后，该资讯将会显示在列表的最前面。</p>
+						<p>设为“<strong>头条</strong>”后，如果正文含有图片，则该资讯的第一张图片将显示在资讯首页的头条图片区，图片尺寸建议统一为：750px*450px。</p>
+						<p>设为“<strong>推荐</strong>”后，该资讯将会显示在页面右侧的推荐资讯中。</p>
 
-设为“推荐”后，该资讯将会显示在页面右侧的推荐资讯中。">
-					</span>
+					</div>
 				</div>
 			</div>
 

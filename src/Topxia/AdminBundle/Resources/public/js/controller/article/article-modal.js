@@ -20,6 +20,13 @@ define(function(require, exports, module) {
 
     };
 
+    $("#article-property-tips").popover({
+        html: true,
+        trigger: 'hover',
+        placement: 'left',
+        content: $("#article-property-tips-html").html()
+    });
+
     function _initTagSelect($form) {
         $('#article-tags').select2({
 

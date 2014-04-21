@@ -1,0 +1,127 @@
+[1mdiff --git a/src/Topxia/AdminBundle/Controller/ArticleController.php b/src/Topxia/AdminBundle/Controller/ArticleController.php[m
+[1mindex d4cf504..ed8133b 100644[m
+[1m--- a/src/Topxia/AdminBundle/Controller/ArticleController.php[m
+[1m+++ b/src/Topxia/AdminBundle/Controller/ArticleController.php[m
+[36m@@ -29,11 +29,10 @@[m [mclass ArticleController extends BaseController[m
+ [m
+         $articles = $this->getArticleService()->searchArticles([m
+             $conditions,[m
+[31m-            'published',[m
+[32m+[m[32m            'normal',[m
+             $paginator->getOffsetCount(),[m
+             $paginator->getPerPageCount()[m
+         );[m
+[31m-[m
+         $categoryIds = ArrayToolkit::column($articles, 'categoryId');[m
+         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);[m
+         $categoryTree = $this->getCategoryService()->getCategoryTree();[m
+[1mdiff --git a/src/Topxia/AdminBundle/Resources/public/js/controller/article/article-modal.js b/src/Topxia/AdminBundle/Resources/public/js/controller/article/article-modal.js[m
+[1mindex ff50c69..5121ccc 100644[m
+[1m--- a/src/Topxia/AdminBundle/Resources/public/js/controller/article/article-modal.js[m
+[1m+++ b/src/Topxia/AdminBundle/Resources/public/js/controller/article/article-modal.js[m
+[36m@@ -20,6 +20,13 @@[m [mdefine(function(require, exports, module) {[m
+ [m
+     };[m
+ [m
+[32m+[m[32m    $("#article-property-tips").popover({[m
+[32m+[m[32m        html: true,[m
+[32m+[m[32m        trigger: 'hover',[m
+[32m+[m[32m        placement: 'left',[m
+[32m+[m[32m        content: $("#article-property-tips-html").html()[m
+[32m+[m[32m    });[m
+[32m+[m
+     function _initTagSelect($form) {[m
+         $('#article-tags').select2({[m
+ [m
+[1mdiff --git a/src/Topxia/AdminBundle/Resources/views/Article/article-modal.html.twig b/src/Topxia/AdminBundle/Resources/views/Article/article-modal.html.twig[m
+[1mindex d3d1585..bb35ab0 100644[m
+[1m--- a/src/Topxia/AdminBundle/Resources/views/Article/article-modal.html.twig[m
+[1m+++ b/src/Topxia/AdminBundle/Resources/views/Article/article-modal.html.twig[m
+[36m@@ -12,6 +12,14 @@[m
+ [m
+ {% block main %}[m
+ [m
+[32m+[m[32m<style>[m
+[32m+[m[32m  #article-form .popover {[m
+[32m+[m[41m  [m	[32mmax-width: 400px;[m
+[32m+[m[41m  [m	[32mwidth: 400px;[m
+[32m+[m[32m  }[m[41m	[m
+[32m+[m
+[32m+[m[32m</style>[m
+[32m+[m
+ {% set article = article|default(null) %}[m
+ [m
+ <div class="page-header clearfix">[m
+[36m@@ -77,14 +85,15 @@[m
+ 					<label class="checkbox-inline">[m
+ 						<input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> 推荐  [m
+ 					</label>[m
+[31m-					<span class="glyphicon glyphicon-question-sign pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" [m
+[31m-					title="[m
+[31m-设为“置顶”后，该资讯将会显示在列表的最前面;[m
+[32m+[m					[32m<a class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="">[m
+[32m+[m					[32m</a>[m
+[32m+[m					[32m<div id="article-property-tips-html" style="display:none;">[m
+ [m
+[31m-设为“头条”后，如果正文含有图片，则该资讯的第一张图片将显示在资讯首页的头条图片区，图片尺寸建议统一为：750*450px;[m
+[32m+[m						[32m<p>设为“<strong>置顶</strong>”后，该资讯将会显示在列表的最前面。</p>[m
+[32m+[m						[32m<p>设为“<strong>头条</strong>”后，如果正文含有图片，则该资讯的第一张图片将显示在资讯首页的头条图片区，图片尺寸建议统一为：750px*450px。</p>[m
+[32m+[m						[32m<p>设为“<strong>推荐</strong>”后，该资讯将会显示在页面右侧的推荐资讯中。</p>[m
+ [m
+[31m-设为“推荐”后，该资讯将会显示在页面右侧的推荐资讯中。">[m
+[31m-					</span>[m
+[32m+[m					[32m</div>[m
+ 				</div>[m
+ 			</div>[m
+ [m
+[1mdiff --git a/src/Topxia/WebBundle/Controller/ArticleController.php b/src/Topxia/WebBundle/Controller/ArticleController.php[m
+[1mindex a7dc381..99f4e72 100644[m
+[1m--- a/src/Topxia/WebBundle/Controller/ArticleController.php[m
+[1m+++ b/src/Topxia/WebBundle/Controller/ArticleController.php[m
+[36m@@ -145,7 +145,7 @@[m [mclass ArticleController extends BaseController[m
+ 	[m
+ 		$articleSetting = $this->getSettingService()->get('article', array());[m
+ 		$categoryTree = $this->getCategoryService()->getCategoryTree();[m
+[31m-		[m
+[32m+[m
+ 		$category = $this->getCategoryService()->getCategory($article['categoryId']);[m
+ 		if(empty($article['tagIds'])){[m
+ 			$article['tagIds'] = array();[m
+[36m@@ -161,6 +161,7 @@[m [mclass ArticleController extends BaseController[m
+ 		$this->getArticleService()->hitArticle($id);[m
+ [m
+ 		$breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);[m
+[32m+[m		[32mvar_dump($breadcrumbs);exit();[m
+ [m
+ 		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array([m
+ 			'categoryTree' => $categoryTree,[m
+[1mdiff --git a/src/Topxia/WebBundle/Resources/public/js/controller/lesson/lesson-toolbar.js b/src/Topxia/WebBundle/Resources/public/js/controller/lesson/lesson-toolbar.js[m
+[1mindex ff39bab..066f19c 100644[m
+[1m--- a/src/Topxia/WebBundle/Resources/public/js/controller/lesson/lesson-toolbar.js[m
+[1m+++ b/src/Topxia/WebBundle/Resources/public/js/controller/lesson/lesson-toolbar.js[m
+[36m@@ -74,6 +74,8 @@[m [mdefine(function(require, exports, module) {[m
+ 					}else{[m
+ 						$('.toolbar-nav li').removeClass('active');[m
+ 						$('.lesson-dashboard').removeClass('lesson-dashboard-open');[m
+[32m+[m						[32m$('.lesson-dashboard').removeClass('lesson-dashboard-open');[m
+[32m+[m						[32m$this.removeClass('glyphicon glyphicon-chevron-right');[m
+ 					}[m
+ 					return false;[m
+ 				});[m
+[1mdiff --git a/src/Topxia/WebBundle/Twig/Extension/WebExtension.php b/src/Topxia/WebBundle/Twig/Extension/WebExtension.php[m
+[1mindex dd9b5b6..1c2e387 100644[m
+[1m--- a/src/Topxia/WebBundle/Twig/Extension/WebExtension.php[m
+[1m+++ b/src/Topxia/WebBundle/Twig/Extension/WebExtension.php[m
+[36m@@ -315,7 +315,11 @@[m [mclass WebExtension extends \Twig_Extension[m
+     public function plainTextFilter($text, $length = null)[m
+     {[m
+         $text = strip_tags($text);[m
+[31m-        [m
+[32m+[m
+[32m+[m[32m        $text = str_replace(array("\n", "\r", "\t") , '', $text);[m
+[32m+[m[32m        $text = str_replace('&nbsp;' , ' ', $text);[m
+[32m+[m[32m        $text = trim($text);[m
+[32m+[m
+         $length = (int) $length;[m
+         if ( ($length > 0) && (mb_strlen($text) > $length) )  {[m
+             $text = mb_substr($text, 0, $length, 'UTF-8');[m

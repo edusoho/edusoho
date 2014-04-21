@@ -29,11 +29,10 @@ class ArticleController extends BaseController
 
         $articles = $this->getArticleService()->searchArticles(
             $conditions,
-            'published',
+            'normal',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->getCategoryService()->getCategoryTree();

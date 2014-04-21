@@ -145,7 +145,7 @@ class ArticleController extends BaseController
 	
 		$articleSetting = $this->getSettingService()->get('article', array());
 		$categoryTree = $this->getCategoryService()->getCategoryTree();
-		
+
 		$category = $this->getCategoryService()->getCategory($article['categoryId']);
 		if(empty($article['tagIds'])){
 			$article['tagIds'] = array();
