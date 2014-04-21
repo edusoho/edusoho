@@ -277,7 +277,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$article['sourceUrl'] = $fields['sourceUrl'];
 		$article['publishedTime'] = strtotime($fields['publishedTime']);
 		$article['updated'] = time();
-
+		$fields['tags'] = explode(",", $fields['tags']);
+		
 		if (!empty($fields['tags']) && is_array($fields['tags'])) {
 	        $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
 		}
