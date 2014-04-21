@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ content.title }} - {{ parent() }}{% endblock %}
+{% block keywords %}{{ content.title }} {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ content.body|plain_text(100) }}{% endblock %}
+
+{% set siteNav = 'page/' ~ content.alias|default(content.id) %}
+
+{% set bodyClass = 'contentpage' %}
+{% block content %}
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>{{ content.title }}</h1></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      {% if content.body %}
+      	{{ content.body|raw }}
+      {% else %}
+        <div class="empty">当前页面尚未编辑内容，请在管理后台编辑。</div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

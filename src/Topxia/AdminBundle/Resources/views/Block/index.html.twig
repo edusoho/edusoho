@@ -7,7 +7,7 @@
 {% block main %}
 <div class="page-header">
   {% if setting('developer.debug') %}
-    <button class="btn btn-info btn-sm pull-right" id="add-block-btn" data-toggle="modal" data-target="#modal" data-url="/admin/block/create">新增编辑区</button>  
+    <button class="btn btn-info btn-sm pull-right" id="add-block-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_block_create') }}">新增编辑区</button>  
   {% endif %}
   <h1>编辑区管理</h1>
 </div>

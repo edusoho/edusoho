@@ -968,6 +968,30 @@ message_delete:
     defaults: { _controller: TopxiaWebBundle:Message:deleteConversationMessage }
     methods: [POST]
 
+content_article_show:
+    pattern: /article/{alias}
+    defaults: {_controller: TopxiaWebBundle:Content:articleShow }
+
+content_article_list:
+    pattern: /article
+    defaults: {_controller: TopxiaWebBundle:Content:articleList }
+
+content_activity_show:
+    pattern: /activity/{alias}
+    defaults: {_controller: TopxiaWebBundle:Content:activityShow }
+
+content_activity_list:
+    pattern: /activity
+    defaults: {_controller: TopxiaWebBundle:Content:activityList }
+
+content_page_show:
+    pattern: /page/{alias}
+    defaults: {_controller: TopxiaWebBundle:Content:pageShow }
+
+content_page_list:
+    pattern: /page
+    defaults: {_controller: TopxiaWebBundle:Content:pageList }
+
 teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
