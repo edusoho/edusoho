@@ -276,7 +276,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$article['source'] = $fields['source'];
 		$article['sourceUrl'] = $fields['sourceUrl'];
 		$article['publishedTime'] = strtotime($fields['publishedTime']);
-		$article['updated'] = time();
+		$article['updatedTime'] = time();
 		
 		if (!empty($fields['tags']) && !is_array($fields['tags'])) {
 			$fields['tags'] = explode(",", $fields['tags']);

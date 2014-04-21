@@ -1,3 +1,8 @@
+
+.breadcrumb > li {
+	margin-right: 1px;
+}
+
 .latest-review-list {
 	font-size: 13px;
 }
