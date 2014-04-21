@@ -69,7 +69,6 @@ class ArticleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $article = $this->getArticleService()->getArticle($id);
-
         if (empty($article)) {
             throw $this->createNotFoundException('文章已删除或者未发布！');
         }

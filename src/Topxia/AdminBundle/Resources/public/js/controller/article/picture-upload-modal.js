@@ -8,6 +8,11 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: '#aticel-picture-form'
         });
+        $("#article-upload-btn").attr({"disabled":"disabled"});
+
+        $("#article-picture-upload").click(function() {
+             $("#article-upload-btn").removeAttr("disabled");
+        });
 
         $("#article-upload-btn").click(function() {
 

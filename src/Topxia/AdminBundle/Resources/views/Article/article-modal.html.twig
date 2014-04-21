@@ -66,6 +66,7 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">资讯属性</div>
+
 				<div class="panel-body">
 				  <label class="checkbox-inline">
 						<input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> 置顶
@@ -76,6 +77,7 @@
 					<label class="checkbox-inline">
 						<input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> 推荐  
 					</label>
+					<span class="glyphicon glyphicon-question-sign pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" title="置顶:...置顶:...推荐:..."></span>
 				</div>
 			</div>
 
@@ -104,7 +106,7 @@
 				<div class="panel-body">
 					<div id="article-thumb-container">
 					  {% if article.thumb|default(null) %}
-						  <img src='{{ article.thumb }}'>
+						  <img src='{{ file_path(article.thumb) }}'>
 					  {% endif %}
 				   </div>
 				   <br>
