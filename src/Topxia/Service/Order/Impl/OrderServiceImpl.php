@@ -180,7 +180,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             }
 
             if ($this->canOrderPay($order)) {
-                $this->getOrderDao()->updateOrder($order['id'], array(
+                $order =  $this->getOrderDao()->updateOrder($order['id'], array(
                     'status' => 'paid',
                     'paidTime' => $payData['paidTime'],
                 ));
