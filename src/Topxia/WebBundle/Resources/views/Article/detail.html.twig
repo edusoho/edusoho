@@ -2,6 +2,10 @@
 
 {% block title %}{{ article.title }} - {{ parent() }}{% endblock %}
 
+{% block keywords %}{{ seoKeyword }}{% endblock %}
+
+{% block description %}{{ seoDesc|plain_text(300) }}{% endblock %}
+
 {% block article_main %}
 
   <ol class="breadcrumb">

@@ -152,6 +152,12 @@ class ArticleController extends BaseController
 		}
 		$tags = $this->getTagService()->findTagsByIds($article['tagIds']);
 
+		$seoKeyword = "";
+		if($tags){
+			$seoKeyword = ArrayToolkit::column($tags, 'name');
+			$seoKeyword = implode(",", $seoKeyword);
+		}
+
 		$this->getArticleService()->hitArticle($id);
 
 		$breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
@@ -164,6 +170,8 @@ class ArticleController extends BaseController
 			'articleNext' => $articleNext,
 			'tags' => $tags,
 			'setting' => $setting,
+			'seoKeyword' => $seoKeyword,
+			'seoDesc' => $article['body'],
 			'breadcrumbs' => $breadcrumbs,
 			'categoryName' => $category['name'],
 			'categoryCode' => $category['code'],

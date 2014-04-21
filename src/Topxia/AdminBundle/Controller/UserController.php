@@ -188,7 +188,6 @@ class UserController extends BaseController
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 $avatarData = $this->avatar_2($id, $fileName);
-
                 return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
                     'user' => $user,
                     'filename' => $fileName,
