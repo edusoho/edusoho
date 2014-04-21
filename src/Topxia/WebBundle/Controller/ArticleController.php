@@ -69,6 +69,7 @@ class ArticleController extends BaseController
 		$conditions = array(
 			'categoryId' => $category['id'],
 			'includeChildren' => true,
+			'status' => 'published'
 		);
 
 
@@ -79,7 +80,7 @@ class ArticleController extends BaseController
 		$subCategories = $this->getSubCategories($categoryTree, $rootCategory);
 
 		$setting = $this->getSettingService()->get('article', array());
-		
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
