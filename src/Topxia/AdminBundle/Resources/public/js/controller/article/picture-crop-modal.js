@@ -23,6 +23,9 @@ define(function(require, exports, module) {
             trueSize: [naturalWidth, naturalHeight],
             setSelect: [0, 0, selectWidth, selectHeight],
             aspectRatio: ratio,
+            onChange: function() {
+                $('.jcrop-keymgr').width(0);
+            },
             onSelect: function(c) {
                 $form.find('[name=x]').val(c.x);
                 $form.find('[name=y]').val(c.y);
