@@ -2,6 +2,11 @@
 
 {% block title %}{{ setting.name }} - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/article.css') }}" />
+{% endblock %}
+
 {% set bodyClass = 'homepage' %}
 
 {% set script_controller = 'index' %}

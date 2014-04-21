@@ -969,11 +969,11 @@ message_delete:
     methods: [POST]
 
 content_article_show:
-    pattern: /article/{alias}
+    pattern: /carticle/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:articleShow }
 
 content_article_list:
-    pattern: /article
+    pattern: /carticle
     defaults: {_controller: TopxiaWebBundle:Content:articleList }
 
 content_activity_show:
