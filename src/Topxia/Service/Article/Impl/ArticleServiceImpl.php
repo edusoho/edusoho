@@ -250,7 +250,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         @unlink($filePath);
 
-        $webPath = realpath($this->getKernel()->getParameter('topxia.upload.public_directory'))."/../";
+        $webPath = realpath($this->getKernel()->getParameter('topxia.upload.public_directory'))."/";
 		return array(
 				'fileOriginalName'=>$fileOriginalName,
 				'fileOriginalNameNew'=>$fileOriginalNameNew,

@@ -77,7 +77,14 @@
 					<label class="checkbox-inline">
 						<input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> 推荐  
 					</label>
-					<span class="glyphicon glyphicon-question-sign pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" title="置顶:...置顶:...推荐:..."></span>
+					<span class="glyphicon glyphicon-question-sign pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" 
+					title="
+设为“置顶”后，该资讯将会显示在列表的最前面;
+
+设为“头条”后，如果正文含有图片，则该资讯的第一张图片将显示在资讯首页的头条图片区，图片尺寸建议统一为：750*450px;
+
+设为“推荐”后，该资讯将会显示在页面右侧的推荐资讯中。">
+					</span>
 				</div>
 			</div>
 
@@ -106,7 +113,7 @@
 				<div class="panel-body">
 					<div id="article-thumb-container">
 					  {% if article.thumb|default(null) %}
-						  <img src='{{ file_path(article.thumb) }}'>
+						  <img src='{{ file_url(article.thumb) }}'>
 					  {% endif %}
 				   </div>
 				   <br>
