@@ -13,7 +13,6 @@ define(function(require, exports, module) {
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
-                console.log(error);
                 if (error) {
                     return ;
                 }
