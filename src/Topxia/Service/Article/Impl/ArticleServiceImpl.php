@@ -284,8 +284,9 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		}
 
 		if ($mode == 'add') {
-			$article['createdTime'] = time();
+			$article['status'] = 'published';
 			$article['userId'] = $this->getCurrentUser()->id;
+			$article['createdTime'] = time();
 		}
 
 		return $article;
