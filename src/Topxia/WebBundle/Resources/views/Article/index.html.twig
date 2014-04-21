@@ -10,7 +10,7 @@
     <div class="homepage-feature homepage-feature-slides mbl" data-cycle-overlay-template='{% verbatim %}{{title}}{% endverbatim %}'>
       <div class="cycle-overlay"></div>
         {% for featuredArticle in featuredArticles %}
-            <a href="{{ path('article_detail', { id:featuredArticle.id }) }}" data-cycle-title="<a href='{{ path('article_detail', { id:featuredArticle.id }) }}'>{{ featuredArticle.title }}</a>" ><img src={{ featuredArticle.picture }} alt="{{ featuredArticle.title }}"></a>
+            <a href="{{ path('article_detail', { id:featuredArticle.id }) }}" data-cycle-title="<a href='{{ path('article_detail', { id:featuredArticle.id }) }}'>{{ featuredArticle.title }}</a>" ><img src={{ featuredArticle.picture }} alt="{{ featuredArticle.title }}" style="max-height:400px;"></a>
         {% endfor %}
     </div>
   {% endif %}
