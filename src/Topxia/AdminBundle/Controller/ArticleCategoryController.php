@@ -27,7 +27,6 @@ class ArticleCategoryController extends BaseController
             'id' => 0,
             'name' => '',
             'code' => '',
-            'pagesize' => '10',
             'parentId' => (int) $request->query->get('parentId', 0),
             'weight' => 0,
             'publishArticle' => 1,

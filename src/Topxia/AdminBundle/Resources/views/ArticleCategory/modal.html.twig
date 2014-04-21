@@ -41,14 +41,6 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="category-pagesize-field">列表每页资讯数</label>
-			<div class="col-md-8 controls">
-				<input class="form-control" id="category-pagesize-field" type="text" name="pagesize" value="{{ category.pagesize }}" tabindex="4">
-				<div class="help-block"></div>
-			</div>
-		</div>
-
-		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-publishArticle-field">允许发布资讯</label>
 			<div class="controls radios col-md-8"><label>
 					<input  id="category-publishArticle-field" type="radio" name="publishArticle" tabindex="0" value=1 {% if category.publishArticle ==1 %}checked{% endif %}>是</label>

@@ -228,7 +228,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $largeImage = $rawImage->copy();
 
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(230, 115));
+        $largeImage->resize(new Box(216, 120));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
 

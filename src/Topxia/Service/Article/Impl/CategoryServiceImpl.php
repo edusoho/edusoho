@@ -119,27 +119,30 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $categoryTree = $this->getCategoryTree();
 
-        $start = false;
-        foreach (array_reverse($categoryTree) as $treeCategory) {
-            if ($treeCategory['id'] == $categoryId) {
-                $start = true;
-            }
+        $indexedCategories = ArrayToolkit::index($categoryTree, 'id');
 
-            if ($start) {
-                $breadcrumbs[] = $treeCategory;
-            }
-
-            if ($start && $treeCategory['depth'] ==1) {
+        while (true) {
+            if (empty($indexedCategories[$categoryId])) {
                 break;
             }
+
+            $category = $indexedCategories[$categoryId];
+            $breadcrumbs[] = $category;
+
+            if (empty($category['parentId'])) {
+                break;
+            }
+
+            $categoryId = $category['parentId'];
         }
+
         return array_reverse($breadcrumbs);
     }
 
     public function createCategory(array $category)
     {
         $category = ArrayToolkit::parts($category, array('name', 'code', 'weight'
-            ,'parentId', 'publishArticle' ,'pagesize','seoTitle','seoKeyword'
+            ,'parentId', 'publishArticle','seoTitle','seoKeyword'
             ,'seoDesc','published','type','templateName','urlNameRule','comment'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
