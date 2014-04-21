@@ -133,7 +133,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 break;
             }
         }
-
         return array_reverse($breadcrumbs);
     }
 
