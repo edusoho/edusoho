@@ -473,6 +473,8 @@ class AppServiceImpl extends BaseService implements AppService
             'level' => empty($errors) ? 'info' : 'error',
             'code' => $package['product']['code'],
             'type' => $package['type'],
+            'fromVersion' => empty($package['fromVersion']) ? '' : $package['fromVersion'],
+            'toVersion' => empty($package['toVersion']) ? '' : $package['toVersion'],
             'message' => $message . (empty($errors) ? '成功' : '失败'),
             'data' => empty($errors) ? '' : $errors,
         ));

@@ -436,6 +436,13 @@ EOD;
 			'code' => 'course_private',
 			'public' => 0,
 		));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
+        ));
+
 	}
 
 	public function initPages()

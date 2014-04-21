@@ -26,9 +26,15 @@
          <span class="label label-info">{{tag.name}}</span>
     {% endfor %}
   {% endif %}
-  {% if article.source|default(null)%}
- <span class="pull-right">本文来源: &nbsp;<a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a></span>
- {% endif %}
+  {% if article.source %}
+     <span class="pull-right">本文来源: &nbsp;
+     {% if article.sourceUrl %}
+       <a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a>
+     {% else %}
+       {{article.source}}
+     {% endif %}
+     </span>
+  {% endif %}
   <p><br></p>
   <ul class="pager">
     {% if articlePrevious %}
