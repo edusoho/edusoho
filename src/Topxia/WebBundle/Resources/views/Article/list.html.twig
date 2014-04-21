@@ -26,7 +26,7 @@
           </div>
           {% if article.thumb %}
             <a class="hidden-xs pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-              <img class="article-picture" src="{{ asset(article.thumb) }}" alt="资讯缩略图">
+              <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="资讯缩略图">
             </a>
           {% endif %}
           <div class="media-body">
