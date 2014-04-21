@@ -140,16 +140,19 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     }
 
     public function createCategory(array $category)
-    {
+    {   
+
         $category = ArrayToolkit::parts($category, array('name', 'code', 'weight'
             ,'parentId', 'publishArticle','seoTitle','seoKeyword'
-            ,'seoDesc','published','type','templateName','urlNameRule','comment'));
+            ,'seoDesc','published'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加栏目失败");
         }
 
         $this->_filterCategoryFields($category);
+        
+        $category['createdTime'] = time();
 
         $category = $this->getCategoryDao()->addCategory($category);
 
@@ -165,8 +168,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createNoteFoundException("栏目(#{$id})不存在，更新栏目失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle' ,'pagesize','seoTitle','seoKeyword'
-            ,'seoDesc','published','type','templateName','urlNameRule','comment'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle','seoTitle','seoKeyword'
+            ,'seoDesc','published'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新栏目失败！');
         }
@@ -202,15 +205,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             'code' => '',
             'weight' => 0,
             'publishArticle' => '',
-            'pagesize' => 10,
             'seoTitle' => '',
             'seoDesc' => '',
             'published' => 1,
             'parentId' => 0,
-            'type' => '',
-            'templateName' => '',
-            'urlNameRule' => '',
-            'comment' => '',
         ));
 
         if (empty($fields['name'])) {
