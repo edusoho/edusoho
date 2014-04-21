@@ -130,6 +130,11 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=categoryId]',
             required: true
+        });   
+
+        validator.addItem({
+            element: '[name=sourceUrl]',
+            rule: 'url'
         });
 
         return validator;
