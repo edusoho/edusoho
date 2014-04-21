@@ -8,13 +8,13 @@
 
 {% block article_main %}
 
-  <ol class="breadcrumb">
+  <ul class="breadcrumb">
       <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
       {% endfor %}
       <li class="active">正文</li>
-  </ol>
+  </ul>
 
   <h2 class="thread-title">{{article.title}}</h2>
      <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
