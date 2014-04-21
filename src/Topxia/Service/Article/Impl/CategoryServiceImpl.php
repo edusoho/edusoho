@@ -142,7 +142,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function createCategory(array $category)
     {
         $category = ArrayToolkit::parts($category, array('name', 'code', 'weight'
-            ,'parentId', 'publishArticle' ,'pagesize','seoTitle','seoKeyword'
+            ,'parentId', 'publishArticle','seoTitle','seoKeyword'
             ,'seoDesc','published','type','templateName','urlNameRule','comment'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
