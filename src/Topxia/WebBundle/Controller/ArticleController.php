@@ -80,6 +80,9 @@ class ArticleController extends BaseController
 		$subCategories = $this->getSubCategories($categoryTree, $rootCategory);
 
 		$setting = $this->getSettingService()->get('article', array());
+		if (empty($setting)) {
+			$setting = array('name' => '资讯频道', 'pageNums' => 20);
+		}
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -92,11 +95,6 @@ class ArticleController extends BaseController
 			$paginator->getOffsetCount(),
             $paginator->getPerPageCount()
 		);
-
-		if (empty($setting)) {
-			$setting = array('name' => '资讯频道', 'pageNums' => 20);
-		}
-
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
