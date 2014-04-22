@@ -119,6 +119,9 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+
+                editor.sync();
+
                 Notify.success('保存文章成功！');
             }
         });
