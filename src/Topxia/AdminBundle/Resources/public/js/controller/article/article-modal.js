@@ -93,7 +93,7 @@ define(function(require, exports, module) {
             }
         });
         
-         $("#article_thumb_remove").on('click', function(){
+        $("#article_thumb_remove").on('click', function(){
             if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
@@ -105,6 +105,10 @@ define(function(require, exports, module) {
             }).error(function(){
                 Notify.danger('删除失败！');
             });
+        });
+
+        validator.on('formValidate', function(element, event) {
+            editor.sync();
         });
 
         return editor;
@@ -119,8 +123,6 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-
-                editor.sync();
 
                 Notify.success('保存文章成功！');
             }
