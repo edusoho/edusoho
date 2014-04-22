@@ -37,7 +37,7 @@ class Version20140421135942 extends AbstractMigration
 			  `partnerName` varchar(255) NOT NULL COMMENT '渠道名称',
 
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8　COMMENT='页面PV记录流水' AUTO_INCREMENT=1 ;
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='页面PV记录流水' AUTO_INCREMENT=1;
 		");
 
 
@@ -52,7 +52,7 @@ class Version20140421135942 extends AbstractMigration
 			  `createdTime` int(11) NOT NULL DEFAULT '0',
 			  `createdmTookeen` varchar(255) NOT NULL,
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8　COMMENT='游客表' AUTO_INCREMENT=1 ;
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='游客表' AUTO_INCREMENT=1 ;
 		");
         
 
@@ -148,7 +148,7 @@ class Version20140421135942 extends AbstractMigration
 
 			  `dayGuestVisit` int(10) NOT NULL COMMENT '日pv',
 			  `dayGuest` int(10) NOT NULL COMMENT '日uv',
-			  
+
 			  `orders` int(10) NOT NULL COMMENT '订单数',
 			  `feeOrders` int(10) NOT NULL COMMENT '收费订单数',
 			  `freeOrders` int(10) NOT NULL COMMENT '免费订单数',
