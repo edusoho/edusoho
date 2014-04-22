@@ -284,6 +284,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		}
 
 		if ($mode == 'add') {
+	        $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
 			$article['status'] = 'published';
 			$article['userId'] = $this->getCurrentUser()->id;
 			$article['createdTime'] = time();
