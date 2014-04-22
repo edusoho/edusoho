@@ -3,8 +3,8 @@ homepage:
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
 guest:
-    pattern:  /guest
-    defaults: { _controller: TopxiaWebBundle:Default:guest }
+    pattern:  /guest/visit
+    defaults: { _controller: TopxiaWebBundle:Default:guestVisit }
 
 course_page:
     pattern: /course

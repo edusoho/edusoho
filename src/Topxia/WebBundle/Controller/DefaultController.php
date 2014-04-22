@@ -10,6 +10,36 @@ use Topxia\Common\Paginator;
 class DefaultController extends BaseController
 {
 
+    public function guestVisitAction(Request $request){
+
+        if ($request->getMethod() == 'POST') {
+
+            $guestId = isset($_COOKIE["guestId"]) ?$_COOKIE["guestId"] : null;
+
+            if (empty($guestId)){
+
+                $currentuser=$this->getCurrentUser();
+
+                $userId=$currentuser['id'];
+
+                if(!empty($userId)){
+
+                    $guest =  $this->getGuestService()->getGuestByUserId($userId);
+
+                     setcookie("guestId", $guest['id'],'/');
+
+                }else{
+                    $guest['']
+                    $guest = $this->getGuestService()->createGuest
+
+                } 
+                   
+                  
+            }
+           
+        }
+    }
+
     public function indexAction (Request $request)
     {
         //$template = ucfirst($this->setting('site.homepage_template', 'less'));
@@ -349,6 +379,12 @@ class DefaultController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
+
+    protected function getGuestService()
+    {
+        return $this->getServiceKernel()->createService('Guest.GuestService');
+    }
+
 
 
 }
