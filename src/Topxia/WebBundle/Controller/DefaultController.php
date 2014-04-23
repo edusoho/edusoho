@@ -24,13 +24,12 @@ class DefaultController extends BaseController
 
                 if(!empty($userId)){
 
-                    $guest =  $this->getGuestService()->getGuestByUserId($userId);
+                     $guest =  $this->getGuestService()->getGuestByUserId($userId);
 
                      setcookie("guestId", $guest['id'],'/');
 
                 }else{
-                    $guest['']
-                    $guest = $this->getGuestService()->createGuest
+                   
 
                 } 
                    
