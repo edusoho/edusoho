@@ -50,7 +50,8 @@ seajs.config({
 		'moment' : 'gallery/moment/2.5.1/moment',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
-		'dialog':'arale/dialog/1.3.0/dialog'
+		'dialog':'arale/dialog/1.3.0/dialog',
+		'dialog-css':'arale/dialog/1.3.0/dialog.css'
 	},
 
 	// 预加载项
