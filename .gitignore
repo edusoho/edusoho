@@ -19,6 +19,7 @@
 /bin/
 /composer.phar
 /etc/sublimetext2/edusoho.sublime-workspace
+/etc/UpgradeScripts
 /web/files/*
 !/web/files/.gitkeep
 /web/customize/*
@@ -34,3 +35,4 @@ app/data/install.lock
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
+edusoho.komodoproject

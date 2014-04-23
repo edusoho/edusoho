@@ -1,0 +1,58 @@
+{% extends 'TopxiaWebBundle:Article:layout.html.twig' %}
+
+{% block title %}{{ article.title }} - {{ parent() }}{% endblock %}
+
+{% block keywords %}{{ seoKeyword }}{% endblock %}
+
+{% block description %}{{ seoDesc|plain_text(100) }}{% endblock %}
+
+{% block article_main %}
+
+  <ul class="breadcrumb">
+      <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
+      {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
+      {% endfor %}
+      <li class="active">正文</li>
+  </ul>
+
+  <h2 class="thread-title">{{article.title}}</h2>
+     <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
+     <p><br></p>
+  <div class="thread-body">{{article.body |raw }}</div>
+  {% if tags %}
+     标签:
+    {% for tag in tags %}
+         <span class="label label-info">{{tag.name}}</span>
+    {% endfor %}
+  {% endif %}
+  {% if article.source %}
+     <span class="pull-right">本文来源: &nbsp;
+     {% if article.sourceUrl %}
+       <a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a>
+     {% else %}
+       {{article.source}}
+     {% endif %}
+     </span>
+  {% endif %}
+  <p><br></p>
+  <ul class="pager">
+    {% if articlePrevious %}
+      <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; 上一篇</a></li>
+    {% else %}
+      <li class="previous disabled"><a href="javascript:;">&larr; 上一篇</a></li>
+    {% endif %}
+
+      {% if articleNext %}
+      <li class="next"><a href="{{ path('article_detail',{id:articleNext.id}) }}"> 下一篇 &rarr;</a></li>
+    {% else %}
+      <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
+    {% endif %}
+  </ul>
+
+{% endblock %}
+
+{% block article_side %}
+  {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
+  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
+{% endblock %}

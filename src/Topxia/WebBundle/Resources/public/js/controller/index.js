@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 	        fx:"scrollHorz",
 	        slides: "> a, > img",
 	        log: "false",
-	        pauseOnHover: "true"
+	        pauseOnHover: "true",
     	});
 
     };
