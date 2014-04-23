@@ -524,11 +524,11 @@ admin_app_package_update_begin_upgrade:
     methods: [POST]
 
 admin_category:
-    pattern:  /category
+    pattern: /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
 
 admin_category_create:
-    pattern:  /category/create
+    pattern: /category/create
     defaults: { _controller: TopxiaAdminBundle:Category:create }
 
 admin_category_checkcode:
@@ -781,3 +781,88 @@ admin_approval_show:
     pattern:  /approvals/{id}/show
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showUserRealInfo }
 
+
+admin_article_category:
+    pattern: /article/category
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:index }
+
+admin_article_category_create:
+    pattern:  /article/category/create
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:create }
+
+admin_article_category_checkparentid:
+    pattern:  /article/category/checkparentid
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkParentId }
+
+admin_article_category_checkcode:
+    pattern:  /article/category/checkcode
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:checkCode }
+
+admin_article_category_edit:
+    pattern:  /article/category/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:edit }
+
+admin_article_category_delete:
+    pattern:  /article/category/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:delete }
+    methods: [POST]
+
+admin_article_setting:
+    pattern: /article/setting
+    defaults: { _controller: TopxiaAdminBundle:Article:setting }
+
+admin_article:
+    pattern:  /article
+    defaults: { _controller: TopxiaAdminBundle:Article:index }
+
+admin_article_create:
+    pattern:  /article/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:Article:create }
+
+admin_article_create:
+    pattern:  /article/create
+    defaults: { _controller: TopxiaAdminBundle:Article:create }
+
+admin_article_picture_crop:
+    pattern:  /article/picture/crop
+    defaults: { _controller: TopxiaAdminBundle:Article:pictureCrop }
+
+admin_article_show_upload:
+    pattern:  /article/show/upload
+    defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
+
+admin_article_set_property:
+    pattern:  /article/set/property/{id}/{property}
+    defaults: { _controller: TopxiaAdminBundle:Article:setArticleProperty }
+
+admin_article_cancel_property:
+    pattern:  /article/cancel/property/{id}/{property}
+    defaults: { _controller: TopxiaAdminBundle:Article:cancelArticleProperty }
+
+admin_article_edit:
+    pattern:  /article/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Article:edit }
+
+admin_article_publish:
+    pattern:  /article/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Article:publish }
+    methods:  [POST]
+
+admin_article_unpublish:
+    pattern:  /article/{id}/unpublish
+    defaults: { _controller: TopxiaAdminBundle:Article:unpublish }
+    methods:  [POST]
+
+admin_article_thumb_remove:
+    pattern:  /article/thumb/{id}/remove
+    defaults: { _controller: TopxiaAdminBundle:Article:thumbRemove }
+
+admin_article_trash:
+    pattern:  /article/{id}/trash
+    defaults: { _controller: TopxiaAdminBundle:Article:trash }
+    methods:  [POST]
+
+admin_article_delete:
+    pattern:  /article/delete
+    defaults: { _controller: TopxiaAdminBundle:Article:delete }
+    methods:  [POST]

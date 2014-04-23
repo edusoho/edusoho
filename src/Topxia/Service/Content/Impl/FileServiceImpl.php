@@ -183,7 +183,6 @@ class FileServiceImpl extends BaseService implements FileService
 	private function saveFile($file, $uri)
 	{
 		$parsed = $this->parseFileUri($uri);
-
 		if ($parsed['access'] == 'public') {
 			$directory = $this->getKernel()->getParameter('topxia.upload.public_directory');
 		} else {

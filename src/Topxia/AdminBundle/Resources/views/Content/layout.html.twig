@@ -4,16 +4,26 @@
 
 {% block content %}
   <div class="col-md-2">
-
     {% block sidebar %}
-      <div class="list-group">
 
-    <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理</a>
-    <a href="{{ url('admin_content', {type:'page'}) }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">页面管理</a>
-    <a href="{{ url('admin_block') }}" class="list-group-item {% if menu == 'admin_block' %}active{% endif %}">编辑区管理</a>
-    <a href="{{ path('admin_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}" style="display:none;">文件监控</a>
-    <a href="{{ path('admin_comment') }}" class="list-group-item {% if menu == 'comment' %}active{% endif %}" style="display:none;">评论管理</a>
+      <div class="list-group">
+        <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理</a>
+        <a href="{{ url('admin_content', {type:'page'}) }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">页面管理</a>
+        <a href="{{ url('admin_block') }}" class="list-group-item {% if menu == 'admin_block' %}active{% endif %}">编辑区管理</a>
+        <a href="{{ path('admin_file') }}" class="list-group-item {% if menu == 'file' %}active{% endif %}" style="display:none;">文件监控</a>
+        <a href="{{ path('admin_comment') }}" class="list-group-item {% if menu == 'comment' %}active{% endif %}" style="display:none;">评论管理</a>
       </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">资讯</div>
+        <div class="list-group">
+          <a href="{{ url('admin_article') }}" class="list-group-item {% if menu == 'article' %}active{% endif %}">资讯管理</a>
+          <a href="{{ path('admin_article_category') }}" class="list-group-item {% if menu == 'category' %}active{% endif %}">栏目管理</a>
+          <a href="{{ path('admin_article_setting') }}" class="list-group-item {% if menu == 'setting' %}active{% endif %}">资讯频道设置</a>
+          <a class="list-group-item" href="{{ path('article_show') }}" target="_blank">资讯频道首页</a>
+        </div>
+      </div>
+
     {% endblock %}
   </div>
   <div class="col-md-10">
