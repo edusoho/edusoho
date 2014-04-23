@@ -6,6 +6,12 @@ define(function(require, exports, module) {
 
     require('wookmark');
 
+   var  Dialog = require('dialog');
+
+   new Dialog({
+        content: '<div style="padding:50px">没有 trigger，直接显示出来</div>'
+    }).show();
+
     exports.run = function() {
 
     	$("#photo .list-item-user").mouseenter(function(){
@@ -58,6 +64,8 @@ define(function(require, exports, module) {
 			$(this).find(".desc").css({display:"none"});
 			
 		});
+
+
 
 
         // $(document).ready(function() {
