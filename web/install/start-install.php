@@ -159,7 +159,8 @@ function install_step3()
 		$init->initBlocks();
         $init->initThemes();
 		$init->initLockFile();
-		$init->initRefundSetting();
+        $init->initRefundSetting();
+		$init->initArticleSetting();
 
 		header("Location: start-install.php?step=4");
 		exit();
@@ -285,7 +286,15 @@ class SystemInit
         );
         $setting = $this->getSettingService()->set('refund', $setting);
 
-	}	
+	}
+
+    public function initArticleSetting()
+    {
+        $setting = array(
+            'name' => '资讯频道', 'pageNums' => 20
+        );
+        $setting = $this->getSettingService()->set('article', $setting);
+    }
 
 	public function initSiteSettings($settings)
 	{
@@ -436,6 +445,13 @@ EOD;
 			'code' => 'course_private',
 			'public' => 0,
 		));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
+        ));
+
 	}
 
 	public function initPages()

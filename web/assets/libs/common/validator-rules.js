@@ -20,6 +20,11 @@ define(function(require, exports, module) {
             '{{display}}必须是数字'
         ],
         [
+            'not_all_digital',
+            /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
+            '{{display}}不能全为数字'
+        ],
+        [
             'chinese',
             /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i,
             '{{display}}必须是中文字'

@@ -998,32 +998,32 @@ message_check_receiver:
 
 message_send:
     pattern: /message/send/
-    defaults: {_controller: TopxiaWebBundle:Message:send }
+    defaults: { _controller: TopxiaWebBundle:Message:send }
 
 message_send_to_receiver:
     pattern: /message/send/{receiverId}/to/receiver/
-    defaults: {_controller: TopxiaWebBundle:Message:sendTo }
+    defaults: { _controller: TopxiaWebBundle:Message:sendTo }
 
 message_conversation_show:
     pattern: /message/conversation/{conversationId}
-    defaults: {_controller: TopxiaWebBundle:Message:showConversation }
+    defaults: { _controller: TopxiaWebBundle:Message:showConversation }
 
 message_conversation_delete:
     pattern: /message/conversation/{conversationId}/delete
-    defaults: {_controller: TopxiaWebBundle:Message:deleteConversation }
+    defaults: { _controller: TopxiaWebBundle:Message:deleteConversation }
     methods: [POST]
 
 message_delete:
     pattern: /message/conversation/{conversationId}/message/{messageId}/delete
-    defaults: {_controller: TopxiaWebBundle:Message:deleteConversationMessage }
+    defaults: { _controller: TopxiaWebBundle:Message:deleteConversationMessage }
     methods: [POST]
 
 content_article_show:
-    pattern: /article/{alias}
+    pattern: /carticle/{alias}
     defaults: {_controller: TopxiaWebBundle:Content:articleShow }
 
 content_article_list:
-    pattern: /article
+    pattern: /carticle
     defaults: {_controller: TopxiaWebBundle:Content:articleList }
 
 content_activity_show:
@@ -1041,7 +1041,6 @@ content_page_show:
 content_page_list:
     pattern: /page
     defaults: {_controller: TopxiaWebBundle:Content:pageList }
-
 
 teacher:
     pattern: /teacher
@@ -1075,6 +1074,18 @@ systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
 
+
+article_show:
+    pattern: /article
+    defaults: { _controller: TopxiaWebBundle:Article:index }
+
+article_detail:
+    pattern: /article/{id}
+    defaults: { _controller: TopxiaWebBundle:Article:detail }
+
+article_category:
+    pattern: /article/category/{categoryCode}
+    defaults: { _controller: TopxiaWebBundle:Article:category }
 
 test:
     pattern:  /test/

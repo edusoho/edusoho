@@ -41,7 +41,10 @@ class WebExtension extends \Twig_Extension
     {
         return array(
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
+
+            // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
             'percent' => new \Twig_Function_Method($this, 'calculatePercent') ,
@@ -256,6 +259,26 @@ class WebExtension extends \Twig_Extension
         }
     }
 
+    public function getFileUrl($uri, $default = '', $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $request = $this->container->get('request');
+
+        if (empty($uri)) {
+            $url = $assets->getUrl('assets/img/default/' . $default);
+            if ($absolute) {
+                $url = $request->getSchemeAndHttpHost() . $url;
+            }
+            return $url;
+        }
+
+        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri;
+        $url = ltrim($url, ' /');
+        $url = $assets->getUrl($url);
+
+        return $url;
+    }
+
     public function fileSizeFilter($size)
     {
         $currentValue = $currentUnit = null;
@@ -292,7 +315,11 @@ class WebExtension extends \Twig_Extension
     public function plainTextFilter($text, $length = null)
     {
         $text = strip_tags($text);
-        
+
+        $text = str_replace(array("\n", "\r", "\t") , '', $text);
+        $text = str_replace('&nbsp;' , ' ', $text);
+        $text = trim($text);
+
         $length = (int) $length;
         if ( ($length > 0) && (mb_strlen($text) > $length) )  {
             $text = mb_substr($text, 0, $length, 'UTF-8');
