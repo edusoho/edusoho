@@ -6,13 +6,13 @@ define(function(require, exports, module) {
 
     require('wookmark');
     
-    require('dialog-css');
+   //  require('dialog-css');
 
-   var  Dialog = require('dialog');
+   // var  Dialog = require('dialog');
 
-   new Dialog({
-        content: '<div style="padding:50px;zindex=100">没有 trigger，直接显示出来</div>'
-    }).show();
+   // new Dialog({
+   //      content: '<div style="padding:50px;zindex=100">没有 trigger，直接显示出来</div>'
+   //  }).show();
 
     exports.run = function() {
 

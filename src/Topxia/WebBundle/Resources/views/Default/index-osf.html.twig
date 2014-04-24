@@ -47,7 +47,7 @@
           <!-- 新加入学员 -->  
           <div class="kytitle">
             <h3>新学员</h3>
-            <div class="fix-right font18">64231人已在学习</div>
+            <div class="fix-right font18">{{studentCounts}}人次参与学习</div>
           </div>
           <div class="mod-content pz clearfix">
             <div class="pull-left info">
@@ -105,7 +105,7 @@
                     </h4>
 
                   </div>
-                  <div class="text-color-green-096 text-normal">{{ teacherinfo.about | plain_text(30) }}</div>
+                  <div class="text-color-green-096 text-normal">{{ teacherinfo.about | plain_text(25) }}</div>
                 </div>
               </li>
               {% endfor %}

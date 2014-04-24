@@ -127,6 +127,9 @@ class DefaultController extends BaseController
 
         $blocks = $this->getBlockService()->getBlocksByCodes(array('home_top_banner','home_new_banner'));
 
+
+        $studentCounts = $this->getCourseService()->searchMemberCount(array());
+
        
 
        
@@ -135,6 +138,7 @@ class DefaultController extends BaseController
             "lastActivitys"=>$lastActivitys,
           
             "users"=>$users,
+            "studentCounts"=>$studentCounts,
 
             "stickTags"=>$stickTags,
             "tagsCourses"=>$tagsCourses,
