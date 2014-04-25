@@ -111,6 +111,8 @@
 				  <div class="panel-body">
 					  {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
 					  {% set templates = {'default': '默认模版'} %}
+
+					   {% set templates = {'default': '含菜单栏页面模板', 'ad_banner': '弹出广告页模板'} %}
 					  <select class="form-control" name="template">
 					  	{{ select_options(templates, field_value(content, 'template')) }}
 					  </select>

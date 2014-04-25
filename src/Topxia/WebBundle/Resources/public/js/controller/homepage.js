@@ -6,13 +6,15 @@ define(function(require, exports, module) {
 
     require('wookmark');
     
-   //  require('dialog-css');
+    require('dialog-css');
 
-   // var  Dialog = require('dialog');
+   var  Dialog = require('dialog');
 
-   // new Dialog({
-   //      content: '<div style="padding:50px;zindex=100">没有 trigger，直接显示出来</div>'
-   //  }).show();
+   new Dialog({
+   		width:800,
+   		content:"http://dev.osf.cn/page/dddddddd",
+        zIndex:9999
+    }).show();
 
     exports.run = function() {
 

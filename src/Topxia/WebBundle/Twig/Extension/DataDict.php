@@ -94,6 +94,11 @@ class DataDict
             'activity' => '活动',
             'page' => '页面',
         ),
+        'contentTemplateType' => array(
+            'default' => '含菜单栏页面模板',
+            'ad_banner' => '弹出广告页模板',
+            'page' => '页面',
+        ),
 	    'articleType' => array(
             'article' => '文章',
             'activity' => '活动',
