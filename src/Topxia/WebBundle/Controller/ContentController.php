@@ -76,7 +76,7 @@ class ContentController extends BaseController
 
         if ($content['template'] == 'default') {
             $template = 'TopxiaWebBundle:Content:page-show.html.twig';
-        }else  if ($content['template'] == 'ad_banner') {
+        }else  if ($content['template'] == 'ad') {
             $template = 'TopxiaWebBundle:Content:ad-show.html.twig';
         } else {
             $alias = $content['alias'] ? : $content['id'];
