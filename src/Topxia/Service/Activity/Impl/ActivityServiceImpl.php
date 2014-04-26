@@ -395,7 +395,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 
 
-	public function addMeberByActivity($member){
+	public function addMemberByActivity($member){
 
 		if(empty($member['activityId'])){
 			throw new Exception("Error Processing Request", 1);
@@ -406,6 +406,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
 		$thread['activityId']=$member['activityId'];
 		$thread['userId']=$member['userId'];
+
+		$thread['orderId']=$member['orderId'];
 
 		$thread['joinMode']=empty($member['joinMode'])?'':$member['joinMode'];
 

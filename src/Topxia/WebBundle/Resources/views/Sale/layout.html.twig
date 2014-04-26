@@ -36,16 +36,18 @@
               <ul class="list-group">
               
                 <a class="list-group-item {% if side_nav == 'link-course-list' %}active{% endif %}" href="{{ path('mysale_link_course_list') }}"> <i class="glyphicon glyphicon-plus"></i>
-                  课程推广链接管理
+                  课程链接推广管理
                 </a>
 
-                <a class="list-group-item {% if side_nav == 'link-web-link' %}active{% endif %}" href="{{ path('mysale_link_web_link') }}"> <i class="glyphicon glyphicon-plus"></i>
-                  网站推广链接生成
-                </a>
+               
 
                 <a class="list-group-item {% if side_nav == 'link-web-list' %}active{% endif %}" href="{{ path('mysale_link_web_list') }}"> <i class="glyphicon glyphicon-plus"></i>
-                  网站推广链接管理
-                </a>                
+                  全站链接推广管理
+                </a> 
+
+                <a class="list-group-item {% if side_nav == 'link-web-link' %}active{% endif %}" href="{{ path('mysale_link_web_link') }}"> <i class="glyphicon glyphicon-plus"></i>
+                  全站链接推广生成
+                </a>               
 
               </ul>
             </div>
@@ -58,7 +60,7 @@
              <ul class="list-group">
 
                <a class="list-group-item {% if side_nav == 'offsale-course-list' %}active{% endif %}" href="{{ path('mysale_offsale_course_list') }}"> <i class="glyphicon glyphicon-tree-deciduous"></i>
-                 课程邀请码推广
+                 课程邀请码管理
                </a>
 
             

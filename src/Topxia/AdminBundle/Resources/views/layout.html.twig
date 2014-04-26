@@ -55,9 +55,13 @@
           <li {% if nav == 'sale' %}class="active"{% endif %}><a href="{{ path('admin_sale_commission') }}">营销</a></li>
 
 
+          <li {% if nav == 'analysis' %}class="active"{% endif %}><a href="{{ path('admin_analysis') }}">统计</a></li>
+
+
           <li {% if nav == 'app' %}class="active"{% endif %}>
             <a href="{{ path('admin_app_installed') }}">应用</a>
           </li>
+
 
           {% if is_granted('ROLE_SUPER_ADMIN') %}
           <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>

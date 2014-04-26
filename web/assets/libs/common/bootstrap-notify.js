@@ -6,7 +6,7 @@ define(function(require, exports, module) {
             $exist.remove();
         }
 
-        var html = '<div class="alert alert-' + type + ' bootstrap-notify-bar" style="display:none;">'
+        var html = '<div class="pvl alert alert-' + type + ' bootstrap-notify-bar" style="display:none;">'
         html += '<button type="button" class="close" data-dismiss="alert">×</button>';
         html += message;
         html += '</div>';

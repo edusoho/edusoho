@@ -47,7 +47,7 @@ interface ActivityService
 	/**
 	* Member API
 	*/
-	public function addMeberByActivity($member);
+	public function addMemberByActivity($member);
 
 	public function removeMember($activityId, $userId);
 

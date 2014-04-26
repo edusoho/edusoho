@@ -32,6 +32,15 @@ class ActivityController extends BaseController
 
 	}
 
+    public function orderManageAction(Request $request)
+    {
+        return $this->forward('TopxiaAdminBundle:Order:manage', array(
+            'request' => $request,
+            'type' => 'activity',
+            'layout' => 'TopxiaAdminBundle:Activity:layout.html.twig',
+        ));
+    }
+
 	public function deleteAction(Request $request, $id)
     {
         $result = $this->getActivityService()->deleteActivity($id);

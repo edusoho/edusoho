@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Sale:layout.html.twig' %}
 
-{% block title %}网站链接推广 - {{ parent() }}{% endblock %}
+{% block title %}全站链接推广 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'mysale/link-web' %}
 {% set side_nav = 'link-web-link' %}
@@ -10,7 +10,7 @@
 
 <div class="panel panel-default panel-col">
 	<div class="panel-heading">
-		网站链接推广地址生成  <button class="btn btn-fat btn-primary pull-right" id="course-create-btn" type="submit">生成网站推广链接</button>
+		全站链接推广地址生成  <button class="btn btn-fat btn-primary pull-right" id="course-create-btn" type="submit">生成全站推广链接</button>
 	</div>
 	<div class="panel-body">
 		<div class="row form-group">
@@ -19,7 +19,7 @@
 			 </div>
 			 <div class="col-md-8">
 
-			 	<textarea  id="oUrl" name="oUrl" class="form-control"  cols="60" rows="3" placeholder="请输入您需要转换的本站链接地址"></textarea>
+			 	<textarea  id="oUrl" name="oUrl" class="form-control"  cols="60" rows="3" placeholder="请输入您需要转换的本站任意链接地址"></textarea>
 			 	<p class="help-block" id="oUrl"></p>
 			 </div>
 		</div>
@@ -42,11 +42,11 @@
 
 			<div class="col-md-12">
 				
-					<h3>关于网站链接推广：</h3>
+					<h3>关于全站链接推广：</h3>
 					<ul class="list-unstyled">
-						<li>1、网站链接推广适用本站所有课程。</li>
+						<li>1、全站链接是你可以用本站的任意链接生成一个您的专属链接，该专属链接可用来推广本站的所有商品（包括课程，会员，活动门票等等）。</li>
 						
-						<li>2、任何用户通过您的专属网站推广链接访问本网站后，该用户在<span class="text-color-red text-size-18">{{lswSetting.webCommissionDay}}天</span>内在本网站购买的所有课程你都能获得<span class="text-color-red text-size-18">{{ lswSetting.webCommission}}%</span>的佣金收入。</li>
+						<li>2、任何用户通过您的专属全站链接访问本网站后，该用户在<span class="text-color-red text-size-18">{{lswSetting.webCommissionDay}}天</span>内在本网站购买的所有商品你都能获得该商品实际订单金额的<span class="text-color-red text-size-18">{{ lswSetting.webCommission}}%</span>的佣金收入。</li>
 
 						<li>
 							3、您可以通过<a  href="{{ path('mysale_commission_list') }}">佣金明细</a>	来查看您的网站链接推广佣金明细及分成情况。
