@@ -4,17 +4,6 @@ define(function(require, exports, module) {
     require('jquery.slides');
     require('jquery.slides-css');
 
-    require('wookmark');
-    
-    require('dialog-css');
-
-   var  Dialog = require('dialog');
-
-   new Dialog({
-   		width:800,
-   		content:"http://dev.osf.cn/page/dddddddd",
-        zIndex:9999
-    }).show();
 
     exports.run = function() {
 
