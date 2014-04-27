@@ -6,6 +6,10 @@ guest:
     pattern:  /guest/visit
     defaults: { _controller: TopxiaWebBundle:Default:guestVisit }
 
+ad:
+    pattern:  /ad/get
+    defaults: { _controller: TopxiaWebBundle:Ad:getAd }
+
 course_page:
     pattern: /course
     defaults: { _controller: TopxiaWebBundle:Default:indexMore }
