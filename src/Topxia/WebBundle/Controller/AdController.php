@@ -20,6 +20,11 @@ class AdController extends BaseController
     }
 
 
+    private function getAdService()
+    {
+        return $this->getServiceKernel()->createService('Ad.SettingService');
+    }
+
    
 
     private function getNotificationService()
