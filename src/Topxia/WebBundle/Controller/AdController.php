@@ -9,15 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdController extends BaseController
 {
-
-      
+    
     public function getAdAction(Request $request)
     {
-        $adr =  $request->request->all();
 
-        
+        $targetUrl=  $request->request->get('targetUrl');
+               
          
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse(array('run'=>false,'showUrl'=>'/dddd'));
     }
 
 

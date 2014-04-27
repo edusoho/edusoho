@@ -5,37 +5,24 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack');
 
 
-
 	$(document).ready(function() {
 
-		$.post(url, data, success) {
+	  		targetUrl = window.location.pathname;
 
-			if (data.ad_config.run) {
+            $.post('/ad/get', {targetUrl:targetUrl}, function(ad){
+            	if (ad.run) {
+					require('wookmark');
+					require('dialog-css');
+					var Dialog = require('dialog');
+					new Dialog({
+						width: 800,
+						content: ad.showUrl,
+						zIndex: 9999
+					}).show();
+				}
 
-
-				require('wookmark');
-
-				require('dialog-css');
-
-				var Dialog = require('dialog');
-
-				new Dialog({
-					width: 800,
-					content: window.ad_config.showUrl,
-					zIndex: 9999
-				}).show();
-
-
-			}
-
-
-
-		}
-
-
+			});
 
 	});
-
-
 
 });
