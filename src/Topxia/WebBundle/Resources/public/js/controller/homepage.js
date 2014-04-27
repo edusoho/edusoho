@@ -25,6 +25,7 @@ define(function(require, exports, module) {
 			
 		
 		});
+		
 		$("#photo .list-item-user").mouseleave(function(){
 			$(this).find(".tip").removeClass("i-active");
 			if($("#wait-you").offset().left-$(this).offset().left > 150){

@@ -1,0 +1,14 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="offsale-table-tr-{{ setting.id }}" data-role="item">
+  <td><input value="{{setting.id}}" type="checkbox"  data-role="batch-item" ></td>
+  
+
+ 
+  <td class="text-muted text-sm text-break">{{ setting.targetUrl }}</td>
+  <td class="text-muted text-sm text-break">{{ setting.showUrl }}</td>
+  <td class="text-muted text-sm text-break">{{ setting.showMode }}</td>
+   <td class="text-muted text-sm text-break">{{ dict_text('adShowModeType',setting.showMode) }}</td>
+
+   
+
+</tr>

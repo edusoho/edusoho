@@ -127,7 +127,7 @@ class DataDict
             'unpublished' => '<span class="text-muted">未发布</span>',
             'trash' => '<span class="text-warning">回收站</span>',
     	),
-	'articleStatus' => array(
+		'articleStatus' => array(
             'published' => '已发布',
             'unpublished' => '未发布',
             'trash' => '回收站',
@@ -250,6 +250,12 @@ class DataDict
 			'linksale-course' =>         '课程链接推广',
             'linksale-web' =>            '全站链接推广',			
 		),
+
+		'adShowModeType' => array(
+			'0' =>         '弹窗',
+            '1' =>         '顶栏',			
+		),
+
 
 		'degreeType' => array(
 			'小学' =>            '小学',

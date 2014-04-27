@@ -14,13 +14,21 @@ class AdController extends BaseController
     {
 
         $targetUrl=  $request->request->get('targetUrl');
-               
-         
-        return $this->createJsonResponse(array('run'=>false,'showUrl'=>'/dddd'));
+
+        $adSetting = $this->getAdSettingService()->findSettingByTargetUrl($targetUrl);
+
+        if(empty($adSetting)){
+            $adSetting['run']=false;
+            $adSetting['showUrl']='/404';
+        }else{
+            $adSetting['run']=true;
+        }
+
+        return $this->createJsonResponse($adSetting);
     }
 
 
-    private function getAdService()
+    private function getAdSettingService()
     {
         return $this->getServiceKernel()->createService('Ad.SettingService');
     }

@@ -10,7 +10,7 @@ use Topxia\Common\Paginator;
 class DefaultController extends BaseController
 {
 
-    public function guestVisitAction(Request $request){
+    public function  LogAccessAction(Request $request){
 
         if ($request->getMethod() == 'POST') {
 

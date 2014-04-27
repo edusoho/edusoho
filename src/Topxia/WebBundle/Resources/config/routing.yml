@@ -2,9 +2,9 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
-guest:
-    pattern:  /guest/visit
-    defaults: { _controller: TopxiaWebBundle:Default:guestVisit }
+access:
+    pattern:  /access/log
+    defaults: { _controller: TopxiaWebBundle:Default:LogAccess }
 
 ad:
     pattern:  /ad/get

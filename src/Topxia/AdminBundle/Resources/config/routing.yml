@@ -698,10 +698,19 @@ admin_sale_linksale_delete_batch:
     defaults: { _controller: TopxiaAdminBundle:LinkSale:batchDelete }
     methods: [POST]
 
-
 admin_sale_setting:
     pattern: /sale/setting
     defaults: { _controller: TopxiaAdminBundle:SettingSale:saleSetting }
+
+admin_ad_setting:
+    pattern: /ad/setting/list
+    defaults: { _controller: TopxiaAdminBundle:AdSetting:list }
+
+
+admin_ad_setting_create:
+    pattern: /ad/setting/create
+    defaults: { _controller: TopxiaAdminBundle:AdSetting:create }
+
 
 
 admin_money_card:
