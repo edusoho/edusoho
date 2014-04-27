@@ -1096,11 +1096,11 @@ article_category:
     defaults: { _controller: TopxiaWebBundle:Article:category }
 
 test:
-    pattern:  /test/
+    pattern:  /test
     defaults: { _controller: TopxiaWebBundle:Test:index }
 
 activity_home:
-    pattern:  /openclass/explore/
+    pattern:  /openclass/explore
     defaults: { _controller: TopxiaWebBundle:Activity:explore }
 
 activity_create:
@@ -1262,7 +1262,7 @@ activity_manage_preview:
     defaults: { _controller: TopxiaWebBundle:ActivityManage:preview }
 
 activity_materials:
-    pattern:  /openclass/{id}/material/
+    pattern:  /openclass/{id}/material
     defaults: { _controller: TopxiaWebBundle:ActivityMaterial:index }
 
 activity_material_download:
