@@ -29,7 +29,7 @@ class AdController extends BaseController
                 
                 $currentUser = $this->getCurrentUser();
 
-                if (empty($currentUser)) {
+                if (empty($currentUser['id'])) {
                     $adSetting['run']=true;
                 }
 
@@ -37,7 +37,7 @@ class AdController extends BaseController
             }else if($adSetting['scope']==2){//仅注册用户
                 $currentUser = $this->getCurrentUser();
 
-                if ($currentUser) {
+                if ($currentUser['id']) {
                     $adSetting['run']=true;
                 }
 
