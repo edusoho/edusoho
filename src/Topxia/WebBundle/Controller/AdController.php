@@ -16,12 +16,14 @@ class AdController extends BaseController
         $targetUrl=  $request->request->get('targetUrl');
 
         $adSetting = $this->getAdSettingService()->findSettingByTargetUrl($targetUrl);
-        $adSetting['run']=false;
 
         if(empty($adSetting)){
+
             $adSetting['run']=false;
-            $adSetting['showUrl']='/404';
+           
         }else{
+
+             $adSetting['run']=false;
 
             if($adSetting['scope']==1){//仅游客
                 

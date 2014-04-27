@@ -16,22 +16,16 @@ define(function(require, exports, module) {
         if ($('#ad-setting-form').find('input[name="targetUrl"]')){
             validator.addItem({
                 element: '[id][name="targetUrl"]',
-                required: true,
-                rule: 'remotePost',
-                hideMessage:function(msg,ele,eve){               
-                    if(null != msg ){
-                        $("#targetUrl_info").html(msg);
-                        $("#targetUrl_info").addClass('text-color-green');
-                    }
-                }          
+                required: true
+                   
              });
         }
 
         if ($('#ad-setting-form').find('input[name="showUrl"]')){
             validator.addItem({
                 element: '[id][name="showUrl"]',         
-                required: true,
-                rule: 'url'
+                required: true
+              
             });
         }
 

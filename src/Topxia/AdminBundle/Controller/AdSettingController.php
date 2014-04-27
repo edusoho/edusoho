@@ -36,9 +36,25 @@ class AdSettingController extends BaseController
 
         if('POST' == $request->getMethod()){
 
-            $setting = $request->request->all();
+            $id=  $request->request->get('id');
 
-            $this->getAdSettingService()->createSetting($setting);
+            $setting = $this->getAdSettingService()->getSetting($id);
+
+            if(empty($setting)){
+
+                $setting = $request->request->all();
+
+                $this->getAdSettingService()->createSetting($setting);
+
+
+            }else{
+
+                $setting = $request->request->all();
+
+                $this->getAdSettingService()->updateSetting($id,$setting);
+
+
+            }
             
             return $this->redirect($this->generateUrl('admin_ad_setting')); 
         }
@@ -63,7 +79,7 @@ class AdSettingController extends BaseController
     {
 
         
-        $setting = $this->getAdSettingService()->getSetting($id);
+       $setting = $this->getAdSettingService()->getSetting($id);
 
        if(empty($setting)){
 
