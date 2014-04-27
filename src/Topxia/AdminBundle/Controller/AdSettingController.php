@@ -16,21 +16,6 @@ class AdSettingController extends BaseController
 
         $conditions = $request->query->all();
 
-        if (isset($conditions['nickName']) and !empty($conditions['nickName']) ){
-
-            $partner = $this->getUserService()->getUserByNickname($conditions['nickName']);
-
-            if (!empty($partner)) {
-
-                $conditions['partnerId'] = $partner['id'];
-               
-             }else {
-                $conditions['partnerId']=-1;
-            }
-
-        }
-
-
         $count = $this->getAdSettingService()->searchSettingCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
@@ -49,46 +34,80 @@ class AdSettingController extends BaseController
     public function createAction(Request $request)
     {
 
-
         if('POST' == $request->getMethod()){
 
-            $offsetting = $request->request->all();
+            $setting = $request->request->all();
 
-            $user = $this->getCurrentUser();
-
-          
-            $partner = $this->getUserService()->getUserByNickname($offsetting['partnerName']);
-
-            if (empty($partner)) {
-                throw $this->createNotFoundException("用户{$offsetting['partnerName']}不存在");
-            }
-
-            $offsetting['partnerId'] = $partner['id'];
-            $offsetting['managerId'] = $user['id'];
-
-            $this->getOffSaleService()->createOffSales($offsetting);
+            $this->getAdSettingService()->createSetting($setting);
             
-            return $this->redirect($this->generateUrl('admin_sale_offsale')); 
+            return $this->redirect($this->generateUrl('admin_ad_setting')); 
+        }
+      
+        $setting = array(
+            'id'=>0,
+            'targetUrl'=>'',
+            'showUrl'=>'',
+            'showMode'=>0,
+            'showWhen'=>0,
+            'showWait'=>0,
+            'scope'=>0,
+            'name'=>'',
+        );
+
+        return $this->render('TopxiaAdminBundle:Sale:ad-setting-create-modal.html.twig',array('setting' => $setting));
+   
+
+    }
+
+    public function editAction(Request $request,$id)
+    {
+
+        
+        $setting = $this->getAdSettingService()->getSetting($id);
+
+       if(empty($setting)){
+
+            $setting = array(
+                'id'=>0,
+                'targetUrl'=>'',
+                'showUrl'=>'',
+                'showMode'=>0,
+                'showWhen'=>0,
+                'showWait'=>0,
+                'scope'=>0,
+                'name'=>'',
+            );
+
         }
 
-        $offsetting = array(
-            'id'=>0,
-            'partnerName'=>'',
-            'promoName'=>'',
-            'adCommissionType'=>'ratio',
-            'adCommission'=>0,
-            'adCommissionDay'=>0,
-            'reducePrice'=>0,
-            'promoNum'=>1,
-            'promoPrefix'=>'',
-            'prodType'=>'course',
-            'prodId'=>'',
-            'strvalidTime'=>'',
-            'reuse'=>'不可以'
-              );
+       
 
-        return $this->render('TopxiaAdminBundle:Sale:ad-setting-create-modal.html.twig',array('offsetting' => $offsetting));
+        return $this->render('TopxiaAdminBundle:Sale:ad-setting-create-modal.html.twig',array('setting' => $setting));
    
+
+    }
+
+
+
+
+    public function targetUrlCheckAction(Request $request){
+        
+        $targetUrl=  $request->request->get('targetUrl');
+
+        $adSetting = $this->getAdSettingService()->findSettingByTargetUrl($targetUrl);
+        
+        if (empty($adSetting)) {
+
+             $response = array('success' => true, 'message' => "{$targetUrl}未设置，现在可以设置");
+            return $this->createJsonResponse($response);
+         
+        }else{
+
+            $response = array('success' => false, 'message' => "{$targetUrl}已设置，请重新输入");
+            return $this->createJsonResponse($response);
+
+        }
+
 
     }
 

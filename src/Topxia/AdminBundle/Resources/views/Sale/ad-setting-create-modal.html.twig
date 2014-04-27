@@ -6,124 +6,73 @@
   设置广告页
 {% endblock %}
 {% block body %}
-<form class="form-horizontal" id="offsale-form"  action="{{ path('admin_ad_setting_create') }}" method="post">
+<form class="form-horizontal" id="ad-setting-form"  action="{{ path('admin_ad_setting_create') }}" method="post">
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="partnerName">网站页URL</label>
+      <label for="targetUrl">网站页URL</label>
     </div>
     <div class="col-md-8 controls">
-        <input class="form-control" type="text" id="partnerName" value="{{offsetting.partnerName}}" name="partnerName"  data-url="{{ path('admin_sale_offsale_parnter_check') }}"  data-fid="offsale-form"  placeholder="/xxx/yyy">
-      <div class="help-block"  id="parterName_info">请输入网站URL，以/开头，不包括域名信息</div>
+        <input class="form-control" type="text" id="targetUrl" value="{{setting.targetUrl}}" name="targetUrl"   placeholder="/xxx/yyy" data-url="{{ path('admin_ad_setting_target_url_check') }}"  data-fid="ad-setting-form" >
+      <div class="help-block"  id="targetUrl_info">请输入网站URL，以/开头，不包括域名信息</div>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="prodId">广告页URL</label>
+      <label for="showUrl">广告页URL</label>
     </div>
     <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="prodId" value="{{offsetting.prodId}}" name="prodId" data-url="{{ path('admin_sale_offsale_prod_check')}}"  data-fid="offsale-form" required/>
-      <p class="help-block" id="prod_info">请输入广告页URL，以/开头或http开头</p>
+      <input class="form-control" type="text" id="showUrl" value="{{setting.showUrl}}" name="showUrl"  required/>
+      <p class="help-block" id="showUrl_info">请输入广告页URL，以http开头</p>
     </div>
   </div>
 
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="adCommission">佣金比例</label>
+      <label for="showMode">广告形式</label>
     </div>
     <div class="col-md-8 controls">
       <div class="input-group">
-        <input class="form-control" type="text" id="adCommission" value="{{offsetting.adCommission}}" name="adCommission" required/>
-        <span class="input-group-addon">%</span>
+        <select class="form-control" name="showMode" required>
+            {{ select_options(dict('adShowModeType'), setting.showUrl, '广告形式') }}
+        </select>
       </div>
     </div>
   </div>
   
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="adCommissionDay">推广有效期</label>
+      <label for="showWhen">针对群体</label>
     </div>
     <div class="col-md-8 controls">
       <div class="input-group">
-        <input class="form-control" type="text" id="adCommissionDay" value="{{offsetting.adCommissionDay}}" name="adCommissionDay" required/>
-        <span class="input-group-addon">天</span>
+        <select class="form-control" name="scope" required>
+            {{ select_options(dict('adShowScopeType'), setting.scope, '针对群体') }}
+        </select>
       </div>
     </div>
   </div>
 
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="reducePrice">优惠额度</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div  class="input-group">
-        <input class="form-control" type="text" id="reducePrice" value="{{offsetting.reducePrice}}" name="reducePrice"  data-url="{{ path('admin_sale_offsale_reduce_check') }}"  data-fid="offsale-form"  required/>  
-        <span class="input-group-addon">元</span>
-
-      </div>
-      <div class="help-block"  id="reducePrice_info">请输入优惠额度</div>
-    </div>
-  </div>
-
-  
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="strvalidTime">优惠截止期</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div class="input-group">
-        <input class="form-control" type="text" id="strvalidTime" value="{{offsetting.strvalidTime}}" name="strvalidTime" >
-        <p class="help-block" id="prod_info">格式：yyyy-mm-dd hh:mm 空表示无限制期限</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="promoNum">生成数量</label>
-    </div>
-    <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="promoNum" value="{{offsetting.promoNum}}" name="promoNum" required/>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="promoPrefix">码前缀</label>
-    </div>
-    <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="promoPrefix" value="{{offsetting.promoPrefix}}" name="promoPrefix"></div>
-  </div>
  
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="promoName">备注描述</label>
+      <label for="name">备注描述</label>
     </div>
     <div class="col-md-8 controls">
-      <input class="form-control" type="text" id="promoName" value="{{offsetting.promoName}}" name="promoName" required/>
+      <input class="form-control" type="text" id="name" value="{{setting.name}}" name="name" required/>
     </div>
   </div>
-
-   <input type="hidden" name="prodType" value="course">   
-   <input type="hidden" name="saleType" value="offsale-course">   
-   <input type="hidden" name="adCommissionType" value="ratio">
-   <input type="hidden" name="customized" value="1">   
-   <input type="hidden" name="reduceType" value="quota"> 
-   <input type="hidden" name="reuse" value="不可以">
-   <input type="hidden" name="valid" value="有效">   
-
  
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></form>
 
-<script type="text/javascript">app.load('sale/offsale-create-modal')</script>
+<script type="text/javascript">app.load('sale/ad-setting-create-modal')</script>
 {% endblock %}
 
 {% block footer %}
 <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-<button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#offsale-form">保存</button>
+<button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#ad-setting-form">保存</button>
 {% endblock %}

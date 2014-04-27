@@ -256,6 +256,12 @@ class DataDict
             '1' =>         '顶栏',			
 		),
 
+		'adShowScopeType' => array(
+			'0' =>         '全部',
+            '1' =>         '仅游客',
+            '2' =>         '仅注册用户',	
+		),
+
 
 		'degreeType' => array(
 			'小学' =>            '小学',

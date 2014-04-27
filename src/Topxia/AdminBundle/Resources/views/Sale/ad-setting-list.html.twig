@@ -22,7 +22,7 @@
   </div>
   
   <div class="form-group">
-    <input class="form-control" type="text" placeholder="要设置广告的目标页URL" name="targetUrl" value="{{ app.request.get('targetUrl') }}"></div>
+    <input class="form-control" type="text" placeholder="网站页URL" name="targetUrl" value="{{ app.request.get('targetUrl') }}"></div>
   
   <div class="form-group">
     <input class="form-control" type="text" placeholder="广告页URL" name="showUrl" value="{{ app.request.get('showUrl') }}"></div>
@@ -30,16 +30,17 @@
    <button class="btn btn-primary">搜索</button>
 </form>
 
-<div id="offsale-table-container">
-  <table class="table table-striped table-hover" id="offsale-table">
+<div id="ad-setting-table-container">
+  <table class="table table-striped table-hover" id="ad-setting-table">
     <thead>
       <tr >
         <th width="2%">
           <input type="checkbox" data-role="batch-select"></th>
         <th width="30%">网站页URL</th>
         <th width="30%">广告页URL</th>
-        <th width="10%">广告显示形式</th>
-        <th width="8%">显示时间</th>
+        <th width="10%">广告形式</th>
+        <th width="10%">针对群体</th>
+        <th width="18%">操作</th>
          
       </tr>
     </thead>
@@ -61,7 +62,7 @@
   <div>
     <label class="checkbox-inline">
       <input type="checkbox" data-role="batch-select">全选</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="优惠码" data-url="{{ path('admin_sale_offsale_delete_batch') }}">删除</button>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="广告页" data-url="{{ path('admin_ad_setting_delete_batch') }}">删除</button>
   </div>
 </div>
 {{ web_macro.paginator(paginator) }}

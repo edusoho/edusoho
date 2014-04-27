@@ -100,11 +100,18 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     public function createSetting($setting){
 
+        $user = $this->getCurrentUser();
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
+
         $setting = ArrayToolkit::parts($setting, array('id','name','targetUrl','showUrl','showMode','showWhen','showWait','scope','status','hits','userId','createdTime','updatedTime','publishedTime'));
 
         $setting['createdTime']=time();
 
         $setting['userId'] = $this->getCurrentUser()->id;
+
+        $setting['status'] ="published";
 
         $setting = $this->getSettingDao()->addSetting(SettingSerialize::serialize($setting));
 

@@ -711,6 +711,20 @@ admin_ad_setting_create:
     pattern: /ad/setting/create
     defaults: { _controller: TopxiaAdminBundle:AdSetting:create }
 
+admin_ad_setting_edit:
+    pattern: /ad/setting/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:AdSetting:edit }
+
+admin_ad_setting_delete_batch:
+    pattern: /ad/setting/delete/batch
+    defaults: { _controller: TopxiaAdminBundle:AdSetting:batchDelete }
+    methods: [POST]
+
+admin_ad_setting_target_url_check:
+    pattern: /ad/setting/target/url/check
+    defaults: { _controller: TopxiaAdminBundle:AdSetting:targetUrlCheck }
+    methods: [POST]
+
 
 
 admin_money_card:

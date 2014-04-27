@@ -1,14 +1,34 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="offsale-table-tr-{{ setting.id }}" data-role="item">
-  <td><input value="{{setting.id}}" type="checkbox"  data-role="batch-item" ></td>
-  
+	<td>
+		<input value="{{setting.id}}" type="checkbox"  data-role="batch-item" ></td>
 
- 
-  <td class="text-muted text-sm text-break">{{ setting.targetUrl }}</td>
-  <td class="text-muted text-sm text-break">{{ setting.showUrl }}</td>
-  <td class="text-muted text-sm text-break">{{ setting.showMode }}</td>
-   <td class="text-muted text-sm text-break">{{ dict_text('adShowModeType',setting.showMode) }}</td>
+	<td >{{ setting.targetUrl }}</td>
+	<td>{{ setting.showUrl }}</td>
+	<td class="text-muted text-sm text-break">{{ dict_text('adShowModeType',setting.showMode)}}</td>
+	<td class="text-muted text-sm text-break">{{ dict_text('adShowScopeType',setting.scope) }}</td>
 
-   
+	<td >
+		<div class="btn-group">
+			 <a class="btn btn-default btn-sm"  data-toggle="modal" data-target="#modal" data-url="{{ path('admin_ad_setting_edit', {id:setting.id} )}}">修改该广告设置</a>
+
+			
+			<a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu pull-right">
+				<li>
+					<a href="" target="_blank">
+						<span class="glyphicon glyphicon-eye-open"></span>
+						取消发布
+					</a>
+				</li>
+				
+
+				<li class="divider"></li>
+			</ul>
+		</div>
+
+	</td>
 
 </tr>
