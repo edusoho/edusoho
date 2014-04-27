@@ -16,12 +16,37 @@ class AdController extends BaseController
         $targetUrl=  $request->request->get('targetUrl');
 
         $adSetting = $this->getAdSettingService()->findSettingByTargetUrl($targetUrl);
+        $adSetting['run']=false;
 
         if(empty($adSetting)){
             $adSetting['run']=false;
             $adSetting['showUrl']='/404';
         }else{
-            $adSetting['run']=true;
+
+            if($adSetting['scope']==1){//仅游客
+                
+                $currentUser = $this->getCurrentUser();
+
+                if (empty($currentUser)) {
+                    $adSetting['run']=true;
+                }
+
+
+            }else if($adSetting['scope']==2){//仅注册用户
+                $currentUser = $this->getCurrentUser();
+
+                if ($currentUser) {
+                    $adSetting['run']=true;
+                }
+
+            }else{
+
+                 $adSetting['run']=true;
+
+            }
+
+
+           
         }
 
         return $this->createJsonResponse($adSetting);
