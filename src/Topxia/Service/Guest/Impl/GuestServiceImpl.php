@@ -30,7 +30,7 @@ class GuestServiceImpl extends BaseService implements GuestService
 
     public function getGuestByUserId($userId)
     {
-        return GuestSerialize::unserialize($this->getGuestDao()->findGuestByUserId($userId));
+        return GuestSerialize::unserialize($this->getGuestDao()->getGuestByUserId($userId));
     }
 
     public function searchGuests($conditions, $sort = 'latest', $start, $limit)
@@ -111,6 +111,12 @@ class GuestServiceImpl extends BaseService implements GuestService
         $guest['createdTime']=time();
 
         $guest['createdIp'] = $this->getCurrentUser()->currentIp;
+
+        $guest['userId'] = $this->getCurrentUser()->id;
+
+        $guest['lastAccessTime']=time();
+
+        $guest['lastAccessIp'] = $this->getCurrentUser()->currentIp;
 
         $guest = $this->getGuestDao()->addGuest(GuestSerialize::serialize($guest));
 

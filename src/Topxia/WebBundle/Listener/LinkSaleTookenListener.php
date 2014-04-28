@@ -34,7 +34,7 @@ class LinkSaleTookenListener
                         
                     setcookie("mu",  $mtookeen, time()+3600*24*$linksale['adCommissionDay'],'/');
 
-                }               
+                }
             }
         }
         

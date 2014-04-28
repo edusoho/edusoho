@@ -17,10 +17,16 @@ class GuestDaoImpl extends BaseDao implements GuestDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findGuestByUserId($userId)
+    public function getGuestByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId));
+        return $this->getConnection()->fetchAssoc($sql, array($userId))? :null;
+    }
+
+    public function getGuestBymTookeen($mTookeen)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE createdmTookeen = ? or lastAccessmTookeen = ?  LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($mTookeen,$mTookeen))?:null;
     }
 
     public function findGuestsByIds(array $ids)
@@ -60,7 +66,7 @@ class GuestDaoImpl extends BaseDao implements GuestDao
 
             ->andWhere('createdmTookeen = :createdmTookeen')
             
-            ->andWhere('loginmTookeen = :loginmTookeen');
+            ->andWhere('lastAccessmTookeen = :lastAccessmTookeen');
     }
 
     public function addGuest($guest)

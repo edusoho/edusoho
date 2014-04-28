@@ -14,38 +14,86 @@ class DefaultController extends BaseController
 
         if ($request->getMethod() == 'POST') {
 
-            $guestId = isset($_COOKIE["guestId"]) ?$_COOKIE["guestId"] : null;
+            $accessHref=  $request->request->get('accessHref');
 
-            $mTookeen = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
+            $accessPathName=  $request->request->get('accessPathName');
 
-            if (empty($guestId)){//新游客
-                $currentuser=$this->getCurrentUser();
-                $userId=$currentuser['id'];
+            $accessSearch=  $request->request->get('accessSearch');
 
+            $userId=$this->getCurrentUser()->id;
+
+            $currentIp =$this->getCurrentUser()->currentIp;
+            
+            $guestId = isset($_COOKIE["guestId"]) ?$_COOKIE["guestId"] : 0;
+
+            $mTookeen = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : '';
+
+            if (empty($guestId)){//新游客 创建游客，并设置cookie
+                
                 if(empty($userId)){//未登陆
-                    $guest = $this->getGuestService()->createGuest(array());              
+
+                    $guest =  $this->getGuestService()->getGuestBymtookeen($mTookeen);
+
+                    if  (empty($guest)){
+                          $guest = $this->getGuestService()->createGuest(array(
+                                'createdmTookeen'=>$mTookeen ,
+                                'lastAccessmTookeen'=>$mTookeen ,
+                                ));
+                    }
 
                 }else{//已登陆,查之前的以游客身份登陆记录
 
                     $guest =  $this->getGuestService()->getGuestByUserId($userId);
 
                     if  (empty($guest)){
-                          $guest = $this->getGuestService()->createGuest(array());   
+                            $guest = $this->getGuestService()->createGuest(array(
+                                'createdmTookeen'=>$mTookeen ,
+                                'lastAccessmTookeen'=>$mTookeen ,
+                                ));   
                     }               
 
-                } 
+                }
 
-                setcookie("guestId", $guest['id'],'/');
+                setcookie("guestId", $guest['id'],time()+time(),'/');
                    
                   
-            }else{//老游客
+            }else{//老游客,更新老游客最后访问时间,不操作cookie
 
+                $guest =  $this->getGuestService()->getGuest($guestId);
+
+                if  (empty($guest)){
+                         $guest = $this->getGuestService()->createGuest(array(
+                            'createdmTookeen'=>$mTookeen ,
+                            'lastAccessmTookeen'=>$mTookeen ,
+                            ));
+                }else{
+
+                    $guest = $this->getGuestService()->updateGuest($guestId,array(
+                            'lastAccessTime'=>time() ,
+                            'lastAccessIp'=>$currentIp,
+                            'lastAccessmTookeen'=>$mTookeen ,
+                            ));
+
+
+                }
 
             }
 
-            
-           
+            //记录访问日志
+
+            $this->getAccessLogService()->createLog(array(
+                'guestId'=>$guest['id'],
+                'userId'=>$userId,
+                'accessHref'=>$accessHref,
+                'accessPathName'=>$accessPathName,
+                'accessSearch'=>$accessSearch,
+                'mTookeen'=>$mTookeen,
+                ));           
         }
+
+         return $this->createJsonResponse(true);
+
+
     }
 
     public function indexAction (Request $request)
@@ -395,6 +443,11 @@ class DefaultController extends BaseController
     protected function getGuestService()
     {
         return $this->getServiceKernel()->createService('Guest.GuestService');
+    }
+
+    protected function getAccessLogService()
+    {
+        return $this->getServiceKernel()->createService('Access.LogService');
     }
 
 

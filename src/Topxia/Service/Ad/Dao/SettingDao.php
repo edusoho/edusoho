@@ -16,8 +16,5 @@ interface SettingDao
 
 	public function updateSetting($id, $fields);
 
-	public function waveCounterById($id, $name, $number);
-
-	public function clearCounterById($id, $name);
 
 }

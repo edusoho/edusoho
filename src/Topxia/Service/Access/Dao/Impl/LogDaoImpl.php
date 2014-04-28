@@ -1,30 +1,23 @@
 <?php
 
-namespace Topxia\Service\Ad\Dao\Impl;
+namespace Topxia\Service\Access\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Ad\Dao\SettingDao;
+use Topxia\Service\Access\Dao\LogDao;
 use Topxia\Common\DaoException;
 use PDO;
 
-class SettingDaoImpl extends BaseDao implements SettingDao
+class LogDaoImpl extends BaseDao implements LogDao
 {
-    protected $table = 'ad_setting';
+    protected $table = 'access_log';
 
-    public function getSetting($id)
+    public function getLog($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findSettingByTargetUrl($targetUrl)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetUrl = ? LIMIT 1";
-        
-        return $this->getConnection()->fetchAssoc($sql, array($targetUrl))? : null;
-    }
-
-    public function findSettingsByIds(array $ids)
+    public function findLogsByIds(array $ids)
     {
         if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
@@ -32,10 +25,10 @@ class SettingDaoImpl extends BaseDao implements SettingDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function searchSettings($conditions, $orderBy, $start, $limit)
+    public function searchLogs($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $builder = $this->createSettingQueryBuilder($conditions)
+        $builder = $this->createLogQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
@@ -43,39 +36,39 @@ class SettingDaoImpl extends BaseDao implements SettingDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function searchSettingCount($conditions)
+    public function searchLogCount($conditions)
     {
-        $builder = $this->createSettingQueryBuilder($conditions)
+        $builder = $this->createLogQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createSettingQueryBuilder($conditions)
+    private function createLogQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);       
 
         return  $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'ad_setting')
+            ->from($this->table, 'access_log')
             ->andWhere('userId = :userId')
 
-            ->andWhere('targetUrl = :targetUrl')
+            ->andWhere('guestId = :guestId')
             
-            ->andWhere('showUrl = :showUrl');
+            ->andWhere('mTookeen = :mTookeen');
     }
 
-    public function addSetting($guest)
+    public function addLog($guest)
     {
         $affected = $this->getConnection()->insert($this->table, $guest);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert guest error.');
         }
-        return $this->getSetting($this->getConnection()->lastInsertId());
+        return $this->getLog($this->getConnection()->lastInsertId());
     }
 
-    public function updateSetting($id, $fields)
+    public function updateLog($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getSetting($id);
+        return $this->getLog($id);
     }
 
     public function waveCounterById($id, $name, $number){

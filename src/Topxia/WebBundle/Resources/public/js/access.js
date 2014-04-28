@@ -4,9 +4,11 @@ define(function(require, exports, module) {
 	require('bootstrap');
 	require('common/bootstrap-modal-hack');
 
-	targetUrl = window.location.pathname;
+	accessHref = window.location.href;
+	accessPathName = window.location.pathname;
+	accessSearch = window.location.search;
 	  		
-    $.post('/access/log', {accessUrl:accessUrl}, function(data){
+    $.post('/access/log', {accessHref:accessHref,accessPathName:accessPathName,accessSearch:accessSearch}, function(data){
     	
 	});
 

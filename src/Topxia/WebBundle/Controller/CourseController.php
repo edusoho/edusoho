@@ -145,7 +145,7 @@ class CourseController extends BaseController
         $mtookeen = $request->query->get('mc'.$id);
         $mTookeenCookie = isset($_COOKIE["mc".$id]) ?$_COOKIE["mc".$id] : null;
 
-        if (empty($mTookeenCookie)){           
+        if (empty($mTookeenCookie)){         
 
             if(!empty($mtookeen)){
 
