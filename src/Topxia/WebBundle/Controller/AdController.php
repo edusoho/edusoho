@@ -27,7 +27,9 @@ class AdController extends BaseController
 
              $showUrl = $adSetting['showUrl'];
 
-             if(substr($showUrl,0,1) != '/'){
+             if(substr($showUrl,0,1) == '/' or strtolower(substr($showUrl,0,4)) == 'http'){
+
+             }else{
 
                  $block = $this->getBlockService()->getBlockByCode($showUrl);
 
