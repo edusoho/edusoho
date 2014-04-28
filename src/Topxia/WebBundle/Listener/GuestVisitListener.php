@@ -19,23 +19,7 @@ class GuestVisitListener
     public function onGuestVisitRequest(GetResponseEvent $event)
     {
 
-        $request = $event->getRequest();
-        
-        if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST)){
-
-            $guestId = isset($_COOKIE["guestId"]) ?$_COOKIE["guestId"] : null;
-
-            if (empty($guestId)){
-                   
-                    setcookie("guestId", time(),'/');
-                  
-            }
-
-
-        }
-        
-
-       
+             
         
         
     }

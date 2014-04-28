@@ -16,25 +16,34 @@ class DefaultController extends BaseController
 
             $guestId = isset($_COOKIE["guestId"]) ?$_COOKIE["guestId"] : null;
 
-            if (empty($guestId)){
+            $mTookeen = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : null;
 
+            if (empty($guestId)){//新游客
                 $currentuser=$this->getCurrentUser();
-
                 $userId=$currentuser['id'];
 
-                if(!empty($userId)){
+                if(empty($userId)){//未登陆
+                    $guest = $this->getGuestService()->createGuest(array());              
 
-                     $guest =  $this->getGuestService()->getGuestByUserId($userId);
+                }else{//已登陆,查之前的以游客身份登陆记录
 
-                     setcookie("guestId", $guest['id'],'/');
+                    $guest =  $this->getGuestService()->getGuestByUserId($userId);
 
-                }else{
-                   
+                    if  (empty($guest)){
+                          $guest = $this->getGuestService()->createGuest(array());   
+                    }               
 
                 } 
+
+                setcookie("guestId", $guest['id'],'/');
                    
                   
+            }else{//老游客
+
+
             }
+
+            
            
         }
     }
