@@ -25,6 +25,16 @@ class AdController extends BaseController
 
              $adSetting['run']=false;
 
+             $showUrl = $adSetting['showUrl'];
+
+             if(substr($showUrl,0,1) != '/'){
+
+                 $block = $this->getBlockService()->getBlockByCode($showUrl);
+
+                 $adSetting['showUrl']=$block['content'];
+
+             }
+
             if($adSetting['scope']==1){//仅游客
                 
                 $currentUser = $this->getCurrentUser();
@@ -65,6 +75,12 @@ class AdController extends BaseController
     private function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+
+    protected function getBlockService()
+    {
+        return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
    

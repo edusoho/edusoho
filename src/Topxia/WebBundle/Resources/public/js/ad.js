@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 					zIndex: 9999
 				}).show();
 			}else if(ad.showMode==1){
-				var Dialog = require('dialog');
+				var Dialog = require('sticky');
 
 			}else if(ad.showMode==2){
 
