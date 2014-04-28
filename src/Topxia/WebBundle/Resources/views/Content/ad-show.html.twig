@@ -1,15 +1,3 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
-
-{% block title %}{{ content.title }} - {{ parent() }}{% endblock %}
-{% block keywords %}{{ content.title }} {{ setting('site.name') }}{% endblock %}
-{% block description %}{{ content.body|plain_text(100) }}{% endblock %}
-
-{% set siteNav = 'page/' ~ content.alias|default(content.id) %}
-
-{% set bodyClass = 'adpage' %}
-
-{% block body %}
-
 <div class="container">
   
 
@@ -26,4 +14,3 @@
 
 </div>
    
-{% endblock %}

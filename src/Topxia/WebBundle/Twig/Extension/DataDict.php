@@ -253,7 +253,8 @@ class DataDict
 
 		'adShowModeType' => array(
 			'0' =>         '弹窗',
-            '1' =>         '顶栏',			
+            '1' =>         '顶栏',
+            '2' =>         '底栏',			
 		),
 
 		'adShowScopeType' => array(

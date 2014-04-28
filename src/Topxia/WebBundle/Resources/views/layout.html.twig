@@ -47,10 +47,10 @@
 
   {{ render(controller('TopxiaWebBundle:Default:customerService')) }}
 
-  <header class="navbar navbar-inverse site-navbar navbar-fixed-top" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
+  <nav class="navbar navbar-inverse site-navbar " role="navigation" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
       <div class="container"> 
         <div class="row">
-          <div class="col-md-4 col-xs-8 col-sm-8">
+          <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8">
                 <div class="navbar-header ptm">
                   {% if  setting('site.logo') %}
                       <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img  class="img-responsive" src="{{ asset(setting('site.logo')) }}"></a>
@@ -60,7 +60,7 @@
                 </div>
           </div>
           
-          <div class="col-xs-4 col-sm-4">
+          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
@@ -68,7 +68,7 @@
                </button>
           </div>
 
-          <div class="col-md-8 col-xs-12 col-sm-12">      
+          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 ">      
 
                 <div class="navbar-right navbar-collapse collapse">
 
@@ -116,12 +116,12 @@
           </div>
         </div>
       </div>     
-  </header> 
+  </nav> 
 
-  <div class="slide-osf"></div>
+  <!--div class="slide-osf"></div-->
  
   <!-- container -->
-  <div id="content-container" class="container">
+  <div id="content-container" class="container ptz">
       {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
         <div class="alert alert-warning">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
