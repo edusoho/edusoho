@@ -150,12 +150,12 @@ class CourseController extends BaseController
             if(!empty($mtookeen)){
 
                 $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($mtookeen);
-
-              
+           
 
                 if(!empty( $linksale)){
 
                     setcookie("mc".$id,  $mtookeen, time()+3600*24*$linksale['adCommissionDay'],'/');
+                    setcookie("partnerId",$linksale['partnerId'], time()+3600*24*$linksale['adCommissionDay'],'/');
 
                 }
 

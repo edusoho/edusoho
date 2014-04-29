@@ -33,6 +33,7 @@ class LinkSaleTookenListener
                 if(!empty( $linksale) ){
                         
                     setcookie("mu",  $mtookeen, time()+3600*24*$linksale['adCommissionDay'],'/');
+                    setcookie("partnerId",$linksale['partnerId'], time()+3600*24*$linksale['adCommissionDay'],'/');
 
                 }
             }

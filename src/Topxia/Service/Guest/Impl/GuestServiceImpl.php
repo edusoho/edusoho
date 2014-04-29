@@ -106,7 +106,7 @@ class GuestServiceImpl extends BaseService implements GuestService
 
     public function createGuest($guest){
 
-        $guest = ArrayToolkit::parts($guest, array('id','userId','lastAccessTime','lastAccessIp','lastAccessmTookeen','createdTime','createdIp','createdmTookeen'));
+        $guest = ArrayToolkit::parts($guest, array('id','userId','lastAccessTime','lastAccessIp','lastAccessmTookeen','lastAccessPartnerId','createdTime','createdIp','createdmTookeen','createdPartnerId'));
 
         $guest['createdTime']=time();
 
@@ -127,7 +127,7 @@ class GuestServiceImpl extends BaseService implements GuestService
     public function updateGuest($id, $guest)
     {
 
-        $guest = ArrayToolkit::parts($guest, array('id','userId','lastAccessTime','lastAccessIp','lastAccessmTookeen','createdTime','createdIp','createdmTookeen'));
+         $guest = ArrayToolkit::parts($guest, array('id','userId','lastAccessTime','lastAccessIp','lastAccessmTookeen','lastAccessPartnerId','createdTime','createdIp','createdmTookeen','createdPartnerId'));
 
        return $this->getGuestDao()->updateGuest($id, GuestSerialize::serialize($guest));
     }

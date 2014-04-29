@@ -28,6 +28,24 @@ class DefaultController extends BaseController
 
             $mTookeen = isset($_COOKIE["mu"]) ?$_COOKIE["mu"] : '';
 
+            $partnerId = isset($_COOKIE["partnerId"]) ?$_COOKIE["partnerId"] : '0';
+
+            if(empty($partnerId)){
+
+                $linksale = $this->getLinkSaleService()->getLinkSaleBymTookeen($mTookeen);
+
+                if(!empty( $linksale)){
+
+                   $partnerId=$linksale['partnerId'];
+
+                }
+
+            }
+
+          
+           
+
+
             if (empty($guestId)){//新游客 创建游客，并设置cookie
                 
                 if(empty($userId)){//未登陆
@@ -38,6 +56,8 @@ class DefaultController extends BaseController
                           $guest = $this->getGuestService()->createGuest(array(
                                 'createdmTookeen'=>$mTookeen ,
                                 'lastAccessmTookeen'=>$mTookeen ,
+                                'createdPartnerId'=>$partnerId ,
+                                'lastAccessPartnerId'=>$partnerId ,
                                 ));
                     }
 
@@ -49,6 +69,8 @@ class DefaultController extends BaseController
                             $guest = $this->getGuestService()->createGuest(array(
                                 'createdmTookeen'=>$mTookeen ,
                                 'lastAccessmTookeen'=>$mTookeen ,
+                                'createdPartnerId'=>$partnerId ,
+                                'lastAccessPartnerId'=>$partnerId ,
                                 ));   
                     }               
 
@@ -65,6 +87,8 @@ class DefaultController extends BaseController
                          $guest = $this->getGuestService()->createGuest(array(
                             'createdmTookeen'=>$mTookeen ,
                             'lastAccessmTookeen'=>$mTookeen ,
+                            'createdPartnerId'=>$partnerId ,
+                            'lastAccessPartnerId'=>$partnerId ,
                             ));
                 }else{
 
@@ -72,6 +96,7 @@ class DefaultController extends BaseController
                             'lastAccessTime'=>time() ,
                             'lastAccessIp'=>$currentIp,
                             'lastAccessmTookeen'=>$mTookeen ,
+                            'lastAccessPartnerId'=>$partnerId ,
                             ));
 
 
@@ -88,6 +113,7 @@ class DefaultController extends BaseController
                 'accessPathName'=>$accessPathName,
                 'accessSearch'=>$accessSearch,
                 'mTookeen'=>$mTookeen,
+                'partnerId'=>$partnerId ,
                 ));           
         }
 

@@ -95,7 +95,7 @@ class LogServiceImpl extends BaseService implements LogService
 
     public function createLog($log){
 
-       $log = ArrayToolkit::parts($log, array('id','guestId','userId','prodType','prodName','prodId','accessHref','accessPathName','accessSearch','createdTime','createdIp','mTookeen','partnerId','partnerName'));
+       $log = ArrayToolkit::parts($log, array('id','guestId','userId','prodType','prodName','prodId','accessHref','accessPathName','accessSearch','createdTime','createdIp','mTookeen','partnerId'));
 
         $log['createdTime']=time();
 
@@ -112,7 +112,7 @@ class LogServiceImpl extends BaseService implements LogService
     public function updateLog($id, $log)
     {
 
-        $log = ArrayToolkit::parts($log, array('id','guestId','userId','prodType','prodName','prodId','accessHref','accessPathName','accessSearch','createdTime','createdIp','mTookeen','partnerId','partnerName'));
+        $log = ArrayToolkit::parts($log, array('id','guestId','userId','prodType','prodName','prodId','accessHref','accessPathName','accessSearch','createdTime','createdIp','mTookeen','partnerId'));
 
 
         return $this->getLogDao()->updateLog($id, LogSerialize::serialize($log));
