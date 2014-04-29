@@ -380,6 +380,16 @@
 	display:inline !important;
 }
 
+.adToolBar {
+	width: 100%;
+	background: rgba(151, 51, 51, 0.9) !important;
+	filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#E5333333', endColorstr='#E5333333');
+}
+
+.ui-dialog {
+    background-color: rgba(151, 51, 51, 0.9) !important;
+}
+
 
 
 
