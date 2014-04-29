@@ -695,6 +695,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items)
     {
+
         $testpaper = $this->getTestpaper($testpaperId);
         if (empty($testpaperId)) {
             throw $this->createServiceException();
@@ -712,6 +713,20 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $types = array();
         $totalScore = 0;
         $seq = 1;
+
+        $items = ArrayToolkit::index($items, 'questionId');
+
+        foreach ($items as $questionId => $item) {
+            if ($questions[$questionId]['type'] == 'material' ) {
+                $items[$questionId]['score'] = 0;
+            }
+        }
+        foreach ($items as $questionId => $item) {
+            if ($questions[$questionId]['parentId'] >0 ) {
+                $items[$questions[$questionId]['parentId']]['score'] += $item['score'];
+            }
+        }
+
 
         foreach ($items as $item) {
             $question = $questions[$item['questionId']];
@@ -735,6 +750,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
             } else {
+
                 $existItem = $existItems[$item['questionId']];
 
                 if ($item['seq'] != $existItem['seq'] or $item['score'] != $existItem['score']) {
