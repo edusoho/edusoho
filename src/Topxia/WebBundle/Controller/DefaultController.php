@@ -16,7 +16,6 @@ class DefaultController extends BaseController
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
-
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
