@@ -16,6 +16,14 @@
     </div>
 
     <div class="form-group">
+      <label for="database-port-field" class="col-sm-4 control-label">数据库端口号</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="database-port-field" name="database_port" value="{{ post.database_port|default('3306') }}">
+        <div class="help-block">数据库端口号，默认为3306</div>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="database-user-field" class="col-sm-4 control-label">数据库用户名</label>
       <div class="controls col-sm-5">
         <input type="text" id="database-user-field" name="database_user" class="form-control" value="{{ post.database_user|default('root') }}">

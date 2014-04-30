@@ -236,6 +236,9 @@ class SettingController extends BaseController
         $payment = array_merge($default, $payment);
         if ($request->getMethod() == 'POST') {
             $payment = $request->request->all();
+            $payment['alipay_key'] = trim($payment['alipay_key']);
+            $payment['alipay_secret'] = trim($payment['alipay_secret']);
+            
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
