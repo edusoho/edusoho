@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 
@@ -136,6 +137,11 @@ class CourseMaterialController extends BaseController
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {
             $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
         }
 
         return $response;

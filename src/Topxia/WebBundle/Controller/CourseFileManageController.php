@@ -3,11 +3,11 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-
 
 class CourseFileManageController extends BaseController
 {
@@ -50,6 +50,7 @@ class CourseFileManageController extends BaseController
 
     public function showAction(Request $request, $id, $fileId)
     {
+
         $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
@@ -159,6 +160,11 @@ class CourseFileManageController extends BaseController
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {
             $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
         }
 
         return $response;
