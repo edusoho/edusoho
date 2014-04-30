@@ -358,9 +358,14 @@ class CourseController extends BaseController
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
+        $course = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程不存在，或已删除。");
+        }
+
         if (!$this->getCourseService()->canTakeCourse($id)) {
-            return $this->createMessageResponse('info', '您还不是该课程的学员，请先购买加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        } 
+            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+        }
 
         try{
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
