@@ -614,7 +614,7 @@ body {
 
 .thread {
 	margin-bottom: 50px;
-
+	overflow-x: scroll;
 }
 
 .thread-header {
