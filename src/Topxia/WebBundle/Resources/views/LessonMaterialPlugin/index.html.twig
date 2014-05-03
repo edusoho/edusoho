@@ -9,6 +9,10 @@
 	  此课时无简介。
 	{% endif %}
 
+  {% if lesson.type in ['video', 'audio'] and setting('course.student_download_media') %}
+    <a href="{{ path('course_lesson_media_download', {courseId:lesson.courseId, lessonId:lesson.id}) }}">下载课时音视频</a>
+  {% endif %}
+
 </div>
 
 <h5>课时资料</h5>

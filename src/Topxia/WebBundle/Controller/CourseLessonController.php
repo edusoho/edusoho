@@ -119,6 +119,21 @@ class CourseLessonController extends BaseController
         return $this->fileAction($request, $lesson['mediaId']);
     }
 
+    public function mediaDownloadAction(Request $request, $courseId, $lessonId)
+    {
+        if (!$this->setting('course.student_download_media')) {
+            return $this->createMessageResponse('未开启课时音视频下载。');
+        }
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        return $this->fileAction($request, $lesson['mediaId'], true);
+    }
+
     public function fileAction(Request $request, $fileId, $isDownload = false)
     {
         $file = $this->getUploadFileService()->getFile($fileId);

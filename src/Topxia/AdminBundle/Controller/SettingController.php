@@ -453,6 +453,7 @@ class SettingController extends BaseController
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'student_download_media' => '0',
         );
 
         $courseSetting = array_merge($default, $courseSetting);
