@@ -276,6 +276,10 @@ class WebExtension extends \Twig_Extension
         $url = ltrim($url, ' /');
         $url = $assets->getUrl($url);
 
+        if ($absolute) {
+            $url = $request->getSchemeAndHttpHost() . $url;
+        }
+
         return $url;
     }
 

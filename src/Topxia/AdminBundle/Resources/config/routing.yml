@@ -359,6 +359,16 @@ admin_setting_storage:
     pattern:  /setting/storage
     defaults: { _controller: TopxiaAdminBundle:Setting:storage }
 
+admin_setting_cloud_video_watermark_upload:
+    pattern: /setting/cloud/video_watermark/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:cloudVideoWatermarkUpload }
+    methods: [POST]
+
+admin_setting_cloud_video_watermark_remove:
+    pattern: /setting/cloud/video_watermark/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:cloudVideoWatermarkRemove }
+    methods: [POST]
+
 admin_setting_refund:
     pattern:  /setting/refund
     defaults: { _controller: TopxiaAdminBundle:Setting:refund }

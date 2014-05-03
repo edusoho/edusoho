@@ -309,6 +309,10 @@ class SettingController extends BaseController
             'cloud_secret_key' => '',
             'cloud_bucket' => '',
             'cloud_api_server' => '',
+            'video_watermark' => 0,
+            'video_watermark_image' => '',
+            'video_watermark_position' => 'topright',
+            'video_fingerprint' => 0,
         );
 
         $storageSetting = array_merge($default, $storageSetting);
@@ -322,6 +326,32 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
             'storageSetting'=>$storageSetting
         ));
+    }
+
+    public function cloudVideoWatermarkUploadAction(Request $request)
+    {
+        $file = $request->files->get('watermark');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'watermark_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+        $path = "system/{$filename}";
+
+        $response = array(
+            'path' => $path,
+            'url' =>  $this->get('topxia.twig.web_extension')->getFileUrl($path),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function cloudVideoWatermarkRemoveAction(Request $request)
+    {
+        return $this->createJsonResponse(true);
     }
 
     public function customerServiceAction(Request $request)

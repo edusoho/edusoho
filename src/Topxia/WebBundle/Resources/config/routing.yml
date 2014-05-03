@@ -1020,6 +1020,10 @@ cloud_oldkeys:
     pattern: /cloud/oldkeys
     defaults: {_controller: TopxiaWebBundle:Cloud:oldkeys }
 
+cloud_video_fingerprint:
+    pattern: /cloud/video_fingerprint
+    defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
+
 systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
