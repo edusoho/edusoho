@@ -70,6 +70,8 @@ class CourseLessonController extends BaseController
                     $factory = new CloudClientFactory();
                     $client = $factory->createClient();
 
+                    $json['mediaConvertStatus'] = $file['convertStatus'];
+
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         $json['mediaHLSUri'] = $url['url'];
