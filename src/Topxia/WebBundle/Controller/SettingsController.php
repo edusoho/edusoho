@@ -171,7 +171,7 @@ class SettingsController extends BaseController
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = 'tmp/' . $filename;
 
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
             'pictureUrl' => $pictureUrl,
