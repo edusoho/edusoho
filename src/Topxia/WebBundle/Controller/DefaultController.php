@@ -50,29 +50,34 @@ class DefaultController extends BaseController
                 
                 if(empty($userId)){//未登陆
 
-                    $guest =  $this->getGuestService()->getGuestBymtookeen($mTookeen);
 
-                    if  (empty($guest)){
-                          $guest = $this->getGuestService()->createGuest(array(
-                                'createdmTookeen'=>$mTookeen ,
-                                'lastAccessmTookeen'=>$mTookeen ,
-                                'createdPartnerId'=>$partnerId ,
-                                'lastAccessPartnerId'=>$partnerId ,
-                                ));
-                    }
+                        $guest = $this->getGuestService()->createGuest(array(
+                            'createdmTookeen'=>$mTookeen ,
+                            'lastAccessmTookeen'=>$mTookeen ,
+                            'createdPartnerId'=>$partnerId ,
+                            'lastAccessPartnerId'=>$partnerId ,
+                        ));
 
                 }else{//已登陆,查之前的以游客身份登陆记录
 
                     $guest =  $this->getGuestService()->getGuestByUserId($userId);
 
-                    if  (empty($guest)){
+                    if(empty($guest)){
                             $guest = $this->getGuestService()->createGuest(array(
                                 'createdmTookeen'=>$mTookeen ,
                                 'lastAccessmTookeen'=>$mTookeen ,
                                 'createdPartnerId'=>$partnerId ,
                                 'lastAccessPartnerId'=>$partnerId ,
                                 ));   
-                    }               
+                    } else{
+
+                         $guest = $this->getGuestService()->updateGuest($guest['id'],array(
+                            'lastAccessTime'=>time() ,
+                            'lastAccessIp'=>$currentIp,
+                            'lastAccessmTookeen'=>$mTookeen ,
+                            'lastAccessPartnerId'=>$partnerId ,
+                            ));
+                    }              
 
                 }
 
