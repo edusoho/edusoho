@@ -1,0 +1,55 @@
+{% extends 'TopxiaAdminBundle:Analysis:layout.html.twig' %}
+
+{% block title %}注册用户统计 - {{ parent() }}{% endblock %}
+
+{% set menu = 'userState' %}
+
+
+
+{% block main %}
+	<div class="page-header">
+   
+    <h1>注册用户统计</h1>
+  </div>
+
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+   
+  </form>
+
+  <table class="table table-striped table-hover" id="activity-table">
+    <thead>
+    <tr>
+      <th>日期</th>
+      <th>注册用户</th>
+      <th>验证用户</th>
+      <th>日注册用户Pv</th>
+      <th>日注册用户</th>
+      <th>日活跃用户</th>
+      <th>过去一周活跃用户</th>
+      <th>过去一月活跃用户</th>
+      <th>过去一月流失用户</th>
+      <th>过去两月流失用户</th>
+      <th>过去三月流失用户</th>
+      <th>过去六月流失用户</th>
+      <th>30天前注册后未登陆</th>
+      <th>30天前注册数</th>
+      <th>60天前注册后未登陆</th>
+      <th>60天前注册数</th>
+      <th>90天前注册后未登陆</th>
+      <th>90天前注册数</th>
+      <th>120天前注册后未登陆</th>
+      <th>120天前注册数</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for userState in userStates %}
+      
+        {% include 'TopxiaAdminBundle:Analysis:user-state-tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

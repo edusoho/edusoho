@@ -1,0 +1,23 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'analysis' %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ path('admin_analysis_user') }}" class="list-group-item {% if menu == 'userState' %}active{% endif %}">注册用户统计</a>
+
+        <a href="{{ url('admin_analysis_guest') }}" class="list-group-item {% if menu == 'guestState' %}active{% endif %}">游客访问统计</a>
+
+        <a href="{{ url('admin_analysis_partner') }}" class="list-group-item {% if menu == 'partnerState' %}active{% endif %}">渠道贡献统计</a>
+
+         <a href="{{ url('admin_analysis_business') }}" class="list-group-item {% if menu == 'businessState' %}active{% endif %}">目标数据统计</a>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

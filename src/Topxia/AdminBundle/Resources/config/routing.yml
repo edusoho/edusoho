@@ -894,8 +894,20 @@ admin_article_delete:
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
 
-admin_analysis:
-    pattern: /analysis/rigister/user
-    defaults: { _controller: TopxiaAdminBundle:Analysis:registerUser }
+admin_analysis_user:
+    pattern: /analysis/user
+    defaults: { _controller: TopxiaAdminBundle:Analysis:userState }
+
+admin_analysis_guest:
+    pattern: /analysis/guest
+    defaults: { _controller: TopxiaAdminBundle:Analysis:guestState }
+
+admin_analysis_partner:
+    pattern: /analysis/partner
+    defaults: { _controller: TopxiaAdminBundle:Analysis:partnerState }
+
+admin_analysis_business:
+    pattern: /analysis/business
+    defaults: { _controller: TopxiaAdminBundle:Analysis:businessState }
 
 

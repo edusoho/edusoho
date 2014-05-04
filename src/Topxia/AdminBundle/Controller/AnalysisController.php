@@ -4,65 +4,59 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
+
 
 class AnalysisController extends BaseController
 {
 
-    public function registerUserAction(Request $request)
+    public function userStateAction(Request $request)
     {
-        $dateType = $request->query->get('dateType');
 
-        $map = array();
-        $students = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 10000);
-        foreach ($students as $student) {
-            if (empty($map[$student['courseId']])) {
-                $map[$student['courseId']] = 1;
-            } else {
-                $map[$student['courseId']] ++;
-            }
-        }
-        asort($map, SORT_NUMERIC);
-        $map = array_slice($map, 0, 5, true);
+        $conditions = $request->query->all();
 
-        $courses = array();
-        foreach ($map as $courseId => $studentNum) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $course['addedStudentNum'] = $studentNum;
-            $course['addedMoney'] = 0;
+        $count = $this->getUserStateService()->searchUserStateCount($conditions);
 
-            $orders = $this->getOrderService()->searchOrders(array('courseId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
-            foreach ($orders as $id => $order) {
-                $course['addedMoney'] += $order['price'];
-            }
+        $paginator = new Paginator($this->get('request'), $count, 20);
 
-            $courses[] = $course;
-        }
+        $userStates = $this->getUserStateService()->searchUserStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
-        return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'courses' => $courses
-        ));
-        
+        return $this->render('TopxiaAdminBundle:Analysis:user-state.html.twig', array(
+            'conditions' => $conditions,
+            'userStates' => $userStates ,  
+            'paginator' => $paginator
+        ));        
+    }
+
+    public function guestStateAction(Request $request)
+    {
+
+        $conditions = $request->query->all();
+
+        $count = $this->getGuestStateService()->searchGuestStateCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $guestStates = $this->getGuestStateService()->searchGuestStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        return $this->render('TopxiaAdminBundle:Analysis:guest-state.html.twig', array(
+            'conditions' => $conditions,
+            'guestStates' => $guestStates ,  
+            'paginator' => $paginator
+        ));        
     }
 
    
 
-    protected function getThreadService()
+    protected function getUserStateService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('State.UserStateService');
     }
 
-    private function getCourseService()
+    protected function getGuestStateService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('State.GuestStateService');
     }
 
-    private function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order.OrderService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
+   
 }

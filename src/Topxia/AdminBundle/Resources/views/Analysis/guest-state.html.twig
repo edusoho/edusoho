@@ -1,0 +1,55 @@
+{% extends 'TopxiaAdminBundle:Analysis:layout.html.twig' %}
+
+{% block title %}游客访问统计 - {{ parent() }}{% endblock %}
+
+{% set menu = 'guestState' %}
+
+
+
+{% block main %}
+	<div class="page-header">
+   
+    <h1>游客访问统计</h1>
+  </div>
+
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+   
+  </form>
+
+  <table class="table table-striped table-hover" id="activity-table">
+    <thead>
+    <tr>
+      <th>日期</th>
+      <th>累计游客</th>
+    
+      <th>日游客Pv</th>
+      <th>日新游客</th>
+      <th>日总游客</th>
+      <th>过去一周总游客</th>
+      <th>过去一月总游客</th>
+      <th>过去一月流失游客</th>
+      <th>过去两月流失游客</th>
+      <th>过去三月流失游客</th>
+      <th>过去六月流失游客</th>
+      <th>30天前访问后未访问</th>
+      <th>30天前访问数</th>
+      <th>60天前访问后未访问</th>
+      <th>60天前访问数</th>
+      <th>90天前访问后未访问</th>
+      <th>90天前访问数</th>
+      <th>120天前访问后未访问</th>
+      <th>120天前访问数</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for guestState in guestStates %}
+      
+        {% include 'TopxiaAdminBundle:Analysis:guest-state-tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

@@ -53,7 +53,7 @@ class DateStateCommand extends BaseCommand
 
             $gs['oneMonthActGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".$currentTime." and lastAccessTime >".($currentTime-24*3600*30));
 
-            $gs['oneMonthLoseGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".$currentTime." and lastAccessTime <".($currentTime-24*3600*30));
+            $gs['oneMonthLoseGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".($currentTime-24*3600*30));
 
             $gs['twoMonthLoseGuest'] = $this->getCount("select count(*) from guest where  lastAccessTime <=".($currentTime-24*3600*30*2));
 
@@ -90,21 +90,59 @@ class DateStateCommand extends BaseCommand
 
             $us['totalVerifyUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and emailVerified=1");
 
-            $gs['dayUserPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0 " );
+            $us['dayUserPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0 " );
 
-            $gs['dayRegUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."  " );
+            $us['dayRegUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."" );
 
-             $gs['dayActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600)."  " );
+            $us['dayActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600)."" );
 
-             $gs['oneWeekActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600*7)."  " );
+            $us['oneWeekActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600*7)."  " );
 
-             $gs['oneMonthActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600*30)."  " );
+            $us['oneMonthActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600*30)."" );
+
+
+            $us['oneMonthLoseUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30)."" );
+
+            $us['twoMonthLoseUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30*2)."" );
+
+            $us['threeMonthLoseUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30*3)."" );
+
+            $us['sixMonthLoseUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30*6)."" );
+
+            $us['oneMonthAgoLoseNewUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30)." and createdTime > ".($currentTime-24*3600*31)." and createdTime < ".($currentTime-24*3600*30)."" );
+
+            $us['oneMonthAgoRegUser'] = $this->getCount("select count(*) from user where createdTime > ".($currentTime-24*3600*31)." and createdTime < ".($currentTime-24*3600*30)."" );
+
+            $us['twoMonthAgoLoseNewUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30*2)." and createdTime > ".($currentTime-24*3600*61)." and createdTime < ".($currentTime-24*3600*30*2)."" );
+
+            $us['twoMonthAgoRegUser'] = $this->getCount("select count(*) from user where createdTime > ".($currentTime-24*3600*61)." and createdTime < ".($currentTime-24*3600*60)."" );
+
+            $us['oneMonthAgoLoseNewUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*90)." and createdTime > ".($currentTime-24*3600*91)." and createdTime < ".($currentTime-24*3600*90)."" );
+
+            $us['oneMonthAgoRegUser'] = $this->getCount("select count(*) from user where createdTime > ".($currentTime-24*3600*91)." and createdTime < ".($currentTime-24*3600*90)."" );
+
+            $us['oneMonthAgoLoseNewUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*120)." and createdTime > ".($currentTime-24*3600*121)." and createdTime < ".($currentTime-24*3600*120)."" );
+
+            $us['oneMonthAgoRegUser'] = $this->getCount("select count(*) from user where createdTime > ".($currentTime-24*3600*121)." and createdTime < ".($currentTime-24*3600*120)."" );
 
            
-
             $this->getUserStateService()->deleteByDate($currentDay);
 
             $this->getUserStateService()->createUserState($us);
+    }
+
+    protected  function computePartnerState($currentDay,$currentTime)
+    {
+            $us['date']=$currentDay;
+
+    }
+
+    protected  function getPartner($currentDay,$currentTime)
+    {
+
+        
+           
+
     }
 
 
