@@ -45,13 +45,11 @@ class DateStateCommand extends BaseCommand
 
             $gs['dayNewGuest'] = $this->getCount("select count(*) from guest where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
 
-            $gs['dayActGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".$currentTime." and lastAccessTime >".($currentTime-24*3600));
+            $gs['dayActGuest'] = $this->getCount("select count(distinct guestId)  from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
 
-            $gs['oneWeekActGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".$currentTime." and lastAccessTime >".($currentTime-24*3600*7));
+            $gs['oneWeekActGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600*7));
 
-            $gs['oneMonthActGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".$currentTime." and lastAccessTime >".($currentTime-24*3600*30));
-
-            $gs['oneMonthActGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".$currentTime." and lastAccessTime >".($currentTime-24*3600*30));
+            $gs['oneMonthActGuest'] = $this->getCount("select count(distinct guestId)  from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600*30));
 
             $gs['oneMonthLoseGuest'] = $this->getCount("select count(*) from guest where lastAccessTime <= ".($currentTime-24*3600*30));
 
@@ -94,11 +92,11 @@ class DateStateCommand extends BaseCommand
 
             $us['dayRegUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."" );
 
-            $us['dayActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600)."" );
+            $us['dayActUser'] = $this->getCount("select count(distinct userId)  from access_log where userId>0 and   createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."" );
 
-            $us['oneWeekActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600*7)."  " );
+            $us['oneWeekActUser'] = $this->getCount("select count(distinct userId) from access_log where userId>0 and createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600*7)."  " );
 
-            $us['oneMonthActUser'] = $this->getCount("select count(*) from user where loginTime <= ".$currentTime." and loginTime >".($currentTime-24*3600*30)."" );
+            $us['oneMonthActUser'] = $this->getCount("select count(distinct userId) from access_log where userId>0 and  createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600*30)."" );
 
 
             $us['oneMonthLoseUser'] = $this->getCount("select count(*) from user where  loginTime <= ".($currentTime-24*3600*30)."" );
