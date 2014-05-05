@@ -58,9 +58,39 @@
       </div>
     </div>
 
+  </fieldset>
+  <fieldset>
+    <legend>直播课程</legend>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >开启状态</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('live_course_enabled', {1:'开启', 0:'关闭'}, courseSetting.live_course_enabled) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>单堂最大学员数</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="max_student_num" name="max_student_num" class="form-control" value="{{ courseSetting.max_student_num }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>同时在线人数上线</label>
+      </div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" placeholder="{{ courseSetting.max_current_num }}人" disabled>
+        <p class="help-block">如需扩充，请联系Edusoho客服人员</p>
+      </div>
+    </div>
 
   </fieldset>
-  <br>
 
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
