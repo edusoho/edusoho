@@ -150,7 +150,9 @@ class CourseController extends BaseController
                 'status' => 'published'
             );
             $nextLiveLesson = $this->getCourseService()->searchLessons( $conditions, array('startTime', 'ASC'), 0, 1);
-            $nextLiveLesson = $nextLiveLesson[0];
+            if ($nextLiveLesson) {
+                $nextLiveLesson = $nextLiveLesson[0];
+            }
         };
 
         $previewAs = $request->query->get('previewAs');
