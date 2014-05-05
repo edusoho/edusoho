@@ -11,7 +11,7 @@ class LiveCourseController extends BaseController
     public function indexAction (Request $request, $status)
     {   
 
-        $courses = $this->getCourseService()->searchCourses(array('isLive' => '1'), $sort = 'latest', 0, 100);
+        $courses = $this->getCourseService()->searchCourses(array('isLive' => '1','status' => 'published'), $sort = 'latest', 0, 100);
 
         $courseIds = ArrayToolkit::column($courses, 'id');
 
@@ -30,6 +30,7 @@ class LiveCourseController extends BaseController
         }
 
         $conditions['courseIds'] = $courseIds;
+        $conditions['status'] ='published';
 
         $paginator = new Paginator(
             $request,
