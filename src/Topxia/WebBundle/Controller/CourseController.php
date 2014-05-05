@@ -304,7 +304,6 @@ class CourseController extends BaseController
         }
 
 		$form = $this->createCourseForm();
-
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
