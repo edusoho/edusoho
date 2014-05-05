@@ -561,6 +561,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
 	}
 
+	public function searchLessonCount($conditions)
+	{
+		return $this->getLessonDao()->searchLessonCount($conditions);
+	}
+
 	public function createLesson($lesson)
 	{
 		$lesson = ArrayToolkit::filter($lesson, array(

@@ -11,20 +11,43 @@ class LiveCourseController extends BaseController
     public function indexAction (Request $request, $status)
     {   
 
-/*        $conditions = $request->query->all();
+        $courses = $this->getCourseService()->searchCourses(array('isLive' => '1'), $sort = 'latest', 0, 100);
 
-        $count = $this->getCourseService()->searchCourseCount($conditions);
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $courses = ArrayToolkit::index($courses, 'id');
 
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        switch ($status) {
+            case 'coming':
+                $conditions['startTimeLessThan'] = time();
+                break;
+            case 'end':
+                $conditions['endTimeGreaterThan'] = time();
+                break;
+            case 'underway':
+                $conditions['underwayTime'] = time();
+                break;
+        }
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
-  
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));*/
+        $conditions['courseIds'] = $courseIds;
 
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->searchLessonCount($conditions),
+            20
+        );
+
+        $lessons = $this->getCourseService()->searchLessons($conditions, 
+            array('startTime', 'DESC'), 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
         return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
-            'status' => $status
+            'status' => $status,
+            'lessons' => $lessons,
+            'courses' => $courses,
+            'paginator' => $paginator
         ));
     }
 
@@ -33,13 +56,5 @@ class LiveCourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
 
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
 }
