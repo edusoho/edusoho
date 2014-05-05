@@ -1,36 +1,3 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
-
-{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
-
-{%- block keywords -%}
-  {% if category %}{{ category.name }}{% endif %}
-  {% for tag in tags %}{{ tag.name }}{% endfor %}
-  {{ course.title }} {{ setting('site.name') }}
-{%- endblock -%}
-{% block description %}{{ course.about|plain_text(150) }}{% endblock %}
-
-
-{% set script_controller = 'course/show' %}
-
-{% block content %}
-
-{% if member and member.locked %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="mtl alert alert-warning">
-      您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
-      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
-    </div>
-  </div>
-</div>
-{% endif %}
-
-
-{% if course.isLive == '1' %}
-
-{% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
-
-{% else %}
 <div class="es-row-wrap container-gap course-cover">
 
   <div class="row row-5-7 course-cover-heading">
@@ -67,13 +34,33 @@
           <span class="rating-num">{{ course.rating|number_format(1) }}分</span>
           <a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}人评价)</a>
         </p>
+        <p>
+          人数上限：
+          <span class="member-num">{{ course.stuNumUpperLimit }}</span>
+          <span class="member-text">人</span>
+        </p>
         {% if course.showStudentNumType == 'opened' %}
         <p>
           学员数：
           <span class="member-num">{{ course.studentNum }}</span>
           <span class="member-text">人</span>
+          {% if course.studentNum == course.stuNumUpperLimit %}
+            <span class="text-danger">名额已满</span>
+          {% endif %}
         </p>
         {% endif %}
+        <p>
+          总课时
+          【<span class="text-muted">{{ course.lessonNum }}</span>】
+        </p>
+        <p>
+          下次直播时间：
+          {% if nextLiveLesson %}
+            【<span class="text-success">{{ nextLiveLesson.startTime|date('Y-m-d H:i') }}</span>】
+          {% else %}
+            <span class="text-danger">没有要直播的课时</span>
+          {% endif %}
+        </p>
         {% if not course.expiryDay == 0 %}
         <p>
           有效期：
@@ -91,7 +78,7 @@
       </div>
       <div class="actions clearfix">
         <div class="pull-left">
-          {% if course.status != 'published' %}
+          {% if course.status != 'published' or course.studentNum == course.stuNumUpperLimit %}
             <a class="btn btn-primary disabled" href="javascript:">{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
           {% else %}
             <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
@@ -233,11 +220,3 @@
   </div>
 
 </div>
-{% endif %}
-</div>
-{% endblock %}
-
-{% block bottom %}
-<div id="course-modal" class="modal"></div>
-<div id="course-edit-modal" class="modal"></div>
-{% endblock %}
