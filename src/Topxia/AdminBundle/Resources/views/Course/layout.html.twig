@@ -8,7 +8,7 @@
       <div class="list-group">
         <a href="{{ path('admin_course') }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">课程管理</a>
 
-        <a href="{{ path('admin_live_course') }}" class="list-group-item {% if menu == 'live-course' %}active{% endif %}">直播管理</a>
+        <a href="{{ path('admin_live_course', {status: 'underway'}) }}" class="list-group-item {% if menu == 'live-course' %}active{% endif %}">直播管理</a>
 
         <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a>
 

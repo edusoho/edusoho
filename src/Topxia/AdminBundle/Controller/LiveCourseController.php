@@ -8,8 +8,9 @@ use Topxia\Common\ArrayToolkit;
 class LiveCourseController extends BaseController
 {
 
-    public function indexAction (Request $request)
-    {
+    public function indexAction (Request $request, $status)
+    {   
+
 /*        $conditions = $request->query->all();
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
@@ -22,7 +23,9 @@ class LiveCourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));*/
 
-        return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig');
+        return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
+            'status' => $status
+        ));
     }
 
     private function getCourseService()

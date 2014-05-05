@@ -2,19 +2,19 @@
 <div data-role="navigation">
   <ul class="nav nav-tabs">
     <li 
-    {% if type == 'underway'%}
+    {% if status == 'underway'%}
     class="active"
     {% endif %}
-    ><a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}">当前进行中</a></li>
+    ><a href="{{ url('admin_live_course', {status: 'underway'}) }}">当前进行中</a></li>
     <li
-    {% if type == 'coming-soon'%}
+    {% if status == 'coming'%}
     class="active"
     {% endif %}
-    ><a href=" {{ url('admin_question', {postStatus: 'all'}) }}">即将开始的</a></li>
+    ><a href=" {{ url('admin_live_course', {status: 'coming'}) }}">即将开始的</a></li>
     <li
-    {% if type == 'end'%}
+    {% if status == 'end'%}
     class="active"
     {% endif %}
-    ><a href=" {{ url('admin_question', {postStatus: 'all'}) }}">已结束的</a></li>
+    ><a href=" {{ url('admin_live_course', {status: 'end'}) }}">已结束的</a></li>
   </ul>
 </div>
