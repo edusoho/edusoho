@@ -39,7 +39,7 @@ class LiveCourseController extends BaseController
         );
 
         $lessons = $this->getCourseService()->searchLessons($conditions, 
-            array('startTime', 'DESC'), 
+            array('startTime', 'ASC'), 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
