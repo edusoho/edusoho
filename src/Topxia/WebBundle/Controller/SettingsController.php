@@ -280,17 +280,21 @@ class SettingsController extends BaseController
 
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
-                $this->sendEmail(
-                    $data['email'],
-                    "重设{$user['nickname']}在" . $this->setting('site.name', 'EDUSOHO') . "的电子邮箱",
-                    $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
-                        'user' => $user,
-                        'token' => $token,
-                    ))
-                );
+                try {
+                    $this->sendEmail(
+                        $data['email'],
+                        "重设{$user['nickname']}在" . $this->setting('site.name', 'EDUSOHO') . "的电子邮箱",
+                        $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
+                            'user' => $user,
+                            'token' => $token,
+                        ))
+                    );
+                    $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
+                } catch (\Exception $e) {
+                    $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
+                    $this->getLogService()->error('setting', 'email_change', '邮箱变更确认邮件发送失败:' . $e->getMessage());
+                }
 
-                $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
-  
                 return $this->redirect($this->generateUrl('settings_email'));
             }
         }
@@ -306,16 +310,21 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
 
-        $this->sendEmail(
-            $user['email'],
-            "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
-            $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
-                'user' => $user,
-                'token' => $token,
-            ))
-        );
+        try {
+            $this->sendEmail(
+                $user['email'],
+                "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
+                $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                ))
+            );
+            $this->setFlashMessage('success',"请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
+        } catch (\Exception $e) {
+            $this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:' . $e->getMessage());
+            $this->setFlashMessage('danger',"邮箱验证邮件发送失败，请联系管理员。");
+        }
 
-        $this->setFlashMessage('success',"请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
 
         return $this->createJsonResponse(true);
     }
