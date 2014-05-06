@@ -16,6 +16,7 @@ define(function(require, exports, module) {
 
         validator.on('formValidated', function(error, msg, $form) {
           if (error) {
+              $('#course-chapter-btn').button('reset').removeClass('disabled');
               return ;
           }
         
@@ -33,6 +34,11 @@ define(function(require, exports, module) {
               $form.parents('.modal').modal('hide');
           });
 
+        });
+
+
+        $('#course-chapter-btn').on('click', function(){
+            $(this).button('submiting').addClass('disabled');
         });
 
 	};
