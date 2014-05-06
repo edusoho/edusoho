@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                $('#profile-save-btn').button('reset').removeClass('disabled');
+                $('#profile-save-btn').button('submiting').addClass('disabled');
             }
         });
 
