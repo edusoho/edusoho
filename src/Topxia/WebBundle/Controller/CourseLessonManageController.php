@@ -125,6 +125,11 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
+	public function liveCreateAction(Request $request)
+	{
+		return $this->render('TopxiaWebBundle:CourseLessonManage:live-lesson-modal.html.twig');
+	}
+
 	// @todo refactor it.
 	public function editAction(Request $request, $courseId, $lessonId)
 	{

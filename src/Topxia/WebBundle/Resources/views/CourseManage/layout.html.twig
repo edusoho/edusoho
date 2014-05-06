@@ -31,7 +31,7 @@
               <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a>
             </div>
           </div>
-
+          {% if course.isLive == 0 %}
           <div class="list-group-panel">
             <div class="list-group-heading">题库</div>
             <div class="list-group">
@@ -41,7 +41,7 @@
               <a class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">试卷批阅</a>
             </div>
           </div>
-
+          {% endif %}
         </div>
 
       </div>

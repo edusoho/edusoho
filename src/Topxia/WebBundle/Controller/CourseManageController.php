@@ -37,7 +37,7 @@ class CourseManageController extends BaseController
 
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
-            'tags' => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
 		));
 	}
 
