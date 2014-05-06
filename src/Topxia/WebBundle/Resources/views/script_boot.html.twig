@@ -2,6 +2,7 @@
   var app = {};
   app.debug = {% if app.debug %}true{% else %}false{% endif %};
   app.version = '{{ assets_version() }}';
+  app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ app.request.getBasePath() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
