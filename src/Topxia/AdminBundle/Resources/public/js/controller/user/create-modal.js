@@ -13,6 +13,9 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
+
+                $('#user-create-btn').button('submiting').addClass('disabled');
+
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
 					Notify.success('新用户添加成功');
