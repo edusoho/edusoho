@@ -138,6 +138,8 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $nextLiveLesson = null;
+
+        $currentTime = time();
  
         if (empty($course)) {
             throw $this->createNotFoundException();
@@ -204,7 +206,8 @@ class CourseController extends BaseController
             'category' => $category,
             'previewAs' => $previewAs,
             'tags' => $tags,
-            'nextLiveLesson' => $nextLiveLesson
+            'nextLiveLesson' => $nextLiveLesson,
+            'currentTime' => $currentTime
         ));
 
     }

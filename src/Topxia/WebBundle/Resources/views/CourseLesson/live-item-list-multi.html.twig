@@ -1,0 +1,32 @@
+<div class="live-course-item-list-multi">
+{% for group in groupedItems %}
+  {% if group.type == 'chapter' %}
+    {% set chapter = group.data %}
+    <h3>章节{{ chapter.number }}: <strong>{{ chapter.title }}</strong></h3>
+  {% else  %}
+	<ul>
+	    {% for item in group.data %}
+			<li class="clearfix">
+				<div class="item-content">
+					{% if item.free %}<span class="item-free">免费</span>{% endif %}
+		      		<span class="item-seq-name">课时{{ item.number }}:</span>
+		      		<span class="item-title"><a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">{{ item.title }}</a></span>
+		      		{% if item.status == 'unpublished' %}
+					  <span class="text-warning">(未发布)</span>
+					{% endif %}
+				</div>
+				<div class="item-status">
+					{% if item.startTime > currentTime %}
+						<span>{{ item.startTime|date('m月d日 D H:i') }}</span>
+					{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+						<span>正在直播中</span>
+					{% elseif item.endTime < currentTime %}
+						<span>直播结束</span>
+					{% endif %}
+				</div>
+			</li>	
+	    {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}
+</div>
