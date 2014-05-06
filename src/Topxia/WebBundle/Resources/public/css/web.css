@@ -683,8 +683,14 @@ body {
 
 .thread-post-body {
 	/*overflow: visible;*/
+}
 
+.announcement-list li .action {
+	visibility: hidden;
+}
 
+.announcement-list li:hover .action {
+	visibility: visible;
 }
 
 .thread-post-dropdown {
