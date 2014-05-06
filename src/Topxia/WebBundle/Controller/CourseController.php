@@ -139,6 +139,8 @@ class CourseController extends BaseController
 
         $nextLiveLesson = null;
 
+        $weeks = array("日","一","二","三","四","五","六");
+
         $currentTime = time();
  
         if (empty($course)) {
@@ -207,7 +209,8 @@ class CourseController extends BaseController
             'previewAs' => $previewAs,
             'tags' => $tags,
             'nextLiveLesson' => $nextLiveLesson,
-            'currentTime' => $currentTime
+            'currentTime' => $currentTime,
+            'weeks' => $weeks
         ));
 
     }

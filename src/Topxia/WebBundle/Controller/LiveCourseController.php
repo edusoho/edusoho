@@ -2,15 +2,24 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
 class LiveCourseController extends BaseController
 {
-	public function indexAction(Request $request)
+	public function exploreAction(Request $request)
 	{
+        if (!$this->setting('course.live_course_enabled')) {
+            return $this->createMessageResponse('info', '直播频道已关闭');
+        }
 
 	}
+
+    public function listAction(Request $request)
+    {
+        
+    }
 
   	public function createAction(Request $request)
     {
@@ -24,4 +33,21 @@ class LiveCourseController extends BaseController
         	
         ));
     }
+
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
 }
