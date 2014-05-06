@@ -10,12 +10,13 @@ define(function(require, exports, module) {
             trigger: '#cloud-video-watermark-upload',
             name: 'watermark',
             action: $('#cloud-video-watermark-upload').data('url'),
+            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
                 Notify.danger('上传云视频水印失败，请重试！');
             },
             success: function(response) {
-                response = eval("(" + response + ")");
+                response = $.parseJSON(response);
                 $("#cloud-video-watermark-container").html('<img src="' + response.url + '">');
                 $form.find('[name=video_watermark_image]').val(response.path);
                 $("#cloud-video-watermark-remove").show();
