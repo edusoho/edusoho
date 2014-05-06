@@ -8,8 +8,9 @@ define(function(require, exports, module) {
             element: '#setting-email-form',
             onFormValidated: function(error){
                 if (error) {
-                    $('#email-save-btn').button('reset').removeClass('disabled');
+                    return false;
                 }
+                $('#email-save-btn').button('submiting').addClass('disabled');
             }
         });
 
@@ -30,11 +31,6 @@ define(function(require, exports, module) {
                 window.location.reload();
             });
         });
-
-        $('#email-save-btn').on('click', function(){
-            $(this).button('submiting').addClass('disabled');
-        });
-
     };
 
 });

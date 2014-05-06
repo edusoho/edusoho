@@ -25,9 +25,9 @@ define(function(require, exports, module) {
 
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
-                $('#course-lesson-btn').button('reset').removeClass('disabled');
                 return;
             }
+            $('#course-lesson-btn').button('submiting').addClass('disabled');
 
             var $panel = $('.lesson-manage-panel');
             $.post($form.attr('action'), $form.serialize(), function(html) {
@@ -195,11 +195,6 @@ define(function(require, exports, module) {
                 };
             }
             $content.val(z);
-        });
-        
-
-        $('#course-lesson-btn').on('click', function(){
-            $(this).button('submiting').addClass('disabled');
         });
         
     };

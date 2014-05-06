@@ -8,18 +8,15 @@ define(function(require, exports, module) {
             triggerType: 'change',
             onFormValidated: function(error){
                 if (error) {
-                    $('#course-create-btn').button('reset').removeClass('disabled');
+                    return false;
                 }
+                $('#course-create-btn').button('submiting').addClass('disabled');
             }
         });
 
         validator.addItem({
             element: '[name="course[title]"]',
             required: true
-        });
-
-        $('#course-create-btn').on('click', function(){
-            $(this).button('submiting').addClass('disabled');
         });
         
     };

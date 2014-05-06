@@ -7,8 +7,9 @@ define(function(require, exports, module) {
             element: '#settings-password-form',
             onFormValidated: function(error){
                 if (error) {
-                    $('#password-save-btn').button('reset').removeClass('disabled');
+                    return false;
                 }
+                $('#password-save-btn').button('submiting').addClass('disabled');
             }
         });
 
@@ -27,10 +28,6 @@ define(function(require, exports, module) {
             element: '[name="form[confirmPassword]"]',
             required: true,
             rule: 'confirmation{target:#form_newPassword}'
-        });
-
-        $('#password-save-btn').on('click', function(){
-            $(this).button('submiting').addClass('disabled');
         });
     };
 
