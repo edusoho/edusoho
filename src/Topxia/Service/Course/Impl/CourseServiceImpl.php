@@ -580,8 +580,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'media' => array(),
 			'mediaId' => 0,
 			'length' => 0,
+			'startTime' => 0,
+			'endTime' => 0,
 		));
-
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
 		}
@@ -595,7 +596,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper','live'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -618,6 +619,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['seq'] = $this->getNextCourseItemSeq($lesson['courseId']);
 		$lesson['userId'] = $this->getCurrentUser()->id;
 		$lesson['createdTime'] = time();
+		$lesson['startTime'] = strtotime($lesson['startTime']);
+		$lesson['endTime'] =strtotime($lesson['endTime']);
 
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)

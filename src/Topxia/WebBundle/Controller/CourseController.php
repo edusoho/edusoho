@@ -323,19 +323,13 @@ class CourseController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-		// $form = $this->createCourseForm();
         if ($request->getMethod() == 'POST') {
-            // $form->bind($request);
-            // if ($form->isValid()) {
-                // $course = $form->getData();
             $course = $request->request->all();
             $course = $this->getCourseService()->createCourse($course);
             return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
-            // }
         }
 
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
-			// 'form' => $form->createView(),
             'userProfile'=>$userProfile,
             'isLive'=>$isLive
 		));

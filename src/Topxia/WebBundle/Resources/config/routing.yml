@@ -421,6 +421,10 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
+live_course_manage_lesson_create:
+    pattern:  /course/{id}/manage/live/lesson/create
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:create }
+
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createTestpaper }
