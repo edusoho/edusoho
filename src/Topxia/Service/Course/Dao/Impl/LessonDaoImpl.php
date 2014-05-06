@@ -52,6 +52,13 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+    public function searchLessonCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function getLessonMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  courseId = ?";
@@ -100,9 +107,24 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('type = :type')
             ->andWhere('free = :free')
             ->andWhere('userId = :userId')
-            ->andWhere('startTime < :startTimeLessThan')
-            ->andWhere('endTime > :endTimeGreaterThan')
+            ->andWhere('startTime > :startTimeLessThan')
+            ->andWhere('endTime < :endTimeGreaterThan')
+            ->andWhere('startTime < :underwayTime')
+            ->andWhere('endTime > :underwayTime')
             ->andWhere('title LIKE :titleLike');
+
+        if (isset($conditions['courseIds'])) {
+            $courseIds = array();
+            foreach ($conditions['courseIds'] as $courseId) {
+                if (ctype_digit((string)abs($courseId))) {
+                    $courseIds[] = $courseId;
+                }
+            }
+            if ($courseIds) {
+                $courseIds = join(',', $courseIds);
+                $builder->andStaticWhere("courseId IN ($courseIds)");
+            }
+        }
 
         return $builder;
     }

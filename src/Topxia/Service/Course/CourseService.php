@@ -75,7 +75,9 @@ interface CourseService
 	
 	public function getCourseLessons($courseId);
 
-	public function searchLessons($condition, $orderBy, $start, $limit);
+	public function searchLessons($conditions, $orderBy, $start, $limit);
+
+	public function searchLessonCount($conditions);
 
 	public function createLesson($lesson);
 
