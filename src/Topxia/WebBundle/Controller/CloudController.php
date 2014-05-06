@@ -75,7 +75,9 @@ class CloudController extends BaseController
             return new Response('');
         }
 
-        return new Response($user['nickname']);
+        $host = $request->getHttpHost();
+
+        return new Response("{$host} {$user['nickname']}");
     }
 
     private function checkSign($server, $sign, $secretKey)
