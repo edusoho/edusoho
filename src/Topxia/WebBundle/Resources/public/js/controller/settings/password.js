@@ -4,7 +4,12 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var validator = new Validator({
-            element: '#settings-password-form'
+            element: '#settings-password-form',
+            onFormValidated: function(error){
+                if (error) {
+                    $('#password-save-btn').button('reset').removeClass('disabled');
+                }
+            }
         });
 
         validator.addItem({
@@ -22,6 +27,10 @@ define(function(require, exports, module) {
             element: '[name="form[confirmPassword]"]',
             required: true,
             rule: 'confirmation{target:#form_newPassword}'
+        });
+
+        $('#password-save-btn').on('click', function(){
+            $(this).button('submiting').addClass('disabled');
         });
     };
 

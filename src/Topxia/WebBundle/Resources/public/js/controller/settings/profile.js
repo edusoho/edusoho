@@ -10,7 +10,12 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: '#user-profile-form',
-            failSilently: true
+            failSilently: true,
+            onFormValidated: function(error){
+                if (error) {
+                    $('#profile-save-btn').button('reset').removeClass('disabled');
+                }
+            }
         });
 
         validator.addItem({
@@ -63,6 +68,11 @@ define(function(require, exports, module) {
                 $('.form-'+ iam +'-group').show();
             });
         }
+
+
+        $('#profile-save-btn').on('click', function(){
+            $(this).button('submiting').addClass('disabled');
+        });
 
     };
 
