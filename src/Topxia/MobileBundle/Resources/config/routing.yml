@@ -1,3 +1,116 @@
 topxia_mobile_user:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaMobileBundle:User:getUser }
+
+topxia_mobile_checkLogin:
+    pattern:  /checkLogin
+    defaults: { _controller: TopxiaMobileBundle:User:checkLogin }
+
+topxia_mobile_getCourse:
+    pattern:  /course/{course_id}
+    defaults: { _controller: TopxiaMobileBundle:Course:getCourse }
+
+topxia_mobile_getRecommendSchool:
+    pattern:  /recommendschool
+    defaults: { _controller: TopxiaMobileBundle:Global:getRecommendSchool }
+
+topxia_mobile_getcarousel:
+    pattern:  /carousel
+    defaults: { _controller: TopxiaMobileBundle:Global:getCarousel }
+
+topxia_mobile_getSchoolAbout:
+    pattern:  /about
+    defaults: { _controller: TopxiaMobileBundle:Global:getSchoolAbout }
+
+topxia_mobile_test:
+    pattern:  /test
+    defaults: { _controller: TopxiaMobileBundle:Global:test }
+
+topxia_mobile_searchSchool:
+    pattern:  /verifyschool
+    defaults: { _controller: TopxiaMobileBundle:Global:verifySchool }
+
+topxia_mobile_getCourseList:
+    pattern:  /courselist/{page}
+    defaults: { _controller: TopxiaMobileBundle:Course:getCourseList, page:'0' }
+
+topxia_mobile_getCourseLesson:
+    pattern:  /courselesson/{course_id}
+    defaults: { _controller: TopxiaMobileBundle:Course:getCourseLesson }
+
+topxia_mobile_getCourseLesson:
+    pattern:  /courselesson/{course_id}
+    defaults: { _controller: TopxiaMobileBundle:Course:getCourseLesson }
+
+topxia_mobile_lgetcomment:
+    pattern:  /commentlist/{courseId}
+    defaults: { _controller: TopxiaMobileBundle:Course:getComment }
+
+topxia_mobile_learnFinish:
+    pattern:  /lessonfinish/{courseId}/{lessonId}
+    defaults: { _controller: TopxiaMobileBundle:Course:learnFinish }
+
+topxia_mobile_learncancel:
+    pattern:  /learncancel/{courseId}/{lessonId}
+    defaults: { _controller: TopxiaMobileBundle:Course:learnCancel }
+
+topxia_mobile_learnStatus:
+    pattern:  /learnstatus/{courseId}/{lessonId}
+    defaults: { _controller: TopxiaMobileBundle:Course:learnStatus }
+
+topxia_mobile_checkToken:
+    pattern:  /checktoken
+    defaults: { _controller: TopxiaMobileBundle:User:checkToken }
+
+topxia_mobile_getfavoriteCourse:
+    pattern:  /favoritecourse
+    defaults: { _controller: TopxiaMobileBundle:Course:getfavoriteCourse }
+
+topxia_mobile_favorite:
+    pattern:  /favorite
+    defaults: { _controller: TopxiaMobileBundle:Course:favorite }
+
+topxia_mobile_buyCourse:
+    pattern:  /buycourse/{course_id}
+    defaults: { _controller: TopxiaMobileBundle:Course:buyCourse }
+
+topxia_mobile_commentcourse:
+    pattern:  /commentcourse/{id}
+    defaults: { _controller: TopxiaMobileBundle:Course:commentCourse }
+
+topxia_mobile_payCourse:
+    pattern:  /paycourse
+    defaults: { _controller: TopxiaMobileBundle:MobileOrder:payCourse }
+
+topxia_mobile_refundCourse:
+    pattern:  /refundcourse/{course_id}
+    defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
+
+topxia_mobile_unFavorite:
+    pattern:  /unfavorite
+    defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
+
+topxia_mobile_getLearnCourse:
+    pattern:  /learncourse
+    defaults: { _controller: TopxiaMobileBundle:Course:getLearnCourse }
+
+topxia_mobile_getLearnedCourse:
+    pattern:  /learnedcourse
+    defaults: { _controller: TopxiaMobileBundle:Course:getLearnedCourse }
+
+topxia_mobile_userLogin:
+    pattern:  /login
+    defaults: { _controller: TopxiaMobileBundle:User:userLogin }
+
+topxia_mobile_logout:
+    pattern:  /logout
+    defaults: { _controller: TopxiaMobileBundle:User:logout }
+
+topxia_mobile_registUser:
+    pattern:  /regist
+    defaults: { _controller: TopxiaMobileBundle:User:registUser }
+
+topxia_mobile_getNotice:
+    pattern:  /notices
+    defaults: { _controller: TopxiaMobileBundle:User:getNotice }
+
