@@ -289,16 +289,22 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-        $this->sendEmail(
-            $user['email'],
-            "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-            $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                'user' => $user,
-                'token' => $token,
-            )), 'html'
-        );
 
-        $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
+        try {
+            $this->sendEmail(
+                $user['email'],
+                "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                )), 'html'
+            );
+            $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：". $e->getMessage());
+            throw $e;
+        }
+
 
         return $this->createJsonResponse(true);
     }
@@ -312,16 +318,20 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
-        $this->sendEmail(
-            $user['email'],
-            "请激活你的帐号，完成注册",
-            $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                'user' => $user,
-                'token' => $token,
-            ))
-        );
-
-        $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
+        try {
+            $this->sendEmail(
+                $user['email'],
+                "请激活你的帐号，完成注册",
+                $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                ))
+            );
+            $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：". $e->getMessage());
+            throw $e;
+        }
 
         return $this->createJsonResponse(true);
     }
