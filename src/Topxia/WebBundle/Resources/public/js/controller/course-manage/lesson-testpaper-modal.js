@@ -31,6 +31,7 @@ define(function(require, exports, module) {
 
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
+                $('#course-testpaper-btn').button('reset').removeClass('disabled');
                 return;
             }
 
@@ -53,7 +54,9 @@ define(function(require, exports, module) {
 
         });
 
-
+        $('#course-testpaper-btn').on('click', function(){
+            $(this).button('submiting').addClass('disabled');
+        });
 
 
     };
