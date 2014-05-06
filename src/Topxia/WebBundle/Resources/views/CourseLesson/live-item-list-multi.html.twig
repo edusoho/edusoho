@@ -17,7 +17,14 @@
 				</div>
 				<div class="item-status">
 					{% if item.startTime > currentTime %}
-						<span>{{ item.startTime|date('m月d日 D H:i') }}</span>
+						<span>{{ item.startTime|date('m月d日') }} 
+							{% for key,week in weeks %}
+								{% if key == item.startTime|date('w')  %}
+									星期{{ week }}
+								{% endif %}
+						    {% endfor %}
+							{{ item.startTime|date('H：i') }}
+						</span>
 					{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
 						<span>正在直播中</span>
 					{% elseif item.endTime < currentTime %}
