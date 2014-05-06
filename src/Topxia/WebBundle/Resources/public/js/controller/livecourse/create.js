@@ -17,8 +17,6 @@ define(function(require, exports, module) {
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
 					Notify.success('保存成功');
-                    // var $tr = $(html);
-                    // $('#' + $tr.attr('id')).replaceWith($tr);
 				}).error(function(){
 					Notify.danger('操作失败');
 				});
@@ -26,32 +24,25 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '#live-title-field',
+            required: true
+        });
+
+        validator.addItem({
             element: '[name=startTime]',
-            rule: 'date'
+            required: true,
+            errormessageRequired: '请输入直播的开始时间'
         });   
 
         validator.addItem({
             element: '[name=endTime]',
-            rule: 'date'
+            required: true,
+            errormessageRequired: '请输入直播的结束时间'
         });
 
-        validator.addItem({
-            element: '#live-title-field',
-        });
-
-        $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
+        $("[name=startTime],[name=endTime]").datetimepicker({
         });  
 
-        $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
-        });
 	};
 
 });

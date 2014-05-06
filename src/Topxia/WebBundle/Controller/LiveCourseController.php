@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
+use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 
 class LiveCourseController extends BaseController
