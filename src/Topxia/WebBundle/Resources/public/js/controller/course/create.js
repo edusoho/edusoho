@@ -5,7 +5,12 @@ define(function(require, exports, module) {
     exports.run = function() {
         var validator = new Validator({
             element: '#course-create-form',
-            triggerType: 'change'
+            triggerType: 'change',
+            onFormValidated: function(error){
+                if (error) {
+                    $('#course-create-btn').button('reset').removeClass('disabled');
+                }
+            }
         });
 
         validator.addItem({
@@ -13,6 +18,10 @@ define(function(require, exports, module) {
             required: true
         });
 
+        $('#course-create-btn').on('click', function(){
+            $(this).button('submiting').addClass('disabled');
+        });
+        
     };
 
 });
