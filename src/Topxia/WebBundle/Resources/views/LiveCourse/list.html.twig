@@ -1,0 +1,81 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}
+   直播频道课程列表 {{ parent() }}
+{% endblock %}
+
+{% set script_controller = 'live-course/list' %}
+
+{% block content %}
+
+<div class="es-row-wrap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>直播频道</h1></div>
+    </div>
+    <div class="col-md-8">
+      <ol class="breadcrumb">
+        <li><a href="{{ path('live_course_explore') }}">直播频道</a></li>
+        <li class="active">直播课程列表</li>
+      </ol>
+      <form class="form-horizontal" id="course-form" method="post">
+        <div class="form-group">
+          <label class="col-md-2 control-label">分类</label>
+          <div class="col-md-6 controls">
+            <select id="live-course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+              <option data-url="{{ path('live_course_list', { date:date }) }}" value="" {% if not category.id %}selected="selected"{% endif %}>全部分类</option>
+              {% for cat in categories %}
+                <option {% if category.id == cat.id %}selected="selected"{% endif %} data-url="{{ path('live_course_list', { category:cat.id, date:date }) }}">
+                  {% if cat.depth > 1 %}
+                    {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
+                  {% endif %}
+                  {{ cat.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">时间段</label>
+          <div class="col-md-6 controls btn-group btn-group-sm">
+            <a href="{{ path('live_course_list', { category:category.id, date:'today' }) }}" class="btn btn-default {% if date == 'today' %}active{% endif %}">今天</a>        
+            <a href="{{ path('live_course_list', { category:category.id, date:'tomorrow'}) }}" class="btn btn-default {% if date == 'tomorrow' %}active{% endif %}">明天</a>
+            <a href="{{ path('live_course_list', { category:category.id, date:'nextweek'}) }}" class="btn btn-default {% if date == 'nextweek' %}active{% endif %}">下一周时间</a>
+            <a href="{{ path('live_course_list', { category:category.id, date:'lastweek'}) }}" class="btn btn-default {% if date == 'lastweek' %}active{% endif %}">上一周时间</a> 
+          </div>
+        </div>
+      </form>
+
+      {% if courses %}
+        {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+        {{ web_macro.paginator(paginator) }} 
+      {% else %}
+        <div class="empty">该分类下无课程</div>
+      {% endif %}
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default sub-articles">
+        <div class="panel-heading">
+          <h3 class="panel-title">热门直播</h3>
+        </div>
+        <div class="panel-body">
+          {% if popularCourses %}
+            <ul class="media-list">
+              {% for key,course in popularCourses %}
+                <li class="media">
+                  <span class="rank_num">{{ key+1 }}</span>
+                  <div class="media-body"><a href="{{ path('course_show', { id:course.id }) }}" title="{{ course.title }}">{{ course.title|plain_text(19) }}</a></div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="empty">暂无热门直播课程</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
