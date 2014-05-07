@@ -21,13 +21,19 @@ class BlockController extends BaseController
 
         $findedBlocks = $this->getBlockService()->searchBlocks($paginator->getOffsetCount(),
             $paginator->getPerPageCount());
+
+        $blockUserIds=ArrayToolkit::column($findedBlocks,'userId');
+        $blockUsers=$this->getUserService()->findUsersByIds($blockUserIds);
+
         
         $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
+
         $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
 
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
             'blocks'=>$findedBlocks,
             'latestUpdateUser'=>$latestUpdateUser,
+            'blockUsers'=>$blockUsers,
             'paginator' => $paginator
         ));
     }
@@ -62,11 +68,18 @@ class BlockController extends BaseController
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
 
         if ('POST' == $request->getMethod()) {
+            
             $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
+
+
+            
+
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
+
             $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
+
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'latestUpdateUser'=>$latestUpdateUser
+                'block' => $block,'blockUser'=>$latestUpdateUser,'latestUpdateUser'=>$latestUpdateUser
             ));
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
                 

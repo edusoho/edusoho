@@ -92,6 +92,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
 
         $fields['updateTime'] = time();
+        $fields['userId']= $user['id'];
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
 
         $blockHistoryInfo = array(
@@ -111,7 +112,11 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function deleteBlock($id)
     {
         $block = $this->getBlockDao()->getBlock($id);
+
+        $this->getLogService()->info('block', 'delete', "删除编辑区#{$id}", array('content' => $block['content']));
+
         $this->getBlockHistoryDao()->deleteBlockHistoryByBlockId($block['id']);
+
         return $this->getBlockDao()->deleteBlock($id);
     }
 

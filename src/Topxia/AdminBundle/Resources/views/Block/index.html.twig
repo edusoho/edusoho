@@ -21,6 +21,7 @@
   <tbody>
     {% if blocks %}
       {% for block in blocks %}
+      {% set blockUser = blockUsers[block.userId] %}
         {% include 'TopxiaAdminBundle:Block:list-tr.html.twig' %}
       {% endfor %}
   {% else %}
