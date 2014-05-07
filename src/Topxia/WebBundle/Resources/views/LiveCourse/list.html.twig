@@ -47,7 +47,7 @@
       </form>
 
       {% if lessons %}
-        {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:courses,lessons:lessons, view: 'grid'})) }}
+        {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:courses,lessons:lessons, view: 'list'})) }}
         {{ web_macro.paginator(paginator) }} 
       {% else %}
         <div class="empty">目前暂无课程</div>

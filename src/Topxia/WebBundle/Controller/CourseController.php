@@ -505,7 +505,7 @@ class CourseController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("TopxiaWebBundle:LiveCourse:courses-block-{$view}.html.twig", array(
+        return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,
             'mode' => $mode,
