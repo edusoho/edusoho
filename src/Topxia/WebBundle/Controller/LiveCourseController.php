@@ -100,7 +100,7 @@ class LiveCourseController extends BaseController
 
         $lessons = $this->getCourseService()->searchLessons($lessonCondition,  array('startTime', 'ASC'), 0,100 );
 
-        $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'studentNum',0,10 );
+        $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'hitNum',0,10 );
 
         return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(
             'date' => $date,
