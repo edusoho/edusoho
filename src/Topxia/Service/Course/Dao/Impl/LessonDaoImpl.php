@@ -107,10 +107,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('type = :type')
             ->andWhere('free = :free')
             ->andWhere('userId = :userId')
-            ->andWhere('startTime > :startTimeLessThan')
-            ->andWhere('endTime < :endTimeGreaterThan')
-            ->andWhere('startTime < :underwayTime')
-            ->andWhere('endTime > :underwayTime')
+            ->andWhere('startTime >= :startTimeGreaterThan')
+            ->andWhere('endTime < :endTimeLessThan')
+            ->andWhere('startTime <= :startTimeLessThan')
+            ->andWhere('endTime > :endTimeGreaterThan')
             ->andWhere('title LIKE :titleLike');
 
         if (isset($conditions['courseIds'])) {
