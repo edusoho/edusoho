@@ -40,17 +40,17 @@
           <div class="col-md-6 controls btn-group btn-group-sm">
             <a href="{{ path('live_course_list', { category:category.id, date:'today' }) }}" class="btn btn-default {% if date == 'today' %}active{% endif %}">今天</a>        
             <a href="{{ path('live_course_list', { category:category.id, date:'tomorrow'}) }}" class="btn btn-default {% if date == 'tomorrow' %}active{% endif %}">明天</a>
-            <a href="{{ path('live_course_list', { category:category.id, date:'nextweek'}) }}" class="btn btn-default {% if date == 'nextweek' %}active{% endif %}">下一周时间</a>
+            <a href="{{ path('live_course_list', { category:category.id, date:'nextweek'}) }}" class="btn btn-default {% if date == 'nextweek' %}active{% endif %}">近一周时间</a>
             <a href="{{ path('live_course_list', { category:category.id, date:'lastweek'}) }}" class="btn btn-default {% if date == 'lastweek' %}active{% endif %}">上一周时间</a> 
           </div>
         </div>
       </form>
 
-      {% if courses %}
-        {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+      {% if lessons %}
+        {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:courses,lessons:lessons, view: 'list'})) }}
         {{ web_macro.paginator(paginator) }} 
       {% else %}
-        <div class="empty">该分类下无课程</div>
+        <div class="empty">目前暂无课程</div>
       {% endif %}
     </div>
     <div class="col-md-4">

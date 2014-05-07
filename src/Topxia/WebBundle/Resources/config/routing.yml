@@ -122,7 +122,6 @@ course_create:
     pattern:  /course/create
     defaults: { _controller: TopxiaWebBundle:Course:create }
 
-
 course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
