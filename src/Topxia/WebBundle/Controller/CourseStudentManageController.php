@@ -104,6 +104,91 @@ class CourseStudentManageController extends BaseController
     }
 
 
+
+    public function createBatchAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryAdminCourse($id);
+
+        $currentUser = $this->getCurrentUser();
+
+        if ('POST' == $request->getMethod()) {
+
+            $data = $request->request->all();
+
+            $num =intval($data['num']);
+
+            for ($i = 1; $i <= $num; $i++) {
+
+                $nickname = $this->generateChars();
+
+                $userData['email'] = $nickname."@osforce.cn";
+                $userData['nickname'] =  $nickname;
+                $userData['password'] =  $nickname."123";
+                $userData['createdIp'] = $request->getClientIp();
+                $user = $this->getAuthService()->register($userData);
+
+                $this->get('session')->set('registed_email', $user['email']);
+
+                if(isset($formData['roles'])){
+                    $roles[] = 'ROLE_TEACHER';
+                    array_push($roles, 'ROLE_USER');
+                    $this->getUserService()->changeUserRoles($user['id'], $roles);
+                }
+
+                $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
+
+            
+                if (empty($user)) {
+                    throw $this->createNotFoundException("用户未创建成功");
+                }
+
+
+                $order = $this->getOrderService()->createOrder(array(
+                    'userId' => $user['id'],
+                    'title' => "购买课程《{$course['title']}》(管理员添加)",
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'amount' => $data['price'],
+                    'payment' => 'none',
+                    'snPrefix' => 'C',
+                ));
+
+
+                $this->getOrderService()->payOrder(array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time(),
+                ));
+
+                $info = array(
+                    'orderId' => $order['id'],
+                    'note'  => $data['remark'],
+                );
+
+                $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+                $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+
+                $this->getNotificationService()->notify($member['userId'], 'student-create', array(
+                    'courseId' => $course['id'], 
+                    'courseTitle' => $course['title'],
+                ));
+
+                $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+            }
+
+            return $this->createStudentTrResponse($course, $member);
+        }
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:create-modal-batch.html.twig',array(
+            'course'=>$course
+        ));
+    }
+
+
+
+
     public function exportAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -311,6 +396,25 @@ class CourseStudentManageController extends BaseController
         ));
     }
 
+    private function generateChars( $length = 7 ) {  
+        // 密码字符集，可任意添加你需要的字符  
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $password ="";  
+        for ( $i = 0; $i < $length; $i++ )  
+        {
+        // 这里提供两种字符获取方式  
+        // 第一种是使用 substr 截取$chars中的任意一位字符；  
+        // 第二种是取字符数组 $chars 的任意元素  
+        // $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);  
+        $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];  
+        }  
+        return $password;  
+    }
+
+
+
+
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -324,5 +428,15 @@ class CourseStudentManageController extends BaseController
     private function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 }

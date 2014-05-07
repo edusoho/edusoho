@@ -13,6 +13,8 @@
     {% if app.user.isAdmin() %}
      
       <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加学员</button>
+
+      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create_batch', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 批量添加学员</button>
       
       <button class="btn btn-info btn-sm pull-right mhs" id="student-exp-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_export', {id:course.id}) }}"><i class="glyphicon glyphicon-file"></i> 导出学员</button>
 
