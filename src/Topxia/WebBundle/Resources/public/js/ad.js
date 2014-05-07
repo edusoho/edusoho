@@ -18,12 +18,14 @@ define(function(require, exports, module) {
 				}).show();
 			}else if(ad.showMode==1){
 				$(document).ready(function(){
-					$('#ad-top').append(ad.showUrl);
-					$('#ad-top').css({zIndex:9999});
 
-					var sticky = require('sticky');
+					$('#ad-banner').append(ad.showUrl);
+					
+					$('#ad-banner').css({'position':'fixed','top':'0','left':'0','zIndex':'9999'});
 
-					sticky("#ad-top",{top:0,bottom:30},function(s){});
+					//var sticky = require('sticky');
+
+					//sticky("#ad-top",{top:0,bottom:30},function(s){});
 
 					//$('#ad').css({top:"0",left:"0",zIndex:9999});
 				});
@@ -32,12 +34,15 @@ define(function(require, exports, module) {
 			}else if(ad.showMode==2){
 
 				$(document).ready(function(){
-					$('#ad-bottom').append(ad.showUrl);
-					$('#ad-bottom').css({zIndex:9999});
 
-					var sticky = require('sticky');
+					$('#ad-banner').append(ad.showUrl);
 					
-					sticky("#ad-bottom",{top:30,bottom:0},function(s){});
+					$('#ad-banner').css({'position':'fixed','bottom':'0','left':'0','zIndex':'9999'});
+					
+
+					// var sticky = require('sticky');
+					
+					// sticky("#ad-bottom",{top:30,bottom:0},function(s){});
 				});
 				
 

@@ -45,7 +45,9 @@
 
 {% block body %}
 
-  <div id="ad-top" class="adToolBar"></div>
+  <div id="ad-banner" class="adToolBar alert-dismissable">
+     <button type="button" class="close text-color-white" data-dismiss="alert" aria-hidden="true">&times;</button>
+  </div>
 
   {{ render(controller('TopxiaWebBundle:Default:customerService')) }}
 
@@ -162,7 +164,7 @@
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
-  <div id="ad-bottom"  class="adToolBar" ></div>
+  
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
