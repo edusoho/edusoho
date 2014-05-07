@@ -71,9 +71,6 @@ class BlockController extends BaseController
             
             $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
 
-
-            
-
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
 
             $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
