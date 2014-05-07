@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\NickName;
 
 class CourseStudentManageController extends BaseController
 {
@@ -119,12 +120,21 @@ class CourseStudentManageController extends BaseController
 
             for ($i = 1; $i <= $num; $i++) {
 
-                $nickname = $this->generateChars();
 
-                $userData['email'] = $nickname."@osforce.cn";
-                $userData['nickname'] =  $nickname;
-                $userData['password'] =  $nickname."123";
+
+                $mail = $this->generateChars();
+
+                $nickname =  $this->generateNickName();
+
+                if($this->getUserService()->getUserByNickname($nickname)){
+                    continue;
+                }
+
+                $userData['email'] = $mail."@osforce.cn";
+                $userData['nickname'] = $nickname;
+                $userData['password'] =  $mail."123";
                 $userData['createdIp'] = $request->getClientIp();
+               
                 $user = $this->getAuthService()->register($userData);
 
                 $this->get('session')->set('registed_email', $user['email']);
@@ -407,6 +417,28 @@ class CourseStudentManageController extends BaseController
         // 第二种是取字符数组 $chars 的任意元素  
         // $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);  
         $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];  
+        }  
+        return $password;  
+    }
+
+    private function generateNickName( $length = 4 ) {
+        
+       // 密码字符集，可任意添加你需要的字符 
+       $nna = NickName::getNickNameArray();
+
+       $password = $nna[array_rand($nna)];
+
+       $chars = "0123456789";
+
+        $length = mt_rand(0, $length);
+
+        for ( $i = 0; $i < $length; $i++ )
+        {
+            // 这里提供两种字符获取方式  
+            // 第一种是使用 substr 截取$chars中的任意一位字符；  
+            // 第二种是取字符数组 $chars 的任意元素  
+            // $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);  
+            $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];  
         }  
         return $password;  
     }
