@@ -60,6 +60,10 @@ define(function(require, exports, module) {
 
 			$('#lesson-toolbar-primary').on('click', 'li[data-plugin]', function(e){
 				e.preventDefault();
+				if ($(this).hasClass('active')) {
+					toolbar.hidePane();
+					return ;
+				}
 				$(e.delegateTarget).find('li[data-plugin]').removeClass('active');
 
 				

@@ -200,6 +200,10 @@ course_lesson_media:
     pattern:  /course/{courseId}/lesson/{lessonId}/media
     defaults: { _controller: TopxiaWebBundle:CourseLesson:media }
 
+course_lesson_media_download:
+    pattern:  /course/{courseId}/lesson/{lessonId}/media_download
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
+
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
@@ -1077,6 +1081,10 @@ cloud_set_server:
 cloud_oldkeys:
     pattern: /cloud/oldkeys
     defaults: {_controller: TopxiaWebBundle:Cloud:oldkeys }
+
+cloud_video_fingerprint:
+    pattern: /cloud/video_fingerprint
+    defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
 
 systeminfo:
     pattern: /systeminfo

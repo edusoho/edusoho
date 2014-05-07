@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 
 class CourseLessonController extends BaseController
@@ -69,6 +70,8 @@ class CourseLessonController extends BaseController
                     $factory = new CloudClientFactory();
                     $client = $factory->createClient();
 
+                    $json['mediaConvertStatus'] = $file['convertStatus'];
+
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         $json['mediaHLSUri'] = $url['url'];
@@ -118,6 +121,21 @@ class CourseLessonController extends BaseController
         }
 
         return $this->fileAction($request, $lesson['mediaId']);
+    }
+
+    public function mediaDownloadAction(Request $request, $courseId, $lessonId)
+    {
+        if (!$this->setting('course.student_download_media')) {
+            return $this->createMessageResponse('未开启课时音视频下载。');
+        }
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        return $this->fileAction($request, $lesson['mediaId'], true);
     }
 
     public function fileAction(Request $request, $fileId, $isDownload = false)
@@ -198,6 +216,11 @@ class CourseLessonController extends BaseController
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {
             $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
         }
 
         return $response;

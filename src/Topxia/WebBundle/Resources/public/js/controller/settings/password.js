@@ -4,7 +4,13 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var validator = new Validator({
-            element: '#settings-password-form'
+            element: '#settings-password-form',
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#password-save-btn').button('submiting').addClass('disabled');
+            }
         });
 
         validator.addItem({

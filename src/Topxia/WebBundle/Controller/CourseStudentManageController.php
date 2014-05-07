@@ -58,6 +58,9 @@ class CourseStudentManageController extends BaseController
                 throw $this->createNotFoundException("用户{$data['nickname']}不存在");
             }
 
+            if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
+                throw $this->createNotFoundException("用户已经是学员，不能添加！");
+            }
 
             $order = $this->getOrderService()->createOrder(array(
                 'userId' => $user['id'],

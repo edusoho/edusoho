@@ -116,6 +116,9 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+
+                $('.submit-btn').button('submiting').addClass('disabled');
+
                 self.get('validator').set('autoSubmit',true);
             });
 

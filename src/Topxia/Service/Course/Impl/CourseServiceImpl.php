@@ -915,10 +915,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'finishedTime' => 0,
 		));
 
-		$this->getMemberDao()->updateMember($member['id'], array(
-			'learnedNum' => $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished'),
-		));
-
+		$memberFields = array();
+		$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
 	public function getUserLearnLessonStatus($userId, $courseId, $lessonId)

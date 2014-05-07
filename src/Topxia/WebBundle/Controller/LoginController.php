@@ -35,6 +35,12 @@ class LoginController extends BaseController
         }
 
         $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        
         if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
             $targetPath = $this->generateUrl('homepage', array(), true);
         }

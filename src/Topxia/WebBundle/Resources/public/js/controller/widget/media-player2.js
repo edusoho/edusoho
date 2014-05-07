@@ -62,6 +62,18 @@ define(function(require, exports, module) {
                 flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.1/HLSProviderOSMF-0.5.0.swf";
             }
 
+            if (this.element.data('watermark')) {
+                flashvars.plugin_watermake = app.httpHost + app.basePath + '/' + 'assets/swf/Watermake.swf';
+                flashvars.watermake_namespace = 'watermake';
+                flashvars.watermake_url = this.element.data('watermark');
+            }
+
+            if (this.element.data('fingerprint')) {
+                flashvars.plugin_fingerprint = app.httpHost + app.basePath + '/' + 'assets/swf/Fingerprint.swf';
+                flashvars.fingerprint_namespace = 'fingerprint',
+                flashvars.fingerprint_src = this.element.data('fingerprint');
+            }
+
             var params = {
                 wmode:'opaque',
                 allowFullScreen: true

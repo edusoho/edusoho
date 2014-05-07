@@ -185,7 +185,7 @@ function install_step4()
 function _create_database($config, $replace)
 {
 	try {
-		$pdo = new PDO("mysql:host={$config['database_host']}", "{$config['database_user']}", "{$config['database_password']}");
+		$pdo = new PDO("mysql:host={$config['database_host']};port={$config['database_port']}", "{$config['database_user']}", "{$config['database_password']}");
 
 		$pdo->exec("SET NAMES utf8");
 
@@ -215,7 +215,7 @@ function _create_config($config)
 	$config = "parameters:
     database_driver: pdo_mysql
     database_host: {$config['database_host']}
-    database_port: null
+    database_port: {$config['database_port']}
     database_name: {$config['database_name']}
     database_user: {$config['database_user']}
     database_password: '{$config['database_password']}'

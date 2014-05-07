@@ -144,8 +144,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             }
         } else {
             $builder->andWhere('target = :target')
-                ->andWhere('target = :targetPrefix')
-                ->orWhere('target LIKE :targetLike');
+                ->andWhere('target = :targetPrefix OR target LIKE :targetLike');
         }
 
         $builder->andWhere('parentId = :parentId')

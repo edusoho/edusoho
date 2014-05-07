@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\User\CurrentUser;
 
 class UploadFileController extends BaseController
 {
@@ -17,6 +18,14 @@ class UploadFileController extends BaseController
         if (empty($token)) {
             throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
         }
+
+        $user = $this->getUserService()->getUser($token['userId']);
+        if (empty($user)) {
+            throw $this->createAccessDeniedException('上传TOKEN非法。');
+        }
+
+        $currentUser = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');

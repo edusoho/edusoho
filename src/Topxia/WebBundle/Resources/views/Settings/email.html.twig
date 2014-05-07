@@ -16,43 +16,36 @@
 
 
 <div class="alert alert-warning ">
- 
- 
 
-    <div class="form-group">
-      <div class="col-md-2 control-label">
-        <label>邮箱验证</label>
-      </div>
-      <div class="col-md-8 controls">
-        <span class="control-text">
-          {{ app.user.email }}
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label>邮箱验证</label>
+    </div>
+    <div class="col-md-8 controls">
+      <span class="control-text">
+        {{ app.user.email }}
               {% if app.user.emailVerified %}
-          <span class="text-success">(已验证)</span>
-          {% else %}
-          <p class="help-block mtm">
-            该邮箱地址尚未验证，
-            <a id="send-verify-email" class="btn btn-info btn-sm" href="javascript:;" data-url="{{ path('settings_email_verify') }}">点此发送验证邮件</a>
-          </p>
-          {% endif %}
-        </span>
-      </div>
-
-
+        <span class="text-success">(已验证)</span>
+        {% else %}
+        <p class="help-block mtm">
+          该邮箱地址尚未验证，
+          <a id="send-verify-email" class="btn btn-info btn-sm" href="javascript:;" data-url="{{ path('settings_email_verify') }}">点此发送验证邮件</a>
+        </p>
+        {% endif %}
+      </span>
+    </div>
   </div>
+
 </div>
 
 
 
 <div class="alert alert-info">
  
-  
-
-
     <div class="form-group">
       <div class="col-md-2 control-label">{{ form_label(form.email, '设置新登录邮箱') }}</div>
       <div class="col-md-8 controls">{{ form_widget(form.email, {attr:{class:'form-control'}}) }}</div>
     </div>
-
 
     <div class="form-group">
       <div class="col-md-2 control-label">{{ form_label(form.password, '当前登录密码') }}</div>
@@ -62,21 +55,16 @@
       </div>
     </div>
 
-
-
     <div class="form-group">
       <div class="col-md-2 control-label"></div>
       <div class="col-md-8 controls">
         {{ form_rest(form) }}
-        <button type="submit" class="btn btn-primary">提交</button>
+        <button id="email-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary">提交</button>
       </div>
     </div>
-
   
 </div>
       
-
-        
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
