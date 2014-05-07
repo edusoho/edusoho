@@ -43,6 +43,8 @@ class UserController extends MobileController
                 $page,
                 MobileController::$defLimit
             );
+
+            $notifications = $this->changeCreatedTime($notifications);
             $result['status'] = "success";
             $result['notifications'] = $notifications;
             $result = $this->setPage($result, $page, $count);
