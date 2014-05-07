@@ -22,11 +22,16 @@ class LiveCourseController extends BaseController
         $now = time();
 
         $today = date("Y-m-d");
-        $today = strtotime("$today");
 
         $tomorrow = strtotime("$today tomorrow");
 
+        $theDayAfterTomorrow = strtotime("$today the day after tomorrow");
+
         $nextweek = strtotime("$today next week");
+
+        $lastweek = strtotime("$today last week");
+
+        $today = strtotime("$today");
 
         if (!empty($category)) {
             if (ctype_digit((string) $category)) {
@@ -68,6 +73,32 @@ class LiveCourseController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        switch ($date) {
+            case 'today':
+                $lessonCondition['startTimeGreaterThan'] = $today;
+                $lessonCondition['endTimeLessThan'] = $tomorrow;
+                break;
+            case 'tomorrow':
+                $lessonCondition['startTimeGreaterThan'] = $tomorrow;
+                $lessonCondition['endTimeLessThan'] = $theDayAfterTomorrow;
+                break;
+            case 'nextweek':
+                $lessonCondition['startTimeGreaterThan'] = $today;
+                $lessonCondition['endTimeLessThan'] = $nextweek;
+                break;
+            case 'lastweek':
+                $lessonCondition['startTimeGreaterThan'] = $lastweek;
+                $lessonCondition['endTimeLessThan'] = $today;
+                break;
+        }
+
+        $lessonCondition['courseIds'] = $courseIds;
+        $lessonCondition['status'] = 'published';
+
+        $lessons = $this->getCourseService()->searchLessons($lessonCondition,  array('startTime', 'ASC'), 0,100 );
 
         $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'studentNum',0,10 );
 
