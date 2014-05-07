@@ -40,8 +40,15 @@ define(function(require, exports, module) {
             errormessageRequired: '请输入直播的结束时间'
         });
 
-        $("[name=startTime],[name=endTime]").datetimepicker({
-        });  
+        $("[name=startTime]").datetimepicker({
+        }).on('hide', function(ev){
+            validator.query('[name=startTime]').execute();
+        });
+
+        $("[name=endTime]").datetimepicker({
+        }).on('hide', function(ev){
+            validator.query('[name=endTime]').execute();
+        });
 
 	};
 
