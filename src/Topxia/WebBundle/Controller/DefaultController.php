@@ -42,14 +42,10 @@ class DefaultController extends BaseController
 
             }
 
-          
-           
-
 
             if (empty($guestId)){//新游客 创建游客，并设置cookie
                 
                 if(empty($userId)){//未登陆
-
 
                         $guest = $this->getGuestService()->createGuest(array(
                             'createdmTookeen'=>$mTookeen ,
@@ -68,7 +64,7 @@ class DefaultController extends BaseController
                                 'lastAccessmTookeen'=>$mTookeen ,
                                 'createdPartnerId'=>$partnerId ,
                                 'lastAccessPartnerId'=>$partnerId ,
-                                ));   
+                            )); 
                     } else{
 
                          $guest = $this->getGuestService()->updateGuest($guest['id'],array(
