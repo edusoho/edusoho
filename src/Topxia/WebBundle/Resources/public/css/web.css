@@ -1204,6 +1204,17 @@ body {
 	color: #428bca;
 }
 
+.live-course-grid .live-course-lesson .live-time {
+	color: #428bca;
+	float: left;
+	text-align: left;
+}
+
+.live-course-grid .live-course-lesson .total-lessons {
+	float: right;
+	text-align: right;
+}
+
 .rank_num {
 	display: inline-block;
 	background-color: #66bc4e;

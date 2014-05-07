@@ -19,7 +19,6 @@ class LiveCourseController extends BaseController
 
     public function listAction(Request $request, $category)
     {
-        $now = time();
 
         $today = date("Y-m-d");
 
@@ -87,7 +86,6 @@ class LiveCourseController extends BaseController
 
         $lessonCondition['courseIds'] = $courseIds;
         $lessonCondition['status'] = 'published';
-
 
         $paginator = new Paginator(
             $this->get('request'),
