@@ -91,6 +91,8 @@ interface CourseService
 
 	public function getNextLessonNumber($courseId);
 
+	public function LessonTimeCheck($courseId,$startTime,$endTime);
+
 	public function startLearnLesson($courseId, $lessonId);
 
 	public function finishLearnLesson($courseId, $lessonId);

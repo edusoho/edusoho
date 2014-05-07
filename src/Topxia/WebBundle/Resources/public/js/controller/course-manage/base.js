@@ -63,6 +63,22 @@ define(function(require, exports, module) {
                 maximumSelectionSize: 20
             });
 
+        var $max_student_num = $('#max_student_num').val();
+
+        var $stuNumUpperLimit = $('#stuNumUpperLimit');
+
+        $stuNumUpperLimit.on('input',function(){
+            $stuNumUpperLimitVal = $stuNumUpperLimit.val();
+
+            if(Number($stuNumUpperLimitVal) > Number($max_student_num)) {
+                $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上线,最多"+$max_student_num+"人");
+                $('#stuNumUpperLimit_help').css("color","red");
+                $('#stuNumUpperLimit_help').show();
+            }else{
+                $('#stuNumUpperLimit_help').hide();
+            }
+        });
+
         var validator = new Validator({
             element: '#course-form',
             failSilently: true,

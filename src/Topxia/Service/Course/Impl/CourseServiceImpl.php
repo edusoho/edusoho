@@ -805,6 +805,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->getLessonCountByCourseId($courseId) + 1;
 	}
 
+	public function LessonTimeCheck($courseId,$startTime,$endTime)
+	{
+		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
+		$endTime = is_numeric($endTime) ? $endTime : strtotime($endTime);
+
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime);
+
+		if ($lessons) {
+			return array('error_occupied','包含这个时间段的课时已经存在！');
+		}
+
+		$diffhour = ($endTime-$startTime)/3600;
+		if ($diffhour > 8) {
+			 return array('error_timeout','时间段不能超过8小时！');
+		}
+		return array('success','');
+	}
+
 	public function startLearnLesson($courseId, $lessonId)
 	{
 		list($course, $member) = $this->tryTakeCourse($courseId);

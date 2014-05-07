@@ -27,7 +27,7 @@
              <div class="col-md-4 controls" style="z-index:2000;">
                 <input type="text"  name="endTime" class="form-control" value="" placeholder="结束时间">
             </div>
-            <input type="hidden" data-url="{{path('create_live_lesson_check')}}">
+            <input type="hidden" id="live_lesson_time_check" data-url="{{path('create_live_lesson_time_check',{id:liveCourse.id})}}">
 		</div>
 
 		<div class="form-group">

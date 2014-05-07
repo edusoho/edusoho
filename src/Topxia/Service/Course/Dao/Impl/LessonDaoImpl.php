@@ -65,6 +65,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE (startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime});";
+        return $this->getConnection()->fetchColumn($sql, array($courseId,$startTime,$endTime));
+    }
+
     public function findLessonsByChapterId($chapterId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE chapterId = ? ORDER BY seq ASC";
