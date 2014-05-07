@@ -103,10 +103,6 @@ class LiveCourseController extends BaseController
         $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'studentNum',0,10 );
 
         return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(
-            'now' => $now,
-            'today' => $today,
-            'tomorrow' => $tomorrow,
-            'nextweek' => $nextweek,
             'date' => $date,
             'category' => $category,
             'categories' => $categories,

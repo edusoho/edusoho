@@ -19,13 +19,14 @@ class LiveCourseController extends BaseController
 
         switch ($status) {
             case 'coming':
-                $conditions['startTimeLessThan'] = time();
+                $conditions['startTimeGreaterThan'] = time();
                 break;
             case 'end':
-                $conditions['endTimeGreaterThan'] = time();
+                $conditions['endTimeLessThan'] = time();
                 break;
             case 'underway':
-                $conditions['underwayTime'] = time();
+                $conditions['startTimeLessThan'] = time();
+                $conditions['endTimeGreaterThan'] = time();
                 break;
         }
 
