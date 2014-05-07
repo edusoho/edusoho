@@ -97,9 +97,13 @@ class BlockController extends BaseController
         if ('POST' == $request->getMethod()) {
 
             $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
-            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
+
+            $blockUser = $this->getUserService()->getUser($block['userId']);
+
+
+          
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'users'=>$users
+                'block' => $block, 'blockUser'=>$blockUser
             ));
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
@@ -114,8 +118,10 @@ class BlockController extends BaseController
         
         if ('POST' == $request->getMethod()) {
             $block = $this->getBlockService()->createBlock($request->request->all());
-            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
-            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'users'=>$users));
+            
+            $blockUser = $this->getUserService()->getUser($block['userId']);
+
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'blockUser'=>$blockUser));
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 

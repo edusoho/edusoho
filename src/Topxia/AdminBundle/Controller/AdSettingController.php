@@ -78,7 +78,6 @@ class AdSettingController extends BaseController
     public function editAction(Request $request,$id)
     {
 
-        
        $setting = $this->getAdSettingService()->getSetting($id);
 
        if(empty($setting)){
@@ -94,9 +93,7 @@ class AdSettingController extends BaseController
                 'name'=>'',
             );
 
-        }
-
-       
+        }      
 
         return $this->render('TopxiaAdminBundle:Sale:ad-setting-create-modal.html.twig',array('setting' => $setting));
    
