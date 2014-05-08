@@ -17,7 +17,10 @@ class LiveCourseLessonManageController extends BaseController
             $liveLesson = $request->request->all();
             $liveLesson['type'] = 'live';
             $liveLesson['courseId'] = $liveCourse['id'];
+            $liveLesson['startTime'] = strtotime($liveLesson['startTime']);
+            $liveLesson['endTime'] = strtotime($liveLesson['endTime']);
             $liveLesson = $this->getCourseService()->createLesson($liveLesson);
+            
 			return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-list-item.html.twig', array(
 				'course' => $liveCourse,
 				'lesson' => $liveLesson,
@@ -29,7 +32,7 @@ class LiveCourseLessonManageController extends BaseController
         ));
     }
 
-    public function LessonTimeCheckAction(Request $request,$id)
+    public function lessonTimeCheckAction(Request $request,$id)
     {
         $data = $request->query->all();
         $startTime = $data['startTime'];

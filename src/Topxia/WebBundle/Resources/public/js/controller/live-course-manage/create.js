@@ -15,8 +15,9 @@ define(function(require, exports, module) {
             		return false;
             	}
 				$.post($form.attr('action'), $form.serialize(), function(html) {
-					$modal.modal('hide');
+                    $modal.modal('hide');
 					Notify.success('保存成功');
+                    window.location.reload();
 				}).error(function(){
 					Notify.danger('操作失败');
 				});
@@ -24,14 +25,14 @@ define(function(require, exports, module) {
         });
 
         Validator.addRule('romote_check',
-            function() {
+            function(options, commit) {
                 var element = $('#live_lesson_time_check');
                 var startTime = $('[name=startTime]').val();
                 var endTime = $('[name=endTime]').val();
                 if(startTime && endTime) {
                     url = element.data('url');
                     $.get(url, {startTime:startTime,endTime:endTime}, function(response) {
-                        console.log(response.message);
+                        commit(response.success, response.message);
                     }, 'json');
                 }else{
                     return true;
@@ -64,13 +65,11 @@ define(function(require, exports, module) {
             if(setStartDate) {
                 $("[name=endTime]").datetimepicker('setStartDate', setStartDate);
             }
-            console.log('startTime');
             validator.query('[name=startTime]').execute();
         });
 
         $("[name=endTime]").datetimepicker({
         }).on('hide', function(ev){
-            console.log('endTime');
             var setEndDate = $("[name=endTime]").val();
              if(setEndDate) {
                 $("[name=startTime]").datetimepicker('setEndDate', setEndDate);

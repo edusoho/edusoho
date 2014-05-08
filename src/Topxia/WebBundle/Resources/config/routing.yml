@@ -435,7 +435,7 @@ live_course_manage_lesson_create:
 
 create_live_lesson_time_check:
     pattern:  /course/{id}/manage/live/lesson/time/check
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:LessonTimeCheck }
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
 
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper

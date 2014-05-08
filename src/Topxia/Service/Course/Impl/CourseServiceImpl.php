@@ -268,7 +268,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
-
 		$fields = $this->_filterCourseFields($fields);
 
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
@@ -308,6 +307,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
+			'stuNumUpperLimit' => 0
 		));
 
 		if (!empty($fields['about'])) {
@@ -619,8 +619,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['seq'] = $this->getNextCourseItemSeq($lesson['courseId']);
 		$lesson['userId'] = $this->getCurrentUser()->id;
 		$lesson['createdTime'] = time();
-		$lesson['startTime'] = strtotime($lesson['startTime']);
-		$lesson['endTime'] =strtotime($lesson['endTime']);
 
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)
@@ -805,14 +803,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->getLessonCountByCourseId($courseId) + 1;
 	}
 
-	public function LessonTimeCheck($courseId,$startTime,$endTime)
-	{
+	public function lessonTimeCheck($courseId,$startTime,$endTime)
+	{	
+		$course = $this->getCourseDao()->getCourse($courseId);
+
+		if (empty($course)) {
+			throw $this->createServiceException('此课程不存在！');
+		}
+
 		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
 		$endTime = is_numeric($endTime) ? $endTime : strtotime($endTime);
 
-		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime);
+		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime);
 
-		if ($lessons) {
+		if ($thisLessons) {
 			return array('error_occupied','包含这个时间段的课时已经存在！');
 		}
 
@@ -820,6 +824,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if ($diffhour > 8) {
 			 return array('error_timeout','时间段不能超过8小时！');
 		}
+
+		$courseSetting = $this->getSettingService()->get('course', array());;
+		$max_student_num = $courseSetting['max_student_num'];
+
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime);
+		$courseIds = ArrayToolkit::column($lessons,'courseId');
+		$courseIds = array_unique($courseIds);
+		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
+		$stuNumUpperLimit = ArrayToolkit::column($courses,'stuNumUpperLimit');
+		$timeSlotOccupiedStuNums = array_sum($stuNumUpperLimit);
+		$leftStuNums = $max_student_num - $timeSlotOccupiedStuNums;
+
+		$thisStuNumUpperLimit = $course['stuNumUpperLimit'];
+
+		if ($thisStuNumUpperLimit > $leftStuNums) {
+			return array('error_limitout','该时间段内可参与直播的学员人数，已超出系统设定的限制,只剩下'.$leftStuNums."人，请与管理员联系！");
+		}
+
 		return array('success','');
 	}
 

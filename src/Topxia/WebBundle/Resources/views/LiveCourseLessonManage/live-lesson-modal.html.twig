@@ -48,8 +48,8 @@
   <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#live-lesson-form">保存</button>
 
   {% if liveLesson|default(null) %}
-    <script>app.load('livecourse/edit')</script>
+    <script>app.load('live-course-manage/edit')</script>
   {% else %}
-    <script>app.load('livecourse/create')</script>
+    <script>app.load('live-course-manage/create')</script>
   {% endif %}
 {% endblock %}

@@ -21,6 +21,8 @@ interface LessonDao
 
     public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime);
 
+    public function findTimeSlotOccupiedLessons($startTime,$endTime);
+
     public function findLessonsByChapterId($chapterId);
 
     public function addLesson($course);
