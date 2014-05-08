@@ -33,6 +33,8 @@ class DateStateCommand extends BaseCommand
 
         $this->computePartnerState($currentDay,$currentTime);
 
+        $this->computeBusinessState($currentDay,$currentTime);
+
     }
 
 
@@ -139,7 +141,7 @@ class DateStateCommand extends BaseCommand
 
             foreach ($partners as $partner) {
 
-                 $partnerId = $partner['partnerId'];
+                $partnerId = $partner['partnerId'];
 
                 if($partnerId == 0 ){
                     continue;
@@ -174,14 +176,76 @@ class DateStateCommand extends BaseCommand
 
             }
 
+    }
 
+
+    protected  function computeBusinessState($currentDay,$currentTime)
+    {
+            $bs['date']=$currentDay;
+
+            $prods = $this->getProds($currentTime);
+
+            foreach ($prods as $prod) {
+
+                $prodType= $prod['prodType'];
+               
+                $prodId = $prod['prodId'];                            
+
+                $bs['prodType'] = $prodType;
+               
+                $bs['prodId'] = $prodId;
+
+                $ps['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' and prodId = '".$prodId."'");
+
+                $ps['feeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount>0 and prodType='".$prodType."' and prodId = '".$prodId."'");
+
+                $ps['freeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount=0 and prodType='".$prodType."' and prodId = '".$prodId."'");
+
+                if($prodType = 'course'){
+
+                    $ps['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/course/".$prodId."' ");
+
+                    $ps['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/course/".$prodId."' ");
+
+                    $course = $this->getCourseService()->getCourse($prodId);
+
+                    $bs['prodName'] = $course['title'];
+
+                }else if ($prodType = 'activity'){
+
+                    $ps['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/openclass/".$prodId."/show' ");
+
+                    $ps['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/openclass/".$prodId."/show' ");
+
+                    $activity = $this->geActivityService()->getActivity($prodId);
+
+                    $bs['prodName'] = $activity['title'];
+
+
+                }
+
+                $this->getBusinessStateService()->deleteByDate($currentDay,$prodType,$prodId);
+
+                $this->getBusinessStateService()->createBusinessState($bs);
+
+            }
 
     }
+
+
 
     protected  function getPartners($currentTime)
     {
 
         return  $this->getRs("select distinct partnerId as partnerId from access_log where createdTime< ".$currentTime." and createdTime > ".($currentTime-24*3600));
+
+    }
+
+
+    protected  function getProds($currentTime)
+    {
+
+        return  $this->getRs("select distinct prodType as prodType, prodId as prodId  from orders where createdTime< ".$currentTime." and createdTime > ".($currentTime-24*3600));
 
     }
 
@@ -220,6 +284,16 @@ class DateStateCommand extends BaseCommand
     protected function getBusinessStateService()
     {
         return $this->getServiceKernel()->createService('State.BusinessStateService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function geActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity.ActivityService');
     }
 
     private function initServiceKernel()

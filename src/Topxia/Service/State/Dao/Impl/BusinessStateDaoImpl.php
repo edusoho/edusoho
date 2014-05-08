@@ -73,9 +73,9 @@ class BusinessStateDaoImpl extends BaseDao implements BusinessStateDao
          return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function deleteByDate($date)
+    public function deleteByDate($date,$prodType,$prodId)
     {
-         return $this->getConnection()->delete($this->table, array('date' => $date));
+         return $this->getConnection()->delete($this->table, array('date' => $date,'prodType'=>$prodType,'prodId'=>$prodId));
     }
 
     

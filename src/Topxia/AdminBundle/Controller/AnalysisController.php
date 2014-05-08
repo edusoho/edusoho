@@ -68,6 +68,25 @@ class AnalysisController extends BaseController
         ));        
     }
 
+    public function businessStateAction(Request $request)
+    {
+
+        $conditions = $request->query->all();
+
+        $count = $this->getBusinessStateService()->searchBusinessStateCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $businessStates = $this->getBusinessStateService()->searchBusinessStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+       
+        return $this->render('TopxiaAdminBundle:Analysis:business-state.html.twig', array(
+            'conditions' => $conditions,
+            'businessStates' => $businessStates, 
+            'paginator' => $paginator
+        ));        
+    }
+
    
 
     protected function getUserStateService()
@@ -83,6 +102,11 @@ class AnalysisController extends BaseController
     protected function getPartnerStateService()
     {
         return $this->getServiceKernel()->createService('State.PartnerStateService');
+    }
+
+    protected function getBusinessStateService()
+    {
+        return $this->getServiceKernel()->createService('State.BusinessStateService');
     }
 
    
