@@ -21,7 +21,7 @@ class DateStateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $currentDay = date('Y-m-d', time()-24*3600);
+        $currentDay = date('Y-m-d', time());
 
         $currentTime = strtotime($currentDay .' 23:59:59');
 
@@ -34,6 +34,12 @@ class DateStateCommand extends BaseCommand
         $this->computePartnerState($currentDay,$currentTime);
 
         $this->computeBusinessState($currentDay,$currentTime);
+
+        $this->computeBusinessStateByProdType($currentDay,$currentTime,'course');
+
+        $this->computeBusinessStateByProdType($currentDay,$currentTime,'activity');
+
+        $this->bakAccessLog($currentDay,$currentTime);
 
     }
 
@@ -195,15 +201,13 @@ class DateStateCommand extends BaseCommand
                
                 $bs['prodId'] = $prodId;
 
-                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' and prodId = ".$prodId."");
-
-             
+                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' and prodId = ".$prodId."");             
 
                 $bs['feeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount>0 and prodType='".$prodType."' and prodId =".$prodId."");
 
                 $bs['freeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount=0 and prodType='".$prodType."' and prodId = ".$prodId."");
 
-                if($prodType = 'course'){
+                if($prodType == 'course'){
 
                     $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/course/".$prodId."' ");
 
@@ -213,7 +217,7 @@ class DateStateCommand extends BaseCommand
 
                     $bs['prodName'] = $course['title'];
 
-                }else if ($prodType = 'activity'){
+                }else if ($prodType == 'activity'){
 
                     $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/openclass/".$prodId."/show' ");
 
@@ -233,6 +237,72 @@ class DateStateCommand extends BaseCommand
             }
 
     }
+
+    protected  function computeBusinessStateByProdType($currentDay,$currentTime,$prodType)
+    {
+
+                $bs['date']=$currentDay;
+
+                               
+
+                $bs['prodType'] = $prodType;
+               
+                $bs['prodId'] = 0;
+
+                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' ");           
+
+                $bs['feeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount>0 and prodType='".$prodType."' ");
+
+                $bs['freeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount=0 and prodType='".$prodType."' ");
+
+                if($prodType == 'course'){
+
+                    $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
+
+                    $bs['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
+
+                   
+                    $bs['prodName'] = "所有课程";
+
+                }else if ($prodType == 'activity'){
+
+                    $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/openclass/)([[:digit:]]+)(/show)$' ");
+
+                    $bs['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP  '^(/openclass/)([[:digit:]]+)(/show)$' ");
+
+                    $bs['prodName'] = "所有活动";
+
+
+                }
+
+                $this->getBusinessStateService()->deleteByDate($currentDay,$prodType,0);
+
+                $this->getBusinessStateService()->createBusinessState($bs);
+
+           
+
+
+    }
+
+
+     protected  function bakAccessLog($currentDay,$currentTime){
+
+
+         $connection = $this->getContainer()->get('database_connection');
+
+        
+
+         $connection->executeUpdate("insert into access_log_history (logId,guestId,userId,prodType,prodName,prodId,accessHref,accessPathName,accessSearch,createdIp,createdTime,mTookeen,partnerId) select id,guestId,userId,prodType,prodName,prodId,accessHref,accessPathName,accessSearch,createdIp,createdTime,mTookeen,partnerId from access_log b where b.createdTime < ".($currentTime-3*24*3600));
+
+
+
+
+          $connection->executeUpdate("delete from access_log  where  createdTime < ".($currentTime-3*24*3600));
+
+
+    }
+
+
 
 
 
