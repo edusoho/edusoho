@@ -91,6 +91,7 @@ class CourseController extends MobileController
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 
+        $favoriteStatus = $this->getFavoriteStatus($course_id);
         $this->result['status'] = "success";
         $this->result['courseinfo'] = 
             array(
@@ -101,13 +102,22 @@ class CourseController extends MobileController
                     "users"=>$commentUsers,
                     "member"=>$member,
                     "learnStatuses"=>$learnStatuses,
-                    "teacherUsers"=>$teacherUsers
+                    "teacherUsers"=>$teacherUsers,
+                    "favoriteStatus"=>$favoriteStatus
                 )
         );
     
         return $this->createJson($request, $this->result);
     }
     
+    /**
+    * return true/ false
+    */
+    protected function getFavoriteStatus($course_id)
+    {
+        return $this->getCourseService()->hasFavoritedCourse($course_id);
+    }
+
     public function getfavoriteCourseAction(Request $request)
     {
         $token = $this->getUserToken($request);
