@@ -21,7 +21,7 @@ class DateStateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $currentDay = date('Y-m-d', time());
+        $currentDay = date('Y-m-d', time()-24*3600);
 
         $currentTime = strtotime($currentDay .' 23:59:59');
 
