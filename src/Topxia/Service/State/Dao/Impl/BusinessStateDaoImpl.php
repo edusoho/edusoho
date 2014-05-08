@@ -49,6 +49,12 @@ class BusinessStateDaoImpl extends BaseDao implements BusinessStateDao
        
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'state')
+
+             ->andWhere('prodType = :prodType')
+
+            ->andWhere('prodId = :prodId')
+
+            ->andWhere('priceType = :priceType')
                        
             ->andWhere('date = :date');
     }

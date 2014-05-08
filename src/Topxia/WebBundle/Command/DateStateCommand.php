@@ -217,6 +217,12 @@ class DateStateCommand extends BaseCommand
 
                     $bs['prodName'] = $course['title'];
 
+                    if($course['price']>0){
+                        $bs['priceType']='fee';
+                    }else{
+                        $bs['priceType']='free';
+                    }
+
                 }else if ($prodType == 'activity'){
 
                     $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/openclass/".$prodId."/show' ");
@@ -226,6 +232,12 @@ class DateStateCommand extends BaseCommand
                     $activity = $this->geActivityService()->getActivity($prodId);
 
                     $bs['prodName'] = $activity['title'];
+
+                     if($activity['price']>0){
+                        $bs['priceType']='fee';
+                    }else{
+                        $bs['priceType']='free';
+                    }
 
 
                 }
