@@ -28,10 +28,10 @@ define(function(require, exports, module) {
             function(options, commit) {
                 var element = $('#live_lesson_time_check');
                 var startTime = $('[name=startTime]').val();
-                var endTime = $('[name=endTime]').val();
-                if(startTime && endTime) {
+                var length = $('[name=length]').val();
+                if(startTime && length) {
                     url = element.data('url');
-                    $.get(url, {startTime:startTime,endTime:endTime}, function(response) {
+                    $.get(url, {startTime:startTime,length:length}, function(response) {
                         commit(response.success, response.message);
                     }, 'json');
                 }else{
@@ -47,35 +47,35 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=startTime]',
             required: true,
-            rule:'romote_check',
+            // rule:'romote_check',
             errormessageRequired: '请输入直播的开始时间'
         });   
 
         validator.addItem({
-            element: '[name=endTime]',
+            element: '[name=length]',
             required: true,
             rule:'romote_check',
-            errormessageRequired: '请输入直播的结束时间'
+            errormessageRequired: '请输入时长'
         });
 
         $("[name=startTime]").datetimepicker({
         }).on('hide', function(ev){
 
-            var setStartDate = $("[name=startTime]").val();
-            if(setStartDate) {
-                $("[name=endTime]").datetimepicker('setStartDate', setStartDate);
-            }
+            // var setStartDate = $("[name=startTime]").val();
+            // if(setStartDate) {
+            //     $("[name=endTime]").datetimepicker('setStartDate', setStartDate);
+            // }
             validator.query('[name=startTime]').execute();
         });
 
-        $("[name=endTime]").datetimepicker({
-        }).on('hide', function(ev){
-            var setEndDate = $("[name=endTime]").val();
-             if(setEndDate) {
-                $("[name=startTime]").datetimepicker('setEndDate', setEndDate);
-            }
-            validator.query('[name=endTime]').execute();
-        });
+        // $("[name=endTime]").datetimepicker({
+        // }).on('hide', function(ev){
+        //     var setEndDate = $("[name=endTime]").val();
+        //      if(setEndDate) {
+        //         $("[name=startTime]").datetimepicker('setEndDate', setEndDate);
+        //     }
+        //     validator.query('[name=endTime]').execute();
+        // });
 
 	};
 

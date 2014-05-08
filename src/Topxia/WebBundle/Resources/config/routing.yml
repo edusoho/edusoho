@@ -433,7 +433,11 @@ live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:create }
 
-create_live_lesson_time_check:
+live_course_manage_lesson_edit:
+    pattern:  /course/{courseId}/manage/live/lesson/{lessonId}/edit
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:edit }
+
+live_lesson_time_check:
     pattern:  /course/{id}/manage/live/lesson/time/check
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
 

@@ -24,9 +24,12 @@ class MyTeachingController extends BaseController
             false
         );
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+
         return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
             'courses'=>$courses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'live_course_enabled' => $courseSetting['live_course_enabled']
         ));
     }
 
@@ -89,6 +92,11 @@ class MyTeachingController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

@@ -581,7 +581,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'mediaId' => 0,
 			'length' => 0,
 			'startTime' => 0,
-			'endTime' => 0,
 		));
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
@@ -619,6 +618,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['seq'] = $this->getNextCourseItemSeq($lesson['courseId']);
 		$lesson['userId'] = $this->getCurrentUser()->id;
 		$lesson['createdTime'] = time();
+		$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
 
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)
@@ -803,7 +803,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->getLessonCountByCourseId($courseId) + 1;
 	}
 
-	public function lessonTimeCheck($courseId,$startTime,$endTime)
+	public function liveLessonTimeCheck($courseId,$lessonId,$startTime,$length)
 	{	
 		$course = $this->getCourseDao()->getCourse($courseId);
 
@@ -811,8 +811,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('此课程不存在！');
 		}
 
+		if ($lessonId) {
+			$liveLesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+			$thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
+			$thisEndTime = empty($liveLesson['endTime']) ? 0 : $liveLesson['endTime'];
+		}
+
 		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
-		$endTime = is_numeric($endTime) ? $endTime : strtotime($endTime);
+		$endTime = $startTime + $length*60;
 
 		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime);
 
@@ -820,8 +826,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return array('error_occupied','包含这个时间段的课时已经存在！');
 		}
 
-		$diffhour = ($endTime-$startTime)/3600;
-		if ($diffhour > 8) {
+		if (($length/60) > 8) {
 			 return array('error_timeout','时间段不能超过8小时！');
 		}
 

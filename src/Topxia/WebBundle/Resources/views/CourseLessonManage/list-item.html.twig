@@ -66,6 +66,8 @@
 		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
 		  {% if lesson.type == 'testpaper' %}
 			  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
+			{% elseif lesson.type == 'live' %}
+			  data-url="{{ path('live_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% else %}
 			  data-url="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% endif %}
