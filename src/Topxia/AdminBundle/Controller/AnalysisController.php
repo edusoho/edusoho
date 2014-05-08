@@ -46,6 +46,28 @@ class AnalysisController extends BaseController
         ));        
     }
 
+    public function partnerStateAction(Request $request)
+    {
+
+        $conditions = $request->query->all();
+
+        $count = $this->getPartnerStateService()->searchPartnerStateCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $partnerStates = $this->getPartnerStateService()->searchPartnerStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        $partnerUserIds=ArrayToolkit::column($partnerStates,'partnerId');
+        $partnerUsers=$this->getUserService()->findUsersByIds($partnerUserIds);
+
+        return $this->render('TopxiaAdminBundle:Analysis:partner-state.html.twig', array(
+            'conditions' => $conditions,
+            'partnerStates' => $partnerStates , 
+            'partnerUsers' => $partnerUsers,
+            'paginator' => $paginator
+        ));        
+    }
+
    
 
     protected function getUserStateService()
@@ -56,6 +78,11 @@ class AnalysisController extends BaseController
     protected function getGuestStateService()
     {
         return $this->getServiceKernel()->createService('State.GuestStateService');
+    }
+
+    protected function getPartnerStateService()
+    {
+        return $this->getServiceKernel()->createService('State.PartnerStateService');
     }
 
    

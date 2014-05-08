@@ -31,6 +31,8 @@ class DateStateCommand extends BaseCommand
 
         $this->computeUserState($currentDay,$currentTime);
 
+        $this->computePartnerState($currentDay,$currentTime);
+
     }
 
 
@@ -131,15 +133,55 @@ class DateStateCommand extends BaseCommand
 
     protected  function computePartnerState($currentDay,$currentTime)
     {
-            $us['date']=$currentDay;
+            $ps['date']=$currentDay;
+
+            $partners = $this->getPartners($currentTime);
+
+            foreach ($partners as $partner) {
+
+                 $partnerId = $partner['partnerId'];
+
+                if($partnerId == 0 ){
+                    continue;
+                }
+                            
+
+                $ps['partnerId'] = $partnerId;
+
+                $ps['courseOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and targetType='course' and id in (select orderId from sale_commission where salerId = ".$partnerId." )");
+
+                $ps['courseOrdersFee'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount > 0 and targetType='course' and id in (select orderId from sale_commission where salerId = ".$partnerId." )");
+
+                $ps['courseOrdersFree'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount = 0  and targetType='course' and id in (select orderId from sale_commission where salerId = ".$partnerId." )");
+
+                $ps['activityOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid'  and targetType='activity' and id in (select orderId from sale_commission where salerId = ".$partnerId." )");
+
+                $ps['vipOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid'  and targetType='vip' and id in (select orderId from sale_commission where salerId = ".$partnerId." )");
+
+                $ps['dayActGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and partnerId= ".$partnerId."  ");
+
+                $ps['dayNewGuest'] = $this->getCount("select count(*) from guest where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and createdPartnerId= ".$partnerId."  ");
+
+                $ps['dayActUser'] = $this->getCount("select count(distinct userId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and userId>0 and  partnerId= ".$partnerId."  ");
+
+                $ps['dayRegUser'] = $this->getCount("select count(*) from user where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and id in (select userId from access_log where partnerId = ".$partnerId.")  ");
+
+                $ps['dayPv'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and partnerId = ".$partnerId." ");
+
+                $this->getPartnerStateService()->deleteByDate($currentDay,$partnerId);
+
+                $this->getPartnerStateService()->createPartnerState($ps);
+
+            }
+
+
 
     }
 
-    protected  function getPartner($currentDay,$currentTime)
+    protected  function getPartners($currentTime)
     {
 
-        
-           
+        return  $this->getRs("select distinct partnerId as partnerId from access_log where createdTime< ".$currentTime." and createdTime > ".($currentTime-24*3600));
 
     }
 
@@ -148,7 +190,14 @@ class DateStateCommand extends BaseCommand
 
         $connection = $this->getContainer()->get('database_connection');
 
-        return  $connection->fetchColumn($sql);       
+        return  $connection->fetchColumn($sql);    
+    }
+
+    protected function getRs($sql){
+
+        $connection = $this->getContainer()->get('database_connection');
+
+        return $connection->fetchAll($sql);    
 
            
     }

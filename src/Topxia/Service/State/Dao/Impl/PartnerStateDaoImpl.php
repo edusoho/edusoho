@@ -74,9 +74,9 @@ class PartnerStateDaoImpl extends BaseDao implements PartnerStateDao
          return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function deleteByDate($date)
+    public function deleteByDate($date,$partnerId)
     {
-         return $this->getConnection()->delete($this->table, array('date' => $date));
+         return $this->getConnection()->delete($this->table, array('date' => $date,'partnerId'=>$partnerId));
     }
     
 

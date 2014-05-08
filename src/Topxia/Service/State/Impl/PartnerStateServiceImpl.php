@@ -113,10 +113,10 @@ class PartnerStateServiceImpl extends BaseService implements PartnerStateService
         }
     }
 
-    public function deleteByDate($date)
+    public function deleteByDate($date,$partnerId)
     {
 
-        return $this->getPartnerStateDao()->deleteByDate($date);
+        return $this->getPartnerStateDao()->deleteByDate($date,$partnerId);
     }
 
     private function getPartnerStateDao()
