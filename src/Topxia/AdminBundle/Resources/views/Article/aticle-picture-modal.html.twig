@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}设置资讯图片{% endblock %}
+{% block body %}
+
+  <form id="aticel-picture-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ path('admin_article_show_upload') }}">
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"><b>资讯图片</b></div>
+      <div class="controls col-md-8 controls">
+      {% if pictureUrl %}
+      	<img src="{{ asset(pictureUrl) }}" id="article-pic-crop" width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <input type="file" id="article-picture-upload" name="picture" required="required" accept="image/gif,image/jpeg,image/png" data-widget-cid="widget-9" data-url="{{ path('admin_article_show_upload') }}">
+        <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="article-upload-btn" data-url="{{ path('admin_article_show_upload') }}" class="btn btn-primary">确定</a>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('article/picture-upload-modal')</script>
+{% endblock %}

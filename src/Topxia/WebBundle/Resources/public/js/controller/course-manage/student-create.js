@@ -15,6 +15,9 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+
+                var $btn = $("#student-create-form-submit");
+                $btn.button('submiting').addClass('disabled');
                 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $table.find('tr.empty').remove();
@@ -23,6 +26,7 @@ define(function(require, exports, module) {
                     Notify.success('添加学员操作成功!');
                 }).error(function(){
                     Notify.danger('添加学员操作失败!');
+                    $btn.button('reset').removeClass('disabled');
                 });
 
             }

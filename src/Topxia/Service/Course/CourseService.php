@@ -75,6 +75,8 @@ interface CourseService
 	
 	public function getCourseLessons($courseId);
 
+	public function searchLessons($condition, $orderBy, $start, $limit);
+
 	public function createLesson($lesson);
 
 	public function updateLesson($courseId, $lessonId, $fields);
@@ -128,6 +130,8 @@ interface CourseService
 	/**
 	 * Member API
 	 */
+
+	public function searchMembers($conditions, $orderBy, $start, $limit);
 
 	public function searchMember($conditions, $start, $limit);
 

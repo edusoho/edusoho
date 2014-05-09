@@ -37,6 +37,7 @@ $kernel->boot();
 $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
+$serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
 $currentUser = new CurrentUser();
 $currentUser->fromArray(array(

@@ -30,7 +30,8 @@ class DefaultController extends BaseController
             $course['addedStudentNum'] = $studentNum;
             $course['addedMoney'] = 0;
 
-            $orders = $this->getOrderService()->searchOrders(array('courseId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
+            $orders = $this->getOrderService()->searchOrders(array('targetType'=>'course', 'targetId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
+
             foreach ($orders as $id => $order) {
                 $course['addedMoney'] += $order['amount'];
             }

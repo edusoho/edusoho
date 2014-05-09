@@ -11,6 +11,8 @@ interface LessonDao
 
     public function findLessonIdsByCourseId($courseId);
 
+    public function searchLessons($condition, $orderBy, $start, $limit);
+
     public function getLessonCountByCourseId($courseId);
 
     public function getLessonMaxSeqByCourseId($courseId);

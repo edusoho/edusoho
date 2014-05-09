@@ -14,6 +14,8 @@ define(function(require, exports, module) {
                     return false;
                 }
 
+                $('#category-create-btn').button('submiting').addClass('disabled');
+
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                   var id = '#' + $(html).attr('id'),
                       $item = $(id);

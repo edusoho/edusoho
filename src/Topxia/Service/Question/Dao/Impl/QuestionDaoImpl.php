@@ -116,7 +116,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         });
 
         if (isset($conditions['targetPrefix'])) {
-            $conditions['targetLike'] = "{$conditions['targetPrefix']}%";
+            $conditions['targetLike'] = "{$conditions['targetPrefix']}/%";
             unset($conditions['target']);
         }
 
@@ -144,7 +144,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             }
         } else {
             $builder->andWhere('target = :target')
-                ->andWhere('target LIKE :targetLike');
+                ->andWhere('target = :targetPrefix OR target LIKE :targetLike');
         }
 
         $builder->andWhere('parentId = :parentId')

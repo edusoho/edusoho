@@ -27,8 +27,7 @@ class EduSohoAppClient implements AppClient
         }
 
         $this->debug = empty($options['debug']) ? false : true;
-
-        $this->tmpDir = empty($options['tmpDir']) ? '/tmp' : $options['tmpDir'];
+        $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
 
     public function getApps()
@@ -71,6 +70,8 @@ class EduSohoAppClient implements AppClient
 
     public function repairProblem($token)
     {
+        $args = array('token' => $token);
+        return $this->callRemoteApi('POST', 'RepairProblem', $args);
 
     }
 
@@ -79,8 +80,6 @@ class EduSohoAppClient implements AppClient
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
-
-        // var_dump($result);
 
         return json_decode($result, true);
     }
@@ -109,7 +108,7 @@ class EduSohoAppClient implements AppClient
     {
         // var_dump($url);
         $filename = md5($url) . '_' . time();
-        $filepath = $this->tmpDir . '/' . $filename;
+        $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
 
         $fp = fopen($filepath, 'w');
 

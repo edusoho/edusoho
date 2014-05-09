@@ -160,8 +160,8 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = 'src目录无写权限';
         }
 
-        if(!is_writeable("{$rootDirectory}/vender")) {
-            $errors[] = 'vender目录无写权限';
+        if(!is_writeable("{$rootDirectory}/vendor")) {
+            $errors[] = 'vendor目录无写权限';
         }
 
         if(!is_writeable("{$rootDirectory}/plugins")) {
@@ -404,6 +404,30 @@ class AppServiceImpl extends BaseService implements AppService
         return $errors;
     }
 
+    public function repairProblem($token)
+    {
+        return $this->createAppClient()->repairProblem($token);
+    }
+
+    public function uninstallApp($code)
+    {
+        $app = $this->getAppDao()->getAppByCode($code);
+        if (empty($app)) {
+            throw $this->createServiceException("App {$code} is not exist.");
+        }
+
+        $uninstallScript = realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../plugins/' . ucfirst($app['code']) . '/Scripts/uninstall.php');
+
+        if (file_exists($uninstallScript)) {
+            include $uninstallScript;
+            $uninstaller = new \AppUninstaller($this->getKernel());
+            $uninstaller->uninstall();
+        }
+
+        $this->getAppDao()->deleteApp($app['id']);
+
+    }
+
     private function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
@@ -449,6 +473,8 @@ class AppServiceImpl extends BaseService implements AppService
             'level' => empty($errors) ? 'info' : 'error',
             'code' => $package['product']['code'],
             'type' => $package['type'],
+            'fromVersion' => empty($package['fromVersion']) ? '' : $package['fromVersion'],
+            'toVersion' => empty($package['toVersion']) ? '' : $package['toVersion'],
             'message' => $message . (empty($errors) ? '成功' : '失败'),
             'data' => empty($errors) ? '' : $errors,
         ));
