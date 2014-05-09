@@ -69,7 +69,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $addtionalCondition = ";";
 
-        if (!empty($thisStartTime && !empty($thisEndTime))) {
+        if (!empty($thisStartTime) && !empty($thisEndTime)) {
             $addtionalCondition = "and (startTime != {$thisStartTime} and endTime != {$thisEndTime});";
         }
 
@@ -81,7 +81,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $addtionalCondition = ";";
 
-        if (!empty($thisStartTime && !empty($thisEndTime))) {
+        if (!empty($thisStartTime) && !empty($thisEndTime)) {
             $addtionalCondition = "and (startTime != {$thisStartTime} and endTime != {$thisEndTime});";
         }
 
