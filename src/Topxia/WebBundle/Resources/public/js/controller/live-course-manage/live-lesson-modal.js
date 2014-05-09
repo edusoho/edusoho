@@ -14,10 +14,23 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
+
+                var $panel = $('.lesson-manage-panel');
+
 				$.post($form.attr('action'), $form.serialize(), function(html) {
+
+                    var id = '#' + $(html).attr('id'),
+                    $item = $(id);
+                    
+                    if ($item.length) {
+                        $item.replaceWith(html);
+                        Notify.success('课时已保存');
+                    } else {
+                        $panel.find('.empty').remove();
+                        $("#course-item-list").append(html);
+                        Notify.success('添加直播课时成功');
+                    }
                     $modal.modal('hide');
-					Notify.success('保存成功');
-                    window.location.reload();
 
 				}).error(function(){
 					Notify.danger('操作失败');
@@ -54,7 +67,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=length]',
             required: true,
-            rule:'romote_check',
+            rule:'integer romote_check',
             errormessageRequired: '请输入时长'
         });
 

@@ -48,7 +48,7 @@ class LiveCourseLessonManageController extends BaseController
 
             $liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
             
-            return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-list-item.html.twig', array(
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
                 'course' => $liveCourse,
                 'lesson' => $liveLesson,
             ));

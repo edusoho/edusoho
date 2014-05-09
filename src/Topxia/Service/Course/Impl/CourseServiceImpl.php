@@ -618,7 +618,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['seq'] = $this->getNextCourseItemSeq($lesson['courseId']);
 		$lesson['userId'] = $this->getCurrentUser()->id;
 		$lesson['createdTime'] = time();
-		$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
+
+		if ($lesson['type'] == "live") {
+			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
+		}
 
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)
@@ -701,9 +704,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'length' => 0,
 			'startTime' => 0,
 		));
-
-		$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
 		
+		if ($lesson['type'] == "live") {
+			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
+		}
+
 		if (isset($fields['title'])) {
 			$fields['title'] = $this->purifyHtml($fields['title']);
 		}

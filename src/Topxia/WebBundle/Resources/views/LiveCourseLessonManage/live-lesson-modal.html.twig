@@ -28,8 +28,9 @@
             <input type="text"  name="startTime" class="form-control" value="{{ liveLesson.startTime|default()|data_format }}" placeholder="起始时间">
         </div>
 
+        <label class="col-md-2 control-label" for="live-length-field" style="display:none">时长</label>
          <div class="col-md-3 controls">
-            <input type="text"  name="length" class="form-control" value="{{ liveLesson.length|default(60) }}" placeholder="时长">
+            <input type="text"  name="length" id="live-length-field" class="form-control" value="{{ liveLesson.length|default(60) }}" placeholder="时长">
         </div>
 		<label>min</label>
 
@@ -56,6 +57,6 @@
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
   <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#live-lesson-form">保存</button>
 
-    <script>app.load('live-course-manage/save')</script>
+    <script>app.load('live-course-manage/live-lesson-modal')</script>
 
 {% endblock %}
