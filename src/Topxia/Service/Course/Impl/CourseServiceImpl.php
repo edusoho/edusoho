@@ -823,12 +823,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime);
 
-		if ($thisLessons) {
-			return array('error_occupied','包含这个时间段的课时已经存在！');
+		if (($length/60) > 8) {
+			 return array('error_timeout','时长不能超过8小时！');
 		}
 
-		if (($length/60) > 8) {
-			 return array('error_timeout','时间段不能超过8小时！');
+		if ($thisLessons) {
+			return array('error_occupied','包含这个时间段的课时已经存在！');
 		}
 
 		$courseSetting = $this->getSettingService()->get('course', array());;
