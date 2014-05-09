@@ -123,7 +123,7 @@ class CourseStudentManageController extends BaseController
     {   
         $course = $this->getCourseService()->tryAdminCourse($id);
 
-        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,1000);
+        $courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'ASC'), 0, 1000);
 
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
