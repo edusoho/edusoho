@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 				$.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
 					Notify.success('保存成功');
-                    $('#course-item-list').append(html);
+                    window.location.reload();
 
 				}).error(function(){
 					Notify.danger('操作失败');
