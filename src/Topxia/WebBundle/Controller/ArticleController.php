@@ -228,7 +228,7 @@ class ArticleController extends BaseController
 		$start = false;
 		foreach ($categoryTree as $treeCategory) {
 			
-			if ($treeCategory['depth'] == 1 && $treeCategory['id'] != $rootCategory['id']) {
+			if ($start && ($treeCategory['depth'] == 1) && ($treeCategory['id'] != $rootCategory['id'])) {
 				break;
 			}
 
