@@ -17,7 +17,8 @@ define(function(require, exports, module) {
 				$.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
 					Notify.success('保存成功');
-                    window.location.reload();
+                    $('#course-item-list').append(html);
+
 				}).error(function(){
 					Notify.danger('操作失败');
 				});
@@ -47,7 +48,6 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=startTime]',
             required: true,
-            // rule:'romote_check',
             errormessageRequired: '请输入直播的开始时间'
         });   
 
@@ -61,22 +61,8 @@ define(function(require, exports, module) {
         $("[name=startTime]").datetimepicker({
         }).on('hide', function(ev){
 
-            // var setStartDate = $("[name=startTime]").val();
-            // if(setStartDate) {
-            //     $("[name=endTime]").datetimepicker('setStartDate', setStartDate);
-            // }
             validator.query('[name=startTime]').execute();
         });
-
-        // $("[name=endTime]").datetimepicker({
-        // }).on('hide', function(ev){
-        //     var setEndDate = $("[name=endTime]").val();
-        //      if(setEndDate) {
-        //         $("[name=startTime]").datetimepicker('setEndDate', setEndDate);
-        //     }
-        //     validator.query('[name=endTime]').execute();
-        // });
-
 	};
 
 });

@@ -12,6 +12,7 @@ class LiveCourseLessonManageController extends BaseController
   	public function createAction(Request $request,$id)
     {
         $liveCourse = $this->getCourseService()->tryManageCourse($id);
+
         if($request->getMethod() == 'POST') {
 
             $liveLesson = $request->request->all();
@@ -21,8 +22,7 @@ class LiveCourseLessonManageController extends BaseController
             $liveLesson['length'] = $liveLesson['length'];
 
             $liveLesson = $this->getCourseService()->createLesson($liveLesson);
-            
-			return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-list-item.html.twig', array(
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $liveCourse,
 				'lesson' => $liveLesson,
 			));
@@ -44,8 +44,9 @@ class LiveCourseLessonManageController extends BaseController
             $liveLesson['type'] = 'live';
             $liveLesson['courseId'] = $liveCourse['id'];
             $liveLesson['startTime'] = strtotime($liveLesson['startTime']);
-            $liveLesson['endTime'] = strtotime($liveLesson['endTime']);
-            $liveLesson = $this->getCourseService()->createLesson($liveLesson);
+            $liveLesson['free'] = empty($liveLesson['free']) ? 0 : $liveLesson['free'];
+
+            $liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
             
             return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-list-item.html.twig', array(
                 'course' => $liveCourse,
@@ -74,6 +75,7 @@ class LiveCourseLessonManageController extends BaseController
         } else {
             $response = array('success' => false, 'message' => $message);
         }
+        
         return $this->createJsonResponse($response);
     }
 

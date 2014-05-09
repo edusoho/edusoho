@@ -699,12 +699,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'mediaId' => 0,
 			'free' => 0,
 			'length' => 0,
+			'startTime' => 0,
 		));
 
-		// if (isset($fields['content'])) {
-		// 	$fields['content'] = $this->purifyHtml($fields['content']);
-		// }
-
+		$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
+		
 		if (isset($fields['title'])) {
 			$fields['title'] = $this->purifyHtml($fields['title']);
 		}
@@ -811,8 +810,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('此课程不存在！');
 		}
 
+		$thisStartTime = $thisEndTime = 0;
+
 		if ($lessonId) {
-			$liveLesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+			$liveLesson = $this->getCourseLesson($course['id'], $lessonId);
 			$thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
 			$thisEndTime = empty($liveLesson['endTime']) ? 0 : $liveLesson['endTime'];
 		}
@@ -820,7 +821,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
 		$endTime = $startTime + $length*60;
 
-		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime);
+		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime);
 
 		if ($thisLessons) {
 			return array('error_occupied','包含这个时间段的课时已经存在！');
@@ -833,9 +834,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseSetting = $this->getSettingService()->get('course', array());;
 		$max_student_num = $courseSetting['max_student_num'];
 
-		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime);
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime);
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
 		$courseIds = array_unique($courseIds);
+		$courseIds = array_values($courseIds);
 		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
 		$stuNumUpperLimit = ArrayToolkit::column($courses,'stuNumUpperLimit');
 		$timeSlotOccupiedStuNums = array_sum($stuNumUpperLimit);
