@@ -19,6 +19,7 @@ class LiveCourseController extends BaseController
 
     public function listAction(Request $request, $category)
     {
+        $now = time();
 
         $today = date("Y-m-d");
 
@@ -75,7 +76,7 @@ class LiveCourseController extends BaseController
                 $lessonCondition['endTimeLessThan'] = $theDayAfterTomorrow;
                 break;
             case 'nextweek':
-                $lessonCondition['startTimeGreaterThan'] = $today;
+                $lessonCondition['startTimeGreaterThan'] = $tomorrow;
                 $lessonCondition['endTimeLessThan'] = $nextweek;
                 break;
             case 'lastweek':
@@ -100,12 +101,28 @@ class LiveCourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        /*if ($date == 'today') {
-            var_dump($lessons);exit();
-        }*/
+        if ($date == 'today') {
+            $lessons = $this->getCourseService()->searchLessons( $lessonCondition,  array('startTime', 'ASC'), 0, 1000 );
+            $finishedLessons = array();
+            foreach ($lessons as &$lesson) {
+                if ($now > $lesson['endTime'] ) {
+                    $finishedLessons[] = $lesson;
+                    $lesson = '';
+                }
+            }
+            $lessons = array_merge($lessons, $finishedLessons);
+            $lessons = array_filter($lessons);
+        }
+
+        $newCourses = array();
 
         $courses = ArrayToolkit::index($courses, 'id');
 
+        foreach ($lessons as $key => &$lesson) {
+            $newCourses[$key] = $courses[$lesson['courseId']];
+            $newCourses[$key]['lesson'] = $lesson;
+        }
+        
         $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'hitNum',0,10 );
 
         return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(
@@ -115,7 +132,8 @@ class LiveCourseController extends BaseController
             'paginator' => $paginator,
             'courses' => $courses,
             'popularCourses' => $popularCourses,
-            'lessons' => $lessons
+            'lessons' => $lessons,
+            'newCourses' => $newCourses
         ));
     }
 
@@ -132,8 +150,9 @@ class LiveCourseController extends BaseController
         ));
     }
 
-    public function coursesBlockAction($lessons, $courses, $view = 'list', $mode = 'default')
-    {
+    public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
+    {   
+
         $userIds = array();
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
@@ -142,7 +161,6 @@ class LiveCourseController extends BaseController
 
         return $this->render("TopxiaWebBundle:LiveCourse:live-courses-block-{$view}.html.twig", array(
             'courses' => $courses,
-            'lessons' => $lessons,
             'users' => $users,
             'mode' => $mode,
         ));

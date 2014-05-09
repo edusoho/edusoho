@@ -1,7 +1,7 @@
 {% set mode = mode|default('default') %}
 <ul class="course-grids live-course-grid">
-  {% for lesson in lessons if courses[lesson.courseId]|default(null) %}
-  {% set course = courses[lesson.courseId]|default(null) %}
+  {% for course in courses %}
+  {% set lesson = course['lesson'] %}
     <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
         <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
@@ -12,7 +12,7 @@
           {% endif %}
         <span class="title">{{ course.title }}</span>
         <span class="live-course-lesson metas">
-          <span class="live-time">直播: {{ lesson.startTime|date('m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</span>
+          <span class="text-warning pull-left mrm">课时{{ lesson.number }}</span><span class="live-time mls">直播: {{ lesson.startTime|date('m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</span>
           <span class="total-lessons">共{{ course.lessonNum }}课时</span>
         </span>
         {% if mode in ['default', 'teach'] %}
