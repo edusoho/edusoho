@@ -1,0 +1,49 @@
+{% extends 'TopxiaAdminBundle:Analysis:layout.html.twig' %}
+
+{% block title %}渠道贡献统计 - {{ parent() }}{% endblock %}
+
+{% set menu = 'partnerState' %}
+
+
+
+{% block main %}
+	<div class="page-header">
+   
+    <h1>渠道贡献统计</h1>
+  </div>
+
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+   
+  </form>
+
+  <table class="table table-striped table-hover" id="activity-table">
+    <thead>
+    <tr>
+      <th>日期</th>
+      <th>渠道名称</th>    
+      <th>带来课程报名人数</th>
+      <th>带来收费课程订单</th>
+      <th>带来免费课程人数</th>
+      <th>带来活动报名人数</th>
+      <th>带来会员订单数</th>
+      <th>带来游客数</th>
+      <th>带来新游客数</th>
+      <th>带来用户数</th>
+      <th>带来注册用户数</th>
+      <th>带来PV数</th>
+    
+    </tr>
+    </thead>
+    <tbody>
+      {% for partnerState in partnerStates %}
+      {% set partnerUser = partnerUsers[partnerState.partnerId]%}
+      
+        {% include 'TopxiaAdminBundle:Analysis:partner-state-tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

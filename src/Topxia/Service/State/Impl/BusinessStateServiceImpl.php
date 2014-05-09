@@ -113,10 +113,10 @@ class BusinessStateServiceImpl extends BaseService implements BusinessStateServi
         }
     }
 
-    public function deleteByDate($date)
+   public function deleteByDate($date,$prodType,$prodId)
     {
 
-        return $this->getBusinessStateDao()->deleteByDate($date);
+        return $this->getBusinessStateDao()->deleteByDate($date,$prodType,$prodId);
     }
 
 

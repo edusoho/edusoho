@@ -419,6 +419,10 @@ course_manage_student_create:
     pattern:  /course/{id}/manage/student/create
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
 
+course_manage_student_create_batch:
+    pattern:  /course/{id}/manage/student/create/batch
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:createBatch }
+
 course_manage_student_export:
     pattern:  /course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:export }

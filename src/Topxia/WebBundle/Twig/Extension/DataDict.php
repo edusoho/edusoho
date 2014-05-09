@@ -277,10 +277,19 @@ class DataDict
 
 		'genderType' => array(
 			'male' =>            '男',
-        	'female' =>            '女',	
-        	
-       
-        				
+        	'female' =>            '女',	        				
+		),
+
+
+		'prodType' => array(
+			'course' =>            '课程',
+        	'activity' =>          '活动',	        				
+		),
+
+		'priceType' => array(
+			
+        	'fee' =>          '收费',
+        	'free' =>         '免费',	        				
 		),
 
 	);
