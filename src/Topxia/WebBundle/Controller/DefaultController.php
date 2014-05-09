@@ -40,6 +40,8 @@ class DefaultController extends BaseController
                 $newLiveCourses[$key]['lesson'] = $lesson;
             }
 
+            $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
+
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
@@ -119,6 +121,37 @@ class DefaultController extends BaseController
         );
 
         return $this->createJsonResponse($info);
+    }
+
+    protected function getCourseTeachersAndCategories($courses)
+    {
+        $userIds = array();
+        $categoryIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+            $categoryIds[] = $course['categoryId'];
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+
+        foreach ($courses as &$course) {
+            $teachers = array();
+            foreach ($course['teacherIds'] as $teacherId) {
+                $user = $users[$teacherId];
+                unset($user['password']);
+                unset($user['salt']);
+                $teachers[] = $user;
+            }
+            $course['teachers'] = $teachers;
+
+            $categoryId = $course['categoryId'];
+            if($categoryId!=0) {
+                $course['category'] = $categories[$categoryId];
+            }
+        }
+        
+        return $courses;
     }
 
     protected function getSettingService()
