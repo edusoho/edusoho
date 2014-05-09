@@ -229,7 +229,7 @@ class DateStateCommand extends BaseCommand
 
                     $bs['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName = '/openclass/".$prodId."/show' ");
 
-                    $activity = $this->geActivityService()->getActivity($prodId);
+                    $activity = $this->getActivityService()->getActivity($prodId);
 
                     $bs['prodName'] = $activity['title'];
 
@@ -375,7 +375,7 @@ class DateStateCommand extends BaseCommand
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function geActivityService()
+    protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity.ActivityService');
     }

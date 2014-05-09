@@ -23,6 +23,13 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($email));
     }
 
+    public function findSystemUser()
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE email like '%osforce.org'  ORDER BY RAND()  LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array());
+    }
+
+
     public function findUserByNickname($nickname)
     {
         $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
