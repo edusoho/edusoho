@@ -13,6 +13,35 @@ class DefaultController extends BaseController
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $liveCourses = array();
+        $newLiveCourses = array();
+
+        if ($courseSetting['live_course_enabled'] == 1) {
+
+            $liveConditions = array(
+                'status' => 'published',
+                'isLive' => '1'
+            );
+            $liveCourses = $this->getCourseService()->searchCourses($liveConditions, 'latest', 0, 1000);
+            $courseIds = ArrayToolkit::column($liveCourses, 'id');
+
+            $lessonConditions = array(
+                'status' => 'published',
+                'courseIds' => $courseIds
+            );
+            $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
+
+            $liveCourses = ArrayToolkit::index($liveCourses, 'id');
+
+            foreach ($lessons as $key => &$lesson) {
+                $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
+                $newLiveCourses[$key]['lesson'] = $lesson;
+            }
+
+        }
+
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
@@ -20,7 +49,8 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
-            'blocks' => $blocks
+            'blocks' => $blocks,
+            'newLiveCourses' => $newLiveCourses
         ));
     }
 
