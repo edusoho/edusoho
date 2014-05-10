@@ -5,9 +5,27 @@
    <td>{{ businessState.prodId }}</td>
   <td>{{ businessState.prodName }}</td>
  
-  <td>{{ businessState.orders }}</td>
-  <td>{{ businessState.feeOrders }}</td> 
-  <td>{{ businessState.freeOrders }}</td> 
+  <td>{{ businessState.orders }}
+    <br>
+
+    {% if businessState.dayGuest >0 %}
+    <span class="text-color-red text-sm">  {{ (businessState.orders/businessState.dayGuest)*100  }}% </span>
+    {% endif %}
+
+  </td>
+  <td>{{ businessState.feeOrders }}
+   <br>
+
+    {% if businessState.dayGuest >0 %}
+    <span class="text-color-red text-sm">  {{ (businessState.feeOrders/businessState.dayGuest)*100  }}% </span>
+    {% endif %}
+  </td> 
+  <td>{{ businessState.freeOrders }} <br>
+
+    {% if businessState.dayGuest >0 %}
+    <span class="text-color-red text-sm">  {{ (businessState.freeOrders/businessState.dayGuest)*100  }}% </span>
+    {% endif %}
+  </td> 
 
   <td>{{ businessState.dayGuest }}</td>
   <td>{{ businessState.dayGuestVisit }}</td>
