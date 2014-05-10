@@ -60,7 +60,7 @@ class WebExtension extends \Twig_Extension
     {
         $basePath = $this->container->get('request')->getBasePath();
         $theme = $this->getSetting('theme.uri', 'default');
-        $plugins = array('coupon', 'vip' ,'questionplumber');
+        $plugins = array('coupon', 'vip');
 
         $paths = array(
             'common' => 'common',
