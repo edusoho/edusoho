@@ -50,6 +50,8 @@ class PartnerStateDaoImpl extends BaseDao implements PartnerStateDao
 
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'state')
+
+            ->andWhere('partnerId = :partnerId')
                        
             ->andWhere('date = :date');
     }

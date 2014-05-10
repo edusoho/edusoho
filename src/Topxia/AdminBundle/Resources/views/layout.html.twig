@@ -54,13 +54,11 @@
 
           <li {% if nav == 'sale' %}class="active"{% endif %}><a href="{{ path('admin_sale_commission') }}">营销</a></li>
 
-
+           {% if is_granted('ROLE_SUPER_ADMIN') %}
           <li {% if nav == 'analysis' %}class="active"{% endif %}><a href="{{ path('admin_analysis_user') }}">统计</a></li>
+           {% endif %}
 
-
-          <li {% if nav == 'app' %}class="active"{% endif %}>
-            <a href="{{ path('admin_app_installed') }}">应用</a>
-          </li>
+          <li {% if nav == 'app' %}class="active"{% endif %}><a href="{{ path('admin_app_installed') }}">应用</a></li>
 
 
           {% if is_granted('ROLE_SUPER_ADMIN') %}
