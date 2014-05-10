@@ -51,11 +51,17 @@ class DateStateCommand extends BaseCommand
 
             $gs['totalGuest'] = $this->getCount("select count(*) from guest where createdTime <= ".$currentTime);
 
-            $gs['dayGuestPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
+            $gs['dayActGuest'] = $this->getCount("select count(distinct guestId)  from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
+
+            $gs['dayActGuestPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
 
             $gs['dayNewGuest'] = $this->getCount("select count(*) from guest where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
 
-            $gs['dayActGuest'] = $this->getCount("select count(distinct guestId)  from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600));
+            $gs['dayNewGuestPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."  and guestId in ( select id from guest where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600) ." )");
+
+            $gs['dayOldGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."  and guestId in ( select id from guest where  createdTime <".($currentTime-24*3600) ." )");
+
+            $gs['dayOldGuestPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."  and guestId in ( select id from guest where  createdTime <".($currentTime-24*3600) ." )");
 
             $gs['oneWeekActGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600*7));
 
@@ -98,11 +104,22 @@ class DateStateCommand extends BaseCommand
 
             $us['totalVerifyUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and emailVerified=1");
 
-            $us['dayUserPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0 " );
-
-            $us['dayRegUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."" );
-
             $us['dayActUser'] = $this->getCount("select count(distinct userId)  from access_log where userId>0 and   createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."" );
+
+            $us['dayActUserPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0 " );
+
+            
+            $us['dayRegUser'] = $this->getCount("select count(*) from user where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." " );
+
+            $us['dayRegUserPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0 and userId in ( select id from user where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)."  ) " );
+
+            
+            $us['dayOldUser'] = $this->getCount("select count(distinct userId) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0  and userId in ( select id from user where  createdTime < ".($currentTime-24*3600)."  ) " );
+
+
+            $us['dayOldUserPv'] = $this->getCount("select count(*) from access_log where createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600)." and userId > 0 and userId in ( select id from user where createdTime <".($currentTime-24*3600)."  ) " );
+
+            
 
             $us['oneWeekActUser'] = $this->getCount("select count(distinct userId) from access_log where userId>0 and createdTime <= ".$currentTime." and createdTime >".($currentTime-24*3600*7)."  " );
 
@@ -293,22 +310,49 @@ class DateStateCommand extends BaseCommand
 
                 if($prodType == 'course'){
 
-                    $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
-
                     $bs['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
 
-                   
+                    $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
+
+                    $bs['dayNewGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$'  and guestId in ( select id from guest where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." ) ");
+
+                    $bs['dayNewGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$'  and guestId in ( select id from guest where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." ) ");
+
+                    $bs['dayOldGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$'  and guestId in ( select id from guest where createdTime < ".($currentTime-24*3600)." ) ");
+
+                    $bs['dayOldGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$'  and guestId in ( select id from guest where  createdTime < ".($currentTime-24*3600)." ) ");
+
+                    $bs['dayUser'] = $this->getCount("select count(distinct userId) from access_log where userId>0 and createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
+
+                    $bs['dayUserVisit'] = $this->getCount("select count(*) from access_log where userId>0 and  createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/course/)([[:digit:]]+)$' ");
+
+
+
                     $bs['prodName'] = "所有课程";
-                    $bs['prodId'] = 9999999999;
+                    $bs['prodId'] = 999999999;
 
                 }else if ($prodType == 'activity'){
 
-                    $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/openclass/)([[:digit:]]+)(/show)$' ");
-
                     $bs['dayGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP  '^(/openclass/)([[:digit:]]+)(/show)$' ");
 
+                    $bs['dayGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/openclass/)([[:digit:]]+)(/show)$' ");
+
+                    $bs['dayNewGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP  '^(/openclass/)([[:digit:]]+)(/show)$' and guestId in (  select id from guest where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)."  )");
+
+                    $bs['dayNewGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/openclass/)([[:digit:]]+)(/show)$'  and guestId in (  select id from guest where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)."  ) ");
+
+                    $bs['dayOldGuest'] = $this->getCount("select count(distinct guestId) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP  '^(/openclass/)([[:digit:]]+)(/show)$' and guestId in ( select id from guest where createdTime < ".($currentTime-24*3600)."  ) ");
+
+                    $bs['dayOldGuestVisit'] = $this->getCount("select count(*) from access_log where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/openclass/)([[:digit:]]+)(/show)$' and guestId in (  select id from guest where createdTime < ".($currentTime-24*3600)." )");
+
+                    $bs['dayUser'] = $this->getCount("select count(distinct userId) from access_log where userId >0 and  createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP  '^(/openclass/)([[:digit:]]+)(/show)$' ");
+
+                    $bs['dayUserVisit'] = $this->getCount("select count(*) from access_log where userId > 0 and  createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and accessPathName REGEXP '^(/openclass/)([[:digit:]]+)(/show)$' ");
+
+                    
+
                     $bs['prodName'] = "所有活动";
-                    $bs['prodId'] = 9999999998;
+                    $bs['prodId'] = 999999998;
 
 
                 }
