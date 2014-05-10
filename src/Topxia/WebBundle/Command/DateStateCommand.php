@@ -329,7 +329,7 @@ class DateStateCommand extends BaseCommand
 
 
                     $bs['prodName'] = "所有课程";
-                    $bs['prodId'] = 999999999;
+                    $bs['prodId'] = 1;
 
                 }else if ($prodType == 'activity'){
 
@@ -352,7 +352,7 @@ class DateStateCommand extends BaseCommand
                     
 
                     $bs['prodName'] = "所有活动";
-                    $bs['prodId'] = 999999998;
+                    $bs['prodId'] = 2;
 
 
                 }
