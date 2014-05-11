@@ -4,6 +4,11 @@ define(function(require, exports, module) {
 	require('bootstrap');
 	require('common/bootstrap-modal-hack');
 
+	// var detector = require('detector');
+
+
+	// console.log(detector);
+
 	accessHref = window.location.href;
 	accessPathName = window.location.pathname;
 	accessSearch = window.location.search;

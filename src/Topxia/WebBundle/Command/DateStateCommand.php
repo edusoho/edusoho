@@ -218,11 +218,20 @@ class DateStateCommand extends BaseCommand
                
                 $bs['prodId'] = $prodId;
 
-                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' and prodId = ".$prodId."");             
+                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' and prodId = ".$prodId."");
+
+                $bs['totalOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime."  and status='paid' and prodType='".$prodType."' and prodId = ".$prodId."");          
 
                 $bs['feeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount>0 and prodType='".$prodType."' and prodId =".$prodId."");
 
+                $bs['totalFeeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime."  and status='paid' and amount>0 and prodType='".$prodType."' and prodId =".$prodId."");
+
+
                 $bs['freeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount=0 and prodType='".$prodType."' and prodId = ".$prodId."");
+
+                $bs['totalFreeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and status='paid' and amount=0 and prodType='".$prodType."' and prodId = ".$prodId."");
+
+
 
                 if($prodType == 'course'){
 
@@ -302,11 +311,19 @@ class DateStateCommand extends BaseCommand
 
                 $bs['prodType'] = $prodType;                
 
-                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' ");           
+                $bs['orders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and prodType='".$prodType."' ");
+
+
+                $bs['totalOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime."  and status='paid' and prodType='".$prodType."' "); 
 
                 $bs['feeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount>0 and prodType='".$prodType."' ");
 
+                $bs['totalFeeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime."  and status='paid' and amount>0 and prodType='".$prodType."' ");
+
+
                 $bs['freeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and  createdTime > ".($currentTime-24*3600)." and status='paid' and amount=0 and prodType='".$prodType."' ");
+
+                $bs['totalFreeOrders'] = $this->getCount("select count(*) from orders where createdTime < ".$currentTime." and status='paid' and amount=0 and prodType='".$prodType."' ");
 
                 if($prodType == 'course'){
 
