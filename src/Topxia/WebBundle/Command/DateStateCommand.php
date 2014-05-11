@@ -35,9 +35,9 @@ class DateStateCommand extends BaseCommand
 
         $this->computeBusinessState($currentDay,$currentTime);
 
-        $this->computeBusinessStateByProdType($currentDay,$currentTime,'course');
+        $this->sumBusinessStateByProdType($currentDay,$currentTime,'course');
 
-        $this->computeBusinessStateByProdType($currentDay,$currentTime,'activity');
+        $this->sumBusinessStateByProdType($currentDay,$currentTime,'activity');
 
         $this->bakAccessLog($currentDay,$currentTime);
 
@@ -201,12 +201,29 @@ class DateStateCommand extends BaseCommand
 
     }
 
-
     protected  function computeBusinessState($currentDay,$currentTime)
+    {
+
+        $this->computeBusinessStateByProdType($currentDay,$currentTime,'course');
+
+        $this->computeBusinessStateByProdType($currentDay,$currentTime,'activity');
+
+    }
+
+
+    protected  function computeBusinessStateByProdType($currentDay,$currentTime,$prodType)
     {
             $bs['date']=$currentDay;
 
-            $prods = $this->getProds($currentTime);
+            if($prodType == 'course'){
+
+                $prods = $this->getCourseProds();
+
+            }else if($prodType == 'activity'){
+
+                $prods = $this->getActivityProds();
+
+            }
 
             foreach ($prods as $prod) {
 
@@ -304,7 +321,7 @@ class DateStateCommand extends BaseCommand
 
     }
 
-    protected  function computeBusinessStateByProdType($currentDay,$currentTime,$prodType)
+    protected  function sumBusinessStateByProdType($currentDay,$currentTime,$prodType)
     {
 
                 $bs['date']=$currentDay;
@@ -417,6 +434,21 @@ class DateStateCommand extends BaseCommand
     {
 
         return  $this->getRs("select distinct prodType as prodType, prodId as prodId  from orders where createdTime< ".$currentTime." and createdTime > ".($currentTime-24*3600));
+
+    }
+
+
+    protected  function getCourseProds()
+    {
+
+        return  $this->getRs("select distinct 'course' as prodType, id as prodId  from course where  status = 'published' ");
+
+    }
+
+    protected  function getActivityProds()
+    {
+
+        return  $this->getRs("select distinct 'activity' as prodType, id as prodId  from activity where  status = 'published' ");
 
     }
 

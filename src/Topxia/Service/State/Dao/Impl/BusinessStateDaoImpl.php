@@ -55,6 +55,12 @@ class BusinessStateDaoImpl extends BaseDao implements BusinessStateDao
             ->andWhere('prodId = :prodId')
 
             ->andWhere('priceType = :priceType')
+
+            ->andWhere('orders >= :orders')
+
+            ->andWhere('feeOrders >= :feeOrders')
+
+            ->andWhere('totalFeeOrders >= :totalFeeOrders')
                        
             ->andWhere('date = :date');
     }
