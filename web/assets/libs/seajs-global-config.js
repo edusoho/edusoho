@@ -51,7 +51,8 @@ seajs.config({
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'dialog':'arale/dialog/1.3.0/dialog',
-		'dialog-css':'arale/dialog/1.3.0/dialog.css'
+		'dialog-css':'arale/dialog/1.3.0/dialog.css',
+		'detector':'arale/detector/1.4.0/detector'
 	},
 
 	// 预加载项

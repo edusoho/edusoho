@@ -1,0 +1,26 @@
+{
+    "family": "arale",
+    "name": "detector",
+    "version": "1.4.0",
+    "description": "客户端信息识别模块",
+    "homepage": "http://aralejs.org/detector",
+    "author": "冒顿 <hotoo.cn@gmail.com>",
+    "maintainers": [
+        "冒顿 <hotoo.cn@gmail.com>"
+    ],
+    "scripts": {
+      "prepublish": "spm build"
+    },
+    "keywords": ["utility"],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aralejs/detector.git"
+    },
+    "bugs": {
+        "url": "https://github.com/aralejs/detector/issues"
+    },
+    "license": "MIT",
+    "spm": {
+      "output": ["detector.js"]
+    }
+}
