@@ -4,6 +4,40 @@
    直播频道首页 {{ parent() }}
 {% endblock %}
 
+{% set script_controller = 'index' %}
+
 {% block content %}
+
+	<div class="es-row-wrap container-gap">
+
+	    <div class="row">
+	        <div class="col-md-12">
+	          <div class="page-header"><h1>直播频道</h1></div>
+	        </div>
+	    </div>
+
+		<div class="row">
+	      	<div class="col-md-8">
+	      		<ul class="nav nav-pills">
+				  	<li class="active"><a href="{{ path('live_course_explore') }}">直播频道首页</a></li>
+				  	{% for category in categories %}
+				  		<li><a href="{{ path('live_course_list', { category:category.code}) }}">{{ category.name }}</a><li>
+				  	{% endfor %}
+				</ul>
+
+				{% set blocks = data('Blocks',{'codes':['live_banner'] }) %}
+			      	{% if blocks.live_banner %}
+			        <div class="homepage-feature homepage-feature-slides mbl mtl">
+			          <div class="cycle-pager"></div>
+			          {{ blocks.live_banner|raw }}
+			        </div>
+			    {% endif %}
+	      	</div>
+
+	      	<div class="col-md-4">
+	        
+	      	</div>
+	    </div>
+	</div>
 
 {% endblock %}
