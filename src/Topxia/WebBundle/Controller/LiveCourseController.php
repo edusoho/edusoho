@@ -15,6 +15,10 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播频道已关闭');
         }
 
+        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
+            
+        ));
+
 	}
 
     public function listAction(Request $request, $category)
