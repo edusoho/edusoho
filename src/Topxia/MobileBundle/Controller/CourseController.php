@@ -259,6 +259,9 @@ class CourseController extends MobileController
         
         $hls = array();
         foreach ($courseLesson as $lesson) {
+            if (! isset($lessoon["type"]) || ! isset($lesson['mediaSource'])) {
+                continue;
+            }
             if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
                 $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
                 if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
