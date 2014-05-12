@@ -297,6 +297,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'about' => '',
 			'expiryDay' => 0,
 			'showStudentNumType' => 'opened',
+			'serializeMode' => 'none',
 			'categoryId' => 0,
 			'vipLevelId' => 0,
 			'goals' => array(),
@@ -553,6 +554,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
+	}
+
+	public function searchLessons($conditions, $orderBy, $start, $limit)
+	{
+		return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
 	}
 
 	public function createLesson($lesson)
@@ -858,10 +864,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'finishedTime' => 0,
 		));
 
-		$this->getMemberDao()->updateMember($member['id'], array(
-			'learnedNum' => $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished'),
-		));
-
+		$memberFields = array();
+		$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
 	public function getUserLearnLessonStatus($userId, $courseId, $lessonId)

@@ -75,6 +75,8 @@ define(function(require, exports, module) {
                     return ;
                 }
 
+                $('#testpaper-create-btn').button('submiting').addClass('disabled');
+
                 if(!self.checkBuildCountAndScoreInputs()){
                     return ;
                 }

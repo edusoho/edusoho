@@ -53,6 +53,14 @@
 			</div>
 
 			<div class="form-group">
+				<label class="col-md-2 control-label">连载状态</label>
+				<div class="col-md-8 controls radios">
+					{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
+				</div>
+			</div>
+
+
+			<div class="form-group">
 				<label class="col-md-2 control-label">显示学员人数</label>
 				<div class="col-md-8 controls radios">
 					{{ radios('showStudentNumType', {'opened':'开启', 'closed':'关闭'}, course.showStudentNumType ) }}

@@ -1,3 +1,11 @@
+.text-sm {
+  font-size: 12px;
+}
+
+.text-lg {
+  font-size: 16px;
+}
+
 .btn-muted {
   color: #999999;
 }

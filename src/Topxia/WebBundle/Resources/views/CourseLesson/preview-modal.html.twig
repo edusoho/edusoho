@@ -8,7 +8,16 @@
   {% if lesson.status == 'published' %}
     {% if lesson.type == 'video' %}
       {% if lesson.mediaSource == 'self' %}
-        <div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"></div>
+        <div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
+
+          {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+            data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+          {% endif %}
+          {% if setting('storage.video_fingerprint') and app.user %}
+            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+          {% endif %}
+
+        ></div>
       {% else %}
         <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
       {% endif %}
@@ -27,7 +36,7 @@
 
 {% block footer %}
   {% if lesson.status == 'published' %}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_buy', {id:course.id}) }}">购买此课程（{{ course.price }}元）</button>
+    <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">购买此课程（{{ course.price }}元）</button>
   {% else %}
     <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
   {% endif %}

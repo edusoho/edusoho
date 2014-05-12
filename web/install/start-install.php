@@ -159,7 +159,8 @@ function install_step3()
 		$init->initBlocks();
         $init->initThemes();
 		$init->initLockFile();
-		$init->initRefundSetting();
+        $init->initRefundSetting();
+		$init->initArticleSetting();
 
 		header("Location: start-install.php?step=4");
 		exit();
@@ -184,7 +185,7 @@ function install_step4()
 function _create_database($config, $replace)
 {
 	try {
-		$pdo = new PDO("mysql:host={$config['database_host']}", "{$config['database_user']}", "{$config['database_password']}");
+		$pdo = new PDO("mysql:host={$config['database_host']};port={$config['database_port']}", "{$config['database_user']}", "{$config['database_password']}");
 
 		$pdo->exec("SET NAMES utf8");
 
@@ -214,7 +215,7 @@ function _create_config($config)
 	$config = "parameters:
     database_driver: pdo_mysql
     database_host: {$config['database_host']}
-    database_port: null
+    database_port: {$config['database_port']}
     database_name: {$config['database_name']}
     database_user: {$config['database_user']}
     database_password: '{$config['database_password']}'
@@ -285,7 +286,15 @@ class SystemInit
         );
         $setting = $this->getSettingService()->set('refund', $setting);
 
-	}	
+	}
+
+    public function initArticleSetting()
+    {
+        $setting = array(
+            'name' => '资讯频道', 'pageNums' => 20
+        );
+        $setting = $this->getSettingService()->set('article', $setting);
+    }
 
 	public function initSiteSettings($settings)
 	{
@@ -436,6 +445,13 @@ EOD;
 			'code' => 'course_private',
 			'public' => 0,
 		));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
+        ));
+
 	}
 
 	public function initPages()

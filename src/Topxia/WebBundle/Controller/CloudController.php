@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CloudController extends BaseController
 {
@@ -64,9 +65,19 @@ class CloudController extends BaseController
         }
 
         return $this->createJsonResponse($files);
+    }
 
+    public function videoFingerprintAction(Request $request)
+    {
+        $userId = $request->query->get('userId');
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            return new Response('');
+        }
 
+        $host = $request->getHttpHost();
 
+        return new Response("{$host} {$user['nickname']}");
     }
 
     private function checkSign($server, $sign, $secretKey)

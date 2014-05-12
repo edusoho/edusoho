@@ -1,0 +1,19 @@
+  <div class="panel panel-default sub-articles">
+    <div class="panel-heading">
+      <h3 class="panel-title">热门资讯</h3>
+    </div>
+    <div class="panel-body">
+      {% if articles %}
+        <ul class="media-list">
+          {% for key,article in articles %}
+            <li class="media">
+              <span class="rank_num">{{ key+1 }}</span>
+              <div class="media-body"><a href="{{ path('article_detail', { id:article.id }) }}" title="{{ article.title }}">{{ article.title|plain_text(19) }}</a></div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="empty">暂无热门资讯</div>
+      {% endif %}
+    </div>
+  </div>
