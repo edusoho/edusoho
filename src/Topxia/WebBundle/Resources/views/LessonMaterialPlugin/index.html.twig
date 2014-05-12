@@ -25,11 +25,18 @@
   {% for material in materials %}
     <li class="media list-item">
       <div class="media-body list-item-body">
-      	<div class="title">
-      		<a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
-      		<span class="meta">({{ material.fileSize|file_size }})</span>
-      	</div>
-      	<div class="summary">{{ material.description }}</div>
+        {% if material.link %}
+          <div class="title">
+            <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+            <span class="glyphicon glyphicon-new-window text-muted text-sm" title="网络链接资料"></span>
+          </div>
+        {% else %}
+        	<div class="title">
+        		<a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+        		<span class="meta">({{ material.fileSize|file_size }})</span>
+        	</div>
+        	<div class="summary">{{ material.description }}</div>
+        {% endif %}
       </div>
     </li>
     {% else %}
