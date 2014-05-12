@@ -53,17 +53,20 @@ class AnalysisController extends BaseController
 
         $count = $this->getPartnerStateService()->searchPartnerStateCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator($this->get('request'), $count, 60);
 
         $partnerStates = $this->getPartnerStateService()->searchPartnerStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        $sumPartnerState  = ArrayToolkit::sumColum($partnerStates);
 
         $partnerUserIds=ArrayToolkit::column($partnerStates,'partnerId');
         $partnerUsers=$this->getUserService()->findUsersByIds($partnerUserIds);
 
         return $this->render('TopxiaAdminBundle:Analysis:partner-state.html.twig', array(
             'conditions' => $conditions,
-            'partnerStates' => $partnerStates , 
+            'partnerStates' => $partnerStates,
             'partnerUsers' => $partnerUsers,
+            'sumPartnerState' => $sumPartnerState,
             'paginator' => $paginator
         ));        
     }
@@ -75,14 +78,18 @@ class AnalysisController extends BaseController
 
         $count = $this->getBusinessStateService()->searchBusinessStateCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator($this->get('request'), $count, 60);
 
         $businessStates = $this->getBusinessStateService()->searchBusinessStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+
+        $sumBusinessState  = ArrayToolkit::sumColum($businessStates);
 
        
         return $this->render('TopxiaAdminBundle:Analysis:business-state.html.twig', array(
             'conditions' => $conditions,
-            'businessStates' => $businessStates, 
+            'businessStates' => $businessStates,
+            'sumBusinessState' => $sumBusinessState,
             'paginator' => $paginator
         ));        
     }

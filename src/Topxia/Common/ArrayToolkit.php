@@ -3,6 +3,29 @@ namespace Topxia\Common;
 
 class ArrayToolkit
 {
+
+    public static  function sumColum(array $arrays){
+
+       if (empty($arrays)) {
+            return array();
+        }
+
+       $valuesSum = array();
+
+       $array = current($arrays);
+
+       $keys = array_keys($array);
+
+      
+
+       foreach ($keys as $key ) {
+          $valuesSum[$key] =  array_sum(ArrayToolkit::column($arrays,$key));
+       }
+
+       return $valuesSum;
+
+    }
+
 	public static function column(array $array, $columnName)
 	{
 		if (empty($array)) {

@@ -7,16 +7,16 @@
 
 
 {% block main %}
-	<div class="page-header">
-   
+	<div class="page-header">   
     <h1>产品订单统计</h1>
   </div>
 
  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
 
-  <div class="form-group">   
-    <select class="form-control" name="prodType">
+  <div class="form-group">
+   
+    <select class="form-control" name="prodType" id="prodType">
         {{ select_options(dict('prodType'), app.request.query.get('prodType'), '产品类型') }}
     </select>
   </div>
@@ -27,8 +27,8 @@
     </select>
   </div>
 
-  <div class="form-group">
-    <input class="form-control" type="text" placeholder="日期" name="date" value="{{ app.request.get('date') }}"></div>
+  <div class="form-group ">
+    <input class="form-control" type="text" placeholder="大于等于日期(yyyy-mm-dd)" name="date1" value="{{ app.request.get('date1') }}">- <input class="form-control " type="text" placeholder="小于等于日期(yyyy-mm-dd)" name="date2" value="{{ app.request.get('date2') }}"></div>
 
 
   <div class="form-group">
@@ -60,14 +60,17 @@
       <th width="15%">产品名称</th>
       
       <th>总订单数</th>
-      <th>日订单数</th>
+      
       <th>总收费定单数</th>
-      <th>日收费定单数</th>
+      
       <th>总免费定单数</th>
+
+      <th>日订单数</th>
+      <th>日收费定单数</th>
       <th>日免费定单数</th>
 
-      <th>总访问UV</th>
-      <th>总访问Pv</th> 
+      <th>日访问UV</th>
+      <th>日访问Pv</th> 
 
       <th>新游客访问UV</th>
       <th>新游客访问Pv</th>  
@@ -82,13 +85,17 @@
     </tr>
     </thead>
     <tbody>
-      {% for businessState in businessStates %}
-     
-      
+      {% if sumBusinessState is not empty  %}
+        {% include 'TopxiaAdminBundle:Analysis:business-state-sum.html.twig' %}
+      {% endif %}
+
+      {% for businessState in businessStates %}      
         {% include 'TopxiaAdminBundle:Analysis:business-state-tr.html.twig' %}
       {% else %}
         <tr><td colspan="6"><div class="empty">无课程记录</div></td></tr>
       {% endfor %}
+
+
     </tbody>
   </table>
 

@@ -47,17 +47,18 @@ class BusinessStateDaoImpl extends BaseDao implements BusinessStateDao
     {
         $conditions = array_filter($conditions);
 
-         if (isset($conditions['prodName'])) {
+        if (isset($conditions['prodName'])) {
             $conditions['prodNameLike'] = "%{$conditions['prodName']}%";
             unset($conditions['prodName']);
         }
-       
+
+           
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'state')
 
-             ->andWhere('prodType = :prodType')
+            ->andWhere('prodType = :prodType')
 
-              ->andWhere('prodName like :prodNameLike')
+            ->andWhere('prodName like :prodNameLike')
 
             ->andWhere('prodId = :prodId')
 
@@ -69,7 +70,9 @@ class BusinessStateDaoImpl extends BaseDao implements BusinessStateDao
 
             ->andWhere('totalFeeOrders >= :totalFeeOrders')
                        
-            ->andWhere('date = :date');
+            ->andWhere('date >= :date1')
+
+             ->andWhere('date <= :date2');
     }
 
     public function addBusinessState($businessState)

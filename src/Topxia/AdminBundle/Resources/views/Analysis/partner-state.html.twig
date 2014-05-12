@@ -14,11 +14,8 @@
 
  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
-
-  
-
   <div class="form-group">
-    <input class="form-control" type="text" placeholder="日期" name="date" value="{{ app.request.get('date') }}"></div>
+    <input class="form-control" type="text" placeholder="大于等于日期" name="date1" value="{{ app.request.get('date1') }}">-<input class="form-control" type="text" placeholder="小于等于日期" name="date2" value="{{ app.request.get('date2') }}"></div>
   <div class="form-group">
     <input class="form-control" type="text" placeholder="渠道Id" name="partnerId" value="{{ app.request.get('partnerId') }}"></div>
 
@@ -47,6 +44,11 @@
     </tr>
     </thead>
     <tbody>
+
+      {% if sumPartnerState is not empty %}
+         {% include 'TopxiaAdminBundle:Analysis:partner-state-sum.html.twig' %}
+      {% endif %}
+
       {% for partnerState in partnerStates %}
       {% set partnerUser = partnerUsers[partnerState.partnerId]%}
       

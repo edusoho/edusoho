@@ -1,0 +1,30 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr  class="text-color-red" >
+
+  <td></td>
+  <td ></td>
+  <td ></td>
+  <td >页面小计：</td>
+  <td ></td>
+  <td ></td>
+  <td ></td>
+
+
+  <td>{{ sumBusinessState.orders }}</td>
+  <td>{{ sumBusinessState.feeOrders }}</td>
+  <td>{{ sumBusinessState.freeOrders }}</td>
+
+
+  <td>{{ sumBusinessState.dayGuest }}</td>
+  <td>{{ sumBusinessState.dayGuestVisit }}</td>
+
+  <td>{{ sumBusinessState.dayNewGuest }}</td>
+  <td>{{ sumBusinessState.dayNewGuestVisit }}</td>
+
+    <td>{{ sumBusinessState.dayOldGuest }}</td>
+  <td>{{ sumBusinessState.dayOldGuestVisit }}</td>
+
+    <td>{{ sumBusinessState.dayUser }}</td>
+  <td>{{ sumBusinessState.dayUserVisit }}</td>
+  
+</tr>
