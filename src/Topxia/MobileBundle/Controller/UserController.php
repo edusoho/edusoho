@@ -20,7 +20,7 @@ class UserController extends MobileController
     {
         $token = $this->getUserToken($request);
         $result = array(
-            "token"=>$token
+            "token"=>$token["token"]
         );
         if ($token) {
             $user = $this->getUserService()->getUser($token["userId"]);
@@ -111,7 +111,7 @@ class UserController extends MobileController
             if ($this->getUserService()->verifyPassword($user['id'], $pass)) {
                 $token = $this->createToken($user, $request);
                 $result['token'] = $token;
-                $result['user'] = $user;
+                $result['user'] = $this->changeUserPicture($user, false);
                 $result['status'] = "success";
             }
         }
