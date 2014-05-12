@@ -19,12 +19,15 @@ class UserController extends MobileController
     public function checkTokenAction(Request $request)
     {
         $token = $this->getUserToken($request);
-        return $this->createJson($request, $token);
-    }
-
-    public function getMessageAction(Request $request)
-    {
-
+        $result = array(
+            "token"=>$token
+        );
+        if ($token) {
+            $user = $this->getUserService()->getUser($token["userId"]);
+            $result["user"] = $this->changeUserPicture($user,false);
+        }
+        
+        return $this->createJson($request, $result);
     }
 
     public function getNoticeAction(Request $request)
@@ -108,6 +111,7 @@ class UserController extends MobileController
             if ($this->getUserService()->verifyPassword($user['id'], $pass)) {
                 $token = $this->createToken($user, $request);
                 $result['token'] = $token;
+                $result['user'] = $user;
                 $result['status'] = "success";
             }
         }

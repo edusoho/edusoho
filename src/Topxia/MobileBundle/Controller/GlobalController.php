@@ -13,17 +13,17 @@ class GlobalController extends MobileController
             array(
                 "image"=>MobileController::$webHost."/mobile/carousel/1.jpg",
                 "action"=>"none",
-                "title"=>"好知网"
+                "title"=>""
             ),
             array(
                 "image"=>MobileController::$webHost."/mobile/carousel/2.jpg",
                 "action"=>"none",
-                "title"=>"好知网"
+                "title"=>""
             ),
             array(
                 "image"=>MobileController::$webHost."/mobile/carousel/3.jpg",
                 "action"=>"none",
-                "title"=>"好知网"
+                "title"=>""
             ),
         );
         return $this->createJson($request, $carousel);

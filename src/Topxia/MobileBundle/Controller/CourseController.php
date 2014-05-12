@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\ReviewType;
+use Topxia\Service\Util\CloudClientFactory;
 
 class CustomSort
 {
@@ -256,6 +257,19 @@ class CourseController extends MobileController
             $chapters[$i]['course_lesson_list'] = $this->_findLessonByChapterId($courseLesson, $chapters[$i]['id']);
         }
         
+        $hls = array();
+        foreach ($courseLesson as $lesson) {
+            if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient();
+                    $hls[$lesson["id"]] = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                }
+            }
+        }
+        
+        $chapters["hls"] = $hls;
         return $this->createJson($request, $chapters);
     }
 
@@ -365,5 +379,10 @@ class CourseController extends MobileController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }
