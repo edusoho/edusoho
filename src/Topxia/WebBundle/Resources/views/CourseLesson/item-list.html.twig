@@ -6,11 +6,19 @@
 	<ul class="course-item-list {{ class }}" id="course-item-list">
 		{% for id, item in items %}
 		  {% if 'chapter' in id %}
-			  <li class="item chapter-item clearfix">
-			  	<span class="name">章节</span>
-			  	<span class="pie">{{ item.number }}</span>
-			  	<span class="title">{{ item.title }}</span>
-	  	  </li>
+		    {% if item.type == 'unit' %}
+				  <li class="item chapter-item chapter-item-unit clearfix">
+				  	<span class="name">单元</span>
+				  	<span class="pie">{{ item.number }}</span>
+				  	<span class="title">{{ item.title }}</span>
+		  	  </li>
+		    {% else %}
+				  <li class="item chapter-item clearfix">
+				  	<span class="name">章节</span>
+				  	<span class="pie">{{ item.number }}</span>
+				  	<span class="title">{{ item.title }}</span>
+		  	  </li>
+		    {% endif %}
 		  {% elseif 'lesson' in id %}
 		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix" data-id="{{ item.id }}">
 		    	{% if item.status == 'published' %}

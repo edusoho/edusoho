@@ -1021,6 +1021,11 @@ body {
 	margin: 25px 0 10px 0;
 }
 
+.course-item-list .chapter-item-unit {
+	margin-left: 20px;
+
+}
+
 .course-item-list .item .name {
 	display: inline-block;
 	width: 60px;
@@ -1037,6 +1042,10 @@ body {
 	font-weight: bold;
 }
 
+.course-item-list .chapter-item-unit .name {
+	width: 40px;
+}
+
 .course-item-list .chapter-item .pie,
 .course-item-list .lesson-item .pie {
 	display: inline-block;
@@ -1047,6 +1056,12 @@ body {
 .course-item-list .chapter-item .pie {
 	height: 30px;
 	width: 30px;
+	font-weight: bold;
+}
+
+.course-item-list .chapter-item-unit .pie {
+	color: #999;
+	font-weight: normal;
 }
 
 .course-item-list .lesson-item .pie {
@@ -1086,11 +1101,13 @@ body {
 	height: 30px;
 }
 
-
-
 .course-item-list .chapter-item .title {
 	font-weight: bold;
 	color: #888;
+}
+
+.course-item-list .chapter-item-unit .title {
+	left: 90px;
 }
 
 .course-item-list .lesson-item:hover .title {
@@ -1136,7 +1153,8 @@ body {
 	color: #fff;
 }
 
-.course-item-list-multi h3 {
+.course-item-list-multi h3 ,
+.course-item-list-multi h4 {
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 36px;
@@ -1147,8 +1165,13 @@ body {
 	margin: 20px 0;
 }
 
-.course-item-list-multi h3 strong {
+.course-item-list-multi h3 strong ,
+.course-item-list-multi h4 strong {
 	color: #555;
+}
+
+.course-item-list-multi h4 {
+	margin: 20px 0 20px 20px;
 }
 
 .course-item-list-multi ul {
@@ -1616,7 +1639,10 @@ body {
 
 .lesson-list .item-chapter {
 	margin-left: -30px;
+}
 
+.lesson-list .item-chapter-unit {
+	margin-left: -15px;
 }
 
 .lesson-list .item-lesson {
