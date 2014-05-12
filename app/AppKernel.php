@@ -33,10 +33,6 @@ class AppKernel extends Kernel
             $bundles[] = new Coupon\CouponBundle\CouponBundle();
         }
 
-        if (file_exists("{$pluginDir}/QuestionPlumber/QuestionPlumberBundle/QuestionPlumberBundle.php")) {
-            $bundles[] = new QuestionPlumber\QuestionPlumberBundle\QuestionPlumberBundle();
-        }
-
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
             

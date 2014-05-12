@@ -68,6 +68,15 @@ define(function(require, exports, module) {
 	    	});
 		}
 
+		$('#buy-btn').on('click', function(){
+			$modal = $('#modal');
+			$modal.modal('hide');
+			$.get($(this).data('url'), function(html) {
+				$modal.html(html);
+				$modal.modal('show');
+			});
+		});
+
     };
 
 });
