@@ -7,6 +7,7 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
         var $modal = $('#live-lesson-form').parents('.modal');
+        var now = new Date();
         var validator = new Validator({
             element: '#live-lesson-form',
             autoSubmit: false,
@@ -70,10 +71,11 @@ define(function(require, exports, module) {
             rule:'integer romote_check',
             errormessageRequired: '请输入时长'
         });
+     
+        $('[name=startTime]').datetimepicker('setStartDate', now);
 
         $("[name=startTime]").datetimepicker({
         }).on('hide', function(ev){
-
             validator.query('[name=startTime]').execute();
         });
 	};
