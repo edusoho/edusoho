@@ -54,6 +54,17 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function getSystemUser()
+    {
+       
+        $user = $this->getUserDao()->findSystemUser();
+        if(!$user){
+            return null;
+        } else {
+            return UserSerialize::unserialize($user);
+        }
+    }
+
     public function findUsersByIds(array $ids)
     {
         $users = UserSerialize::unserializes(

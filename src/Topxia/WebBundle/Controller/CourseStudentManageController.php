@@ -123,38 +123,13 @@ class CourseStudentManageController extends BaseController
 
             for ($i = 1; $i <= $num; $i++) {
 
+                $user = $this->getUserService()->getSystemUser();
 
+                $courseMember = $this->getCourseService()->getCourseMember($course['id'],$user['id']);
 
-                $mail = $this->generateChars();
-
-                $nickname =  $this->generateNickName();
-
-                if($this->getUserService()->getUserByNickname($nickname)){
+                if($courseMember){
                     continue;
                 }
-
-                $userData['email'] = $mail."@osforce.cn";
-                $userData['nickname'] = $nickname;
-                $userData['password'] =  $mail."123";
-                $userData['createdIp'] = $request->getClientIp();
-               
-                $user = $this->getAuthService()->register($userData);
-
-                $this->get('session')->set('registed_email', $user['email']);
-
-                if(isset($formData['roles'])){
-                    $roles[] = 'ROLE_TEACHER';
-                    array_push($roles, 'ROLE_USER');
-                    $this->getUserService()->changeUserRoles($user['id'], $roles);
-                }
-
-                $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
-
-            
-                if (empty($user)) {
-                    throw $this->createNotFoundException("用户未创建成功");
-                }
-
 
                 $order = $this->getOrderService()->createOrder(array(
                     'userId' => $user['id'],

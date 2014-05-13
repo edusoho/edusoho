@@ -289,7 +289,8 @@ class DataDict
 		'priceType' => array(
 			
         	'fee' =>          '收费',
-        	'free' =>         '免费',	        				
+        	'free' =>         '免费',
+        	'none' =>         '无',	        				
 		),
 
 	);
