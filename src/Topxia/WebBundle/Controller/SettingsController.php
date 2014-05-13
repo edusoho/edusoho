@@ -545,7 +545,7 @@ class SettingsController extends BaseController
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         if (!empty($bind)) {
-            $this->setFlashMessage('danger', '该第三方帐号已经被其他好知网帐号绑定，不能重复绑定!');
+            $this->setFlashMessage('danger', '该第三方帐号已经被其他帐号绑定，不能重复绑定!');
             goto response;
         }
 

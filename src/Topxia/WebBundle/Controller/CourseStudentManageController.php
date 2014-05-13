@@ -260,34 +260,45 @@ class CourseStudentManageController extends BaseController
     {   
         $course = $this->getCourseService()->tryAdminCourse($id);
 
-        $courseMembers = $this->getCourseService()->findCourseStudents($course['id'],0,10000);
+
+        $courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 10000);
+
 
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
 
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+        
         $progresses = array();
         foreach ($courseMembers as $student) {
-            $progresses[] = $this->calculateUserLearnProgress($course, $student);
+            $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
         }
+
         $str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
 
-        $students = array_map(function($user,$courseMember,$progress,$profile){
-            $member['nickname']   = $user['nickname'];
-            $member['joinedTime'] = date('Y-n-d H:i:s', $courseMember['createdTime']);
-            $member['percent']  = $progress['percent'];
-            $member['truename'] = $profile['truename'] ? $profile['truename'] : "-";
-            $member['email'] = $user['email'] ? $user['email'] : "-";
-            $member['company'] = $profile['company'] ? $profile['company'] : "-";
-            $member['title'] = $user['title'] ? $user['title'] : "-";
-            $member['mobile'] = $profile['mobile'] ? $profile['mobile'] : "-";
-            $member['weixin'] = $profile['weixin'] ? $profile['weixin'] : "-";
-            $member['qq'] = $profile['qq'] ? $profile['qq'] : "-";
-            return implode(',',$member);
-        }, $users,$courseMembers,$progresses,$profiles);
+        $students = array();
+
+        foreach ($courseMembers as $courseMember) {
+            $member = "";
+            $member .= $users[$courseMember['userId']]['nickname'].",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+            $member .= $progresses[$courseMember['userId']]['percent'].",";
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['email'].",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-";
+            $students[] = $member;   
+        };
+
         $str .= implode("\r\n",$students);
         $str = chr(239) . chr(187) . chr(191) . $str;
-
+        
         $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
         $userId = $this->getCurrentUser()->id;
