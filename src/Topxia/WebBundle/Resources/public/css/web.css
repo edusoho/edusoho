@@ -984,7 +984,7 @@ body {
 }
 
 .course-item-list-wrap {
-	margin-left: 89px;
+	margin-left: 99px;
 	border-left: 1px solid #c9c9c9;
 /*	overflow-y: auto;
 	overflow-x: hidden;*/
@@ -992,7 +992,7 @@ body {
 
 .course-item-list {
 	list-style: none;
-	margin: 0 0 0 -89px;
+	margin: 0 0 0 -99px;
 	padding: 0;
 }
 
@@ -1022,8 +1022,11 @@ body {
 }
 
 .course-item-list .chapter-item-unit {
-	margin-left: 20px;
+	margin-left: 15px;
+}
 
+.course-item-list .lesson-item {
+	margin-left: 15px;
 }
 
 .course-item-list .item .name {
@@ -1043,7 +1046,8 @@ body {
 }
 
 .course-item-list .chapter-item-unit .name {
-	width: 40px;
+	/*font-weight: normal;*/
+	width: 60px;
 }
 
 .course-item-list .chapter-item .pie,
@@ -1092,7 +1096,7 @@ body {
 
 .course-item-list .item .title {
 	position: absolute;
-	left: 110px;
+	left: 120px;
 	right: 90px;
 	display: inline-block;
 	color: #888;
@@ -1101,18 +1105,30 @@ body {
 	height: 30px;
 }
 
+.course-item-list .lesson-item .title {
+	left: 110px;
+}
+
 .course-item-list .chapter-item .title {
 	font-weight: bold;
 	color: #888;
+	left: 75px;
 }
 
 .course-item-list .chapter-item-unit .title {
-	left: 90px;
+	left: 70px;
 }
 
 .course-item-list .lesson-item:hover .title {
 	color: #444;
 	outline: none;
+}
+
+.course-item-list .lesson-item .name {
+	text-align: left;
+	padding-left: 15px;
+	margin-right: 0px;
+	width: 65px;
 }
 
 .course-item-list .lesson-item .type {

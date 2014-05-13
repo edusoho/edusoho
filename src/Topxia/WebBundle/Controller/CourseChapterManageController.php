@@ -50,6 +50,7 @@ class CourseChapterManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
 			'chapter' => $chapter,
+            'type' => $chapter['type'],
 		));
 		
 	}

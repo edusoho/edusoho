@@ -8,14 +8,12 @@
 		  {% if 'chapter' in id %}
 		    {% if item.type == 'unit' %}
 				  <li class="item chapter-item chapter-item-unit clearfix">
-				  	<span class="name">单元</span>
-				  	<span class="pie">{{ item.number }}</span>
+				  	<span class="name">第 {{ item.number }} 节</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
 		    {% else %}
 				  <li class="item chapter-item clearfix">
-				  	<span class="name">章节</span>
-				  	<span class="pie">{{ item.number }}</span>
+				  	<span class="name">第 {{ item.number }} 章</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
 		    {% endif %}
