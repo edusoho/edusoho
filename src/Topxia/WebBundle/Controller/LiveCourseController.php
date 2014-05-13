@@ -196,13 +196,15 @@ class LiveCourseController extends BaseController
 
         $newCourses = array();
 
-        $courses = ArrayToolkit::index($courses, 'id');
+        if ($courses) {
+            $courses = ArrayToolkit::index($courses, 'id');
 
-        foreach ($lessons as $key => &$lesson) {
-            $newCourses[$key] = $courses[$lesson['courseId']];
-            $newCourses[$key]['lesson'] = $lesson;
+            foreach ($lessons as $key => &$lesson) {
+                $newCourses[$key] = $courses[$lesson['courseId']];
+                $newCourses[$key]['lesson'] = $lesson;
+            }
         }
-        
+
         $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'hitNum',0,10 );
 
         return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(
