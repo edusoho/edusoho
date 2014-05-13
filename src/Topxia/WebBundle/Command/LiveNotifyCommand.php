@@ -39,22 +39,27 @@ class LiveNotifyCommand extends BaseCommand
 	    $courseIds = ArrayToolkit::column($liveLessons,'courseId');
 	    $courseIds = array_unique($courseIds);
 	    $courseIds = array_values($courseIds);
-	    // $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+	    
+	    if ($courseIds) {
 
-        $courseMembers =  $connection->fetchAll("SELECT * FROM `course_member` WHERE id IN ({$marks})", $courseIds);
+	        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
 
-	    foreach ($courseMembers as $key => $value) {
+	        $courseMembers =  $connection->fetchAll("SELECT * FROM `course_member` WHERE courseId IN ({$marks})", $courseIds);
 
-	      $minStartTime = $connection->fetchAll("select min(`startTime`) as startTime from `course_lesson` where courseId ={$value['courseId']};");
+		    foreach ($courseMembers as $key => $value) {
 
-	      $minStartTime = date("Y-m-d H:i:s",$minStartTime[0]['startTime']);
-	      var_dump($minStartTime);
+		      $minStartTime = $connection->fetchAll("select min(`startTime`) as startTime from `course_lesson` where courseId ={$value['courseId']};");
 
-	      // $this->getNotificationService()->notify($value['userId'], $type="thread",  $content = "【直播】 您正在学习的《课程名称课程名称》即将于 明天{$minStartTime} 开始直播，请安排好时间准时参加。");
+		      $minStartTime = date("Y-m-d H:i:s",$minStartTime[0]['startTime']);
+
+		      $this->getNotificationService()->notify($value['userId'], $type="default",  $content = "【直播】您正在学习的《课程名称课程名称》即将于 明天{$minStartTime} 开始直播，请安排好时间准时参加。");
+		    }
+
+		  	$output->writeln('<info>消息发布完成</info>');
+	    } else {
+			$output->writeln('<info>没有消息可以发布</info>');
 	    }
-
-	  	$output->writeln('<info>消息发布完成</info>');
+	   
 
 	}
 	
