@@ -98,7 +98,11 @@ class LiveCourseController extends BaseController
 	}
 
     public function listAction(Request $request, $category)
-    {
+    {   
+        if (!$this->setting('course.live_course_enabled')) {
+            return $this->createMessageResponse('info', '直播频道已关闭');
+        }
+        
         $now = time();
 
         $today = date("Y-m-d");
