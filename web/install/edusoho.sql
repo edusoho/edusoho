@@ -228,12 +228,14 @@ CREATE TABLE `course_announcement` (
 
 DROP TABLE IF EXISTS `course_chapter`;
 CREATE TABLE `course_chapter` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `courseId` int(10) unsigned NOT NULL,
-  `number` int(10) unsigned NOT NULL,
-  `seq` int(10) unsigned NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `createdTime` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程章节ID',
+  `courseId` int(10) unsigned NOT NULL COMMENT '章节所属课程ID',
+  `type` enum('chapter','unit') NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元。',
+  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'parentId大于０时为单元',
+  `number` int(10) unsigned NOT NULL COMMENT '章节编号',
+  `seq` int(10) unsigned NOT NULL COMMENT '章节序号',
+  `title` varchar(255) NOT NULL COMMENT '章节名称',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '章节创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -290,19 +292,20 @@ CREATE TABLE `course_lesson_learn` (
 
 DROP TABLE IF EXISTS `course_material`;
 CREATE TABLE `course_material` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `courseId` int(10) unsigned NOT NULL DEFAULT '0',
-  `lessonId` int(10) unsigned NOT NULL DEFAULT '0',
-  `title` varchar(1024) NOT NULL,
-  `description` text,
-  `fileId` int(10) unsigned NOT NULL,
-  `fileUri` varchar(255) NOT NULL DEFAULT '',
-  `fileMime` varchar(255) NOT NULL DEFAULT '',
-  `fileSize` int(10) unsigned NOT NULL DEFAULT '0',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0',
-  `createdTime` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程资料ID',
+  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属课程ID',
+  `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属课时ID',
+  `title` varchar(1024) NOT NULL COMMENT '资料标题',
+  `description` text COMMENT '资料描述',
+  `link` varchar(1024) NOT NULL DEFAULT '' COMMENT '外部链接地址',
+  `fileId` int(10) unsigned NOT NULL COMMENT '资料文件ID',
+  `fileUri` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件URI',
+  `fileMime` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件MIME',
+  `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_member`;
 CREATE TABLE `course_member` (
