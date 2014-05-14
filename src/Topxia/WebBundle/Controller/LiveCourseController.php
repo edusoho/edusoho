@@ -89,7 +89,7 @@ class LiveCourseController extends BaseController
             'recentCourses' => $recentCourses,
             'users' => $users,
             'tomorrow' => $tomorrow,
-            'category' => array('id' => null)
+            'category' => array('id' => null,'parentId' => null)
         ));
 
 	}
