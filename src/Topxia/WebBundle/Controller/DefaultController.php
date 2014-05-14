@@ -13,12 +13,13 @@ class DefaultController extends BaseController
         $conditions = array('status' => 'published');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
+        $courseSetting['live_course_enabled'] = 0;
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $liveCourses = array();
         $newLiveCourses = array();
 
-        if (!@$courseSetting['live_course_enabled']) {
+        if (!$courseSetting['live_course_enabled']) {
 
             $liveConditions = array(
                 'status' => 'published',

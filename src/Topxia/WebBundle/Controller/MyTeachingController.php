@@ -29,7 +29,7 @@ class MyTeachingController extends BaseController
         return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
             'courses'=>$courses,
             'paginator' => $paginator,
-            'live_course_enabled' => @$courseSetting['live_course_enabled']
+            'live_course_enabled' => $courseSetting['live_course_enabled']
         ));
     }
 
