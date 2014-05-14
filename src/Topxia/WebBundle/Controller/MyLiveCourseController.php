@@ -24,9 +24,17 @@ class MyLiveCourseController extends BaseController
             'courseIds' => $courseIds
         );
 
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchLessonCount($conditions),
+            10
+        );
+
         $lessons = $this->getCourseService()->searchLessons(
             $conditions,  
-            array('startTime', 'ASC'), 0, 10
+            array('startTime', 'ASC'), 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         $newCourses = array();
@@ -39,18 +47,14 @@ class MyLiveCourseController extends BaseController
         }
         
         return $this->render('TopxiaWebBundle:MyLiveCourse:index.html.twig', array(
-            'courses'=>$newCourses
+            'courses' => $newCourses,
+            'paginator' => $paginator
         ));
     }
 
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

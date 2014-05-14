@@ -33,7 +33,8 @@
 					    </div>
 					</li>
 					{% endfor %}
-				</ul>				
+				</ul>
+				{{ web_macro.paginator(paginator) }} 				
 			{% else %}
 			    <div class="empty">暂无学习中的课程</div>
 			{% endif %}
