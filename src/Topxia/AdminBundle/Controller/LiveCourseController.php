@@ -11,7 +11,7 @@ class LiveCourseController extends BaseController
     public function indexAction (Request $request, $status)
     {   
 
-        $courses = $this->getCourseService()->searchCourses(array('isLive' => '1','status' => 'published'), $sort = 'latest', 0, 100);
+        $courses = $this->getCourseService()->searchCourses(array('isLive' => '1','status' => 'published'), $sort = 'latest', 0, 1000);
 
         $courseIds = ArrayToolkit::column($courses, 'id');
 
@@ -57,6 +57,5 @@ class LiveCourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-
 
 }
