@@ -37,7 +37,7 @@ class QuestionController extends BaseController
         $result = $client->generateFileUrl($client->getBucket(), $file['metas2']['shd'], 3600);
         $result['status'] = 'ok';
 
-        return $this->createJsonResponse($url);
+        return $this->createJsonResponse($result);
     }
 
     private function getUploadFileService()
