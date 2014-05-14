@@ -6,9 +6,9 @@
   <div class="col-md-2">
     {% block sidebar %}
       <div class="list-group">
-        <a href="{{ path('admin_analysis_user') }}" class="list-group-item {% if menu == 'userState' %}active{% endif %}">注册用户统计</a>
+        <a href="{{ path('admin_analysis_user') }}" class="list-group-item {% if menu == 'userState' %}active{% endif %}">注册学员统计</a>
 
-        <a href="{{ url('admin_analysis_guest') }}" class="list-group-item {% if menu == 'guestState' %}active{% endif %}">游客访问统计</a>
+        <a href="{{ url('admin_analysis_guest') }}" class="list-group-item {% if menu == 'guestState' %}active{% endif %}"> 全站用户统计</a>
 
         <a href="{{ url('admin_analysis_partner') }}" class="list-group-item {% if menu == 'partnerState' %}active{% endif %}">渠道贡献统计</a>
 
