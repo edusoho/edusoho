@@ -1748,3 +1748,41 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   cursor: pointer;
 }
 /* End: Postroll */
+
+
+
+
+.webuploader-container {
+  position: relative;
+  padding: 0;
+}
+
+.webuploader-container label {
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+
+
+.webuploader-container > .glyphicon {
+  padding: 8px 10px;
+  top: 0;
+}
+
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+  position: relative;
+  overflow: hidden;
+  padding: 5px 10px;
+}
+.webuploader-pick-hover {
+}
+
+.webuploader-pick-disable {
+  opacity: 0.6;
+  pointer-events:none;
+}

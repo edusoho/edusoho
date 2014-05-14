@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
+    require('webuploader');
 
     var QuestionCreator = Widget.extend({
         attrs: {
@@ -36,24 +37,47 @@ define(function(require, exports, module) {
                 editor.sync();
             });
 
-            var $trigger = this.$('[data-role=analysis-uploader]');
-            var uploader = new Uploader({
-                trigger: $trigger,
-                name: 'file',
-                action: this.element.data('uploadUrl'),
-                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                accept: 'image/*'
-            }).error(function(file) {
-                Notify.danger('上传失败，请重试！');
-            }).success(function(response) {
-                response = $.parseJSON(response);
-                var result = '[image]' + response.hashId + '[/image]'
-                editor.insertHtml(result);
-                Notify.success('上传成功！', 1);
-            }).change(function(files) {
-                Notify.info('正在上传，请稍等！', 0);
-                uploader.submit();
+
+            var uploader = WebUploader.create({
+                swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+                server: this.element.data('uploadUrl'),
+                pick: '#question-analysis-uploader',
+                formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,png',
+                    mimeTypes: 'image/*'
+                }
+
             });
+
+            uploader.on( 'fileQueued', function( file ) {
+                Notify.info('正在上传，请稍等！', 0);
+                uploader.upload();
+            });
+
+            uploader.on( 'uploadSuccess', function( file, response ) {
+                Notify.success('上传成功！', 1);
+                var result = '[image]' + response.hashId + '[/image]';
+                editor.insertHtml(result);
+            });
+
+            uploader.on( 'uploadError', function( file, response ) {
+                Notify.danger('上传失败，请重试！');
+            });
+
+            uploader.disable();
+
+            this.$('#advanced-collapse').on('shown.bs.collapse', function(){
+                uploader.enable();
+                console.log('shown');
+            });
+
+            this.$('#advanced-collapse').on('hidden.bs.collapse', function(){
+                console.log('hidden');
+                uploader.disable();
+            });
+
         },
 
         _initStemField: function() {
@@ -63,24 +87,31 @@ define(function(require, exports, module) {
                 editor.sync();
             });
 
-            var $trigger = this.$('[data-role=stem-uploader]');
+            var uploader = WebUploader.create({
+                swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+                server: this.element.data('uploadUrl'),
+                pick: '#question-stem-uploader',
+                formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,png',
+                    mimeTypes: 'image/*'
+                }
+            });
 
-            var uploader = new Uploader({
-                trigger: $trigger,
-                name: 'file',
-                action: this.element.data('uploadUrl'),
-                data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                accept: 'image/*'
-            }).error(function(file) {
-                Notify.danger('上传失败，请重试！');
-            }).success(function(response) {
-                response = $.parseJSON(response);
-                var result = '[image]' + response.hashId + '[/image]'
-                editor.insertHtml(result);
-                Notify.success('上传成功！', 1);
-            }).change(function(files) {
+            uploader.on( 'fileQueued', function( file ) {
                 Notify.info('正在上传，请稍等！', 0);
-                uploader.submit();
+                uploader.upload();
+            });
+
+            uploader.on( 'uploadSuccess', function( file, response ) {
+                Notify.success('上传成功！', 1);
+                var result = '[image]' + response.hashId + '[/image]';
+                editor.insertHtml(result);
+            });
+
+            uploader.on( 'uploadError', function( file, response ) {
+                Notify.danger('上传失败，请重试！');
             });
 
         },
