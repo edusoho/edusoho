@@ -81,18 +81,15 @@ class LiveCourseController extends BaseController
             $userIds = array_merge($userIds, $course['teacherIds']);
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $conditions['ratingGreaterThan'] = 0.01;
-
-        $ratingCourses = $this->getCourseService()->searchCourses( $conditions, 'Rating',0,10);
         
         return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
-            'categories' => $categories,
+            'rootCategories' => $categories,
             'newCourses' => $newCourses,
             'recentlessons' => $recentlessons,
             'recentCourses' => $recentCourses,
             'users' => $users,
             'tomorrow' => $tomorrow,
-            'ratingCourses' => $ratingCourses
+            'category' => array('id' => null,'parentId' => null)
         ));
 
 	}
@@ -134,8 +131,10 @@ class LiveCourseController extends BaseController
         $group = $this->getCategoryService()->getGroupByCode('course');
         if (empty($group)) {
             $categories = array();
+            $rootCategories = array();
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+            $rootCategories = $this->getCategoryService()->findGroupRootCategories($group['code']);
         }
 
         $date = $request->query->get('date', 'today');
@@ -209,15 +208,13 @@ class LiveCourseController extends BaseController
             }
         }
 
-        $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'hitNum',0,10 );
-
         return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(
             'date' => $date,
             'category' => $category,
             'categories' => $categories,
+            'rootCategories' => $rootCategories,
             'paginator' => $paginator,
             'courses' => $courses,
-            'popularCourses' => $popularCourses,
             'lessons' => $lessons,
             'newCourses' => $newCourses
         ));
@@ -233,6 +230,21 @@ class LiveCourseController extends BaseController
             
         return $this->render('TopxiaWebBundle:LiveCourse:live-lesson-modal.html.twig',array(
         	
+        ));
+    }
+
+    public function ratingCoursesBlockAction()
+    {   
+        $conditions = array(
+            'status' => 'published',
+            'isLive' => '1',
+            'ratingGreaterThan' => 0.01
+        );
+
+        $courses = $this->getCourseService()->searchCourses( $conditions, 'Rating',0,10);
+
+        return $this->render('TopxiaWebBundle:LiveCourse:rating-courses-block.html.twig', array(
+            'courses' => $courses
         ));
     }
 

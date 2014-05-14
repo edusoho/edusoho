@@ -18,7 +18,7 @@ class DefaultController extends BaseController
         $liveCourses = array();
         $newLiveCourses = array();
 
-        if ($courseSetting['live_course_enabled'] == 1) {
+        if (!@$courseSetting['live_course_enabled']) {
 
             $liveConditions = array(
                 'status' => 'published',
@@ -41,7 +41,6 @@ class DefaultController extends BaseController
             }
 
             $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
-
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');

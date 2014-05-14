@@ -3,12 +3,15 @@
 {% block title %}课程设置 - {{ parent() }}{% endblock %}
 
 {% set submenu = 'course_setting' %}
+
+{% set script_controller = 'setting/course' %}
+
 {% block maincontent %}
 <div class="page-header"><h1>课程设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
-<form class="form-horizontal" method="post" novalidate>
+<form class="form-horizontal" method="post" id="course-form" novalidate>
 
   <fieldset>
     <div class="form-group">
@@ -85,7 +88,8 @@
         <label>同时在线人数上线</label>
       </div>
       <div class="controls col-md-8">
-        <input class="form-control" type="text" placeholder="{{ courseSetting.max_current_num }}人" disabled>
+        <div class="mts text-muted" >{{ courseSetting.max_current_num }}人</div>
+        <input class="form-control" name="max_current_num" type="hidden" data-value="{{ courseSetting.max_current_num }}">
         <p class="help-block">如需扩充，请联系Edusoho客服人员</p>
       </div>
     </div>
