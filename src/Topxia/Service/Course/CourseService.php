@@ -81,6 +81,8 @@ interface CourseService
 
 	public function createLesson($lesson);
 
+	public function createLiveRoomNum($courseId, $lessonId, $fields);
+
 	public function updateLesson($courseId, $lessonId, $fields);
 
 	public function deleteLesson($courseId, $lessonId);

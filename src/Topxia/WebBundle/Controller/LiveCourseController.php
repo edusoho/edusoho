@@ -264,14 +264,53 @@ class LiveCourseController extends BaseController
         } 
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         if ($lesson['startTime'] <= (time()+60*30)) {
-            return $this->render("TopxiaWebBundle:LiveCourse:");
+
+            $url = 'http://www.tetequ.com/api2/get_room_num';
+            $params = array(
+            'room_title' =>$lesson['title'],
+            'description' => $lesson['summary']."#".time(),
+            'begin_time' => $lesson['startTime'],
+            'take_time' => 21599,
+            'is_show' => 0,
+            'company_code' => 'DZHKJ'
+            );
+            
+            $result = $this->postRequest($url, $params);
+            $result = json_decode($result, true);
+
+            if (empty($result['room_num'])) {
+                echo 'get room num error!';
+                exit();
+            }
+
+            unset($result['success']);
+            $liveLesson = $this->getCourseService()->createLiveRoomNum($courseId, $lessonId, $result);
+        
         } else {
             return $this->createMessageResponse('info', '还没到登陆时间');
         }
+    }
 
-        var_dump($lesson);
-        exit();
+    public function postRequest($url, $params)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
     }
 
     private function getCourseService()

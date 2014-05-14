@@ -636,6 +636,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $lesson;
 	}
 
+	public function createLiveRoomNum($courseId, $lessonId, $roomNum)
+	{
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createServiceException("课程(#{$courseId})不存在！");
+		}
+
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
+		if (empty($lesson)) {
+			throw $this->createServiceException("课时(#{$lessonId})不存在！");
+		}
+		
+		$roomNum = array(
+			'roomNum' => $roomNum['room_num']
+		);
+
+		$lesson = $this->getLessonDao()->updateLesson($lessonId,$roomNum);
+
+		$this->getLogService()->info('course', 'createLiveRoomNum', "更新课时《{$lesson['title']}》({$lesson['id']})", $lesson);
+
+		return $lesson;
+	}
+
 	private function fillLessonMediaFields(&$lesson)
 	{
 
