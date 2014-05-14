@@ -252,6 +252,28 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    public function playAction(Request $request,$courseId,$lessonId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($courseId)) {
+            return $this->createMessageResponse('info', '您还不是该课程的学员，请先购买加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
+        } 
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if ($lesson['startTime'] <= (time()+60*30)) {
+            return $this->render("TopxiaWebBundle:LiveCourse:");
+        } else {
+            return $this->createMessageResponse('info', '还没到登陆时间');
+        }
+
+        var_dump($lesson);
+        exit();
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

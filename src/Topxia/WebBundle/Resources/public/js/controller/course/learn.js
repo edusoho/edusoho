@@ -272,6 +272,8 @@ define(function(require, exports, module) {
                         var startTime = lesson.startTime;
                         var endTime = lesson.endTime;
 
+                        var courseId = lesson.courseId;
+                        var lessonId = lesson.id;
                         var $liveNotice = "直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入,";
 
                             var iID = setInterval(function () {
@@ -298,18 +300,18 @@ define(function(require, exports, module) {
                         if (0< startLeftSeconds && startLeftSeconds < 1800) {
 
                              $liveNotice = "直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入,";
-                              $countDown = "还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='http://edusoho-dev.com/live/login'>进入直播教室</a><br><br>";
+                              $countDown = "还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/play/course/"+courseId+"/lesson/"+lessonId+"'>进入直播教室</a><br><br>";
                         };
 
                         if (startLeftSeconds <= 0) {
                                     clearInterval(iID); 
                                      $liveNotice = "直播已经开始,直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束";
-                                    $countDown = "<a class='btn btn-primary' href='http://edusoho-dev.com/live/ing'>进入直播教室</a><br><br>";
+                                    $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/play/course/"+courseId+"/lesson/"+lessonId+"'>进入直播教室</a><br><br>";
                         };
 
                         if (endLeftSeconds <= 0) {
                               $liveNotice = "直播已结束";
-                                $countDown = "<a class='btn btn-primary' href='http://edusoho-dev.com/live/reply'>查看录播实况</a><br><br>";
+                                $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/reply'>查看录播实况</a><br><br>";
                         };
 
                         $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice+$countDown+lesson.summary);

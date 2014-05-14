@@ -63,6 +63,8 @@ class CourseLessonController extends BaseController
         $json['endTimeFormat'] = date("H:i",$lesson['endTime']);
         $json['startTime'] = $lesson['startTime'];
         $json['endTime'] = $lesson['endTime'];
+        $json['id'] = $lesson['id'];
+        $json['courseId'] = $lesson['courseId'];
 
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);

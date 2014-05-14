@@ -106,6 +106,10 @@ live_course_explore:
     pattern:  /live
     defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }
 
+live_course_play:
+    pattern:  /live/play/course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:play }
+
 live_course_list:
     pattern:  /live/list/{category}
     defaults: { _controller: TopxiaWebBundle:LiveCourse:list, category:'' }
