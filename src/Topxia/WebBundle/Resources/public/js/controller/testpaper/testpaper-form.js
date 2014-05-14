@@ -112,7 +112,7 @@ define(function(require, exports, module) {
                         var missingTexts = [];
                         var types = {
                             single_choice: '单选题',
-                            uncertain_choice: '不定向选择题',
+                            uncertain_choice: '不定项选择题',
                             choice: '多选题',
                             fill: '填空题',
                             determine: '判断题',
