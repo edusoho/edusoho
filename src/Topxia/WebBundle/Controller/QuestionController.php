@@ -34,7 +34,7 @@ class QuestionController extends BaseController
 
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
-        $result = $client->generateFileUrl($client->getBucket(), $file['metas2']['shd'], 3600);
+        $result = $client->generateFileUrl($client->getBucket(), $file['metas2']['shd']['key'], 3600);
         $result['status'] = 'ok';
 
         return $this->createJsonResponse($result);
