@@ -4,6 +4,7 @@
 
 {% set menu = 'partnerState' %}
 
+{% set script_controller = 'analysis/partner-state' %}
 
 
 {% block main %}
@@ -19,27 +20,29 @@
   <div class="form-group">
     <input class="form-control" type="text" placeholder="渠道Id" name="partnerId" value="{{ app.request.get('partnerId') }}"></div>
 
+  <input class="form-control" type="hidden" placeholder="排序字段" id="sort" name="sort" value="{{ app.request.get('sort') }}">
+
   
 
   <button class="btn btn-primary">搜索</button>
 </form>
 
-  <table class="table table-striped table-hover" id="activity-table">
+  <table class="table table-striped table-hover" id="state-table">
     <thead>
-    <tr>
+    <tr id="state-table-tr">
       <th>日期</th>
       <th>渠道Id</th> 
-      <th>渠道名称</th>    
-      <th>带来课程报名人数</th>
-      <th>带来收费课程订单</th>
-      <th>带来免费课程人数</th>
-      <th>带来活动报名人数</th>
-      <th>带来会员订单数</th>
-      <th>带来游客数</th>
-      <th>带来新游客数</th>
-      <th>带来用户数</th>
-      <th>带来注册用户数</th>
-      <th>带来PV数</th>
+      <th>渠道名称</th> 
+      <th data-sort="courseOrders" ><a href="">带来课程报名人数</a></th>
+      <th data-sort="courseOrdersFee"><a href="">带来收费课程订单</a></th>
+      <th data-sort="courseOrdersFree"><a href="">带来免费课程人数</a></th>
+      <th data-sort="activityOrders"><a href="">带来活动报名人数</a></th>
+      <th data-sort="vipOrders"><a href="">带来会员订单数</a></th>
+      <th data-sort="dayActGuest"><a href="">带来游客数</a></th>
+      <th data-sort="dayNewGuest"><a href="">带来新游客数</a></th>
+      <th data-sort="dayActUser"><a href="">带来用户数</a></th>
+      <th data-sort="dayRegUser"><a href="">带来注册用户数</a></th>
+      <th data-sort="dayPv"><a href="">带来PV数</a></th>
     
     </tr>
     </thead>

@@ -29,8 +29,14 @@ class BusinessStateDaoImpl extends BaseDao implements BusinessStateDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createBusinessStateQueryBuilder($conditions)
+            
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
+
+            ->addOrderBy('date', 'DESC')
+
+            ->addOrderBy($orderBy[0], $orderBy[1])
+
+            
             ->setFirstResult($start)
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();

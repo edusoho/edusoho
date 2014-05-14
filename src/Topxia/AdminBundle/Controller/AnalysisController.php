@@ -51,11 +51,20 @@ class AnalysisController extends BaseController
 
         $conditions = $request->query->all();
 
+        if(empty($conditions['sort'])){
+             $sort = 'latest';
+        }else{
+
+            $sort = $conditions['sort'];
+
+        }
+
+
         $count = $this->getPartnerStateService()->searchPartnerStateCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 60);
 
-        $partnerStates = $this->getPartnerStateService()->searchPartnerStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $partnerStates = $this->getPartnerStateService()->searchPartnerStates($conditions,$sort, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
         $sumPartnerState  = ArrayToolkit::sumColum($partnerStates);
 
@@ -76,11 +85,19 @@ class AnalysisController extends BaseController
 
         $conditions = $request->query->all();
 
+        if(empty($conditions['sort'])){
+             $sort = 'latest';
+        }else{
+
+            $sort = $conditions['sort'];
+
+        }
+
         $count = $this->getBusinessStateService()->searchBusinessStateCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 60);
 
-        $businessStates = $this->getBusinessStateService()->searchBusinessStates($conditions,'latest', $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $businessStates = $this->getBusinessStateService()->searchBusinessStates($conditions,$sort, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
 
         $sumBusinessState  = ArrayToolkit::sumColum($businessStates);

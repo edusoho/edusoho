@@ -27,7 +27,13 @@ class BusinessStateServiceImpl extends BaseService implements BusinessStateServi
     {
         $conditions = $this->_prepareBusinessStateConditions($conditions);
         if ($sort == 'latest') {
+            
             $orderBy = array('createdTime', 'DESC');
+
+        }else{
+
+            $orderBy = array($sort, 'DESC');
+
         }
         
         return BusinessStateSerialize::unserializes($this->getBusinessStateDao()->searchBusinessStates($conditions, $orderBy, $start, $limit));

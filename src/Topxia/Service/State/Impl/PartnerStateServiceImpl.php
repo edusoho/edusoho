@@ -26,8 +26,15 @@ class PartnerStateServiceImpl extends BaseService implements PartnerStateService
     public function searchPartnerStates($conditions, $sort = 'latest', $start, $limit)
     {
         $conditions = $this->_preparePartnerStateConditions($conditions);
+       
         if ($sort == 'latest') {
+            
             $orderBy = array('createdTime', 'DESC');
+
+        }else{
+
+            $orderBy = array($sort, 'DESC');
+
         }
         
         return PartnerStateSerialize::unserializes($this->getPartnerStateDao()->searchPartnerStates($conditions, $orderBy, $start, $limit));
