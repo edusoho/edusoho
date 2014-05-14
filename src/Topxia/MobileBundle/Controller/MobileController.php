@@ -13,7 +13,9 @@ class MobileController extends BaseController
     /**
     *GetHostByName($_SERVER['SERVER_NAME']);
     */
-    public static $webHost = "http://192.168.12.17/files";
+    public static $webHost = "http://192.168.12.7/files";
+
+    public static $baseUrl = "http://192.168.12.7";
 
     public static $mobileType = "mobileLogin";
 

@@ -52,25 +52,25 @@ class GlobalController extends MobileController
                 "title"=>"开源力量",
                 "info"=>"网校简介",
                 "logo"=>"images/school_nxw.png",
-                "url"=>"http://192.168.12.17"
+                "url"=>"http://192.168.12.7"
             ),
             array(
                 "title"=>"小象科技",
                 "info"=>"网校简介",
                 "logo"=>"images/school_nxw.png",
-                "url"=>"http://192.168.12.17"
+                "url"=>"http://192.168.12.7"
             ),
             array(
                 "title"=>"好知网",
                 "info"=>"网校简介",
                 "logo"=>"images/school_nxw.png",
-                "url"=>"http://192.168.12.17"
+                "url"=>"http://192.168.12.7"
             ),
             array(
                 "title"=>"年兄网",
                 "info"=>"网校简介",
                 "logo"=>"images/school_nxw.png",
-                "url"=>"http://192.168.12.17"
+                "url"=>"http://192.168.12.7"
             )
         );
         return $this->createJson($request, $schools);

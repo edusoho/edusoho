@@ -114,3 +114,23 @@ topxia_mobile_getNotice:
     pattern:  /notices
     defaults: { _controller: TopxiaMobileBundle:User:getNotice }
 
+topxia_mobile_alipay_paypage:
+    pattern:  /alipay_paypage
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:showPayPage }
+
+topxia_mobile_alipay_notify:
+    pattern:  /alipay_notify
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payNotify }
+
+topxia_mobile_alipay_pay:
+    pattern:  /alipay_pay
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:pay }
+
+topxia_mobile_alipay_callback:
+    pattern:  /alipay_callback
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
+
+topxia_mobile_alipay_payresult:
+    pattern:  /alipay_result
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payResult }
+

@@ -5,6 +5,7 @@ namespace Topxia\MobileBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
+use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
 
 class MobileOrderController extends MobileController
 {
@@ -63,12 +64,9 @@ class MobileOrderController extends MobileController
 
         $order = $this->getOrderService()->createOrder($order);
         if (intval($order['amount']*100) > 0) {
-            $payRequestParams = array(
-                'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
-                'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
-                'showUrl' => $this->generateUrl('course_show', array('id' => $course['id']), true),
-            );
             //跳转支付宝支付
+            $result['payurl'] = MobileAlipayConfig::createAlipayOrderUrl("edusoho", $order);
+            $result['status'] = "error";
         } else {
             //课程价格为0
             list($success, $order) = $this->getOrderService()->payOrder(array(
@@ -83,8 +81,8 @@ class MobileOrderController extends MobileController
                 'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
             );
             $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            $result['status'] = "success";
         }
-        $result['status'] = "success";
         return $this->createJson($request, $result);
     }
 
