@@ -22,21 +22,94 @@ class LiveCourseController extends BaseController
             $categories = $this->getCategoryService()->findGroupRootCategories($group['code']);
         }
 
-        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
-            'categories' => $categories   
-        ));
+        $conditions = array(
+            'status' => 'published',
+            'isLive' => '1'
+        );
 
-	}
+        $courses = $this->getCourseService()->searchCourses( $conditions, 'lastest',0,1000 );
 
-    public function listAction(Request $request, $category)
-    {
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $lessonCondition['courseIds'] = $courseIds;
+        $lessonCondition['status'] = 'published';
+
+        $lessons = $this->getCourseService()->searchLessons(
+            $lessonCondition,  
+            array('startTime', 'ASC'), 0, 10
+        );
+
+        $newCourses = array();
+
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        foreach ($lessons as $key => &$lesson) {
+            $newCourses[$key] = $courses[$lesson['courseId']];
+            $newCourses[$key]['lesson'] = $lesson;
+        }
+
         $now = time();
 
         $today = date("Y-m-d");
 
         $tomorrow = strtotime("$today tomorrow");
 
-        $theDayAfterTomorrow = strtotime("$today the day after tomorrow");
+        $theDayAfterTomorrow = strtotime("$today +2 day");
+
+        $today = strtotime("$today");
+
+        $recenntLessonsCondition = array(
+            'status' => 'published',
+            'startTimeGreaterThan' => $now,
+            'endTimeLessThan' => $theDayAfterTomorrow
+        );
+
+        $recentlessons = $this->getCourseService()->searchLessons(
+            $recenntLessonsCondition,  
+            array('startTime', 'ASC'), 0, 100
+        );
+
+        $recentCourses = array();
+        $userIds = array();
+
+        foreach ($recentlessons as $key => &$lesson) {
+            $recentCourses[$key] = $courses[$lesson['courseId']];
+            $recentCourses[$key]['lesson'] = $lesson;
+        }
+
+        foreach ($recentCourses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $conditions['ratingGreaterThan'] = 0.01;
+
+        $ratingCourses = $this->getCourseService()->searchCourses( $conditions, 'Rating',0,10);
+        
+        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
+            'categories' => $categories,
+            'newCourses' => $newCourses,
+            'recentlessons' => $recentlessons,
+            'recentCourses' => $recentCourses,
+            'users' => $users,
+            'tomorrow' => $tomorrow,
+            'ratingCourses' => $ratingCourses
+        ));
+
+	}
+
+    public function listAction(Request $request, $category)
+    {   
+        if (!$this->setting('course.live_course_enabled')) {
+            return $this->createMessageResponse('info', '直播频道已关闭');
+        }
+        
+        $now = time();
+
+        $today = date("Y-m-d");
+
+        $tomorrow = strtotime("$today tomorrow");
+
+        $theDayAfterTomorrow = strtotime("$today +2 day");
 
         $nextweek = strtotime("$today next week");
 
@@ -127,13 +200,15 @@ class LiveCourseController extends BaseController
 
         $newCourses = array();
 
-        $courses = ArrayToolkit::index($courses, 'id');
+        if ($courses) {
+            $courses = ArrayToolkit::index($courses, 'id');
 
-        foreach ($lessons as $key => &$lesson) {
-            $newCourses[$key] = $courses[$lesson['courseId']];
-            $newCourses[$key]['lesson'] = $lesson;
+            foreach ($lessons as $key => &$lesson) {
+                $newCourses[$key] = $courses[$lesson['courseId']];
+                $newCourses[$key]['lesson'] = $lesson;
+            }
         }
-        
+
         $popularCourses = $this->getCourseService()->searchCourses( array( 'status' => 'published', 'isLive' => '1' ), 'hitNum',0,10 );
 
         return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(

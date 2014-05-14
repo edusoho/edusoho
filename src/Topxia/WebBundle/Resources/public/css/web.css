@@ -1215,6 +1215,14 @@ body {
 	text-align: right;
 }
 
+.live-rating-course .first-rating {
+	display: block;
+}
+
+.live-rating-course .other-rating {
+	display: none;
+}
+
 .rank_num {
 	display: inline-block;
 	background-color: #66bc4e;

@@ -4,7 +4,7 @@
    直播频道首页 {{ parent() }}
 {% endblock %}
 
-{% set script_controller = 'index' %}
+{% set script_controller = 'live-course/index' %}
 
 {% block content %}
 
@@ -32,10 +32,82 @@
 			          {{ blocks.live_banner|raw }}
 			        </div>
 			    {% endif %}
+
+		    	<div class="es-box">
+			        <div class="es-box-heading">
+			        	<h2>直播课程</h2>
+			        	<a class="text-muted pull-right mts" href="{{ path('live_course_list') }}">更多>></a>
+			       	</div>
+			        <div class="es-box-body">
+			          {% if newCourses %}
+			            {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:newCourses, view: 'list'})) }}
+			          {% else %}
+			            <div class="empty">还没有发布的课程</div>
+			          {% endif %}
+			        </div>
+		      	</div>
 	      	</div>
 
 	      	<div class="col-md-4">
-	        
+	      		<div class="es-box">
+			        <div class="es-box-heading">
+			        	<h2>即将开始</h2>
+			       	</div>
+			        <div class="es-box-body">
+			        	<div class="list-group">
+			        		{% if recentCourses %}
+				        		{% for course in recentCourses %}
+				        			{% set lesson = course.lesson %}
+								    <a href="{{ path('course_show', {id:course.id}) }}" class="list-group-item">
+								    	<h4 class="list-group-item-heading clearfix">
+								    		<span class="text-primary pull-left fsn mts">{{ lesson.startTime|date('H:i') }}-{{ lesson.endTime|date('H:i m-d')}}</span>
+								    		{% if lesson.endTime < tomorrow %}
+								    			<button type="button" class="mlm btn btn-xs btn-success">今天</button>
+								    		{% else %}
+								    			<button type="button" class="mlm btn btn-xs btn-danger">明天</button>
+								    		{% endif %}
+								    		{% set teacher = users[course.teacherIds|first]|default(null) %}
+								    		<span class="text-muted pull-right fsn mts">{{ teacher.nickname }}</span>
+								    	</h4>
+							          	<div class="list-group-item-text">
+							          		<strong>{{ course.title|plain_text(26) }}</strong>
+							          		<span class="text-muted mll">({{ lesson.number }}/{{ course.lessonNum }})</span>
+							          	</div>
+							        </a>
+							    {% endfor %}
+							{% else %}
+								<div class="empty">没有即将开始的课程</div>
+						    {% endif %}
+						</div>
+			        </div>
+		      	</div>
+		      	{% if ratingCourses %}
+			      	<div class="es-box">
+				        <div class="es-box-heading">
+				        	<h2>好评课程</h2>
+				        </div>	
+			        	<div class="es-box-body">
+			        		<ul class="media-list mtl">
+			        			{% for key,course in ratingCourses %}
+				                <li class="media live-rating-course">
+					              	<span class="rank_num">{{key+1}}</span>
+					              	<div class="media-body">
+					              		<a href="{{ path('course_show' , {id:course.id})}}" title="{{ course.title}}">
+					              			{{ course.title }}
+					              		</a>
+					              		{% if key == 0%}
+					              		<div class="mts rating first-rating stars-{{ (course.rating)|number_format }}">&nbsp;</div>
+					              		{% else %}
+					              		<div class="mts rating other-rating stars-{{ (course.rating)|number_format }}">&nbsp;</div>
+					              		{% endif %}
+					              	</div>
+				            	</li>
+				            	{% endfor %}
+				            </ul>
+			        	</div>
+				       	</div>
+				    </div>
+			    {% endif %}
 	      	</div>
 	    </div>
 	</div>
