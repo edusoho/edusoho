@@ -200,7 +200,10 @@ define(function(require, exports, module) {
                         if (lesson.mediaSource == 'self') {
                             $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
 
-
+                            if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
+                                Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                                return ;
+                            }
 
                             var player = VideoJS("lesson-video-player", {
                                 techOrder: ['flash','html5']

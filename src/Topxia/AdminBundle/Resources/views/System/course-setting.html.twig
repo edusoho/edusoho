@@ -58,6 +58,15 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >允许学员下载课时的音视频</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('student_download_media', {0:'不允许', 1:'允许'}, courseSetting.student_download_media) }}
+        <div class="help-block">开启此项设置后，学员可在课时学习界面侧栏的"资料"面板中下载。</div>
+      </div>
+    </div>
 
   </fieldset>
   <br>

@@ -78,6 +78,16 @@ class DataDict
             'activity' => '活动',
             'page' => '页面',
         ),
+	    'articleType' => array(
+            'article' => '文章',
+            'activity' => '活动',
+            'page' => '文章',
+        ),   
+        'articleProperty' => array(
+            'featured' => '头条',
+            'promoted' => '推荐',
+            'sticky' => '置顶',
+        ),
         'dateType' => array(
             'today' => '今日',
             'yesterday' => '昨日',
@@ -92,6 +102,16 @@ class DataDict
             'trash' => '回收站',
     	),
         'contentStatus:html' => array(
+            'published' => '<span class="text-success">已发布</span>',
+            'unpublished' => '<span class="text-muted">未发布</span>',
+            'trash' => '<span class="text-warning">回收站</span>',
+    	),
+	'articleStatus' => array(
+            'published' => '已发布',
+            'unpublished' => '未发布',
+            'trash' => '回收站',
+    	),
+        'articleStatus:html' => array(
             'published' => '<span class="text-success">已发布</span>',
             'unpublished' => '<span class="text-muted">未发布</span>',
             'trash' => '<span class="text-warning">回收站</span>',

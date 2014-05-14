@@ -27,6 +27,7 @@ define(function(require, exports, module) {
             if (error) {
                 return;
             }
+            $('#course-lesson-btn').button('submiting').addClass('disabled');
 
             var $panel = $('.lesson-manage-panel');
             $.post($form.attr('action'), $form.serialize(), function(html) {
@@ -195,6 +196,6 @@ define(function(require, exports, module) {
             }
             $content.val(z);
         });
- 
+        
     };
 });

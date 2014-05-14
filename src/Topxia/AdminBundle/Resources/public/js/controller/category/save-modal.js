@@ -17,6 +17,8 @@ define(function(require, exports, module) {
                     return ;
                 }
 
+                $('#category-create-btn').button('submiting').addClass('disabled');
+
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);
@@ -37,7 +39,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-code-field',
             required: true,
-            rule: 'alphanumeric remote'
+            rule: 'alphanumeric not_all_digital remote'
         });
 
         validator.addItem({

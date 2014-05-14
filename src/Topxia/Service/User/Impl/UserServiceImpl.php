@@ -142,7 +142,6 @@ class UserServiceImpl extends BaseService implements UserService
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $largeImage->save($smallFilePath, array('quality' => 90));
         $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
-
         @unlink($filePath);
 
         $oldAvatars = array(

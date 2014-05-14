@@ -10,7 +10,13 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: '#user-profile-form',
-            failSilently: true
+            failSilently: true,
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#profile-save-btn').button('submiting').addClass('disabled');
+            }
         });
 
         validator.addItem({

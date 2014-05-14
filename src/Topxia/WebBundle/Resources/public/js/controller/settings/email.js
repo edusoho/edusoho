@@ -5,7 +5,13 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var validator = new Validator({
-            element: '#setting-email-form'
+            element: '#setting-email-form',
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#email-save-btn').button('submiting').addClass('disabled');
+            }
         });
 
         validator.addItem({
@@ -25,7 +31,6 @@ define(function(require, exports, module) {
                 window.location.reload();
             });
         });
-
     };
 
 });

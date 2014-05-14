@@ -8,8 +8,15 @@
 	{% else %}
 	  此课时无简介。
 	{% endif %}
-
 </div>
+
+{% if lesson.type in ['video', 'audio'] and setting('course.student_download_media') and file %}
+<h5>课时音视频文件下载</h5>
+<div class="lesson-about">
+  <a href="{{ path('course_lesson_media_download', {courseId:lesson.courseId, lessonId:lesson.id}) }}">{{ file.size|file_size }} (点击下载)</a>
+</div>
+{% endif %}
+
 
 <h5>课时资料</h5>
 

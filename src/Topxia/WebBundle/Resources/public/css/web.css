@@ -614,7 +614,7 @@ body {
 
 .thread {
 	margin-bottom: 50px;
-
+	overflow-x: scroll;
 }
 
 .thread-header {
@@ -683,8 +683,14 @@ body {
 
 .thread-post-body {
 	/*overflow: visible;*/
+}
 
+.announcement-list li .action {
+	visibility: hidden;
+}
 
+.announcement-list li:hover .action {
+	visibility: visible;
 }
 
 .thread-post-dropdown {
@@ -2422,6 +2428,12 @@ body {
 	margin: 15px 15px 15px 0;
 	border: 1px solid #e1e1e1;
 	border-radius: 4px;
+}
+
+.course-grid .series-mode-label {
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
 .lt-ie8 .course-grid {

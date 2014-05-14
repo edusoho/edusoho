@@ -167,10 +167,8 @@ class UserController extends BaseController
         $form = $this->createFormBuilder()
             ->add('avatar', 'file')
             ->getForm();
-
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
-
             if ($form->isValid()) {
                 $data = $form->getData();
                 $file = $data['avatar'];
@@ -190,7 +188,6 @@ class UserController extends BaseController
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 $avatarData = $this->avatar_2($id, $fileName);
-
                 return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
                     'user' => $user,
                     'filename' => $fileName,
@@ -237,7 +234,7 @@ class UserController extends BaseController
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = 'tmp/' . $filename;
 
         return array(
             'naturalSize' => $naturalSize,
@@ -258,7 +255,6 @@ class UserController extends BaseController
             $filename = str_replace('!', '.', $filename);
             $filename = str_replace(array('..' , '/', '\\'), '', $filename);
             $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
             $this->getUserService()->changeAvatar($id, realpath($pictureFilePath), $options);
 
             // return $this->redirect($this->generateUrl('admin_user'));
@@ -293,16 +289,22 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-        $this->sendEmail(
-            $user['email'],
-            "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-            $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                'user' => $user,
-                'token' => $token,
-            )), 'html'
-        );
 
-        $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
+        try {
+            $this->sendEmail(
+                $user['email'],
+                "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                )), 'html'
+            );
+            $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：". $e->getMessage());
+            throw $e;
+        }
+
 
         return $this->createJsonResponse(true);
     }
@@ -316,16 +318,20 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
-        $this->sendEmail(
-            $user['email'],
-            "请激活你的帐号，完成注册",
-            $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                'user' => $user,
-                'token' => $token,
-            ))
-        );
-
-        $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
+        try {
+            $this->sendEmail(
+                $user['email'],
+                "请激活你的帐号，完成注册",
+                $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
+                    'user' => $user,
+                    'token' => $token,
+                ))
+            );
+            $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
+        } catch(\Exception $e) {
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：". $e->getMessage());
+            throw $e;
+        }
 
         return $this->createJsonResponse(true);
     }

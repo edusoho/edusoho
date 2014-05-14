@@ -49,7 +49,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form">保存</button>
+    <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="正在保存...">保存</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   <script>app.load('course-manage/student-create')</script>

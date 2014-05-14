@@ -118,6 +118,8 @@ define(function(require, exports, module) {
                     return false;
                 }
 
+                $('.submit-btn').button('submiting').addClass('disabled');
+
                 self.get('validator').set('autoSubmit',true);
             });
         },
