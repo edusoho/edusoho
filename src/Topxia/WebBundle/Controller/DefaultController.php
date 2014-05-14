@@ -18,29 +18,31 @@ class DefaultController extends BaseController
         $liveCourses = array();
         $newLiveCourses = array();
 
-        if ($courseSetting['live_course_enabled'] == 1) {
+        if (!$courseSetting) {
+            if (!$courseSetting['live_course_enabled']) {
+                
+                $liveConditions = array(
+                    'status' => 'published',
+                    'isLive' => '1'
+                );
+                $liveCourses = $this->getCourseService()->searchCourses($liveConditions, 'latest', 0, 1000);
+                $courseIds = ArrayToolkit::column($liveCourses, 'id');
 
-            $liveConditions = array(
-                'status' => 'published',
-                'isLive' => '1'
-            );
-            $liveCourses = $this->getCourseService()->searchCourses($liveConditions, 'latest', 0, 1000);
-            $courseIds = ArrayToolkit::column($liveCourses, 'id');
+                $lessonConditions = array(
+                    'status' => 'published',
+                    'courseIds' => $courseIds
+                );
+                $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
 
-            $lessonConditions = array(
-                'status' => 'published',
-                'courseIds' => $courseIds
-            );
-            $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
+                $liveCourses = ArrayToolkit::index($liveCourses, 'id');
 
-            $liveCourses = ArrayToolkit::index($liveCourses, 'id');
+                foreach ($lessons as $key => &$lesson) {
+                    $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
+                    $newLiveCourses[$key]['lesson'] = $lesson;
+                }
 
-            foreach ($lessons as $key => &$lesson) {
-                $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
-                $newLiveCourses[$key]['lesson'] = $lesson;
+                $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
             }
-
-            $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
 
         }
 
