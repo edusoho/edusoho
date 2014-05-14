@@ -21,17 +21,16 @@ class LiveNotifyCommand extends BaseCommand
 	{
 		$this->initServiceKernel();
 		$connection = $this->getContainer()->get('database_connection');
-	    $connection->beginTransaction();
 
-		$sendTime = date("Y-m-d",time());
+		$tomorrow = date("Y-m-d",strtotime("+1 day"));
 
-		$startDate = $sendTime." 0:00";
-		$endDate = $sendTime." 24:00";
+		$startDate = $tomorrow." 0:00";
+		$endDate = $tomorrow." 24:00";
 
 		$conditions['startTimeLessThan'] = strtotime($endDate);
 		$conditions['startTimeGreaterThan'] = strtotime($startDate);
-
 		$total = $this->getCourseService()->searchLessonCount($conditions);
+
 	    $liveLessons = $this->getCourseService()->searchLessons(
 	    	$conditions, array('startTime', 'ASC'), 0, $total
 	    );

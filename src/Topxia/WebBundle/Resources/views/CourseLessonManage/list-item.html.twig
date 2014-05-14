@@ -49,7 +49,6 @@
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
 		</button>
 	  {% endif %}
-
 	  {% if lesson.type == 'testpaper' %}
 			<a class="btn btn-link" title="预览" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 	  {% else %}
