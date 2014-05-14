@@ -880,7 +880,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 
 
-/*! define jquery-plugin/mediaelement/2.13.1/mediaelementplayer-debug.css */
 .mejs-container {
   position: relative;
   background: #000;
@@ -1070,7 +1069,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 /* :focus for accessibility */
 .mejs-controls .mejs-button button:focus {
-  outline: solid 1px yellow;
+  outline: dotted 1px #999;
 }
 
 /* End: CONTROL BAR */
@@ -1272,6 +1271,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background-position: -32px -16px;
 }
 /* End: Fullscreen */
+
 
 /* Start: Mute/Volume */
 .mejs-controls .mejs-volume-button {
@@ -1603,6 +1603,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 /* End: Error */
 
+
 /* Start: Loop */
 .mejs-controls .mejs-loop-off button {
   background-position: -64px -16px;
@@ -1629,6 +1630,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background-position: -96px 0;
 }
 /* End: Picture Controls */
+
 
 /* context menu */
 .mejs-contextmenu {
@@ -1746,6 +1748,10 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   padding: 4px;
   z-index: 100;
   cursor: pointer;
+}
+
+.mejs-audio {
+  display: inline-block;
 }
 /* End: Postroll */
 

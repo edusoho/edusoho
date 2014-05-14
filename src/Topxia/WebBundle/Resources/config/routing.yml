@@ -453,6 +453,10 @@ course_manage_lesson_unpublish:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
     methods: [POST]
 
+question_file_url:
+    pattern: /question_ajax/file_url
+    defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
+
 course_manage_question:
     pattern: /course/{courseId}/manage/question
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:index }

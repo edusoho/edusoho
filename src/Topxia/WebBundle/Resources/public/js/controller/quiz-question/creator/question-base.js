@@ -81,6 +81,7 @@ define(function(require, exports, module) {
         },
 
         _initStemField: function() {
+            var self = this;
             var height = $('#question-stem-field').height();
             var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'), {height:height});
             this.get('validator').on('formValidate', function(elemetn, event) {
@@ -111,6 +112,56 @@ define(function(require, exports, module) {
             });
 
             uploader.on( 'uploadError', function( file, response ) {
+                Notify.danger('上传失败，请重试！');
+            });
+
+            /**
+             * 音频上传
+             */
+            var audioUploader = WebUploader.create({
+                swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+                pick: '#question-stem-audio-uploader',
+                formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+                accept: {
+                    title: 'Images',
+                    extensions: 'mp3,wav',
+                    mimeTypes: 'audio/*'
+                }
+            });
+
+            audioUploader.on( 'fileQueued', function( file, a, b ) {
+                Notify.info('正在上传，请稍等！', 0);
+
+                $.ajax({
+                    url: self.element.data('mediaUploadParamsUrl'),
+                    async: false,
+                    dataType: 'json',
+                    data: {convertor: 'audio'},
+                    cache: false,
+                    success: function(response, status, jqXHR) {
+                        audioUploader.option('server', response.url)
+                        audioUploader.option('formData', response.postParams);
+                    },
+                    error: function(jqXHR, status, error) {
+                        Notify.danger('请求上传授权码失败！');
+                    }
+                });
+
+                audioUploader.upload();
+            });
+
+            audioUploader.on( 'uploadSuccess', function( file, response ) {
+                Notify.success('上传成功！', 1);
+
+                $.post(self.element.data('mediaUploadCallbackUrl'), response, function(response) {
+                    var name = response.filename.match(/[^\.]*\./)[0].slice(0, -1);
+                    var result = '[audio id="' + response.id +'"]' + name + '[/audio]';
+                    editor.insertHtml(result);
+                });
+
+            });
+
+            audioUploader.on( 'uploadError', function( file, response ) {
                 Notify.danger('上传失败，请重试！');
             });
 

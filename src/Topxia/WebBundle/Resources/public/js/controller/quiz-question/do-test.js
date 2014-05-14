@@ -8,6 +8,8 @@ define(function(require, exports, module) {
 
     var EditorFactory = require('common/kindeditor-factory');
 
+    require('./audio-player');
+
     var wrongs = [],
 
     rights = [],

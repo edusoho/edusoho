@@ -340,19 +340,16 @@ class WebExtension extends \Twig_Extension
 
     public function bbCode2HtmlFilter($bbCode)
     {
-        $isFind = preg_match_all("#\[image\].*?\[\/image\]|\[video\].*?\[\/video\]#", $bbCode, $matches);
+        $ext = $this;
 
-        if($isFind){
-            foreach ($matches[0] as $value) {
-                $old = $value;
-                $src = "/files/" . str_replace(array('[image]', '[/image]'), '', $value);
+        $bbCode = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($ext) {
+            $src = $ext->getFileUrl($matches[1]);
+            return "<img src='{$src}' />";
+        }, $bbCode);
 
-                $new = "<img src='" . $src . "' />";
-
-                $bbCode = str_replace($old, $new, $bbCode);
-            }
-
-        }
+        $bbCode = preg_replace_callback('/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i', function($matches) {
+            return "<a class='audio-paly-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\">{$matches[2]} <span class='glyphicon glyphicon-play-circle'></span></a>";
+        }, $bbCode);
 
         return $bbCode;
     }
