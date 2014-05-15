@@ -89,7 +89,7 @@ define(function(require, exports, module) {
              */
             var audioUploader = WebUploader.create({
                 swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                pick: '#item-upload-' + model.id,
+                pick: '#item-audio-upload-' + model.id,
                 formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                 accept: {
                     title: 'Images',
