@@ -47,7 +47,7 @@
 			<div class="form-group">
 			  <label class="col-md-2 control-label">学员上限</label>
 			 <div class="col-md-8 controls">
-					<input type="text" id="stuNumUpperLimit" name="stuNumUpperLimit" class="form-control width-input width-input-large" value="{{ course.stuNumUpperLimit|default(0) }}" > 人
+					<input type="text" id="stuNumUpperLimit" name="maxStudentNum" class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(0) }}" > 人
 					<div id="stuNumUpperLimit_help" class="help-block" style="display:none;"></div>
 				</div>
 				<input type="hidden" id="max_student_num" value="{{max_student_num}}">
