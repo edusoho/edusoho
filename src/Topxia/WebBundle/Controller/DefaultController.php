@@ -23,7 +23,7 @@ class DefaultController extends BaseController
 
             $liveConditions = array(
                 'status' => 'published',
-                'isLive' => '1'
+                'type' => 'live'
             );
             $liveCourses = $this->getCourseService()->searchCourses($liveConditions, 'latest', 0, 1000);
             $courseIds = ArrayToolkit::column($liveCourses, 'id');

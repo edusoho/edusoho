@@ -147,7 +147,7 @@ class CourseController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($course['isLive'] == '1') {
+        if ($course['type'] == 'live') {
             $conditions = array(
                 'courseId' => $course['id'],
                 'startTimeLessThan' => time(),
@@ -176,7 +176,7 @@ class CourseController extends BaseController
             $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
             return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
                 'course' => $course,
-                'isLive' => $course['isLive'],
+                'type' => $course['type'],
                 'member' => $member,
                 'items' => $items,
                 'learnStatuses' => $learnStatuses

@@ -13,7 +13,7 @@
   <td>{{ lesson.startTime|date('Y-m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</td>
   <td>
   	{% if course %}
-  		{{ course.stuNumUpperLimit }}
+  		{{ course.maxStudentNum }}
   	{% else %}
   		<span class="text-muted">课程已删除</div>
   	{% endif %}
