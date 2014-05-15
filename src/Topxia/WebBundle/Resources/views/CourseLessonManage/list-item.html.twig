@@ -3,7 +3,7 @@
 	<div class="item-content">
 	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
 		
-		{% if lesson.type == 'video' %}
+		{% if lesson.type in ['video', 'live'] %}
 		  {% if mediaStatus == 'waiting' %}
 			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
 		  {% elseif mediaStatus == 'doing' %}
@@ -23,7 +23,7 @@
 
 		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
-		{% if lesson.type in ['video', 'audio'] %}
+		{% if lesson.type in ['video', 'audio','live'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
 		{% endif %}
 
