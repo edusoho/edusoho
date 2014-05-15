@@ -984,7 +984,7 @@ body {
 }
 
 .course-item-list-wrap {
-	margin-left: 89px;
+	margin-left: 99px;
 	border-left: 1px solid #c9c9c9;
 /*	overflow-y: auto;
 	overflow-x: hidden;*/
@@ -992,7 +992,7 @@ body {
 
 .course-item-list {
 	list-style: none;
-	margin: 0 0 0 -89px;
+	margin: 0 0 0 -99px;
 	padding: 0;
 }
 
@@ -1021,6 +1021,15 @@ body {
 	margin: 25px 0 10px 0;
 }
 
+.course-item-list .chapter-item-unit {
+	margin-top: 15px;
+	margin-left: 15px;
+}
+
+.course-item-list .lesson-item {
+	margin-left: 15px;
+}
+
 .course-item-list .item .name {
 	display: inline-block;
 	width: 60px;
@@ -1037,6 +1046,11 @@ body {
 	font-weight: bold;
 }
 
+.course-item-list .chapter-item-unit .name {
+	/*font-weight: normal;*/
+	width: 60px;
+}
+
 .course-item-list .chapter-item .pie,
 .course-item-list .lesson-item .pie {
 	display: inline-block;
@@ -1047,6 +1061,12 @@ body {
 .course-item-list .chapter-item .pie {
 	height: 30px;
 	width: 30px;
+	font-weight: bold;
+}
+
+.course-item-list .chapter-item-unit .pie {
+	color: #999;
+	font-weight: normal;
 }
 
 .course-item-list .lesson-item .pie {
@@ -1077,7 +1097,7 @@ body {
 
 .course-item-list .item .title {
 	position: absolute;
-	left: 110px;
+	left: 120px;
 	right: 90px;
 	display: inline-block;
 	color: #888;
@@ -1086,16 +1106,30 @@ body {
 	height: 30px;
 }
 
-
+.course-item-list .lesson-item .title {
+	left: 110px;
+}
 
 .course-item-list .chapter-item .title {
 	font-weight: bold;
 	color: #888;
+	left: 75px;
+}
+
+.course-item-list .chapter-item-unit .title {
+	left: 70px;
 }
 
 .course-item-list .lesson-item:hover .title {
 	color: #444;
 	outline: none;
+}
+
+.course-item-list .lesson-item .name {
+	text-align: left;
+	padding-left: 15px;
+	margin-right: 0px;
+	width: 65px;
 }
 
 .course-item-list .lesson-item .type {
@@ -1136,7 +1170,8 @@ body {
 	color: #fff;
 }
 
-.course-item-list-multi h3 {
+.course-item-list-multi h3 ,
+.course-item-list-multi h4 {
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 36px;
@@ -1147,8 +1182,13 @@ body {
 	margin: 20px 0;
 }
 
-.course-item-list-multi h3 strong {
+.course-item-list-multi h3 strong ,
+.course-item-list-multi h4 strong {
 	color: #555;
+}
+
+.course-item-list-multi h4 {
+	margin: 20px 0 20px 20px;
 }
 
 .course-item-list-multi ul {
@@ -1616,7 +1656,10 @@ body {
 
 .lesson-list .item-chapter {
 	margin-left: -30px;
+}
 
+.lesson-list .item-chapter-unit {
+	margin-left: -15px;
 }
 
 .lesson-list .item-lesson {

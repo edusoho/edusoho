@@ -665,6 +665,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['userId'] = $this->getCurrentUser()->id;
 		$lesson['createdTime'] = time();
 
+		$lastChapter = $this->getChapterDao()->getLastChapterByCourseId($lesson['courseId']);
+		$lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
+
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)
 		);
@@ -800,15 +803,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLessonDao()->deleteLesson($lessonId);
 
 		// 更新课时序号
-		$number = 1;
-		$lessons = $this->getCourseLessons($courseId);
-        foreach ($lessons as $lesson) {
-        	if ($lesson['number'] != $number) {
-        		$this->getLessonDao()->updateLesson($lesson['id'], array('number' => $number));
-        	}
-        	$number ++;
-        }
-
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
@@ -975,7 +969,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function createChapter($chapter)
 	{
-		$chapter['number'] = $this->getNextChapterNumber($chapter['courseId']);
+		if (!in_array($chapter['type'], array('chapter', 'unit'))) {
+			throw $this->createServiceException("章节类型不正确，添加失败！");
+		}
+
+		if ($chapter['type'] == 'unit') {
+			list($chapter['number'], $chapter['parentId']) = $this->getNextUnitNumberAndParentId($chapter['courseId']);
+		} else {
+			$chapter['number'] = $this->getNextChapterNumber($chapter['courseId']);
+			$chapter['parentId'] = 0;
+		}
+
 		$chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
 		$chapter['createdTime'] = time();
 		return $this->getChapterDao()->addChapter($chapter);
@@ -1002,16 +1006,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getChapterDao()->deleteChapter($deletedChapter['id']);
 
-		$number = 1;
 		$prevChapter = array('id' => 0);
 		foreach ($this->getCourseChapters($course['id']) as $chapter) {
 			if ($chapter['number'] < $deletedChapter['number']) {
 				$prevChapter = $chapter;
 			}
-			if ($chapter['number'] != $number) {
-				$this->getChapterDao()->updateChapter($chapter['id'], array('number' => $number));
-			}
-			$number ++;
 		}
 
 		$lessons = $this->getLessonDao()->findLessonsByChapterId($deletedChapter['id']);
@@ -1019,11 +1018,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$this->getLessonDao()->updateLesson($lesson['id'], array('chapterId' => $prevChapter['id']));
 		}
 	}
+	
 
 	public function getNextChapterNumber($courseId)
 	{
-		$counter = $this->getChapterDao()->getChapterCountByCourseId($courseId);
+		$counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
 		return $counter + 1;
+	}
+
+	public function getNextUnitNumberAndParentId($courseId)
+	{
+		$lastChapter = $this->getChapterDao()->getLastChapterByCourseIdAndType($courseId, 'chapter');
+
+		$parentId = empty($lastChapter) ? 0 : $lastChapter['id'];
+
+		$unitNum = 1 + $this->getChapterDao()->getChapterCountByCourseIdAndTypeAndParentId($courseId, 'unit', $parentId);
+
+		return array($unitNum, $parentId);
 	}
 
 	public function getCourseItems($courseId)
@@ -1065,26 +1076,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('itemdIds参数不正确');
 		}
 
-		$lessonId = $chapterId = $seq = 0;
-		$currentChapter = array('id' => 0);
+		$lessonNum = $chapterNum = $unitNum = $seq = 0;
+		$currentChapter = $rootChapter = array('id' => 0);
 
 		foreach ($itemIds as $itemId) {
 			$seq ++;
 			list($type, ) = explode('-', $itemId);
 			switch ($type) {
 				case 'lesson':
-					$lessonId ++;
+					$lessonNum ++;
 					$item = $items[$itemId];
-					$fields = array('number' => $lessonId, 'seq' => $seq, 'chapterId' => $currentChapter['id']);
+					$fields = array('number' => $lessonNum, 'seq' => $seq, 'chapterId' => $currentChapter['id']);
 					if ($fields['number'] != $item['number'] or $fields['seq'] != $item['seq'] or $fields['chapterId'] != $item['chapterId']) {
 						$this->getLessonDao()->updateLesson($item['id'], $fields);
 					}
 					break;
 				case 'chapter':
-					$chapterId ++;
 					$item = $currentChapter = $items[$itemId];
-					$fields = array('number' => $chapterId, 'seq' => $seq);
-					if ($fields['number'] != $item['number'] or $fields['seq'] != $item['seq']) {
+				    if ($item['type'] == 'unit') {
+				    	$unitNum ++;
+						$fields = array('number' => $unitNum, 'seq' => $seq, 'parentId' => $rootChapter['id']);
+				    } else {
+				    	$chapterNum ++;
+				    	$unitNum = 0;
+						$rootChapter = $item;
+						$fields = array('number' => $chapterNum, 'seq' => $seq, 'parentId' => 0);
+				    }
+					if ($fields['parentId'] != $item['parentId'] or $fields['number'] != $item['number'] or $fields['seq'] != $item['seq']) {
 						$this->getChapterDao()->updateChapter($item['id'], $fields);
 					}
 					break;

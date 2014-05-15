@@ -10,6 +10,8 @@ class CourseChapterManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
+        $type = $request->query->get('type');
+        $type = in_array($type, array('chapter', 'unit')) ? $type : 'chapter';
 
 	    if($request->getMethod() == 'POST'){
         	$chapter = $request->request->all();
@@ -23,6 +25,7 @@ class CourseChapterManageController extends BaseController
 
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
+            'type' => $type,
 		));
 	}
 
@@ -47,6 +50,7 @@ class CourseChapterManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
 			'chapter' => $chapter,
+            'type' => $chapter['type'],
 		));
 		
 	}

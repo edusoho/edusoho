@@ -4,13 +4,14 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var FileBrowser = require('./file-browser');
     var Notify = require('common/bootstrap-notify');
+    var Validator = require('bootstrap.validator');
 
     var FileChooser = Widget.extend({
         attrs: {
             choosed: null,
             uploader: null,
             progressbar: null,
-            uploaderSettings: {},
+            uploaderSettings: {}
         },
 
         events: {
@@ -100,6 +101,16 @@ define(function(require, exports, module) {
                     }
                     self._destoryUploader();
                 }
+
+                if ($(e.target).hasClass('file-chooser-link-tab')) {
+                    self._initLinkPane();
+                }
+
+                if ($(e.relatedTarget).hasClass('file-chooser-link-tab')) {
+                    self._destoryLinkPane();
+                }
+
+
             });
         },
 
@@ -114,6 +125,38 @@ define(function(require, exports, module) {
                 self.trigger('change', self._convertFileToMedia(file));
                 self.trigger('fileinfo.fetched', {});
             });
+        },
+
+        _initLinkPane: function() {
+            var self = this;
+
+
+            var validator = Validator.query('#course-material-form');
+            if (!validator) {
+                validator = new Validator({
+                    element: '#course-material-form',
+                    autoSubmit: false
+                });
+            }
+
+            validator.addItem({
+                element: '[name="link"]',
+                display: '链接地址',
+                required: true,
+                rule: 'url'
+            }).on('itemValidated', function(error, results, $item){
+                console.log(error, results, $item);
+                if (error) {
+                    $item.parents('form').find('[name=fileId]').val('');
+                    return false;
+                }
+                $item.parents('form').find('[name=fileId]').val('0');
+            });
+
+        },
+
+        _destoryLinkPane: function() {
+            Validator.query('#course-material-form').removeItem('[name="link"]');
         },
 
         _convertFileToMedia: function(file) {

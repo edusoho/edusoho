@@ -30,10 +30,28 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
-    public function getChapterCountByCourseId($courseId)
+    public function getChapterCountByCourseIdAndType($courseId, $type)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId, $type));
+    }
+
+    public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ? AND parentId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId, $type, $parentId));
+    }
+
+    public function getLastChapterByCourseIdAndType($courseId, $type)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($courseId, $type)) ? : null;
+    }
+
+    public function getLastChapterByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE  courseId = ? ORDER BY seq DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($courseId)) ? : null;
     }
 
     public function getChapterMaxSeqByCourseId($courseId)
