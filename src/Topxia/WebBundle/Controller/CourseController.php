@@ -319,7 +319,7 @@ class CourseController extends BaseController
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
         $isLive = $request->query->get('flag');
-        $isLive = $isLive ? 1 : 0;
+        $type = ($isLive == "isLive") ? 'live' : 'normal';
 
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
             throw $this->createAccessDeniedException();
@@ -333,7 +333,7 @@ class CourseController extends BaseController
 
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
             'userProfile'=>$userProfile,
-            'isLive'=>$isLive
+            'type'=>$type
 		));
 	}
 

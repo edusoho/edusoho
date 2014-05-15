@@ -32,7 +32,7 @@
          <div class="col-md-3 controls">
             <input type="text"  name="length" id="live-length-field" class="form-control" value="{{ liveLesson.length|default(60) }}" placeholder="时长">
         </div>
-		<label>min</label>
+		<label>分钟</label>
 
         <input type="hidden" id="live_lesson_time_check" data-url="{% if liveLesson|default(null) %}{{path('live_lesson_time_check',{id:liveCourse.id,lessonId:liveLesson.id}) }}{% else %}{{path('live_lesson_time_check',{id:liveCourse.id})}}{% endif %}">
 	

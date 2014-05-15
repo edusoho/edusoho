@@ -236,7 +236,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
-		$course = ArrayToolkit::parts($course, array('title', 'isLive','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
 
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
@@ -307,7 +307,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
-			'stuNumUpperLimit' => 0
+			'maxStudentNum' => 0
 		));
 
 		if (!empty($fields['about'])) {
@@ -867,13 +867,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseIds = array_unique($courseIds);
 		$courseIds = array_values($courseIds);
 		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
-		$stuNumUpperLimit = ArrayToolkit::column($courses,'stuNumUpperLimit');
-		$timeSlotOccupiedStuNums = array_sum($stuNumUpperLimit);
+		$maxStudentNum = ArrayToolkit::column($courses,'maxStudentNum');
+		$timeSlotOccupiedStuNums = array_sum($maxStudentNum);
 		$leftStuNums = $max_student_num - $timeSlotOccupiedStuNums;
 
-		$thisStuNumUpperLimit = $course['stuNumUpperLimit'];
+		$thisMaxStudentNum = $course['maxStudentNum'];
 
-		if ($thisStuNumUpperLimit > $leftStuNums) {
+		if ($thisMaxStudentNum > $leftStuNums) {
 			return array('error_limitout','该时间段内可参与直播的学员人数，已超出系统设定的限制,只剩下'.$leftStuNums."人，请与管理员联系！");
 		}
 
