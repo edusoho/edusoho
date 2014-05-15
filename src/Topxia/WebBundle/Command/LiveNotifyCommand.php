@@ -24,8 +24,8 @@ class LiveNotifyCommand extends BaseCommand
 
 		$tomorrow = date("Y-m-d",strtotime("+1 day"));
 
-		$startDate = $tomorrow." 0:00";
-		$endDate = $tomorrow." 24:00";
+		$startDate = $tomorrow." 0:00:00";
+		$endDate = $tomorrow." 24:00:00";
 
 		$conditions['startTimeLessThan'] = strtotime($endDate);
 		$conditions['startTimeGreaterThan'] = strtotime($startDate);
