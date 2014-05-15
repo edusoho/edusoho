@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set modal_class = 'modal-lg' %}
+
 {% block title %}{% if liveLesson|default(null) %}编辑{% else %}新增{% endif %}直播课时{% endblock %}
 
 {% block body %}
