@@ -24,7 +24,7 @@ class LiveCourseController extends BaseController
 
         $conditions = array(
             'status' => 'published',
-            'isLive' => '1'
+            'type' => 'live'
         );
 
         $courses = $this->getCourseService()->searchCourses( $conditions, 'lastest',0,1000 );
@@ -142,7 +142,7 @@ class LiveCourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'categoryId' => $category['id'],
-            'isLive' => '1'
+            'type' => 'live'
         );
 
         $courses = $this->getCourseService()->searchCourses( $conditions, 'lastest',0,1000 );
@@ -237,7 +237,7 @@ class LiveCourseController extends BaseController
     {   
         $conditions = array(
             'status' => 'published',
-            'isLive' => '1',
+            'type' => 'live',
             'ratingGreaterThan' => 0.01
         );
 
