@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             }
 
             var id = 'audio-player-' + audioPlayers.length;
-            $this.replaceWith('<audio id="' + id + '" style="display:inline-block;width:400px;height:30px;"></audio>');
+            $this.replaceWith('<audio id="' + id + '" style="display:inline-block;width:320px;height:30px;"></audio>');
 
             var audioPlayer = new MediaElementPlayer('#' + id, {
                 type: ['audio/mp3'],

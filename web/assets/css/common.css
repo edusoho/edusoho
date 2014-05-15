@@ -1748,7 +1748,9 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 /* End: Postroll */
 
-
+.mejs-audio {
+  display: inline-block;
+}
 
 
 

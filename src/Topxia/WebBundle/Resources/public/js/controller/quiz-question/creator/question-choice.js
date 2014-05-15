@@ -2,8 +2,8 @@ define(function(require, exports, module) {
 
     var BaseQuestion = require('./question-base');
     var Handlebars = require('handlebars');
-    var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
+    require('webuploader');
 
     var ChoiceQuestion = BaseQuestion.extend({
         attrs: {

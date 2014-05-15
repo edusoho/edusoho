@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Handlebars = require('handlebars');
     var Validator = require('bootstrap.validator');
-    var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
     var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
