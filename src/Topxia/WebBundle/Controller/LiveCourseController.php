@@ -277,32 +277,87 @@ class LiveCourseController extends BaseController
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
+        if ($lesson['endTime'] < time()) {
+            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+                'lesson' => $lesson,
+                'courseId' => $courseId
+            ));
+        }
+
         if ($lesson['startTime'] <= (time()+60*30)) {
 
-            $url = 'http://www.tetequ.com/api2/get_room_num';
-            $params = array(
-            'room_title' =>$lesson['title'],
-            'description' => $lesson['summary']."#".time(),
-            'begin_time' => $lesson['startTime'],
-            'take_time' => 21599,
-            'is_show' => 0,
-            'company_code' => 'DZHKJ'
-            );
-            
-            $result = $this->postRequest($url, $params);
-            $result = json_decode($result, true);
+            if (empty($lesson['roomNum'])) {
+                $url = 'http://www.tetequ.com/api2/get_room_num';
+                $params = array(
+                'room_title' =>$lesson['title'],
+                'description' => $lesson['summary']."#".time(),
+                'begin_time' => $lesson['startTime'],
+                'take_time' => $lesson['length']*60,
+                'is_show' => 0,
+                'company_code' => 'DZHKJ'
+                );
+                
+                $result = $this->postRequest($url, $params);
 
-            if (empty($result['room_num'])) {
-                echo 'get room num error!';
-                exit();
+                while (!$result) {
+                    $url = 'http://www.tetequ.com/api2/get_room_num';
+                    $params = array(
+                    'room_title' =>$lesson['title'],
+                    'description' => $lesson['summary']."#".time(),
+                    'begin_time' => $lesson['startTime'],
+                    'take_time' => $lesson['length']*60,
+                    'is_show' => 0,
+                    'company_code' => 'DZHKJ'
+                    );
+                    
+                    $result = $this->postRequest($url, $params);
+                }
+
+                $result = json_decode($result, true);
+                if (empty($result['room_num'])) {
+                    echo 'get room num error!';
+                    exit();
+                }
+
+                unset($result['success']);
+                $lesson = $this->getCourseService()->createLiveRoomNum($courseId, $lessonId, $result);
             }
 
-            unset($result['success']);
-            $liveLesson = $this->getCourseService()->createLiveRoomNum($courseId, $lessonId, $result);
+            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+                'lesson' => $lesson,
+                'courseId' => $courseId
+            ));
         
         } else {
             return $this->createMessageResponse('info', '还没到登陆时间');
         }
+    }
+
+    public function replayAction(Request $request,$courseId,$lessonId)
+    {
+        return $this->forward('TopxiaWebBundle:LiveCourse:play', 
+        array(
+                'courseId'=>$courseId,
+                'lessonId'=>$lessonId
+            )
+        );
+    }
+
+    public function classroomIframeAction(Request $request,$courseId,$lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if ($lesson) {
+            $roomNum = $lesson['roomNum'];
+        } else {
+            return $this->createMessageResponse('info', '没有这个直播课程，请检查');
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourse:classroom-iframe.html.twig', array(
+            'roomNum' => $roomNum,
+            'joinCode' => $this->getJoinCode(),
+            'lesson' =>  $lesson
+        ));
     }
 
     public function postRequest($url, $params)
@@ -323,6 +378,28 @@ class LiveCourseController extends BaseController
         curl_close($curl);
 
         return $response;
+    }
+
+    private function getJoinCode()
+    {
+        $url = 'http://www.tetequ.com/api2/get_join_code';
+        $result = $this->postRequest($url, array(
+        'company_code' => 'DZHKJ',
+        'key' => 'DZHKJ51d69529c45ee',
+        ));
+
+        $result = json_decode($result, true);
+        if (empty($result['join_code'])) {
+            while (!$result) {
+                $url = 'http://www.tetequ.com/api2/get_join_code';
+                $result = $this->postRequest($url, array(
+                'company_code' => 'DZHKJ',
+                'key' => 'DZHKJ51d69529c45ee',
+                ));
+            }
+        }
+
+        return $result['join_code'];
     }
 
     private function getCourseService()

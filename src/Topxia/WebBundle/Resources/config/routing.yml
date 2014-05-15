@@ -110,9 +110,17 @@ live_course_play:
     pattern:  /live/play/course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:LiveCourse:play }
 
+live_course_replay:
+    pattern: /live/replay/course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:replay }
+
 live_course_list:
     pattern:  /live/list/{category}
     defaults: { _controller: TopxiaWebBundle:LiveCourse:list, category:'' }
+
+live_classroom_iframe:
+    pattern: /live/classroom/course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:classroomIframe }
 
 live_course_create:
     pattern:  /livecourse/create

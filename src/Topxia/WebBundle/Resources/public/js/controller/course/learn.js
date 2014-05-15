@@ -311,7 +311,7 @@ define(function(require, exports, module) {
 
                         if (endLeftSeconds <= 0) {
                               $liveNotice = "直播已结束";
-                                $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/reply'>查看录播实况</a><br><br>";
+                                $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/replay/course/"+courseId+"/lesson/"+lessonId+"''>查看录播实况</a><br><br>";
                         };
 
                         $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice+$countDown+lesson.summary);
