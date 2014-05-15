@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
@@ -7,6 +8,7 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
         var $modal = $('#live-lesson-form').parents('.modal');
+        var $content = $("#live-lesson-content-field");
         var now = new Date();
         var validator = new Validator({
             element: '#live-lesson-form',
@@ -56,6 +58,7 @@ define(function(require, exports, module) {
 
         Validator.addRule('live_date_check',
             function() {
+
                 var thisTime = $('[name=startTime]').val();
                 var thisTime = Date.parse(thisTime)/1000;
                 var nowTime = Date.parse(new Date())/1000;
@@ -65,7 +68,7 @@ define(function(require, exports, module) {
                 }else{
                     return false;
                 }
-            },"输入直播的开始时间大于等于当前时间"
+            },"输入直播的开始时间有错误,请检查"
 
         );
 
@@ -94,6 +97,21 @@ define(function(require, exports, module) {
         }).on('hide', function(ev){
             validator.query('[name=startTime]').execute();
         });
-	};
+
+        var editor = EditorFactory.create('#live_lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
+        
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+            var z = editor.html();
+            var x = editor.html().match(/<embed[\s\S]*?\/>/g);
+            if (x) {
+                for (var i = x.length - 1; i >= 0; i--) {
+                   var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+                   var z =  z.replace(x[i],y);
+                };
+            }
+            $content.val(z);
+        });
+    };
 
 });
