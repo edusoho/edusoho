@@ -54,6 +54,21 @@ define(function(require, exports, module) {
                 }
             });
 
+        Validator.addRule('live_date_check',
+            function() {
+                var thisTime = $('[name=startTime]').val();
+                var thisTime = Date.parse(thisTime)/1000;
+                var nowTime = Date.parse(new Date())/1000;
+
+                if (nowTime <= thisTime) {
+                    return true;
+                }else{
+                    return false;
+                }
+            },"输入直播的开始时间大于等于当前时间"
+
+        );
+
         validator.addItem({
             element: '#live-title-field',
             required: true
@@ -62,6 +77,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=startTime]',
             required: true,
+            rule:'live_date_check',
             errormessageRequired: '请输入直播的开始时间'
         });   
 
