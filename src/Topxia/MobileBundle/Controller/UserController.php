@@ -54,7 +54,7 @@ class UserController extends MobileController
             $notifications = $this->changeCreatedTime($notifications);
             $this->setResultStatus("success");
             $this->result['notifications'] = $notifications;
-            $this->result = $this->setPage($result, $page, $count);
+            $this->result = $this->setPage($this->result, $page, $count);
             $this->getNotificationService()->clearUserNewNotificationCounter($token['userId']);
         }
         return $this->createJson($request, $this->result);

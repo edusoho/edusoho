@@ -151,32 +151,55 @@ class CourseController extends MobileController
     public function learnStatusAction(Request $request, $courseId, $lessonId)
     {
         $token = $this->getUserToken($request);
-        $user = $this->getCurrentUser();
-        $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
+        if ($token) {
+            $user = $this->getCurrentUser();
+            $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+            if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
+                $status = "unstart";
+            } else {
+                $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
+            }
+        }
         return $this->createJson($request, $status ? : 'unstart');
     }
 
     public function learnCancelAction(Request $request, $courseId, $lessonId)
     {
         $token = $this->getUserToken($request);
-        $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
-        $this->setResultStatus("success");
+        if ($token) {
+            $user = $this->getCurrentUser();
+            $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+            if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
+                $this->setResultStatus("error");
+                $this->result["message"] = "您不是课程学员，不能学习！";
+            } else {
+                $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
+                $this->setResultStatus("success");
+            }
+            
+        }
         return $this->createJson($request, $this->result);
     }
 
     public function learnFinishAction(Request $request, $courseId, $lessonId)
     {
         $token = $this->getUserToken($request);
-        $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
-
         $user = $this->getCurrentUser();
-        $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+        if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
+            $this->setResultStatus("error");
+            $this->result["message"] = "您不是课程学员，不能学习！";
+        } else {
+            $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
+            $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
-        $this->setResultStatus("success");
-        $this->result['result'] = array(
-            'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
-            'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
-        );
+            $this->setResultStatus("success");
+            $this->result['result'] = array(
+                'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
+                'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
+            );
+        }
+        
         return $this->createJson($request, $this->result);
     }
 
@@ -270,8 +293,11 @@ class CourseController extends MobileController
             }
         }
         
-        $chapters["hls"] = $hls;
-        return $this->createJson($request, $chapters);
+        $result = array(
+            "chapters"=>$chapters,
+            "hls"=>$hls
+        );
+        return $this->createJson($request, $result);
     }
 
     protected function _findLessonByChapterId($courseLesson, $chapterId)
@@ -385,5 +411,10 @@ class CourseController extends MobileController
     private function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getMemberDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
     }
 }
