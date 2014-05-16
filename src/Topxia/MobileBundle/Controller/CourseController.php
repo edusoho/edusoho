@@ -18,11 +18,9 @@ class CustomSort
 
 class CourseController extends MobileController
 {
-    protected $result;
-
     public function __construct()
     {
-        $this->result = array("status"=>"error");
+        $this->setResultStatus();
     }
 
     public function getCommentAction(Request $request, $courseId)
@@ -34,9 +32,9 @@ class CourseController extends MobileController
         $commentUsers = $this->changeUserPicture($commentUsers, true);
 
         $course_comment = $this->subTime($course_comment);
-        $this->result['status'] = "success";
         $this->result['course_comment'] = $course_comment;
         $this->result['commentUsers'] = $commentUsers;
+        $this->setResultStatus("success");
         return $this->createJson($request, $this->result);
     }
 
@@ -60,7 +58,7 @@ class CourseController extends MobileController
             $form['userId']= $currentUser['id'];
             $form['courseId']= $id;
             $this->getReviewService()->saveReview($form);
-            $this->result['status'] = "success";
+            $this->setResultStatus("success");
             return $this->createJson($request, $this->result);
         }
         return $this->createJson($request, $this->result);
@@ -72,7 +70,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($course_id);
         if(!$this->canShowCourse($course, $user)) {
-            $this->result['status'] = "error";
+            $this->setResultStatus("error");
             $this->result['info'] = "抱歉，课程已关闭或未发布，不能参加学习，如有疑问请联系管理员！";
             return $this->createJson($request, $this->result);
         }
@@ -93,7 +91,7 @@ class CourseController extends MobileController
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 
         $favoriteStatus = $this->getFavoriteStatus($course_id);
-        $this->result['status'] = "success";
+        $this->setResultStatus("success");
         $this->result['courseinfo'] = 
             array(
                 array(
@@ -126,7 +124,7 @@ class CourseController extends MobileController
             $page = $this->getParam($request, 'page', 0);
             $favoriteCourses = $this->getCourseService()->findUserFavoritedCourses($token['userId'], $page, self::$defLimit);
             $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($favoriteCourses, 'userId'));
-            $this->result['status'] = "success";
+            $this->setResultStatus("success");
             $this->result['users'] = $users;
             $this->result['favoriteCourses'] = $this->changeCoursePicture($favoriteCourses, true);
             $count = $this->getCourseService()->findUserFavoritedCourseCount($token['userId']);
@@ -143,7 +141,7 @@ class CourseController extends MobileController
             if ($this->getCourseService()->hasFavoritedCourse($course_id)) {
                 $this->result['message'] = "课程已收藏";
             } else if ($this->getCourseService()->favoriteCourse($course_id)) {
-                $this->result['status'] = "success";
+                $this->setResultStatus("success");
             }
         }
     
@@ -162,7 +160,7 @@ class CourseController extends MobileController
     {
         $token = $this->getUserToken($request);
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
-        $this->result['status'] = "success";
+        $this->setResultStatus("success");
         return $this->createJson($request, $this->result);
     }
 
@@ -174,7 +172,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
-        $this->result['status'] = "success";
+        $this->setResultStatus("success");
         $this->result['result'] = array(
             'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
             'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
@@ -189,7 +187,7 @@ class CourseController extends MobileController
             $course_id = $this->getParam($request, 'course_id', 0);
             if ($this->getCourseService()->hasFavoritedCourse($course_id)) {
                 if ($this->getCourseService()->unFavoriteCourse($course_id)) {
-                   $this->result['status'] = "success";
+                   $this->setResultStatus("success");
                 }  
             }
         }
@@ -205,7 +203,7 @@ class CourseController extends MobileController
             $count = $this->getCourseService()->findUserLeaningCourseCount($token['userId']);
             $learnCourses = $this->getCourseService()->findUserLeaningCourses($token['userId'], $page, self::$defLimit);
             $learnCourses = $this->changeLearnCourse($learnCourses);
-            $this->result['status'] = "success";
+            $this->setResultStatus("success");
             $this->result['learnCourses'] = $learnCourses;
             $this->result = $this->setPage($this->result, $page, $count);
         }
@@ -220,7 +218,7 @@ class CourseController extends MobileController
             $count = $this->getCourseService()->findUserLeanedCourseCount($token['userId']);
             $learnCourses = $this->getCourseService()->findUserLeanedCourses($token['userId'], $page, self::$defLimit);
             $learnCourses = $this->changeLearnCourse($learnCourses);
-            $this->result['status'] = "success";
+            $this->setResultStatus("success");
             $this->result['learnedCourses'] = $learnCourses;
             $this->result = $this->setPage($this->result, $page, $count);
         }

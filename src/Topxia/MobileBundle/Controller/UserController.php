@@ -10,6 +10,11 @@ use Topxia\Common\SimpleValidator;
 class UserController extends MobileController
 {
 
+    public function __construct()
+    {
+        $this->setResultStatus();
+    }
+
     public function getUserAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
@@ -32,7 +37,6 @@ class UserController extends MobileController
 
     public function getNoticeAction(Request $request)
     {
-        $result = array("status" => "error");
         $token = $this->getUserToken($request);
         if ($token) {
             $user = $this->getCurrentUser();
@@ -48,17 +52,16 @@ class UserController extends MobileController
             );
 
             $notifications = $this->changeCreatedTime($notifications);
-            $result['status'] = "success";
-            $result['notifications'] = $notifications;
-            $result = $this->setPage($result, $page, $count);
+            $this->setResultStatus("success");
+            $this->result['notifications'] = $notifications;
+            $this->result = $this->setPage($result, $page, $count);
             $this->getNotificationService()->clearUserNewNotificationCounter($token['userId']);
         }
-        return $this->createJson($request, $result);
+        return $this->createJson($request, $this->result);
     }
 
     public function registUserAction(Request $request)
     {
-        $result = array("status" => "error");
         $registration = array(
             "email"=>$request->query->get('email'),
             "password"=>$request->query->get('password'),
@@ -69,23 +72,23 @@ class UserController extends MobileController
         if (empty($vaildResult)) {
             $registration['createdIp'] = $request->getClientIp();
             if (!$this->getUserService()->isNicknameAvaliable($registration['nickname'])) {
-                $result['message'] = "昵称已存在";
+                $this->result['message'] = "昵称已存在";
             }
             if (!$this->getUserService()->isEmailAvaliable($registration['email'])) {
-                $result['message'] = "邮箱已注册";
+                $this->result['message'] = "邮箱已注册";
             }
             if (!isset($result['message'])) {
                 $user = $this->getAuthService()->register($registration);
                 $this->authenticateUser($user);
                 $this->sendRegisterMessage($user);
-                $result['token'] = $token = $this->createToken($user, $request);
-                $result['status'] = "success";
+                $this->result['token'] = $token = $this->createToken($user, $request);
+                $this->setResultStatus("success");
             }
         } else {
             $result['message'] = $vaildResult['message'];
         }
         
-        return $this->createJson($request, $result);
+        return $this->createJson($request, $this->result);
     }
 
     public function checkLoginAction(Request $request)
@@ -94,38 +97,35 @@ class UserController extends MobileController
     	$pass = $request->request->get('pass');
     	$user = $this->getUserService()->getUserByEmail($email);
 
- 		$result = array("status" => "error");
     	if ($user) {
-    		$result = array("status" => "success");
+    		$this->setResultStatus("success");
     	}
-    	return $this->createJson($request, $result);
+    	return $this->createJson($request, $this->result);
     }
 
     public function userLoginAction(Request $request)
     {
-        $result = array("status"=>"error");
         $username = $request->query->get('_username');
         $user = $this->loadUserByUsername($request, $username);
         if ($user) {
             $pass = $request->query->get('_password');
             if ($this->getUserService()->verifyPassword($user['id'], $pass)) {
                 $token = $this->createToken($user, $request);
-                $result['token'] = $token;
-                $result['user'] = $this->changeUserPicture($user, false);
-                $result['status'] = "success";
+                $this->result['token'] = $token;
+                $this->result['user'] = $this->changeUserPicture($user, false);
+                $this->setResultStatus("success");
             }
         }
-        return $this->createJson($request, $result);
+        return $this->createJson($request, $this->result);
     }
 
     public function logoutAction(Request $request)
     {
-        $result = array("status"=>"error");
         $token = $request->query->get('token');
         if ($this->getUserService()->deleteToken(UserController::$mobileType, $token)) {
-                $result['status'] = "success";
+            $this->setResultStatus("success");
         }
-        return $this->createJson($request, $result);
+        return $this->createJson($request, $this->result);
     }
 
     private function loadUserByUsername ($request, $username) {

@@ -21,6 +21,13 @@ class MobileController extends BaseController
 
     public static $defLimit = 8;
 
+    protected $result = array();
+
+    protected function setResultStatus($status = "error")
+    {
+        $this->result['status'] = $status;
+    }
+
     protected function createJson(Request $request, $data)
     {
         $callback = $request->query->get('callback');

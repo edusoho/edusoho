@@ -7,6 +7,11 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class GlobalController extends MobileController
 {
+    public function __construct()
+    {
+        $this->setResultStatus();
+    }
+    
     public function getCarouselAction(Request $request)
     {
         $carousel = array(
@@ -31,10 +36,9 @@ class GlobalController extends MobileController
 
     public function verifySchoolAction(Request $request)
     {
-        $result = array("status"=>"error");
         $site = $this->getSettingService()->get('site', array());
         if($site) {
-            $result['status'] = "success";
+            $this->setResultStatus("success");
             $result['school'] = array(
                 "name"=>$site['name'],
                 "slogan"=>$site['slogan'],
@@ -42,7 +46,7 @@ class GlobalController extends MobileController
                 "logo"=>$site['logo']
                 );
         }
-        return $this->createJson($request, $result);
+        return $this->createJson($request, $this->result);
     }
 
     public function getRecommendSchoolAction(Request $request)
