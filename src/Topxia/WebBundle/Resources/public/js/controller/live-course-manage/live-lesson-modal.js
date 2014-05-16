@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             function(options, commit) {
                 var element = $('#live_lesson_time_check');
                 var startTime = $('[name=startTime]').val();
-                var length = $('[name=length]').val();
+                var length = $('[name=timeLength]').val();
                 if(startTime && length) {
                     url = element.data('url');
                     $.get(url, {startTime:startTime,length:length}, function(response) {
@@ -85,7 +85,7 @@ define(function(require, exports, module) {
         });   
 
         validator.addItem({
-            element: '[name=length]',
+            element: '[name=timeLength]',
             required: true,
             rule:'integer romote_check',
             errormessageRequired: '请输入时长'

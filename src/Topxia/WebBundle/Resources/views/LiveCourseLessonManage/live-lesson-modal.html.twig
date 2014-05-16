@@ -29,15 +29,18 @@
 		 <div class="col-md-4 controls" style="z-index:2000;">
             <input type="text"  name="startTime" class="form-control" value="{{ liveLesson.startTime|default()|data_format }}" placeholder="起始时间">
         </div>
-
+	</div>
+	
+	<div class="form-group">
+        <label class="col-md-2 control-label" >时长</label>
         <label class="col-md-2 control-label" for="live-length-field" style="display:none">时长</label>
          <div class="col-md-3 controls">
-            <input type="text"  name="length" id="live-length-field" class="form-control" value="{{ liveLesson.length|default(60) }}" placeholder="时长">
+            <input type="text"  name="timeLength" id="live-length-field" class="form-control" value="{{ liveLesson.length|default(60) }}" placeholder="时长">
         </div>
 		<label>分钟</label>
 
-        <input type="hidden" id="live_lesson_time_check" data-url="{% if liveLesson|default(null) %}{{path('live_lesson_time_check',{id:liveCourse.id,lessonId:liveLesson.id}) }}{% else %}{{path('live_lesson_time_check',{id:liveCourse.id})}}{% endif %}">
 	
+        <input type="hidden" id="live_lesson_time_check" data-url="{% if liveLesson|default(null) %}{{path('live_lesson_time_check',{id:liveCourse.id,lessonId:liveLesson.id}) }}{% else %}{{path('live_lesson_time_check',{id:liveCourse.id})}}{% endif %}">
 	</div>
 
 	<div class="form-group">
