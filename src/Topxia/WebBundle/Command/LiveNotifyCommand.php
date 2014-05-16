@@ -45,9 +45,16 @@ class LiveNotifyCommand extends BaseCommand
 
 		    foreach ($courseMembers as $key => $value) {
 		      $minStartTime = $this->getCourseService()->findMinStartTimeByCourseId($value['courseId']);
+		      
+		      if (time() >= strtotime($startDate)) {
+		      	$noticeDay = "今天";
+		      } else {
+		      	$noticeDay = "明天";
+		      }
+
 		      $minStartTime = date("Y-m-d H:i:s",$minStartTime[0]['startTime']);
 
-		      $this->getNotificationService()->notify($value['userId'], $type="default",  $content = "【直播】您正在学习的《课程名称课程名称》即将于 明天{$minStartTime} 开始直播，请安排好时间准时参加。");
+		      $this->getNotificationService()->notify($value['userId'], $type="default",  $content = "【直播】您正在学习的《课程名称课程名称》即将于 {$noticeDay}{$minStartTime} 开始直播，请安排好时间准时参加。");
 		    }
 
 		  	$output->writeln('<info>消息发布完成</info>');
