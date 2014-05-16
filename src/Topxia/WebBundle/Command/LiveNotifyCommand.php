@@ -41,14 +41,10 @@ class LiveNotifyCommand extends BaseCommand
 	    
 	    if ($courseIds) {
 
-	        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
-
-	        $courseMembers =  $connection->fetchAll("SELECT * FROM `course_member` WHERE courseId IN ({$marks})", $courseIds);
+	    	$courseMembers = $this->getCourseService()->findCourseStudentsByCourseIds($courseIds);
 
 		    foreach ($courseMembers as $key => $value) {
-
-		      $minStartTime = $connection->fetchAll("select min(`startTime`) as startTime from `course_lesson` where courseId ={$value['courseId']};");
-
+		      $minStartTime = $this->getCourseService()->findMinStartTimeByCourseId($value['courseId']);
 		      $minStartTime = date("Y-m-d H:i:s",$minStartTime[0]['startTime']);
 
 		      $this->getNotificationService()->notify($value['userId'], $type="default",  $content = "【直播】您正在学习的《课程名称课程名称》即将于 明天{$minStartTime} 开始直播，请安排好时间准时参加。");

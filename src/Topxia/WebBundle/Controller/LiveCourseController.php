@@ -289,7 +289,7 @@ class LiveCourseController extends BaseController
             if (empty($lesson['roomNum'])) {
                 $url = 'http://www.tetequ.com/api2/get_room_num';
                 $params = array(
-                'room_title' =>$lesson['title'],
+                'room_title' =>$lesson['title']."#".time(),
                 'description' => $lesson['summary']."#".time(),
                 'begin_time' => $lesson['startTime'],
                 'take_time' => $lesson['length']*60,
@@ -297,30 +297,23 @@ class LiveCourseController extends BaseController
                 'company_code' => 'DZHKJ'
                 );
                 
+
                 $result = $this->postRequest($url, $params);
-
-                while (!$result) {
-                    $url = 'http://www.tetequ.com/api2/get_room_num';
-                    $params = array(
-                    'room_title' =>$lesson['title'],
-                    'description' => $lesson['summary']."#".time(),
-                    'begin_time' => $lesson['startTime'],
-                    'take_time' => $lesson['length']*60,
-                    'is_show' => 0,
-                    'company_code' => 'DZHKJ'
-                    );
-                    
-                    $result = $this->postRequest($url, $params);
-                }
-
-                $result = json_decode($result, true);
-                if (empty($result['room_num'])) {
-                    echo 'get room num error!';
+                if (!$result) {
+                    echo "直播api出错";
+                    $this->getLogService()->info('直播api出错', 'create', "直播api-false{$result}");
                     exit();
                 }
 
-                unset($result['success']);
-                $lesson = $this->getCourseService()->createLiveRoomNum($courseId, $lessonId, $result);
+                $result_decode = json_decode($result, true);
+                if (empty($result_decode['room_num'])) {
+                    echo 'get room num error!';
+                    var_dump($result);
+                    $this->getLogService()->info('直播api出错', 'get_room_num', "get room num error!{$result}");
+                    exit();
+                }
+
+                $lesson = $this->getCourseService()->createLiveRoomNum($courseId, $lessonId, $result_decode);
             }
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
@@ -366,11 +359,14 @@ class LiveCourseController extends BaseController
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
         curl_setopt($curl, CURLOPT_URL, $url );
-
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
 
         $response = curl_exec($curl);
@@ -388,18 +384,14 @@ class LiveCourseController extends BaseController
         'key' => 'DZHKJ51d69529c45ee',
         ));
 
-        $result = json_decode($result, true);
-        if (empty($result['join_code'])) {
-            while (!$result) {
-                $url = 'http://www.tetequ.com/api2/get_join_code';
-                $result = $this->postRequest($url, array(
-                'company_code' => 'DZHKJ',
-                'key' => 'DZHKJ51d69529c45ee',
-                ));
-            }
+        $result_decode = json_decode($result, true);
+        if (empty($result_decode['join_code'])) {
+           var_dump($result);
+           $this->getLogService()->info('直播api出错', 'getJoinCode', "join_code　为空！！{$result}");
+           exit();
         }
 
-        return $result['join_code'];
+        return $result_decode['join_code'];
     }
 
     private function getCourseService()

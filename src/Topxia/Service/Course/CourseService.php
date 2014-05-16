@@ -19,6 +19,8 @@ interface CourseService
 	public function getCourse($id);
 
 	public function findCoursesByIds(array $ids);
+	
+	public function findMinStartTimeByCourseId($courseId);
 
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
@@ -152,6 +154,8 @@ interface CourseService
 	public function isMemberNonExpired($course, $member);
 
 	public function findCourseStudents($courseId, $start, $limit);
+
+	public function findCourseStudentsByCourseIds($courseIds);
 
 	public function getCourseStudentCount($courseId);
 

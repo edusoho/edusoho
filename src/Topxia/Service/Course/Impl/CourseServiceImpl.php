@@ -26,6 +26,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findMinStartTimeByCourseId($courseId)
+	{
+		return  $this->getLessonDao()->findMinStartTimeByCourseId($courseId);
+	}
+
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -648,9 +653,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 		
-		$roomNum = array(
-			'roomNum' => $roomNum['room_num']
-		);
+		if (!empty($roomNum['room_num'])) {
+			$roomNum = array(
+				'roomNum' => $roomNum['room_num']
+			);
+		} else {
+			$this->getLogService()->info('course', 'createLiveRoomNum', "room_num id empty!");
+			exit('room_num id empty!');
+		}
 
 		$lesson = $this->getLessonDao()->updateLesson($lessonId,$roomNum);
 
@@ -1187,6 +1197,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findCourseStudents($courseId, $start, $limit)
 	{
 		return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student', $start, $limit);
+	}
+
+	public function findCourseStudentsByCourseIds($courseIds)
+	{
+		return $this->getMemberDao()->getMembersByCourseIds($courseIds);
 	}
 
 	public function getCourseStudentCount($courseId)
