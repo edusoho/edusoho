@@ -66,7 +66,6 @@ define(function(require, exports, module) {
                             if (self._endedTriggered) {
                                 return ;
                             }
-                            console.log('face out');
                             $('#' + id + '-flag').fadeOut('slow');
                             self.trigger('ended');
                             self._endedTriggered = true;
