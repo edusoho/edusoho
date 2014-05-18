@@ -348,7 +348,7 @@ class WebExtension extends \Twig_Extension
         }, $bbCode);
 
         $bbCode = preg_replace_callback('/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i', function($matches) {
-            return "<a class='audio-paly-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\">{$matches[2]} <span class='glyphicon glyphicon-play-circle'></span></a>";
+            return "<span class='audio-play-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\"></span>";
         }, $bbCode);
 
         return $bbCode;

@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     var audioPlayers = [];
 
-    $('body').on('click', '.audio-paly-trigger', function() {
+    $('body').on('click', '.audio-play-trigger', function() {
         var $this = $(this);
 
         var fileId = $this.data('fileId');
@@ -34,14 +34,21 @@ define(function(require, exports, module) {
             }
 
             var id = 'audio-player-' + audioPlayers.length;
-            $this.replaceWith('<audio id="' + id + '" style="display:inline-block;width:320px;height:30px;"></audio>');
+            $this.replaceWith(
+                '<audio id="' + id + '" style="display:inline-block;width:1px;height:1px;" class="hide"></audio>' +
+                '<span id="' + id + '-flag" class="glyphicon glyphicon-volume-up"></span>'
+            );
 
-            var audioPlayer = new MediaElementPlayer('#' + id, {
+            var audioPlayer = new MediaElement(id, {
                 type: ['audio/mp3'],
                 mode:'auto_plugin',
                 enablePluginDebug: false,
                 enableAutosize:true,
                 success: function(media) {
+                    media.addEventListener('ended', function() {
+                        $('#' + id + '-flag').remove();
+                    });
+
                     var sources = [
                         { src: response.url, type: 'audio/mp3' }
                     ];
