@@ -4,7 +4,13 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var validator = new Validator({
-            element: '#register-form'
+            element: '#register-form',
+            onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return false;
+                }
+                $('#register-btn').button('submiting').addClass('disabled');
+            }
         });
 
         validator.addItem({

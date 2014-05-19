@@ -2,7 +2,11 @@
 {% for group in groupedItems %}
   {% if group.type == 'chapter' %}
     {% set chapter = group.data %}
-    <h3>章节{{ chapter.number }}: <strong>{{ chapter.title }}</strong></h3>
+    {% if chapter.type == 'unit' %}
+	    <h4>第 {{ chapter.number }} 节： <strong>{{ chapter.title }}</strong></h4>
+    {% else %}
+	    <h3>第 {{ chapter.number }} 章：　<strong>{{ chapter.title }}</strong></h3>
+    {% endif %}
   {% else  %}
 	  <ul class="row">
 	    {% for item in group.data %}
