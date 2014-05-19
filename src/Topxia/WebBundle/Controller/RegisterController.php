@@ -9,6 +9,11 @@ class RegisterController extends BaseController
 
     public function indexAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            return $this->createMessageResponse('info', '你已经登陆了', null, 3000, $this->generateUrl('homepage'));
+        }
+
         $form = $this->createForm(new RegisterType());
 
         if ($request->getMethod() == 'POST') {
