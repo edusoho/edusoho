@@ -60,6 +60,7 @@ define(function(require, exports, module) {
             function() {
 
                 var thisTime = $('[name=startTime]').val();
+                thisTime=thisTime.replace("-", "/").replace("-", "/"); 
                 var thisTime = Date.parse(thisTime)/1000;
                 var nowTime = Date.parse(new Date())/1000;
 
