@@ -20,7 +20,7 @@
 			<div class="col-md-6 controls">
 				<input class="form-control" id="live-title-field" type="text" name="title" value="{{ liveLesson.title|default() }}" tabindex="2">
 			</div>
-		<label><input type="checkbox" style="background: inherit;
+		<label class="control-label"><input type="checkbox" style="background: inherit;
     width: 30px;" name="free" value="1" {% if liveLesson.free|default(0) %} checked="checked" {% endif %} > 免费课时</label>
 	</div> 	
 
@@ -38,7 +38,7 @@
          <div class="col-md-3 controls">
             <input type="text"  name="timeLength" id="live-length-field" class="form-control" value="{{ liveLesson.length|default(60) }}" placeholder="时长">
         </div>
-		<label>分钟</label>
+		<label class="control-label">分钟</label>
 
 	
         <input type="hidden" id="live_lesson_time_check" data-url="{% if liveLesson|default(null) %}{{path('live_lesson_time_check',{id:liveCourse.id,lessonId:liveLesson.id}) }}{% else %}{{path('live_lesson_time_check',{id:liveCourse.id})}}{% endif %}">

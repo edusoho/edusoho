@@ -11,6 +11,7 @@ define(function(require, exports, module) {
         var $content = $("#live-lesson-content-field");
         var now = new Date();
         var validator = new Validator({
+            
             element: '#live-lesson-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
@@ -19,7 +20,6 @@ define(function(require, exports, module) {
             	}
 
                 var $panel = $('.lesson-manage-panel');
-
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 
                     var id = '#' + $(html).attr('id'),
@@ -43,9 +43,11 @@ define(function(require, exports, module) {
 
         Validator.addRule('romote_check',
             function(options, commit) {
+
                 var element = $('#live_lesson_time_check');
                 var startTime = $('[name=startTime]').val();
                 var length = $('[name=timeLength]').val();
+
                 if(startTime && length) {
                     url = element.data('url');
                     $.get(url, {startTime:startTime,length:length}, function(response) {
@@ -60,8 +62,8 @@ define(function(require, exports, module) {
             function() {
 
                 var thisTime = $('[name=startTime]').val();
-                thisTime=thisTime.replace("-", "/").replace("-", "/"); 
-                var thisTime = Date.parse(thisTime)/1000;
+                thisTime = thisTime.replace(/-/g,"/");
+                thisTime = Date.parse(thisTime)/1000;
                 var nowTime = Date.parse(new Date())/1000;
 
                 if (nowTime <= thisTime) {
@@ -93,7 +95,6 @@ define(function(require, exports, module) {
         });
      
         $('[name=startTime]').datetimepicker('setStartDate', now);
-
         $("[name=startTime]").datetimepicker({
         }).on('hide', function(ev){
             validator.query('[name=startTime]').execute();
