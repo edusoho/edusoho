@@ -16,6 +16,8 @@ define(function(require, exports, module) {
                     return ;
                 }
 
+                $('#tag-create-btn').button('submiting').addClass('disabled');
+
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     var $html = $(html);
                     if ($table.find( '#' +  $html.attr('id')).length > 0) {

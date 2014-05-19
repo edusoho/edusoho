@@ -34,13 +34,8 @@ class CourseMaterialManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if (empty($fields['fileId'])) {
+            if (empty($fields['fileId']) && empty($fields['link'])) {
                 throw $this->createNotFoundException();
-            }
-
-            $file = $this->getUploadFileService()->getFile($fields['fileId']);
-            if (empty($file)) {
-            	throw $this->createNotFoundException();
             }
 
             $fields['courseId'] = $course['id'];

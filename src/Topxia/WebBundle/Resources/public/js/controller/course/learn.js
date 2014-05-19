@@ -169,9 +169,15 @@ define(function(require, exports, module) {
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 that.element.find('[data-role=lesson-number]').html(lesson.number);
                 if (parseInt(lesson.chapterNumber) > 0) {
-                    that.element.find('[data-role=chapter-number]').html(lesson.chapterNumber).parent().show();
+                    that.element.find('[data-role=chapter-number]').html(lesson.chapterNumber).parent().show().next().show();
                 } else {
-                    that.element.find('[data-role=chapter-number]').parent().hide();
+                    that.element.find('[data-role=chapter-number]').parent().hide().next().hide();
+                }
+
+                if (parseInt(lesson.unitNumber) > 0) {
+                    that.element.find('[data-role=unit-number]').html(lesson.unitNumber).parent().show().next().show();
+                } else {
+                    that.element.find('[data-role=unit-number]').parent().hide().next().hide();
                 }
 
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
@@ -200,7 +206,10 @@ define(function(require, exports, module) {
                         if (lesson.mediaSource == 'self') {
                             $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
 
-
+                            if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
+                                Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                                return ;
+                            }
 
                             var player = VideoJS("lesson-video-player", {
                                 techOrder: ['flash','html5']

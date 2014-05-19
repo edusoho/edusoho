@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+    define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -10,7 +10,13 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: '#user-profile-form',
-            failSilently: true
+            failSilently: true,
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#profile-save-btn').button('submiting').addClass('disabled');
+            }
         });
 
         validator.addItem({
@@ -26,6 +32,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="profile[weibo]"]',
             rule: 'url',
+            errormessageUrl: '微博地址不正确，须以http://开头。'
         });
 
         validator.addItem({
@@ -37,7 +44,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="profile[site]"]',
             rule: 'url',
-            errormessageUrl: '网站地址不正确，须以http://开头。'
+            errormessageUrl: '个人主页地址不正确，须以http://开头。'
         });
 
         validator.addItem({

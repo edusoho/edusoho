@@ -10,7 +10,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 {
     public function onLogoutSuccess(Request $request)
     {
-        $this->targetUrl = 'login';
+        $this->targetUrl = $this->httpUtils->generateUri($request, 'login');
         if ($this->getAuthService()->hasPartnerAuth()) {
             $user = ServiceKernel::instance()->getCurrentUser();
             if (!$user->isLogin()) {

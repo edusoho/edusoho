@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="form-group for-video-type for-audio-type">
+  <div class="form-group for-text-type for-video-type for-audio-type">
     <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary">{{ field_value(lesson, 'summary') }}</textarea></div>
   </div>
@@ -82,7 +82,7 @@
 
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>
+    <button id="course-lesson-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

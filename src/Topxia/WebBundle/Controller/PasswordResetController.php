@@ -29,14 +29,19 @@ class PasswordResetController extends BaseController
 
                 if ($user) {
                     $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-                    $this->sendEmail(
-                        $user['email'],
-                        "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                        $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                            'user' => $user,
-                            'token' => $token,
-                        )), 'html'
-                    );
+                    try {
+                        $this->sendEmail(
+                            $user['email'],
+                            "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                            $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+                                'user' => $user,
+                                'token' => $token,
+                            )), 'html'
+                        );
+                    } catch (\Exception $e) {
+                        $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:' . $e->getMessage());
+                        return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');
+                    }
 
                     $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
 

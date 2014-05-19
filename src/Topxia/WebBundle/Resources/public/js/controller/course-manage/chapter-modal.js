@@ -18,6 +18,7 @@ define(function(require, exports, module) {
           if (error) {
               return ;
           }
+          $('#course-chapter-btn').button('submiting').addClass('disabled');
         
           $.post($form.attr('action'), $form.serialize(), function(html) {
               var id = '#' + $(html).attr('id'),
