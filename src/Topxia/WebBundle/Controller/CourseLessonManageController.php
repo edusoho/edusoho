@@ -11,7 +11,6 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 		$courseItems = $this->getCourseService()->getCourseItems($course['id']);
-
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {
@@ -31,13 +30,14 @@ class CourseLessonManageController extends BaseController
 		$mediaIds = array_keys($mediaMap);
 
 		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
 		foreach ($files as $file) {
 			$lessonIds = $mediaMap[$file['id']];
 			foreach ($lessonIds as $lessonId) {
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems
@@ -48,7 +48,6 @@ class CourseLessonManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-
 	    if($request->getMethod() == 'POST') {
         	$lesson = $request->request->all();
         	$lesson['courseId'] = $course['id'];
