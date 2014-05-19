@@ -2,11 +2,31 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Course\OrderService;
+use Topxia\Service\Course\CourseOrderService;
 use Topxia\Common\ArrayToolkit;
 
-class OrderServiceImpl extends BaseService implements OrderService
+class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 {
+
+    public function doSuccessPayOrder($id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        if (empty($order) or $order['targetType'] != 'course') {
+            throw $this->createServiceException('非课程订单，加入课程失败。');
+        }
+
+        $info = array(
+            'orderId' => $order['id'],
+            'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+        );
+
+        if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+        }
+
+        return ;
+    }
+
     public function cancelRefundOrder($id)
     {
         $order = $this->getOrderService()->getOrder($id);

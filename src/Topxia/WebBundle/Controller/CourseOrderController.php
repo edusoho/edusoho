@@ -129,18 +129,7 @@ class CourseOrderController extends OrderController
                 $controller->generateUrl('course_show', array('id' => $order['targetId']));
             }
 
-            if ($order['targetType'] != 'course') {
-                throw \RuntimeException('非课程订单，加入课程失败。');
-            }
-
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-
-            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            }
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
 
             return $controller->generateUrl('course_show', array('id' => $order['targetId']));
         });
@@ -153,18 +142,8 @@ class CourseOrderController extends OrderController
             if (!$success) {
                 return ;
             }
-            if ($order['targetType'] != 'course') {
-                throw \RuntimeException('非课程订单，加入课程失败。');
-            }
-
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-
-            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            }
+            
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
 
             return ;
         });
@@ -289,7 +268,7 @@ class CourseOrderController extends OrderController
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 
     protected function getSettingService()

@@ -20,6 +20,6 @@ class OrderServiceTest extends BaseTestCase
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 }
