@@ -129,32 +129,18 @@ class CourseOrderController extends OrderController
             throw $this->createNotFoundException();
         }
 
-        $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
-        $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
 
-            $refund = $this->getOrderService()->applyRefundOrder($member['orderId'], $amount, $reason);
-            if ($refund['status'] == 'created') {
-                $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
-                $message = $this->setting('refund.applyNotification', '');
-                if ($message) {
-                    $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
-                    $variables = array(
-                        'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"
-                    );
-                    $message = StringToolkit::template($message, $variables);
-                    $this->getNotificationService()->notify($refund['userId'], 'default', $message);
-                }
-            } elseif ($refund['status'] == 'success') {
-                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
-            }
+            $refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
 
             return $this->createJsonResponse($refund);
         }
+
+        $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
+        $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
 
         return $this->render('TopxiaWebBundle:CourseOrder:refund-modal.html.twig', array(
             'course' => $course,
