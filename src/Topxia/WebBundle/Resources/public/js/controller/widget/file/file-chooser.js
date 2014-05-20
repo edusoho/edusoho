@@ -145,7 +145,6 @@ define(function(require, exports, module) {
                 required: true,
                 rule: 'url'
             }).on('itemValidated', function(error, results, $item){
-                console.log(error, results, $item);
                 if (error) {
                     $item.parents('form').find('[name=fileId]').val('');
                     return false;
