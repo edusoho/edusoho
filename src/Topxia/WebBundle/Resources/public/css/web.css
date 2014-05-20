@@ -2458,7 +2458,6 @@ body {
   border-right: 3px solid #096;
 }
 
-
 .course-grids {
 	margin:0 -15px 0 0;
 	padding:0;
@@ -2501,10 +2500,29 @@ body {
 	text-decoration: none;
 }
 
+.required-course-grid {
+	margin: 0px 15px 0px 0px;
+}
+
 @media (min-width: 1200px) {
 	.course-grid .grid-body {
 		width: 254px;
 	}
+	.required-course-grid .grid-body {
+		width: 213px;
+	}
+}
+
+@media (min-width: 980px ) and ( max-width: 1199px ) {
+    .required-course-grid .grid-body {
+        width: 263px;
+    }
+}
+
+@media (min-width: 768px ) and ( max-width: 979px ) {
+    .required-course-grid .grid-body {
+        width: 306px;
+    }
 }
 
 .course-grid .grid-body:hover {
