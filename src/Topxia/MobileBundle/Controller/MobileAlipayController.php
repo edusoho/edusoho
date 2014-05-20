@@ -31,6 +31,7 @@ class MobileAlipayController extends MobileController
 
     public function payNotifyAction(Request $request)
     {
+        $this->getLogService()->info('notify', 'create', "paycalknotify action");
         $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
 
@@ -48,11 +49,9 @@ class MobileAlipayController extends MobileController
                 $trade_status = $doc['trade_status'];
                 
                 if($_POST['trade_status'] == 'TRADE_FINISHED') {
-                    //判断该笔订单是否在商户网站中已经做过处理
                     $result["status"] = "success";
                 }
                 else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-                    //判断该笔订单是否在商户网站中已经做过处理
                     $result["status"] = "success";
                 }
             }
@@ -73,14 +72,17 @@ class MobileAlipayController extends MobileController
 
                 if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
                     $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                    $this->getLogService()->info('notify', 'becomeStudent', "paycalknotify action");
                 }
-
                 return ;
             });
+
+            $this->getLogService()->info('notify', 'success' . $status, "paycalknotify action");
         }
         else {
             //验证失败
             $result["status"] = "fail";
+            $this->getLogService()->info('notify', 'check_fail', "paycalknotify action");
         }
         return new Response("success");
     }
@@ -107,6 +109,7 @@ class MobileAlipayController extends MobileController
 
             return ;
         });
+        $this->getLogService()->info('order', 'callback', "paycalknotify action");
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
         return new Response($callback);
     }
@@ -207,34 +210,9 @@ class MobileAlipayController extends MobileController
         return $options;
     }
 
-
-    public function payCallBackAction_temp(Request $request)
+    public function getLogService()
     {
-        $status = "fail";
-        $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
-        $verify_result = $alipayNotify->verifyReturn();
-        if($verify_result) {
-            //验证成功
-            //商户订单号
-            $out_trade_no = $_GET['out_trade_no'];
-
-            //支付宝交易号
-            $trade_no = $_GET['trade_no'];
-
-            //交易状态
-            $result = $_GET['result'];
-            
-            $this->getCourseOrderService()->doSuccessPayOrder($out_trade_no);
-            $status = "success";
-        }
-        else {
-            //验证失败
-            //如要调试，请看alipay_notify.php页面的verifyReturn函数
-            $status = "fail";
-        }
-
-        $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
-        return new Response($callback);
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 
     protected function getOrderService()
