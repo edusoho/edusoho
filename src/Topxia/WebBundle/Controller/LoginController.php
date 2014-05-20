@@ -11,7 +11,7 @@ class LoginController extends BaseController
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登陆了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
