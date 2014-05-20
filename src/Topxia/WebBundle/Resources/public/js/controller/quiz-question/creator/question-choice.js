@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             var $html = $($.trim(template(model)));
 
             if (this.get('enableAudioUpload')) {
-                $html.find('.item-audio-upload').show();
+                $html.find('.item-audio-upload').removeClass('hide');
             }
 
             $html.appendTo(this.$('[data-role=choices]'));
