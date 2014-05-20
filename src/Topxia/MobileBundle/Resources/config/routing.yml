@@ -134,3 +134,6 @@ topxia_mobile_alipay_payresult:
     pattern:  /alipay_result
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payResult }
 
+topxia_mobile_checkQR:
+    pattern:  /check_qr
+    defaults: { _controller: TopxiaMobileBundle:User:checkQR }

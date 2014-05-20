@@ -21,6 +21,30 @@ class UserController extends MobileController
         return $this->createJson($request, $user);
     }
 
+    public function checkQRAction(Request $request)
+    {
+        $site = $this->getSettingService()->get('site', array());
+        if($site) {
+            $this->setResultStatus("success");
+            $token = $this->getUserToken($request);
+            if ($token) {
+                $this->result["token"] = $token["token"];
+                $user = $this->getUserService()->getUser($token["userId"]);
+                $this->result["user"] = $this->changeUserPicture($user, false);
+            }
+
+            $site['url'] = MobileController::$baseUrl;
+            $this->result["school"] = array(
+                "title"=>$site['name'],
+                "info"=>$site['slogan'],
+                "url"=>$site['url'],
+                "logo"=>$site['logo']
+            );
+        }
+        
+        return $this->createJson($request, $this->result);
+    }
+    
     public function checkTokenAction(Request $request)
     {
         $token = $this->getUserToken($request);
