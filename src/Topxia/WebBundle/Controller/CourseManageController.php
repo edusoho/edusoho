@@ -327,11 +327,6 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Course.OrderService');
-    }
-
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');

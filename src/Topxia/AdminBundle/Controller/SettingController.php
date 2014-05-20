@@ -140,6 +140,8 @@ class SettingController extends BaseController
             'welcome_methods' => array(),
             'welcome_title' => '',
             'welcome_body' => '',
+            'user_terms' => 'closed',
+            'user_terms_body' => ''
         );
 
         $auth = array_merge($default, $auth);

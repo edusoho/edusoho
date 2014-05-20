@@ -139,7 +139,7 @@ class CourseOrderController extends BaseController
 
     protected function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 
     protected function getCourseService()

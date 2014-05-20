@@ -15,34 +15,39 @@ class RegisterController extends BaseController
         }
 
         $form = $this->createForm(new RegisterType());
-
+        
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            
+            $registration = $request->request->all();
+            $registration['createdIp'] = $request->getClientIp();
 
-           
-            if ($form->isValid()) {
-                $registration = $form->getData();
-                $registration['createdIp'] = $request->getClientIp();
+            $user = $this->getAuthService()->register($registration);
+            $this->authenticateUser($user);
+            $this->sendRegisterMessage($user);
 
-                $user = $this->getAuthService()->register($registration);
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
+            $goto = $this->generateUrl('register_submited', array(
+                'id' => $user['id'], 'hash' => $this->makeHash($user)
+            ));
 
-                $goto = $this->generateUrl('register_submited', array(
-                    'id' => $user['id'], 'hash' => $this->makeHash($user)
-                ));
-
-                if ($this->getAuthService()->hasPartnerAuth()) {
-                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-                }
-
-                return $this->redirect($goto);
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
+
+            return $this->redirect($goto);
+            
         }
         $loginEnable  = $this->isLoginEnabled();
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'form' => $form->createView(),
             'isLoginEnabled' => $loginEnable
+        ));
+    }
+
+    public function userTermsAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('auth', array());
+
+        return $this->render("TopxiaWebBundle:Register:user-terms.html.twig", array(
+            'userTerms' => $setting['user_terms_body']
         ));
     }
 
