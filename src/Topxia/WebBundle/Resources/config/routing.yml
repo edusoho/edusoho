@@ -135,6 +135,10 @@ coupon_check:
     pattern:  /{type}/{id}/coupon/check
     defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
 
+course_order_notice:
+    pattern:  /course/order/notice
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:notice }
+
 course_order_pay:
     pattern:  /course/order/pay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
