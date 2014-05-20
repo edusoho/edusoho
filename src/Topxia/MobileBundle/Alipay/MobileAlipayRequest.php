@@ -2,6 +2,7 @@
 
 namespace Topxia\MobileBundle\Alipay;
 use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
+use Topxia\MobileBundle\Controller\MobileController;
 
 class MobileAlipayRequest
 {
@@ -37,15 +38,15 @@ class MobileAlipayRequest
         //**req_data详细信息**
 
         //服务器异步通知页面路径
-        $notify_url = "http://192.168.12.7/mapi/alipay/alipay_notify";
+        $notify_url = MobileController::$baseUrl . "/mapi/alipay/alipay_notify";
         //需http://格式的完整路径，不允许加?id=123这类自定义参数
 
         //页面跳转同步通知页面路径
-        $call_back_url = "http://192.168.12.7/mapi/alipay/alipay_callback";
+        $call_back_url = MobileController::$baseUrl . "/mapi/alipay/alipay_callback";
         //需http://格式的完整路径，不允许加?id=123这类自定义参数
 
         //操作中断返回地址
-        $merchant_url = "http://192.168.12.7/mapi/alipay/alipay_merchant";
+        $merchant_url = MobileController::$baseUrl . "/mapi/alipay/alipay_merchant";
         //用户付款中途退出返回商户的地址。需http://格式的完整路径，不允许加?id=123这类自定义参数
 
         //卖家支付宝帐户

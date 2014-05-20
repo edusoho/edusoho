@@ -55,26 +55,26 @@ class GlobalController extends MobileController
             array(
                 "title"=>"开源力量",
                 "info"=>"开源力量-网校简介",
-                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
-                "url"=>"http://192.168.12.7"
+                "logo"=>"http://try3.edusoho.cn/files/mobile/school/nxw.png",
+                "url"=>"http://try3.edusoho.cn"
             ),
             array(
                 "title"=>"小象科技",
                 "info"=>"小象科技-网校简介",
-                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
-                "url"=>"http://192.168.12.7"
+                "logo"=>"http://try3.edusoho.cn/files/mobile/school/nxw.png",
+                "url"=>"http://try3.edusoho.cn"
             ),
             array(
                 "title"=>"好知网",
                 "info"=>"好知网-网校简介",
-                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
-                "url"=>"http://192.168.12.7"
+                "logo"=>"http://try3.edusoho.cn/files/mobile/school/nxw.png",
+                "url"=>"http://try3.edusoho.cn"
             ),
             array(
                 "title"=>"年兄网",
                 "info"=>"年兄网-网校简介",
-                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
-                "url"=>"http://192.168.12.7"
+                "logo"=>"http://try3.edusoho.cn/files/mobile/school/nxw.png",
+                "url"=>"http://try3.edusoho.cn"
             )
         );
         return $this->createJson($request, $schools);
