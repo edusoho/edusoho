@@ -82,11 +82,6 @@ class CourseOrderController extends OrderController
         }
     }
 
-    public function noticeAction(Request $request)
-    {
-        return $this->render('TopxiaWebBundle:CourseOrder:notice.html.twig');
-    }
-
     public function payReturnAction(Request $request, $name)
     {
         $controller = $this;
