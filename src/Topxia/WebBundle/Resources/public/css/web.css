@@ -1572,7 +1572,7 @@ body {
 .lesson-dashboard .lesson-content-audio .mejs-container {
 	margin: 0 auto;
 	margin-top: 100px;
-
+	display: block;
 }
 
 .lesson-dashboard .lesson-content-text {
