@@ -9,9 +9,7 @@ define(function(require, exports, module) {
             editUser = $form.data('edituser');
 
         if (currentUser == editUser) {
-            $form.find('input[value=ROLE_SUPER_ADMIN]').on('click', function(){
-                return false;
-            });
+            $form.find('input[value=ROLE_SUPER_ADMIN]').attr('disabled', 'disabled');
         };
 
         $form.find('input[value=ROLE_USER]').on('change', function(){
@@ -40,6 +38,8 @@ define(function(require, exports, module) {
                     return false;
                 }
             }
+
+            $form.find('input[value=ROLE_SUPER_ADMIN]').removeAttr('disabled');
 
             $.post($form.attr('action'), $form.serialize(), function(html) {
 
