@@ -124,7 +124,7 @@ define(function(require, exports, module) {
                     pick: '#question-stem-audio-uploader',
                     formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                     accept: {
-                        title: 'Images',
+                        title: 'Audio',
                         extensions: 'mp3,wav',
                         mimeTypes: 'audio/*'
                     }
