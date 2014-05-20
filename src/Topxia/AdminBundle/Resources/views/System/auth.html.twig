@@ -3,6 +3,7 @@
 {% block title %}注册设置 - {{ parent() }}{% endblock %}
 
 {% set submenu = 'auth' %}
+{% set script_controller = 'setting/auth' %}
 
 {% block maincontent %}
 
@@ -114,6 +115,29 @@
         </div>
       </div>
     </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>服务条款设置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="user_terms">是否开启服务条款</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('user_terms', {'opened':'开启', 'closed':'关闭'}, auth.user_terms) }}
+        <div class="help-block">开启后用户注册时必须同意条款才能注册</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="user_terms_body">条款内容</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body">{{ auth.user_terms_body }}</textarea>
+      </div>
+    </div>
+
   </fieldset>
 
   <div class="form-group">

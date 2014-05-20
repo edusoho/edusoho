@@ -42,6 +42,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+user_terms:
+    pattern:  /userterms
+    defaults: { _controller: TopxiaWebBundle:Register:userTerms }
+
 register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
