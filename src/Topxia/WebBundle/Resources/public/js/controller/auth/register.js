@@ -10,7 +10,8 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $('#register-btn').button('submiting').addClass('disabled');
-            }
+            },
+            failSilently: true
         });
 
         validator.addItem({
