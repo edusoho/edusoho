@@ -277,6 +277,80 @@ class ActivityManageController extends BaseController
     }
 
 
+    public function joinBatchAction(Request $request, $id)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+
+        $currentUser = $this->getCurrentUser();
+
+        if ('POST' == $request->getMethod()) {
+
+            $data = $request->request->all();
+
+            $num =intval($data['num']);
+
+            for ($i = 1; $i <= $num; $i++) {
+
+                $user = $this->getUserService()->getSystemUser();
+
+                $activityMember = $this->getActivityService()->getActivityMember($activity['id'],$user['id']);
+
+                if($activityMember){
+                    continue;
+                }
+
+                $order = $this->getOrderService()->createOrder(array(
+                    'userId' => $user['id'],
+                    'title' => "购买课程《{$activity['title']}》(管理员添加)",
+                    'targetType' => 'activity',
+                    'targetId' => $activity['id'],
+                    'amount' => $data['price'],
+                    'payment' => 'none',
+                    'snPrefix' => 'A',
+                ));
+
+
+                $this->getOrderService()->payOrder(array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time(),
+                ));
+
+                $member['truename'] =  '';
+                $member['mobile'] =  '';
+                $member['job'] =  '';
+                $member['company'] =  '';
+
+
+                $member['activityId']=$id;
+                $member['userId']=$user['id'];
+                $member['joinMode']='线上';
+                $member['newUser']='0';
+                $member['orderId']=$order['id'];
+                
+                $member =  $this->getActivityService()->addMemberByActivity($member);
+                
+                $this->getActivityService()->addActivityStudentNum($id);
+
+
+                $this->getLogService()->info('activity', 'add_member', "活动《{$activity['title']}》(#{$activity['id']})，添加学员{$user['nickname']}(#{$user['id']})");
+            }
+
+           return $this->redirect($this->generateUrl("activity_manage_members",array(
+                    "id"=>$id
+                   ))
+                );  
+        }
+
+        return $this->render('TopxiaWebBundle:ActivityMemberManage:join-modal-batch.html.twig',array(
+            'activity'=>$activity
+        ));
+    }
+
+
+
+
     public function exportCsvAction (Request $request, $id)
     {   
 
@@ -519,5 +593,11 @@ class ActivityManageController extends BaseController
     {
         return $this->container->get('topxia.twig.web_extension');
     }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
 
 }

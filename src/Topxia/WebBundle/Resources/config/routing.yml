@@ -1215,9 +1215,10 @@ activity_manage_members:
     pattern:  /openclass/{id}/manage/members
     defaults: { _controller: TopxiaWebBundle:ActivityManage:members }
 
-activity_manage_members_export:
-    pattern:  /openclass/{id}/manage/members/export
-    defaults: { _controller: TopxiaWebBundle:ActivityManage:export }
+activity_manage_members_join_batch:
+    pattern:  /openclass/{id}/manage/members/join
+    defaults: { _controller: TopxiaWebBundle:ActivityManage:joinBatch }
+
 
 activity_manage_members_export_csv:
     pattern:  /openclass/{id}/manage/members/export/csv
@@ -1227,43 +1228,6 @@ activity_manage_members_export_csv:
 activity_manage_teachers_match:
     pattern: /openclass/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:ActivityManage:teachersMatch }
-
-activity_manage_quiz:
-    pattern: /openclass/{courseId}/manage/lesson/{lessonId}/quiz
-    defaults: { _controller: TopxiaWebBundle:ActivityQuizManage:index }
-
-activity_manage_quiz_item_save:
-    pattern: /openclass/{courseId}/manage/lesson/{lessonId}/quiz/saveitem
-    defaults: { _controller: TopxiaWebBundle:ActivityQuizManage:saveItem }
-
-activity_manage_quiz_item_delete:
-    pattern: /openclass/{courseId}/manage/quiz/{itemId}/delete
-    defaults: { _controller: TopxiaWebBundle:ActivityQuizManage:deleteItem }
-    methods: [POST]
-
-activity_manage_chapter_create:
-    pattern:  /openclass/{id}/manage/chapter/create
-    defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:create }
-
-activity_manage_chapter_edit:
-    pattern:  /openclass/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:edit }
-
-activity_manage_chapter_delete:
-    pattern:  /openclass/{courseId}/manage/chapter/{chapterId}/delete
-    defaults: { _controller: TopxiaWebBundle:ActivityChapterManage:delete }
-
-activity_manage_media_library:
-    pattern:  /openclass/{id}/manage/media/library
-    defaults: { _controller: TopxiaWebBundle:ActivityMediaManage:library }
-
-activity_manage_media_upload:
-    pattern:  /openclass/{id}/manage/media/upload
-    defaults: { _controller: TopxiaWebBundle:ActivityMediaManage:upload }
-
-activity_manage_media_import:
-    pattern:  /openclass/{id}/manage/media/import
-    defaults: { _controller: TopxiaWebBundle:ActivityMediaManage:import }
 
 activity_manage_publish:
     pattern:  /openclass/{id}/manage/publish

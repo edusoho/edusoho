@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}批量添加报名人员{% endblock %}
+{% block body %}
+
+<form id="member-create-form" class="form-horizontal" method="post" action="{{ path('activity_manage_members_join_batch', {id:activity.id}) }}">
+  {% if activity.status == 'published' %}
+  	<div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="member-num">数量</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="member-num" name="num" class="form-control" >
+      	<div class="help-block">请输入批量增加的数量</div>
+    	</div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="buy-price">购买价格</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="buy-price" name="price" value="0"  readonly class="form-control">
+        <div class="help-block">本课程的价格为{{activity.price}}元</div>
+      </div>
+    </div>
+
+    
+  {% else %}
+    <div class="empty">{{dict_text('courseStatus', activity.status)}}活动不能添加报名人员，请发布后再添加。</div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {% if activity.status == 'published' %}
+    <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#member-create-form">保存</button>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('activity-manage/member-join-batch')</script>
+{% endblock %}
