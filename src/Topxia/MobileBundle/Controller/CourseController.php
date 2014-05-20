@@ -91,6 +91,8 @@ class CourseController extends MobileController
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 
         $favoriteStatus = $this->getFavoriteStatus($course_id);
+
+        $isStudent = $this->getCourseService()->isCourseStudent($course_id, $user->id);
         $this->setResultStatus("success");
         $this->result['courseinfo'] = 
             array(
@@ -102,7 +104,8 @@ class CourseController extends MobileController
                     "member"=>$member,
                     "learnStatuses"=>$learnStatuses,
                     "teacherUsers"=>$teacherUsers,
-                    "favoriteStatus"=>$favoriteStatus
+                    "favoriteStatus"=>$favoriteStatus,
+                    "isStudent"=>$isStudent
                 )
         );
     
@@ -126,7 +129,7 @@ class CourseController extends MobileController
             $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($favoriteCourses, 'userId'));
             $this->setResultStatus("success");
             $this->result['users'] = $users;
-            $this->result['favoriteCourses'] = $this->changeCoursePicture($favoriteCourses, true);
+            $this->result['courses'] = $this->changeCoursePicture($favoriteCourses, true);
             $count = $this->getCourseService()->findUserFavoritedCourseCount($token['userId']);
             $this->result = $this->setPage($this->result, $page, $count);
         }
