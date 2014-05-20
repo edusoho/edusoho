@@ -20,6 +20,8 @@ interface CourseService
 
 	public function findCoursesByIds(array $ids);
 
+	public function findCoursesByTagIds(array $tagIds, $status, $start, $limit);
+
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
 	public function searchCourseCount($conditions);
@@ -245,6 +247,8 @@ interface CourseService
 	public function deleteCourseAnnouncement($courseId, $id);
 
 	public function findAnnouncements($courseId, $start, $limit);
+
+	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
 
 	public function updateAnnouncement($courseId, $id, $fields);
 

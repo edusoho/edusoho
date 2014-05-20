@@ -19,6 +19,11 @@ class OrderController extends BaseController
         ));
     }
 
+    public function resultNoticeAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Order:resultNotice.html.twig');
+    }
+
     public function couponCheckAction (Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {
@@ -45,7 +50,7 @@ class OrderController extends BaseController
             $successUrl = $successCallback($success, $order);
         }
 
-        $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
+        $goto = empty($successUrl) ? $this->generateUrl('order_result_notice', array(), true) : $successUrl;
 
         return $this->redirect($goto);
     }

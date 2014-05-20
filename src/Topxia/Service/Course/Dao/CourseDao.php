@@ -10,6 +10,8 @@ interface CourseDao
 
     public function findCoursesByIds(array $ids);
 
+    public function findCoursesByTagIds(array $tagIds, $status, $start, $limit);
+
 	public function searchCourses($conditions, $orderBy, $start, $limit);
 
 	public function searchCourseCount($conditions);
