@@ -47,6 +47,10 @@ define(function(require, exports, module) {
             var template = this.get('choiceTemplate');
             var $html = $($.trim(template(model)));
 
+            if (this.get('enableAudioUpload')) {
+                $html.find('.item-audio-upload').show();
+            }
+
             $html.appendTo(this.$('[data-role=choices]'));
             this.get("validator").addItem({
                 element: '#item-input-'+model.id,
@@ -84,57 +88,60 @@ define(function(require, exports, module) {
             });
 
 
-            /**
-             * 音频上传
-             */
-            var audioUploader = WebUploader.create({
-                swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                pick: '#item-audio-upload-' + model.id,
-                formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                accept: {
-                    title: 'Images',
-                    extensions: 'mp3,wav',
-                    mimeTypes: 'audio/*'
-                }
-            });
-
-            audioUploader.on( 'fileQueued', function( file, a, b ) {
-                Notify.info('正在上传，请稍等！', 0);
-
-                $.ajax({
-                    url: self.element.data('mediaUploadParamsUrl'),
-                    async: false,
-                    dataType: 'json',
-                    data: {convertor: 'audio'},
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        audioUploader.option('server', response.url)
-                        audioUploader.option('formData', response.postParams);
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
+            if (this.get('enableAudioUpload')) {
+                /**
+                 * 音频上传
+                 */
+                var audioUploader = WebUploader.create({
+                    swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+                    pick: '#item-audio-upload-' + model.id,
+                    formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+                    accept: {
+                        title: 'Images',
+                        extensions: 'mp3,wav',
+                        mimeTypes: 'audio/*'
                     }
                 });
 
-                audioUploader.upload();
-            });
+                audioUploader.on( 'fileQueued', function( file, a, b ) {
+                    Notify.info('正在上传，请稍等！', 0);
 
-            audioUploader.on( 'uploadSuccess', function( file, response ) {
-                Notify.success('上传成功！', 1);
+                    $.ajax({
+                        url: self.element.data('mediaUploadParamsUrl'),
+                        async: false,
+                        dataType: 'json',
+                        data: {convertor: 'audio'},
+                        cache: false,
+                        success: function(response, status, jqXHR) {
+                            audioUploader.option('server', response.url)
+                            audioUploader.option('formData', response.postParams);
+                        },
+                        error: function(jqXHR, status, error) {
+                            Notify.danger('请求上传授权码失败！');
+                        }
+                    });
 
-                $.post(self.element.data('mediaUploadCallbackUrl'), response, function(response) {
-                    var name = response.filename.match(/[^\.]*\./)[0].slice(0, -1);
-                    var result = '[audio id="' + response.id +'"]' + name + '[/audio]';
-
-                    var $input = $($('#item-upload-' + model.id).data('target'));
-                    $input.val($input.val() + result);
+                    audioUploader.upload();
                 });
 
-            });
+                audioUploader.on( 'uploadSuccess', function( file, response ) {
+                    Notify.success('上传成功！', 1);
 
-            audioUploader.on( 'uploadError', function( file, response ) {
-                Notify.danger('上传失败，请重试！');
-            });
+                    $.post(self.element.data('mediaUploadCallbackUrl'), response, function(response) {
+                        var name = response.filename.match(/[^\.]*\./)[0].slice(0, -1);
+                        var result = '[audio id="' + response.id +'"]' + name + '[/audio]';
+
+                        var $input = $($('#item-upload-' + model.id).data('target'));
+                        $input.val($input.val() + result);
+                    });
+
+                });
+
+                audioUploader.on( 'uploadError', function( file, response ) {
+                    Notify.danger('上传失败，请重试！');
+                });
+            }
+            
 
         },
 
