@@ -17,8 +17,7 @@ interface CourseOrderService
      *
      * 在支付通知结果返回中，调用此接口
      */
-    public function doSuccessPayOrder($order);
-
+    public function doSuccessPayOrder($id);
     /**
      * 取消课程的退款订单
      */
