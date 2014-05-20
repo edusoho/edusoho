@@ -34,7 +34,7 @@ class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
             $status = $arguments['status'];
         }
 
-        $courses = $this->getCourseService()->findCoursesByTagIds($tagIds, $status, 0, $arguments['count']);
+        $courses = $this->getCourseService()->findCoursesByTagIdsAndStatus($tagIds, $status, 0, $arguments['count']);
 
         return $this->getCourseTeachersAndCategories($courses);
     }
