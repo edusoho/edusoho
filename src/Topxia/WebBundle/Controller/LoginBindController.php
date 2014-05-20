@@ -50,7 +50,6 @@ class LoginBindController extends BaseController
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
             'client' => $client,
@@ -61,7 +60,6 @@ class LoginBindController extends BaseController
     public function newAction(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');
-
 
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
@@ -123,6 +121,7 @@ class LoginBindController extends BaseController
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
+        $registration['nickname'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $registration['nickname']);
 
         $user = $this->getAuthService()->register($registration, $type);
         return $user;
