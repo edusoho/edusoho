@@ -55,7 +55,11 @@ class AppServiceImpl extends BaseService implements AppService
             $args[$app['code']] = $app['version'];
         }
 
-        return $this->createAppClient()->checkUpgradePackages($args);
+        $extInfos = array(
+            'userCount' => $this->getUserService()->searchUserCount(array()),
+        );
+
+        return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
     }
 
     public function findLogs($start, $limit)
@@ -625,6 +629,11 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 
 }
