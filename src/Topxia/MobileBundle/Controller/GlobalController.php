@@ -54,26 +54,26 @@ class GlobalController extends MobileController
         $schools = array(
             array(
                 "title"=>"开源力量",
-                "info"=>"网校简介",
-                "logo"=>"images/school_nxw.png",
+                "info"=>"开源力量-网校简介",
+                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
                 "url"=>"http://192.168.12.7"
             ),
             array(
                 "title"=>"小象科技",
-                "info"=>"网校简介",
-                "logo"=>"images/school_nxw.png",
+                "info"=>"小象科技-网校简介",
+                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
                 "url"=>"http://192.168.12.7"
             ),
             array(
                 "title"=>"好知网",
-                "info"=>"网校简介",
-                "logo"=>"images/school_nxw.png",
+                "info"=>"好知网-网校简介",
+                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
                 "url"=>"http://192.168.12.7"
             ),
             array(
                 "title"=>"年兄网",
-                "info"=>"网校简介",
-                "logo"=>"images/school_nxw.png",
+                "info"=>"年兄网-网校简介",
+                "logo"=>"http://192.168.12.7/files/mobile/school/nxw.png",
                 "url"=>"http://192.168.12.7"
             )
         );

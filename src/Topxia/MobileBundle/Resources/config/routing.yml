@@ -119,7 +119,7 @@ topxia_mobile_alipay_paypage:
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:showPayPage }
 
 topxia_mobile_alipay_notify:
-    pattern:  /alipay_notify
+    pattern:  /{name}/alipay_notify
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payNotify }
 
 topxia_mobile_alipay_pay:
@@ -127,7 +127,7 @@ topxia_mobile_alipay_pay:
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:pay }
 
 topxia_mobile_alipay_callback:
-    pattern:  /alipay_callback
+    pattern:  /{name}/alipay_callback
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
 
 topxia_mobile_alipay_payresult:

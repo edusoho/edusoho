@@ -8,6 +8,8 @@ use Topxia\MobileBundle\Alipay\MobileAlipayRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundle\Alipay\AlipayNotify;
 use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
+use Topxia\Component\Payment\Payment;
+use Topxia\MobileBundle\Alipay\MobileAlipayResponse;
 
 class MobileAlipayController extends MobileController
 {
@@ -29,8 +31,6 @@ class MobileAlipayController extends MobileController
 
     public function payNotifyAction(Request $request)
     {
-        $result = array("status"=>"error");
-
         $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
 
@@ -39,7 +39,7 @@ class MobileAlipayController extends MobileController
             $doc = simplexml_load_string($notify_data);
             $doc = (array)$doc;
             
-            if( ! empty($doc['notify']) ) {
+            if(!empty($doc['notify']) ) {
                 //商户订单号
                 $out_trade_no = $doc['out_trade_no'];
                 //支付宝交易号
@@ -57,16 +57,158 @@ class MobileAlipayController extends MobileController
                 }
             }
 
-            //——请根据您的业务逻辑来编写程序（以上代码仅作参考）
+            $controller = $this;
+            $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
+                if (!$success) {
+                    return ;
+                }
+                if ($order['targetType'] != 'course') {
+                    throw \RuntimeException('非课程订单，加入课程失败。');
+                }
+
+                $info = array(
+                    'orderId' => $order['id'],
+                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+                );
+
+                if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                    $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                }
+
+                return ;
+            });
         }
         else {
             //验证失败
             $result["status"] = "fail";
         }
-        return $this->createJson($request, $result);
+        return new Response("success");
     }
 
-    public function payCallBackAction(Request $request)
+    public function payCallBackAction(Request $request, $name)
+    {
+        $controller = $this;
+        $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                return ;
+            }
+            if ($order['targetType'] != 'course') {
+                throw \RuntimeException('非课程订单，加入课程失败。');
+            }
+
+            $info = array(
+                'orderId' => $order['id'],
+                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            );
+
+            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            }
+
+            return ;
+        });
+        $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
+        return new Response($callback);
+    }
+
+    //支付校验
+    protected function doPayNotify(Request $request, $name, $successCallback = null)
+    {
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
+        
+        if ($request->getMethod() == "GET") {
+            $requestParams = $request->query->all();
+            $order = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
+            $requestParams['total_fee'] = $order['amount'];
+        } else {
+            $requestParams = $request->request->all();
+        }
+
+        $payData = $this->createPaymentResponse($requestParams);
+        
+        try {
+            list($success, $order) = $this->getOrderService()->payOrder($payData);
+            if ($order['status'] == 'paid' and $successCallback) {
+                $successCallback($success, $order);
+            }
+
+            return "success";
+        } catch (\Exception $e) {
+            return "fail";
+        }
+    }
+
+    private function createPaymentResponse($params)
+    {
+        $data = array();
+        $data['payment'] = 'alipay';
+        $data['sn'] = $params['out_trade_no'];
+        if (!empty($params['trade_status'])) {
+            $data['status'] = in_array($params['trade_status'], array('TRADE_SUCCESS', 'TRADE_FINISHED')) ? 'success' : 'unknown';
+        } elseif (!empty($params['result'])) {
+            $data['status'] = $params['result'];
+        }
+        
+        $data['amount'] = $params['total_fee'];
+
+        if (!empty($params['gmt_payment'])) {
+            $data['paidTime'] = strtotime($params['gmt_payment']);
+        } elseif (!empty($params['notify_time'])) {
+            $data['paidTime'] = strtotime($params['notify_time']);
+        } else {
+            $data['paidTime'] = time();
+        }
+
+        $data['raw'] = $params;
+        return $data;
+    }
+
+    protected function createPaymentRequest($order, $requestParams)
+    {
+        $options = $this->getPaymentOptions($order['payment']);
+        $request = Payment::createRequest($order['payment'], $options);
+
+        $requestParams = array_merge($requestParams, array(
+            'orderSn' => $order['sn'],
+            'title' => $order['title'],
+            'summary' => '',
+            'amount' => $order['amount'],
+        ));
+
+        return $request->setParams($requestParams);
+    }
+
+    private function getPaymentOptions($payment)
+    {
+        $settings = $this->setting('payment');
+
+        if (empty($settings)) {
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings['enabled'])) {
+            throw new \RuntimeException("支付模块未开启，请先开启。");
+        }
+
+        if (empty($settings[$payment. '_enabled'])) {
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+
+        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+        }
+
+        $options = array(
+            'key' => $settings["{$payment}_key"],
+            'secret' => $settings["{$payment}_secret"],
+            'type' => $settings["{$payment}_type"]
+        );
+
+        return $options;
+    }
+
+
+    public function payCallBackAction_temp(Request $request)
     {
         $status = "fail";
         $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
@@ -81,7 +223,8 @@ class MobileAlipayController extends MobileController
 
             //交易状态
             $result = $_GET['result'];
-                
+            
+            $this->getCourseOrderService()->doSuccessPayOrder($out_trade_no);
             $status = "success";
         }
         else {
@@ -94,8 +237,18 @@ class MobileAlipayController extends MobileController
         return new Response($callback);
     }
 
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCourseOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 }

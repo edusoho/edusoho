@@ -49,7 +49,7 @@ class MobileOrderController extends MobileController
         $order['userId'] = $user['id'];
         $order['title'] = "购买课程《{$course['title']}》";
         $order['targetType'] = 'course';
-        $order['targetId'] = $course['id'];
+        $order['courseId'] = $course['id'];
         $order['payment'] = $formData['payment'];
         $order['amount'] = $course['price'];
         $order['snPrefix'] = 'C';
@@ -62,7 +62,8 @@ class MobileOrderController extends MobileController
             $order['data'] = array('note' => $formData['note']);
         }
 
-        $order = $this->getOrderService()->createOrder($order);
+        //$order = $this->getOrderService()->createOrder($order);
+        $order = $this->getCourseOrderService()->createOrder($order);
         if (intval($order['amount']*100) > 0) {
             //跳转支付宝支付
             $result['payurl'] = MobileAlipayConfig::createAlipayOrderUrl("edusoho", $order);
@@ -130,6 +131,11 @@ class MobileOrderController extends MobileController
             }
             return $this->createJson($request, $result);
         }
+    }
+
+    protected function getCourseOrderService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 
     protected function getOrderService()
