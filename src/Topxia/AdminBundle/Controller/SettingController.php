@@ -456,6 +456,7 @@ class SettingController extends BaseController
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'student_download_media' => '0',
+            'relatedCourses' => '0'
         );
 
         $courseSetting = array_merge($default, $courseSetting);

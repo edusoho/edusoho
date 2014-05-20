@@ -22,6 +22,8 @@ interface CourseService
 
 	public function findCoursesByTagIds(array $tagIds, $status, $start, $limit);
 
+	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $orderBy, $status, $start, $limit);
+
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
 	public function searchCourseCount($conditions);

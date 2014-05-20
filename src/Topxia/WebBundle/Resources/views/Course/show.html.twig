@@ -213,6 +213,10 @@
       {% endembed %}
 
       {{ render(controller('TopxiaWebBundle:CourseReview:latestBlock',{course:course})) }}
+
+      {% if setting('course.relatedCourses') == 1 %}
+        {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
+      {% endif %}
     </div>
     <div class="col-md-4">
       {{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
