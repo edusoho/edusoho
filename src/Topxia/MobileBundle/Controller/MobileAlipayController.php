@@ -220,7 +220,7 @@ class MobileAlipayController extends MobileController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    protected function getCourseService()
+    public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
