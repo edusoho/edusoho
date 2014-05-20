@@ -24,12 +24,17 @@ class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $tagIds = array();
 
-
         foreach ($tags as $tagId) {
              array_push($tagIds, $tagId['id']);
         }
 
-        $courses = $this->getCourseService()->findCoursesByTagIds($tagIds, 0, $arguments['count']);
+        if (empty($arguments['status'])) {
+            $status = 'published';
+        } else {
+            $status = $arguments['status'];
+        }
+
+        $courses = $this->getCourseService()->findCoursesByTagIds($tagIds, $status, 0, $arguments['count']);
 
         return $this->getCourseTeachersAndCategories($courses);
     }
