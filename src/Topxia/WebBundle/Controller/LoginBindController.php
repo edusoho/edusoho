@@ -50,7 +50,6 @@ class LoginBindController extends BaseController
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
             'client' => $client,
@@ -61,7 +60,6 @@ class LoginBindController extends BaseController
     public function newAction(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');
-
 
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
@@ -95,7 +93,12 @@ class LoginBindController extends BaseController
         $registration = array();
 
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
+
+        if (empty($oauthUser['name'])) {
+            $oauthUser['name'] = "{$type}" . substr($randString, 9, 3);
+        }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
         if ($nameLength > 10) {
@@ -104,9 +107,9 @@ class LoginBindController extends BaseController
 
         $nicknames = array();
         $nicknames[] = $oauthUser['name'];
-        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 0, 3);
-        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 3, 3);
-        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 6, 3);
+        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
+        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);
+        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
 
         foreach ($nicknames as $name) {
             if ($this->getUserService()->isNicknameAvaliable($name)) {
