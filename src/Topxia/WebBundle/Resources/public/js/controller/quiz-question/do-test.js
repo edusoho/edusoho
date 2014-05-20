@@ -8,6 +8,10 @@ define(function(require, exports, module) {
 
     var EditorFactory = require('common/kindeditor-factory');
 
+    var AudioPlayer = require('./audioplayer');
+    var playedQuestions = [];
+    var playingQuestion = null;
+
     var wrongs = [],
 
     rights = [],
@@ -251,6 +255,8 @@ define(function(require, exports, module) {
 
         });
 
+        var isDoing = $('.testpaper-status-doing').length > 0;
+
         $('.testpaper-question-choice').on('click', 'ul.testpaper-question-choices li', function(){
             $input = $(this).parents('div.testpaper-question-choice').find('.testpaper-question-choice-inputs label').eq($(this).index()).find('input');
             isChecked = $input.prop("checked");
@@ -258,18 +264,33 @@ define(function(require, exports, module) {
             $input.prop("checked", !isChecked).change();
 
             $input.parents('.testpaper-question-choice-inputs').find('label').each(function(){
- 
                 $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
             });
+
+            if (isDoing) {
+                var $question = $(this).parents('.testpaper-question').next();
+                playQuestion($question);
+            }
             
         });
+
+        if (isDoing) {
+            setTimeout(function(){
+                playQuestion($('.testpaper-body').find('.testpaper-question:first'));
+            }, 2000);
+        }
 
         $('.testpaper-question-choice-inputs,.testpaper-question-determine-inputs').on('click', 'input', function(){
             $input = $(this);
             $input.parents('.testpaper-question-choice-inputs,.testpaper-question-determine-inputs').find('label').each(function(){
-
                 $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
             });
+
+            if (isDoing) {
+                var $question = $(this).parents('.testpaper-question').next();
+                playQuestion($question);
+            }
+
         });
 
 
@@ -614,6 +635,42 @@ define(function(require, exports, module) {
         while (str.length < length) {str = '0' + str;}
         return str;
     };
+
+
+    function playQuestion($question)
+    {
+        if ($question.length == 0) {
+            return ;
+        }
+
+        if ($.inArray($question.attr('id'), playedQuestions) != -1) {
+            return ;
+        }
+
+        playedQuestions.push($question.attr('id'));
+
+        var $playTriggers = $question.find('.audio-play-trigger');
+        if ($playTriggers.length > 0) {
+            $.each($playTriggers, function(i, trigger) {
+                $(document).queue('audio_player', function() {
+                    playingQuestion = true;
+                    var player = new AudioPlayer({
+                        element: trigger
+                    });
+
+                    player.on('ended', function() {
+                        playingQuestion = false;
+                        $(document).dequeue('audio_player');
+                    });
+
+                });
+            });
+
+            if (!playingQuestion) {
+                $(document).dequeue('audio_player');
+            }
+        }
+    }
 
 
 });

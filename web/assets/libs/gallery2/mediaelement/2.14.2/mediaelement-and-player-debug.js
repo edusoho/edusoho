@@ -1,5 +1,5 @@
-define("jquery-plugin/mediaelement/2.13.1/mediaelement-and-player-debug", [ "$-debug" ], function(require) {
-    var jQuery = require("$-debug");
+define("gallery2/mediaelement/2.14.2/mediaelement-and-player-debug", [ "$-debug" ], function(require, exports, module) {
+    require("$-debug");
     /*!
 * MediaElement.js
 * HTML5 <video> and <audio> shim and player
@@ -9,14 +9,14 @@ define("jquery-plugin/mediaelement/2.13.1/mediaelement-and-player-debug", [ "$-d
 * for browsers that don't understand HTML5 or can't play the provided codec
 * Can play MP4 (H.264), Ogg, WebM, FLV, WMV, WMA, ACC, and MP3
 *
-* Copyright 2010-2013, John Dyer (http://j.hn)
+* Copyright 2010-2014, John Dyer (http://j.hn)
 * License: MIT
 *
 */
     // Namespace
     var mejs = mejs || {};
     // version number
-    mejs.version = "2.13.1";
+    mejs.version = "2.14.2";
     // player number (for missing, same id attr)
     mejs.meIndex = 0;
     // media types accepted by plugins
@@ -246,7 +246,7 @@ PluginDetector.addPlugin('acrobat','Adobe Acrobat','application/pdf','AcroPDF.PD
             t.isAndroid = ua.match(/android/i) !== null;
             t.isBustedAndroid = ua.match(/android 2\.[12]/) !== null;
             t.isBustedNativeHTTPS = location.protocol === "https:" && (ua.match(/android [12]\./) !== null || ua.match(/macintosh.* version.* safari/) !== null);
-            t.isIE = nav.appName.toLowerCase().match(/trident/gi) !== null;
+            t.isIE = nav.appName.toLowerCase().indexOf("microsoft") != -1 || nav.appName.toLowerCase().match(/trident/gi) !== null;
             t.isChrome = ua.match(/chrome/gi) !== null;
             t.isFirefox = ua.match(/firefox/gi) !== null;
             t.isWebkit = ua.match(/webkit/gi) !== null;
@@ -414,7 +414,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         // HTML5 methods
         play: function() {
             if (this.pluginApi != null) {
-                if (this.pluginType == "youtube") {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {
                     this.pluginApi.playVideo();
                 } else {
                     this.pluginApi.playMedia();
@@ -424,7 +424,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         },
         load: function() {
             if (this.pluginApi != null) {
-                if (this.pluginType == "youtube") {} else {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {} else {
                     this.pluginApi.loadMedia();
                 }
                 this.paused = false;
@@ -432,7 +432,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         },
         pause: function() {
             if (this.pluginApi != null) {
-                if (this.pluginType == "youtube") {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {
                     this.pluginApi.pauseVideo();
                 } else {
                     this.pluginApi.pauseMedia();
@@ -442,7 +442,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         },
         stop: function() {
             if (this.pluginApi != null) {
-                if (this.pluginType == "youtube") {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {
                     this.pluginApi.stopVideo();
                 } else {
                     this.pluginApi.stopMedia();
@@ -498,7 +498,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         },
         setCurrentTime: function(time) {
             if (this.pluginApi != null) {
-                if (this.pluginType == "youtube") {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {
                     this.pluginApi.seekTo(time);
                 } else {
                     this.pluginApi.setCurrentTime(time);
@@ -509,7 +509,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         setVolume: function(volume) {
             if (this.pluginApi != null) {
                 // same on YouTube and MEjs
-                if (this.pluginType == "youtube") {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {
                     this.pluginApi.setVolume(volume * 100);
                 } else {
                     this.pluginApi.setVolume(volume);
@@ -519,7 +519,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
         },
         setMuted: function(muted) {
             if (this.pluginApi != null) {
-                if (this.pluginType == "youtube") {
+                if (this.pluginType == "youtube" || this.pluginType == "vimeo") {
                     if (muted) {
                         this.pluginApi.mute();
                     } else {
@@ -575,7 +575,7 @@ Mimics the <video/audio> element by calling Flash's External Interface or Silver
                 this.events[eventName] = [];
                 return true;
             }
-            for (i = 0; i < callbacks.length; i++) {
+            for (var i = 0; i < callbacks.length; i++) {
                 if (callbacks[i] === callback) {
                     this.events[eventName].splice(i, 1);
                     return true;
@@ -842,7 +842,7 @@ mimics HTML5 MediaElement
                 }
                 for (i = 0; i < mediaFiles.length; i++) {
                     // normal check
-                    if (htmlMediaElement.canPlayType(mediaFiles[i].type).replace(/no/, "") !== "" || htmlMediaElement.canPlayType(mediaFiles[i].type.replace(/mp3/, "mpeg")).replace(/no/, "") !== "") {
+                    if (htmlMediaElement.canPlayType(mediaFiles[i].type).replace(/no/, "") !== "" || htmlMediaElement.canPlayType(mediaFiles[i].type.replace(/mp3/, "mpeg")).replace(/no/, "") !== "" || htmlMediaElement.canPlayType(mediaFiles[i].type.replace(/m4a/, "mp4")).replace(/no/, "") !== "") {
                         result.method = "native";
                         result.url = mediaFiles[i].url;
                         break;
@@ -922,6 +922,7 @@ mimics HTML5 MediaElement
             switch (ext) {
               case "mp4":
               case "m4v":
+              case "m4a":
                 return "mp4";
 
               case "webm":
@@ -967,8 +968,8 @@ mimics HTML5 MediaElement
             }
             // check for placement inside a <p> tag (sometimes WYSIWYG editors do this)
             node = htmlMediaElement.parentNode;
-            while (node !== null && node.tagName.toLowerCase() != "body") {
-                if (node.parentNode.tagName.toLowerCase() == "p") {
+            while (node !== null && node.tagName.toLowerCase() !== "body" && node.parentNode != null) {
+                if (node.parentNode.tagName.toLowerCase() === "p") {
                     node.parentNode.parentNode.insertBefore(node, node.parentNode);
                     break;
                 }
@@ -1030,14 +1031,23 @@ mimics HTML5 MediaElement
                 if (mejs.MediaFeatures.isIE) {
                     specialIEContainer = document.createElement("div");
                     container.appendChild(specialIEContainer);
-                    specialIEContainer.outerHTML = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="//download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" ' + 'id="' + pluginid + '" width="' + width + '" height="' + height + '" class="mejs-shim">' + '<param name="movie" value="' + options.pluginPath + options.flashName + "?x=" + new Date() + '" />' + '<param name="flashvars" value="' + initVars.join("&amp;") + '" />' + '<param name="quality" value="high" />' + '<param name="bgcolor" value="#000000" />' + '<param name="wmode" value="transparent" />' + '<param name="allowScriptAccess" value="always" />' + '<param name="allowFullScreen" value="true" />' + "</object>";
+                    specialIEContainer.outerHTML = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="//download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" ' + 'id="' + pluginid + '" width="' + width + '" height="' + height + '" class="mejs-shim">' + '<param name="movie" value="' + options.pluginPath + options.flashName + "?x=" + new Date() + '" />' + '<param name="flashvars" value="' + initVars.join("&amp;") + '" />' + '<param name="quality" value="high" />' + '<param name="bgcolor" value="#000000" />' + '<param name="wmode" value="transparent" />' + '<param name="allowScriptAccess" value="always" />' + '<param name="allowFullScreen" value="true" />' + '<param name="scale" value="default" />' + "</object>";
                 } else {
-                    container.innerHTML = '<embed id="' + pluginid + '" name="' + pluginid + '" ' + 'play="true" ' + 'loop="false" ' + 'quality="high" ' + 'bgcolor="#000000" ' + 'wmode="transparent" ' + 'allowScriptAccess="always" ' + 'allowFullScreen="true" ' + 'type="application/x-shockwave-flash" pluginspage="//www.macromedia.com/go/getflashplayer" ' + 'src="' + options.pluginPath + options.flashName + '" ' + 'flashvars="' + initVars.join("&") + '" ' + 'width="' + width + '" ' + 'height="' + height + '" ' + 'class="mejs-shim"></embed>';
+                    container.innerHTML = '<embed id="' + pluginid + '" name="' + pluginid + '" ' + 'play="true" ' + 'loop="false" ' + 'quality="high" ' + 'bgcolor="#000000" ' + 'wmode="transparent" ' + 'allowScriptAccess="always" ' + 'allowFullScreen="true" ' + 'type="application/x-shockwave-flash" pluginspage="//www.macromedia.com/go/getflashplayer" ' + 'src="' + options.pluginPath + options.flashName + '" ' + 'flashvars="' + initVars.join("&") + '" ' + 'width="' + width + '" ' + 'height="' + height + '" ' + 'scale="default"' + 'class="mejs-shim"></embed>';
                 }
                 break;
 
               case "youtube":
-                var videoId = playback.url.substr(playback.url.lastIndexOf("=") + 1);
+                var videoId;
+                // youtu.be url from share button
+                if (playback.url.lastIndexOf("youtu.be") != -1) {
+                    videoId = playback.url.substr(playback.url.lastIndexOf("/") + 1);
+                    if (videoId.indexOf("?") != -1) {
+                        videoId = videoId.substr(0, videoId.indexOf("?"));
+                    }
+                } else {
+                    videoId = playback.url.substr(playback.url.lastIndexOf("=") + 1);
+                }
                 youtubeSettings = {
                     container: container,
                     containerId: container.id,
@@ -1056,19 +1066,53 @@ mimics HTML5 MediaElement
 
               // DEMO Code. Does NOT work.
                 case "vimeo":
-                //
+                var player_id = pluginid + "_player";
                 pluginMediaElement.vimeoid = playback.url.substr(playback.url.lastIndexOf("/") + 1);
-                container.innerHTML = '<iframe src="http://player.vimeo.com/video/' + pluginMediaElement.vimeoid + '?portrait=0&byline=0&title=0" width="' + width + '" height="' + height + '" frameborder="0" class="mejs-shim"></iframe>';
-                /*
-				container.innerHTML =
-					'<object width="' + width + '" height="' + height + '" class="mejs-shim">' +
-						'<param name="allowfullscreen" value="true" />' +
-						'<param name="allowscriptaccess" value="always" />' +
-						'<param name="flashvars" value="api=1" />' + 
-						'<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=' + pluginMediaElement.vimeoid  + '&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00adef&amp;fullscreen=1&amp;autoplay=0&amp;loop=0" />' +
-						'<embed src="//vimeo.com/moogaloop.swf?api=1&amp;clip_id=' + pluginMediaElement.vimeoid + '&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00adef&amp;fullscreen=1&amp;autoplay=0&amp;loop=0" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="' + width + '" height="' + height + '" class="mejs-shim"></embed>' +
-					'</object>';
-					*/
+                container.innerHTML = '<iframe src="//player.vimeo.com/video/' + pluginMediaElement.vimeoid + "?api=1&portrait=0&byline=0&title=0&player_id=" + player_id + '" width="' + width + '" height="' + height + '" frameborder="0" class="mejs-shim" id="' + player_id + '"></iframe>';
+                if (typeof $f == "function") {
+                    // froogaloop available
+                    var player = $f(container.childNodes[0]);
+                    player.addEvent("ready", function() {
+                        player.playVideo = function() {
+                            player.api("play");
+                        };
+                        player.pauseVideo = function() {
+                            player.api("pause");
+                        };
+                        player.seekTo = function(seconds) {
+                            player.api("seekTo", seconds);
+                        };
+                        function createEvent(player, pluginMediaElement, eventName, e) {
+                            var obj = {
+                                type: eventName,
+                                target: pluginMediaElement
+                            };
+                            if (eventName == "timeupdate") {
+                                pluginMediaElement.currentTime = obj.currentTime = e.seconds;
+                                pluginMediaElement.duration = obj.duration = e.duration;
+                            }
+                            pluginMediaElement.dispatchEvent(obj.type, obj);
+                        }
+                        player.addEvent("play", function() {
+                            createEvent(player, pluginMediaElement, "play");
+                            createEvent(player, pluginMediaElement, "playing");
+                        });
+                        player.addEvent("pause", function() {
+                            createEvent(player, pluginMediaElement, "pause");
+                        });
+                        player.addEvent("finish", function() {
+                            createEvent(player, pluginMediaElement, "ended");
+                        });
+                        player.addEvent("playProgress", function(e) {
+                            createEvent(player, pluginMediaElement, "timeupdate", e);
+                        });
+                        pluginMediaElement.pluginApi = player;
+                        // init mejs
+                        mejs.MediaPluginBridge.initPlugin(pluginid);
+                    });
+                } else {
+                    console.warn("You need to include froogaloop for vimeo to work");
+                }
                 break;
             }
             // hide original element
@@ -1307,20 +1351,17 @@ mimics HTML5 MediaElement
         };
         // start i18n
         /**
-     * Get the current browser's language
-     *
-     * @see: i18n.methods.t()
+     * Get language, fallback to browser's language if empty
      */
-        i18n.locale.getLanguage = function() {
-            return i18n.locale.language || navigator.language;
+        i18n.getLanguage = function() {
+            var language = i18n.locale.language || window.navigator.userLanguage || window.navigator.language;
+            // convert to iso 639-1 (2-letters, lower case)
+            return language.substr(0, 2).toLowerCase();
         };
+        // i18n fixes for compatibility with WordPress
         if (typeof mejsL10n != "undefined") {
             i18n.locale.language = mejsL10n.language;
         }
-        /**
-     * Store the language the locale object was initialized with
-     */
-        i18n.locale.INIT_LANGUAGE = i18n.locale.getLanguage();
         /**
      * Encode special characters in a plain-text string for display as HTML.
      */
@@ -1341,72 +1382,25 @@ mimics HTML5 MediaElement
             return str;
         };
         /**
-     * Replace placeholders with sanitized values in a string.
-     *
-     * @param str
-     *   A string with placeholders.
-     * @param args
-     *   An object of replacements pairs to make. Incidences of any key in this
-     *   array are replaced with the corresponding value. Based on the first
-     *   character of the key, the value is escaped and/or themed:
-     *    - !variable: inserted as is
-     *    - @variable: escape plain text to HTML (i18n.methods.checkPlain)
-     *    - %variable: escape text and theme as a placeholder for user-submitted
-     *      content (checkPlain + <em class="placeholder" > )
-     *
-     * @see i18n.methods.t()
-     */
-        i18n.methods.formatString = function(str, args) {
-            // Transform arguments before inserting them.
-            for (var key in args) {
-                switch (key.charAt(0)) {
-                  // Escaped only.
-                    case "@":
-                    args[key] = i18n.methods.checkPlain(args[key]);
-                    break;
-
-                  // Pass-through.
-                    case "!":
-                    break;
-
-                  // Escaped and placeholder.
-                    case "%":
-                  default:
-                    args[key] = '<em class="placeholder">' + i18n.methods.checkPlain(args[key]) + "</em>";
-                    break;
-                }
-                str = str.replace(key, args[key]);
-            }
-            return str;
-        };
-        /**
      * Translate strings to the page language or a given language.
      *
-     * See the documentation of the server-side t() function for further details.
      *
      * @param str
      *   A string containing the English string to translate.
-     * @param args
-     *   An object of replacements pairs to make after translation. Incidences
-     *   of any key in this array are replaced with the corresponding value.
-     *   See i18n.methods.formatString().
      *
      * @param options
      *   - 'context' (defaults to the default context): The context the source string
      *     belongs to.
      *
      * @return
-     *   The translated string.
+     *   The translated string, escaped via i18n.methods.checkPlain()
      */
-        i18n.methods.t = function(str, args, options) {
+        i18n.methods.t = function(str, options) {
             // Fetch the localized version of the string.
             if (i18n.locale.strings && i18n.locale.strings[options.context] && i18n.locale.strings[options.context][str]) {
                 str = i18n.locale.strings[options.context][str];
             }
-            if (args) {
-                str = i18n.methods.formatString(str, args);
-            }
-            return str;
+            return i18n.methods.checkPlain(str);
         };
         /**
      * Wrapper for i18n.methods.t()
@@ -1414,15 +1408,15 @@ mimics HTML5 MediaElement
      * @see i18n.methods.t()
      * @throws InvalidArgumentException
      */
-        i18n.t = function(str, args, options) {
+        i18n.t = function(str, options) {
             if (typeof str === "string" && str.length > 0) {
                 // check every time due language can change for
                 // different reasons (translation, lang switcher ..)
-                var language = i18n.locale.getLanguage();
+                var language = i18n.getLanguage();
                 options = options || {
                     context: language
                 };
-                return i18n.methods.t(str, args, options);
+                return i18n.methods.t(str, options);
             } else {
                 throw {
                     name: "InvalidArgumentException",
@@ -1441,21 +1435,25 @@ mimics HTML5 MediaElement
     })(mejs.i18n.locale.strings);
     (function(exports, undefined) {
         "use strict";
-        exports.de = {
-            Fullscreen: "Vollbild",
-            "Go Fullscreen": "Vollbild an",
-            "Turn off Fullscreen": "Vollbild aus",
-            Close: "Schließen"
-        };
+        if (typeof exports.de === "undefined") {
+            exports.de = {
+                Fullscreen: "Vollbild",
+                "Go Fullscreen": "Vollbild an",
+                "Turn off Fullscreen": "Vollbild aus",
+                Close: "Schließen"
+            };
+        }
     })(mejs.i18n.locale.strings);
     (function(exports, undefined) {
         "use strict";
-        exports.zh = {
-            Fullscreen: "全螢幕",
-            "Go Fullscreen": "全屏模式",
-            "Turn off Fullscreen": "退出全屏模式",
-            Close: "關閉"
-        };
+        if (typeof exports.zh === "undefined") {
+            exports.zh = {
+                Fullscreen: "全螢幕",
+                "Go Fullscreen": "全屏模式",
+                "Turn off Fullscreen": "退出全屏模式",
+                Close: "關閉"
+            };
+        }
     })(mejs.i18n.locale.strings);
     /*!
  * MediaElementPlayer
@@ -1546,9 +1544,9 @@ mimics HTML5 MediaElement
                 179 ],
                 action: function(player, media) {
                     if (media.paused || media.ended) {
-                        media.play();
+                        player.play();
                     } else {
-                        media.pause();
+                        player.pause();
                     }
                 }
             }, {
@@ -1670,8 +1668,7 @@ mimics HTML5 MediaElement
                     // no Issue found on iOS3 -ttroxell
                     // override Apple's autoplay override for iPads
                     if (mf.isiPad && t.media.getAttribute("autoplay") !== null) {
-                        t.media.load();
-                        t.media.play();
+                        t.play();
                     }
                 } else if (mf.isAndroid && t.options.AndroidUseNativeControls) {} else {
                     // DESKTOP: use MediaElementPlayer controls
@@ -1861,13 +1858,13 @@ mimics HTML5 MediaElement
                         } else {
                             // create callback here since it needs access to current
                             // MediaElement object
-                            mejs.MediaElementPlayer.prototype.clickToPlayPauseCallback = function() {
+                            t.clickToPlayPauseCallback = function() {
                                 //
                                 if (t.options.clickToPlayPause) {
                                     if (t.media.paused) {
-                                        t.media.play();
+                                        t.play();
                                     } else {
-                                        t.media.pause();
+                                        t.pause();
                                     }
                                 }
                             };
@@ -1949,7 +1946,7 @@ mimics HTML5 MediaElement
                             t.setCurrentRail();
                         }
                         if (t.options.loop) {
-                            t.media.play();
+                            t.play();
                         } else if (!t.options.alwaysShowControls && t.controlsEnabled) {
                             t.showControls();
                         }
@@ -1988,8 +1985,7 @@ mimics HTML5 MediaElement
                 }
                 // force autoplay for HTML5
                 if (autoplay && media.pluginType == "native") {
-                    media.load();
-                    media.play();
+                    t.play();
                 }
                 if (t.options.success) {
                     if (typeof t.options.success == "string") {
@@ -2019,6 +2015,10 @@ mimics HTML5 MediaElement
                 if (t.height.toString().indexOf("%") > 0 || t.$node.css("max-width") === "100%" || parseInt(t.$node.css("max-width").replace(/px/, ""), 10) / t.$node.offsetParent().width() === 1 || t.$node[0].currentStyle && t.$node[0].currentStyle.maxWidth === "100%") {
                     // do we have the native dimensions yet?
                     var nativeWidth = t.isVideo ? t.media.videoWidth && t.media.videoWidth > 0 ? t.media.videoWidth : t.options.defaultVideoWidth : t.options.defaultAudioWidth, nativeHeight = t.isVideo ? t.media.videoHeight && t.media.videoHeight > 0 ? t.media.videoHeight : t.options.defaultVideoHeight : t.options.defaultAudioHeight, parentWidth = t.container.parent().closest(":visible").width(), newHeight = t.isVideo || !t.options.autosizeProgress ? parseInt(parentWidth * nativeHeight / nativeWidth, 10) : nativeHeight;
+                    // When we use percent, the newHeight can't be calculated so we get the container height
+                    if (isNaN(newHeight)) {
+                        newHeight = t.container.parent().closest(":visible").height();
+                    }
                     if (t.container.parent()[0].tagName.toLowerCase() === "body") {
                         // && t.container.siblings().count == 0) {
                         parentWidth = $(window).width();
@@ -2048,7 +2048,11 @@ mimics HTML5 MediaElement
                 playButton.css("margin-top", "-" + (playButton.height() / 2 - t.controls.height() / 2).toString() + "px");
             },
             setControlsSize: function() {
-                var t = this, usedWidth = 0, railWidth = 0, rail = t.controls.find(".mejs-time-rail"), total = t.controls.find(".mejs-time-total"), current = t.controls.find(".mejs-time-current"), loaded = t.controls.find(".mejs-time-loaded"), others = rail.siblings();
+                var t = this, usedWidth = 0, railWidth = 0, rail = t.controls.find(".mejs-time-rail"), total = t.controls.find(".mejs-time-total"), current = t.controls.find(".mejs-time-current"), loaded = t.controls.find(".mejs-time-loaded"), others = rail.siblings(), lastControl = others.last(), lastControlPosition = null;
+                // skip calculation if hidden
+                if (!t.container.is(":visible") || !rail.length || !rail.is(":visible")) {
+                    return;
+                }
                 // allow the size to come from custom CSS
                 if (t.options && !t.options.autosizeProgress) {
                     // Also, frontends devs can be more flexible
@@ -2067,10 +2071,19 @@ mimics HTML5 MediaElement
                     // fit the rail into the remaining space
                     railWidth = t.controls.width() - usedWidth - (rail.outerWidth(true) - rail.width());
                 }
-                // outer area
-                rail.width(railWidth);
-                // dark space
-                total.width(railWidth - (total.outerWidth(true) - total.width()));
+                // resize the rail,
+                // but then check if the last control (say, the fullscreen button) got pushed down
+                // this often happens when zoomed
+                do {
+                    // outer area
+                    rail.width(railWidth);
+                    // dark space
+                    total.width(railWidth - (total.outerWidth(true) - total.width()));
+                    if (lastControl.css("position") != "absolute") {
+                        lastControlPosition = lastControl.position();
+                        railWidth--;
+                    }
+                } while (lastControlPosition != null && lastControlPosition.top > 0 && railWidth > 0);
                 if (t.setProgressRail) t.setProgressRail();
                 if (t.setCurrentRail) t.setCurrentRail();
             },
@@ -2109,12 +2122,10 @@ mimics HTML5 MediaElement
                 var t = this;
                 if (!player.isVideo) return;
                 var loading = $('<div class="mejs-overlay mejs-layer">' + '<div class="mejs-overlay-loading"><span></span></div>' + "</div>").hide().appendTo(layers), error = $('<div class="mejs-overlay mejs-layer">' + '<div class="mejs-overlay-error"></div>' + "</div>").hide().appendTo(layers), // this needs to come last so it's on top
-                bigPlay = $('<div class="mejs-overlay mejs-layer mejs-overlay-play">' + '<div class="mejs-overlay-button"></div>' + "</div>").appendTo(layers).click(function() {
+                bigPlay = $('<div class="mejs-overlay mejs-layer mejs-overlay-play">' + '<div class="mejs-overlay-button"></div>' + "</div>").appendTo(layers).bind("click touchstart", function() {
                     if (t.options.clickToPlayPause) {
                         if (media.paused) {
                             media.play();
-                        } else {
-                            media.pause();
                         }
                     }
                 });
@@ -2195,9 +2206,7 @@ mimics HTML5 MediaElement
                 });
                 // check if someone clicked outside a player region, then kill its focus
                 t.globalBind("click", function(event) {
-                    if ($(event.target).closest(".mejs-container").length == 0) {
-                        player.hasFocus = false;
-                    }
+                    player.hasFocus = $(event.target).closest(".mejs-container").length != 0;
                 });
             },
             findTracks: function() {
@@ -2222,6 +2231,7 @@ mimics HTML5 MediaElement
                 this.setControlsSize();
             },
             play: function() {
+                this.load();
                 this.media.play();
             },
             pause: function() {
@@ -2230,7 +2240,10 @@ mimics HTML5 MediaElement
                 } catch (e) {}
             },
             load: function() {
-                this.media.load();
+                if (!this.isLoaded) {
+                    this.media.load();
+                }
+                this.isLoaded = true;
             },
             setMuted: function(muted) {
                 this.media.setMuted(muted);
@@ -2277,7 +2290,9 @@ mimics HTML5 MediaElement
                 }
                 // Remove the player from the mejs.players object so that pauseOtherPlayers doesn't blow up when trying to pause a non existance flash api.
                 delete mejs.players[t.id];
-                t.container.remove();
+                if (typeof t.container == "object") {
+                    t.container.remove();
+                }
                 t.globalUnbind();
                 delete t.node.player;
             }
@@ -2404,8 +2419,13 @@ mimics HTML5 MediaElement
                 $('<div class="mejs-time-rail">' + '<span class="mejs-time-total">' + '<span class="mejs-time-buffering"></span>' + '<span class="mejs-time-loaded"></span>' + '<span class="mejs-time-current"></span>' + '<span class="mejs-time-handle"></span>' + '<span class="mejs-time-float">' + '<span class="mejs-time-float-current">00:00</span>' + '<span class="mejs-time-float-corner"></span>' + "</span>" + "</span>" + "</div>").appendTo(controls);
                 controls.find(".mejs-time-buffering").hide();
                 var t = this, total = controls.find(".mejs-time-total"), loaded = controls.find(".mejs-time-loaded"), current = controls.find(".mejs-time-current"), handle = controls.find(".mejs-time-handle"), timefloat = controls.find(".mejs-time-float"), timefloatcurrent = controls.find(".mejs-time-float-current"), handleMouseMove = function(e) {
-                    // mouse position relative to the object
-                    var x = e.pageX, offset = total.offset(), width = total.outerWidth(true), percentage = 0, newTime = 0, pos = 0;
+                    // mouse or touch position relative to the object
+                    if (e.originalEvent.changedTouches) {
+                        var x = e.originalEvent.changedTouches[0].pageX;
+                    } else {
+                        var x = e.pageX;
+                    }
+                    var offset = total.offset(), width = total.outerWidth(true), percentage = 0, newTime = 0, pos = 0;
                     if (media.duration) {
                         if (x < offset.left) {
                             x = offset.left;
@@ -2429,15 +2449,15 @@ mimics HTML5 MediaElement
                 }, mouseIsDown = false, mouseIsOver = false;
                 // handle clicks
                 //controls.find('.mejs-time-rail').delegate('span', 'click', handleMouseMove);
-                total.bind("mousedown", function(e) {
-                    // only handle left clicks
-                    if (e.which === 1) {
+                total.bind("mousedown touchstart", function(e) {
+                    // only handle left clicks or touch
+                    if (e.which === 1 || e.which === 0) {
                         mouseIsDown = true;
                         handleMouseMove(e);
-                        t.globalBind("mousemove.dur", function(e) {
+                        t.globalBind("mousemove.dur touchmove.dur", function(e) {
                             handleMouseMove(e);
                         });
-                        t.globalBind("mouseup.dur", function(e) {
+                        t.globalBind("mouseup.dur touchend.dur", function(e) {
                             mouseIsDown = false;
                             timefloat.hide();
                             t.globalUnbind(".dur");
@@ -2564,7 +2584,7 @@ mimics HTML5 MediaElement
         $.extend(MediaElementPlayer.prototype, {
             buildvolume: function(player, controls, layers, media) {
                 // Android and iOS don't support volume controls
-                if (mejs.MediaFeatures.hasTouch && this.options.hideVolumeOnTouchDevices) return;
+                if ((mejs.MediaFeatures.isAndroid || mejs.MediaFeatures.isiOS) && this.options.hideVolumeOnTouchDevices) return;
                 var t = this, mode = t.isVideo ? t.options.videoVolume : t.options.audioVolume, mute = mode == "horizontal" ? // horizontal version
                 $('<div class="mejs-button mejs-volume-button mejs-mute">' + '<button type="button" aria-controls="' + t.id + '" title="' + t.options.muteText + '" aria-label="' + t.options.muteText + '"></button>' + "</div>" + '<div class="mejs-horizontal-volume-slider">' + // outer background
                 '<div class="mejs-horizontal-volume-total"></div>' + // line background
@@ -2911,8 +2931,16 @@ mimics HTML5 MediaElement
                             // notably in Chrome <iframe>. Fixed in version 17
                             setTimeout(function checkFullscreen() {
                                 if (t.isNativeFullScreen) {
+                                    var zoomMultiplier = window["devicePixelRatio"] || 1;
+                                    // Use a percent error margin since devicePixelRatio is a float and not exact.
+                                    var percentErrorMargin = .002;
+                                    // 0.2%
+                                    var windowWidth = zoomMultiplier * $(window).width();
+                                    var screenWidth = screen.width;
+                                    var absDiff = Math.abs(screenWidth - windowWidth);
+                                    var marginError = screenWidth * percentErrorMargin;
                                     // check if the video is suddenly not really fullscreen
-                                    if ($(window).width() !== screen.width) {
+                                    if (absDiff > marginError) {
                                         // manually exit
                                         t.exitFullScreen();
                                     } else {

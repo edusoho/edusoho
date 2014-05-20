@@ -1,4 +1,4 @@
-/*! define jquery-plugin/mediaelement/2.13.1/mediaelementplayer-debug.css */
+/*! define gallery2/mediaelement/2.14.2/mediaelementplayer-debug.css */
 .mejs-container {
 	position: relative;
 	background: #000;
@@ -188,7 +188,7 @@
 
 /* :focus for accessibility */
 .mejs-controls .mejs-button button:focus {
-	outline: solid 1px yellow;
+	outline: dotted 1px #999;
 }
 
 /* End: CONTROL BAR */

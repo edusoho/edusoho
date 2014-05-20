@@ -62,7 +62,12 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if ($status != 'success') {
             $file['convertStatus'] = $status;
         } else {
-            $cmds = $this->getCloudClient()->getVideoConvertCommands();
+
+            if ($file['type'] == 'video') {
+                $cmds = $this->getCloudClient()->getVideoConvertCommands();
+            } elseif ($file['type'] == 'audio') {
+                $cmds = $this->getCloudClient()->getAudioConvertCommands();
+            }
 
             $file['metas2'] = array();
             foreach ($result as $item) {

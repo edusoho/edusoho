@@ -220,8 +220,6 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::email($registration['email'])) {
             throw $this->createServiceException('email error!');
         }
-
-        $registration['nickname'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $registration['nickname']);
         
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
