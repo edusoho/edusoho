@@ -47,10 +47,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? ";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? AND ";
 
-        foreach ($tagIds as $tagId) {
-            $sql .= " OR tags LIKE '%|$tagId|%' ";
+        foreach ($tagIds as $key => $tagId) {
+            if ($key > 0 ) {
+                $sql .= "OR tags LIKE '%|$tagId|%'";
+            } else {
+                $sql .= " tags LIKE '%|$tagId|%' ";
+            }
         }
 
         $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
