@@ -198,7 +198,7 @@ class AlipaySubmit {
         $url = $this->alipay_gateway_new."service=query_timestamp&partner=".trim(strtolower($this->alipay_config['partner']))."&_input_charset=".trim(strtolower($this->alipay_config['input_charset']));
         $encrypt_key = "";      
 
-        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->load($url);
         $itemEncrypt_key = $doc->getElementsByTagName( "encrypt_key" );
         $encrypt_key = $itemEncrypt_key->item(0)->nodeValue;
