@@ -355,6 +355,7 @@ class CourseController extends BaseController
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
+            $request->getSession()->set('_target_path', $this->generateUrl('course_show', array('id' => $id)));
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
