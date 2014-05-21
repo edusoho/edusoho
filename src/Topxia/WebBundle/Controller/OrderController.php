@@ -50,7 +50,7 @@ class OrderController extends BaseController
             $successUrl = $successCallback($success, $order);
         }
 
-        $goto = empty($successUrl) ? $this->generateUrl('order_result_notice', array(), true) : $successUrl;
+        $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
 
         return $this->redirect($goto);
     }

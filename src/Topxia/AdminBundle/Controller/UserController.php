@@ -136,8 +136,6 @@ class UserController extends BaseController
 
         $user = $this->getUserService()->getUser($id);
 
-        $currentUser = $this->getCurrentUser();
-
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
@@ -154,8 +152,7 @@ class UserController extends BaseController
         }
            
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
-            'user' => $user,
-            'currentUser' => $currentUser
+            'user' => $user
         ));
     }
 

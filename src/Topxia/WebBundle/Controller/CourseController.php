@@ -499,6 +499,17 @@ class CourseController extends BaseController
         ));
     }
 
+    public function relatedCoursesBlockAction($course)
+    {   
+
+        $courses = $this->getCourseService()->findCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
+        
+        return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
+            'courses' => $courses,
+            'currentCourse' => $course
+        ));
+    }
+
     private function createCourseForm()
     {
         return $this->createNamedFormBuilder('course')

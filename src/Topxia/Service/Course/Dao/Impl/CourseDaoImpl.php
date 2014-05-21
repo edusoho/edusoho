@@ -41,6 +41,23 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array($status));
     }
 
+    public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    {
+        if(empty($tagIds)){
+            return array();
+        }
+
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? ";
+
+        foreach ($tagIds as $tagId) {
+            $sql .= " OR tags LIKE '%|$tagId|%' ";
+        }
+
+        $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+        
+        return $this->getConnection()->fetchAll($sql, array($status));
+
+    }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
@@ -99,6 +116,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
+        if (isset($conditions['tagIds'])) {
+            $tagIds = $conditions['tagIds'];
+            $conditions['tagsLike'] = '%|';
+            if (!empty($tagIds)) {
+                foreach ($tagIds as $tagId) {
+                    $conditions['tagsLike'] .= "{$tagId}|";
+                }
+            }
+            $conditions['tagsLike'] .= '%';
+            unset($conditions['tagIds']);
+        }
+        
         if (isset($conditions['notFree'])) {
             $conditions['notFree'] = 0;
         }

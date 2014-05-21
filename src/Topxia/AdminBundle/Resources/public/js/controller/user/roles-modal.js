@@ -5,11 +5,11 @@ define(function(require, exports, module) {
 	exports.run = function() {
         var $form = $("#user-roles-form"),
             isTeacher = $form.find('input[value=ROLE_TEACHER]').prop('checked'),
-            currentUser = $form.find('.user').data('currentuser'),
-            editUser = $form.find('.user').data('edituser');
+            currentUser = $form.data('currentuser'),
+            editUser = $form.data('edituser');
 
         if (currentUser == editUser) {
-            $form.find('input[value=ROLE_SUPER_ADMIN]').attr("disabled","disabled")
+            $form.find('input[value=ROLE_SUPER_ADMIN]').attr('disabled', 'disabled');
         };
 
         $form.find('input[value=ROLE_USER]').on('change', function(){
@@ -38,6 +38,8 @@ define(function(require, exports, module) {
                     return false;
                 }
             }
+
+            $form.find('input[value=ROLE_SUPER_ADMIN]').removeAttr('disabled');
 
             $.post($form.attr('action'), $form.serialize(), function(html) {
 
