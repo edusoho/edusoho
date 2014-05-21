@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
+use Symfony\Component\HttpFoundation\Response;
 
 class MobileOrderController extends MobileController
 {
@@ -98,7 +99,7 @@ class MobileOrderController extends MobileController
             $result = $isStudent ? "success" : "fail";
         }
         
-        return $this->createJson($request, $result);
+        return new Response($result);
     }
 
     public function refundCourseAction(Request $request , $course_id)
