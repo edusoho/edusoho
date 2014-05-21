@@ -113,13 +113,13 @@ class MobileAlipayController extends MobileController
             $requestParams = array();
             if(!empty($doc['out_trade_no']) ) {
                 //商户订单号
-                $fromData['out_trade_no'] = $doc['out_trade_no'];
+                $requestParams['out_trade_no'] = $doc['out_trade_no'];
                 //支付宝交易号
-                $fromData['trade_no'] = $doc['trade_no'];
+                $requestParams['trade_no'] = $doc['trade_no'];
                 //交易状态
-                $fromData['trade_status'] = $doc['trade_no'];
-                $fromData['trade_no'] = $doc['total_fee'];
-                $fromData['gmt_payment'] = $doc['gmt_payment'];
+                $requestParams['trade_status'] = $doc['trade_no'];
+                $requestParams['trade_no'] = $doc['total_fee'];
+                $requestParams['gmt_payment'] = $doc['gmt_payment'];
             }
         }
 
