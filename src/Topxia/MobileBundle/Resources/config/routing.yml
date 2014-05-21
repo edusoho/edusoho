@@ -141,3 +141,7 @@ topxia_mobile_checkQR:
 topxia_mobile_checkOrderStatus:
     pattern:  /check_order
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:checkOrderStatus }
+
+topxia_mobile_qrcode:
+    pattern:  /qrcode
+    defaults: { _controller: TopxiaMobileBundle:Qrcode:index }

@@ -18,9 +18,10 @@
         "sensio/framework-extra-bundle": "2.3.*",
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
-        "doctrine/doctrine-migrations-bundle": "dev-master",
+        "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
         "imagine/imagine": "v0.5.0",
-        "ezyang/htmlpurifier": "v4.5.0"
+        "ezyang/htmlpurifier": "v4.5.0",
+        "endroid/qrcode": "1.2.4"
     },
     "scripts": {
         "post-install-cmd": [
