@@ -117,8 +117,8 @@ class MobileAlipayController extends MobileController
                 //支付宝交易号
                 $requestParams['trade_no'] = $doc['trade_no'];
                 //交易状态
-                $requestParams['trade_status'] = $doc['trade_no'];
-                $requestParams['trade_no'] = $doc['total_fee'];
+                $requestParams['trade_status'] = $doc['trade_status'];
+                $requestParams['total_fee'] = $doc['total_fee'];
                 $requestParams['gmt_payment'] = $doc['gmt_payment'];
             }
         }
