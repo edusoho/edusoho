@@ -137,3 +137,7 @@ topxia_mobile_alipay_payresult:
 topxia_mobile_checkQR:
     pattern:  /check_qr
     defaults: { _controller: TopxiaMobileBundle:User:checkQR }
+
+topxia_mobile_checkOrderStatus:
+    pattern:  /check_order
+    defaults: { _controller: TopxiaMobileBundle:MobileOrder:checkOrderStatus }

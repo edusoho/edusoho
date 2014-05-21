@@ -87,6 +87,20 @@ class MobileOrderController extends MobileController
         return $this->createJson($request, $result);
     }
 
+    public function checkOrderStatusAction(Request $request)
+    {
+        $result = "fail";
+        $token = $this->getUserToken($request);
+        if ($token) {
+            $course_id = $this->getParam($request, "course_id", "");
+            $user = $this->getCurrentUser();
+            $isStudent = $this->getCourseService()->isCourseStudent($course_id, $user->id);
+            $result = $isStudent ? "success" : "fail";
+        }
+        
+        return $this->createJson($request, $result);
+    }
+
     public function refundCourseAction(Request $request , $course_id)
     {
         $result = array("status"=>"error");
