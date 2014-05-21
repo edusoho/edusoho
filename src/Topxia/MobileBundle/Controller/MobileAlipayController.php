@@ -29,41 +29,44 @@ class MobileAlipayController extends MobileController
     	return new Response($alipayRequest->getRequestForm("edusoho"));
     }
 
-    public function payNotifyAction(Request $request)
+    public function payNotifyAction(Request $request, $name)
     {
-        $this->getLogService()->info('notify', 'create', "paycalknotify action");
+        $this->getLogService()->info('notify', 'create', "paynotify action");
         $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
 
         if($verify_result) {
             //验证成功
             $controller = $this;
-            $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-                if (!$success) {
-                    return ;
-                }
-                if ($order['targetType'] != 'course') {
-                    throw \RuntimeException('非课程订单，加入课程失败。');
-                }
+            try {
+                $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
+                     if (!$success) {
+                            return ;
+                     }
+                     if ($order['targetType'] != 'course') {
+                            throw \RuntimeException('非课程订单，加入课程失败。');
+                     }
 
-                $info = array(
-                    'orderId' => $order['id'],
-                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-                );
+                     $info = array(
+                             'orderId' => $order['id'],
+                             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+                     );
 
-                if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                    $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-                    $this->getLogService()->info('notify', 'becomeStudent', "paycalknotify action");
-                }
-                return ;
-            });
+                     if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                        $this->getLogService()->info('notify', 'success', "paynotify action");
+                        $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                     }
 
-            $this->getLogService()->info('notify', 'success' . $status, "paycalknotify action");
+                     return ;
+              });
+            }catch(\Exception $e) {
+                error_log($e->getMessage(), 0);
+            }
         }
         else {
             //验证失败
             $result["status"] = "fail";
-            $this->getLogService()->info('notify', 'check_fail', "paycalknotify action");
+            $this->getLogService()->info('notify', 'check_fail', "paynotify action");
         }
         return new Response("success");
     }
@@ -86,11 +89,11 @@ class MobileAlipayController extends MobileController
 
             if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                $this->getLogService()->info('order', 'callback_success', "paycalknotify action");
             }
 
             return ;
         });
-        $this->getLogService()->info('order', 'callback', "paycalknotify action");
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
         return new Response($callback);
     }
@@ -98,13 +101,12 @@ class MobileAlipayController extends MobileController
     //支付校验
     protected function doPayNotify(Request $request, $name, $successCallback = null)
     {
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        
         if ($request->getMethod() == "GET") {
             $requestParams = $request->query->all();
             $order = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
             $requestParams['total_fee'] = $order['amount'];
         } else {
+            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知");
             $doc = simplexml_load_string($_POST['notify_data']);
             $doc = (array)$doc;
             
