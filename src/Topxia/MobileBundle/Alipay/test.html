@@ -159,31 +159,44 @@ ul,ol{
 				<li class="last">3、确认完成</li>
             </ol>
         </div>
-        <form name=alipayment action=alipayapi.php method=post target="_blank">
+        <!--
+        service=alipay.wap.trade.create.direct
+        &sign=9a28a69600d674f37c05162f73fee52b&
+        sec_id=MD5&
+        v=1.0&
+        notify_data=%3Cnotify%3E%3Cpayment_type%3E1%3C%2Fpayment_type%3E%3Csubject%3E%E8%B4%AD%E4%B9%B0%E8%AF%BE%E7%A8%8B%E3%80%8A%E8%AF%BE%E7%A8%8B%E8%B4%AD%E4%B9%B0%E6%BC%94%E7%A4%BA%EF%BC%8D%E6%AC%A2%E8%BF%8E%E8%B4%AD%E4%B9%B0e%E3%80%8B%3C%2Fsubject%3E%3Ctrade_no%3E2014052129557749%3C%2Ftrade_no%3E%3Cbuyer_email%3E18659572957%3C%2Fbuyer_email%3E%3Cgmt_create%3E2014-05-21+08%3A39%3A51%3C%2Fgmt_create%3E%3Cnotify_type%3Etrade_status_sync%3C%2Fnotify_type%3E%3Cquantity%3E1%3C%2Fquantity%3E%3Cout_trade_no%3EC2014052108394572040%3C%2Fout_trade_no%3E%3Cnotify_time%3E2014-05-21+08%3A40%3A00%3C%2Fnotify_time%3E%3Cseller_id%3E2088801030402123%3C%2Fseller_id%3E%3Ctrade_status%3ETRADE_FINISHED%3C%2Ftrade_status%3E%3Cis_total_fee_adjust%3EN%3C%2Fis_total_fee_adjust%3E%3Ctotal_fee%3E0.01%3C%2Ftotal_fee%3E%3Cgmt_payment%3E2014-05-21+08%3A40%3A00%3C%2Fgmt_payment%3E%3Cseller_email%3Eservice%40howzhi.com%3C%2
+    -->
+        <form name=alipayment action="http://try3.edusoho.cn/mapi/alipay/alipay_notify" method=post target="_blank">
+            <input type="hidden" name="service" value="alipay.wap.trade.create.direct" />
+            <input type="hidden" name="sign" value="9a28a69600d674f37c05162f73fee52b" />
+            <input type="hidden" name="sec_id" value="MD5" />
+            <input type="hidden" name="v" value="1.0" />
+            <input type="hidden" name="notify_data" value="<notify><payment_type>1</payment_type><subject>购买课程《课程购买演示－欢迎购买e》</subject><trade_no>2014052129557749</trade_no><buyer_email>18659572957</buyer_email><gmt_create>2014-05-21+08:39:51</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>C2014052108394572040</out_trade_no><notify_time>2014-05-21+08:40:00</notify_time><seller_id>2088801030402123</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2014-05-21+08:40:00</gmt_payment><seller_email>service@howzhi.com</seller_email></notify>" />
+
             <div id="body" style="clear:left">
                 <dl class="content">
                     <dt>卖家支付宝帐户：</dt>
                   <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDseller_email" />
+                        <input size="30" name="" />
                         <span></span>
                     </dd>
                     <dt>商户订单号：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDout_trade_no" />
+                        <input size="30" name="" />
                         <span></span>
                     </dd>
                     <dt>订单名称：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDsubject" />
+                        <input size="30" name="" />
                         <span></span>
                     </dd>
                     <dt>付款金额：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDtotal_fee" />
+                        <input size="30" name="" />
                         <span></span>
                     </dd>
 					<dt></dt>

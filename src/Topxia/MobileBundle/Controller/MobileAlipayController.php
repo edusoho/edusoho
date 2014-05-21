@@ -37,25 +37,6 @@ class MobileAlipayController extends MobileController
 
         if($verify_result) {
             //验证成功
-            $doc = simplexml_load_string($notify_data);
-            $doc = (array)$doc;
-            
-            if(!empty($doc['notify']) ) {
-                //商户订单号
-                $out_trade_no = $doc['out_trade_no'];
-                //支付宝交易号
-                $trade_no = $doc['trade_no'];
-                //交易状态
-                $trade_status = $doc['trade_status'];
-                
-                if($_POST['trade_status'] == 'TRADE_FINISHED') {
-                    $result["status"] = "success";
-                }
-                else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-                    $result["status"] = "success";
-                }
-            }
-
             $controller = $this;
             $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
                 if (!$success) {
@@ -124,7 +105,20 @@ class MobileAlipayController extends MobileController
             $order = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
             $requestParams['total_fee'] = $order['amount'];
         } else {
-            $requestParams = $request->request->all();
+            $doc = simplexml_load_string($_POST['notify_data']);
+            $doc = (array)$doc;
+            
+            $requestParams = array();
+            if(!empty($doc['out_trade_no']) ) {
+                //商户订单号
+                $fromData['out_trade_no'] = $doc['out_trade_no'];
+                //支付宝交易号
+                $fromData['trade_no'] = $doc['trade_no'];
+                //交易状态
+                $fromData['trade_status'] = $_POST['trade_status'];
+                $fromData['trade_no'] = $doc['total_fee'];
+                $fromData['gmt_payment'] = $doc['gmt_payment'];
+            }
         }
 
         $payData = $this->createPaymentResponse($requestParams);
