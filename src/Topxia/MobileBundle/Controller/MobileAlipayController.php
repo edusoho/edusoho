@@ -89,7 +89,7 @@ class MobileAlipayController extends MobileController
 
             if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-                $this->getLogService()->info('order', 'callback_success', "paycalknotify action");
+                $controller->getLogService()->info('order', 'callback_success', "paycalknotify action");
             }
 
             return ;
