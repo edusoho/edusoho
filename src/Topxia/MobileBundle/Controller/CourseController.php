@@ -140,47 +140,6 @@ class CourseController extends MobileController
         return $this->createJson($request, $json);
     }
 
-    public function getCommentAction(Request $request, $courseId)
-    {
-        $token = $this->getUserToken($request);
-        $course_comment = $this->getReviewService()->findCourseReviews($courseId, 0, 12);
-        $course_comment = $this->changeCreatedTime($course_comment);
-        $commentUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($course_comment, 'userId'));
-        $commentUsers = $this->changeUserPicture($commentUsers, true);
-
-        $course_comment = $this->subTime($course_comment);
-        $this->result['course_comment'] = $course_comment;
-        $this->result['commentUsers'] = $commentUsers;
-        $this->setResultStatus("success");
-        return $this->createJson($request, $this->result);
-    }
-
-    protected function subTime($course_comments)
-    {
-        for($i=0; $i < count($course_comments); $i++) {
-            $course_comments[$i]['createdTime'] =  substr($course_comments[$i]['createdTime'], 0, 10);
-        }
-        return $course_comments;
-    }
-
-    public function commentCourseAction(Request $request, $id)
-    {
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $currentUser = $this->getCurrentUser();
-            $course = $this->getCourseService()->getCourse($id);
-            $review = $this->getReviewService()->getUserCourseReview($currentUser['id'], $course['id']);
-            $form = $request->query->all();
-            $form['rating'] = $form['rating'];
-            $form['userId']= $currentUser['id'];
-            $form['courseId']= $id;
-            $this->getReviewService()->saveReview($form);
-            $this->setResultStatus("success");
-            return $this->createJson($request, $this->result);
-        }
-        return $this->createJson($request, $this->result);
-    }
-
     public function getfavoriteCourseAction(Request $request)
     {
         $token = $this->getUserToken($request);
@@ -443,55 +402,6 @@ class CourseController extends MobileController
 
         return $enableds;
     }
-
-    public function simpleUser($user) 
-    {
-        if (empty($user)) {
-            return null;
-        }
-        $users = $this->simplifyUsers(array($user));
-        return current($users);
-    }
-
-    public function simplifyUsers($users)
-    {
-        if (empty($users)) {
-            return array();
-        }
-
-        $simplifyUsers = array();
-        foreach ($users as $key => $user) {
-            $simplifyUsers[$key] = array (
-                'id' => $user['id'],
-                'nickname' => $user['nickname'],
-                'title' => $user['title'],
-                'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
-            );
-        }
-
-        return $simplifyUsers;
-    }
-
-    protected function filterReviews($reviews)
-    {
-        if (empty($reviews)) {
-            return array();
-        }
-
-        $userIds = ArrayToolkit::column($reviews, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $self = $this;
-        return array_map(function($review) use ($self, $users) {
-            $review['user'] = empty($users[$review['userId']]) ? null : $self->simpleUser($users[$review['userId']]);
-            unset($review['userId']);
-
-            $review['createdTime'] = date('c', $review['createdTime']);
-            return $review;
-        }, $reviews);
-
-    }
-
 
     protected function filterCourse($course)
     {

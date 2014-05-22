@@ -18,8 +18,12 @@ class KernelRequestListener
     {
     	$request = $event->getRequest();
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
-            $whiteList = array('/mapi/alipay/alipay_notify', '/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify');
+            $whiteList = array('/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify');
             if (in_array($request->getPathInfo(), $whiteList)) {
+                return ;
+            }
+
+            if (stripos($request->getPathInfo(), '/mapi/') == 0) {
                 return ;
             }
 

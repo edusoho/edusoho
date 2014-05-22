@@ -42,10 +42,6 @@ topxia_mobile_getCourseLesson:
     pattern:  /courselesson/{course_id}
     defaults: { _controller: TopxiaMobileBundle:Course:getCourseLesson }
 
-topxia_mobile_lgetcomment:
-    pattern:  /commentlist/{courseId}
-    defaults: { _controller: TopxiaMobileBundle:Course:getComment }
-
 topxia_mobile_learnFinish:
     pattern:  /lessonfinish/{courseId}/{lessonId}
     defaults: { _controller: TopxiaMobileBundle:Course:learnFinish }
@@ -73,10 +69,6 @@ topxia_mobile_favorite:
 topxia_mobile_buyCourse:
     pattern:  /buycourse/{course_id}
     defaults: { _controller: TopxiaMobileBundle:Course:buyCourse }
-
-topxia_mobile_commentcourse:
-    pattern:  /commentcourse/{id}
-    defaults: { _controller: TopxiaMobileBundle:Course:commentCourse }
 
 topxia_mobile_payCourse:
     pattern:  /paycourse
@@ -146,15 +138,34 @@ topxia_mobile_qrcode:
     pattern:  /qrcode
     defaults: { _controller: TopxiaMobileBundle:Qrcode:index }
 
-
 mapi_course:
-    pattern:  /course/{courseId}
+    pattern:  /courses/{courseId}
     defaults: { _controller: TopxiaMobileBundle:Course:course }
 
 mapi_course_items:
-    pattern:  /course/{courseId}/items
+    pattern:  /courses/{courseId}/items
     defaults: { _controller: TopxiaMobileBundle:Course:items }
 
 mapi_course_lesson:
-    pattern:  /course/{courseId}/lesson/{lessonId}
+    pattern:  /courses/{courseId}/lessons/{lessonId}
     defaults: { _controller: TopxiaMobileBundle:Course:lesson }
+
+mapi_course_reviews:
+    pattern:  /courses/{courseId}/reviews
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:reviews }
+    methods: [GET]
+
+mapi_course_review_create:
+    pattern:  /courses/{courseId}/reviews
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:create }
+    methods: [POST]
+
+mapi_course_review_get:
+    pattern:  /courses/{courseId}/reviews/{reviewId}
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:get }
+    methods: [GET]
+
+mapi_course_review_update:
+    pattern:  /courses/{courseId}/reviews/{reviewId}
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
+    methods: [POST]
