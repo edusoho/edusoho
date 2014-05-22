@@ -149,3 +149,7 @@ topxia_mobile_qrcode:
 mapi_course_items:
     pattern:  /course/{courseId}/items
     defaults: { _controller: TopxiaMobileBundle:Course:items }
+
+mapi_course_lesson:
+    pattern:  /course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaMobileBundle:Course:lesson }

@@ -29,6 +29,82 @@ class CourseController extends MobileController
         return $this->createJson($request, $items);
     }
 
+    public function lessonAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $json = array();
+        $json['number'] = $lesson['number'];
+
+        $chapter = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
+        if ($chapter['type'] == 'unit') {
+            $unit = $chapter;
+            $json['unitNumber'] = $unit['number'];
+
+            $chapter = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
+            $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
+
+        } else {
+            $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
+            $json['unitNumber'] = 0;
+        }
+
+        $json['title'] = $lesson['title'];
+        $json['summary'] = $lesson['summary'];
+        $json['type'] = $lesson['type'];
+        $json['content'] = $lesson['content'];
+        $json['status'] = $lesson['status'];
+        $json['quizNum'] = $lesson['quizNum'];
+        $json['materialNum'] = $lesson['materialNum'];
+        $json['mediaId'] = $lesson['mediaId'];
+        $json['mediaSource'] = $lesson['mediaSource'];
+
+        if ($json['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+            if (!empty($file)) {
+                if ($file['storage'] == 'cloud') {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient();
+
+                    $json['mediaConvertStatus'] = $file['convertStatus'];
+
+                    if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                        $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                        $json['mediaUri'] = $url['url'];
+                    } else {
+                        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                            $key = $file['metas']['hd']['key'];
+                        } else {
+                            if ($file['type'] == 'video') {
+                                $key = null;
+                            } else {
+                                $key = $file['hashId'];
+                            }
+                        }
+
+                        if ($key) {
+                            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $json['mediaUri'] = $url['url'];
+                        } else {
+                            $json['mediaUri'] = '';
+                        }
+
+                    }
+                } else {
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
+                }
+            } else {
+                $json['mediaUri'] = '';
+            }
+        } else {
+            $json['mediaUri'] = $lesson['mediaUri'];
+        }
+
+        return $this->createJson($request, $json);
+    }
+
     public function getCommentAction(Request $request, $courseId)
     {
         $token = $this->getUserToken($request);
