@@ -34,14 +34,6 @@ topxia_mobile_getCourseList:
     pattern:  /courselist/{page}
     defaults: { _controller: TopxiaMobileBundle:Course:getCourseList, page:'0' }
 
-topxia_mobile_getCourseLesson:
-    pattern:  /courselesson/{course_id}
-    defaults: { _controller: TopxiaMobileBundle:Course:getCourseLesson }
-
-topxia_mobile_getCourseLesson:
-    pattern:  /courselesson/{course_id}
-    defaults: { _controller: TopxiaMobileBundle:Course:getCourseLesson }
-
 topxia_mobile_learnFinish:
     pattern:  /lessonfinish/{courseId}/{lessonId}
     defaults: { _controller: TopxiaMobileBundle:Course:learnFinish }
@@ -58,14 +50,6 @@ topxia_mobile_checkToken:
     pattern:  /checktoken
     defaults: { _controller: TopxiaMobileBundle:User:checkToken }
 
-topxia_mobile_getfavoriteCourse:
-    pattern:  /favoritecourse
-    defaults: { _controller: TopxiaMobileBundle:Course:getfavoriteCourse }
-
-topxia_mobile_favorite:
-    pattern:  /favorite
-    defaults: { _controller: TopxiaMobileBundle:Course:favorite }
-
 topxia_mobile_buyCourse:
     pattern:  /buycourse/{course_id}
     defaults: { _controller: TopxiaMobileBundle:Course:buyCourse }
@@ -77,10 +61,6 @@ topxia_mobile_payCourse:
 topxia_mobile_refundCourse:
     pattern:  /refundcourse/{course_id}
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
-
-topxia_mobile_unFavorite:
-    pattern:  /unfavorite
-    defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
 
 topxia_mobile_getLearnCourse:
     pattern:  /learncourse
@@ -138,6 +118,10 @@ topxia_mobile_qrcode:
     pattern:  /qrcode
     defaults: { _controller: TopxiaMobileBundle:Qrcode:index }
 
+mapi_courses:
+    pattern:  /courses
+    defaults: { _controller: TopxiaMobileBundle:Course:courses }
+
 mapi_course:
     pattern:  /courses/{courseId}
     defaults: { _controller: TopxiaMobileBundle:Course:course }
@@ -169,3 +153,21 @@ mapi_course_review_update:
     pattern:  /courses/{courseId}/reviews/{reviewId}
     defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
     methods: [POST]
+
+topxia_mobile_getfavoriteCourse:
+    pattern:  /favoritecourse
+    defaults: { _controller: TopxiaMobileBundle:Course:getfavoriteCourse }
+
+mapi_course_favorite:
+    pattern:  /courses/{courseId}/favorite
+    defaults: { _controller: TopxiaMobileBundle:Course:favorite }
+    methods: [POST]
+
+mapi_course_unfavorite:
+    pattern:  /courses/{courseId}/unfavorite
+    defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
+    methods: [POST]
+
+mapi_me_course_favorites:
+    pattern:  /me/course_favorites
+    defaults: { _controller: TopxiaMobileBundle:Course:meFavorites }
