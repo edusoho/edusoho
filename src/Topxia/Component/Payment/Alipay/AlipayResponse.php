@@ -28,6 +28,10 @@ class AlipayResponse extends Response
             }
         }
 
+        if($params['trade_status'] == "WAIT_BUYER_CONFIRM_GOODS") {
+           return array('sn' => $params['trade_no'], 'status' => 'waitBuyerConfirmGoods');
+        }
+
         $data = array();
         $data['payment'] = 'alipay';
         $data['sn'] = $params['out_trade_no'];
