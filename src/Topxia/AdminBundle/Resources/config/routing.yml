@@ -537,6 +537,11 @@ admin_category_delete:
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
 
+admin_category_upload:
+    pattern: /category/uploadfile
+    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
+    methods: [POST]
+
 admin_file:
     pattern:  /file
     defaults: { _controller: TopxiaAdminBundle:File:index }

@@ -3,6 +3,8 @@
 {% block title %}{% if category.id %}编辑分类{% else %}添加分类{% endif %}{% endblock %}
 
 {% block body %}
+<div id="category-creater-widget" data-upload-url="{{ path('admin_category_upload') }}">
+
 	<form id="category-form" class="form-horizontal" action="{% if category.id %}{{ path('admin_category_edit', {id:category.id}) }}{% else %}{{ path('admin_category_create') }}{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-name-field">名称</label>
@@ -26,17 +28,28 @@
 				<div class="help-block">选填，建议使用分类名称的英文单词或缩写作为编码。</div>
 			</div>
 		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="category-code-field">图标</label>
+			<div class="col-md-8 controls">
+				<div id="category-icon-field">
+					{% if category.icon %}
+						<img class="mbm" src="{{ category.icon }}">
+					{% endif %}
+				</div>
+				<input type="hidden" name="icon" value="{{ category.icon }}">
+				<button id="category-icon-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#category-icon-field"><i class="glyphicon glyphicon-picture"></i></button>
+				<button {% if not category.icon %}style="display:none;"{% endif %} id="category-icon-delete" class="btn btn-sm btn-default webuploader-container" type="button"><i class="glyphicon glyphicon-trash"></i></button>
+				<div class="help-block">允许上传的图标文件格式为jpg, jpeg, gif, png</div>
+			</div>
+		</div>
+
 		<input type="hidden" name="groupId" value="{{ category.groupId }}">
 		<input type="hidden" name="parentId" value="{{ category.parentId }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
-
-	<div>
-
-	</div>
-
-
-	<script type="text/javascript"> app.load('category/save-modal') </script>
+</div>
+<script type="text/javascript"> app.load('category/save-modal') </script>
 {% endblock %}
 
 {% block footer %}
