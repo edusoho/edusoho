@@ -65,6 +65,62 @@ class CourseController extends BaseController
         ));
     }
 
+    public function archiveAction(Request $request)
+    {   
+        $conditions = array(
+            'status' => 'published'
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions)
+            , 30
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions, 'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = array();
+        foreach ($courses as &$course) {
+            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('TopxiaWebBundle:Course:archive.html.twig',array(
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'users' => $users
+        ));
+    }
+
+    public function archiveLessonAction(Request $request, $id, $lessonId)
+    {   
+
+        $course = $this->getCourseService()->getCourse($id);
+
+        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+
+        if ($lessonId == '' && $lessons != null ) {
+            $currentLesson = $lessons[0];
+        } else {
+            $currentLesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        }
+
+        return $this->render('TopxiaWebBundle:Course:archiveLesson.html.twig',array(
+            'course' => $course,
+            'lessons' => $lessons,
+            'currentLesson' => $currentLesson,
+            'tags' => $tags
+        ));
+    }
+
     public function infoAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
