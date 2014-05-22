@@ -69,19 +69,6 @@ class MobileController extends BaseController
         return $course_comment;
     }
 
-    protected function changeCoursePicture($course, $isArray)
-    {
-        if ($isArray) {
-            for ($i=0; $i<count($course); $i++) {
-                $course[$i] = $this->_changeCoursePicture($course[$i]);
-            }
-        } else {
-            $course = $this->_changeCoursePicture($course);
-        }
-        
-        return $course;
-    }
-
     protected function changeUserPicture($users, $isArray)
     {
         if ($isArray) {
@@ -102,14 +89,6 @@ class MobileController extends BaseController
         $user['mediumAvatar'] = $user['mediumAvatar'] ? self::$webHost. '/' . str_replace('public://', '', $user['mediumAvatar']) : null;
         $user['largeAvatar'] = $user['largeAvatar'] ? self::$webHost. '/' . str_replace('public://', '', $user['largeAvatar']) : null;
         return $user;
-    }
-
-    protected function _changeCoursePicture($course)
-    {
-        $course['smallPicture'] = $course['smallPicture'] ? self::$webHost. '/' . str_replace('public://', '', $course['smallPicture']) : null;
-        $course['middlePicture'] = $course['middlePicture'] ? self::$webHost. '/' . str_replace('public://', '', $course['middlePicture']) : null;
-        $course['largePicture'] = $course['largePicture'] ? self::$webHost. '/' . str_replace('public://', '', $course['largePicture']) : null;
-        return $course;
     }
 
     private function setCurrentUser($userId, $request)

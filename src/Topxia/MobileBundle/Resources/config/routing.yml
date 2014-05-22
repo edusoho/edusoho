@@ -30,22 +30,6 @@ topxia_mobile_searchSchool:
     pattern:  /verifyschool
     defaults: { _controller: TopxiaMobileBundle:Global:verifySchool }
 
-topxia_mobile_getCourseList:
-    pattern:  /courselist/{page}
-    defaults: { _controller: TopxiaMobileBundle:Course:getCourseList, page:'0' }
-
-topxia_mobile_learnFinish:
-    pattern:  /lessonfinish/{courseId}/{lessonId}
-    defaults: { _controller: TopxiaMobileBundle:Course:learnFinish }
-
-topxia_mobile_learncancel:
-    pattern:  /learncancel/{courseId}/{lessonId}
-    defaults: { _controller: TopxiaMobileBundle:Course:learnCancel }
-
-topxia_mobile_learnStatus:
-    pattern:  /learnstatus/{courseId}/{lessonId}
-    defaults: { _controller: TopxiaMobileBundle:Course:learnStatus }
-
 topxia_mobile_checkToken:
     pattern:  /checktoken
     defaults: { _controller: TopxiaMobileBundle:User:checkToken }
@@ -61,14 +45,6 @@ topxia_mobile_payCourse:
 topxia_mobile_refundCourse:
     pattern:  /refundcourse/{course_id}
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
-
-topxia_mobile_getLearnCourse:
-    pattern:  /learncourse
-    defaults: { _controller: TopxiaMobileBundle:Course:getLearnCourse }
-
-topxia_mobile_getLearnedCourse:
-    pattern:  /learnedcourse
-    defaults: { _controller: TopxiaMobileBundle:Course:getLearnedCourse }
 
 topxia_mobile_userLogin:
     pattern:  /login
@@ -154,10 +130,6 @@ mapi_course_review_update:
     defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
     methods: [POST]
 
-topxia_mobile_getfavoriteCourse:
-    pattern:  /favoritecourse
-    defaults: { _controller: TopxiaMobileBundle:Course:getfavoriteCourse }
-
 mapi_course_favorite:
     pattern:  /courses/{courseId}/favorite
     defaults: { _controller: TopxiaMobileBundle:Course:favorite }
@@ -168,6 +140,28 @@ mapi_course_unfavorite:
     defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
     methods: [POST]
 
-mapi_me_course_favorites:
-    pattern:  /me/course_favorites
+mapi_course_lesson_learn:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/learn
+    defaults: { _controller: TopxiaMobileBundle:Course:learn }
+    methods: [POST]
+
+mapi_course_lesson_unlearn:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/unlearn
+    defaults: { _controller: TopxiaMobileBundle:Course:unLearn }
+    methods: [POST]
+
+mapi_course_lesson_learn_status:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/learn_status
+    defaults: { _controller: TopxiaMobileBundle:Course:learnStatus }
+
+mapi_me_favorite_courses:
+    pattern:  /me/favorite_courses
     defaults: { _controller: TopxiaMobileBundle:Course:meFavorites }
+
+mapi_me_learning_courses:
+    pattern:  /me/learning_courses
+    defaults: { _controller: TopxiaMobileBundle:Course:meLearnings }
+
+mapi_me_learned_courses:
+    pattern:  /me/learned_courses
+    defaults: { _controller: TopxiaMobileBundle:Course:meLearneds }

@@ -4,17 +4,11 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Common\ArrayToolkit;
 
 class CourseController extends MobileController
 {
-    public function __construct()
-    {
-        $this->setResultStatus();
-    }
-
     public function coursesAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -150,6 +144,9 @@ class CourseController extends MobileController
         return $this->createJson($request, $json);
     }
 
+    /**
+     * 收藏课程
+     */
     public function favoriteAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
@@ -166,6 +163,9 @@ class CourseController extends MobileController
         return $this->createJson($request, true);
     }
 
+    /**
+     * 取消收藏课程
+     */
     public function unfavoriteAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
@@ -184,6 +184,9 @@ class CourseController extends MobileController
         return $this->createJson($request, true);
     }
 
+    /**
+     * 获得当前用户收藏的课程
+     */
     public function meFavoritesAction(Request $request)
     {
         $this->getUserToken($request);
@@ -194,9 +197,9 @@ class CourseController extends MobileController
         }
 
         $result = array();
+        $result['total'] = $this->getCourseService()->findUserFavoritedCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $result['total'] = $this->getCourseService()->findUserFavoritedCourseCount($user['id']);
 
         $courses = $this->getCourseService()->findUserFavoritedCourses($user['id'], $result['start'], $result['limit']);
         $result['data'] = $this->filterCourses($courses);
@@ -204,98 +207,90 @@ class CourseController extends MobileController
         return $this->createJson($request, $result);
     }
 
+    /**
+     * 获得当前用户正在学的课程
+     */
+    public function meLearningsAction(Request $request)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $result = array();
+        $result['total'] = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $result['start'] = (int) $request->query->get('start', 0);
+        $result['limit'] = (int) $request->query->get('limit', 10);
+        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $result['start'], $result['limit']);
+        $result['data'] = $this->filterCourses($courses);
+
+        return $this->createJson($request, $result);
+    }
+
+    /**
+     * 获得当前用户已学过的课程
+     */
+    public function meLearnedsAction(Request $request)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $result = array();
+        $result['total'] = $this->getCourseService()->findUserLeanedCourseCount($user['id']);
+        $result['start'] = (int) $request->query->get('start', 0);
+        $result['limit'] = (int) $request->query->get('limit', 10);
+        $courses = $this->getCourseService()->findUserLeanedCourses($user['id'], $result['start'], $result['limit']);
+        $result['data'] = $this->filterCourses($courses);
+
+        return $this->createJson($request, $result);
+    }
+
+    public function learnAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
+
+        return $this->createJson($request, true);
+    }
+
+    public function unlearnAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
+
+        return $this->createJson($request, true);
+    }
+
     public function learnStatusAction(Request $request, $courseId, $lessonId)
     {
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $user = $this->getCurrentUser();
-            $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-            if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
-                $status = "unstart";
-            } else {
-                $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
-            }
-        }
-        return $this->createJson($request, $status ? : 'unstart');
-    }
-
-    public function learnCancelAction(Request $request, $courseId, $lessonId)
-    {
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $user = $this->getCurrentUser();
-            $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-            if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
-                $this->setResultStatus("error");
-                $this->result["message"] = "您不是课程学员，不能学习！";
-            } else {
-                $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
-                $this->setResultStatus("success");
-            }
-            
-        }
-        return $this->createJson($request, $this->result);
-    }
-
-    public function learnFinishAction(Request $request, $courseId, $lessonId)
-    {
-        $token = $this->getUserToken($request);
+        $this->getUserToken($request);
         $user = $this->getCurrentUser();
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-        if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
-            $this->setResultStatus("error");
-            $this->result["message"] = "您不是课程学员，不能学习！";
-        } else {
-            $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
-            $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
-            $this->setResultStatus("success");
-            $this->result['result'] = array(
-                'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
-                'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
-            );
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
         }
-        
-        return $this->createJson($request, $this->result);
-    }
 
-    public function getLearnCourseAction(Request $request)
-    {   
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $page = $this->getParam($request, 'page', 0);
-            $count = $this->getCourseService()->findUserLeaningCourseCount($token['userId']);
-            $learnCourses = $this->getCourseService()->findUserLeaningCourses($token['userId'], $page, self::$defLimit);
-            $learnCourses = $this->changeLearnCourse($learnCourses);
-            $this->setResultStatus("success");
-            $this->result['learnCourses'] = $learnCourses;
-            $this->result = $this->setPage($this->result, $page, $count);
-        }
-        return $this->createJson($request, $this->result);
-    }
+        $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
 
-    public function getLearnedCourseAction(Request $request)
-    {
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $page = $this->getParam($request, 'page', 0);
-            $count = $this->getCourseService()->findUserLeanedCourseCount($token['userId']);
-            $learnCourses = $this->getCourseService()->findUserLeanedCourses($token['userId'], $page, self::$defLimit);
-            $learnCourses = $this->changeLearnCourse($learnCourses);
-            $this->setResultStatus("success");
-            $this->result['learnedCourses'] = $learnCourses;
-            $this->result = $this->setPage($this->result, $page, $count);
-        }
-        return $this->createJson($request, $this->result);
-    }
-
-    protected function changeLearnCourse($learnCourses)
-    {
-        $keys = array_keys($learnCourses);
-        foreach($keys as $i) {
-            $learnCourses[$i] = $this->_changeCoursePicture($learnCourses[$i]);
-        }
-        return $learnCourses;
+        return $this->createJson($request, $status ? : 'unstart');
     }
 
     protected function filterCourse($course)
@@ -357,19 +352,9 @@ class CourseController extends MobileController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
     private function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getUploadFileService()
