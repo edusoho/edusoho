@@ -23,6 +23,41 @@ class CourseController extends MobileController
         $this->setResultStatus();
     }
 
+    public function courseAction(Request $request, $courseId)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            $error = array('error' => 'not_found', 'message' => "课程#{$courseId}不存在。");
+            return $this->createJson($request, $error);
+        }
+
+        if ($course['status'] != 'published') {
+            $error = array('error' => 'course_not_published', 'message' => "课程#{$courseId}未发布或已关闭。");
+        }
+
+        $items = $this->getCourseService()->getCourseItems($courseId);
+        $reviews = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
+        $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
+        $member = $user->isLogin() ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        if ($member) {
+            $member['createdTime'] = date('c', $member['createdTime']);
+        }
+
+        $result = array();
+        $result['course'] = $this->filterCourse($course);
+        $result['items'] = $this->filterItems($items);
+        $result['reviews'] = $this->filterReviews($reviews);
+        $result['member'] = $member;
+        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
+        $result['userLearns'] = $learnStatuses;
+        $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
+
+        return $this->createJson($request, $result);
+    }
+
     public function itemsAction(Request $request, $courseId)
     {
         $items = $this->getCourseService()->getCourseItems($courseId);
@@ -144,62 +179,6 @@ class CourseController extends MobileController
             return $this->createJson($request, $this->result);
         }
         return $this->createJson($request, $this->result);
-    }
-
-    public function getCourseAction(Request $request, $course_id)
-    {
-        $token = $this->getUserToken($request);
-        $user = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($course_id);
-        if(!$this->canShowCourse($course, $user)) {
-            $this->setResultStatus("error");
-            $this->result['info'] = "抱歉，课程已关闭或未发布，不能参加学习，如有疑问请联系管理员！";
-            return $this->createJson($request, $this->result);
-        }
-
-        $course = $this->changeCoursePicture($course, false);
-        $course_list = $this->getCourseService()->getCourseLessons($course_id);
-
-        $course_comment = $this->getReviewService()->findCourseReviews($course_id, 0, 12);
-        $course_comment = $this->changeCreatedTime($course_comment);
-        $commentUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($course_comment, 'userId'));
-        $commentUsers = $this->changeUserPicture($commentUsers, true);
-        $course_comment = $this->subTime($course_comment);
-
-        $teacherUsers = $this->getUserService()->findUsersByIds($course['teacherIds']);
-        $teacherUsers = $this->changeUserPicture($teacherUsers, true);
-        
-        $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-        $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-
-        $favoriteStatus = $this->getFavoriteStatus($course_id);
-
-        $isStudent = $this->getCourseService()->isCourseStudent($course_id, $user->id);
-        $this->setResultStatus("success");
-        $this->result['courseinfo'] = 
-            array(
-                array(
-                    "favoriteStatus"=>$favoriteStatus,
-                    "isStudent"=>$isStudent,
-                    "couse_introduction"=>$course,
-                    "course_comment"=>$course_comment,
-                    "course_list"=>$course_list,
-                    "users"=>$commentUsers,
-                    "member"=>$member,
-                    "learnStatuses"=>$learnStatuses,
-                    "teacherUsers"=>$teacherUsers
-                )
-        );
-    
-        return $this->createJson($request, $this->result);
-    }
-    
-    /**
-    * return true/ false
-    */
-    protected function getFavoriteStatus($course_id)
-    {
-        return $this->getCourseService()->hasFavoritedCourse($course_id);
     }
 
     public function getfavoriteCourseAction(Request $request)
@@ -463,6 +442,111 @@ class CourseController extends MobileController
         }
 
         return $enableds;
+    }
+
+    public function simpleUser($user) 
+    {
+        if (empty($user)) {
+            return null;
+        }
+        $users = $this->simplifyUsers(array($user));
+        return current($users);
+    }
+
+    public function simplifyUsers($users)
+    {
+        if (empty($users)) {
+            return array();
+        }
+
+        $simplifyUsers = array();
+        foreach ($users as $key => $user) {
+            $simplifyUsers[$key] = array (
+                'id' => $user['id'],
+                'nickname' => $user['nickname'],
+                'title' => $user['title'],
+                'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+            );
+        }
+
+        return $simplifyUsers;
+    }
+
+    protected function filterReviews($reviews)
+    {
+        if (empty($reviews)) {
+            return array();
+        }
+
+        $userIds = ArrayToolkit::column($reviews, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $self = $this;
+        return array_map(function($review) use ($self, $users) {
+            $review['user'] = empty($users[$review['userId']]) ? null : $self->simpleUser($users[$review['userId']]);
+            unset($review['userId']);
+
+            $review['createdTime'] = date('c', $review['createdTime']);
+            return $review;
+        }, $reviews);
+
+    }
+
+
+    protected function filterCourse($course)
+    {
+        if (empty($course)) {
+            return null;
+        }
+
+        $courses = $this->filterCourses(array($course));
+
+        return current($courses);
+    }
+
+    protected function filterCourses($courses)
+    {
+        if (empty($courses)) {
+            return array();
+        }
+
+        $teacherIdss = ArrayToolkit::column($courses, 'teacherIds');
+        $teacherIds = array();
+        foreach ($teacherIdss as $ids) {
+            $teacherIds = array_merge($teacherIds, $ids);
+        }
+
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+        $teachers = $this->simplifyUsers($teachers);
+
+        $self = $this;
+        $container = $this->container;
+        return array_map(function($course) use ($self, $container, $teachers) {
+            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
+            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
+            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+
+            $course['teachers'] = array();
+            foreach ($course['teacherIds'] as $teacherId) {
+                $course['teachers'][] = $teachers[$teacherId];
+            }
+            unset($course['teacherIds']);
+
+            return $course;
+        }, $courses);
+    }
+
+    protected function filterItems($items)
+    {
+        if (empty($items)) {
+            return array();
+        }
+
+        return array_map(function($item) {
+            $item['createdTime'] = date('c', $item['createdTime']);
+            return $item;
+        }, $items);
+
     }
 
     private function canShowCourse($course, $user)

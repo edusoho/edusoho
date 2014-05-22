@@ -6,9 +6,9 @@ topxia_mobile_checkLogin:
     pattern:  /checkLogin
     defaults: { _controller: TopxiaMobileBundle:User:checkLogin }
 
-topxia_mobile_getCourse:
-    pattern:  /course/{course_id}
-    defaults: { _controller: TopxiaMobileBundle:Course:getCourse }
+# topxia_mobile_getCourse:
+#     pattern:  /course/{course_id}
+#     defaults: { _controller: TopxiaMobileBundle:Course:getCourse }
 
 topxia_mobile_getRecommendSchool:
     pattern:  /recommendschool
@@ -145,6 +145,11 @@ topxia_mobile_checkOrderStatus:
 topxia_mobile_qrcode:
     pattern:  /qrcode
     defaults: { _controller: TopxiaMobileBundle:Qrcode:index }
+
+
+mapi_course:
+    pattern:  /course/{courseId}
+    defaults: { _controller: TopxiaMobileBundle:Course:course }
 
 mapi_course_items:
     pattern:  /course/{courseId}/items
