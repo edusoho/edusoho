@@ -41,7 +41,7 @@ define(function(require, exports, module) {
         });
 
         $("#category-icon-delete").on('click', function(){
-            if (!confirm('确认要删除吗？')) return false;
+            if (!confirm('确认要删除图标吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#category-icon-field").html('');
