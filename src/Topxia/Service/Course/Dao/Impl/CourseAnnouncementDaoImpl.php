@@ -22,6 +22,16 @@ class CourseAnnouncementDaoImpl extends BaseDao implements CourseAnnouncementDao
         return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }
 
+    public function findAnnouncementsByCourseIds($ids, $start, $limit)
+    {
+       if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit};";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
 	public function addAnnouncement($fields)
 	{
         $affected = $this->getConnection()->insert($this->table, $fields);

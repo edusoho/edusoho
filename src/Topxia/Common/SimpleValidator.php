@@ -16,6 +16,7 @@ class SimpleValidator
 
 	public static function nickname($value, array $option = array())
 	{
+		
 		$option = array_merge(
 			array('minLength' => 3, 'maxLength' => 20),
 			$option
@@ -25,7 +26,6 @@ class SimpleValidator
 		if ($len > $option['maxLength'] or $len < $option['minLength']) {
 			return false;
 		}
-
 		return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.]+$/u', $value);
 	}
 

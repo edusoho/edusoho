@@ -72,6 +72,7 @@ class UploadFileController extends BaseController
             if ($convertor == 'video') {
                 $commands = array_keys($client->getVideoConvertCommands());
             } elseif ($convertor == 'audio') {
+                $commands = array_keys($client->getAudioConvertCommands());
             }
 
             //@todo refacor it. 

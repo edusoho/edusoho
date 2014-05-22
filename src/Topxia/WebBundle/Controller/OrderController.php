@@ -19,6 +19,11 @@ class OrderController extends BaseController
         ));
     }
 
+    public function resultNoticeAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Order:resultNotice.html.twig');
+    }
+
     public function couponCheckAction (Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {

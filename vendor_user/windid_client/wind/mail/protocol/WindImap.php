@@ -366,7 +366,7 @@ class WindImap {
 	}
 
 	/**
-	 * 登陆
+	 * 登录
 	 * @param string $username
 	 * @param string $password
 	 * @return string
@@ -407,7 +407,7 @@ class WindImap {
 
 	/**
 	 * LIST命令用于列出邮箱中已有的文件夹，有点像操作系统的列目录命令
-	 * @param string $base 用户登陆目录
+	 * @param string $base 用户登录目录
 	 * @param string $template 显示的邮箱名。可以使用通配符"*"。
 	 * @return string
 	 */

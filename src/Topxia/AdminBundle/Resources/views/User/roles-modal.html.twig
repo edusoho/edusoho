@@ -5,11 +5,10 @@
 {% block title %}设置用户组{% endblock %}
 {% block body %}
 
-<form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}">
+<form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}" data-currentuser="{{ app.user.id }}" data-edituser="{{ user.id }}">
   <div class="checkboxs">
     {{ checkboxs('roles', dict('userRole'), user.roles) }}
   </div>
-  <div class="user hidden" data-currentuser="{{ currentUser.id }}" data-edituser="{{ user.id }}"></div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 {% endblock %}

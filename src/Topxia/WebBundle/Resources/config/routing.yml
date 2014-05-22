@@ -42,6 +42,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+user_terms:
+    pattern:  /userterms
+    defaults: { _controller: TopxiaWebBundle:Register:userTerms }
+
 register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
@@ -130,6 +134,10 @@ course_buy:
 coupon_check:
     pattern:  /{type}/{id}/coupon/check
     defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
+
+order_result_notice:
+    pattern: /order/result/notice
+    defaults: { _controller: TopxiaWebBundle:Order:resultNotice }
 
 course_order_pay:
     pattern:  /course/order/pay
@@ -452,6 +460,10 @@ course_manage_lesson_unpublish:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
     methods: [POST]
+
+question_file_url:
+    pattern: /question_ajax/file_url
+    defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
 
 course_manage_question:
     pattern: /course/{courseId}/manage/question

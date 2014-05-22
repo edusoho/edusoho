@@ -26,6 +26,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
+	{
+		$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findCoursesByTagIdsAndStatus($tagIds, $status, $start, $limit)
+        );
+        return ArrayToolkit::index($courses, 'id');
+	}
+
+	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+	{
+		$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findCoursesByAnyTagIdsAndStatus($tagIds, $status, $orderBy, $start, $limit)
+        );
+        return ArrayToolkit::index($courses, 'id');
+	}
+
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -1587,6 +1603,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findAnnouncements($courseId, $start, $limit)
 	{
 		return $this->getAnnouncementDao()->findAnnouncementsByCourseId($courseId, $start, $limit);
+	}
+
+	public function findAnnouncementsByCourseIds(array $ids, $start, $limit)
+	{
+		return $this->getAnnouncementDao()->findAnnouncementsByCourseIds($ids,$start, $limit);
 	}
 	
 	public function createAnnouncement($courseId, $fields)

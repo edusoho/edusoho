@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseOrderService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
 
 class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 {
@@ -85,6 +86,36 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return ;
     }
 
+    public function applyRefundOrder($id, $amount, $reason, $container)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        if (empty($order)) {
+            throw $this->createServiceException('订单不存在，不嫩申请退款。');
+        }
+
+        $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
+        if ($refund['status'] == 'created') {
+            $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
+
+            $setting = $this->getSettingService()->get('refund');
+            $message = empty($setting) or empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
+            if ($message) {
+                $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
+                $variables = array(
+                    'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"
+                );
+                $message = StringToolkit::template($message, $variables);
+                $this->getNotificationService()->notify($refund['userId'], 'default', $message);
+            }
+
+        } elseif ($refund['status'] == 'success') {
+            $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+        }
+
+        return $refund;
+
+    }
+
     public function cancelRefundOrder($id)
     {
         $order = $this->getOrderService()->getOrder($id);
@@ -99,14 +130,24 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         }
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->createService('Order.OrderService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->createService('User.NotificationService');
     }
 
 }
