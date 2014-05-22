@@ -145,3 +145,7 @@ topxia_mobile_checkOrderStatus:
 topxia_mobile_qrcode:
     pattern:  /qrcode
     defaults: { _controller: TopxiaMobileBundle:Qrcode:index }
+
+mapi_course_items:
+    pattern:  /course/{courseId}/items
+    defaults: { _controller: TopxiaMobileBundle:Course:items }

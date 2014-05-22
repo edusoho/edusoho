@@ -23,6 +23,12 @@ class CourseController extends MobileController
         $this->setResultStatus();
     }
 
+    public function itemsAction(Request $request, $courseId)
+    {
+        $items = $this->getCourseService()->getCourseItems($courseId);
+        return $this->createJson($request, $items);
+    }
+
     public function getCommentAction(Request $request, $courseId)
     {
         $token = $this->getUserToken($request);
