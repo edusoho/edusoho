@@ -23,7 +23,8 @@ class KernelRequestListener
                 return ;
             }
 
-            if (stripos($request->getPathInfo(), '/mapi/') == 0) {
+
+            if (stripos($request->getPathInfo(), '/mapi/') === 0) {
                 return ;
             }
 
