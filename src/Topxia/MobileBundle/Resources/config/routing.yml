@@ -1,15 +1,3 @@
-topxia_mobile_user:
-    pattern:  /user/{id}
-    defaults: { _controller: TopxiaMobileBundle:User:getUser }
-
-topxia_mobile_checkLogin:
-    pattern:  /checkLogin
-    defaults: { _controller: TopxiaMobileBundle:User:checkLogin }
-
-# topxia_mobile_getCourse:
-#     pattern:  /course/{course_id}
-#     defaults: { _controller: TopxiaMobileBundle:Course:getCourse }
-
 topxia_mobile_getRecommendSchool:
     pattern:  /recommendschool
     defaults: { _controller: TopxiaMobileBundle:Global:getRecommendSchool }
@@ -30,10 +18,6 @@ topxia_mobile_searchSchool:
     pattern:  /verifyschool
     defaults: { _controller: TopxiaMobileBundle:Global:verifySchool }
 
-topxia_mobile_checkToken:
-    pattern:  /checktoken
-    defaults: { _controller: TopxiaMobileBundle:User:checkToken }
-
 topxia_mobile_buyCourse:
     pattern:  /buycourse/{course_id}
     defaults: { _controller: TopxiaMobileBundle:Course:buyCourse }
@@ -45,22 +29,6 @@ topxia_mobile_payCourse:
 topxia_mobile_refundCourse:
     pattern:  /refundcourse/{course_id}
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
-
-topxia_mobile_userLogin:
-    pattern:  /login
-    defaults: { _controller: TopxiaMobileBundle:User:userLogin }
-
-topxia_mobile_logout:
-    pattern:  /logout
-    defaults: { _controller: TopxiaMobileBundle:User:logout }
-
-topxia_mobile_registUser:
-    pattern:  /regist
-    defaults: { _controller: TopxiaMobileBundle:User:registUser }
-
-topxia_mobile_getNotice:
-    pattern:  /notices
-    defaults: { _controller: TopxiaMobileBundle:User:getNotice }
 
 topxia_mobile_alipay_paypage:
     pattern:  /alipay_paypage
@@ -173,3 +141,29 @@ mapi_me_learning_courses:
 mapi_me_learned_courses:
     pattern:  /me/learned_courses
     defaults: { _controller: TopxiaMobileBundle:Course:meLearneds }
+
+mapi_user:
+    pattern:  /users/{id}
+    defaults: { _controller: TopxiaMobileBundle:User:user }
+
+mapi_user_register:
+    pattern:  /users
+    defaults: { _controller: TopxiaMobileBundle:User:register }
+
+mapi_user_login:
+    pattern:  /login
+    defaults: { _controller: TopxiaMobileBundle:User:login }
+
+mapi_user_logout:
+    pattern:  /logout
+    defaults: { _controller: TopxiaMobileBundle:User:logout }
+
+mapi_user_login_with_token:
+    pattern:  /login_with_token
+    defaults: { _controller: TopxiaMobileBundle:User:loginWithToken }
+
+
+
+topxia_mobile_getNotice:
+    pattern:  /notices
+    defaults: { _controller: TopxiaMobileBundle:User:getNotice }

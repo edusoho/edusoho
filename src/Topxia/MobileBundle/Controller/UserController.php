@@ -15,11 +15,68 @@ class UserController extends MobileController
         $this->setResultStatus();
     }
 
-    public function getUserAction(Request $request, $id)
+    public function userAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
+        $user = $this->filterUser($user);
         return $this->createJson($request, $user);
     }
+
+    public function loginAction(Request $request)
+    {
+        $username = $request->query->get('_username');
+        $password = $request->query->get('_password');
+        $user = $this->loadUserByUsername($request, $username);
+
+        if (empty($user)) {
+            return $this->createErrorResponse('username_error', '用户帐号不存在');
+        }
+
+        if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
+            return $this->createErrorResponse('password_error', '帐号密码不正确');
+        }
+
+        $token = $this->createToken($user, $request);
+
+        $result = array(
+            'token' => $token,
+            'user' => $this->filterUser($user),
+        );
+
+        return $this->createJson($request, $result);
+    }
+
+    public function logoutAction(Request $request)
+    {
+        $token = $request->query->get('token', '');
+        $this->getUserService()->deleteToken(UserController::$mobileType, $token);
+        return $this->createJson($request, true);
+    }
+
+    public function loginWithTokenAction(Request $request)
+    {
+        $token = $this->getUserToken($request);
+        if (empty($token)) {
+            return $this->createErrorResponse('token_error', '登录已过期，请重新登录');
+        }
+
+        if ($token['type'] != UserController::$mobileType) {
+            return $this->createErrorResponse('token_error', '登录已过期，请重新登录');
+        }
+
+        $user = $this->getUserService()->getUser($token['userId']);
+        if (empty($user)) {
+            return $this->createErrorResponse('user_not_found', '用户不存在');
+        }
+
+        $result = array(
+            'token' => $token['token'],
+            'user' => $this->filterUser($user),
+        );
+        
+        return $this->createJson($request, $result);
+    }
+
 
     public function checkQRAction(Request $request)
     {
@@ -45,20 +102,6 @@ class UserController extends MobileController
         return $this->createJson($request, $this->result);
     }
     
-    public function checkTokenAction(Request $request)
-    {
-        $token = $this->getUserToken($request);
-        $result = array(
-            "token"=>$token["token"]
-        );
-        if ($token) {
-            $user = $this->getUserService()->getUser($token["userId"]);
-            $result["user"] = $this->changeUserPicture($user,false);
-        }
-        
-        return $this->createJson($request, $result);
-    }
-
     public function getNoticeAction(Request $request)
     {
         $token = $this->getUserToken($request);
@@ -115,43 +158,6 @@ class UserController extends MobileController
         return $this->createJson($request, $this->result);
     }
 
-    public function checkLoginAction(Request $request)
-    {
-    	$email = $request->query->get('email');
-    	$pass = $request->request->get('pass');
-    	$user = $this->getUserService()->getUserByEmail($email);
-
-    	if ($user) {
-    		$this->setResultStatus("success");
-    	}
-    	return $this->createJson($request, $this->result);
-    }
-
-    public function userLoginAction(Request $request)
-    {
-        $username = $request->query->get('_username');
-        $user = $this->loadUserByUsername($request, $username);
-        if ($user) {
-            $pass = $request->query->get('_password');
-            if ($this->getUserService()->verifyPassword($user['id'], $pass)) {
-                $token = $this->createToken($user, $request);
-                $this->result['token'] = $token;
-                $this->result['user'] = $this->changeUserPicture($user, false);
-                $this->setResultStatus("success");
-            }
-        }
-        return $this->createJson($request, $this->result);
-    }
-
-    public function logoutAction(Request $request)
-    {
-        $token = $request->query->get('token');
-        if ($this->getUserService()->deleteToken(UserController::$mobileType, $token)) {
-            $this->setResultStatus("success");
-        }
-        return $this->createJson($request, $this->result);
-    }
-
     private function loadUserByUsername ($request, $username) {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->getUserService()->getUserByEmail($username);
@@ -193,4 +199,53 @@ class UserController extends MobileController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
+
+
+    protected function filterUser($user)
+    {
+        if (empty($user)) {
+            return null;
+        }
+
+        $users = $this->filterUsers(array($user));
+
+        return current($users);
+    }
+
+    public function filterUsers($users)
+    {
+        if (empty($users)) {
+            return array();
+        }
+
+        $container = $this->container;
+
+        return array_map(function($user) use ($container) {
+            $user['smallAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['createdTime'] = date('c', $user['createdTime']);
+
+            $user['email'] = '';
+            $user['roles'] = array();
+            unset($user['password']);
+            unset($user['salt']);
+            unset($user['createdIp']);
+            unset($user['loginTime']);
+            unset($user['loginIp']);
+            unset($user['loginSessionId']);
+            unset($user['newMessageNum']);
+            unset($user['newNotificationNum']);
+            unset($user['promoted']);
+            unset($user['promotedTime']);
+            unset($user['approvalTime']);
+            unset($user['approvalStatus']);
+            unset($user['tags']);
+            unset($user['point']);
+            unset($user['coin']);
+
+            return $user;
+        }, $users);
+    }
+
 }

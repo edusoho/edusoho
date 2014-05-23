@@ -186,9 +186,9 @@ class MobileController extends BaseController
         return current($reviews);
     }
 
-    protected function createErrorResponse($code, $message)
+    protected function createErrorResponse($name, $message)
     {
-        $error = array('error' => $code, 'message' => $message);
+        $error = array('error' => array('name' => $name, 'message' => $message));
         return new JsonResponse($error, 400);
     }
 
