@@ -419,7 +419,7 @@ body {
 }
 
 .course-header .title {
-	margin: 5px 0 10px 0;
+	margin: 5px 170px 10px 0;
 	padding: 0;
 	line-height: 1.2;
 	font-size: 18px;
@@ -1687,12 +1687,12 @@ body {
 
 .lesson-list .item-actions {
 	visibility: hidden;
-	top: 0;
-	right: 0;
 	background: #f3f3f3;
 	border-left: 1px solid #ddd;
 	margin-left: 10px;
+	position: absolute;
 	float: right;
+	right: 50px;
 }
 
 .lesson-list .item-chapter:hover .item-actions, .lesson-list .item-lesson:hover .item-actions  {
