@@ -120,6 +120,10 @@ mapi_course_review_create:
     defaults: { _controller: TopxiaMobileBundle:CourseReview:create }
     methods: [POST]
 
+mapi_course_review_create_html5:
+    pattern:  /courses/{courseId}/review_create
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:create }
+
 mapi_course_review_get:
     pattern:  /courses/{courseId}/reviews/{reviewId}
     defaults: { _controller: TopxiaMobileBundle:CourseReview:get }
@@ -130,25 +134,29 @@ mapi_course_review_update:
     defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
     methods: [POST]
 
+mapi_course_review_update_html5:
+    pattern:  /courses/{courseId}/reviews/{reviewId}/update
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
+
 mapi_course_favorite:
     pattern:  /courses/{courseId}/favorite
     defaults: { _controller: TopxiaMobileBundle:Course:favorite }
-    methods: [POST]
+    methods: [GET, POST]
 
 mapi_course_unfavorite:
     pattern:  /courses/{courseId}/unfavorite
     defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
-    methods: [POST]
+    methods: [GET, POST]
 
 mapi_course_lesson_learn:
     pattern:  /courses/{courseId}/lessons/{lessonId}/learn
     defaults: { _controller: TopxiaMobileBundle:Course:learn }
-    methods: [POST]
+    methods: [GET, POST]
 
 mapi_course_lesson_unlearn:
     pattern:  /courses/{courseId}/lessons/{lessonId}/unlearn
     defaults: { _controller: TopxiaMobileBundle:Course:unLearn }
-    methods: [POST]
+    methods: [GET, POST]
 
 mapi_course_lesson_learn_status:
     pattern:  /courses/{courseId}/lessons/{lessonId}/learn_status

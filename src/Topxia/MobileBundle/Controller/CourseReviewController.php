@@ -42,8 +42,8 @@ class CourseReviewController extends MobileController
         $review = array();
         $review['courseId'] = $course['id'];
         $review['userId'] = $user['id'];
-        $review['rating'] = $request->request->get('rating', 0);
-        $review['content'] = $request->request->get('content','');
+        $review['rating'] = $request->get('rating', 0);
+        $review['content'] = $request->get('content','');
 
         $review = $this->getReviewService()->saveReview($review);
         $review = $this->filterReview($review);
