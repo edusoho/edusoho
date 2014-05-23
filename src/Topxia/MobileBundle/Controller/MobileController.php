@@ -10,24 +10,9 @@ use Topxia\Common\ArrayToolkit;
 
 class MobileController extends BaseController
 {
-
-    /**
-    *GetHostByName($_SERVER['SERVER_NAME']);
-    */
-    public static $webHost = "http://try3.edusoho.cn/files";
-
-    public static $baseUrl = "http://try3.edusoho.cn";
-
-    public static $mobileType = "mobileLogin";
-
-    public static $defLimit = 8;
+    const TOKEN_TYPE = 'mobile_login';
 
     protected $result = array();
-
-    protected function setResultStatus($status = "error")
-    {
-        $this->result['status'] = $status;
-    }
 
     protected function createJson(Request $request, $data)
     {
@@ -51,45 +36,6 @@ class MobileController extends BaseController
         $result = $request->query->get($name);
         return $result ? $result : $default;
     }
-    
-    protected function setPage($result, $page, $count)
-    {
-        $result['page'] = $page;
-        $total_page = $count % self::$defLimit == 0 ? $count / self::$defLimit : intval($count / self::$defLimit) + 1;
-        $result['total_page'] = $total_page;
-        return $result;
-    }
-
-    protected function changeCreatedTime($course_comment)
-    {
-        for ($i=0; $i<count($course_comment); $i++) {
-            $temp = $course_comment[$i];
-            $course_comment[$i]['createdTime'] = date('Y-m-d H:i:s', $temp['createdTime']);
-        }
-        return $course_comment;
-    }
-
-    protected function changeUserPicture($users, $isArray)
-    {
-        if ($isArray) {
-            $keys = array_keys($users);
-            foreach($keys as $i) {
-                $users[$i] = $this->_changeUserPicture($users[$i]);
-            }
-        } else {
-            $users = $this->_changeUserPicture($users);
-        }
-        
-        return $users;
-    }
-
-    protected function _changeUserPicture($user)
-    {
-        $user['smallAvatar'] = $user['smallAvatar'] ? self::$webHost. '/' . str_replace('public://', '', $user['smallAvatar']) : null;
-        $user['mediumAvatar'] = $user['mediumAvatar'] ? self::$webHost. '/' . str_replace('public://', '', $user['mediumAvatar']) : null;
-        $user['largeAvatar'] = $user['largeAvatar'] ? self::$webHost. '/' . str_replace('public://', '', $user['largeAvatar']) : null;
-        return $user;
-    }
 
     private function setCurrentUser($userId, $request)
     {
@@ -107,7 +53,7 @@ class MobileController extends BaseController
     protected function getUserToken($request)
     {
         $token = $request->query->get('token');
-        $token = $this->getUserService()->getToken(self::$mobileType, $token);
+        $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
         }
@@ -116,7 +62,7 @@ class MobileController extends BaseController
 
     protected function createToken($user, $request)
     {
-        $token = $this->getUserService()->makeToken(self::$mobileType, $user['id'], time() + 3600 * 24 * 30);
+        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
         if ($token) {
             $this->setCurrentUser($user['id'], $request);
         }

@@ -4,16 +4,10 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\WebBundle\Form\RegisterType;
 use Topxia\Common\SimpleValidator;
 
 class UserController extends MobileController
 {
-
-    public function __construct()
-    {
-        $this->setResultStatus();
-    }
 
     public function userAction(Request $request, $id)
     {
@@ -49,7 +43,7 @@ class UserController extends MobileController
     public function logoutAction(Request $request)
     {
         $token = $request->query->get('token', '');
-        $this->getUserService()->deleteToken(UserController::$mobileType, $token);
+        $this->getUserService()->deleteToken(self::TOKEN_TYPE, $token);
         return $this->createJson($request, true);
     }
 
@@ -60,7 +54,7 @@ class UserController extends MobileController
             return $this->createErrorResponse('token_error', '登录已过期，请重新登录');
         }
 
-        if ($token['type'] != UserController::$mobileType) {
+        if ($token['type'] != self::TOKEN_TYPE) {
             return $this->createErrorResponse('token_error', '登录已过期，请重新登录');
         }
 
@@ -91,23 +85,6 @@ class UserController extends MobileController
         return $this->createJson($request, $result);
     }
 
-    private function getSiteInfo($request)
-    {
-        $site = $this->getSettingService()->get('site', array());
-
-        if (!empty($site['logo'])) {
-            $logo = $request->getSchemeAndHttpHost() . '/' . $site['logo'];
-        } else {
-            $logo = '';
-        }
-
-        return array(
-            'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost(),
-            'logo' => $logo,
-        );
-    }
-    
     public function notifiactionsAction(Request $request)
     {
         $this->getUserToken($request);
@@ -183,21 +160,6 @@ class UserController extends MobileController
         return $user;
     }
 
-    protected function getAuthService()
-    {
-        return $this->getServiceKernel()->createService('User.AuthService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     protected function filterUser($user)
     {
         if (empty($user)) {
@@ -243,6 +205,38 @@ class UserController extends MobileController
 
             return $user;
         }, $users);
+    }
+
+    private function getSiteInfo($request)
+    {
+        $site = $this->getSettingService()->get('site', array());
+
+        if (!empty($site['logo'])) {
+            $logo = $request->getSchemeAndHttpHost() . '/' . $site['logo'];
+        } else {
+            $logo = '';
+        }
+
+        return array(
+            'name' => $site['name'],
+            'url' => $request->getSchemeAndHttpHost(),
+            'logo' => $logo,
+        );
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
