@@ -167,6 +167,6 @@ mapi_user_login_with_token:
     pattern:  /login_with_token
     defaults: { _controller: TopxiaMobileBundle:User:loginWithToken }
 
-topxia_mobile_checkQR:
-    pattern:  /check_qr
-    defaults: { _controller: TopxiaMobileBundle:User:checkQR }
+mapi_user_login_with_site:
+    pattern:  /login_with_site
+    defaults: { _controller: TopxiaMobileBundle:User:loginWithSite }

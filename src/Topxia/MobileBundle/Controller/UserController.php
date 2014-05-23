@@ -69,37 +69,43 @@ class UserController extends MobileController
             return $this->createErrorResponse('user_not_found', '用户不存在');
         }
 
+        $site = $this->getSettingService()->get('site', array());
+
         $result = array(
             'token' => $token['token'],
             'user' => $this->filterUser($user),
+            'site' => $this->getSiteInfo()
         );
         
         return $this->createJson($request, $result);
     }
 
 
-    public function checkQRAction(Request $request)
+    public function loginWithSiteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
-        if($site) {
-            $this->setResultStatus("success");
-            $token = $this->getUserToken($request);
-            if ($token) {
-                $this->result["token"] = $token["token"];
-                $user = $this->getUserService()->getUser($token["userId"]);
-                $this->result["user"] = $this->changeUserPicture($user, false);
-            }
+        $result = array(
+            'site' => $this->getSiteInfo($request)
+        );
 
-            $site['url'] = MobileController::$baseUrl;
-            $this->result["school"] = array(
-                "title"=>$site['name'],
-                "info"=>$site['slogan'],
-                "url"=>$site['url'],
-                "logo"=>$site['logo']
-            );
+        return $this->createJson($request, $result);
+    }
+
+    private function getSiteInfo($request)
+    {
+        $site = $this->getSettingService()->get('site', array());
+
+        if (!empty($site['logo'])) {
+            $logo = $request->getSchemeAndHttpHost() . '/' . $site['logo'];
+        } else {
+            $logo = '';
         }
-        
-        return $this->createJson($request, $this->result);
+
+        return array(
+            'name' => $site['name'],
+            'url' => $request->getSchemeAndHttpHost(),
+            'logo' => $logo,
+        );
     }
     
     public function notifiactionsAction(Request $request)
@@ -187,6 +193,10 @@ class UserController extends MobileController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 
     protected function filterUser($user)
     {
