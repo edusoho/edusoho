@@ -110,6 +110,14 @@ course_explore:
     pattern:  /course/explore/{category}
     defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
 
+course_archive:
+    pattern:  /archive/course
+    defaults: { _controller: TopxiaWebBundle:Course:archive }
+
+course_archive_lesson:
+    pattern:  /archive/course/{id}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:Course:archiveLesson, lessonId:''}
+
 course_create:
     pattern:  /course/create
     defaults: { _controller: TopxiaWebBundle:Course:create }
