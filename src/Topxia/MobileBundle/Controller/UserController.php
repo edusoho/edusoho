@@ -102,60 +102,64 @@ class UserController extends MobileController
         return $this->createJson($request, $this->result);
     }
     
-    public function getNoticeAction(Request $request)
+    public function notifiactionsAction(Request $request)
     {
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $user = $this->getCurrentUser();
-            if (!$user) {
-                throw $this->createAccessDeniedException();
-            }
-            $page = $this->getParam($request, 'page', 0);
-            $count = $this->getNotificationService()->getUserNotificationCount($token['userId']);
-            $notifications = $this->getNotificationService()->findUserNotifications(
-                $token['userId'],
-                $page,
-                MobileController::$defLimit
-            );
-
-            $notifications = $this->changeCreatedTime($notifications);
-            $this->setResultStatus("success");
-            $this->result['notifications'] = $notifications;
-            $this->result = $this->setPage($this->result, $page, $count);
-            $this->getNotificationService()->clearUserNewNotificationCounter($token['userId']);
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录！');
         }
-        return $this->createJson($request, $this->result);
+
+        // 通知，只取最近的100条
+        $notifications = $this->getNotificationService()->findUserNotifications($user['id'], 0, 100);
+        $this->getNotificationService()->clearUserNewNotificationCounter($user['id']);
+
+        foreach ($notifications as &$notification) {
+            $notification['createdTime'] = date('c', $notification['createdTime']);
+            unset($notification);
+        }
+
+        return $this->createJson($request, $notifications);
     }
 
-    public function registUserAction(Request $request)
+    public function registerAction(Request $request)
     {
-        $registration = array(
-            "email"=>$request->query->get('email'),
-            "password"=>$request->query->get('password'),
-            "nickname"=>$request->query->get('nickname'),
-        );
+        $email = $request->get('email');
+        $nickname = $request->get('nickname');
+        $password = $request->get('password');
 
-        $vaildResult = $this->vaildRegistration($registration);
-        if (empty($vaildResult)) {
-            $registration['createdIp'] = $request->getClientIp();
-            if (!$this->getUserService()->isNicknameAvaliable($registration['nickname'])) {
-                $this->result['message'] = "昵称已存在";
-            }
-            if (!$this->getUserService()->isEmailAvaliable($registration['email'])) {
-                $this->result['message'] = "邮箱已注册";
-            }
-            if (!isset($result['message'])) {
-                $user = $this->getAuthService()->register($registration);
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
-                $this->result['token'] = $token = $this->createToken($user, $request);
-                $this->setResultStatus("success");
-            }
-        } else {
-            $result['message'] = $vaildResult['message'];
+        if (!SimpleValidator::email($email)) {
+            return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
         }
-        
-        return $this->createJson($request, $this->result);
+
+        if (!SimpleValidator::nickname($nickname)) {
+            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+        }
+
+        if (!SimpleValidator::password($password)) {
+            return $this->createErrorResponse('password_invalid', '密码格式不正确');
+        }
+
+        if (!$this->getUserService()->isEmailAvaliable($email)) {
+            return $this->createErrorResponse('email_exist', '该邮箱已被注册');
+        }
+
+        if (!$this->getUserService()->isNicknameAvaliable($nickname)) {
+            return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+        }
+
+        $user = $this->getAuthService()->register(array(
+            'email' => $email,
+            'nickname' => $nickname,
+            'password' => $password,
+        ));
+
+        $token = $this->createToken($user, $request);
+
+        return $this->createJson($request, array (
+            'user' => $this->filterUser($user),
+            'token' => $token
+        ));
     }
 
     private function loadUserByUsername ($request, $username) {
@@ -171,23 +175,6 @@ class UserController extends MobileController
         $user['currentIp'] = $request->getClientIp();
 
         return $user;
-    }
-
-    protected function vaildRegistration($registration)
-    {
-        $msg = null;
-        $result = null;
-        if (!SimpleValidator::email($registration['email'])) {
-            $msg= "邮箱格式不正确";
-        }else if (!SimpleValidator::nickname($registration['nickname'])) {
-            $msg = "昵称格式不正确";
-        } else if (!SimpleValidator::password($registration['password'])) {
-            $msg = "密码格式不正确";
-        }
-        if ($msg) {
-            $result = array("message"=>$msg);
-        }
-        return $result;
     }
 
     protected function getAuthService()

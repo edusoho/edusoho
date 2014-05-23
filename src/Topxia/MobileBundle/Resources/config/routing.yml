@@ -50,10 +50,6 @@ topxia_mobile_alipay_payresult:
     pattern:  /alipay_result
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payResult }
 
-topxia_mobile_checkQR:
-    pattern:  /check_qr
-    defaults: { _controller: TopxiaMobileBundle:User:checkQR }
-
 topxia_mobile_checkOrderStatus:
     pattern:  /check_order
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:checkOrderStatus }
@@ -142,12 +138,21 @@ mapi_me_learned_courses:
     pattern:  /me/learned_courses
     defaults: { _controller: TopxiaMobileBundle:Course:meLearneds }
 
+mapi_me_notifications:
+    pattern:  /me/notifications
+    defaults: { _controller: TopxiaMobileBundle:User:notifiactions }
+
 mapi_user:
     pattern:  /users/{id}
     defaults: { _controller: TopxiaMobileBundle:User:user }
 
 mapi_user_register:
     pattern:  /users
+    defaults: { _controller: TopxiaMobileBundle:User:register }
+    methods: [POST]
+
+mapi_user_register_html5:
+    pattern:  /user_register
     defaults: { _controller: TopxiaMobileBundle:User:register }
 
 mapi_user_login:
@@ -162,8 +167,6 @@ mapi_user_login_with_token:
     pattern:  /login_with_token
     defaults: { _controller: TopxiaMobileBundle:User:loginWithToken }
 
-
-
-topxia_mobile_getNotice:
-    pattern:  /notices
-    defaults: { _controller: TopxiaMobileBundle:User:getNotice }
+topxia_mobile_checkQR:
+    pattern:  /check_qr
+    defaults: { _controller: TopxiaMobileBundle:User:checkQR }
