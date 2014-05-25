@@ -184,6 +184,27 @@ class CourseController extends MobileController
         return $this->createJson($request, true);
     }
 
+    public function canLearnAction(Request $request, $courseId)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            $result = array('status' => 'fail', 'message' => '您尚未登录，不能学习');
+            goto response;
+        }
+
+        if (!$this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+            $result = array('status' => 'fail', 'message' => '您不是课程学员，不能学习');
+            goto response;
+        }
+
+        $result = array('status' => 'ok', 'message' => '');
+
+        response:
+        return $this->createJson($request, $result);
+    }
+
     /**
      * 获得当前用户收藏的课程
      */

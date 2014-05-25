@@ -1,18 +1,10 @@
-topxia_mobile_buyCourse:
-    pattern:  /buycourse/{course_id}
-    defaults: { _controller: TopxiaMobileBundle:Course:buyCourse }
-
-topxia_mobile_payCourse:
-    pattern:  /paycourse
+mapi_course_pay:
+    pattern:  /courses/{courseId}/pay
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:payCourse }
 
-topxia_mobile_refundCourse:
-    pattern:  /refundcourse/{course_id}
+mapi_course_refund:
+    pattern:  /courses/{courseId}/refund
     defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
-
-topxia_mobile_alipay_paypage:
-    pattern:  /alipay_paypage
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:showPayPage }
 
 topxia_mobile_alipay_notify:
     pattern:  /{name}/alipay_notify
@@ -25,14 +17,6 @@ topxia_mobile_alipay_pay:
 topxia_mobile_alipay_callback:
     pattern:  /{name}/alipay_callback
     defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
-
-topxia_mobile_alipay_payresult:
-    pattern:  /alipay_result
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payResult }
-
-topxia_mobile_checkOrderStatus:
-    pattern:  /check_order
-    defaults: { _controller: TopxiaMobileBundle:MobileOrder:checkOrderStatus }
 
 topxia_mobile_qrcode:
     pattern:  /qrcode
@@ -90,6 +74,11 @@ mapi_course_favorite:
 mapi_course_unfavorite:
     pattern:  /courses/{courseId}/unfavorite
     defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
+    methods: [GET, POST]
+
+mapi_course_can_learn:
+    pattern:  /courses/{courseId}/can_learn
+    defaults: { _controller: TopxiaMobileBundle:Course:canLearn }
     methods: [GET, POST]
 
 mapi_course_lesson_learn:

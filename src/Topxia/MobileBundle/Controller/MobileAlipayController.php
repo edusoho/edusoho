@@ -13,15 +13,6 @@ use Topxia\MobileBundle\Alipay\MobileAlipayResponse;
 
 class MobileAlipayController extends MobileController
 {
-    public function showPayPageAction(Request $request)
-    {
-    	return $this->redirect("/Alipay/index.html");
-    }
-
-    public function payResultAction()
-    {
-        return new Response("success");
-    }
 
     public function payAction(Request $request)
     {

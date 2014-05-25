@@ -18,11 +18,11 @@ class MobileAlipayConfig
 		return $alipay_config;
 	}
 
-	public static function createAlipayOrderUrl($name, $order)
+	public static function createAlipayOrderUrl($request, $name, $order)
 	{
         $alipay_config  = self::getAlipayConfig($name);
 
-		$payUrl = MobileController::$baseUrl . "/mapi/alipay_pay?WIDseller_email=" . $alipay_config['seller_email'];
+		$payUrl = $request->getSchemeAndHttpHost() . "/mapi/alipay_pay?WIDseller_email=" . $alipay_config['seller_email'];
 		$payUrl = $payUrl."&WIDout_trade_no=" . $order["sn"];
 		$payUrl = $payUrl."&WIDsubject=" . $order["title"];
 		$payUrl = $payUrl."&WIDtotal_fee=" . $order["amount"];

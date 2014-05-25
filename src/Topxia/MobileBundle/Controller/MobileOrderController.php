@@ -11,141 +11,52 @@ use Symfony\Component\HttpFoundation\Response;
 class MobileOrderController extends MobileController
 {
 
-    public function payCourseAction(Request $request)
+    public function payCourseAction(Request $request, $courseId)
     {
-        $result = array("status"=>"error");
-        $token = $this->getUserToken($request);
         $formData = $request->query->all();
+        $formData['courseId'] = $courseId;
 
+        $this->getUserToken($request);
         $user = $this->getCurrentUser();
 
-        if (empty($user)) {
-            $result['message'] = "用户未登录，创建课程订单失败。";
-            return $this->createJson($request, $this->result); 
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '用户未登录，创建课程订单失败。');
         }
 
-        $userInfo = ArrayToolkit::parts($formData, array(
-            'truename',
-            'mobile',
-            'qq',
-            'company',
-            'job'
-        ));
-        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        $order = $this->getCourseOrderService()->createOrder($formData);
 
-        if (!ArrayToolkit::requireds($formData, array('courseId', 'payment'))) {
-            $result['message'] = "用订单数据缺失，创建课程订单失败";
-            return $this->createJson($request, $result);
-        }
-
-        $course = $this->getCourseService()->getCourse($formData['courseId']);
-        if (empty($course)) {
-            $this->result['status'] = "error";
-            $this->result['message'] = "课程不存在，创建课程订单失败。";
-            return $this->createJson($request, $result);
-        }
-
-        $order = array();
-
-        $order['userId'] = $user['id'];
-        $order['title'] = "购买课程《{$course['title']}》";
-        $order['targetType'] = 'course';
-        $order['courseId'] = $course['id'];
-        $order['payment'] = $formData['payment'];
-        $order['amount'] = $course['price'];
-        $order['snPrefix'] = 'C';
-
-        if (!empty($formData['coupon'])) {
-            $order['couponCode'] = $formData['coupon'];
-        }
-
-        if (!empty($formData['note'])) {
-            $order['data'] = array('note' => $formData['note']);
-        }
-
-        //$order = $this->getOrderService()->createOrder($order);
-        $order = $this->getCourseOrderService()->createOrder($order);
-        if (intval($order['amount']*100) > 0) {
-            //跳转支付宝支付
-            $result['payurl'] = MobileAlipayConfig::createAlipayOrderUrl("edusoho", $order);
-            $result['status'] = "error";
+        if ($order['status'] == 'paid') {
+            $result = array('status' => 'ok', 'paid' => true);
         } else {
-            //课程价格为0
-            list($success, $order) = $this->getOrderService()->payOrder(array(
-                'sn' => $order['sn'],
-                'status' => 'success', 
-                'amount' => $order['amount'], 
-                'paidTime' => time()
-            ));
-
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            $result['status'] = "success";
+            $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
         }
+
         return $this->createJson($request, $result);
+
     }
 
-    public function checkOrderStatusAction(Request $request)
+    public function refundCourseAction(Request $request , $courseId)
     {
-        $result = "fail";
-        $token = $this->getUserToken($request);
-        if ($token) {
-            $course_id = $this->getParam($request, "course_id", "");
-            $user = $this->getCurrentUser();
-            $isStudent = $this->getCourseService()->isCourseStudent($course_id, $user->id);
-            $result = $isStudent ? "success" : "fail";
-        }
-        
-        return new Response($result);
-    }
-
-    public function refundCourseAction(Request $request , $course_id)
-    {
-        $result = array("status"=>"error");
-        $token = $this->getUserToken($request);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($course_id);
+        $this->getUserToken($request);
         $user = $this->getCurrentUser();
-
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        
         if (empty($member) or empty($member['orderId'])) {
-            $result['message'] = "您不是课程的学员或尚未购买该课程，不能退学。";
-            return $this->createJson($request, $result);
+            return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
         if (empty($order)) {
-            $result['message'] = "课程不存在";
-            return $this->createJson($request, $result);
+            return $this->createErrorResponse('order_error', '订单不存在，不能退学。');
         }
 
-        $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
-        $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
+        $data = $request->query->all();
+        $reason = empty($data['reason']) ? array() : $data['reason'];
+        $amount = empty($data['applyRefund']) ? 0 : null;
 
-        if ('GET' == $request->getMethod()) {
-            $data = $request->query->all();
-            $reason = empty($data['reason']) ? array() : $data['reason'];
-            $amount = empty($data['applyRefund']) ? 0 : null;
+        $refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
 
-            $refund = $this->getOrderService()->applyRefundOrder($member['orderId'], $amount, $reason);
-            if ($refund['status'] == 'created') {
-                $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
-                $message = $this->setting('refund.applyNotification', '');
-                if ($message) {
-                    $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
-                    $variables = array(
-                        'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"
-                    );
-                    $message = StringToolkit::template($message, $variables);
-                    $this->getNotificationService()->notify($refund['userId'], 'default', $message);
-                }
-            } elseif ($refund['status'] == 'success') {
-                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
-                $result['status'] = "success";
-            }
-            return $this->createJson($request, $result);
-        }
+        return $this->createJson($request, $refund);
     }
 
     protected function getCourseOrderService()
