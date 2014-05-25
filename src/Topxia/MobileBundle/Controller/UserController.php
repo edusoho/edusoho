@@ -68,7 +68,7 @@ class UserController extends MobileController
         $result = array(
             'token' => $token['token'],
             'user' => $this->filterUser($user),
-            'site' => $this->getSiteInfo()
+            'site' => $this->getSiteInfo($request)
         );
         
         return $this->createJson($request, $result);
