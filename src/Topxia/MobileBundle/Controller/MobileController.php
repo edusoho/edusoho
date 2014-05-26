@@ -132,10 +132,10 @@ class MobileController extends BaseController
         return current($reviews);
     }
 
-    protected function createErrorResponse($name, $message)
+    protected function createErrorResponse($request, $name, $message)
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
-        return new JsonResponse($error, 200);
+        return $this->createJson($request, $error);
     }
 
 }

@@ -23,11 +23,11 @@ class UserController extends MobileController
         $user = $this->loadUserByUsername($request, $username);
 
         if (empty($user)) {
-            return $this->createErrorResponse('username_error', '用户帐号不存在');
+            return $this->createErrorResponse($request, 'username_error', '用户帐号不存在');
         }
 
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            return $this->createErrorResponse('password_error', '帐号密码不正确');
+            return $this->createErrorResponse($request, 'password_error', '帐号密码不正确');
         }
 
         $token = $this->createToken($user, $request);
@@ -51,16 +51,16 @@ class UserController extends MobileController
     {
         $token = $this->getUserToken($request);
         if (empty($token)) {
-            return $this->createErrorResponse('token_error', '登录已过期，请重新登录');
+            return $this->createErrorResponse($request, 'token_error', '登录已过期，请重新登录');
         }
 
         if ($token['type'] != self::TOKEN_TYPE) {
-            return $this->createErrorResponse('token_error', '登录已过期，请重新登录');
+            return $this->createErrorResponse($request, 'token_error', '登录已过期，请重新登录');
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
         if (empty($user)) {
-            return $this->createErrorResponse('user_not_found', '用户不存在');
+            return $this->createErrorResponse($request, 'user_not_found', '用户不存在');
         }
 
         $site = $this->getSettingService()->get('site', array());
@@ -90,7 +90,7 @@ class UserController extends MobileController
         $this->getUserToken($request);
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '您尚未登录！');
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录！');
         }
 
         // 通知，只取最近的100条
@@ -112,23 +112,23 @@ class UserController extends MobileController
         $password = $request->get('password');
 
         if (!SimpleValidator::email($email)) {
-            return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
+            return $this->createErrorResponse($request, 'email_invalid', '邮箱地址格式不正确');
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+            return $this->createErrorResponse($request, 'nickname_invalid', '昵称格式不正确');
         }
 
         if (!SimpleValidator::password($password)) {
-            return $this->createErrorResponse('password_invalid', '密码格式不正确');
+            return $this->createErrorResponse($request, 'password_invalid', '密码格式不正确');
         }
 
         if (!$this->getUserService()->isEmailAvaliable($email)) {
-            return $this->createErrorResponse('email_exist', '该邮箱已被注册');
+            return $this->createErrorResponse($request, 'email_exist', '该邮箱已被注册');
         }
 
         if (!$this->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+            return $this->createErrorResponse($request, 'nickname_exist', '该昵称已被注册');
         }
 
         $user = $this->getAuthService()->register(array(

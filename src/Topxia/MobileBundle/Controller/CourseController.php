@@ -79,7 +79,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '您尚未登录，不能查看课时！');
+            return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能查看课时！');
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -168,7 +168,7 @@ class CourseController extends MobileController
         $this->getUserToken($request);
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能查看课时！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能查看课时！");
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
@@ -192,7 +192,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
         }
 
         if (!$this->getCourseService()->hasFavoritedCourse($courseId)) {
@@ -211,11 +211,11 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
         }
 
         if (!$this->getCourseService()->hasFavoritedCourse($courseId)) {
-            return $this->createErrorResponse('runtime_error', "您尚未收藏课程，不能取消收藏！");
+            return $this->createErrorResponse($request, 'runtime_error', "您尚未收藏课程，不能取消收藏！");
         }
 
         $this->getCourseService()->unfavoriteCourse($courseId);
@@ -253,7 +253,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
         }
 
         $result = array();
@@ -276,7 +276,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
         $result = array();
@@ -298,7 +298,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
         $result = array();
@@ -317,7 +317,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
@@ -331,7 +331,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
@@ -345,7 +345,7 @@ class CourseController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
         $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);

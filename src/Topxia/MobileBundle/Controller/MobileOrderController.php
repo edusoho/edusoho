@@ -20,7 +20,7 @@ class MobileOrderController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '用户未登录，创建课程订单失败。');
+            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建课程订单失败。');
         }
 
         $order = $this->getCourseOrderService()->createOrder($formData);
@@ -42,12 +42,12 @@ class MobileOrderController extends MobileController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         
         if (empty($member) or empty($member['orderId'])) {
-            return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
+            return $this->createErrorResponse($request, 'not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
         if (empty($order)) {
-            return $this->createErrorResponse('order_error', '订单不存在，不能退学。');
+            return $this->createErrorResponse($request, 'order_error', '订单不存在，不能退学。');
         }
 
         $data = $request->query->all();

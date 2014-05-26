@@ -13,7 +13,7 @@ class CourseReviewController extends MobileController
     {
         $review = $this->getReviewService()->getReview($reviewId);
         if (empty($review)) {
-            return $this->createErrorResponse('not_found', "评价#{$reviewId}找不到！");
+            return $this->createErrorResponse($request, 'not_found', "评价#{$reviewId}找不到！");
         }
 
         $review = $this->filterReview($review);
@@ -27,16 +27,16 @@ class CourseReviewController extends MobileController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能评价课程！");
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
-            return $this->createErrorResponse('not_found', "课程#{$courseId}不存在，不能评价！");
+            return $this->createErrorResponse($request, 'not_found', "课程#{$courseId}不存在，不能评价！");
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createErrorResponse('access_denied', "您不是课程《{$course['title']}》学员，不能评价课程！");
+            return $this->createErrorResponse($request, 'access_denied', "您不是课程《{$course['title']}》学员，不能评价课程！");
         }
 
         $review = array();
