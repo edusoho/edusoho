@@ -149,6 +149,13 @@ class CourseController extends MobileController
             } else {
                 $json['mediaUri'] = '';
             }
+        } else if ($json['mediaSource'] == 'youku') {
+            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $json['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+            } else {
+                $json['mediaUri'] = '';
+            }
         } else {
             $json['mediaUri'] = $lesson['mediaUri'];
         }
