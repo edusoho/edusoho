@@ -135,7 +135,7 @@ class MobileController extends BaseController
     protected function createErrorResponse($name, $message)
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
-        return new JsonResponse($error, 400);
+        return new JsonResponse($error, 200);
     }
 
 }
