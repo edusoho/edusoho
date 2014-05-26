@@ -132,7 +132,7 @@ class CourseController extends MobileController
 
                     }
                 } else {
-                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']), true);
                 }
             } else {
                 $json['mediaUri'] = '';
