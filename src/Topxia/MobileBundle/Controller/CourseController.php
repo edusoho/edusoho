@@ -156,6 +156,13 @@ class CourseController extends MobileController
             } else {
                 $json['mediaUri'] = '';
             }
+        } else if ($json['mediaSource'] == 'tudou') {
+            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $json['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+            } else {
+                $json['mediaUri'] = '';
+            }
         } else {
             $json['mediaUri'] = $lesson['mediaUri'];
         }
