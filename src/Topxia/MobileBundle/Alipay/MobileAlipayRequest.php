@@ -12,7 +12,7 @@ class MobileAlipayRequest
 
     public function __construct($request)
     {
-        $this->$request = $request;
+        $this->request = $request;
         if ($request->getMethod() == "POST") {
             $this->requestData = $request->request->all();
         } else {
