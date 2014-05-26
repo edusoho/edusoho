@@ -132,7 +132,7 @@ class CourseController extends MobileController
 
                     }
                 } else {
-                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']), true);
+                    $json['mediaUri'] = $this->generateUrl('mapi_course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']), true);
                 }
             } else {
                 $json['mediaUri'] = '';
@@ -142,6 +142,26 @@ class CourseController extends MobileController
         }
 
         return $this->createJson($request, $json);
+    }
+
+    public function lessonMediaAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能查看课时！");
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $lesson['mediaId'], 'isDownload' => false));
     }
 
     /**

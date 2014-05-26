@@ -38,6 +38,10 @@ mapi_course_lesson:
     pattern:  /courses/{courseId}/lessons/{lessonId}
     defaults: { _controller: TopxiaMobileBundle:Course:lesson }
 
+mapi_course_lesson_media:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/media
+    defaults: { _controller: TopxiaMobileBundle:Course:lessonMedia }
+
 mapi_course_reviews:
     pattern:  /courses/{courseId}/reviews
     defaults: { _controller: TopxiaMobileBundle:CourseReview:reviews }
