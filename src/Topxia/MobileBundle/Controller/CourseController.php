@@ -74,6 +74,14 @@ class CourseController extends MobileController
 
     public function lessonAction(Request $request, $courseId, $lessonId)
     {
+
+        $token = $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看课时！');
+        }
+
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
@@ -136,7 +144,7 @@ class CourseController extends MobileController
 
                     }
                 } else {
-                    $json['mediaUri'] = $this->generateUrl('mapi_course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']), true);
+                    $json['mediaUri'] = $this->generateUrl('mapi_course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id'], 'token' => empty($token) ? '' : $token['token']), true);
                 }
             } else {
                 $json['mediaUri'] = '';
