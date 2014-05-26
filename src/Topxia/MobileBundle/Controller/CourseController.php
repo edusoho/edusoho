@@ -18,6 +18,10 @@ class CourseController extends MobileController
         $result['total'] = $this->getCourseService()->searchCourseCount($conditions);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
+        $search = $request->query->get('search', '');
+        if ($search != '') {
+            $conditions['title'] = $search;
+        }
         
         $sort = $request->query->get('sort', 'latest');
         $courses = $this->getCourseService()->searchCourses($conditions, $sort, $result['start'], $result['limit']);
