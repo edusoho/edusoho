@@ -277,7 +277,7 @@ class CourseController extends MobileController
     }
 
     /**
-     * 获得当前用户正在学和已学完的课程
+     * 获得当前用户正在学和已学完课程
      */
     public function meLearningsAction(Request $request)
     {
