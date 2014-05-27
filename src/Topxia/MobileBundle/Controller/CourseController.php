@@ -168,6 +168,7 @@ class CourseController extends MobileController
             $json['mediaUri'] = $lesson['mediaUri'];
         }
 
+        $this->getCourseService()->startLearnLesson($courseId, $lessonId);
         return $this->createJson($request, $json);
     }
 
