@@ -207,6 +207,13 @@ class UserController extends MobileController
         }, $users);
     }
 
+
+    public function getSchoolSiteAction(Request $request)
+    {
+        $site = $this->getSettingService()->get('site', array());
+        return $this->createJson($request, $site['slogan']);
+    }
+    
     private function getSiteInfo($request)
     {
         $site = $this->getSettingService()->get('site', array());

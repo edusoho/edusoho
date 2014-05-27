@@ -26,6 +26,10 @@ mapi_courses:
     pattern:  /courses
     defaults: { _controller: TopxiaMobileBundle:Course:courses }
 
+mapi_about:
+    pattern:  /about
+    defaults: { _controller: TopxiaMobileBundle:User:getSchoolSite }
+
 mapi_course:
     pattern:  /courses/{courseId}
     defaults: { _controller: TopxiaMobileBundle:Course:course }
