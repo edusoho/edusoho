@@ -277,7 +277,7 @@ class CourseController extends MobileController
     }
 
     /**
-     * 获得当前用户正在学的课程
+     * 获得当前用户正在学和已学完的课程
      */
     public function meLearningsAction(Request $request)
     {
@@ -289,10 +289,10 @@ class CourseController extends MobileController
         }
 
         $result = array();
-        $result['total'] = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $result['total'] = $this->getCourseService()->findUserLearnCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $result['start'], $result['limit']);
+        $courses = $this->getCourseService()->findUserLearnCourses($user['id'], $result['start'], $result['limit']);
         $result['data'] = $this->filterCourses($courses);
 
         return $this->createJson($request, $result);
