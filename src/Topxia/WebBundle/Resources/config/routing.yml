@@ -118,6 +118,10 @@ course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
 
+course_info:
+    pattern:  /course/{id}/info
+    defaults: { _controller: TopxiaWebBundle:Course:info }
+
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
@@ -248,10 +252,6 @@ course_review_create:
 course_review_list:
     pattern:  /course/{id}/review/list
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
-
-course_info:
-    pattern:  /course/{id}/info
-    defaults: { _controller: TopxiaWebBundle:Course:info }
 
 course_teacher_info:
     pattern:  /course/{courseId}/teacher/{id}

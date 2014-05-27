@@ -327,7 +327,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		if (!empty($fields['about'])) {
-			$fields['about'] = $this->purifyHtml($fields['about']);
+			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
 
 		if (!empty($fields['tags'])) {

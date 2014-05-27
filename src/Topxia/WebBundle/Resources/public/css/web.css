@@ -552,9 +552,12 @@ body {
 	visibility: visible;
 }
 
-.course-modal-infos dd {
+.course-dashboard-page .course-infos dd {
 	margin-bottom: 20px;
 }
+
+
+
 
 #course-about-pane img {
 	max-width: 100%;
@@ -2969,8 +2972,8 @@ body {
 }
 
 .userpage-header .row {
-	margin-top: 25px;
-	margin-bottom: 25px;
+	padding-top: 25px;
+	padding-bottom: 25px;
 }
 
 .lt-ie8 .userpage-header {
