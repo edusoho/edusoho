@@ -38,6 +38,22 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $this->getBlockHistoryDao()->getBlockHistory($id);
     }
 
+    public function generateBlockTemplateItems($block)
+    {
+        $templateDatas = json_decode($block['templateData']);
+        $templateItems = array();
+
+        foreach ($templateDatas as &$item) {
+            $item = explode(":", $item);
+            $arr[] = array( 'title' => $item[0],'type' => $item[1] );
+        }
+
+        $templateItems = ArrayToolkit::index($arr, 'title');
+        $templateItems = array_values($templateItems);
+
+        return $templateItems;
+    }
+
     public function getBlockByCode($code)
     {
 
@@ -65,6 +81,14 @@ class BlockServiceImpl extends BaseService implements BlockService
             throw $this->createServiceException("创建编辑区失败，缺少必要的字段");
         }
 
+        if($block['mode'] == 'template') {
+            preg_match_all("/\(\((.+?)\)\)/", $block['template'], $matches);
+            while (list($key, $value) = each($matches[1])){
+                $matches[1][$key] = trim($value);
+            };
+            $block['templateData'] = json_encode($matches[1]) ? json_encode($matches[1]) : '';
+        }
+
         $user = $this->getCurrentUser();
         $block['userId'] = $user['id'];
         $block['tips'] = empty($block['tips']) ? '' : $block['tips'];
@@ -75,6 +99,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $blockHistoryInfo = array(
             'blockId'=>$createdBlock['id'],
             'content'=>$createdBlock['content'],
+            'templateData'=>$createdBlock['templateData'],
             'userId'=>$createdBlock['userId'],
             'createdTime'=>time()
             );
@@ -91,15 +116,24 @@ class BlockServiceImpl extends BaseService implements BlockService
             throw $this->createServiceException("此编辑区不存在，更新失败!");
         }
 
+        if(@$fields['mode'] == 'template') {
+            preg_match_all("/\(\((.+?)\)\)/", $fields['template'], $matches);
+            while (list($key, $value) = each($matches[1])){
+                $matches[1][$key] = trim($value);
+            };
+            $fields['templateData'] = json_encode($matches[1]) ? json_encode($matches[1]) : '';
+        }
+
         $fields['updateTime'] = time();
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
 
         $blockHistoryInfo = array(
             'blockId'=>$updatedBlock['id'],
             'content'=>$updatedBlock['content'],
+            'templateData'=>$updatedBlock['templateData'],
             'userId'=>$user['id'],
             'createdTime'=>time()
-            );
+        );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
         $this->getLogService()->info('block', 'update', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));

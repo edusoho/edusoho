@@ -53,7 +53,14 @@ class BlockController extends BaseController
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
             5
         );
-
+        
+        $templatetips = array();
+        $templateItems = array();
+        if ($block['mode'] == 'template') {
+            $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
+        } 
+            $templatetips = json_decode($block['tips'],true);
+            
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'], 
             $paginator->getOffsetCount(),
@@ -62,21 +69,41 @@ class BlockController extends BaseController
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
 
         if ('POST' == $request->getMethod()) {
-            $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
+            $fields = $request->request->all();
+            $tips = array();
+            if ($block['mode'] == 'template') {
+                $template = $block['template'];
+                $content = "";
+                
+                foreach ($fields as $key => $value) {   
+                    $content = str_replace('(( '.$key.' ))', $value, $template);
+                    break;
+                };
+                foreach ($fields as $key => $value) {   
+                    $content = str_replace('(( '.$key.' ))', $value, $content);
+                }
+                $tips = $fields;
+                $fields = "";
+                $fields['content'] = $content;
+                $fields['tips'] = json_encode($tips);
+            }
+            
+            $block = $this->getBlockService()->updateBlock($block['id'], $fields);
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
             $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
                 'block' => $block, 'latestUpdateUser'=>$latestUpdateUser
             ));
-            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-                
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));          
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-update-modal.html.twig', array(
             'block' => $block,
-            'blockHistorys'=>$blockHistorys,
-            'historyUsers'=>$historyUsers,
-            'paginator'=>$paginator
+            'blockHistorys' => $blockHistorys,
+            'historyUsers' => $historyUsers,
+            'paginator' => $paginator,
+            'templateItems' => $templateItems,
+            'templatetips' => $templatetips
         ));
     }
 
@@ -110,9 +137,11 @@ class BlockController extends BaseController
         }
 
         $editBlock = array(
-            'id'=>0,
-            'title'=>'',
-            'code'=>''
+            'id' => 0,
+            'title' => '',
+            'code' => '',
+            'mode' => 'html',
+            'template' => ''
         );
 
         return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
