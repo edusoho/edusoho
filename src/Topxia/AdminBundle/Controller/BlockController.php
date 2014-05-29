@@ -78,14 +78,17 @@ class BlockController extends BaseController
             $templateData = array();
             if ($block['mode'] == 'template') {
                 $template = $block['template'];
+                
+                $template = str_replace(array("(( "," ))","((  ","  )"),array("((","))","((","))"),$template); 
+                
                 $content = "";
                 
                 foreach ($fields as $key => $value) {   
-                    $content = str_replace('(( '.$key.' ))', $value, $template);
+                    $content = str_replace('(('.$key.'))', $value, $template);
                     break;
                 };
                 foreach ($fields as $key => $value) {   
-                    $content = str_replace('(( '.$key.' ))', $value, $content);
+                    $content = str_replace('(('.$key.'))', $value, $content);
                 }
                 $templateData = $fields;
                 $fields = "";

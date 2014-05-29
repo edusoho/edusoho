@@ -33,11 +33,11 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label"><label for="mode">模式</label></div>
+    <div class="col-md-3 control-label"><label for="mode">编辑模式</label></div>
     <div class="col-md-8 controls"> 
       <div class="controls col-md-8 radios">
         <label><input type="radio" name="mode" value="html" {% if editBlock.mode == 'html' %}checked{% endif %}>HTML</label>
-        <label><input type="radio" name="mode" value="template" {% if editBlock.mode == 'template' %}checked{% endif %}>TEMPLATE</label>
+        <label><input type="radio" name="mode" value="template" {% if editBlock.mode == 'template' %}checked{% endif %}>模板</label>
       </div>
     </div>
   </div>

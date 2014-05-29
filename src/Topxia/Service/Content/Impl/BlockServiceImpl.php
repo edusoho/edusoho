@@ -112,10 +112,9 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (!$block) {
             throw $this->createServiceException("此编辑区不存在，更新失败!");
         }
-
         $fields['updateTime'] = time();
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
-        
+
         $blockHistoryInfo = array(
             'blockId'=>$updatedBlock['id'],
             'content'=>$updatedBlock['content'],

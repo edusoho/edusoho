@@ -99,6 +99,7 @@ define(function(require, exports, module) {
 
             $form.find("input").each(function(index, el) {
 
+                if (templates != null ) {
                 $.each(templates,function(n,value) {
                     if ($(el).attr('name') == n ) {
                         $(el).val(value);
@@ -112,6 +113,7 @@ define(function(require, exports, module) {
                         }
                     };
                 });
+              };
             });
         });
     };
