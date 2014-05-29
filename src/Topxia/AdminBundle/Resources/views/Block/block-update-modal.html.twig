@@ -20,7 +20,7 @@
   {% else %}
     {% for item in templateItems %}
       {% set join = [item.title,item.type]|join(':') %}
-      {% set templatetip = templatetips[join] %}
+      {% set templatetip = templatetips[join]|default(null) %}
       {% if item.type == 'a' or item.type == 'text' %}
         <div class="form-group">
           <div class="col-md-1 control-label"><label for="{{ item.title }}:{{ item.type }}">{{ item.title }}</label></div>

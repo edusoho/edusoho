@@ -59,7 +59,7 @@ class BlockController extends BaseController
         if ($block['mode'] == 'template') {
             $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
         } 
-            $templatetips = json_decode($block['tips'],true);
+        $templatetips = json_decode($block['tips'],true);
             
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'], 
@@ -112,8 +112,17 @@ class BlockController extends BaseController
         $block = $this->getBlockService()->getBlock($block);
 
         if ('POST' == $request->getMethod()) {
+            
+            $fields = $request->request->all();
+            if($fields['mode'] == 'template') {
+                preg_match_all("/\(\((.+?)\)\)/", $fields['template'], $matches);
+                while (list($key, $value) = each($matches[1])){
+                    $matches[1][$key] = trim($value);
+                };
+                $fields['templateData'] = json_encode($matches[1]) ? json_encode($matches[1]) : '';
+            }
 
-            $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
+            $block = $this->getBlockService()->updateBlock($block['id'], $fields);
             $users = $this->getUserService()->findUsersByIds(array($block['userId']));
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
                 'block' => $block, 'users'=>$users
