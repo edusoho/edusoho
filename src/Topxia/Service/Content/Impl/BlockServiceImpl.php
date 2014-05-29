@@ -39,8 +39,14 @@ class BlockServiceImpl extends BaseService implements BlockService
     }
 
     public function generateBlockTemplateItems($block)
-    {
-        $templateDatas = json_decode($block['templateData']);
+    {  
+
+        preg_match_all("/\(\((.+?)\)\)/", $block['template'], $matches);
+        while (list($key, $value) = each($matches[1])){
+            $matches[1][$key] = trim($value);
+        };
+
+        $templateDatas = ($matches[1]) ? ($matches[1]) : 0;
         $templateItems = array();
 
         foreach ($templateDatas as &$item) {
@@ -90,10 +96,10 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         $blockHistoryInfo = array(
             'blockId'=>$createdBlock['id'],
-            'content'=>$createdBlock['content']
+            'content'=>$createdBlock['content'],
             'userId'=>$createdBlock['userId'],
             'createdTime'=>time()
-        );
+            );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
         return $createdBlock;
     }
@@ -107,11 +113,9 @@ class BlockServiceImpl extends BaseService implements BlockService
             throw $this->createServiceException("此编辑区不存在，更新失败!");
         }
 
-        
-
         $fields['updateTime'] = time();
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
-
+        
         $blockHistoryInfo = array(
             'blockId'=>$updatedBlock['id'],
             'content'=>$updatedBlock['content'],
@@ -122,8 +126,6 @@ class BlockServiceImpl extends BaseService implements BlockService
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
         $this->getLogService()->info('block', 'update', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
-
-
         return $updatedBlock;
     }
 

@@ -33,16 +33,6 @@ define(function(require, exports, module) {
 
         });
 
-
-
-
-
-
-
-
-
-
-
         $form.submit(function() {
             $.post($form.attr('action'), $form.serialize(), function(response) {
                 if (response.status == 'ok') {
@@ -86,41 +76,24 @@ define(function(require, exports, module) {
             return false;
         });
 
-        var uploader = new Uploader({
-            trigger: '#site-logo-upload',
-            name: 'logo',
-            action: $('#site-logo-upload').data('url'),
-            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
-            error: function(file) {
-                Notify.danger('上传网站LOGO失败，请重试！')
-            },
-            success: function(response) {
-                response = $.parseJSON(response);
-                $("#site-logo-container").html('<img src="' + response.url + '">');
-                $form.find('[name=logo]').val(response.path);
-                $("#site-logo-remove").show();
-                Notify.success('上传网站LOGO成功！');
-            }
-        });
-
-        $("#site-logo-remove").on('click', function(){
-            if (!confirm('确认要删除吗？')) return false;
-            var $btn = $(this);
-            $.post($btn.data('url'), function(){
-                $("#site-logo-container").html('');
-                $form.find('[name=logo]').val('');
-                $btn.hide();
-                Notify.success('删除网站LOGO成功！');
-            }).error(function(){
-                Notify.danger('删除网站LOGO失败！');
-            });
-        });
-
-
         $('.btn-recover-content').on('click', function() {
             var html = $(this).parents('tr').find('.data-role-content').text();
             $("#blockContent").val(html);
+        });
+
+        $('.btn-recover-template').on('click', function() {
+            var html = $(this).parents('tr').find('.data-role-content').text();
+            var templates = $.parseJSON(html);
+
+            $form.find("input").each(function(index, el) {
+
+                $.each(templates,function(n,value) {
+                    if ($(el).attr('name') == n ) {
+                        $(el).val(value);
+                        $(el).siblings('span').html(value);
+                    };
+                });
+            });
         });
     };
 

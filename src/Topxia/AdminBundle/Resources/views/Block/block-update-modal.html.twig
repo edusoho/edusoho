@@ -20,20 +20,20 @@
   {% else %}
     {% for item in templateItems %}
       {% set join = [item.title,item.type]|join(':') %}
-      {% set templatetip = templatetips[join]|default(null) %}
+      {% set template = templateData[join]|default(null) %}
       {% if item.type == 'a' or item.type == 'text' %}
         <div class="form-group">
           <div class="col-md-1 control-label"><label for="{{ item.title }}:{{ item.type }}">{{ item.title }}</label></div>
           <div class="col-md-8 controls"> 
-          <input class="form-control" type="text" id="{{ item.title }}:{{ item.type }}" value="{{ templatetip }}" name="{{ item.title }}:{{ item.type }}"></div>
+          <input class="form-control" type="text" id="{{ item.title }}:{{ item.type }}" value="{{ template }}" name="{{ item.title }}:{{ item.type }}"></div>
         </div>
       {% else %}
         <div class="form-group">
           <div class="col-md-1 control-label"><label for="{{ item.title }}:{{ item.type }}">{{ item.title }}</label></div>
           <div class="col-md-8 controls">
             <button class="btn btn-default btn-sm upload-img" id="{{ item.title}}:{{ item.type }}" type="button" data-url="{{ path('file_upload', {group:'default'}) }}" data-name="{{ item.title}}:{{ item.type }}" >上传</button>
-            <input type="hidden" name="{{ item.title }}:{{ item.type }}" value="{{ templatetip }}">
-            <span>{{ templatetip }}</span>
+            <input type="hidden" name="{{ item.title }}:{{ item.type }}" value="{{ template }}">
+            <span>{{ template }}</span>
           </div>
         </div>
       {% endif %}
@@ -56,6 +56,7 @@
   <table id="block-history-table" class="table table-striped table-condensed">
     <tbody>
       {% for blockHistory in blockHistorys %}
+      {% set templateData = blockHistory.templateData %}
         <tr id="{{ blockHistory.id }}">
           <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
           <td>{{ historyUsers[blockHistory.userId].nickname }}</td>
@@ -63,10 +64,17 @@
             <a class="btn btn-xs btn-default edit-btn" 
             href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
           </td>
+          {% if block.mode == 'template' %}
+          <td>
+            <button class="btn-recover-template btn btn-xs btn-default edit-btn">恢复模板</button>
+            <div class="data-role-content" style="display:none">{{ templateData|json_encode() }}</div>
+          </td>
+          {% else %}
           <td>
             <button class="btn-recover-content btn btn-xs btn-default edit-btn">恢复此内容</button>
-            <div class="data-role-content" style="display:none" > {{ blockHistory.content}} </div>
+            <div class="data-role-content" style="display:none"> {{ blockHistory.content }} </div>
           </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>

@@ -54,23 +54,28 @@ class BlockController extends BaseController
             5
         );
         
-        $templatetips = array();
+        $templateData = array();
         $templateItems = array();
         if ($block['mode'] == 'template') {
             $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
+            $templateData = json_decode($block['templateData'],true);
         } 
-        $templatetips = json_decode($block['tips'],true);
-            
+        
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'], 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
+        foreach ($blockHistorys as &$blockHistory) {
+            $blockHistory['templateData'] = json_decode($blockHistory['templateData'],true);
+        }
+
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
-            $tips = array();
+
+            $templateData = array();
             if ($block['mode'] == 'template') {
                 $template = $block['template'];
                 $content = "";
@@ -82,10 +87,10 @@ class BlockController extends BaseController
                 foreach ($fields as $key => $value) {   
                     $content = str_replace('(( '.$key.' ))', $value, $content);
                 }
-                $tips = $fields;
+                $templateData = $fields;
                 $fields = "";
                 $fields['content'] = $content;
-                $fields['tips'] = json_encode($tips);
+                $fields['templateData'] = json_encode($templateData);
             }
             
             $block = $this->getBlockService()->updateBlock($block['id'], $fields);
@@ -103,7 +108,7 @@ class BlockController extends BaseController
             'historyUsers' => $historyUsers,
             'paginator' => $paginator,
             'templateItems' => $templateItems,
-            'templatetips' => $templatetips
+            'templateData' => $templateData
         ));
     }
 
@@ -112,7 +117,7 @@ class BlockController extends BaseController
         $block = $this->getBlockService()->getBlock($block);
 
         if ('POST' == $request->getMethod()) {
-            
+
             $fields = $request->request->all();
             if($fields['mode'] == 'template') {
                 preg_match_all("/\(\((.+?)\)\)/", $fields['template'], $matches);
