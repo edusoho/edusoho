@@ -31,9 +31,10 @@
         <div class="form-group">
           <div class="col-md-1 control-label"><label for="{{ item.title }}:{{ item.type }}">{{ item.title }}</label></div>
           <div class="col-md-8 controls">
-            <button class="btn btn-default btn-sm upload-img" id="{{ item.title}}:{{ item.type }}" type="button" data-url="{{ path('file_upload', {group:'default'}) }}" data-name="{{ item.title}}:{{ item.type }}" >上传</button>
+            <button class="btn btn-default btn-sm upload-img" id="{{ item.title}}:{{ item.type }}" type="button" data-url="{{ path('file_upload', {group:'default'}) }}" data-name="{{ item.title}}:{{ item.type }}" >上传</button>       
+            <button class="btn btn-default btn-sm upload-img-del" type="button"  data-name="{{ item.title}}:{{ item.type }}" {% if not template %}style="display:none;"{% endif %}>删除</button>
             <input type="hidden" name="{{ item.title }}:{{ item.type }}" value="{{ template }}">
-            <span>{{ template }}</span>
+            <a href="{{ template }}" target="_blank" {% if not template %}style="display:none;"{% endif %}>{{ item.title }}</a>
           </div>
         </div>
       {% endif %}

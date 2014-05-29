@@ -25,12 +25,24 @@ define(function(require, exports, module) {
                 },
                 success: function(response) {
                     response = $.parseJSON(response);
-                    $(el).siblings('span').html(response.url);
+                    $(el).siblings('a').attr('href', response.url);
+                    $(el).siblings('a').show();
                     $(el).siblings('input').val(response.url);
+                    $(el).siblings('button').show();
                     Notify.success('上传图片成功！');
                 }
             });
 
+        });
+
+        $form.find('.upload-img-del').each(function(index, el) {
+            $(el).on('click', function(event) {
+                $(this).siblings('span').html('');
+                $(this).siblings('input').val('');
+                $(this).hide();
+                $(this).siblings('a').hide();
+                Notify.success('删除图片成功！');
+            });
         });
 
         $form.submit(function() {
@@ -90,7 +102,14 @@ define(function(require, exports, module) {
                 $.each(templates,function(n,value) {
                     if ($(el).attr('name') == n ) {
                         $(el).val(value);
-                        $(el).siblings('span').html(value);
+                        $(el).siblings('a').attr('href', value);
+                        if($(el).siblings('a').attr('href')) {
+                            $(el).siblings('a').show();
+                            $(el).siblings('.upload-img-del').show();
+                        } else {
+                            $(el).siblings('a').hide();
+                            $(el).siblings('.upload-img-del').hide();
+                        }
                     };
                 });
             });
