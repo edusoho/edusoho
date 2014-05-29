@@ -46,10 +46,6 @@ admin_content_alias_check:
     pattern:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
 
-admin_user_logs:
-    pattern:  /user/logs
-    defaults: { _controller: TopxiaAdminBundle:User:logs }
-
 admin_block:
     pattern:  /block
     defaults: { _controller: TopxiaAdminBundle:Block:index }
