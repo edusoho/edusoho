@@ -70,6 +70,7 @@ class CourseController extends MobileController
     public function itemsAction(Request $request, $courseId)
     {
         $items = $this->getCourseService()->getCourseItems($courseId);
+        $items = $this->filterItems($items);
         return $this->createJson($request, $items);
     }
 
@@ -107,6 +108,11 @@ class CourseController extends MobileController
         $json['type'] = $lesson['type'];
         $json['content'] = $lesson['content'];
         $json['status'] = $lesson['status'];
+        if ($lesson['length'] > 0 and in_array($lesson['type'], array('audio', 'video'))) {
+            $json['length'] =  $this->container->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
+        } else {
+            $json['length'] = 0;
+        }
         $json['quizNum'] = $lesson['quizNum'];
         $json['materialNum'] = $lesson['materialNum'];
         $json['mediaId'] = $lesson['mediaId'];
@@ -409,8 +415,16 @@ class CourseController extends MobileController
             return array();
         }
 
-        return array_map(function($item) {
+        $container = $this->container;
+
+        return array_map(function($item) use ($container) {
             $item['createdTime'] = date('c', $item['createdTime']);
+            if (!empty($item['length']) and in_array($item['type'], array('audio', 'video'))) {
+                $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
+            } else {
+                $item['length'] = 0;
+            }
+
             return $item;
         }, $items);
 
