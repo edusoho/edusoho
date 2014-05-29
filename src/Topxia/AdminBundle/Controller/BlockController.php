@@ -60,7 +60,7 @@ class BlockController extends BaseController
             $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
             $templateData = json_decode($block['templateData'],true);
         } 
-        
+
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'], 
             $paginator->getOffsetCount(),
@@ -122,14 +122,6 @@ class BlockController extends BaseController
         if ('POST' == $request->getMethod()) {
 
             $fields = $request->request->all();
-            if($fields['mode'] == 'template') {
-                preg_match_all("/\(\((.+?)\)\)/", $fields['template'], $matches);
-                while (list($key, $value) = each($matches[1])){
-                    $matches[1][$key] = trim($value);
-                };
-                $fields['templateData'] = json_encode($matches[1]) ? json_encode($matches[1]) : '';
-            }
-
             $block = $this->getBlockService()->updateBlock($block['id'], $fields);
             $users = $this->getUserService()->findUsersByIds(array($block['userId']));
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
