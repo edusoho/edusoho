@@ -1,10 +1,14 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 class ServiceKernel
 {
 
     private static $_instance;
+
+    private static $_dispatcher;
 
     protected $environment;
     protected $debug;
@@ -38,6 +42,17 @@ class ServiceKernel
         }
         self::$_instance->boot();
         return self::$_instance;
+    }
+
+    public static function dispatcher()
+    {
+        if (self::$_dispatcher) {
+            return self::$_dispatcher;
+        }
+
+        self::$_dispatcher = new EventDispatcher();
+
+        return self::$_dispatcher;
     }
 
     public function boot()
