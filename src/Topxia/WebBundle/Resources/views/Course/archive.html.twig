@@ -17,9 +17,10 @@
 	    		{% set teacher = users[course.teacherIds|first]|default(null) %}
 	    		{% set tags = course.tags %}
 		        <li>
-		        	<h4><a  class="text-success" href="{{ path('course_archive_lesson', {id:course.id}) }}">{{ course.title }}</a>
-		        	{% if teacher %}</h4>
-		        	<div class="fsm text-muted mbl">教师： <a class="teacher-nickname" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+		        	<h4><a  class="text-success" href="{{ path('course_archive_lesson', {id:course.id}) }}">{{ course.title }}</a></h4>
+              <div class="fsm text-muted mbl">
+		        	{% if teacher %}
+		        	教师： <a class="teacher-nickname" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
 		        	{% endif %}
 		        	{% if tags %}
 			        	<span class="text-muted mlm">标签：</span>{% for tag in tags %}
