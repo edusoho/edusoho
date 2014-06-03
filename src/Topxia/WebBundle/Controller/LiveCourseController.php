@@ -125,7 +125,7 @@ class LiveCourseController extends BaseController
                 throw $this->createNotFoundException();
             }
         } else {
-            $category = array('id' => null);
+            $category = array('id' => null,'parentId' => null);
         }
 
         $group = $this->getCategoryService()->getGroupByCode('course');
