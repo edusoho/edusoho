@@ -77,7 +77,7 @@ class PluginRefreshCommand extends BaseCommand
 
             $routingPath = sprintf("{$pluginRootDirectory}/%s/%sBundle/Resources/config/routing.yml", ucfirst($code), ucfirst($code));
             if ($this->filesystem->exists($routingPath)) {
-                $config  = "_plugin_{$code}_web:\n";
+                $config .= "_plugin_{$code}_web:\n";
                 $config .= sprintf("    resource: \"@%sBundle/Resources/config/routing.yml\"\n", ucfirst($code));
                 $config .= "    prefix:   /\n";
             }
