@@ -5,11 +5,13 @@
 {% block content %}
 
 <div class="es-row-wrap container-gap">
-
-  	<div class="row article-row">
+	<div class="row">
 	    <div class="col-md-12">
 	      <div class="page-header"><h1>{{ course.title }}</h1></div>
 	    </div>
+	</div>
+
+  	<div class="row article-row">
 	  	<div class="col-md-8 mbl">
 	  		{% if currentLesson %}
 	  		<div class="text-success"><h4>{{ currentLesson.title }}</h4></div>
@@ -32,7 +34,6 @@
 			    <div class="panel-heading">
 			      <h3 class="panel-title">课程相关课时</h3>
 			    </div>
-			</div>
 		    <div class="panel-body">
 		    	{% if lessons %}
 		        <ul class="media-list">
@@ -46,7 +47,8 @@
 		        <div class="empty">课程暂无相关课时</div>
 		        {% endif %}
 		    </div>
-		</div>
+		  </div>
+	  	</div>
 	</div>
 </div>
 {% endblock %}
