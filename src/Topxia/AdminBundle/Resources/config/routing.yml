@@ -290,6 +290,10 @@ admin_course_order_manage:
     pattern: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
+admin_live_course:
+    pattern: /livecourse/{status}
+    defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
+
 admin_order:
     pattern: /order
     defaults: { _controller: TopxiaAdminBundle:Order:index }

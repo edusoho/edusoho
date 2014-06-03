@@ -1,0 +1,26 @@
+{% if courses %}
+  	<div class="es-box">
+        <div class="es-box-heading">
+        	<h2>好评课程</h2>
+        </div>	
+    	<div class="es-box-body">
+    		<ul class="media-list mtl">
+    			{% for key,course in courses %}
+                <li class="media live-rating-course">
+	              	<span class="rank_num">{{key+1}}</span>
+	              	<div class="media-body">
+	              		<a href="{{ path('course_show' , {id:course.id})}}" title="{{ course.title}}">
+	              			{{ course.title }}
+	              		</a>
+	              		{% if key == 0%}
+	              		<div class="mts rating first-rating stars-{{ (course.rating)|number_format }}">&nbsp;</div>
+	              		{% else %}
+	              		<div class="mts rating other-rating stars-{{ (course.rating)|number_format }}">&nbsp;</div>
+	              		{% endif %}
+	              	</div>
+            	</li>
+            	{% endfor %}
+            </ul>
+    	</div>
+    </div>
+{% endif %}

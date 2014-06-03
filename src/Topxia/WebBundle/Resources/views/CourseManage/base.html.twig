@@ -45,6 +45,16 @@
 			</div>
 
 			<div class="form-group">
+			  <label class="col-md-2 control-label">学员上限</label>
+			 <div class="col-md-8 controls">
+					<input type="text" id="stuNumUpperLimit" name="maxStudentNum" class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(0) }}" > 人
+					<div id="stuNumUpperLimit_help" class="help-block" style="display:none;"></div>
+				</div>
+				<input type="hidden" id="max_student_num" value="{{ max_student_num }}">
+				<input type="hidden" id="default_max_student_num" value="{{ course.maxStudentNum|default(0) }}">
+			</div>
+
+			<div class="form-group">
 			  <label class="col-md-2 control-label">学员有效期</label>
 			  <div class="col-md-8 controls">
 			    <input type="text" id="course_expiryDay" name="expiryDay" required="required" class="form-control width-input width-input-large" value="{{ course.expiryDay }}" data-widget-cid="widget-3" data-explain="设置该值后，学员只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学员只能浏览课时目录及讨论区。该值为0，则不做此限制。"> 天
@@ -52,13 +62,14 @@
 			  </div>
 			</div>
 
-			<div class="form-group">
-				<label class="col-md-2 control-label">连载状态</label>
-				<div class="col-md-8 controls radios">
-					{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
+			{% if course.type == 'normal' %}
+				<div class="form-group">
+					<label class="col-md-2 control-label">连载状态</label>
+					<div class="col-md-8 controls radios">
+						{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
+					</div>
 				</div>
-			</div>
-
+			{% endif %}
 
 			<div class="form-group">
 				<label class="col-md-2 control-label">显示学员人数</label>

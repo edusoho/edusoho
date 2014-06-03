@@ -24,7 +24,8 @@ class CourseManageController extends BaseController
 	public function baseAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-
+        $courseSetting = $this->getSettingService()->get('course', array());
+        
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
 
@@ -37,7 +38,8 @@ class CourseManageController extends BaseController
 
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
-            'tags' => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
+            'max_student_num' => $courseSetting['max_student_num']
 		));
 	}
 
@@ -330,5 +332,10 @@ class CourseManageController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

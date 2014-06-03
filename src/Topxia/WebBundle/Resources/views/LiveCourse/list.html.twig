@@ -1,0 +1,50 @@
+{% extends 'TopxiaWebBundle:LiveCourse:layout.html.twig' %}
+
+{% block title %}列表页 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'live-course/list' %}
+
+{% block live_main %}
+
+  {% include 'TopxiaWebBundle:LiveCourse:nav.html.twig' %}
+
+  <form class="form-horizontal" id="course-form" method="post">
+
+    <div class="form-group mtl">
+      <label class="col-md-2 control-label">时间段</label>
+      <div class="col-md-6 controls btn-group btn-group-sm">
+        <a href="{{ path('live_course_list', { category:category.id, date:'today' }) }}" class="btn btn-default {% if date == 'today' %}active{% endif %}">今天</a>        
+        <a href="{{ path('live_course_list', { category:category.id, date:'tomorrow'}) }}" class="btn btn-default {% if date == 'tomorrow' %}active{% endif %}">明天</a>
+        <a href="{{ path('live_course_list', { category:category.id, date:'nextweek'}) }}" class="btn btn-default {% if date == 'nextweek' %}active{% endif %}">近一周时间</a>
+        <a href="{{ path('live_course_list', { category:category.id, date:'lastweek'}) }}" class="btn btn-default {% if date == 'lastweek' %}active{% endif %}">上一周时间</a> 
+      </div>
+    </div>
+
+  </form>
+
+  {% if newCourses %}
+    {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', { courses:newCourses, view: 'list'})) }}
+    {{ web_macro.paginator(paginator) }} 
+  {% else %}
+    <div class="empty">目前暂无课程</div>
+  {% endif %}
+
+{% endblock %}
+
+{% block live_side %}
+
+  <ul class="nav nav-pills nav-stacked mbl">
+    {% for cat in categories %}
+      <li {% if category.id == cat.id %}class="active"{% endif %}>
+        <a href="{{ path('live_course_list', {category:cat.code|default(cat.id)}) }}">
+        {% if cat.depth > 1 %}
+          {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
+        {% endif %}
+        {{ cat.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {{ render(controller('TopxiaWebBundle:LiveCourse:ratingCoursesBlock')) }}
+
+{% endblock %}

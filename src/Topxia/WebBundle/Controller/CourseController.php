@@ -192,10 +192,28 @@ class CourseController extends BaseController
     public function showAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
-        
+
+        $nextLiveLesson = null;
+
+        $weeks = array("日","一","二","三","四","五","六");
+
+        $currentTime = time();
+ 
         if (empty($course)) {
             throw $this->createNotFoundException();
         }
+
+        if ($course['type'] == 'live') {
+            $conditions = array(
+                'courseId' => $course['id'],
+                'startTimeLessThan' => time(),
+                'status' => 'published'
+            );
+            $nextLiveLesson = $this->getCourseService()->searchLessons( $conditions, array('startTime', 'ASC'), 0, 1);
+            if ($nextLiveLesson) {
+                $nextLiveLesson = $nextLiveLesson[0];
+            }
+        };
 
         $previewAs = $request->query->get('previewAs');
 
@@ -210,12 +228,11 @@ class CourseController extends BaseController
         }
         
         $member = $this->previewAsMember($previewAs, $member, $course);
-        
         if ($member && empty($member['locked'])) {
             $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-
             return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
                 'course' => $course,
+                'type' => $course['type'],
                 'member' => $member,
                 'items' => $items,
                 'learnStatuses' => $learnStatuses
@@ -236,7 +253,6 @@ class CourseController extends BaseController
             }
         }
 
-
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,
             'member' => $member,
@@ -247,6 +263,9 @@ class CourseController extends BaseController
             'category' => $category,
             'previewAs' => $previewAs,
             'tags' => $tags,
+            'nextLiveLesson' => $nextLiveLesson,
+            'currentTime' => $currentTime,
+            'weeks' => $weeks
         ));
 
     }
@@ -355,24 +374,22 @@ class CourseController extends BaseController
         $user = $this->getUserService()->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
+        $isLive = $request->query->get('flag');
+        $type = ($isLive == "isLive") ? 'live' : 'normal';
+
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
             throw $this->createAccessDeniedException();
         }
 
-		$form = $this->createCourseForm();
-
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $course = $form->getData();
-                $course = $this->getCourseService()->createCourse($course);
-                return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
-            }
+            $course = $request->request->all();
+            $course = $this->getCourseService()->createCourse($course);
+            return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
         }
 
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
-			'form' => $form->createView(),
-            'userProfile'=>$userProfile
+            'userProfile'=>$userProfile,
+            'type'=>$type
 		));
 	}
 

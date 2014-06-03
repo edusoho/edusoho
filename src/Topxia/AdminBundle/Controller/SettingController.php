@@ -449,25 +449,28 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
-
         $default = array(
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'student_download_media' => '0',
-            'relatedCourses' => '0'
+            'relatedCourses' => '0',
+            'live_course_enabled' => '0',
+            'max_student_num' => '0',
+            'max_current_num' => '50'
         );
 
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
+            $courseSetting['max_current_num'] = '50';
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
         }
-
+        
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting
         ));

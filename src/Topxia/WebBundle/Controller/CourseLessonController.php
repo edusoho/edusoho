@@ -45,7 +45,6 @@ class CourseLessonController extends BaseController
     	list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
     	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
         $json = array();
         $json['number'] = $lesson['number'];
 
@@ -71,6 +70,12 @@ class CourseLessonController extends BaseController
         $json['materialNum'] = $lesson['materialNum'];
         $json['mediaId'] = $lesson['mediaId'];
         $json['mediaSource'] = $lesson['mediaSource'];
+        $json['startTimeFormat'] = date("m-d H:i",$lesson['startTime']);
+        $json['endTimeFormat'] = date("H:i",$lesson['endTime']);
+        $json['startTime'] = $lesson['startTime'];
+        $json['endTime'] = $lesson['endTime'];
+        $json['id'] = $lesson['id'];
+        $json['courseId'] = $lesson['courseId'];
 
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
