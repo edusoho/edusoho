@@ -86,10 +86,15 @@
         <label>未购买页面显示相关课程</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}
+        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}     
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
         <label for="max_student_num">单堂最大学员数</label>
       </div>
-      <div class="controls col-md-8">
+      <div class="controls col-md-5">
         <input type="text" id="max_student_num" name="max_student_num" class="form-control" value="{{ courseSetting.max_student_num }}">
       </div>
     </div>

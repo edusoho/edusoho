@@ -1427,7 +1427,7 @@ body {
 /**
  * @todo
  */
-.rank_num {
+.live-rating-course .rank_num {
 	display: inline-block;
 	background-color: #66bc4e;
 	color: white;
