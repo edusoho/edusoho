@@ -7,12 +7,12 @@ use Topxia\Service\Common\ServiceKernel;
 class ServiceEvent extends GenericEvent
 {
 
-    protected function getKernel()
+    public function getKernel()
     {
         return ServiceKernel::instance();
     }
 
-    protected function createService($name)
+    public function createService($name)
     {
         return $this->getKernel()->createService($name);
     }
