@@ -49,7 +49,12 @@ class CourseController extends MobileController
 
         $items = $this->getCourseService()->getCourseItems($courseId);
         $reviews = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
-        $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
+        
+        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
+
+        if ($result['userIsStudent']) {
+            $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
+        }
         $member = $user->isLogin() ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         if ($member) {
             $member['createdTime'] = date('c', $member['createdTime']);
@@ -60,7 +65,7 @@ class CourseController extends MobileController
         $result['items'] = $this->filterItems($items);
         $result['reviews'] = $this->filterReviews($reviews);
         $result['member'] = $member;
-        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
+        
         $result['userLearns'] = $learnStatuses;
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
