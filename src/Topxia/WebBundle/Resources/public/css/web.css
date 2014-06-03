@@ -2510,27 +2510,31 @@ body {
 	text-decoration: none;
 }
 
-.required-course-grid {
-	margin: 0px 15px 0px 0px;
+.related-course-grid {
+	margin: 0px 15px 15px 0px;
 }
 
 @media (min-width: 1200px) {
+	.related-course-grid {
+		margin-bottom: 0px;
+	}
+
 	.course-grid .grid-body {
 		width: 254px;
 	}
-	.required-course-grid .grid-body {
+	.related-course-grid .grid-body {
 		width: 213px;
 	}
 }
 
 @media (min-width: 980px ) and ( max-width: 1199px ) {
-    .required-course-grid .grid-body {
+    .related-course-grid .grid-body {
         width: 263px;
     }
 }
 
 @media (min-width: 768px ) and ( max-width: 979px ) {
-    .required-course-grid .grid-body {
+    .related-course-grid .grid-body {
         width: 306px;
     }
 }
