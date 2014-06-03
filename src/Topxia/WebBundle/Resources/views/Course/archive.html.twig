@@ -5,39 +5,37 @@
 {% block content %}
 
 <div class="es-row-wrap container-gap">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-header"><h1>课程存档</h1></div>
-    </div>
-  </div>
+	<div class="row">
+	    <div class="col-md-12">
+	      <div class="page-header"><h1>课程存档</h1></div>
+	    </div>
 
-  <div class="row">
-    <div class="col-md-12">
-    	{% if courses %}
-    	<ul class="list-unstyled">
-    		{% for course in courses %}
-    		{% set teacher = users[course.teacherIds|first]|default(null) %}
-    		{% set tags = course.tags %}
-	        <li>
-	        	<h4><a  class="text-success" href="{{ path('course_archive_lesson', {id:course.id}) }}">{{ course.title }}</a>
-	        	{% if teacher %}</h4>
-	        	<div class="fsm text-muted mbl">教师： <a class="teacher-nickname" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-	        	{% endif %}
-	        	{% if tags %}
-		        	<span class="text-muted mlm">标签：</span>{% for tag in tags %}
-	                <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
-	                {% endfor %}
-	        	{% endif %}
-		        </div>
-		    </li>
-	        {% endfor %}
-	    </ul> 
-	    {% else %}
-	    	<div class="empty">目前暂时无课程</div>
-	    {% endif %}
-	    {{ web_macro.paginator(paginator) }}
-    </div>
-  </div>
+	    <div class="col-md-12">
+	    	{% if courses %}
+	    	<ul class="list-unstyled">
+	    		{% for course in courses %}
+	    		{% set teacher = users[course.teacherIds|first]|default(null) %}
+	    		{% set tags = course.tags %}
+		        <li>
+		        	<h4><a  class="text-success" href="{{ path('course_archive_lesson', {id:course.id}) }}">{{ course.title }}</a>
+		        	{% if teacher %}</h4>
+		        	<div class="fsm text-muted mbl">教师： <a class="teacher-nickname" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+		        	{% endif %}
+		        	{% if tags %}
+			        	<span class="text-muted mlm">标签：</span>{% for tag in tags %}
+		                <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
+		                {% endfor %}
+		        	{% endif %}
+			        </div>
+			    </li>
+		        {% endfor %}
+		    </ul> 
+		    {% else %}
+		    	<div class="empty">目前暂时无课程</div>
+		    {% endif %}
+		    {{ web_macro.paginator(paginator) }}
+	    </div>
+	</div>
 
 </div>
 {% endblock %}
