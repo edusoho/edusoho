@@ -426,6 +426,13 @@ body {
 	font-weight: bold;
 }
 
+@media (max-width: 767px) {
+	.course-header .title {
+		margin-right: 10px;
+	}
+}
+
+
 .course-header .teachers {
 	color: #999;
 	font-size: 13px;
