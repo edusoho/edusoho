@@ -10,7 +10,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published');
+        $conditions = array('status' => 'published', 'type' => 'normal');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
         $courseSetting = $this->getSettingService()->get('course', array());
