@@ -61,6 +61,9 @@ class CourseController extends MobileController
         $result['reviews'] = $this->filterReviews($reviews);
         $result['member'] = $member;
         $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
+        if (!$result['userIsStudent']){
+                $learnStatuses = array();
+        }
         $result['userLearns'] = $learnStatuses;
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
