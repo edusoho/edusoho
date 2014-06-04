@@ -9,7 +9,7 @@
         {% for course in courses %}
           {% if key < 3 and currentCourse.id != course.id %}
           {% set key = key + 1 %}
-          <li class="course-grid required-course-grid">
+          <li class="course-grid related-course-grid">
               <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
               <img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="img-responsive thumb">
               <span class="title">{{ course.title }}</span>  
