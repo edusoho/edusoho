@@ -10,7 +10,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published');
+        $conditions = array('status' => 'published', 'type' => 'normal');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -29,18 +29,19 @@ class DefaultController extends BaseController
 
             $lessonConditions = array(
                 'status' => 'published',
+                'type' => 'live',
                 'courseIds' => $courseIds
             );
             $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
-
             $liveCourses = ArrayToolkit::index($liveCourses, 'id');
 
-            foreach ($lessons as $key => &$lesson) {
-                $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
-                $newLiveCourses[$key]['lesson'] = $lesson;
-            }
-
-            $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
+            if (!empty($lessons) && !empty($liveCourses)) {
+                    foreach ($lessons as $key => &$lesson) {
+                    $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
+                    $newLiveCourses[$key]['lesson'] = $lesson;
+                }
+                $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
+            } 
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');

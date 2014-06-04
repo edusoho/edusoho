@@ -5,14 +5,14 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var currentNum = $('[name="max_current_num"]').data('value');
+        var currentNum = $('[name="live_student_capacity"]').data('value');
 
         var validator = new Validator({
                 element: '#course-form'
             });
         
         validator.addItem({
-            element: '[name="max_student_num"]',
+            element: '[name="perLiveMaxStudentNum"]',
             rule: 'integer max{max: '+ currentNum + '}'
         });
 

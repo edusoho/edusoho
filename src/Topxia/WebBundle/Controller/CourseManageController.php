@@ -25,7 +25,7 @@ class CourseManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
         $courseSetting = $this->getSettingService()->get('course', array());
-        
+
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
 
@@ -39,7 +39,7 @@ class CourseManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
-            'max_student_num' => $courseSetting['max_student_num']
+            'perLiveMaxStudentNum' => $courseSetting['perLiveMaxStudentNum'] ? $courseSetting['perLiveMaxStudentNum'] : 0
 		));
 	}
 

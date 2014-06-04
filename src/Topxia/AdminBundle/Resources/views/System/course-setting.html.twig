@@ -68,6 +68,19 @@
       <div class="controls col-md-8 radios">
         {{ radios('student_download_media', {0:'不允许', 1:'允许'}, courseSetting.student_download_media) }}
         <div class="help-block">开启此项设置后，学员可在课时学习界面侧栏的"资料"面板中下载。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>课程宣传首页显示相关课程</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}
+        <div class="help-block">根据课程的标签，显示相关课程</div>
+      </div>
+    </div>
+
   </fieldset>
   <fieldset>
     <legend>直播课程</legend>
@@ -83,29 +96,20 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>未购买页面显示相关课程</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}     
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="max_student_num">单堂最大学员数</label>
+        <label for="perLiveMaxStudentNum">单堂最大学员数</label>
       </div>
       <div class="controls col-md-5">
-        <input type="text" id="max_student_num" name="max_student_num" class="form-control" value="{{ courseSetting.max_student_num }}">
+        <input type="text" id="perLiveMaxStudentNum" name="perLiveMaxStudentNum" class="form-control" value="{{ courseSetting.perLiveMaxStudentNum }}">
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>同时在线人数上线</label>
+        <label>同时在线人数上限</label>
       </div>
       <div class="controls col-md-8">
-        <div class="mts text-muted" >{{ courseSetting.max_current_num }}人</div>
-        <input class="form-control" name="max_current_num" type="hidden" data-value="{{ courseSetting.max_current_num }}">
+        <div class="mts text-muted" >{{ courseSetting.live_student_capacity }}人</div>
+        <input class="form-control" name="live_student_capacity" type="hidden" data-value="{{ courseSetting.live_student_capacity }}">
         <p class="help-block">如需扩充，请联系Edusoho客服人员</p>
       </div>
     </div>

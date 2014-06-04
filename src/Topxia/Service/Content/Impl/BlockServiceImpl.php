@@ -46,18 +46,21 @@ class BlockServiceImpl extends BaseService implements BlockService
             $matches[1][$key] = trim($value);
         };
 
-        $templateDatas = ($matches[1]) ? ($matches[1]) : 0;
+        $templateDatas = ($matches[1]) ? ($matches[1]) : '';
         $templateItems = array();
 
-        foreach ($templateDatas as &$item) {
-            $item = explode(":", $item);
-            $arr[] = array( 'title' => $item[0],'type' => $item[1] );
+        if (empty($templateDatas)) {
+            return $templateItems;
+        } else {
+            foreach ($templateDatas as &$item) {
+                $item = explode(":", $item);
+                $arr[] = array( 'title' => $item[0],'type' => $item[1] );
+            }
+
+            $templateItems = ArrayToolkit::index($arr, 'title');
+            $templateItems = array_values($templateItems);
+            return $templateItems;
         }
-
-        $templateItems = ArrayToolkit::index($arr, 'title');
-        $templateItems = array_values($templateItems);
-
-        return $templateItems;
     }
 
     public function getBlockByCode($code)

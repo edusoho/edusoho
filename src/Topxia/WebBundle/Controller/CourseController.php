@@ -206,7 +206,7 @@ class CourseController extends BaseController
         if ($course['type'] == 'live') {
             $conditions = array(
                 'courseId' => $course['id'],
-                'startTimeLessThan' => time(),
+                'startTimeGreaterThan' => time(),
                 'status' => 'published'
             );
             $nextLiveLesson = $this->getCourseService()->searchLessons( $conditions, array('startTime', 'ASC'), 0, 1);
@@ -235,7 +235,9 @@ class CourseController extends BaseController
                 'type' => $course['type'],
                 'member' => $member,
                 'items' => $items,
-                'learnStatuses' => $learnStatuses
+                'learnStatuses' => $learnStatuses,
+                'currentTime' => $currentTime,
+                'weeks' => $weeks
             ));
         }
 
