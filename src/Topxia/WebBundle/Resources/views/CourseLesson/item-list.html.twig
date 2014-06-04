@@ -35,7 +35,22 @@
 				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
 				    {% elseif item.type == 'testpaper' %}
 				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
-			    	{% endif %}
+				    {% elseif item.type == 'live' %}
+				       	{% if item.startTime > currentTime %}
+							<span class="type">{{ item.startTime|date('m月d日') }} 
+									{% for key,week in weeks %}
+										{% if key == item.startTime|date('w')  %}
+											星期{{ week }}
+										{% endif %}
+								    {% endfor %}
+									{{ item.startTime|date('H：i') }}
+								</span>
+							{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+								<span class="type">正在直播中</span>
+							{% elseif item.endTime < currentTime %}
+								<span class="type">直播结束</span>
+							{% endif %}
+				      	{% endif %}
 			    {% else %}
 			      <span class="status">未发布</span>
 			    {% endif %}

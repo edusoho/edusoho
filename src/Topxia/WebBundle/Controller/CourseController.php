@@ -235,7 +235,9 @@ class CourseController extends BaseController
                 'type' => $course['type'],
                 'member' => $member,
                 'items' => $items,
-                'learnStatuses' => $learnStatuses
+                'learnStatuses' => $learnStatuses,
+                'currentTime' => $currentTime,
+                'weeks' => $weeks
             ));
         }
 
