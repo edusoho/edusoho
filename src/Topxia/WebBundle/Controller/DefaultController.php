@@ -32,15 +32,14 @@ class DefaultController extends BaseController
                 'courseIds' => $courseIds
             );
             $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
-
             $liveCourses = ArrayToolkit::index($liveCourses, 'id');
-
-            foreach ($lessons as $key => &$lesson) {
-                $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
-                $newLiveCourses[$key]['lesson'] = $lesson;
-            }
-
-            $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
+            if (!empty($lessons)) {
+                    foreach ($lessons as $key => &$lesson) {
+                    $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
+                    $newLiveCourses[$key]['lesson'] = $lesson;
+                }
+                $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
+            } 
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
