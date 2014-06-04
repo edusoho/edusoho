@@ -41,9 +41,11 @@ class MyLiveCourseController extends BaseController
 
         $courses = ArrayToolkit::index($courses, 'id');
 
-        foreach ($lessons as $key => &$lesson) {
-            $newCourses[$key] = $courses[$lesson['courseId']];
-            $newCourses[$key]['lesson'] = $lesson;
+        if (!empty($courses)) {
+            foreach ($lessons as $key => &$lesson) {
+                $newCourses[$key] = $courses[$lesson['courseId']];
+                $newCourses[$key]['lesson'] = $lesson;
+            }
         }
         
         return $this->render('TopxiaWebBundle:MyLiveCourse:index.html.twig', array(
