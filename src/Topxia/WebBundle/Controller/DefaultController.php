@@ -35,7 +35,7 @@ class DefaultController extends BaseController
             $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
             $liveCourses = ArrayToolkit::index($liveCourses, 'id');
 
-            if (!empty($lessons)) {
+            if (!empty($lessons) && !empty($liveCourses)) {
                     foreach ($lessons as $key => &$lesson) {
                     $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
                     $newLiveCourses[$key]['lesson'] = $lesson;
