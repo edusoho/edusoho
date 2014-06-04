@@ -63,8 +63,8 @@ define(function(require, exports, module) {
                 maximumSelectionSize: 20
             });
 
-        var $max_student_num = $('#max_student_num').val();
-        var $default_max_student_num = $('#default_max_student_num').val();
+        var $perLiveMaxStudentNum = $('#perLiveMaxStudentNum').val();
+        var $default_perLiveMaxStudentNum = $('#default_perLiveMaxStudentNum').val();
 
         var $stuNumUpperLimit = $('#stuNumUpperLimit');
 
@@ -75,13 +75,13 @@ define(function(require, exports, module) {
                 $('#stuNumUpperLimit_help').css("color","red");
                 $('#stuNumUpperLimit_help').show();
             }else{
-                if (Number($stuNumUpperLimitVal) < Number($default_max_student_num) && Number($default_max_student_num)>0) {
+                if (Number($stuNumUpperLimitVal) < Number($default_perLiveMaxStudentNum) && Number($default_perLiveMaxStudentNum)>0) {
                     $('#stuNumUpperLimit_help').html("不能降低学员上限");
                     $('#stuNumUpperLimit_help').css("color","red");
                     $('#stuNumUpperLimit_help').show();
                 }else{
-                    if(Number($stuNumUpperLimitVal) > Number($max_student_num)) {
-                        $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上线,最多"+$max_student_num+"人");
+                    if(Number($stuNumUpperLimitVal) > Number($perLiveMaxStudentNum)) {
+                        $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上线,最多"+$perLiveMaxStudentNum+"人");
                         $('#stuNumUpperLimit_help').css("color","red");
                         $('#stuNumUpperLimit_help').show();
                     }else{

@@ -457,15 +457,15 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
-            'max_student_num' => '0',
-            'max_current_num' => '50'
+            'perLiveMaxStudentNum' => '0',
+            'live_student_capacity' => '50'
         );
 
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
-            $courseSetting['max_current_num'] = '50';
+            $courseSetting['live_student_capacity'] = '50';
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');

@@ -879,7 +879,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$courseSetting = $this->getSettingService()->get('course', array());;
-		$max_student_num = $courseSetting['max_student_num'];
+		$perLiveMaxStudentNum = $courseSetting['perLiveMaxStudentNum'];
 
 		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime);
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
@@ -888,7 +888,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
 		$maxStudentNum = ArrayToolkit::column($courses,'maxStudentNum');
 		$timeSlotOccupiedStuNums = array_sum($maxStudentNum);
-		$leftStuNums = $max_student_num - $timeSlotOccupiedStuNums;
+		$leftStuNums = $perLiveMaxStudentNum - $timeSlotOccupiedStuNums;
 
 		$thisMaxStudentNum = $course['maxStudentNum'];
 
