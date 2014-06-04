@@ -616,12 +616,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper','live'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
 		$this->fillLessonMediaFields($lesson);
-
 
 
 		//课程内容的过滤 @todo
@@ -642,7 +641,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lastChapter = $this->getChapterDao()->getLastChapterByCourseId($lesson['courseId']);
 		$lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
-		if ($lesson['type'] == "live") {
+		if ($lesson['type'] == 'live') {
 			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
 		}
 
@@ -720,6 +719,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$lesson['mediaUri'] = $media['uri'];
 			}
 		} elseif ($lesson['type'] == 'testpaper') {
+			$lesson['mediaId'] = $lesson['mediaId'];
+		} elseif ($lesson['type'] == 'live') {
 			$lesson['mediaId'] = $lesson['mediaId'];
 		} else {
 			$lesson['mediaId'] = 0;

@@ -106,6 +106,10 @@ kindeditor_upload:
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
     methods: [POST]
 
+live_auth:
+    pattern:  /live/auth
+    defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
+
 live_course_explore:
     pattern:  /live
     defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }
