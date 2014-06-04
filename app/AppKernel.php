@@ -23,14 +23,16 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
         );
 
-        //@todo refactor.
-        $pluginDir = dirname(__FILE__) . '/../plugins';
-        if (file_exists("{$pluginDir}/Vip/VipBundle/VipBundle.php")) {
-            $bundles[] = new Vip\VipBundle\VipBundle();
-        }
+        $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
+        $pluginRootDir = $this->getRootDir() . '/../plugins';
 
-        if (file_exists("{$pluginDir}/Coupon/CouponBundle/CouponBundle.php")) {
-            $bundles[] = new Coupon\CouponBundle\CouponBundle();
+        if (file_exists($pluginMetaFilepath)) {
+            $pluginMeta = include_once($pluginMetaFilepath);
+            foreach ($pluginMeta['installed'] as $code) {
+                $code = ucfirst($code);
+                $bundleName = "{$code}\\{$code}Bundle\\{$code}Bundle";
+                $bundles[] = new $bundleName();
+            }
         }
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
