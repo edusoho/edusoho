@@ -57,6 +57,11 @@
           {% endif %}
         </div>
         <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        <li>
+          <a href="{{ path('mygroup') }}">小组</a>
+        </li>
+      </ul>
           {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
           <ul class="nav navbar-nav navbar-right">

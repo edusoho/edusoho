@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle:MyGroup:groupindex.html.twig' %}
+{% block group %}
+
+<div class="es-row-wrap container-gap userpage-body">
+  <ul class="nav nav-pills userpage-nav clearfix">
+             <li><a href="{{path('groupindex',{id:groupinfo.id})}}">小组首页</a></li>
+        <li><a href="#">讨论区</a></li>
+        <li class="active"><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
+  </ul>
+
+  <div class="row">
+<div class="col-xs-12"><div class="row row-offcanvas row-offcanvas-right">
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 成员列表</div>
+                <div class="col-xs-12">
+                    <p><b>组长</b></p>
+                </div>
+              <div class="col-xs-2">  <a href="" title="{{owner_info.nickname}}"  >
+                   <img src="{{file_path(owner_info.largeAvatar, 'avatar-large.png') }}" alt="{{owner_info.nickname}}" >
+                   </a> <p class="mvs"><a href="" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a></p></div>
+                <div class="col-xs-12">
+                    <p><b>组员</b></p>
+                </div>
+                    {% if groupmember_info %}
+                    {% for member in groupmember_info %}
+                     <div class="col-xs-2">  <a href="" title="{{member.nickname}}"  >
+                                     {% if member.largeAvatar %}
+                                    <img src="{{file_path(member.largeAvatar, 'avatar-large.png') }}" alt="{{member.nickname}}" >
+                                    {%else%}
+                                    <img src="{{asset('assets/img/default/avatar-large.png')}}" alt="{{member.nickname}}" >
+                                    {%endif%}
+                                </a> <p class="mvs"><a href="" title="{{member.nickname}}">{{member.nickname}}</a></p></div>
+                      
+                                {%endfor%}
+                    {%else%}
+                     <div class="col-xs-12"> 
+                  <p>  还没有小组成员！</p>
+
+                    </div>
+                    {%endif%}
+            </div>   </div>
+</div>
+
+</div>
+{% endblock %}

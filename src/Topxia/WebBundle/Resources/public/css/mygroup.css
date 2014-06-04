@@ -1,0 +1,39 @@
+.col-xs-2 img{
+   
+    border: 0px none;
+    width: 55px;;
+    height: 55px;;
+
+}
+.col-xs-2{
+    width: 90px;
+    height: 110px;
+}
+
+.jumbotron{
+    background: #fff;
+    position: relative;
+}
+.jumbotron img{
+     width: 60px;;
+    height: 60px;;
+}
+.nav-pills{
+    border-bottom:none;
+}
+.group-header-btn{
+   right: 0px;
+}
+.group-header-tip{
+    font-size: 14px;
+}
+.modal-body img{
+    width: auto;
+    height: auto;
+}
+.mvs{
+    text-align: center;
+}
+.group-header-btn{
+    text-align: right;
+}

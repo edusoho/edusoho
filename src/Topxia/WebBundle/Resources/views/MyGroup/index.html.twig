@@ -1,0 +1,109 @@
+{% extends 'TopxiaWebBundle:MyGroup:layout.html.twig' %}
+
+{% block title %}小组 - {{ parent() }}{% endblock %}
+{% block content %}
+<div class="row row-offcanvas row-offcanvas-right">
+    <div class="col-xs-12 col-sm-9">
+        <div class="es-row-wrap ">
+            <div class="row">
+
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门小组</div>
+                <div class="row-fluid ">
+                    {% if activegroup %}
+                    {% for group in activegroup %}
+                     <div class="col-xs-2">  <a href="{{path('groupindex',{id:group.id})}}" title="{{group.title}}">
+                                     {% if group.logo %}
+                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
+                                    {%else%}
+                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
+                                    {%endif%}
+                                </a> <p class="mvs"><a href="{{path('groupindex',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p></div>
+                      
+                                {%endfor%}
+                    {%else%}
+                    还没有小组信息！赶紧去创建吧！
+                    {%endif%}
+              
+                      
+                </div>
+            </div>
+   <br>
+        </div>
+
+        <div class="es-row-wrap ">
+            <div class="row">
+
+                <div class="page-header">我的小组</div> 
+
+
+
+            </div></div>
+
+    </div>
+    <div class="col-xs-6 col-sm-3">
+        <div class="es-row-wrap ">
+            <div class="row">
+
+                <div class="page-header">我创建的小组</div> 
+                  <div class="row">
+                <div class="col-xs">
+                     {% if mycreatedGroup %}
+                    {% for group in mycreatedGroup %}
+                     <div class="col-xs-2">  <a href="{{path('groupindex',{id:group.id})}}" title="{{group.title}}">
+                                     {% if group.logo %}
+                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
+                                    {%else%}
+                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
+                                    {%endif%}
+                                </a> <p class="mvs"><a href="{{path('groupindex',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p></div>
+                     
+                                {%endfor%}
+                    {%else%}
+                    还没有小组信息！赶紧去加入小组吧！
+                    {%endif%}
+                   </div><br></div>
+               <div class="page">
+                   
+                     <a href="{{ path ('mygroup_add') }}" class="btn btn-primary btn-default active" role="button">创建小组</a>
+              
+               </div>
+
+
+            </div></div>
+         <div class="es-row-wrap ">
+            <div class="row">
+
+                <div class="page-header">我加入的小组</div> 
+                  <div class="row">
+                <div class="col-xs">
+                     {% if myjionGroup %}
+                    {% for grouparray in myjionGroup %}
+                     {% for group in grouparray %}
+                     <div class="col-xs-2">  <a href="{{path('groupindex',{id:group.id})}}" title="{{group.title}}">
+                                     {% if group.logo %}
+                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
+                                    {%else%}
+                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
+                                    {%endif%}
+                                </a> <p class="mvs"><a href="{{path('groupindex',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p></div>
+                     {%endfor%}
+                                {%endfor%}
+                    {%else%}
+                    还没有小组信息！赶紧去加入小组吧！
+                    {%endif%}
+                   </div><br></div>
+               
+
+
+            </div></div>
+        <div class="es-row-wrap ">
+            <div class="row">
+
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门话题</div> 
+
+
+
+            </div></div>
+    </div>
+</div>
+{% endblock %}
