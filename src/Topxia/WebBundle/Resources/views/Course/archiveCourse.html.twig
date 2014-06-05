@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
-{% block title %}第{{ currentLesson.number }}课时：{{ course.title }} -{{ parent() }}{% endblock %}
+{% block title %}{{ course.title }} -{{ parent() }}{% endblock %}
 {% block keywords %}{{ course.title }}{% endblock %}
 {% block description %}{{ course.about }}{% endblock %}
 
@@ -15,12 +15,46 @@
 
   	<div class="row article-row">
 	  	<div class="col-md-8 mbl">
-	  		{% if currentLesson %}
-		  		<div class="text-success"><h4>第{{ currentLesson.number }}课时： {{ currentLesson.title }}</h4></div>
-		  		<div class="">{{ currentLesson.summary }}</div>
-	  		{% else %}
-	  			<div class="empty">课程暂无课时</div>
-	  		{% endif %}
+	  		<dl class="course-infos">
+    <dt>简介</dt>
+    <dd class="mbm">{{ course.about|raw }}</dd>
+
+    {% if category %}
+    <dt>分类</dt>
+    <dd class="mbm">
+      <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
+    </dd>
+    {% endif %}
+
+    {% if course.goals %}
+      <dt>课程目标</dt>
+      <dd>
+        <ul>
+          {% for goal in course.goals %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+
+    {% if course.audiences %}
+      <dt>适合人群</dt>
+      <dd>
+        <ul>
+          {% for audience in course.audiences %}
+            <li>{{ audience }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+  </dl>
+		  		{% if tags %}
+		  		<div class="mtm">课程标签：
+		  			{% for tag in tags %}
+		  			<a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs"><span class="label label-info">{{ tag.name }}</span></a>
+		  			{% endfor %}
+		  		</div>
+		  		{% endif %}
 	  		<a class="btn btn-primary mtl nav-btn" href="{{ path('course_show',{id:course.id})}}"><span class="glyphicon glyphicon-play"></span> 查看课程</a>
 		</div>
 	  	<div class="col-md-4">
