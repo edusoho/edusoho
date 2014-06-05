@@ -80,7 +80,7 @@ class LiveCourseController extends BaseController
 
         if (!empty($courses)) {
             foreach ($recentlessons as $key => &$lesson) {
-                $recentCourses[$key] = $courses[$lesson['courseId']];
+                $recentCourses[$key] = empty($courses[$lesson['courseId']]) ? array() : $courses[$lesson['courseId']];
                 $recentCourses[$key]['lesson'] = $lesson;
             }
         }
