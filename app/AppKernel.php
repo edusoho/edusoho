@@ -6,6 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AppKernel extends Kernel
 {
+    protected $plugins;
 
     public function registerBundles ()
     {
@@ -23,14 +24,20 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
         );
 
-        //@todo refactor.
-        $pluginDir = dirname(__FILE__) . '/../plugins';
-        if (file_exists("{$pluginDir}/Vip/VipBundle/VipBundle.php")) {
-            $bundles[] = new Vip\VipBundle\VipBundle();
-        }
+        $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
+        $pluginRootDir = $this->getRootDir() . '/../plugins';
 
-        if (file_exists("{$pluginDir}/Coupon/CouponBundle/CouponBundle.php")) {
-            $bundles[] = new Coupon\CouponBundle\CouponBundle();
+        if (file_exists($pluginMetaFilepath)) {
+            $pluginMeta = include_once($pluginMetaFilepath);
+            $this->plugins = $pluginMeta['installed'];
+
+            if (is_array($pluginMeta)) {
+                foreach ($pluginMeta['installed'] as $code) {
+                    $code = ucfirst($code);
+                    $bundleName = "{$code}\\{$code}Bundle\\{$code}Bundle";
+                    $bundles[] = new $bundleName();
+                }
+            }
         }
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
@@ -54,5 +61,10 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+    }
+
+    public function getPlugins()
+    {
+        return $this->plugins;
     }
 }

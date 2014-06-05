@@ -153,6 +153,19 @@ a:hover {
 
 }
 
+.autumn-course-list .live-course-lesson {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.autumn-course-list .live-course-lesson .live-time {
+    color: #428bca;
+}
+
+.autumn-course-list .live-course-lesson .total-lessons {
+    color: #777;
+}
+
 .autumn-course-list .media {
     position: relative;
     border-bottom-color: #ddd;
