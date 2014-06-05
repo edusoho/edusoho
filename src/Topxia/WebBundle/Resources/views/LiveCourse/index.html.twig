@@ -8,11 +8,11 @@
 
 	{% include 'TopxiaWebBundle:LiveCourse:nav.html.twig' %}
 
-	{% set blocks = data('Blocks',{'codes':['live_banner'] }) %}
-      	{% if blocks.live_banner %}
+	{% set blocks = data('Blocks',{'codes':['live_top_banner'] }) %}
+      	{% if blocks.live_top_banner %}
         <div class="homepage-feature homepage-feature-slides mbl">
           <div class="cycle-pager"></div>
-          {{ blocks.live_banner|raw }}
+          {{ blocks.live_top_banner|raw }}
         </div>
     {% endif %}
 
@@ -52,7 +52,9 @@
 					    			<button type="button" class="mlm btn btn-xs btn-danger">明天</button>
 					    		{% endif %}
 					    		{% set teacher = users[course.teacherIds|first]|default(null) %}
-					    		<span class="text-muted pull-right fsn mts">{{ teacher.nickname }}</span>
+                  {% if teacher %}
+  					    		<span class="text-muted pull-right fsn mts">{{ teacher.nickname }}</span>
+                  {% endif %}
 					    	</h4>
 				          	<div class="list-group-item-text">
 				          		<strong>{{ course.title|plain_text(26) }}</strong>
