@@ -6,7 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AppKernel extends Kernel
 {
-    protected $plugins;
+    protected $plugins = array();
 
     public function registerBundles ()
     {
