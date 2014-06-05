@@ -879,7 +879,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return array('error_occupied','包含这个时间段的课时已经存在！');
 		}
 
-		$courseSetting = $this->getSettingService()->get('course', array());;
+		$courseSetting = $this->getSettingService()->get('course', array());
 		$perLiveMaxStudentNum = !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0;
 
 		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime);
