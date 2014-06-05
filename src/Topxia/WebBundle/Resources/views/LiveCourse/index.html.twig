@@ -41,15 +41,14 @@
         	<div class="list-group">
         		{% if recentCourses %}
 	        		{% for course in recentCourses %}
-	        			{% if course.lesson %}
 	        			{% set lesson = course.lesson %}
 					    <a href="{{ path('course_show', {id:course.id}) }}" class="list-group-item">
 					    	<h4 class="list-group-item-heading clearfix">
 					    		<span class="text-primary pull-left fsn mts">{{ lesson.startTime|date('H:i') }}-{{ lesson.endTime|date('H:i m-d')}}</span>
-					    		{% if lesson.startTime < tomorrow %}
+					    		{% if lesson.endTime < tomorrow %}
 					    			<button type="button" class="mlm btn btn-xs btn-success">今天</button>
 					    		{% else %}
-					    			<button type="button" class="mlm btn btn-xs btn-success">明天</button>
+					    			<button type="button" class="mlm btn btn-xs btn-danger">明天</button>
 					    		{% endif %}
 					    		{% set teacher = users[course.teacherIds|first]|default(null) %}
 					    		<span class="text-muted pull-right fsn mts">{{ teacher.nickname }}</span>
@@ -59,7 +58,6 @@
 				          		<span class="text-muted mll">({{ lesson.number }}/{{ course.lessonNum }})</span>
 				          	</div>
 				        </a>
-				        {% endif %}
 				    {% endfor %}
 				{% else %}
 					<div class="empty">没有即将开始的课程</div>
