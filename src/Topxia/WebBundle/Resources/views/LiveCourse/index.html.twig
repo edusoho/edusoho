@@ -45,10 +45,10 @@
 					    <a href="{{ path('course_show', {id:course.id}) }}" class="list-group-item">
 					    	<h4 class="list-group-item-heading clearfix">
 					    		<span class="text-primary pull-left fsn mts">{{ lesson.startTime|date('H:i') }}-{{ lesson.endTime|date('H:i m-d')}}</span>
-					    		{% if lesson.endTime < tomorrow %}
+					    		{% if lesson.startTime < tomorrow %}
 					    			<button type="button" class="mlm btn btn-xs btn-success">今天</button>
 					    		{% else %}
-					    			<button type="button" class="mlm btn btn-xs btn-danger">明天</button>
+					    			<button type="button" class="mlm btn btn-xs btn-success">明天</button>
 					    		{% endif %}
 					    		{% set teacher = users[course.teacherIds|first]|default(null) %}
 					    		<span class="text-muted pull-right fsn mts">{{ teacher.nickname }}</span>
