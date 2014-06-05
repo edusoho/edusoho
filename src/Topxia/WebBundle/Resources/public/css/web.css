@@ -1337,6 +1337,10 @@ body {
 }
 
 
+.live-label {
+	font-size: 12px;
+	font-weight: normal;
+}
 
 .live-course-item-list-multi h3 {
 	font-size: 16px;
