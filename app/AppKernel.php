@@ -6,6 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AppKernel extends Kernel
 {
+    protected $plugins;
 
     public function registerBundles ()
     {
@@ -28,6 +29,7 @@ class AppKernel extends Kernel
 
         if (file_exists($pluginMetaFilepath)) {
             $pluginMeta = include_once($pluginMetaFilepath);
+            $this->plugins = $pluginMeta['installed'];
             foreach ($pluginMeta['installed'] as $code) {
                 $code = ucfirst($code);
                 $bundleName = "{$code}\\{$code}Bundle\\{$code}Bundle";
@@ -56,5 +58,10 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+    }
+
+    public function getPlugins()
+    {
+        return $this->plugins;
     }
 }
