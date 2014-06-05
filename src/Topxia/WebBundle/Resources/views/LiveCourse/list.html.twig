@@ -35,7 +35,7 @@
   <ul class="nav nav-pills nav-stacked mbl">
     {% for cat in subCategories %}
         <li {% if category.id == cat.id %}class="active"{% endif %}>
-          <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
+          <a href="{{ path('live_course_list', {category:cat.code}) }}">
           {% if cat.depth > 1 %}
             {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
           {% endif %}
