@@ -34,11 +34,6 @@
           <span class="rating-num">{{ course.rating|number_format(1) }}分</span>
           <a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}人评价)</a>
         </p>
-        <p>
-          人数上限：
-          <span class="member-num">{{ course.maxStudentNum }}</span>
-          <span class="member-text">人</span>
-        </p>
         {% if course.showStudentNumType == 'opened' %}
         <p>
           学员数：
@@ -46,6 +41,8 @@
           <span class="member-text">人</span>
           {% if course.studentNum == course.maxStudentNum %}
             <span class="text-danger">名额已满</span>
+          {% else %}
+            <span class="text-warning"> (共<strong>{{ course.maxStudentNum }}</strong>名额)</span>
           {% endif %}
         </p>
         {% endif %}
