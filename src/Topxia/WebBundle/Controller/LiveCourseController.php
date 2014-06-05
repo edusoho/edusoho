@@ -44,9 +44,11 @@ class LiveCourseController extends BaseController
 
         $courses = ArrayToolkit::index($courses, 'id');
 
-        foreach ($lessons as $key => &$lesson) {
-            $newCourses[$key] = $courses[$lesson['courseId']];
-            $newCourses[$key]['lesson'] = $lesson;
+        if (isset($lessons)) {
+            foreach ($lessons as $key => &$lesson) {
+                $newCourses[$key] = empty($courses[$lesson['courseId']]) ? '' : $courses[$lesson['courseId']];
+                $newCourses[$key]['lesson'] = $lesson;
+            }
         }
 
         $now = time();
@@ -73,13 +75,15 @@ class LiveCourseController extends BaseController
         $recentCourses = array();
         $userIds = array();
 
-        foreach ($recentlessons as $key => &$lesson) {
-            $recentCourses[$key] = $courses[$lesson['courseId']];
-            $recentCourses[$key]['lesson'] = $lesson;
+        if (isset($recentlessons)) {
+            foreach ($recentlessons as $key => &$lesson) {
+                $recentCourses[$key] = empty($courses[$lesson['courseId']]) ? '' : $courses[$lesson['courseId']];
+                $recentCourses[$key]['lesson'] = $lesson;
+            }
         }
 
         foreach ($recentCourses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
+            $userIds = array_merge($userIds, empty($course['teacherIds']) ? array(): $course['teacherIds']);
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
         
@@ -259,10 +263,10 @@ class LiveCourseController extends BaseController
 
         $userIds = array();
         foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
+            $userIds = array_merge($userIds, empty($course['teacherIds']) ? array() : $course['teacherIds']) ;
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        
         return $this->render("TopxiaWebBundle:LiveCourse:live-courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,
