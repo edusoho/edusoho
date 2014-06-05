@@ -98,6 +98,21 @@ class CourseController extends BaseController
         ));
     }
 
+    public function archiveCourseAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+        $category = $this->getCategoryService()->getCategory($course['categoryId']);
+
+        return $this->render('TopxiaWebBundle:Course:archiveCourse.html.twig', array(
+            'course' => $course,
+            'lessons' => $lessons,
+            'tags' => $tags,
+            'category' => $category
+        ));
+    }
+
     public function archiveLessonAction(Request $request, $id, $lessonId)
     {   
 
