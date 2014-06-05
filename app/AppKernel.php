@@ -30,10 +30,13 @@ class AppKernel extends Kernel
         if (file_exists($pluginMetaFilepath)) {
             $pluginMeta = include_once($pluginMetaFilepath);
             $this->plugins = $pluginMeta['installed'];
-            foreach ($pluginMeta['installed'] as $code) {
-                $code = ucfirst($code);
-                $bundleName = "{$code}\\{$code}Bundle\\{$code}Bundle";
-                $bundles[] = new $bundleName();
+
+            if (is_array($pluginMeta)) {
+                foreach ($pluginMeta['installed'] as $code) {
+                    $code = ucfirst($code);
+                    $bundleName = "{$code}\\{$code}Bundle\\{$code}Bundle";
+                    $bundles[] = new $bundleName();
+                }
             }
         }
 
