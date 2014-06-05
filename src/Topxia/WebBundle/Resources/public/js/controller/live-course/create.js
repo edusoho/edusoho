@@ -44,13 +44,6 @@ define(function(require, exports, module) {
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
-        });  
-
-        $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
         });
 	};
 

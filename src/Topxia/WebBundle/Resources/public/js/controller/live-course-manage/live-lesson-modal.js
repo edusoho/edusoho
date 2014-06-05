@@ -94,11 +94,12 @@ define(function(require, exports, module) {
             errormessageRequired: '请输入时长'
         });
      
-        $('[name=startTime]').datetimepicker('setStartDate', now);
         $("[name=startTime]").datetimepicker({
+            language: 'zh-CN'
         }).on('hide', function(ev){
             validator.query('[name=startTime]').execute();
         });
+        $('[name=startTime]').datetimepicker('setStartDate', now);
 
         var editor = EditorFactory.create('#live_lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
         
