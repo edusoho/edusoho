@@ -518,9 +518,9 @@ EOD;
         ));
 
         $content = <<<'EOD'
-<a href=""><img src="./assets/img/placeholder/carousel-1200x256-1.png" /></a>
-<a href="#"><img src="./assets/img/placeholder/carousel-1200x256-2.png" /></a>
-<a href="#"><img src="./assets/img/placeholder/carousel-1200x256-3.png" /></a>
+<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
 		$this->getBlockService()->updateContent($block['id'], $content);
 
@@ -531,13 +531,13 @@ EOD;
 
         $content = <<<'EOD'
 <div class="item active">
-    <img src="./themes/autumn/img/slide-1.jpg">
+    <img src="../themes/autumn/img/slide-1.jpg">
 </div>
 <div class="item">
-    <img src="./themes/autumn/img/slide-2.jpg">
+    <img src="../themes/autumn/img/slide-2.jpg">
 </div>
 <div class="item">
-    <img src="./themes/autumn/img/slide-3.jpg">
+    <img src="../themes/autumn/img/slide-3.jpg">
 </div>
 EOD;
         $this->getBlockService()->updateContent($block['id'], $content);
@@ -548,8 +548,8 @@ EOD;
         ));
 
         $content = <<<'EOD'
-<a href="#"><img src="./assets/img/placeholder/live-slide-1.jpg" /></a>
-<a href="#"><img src="./assets/img/placeholder/live-slide-2.jpg" /></a>
+<a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
+<a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
 EOD;
 		$this->getBlockService()->updateContent($block['id'], $content);
 
