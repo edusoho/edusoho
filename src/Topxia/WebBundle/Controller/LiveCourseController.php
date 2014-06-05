@@ -89,9 +89,9 @@ class LiveCourseController extends BaseController
             $userIds = array_merge($userIds, empty($course['teacherIds']) ? array(): $course['teacherIds']);
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
-        foreach ($recentCourses as $course) {
+        foreach ($recentCourses as &$course) {
             if (empty($course['id'])) {
-                $course = '';
+                $course = array();
             }
         }
         $recentCourses = array_filter($recentCourses);
