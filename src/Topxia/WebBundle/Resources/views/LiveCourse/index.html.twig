@@ -41,6 +41,7 @@
         	<div class="list-group">
         		{% if recentCourses %}
 	        		{% for course in recentCourses %}
+	        			{% if course.lesson %}
 	        			{% set lesson = course.lesson %}
 					    <a href="{{ path('course_show', {id:course.id}) }}" class="list-group-item">
 					    	<h4 class="list-group-item-heading clearfix">
@@ -58,6 +59,7 @@
 				          		<span class="text-muted mll">({{ lesson.number }}/{{ course.lessonNum }})</span>
 				          	</div>
 				        </a>
+				        {% endif %}
 				    {% endfor %}
 				{% else %}
 					<div class="empty">没有即将开始的课程</div>
