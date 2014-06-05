@@ -1,6 +1,0 @@
-<ul class="nav nav-pills mbl">
-  	<li {% if not category.id %}class="active"{% endif %}><a href="{{ path('live_course_explore') }}">直播频道首页</a></li>
-  	{% for cat in rootCategories %}
-  		<li {% if category.id == cat.id or category.parentId == cat.id %}class="active"{% endif %}><a href="{{ path('live_course_list', { category:cat.code}) }}">{{ cat.name }}</a><li>
-  	{% endfor %}
-</ul>

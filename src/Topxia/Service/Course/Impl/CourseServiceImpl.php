@@ -692,7 +692,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		} elseif ($lesson['type'] == 'testpaper') {
 			$lesson['mediaId'] = $lesson['mediaId'];
 		} elseif ($lesson['type'] == 'live') {
-			$lesson['mediaId'] = $lesson['mediaId'];
 		} else {
 			$lesson['mediaId'] = 0;
 			$lesson['mediaName'] = '';
@@ -737,6 +736,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
+		$this->fillLessonMediaFields($fields);
 
 		$lesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))

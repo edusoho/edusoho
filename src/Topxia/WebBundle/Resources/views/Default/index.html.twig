@@ -28,19 +28,16 @@
         </div>
       </div>
 
-      {% if newLiveCourses %}
-
-        <div class="es-box">
-          <div class="es-box-heading"><h2>直播课程</h2></div>
-          <div class="es-box-body">
-            {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', { courses:newLiveCourses, view: 'list'})) }}
-            {% if newLiveCourses|length >= 12 %}
-              <a class="btn btn-default btn-lg btn-block" href="{{ path('live_course_explore') }}">更多课程</a>
-            {% endif %}
-          </div>
+      <div class="es-box">
+        <div class="es-box-heading"><h2>直播课程</h2></div>
+        <div class="es-box-body">
+          {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', { courses:recentLiveCourses, view: 'list'})) }}
+          {% if recentLiveCourses|length >= 1 %}
+            <a class="btn btn-default btn-lg btn-block" href="{{ path('live_course_explore') }}">更多课程</a>
+          {% endif %}
         </div>
+      </div>
 
-      {% endif %}
     </div>
 
     <div class="col-md-3">

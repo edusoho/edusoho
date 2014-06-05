@@ -16,228 +16,53 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播频道已关闭');
         }
 
-        $group = $this->getCategoryService()->getGroupByCode('course');
-        if (empty($group)) {
-            $categories = array();
-        } else {
-            $categories = $this->getCategoryService()->findGroupRootCategories($group['code']);
-        }
-
-        $conditions = array(
-            'status' => 'published',
-            'type' => 'live'
-        );
-
-        $courses = $this->getCourseService()->searchCourses( $conditions, 'lastest',0,1000 );
-
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $newCourses = array();
-        $lessons = array();
-
-        if (isset($courseIds)) {
-            $lessonCondition['courseIds'] = $courseIds;
-            $lessonCondition['status'] = 'published';
-
-            $lessons = $this->getCourseService()->searchLessons(
-                $lessonCondition,  
-                array('startTime', 'ASC'), 0, 10
-            );
-        }
-
-        $courses = ArrayToolkit::index($courses, 'id');
-
-        if (isset($lessons)) {
-            foreach ($lessons as $key => &$lesson) {
-                $newCourses[$key] = empty($courses[$lesson['courseId']]) ? '' : $courses[$lesson['courseId']];
-                $newCourses[$key]['lesson'] = $lesson;
-            }
-        }
-
-        $now = time();
-
-        $today = date("Y-m-d");
-
-        $tomorrow = strtotime("$today tomorrow");
-
-        $theDayAfterTomorrow = strtotime("$today +2 day");
-
-        $today = strtotime("$today");
-
         $recenntLessonsCondition = array(
             'status' => 'published',
-            'startTimeGreaterThan' => $now
+            'startTimeGreaterThan' => time()
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchLessonCount($recenntLessonsCondition)
+            , 10
         );
 
         $recentlessons = $this->getCourseService()->searchLessons(
             $recenntLessonsCondition,  
-            array('startTime', 'ASC'), 0, 8
-        );
-
-        $recentCourses = array();
-        $userIds = array();
-
-        if (!empty($courses)) {
-            foreach ($recentlessons as $key => &$lesson) {
-                $recentCourses[$key] = empty($courses[$lesson['courseId']]) ? array() : $courses[$lesson['courseId']];
-                $recentCourses[$key]['lesson'] = $lesson;
-            }
-        }
-
-        foreach ($recentCourses as $course) {
-            $userIds = array_merge($userIds, empty($course['teacherIds']) ? array(): $course['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        foreach ($recentCourses as &$course) {
-            if (empty($course['id'])) {
-                $course = array();
-            }
-        }
-        $recentCourses = array_filter($recentCourses);
-
-        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
-            'rootCategories' => $categories,
-            'newCourses' => $newCourses,
-            'recentlessons' => $recentlessons,
-            'recentCourses' => $recentCourses,
-            'users' => $users,
-            'tomorrow' => $tomorrow,
-            'theDayAfterTomorrow' => $theDayAfterTomorrow,
-            'category' => array('id' => null,'parentId' => null)
-        ));
-
-	}
-
-    public function listAction(Request $request, $category)
-    {   
-        if (!$this->setting('course.live_course_enabled')) {
-            return $this->createMessageResponse('info', '直播频道已关闭');
-        }
-        
-        $now = time();
-
-        $today = date("Y-m-d");
-
-        $tomorrow = strtotime("$today tomorrow");
-
-        $theDayAfterTomorrow = strtotime("$today +2 day");
-
-        $nextweek = strtotime("$today next week");
-
-        $lastweek = strtotime("$today last week");
-
-        $today = strtotime("$today");
-
-        if (!empty($category)) {
-            if (ctype_digit((string) $category)) {
-                $category = $this->getCategoryService()->getCategory($category);
-            } else {
-                $category = $this->getCategoryService()->getCategoryByCode($category);
-            }
-
-            if (empty($category)) {
-                throw $this->createNotFoundException();
-            }
-        } else {
-            $category = array('id' => null,'parentId' => null);
-        }
-
-        $group = $this->getCategoryService()->getGroupByCode('course');
-        if (empty($group)) {
-            $categories = array();
-            $rootCategories = array();
-        } else {
-            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
-            $rootCategories = $this->getCategoryService()->findGroupRootCategories($group['code']);
-        }
-
-        $rootCategory = $this->getRootCategory($categories,$category);
-
-        $subCategories = $this->getSubCategories($categories, $rootCategory);
-
-        $date = $request->query->get('date', 'today');
-
-        $conditions = array(
-            'status' => 'published',
-            'categoryId' => $category['id'],
-            'type' => 'live'
-        );
-
-        $courses = $this->getCourseService()->searchCourses( $conditions, 'lastest',0,1000 );
-
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        switch ($date) {
-            case 'today':
-                $lessonCondition['startTimeGreaterThan'] = $today;
-                $lessonCondition['endTimeLessThan'] = $tomorrow;
-                break;
-            case 'tomorrow':
-                $lessonCondition['startTimeGreaterThan'] = $tomorrow;
-                $lessonCondition['endTimeLessThan'] = $theDayAfterTomorrow;
-                break;
-            case 'nextweek':
-                $lessonCondition['startTimeGreaterThan'] = $tomorrow;
-                $lessonCondition['endTimeLessThan'] = $nextweek;
-                break;
-            case 'lastweek':
-                $lessonCondition['startTimeGreaterThan'] = $lastweek;
-                $lessonCondition['endTimeLessThan'] = $today;
-                break;
-        }
-
-        $lessonCondition['courseIds'] = $courseIds;
-        $lessonCondition['status'] = 'published';
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchLessonCount($lessonCondition)
-            , 10
-        );
-
-        $lessons = $this->getCourseService()->searchLessons(
-            $lessonCondition,  
-            array('startTime', 'ASC'), 
+            array('startTime', 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        if ($date == 'today') {
-            $lessons = $this->getCourseService()->searchLessons( $lessonCondition,  array('startTime', 'ASC'), 0, 1000 );
-            $finishedLessons = array();
-            foreach ($lessons as &$lesson) {
-                if ($now > $lesson['endTime'] ) {
-                    $finishedLessons[] = $lesson;
-                    $lesson = '';
-                }
-            }
-            $lessons = array_merge($lessons, $finishedLessons);
-            $lessons = array_filter($lessons);
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
+
+        $recentCourses = array();
+        foreach ($recentlessons as $lesson) {
+            $course = $courses[$lesson['courseId']];
+            $course['lesson'] = $lesson;
+            $recentCourses[] = $course;
         }
 
-        $newCourses = array();
+        $liveCourses = $this->getCourseService()->searchCourses( array(
+            'status' => 'published',
+            'type' => 'live'
+        ), 'lastest',0, 10 );
 
-        if ($courses) {
-            $courses = ArrayToolkit::index($courses, 'id');
-
-            foreach ($lessons as $key => &$lesson) {
-                $newCourses[$key] = $courses[$lesson['courseId']];
-                $newCourses[$key]['lesson'] = $lesson;
-            }
+        $userIds = array();
+        foreach ($liveCourses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
         }
 
-        return $this->render('TopxiaWebBundle:LiveCourse:list.html.twig',array(
-            'date' => $date,
-            'category' => $category,
-            'categories' => $categories,
-            'rootCategories' => $rootCategories,
-            'subCategories' => $subCategories,
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
+            'recentCourses' => $recentCourses,
+            'liveCourses' => $liveCourses,
+            'users' => $users,
             'paginator' => $paginator,
-            'courses' => $courses,
-            'lessons' => $lessons,
-            'newCourses' => $newCourses
         ));
-    }
+
+	}
 
   	public function createAction(Request $request)
     {
@@ -281,7 +106,7 @@ class LiveCourseController extends BaseController
             }
         }
         $courses = array_filter($courses);
-        return $this->render("TopxiaWebBundle:LiveCourse:live-courses-block-{$view}.html.twig", array(
+        return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,
             'mode' => $mode,
