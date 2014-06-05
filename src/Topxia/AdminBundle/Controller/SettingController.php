@@ -470,7 +470,6 @@ class SettingController extends BaseController
         );
 
         $courseSetting = array_merge($default, $courseSetting);
-        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
@@ -478,6 +477,8 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
         }
+
+        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : empty($capacity['capacity']);
         
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting

@@ -24,9 +24,9 @@ class EdusohoLiveClient
             throw new \RuntimeException('云平台apiServer参数不正确，请更改云视频设置。');
         }
 
-        if (empty($options['accessKey']) or empty($options['secretKey'])) {
+        /*if (empty($options['accessKey']) or empty($options['secretKey'])) {
             throw new \RuntimeException('云平台accessKey/secretKey不能为空，请更改云视频设置。');
-        }
+        }*/
         
         $this->apiServer = rtrim($options['apiServer'], '/');
         $this->accessKey = $options['accessKey'];
