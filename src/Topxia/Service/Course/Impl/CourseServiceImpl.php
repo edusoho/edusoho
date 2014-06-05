@@ -880,7 +880,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$courseSetting = $this->getSettingService()->get('course', array());;
-		$perLiveMaxStudentNum = $courseSetting['perLiveMaxStudentNum'];
+		$perLiveMaxStudentNum = !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0;
 
 		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime);
 		$courseIds = ArrayToolkit::column($lessons,'courseId');

@@ -39,7 +39,7 @@ class CourseManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
-            'perLiveMaxStudentNum' => $courseSetting['perLiveMaxStudentNum'] ? $courseSetting['perLiveMaxStudentNum'] : 0
+            'perLiveMaxStudentNum' => !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0
 		));
 	}
 
