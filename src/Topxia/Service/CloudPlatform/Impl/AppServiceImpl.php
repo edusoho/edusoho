@@ -10,6 +10,8 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\System;
 
+use Topxia\Service\Util\PluginUtil;
+
 class AppServiceImpl extends BaseService implements AppService
 {
     const MAX_APP_COUNT = 100;
@@ -401,6 +403,7 @@ class AppServiceImpl extends BaseService implements AppService
         if (empty($errors)) {
             $this->updateAppForPackageUpdate($package);
             $this->createPackageUpdateLog($package, 'SUCCESS');
+            PluginUtil::refresh();
         }
 
         last:
