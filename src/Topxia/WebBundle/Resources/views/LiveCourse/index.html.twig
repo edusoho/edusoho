@@ -19,11 +19,11 @@
 	<div class="es-box">
         <div class="es-box-heading">
         	<h2>直播课程</h2>
-        	<a class="text-muted pull-right mts" href="{{ path('live_course_list') }}">更多>></a>
        	</div>
         <div class="es-box-body">
           {% if newCourses %}
             {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:newCourses, view: 'list'})) }}
+
           {% else %}
             <div class="empty">还没有发布的课程</div>
           {% endif %}
@@ -61,6 +61,7 @@
 				        </a>
 				        {% endif %}
 				    {% endfor %}
+				    <a href="{{ path('live_course_list') }}" class="list-group-item text-center">更多直播</a>
 				{% else %}
 					<div class="empty">没有即将开始的课程</div>
 			    {% endif %}
