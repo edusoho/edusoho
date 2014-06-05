@@ -32,6 +32,7 @@ class CourseController extends BaseController
 
         $conditions = array(
             'status' => 'published',
+            'type' => 'live',
             'categoryId' => $category['id'],
             'recommended' => ($sort == 'recommendedSeq') ? 1 : null
         );
@@ -41,7 +42,6 @@ class CourseController extends BaseController
             $this->getCourseService()->searchCourseCount($conditions)
             , 10
         );
-
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions, $sort,
