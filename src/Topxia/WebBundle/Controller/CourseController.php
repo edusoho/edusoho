@@ -101,7 +101,7 @@ class CourseController extends BaseController
     public function archiveCourseAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
-        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'],'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
 
@@ -118,7 +118,7 @@ class CourseController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'],'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
