@@ -458,6 +458,7 @@ class SettingController extends BaseController
             $capacity = array();
         }
 
+
         $default = array(
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
@@ -473,6 +474,7 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
+
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');

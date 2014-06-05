@@ -8,6 +8,7 @@ use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\CourseType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 class CourseController extends BaseController
 {
@@ -393,6 +394,22 @@ class CourseController extends BaseController
 
         $isLive = $request->query->get('flag');
         $type = ($isLive == "isLive") ? 'live' : 'normal';
+
+        if ($type == 'live') {
+
+            $courseSetting = $this->setting('course', array());
+
+            if (!empty($courseSetting['live_course_enabled'])) {
+                $client = LiveClientFactory::createClient();
+                $capacity = $client->getCapacity();
+            } else {
+                $capacity = array();
+            }
+
+            if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
+                return $this->createMessageResponse('info', '请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+            }
+        }
 
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
             throw $this->createAccessDeniedException();
