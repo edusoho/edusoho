@@ -9,6 +9,10 @@
           {% elseif course.serializeMode=='finished' %}
             <span class="label label-warning series-mode-label">已完结</span>
           {% endif %}
+
+          {% if course.type == 'live' %}
+            <span class="label label-success series-mode-label">直播</span>
+          {% endif %}
         <span class="title">{{ course.title }}</span>
         {% if mode in ['default', 'teach'] %}
           <span class="metas clearfix">
