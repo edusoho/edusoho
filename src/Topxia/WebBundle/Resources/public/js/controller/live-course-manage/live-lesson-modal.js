@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
-                $('[data-target="#live-lesson-form]').attr('disabled', 'disabled');
+                $('#live-course-create-btn').button('submiting').addClass('disabled');
                 var $panel = $('.lesson-manage-panel');
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 

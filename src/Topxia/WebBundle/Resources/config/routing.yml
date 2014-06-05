@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+live_jump:
+    pattern: /live/jump
+    defaults: { _controller: TopxiaWebBundle:Default:jump }
+
 login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:Login:index }
