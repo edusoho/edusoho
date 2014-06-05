@@ -478,7 +478,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success','课程设置已保存！');
         }
 
-        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : empty($capacity['capacity']);
+        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
         
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting
