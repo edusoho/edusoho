@@ -32,15 +32,18 @@ class LiveCourseController extends BaseController
 
         $courseIds = ArrayToolkit::column($courses, 'id');
 
-        $lessonCondition['courseIds'] = $courseIds;
-        $lessonCondition['status'] = 'published';
-
-        $lessons = $this->getCourseService()->searchLessons(
-            $lessonCondition,  
-            array('startTime', 'ASC'), 0, 10
-        );
-
         $newCourses = array();
+        $lessons = array();
+
+        if (isset($courseIds)) {
+            $lessonCondition['courseIds'] = $courseIds;
+            $lessonCondition['status'] = 'published';
+
+            $lessons = $this->getCourseService()->searchLessons(
+                $lessonCondition,  
+                array('startTime', 'ASC'), 0, 10
+            );
+        }
 
         $courses = ArrayToolkit::index($courses, 'id');
 
@@ -75,9 +78,9 @@ class LiveCourseController extends BaseController
         $recentCourses = array();
         $userIds = array();
 
-        if (isset($recentlessons)) {
+        if (!empty($courses)) {
             foreach ($recentlessons as $key => &$lesson) {
-                $recentCourses[$key] = empty($courses[$lesson['courseId']]) ? '' : $courses[$lesson['courseId']];
+                $recentCourses[$key] = $courses[$lesson['courseId']];
                 $recentCourses[$key]['lesson'] = $lesson;
             }
         }
@@ -266,7 +269,12 @@ class LiveCourseController extends BaseController
             $userIds = array_merge($userIds, empty($course['teacherIds']) ? array() : $course['teacherIds']) ;
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
-        
+        foreach ($courses as &$course) {
+            if (empty($course['id'])) {
+                $course = array();
+            }
+        }
+        $courses = array_filter($courses);
         return $this->render("TopxiaWebBundle:LiveCourse:live-courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,

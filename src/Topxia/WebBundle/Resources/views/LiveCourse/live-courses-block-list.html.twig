@@ -1,4 +1,5 @@
 <ul class="course-wide-list live-course-list">
+  {% if courses %}
   {% for course in courses %}
   {% set lesson = course['lesson'] %}
   <li class="course-item clearfix">
@@ -38,7 +39,8 @@
       </div>
     </div>
   </li>
+  {% endfor %}
   {% else %}
     <div class="empty">目前暂无课程</div>
-  {% endfor %}
+  {% endif %}
 </ul>
