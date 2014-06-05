@@ -52,6 +52,14 @@ class EdusohoLiveClient
         return $this->callRemoteApi('POST', 'LiveStart', $args);
     }
 
+    public function deleteLive($liveId)
+    {
+        $args = array(
+            'liveId' => $liveId
+        );
+        return $this->callRemoteApi('POST', 'LiveDelete', $args);
+    }
+
     public function entryLive($liveId, $params)
     {
         $url = "http://webinar.vhall.com/appaction.php?module=inituser&pid={$liveId}&email={$params['email']}&name={$params['nickname']}&k={$params['sign']}";
