@@ -138,6 +138,10 @@ class LiveCourseController extends BaseController
             $rootCategories = $this->getCategoryService()->findGroupRootCategories($group['code']);
         }
 
+        $rootCategory = $this->getRootCategory($categories,$category);
+
+        $subCategories = $this->getSubCategories($categories, $rootCategory);
+
         $date = $request->query->get('date', 'today');
 
         $conditions = array(
@@ -214,6 +218,7 @@ class LiveCourseController extends BaseController
             'category' => $category,
             'categories' => $categories,
             'rootCategories' => $rootCategories,
+            'subCategories' => $subCategories,
             'paginator' => $paginator,
             'courses' => $courses,
             'lessons' => $lessons,
@@ -341,6 +346,46 @@ class LiveCourseController extends BaseController
                 'lessonId'=>$lessonId
             )
         );
+    }
+
+    private function getRootCategory($categoryTree, $category)
+    {
+        $start = false;
+        foreach (array_reverse($categoryTree) as $treeCategory) {
+            if ($treeCategory['id'] == $category['id']) {
+                $start = true;
+            }
+
+            if ($start && $treeCategory['depth'] ==1) {
+                return $treeCategory;
+            }
+        }
+
+        return null;
+    }
+
+    private function getSubCategories($categoryTree, $rootCategory)
+    {
+        $categories = array();
+
+        $start = false;
+        foreach ($categoryTree as $treeCategory) {
+            
+            if ($start && ($treeCategory['depth'] == 1) && ($treeCategory['id'] != $rootCategory['id'])) {
+                break;
+            }
+
+            if ($treeCategory['id'] == $rootCategory['id']) {
+                $start = true;
+            }
+
+            if ($start == true) {
+                $categories[] = $treeCategory;
+            }
+
+        }
+
+        return $categories;
     }
 
     private function getCourseService()
