@@ -39,11 +39,19 @@ class LiveCourseController extends BaseController
             20
         );
 
-        $lessons = $this->getCourseService()->searchLessons($conditions, 
-            array('startTime', 'ASC'), 
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        if ($status == 'end') {
+            $lessons = $this->getCourseService()->searchLessons($conditions, 
+                array('startTime', 'DESC'), 
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        } else {
+            $lessons = $this->getCourseService()->searchLessons($conditions, 
+                array('startTime', 'ASC'), 
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
         
         return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
             'status' => $status,
