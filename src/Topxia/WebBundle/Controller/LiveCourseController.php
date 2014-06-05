@@ -304,6 +304,12 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播教室不存在！');
         }
 
+        $startTime = $lesson['startTime'];
+
+        if ($startTime-time() > 3600) {
+            return $this->createMessageResponse('info', '直播还没开始!');
+        }
+          
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
 

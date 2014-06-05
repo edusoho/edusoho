@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\Util\LiveClientFactory;
 
 class CourseLessonManageController extends BaseController
 {
@@ -342,6 +343,9 @@ class CourseLessonManageController extends BaseController
 	public function deleteAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+		$client = LiveClientFactory::createClient();
+        $client->deleteLive($lesson['mediaId']);
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 		return $this->createJsonResponse(true);
