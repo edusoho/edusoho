@@ -89,7 +89,13 @@ class LiveCourseController extends BaseController
             $userIds = array_merge($userIds, empty($course['teacherIds']) ? array(): $course['teacherIds']);
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
-        
+        foreach ($recentCourses as $course) {
+            if (empty($course['id'])) {
+                $course = '';
+            }
+        }
+        $recentCourses = array_filter($recentCourses);
+
         return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
             'rootCategories' => $categories,
             'newCourses' => $newCourses,
