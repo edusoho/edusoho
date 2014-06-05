@@ -84,9 +84,6 @@ class EdusohoLiveClient
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
-        echo "<pre> api raw result: \n";
-        var_dump($result);
-        echo "</pre>";
 
         return json_decode($result, true);
     }
