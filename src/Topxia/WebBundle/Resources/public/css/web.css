@@ -1234,6 +1234,11 @@ body {
 	background: url(../img/course/course-item-types-white.png) 0 0 no-repeat;
 }
 
+.course-item-list-multi .item-object-live {
+	background-color: #F8A269;
+	border-color: #DA9078;
+}
+
 .course-item-list-multi .item-object-video {
 
 }
@@ -1312,6 +1317,10 @@ body {
 	width: 100%;
 	height: 36px;
 	overflow: hidden;
+}
+
+.course-item-list-multi .live-item .item-title {
+	height: 18px;
 }
 
 .lt-ie8 .course-item-list-multi .row {
