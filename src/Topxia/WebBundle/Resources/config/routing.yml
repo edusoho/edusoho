@@ -115,8 +115,8 @@ live_course_explore:
     defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }
 
 live_course_play:
-    pattern:  /live/play/course/{courseId}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:play }
+    pattern:  /course/{courseId}/lesson/{lessonId}/live_entry
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:entry }
 
 live_course_replay:
     pattern: /live/replay/course/{courseId}/lesson/{lessonId}

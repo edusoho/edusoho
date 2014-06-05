@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 class LiveCourseController extends BaseController
 {
@@ -264,66 +265,72 @@ class LiveCourseController extends BaseController
         ));
     }
 
-    public function playAction(Request $request,$courseId,$lessonId)
+    public function entryAction(Request $request,$courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        if (!$this->getCourseService()->canTakeCourse($courseId)) {
-            return $this->createMessageResponse('info', '您还不是该课程的学员，请先购买加入学习。', null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
-        } 
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        if ($lesson['endTime'] < time()) {
-            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-                'lesson' => $lesson,
-                'courseId' => $courseId
-            ));
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', '课时不存在！');
         }
 
-        if ($lesson['startTime'] <= (time()+60*30)) {
+        if (empty($lesson['mediaId'])) {
+            return $this->createMessageResponse('info', '直播教室不存在！');
+        }
 
-            if (empty($lesson['roomNum'])) {
-                $url = 'http://www.tetequ.com/api2/get_room_num';
-                $params = array(
-                'room_title' =>$lesson['title']."#".time(),
-                'description' => $lesson['summary']."#".time(),
-                'begin_time' => $lesson['startTime'],
-                'take_time' => $lesson['length']*60,
-                'is_show' => 0,
-                'company_code' => 'DZHKJ'
-                );
-                
+        if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+            // 老师登录
 
-                $result = $this->postRequest($url, $params);
-                if (!$result) {
-                    echo "直播api出错";
-                    $this->getLogService()->info('直播api出错', 'create', "直播api-false{$result}");
-                    exit();
-                }
+            $client = LiveClientFactory::createClient();
+            $result = $client->startLive($lesson['mediaId']);
 
-                $result_decode = json_decode($result, true);
-                if (empty($result_decode['room_num'])) {
-                    echo 'get room num error!';
-                    var_dump($result);
-                    $this->getLogService()->info('直播api出错', 'get_room_num', "get room num error!{$result}");
-                    exit();
-                }
-
-                $lesson = $this->getCourseService()->createLiveRoomNum($courseId, $lessonId, $result_decode);
+            if (empty($result) or isset($result['error'])) {
+                return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
             }
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
-                'courseId' => $courseId
+                'url' => $result['url'],
             ));
-        
-        } else {
-            return $this->createMessageResponse('info', '还没到登陆时间');
+
         }
+
+        if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+
+            // http://webinar.vhall.com/appaction.php?module=inituser&pid=***&email=***&name=****&k=****&refer=****
+            // $matched = preg_match('/^c(\d+)u(\d+)t(\d+)s(\w+)$/', $k, $matches);
+            $now = time();
+            $params = array();
+
+            $params['email'] = 'live-' . $user['id'] . '@edusoho.net';
+            $params['nickname'] = $user['nickname'];
+
+            $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
+            $params['sign'] .= 's' . $this->makeSign($params['sign']);
+
+            $client = LiveClientFactory::createClient();
+
+
+            $result = $client->entryLive($lesson['mediaId'], $params);
+
+            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+                'lesson' => $lesson,
+                'url' => $result['url'],
+            ));
+
+        }
+
+        return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+    }
+
+
+    protected function makeSign($string)
+    {
+        $secret = $this->container->getParameter('secret');
+        return md5($string . $secret);
     }
 
     public function replayAction(Request $request,$courseId,$lessonId)
@@ -334,64 +341,6 @@ class LiveCourseController extends BaseController
                 'lessonId'=>$lessonId
             )
         );
-    }
-
-    public function classroomIframeAction(Request $request,$courseId,$lessonId)
-    {
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        if ($lesson) {
-            $roomNum = $lesson['roomNum'];
-        } else {
-            return $this->createMessageResponse('info', '没有这个直播课程，请检查');
-        }
-
-        return $this->render('TopxiaWebBundle:LiveCourse:classroom-iframe.html.twig', array(
-            'roomNum' => $roomNum,
-            'joinCode' => $this->getJoinCode(),
-            'lesson' =>  $lesson
-        ));
-    }
-
-    public function postRequest($url, $params)
-    {
-        $curl = curl_init();
-
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
-        curl_setopt($curl, CURLOPT_URL, $url );
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-        // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
-
-    private function getJoinCode()
-    {
-        $url = 'http://www.tetequ.com/api2/get_join_code';
-        $result = $this->postRequest($url, array(
-        'company_code' => 'DZHKJ',
-        'key' => 'DZHKJ51d69529c45ee',
-        ));
-
-        $result_decode = json_decode($result, true);
-        if (empty($result_decode['join_code'])) {
-           var_dump($result);
-           $this->getLogService()->info('直播api出错', 'getJoinCode', "join_code　为空！！{$result}");
-           exit();
-        }
-
-        return $result_decode['join_code'];
     }
 
     private function getCourseService()

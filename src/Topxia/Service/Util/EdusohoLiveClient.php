@@ -52,6 +52,12 @@ class EdusohoLiveClient
         return $this->callRemoteApi('POST', 'LiveStart', $args);
     }
 
+    public function entryLive($liveId, $params)
+    {
+        $url = "http://webinar.vhall.com/appaction.php?module=inituser&pid={$liveId}&email={$params['email']}&name={$params['nickname']}&k={$params['sign']}";
+        return array('url' => $url);
+    }
+
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         $url = $this->makeApiUrl($action);

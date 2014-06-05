@@ -307,24 +307,29 @@ define(function(require, exports, module) {
                         };
 
                         if (0< startLeftSeconds && startLeftSeconds < 1800) {
-
-                             $liveNotice = "直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入,";
-                              $countDown = "还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/play/course/"+courseId+"/lesson/"+lessonId+"'>进入直播教室</a><br><br>";
+                             $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
+                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                              $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                         };
 
                         if (startLeftSeconds <= 0) {
-                                    clearInterval(iID); 
-                                     $liveNotice = "直播已经开始,直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束";
-                                    $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/play/course/"+courseId+"/lesson/"+lessonId+"'>进入直播教室</a><br><br>";
+                            clearInterval(iID);
+                             $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
+                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+
+                            $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                         };
 
                         if (endLeftSeconds <= 0) {
-                              $liveNotice = "直播已结束";
-                                $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/replay/course/"+courseId+"/lesson/"+lessonId+"''>查看录播实况</a><br><br>";
+                            $liveNotice = "<p>直播已结束</p>";
+                            // $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/replay/course/"+courseId+"/lesson/"+lessonId+"''>查看录播实况</a><br><br>";
+                            $countDown = "";
                         };
 
-                        $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice+$countDown+lesson.summary);
-                            }, 1000)
+                        $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div>' + lesson.summary + '</div>' + '<br>' + $countDown);
+
+
+                            }, 1000);
 
                         $("#lesson-live-content").show();
                         $("#lesson-live-content").perfectScrollbar({wheelSpeed:50});
