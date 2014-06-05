@@ -16,9 +16,9 @@
             {% endif %}
           </h4>
           <div class="course-about ellipsis">{{ course.subtitle }}</div>
-          <div class="live-course-lesson">
-            <span class="text-warning mrs">课时{{ lesson.number }}</span><span class="live-time">直播:{{ lesson.startTime|date('m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</span>
-            <span class="total-lessons">共{{ course.lessonNum }}课时</span>
+          <div class="live-course-lesson mbm">
+                  <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                  <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
           </div>
           <div class="course-footer clearfix">
             {% set teacher = users[course.teacherIds|first]|default(null) %}
