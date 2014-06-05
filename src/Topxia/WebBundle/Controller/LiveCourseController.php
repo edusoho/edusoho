@@ -281,7 +281,7 @@ class LiveCourseController extends BaseController
             }
         }
         $courses = array_filter($courses);
-        return $this->render("TopxiaWebBundle:LiveCourse:live-courses-block-{$view}.html.twig", array(
+        return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,
             'mode' => $mode,
