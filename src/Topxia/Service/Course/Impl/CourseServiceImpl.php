@@ -876,7 +876,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if ($thisLessons) {
-			return array('error_occupied','包含这个时间段的课时已经存在！');
+			return array('error_occupied','该时段内已有直播课时存在，请调整直播开始时间');
 		}
 
 		$courseSetting = $this->getSettingService()->get('course', array());
