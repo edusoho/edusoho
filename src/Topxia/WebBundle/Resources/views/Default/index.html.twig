@@ -28,8 +28,10 @@
         </div>
       </div>
 
+      {% if setting('course.live_course_enabled') %}
+
       <div class="es-box">
-        <div class="es-box-heading"><h2>直播课程</h2></div>
+        <div class="es-box-heading"><h2>近期直播</h2></div>
         <div class="es-box-body">
           {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', { courses:recentLiveCourses, view: 'list'})) }}
           {% if recentLiveCourses|length >= 1 %}
@@ -37,6 +39,8 @@
           {% endif %}
         </div>
       </div>
+      
+      {% endif %}
 
     </div>
 

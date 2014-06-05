@@ -103,6 +103,8 @@
           <a class="btn btn-default btn-lg btn-block" href="{{ path('course_explore') }}">更多课程</a>
         </div>
       </div>
+
+      {% if setting('course.live_course_enabled') %}
       <div class="panel panel-autumn panel-autumn-default">
         <div class="panel-heading panel-heading-important">
           <h2 class="panel-title">近期直播 / <small>LiveCourse</small></h2>
@@ -145,6 +147,7 @@
           {% endif %}
         </div>
       </div>
+      {% endif %}
     </div>
 
     <div class="col-md-4">
