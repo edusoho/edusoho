@@ -81,7 +81,7 @@ define(function(require, exports, module) {
                     $('#stuNumUpperLimit_help').show();
                 }else{
                     if(Number($stuNumUpperLimitVal) > Number($perLiveMaxStudentNum)) {
-                        $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上线,最多"+$perLiveMaxStudentNum+"人");
+                        $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上限,最多"+$perLiveMaxStudentNum+"人");
                         $('#stuNumUpperLimit_help').css("color","red");
                         $('#stuNumUpperLimit_help').show();
                     }else{

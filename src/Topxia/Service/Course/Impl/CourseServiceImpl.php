@@ -876,7 +876,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if ($thisLessons) {
-			return array('error_occupied','包含这个时间段的课时已经存在！');
+			return array('error_occupied','该时段内已有直播课时存在，请调整直播开始时间');
 		}
 
 		$courseSetting = $this->getSettingService()->get('course', array());
@@ -894,7 +894,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$thisMaxStudentNum = $course['maxStudentNum'];
 
 		if ($thisMaxStudentNum > $leftStuNums) {
-			return array('error_limitout','该时间段内可参与直播的学员人数，已超出系统设定的限制,只剩下'.$leftStuNums."人，请与管理员联系！");
+			return array('error_limitout','该时段内可加入直播的人数，已超出系统限制，请调整时间后再试或与管理员联系');
 		}
 
 		return array('success','');

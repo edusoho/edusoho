@@ -71,7 +71,7 @@ define(function(require, exports, module) {
                 }else{
                     return false;
                 }
-            },"输入直播的开始时间有错误,请检查"
+            },"请输入一个晚于现在的时间"
 
         );
 
