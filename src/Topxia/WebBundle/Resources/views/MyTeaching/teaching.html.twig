@@ -34,13 +34,16 @@
         <tr>
           <td>
 
-    <a class="pull-left" href="{{ path('course_show', {id:course.id}) }}">
-      <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
-    </a>
+            <a class="pull-left" href="{{ path('course_show', {id:course.id}) }}">
+              <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
+            </a>
 
-
-
-          <a href="{{ path('course_show', {id:course.id}) }}" class="mlm">{{ course.title }}</a>
+            <div class="mlm">
+              <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+              {% if course.type == 'live' %}
+                <div><span class="label label-success live-label">直播</span></div>
+              {% endif  %}
+            </div>
 
           </td>
           <td>{{ course.studentNum }}</td>
