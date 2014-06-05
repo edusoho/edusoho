@@ -19,8 +19,7 @@
 		    {% endif %}
 		  {% elseif 'lesson' in id %}
 		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix" data-id="{{ item.id }}">
-		    	{% if item.status == 'published' %}
-		    	
+		    	{% if item.status == 'published' %}	    	
 			    	{% if item.type == 'video' %}
 				    	<span class="type" title="视频时长{{ item.length|duration }}">
 				    		<span>{{ item.length|duration }}</span>
@@ -35,9 +34,24 @@
 				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
 				    {% elseif item.type == 'testpaper' %}
 				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
-			    	{% endif %}
+				    {% elseif item.type == 'live' %}
+				       	{% if item.startTime > currentTime %}
+							<span class="type">{{ item.startTime|date('m月d日') }} 
+								{% for key,week in weeks %}
+									{% if key == item.startTime|date('w')  %}
+										星期{{ week }}
+									{% endif %}
+							    {% endfor %}
+								{{ item.startTime|date('H：i') }}
+							</span>
+						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+							<span class="type">正在直播中</span>
+						{% elseif item.endTime < currentTime %}
+							<span class="type">直播结束</span>
+						{% endif %}
+				    {% endif %}
 			    {% else %}
-			      <span class="status">未发布</span>
+			      	<span class="status">未发布</span>
 			    {% endif %}
 		    	<span class="name">课时{{ item.number }}</span>
 		    	<span class="pie">&nbsp;</span>

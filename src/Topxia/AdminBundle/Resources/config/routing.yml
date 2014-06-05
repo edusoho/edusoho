@@ -290,6 +290,10 @@ admin_course_order_manage:
     pattern: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
+admin_live_course:
+    pattern: /livecourse/{status}
+    defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
+
 admin_order:
     pattern: /order
     defaults: { _controller: TopxiaAdminBundle:Order:index }
@@ -531,6 +535,11 @@ admin_category_edit:
 admin_category_delete:
     pattern:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
+    methods: [POST]
+
+admin_category_upload:
+    pattern: /category/uploadfile
+    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
     methods: [POST]
 
 admin_file:

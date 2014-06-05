@@ -10,8 +10,39 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published');
+        $conditions = array('status' => 'published', 'type' => 'normal');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $liveCourses = array();
+        $newLiveCourses = array();
+
+        if (!empty($courseSetting['live_course_enabled']) && $courseSetting['live_course_enabled']) {
+
+            $liveConditions = array(
+                'status' => 'published',
+                'type' => 'live'
+            );
+            $liveCourses = $this->getCourseService()->searchCourses($liveConditions, 'latest', 0, 1000);
+            $courseIds = ArrayToolkit::column($liveCourses, 'id');
+
+            $lessonConditions = array(
+                'status' => 'published',
+                'type' => 'live',
+                'courseIds' => $courseIds
+            );
+            $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
+            $liveCourses = ArrayToolkit::index($liveCourses, 'id');
+
+            if (!empty($lessons) && !empty($liveCourses)) {
+                    foreach ($lessons as $key => &$lesson) {
+                    $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
+                    $newLiveCourses[$key]['lesson'] = $lesson;
+                }
+                $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
+            } 
+        }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
@@ -19,7 +50,8 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
-            'blocks' => $blocks
+            'blocks' => $blocks,
+            'newLiveCourses' => $newLiveCourses
         ));
     }
 
@@ -88,6 +120,48 @@ class DefaultController extends BaseController
         );
 
         return $this->createJsonResponse($info);
+    }
+
+    public function jumpAction()
+    {
+        $courseId = $_GET['id'];
+        echo "<script type=\"text/javascript\"> 
+        if (top.location !== self.location) {
+        top.location = \"http://www.edusoho-dev.com/course/{$courseId}\";
+        }
+        </script>";
+        exit();
+    }
+
+    protected function getCourseTeachersAndCategories($courses)
+    {
+        $userIds = array();
+        $categoryIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+            $categoryIds[] = $course['categoryId'];
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+
+        foreach ($courses as &$course) {
+            $teachers = array();
+            foreach ($course['teacherIds'] as $teacherId) {
+                $user = $users[$teacherId];
+                unset($user['password']);
+                unset($user['salt']);
+                $teachers[] = $user;
+            }
+            $course['teachers'] = $teachers;
+
+            $categoryId = $course['categoryId'];
+            if($categoryId!=0) {
+                $course['category'] = $categories[$categoryId];
+            }
+        }
+        
+        return $courses;
     }
 
     protected function getSettingService()

@@ -11,7 +11,7 @@ class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
      * 获取标签课程列表
      *
      * 可传入的参数：
-     *   TagIds 可选 标签ID
+     *   TagIds 必需 标签ID
      *   count    必需 课程数量，取值不超过10
      * 
      * @param  array $arguments 参数
