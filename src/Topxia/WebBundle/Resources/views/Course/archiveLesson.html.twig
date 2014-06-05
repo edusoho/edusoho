@@ -16,15 +16,8 @@
   	<div class="row article-row">
 	  	<div class="col-md-8 mbl">
 	  		{% if currentLesson %}
-	  		<div class="text-success"><h4>第{{ currentLesson.number }}课时： {{ currentLesson.title }}</h4></div>
-	  		<div class="">{{ currentLesson.summary }}</div>
-		  		{% if tags %}
-		  		<div class="mtm">课程标签：
-		  			{% for tag in tags %}
-		  			<a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs"><span class="label label-info">{{ tag.name }}</span></a>
-		  			{% endfor %}
-		  		</div>
-		  		{% endif %}
+		  		<div class="text-success"><h4>第{{ currentLesson.number }}课时： {{ currentLesson.title }}</h4></div>
+		  		<div class="">{{ currentLesson.summary }}</div>
 	  		{% else %}
 	  			<div class="empty">课程暂无课时</div>
 	  		{% endif %}
