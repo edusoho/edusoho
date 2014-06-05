@@ -32,7 +32,7 @@ class CourseController extends BaseController
 
         $conditions = array(
             'status' => 'published',
-            'type' => 'live',
+            'type' => 'normal',
             'categoryId' => $category['id'],
             'recommended' => ($sort == 'recommendedSeq') ? 1 : null
         );
