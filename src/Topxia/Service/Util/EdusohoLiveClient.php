@@ -58,6 +58,14 @@ class EdusohoLiveClient
         return array('url' => $url);
     }
 
+    public function getCapacity()
+    {
+        $args = array(
+            'timestamp' => time() . '',
+        );
+        return $this->callRemoteApi('GET', 'LiveCapacity', $args);
+    }
+
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         $url = $this->makeApiUrl($action);

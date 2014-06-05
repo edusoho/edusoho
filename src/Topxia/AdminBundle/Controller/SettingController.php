@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -449,6 +450,14 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (!empty($courseSetting['live_course_enabled'])) {
+            $client = LiveClientFactory::createClient();
+            $capacity = $client->getCapacity();
+        } else {
+            $capacity = array();
+        }
+
         $default = array(
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
@@ -457,15 +466,14 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
-            'perLiveMaxStudentNum' => '0',
-            'live_student_capacity' => '50'
+            'perLiveMaxStudentNum' => '0'
         );
 
         $courseSetting = array_merge($default, $courseSetting);
+        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
-            $courseSetting['live_student_capacity'] = '50';
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
