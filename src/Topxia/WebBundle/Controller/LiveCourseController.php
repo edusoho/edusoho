@@ -66,13 +66,12 @@ class LiveCourseController extends BaseController
 
         $recenntLessonsCondition = array(
             'status' => 'published',
-            'startTimeGreaterThan' => $now,
-            'endTimeLessThan' => $theDayAfterTomorrow
+            'startTimeGreaterThan' => $now
         );
 
         $recentlessons = $this->getCourseService()->searchLessons(
             $recenntLessonsCondition,  
-            array('startTime', 'ASC'), 0, 100
+            array('startTime', 'ASC'), 0, 8
         );
 
         $recentCourses = array();
@@ -103,6 +102,7 @@ class LiveCourseController extends BaseController
             'recentCourses' => $recentCourses,
             'users' => $users,
             'tomorrow' => $tomorrow,
+            'theDayAfterTomorrow' => $theDayAfterTomorrow,
             'category' => array('id' => null,'parentId' => null)
         ));
 
