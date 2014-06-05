@@ -123,9 +123,8 @@
               <div class="media-body">
                 <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
                 <div class="live-course-lesson">
+                  <span class="live-time mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
                   <span class="text-warning mrs">课时{{ lesson.number }}</span>
-                  <span class="live-time">直播:{{ lesson.startTime|date('m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</span>
-                  <span class="total-lessons">共{{ course.lessonNum }}课时</span>
                 </div>
 
                 <div class="course-about"><p>{{ course.about|plain_text(100) }}</p></div>
