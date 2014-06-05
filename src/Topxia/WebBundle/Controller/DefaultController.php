@@ -1,7 +1,9 @@
 <?php
 
 namespace Topxia\WebBundle\Controller;
+
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 
@@ -15,33 +17,10 @@ class DefaultController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        $liveCourses = array();
-        $newLiveCourses = array();
-
         if (!empty($courseSetting['live_course_enabled']) && $courseSetting['live_course_enabled']) {
-
-            $liveConditions = array(
-                'status' => 'published',
-                'type' => 'live'
-            );
-            $liveCourses = $this->getCourseService()->searchCourses($liveConditions, 'latest', 0, 1000);
-            $courseIds = ArrayToolkit::column($liveCourses, 'id');
-
-            $lessonConditions = array(
-                'status' => 'published',
-                'type' => 'live',
-                'courseIds' => $courseIds
-            );
-            $lessons = $this->getCourseService()->searchLessons( $lessonConditions, array('startTime', 'ASC'), 0, 12);
-            $liveCourses = ArrayToolkit::index($liveCourses, 'id');
-
-            if (!empty($lessons) && !empty($liveCourses)) {
-                    foreach ($lessons as $key => &$lesson) {
-                    $newLiveCourses[$key] = $liveCourses[$lesson['courseId']];
-                    $newLiveCourses[$key]['lesson'] = $lesson;
-                }
-                $newLiveCourses = $this->getCourseTeachersAndCategories($newLiveCourses);
-            } 
+            $recentLiveCourses = $this->getRecentLiveCourses();
+        } else {
+            $recentLiveCourses = array();
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
@@ -51,8 +30,37 @@ class DefaultController extends BaseController
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
-            'newLiveCourses' => $newLiveCourses
+            'recentLiveCourses' => $recentLiveCourses
         ));
+    }
+
+    private function getRecentLiveCourses()
+    {
+
+        $recenntLessonsCondition = array(
+            'status' => 'published',
+            'startTimeGreaterThan' => time()
+        );
+
+        $recentlessons = $this->getCourseService()->searchLessons(
+            $recenntLessonsCondition,  
+            array('startTime', 'ASC'),
+            0,
+            9
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
+
+        $recentCourses = array();
+        foreach ($recentlessons as $lesson) {
+            $course = $courses[$lesson['courseId']];
+            $course['lesson'] = $lesson;
+            // @todo refactor
+            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+            $recentCourses[] = $course;
+        }
+
+        return $recentCourses;
     }
 
     public function promotedTeacherBlockAction()
@@ -122,46 +130,16 @@ class DefaultController extends BaseController
         return $this->createJsonResponse($info);
     }
 
-    public function jumpAction()
+    public function jumpAction(Request $request)
     {
-        $courseId = $_GET['id'];
+        $courseId = intval($request->query->get('id'));
+        $url = $this->generateUrl('course_show', array('id' => $courseId));
         echo "<script type=\"text/javascript\"> 
         if (top.location !== self.location) {
-        top.location = \"http://www.edusoho-dev.com/course/{$courseId}\";
+        top.location = \"{$url}\";
         }
         </script>";
         exit();
-    }
-
-    protected function getCourseTeachersAndCategories($courses)
-    {
-        $userIds = array();
-        $categoryIds = array();
-        foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-            $categoryIds[] = $course['categoryId'];
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
-        foreach ($courses as &$course) {
-            $teachers = array();
-            foreach ($course['teacherIds'] as $teacherId) {
-                $user = $users[$teacherId];
-                unset($user['password']);
-                unset($user['salt']);
-                $teachers[] = $user;
-            }
-            $course['teachers'] = $teachers;
-
-            $categoryId = $course['categoryId'];
-            if($categoryId!=0) {
-                $course['category'] = $categories[$categoryId];
-            }
-        }
-        
-        return $courses;
     }
 
     protected function getSettingService()
