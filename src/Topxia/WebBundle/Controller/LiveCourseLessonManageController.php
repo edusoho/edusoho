@@ -33,9 +33,8 @@ class LiveCourseLessonManageController extends BaseController
                 'startTime' => $liveLesson['startTime'] . '',
                 'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
                 'authUrl' => $this->generateUrl('live_auth', array(), true),
-                'jumpUrl' => $this->generateUrl('course_show', array('id' => $liveLesson['courseId']), true),
+                'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
             ));
-
             if (empty($live) or isset($live['error'])) {
                 throw new \RuntimeException('创建直播教室失败，请重试！');
             }

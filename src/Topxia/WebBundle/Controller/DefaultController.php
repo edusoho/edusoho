@@ -122,6 +122,17 @@ class DefaultController extends BaseController
         return $this->createJsonResponse($info);
     }
 
+    public function jumpAction()
+    {
+        $courseId = $_GET['id'];
+        echo "<script type=\"text/javascript\"> 
+        if (top.location !== self.location) {
+        top.location = \"http://www.edusoho-dev.com/course/{$courseId}\";
+        }
+        </script>";
+        exit();
+    }
+
     protected function getCourseTeachersAndCategories($courses)
     {
         $userIds = array();
