@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle:MyGroup:groupindex.html.twig' %}
+{% block group %}
+
+<div class="es-row-wrap container-gap userpage-body">
+  <ul class="nav nav-pills userpage-nav clearfix">
+        <li><a href="{{path('groupindex',{id:groupinfo.id})}}">小组首页</a></li>
+        <li  class="active"><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
+        <li><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
+  </ul>
+{% block groupthread %}
+  <div class="row">
+<div class="col-xs-12"><div class="row row-offcanvas row-offcanvas-right">
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 话题列表
+                 {% if is_groupmember!=0%}<a href="{{path('publishthread',{id:groupinfo.id})}}" class="btn btn-primary btn-sm pull-right" role="button">发话题</a>
+                 {% endif %}  </div>
+               
+            </div>   </div>
+</div>
+{% endblock %}
+</div>
+{% endblock %}

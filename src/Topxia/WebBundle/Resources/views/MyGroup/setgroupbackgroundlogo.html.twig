@@ -1,32 +1,32 @@
 {% extends 'TopxiaWebBundle:MyGroup:layout.html.twig' %}
 
-{% block title %}小组logo设置 - {{ parent() }}{% endblock %}
+{% block title %}小组背景设置 - {{ parent() }}{% endblock %}
 {% set script_controller = 'mygroup/group_logo' %}
 
 {% block main %}
-
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}<span class="glyphicon "></span> 小组logo设置{% endblock %}
+    {% block heading %}<span class="glyphicon "></span> 小组背景设置{% endblock %}
     {% block body %}
     
-      <form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{path ('setgrouplogo',{id:id})}}">
-        {{ web_macro.flash_messages() }}
+      <form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{path ('setgroupbackgroundlogo',{id:id})}}">
+         {{ web_macro.flash_messages() }}
+       
        
  <div class="form-group">
-          <div class="col-md-2 control-label"><b>当前logo</b></div>
+          <div class="col-md-2 control-label"><b>当前背景</b></div>
           <div class="controls col-md-8 controls">
             {% if logo %}
-               <img src="{{file_path(logo)}}">
+               <img src="{{file_path(logo)}}" style="width:400px;height:100px;">
             {% else %}
-               <img src="{{asset('assets/img/default/group.png')}}">
+               <img src="{{asset('assets/img/default/background_group.jpg')}}" style="width:400px;height:100px;">
             {% endif %}
-         
+              
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-md-2 control-label">
-          {{ form_label(form.avatar, '新logo ') }}
+          {{ form_label(form.avatar, '新背景 ') }}
           </div>
           <div class="controls col-md-8 controls">
             {{ form_widget(form.avatar,{'attr' : { 'accept': 'image/gif,image/jpeg,image/png'}}) }}
@@ -47,5 +47,4 @@
       </form>
     {% endblock %}
   {% endembed %}
-
-{% endblock %}
+  {% endblock %}

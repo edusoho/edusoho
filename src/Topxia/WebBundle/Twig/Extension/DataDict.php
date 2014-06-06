@@ -183,6 +183,10 @@ class DataDict
         	'course' => '课程',
         	'vip' => '会员'
     	),
+    	'groupstatus'=>array(
+    		'on'=>'开启',
+    		'off'=>'关闭',
+    	),
 
 	);
 

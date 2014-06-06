@@ -4,13 +4,13 @@
 <div class="es-row-wrap container-gap userpage-body">
   <ul class="nav nav-pills userpage-nav clearfix">
              <li><a href="{{path('groupindex',{id:groupinfo.id})}}">小组首页</a></li>
-        <li><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
+        <li><a href="#">讨论区</a></li>
         <li class="active"><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
   </ul>
 
   <div class="row">
 <div class="col-xs-12"><div class="row row-offcanvas row-offcanvas-right">
-                <div class="page-header"><span class="glyphicon glyphicon-user"></span> 成员列表</div>
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 成员列表</div>
                 <div class="col-xs-12">
                     <p><b>组长</b></p>
                 </div>
@@ -37,7 +37,7 @@
 
                     </div>
                     {%endif%}
-            </div>  <br> </div>
+            </div>   </div>
 </div>
 
 </div>

@@ -1,10 +1,11 @@
 {% extends 'TopxiaWebBundle:MyGroup:layout.html.twig' %}
 {% set script_controller = 'mygroup/group' %}
+{% set script_controller = 'mygroup/publishthread' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 {% block content %}
 
  {{ web_macro.flash_messages() }}
-<div class="jumbotron" >
+<div class="jumbotron" {% if groupinfo.backgroundLogo %}style="background:url({{file_path(groupinfo.backgroundLogo)}});"{% else %}style="background:url({{asset('assets/img/default/background_group.jpg')}});"{% endif %}>
     <div class="row"><h2>
  {% if groupinfo.logo%}
             <img src="{{file_path(groupinfo.logo)}}" alt="" > 
@@ -25,6 +26,7 @@
         <a class="btn btn-primary btn-default" role="button" href="{{path('groupexit',{id:groupinfo.id,title:groupinfo.title})}}">退出小组</a>
         {% else %}
          <a class="btn btn-primary btn-default" role="button" href="{{path('setgrouplogo',{id:groupinfo.id})}}">logo设置</a>
+         <a class="btn btn-primary btn-default" role="button" href="{{path('setgroupbackgroundlogo',{id:groupinfo.id})}}">背景设置</a>
          <button class="btn btn-primary btn-default" data-toggle="modal" data-target="#groupinfo_edit">编辑小组 </button>
         {% endif %}
     </p>
@@ -44,7 +46,7 @@
   
           <div class="form-group">
             <label class="col-md-2 control-label" for="group_grouptitle">小组名称</label>
-            <div class="col-md-7 controls">
+            <div class="col-md-9 controls">
               <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
           value="{{groupinfo.title}}" >
               <div class="help-block" style="display:none;"></div>
@@ -53,7 +55,7 @@
 
           <div class="form-group">
             <label class="col-md-2 control-label" for="group_about">小组介绍</label>
-            <div class="col-md-7 controls">
+            <div class="col-md-9 controls">
               <textarea name="group[about]" rows="10" id="group_about" class="form-control">{{groupinfo.about}}</textarea>
             </div>
           </div>
@@ -104,28 +106,64 @@
 <div class="es-row-wrap container-gap userpage-body">
   <ul class="nav nav-pills userpage-nav clearfix">
              <li class="active"><a href="{{path('groupindex',{id:groupinfo.id})}}">小组首页</a></li>
-        <li><a href="#">讨论区</a></li>
+        <li><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
         <li><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
   </ul>
 
   <div class="row">
   <div class="col-md-12">
                        
-<div class="row row-offcanvas row-offcanvas-right">
+
 
     <div class="col-xs-12 col-sm-9">
         
             <div class="row">
 
-                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 最近话题</div>
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 最近话题
+                 {% if is_groupmember!=0%}<a href="{{path('publishthread',{id:groupinfo.id})}}" class="btn btn-primary btn-sm pull-right" role="button">发话题</a>
+                 {% endif %}</div>
+                 <ul class="media-list">
+                  {% if thread_recentlyinfo%}
+                    {% for threadinfo in thread_recentlyinfo%}
+                    <li class="media">  
+                                      
+                      {% if threadinfo.logo %}   
+                   <a href="" title="{{threadinfo.nickname}}" class="pull-left">         
+                    <img class="media-object" src="{{file_path(threadinfo.logo)}}" alt="{{threadinfo.nickname}}"></a>
+                     {% else %} <a href="" title="{{threadinfo.nickname}}" class="pull-left">
+                     <img src="{{asset('assets/img/default/avatar-large.png')}}" alt="{{threadinfo.nickname}}" ></a>
+                     {% endif %}
+                    <div class="media-body">
+                      <span class="badge pull-right" style="margin-top:15px;"> 1</span>
+                     <span class="label label-danger">置顶</span>
+                       <span class="label label-warning">精</span><h4 class="mdm">                     
+                      <a href="#">{{threadinfo.title}}</a></h4>
+                     <div class="text-muted text-normal">
+                       by <a href="#">{{threadinfo.nickname}}</a> &nbsp; {{threadinfo.createdTime|smart_time}} 
+                       {% if threadinfo.lastpostmemberinfo %}
+                      最后回复:<a href="#"> {{threadinfo.lastpostmemberinfo.nickname}}</a>
+                      最后回复时间: {{threadinfo.lastPostTime|smart_time}}
+                      {% endif %}
+                     </div>
+                     
+                    
+                   </li>
 
-         
+                    {% endfor %}
+                     <a href="#" class="btn btn-primary btn-default btn-block" role="button">更多话题</a>  
+                    {% else %}
+                    还没有话题！
+                    {% endif %}
+  
+</ul>
+          
+</div>
+       
             <br>
         </div>
 
 
 
-    </div>
     <div class="col-xs-6 col-sm-3">
       
             <div class="row">

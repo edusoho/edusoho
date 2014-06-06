@@ -48,7 +48,7 @@ class CourseThreadController extends BaseController
             ArrayToolkit::column($threads, 'latestPostUserId')
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        
         $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
         return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
             'course' => $course,

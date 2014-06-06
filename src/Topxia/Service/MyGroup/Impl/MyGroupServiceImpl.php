@@ -46,6 +46,36 @@ class MyGroupServiceImpl extends BaseService implements MyGroupService {
     public function isowner($id,$userid) {
          return $this->getMyGroupDao()->isowner($id,$userid);
      }
+    public function changegroupbackgroundlogo($id, $filePath, $options){
+        $groupinfo=$this->getGroupinfo($id);
+        $pathinfo = pathinfo($filePath);
+
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($filePath);
+
+        $grouplogoImage = $rawImage->copy();
+        $grouplogoImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        
+        $grouplogoImage->resize(new Box(1140, 254));
+        $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
+        $grouplogoImage->save($mediumFilePath, array('quality' => 90));
+        $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
+
+        @unlink($filePath);
+       //  print_r($groupinfo);die;
+        $oldAvatars = array(
+            'logo' => $groupinfo[0]['backgroundLogo'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $groupinfo[0]['backgroundLogo']) : null,
+         );
+
+        array_map(function($oldAvatar){
+            if (!empty($oldAvatar)) {
+                @unlink($oldAvatar);
+            }
+        }, $oldAvatars);
+        return  $this->getMyGroupDao()->updatgroupinfo($id, array(
+            'backgroundlogo' => $mediumFileRecord['uri'],
+        ));
+         }
     public function changegrouplogo($id, $filePath, $options){
         $groupinfo=$this->getGroupinfo($id);
         $pathinfo = pathinfo($filePath);
@@ -87,7 +117,20 @@ class MyGroupServiceImpl extends BaseService implements MyGroupService {
         return $status;
 
      }
+     public function getAllgroupinfo($condtion,$sort,$start,$limit){
 
+        return $this->getMyGroupDao()->getAllgroupinfo($condtion,$sort,$start,$limit);
+     }
+     public function getAllgroupCount($condtion){
+   
+        return $this->getMyGroupDao()->getAllgroupCount($condtion);
+     }
+    public function openGroup($id){
+         return $this->getMyGroupDao()->openGroup($id);
+    }
+    public function closeGroup($id){
+         return $this->getMyGroupDao()->closeGroup($id);
+    }
     private function getLogService() {
         return $this->createService('System.LogService');
     }

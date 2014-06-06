@@ -54,4 +54,26 @@ class GroupMemberDaoImpl extends BaseDao implements GroupMemberDao {
         $sql="SELECT memberId FROM {$this->table} WHERE groupId=? ";
         return $this->getConnection()->fetchAll($sql,array($id)) ? : array();
     }
+     public function getNum($groupid,$memberid,$condition) {
+        $sql = "SELECT {$condition} FROM {$this->table} where  groupId=? and memberId=? ";
+        return $this->getConnection()->fetchColumn($sql, array($groupid,$memberid)) ? : 0;
+    }
+    public function updatethreadNum($groupid,$memberid,$type){
+        $threadNum = $this->getNum($groupid,$memberid,'threadNum');
+        if ($type == '+') {
+
+            $num = array(
+                'threadNum' => $threadNum + 1,
+            );
+        } else if ($type == '-') {
+
+            $num = array(
+                'threadNum' => $threadNum - 1,
+            );
+        }
+
+        $this->getConnection()->update($this->table, $num, array('groupId' => $groupid,'memberId'=>$memberid));
+        return $num;
+    }
+
 }

@@ -734,3 +734,13 @@ admin_article_delete:
     pattern:  /article/delete
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
+admin_group:
+    pattern:  /group/
+    defaults: { _controller: TopxiaAdminBundle:Group:index }
+admin_close_group:
+    pattern:  /group/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:Group:close_group }
+admin_open_group:
+    pattern:  /group/{id}/open
+    defaults: { _controller: TopxiaAdminBundle:Group:open_group }
+

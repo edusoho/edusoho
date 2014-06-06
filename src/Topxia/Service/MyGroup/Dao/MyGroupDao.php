@@ -12,4 +12,9 @@ interface MyGroupDao
         public function getownerId($id);
         public function updatgroupinfo($id,$condtion);
         public function updategroupinfo($id,$condtion);
+        public function getAllgroupinfo($condtion,$sort,$start,$limit);
+        public function getAllgroupCount($condtion);
+        public function openGroup($id);
+        public function closeGroup($id);
+        public function updatethreadNum($id, $type);
 }

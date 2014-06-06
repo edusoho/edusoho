@@ -10,8 +10,7 @@
     {% block heading %}<span class="glyphicon glyphicon-hand-right"></span> 创建小组{% endblock %}
     {% block body %}
 
-
-      <form id="user-group-form" class="form-horizontal" method="post" action="{{path ('mygroup_add')}}">
+       <form id="user-group-form" class="form-horizontal" method="post" action="{{path ('mygroup_add')}}">
         {{ web_macro.flash_messages() }}
 
           <div class="form-group">

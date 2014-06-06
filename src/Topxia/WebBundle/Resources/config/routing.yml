@@ -1067,7 +1067,7 @@ mygroup:
     pattern:  /group
     defaults: { _controller: TopxiaWebBundle:MyGroup:index }
 mygroup_add:
-    pattern:  /group/add
+    pattern:  /mygroup/add
     defaults: { _controller: TopxiaWebBundle:MyGroup:mygroup_add }
 groupindex:
     pattern:  /group/{id}
@@ -1090,6 +1090,18 @@ setgrouplogo_crop:
 groupinfo_edit:
     pattern:  /group/info_edit/{id}
     defaults: { _controller: TopxiaWebBundle:MyGroup:groupinfo_edit }
+setgroupbackgroundlogo:
+    pattern:  /group/set_backgroundlogo/{id}
+    defaults: { _controller: TopxiaWebBundle:MyGroup:setgroupbackgroundlogo }
+setgroupbackgroundlogo_crop:
+    pattern:  /group/set_backgroundlogo/crop/{file}/{id}
+    defaults: { _controller: TopxiaWebBundle:MyGroup:setgroupbackgroundlogo_crop }
+groupthread:
+    pattern:  /group/thread/{id}
+    defaults: { _controller: TopxiaWebBundle:MyGroup:groupthread }
+publishthread:
+    pattern:  /mygroup/publishthread/{id}
+    defaults: { _controller: TopxiaWebBundle:MyGroup:publishthread }
 #占位
 vip:
     pattern: /vip/

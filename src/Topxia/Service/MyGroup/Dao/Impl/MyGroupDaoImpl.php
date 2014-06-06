@@ -11,7 +11,50 @@ class MyGroupDaoImpl extends BaseDao implements MyGroupDao {
     private $serializeFields = array(
         'tagIds' => 'json',
     );
+    public function getAllgroupinfo($condtion,$sort,$start,$limit){
+        $this->filterStartLimit($start, $limit);
+        $con=$this->getcondition($condtion);
+        $sql = "SELECT groups.*,user.nickname,user.id as userid FROM groups,user where  groups.ownerId=user.id {$con} ORDER BY {$sort} LIMIT $start,$limit";
+        return $this->getConnection()->fetchAll($sql) ? : array();
+    }
+    public function getAllgroupCount($condtion){
+       
+        
+        $con=$this->getcondition($condtion);
+        $sql = "SELECT count(groups.id) FROM groups,user where  groups.ownerId=user.id {$con} ";
+        return $this->getConnection()->fetchColumn($sql) ? : 0;
+    }
+    private function getcondition($condtion){
+        $con="";
+        if(isset($condtion['status'])){
+            if($condtion['status']=='on')
+            {
+            $con.="and groups.status=1 ";
+            }
+            elseif($condtion['status']=='off'){
+                $con.="and groups.status=0 ";
 
+            }
+            
+        }
+        if(isset($condtion['nickname']))
+        {
+           $nickname='\'%'.$condtion['nickname'].'%\'';
+           $con.="and user.nickname like".$nickname; 
+        }
+
+        if(isset($condtion['title']))
+        {
+            $title='\'%'.$condtion['title'].'%\'';
+            $con.="and groups.title like".$title; 
+        }
+        if(isset($condtion['id']))
+        {            
+            $id='\' '.$condtion['id'].'\'';
+            $con.="and groups.id=".$id; 
+        }
+        return $con;
+    }
     public function addGroup($group) {
 
         $group = $this->createSerializer()->serialize($group, $this->serializeFields);
@@ -38,13 +81,13 @@ class MyGroupDaoImpl extends BaseDao implements MyGroupDao {
         return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
     }
 
-    public function getmemberNum($id) {
-        $sql = "SELECT memberNum FROM {$this->table} where status=1 and id=? ";
+    public function getNum($id,$condition) {
+        $sql = "SELECT {$condition} FROM {$this->table} where status=1 and id=? ";
         return $this->getConnection()->fetchColumn($sql, array($id)) ? : 0;
     }
 
     public function updatememberNum($id, $type) {
-        $memberNum = $this->getmemberNum($id);
+        $memberNum = $this->getNum($id,'memberNum');
         if ($type == '+') {
 
             $num = array(
@@ -60,7 +103,23 @@ class MyGroupDaoImpl extends BaseDao implements MyGroupDao {
         $this->getConnection()->update($this->table, $num, array('id' => $id));
         return $num;
     }
+    public function updatethreadNum($id, $type) {
+        $threadNum = $this->getNum($id,'threadNum');
+        if ($type == '+') {
 
+            $num = array(
+                'threadNum' => $threadNum + 1,
+            );
+        } else if ($type == '-') {
+
+            $num = array(
+                'threadNum' => $threadNum - 1,
+            );
+        }
+
+        $this->getConnection()->update($this->table, $num, array('id' => $id));
+        return $num;
+    }
     public function isowner($id, $userid) {
         $sql = "SELECT ownerId FROM {$this->table} where status=1 and id=? ";
         $getid = $this->getConnection()->fetchColumn($sql, array($id)) ? : 0;
@@ -76,6 +135,22 @@ class MyGroupDaoImpl extends BaseDao implements MyGroupDao {
      }
       public function updatgroupinfo($id,$condtion){
          if($this->getConnection()->update($this->table, $condtion, array('id' => $id))){
+            return TRUE;
+         }
+        else{
+            return FALSE;
+        }
+     }
+     public function openGroup($id){
+        if($this->getConnection()->update($this->table, array('status'=>1), array('id' => $id))){
+            return TRUE;
+         }
+        else{
+            return FALSE;
+        }
+     }
+     public function closeGroup($id){
+        if($this->getConnection()->update($this->table, array('status'=>0), array('id' => $id))){
             return TRUE;
          }
         else{
