@@ -716,8 +716,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
-		$fields['length'] = $fields['timeLength'];
-
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'summary' => '',
@@ -728,7 +726,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'length' => 0,
 			'startTime' => 0,
 		));
-		
+
 		if ($lesson['type'] == "live") {
 			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
 		}
@@ -837,12 +835,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$liveLesson = $this->getCourseLesson($course['id'], $lessonId);
 			$thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
 			$thisEndTime = empty($liveLesson['endTime']) ? 0 : $liveLesson['endTime'];
+		} else {
+			$lessonId = "";
 		}
 
 		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
 		$endTime = $startTime + $length*60;
 
-		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime);
+		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime,$lessonId);
 
 		if (($length/60) > 8) {
 			 return array('error_timeout','时长不能超过8小时！');
@@ -855,7 +855,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$perLiveMaxStudentNum = !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0;
 
-		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime);
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime,$lessonId);
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
 		$courseIds = array_unique($courseIds);
 		$courseIds = array_values($courseIds);

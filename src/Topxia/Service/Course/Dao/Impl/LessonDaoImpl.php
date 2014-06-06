@@ -71,24 +71,24 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
-    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime)
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime,$lessonId)
     {
         $addtionalCondition = ";";
 
-        if (!empty($thisStartTime) && !empty($thisEndTime)) {
-            $addtionalCondition = "and (startTime != {$startTime} and endTime != {$endTime});";
+        if (!empty($lessonId)) {
+            $addtionalCondition = "and id != {$lessonId};";
         }
 
         $sql = "SELECT * FROM {$this->table} WHERE courseId = {$courseId} and ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime}))".$addtionalCondition;
         return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
     }
 
-    public function findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime)
+    public function findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime,$lessonId)
     {
         $addtionalCondition = ";";
 
-        if (!empty($thisStartTime) && !empty($thisEndTime)) {
-            $addtionalCondition = "and (startTime != {$startTime} and endTime != {$endTime});";
+        if (!empty($lessonId)) {
+            $addtionalCondition = "and id != {$lessonId};";
         }
 
         $sql = "SELECT * FROM {$this->table} WHERE (startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})".$addtionalCondition;
