@@ -450,14 +450,9 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
-
-        if (!empty($courseSetting['live_course_enabled'])) {
-            $client = LiveClientFactory::createClient();
-            $capacity = $client->getCapacity();
-        } else {
-            $capacity = array();
-        }
-
+        
+        $client = LiveClientFactory::createClient();
+        $capacity = $client->getCapacity();
 
         $default = array(
             'welcome_message_enabled' => '0',
