@@ -842,7 +842,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
 		$endTime = $startTime + $length*60;
 
-		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime,$lessonId);
+		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$lessonId);
 
 		if (($length/60) > 8) {
 			 return array('error_timeout','时长不能超过8小时！');
@@ -855,7 +855,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$perLiveMaxStudentNum = !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0;
 
-		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime,$lessonId);
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$lessonId);
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
 		$courseIds = array_unique($courseIds);
 		$courseIds = array_values($courseIds);
