@@ -716,6 +716,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
+		$fields['length'] = $fields['timeLength'];
+
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'summary' => '',
@@ -736,6 +738,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
+
 		$this->fillLessonMediaFields($fields);
 
 		$lesson = LessonSerialize::unserialize(
