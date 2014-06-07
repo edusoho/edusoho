@@ -21,9 +21,9 @@ interface LessonDao
 
     public function getLessonMaxSeqByCourseId($courseId);
 
-    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$thisStartTime,$thisEndTime);
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0);
 
-    public function findTimeSlotOccupiedLessons($startTime,$endTime,$thisStartTime,$thisEndTime);
+    public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0);
 
     public function findLessonsByChapterId($chapterId);
 

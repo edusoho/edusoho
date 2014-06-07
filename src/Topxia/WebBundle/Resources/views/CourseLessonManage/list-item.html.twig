@@ -23,8 +23,12 @@
 
 		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
-		{% if lesson.type in ['video', 'audio','live'] %}
+		{% if lesson.type in ['video', 'audio'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
+		{% endif %}
+
+		{% if lesson.type in ['live'] %}
+		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
 		{% endif %}
 
 		{% if lesson.type != 'testpaper' %}

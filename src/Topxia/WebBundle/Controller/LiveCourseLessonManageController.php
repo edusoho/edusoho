@@ -66,7 +66,8 @@ class LiveCourseLessonManageController extends BaseController
             $liveLesson['courseId'] = $liveCourse['id'];
             $liveLesson['startTime'] = strtotime($liveLesson['startTime']);
             $liveLesson['free'] = empty($liveLesson['free']) ? 0 : $liveLesson['free'];
-
+            $liveLesson['length'] = $liveLesson['timeLength'];
+            
             $liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
             
             return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(

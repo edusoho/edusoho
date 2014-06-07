@@ -18,7 +18,7 @@ class LiveCourseController extends BaseController
 
         $recenntLessonsCondition = array(
             'status' => 'published',
-            'startTimeGreaterThan' => time()
+            'endTimeGreaterThan' => time()
         );
 
         $paginator = new Paginator(

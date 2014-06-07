@@ -39,7 +39,7 @@ class DefaultController extends BaseController
 
         $recenntLessonsCondition = array(
             'status' => 'published',
-            'startTimeGreaterThan' => time()
+            'endTimeGreaterThan' => time(),
         );
 
         $recentlessons = $this->getCourseService()->searchLessons(
