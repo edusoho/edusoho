@@ -44,6 +44,8 @@
 			  </div>
 			</div>
 
+			{% if course.type == 'live' %}
+
 			<div class="form-group">
 			  <label class="col-md-2 control-label">直播最大学员数</label>
 			 <div class="col-md-8 controls">
@@ -53,6 +55,8 @@
 				<input type="hidden" id="perLiveMaxStudentNum" value="{{ perLiveMaxStudentNum }}">
 				<input type="hidden" id="default_perLiveMaxStudentNum" value="{{ course.maxStudentNum|default(0) }}">
 			</div>
+
+			{% endif %}
 
 			<div class="form-group">
 			  <label class="col-md-2 control-label">学员有效期</label>
