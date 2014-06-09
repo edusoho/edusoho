@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+    define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -74,18 +74,22 @@ define(function(require, exports, module) {
                 $('#stuNumUpperLimit_help').html("请输入大于0的数字");
                 $('#stuNumUpperLimit_help').css("color","red");
                 $('#stuNumUpperLimit_help').show();
+                $('#course-create-btn').attr("disabled", true);
             }else{
                 if (Number($stuNumUpperLimitVal) < Number($default_perLiveMaxStudentNum) && Number($default_perLiveMaxStudentNum)>0) {
-                    $('#stuNumUpperLimit_help').html("不能降低学员上限");
+                    $('#stuNumUpperLimit_help').html("最大学员数只能增加，不能减少");
                     $('#stuNumUpperLimit_help').css("color","red");
                     $('#stuNumUpperLimit_help').show();
+                    $('#course-create-btn').attr("disabled", true);
                 }else{
                     if(Number($stuNumUpperLimitVal) > Number($perLiveMaxStudentNum)) {
                         $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上限,最多"+$perLiveMaxStudentNum+"人");
                         $('#stuNumUpperLimit_help').css("color","red");
                         $('#stuNumUpperLimit_help').show();
+                        $('#course-create-btn').attr("disabled", true);
                     }else{
                         $('#stuNumUpperLimit_help').hide();
+                        $('#course-create-btn').attr("disabled", false);
                     }
                 }
             }
