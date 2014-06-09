@@ -49,6 +49,7 @@
         <p>
           总课时： <span class="text-muted">{{ course.lessonNum }}</span>
         </p>
+        {% if nextLiveLesson %}
         <p>
           下次直播时间：
           {% if nextLiveLesson %}
@@ -57,6 +58,7 @@
             <span class="text-danger">没有要直播的课时</span>
           {% endif %}
         </p>
+        {% endif %}
         {% if not course.expiryDay == 0 %}
         <p>
           有效期：
