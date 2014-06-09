@@ -110,6 +110,7 @@ class LiveCourseController extends BaseController
             'courses' => $courses,
             'users' => $users,
             'mode' => $mode,
+            'currentTime' => time()
         ));
     }
 
