@@ -6,8 +6,10 @@ define(function(require, exports, module) {
     exports.run = function() {
         var validator = new Validator({
             element: '#course-buy-form',
-            autoSubmit: true
+            autoSubmit: true,
+
         });
+
         if ($('#course-buy-form').find('input[name="mobile"]').length > 0){
             validator.addItem({
                 element: '[name="mobile"]',
@@ -68,6 +70,9 @@ define(function(require, exports, module) {
             });
         });
 
+        $('#join-course-btn').on('click', function(){
+            $(this).button('submiting').addClass('disabled');
+        });
 
     };
 
