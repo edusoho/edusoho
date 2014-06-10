@@ -12,8 +12,8 @@ class MyTeachingController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if(!in_array('ROLE_TEACHER', $user['roles'])) {
-            throw $this->createAccessDeniedException();
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
         $paginator = new Paginator(
@@ -42,6 +42,11 @@ class MyTeachingController extends BaseController
 	{
 
 		$user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
 		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
 
         if (empty($myTeachingCourseCount)) {
