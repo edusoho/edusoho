@@ -11,8 +11,8 @@ class MyTeachingController extends BaseController
     public function coursesAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        
-        if(in_array('ROLE_USER', $user['roles'])) {
+
+        if(!in_array('ROLE_TEACHER', $user['roles'])) {
             throw $this->createAccessDeniedException();
         }
 
