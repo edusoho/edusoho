@@ -120,6 +120,13 @@
                 {% elseif course.serializeMode == 'finished' %}
                   <span class="label label-warning series-mode-label">已完结</span>
                 {% endif %}
+                {% if course.type == 'live' %}
+                  {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                    <span class="label label-warning series-mode-label">直播中</span>
+                  {% else %}
+                    <span class="label label-success series-mode-label">直播</span>
+                  {% endif %}
+                {% endif %}
               </a>
               <div class="media-body">
                 <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>

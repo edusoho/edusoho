@@ -54,6 +54,9 @@ class DefaultController extends BaseController
         $recentCourses = array();
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
+            if ($course['status'] != 'published') {
+                continue;
+            }
             $course['lesson'] = $lesson;
             // @todo refactor
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
