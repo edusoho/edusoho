@@ -27,7 +27,7 @@
 		<label class="col-md-2 control-label" >直播开始时间</label>
 		 <div class="col-md-8 controls" style="z-index:2000;">
           <input type="text"  name="startTime" class="form-control width-input width-input-large" value="{{ liveLesson.startTime|default()|data_format }}">
-          <div class="help-block">教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。</div>
+          <div class="help-block" id="starttime-help-block">教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。</div>
       </div>
 	</div>
 
@@ -35,6 +35,7 @@
         <label class="col-md-2 control-label" >直播时长</label>
          <div class="col-md-8 controls">
             <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ liveLesson.length|default(60) }}" placeholder="时长"> 分钟
+            <div class="help-block" id="timelength-help-block"></div>
         </div>
 
 	

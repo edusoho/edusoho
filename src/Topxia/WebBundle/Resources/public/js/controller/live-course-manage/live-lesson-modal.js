@@ -75,6 +75,22 @@ define(function(require, exports, module) {
 
         );
 
+        var thisTime = $('[name=startTime]').val();
+            thisTime = thisTime.replace(/-/g,"/");
+            thisTime = Date.parse(thisTime)/1000;
+            var nowTime = Date.parse(new Date())/1000;
+
+        if (nowTime > thisTime) {
+            $('[name=startTime]').attr('disabled',true);
+            $('#live-length-field').attr('disabled',true);
+            $('#starttime-help-block').html("直播已经开始或者结束,无法编辑");
+            $('#starttime-help-block').css('color','#a94442');
+            $('#timelength-help-block').html("直播已经开始或者结束,无法编辑");
+            $('#timelength-help-block').css('color','#a94442');
+        }else{
+            $('[name=startTime]').attr('disabled',false);
+        }
+
         validator.addItem({
             element: '#live-title-field',
             required: true
