@@ -38,20 +38,24 @@
 
               <div class="text-muted" style="font-weight:normal;font-size:12px;color:#aaa;">
 
-                {% if item.startTime > currentTime %}
-                  <span>{{ item.startTime|date('m月d日') }} 
-                    {% for key,week in weeks %}
-                      {% if key == item.startTime|date('w')  %}
-                        星期{{ week }}
-                      {% endif %}
-                      {% endfor %}
-                    {{ item.startTime|date('H：i') }}
-                  </span>
-                {% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
-                  <span class="text-warning">正在直播中</span>
-                {% elseif item.endTime < currentTime %}
-                  <span>直播结束</span>
-                {% endif %}
+                {% if item.type == 'live' %}
+
+                  {% if item.startTime > currentTime %}
+                    <span>{{ item.startTime|date('m月d日') }} 
+                      {% for key,week in weeks %}
+                        {% if key == item.startTime|date('w')  %}
+                          星期{{ week }}
+                        {% endif %}
+                        {% endfor %}
+                      {{ item.startTime|date('H：i') }}
+                    </span>
+                  {% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+                    <span class="text-warning">正在直播中</span>
+                  {% elseif item.endTime < currentTime %}
+                    <span>直播结束</span>
+                  {% endif %}
+
+                {% endif  %}
 
               </div>
 
