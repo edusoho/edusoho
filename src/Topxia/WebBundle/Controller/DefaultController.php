@@ -46,7 +46,7 @@ class DefaultController extends BaseController
             $recenntLessonsCondition,  
             array('startTime', 'ASC'),
             0,
-            9
+            20
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
@@ -58,8 +58,12 @@ class DefaultController extends BaseController
                 continue;
             }
             $course['lesson'] = $lesson;
-            // @todo refactor
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+            if (count($recentCourses) >= 8) {
+                break;
+            }
+
             $recentCourses[] = $course;
         }
 
