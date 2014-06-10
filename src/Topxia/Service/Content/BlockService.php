@@ -16,6 +16,8 @@ interface BlockService
 
 	public function findBlockHistoryCountByBlockId($blockId);
 
+	public function generateBlockTemplateItems($block);
+
 	public function getBlockHistory($id);
 
 	public function getLatestBlockHistory();

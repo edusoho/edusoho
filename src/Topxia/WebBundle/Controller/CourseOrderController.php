@@ -25,7 +25,6 @@ class CourseOrderController extends OrderController
         $previewAs = $request->query->get('previewAs');
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -48,7 +47,6 @@ class CourseOrderController extends OrderController
     public function payAction(Request $request)
     {
         $formData = $request->request->all();
-
         $user = $this->getCurrentUser();
         if (empty($user)) {
             return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');

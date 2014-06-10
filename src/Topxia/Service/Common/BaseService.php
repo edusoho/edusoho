@@ -30,7 +30,12 @@ abstract class BaseService
         return $this->getKernel()->getCurrentUser();
     }
 
-    protected function purifyHtml($html)
+    public function getDispatcher()
+    {
+        return ServiceKernel::dispatcher();
+    }
+
+    protected function purifyHtml($html, $trusted = false)
     {
         if (empty($html)) {
             return '';
@@ -41,7 +46,7 @@ abstract class BaseService
         );
 
         $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create();
+        $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);
     }

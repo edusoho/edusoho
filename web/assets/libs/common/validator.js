@@ -18,9 +18,11 @@ define(function(require, exports, module) {
         },
         getExplain: function(ele) {
             var item = this.getItem(ele);
-            var explain = item.find("." + this.get("explainClass"));
+            ele = $(ele);
+            var explain = ele.parents('.controls').find("." + this.get("explainClass"));
+
             if (explain.length == 0) {
-                var explain = $('<div class="' + this.get("explainClass") + '" style="display:none;"></div>').appendTo(item.find('.controls'));
+                var explain = $('<div class="' + this.get("explainClass") + '" style="display:none;"></div>').appendTo(ele.parents('.controls'));
             }
             return explain;
         }

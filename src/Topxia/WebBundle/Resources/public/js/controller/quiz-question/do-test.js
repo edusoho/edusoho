@@ -61,6 +61,8 @@ define(function(require, exports, module) {
 
         var isLimit = true;
 
+        var timerFinish = null;
+
         if (deadline == null) {
             isLimit = false;
             deadline = interval*3;
@@ -83,7 +85,9 @@ define(function(require, exports, module) {
                 usedTime++;
                 $('#time_show').text(formatTime(deadline));
 
-                if (deadline <= 0) {
+                if (deadline < 0) {
+
+                    timer.stop();
 
                     if (isAjaxing == 0) {
                         $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
@@ -97,17 +101,16 @@ define(function(require, exports, module) {
                             timer.stop();
                         });
                     } else {
-                        setInterval(function(){
+                        timerFinish = setInterval(function(){
                             if (isAjaxing == 0) {
+                                clearInterval(timerFinish);
                                 $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                                     changeAnswers = {};
                                     $('#timeout-dialog').show();
-                                    timer.stop();
                                 }).error(function(){
                                     $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
                                     $('#timeout-dialog').find('#show_testpaper_result').text('确定');
                                     $('#timeout-dialog').show();
-                                    timer.stop();
                                 });
                             }
                         }, 1000);
@@ -236,8 +239,9 @@ define(function(require, exports, module) {
                     window.location.href = $finishBtn.data('goto');
                 });
             } else {
-                setInterval(function(){
+                timerFinish = setInterval(function(){
                     if (isAjaxing == 0) {
+                        clearInterval(timerFinish);
                         $.post($finishBtn.data('url'), { data:changeAnswers, usedTime:usedTime }, function(){
                             window.location.href = $finishBtn.data('goto');
                         });

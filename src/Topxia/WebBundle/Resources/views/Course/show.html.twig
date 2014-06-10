@@ -25,6 +25,12 @@
 </div>
 {% endif %}
 
+
+{% if course.type == 'live' %}
+
+{% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
+
+{% else %}
 <div class="es-row-wrap container-gap course-cover">
 
   <div class="row row-5-7 course-cover-heading">
@@ -231,7 +237,7 @@
   </div>
 
 </div>
-
+{% endif %}
 </div>
 {% endblock %}
 
