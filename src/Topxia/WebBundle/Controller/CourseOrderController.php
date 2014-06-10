@@ -16,7 +16,7 @@ class CourseOrderController extends OrderController
     {   
         $course = $this->getCourseService()->getCourse($id);
 
-        $remainingStudentNum = '';
+        $remainingStudentNum = $course['maxStudentNum'];
 
         if ($course['type'] == 'live') {
             if ($course['price'] <= 0) {
@@ -50,15 +50,21 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
-            'course' => $course,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-            'courseSetting' => $courseSetting,
-            'member' => $member,
-            'remainingStudentNum' => $remainingStudentNum
-        ));
+        if ($remainingStudentNum == 0) {
+            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
+                'course' => $course
+            ));
+        } else {
+            return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
+                'course' => $course,
+                'payments' => $this->getEnabledPayments(),
+                'user' => $userInfo,
+                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+                'courseSetting' => $courseSetting,
+                'member' => $member
+            ));
+        }
+
     }
 
     public function payAction(Request $request)

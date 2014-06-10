@@ -1,0 +1,6 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}{% endblock %}
+{% block body %}
+  <div class="alert alert-info">真不巧，已经有人抢在你前面下单了，请继续关注~</div>
+{% endblock %}
