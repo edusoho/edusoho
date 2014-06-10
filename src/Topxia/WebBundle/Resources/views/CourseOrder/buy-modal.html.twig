@@ -156,7 +156,12 @@
         <span class="text-muted">预览模式无法支付</span>
         <button class="btn btn-primary" disabled="disabled">去支付</button> 
       {% else %}
-        <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+        {% if remainingStudentNum <= 0 %}
+          <span class="text-muted">学生人数已达最大人数,如需增加人数请联系管理员</span>
+          <button class="btn btn-primary" disabled="disabled">去支付</button>
+        {% else %}
+          <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+        {% endif %}
       {% endif %}
     {% endif %}
   {% else %}
@@ -165,7 +170,12 @@
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
       {% if not avatarAlert %}
-        <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        {% if remainingStudentNum <= 0 %}
+          <span class="text-muted">学生人数已达最大人数,如需增加人数请联系管理员</span>
+          <button class="btn btn-primary" disabled="disabled">加入学习</button>
+        {% else %}
+          <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        {% endif %}
       {% endif %}
     {% endif %}
 
