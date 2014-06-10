@@ -2,7 +2,9 @@
 
 {% block title %}{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
-  
+  {% if course.price > 0 %}
+    <div class="alert alert-info">注意：请在30分钟内完成支付，否则订单将会过期失效</div>
+  {% endif %}
   <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
 
     <div class="form-group">
@@ -156,12 +158,7 @@
         <span class="text-muted">预览模式无法支付</span>
         <button class="btn btn-primary" disabled="disabled">去支付</button> 
       {% else %}
-        {% if remainingStudentNum <= 0 %}
-          <span class="text-muted">学生人数已达最大人数,如需增加人数请联系管理员</span>
-          <button class="btn btn-primary" disabled="disabled">去支付</button>
-        {% else %}
-          <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
-        {% endif %}
+        <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
       {% endif %}
     {% endif %}
   {% else %}
@@ -170,12 +167,7 @@
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
       {% if not avatarAlert %}
-        {% if remainingStudentNum <= 0 %}
-          <span class="text-muted">学生人数已达最大人数,如需增加人数请联系管理员</span>
-          <button class="btn btn-primary" disabled="disabled">加入学习</button>
-        {% else %}
-          <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
-        {% endif %}
+        <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
 
