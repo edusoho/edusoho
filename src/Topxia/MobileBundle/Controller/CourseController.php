@@ -13,6 +13,7 @@ class CourseController extends MobileController
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
+        $conditions['type'] = 'normal';
         
         $search = $request->query->get('search', '');
         if ($search != '') {
@@ -401,6 +402,7 @@ class CourseController extends MobileController
             $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
             $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
 
             $course['teachers'] = array();
             foreach ($course['teacherIds'] as $teacherId) {
@@ -418,9 +420,10 @@ class CourseController extends MobileController
             return array();
         }
 
+        $self = $this;
         $container = $this->container;
 
-        return array_map(function($item) use ($container) {
+        return array_map(function($item) use ($self, $container) {
             $item['createdTime'] = date('c', $item['createdTime']);
             if (!empty($item['length']) and in_array($item['type'], array('audio', 'video'))) {
                 $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
@@ -428,8 +431,21 @@ class CourseController extends MobileController
                 $item['length'] = 0;
             }
 
+            $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
+
             return $item;
         }, $items);
+
+    }
+
+    public function convertAbsoluteUrl($request, $html)
+    {
+        $baseUrl = $request->getSchemeAndHttpHost();
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+            return "src=\"{$baseUrl}/{$matches[1]}\"";
+        }, $html);
+
+        return $html;
 
     }
 
