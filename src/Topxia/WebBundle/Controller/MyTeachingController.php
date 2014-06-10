@@ -11,6 +11,11 @@ class MyTeachingController extends BaseController
     public function coursesAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
+        if(!in_array('ROLE_TEACHER', $user['roles'])) {
+            throw $this->createAccessDeniedException();
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
