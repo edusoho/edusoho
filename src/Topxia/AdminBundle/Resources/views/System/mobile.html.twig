@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}客户端设置 - {{ parent() }}{% endblock %}
+{% block title %}移动客户端设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'client' %}
 {% set script_controller = 'setting/mobile' %}
@@ -12,7 +12,7 @@
 img {max-width: 80%; margin-bottom: 10px;}
 </style>
 
-<div class="page-header"><h1>客户端设置</h1></div>
+<div class="page-header"><h1>移动客户端设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
@@ -20,10 +20,11 @@ img {max-width: 80%; margin-bottom: 10px;}
 
   <div class="form-group">
     <div class="col-md-2 control-label">
-      <label >网校状态</label>
+      <label >显示状态</label>
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('enabled', {1:'开启', 0:'关闭'}, mobile.enabled) }}
+      <div class="help-block">是否在网站显示移动客户端登录/下载入口</div>
     </div>
   </div>
 
@@ -33,6 +34,7 @@ img {max-width: 80%; margin-bottom: 10px;}
     </div>
     <div class="controls col-md-8">
       <textarea class="form-control" id="mobile_about" rows="10" name="about">{{ mobile.about }}</textarea>
+      <div class="help-block">此简介将显示在移动客户端的"关于网校"</div>
     </div>
   </div>
 
@@ -49,6 +51,9 @@ img {max-width: 80%; margin-bottom: 10px;}
     </div>
   </div>
 
+  <fieldset>
+  <legend>设置启动图</legend>
+  <div class="help-block">最多允许设置5张启动图，用户首次登录网校时会显示启动图。</div>
   <div class="form-group">
     <div class="col-md-2 control-label">
       <label for="splash1">启动图1</label>
@@ -113,6 +118,8 @@ img {max-width: 80%; margin-bottom: 10px;}
       <input type="hidden" name="splash5" value="{{ mobile.splash5 }}">
     </div>
   </div>
+
+  </fieldset>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   

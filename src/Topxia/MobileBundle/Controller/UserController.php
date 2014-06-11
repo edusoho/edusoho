@@ -206,36 +206,50 @@ class UserController extends MobileController
 
     public function getSchoolSiteAction(Request $request)
     {
-        $site = $this->getSettingService()->get('site', array());
-        return $this->createJson($request, $site['slogan']);
+        $mobile = $this->getSettingService()->get('mobile', array());
+
+        return $this->createJson($request, array(
+            'about' => $this->convertAbsoluteUrl($request, $mobile['about']), 
+        ));
+    }
+
+    public function convertAbsoluteUrl($request, $html)
+    {
+        $baseUrl = $request->getSchemeAndHttpHost();
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+            return "src=\"{$baseUrl}/{$matches[1]}\"";
+        }, $html);
+
+        return $html;
+
     }
     
     private function getSiteInfo($request)
     {
         $site = $this->getSettingService()->get('site', array());
+        $mobile = $this->getSettingService()->get('mobile', array());
 
-        if (!empty($site['logo'])) {
-            $logo = $request->getSchemeAndHttpHost() . '/' . $site['logo'];
+        if (!empty($mobile['logo'])) {
+            $logo = $request->getSchemeAndHttpHost() . '/' . $mobile['logo'];
         } else {
             $logo = '';
         }
 
-        $splashs = array(
-            '/assets/img/default/course-large.png',
-            '/assets/img/default/course-large.png',
-            '/assets/img/default/course-large.png'
-        );
+        for($i=1; $i < 5; $i++) {
+            if (!empty($mobile['splash'. $i])) {
+                $splashs[] = $request->getSchemeAndHttpHost() . '/' . $mobile['splash'. $i];
+            }
+        }
 
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
+            'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
                 "max" => "1.0.0"
             ),
-            'clientUpdateUrl' => 'http://open.edusoho.com/mobile_update',
-            'splashs' => $splashs
         );
     }
 

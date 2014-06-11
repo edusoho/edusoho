@@ -193,7 +193,7 @@ define(function(require, exports, module) {
             });
         });
 
-        var editor = EditorFactory.create('#mobile_about', 'simple');
+        var editor = EditorFactory.create('#mobile_about', 'simple', {extraFileUploadParams:{group:'default'}});
         editor.sync();
     };
 
