@@ -51,8 +51,14 @@ class SettingController extends BaseController
         $mobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled'=> 0,
-            'about'=>'',
+            'enabled'=> 0,   // 网校状态
+            'about'=>'',     // 网校简介
+            'logo' => '',    // 网校Logo
+            'splash1' => '', // 启动图1
+            'splash2' => '', // 启动图2
+            'splash3' => '', // 启动图3
+            'splash4' => '', // 启动图4
+            'splash5' => '', // 启动图5
         );
 
         $mobile = array_merge($default, $mobile);

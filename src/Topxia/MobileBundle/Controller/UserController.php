@@ -231,8 +231,8 @@ class UserController extends MobileController
             'url' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'apiVersionRange' => array(
-                "min" => 1.0,
-                "max" => 1.0
+                "min" => "1.0.0",
+                "max" => "1.0.0"
             ),
             'clientUpdateUrl' => 'http://open.edusoho.com/mobile_update',
             'splashs' => $splashs
