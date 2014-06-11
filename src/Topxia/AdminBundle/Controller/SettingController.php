@@ -64,7 +64,7 @@ class SettingController extends BaseController
         $mobile = array_merge($default, $mobile);
 
         if ($request->getMethod() == 'POST') {
-            $site = $request->request->all();
+            $mobile = $request->request->all();
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
@@ -73,6 +73,45 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile
         ));
+    }
+
+    public function mobilePictureUploadAction(Request $request, $type)
+    {
+        $file = $request->files->get($type);
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $mobile = $this->getSettingService()->get('mobile', array()); 
+        $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $mobile[$type] = ltrim($mobile[$type], '/');
+
+        $this->getSettingService()->set('mobile', $mobile);
+
+        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
+
+        $response = array(
+            'path' => $mobile[$type],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function mobilePictureRemoveAction(Request $request, $type)
+    {
+        $setting = $this->getSettingService()->get("mobile");
+        $setting[$type] = '';
+
+        $this->getSettingService()->set('mobile', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
+
+        return $this->createJsonResponse(true);
     }
 
     public function logoUploadAction(Request $request)

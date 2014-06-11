@@ -323,6 +323,16 @@ admin_setting_mobile:
     pattern:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
 
+admin_setting_mobile_picture_upload:
+    pattern:  /setting/mobile/picture/upload/{type}
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureUpload }
+    methods: [POST]
+
+admin_setting_mobile_picture_remove:
+    pattern:  /setting/mobile/picture/remove/{type}
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureRemove }
+    methods: [POST]
+
 admin_setting_logo_upload:
     pattern:  /setting/logo/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:logoUpload }
