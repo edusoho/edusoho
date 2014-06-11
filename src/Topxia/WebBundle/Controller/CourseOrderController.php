@@ -16,27 +16,13 @@ class CourseOrderController extends OrderController
     {   
         $course = $this->getCourseService()->getCourse($id);
 
-        $remainingStudentNum = $course['maxStudentNum'];
-
-        if ($course['type'] == 'live') {
-            if ($course['price'] <= 0) {
-                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
-            } else {
-                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
-                    'targetType' => 'course',
-                    'targetId' => $course['id'],
-                    'status' => 'created',
-                    'createdTimeGreaterThan' => strtotime("-30 minutes")
-                ));
-                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
-            }
-        }
-
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+
+        $remainingStudentNum = $this->getRemainStudentNum($course);
 
         $previewAs = $request->query->get('previewAs');
 
@@ -227,6 +213,27 @@ class CourseOrderController extends OrderController
         }
 
         return $member;
+    }
+
+    private function getRemainStudentNum($course)
+    {
+        $remainingStudentNum = $course['maxStudentNum'];
+
+        if ($course['type'] == 'live') {
+            if ($course['price'] <= 0) {
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
+            } else {
+                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'status' => 'created',
+                    'createdTimeGreaterThan' => strtotime("-30 minutes")
+                ));
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
+            }
+        }
+
+        return $remainingStudentNum;
     }
 
     public function getCourseService()
