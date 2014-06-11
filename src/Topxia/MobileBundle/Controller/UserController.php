@@ -50,24 +50,21 @@ class UserController extends MobileController
     public function loginWithTokenAction(Request $request)
     {
         $token = $this->getUserToken($request);
+        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+            $token = null;
+        }
+
         if (empty($token)) {
-            return $this->createErrorResponse($request, 'token_error', '登录已过期，请重新登录');
-        }
-
-        if ($token['type'] != self::TOKEN_TYPE) {
-            return $this->createErrorResponse($request, 'token_error', '登录已过期，请重新登录');
-        }
-
-        $user = $this->getUserService()->getUser($token['userId']);
-        if (empty($user)) {
-            return $this->createErrorResponse($request, 'user_not_found', '用户不存在');
+            $user = null;
+        } else {
+            $user = $this->getUserService()->getUser($token['userId']);
         }
 
         $site = $this->getSettingService()->get('site', array());
 
         $result = array(
-            'token' => $token['token'],
-            'user' => $this->filterUser($user),
+            'token' => empty($token) ? '' : $token['token'],
+            'user' => empty($user) ? null : $this->filterUser($user),
             'site' => $this->getSiteInfo($request)
         );
         
@@ -233,10 +230,11 @@ class UserController extends MobileController
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
-            'versionRange' => array(
+            'apiVersionRange' => array(
                 "min" => 1.0,
                 "max" => 1.0
-                ),
+            ),
+            'clientUpdateUrl' => 'http://open.edusoho.com/mobile_update',
             'splashs' => $splashs
         );
     }
