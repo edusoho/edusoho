@@ -48,7 +48,7 @@
 
 	</div>
 
-	<div class="item-actions">
+	<div class="item-actions prm">
 	  {% if lesson.type != 'testpaper' %}
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
 		</button>
