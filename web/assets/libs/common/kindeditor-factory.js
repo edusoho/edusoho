@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     var simpleNoImageItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', '|', 'removeformat', 'source'];
 
-    var simpleItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source'];
+    var simpleItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', 'code', '|', 'removeformat', 'source'];
 
     var standardItems = [
         'bold', 'italic', 'underline', 'strikethrough', 'removeformat', '|',
