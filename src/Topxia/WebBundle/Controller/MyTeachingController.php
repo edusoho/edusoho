@@ -88,13 +88,6 @@ class MyTeachingController extends BaseController
     	));
 	}
 
-    protected function roleJudge($role)
-    {
-        if(!in_array('ROLE_TEACHER', $role)) {
-            throw $this->createAccessDeniedException();
-        }
-    }
-
 	protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');

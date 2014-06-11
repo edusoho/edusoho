@@ -447,7 +447,9 @@ class TestpaperController extends BaseController
     {
         $user = $this->getCurrentUser();
         
-        $this->roleJudge($user['roles']);
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
 
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
 
@@ -602,13 +604,6 @@ class TestpaperController extends BaseController
         }
 
         return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
-    }
-
-    private function roleJudge($role)
-    {
-        if(!in_array('ROLE_TEACHER', $role)) {
-            throw $this->createAccessDeniedException();
-        }
     }
 
     private function getTestpaperService()

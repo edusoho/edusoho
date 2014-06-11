@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         var validator = new Validator({
             element: '#course-buy-form',
-            autoSubmit: true,
+            autoSubmit: true
 
         });
 
