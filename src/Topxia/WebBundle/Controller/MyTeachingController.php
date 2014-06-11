@@ -40,7 +40,6 @@ class MyTeachingController extends BaseController
 
 	public function threadsAction(Request $request, $type)
 	{
-
 		$user = $this->getCurrentUser();
 
         if(!$user->isTeacher()) {
@@ -88,6 +87,13 @@ class MyTeachingController extends BaseController
             'type'=>$type
     	));
 	}
+
+    protected function roleJudge($role)
+    {
+        if(!in_array('ROLE_TEACHER', $role)) {
+            throw $this->createAccessDeniedException();
+        }
+    }
 
 	protected function getThreadService()
     {
