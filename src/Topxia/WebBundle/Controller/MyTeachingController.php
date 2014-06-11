@@ -12,7 +12,9 @@ class MyTeachingController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $this->roleJudge($user['roles']);
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -40,7 +42,9 @@ class MyTeachingController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 
-        $this->roleJudge($user['roles']);
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
 
 		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
 
