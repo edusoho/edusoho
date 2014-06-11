@@ -14,6 +14,21 @@ class MobileController extends BaseController
 
     protected $result = array();
 
+    public function mobileVersionAction(Request $request)
+    {
+        $result = array(
+            'mobileVersion' => 1,
+            'url' => $request->getSchemeAndHttpHost()
+            );
+
+        return $this->createJson($request, $result);
+    }
+
+    public function notifyMobileVersionAction(Request $request)
+    {
+        return new JsonResponse("success");
+    }
+
     protected function createJson(Request $request, $data)
     {
         $callback = $request->query->get('callback');

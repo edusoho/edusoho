@@ -147,3 +147,11 @@ mapi_user_login_with_token:
 mapi_user_login_with_site:
     pattern:  /login_with_site
     defaults: { _controller: TopxiaMobileBundle:User:loginWithSite }
+
+mapi_mobile_version:
+    pattern:  /mobile_version
+    defaults: { _controller: TopxiaMobileBundle:Mobile:mobileVersion }
+
+mapi_mobile_notify_version:
+    pattern:  /notify_mobile_version
+    defaults: { _controller: TopxiaMobileBundle:Mobile:notifyMobileVersion }

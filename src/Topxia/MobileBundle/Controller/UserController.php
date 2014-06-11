@@ -207,7 +207,6 @@ class UserController extends MobileController
         }, $users);
     }
 
-
     public function getSchoolSiteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
@@ -224,10 +223,21 @@ class UserController extends MobileController
             $logo = '';
         }
 
+        $splashs = array(
+            '/assets/img/default/course-large.png',
+            '/assets/img/default/course-large.png',
+            '/assets/img/default/course-large.png'
+        );
+
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
+            'versionRange' => array(
+                "min" => 1.0,
+                "max" => 1.0
+                ),
+            'splashs' => $splashs
         );
     }
 
