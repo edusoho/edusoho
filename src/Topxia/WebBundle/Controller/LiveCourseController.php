@@ -24,7 +24,7 @@ class LiveCourseController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchLessonCount($recenntLessonsCondition)
-            , 20
+            , 30
         );
 
         $recentlessons = $this->getCourseService()->searchLessons(
