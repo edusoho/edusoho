@@ -50,7 +50,6 @@ class CourseOrderController extends OrderController
                 'member' => $member
             ));
         }
-
     }
 
     public function payAction(Request $request)
