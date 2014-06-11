@@ -12,9 +12,7 @@ class MyTeachingController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if(!in_array('ROLE_TEACHER', $user['roles'])) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->roleJudge($user['roles']);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -40,8 +38,10 @@ class MyTeachingController extends BaseController
 
 	public function threadsAction(Request $request, $type)
 	{
-
 		$user = $this->getCurrentUser();
+
+        $this->roleJudge($user['roles']);
+
 		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
 
         if (empty($myTeachingCourseCount)) {
@@ -83,6 +83,13 @@ class MyTeachingController extends BaseController
             'type'=>$type
     	));
 	}
+
+    protected function roleJudge($role)
+    {
+        if(!in_array('ROLE_TEACHER', $role)) {
+            throw $this->createAccessDeniedException();
+        }
+    }
 
 	protected function getThreadService()
     {

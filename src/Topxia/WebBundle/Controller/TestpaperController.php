@@ -446,6 +446,8 @@ class TestpaperController extends BaseController
     public function listReviewingTestAction (Request $request)
     {
         $user = $this->getCurrentUser();
+        
+        $this->roleJudge($user['roles']);
 
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
 
@@ -600,6 +602,13 @@ class TestpaperController extends BaseController
         }
 
         return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
+    }
+
+    private function roleJudge($role)
+    {
+        if(!in_array('ROLE_TEACHER', $role)) {
+            throw $this->createAccessDeniedException();
+        }
     }
 
     private function getTestpaperService()
