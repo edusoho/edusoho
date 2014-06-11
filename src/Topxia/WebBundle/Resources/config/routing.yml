@@ -1102,7 +1102,7 @@ cloud_video_fingerprint:
 
 systeminfo:
     pattern: /systeminfo
-    defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
+    defaults: {_controller: TopxiaWebBundle:Systeminfo:index }
 
 setting_approval_submit:
     pattern: /settings/approval/submit

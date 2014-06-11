@@ -319,6 +319,10 @@ admin_setting_site:
     pattern:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:Setting:site }
 
+admin_setting_mobile:
+    pattern:  /setting/mobile
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
+
 admin_setting_logo_upload:
     pattern:  /setting/logo/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:logoUpload }

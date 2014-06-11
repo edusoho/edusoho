@@ -46,6 +46,29 @@ class SettingController extends BaseController
         ));
     }
 
+    public function mobileAction(Request $request)
+    {
+        $mobile = $this->getSettingService()->get('mobile', array());
+
+        $default = array(
+            'enabled'=> 0,
+            'about'=>'',
+        );
+
+        $mobile = array_merge($default, $mobile);
+
+        if ($request->getMethod() == 'POST') {
+            $site = $request->request->all();
+            $this->getSettingService()->set('mobile', $mobile);
+            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
+            $this->setFlashMessage('success', '移动客户端设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
+            'mobile'=>$mobile
+        ));
+    }
+
     public function logoUploadAction(Request $request)
     {
         $file = $request->files->get('logo');
