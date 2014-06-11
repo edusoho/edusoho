@@ -727,18 +727,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 		));
 
-		if ($lesson['type'] == "live") {
-			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
-		}
-
 		if (isset($fields['title'])) {
 			$fields['title'] = $this->purifyHtml($fields['title']);
 		}
 
 		$fields['type'] = $lesson['type'];
+		$fields['endTime'] = $fields['startTime']+$fields['length']*60;
 
 		$this->fillLessonMediaFields($fields);
-
+		
 		$lesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);
