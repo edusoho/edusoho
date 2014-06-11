@@ -36,18 +36,18 @@
 				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
 				    {% elseif item.type == 'live' %}
 				       	{% if item.startTime > currentTime %}
-							<span class="type">{{ item.startTime|date('m月d日') }} 
+							<small class="type">{{ item.startTime|date('m月d日') }} 
 								{% for key,week in weeks %}
 									{% if key == item.startTime|date('w')  %}
 										星期{{ week }}
 									{% endif %}
 							    {% endfor %}
 								{{ item.startTime|date('H：i') }}
-							</span>
+							</small>
 						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
-							<span class="type">正在直播中</span>
+							<small class="type">正在直播中</small>
 						{% elseif item.endTime < currentTime %}
-							<span class="type">直播结束</span>
+							<small class="type">直播结束</small>
 						{% endif %}
 				    {% endif %}
 			    {% else %}
