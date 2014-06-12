@@ -11,6 +11,14 @@
       {% elseif course.serializeMode=='finished' %}
         <span class="label label-warning ">已完结</span>
       {% endif %}
+      {% if course.type == 'live' %}
+          {% set lesson = course['lesson']|default(null) %}
+          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+            <span class="label label-warning series-mode-label">正在直播中</span>
+          {% else %}
+            <span class="label label-success series-mode-label">直播</span>
+          {% endif %}
+      {% endif %}
       </h4>
 
       {% if course.type == 'live' %}

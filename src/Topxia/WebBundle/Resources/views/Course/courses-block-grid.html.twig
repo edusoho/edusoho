@@ -11,8 +11,14 @@
           {% endif %}
 
           {% if course.type == 'live' %}
-            <span class="label label-success series-mode-label">直播</span>
+            {% set lesson = course['lesson']|default(null) %}
+            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+              <span class="label label-warning series-mode-label">正在直播中</span>
+            {% else %}
+              <span class="label label-success series-mode-label">直播</span>
+            {% endif %}
           {% endif %}
+
         <span class="title">{{ course.title }}</span>
         {% if mode in ['default', 'teach'] %}
 
@@ -56,8 +62,6 @@
                 </span>
               {% endif %}
             </span>
-
-
 
           </span>
         {% endif %}

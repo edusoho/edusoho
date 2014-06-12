@@ -64,12 +64,16 @@ class WebExtension extends \Twig_Extension
 
         $plugins = $this->container->get('kernel')->getPlugins();
 
+        $plugins[] = "customweb";
+        $plugins[] = "customadmin";
+
         $paths = array(
             'common' => 'common',
             'theme' => "{$basePath}/themes/{$theme}/js"
         );
 
         foreach ($plugins as $name) {
+            $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
 

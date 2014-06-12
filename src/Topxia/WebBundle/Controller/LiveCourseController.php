@@ -24,7 +24,7 @@ class LiveCourseController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchLessonCount($recenntLessonsCondition)
-            , 10
+            , 30
         );
 
         $recentlessons = $this->getCourseService()->searchLessons(
@@ -39,6 +39,9 @@ class LiveCourseController extends BaseController
         $recentCourses = array();
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
+            if ($course['status'] != 'published') {
+                continue;
+            }
             $course['lesson'] = $lesson;
             $recentCourses[] = $course;
         }
@@ -61,7 +64,6 @@ class LiveCourseController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
         ));
-
 	}
 
   	public function createAction(Request $request)
@@ -109,7 +111,7 @@ class LiveCourseController extends BaseController
         return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,
-            'mode' => $mode,
+            'mode' => $mode
         ));
     }
 
